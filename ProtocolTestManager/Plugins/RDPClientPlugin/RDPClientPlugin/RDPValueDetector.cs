@@ -213,6 +213,8 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             propertiesDic.Add("RDP.Client.SupportServerRedirection", new List<string>() { NullableBoolToString(detectionInfo.IsSupportServerRedirection) });
             propertiesDic.Add("RDP.Client.SupportRDPEFS", new List<string>() { NullableBoolToString(detectionInfo.IsSupportRDPEFS) });
 
+            propertiesDic.Add("RDP.Version", new List<string>() { detectionInfo.RdpVersion });
+
             propertiesDic.Add("SUTControl.AgentAddress", new List<string>() { detectionInfo.SUTName+":"+detectionInfo.AgentListenPort });
             propertiesDic.Add("SUTControl.ClientSupportRDPFile", new List<string>() { detectionInfo.IsWindowsImplementation });
 
