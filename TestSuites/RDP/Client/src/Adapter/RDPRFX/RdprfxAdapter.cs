@@ -247,7 +247,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
                         }
                         else
                         {
-                            Site.Log.Add(LogEntryKind.TestInProgress, "Received and cached Pdu: {0}.", receivedPdu.GetType());
+                            Site.Log.Add(LogEntryKind.Debug, "Received and cached Pdu: {0}.", receivedPdu.GetType());
                             pduCache.Add(receivedPdu);
                         }
                     }
