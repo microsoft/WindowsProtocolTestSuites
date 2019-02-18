@@ -495,15 +495,20 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 CaptureRequirement(fpInputPdu.numberEvents != 0,
                  @"In TS_FP_INPUT_PDU structure, if the number of input events in fpInputHeader is greater than 15, then the numEvents bit field in the fast-path header byte MUST be set to zero, and the numEvents optional field inserted after the dataSignature field. This allows up to 255 input events in one PDU."
                  );
-            }           
+            }
 
-            if (this.serverConfig.encryptionLevel == EncryptionLevel.ENCRYPTION_LEVEL_FIPS)
+            int pduSize = RdpbcgrUtility.GetPduSize(fpInputPdu);
+            int length = RdpbcgrUtility.CalculateFpUpdatePduLength(fpInputPdu.length1, fpInputPdu.length2);
+            site.Assert.AreEqual(pduSize, length, "The length ({0}) of TS_FP_INPUT_PDU calculated by length1 & length2 must be equal to the real size ({1}) of the pdu.", length, pduSize);
+
+            if ((0x7f & fpInputPdu.length1) == fpInputPdu.length1)
             {
-                site.Assert.AreEqual<TS_FP_FIPS_INFO_length_Values>(TS_FP_FIPS_INFO_length_Values.V1, fpInputPdu.fipsInformation.length, 
-                    @"In TS_FP_INPUT_PDU structure, the fipsInformation is present when the Encryption Level "
-                    + @"selected by the server is ENCRYPTION_LEVEL_FIPS (4).In TS_FP_INPUT_PDU structure, the"
-                    + @" fipsInformation is present when the Encryption Level selected by the server is "
-                    + @"ENCRYPTION_LEVEL_FIPS (4).");
+                // length1's most significant bit is not set
+                site.Assert.AreEqual(true, fpInputPdu.length1 >= 1 && fpInputPdu.length1 <= 127, "If the most significant bit of the length1 field is not set, then the size of the PDU is in the range 1 to 127 bytes ");
+            }
+            else
+            {
+                site.Assert.AreEqual(true, length <= 16383, "If the most significant bit of the length1 field is set, the overall PDU length SHOULD be less than or equal to 16,383 bytes.");
             }
 
             Console.WriteLine("encryptionFlags= " + encryptionFlags);
