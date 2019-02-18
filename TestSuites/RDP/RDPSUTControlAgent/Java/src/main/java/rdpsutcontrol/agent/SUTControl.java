@@ -3,19 +3,27 @@
 
 package rdpsutcontrol.agent;
 
+import rdpsutcontrol.message.*;
+
 import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.Properties;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
-import rdpsutcontrol.message.*;
-
 public class SUTControl
 {
-    public static SUT_Control_Response_Message ProcessCommand(SUT_Control_Request_Message request)
+    private Properties config;
+
+    public SUTControl(Properties _config)
+    {
+        config = _config;
+    }
+
+    public SUT_Control_Response_Message ProcessCommand(SUT_Control_Request_Message request)
     {
         int resultCode = 1;
         String errorMessage = null;
@@ -63,63 +71,82 @@ public class SUTControl
                         errorMessage = "Take screen shot failed!";
                     }
                     break;
-                    
+
                     //Add more command support here
-                    
+
                 default:
                     errorMessage = "CommandID is not supported :"+request.commandId;
                     break;
             }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             errorMessage = "Process command "+ request.commandId +" failed with exception :"+e.getMessage();
         }
-        
+
         SUT_Control_Response_Message response = new SUT_Control_Response_Message(request.testsuiteId, request.commandId, request.caseName, request.requestId, resultCode, errorMessage, payload);
         return response;
     }
 
-    public static int Start_RDP_Connection(RDP_Connection_Configure_Parameters parameters)
+    public int Start_RDP_Connection(RDP_Connection_Configure_Parameters parameters)
     {
-        // TODO: 
-        String parameterStr = " --rfx -T RDPClient";
-        parameterStr += " " + parameters.address +":"+parameters.port;
-        if(parameters.screenType == 0x0001)
+        String cmd;
+
+        if (parameters.connectApproach == 0x0000 && parameters.screenType == 0x0000)
         {
-            parameterStr += " -f";
+            cmd = config.getProperty("Negotiate");
+        }
+        else if (parameters.connectApproach == 0x0000 && parameters.screenType == 0x0001)
+        {
+            cmd = config.getProperty("NegotiateFullScreen");
+        }
+        else if (parameters.connectApproach == 0x0001 && parameters.screenType == 0x0000)
+        {
+            cmd = config.getProperty("DirectCredSSP");
+        }
+        else if (parameters.connectApproach == 0x0001 && parameters.screenType == 0x0001)
+        {
+            cmd = config.getProperty("DirectCredSSPFullScreen");
         }
         else
-        {            
+        {
+            // Negotiate is the default one
+            cmd = config.getProperty("Negotiate");
         }
+
         try
         {
-            System.out.println("xfreerdp "+parameterStr);
-            Runtime.getRuntime().exec("xfreerdp "+parameterStr);
+            cmd = cmd.replace("{{address}}", parameters.address);
+            cmd = cmd.replace("{{port}}", String.valueOf(parameters.port));
+
+            System.out.println(cmd);
+            Runtime.getRuntime().exec(cmd);
             return 1;
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             return -1;
         }
     }
 
-    public static int Stop_RDP_Connection()
+    public int Stop_RDP_Connection()
     {
-    
+        String cmd;
+        cmd = config.getProperty("StopRDP");
+
         try
         {
-            // Do nothing. FreeRDP close the connection when server disconnect connection
-            // you can do something here to kill or close RDP client too
+            System.out.println(cmd);
+            Runtime.getRuntime().exec(cmd);
             return 1;
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             return -1;
         }
     }
 
-    public static byte[] Take_Screen_Shot()
+    public byte[] Take_Screen_Shot()
     {
         try
         {
@@ -155,7 +182,7 @@ public class SUTControl
             return buffer.array();
 
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             System.out.println(e.getMessage());
             return null;

@@ -3,24 +3,27 @@
 
 package rdpsutcontrol.agent;
 
-import java.net.*;
-import java.io.*;
-
 import rdpsutcontrol.message.*;
+
+import java.net.*;
+import java.util.Properties;
+import java.io.*;
 
 public class Listener extends Thread
 {
     public boolean ThreadRunning = true;
     public static int bufferLength = 20000;
     private ServerSocket serverSocket;
-    
-    public Listener(int port) throws IOException
+    private SUTControl sutControl;
+
+    public Listener(int port, Properties config) throws IOException
     {
+        sutControl = new SUTControl(config);
         serverSocket = new ServerSocket(port);
         serverSocket.setSoTimeout(10000);
         ThreadRunning = true;
     }
-    
+
     public void run()
     {
         while(ThreadRunning)
@@ -36,11 +39,11 @@ public class Listener extends Thread
 
                 SUT_Control_Request_Message request = new SUT_Control_Request_Message();
                 request.Decode(buffer);
-                
-                SUT_Control_Response_Message response = SUTControl.ProcessCommand(request);
+
+                SUT_Control_Response_Message response = sutControl.ProcessCommand(request);
                 DataOutputStream out = new DataOutputStream(server.getOutputStream());
                 out.write(response.Encode());
-                
+
                 server.close();
             }
             catch(SocketTimeoutException s)
