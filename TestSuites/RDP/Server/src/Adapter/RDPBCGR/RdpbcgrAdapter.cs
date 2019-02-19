@@ -1538,6 +1538,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 {
                     tlsVersion = SslProtocols.None;
                 }
+                else
+                {
+                    this.Site.Assume.Fail("The property value \"RDP.Security.TLS.Version\" is invalid in PTFConfig file.");
+                }
+            }
+            else
+            {
+                this.Site.Assume.Fail("The property \"RDP.Security.TLS.Version\" is not present in PTFConfig file.");
             }
         }
 
