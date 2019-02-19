@@ -13,6 +13,7 @@ using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
+using System.Security.Authentication;
 
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.Mcs;
@@ -43,6 +44,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         private StreamConfig transportConfig;
         private bool isAutoReactivate;
         protected const ushort TS_UD_CS_SEC_SecurityDataSize = 12;
+        private SslProtocols tlsVersion;
 
         /// <summary>
         /// A TCP transport instance, sending and receiving all the PDUs.
@@ -137,6 +139,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             set
             {
                 isAutoReactivate = value;
+            }
+        }
+
+        public SslProtocols TlsVersion
+        {
+            get
+            {
+                return tlsVersion;
+            }
+            set
+            {
+                tlsVersion = value;
             }
         }
 
@@ -635,7 +649,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                         new RemoteCertificateValidationCallback(ValidateServerCertificate),
                         null
                         );
-                    ((SslStream)clientStream).AuthenticateAsClient(serverName);
+                    ((SslStream)clientStream).AuthenticateAsClient(serverName, null, TlsVersion, false);
                     transportConfig.Stream = clientStream;
                     transportStack.UpdateConfig(transportConfig);
                 }

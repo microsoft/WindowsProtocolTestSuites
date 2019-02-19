@@ -10,7 +10,11 @@
     <Property name="RDP.Security.Negotiation" value="True"/>
     <!--One of the TLS, CredSSP, or RDP.-->
     <Property name="RDP.Security.Protocol" value="TLS"/>
-
+    <!-- Version of TLS -->
+    <Property name="RDP.Security.TLS.Version" value="TLS1.0">
+      <Choice>None, TLS1.0, TLS1.1, TLS1.2</Choice>
+      <Description>One of None, TLS1.0, TLS1.1, TLS1.2. The value is valid only if value of RDP.Security.Protocol is set to TLS. Please be noted that if TLS1.1 or TLS1.2 is used, packets in capture file may not be decrypted due to limitation of Message Analyzaer; use TLS 1.0 if you want to capture packets and then decrypt the packets.</Description>
+    </Property>
     <!-- Domain of the tested RDP Server -->
     <Property name="RDP.ServerDomain" value=""/>
     <!-- Computer name or IP of the tested RDP Server-->
@@ -23,13 +27,13 @@
     <Property name="RDP.ServerUserPassword" value="Password01!"/>
     <!-- Computer name or IP of the driver computer-->
     <Property name="RDP.ClientName" value="192.168.2.1"/>
-    
+
     <!-- Whether verify RDPBCGR message received -->
     <Property name="VerifyRdpbcgrMessages" value="true"/>
     <!-- Whether verify SHOULD behaviors in TD -->
     <Property name="VerifyShouldBehaviors" value="true"/>
     <Property name="WaitTime" value="20"/>
-    
+
     <!--The version of the RDP intends to test. It should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4-->
     <!--The seperator between the RDP.Version is required to be ".".-->
     <Property name="RDP.Version" value="8.1">
@@ -37,7 +41,7 @@
       <Description>The version of the RDP intends to test, it should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4</Description>
     </Property>
     <!-- Block End -->
-    
+
   </Properties>
   <Adapters>
   </Adapters>
