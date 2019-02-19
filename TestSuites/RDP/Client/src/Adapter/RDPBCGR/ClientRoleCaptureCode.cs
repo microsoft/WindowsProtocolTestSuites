@@ -238,11 +238,16 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         {
             VerifySecurityHeader(confirmActivePdu.commonHeader.securityHeader, "Client Confirm Active");
 
+            VerifyStructure(confirmActivePdu.confirmActivePduData);
+
             //verify all the capability set:
             foreach (ITsCapsSet cap in confirmActivePdu.confirmActivePduData.capabilitySets)
             {
                 switch (cap.GetCapabilityType())
                 {
+                    case capabilitySetType_Values.CAPSTYPE_GENERAL:
+                        VerifyStructure((TS_GENERAL_CAPABILITYSET)cap);
+                        break;
                     case capabilitySetType_Values.CAPSTYPE_BITMAP:
                         VerifyStructure((TS_BITMAP_CAPABILITYSET)cap);
                         break;
@@ -853,6 +858,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                     @"[In Extended Info Packet (TS_EXTENDED_INFO_PACKET)] clientDir (variable):The maximum allowed length is 512 bytes "
                     + @"(including the mandatory null terminator).");
 
+                VerifyStructure(info.extraInfo.clientTimeZone);
+
                 isValidLen = info.extraInfo.cbAutoReconnectLen <= 128;
                 site.Assert.IsTrue(isValidLen,
                     @"[Extended Info Packet (TS_EXTENDED_INFO_PACKET)]autoReconnectCookie (28 bytes):the maximum allowed length "
@@ -878,9 +885,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="confirmActive"></param>
         public void VerifyStructure(TS_CONFIRM_ACTIVE_PDU confirmActive)
         {
-            site.Assert.AreEqual<ShareControlHeaderType>(ShareControlHeaderType.PDUTYPE_CONFIRMACTIVEPDU, (ShareControlHeaderType)(confirmActive.shareControlHeader.pduType.typeAndVersionLow & 0x15), 
+            site.Assert.AreEqual<ShareControlHeaderType>(ShareControlHeaderType.PDUTYPE_CONFIRMACTIVEPDU, (ShareControlHeaderType)(confirmActive.shareControlHeader.pduType.typeAndVersionLow & 0x0F), 
                 @"In TS_CONFIRM_ACTIVE_PDU structure, the type subfield of the pduType field of the Share Control Header MUST be set to"
                 + @" PDUTYPE_CONFIRMACTIVEPDU (3).");
+            site.Assert.AreEqual<ControlHeaderVersionLow>(ControlHeaderVersionLow.TS_PROTOCOL_VERSION, (ControlHeaderVersionLow)(confirmActive.shareControlHeader.pduType.typeAndVersionLow >>4 & 0x0F),
+                @"The PDUVersion subfield MUST be set to TS_PROTOCOL_VERSION (0x1).");
             site.Assert.AreEqual<originatorId_Values>(originatorId_Values.V1, confirmActive.originatorId, 
                 @"In TS_CONFIRM_ACTIVE_PDU structure, the originatorId MUST be set to the server channel ID (in Microsoft RDP server "
                 + @"implementations, this value is always 0x03EA)");
