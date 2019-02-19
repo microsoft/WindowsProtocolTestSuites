@@ -177,10 +177,14 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             caseList.Add(CreateRule("Priority.BVT", true));
             caseList.Add(CreateRule("Priority.NonBVT", true));
 
+            #region RDP Version
+            caseList.Add(CreateRule("RDP Version.RDP 70", true));
+            caseList.Add(CreateRule("RDP Version.RDP 80", true));
+            caseList.Add(CreateRule("RDP Version.RDP 81", true));
+            #endregion RDP Version
+
             #region Protocols
-
             caseList.Add(CreateRule("Protocol.RDPBCGR", true));
-
             #endregion Protocols
 
             return caseList;
