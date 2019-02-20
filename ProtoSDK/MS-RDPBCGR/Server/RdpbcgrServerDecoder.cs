@@ -2750,15 +2750,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         }
 
         /// <summary>
-        /// Parse TS_FP_QOE_TIMESTAMP_EVENT
+        /// Parse TS_FP_QOETIMESTAMP_EVENT
         /// (parser index is updated according to parsed length)
         /// </summary>
         /// <param name="data">data to be parsed</param>
         /// <param name="currentIndex">current parser index</param>
-        /// <returns>parsed TS_FP_QOE_TIMESTAMP_EVENT</returns>
-        private TS_FP_QOE_TIMESTAMP_EVENT ParseTsFpInputQoETimeStamp(byte[] data, ref int currentIndex)
+        /// <returns>parsed TS_FP_QOETIMESTAMP_EVENT</returns>
+        private TS_FP_QOETIMESTAMP_EVENT ParseTsFpInputQoETimeStamp(byte[] data, ref int currentIndex)
         {
-            TS_FP_QOE_TIMESTAMP_EVENT qoeTimeStamp = new TS_FP_QOE_TIMESTAMP_EVENT();
+            TS_FP_QOETIMESTAMP_EVENT qoeTimeStamp = new TS_FP_QOETIMESTAMP_EVENT();
 
             qoeTimeStamp.timestamp = ParseUInt32(data, ref currentIndex, false);
 

@@ -2548,7 +2548,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             fpInputEvent.eventData = extendedMouseEvent;
             fastpathInputPdu.fpInputEvents.Add(fpInputEvent);
 
-            TS_FP_QOE_TIMESTAMP_EVENT qoeTimestampEvent = new TS_FP_QOE_TIMESTAMP_EVENT();
+            TS_FP_QOETIMESTAMP_EVENT qoeTimestampEvent = new TS_FP_QOETIMESTAMP_EVENT();
             qoeTimestampEvent.timestamp = (uint)DateTime.Now.Millisecond;
             fpInputEvent.eventHeader.eventFlagsAndCode =
                 (byte)((int)eventCode_Values.FASTPATH_INPUT_EVENT_QOE_TIMESTAMP << 5);

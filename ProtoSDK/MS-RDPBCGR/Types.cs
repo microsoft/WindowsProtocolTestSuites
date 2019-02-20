@@ -14812,7 +14812,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     }
 
     [StructLayout(LayoutKind.Explicit, Size = 4)]
-    public partial struct TS_FP_QOE_TIMESTAMP_EVENT
+    public partial struct TS_FP_QOETIMESTAMP_EVENT
     {
         /// <summary>
         ///  A 32-bit, unsigned integer.

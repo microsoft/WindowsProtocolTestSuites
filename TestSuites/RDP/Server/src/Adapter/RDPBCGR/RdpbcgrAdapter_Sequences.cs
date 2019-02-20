@@ -354,24 +354,30 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 // Send Sync event
                 TS_FP_INPUT_EVENT synchronizeEvent = this.GenerateFPSynchronizeEvent(false, true, false, false);
                 this.SendClientFastPathInputEventPDU(NegativeType.None, new TS_FP_INPUT_EVENT[] { synchronizeEvent });
+                Site.Log.Add(LogEntryKind.Comment, "TS_FP_INPUT_PDU with Synchronize Event has been sent");
 
                 // Send mouse event
                 TS_FP_INPUT_EVENT mouseEvent = this.GenerateFPMouseEvent(pointerFlags_Values.PTRFLAGS_WHEEL, RdpConstValue.X_POS, RdpConstValue.Y_POS);
                 this.SendClientFastPathInputEventPDU(NegativeType.None, new TS_FP_INPUT_EVENT[] { mouseEvent });
+                Site.Log.Add(LogEntryKind.Comment, "TS_FP_INPUT_PDU with Mouse Event has been sent");
 
                 TS_FP_INPUT_EVENT extendedMouseEvent = this.GenerateFPExtendedMouseEvent(TS_POINTERX_EVENT_pointerFlags_Values.PTRXFLAGS_BUTTON1, RdpConstValue.X_POS, RdpConstValue.Y_POS);
                 this.SendClientFastPathInputEventPDU(NegativeType.None, new TS_FP_INPUT_EVENT[] { extendedMouseEvent });
+                Site.Log.Add(LogEntryKind.Comment, "TS_FP_INPUT_PDU with Extended Mouse Event has been sent");
 
                 // Send keyboard event
                 TS_FP_INPUT_EVENT keyboardEvent = this.GenerateFPKeyboardEvent(TS_FP_KEYBOARD_EVENT_Eventflags.FASTPATH_INPUT_KBDFLAGS_EXTENDED, RdpConstValue.FP_KEY_CODE);
                 this.SendClientFastPathInputEventPDU(NegativeType.None, new TS_FP_INPUT_EVENT[] { keyboardEvent });
+                Site.Log.Add(LogEntryKind.Comment, "TS_FP_INPUT_PDU with Keyboard Event has been sent");
 
                 TS_FP_INPUT_EVENT unicodeKeyboardEvent = this.GenerateFPUnicodeKeyboardEvent(TS_FP_KEYBOARD_EVENT_Eventflags.FASTPATH_INPUT_KBDFLAGS_RELEASE, RdpConstValue.FP_UNICODE_CODE);
                 this.SendClientFastPathInputEventPDU(NegativeType.None, new TS_FP_INPUT_EVENT[] { unicodeKeyboardEvent });
+                Site.Log.Add(LogEntryKind.Comment, "TS_FP_INPUT_PDU with Unicode Keyboard Event has been sent");
 
                 // Send QoE Timestamp Event
                 TS_FP_INPUT_EVENT qoeTimestampEvent = this.GenerateQoETimestampEvent((uint)DateTime.Now.Millisecond);
                 this.SendClientFastPathInputEventPDU(NegativeType.None, new TS_FP_INPUT_EVENT[] { qoeTimestampEvent });
+                Site.Log.Add(LogEntryKind.Comment, "TS_FP_INPUT_PDU with QoE Timestamp Event has been sent");
             }
             catch (System.IO.IOException ioE)
             {

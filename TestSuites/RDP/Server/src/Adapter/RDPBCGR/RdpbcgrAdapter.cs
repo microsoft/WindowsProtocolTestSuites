@@ -1041,14 +1041,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         }
 
         /// <summary>
-        /// Generate a TS_FP_INPUT_EVENT structure with a TS_FP_QOE_TIMESTAMP_EVENT
+        /// Generate a TS_FP_INPUT_EVENT structure with a TS_FP_QOETIMESTAMP_EVENT
         /// </summary>
         /// <param name="timestamp">The timestamp indicates when the current input batch was encoded by the client</param>
-        /// <returns>TS_FP_INPUT_EVENT structure with a TS_FP_QOE_TIMESTAMP_EVENT</returns>
+        /// <returns>TS_FP_INPUT_EVENT structure with a TS_FP_QOETIMESTAMP_EVENT</returns>
         public TS_FP_INPUT_EVENT GenerateQoETimestampEvent(uint timestamp)
         {
             TS_FP_INPUT_EVENT fpInputEvent = new TS_FP_INPUT_EVENT();
-            TS_FP_QOE_TIMESTAMP_EVENT qoeTimestampEvent = new TS_FP_QOE_TIMESTAMP_EVENT();
+            TS_FP_QOETIMESTAMP_EVENT qoeTimestampEvent = new TS_FP_QOETIMESTAMP_EVENT();
             qoeTimestampEvent.timestamp = timestamp;
             fpInputEvent.eventHeader.eventFlagsAndCode =
                 (byte)((int)eventCode_Values.FASTPATH_INPUT_EVENT_QOE_TIMESTAMP << 5);

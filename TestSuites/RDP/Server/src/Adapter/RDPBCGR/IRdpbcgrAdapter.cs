@@ -417,10 +417,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         TS_FP_INPUT_EVENT GenerateFPUnicodeKeyboardEvent(TS_FP_KEYBOARD_EVENT_Eventflags eventFlag, ushort unicodeCode);
 
         /// <summary>
-        /// Generate a TS_FP_INPUT_EVENT structure with a TS_FP_QOE_TIMESTAMP_EVENT
+        /// Generate a TS_FP_INPUT_EVENT structure with a TS_FP_QOETIMESTAMP_EVENT
         /// </summary>
         /// <param name="timestamp">The timestamp indicates when the current input batch was encoded by the client</param>
-        /// <returns>TS_FP_INPUT_EVENT structure with a TS_FP_QOE_TIMESTAMP_EVENT</returns>
+        /// <returns>TS_FP_INPUT_EVENT structure with a TS_FP_QOETIMESTAMP_EVENT</returns>
         TS_FP_INPUT_EVENT GenerateQoETimestampEvent(uint timestamp);
 
         #endregion TS_FP_INPUT_EVENT generation
