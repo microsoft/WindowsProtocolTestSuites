@@ -12475,6 +12475,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// </summary>
         TS_INPUT_FLAG_MOUSE_HWHEEL = 0x0100,
 
+        /// <summary>
+        /// Indicates support for Quality of Experience (QoE) Timestamp Event notifications
+        /// (section 2.2.8.1.2.2.6).
+        /// There is no slow-path support for Quality of Experience (QoE) timestamps.
+        /// </summary>
+        TS_INPUT_FLAG_QOE_TIMESTAMPS = 0x200,
+
     }
 
     /// <summary>
@@ -14723,6 +14730,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  Indicates a Fast-Path Unicode Keyboard Event.
         /// </summary>
         FASTPATH_INPUT_EVENT_UNICODE = 0x4,
+
+        /// <summary>
+        /// Indicates a Fast-Path Quality of Experience (QoE) Timestamp Event.
+        /// </summary>
+        FASTPATH_INPUT_EVENT_QOE_TIMESTAMP = 0x6,
     }
 
     /// <summary>
@@ -14797,6 +14809,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// </summary>
         [FieldOffset(0)]
         public ushort unicodeCode;
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 4)]
+    public partial struct TS_FP_QOE_TIMESTAMP_EVENT
+    {
+        /// <summary>
+        ///  A 32-bit, unsigned integer.
+        ///  A client-generated timestamp, in milliseconds,
+        ///  that indicates when the current input batch was encoded by the client.
+        ///  The value of the first timestamp sent by the client implicitly defines
+        ///  the origin for all subsequent timestamps.
+        ///  The server is responsible for handling roll-over of the timestamp.
+        /// </summary>
+        [FieldOffset(0)]
+        public uint timestamp;
     }
 
     /// <summary>

@@ -368,6 +368,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
                 TS_FP_INPUT_EVENT unicodeKeyboardEvent = this.GenerateFPUnicodeKeyboardEvent(TS_FP_KEYBOARD_EVENT_Eventflags.FASTPATH_INPUT_KBDFLAGS_RELEASE, RdpConstValue.FP_UNICODE_CODE);
                 this.SendClientFastPathInputEventPDU(NegativeType.None, new TS_FP_INPUT_EVENT[] { unicodeKeyboardEvent });
+
+                // Send QoE Timestamp Event
+                TS_FP_INPUT_EVENT qoeTimestampEvent = this.GenerateQoETimestampEvent((uint)DateTime.Now.Millisecond);
+                this.SendClientFastPathInputEventPDU(NegativeType.None, new TS_FP_INPUT_EVENT[] { qoeTimestampEvent });
             }
             catch (System.IO.IOException ioE)
             {

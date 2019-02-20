@@ -159,7 +159,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                                           | inputFlags_Values.INPUT_FLAG_SCANCODES;
             if (supportFastPathInput)
             {
-                inputCapabilitySet.inputFlags |= inputFlags_Values.INPUT_FLAG_FASTPATH_INPUT2;
+                inputCapabilitySet.inputFlags |=
+                    (inputFlags_Values.INPUT_FLAG_FASTPATH_INPUT2 | inputFlags_Values.TS_INPUT_FLAG_QOE_TIMESTAMPS);
             }
             inputCapabilitySet.pad2octetsA = 0;
             inputCapabilitySet.keyboardLayout = RdpConstValue.LOCALE_ENGLISH_UNITED_STATES;

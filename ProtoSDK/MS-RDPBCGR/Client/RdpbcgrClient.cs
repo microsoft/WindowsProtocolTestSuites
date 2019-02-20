@@ -356,7 +356,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                                           | inputFlags_Values.INPUT_FLAG_SCANCODES;
             if (supportFastPathInput)
             {
-                inputCapabilitySet.inputFlags |= inputFlags_Values.INPUT_FLAG_FASTPATH_INPUT2;
+                inputCapabilitySet.inputFlags |=
+                    (inputFlags_Values.INPUT_FLAG_FASTPATH_INPUT2 | inputFlags_Values.TS_INPUT_FLAG_QOE_TIMESTAMPS);
             }
             inputCapabilitySet.pad2octetsA = 0;
             inputCapabilitySet.keyboardLayout = ConstValue.LOCALE_ENGLISH_UNITED_STATES;
@@ -2545,6 +2546,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             fpInputEvent.eventHeader.eventFlagsAndCode =
                 (byte)((int)eventCode_Values.FASTPATH_INPUT_EVENT_MOUSEX << 5);
             fpInputEvent.eventData = extendedMouseEvent;
+            fastpathInputPdu.fpInputEvents.Add(fpInputEvent);
+
+            TS_FP_QOE_TIMESTAMP_EVENT qoeTimestampEvent = new TS_FP_QOE_TIMESTAMP_EVENT();
+            qoeTimestampEvent.timestamp = (uint)DateTime.Now.Millisecond;
+            fpInputEvent.eventHeader.eventFlagsAndCode =
+                (byte)((int)eventCode_Values.FASTPATH_INPUT_EVENT_QOE_TIMESTAMP << 5);
+            fpInputEvent.eventData = qoeTimestampEvent;
             fastpathInputPdu.fpInputEvents.Add(fpInputEvent);
             #endregion Fill in TS_FP_INPUT_EVENT
 
