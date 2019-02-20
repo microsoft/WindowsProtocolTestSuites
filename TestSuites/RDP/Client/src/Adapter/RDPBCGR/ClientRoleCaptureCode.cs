@@ -858,27 +858,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                     @"[In Extended Info Packet (TS_EXTENDED_INFO_PACKET)] clientDir (variable):The maximum allowed length is 512 bytes "
                     + @"(including the mandatory null terminator).");
 
-                VerifyStructure(info.extraInfo.clientTimeZone);
-
                 isValidLen = info.extraInfo.cbAutoReconnectLen <= 128;
                 site.Assert.IsTrue(isValidLen,
                     @"[Extended Info Packet (TS_EXTENDED_INFO_PACKET)]autoReconnectCookie (28 bytes):the maximum allowed length "
                     + @"is 128 bytes.");
             }
         }
-        /// <summary>
-        /// 2.2.1.11.1.1.1
-        /// </summary>
-        /// <param name="zoneInfo"></param>
-        public void VerifyStructure(TS_TIME_ZONE_INFORMATION zoneInfo)
-        {
-            site.Assert.IsTrue(System.Runtime.InteropServices.Marshal.SizeOf(zoneInfo.DaylightName) == 64, 
-                @"In TS_TIME_ZONE_INFORMATION structure, DaylightName field must be 64 bytes");
-            site.Assert.IsTrue(System.Runtime.InteropServices.Marshal.SizeOf(zoneInfo.DaylightDate) == 16, 
-                @"In TS_TIME_ZONE_INFORMATION structure, DaylightDate must be 16 bytes");
-            site.Assert.IsTrue(System.Runtime.InteropServices.Marshal.SizeOf(zoneInfo.DaylightBias) == 4, 
-                @"In TS_TIME_ZONE_INFORMATION structure, DaylightBias must be 4 bytes");
-        }
+
         /// <summary>
         /// 2.2.1.13.2.1
         /// </summary>
@@ -888,7 +874,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             site.Assert.AreEqual<ShareControlHeaderType>(ShareControlHeaderType.PDUTYPE_CONFIRMACTIVEPDU, (ShareControlHeaderType)(confirmActive.shareControlHeader.pduType.typeAndVersionLow & 0x0F), 
                 @"In TS_CONFIRM_ACTIVE_PDU structure, the type subfield of the pduType field of the Share Control Header MUST be set to"
                 + @" PDUTYPE_CONFIRMACTIVEPDU (3).");
-            site.Assert.AreEqual<ControlHeaderVersionLow>(ControlHeaderVersionLow.TS_PROTOCOL_VERSION, (ControlHeaderVersionLow)(confirmActive.shareControlHeader.pduType.typeAndVersionLow >>4 & 0x0F),
+            site.Assert.AreEqual(1, confirmActive.shareControlHeader.pduType.typeAndVersionLow >>4 & 0x0F,
                 @"The PDUVersion subfield MUST be set to TS_PROTOCOL_VERSION (0x1).");
             site.Assert.AreEqual<originatorId_Values>(originatorId_Values.V1, confirmActive.originatorId, 
                 @"In TS_CONFIRM_ACTIVE_PDU structure, the originatorId MUST be set to the server channel ID (in Microsoft RDP server "
