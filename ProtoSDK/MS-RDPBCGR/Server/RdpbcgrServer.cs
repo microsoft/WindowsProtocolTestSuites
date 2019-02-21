@@ -1674,7 +1674,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             RdpbcgrUtility.FillShareControlHeader(ref demandActivePduData.shareControlHeader,
                                            (ushort)totalLength,
                                            ShareControlHeaderType.PDUTYPE_DEMANDACTIVEPDU,
-                                           (ushort)sessionContext.UserChannelId);
+                                           (ushort)sessionContext.ServerChannelId);
 
             demandActivePdu.demandActivePduData = demandActivePduData;
 
