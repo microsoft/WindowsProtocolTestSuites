@@ -2483,7 +2483,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             // events is in the range 1 to 15.
             fastpathInputPdu.fpInputHeader.actionCode =
                 (byte)(((int)actionCode_Values.FASTPATH_INPUT_ACTION_FASTPATH & 0x03)
-                | ((int)(ConstValue.NUMBER_EVENTS & 0x0F) << 2));
+                | ((int)(ConstValue.FP_NUMBER_EVENTS & 0x0F) << 2));
 
             if (context.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE)
             {
@@ -2496,7 +2496,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             fastpathInputPdu.dataSignature = null;
             fastpathInputPdu.length1 = 0;
             fastpathInputPdu.length2 = 0;
-            fastpathInputPdu.numberEvents = ConstValue.NUMBER_EVENTS;
+            fastpathInputPdu.numberEvents = ConstValue.FP_NUMBER_EVENTS;
 
             if (context.RdpEncryptionLevel == EncryptionLevel.ENCRYPTION_LEVEL_FIPS)
             {

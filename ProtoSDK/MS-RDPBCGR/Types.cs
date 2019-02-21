@@ -14811,6 +14811,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         public ushort unicodeCode;
     }
 
+    /// <summary>
+    /// The TS_FP_QOETIMESTAMP_EVENT structure is used to enable the calculation of
+    /// Quality of Experience (QoE) metrics. This event is sent solely for informational
+    /// and debugging purposes and MUST NOT be transmitted to the server if the
+    /// TS_INPUT_FLAG_QOE_TIMESTAMPS (0x0200) flag was not received in the
+    /// Input Capability Set (section 2.2.7.1.6).
+    /// </summary>
     [StructLayout(LayoutKind.Explicit, Size = 4)]
     public partial struct TS_FP_QOETIMESTAMP_EVENT
     {
