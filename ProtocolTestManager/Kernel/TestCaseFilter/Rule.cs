@@ -77,7 +77,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             get {
                 switch (SelectStatus)
                 {
-                    case RuleSelectStatus.NotSelected: return false;
+                    case RuleSelectStatus.UnSelected: return false;
                     case RuleSelectStatus.Selected: return true;
                     case RuleSelectStatus.Partial: return null;
                 }
@@ -85,9 +85,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
             }
             set
             {
-                if (value == null) SelectStatus = RuleSelectStatus.NotSelected;
+                if (value == null) SelectStatus = RuleSelectStatus.UnSelected;
                 else
-                    SelectStatus = (bool)value ? RuleSelectStatus.Selected : RuleSelectStatus.NotSelected;
+                    SelectStatus = (bool)value ? RuleSelectStatus.Selected : RuleSelectStatus.UnSelected;
             }
         }
 
@@ -95,7 +95,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public Rule()
         {
             CategoryList = new List<string>();
-            SelectStatus = RuleSelectStatus.NotSelected;
+            SelectStatus = RuleSelectStatus.UnSelected;
             Status = RuleSupportStatus.Default;
         }
 
@@ -209,5 +209,5 @@ namespace Microsoft.Protocols.TestManager.Kernel
     /// <summary>
     /// Enumerates the selectStatus of a rule. 
     /// </summary>
-    public enum RuleSelectStatus { Selected, Partial, NotSelected }
+    public enum RuleSelectStatus { Selected, Partial, UnSelected }
 }
