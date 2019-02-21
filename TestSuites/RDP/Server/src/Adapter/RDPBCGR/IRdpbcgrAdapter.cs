@@ -538,6 +538,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         bool IsServerSupportFastpathInput();
 
         /// <summary>
+        /// Check if RDP Server support fast path input Quality of Experience (QoE) Timestamp event notification
+        /// Check inputFlags flag of TS_INPUT_CAPABILITYSET
+        /// </summary>
+        /// <returns></returns>
+        bool IsServerSupportFastpathInputQoeTimestampEvent();
+
+        /// <summary>
         /// Whether server support RDP-UDP FEC reliable transport
         /// Check flags field of TS_UD_SC_MULTITRANSPORT
         /// </summary>
@@ -617,7 +624,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <summary>
         /// Send Client Fast-Path Input Event PDU with all kinds of input events
         /// </summary>
-        void GenerateFastPathInputs();
+        void GenerateFastPathInputs(bool supportQoeTimestampEvent);
 
         /// <summary>
         /// Expect and verifies fast-path output events during a specific timespan

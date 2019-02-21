@@ -12365,7 +12365,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// (section 2.2.8.1.2.2.6).
         /// There is no slow-path support for Quality of Experience (QoE) timestamps.
         /// </summary>
-        TS_INPUT_FLAG_QOE_TIMESTAMPS = 0x200,
+        TS_INPUT_FLAG_QOE_TIMESTAMPS = 0x0200,
 
     }
 

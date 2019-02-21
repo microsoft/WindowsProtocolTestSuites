@@ -2455,9 +2455,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         }
 
         /// <summary>
-        /// Create Fast Path Input Event PDU. This PDU includes 5 event, 
+        /// Create Fast Path Input Event PDU. This PDU includes 6 event, 
         /// FASTPATH_INPUT_EVENT_SCANCODE, FASTPATH_INPUT_EVENT_MOUSE, FASTPATH_INPUT_EVENT_MOUSEX,
-        /// FASTPATH_INPUT_EVENT_SYNC and FASTPATH_INPUT_EVENT_UNICODE for each.
+        /// FASTPATH_INPUT_EVENT_SYNC, FASTPATH_INPUT_EVENT_UNICODE and TS_FP_QOETIMESTAMP_EVENT for each.
         /// 
         /// The default fields value of the PDU is determined by previous messages.
         /// User can set special value in the PDU other than the default after calling this method.

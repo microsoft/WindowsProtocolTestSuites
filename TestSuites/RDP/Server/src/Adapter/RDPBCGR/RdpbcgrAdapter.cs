@@ -1445,6 +1445,20 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             return false;
         }
 
+        public bool IsServerSupportFastpathInputQoeTimestampEvent()
+        {
+            ITsCapsSet capset = this.GetServerCapSet(capabilitySetType_Values.CAPSTYPE_INPUT);
+            if (capset != null)
+            {
+                TS_INPUT_CAPABILITYSET inputCap = (TS_INPUT_CAPABILITYSET)capset;
+                if (inputCap.inputFlags.HasFlag(inputFlags_Values.TS_INPUT_FLAG_QOE_TIMESTAMPS))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         /// <summary>
         /// Whether server support RDP-UDP FEC reliable transport
         /// Check flags field of TS_UD_SC_MULTITRANSPORT

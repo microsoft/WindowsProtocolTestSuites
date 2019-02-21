@@ -55,8 +55,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 supportFastPathInput:true,
                 supportFastPathOutput:true);
 
+            bool supportQoeTimestampEvent = rdpbcgrAdapter.IsServerSupportFastpathInputQoeTimestampEvent();
             this.Site.Log.Add(LogEntryKind.Comment, "Send several Client Fast-Path Input Event PDUs.");
-            rdpbcgrAdapter.GenerateFastPathInputs();
+            rdpbcgrAdapter.GenerateFastPathInputs(supportQoeTimestampEvent);
 
             this.Site.Log.Add(LogEntryKind.Comment, "Wait a period to receive and verify all fast-path update PDUs received ");
             rdpbcgrAdapter.ExpectFastpathOutputs(timeout);

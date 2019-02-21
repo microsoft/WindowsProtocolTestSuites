@@ -347,7 +347,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <summary>
         /// Send Client Fast-Path Input Event PDU with all kinds of input events
         /// </summary>
-        public void GenerateFastPathInputs()
+        public void GenerateFastPathInputs(bool supportQoeTimestampEvent)
         {
             try
             {
@@ -374,10 +374,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 this.SendClientFastPathInputEventPDU(NegativeType.None, new TS_FP_INPUT_EVENT[] { unicodeKeyboardEvent });
                 Site.Log.Add(LogEntryKind.Comment, "TS_FP_INPUT_PDU with Unicode Keyboard Event has been sent");
 
-                // Send QoE Timestamp Event
-                TS_FP_INPUT_EVENT qoeTimestampEvent = this.GenerateQoETimestampEvent((uint)DateTime.Now.Millisecond);
-                this.SendClientFastPathInputEventPDU(NegativeType.None, new TS_FP_INPUT_EVENT[] { qoeTimestampEvent });
-                Site.Log.Add(LogEntryKind.Comment, "TS_FP_INPUT_PDU with QoE Timestamp Event has been sent");
+                if (supportQoeTimestampEvent)
+                {
+                    // Send QoE Timestamp Event
+                    TS_FP_INPUT_EVENT qoeTimestampEvent = this.GenerateQoETimestampEvent((uint)DateTime.Now.Millisecond);
+                    this.SendClientFastPathInputEventPDU(NegativeType.None, new TS_FP_INPUT_EVENT[] { qoeTimestampEvent });
+                    Site.Log.Add(LogEntryKind.Comment, "TS_FP_INPUT_PDU with QoE Timestamp Event has been sent");
+                }
             }
             catch (System.IO.IOException ioE)
             {
