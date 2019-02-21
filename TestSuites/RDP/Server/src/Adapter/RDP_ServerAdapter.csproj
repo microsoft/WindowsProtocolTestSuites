@@ -62,6 +62,8 @@
     <Compile Include="RDPBCGR\RdpbcgrConstValue.cs" />
     <Compile Include="RDPBCGR\RdpbcgrTypes.cs" />
     <Compile Include="RDPBCGR\RdpbcgrAdapter_ReceiveMethod.cs" />
+    <Compile Include="RDPEDYC\IRdpedycAdapter.cs" />
+    <Compile Include="RDPEDYC\RDPEDYCAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\Asn1Base\Asn1Base.csproj">

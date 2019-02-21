@@ -16,6 +16,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         private TimeSpan waitInterval = new TimeSpan(0, 0, 0, 0, 100);
 
         private RdpbcgrClient rdpbcgrClient = null;
+
         private RdpbcgrClientContext clientSessionContext = null;
 
         private Dictionary<DynamicVC_TransportType, IDVCTransport> transportDic;
@@ -26,8 +27,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
         private PduBuilder pduBuilder;
 
-        private bool autoCreateChannel;
-        private Dictionary<string, ReceiveData> callBackMethodsDic;
+        private bool autoCreateChannel;       
 
         #endregion Variables
 
@@ -40,7 +40,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         /// <param name="context"></param>
         /// <param name="autoCreateChannel"></param>
         /// <param name="callBackMethodsDic"></param>
-        public RdpedycClient(RdpbcgrClient client, RdpbcgrClientContext context, bool autoCreateChannel = true, Dictionary<string, ReceiveData> callBackMethodsDic = null)
+        public RdpedycClient(RdpbcgrClient client, RdpbcgrClientContext context, bool autoCreateChannel = true)
         {
             this.rdpbcgrClient = client;
             this.clientSessionContext = context;
@@ -51,7 +51,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             channelDicbyId = new Dictionary<uint, DynamicVirtualChannel>();
 
             this.autoCreateChannel = autoCreateChannel;
-            this.callBackMethodsDic = callBackMethodsDic;
 
             pduBuilder = new PduBuilder();
 
@@ -123,13 +122,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         }
         
         /// <summary>
-        /// Expect to create a SVC
+        /// Expect server send a create SVC request
         /// </summary>
         /// <param name="timeout">Timeout</param>
         /// <param name="channelName">Channel Name</param>
         /// <param name="transportType">Transport Type</param>
         /// <returns></returns>
-        public DynamicVirtualChannel ExpectChannel(TimeSpan timeout, string channelName, DynamicVC_TransportType transportType, ReceiveData receiveCallBack = null)
+        public DynamicVirtualChannel ExpectChannel(TimeSpan timeout, string channelName, DynamicVC_TransportType transportType)
         {
             if (autoCreateChannel)
             {
@@ -138,7 +137,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
             if (!transportDic.ContainsKey(transportType))
             {
-                throw new InvalidOperationException("Not create DVC transport:" + transportType);
+                throw new InvalidOperationException("DVC transport:" + transportType + " does not exist.");
             }
             
 
@@ -149,19 +148,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             }
 
             DynamicVirtualChannel channel = new DynamicVirtualChannel(createReq.ChannelId, channelName, (ushort)createReq.HeaderBits.Sp, transportDic[transportType]);
-            if (receiveCallBack != null)
-            {
-                // Add event method here can make sure processing the first DVC data packet
-                channel.Received += receiveCallBack;
-            }
-            else
-            {
-                if (callBackMethodsDic != null && callBackMethodsDic.ContainsKey(channelName))
-                {
-                    channel.Received += callBackMethodsDic[channelName];
-                }
-            }
-            
+                       
             channelDicbyId.Add(createReq.ChannelId, channel);
 
             this.SendDVCCreateResponsePDU(createReq.ChannelId, 0, transportType);
@@ -171,7 +158,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         }
         
         /// <summary>
-        /// Close a DVC
+        /// Expect server send a close DVC request
         /// </summary>
         /// <param name="channelId">Channel Id</param>
         public void CloseChannel(UInt16 channelId)
@@ -188,19 +175,112 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             // Remove the channel from dictionary
             channelDicbyId.Remove(channelId);
         }
-        
+            
         /// <summary>
-        /// Send a PDU using a specific transport
+        /// Send the DYNVC_DATA_ PDU
         /// </summary>
-        /// <param name="pdu"></param>
+        /// <param name="channelId"></param>
         /// <param name="transportType"></param>
-        public void Send(DynamicVCPDU pdu, DynamicVC_TransportType transportType)
+        public void SendUncompressedPdu(uint channelId, DynamicVC_TransportType transportType)
         {
-            if (!transportDic.ContainsKey(transportType))
+            // Generate the data based on TD
+            byte[] data = new byte[ConstLength.MAX_UNCOMPRESSED_DATA_LENGTH] ;
+            for (int i = 0; i < ConstLength.MAX_UNCOMPRESSED_DATA_LENGTH; i++)
             {
-                throw new InvalidOperationException("Not create DVC transport:" + transportType);
+                data[i] = 0x71;
             }
-            transportDic[transportType].Send(pdu);
+
+           channelDicbyId[channelId].Send(data, false);            
+        }
+
+        /// <summary>
+        /// Send the DYNVC_DATA_FIRST_COMPRESSED and DYNCV_DATA_COMPRESSED PDU
+        /// </summary>
+        /// <param name="channelId"></param>
+        /// <param name="transportType"></param>
+        public void SendCompressedData(uint channelId, DynamicVC_TransportType transportType)
+        {
+            // Generate the data based on TD examples
+            byte[] data = new byte[] { 0x64, 0x03, 0x7b, 0x0c, 0xe0, 0x26, 0x38, 0xc4, 0x3f, 0xf4, 0x74, 0x01 };
+
+            SendFirstCompressedDataPdu(channelId, data, transportType);
+
+            // Generate the data based on TD examples
+            data = new byte[] { 0x70, 0x03, 0xe0, 0x26, 0x88, 0x7f, 0xe8, 0xf4, 0x02 };
+
+            SendDataCompressedReqPdu(channelId, data, transportType);
+        }
+
+        /// <summary>
+        /// Exchange DYNVC_DATA response from RDP server
+        /// </summary>
+        /// <param name="version"></param>
+        public DynamicVCPDU ExpectDynvcData(TimeSpan timeout, DynamicVC_TransportType transportType = DynamicVC_TransportType.RDP_TCP)
+        {
+            DateTime endTime = DateTime.Now + timeout;
+            while (DateTime.Now < endTime)
+            {
+                if (unprocessedDVCPacketBuffer.Count > 0)
+                {
+                    lock (unprocessedDVCPacketBuffer)
+                    {
+                        if (unprocessedDVCPacketBuffer.Count > 0)
+                        {
+                            for (int i = 0; i < unprocessedDVCPacketBuffer.Count; i++)
+                            {
+                                if (transportType == unprocessedDVCPacketBuffer[i].TransportType
+                                    && unprocessedDVCPacketBuffer[i].PDU is DynamicVCPDU)
+                                {
+                                    DynamicVCPDU rep = unprocessedDVCPacketBuffer[i].PDU as DynamicVCPDU;
+                                    if (rep.HeaderBits.Cmd == Cmd_Values.Data)
+                                    {
+                                        unprocessedDVCPacketBuffer.RemoveAt(i);
+                                        return rep;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Thread.Sleep(this.waitInterval);
+            }
+            return null;
+
+        }
+      
+               
+        /// <summary>
+        /// Expect a DYNVC_SOFT_SYNC_RESPONSE PDU.
+        /// </summary>
+        public SoftSyncReqDvcPDU ExpectSoftSyncReqPDU(TimeSpan timeout, DynamicVC_TransportType transportType = DynamicVC_TransportType.RDP_UDP_Reliable)
+        {
+            DateTime endTime = DateTime.Now + timeout;
+            while (DateTime.Now < endTime)
+            {
+                if (unprocessedDVCPacketBuffer.Count > 0)
+                {
+                    lock (unprocessedDVCPacketBuffer)
+                    {
+                        if (unprocessedDVCPacketBuffer.Count > 0)
+                        {
+                            for (int i = 0; i < unprocessedDVCPacketBuffer.Count; i++)
+                            {
+                                if (transportType == unprocessedDVCPacketBuffer[i].TransportType
+                                    && unprocessedDVCPacketBuffer[i].PDU is SoftSyncReqDvcPDU)
+                                {
+                                    SoftSyncReqDvcPDU capReq = unprocessedDVCPacketBuffer[i].PDU as SoftSyncReqDvcPDU;
+                                    unprocessedDVCPacketBuffer.RemoveAt(i);
+                                    return capReq;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Thread.Sleep(this.waitInterval);
+            }
+            return null;
         }
 
         /// <summary>
@@ -217,6 +297,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         #endregion Public Methods
 
         #region Private Methods
+        /// <summary>
+        /// Send a PDU using a specific transport
+        /// </summary>
+        /// <param name="pdu"></param>
+        /// <param name="transportType"></param>
+        private void Send(DynamicVCPDU pdu, DynamicVC_TransportType transportType)
+        {
+
+            if (!transportDic.ContainsKey(transportType))
+            {
+                throw new InvalidOperationException("Not create DVC transport:" + transportType);
+            }
+            transportDic[transportType].Send(pdu);
+        }
 
         /// <summary>
         /// Expect a DVC Capabilities Request PDU
@@ -255,7 +349,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             }
             return null;
         }
-
+        
         /// <summary>
         /// Send a DVC Capabilities Response PDU
         /// </summary>
@@ -290,7 +384,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
                                 {
                                     if (transportType == unprocessedDVCPacketBuffer[i].TransportType
                                         && unprocessedDVCPacketBuffer[i].PDU is CreateReqDvcPdu
-                                        && (unprocessedDVCPacketBuffer[i].PDU as CreateReqDvcPdu).ChannelName == channelName)
+                                        && (string.Equals(( unprocessedDVCPacketBuffer[i].PDU as CreateReqDvcPdu).ChannelName.Trim('\0'), channelName, StringComparison.OrdinalIgnoreCase)))
                                     {
                                         CreateReqDvcPdu pdu = unprocessedDVCPacketBuffer[i].PDU as CreateReqDvcPdu;
                                         unprocessedDVCPacketBuffer.RemoveAt(i);
@@ -374,19 +468,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             }
 
             DynamicVirtualChannel channel = new DynamicVirtualChannel(createReq.ChannelId, createReq.ChannelName, (ushort)createReq.HeaderBits.Sp, transportDic[transportType]);
-            if (receiveCallBack != null)
-            {
-                // Add event method here can make sure processing the first DVC data packet
-                channel.Received += receiveCallBack;
-            }
-            else
-            {
-                if (callBackMethodsDic != null && callBackMethodsDic.ContainsKey(createReq.ChannelName))
-                {
-                    channel.Received += callBackMethodsDic[createReq.ChannelName];
-                }
-            }
-
+           
             channelDicbyId.Add(createReq.ChannelId, channel);
 
             this.SendDVCCreateResponsePDU(createReq.ChannelId, 0, transportType);
@@ -459,6 +541,71 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             return null;
         }
 
+        private void SendDataCompressedReqPdu(uint channelId, byte[] data, DynamicVC_TransportType transportType)
+        {
+            DataCompressedDvcPdu pdu = pduBuilder.CreateDataCompressedReqPdu(channelId, data);
+            Send(pdu, transportType);
+        }
+
+        private void SendFirstCompressedDataPdu(uint channelId, byte[] data, DynamicVC_TransportType transport)
+        {
+            //According to section 3.1.5.1.4 of MS-RDPEDYC,
+            //If the total uncompressed length of the message exceeds 1,590 bytes, 
+            //the DYNVC_DATA_FIRST_COMPRESSED (section 2.2.3.3) PDU is sent as the first data PDU, 
+            //followed by DYNVC_DATA_COMPRESSED (section 2.2.3.4) PDUs until all the data has been sent.
+            if (data.Length <= ConstLength.MAX_UNCOMPRESSED_DATA_LENGTH)
+            {
+                byte[] compressedData = pduBuilder.CompressDataToRdp8BulkEncodedData(data, PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_LITE | PACKET_COMPR_FLAG.PACKET_COMPRESSED);
+                DataFirstCompressedDvcPdu firstCompressedPdu = new DataFirstCompressedDvcPdu(channelId, (uint)data.Length, compressedData);
+                firstCompressedPdu.GetNonDataSize();
+                Send(firstCompressedPdu, transport);
+            }
+            else
+            {
+                //Cmd:4 bits, Len: 2 bits, cbChid:2 bits, ChannelId: 8 bit, Length: no more than 1600, so it it 16 bits. Totally, 4 bytes
+                // Descriptor is 1 byte, Header is 1 byte
+                //So the max length of the data should be 1600 (Max Chunk Length)-6
+                byte[] uncompressedData = new byte[ConstLength.MAX_FIRST_COMPRESSED_DATA_LENGTH];
+                Array.Copy(data, uncompressedData, ConstLength.MAX_FIRST_COMPRESSED_DATA_LENGTH);
+                byte[] compressedData = pduBuilder.CompressDataToRdp8BulkEncodedData(uncompressedData, PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_LITE | PACKET_COMPR_FLAG.PACKET_COMPRESSED);
+
+                DataFirstCompressedDvcPdu firstCompressedPdu = new DataFirstCompressedDvcPdu(channelId, (uint)data.Length, compressedData);
+                firstCompressedPdu.GetNonDataSize();
+                Send(firstCompressedPdu, transport);
+
+                int leftBytes = uncompressedData.Length - (int)ConstLength.MAX_FIRST_COMPRESSED_DATA_LENGTH;
+                int followingMsgCount = 0;
+
+                if (leftBytes > 0)
+                {
+                    int followingLen = data.Length - (int)ConstLength.MAX_FIRST_COMPRESSED_DATA_LENGTH;
+                    followingMsgCount = (followingLen / (int)ConstLength.MAX_COMPRESSED_DATA_LENGTH);
+                    followingMsgCount = (followingLen % (int)ConstLength.MAX_COMPRESSED_DATA_LENGTH == 0) ? followingMsgCount : ++followingMsgCount;
+                    for (int i = 0; i < followingMsgCount; i++)
+                    {
+                        if (i != followingMsgCount)
+                        {
+                            byte[] followingUnCompressedData = new byte[ConstLength.MAX_COMPRESSED_DATA_LENGTH];
+                            Array.Copy(data, i * ConstLength.MAX_COMPRESSED_DATA_LENGTH + ConstLength.MAX_FIRST_COMPRESSED_DATA_LENGTH, followingUnCompressedData, 0, ConstLength.MAX_COMPRESSED_DATA_LENGTH);
+                            byte[] followingCompressedData = pduBuilder.CompressDataToRdp8BulkEncodedData(followingUnCompressedData, PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_LITE | PACKET_COMPR_FLAG.PACKET_COMPRESSED);
+
+                            DynamicVCPDU followingCompressedPDU = pduBuilder.CreateDataCompressedReqPdu(channelId, followingCompressedData);
+                            Send(followingCompressedPDU, transport);
+                        }
+                        else //Last message
+                        {
+                            byte[] lastUnCompressedData = new byte[data.Length - i * ConstLength.MAX_COMPRESSED_DATA_LENGTH];
+                            Array.Copy(data, i * ConstLength.MAX_COMPRESSED_DATA_LENGTH + ConstLength.MAX_FIRST_COMPRESSED_DATA_LENGTH, lastUnCompressedData, 0, followingLen - i * ConstLength.MAX_COMPRESSED_DATA_LENGTH);
+                            byte[] lastCompressedData = pduBuilder.CompressDataToRdp8BulkEncodedData(lastUnCompressedData, PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_LITE | PACKET_COMPR_FLAG.PACKET_COMPRESSED);
+
+                            DynamicVCPDU followingPdu = pduBuilder.CreateDataCompressedReqPdu(channelId, lastCompressedData);
+                            Send(followingPdu, transport);
+                        }
+                    }
+                }
+            }
+        }
+       
         /// <summary>
         /// Process DVC packet, but don't process data packet
         /// Data packet will be processed by corresponding Dynamic virtual channel

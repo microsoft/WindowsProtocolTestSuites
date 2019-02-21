@@ -241,7 +241,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
     {
         public virtual Header HeaderBits { get; set; }
 
-        public byte[] RawData { get; protected set; }
+        public byte[] RawData { get; set; }
 
         public virtual uint ChannelId { get; set; }
 

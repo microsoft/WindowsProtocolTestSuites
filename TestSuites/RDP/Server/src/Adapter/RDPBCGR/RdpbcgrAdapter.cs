@@ -20,7 +20,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         private const string SVCNameForRDPEDYC = "DRDYNVC";
 
-        private RdpbcgrClient rdpbcgrClientStack;
+        public RdpbcgrClient rdpbcgrClientStack;
 
         private TimeSpan pduWaitTimeSpan = new TimeSpan(0, 0, 20);
         
@@ -256,7 +256,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         {
             rdpbcgrClientStack.Connect(encryptedProtocol);
         }
-
+      
         /// <summary>
         /// Disconnect transport connection with RDP Server
         /// </summary>
