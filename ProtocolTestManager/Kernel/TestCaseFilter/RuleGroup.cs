@@ -21,8 +21,14 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// </summary>
         public string Name { set; get; }
 
+        /// <summary>
+        /// RuleGroup Description.
+        /// </summary>
         public string Description { set; get; }
 
+        /// <summary>
+        /// RuleGroup Type.
+        /// </summary>
         public RuleType RuleGroupType { set; get; }
 
         /// <summary>
@@ -31,7 +37,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public bool isLoadingProfile { set; get; }
 
         /// <summary>
-        /// A feature mapping table
+        /// A table which helps lookup rules in mapping filter by category name in target filter
+        /// Key: category name of a rule in target filter
+        /// Value: list of rules in mapping filter
         /// </summary>
         public Dictionary<string, List<Rule>> featureMappingTable = null;
 
@@ -41,29 +49,134 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public RuleGroup mappingRuleGroup = null;
 
         /// <summary>
+        /// A table which helps lookup rules in target filter by category name in mapping filter
+        /// Key: category name of a rule in mapping filter
+        /// Value: list of rules in target filter
+        /// </summary>
+        public Dictionary<string, List<Rule>> reverseFeatureMappingTable = null;
+
+        /// <summary>
+        /// RuleGroup with index specified in config.xml
+        /// </summary>
+        public RuleGroup targetRuleGroup = null;
+
+        /// <summary>
+        /// Status of RefreshFeatureMapping
+        /// </summary>
+        public enum RefreshStatus : Int16
+        {
+            /// <summary>
+            /// Current task is done
+            /// </summary>
+            Done = 0x0000,
+
+            /// <summary>
+            /// Current task is Refreshing Feature Mapping
+            /// </summary>
+            FeatureMapping = 0x0001,
+
+            /// <summary>
+            /// Current task is Refreshing Reverse Feature Mapping
+            /// </summary>
+            ReverseFeatureMapping = 0x0002,
+        }
+
+        /// <summary>
+        /// Status of refreshing feature mapping
+        /// </summary>
+        public RefreshStatus refreshStatus;
+
+        /// <summary>
         /// Refresh feature mapping from target filter ruleGroup to mapping filter ruleGroup
         /// </summary>
         private void RefreshFeatureMapping()
         {
             // Not to refresh feature mapping when loading profile or the result of filtering cases will be changed
-            if (!isLoadingProfile && featureMappingTable != null)
+            if (!isLoadingProfile)
             {
-                List<string> categories = GetCategories(RuleGroupType == RuleType.Selector);
-
-                // Unselect all features in mappingFilter
-                mappingRuleGroup.SelectStatus = RuleSelectStatus.NotSelected;
-
-                // Select mapping features in mappingFilter based on featureMappingTable
-                foreach (string category in categories)
+                // If feature mapping table exists and we are updating from target filter to mapping filter
+                if (featureMappingTable != null && !refreshStatus.HasFlag(RefreshStatus.ReverseFeatureMapping))
                 {
-                    if (featureMappingTable.ContainsKey(category))
+                    refreshStatus |= RefreshStatus.FeatureMapping;
+
+                    // Get selected categories only to avoid refreshing for rule with partial selection
+                    List<string> categories = GetSelectedCategories(RuleGroupType == RuleType.Selector);
+
+                    // Unselect all features in mappingFilter
+                    mappingRuleGroup.SelectStatus = RuleSelectStatus.UnSelected;
+
+                    // Select mapping features in mappingFilter based on featureMappingTable
+                    foreach (string category in categories)
                     {
-                        List<Rule> ruleList = featureMappingTable[category];
-                        foreach (Rule rule in ruleList)
+                        if (featureMappingTable.ContainsKey(category))
                         {
-                            rule.SelectStatus = RuleSelectStatus.Selected;
+                            List<Rule> ruleList = featureMappingTable[category];
+                            foreach (Rule rule in ruleList)
+                            {
+                                // Check selection status from reverse feature mapping table
+                                string key = rule.CategoryList[0];
+                                RuleSelectStatus currentSelectStatus = RuleSelectStatus.Selected;
+                                foreach (var r in mappingRuleGroup.reverseFeatureMappingTable[key])
+                                {
+                                    if (r.SelectStatus == RuleSelectStatus.UnSelected)
+                                    {
+                                        currentSelectStatus = RuleSelectStatus.Partial;
+                                        break;
+                                    }
+                                }
+                                rule.SelectStatus = currentSelectStatus;
+                            }
                         }
                     }
+                    refreshStatus &= ~RefreshStatus.FeatureMapping;
+                }
+                // If reverse feature mapping table exists and we are updating from mapping filter to target filter
+                else if (reverseFeatureMappingTable != null && !targetRuleGroup.refreshStatus.HasFlag(RefreshStatus.FeatureMapping))
+                {
+                    List<string> categories = GetCategories(RuleGroupType == RuleType.Selector);
+
+                    targetRuleGroup.refreshStatus |= RefreshStatus.ReverseFeatureMapping;
+
+                    // Unselect all features in targetFilter
+                    targetRuleGroup.SelectStatus = RuleSelectStatus.UnSelected;
+
+                    // Set select status to partial for rule in target filter
+                    foreach (string category in categories)
+                    {
+                        if (reverseFeatureMappingTable.ContainsKey(category))
+                        {
+                            List<Rule> ruleList = reverseFeatureMappingTable[category];
+
+                            foreach (Rule rule in ruleList)
+                            {
+                                // Check selection status from feature mapping table
+                                bool noCaseSelected = true;
+                                RuleSelectStatus currentSelectStatus = RuleSelectStatus.Selected;
+                                string key = rule.CategoryList[0];
+                                foreach (var r in targetRuleGroup.featureMappingTable[key])
+                                {
+                                    if (r.SelectStatus == RuleSelectStatus.UnSelected)
+                                    {
+                                        currentSelectStatus = RuleSelectStatus.Partial;
+                                    }
+                                    else
+                                    {
+                                        // RuleSelectStatus.Selected or RuleSelectStatus.Partial
+                                        noCaseSelected = false;
+                                    }
+                                }
+                                if (noCaseSelected)
+                                {
+                                    rule.SelectStatus = RuleSelectStatus.UnSelected;
+                                }
+                                else
+                                {
+                                    rule.SelectStatus = currentSelectStatus;
+                                }
+                            }
+                        }
+                    }
+                    targetRuleGroup.refreshStatus &= ~RefreshStatus.ReverseFeatureMapping;
                 }
             }
             isLoadingProfile = false;
@@ -96,7 +209,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 switch (SelectStatus)
                 {
-                    case RuleSelectStatus.NotSelected: return false;
+                    case RuleSelectStatus.UnSelected: return false;
                     case RuleSelectStatus.Selected: return true;
                     case RuleSelectStatus.Partial: return null;
                 }
@@ -104,15 +217,15 @@ namespace Microsoft.Protocols.TestManager.Kernel
             }
             set
             {
-                if (value == null) SelectStatus = RuleSelectStatus.NotSelected;
+                if (value == null) SelectStatus = RuleSelectStatus.UnSelected;
                 else
-                    SelectStatus = (bool)value ? RuleSelectStatus.Selected : RuleSelectStatus.NotSelected;
+                    SelectStatus = (bool)value ? RuleSelectStatus.Selected : RuleSelectStatus.UnSelected;
             }
         }
 
         public RuleGroup()
         {
-            SelectStatus =  RuleSelectStatus.NotSelected;
+            SelectStatus = RuleSelectStatus.UnSelected;
         }
 
         [SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", Justification = "By Design")]
@@ -205,12 +318,41 @@ namespace Microsoft.Protocols.TestManager.Kernel
             while (rulestack.Count > 0)
             {
                 Rule r = rulestack.Pop();
-                if ((r.SelectStatus != RuleSelectStatus.NotSelected && IsSelected) ||
-                    (r.SelectStatus == RuleSelectStatus.NotSelected && !IsSelected))
+                if ((r.SelectStatus != RuleSelectStatus.UnSelected && IsSelected) ||
+                    (r.SelectStatus == RuleSelectStatus.UnSelected && !IsSelected))
                 {
                     foreach (string cat in r.CategoryList)
                     {
                         if (!categories.Contains(cat)) categories.Add(cat);
+                    }
+                    foreach (Rule childrule in r) rulestack.Push(childrule);
+                }
+            }
+            return categories;
+        }
+
+        /// <summary>
+        /// Only get categories from selected rule
+        /// </summary>
+        /// <param name="IsSelected"></param>
+        /// <returns></returns>
+        public List<string> GetSelectedCategories(bool IsSelected)
+        {
+            List<string> categories = new List<string>();
+            Stack<Rule> rulestack = new Stack<Rule>();
+            foreach (Rule r in this) rulestack.Push(r);
+            while (rulestack.Count > 0)
+            {
+                Rule r = rulestack.Pop();
+                if ((r.SelectStatus != RuleSelectStatus.UnSelected && IsSelected) ||
+                    (r.SelectStatus == RuleSelectStatus.UnSelected && !IsSelected))
+                {
+                    foreach (string cat in r.CategoryList)
+                    {
+                        if (r.SelectStatus == RuleSelectStatus.Selected)
+                        {
+                            if (!categories.Contains(cat)) categories.Add(cat);
+                        }
                     }
                     foreach (Rule childrule in r) rulestack.Push(childrule);
                 }
@@ -252,7 +394,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public event PropertyChangedEventHandler PropertyChanged;
 
         public event ContentModifiedEventHandler ContentModified;
-       
+
     }
 
     public enum RuleType { Selector, Remover };

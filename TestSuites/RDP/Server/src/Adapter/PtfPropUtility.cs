@@ -15,6 +15,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
     {
         public const string RdpSecurityProtocol = "RDP.Security.Protocol";
         public const string RdpSecurityNegotiation = "RDP.Security.Negotiation";
+        public const string RdpSecurityTlsVersion = "RDP.Security.TLS.Version";
     }
 
     /// <summary>

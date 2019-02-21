@@ -95,8 +95,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             get { return testConfig; }
         }
 
-        public string FileName {
-            get { return fileName;  }
+        public string FileName
+        {
+            get { return fileName; }
         }
 
         public FileSystem FileSystem
@@ -5191,9 +5192,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         #region Utility methods
 
         /// <summary>
-        /// Create a random file name with test case name and a random string of 8 letters.
+        /// Create a random file name a random string of 8 letters.
         /// </summary>
-        /// <returns>>A file name with test case name and a random string of 8 letters.</returns>
+        /// <returns>>A file name with a random string of 8 letters.</returns>
         protected string ComposeRandomFileName()
         {
             return ComposeRandomFileName(8);
@@ -5203,7 +5204,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// Create a random file name
         /// </summary>
         /// <param name="fileNameLength">The length of the file name.</param>
-        /// <returns>A file name with test case name and a random string of the given length.</returns>
+        /// <returns>A file name with a random string of the given length.</returns>
         public string ComposeRandomFileName(int fileNameLength)
         {
             int randomNumber = 0;
@@ -5219,8 +5220,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 ramdomFileName = ramdomFileName + fileNameLetter.ToString(); ;
             }
 
-            AddTestFileName(gOpenMode, CurrentTestCaseName + "_" + ramdomFileName);
-            return CurrentTestCaseName + "_" + ramdomFileName;
+            AddTestFileName(gOpenMode, ramdomFileName);
+            return ramdomFileName;
         }
 
         /// <summary>

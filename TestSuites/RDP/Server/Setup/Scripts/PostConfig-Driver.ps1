@@ -1,7 +1,5 @@
-#############################################################
-## Copyright (c) Microsoft Corporation. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 #############################################################################
 ##
@@ -14,15 +12,19 @@
 
 Param
 (
-	[string]$WorkingPath = "C:\temp"
+    [String]$WorkingPath  = (split-path -parent ([System.IO.Path]::GetDirectoryName($myInvocation.MyCommand.Definition)))
 )
 
 $param                   = @{}
 $ScriptFileFullPath      = $MyInvocation.MyCommand.Definition
 $ScriptName              = [System.IO.Path]::GetFileName($ScriptFileFullPath)
 $LogFileFullPath         = "$ScriptFileFullPath.log"
-$SignalFileFullPath      = "$WorkingPath\post.finished.signal"
+$SignalFileFullPath      = "$env:SystemDrive\PostScript.Completed.signal"
 [string]$configPath	 	 = "$WorkingPath\protocol.xml"
+
+# Switch to the working path
+Write-Host "Switching to $WorkingPath..." -ForegroundColor Yellow
+Push-Location $WorkingPath
 
 [xml]$Content = Get-Content $configPath
 $driverComputerSetting = $Content.lab.servers.vm | where {$_.role -eq "DriverComputer"}
@@ -58,7 +60,7 @@ Function Write-ConfigLog
 Function Complete-Configure
 {
     # Write signal file
-    Write-ConfigLog "Write signal file`: post.finished.signal to hard drive."
+    Write-ConfigLog "Write signal file`: $SignalFileFullPath to hard drive."
     cmd /C ECHO CONFIG FINISHED > $SignalFileFullPath
 
     # Ending script
@@ -80,10 +82,6 @@ Function Init-Environment()
 
     # Start executing the script
     Write-ConfigLog "Executing [$ScriptName]..." -ForegroundColor Cyan
-
-    # Switch to the working path
-    Write-ConfigLog "Switching to $WorkingPath..." -ForegroundColor Yellow
-    Push-Location $WorkingPath
 }
 
 #------------------------------------------------------------------------------------------
@@ -96,16 +94,21 @@ Function Config-Environment
 	[string] $domain = $driverComputerSetting.domain
 	[string] $userName = $coreSetting.username
 	[string] $userPwd = $coreSetting.password
-	
+
     Write-ConfigLog "Setting autologon..." -ForegroundColor Yellow
-    Set-AutoLogon -Domain $domain -Username $userName -Password $userPwd -Count 999
+    .\Set-AutoLogon -Domain $domain -Username $userName -Password $userPwd -Count 999
 
     # Turn off UAC
     Write-ConfigLog "Turn off UAC..." -ForegroundColor Yellow
     Set-ItemProperty -path  HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System -name "EnableLUA" -value "0"
 
-    Write-Host "Enable remoting"
-    Enable-Remoting
+    # Write-Host "Enable WinRM"
+    Write-Host "Enable WinRM"
+    if(Test-WSMan -ComputerName $driverComputerSetting.ip){
+        Write-Host "WinRM is running"
+    }else{
+        .\Enable-WinRM.ps1
+    }
 }
 
 
@@ -115,7 +118,7 @@ Function Config-Environment
 Function Main
 {
     # Initialize configure environment
-    Init-Environment    
+    Init-Environment
 
     # Start configure
     Config-Environment
@@ -125,3 +128,5 @@ Function Main
 }
 
 Main
+
+Pop-Location

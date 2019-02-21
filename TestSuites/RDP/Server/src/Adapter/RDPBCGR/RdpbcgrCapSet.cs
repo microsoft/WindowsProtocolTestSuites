@@ -169,7 +169,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             inputCapabilitySet.imeFileName = string.Empty;
             inputCapabilitySet.lengthCapability = (ushort)(Marshal.SizeOf(inputCapabilitySet)
                                                 - sizeof(int)
-                                                + RdpConstValue.INPUT_CAP_IME_FLIENAME_SIZE);
+                                                + RdpConstValue.INPUT_CAP_IME_FILENAME_SIZE);
 
             capabilitySets.Add(inputCapabilitySet);
             #endregion Populating Input Capability Set

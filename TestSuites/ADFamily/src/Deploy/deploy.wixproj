@@ -386,7 +386,6 @@
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Install-Iis-Feature.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Install-SelfSignedCert.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Join-Domain.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
-    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\makecert.exe" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Modify-PtfConfigFiles.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\PromoteChildDomain.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\PromoteDomainController.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />

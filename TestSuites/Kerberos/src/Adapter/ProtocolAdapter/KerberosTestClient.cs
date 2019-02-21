@@ -412,13 +412,11 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
         /// <param name="kdcOptions">KDC options</param>
         /// <param name="seqPadata">A sequence of preauthentication data</param>
         /// <param name="checksumType">Checksum type of PA-TGS-REQ</param>
-        /// <param name="additionalTicket">Additional ticket</param>
         /// <param name="data">Authorization data</param>
         /// <param name="msgType">Message Type</param>
         public void SendTgsRequest(string sName,
             KdcOptions kdcOptions,
             Asn1SequenceOf<PA_DATA> seqPadata = null,
-            Ticket additionalTicket = null,
             AuthorizationData dataInAuthenticator = null,
             AuthorizationData dataInEncAuthData = null,
             MsgType msgType = MsgType.KRB_TGS_REQ)
@@ -466,7 +464,7 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
             KdcOptions kdcOptions,
             MsgType msgType)
         {
-            SendTgsRequest(sName, kdcOptions, null, null, null, null, msgType);
+            SendTgsRequest(sName, kdcOptions, null, null, null, msgType);
         }
 
         /// <summary>

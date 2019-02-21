@@ -4141,7 +4141,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     "00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-" +
                     "00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-" +
                     "00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00";
-            inputCapabilitySet.lengthCapability = (ushort)(24 + ConstValue.INPUT_CAP_IME_FLIENAME_SIZE); // the other fields(except imeFileName field) totoal length is 24
+            inputCapabilitySet.lengthCapability = (ushort)(24 + ConstValue.INPUT_CAP_IME_FILENAME_SIZE); // the other fields(except imeFileName field) totoal length is 24
 
             capabilitySets.Add(inputCapabilitySet);
             #endregion Populating Input Capability Set

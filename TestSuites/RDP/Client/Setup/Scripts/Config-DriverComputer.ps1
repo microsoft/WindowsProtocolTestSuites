@@ -6,7 +6,7 @@ Param(
 )
 
 Write-Host "Put current dir as $scriptsPath."
-pushd $scriptsPath
+Push-Location $scriptsPath
 
 #----------------------------------------------------------------------------
 # Starting script
@@ -56,7 +56,6 @@ if([double]$SutOSVersion -ge "10.0")
         $DropConnectionForInvalidRequest = "false"
     }
 }
-
 
 #-----------------------------------------------------
 # Create $logPath if not exist
@@ -155,7 +154,13 @@ if($listeningPort -eq "3389")
    if(Get-Service | Where-Object{$_.name -eq "TermService"} | where-object{$_.status -eq "Running"})
    {
        Set-ItemProperty HKLM:\SYSTEM\CurrentControlSet\Control\"Terminal Server"\Winstations\RDP-Tcp PortNumber -value 4488 -Type DWORD
-       Restart-Service TermService -F
+       try {
+            Restart-Service TermService -Force 
+       }
+       catch {
+            Write-Warning  "Restart-Service TermService failed..."
+       }
+       
    }
 }
 
@@ -239,7 +244,7 @@ cmd /c schtasks /Create /SC Weekly /TN WaitForSUTControlAdapterReady /TR "powers
 #-----------------------------------------------------
 # Finished to config driver computer
 #-----------------------------------------------------
-popd
+Pop-Location
 Write-Host "Write signal file: config.finished.signal to system drive."
 cmd /C ECHO CONFIG FINISHED>$env:HOMEDRIVE\config.finished.signal
 
@@ -249,7 +254,4 @@ cmd /C ECHO CONFIG FINISHED>$env:HOMEDRIVE\config.finished.signal
 Write-Host "Config finished."
 Write-Host "EXECUTE [Config-DriverComputer.ps1] FINISHED (NOT VERIFIED)."
 
-
-
 exit 0
-

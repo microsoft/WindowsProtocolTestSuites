@@ -120,8 +120,8 @@ Note
 | | Confirm that your test environment and computers meet the requirements of the test suite.| For information about the requirements of the test suite, see [Requirements](#requirements). |
 | | Install the software prerequisites.| For information about software that must be installed on the computers in your test environment before the test suite is installed, see [Software](#software).|
 | | Set up the driver computer.| See [Set Up the Driver Computer](#set-up-the-driver-computer).|
-| | Set up the system under test (SUT).| See [Set Up the SUT](#set-up-the-sut).|
-| | Set up the Domain Controller (DC). (optional)| See [Set Up the DC](#set-up-the-dc). |
+| | Set up the system under test (SUT).| See [Set Up a Windows Based SUT](#set-up-a-windows-based-sut).|
+| | Set up the Domain Controller (DC). (optional)| See [Set Up a Windows Based Domain Controller](#set-up-a-windows-based-domain-controller). |
 | | Set up the network.| See [Network Setup](#network-setup).|
 | | Verify the connection from the driver computer to the SUT and other computers.| See [Verify Connectivity from the Driver Computer](#verify-connectivity-from-the-driver-computer).|
 | | Configure the SUT.| See [Configure Windows based Computers](#configure-windows-based-computers) or |
@@ -138,8 +138,8 @@ Use the following quick reference to learn how to complete common tasks.
 | -------------| ------------- |
 | Set up the test environment| [Network Setup](#network-setup) and [Computer Setup](#computer-setup)|
 | Verify the connection from the driver computer to other computers in the test environment| [Verify Connectivity from the Driver Computer](#verify-connectivity-from-the-driver-computer)|
-| Configure a SUT| [Configure the SUT](#configure-the-sut) or [Configure Computers that are Not Based on Windows](#configure-computers-that-are-not-based-on-window)|
-| Configure a DC| [Configure Computers that are Not Based on Windows](configure-computers-that-are-not-based-on-window)|
+| Configure a SUT| [Configure the SUT](#configure-windows-based-computers) or [Configure Computers that are Not Based on Windows](#configure-computers-that-are-not-based-on-windows)|
+| Configure a DC| [Configure Computers that are Not Based on Windows](#configure-computers-that-are-not-based-on-windows)|
 | Configure the driver computer| [Configure Windows-based Computers](#configure-windows-based-computers)|
 | Configure the test suite settings| [Configure the Test Suite](#configure-the-test-suite)|
 | Run a smoke test| [Run the Smoke Test](#run-the-smoke-test).|
@@ -284,7 +284,7 @@ Note
 
 ## Network Setup
 
-You can run this test suite in a workgroup or domain environment using either physical or virtual machines. This section describes the test environment using physical computers. For information about configuring a virtual machine, see [http://www.microsoft.com/virtualization/en/us/solution-appliance-test.aspx](http://www.microsoft.com/virtualization/en/us/solution-appliance-test.aspx).
+You can run this test suite in a workgroup or domain environment using either physical or virtual machines. This section describes the test environment using physical computers. For information about configuring a virtual machine, see [https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/create-virtual-machine](https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/create-virtual-machine).
 
 ### Network Infrastructure
 
@@ -339,7 +339,7 @@ After you prepare the environment, verify the connection from the driver compute
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
 Note
 
->Disable active firewalls in the test environment.
+>Disable active firewalls in the test environment(Run Disable_Firewall.ps1 or do it manually).
 
 To check the connection from the driver computer
 
@@ -370,7 +370,7 @@ This section describes how to set up the driver computer.
 ![image6.png](./image/RDP_ClientUserGuide/image6.png)
 Important
 
->Microsoft Visual Studio 2017 (or later) and Protocol Test Framework (build 1.0.6000.0) must be installed on the driver computer before you run the test suite installer.
+>Microsoft Visual Studio 2017 (or later), Spec Explorer (build 3.5.3146.0 or later) and Protocol Test Framework (build 1.0.6000.0) must be installed on the driver computer before you run the test suite installer.
 
 To set up the driver computer
 
@@ -537,6 +537,10 @@ Note
 
 * Type cd C:\MicrosoftProtocolTests\RDP \Client-Endpoint\ _&#60; version &#35;  &#62;_ \Scripts, and press **Enter**.
 
+* Type .\Enable-USBRedirection.ps1 and press **Enter** if you want to test MS-RDPEUSB cases.
+
+* Type .\Enable-WinRM.ps1 and press **Enter**.
+
 * Type .\Config-TerminalClient.ps1 and press **Enter**.
 
 * Config Group Policy:
@@ -646,13 +650,12 @@ Note
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
 Note
 
->After run Config-DriverComputer.ps1, three files are generated under C:\, as follows:
+>After run Config-DriverComputer.ps1, two files are generated under C:\, as follows:
 
 >	* ***ComputerName***.cer
 
 >	* ***ComputerName***.pfx
 
->	* ***ComputerName***.pvk
 
 >***ComputerName*** represents driver computer’s name as you configured in ParamConfig.xml.
 
@@ -713,7 +716,7 @@ This guide provides only basic information about configuring the test environmen
 
 * For domain environments, join all computers to the domain of the domain controller.
 
-* Disable active firewalls on all computers.
+* Disable active firewalls on all computers(Run Disable_Firewall.ps1 or do it manually).
 
 For detailed instructions about how to complete the tasks that this process requires, see the administration guide for your operating system.
 

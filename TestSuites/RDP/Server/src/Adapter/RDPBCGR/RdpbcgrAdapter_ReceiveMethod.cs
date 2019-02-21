@@ -835,6 +835,21 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 return;
             }
 
+            // Verify the pdu size
+            int pduSize = RdpbcgrUtility.GetPduSize(updatePdu);
+            int length = RdpbcgrUtility.CalculateFpUpdatePduLength(updatePdu.length1, updatePdu.length2);
+            Site.Assert.AreEqual(pduSize, length, "The length ({0}) of TS_FP_UPDATE_PDU calculated by length1 & length2 must be equal to the real size ({1}) of the pdu.", length, pduSize);
+
+            if ((0x7f & updatePdu.length1) == updatePdu.length1)
+            {
+                // length1's most significant bit is not set
+                Site.Assert.AreEqual(true, updatePdu.length1 >= 1 && updatePdu.length1 <= 127, "If the most significant bit of the length1 field is not set, then the size of the PDU is in the range 1 to 127 bytes ");
+            }
+            else
+            {
+                Site.Assert.AreEqual(true, length <= 16383, "If the most significant bit of the length1 field is set, the overall PDU length SHOULD be less than or equal to 16,383 bytes.");
+            }
+
             if (updatePdu.fpOutputUpdates != null)
             {
                 foreach (TS_FP_UPDATE update in updatePdu.fpOutputUpdates)

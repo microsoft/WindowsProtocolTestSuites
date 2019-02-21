@@ -81,3 +81,7 @@ TestSuites/RDP/Server/src/Deploy/Batch.wxs
 TestSuites/RDP/Server/src/Deploy/Bin.wxs
 TestSuites/RDP/Server/src/Deploy/DOCS_FILES.wxs
 TestSuites/RDP/Server/src/Deploy/Scripts.wxs
+TestSuites/RDP/Client/src/Deploy/CommonBatch.wxs
+TestSuites/MS-SMBD/src/Deploy/Batch.wxs
+TestSuites/MS-SMBD/src/Deploy/Bin.wxs
+TestSuites/MS-SMBD/src/Deploy/CommonBatch.wxs

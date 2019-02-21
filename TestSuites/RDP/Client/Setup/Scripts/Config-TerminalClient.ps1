@@ -7,9 +7,8 @@ Param(
 [String]$scriptsPath  = [System.IO.Path]::GetDirectoryName($myInvocation.MyCommand.Definition)
 )
 
-pushd $scriptsPath
+Push-Location $scriptsPath
 $dataPath = "$scriptsPath\..\Data"
-$toolPath = "$env:HOMEDRIVE\Test\Tools" #For Temporarily use, will be removed in released version.
 
 #----------------------------------------------------------------------------
 # Starting script
@@ -57,7 +56,7 @@ Start-Transcript $logFile -Append
 #-----------------------------------------------------
 # Write value for all the parameters
 #-----------------------------------------------------
-Write-Host "EXECUTING [Config-DriverComputer.ps1] ..." -foregroundcolor cyan
+Write-Host "EXECUTING [Config-TerminalClient.ps1] ..." -foregroundcolor cyan
 Write-Host "`$scriptsPath        = $scriptsPath"
 Write-Host "`$logPath            = $logPath"       
 Write-Host "`$logFile            = $logFile"
@@ -86,10 +85,14 @@ cmd /c netsh advfirewall set allprofile state off 2>&1 | Write-Host
 #-----------------------------------------------------
 # Enable Powershell Remoting
 #-----------------------------------------------------
-Set-NetConnectionProfile -NetworkCategory Private -ErrorAction Ignore
-Enable-PSRemoting -Force
-Set-Item wsman:\localhost\client\trustedhosts *  -Force
-Restart-Service WinRM
+if(Test-WSMan -ComputerName $sutSetting.ip){
+    Write-Host "WinRM is running"
+}else{
+    Set-NetConnectionProfile -NetworkCategory Private -ErrorAction Ignore
+    Enable-PSRemoting -Force
+    Set-Item wsman:\localhost\client\trustedhosts *  -Force
+    Restart-Service WinRM
+}
 
 #-----------------------------------------------------
 # Modify ChangeResolution.ps1 and ChangeOrientation.ps1
@@ -228,10 +231,10 @@ New-Item -type Directory HKCU:\Software\Microsoft\"Terminal Server Client"\Serve
 New-Item -type Directory HKCU:\Software\Microsoft\"Terminal Server Client"\Servers\$driverComputerName -Force
 if ($workgroupDomain.ToUpper() -eq "DOMAIN")
 {
-    $usernameHint = "$domainName\administrator"
+    $usernameHint = "$domainName\$taskUser"
 }else
 {
-    $usernameHint = "$driverComputerName\administrator"
+    $usernameHint = "$driverComputerName\$taskUser"
 }
 New-ItemProperty HKCU:\Software\Microsoft\"Terminal Server Client"\Servers\$driverComputerName UsernameHint -value $usernameHint -PropertyType string -Force
 
@@ -253,7 +256,7 @@ New-ItemProperty HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANN
 #-----------------------------------------------------
 # Finished to config Terminal Client
 #-----------------------------------------------------
-popd
+Pop-Location
 Write-Host "Write signal file: config.finished.signal to system drive."
 cmd /C ECHO CONFIG FINISHED>$env:HOMEDRIVE\config.finished.signal
 
@@ -261,7 +264,7 @@ cmd /C ECHO CONFIG FINISHED>$env:HOMEDRIVE\config.finished.signal
 # Ending script
 #----------------------------------------------------------------------------
 Write-Host "Config finished."
-Write-Host "EXECUTE [Config-DriverComputer.ps1] FINISHED (NOT VERIFIED)."
+Write-Host "EXECUTE [Config-TerminalClient.ps1] FINISHED (NOT VERIFIED)."
 
 # cmd /C Pause
 

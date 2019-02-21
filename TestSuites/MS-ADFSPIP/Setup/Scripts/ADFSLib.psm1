@@ -1,7 +1,16 @@
-########################################################################################################
-## Copyright (c) Microsoft. All rights reserved.
+#############################################################################
+## Copyright (c) Microsoft Corporation. All rights reserved.
 ## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-########################################################################################################
+#############################################################################
+
+#############################################################################
+##
+## Microsoft Windows Powershell Sripting
+## File         :   ADFSLib.PSM1
+## Requirements :   Windows Powershell 3.0
+## Supported OS :   Windows Server 2012
+##
+##############################################################################
 
 function Install-DomainController {
 ##
@@ -162,14 +171,25 @@ function Set-AutoLogon {
 	param (
 	    [Parameter(Mandatory=$true)][ValidateNotNullOrEmpty()][String]$Domain,
 	    [Parameter(Mandatory=$true)][ValidateNotNullOrEmpty()][String]$Username,
-	    [Parameter(Mandatory=$true)][ValidateNotNullOrEmpty()][String]$Password
+	    [Parameter(Mandatory=$true)][ValidateNotNullOrEmpty()][String]$Password,
+	    [string]$Count = 999
 	)
 	process {
-		$regPath = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"
-	    Set-ItemProperty -path $regPath -Name "AutoAdminLogon" -Value "1" -Force
-	    Set-ItemProperty -path $regPath -Name "DefaultUserName" -Value $Username -Force
-	    Set-ItemProperty -path $regPath -Name "DefaultDomainName" -Value $Domain -Force 
-	    Set-ItemProperty -path $regPath -Name "DefaultPassword" -Value $Password -Force 
+	    $regPath = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"
+	    try {
+		Set-ItemProperty -Path $regPath -Name "AutoAdminLogon" -Value "1" -Force -ErrorAction Stop
+		Set-ItemProperty -Path $regPath -Name "DefaultDomainName" -Value $Domain -Force -ErrorAction Stop
+		Set-ItemProperty -Path $regPath -Name "DefaultUserName" -Value $Username -Force -ErrorAction Stop
+		Set-ItemProperty -Path $regPath -Name "DefaultPassword" -Value $Password -Force -ErrorAction Stop
+		Set-ItemProperty -Path $regPath -name "AltDefaultUserName" -value "$Username" -Force -ErrorAction Stop
+		Set-ItemProperty -Path $regPath -name "AltDefaultDomainName" -value "$Domain" -Force -ErrorAction Stop
+		Set-ItemProperty -Path $regPath -Name "AutologonCount" -Value $Count -Force -ErrorAction Stop
+	    }
+	    catch {
+		throw "Unable to set auto logon for domain $Domain user $Username with password $Password and logon count $Count. Error happened: "+$_.Exception.Message
+	    }
+        Get-ItemProperty -Path $regPath -Name "AutoAdminLogon" | Out-File $ENV:HOMEDRIVE\temp1.txt
+        Get-ItemProperty -Path $regPath -Name "AutologonCount" | Out-File $ENV:HOMEDRIVE\temp2.txt
 	}
 }
 

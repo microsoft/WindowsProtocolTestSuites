@@ -11,6 +11,7 @@ using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestSuites.Rdp;
+using System.Security.Authentication;
 
 namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 {
@@ -32,6 +33,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         private string localAddress;
         private bool verifyPduEnabled;
         private bool verifyShouldBehaviors;
+        private SslProtocols tlsVersion = SslProtocols.None;
         private int sendInterval = 100;
 
         private List<StackPacket> receiveBuffer;
@@ -199,7 +201,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 password,
                 localAddress,
                 serverPort);
-
+            rdpbcgrClientStack.TlsVersion = tlsVersion;
             isLogon = false;
         }
 
@@ -1249,7 +1251,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         }
 
         #endregion Multitransport Bootstrapping
-                
+
         #region Expect Methods
 
         /// <summary>
@@ -1302,6 +1304,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                         {
                             return packet as T;
                         }
+                        else if (packet is ErrorPdu)
+                        {
+                            // Print out the error message if there is an exception when expecting the pdu.
+                            this.Site.Assert.Fail("An Exception happened when expecting the packet: {0}", ((ErrorPdu)packet).ErrorMessage);
+                        }
                         else
                         {
                             // If the type of received packet is not T, add it into receive buffer
@@ -1312,7 +1319,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                         }
                     }
                 }
-            }
+            } 
             this.Site.Log.Add(LogEntryKind.Debug, "Timeout when expecting a {0}.", typeof(T).Name);
             return null;
         }
@@ -1505,6 +1512,41 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             PtfPropUtility.GetBoolPtfProperty(Site, "VerifyRdpbcgrMessages", out verifyPduEnabled);
             PtfPropUtility.GetBoolPtfProperty(Site, "VerifyShouldBehaviors", out verifyShouldBehaviors);
+
+            getTlsVersion();
+        }
+
+        private void getTlsVersion()
+        {
+            string strRDPSecurityTlsVersion;
+            if (PtfPropUtility.GetStringPtfProperty(Site, "RDP.Security.TLS.Version", out strRDPSecurityTlsVersion))
+            {
+                // TLS1.0, TLS1.1, TLS1.2 or None
+                if (strRDPSecurityTlsVersion.Equals("TLS1.0", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    tlsVersion = SslProtocols.Tls;
+                }
+                else if (strRDPSecurityTlsVersion.Equals("TLS1.1", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    tlsVersion = SslProtocols.Tls11;
+                }
+                else if (strRDPSecurityTlsVersion.Equals("TLS1.2", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    tlsVersion = SslProtocols.Tls12;
+                }
+                else if (strRDPSecurityTlsVersion.Equals("None", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    tlsVersion = SslProtocols.None;
+                }
+                else
+                {
+                    this.Site.Assume.Fail("The property value \"RDP.Security.TLS.Version\" is invalid in PTFConfig file.");
+                }
+            }
+            else
+            {
+                this.Site.Assume.Fail("The property \"RDP.Security.TLS.Version\" is not present in PTFConfig file.");
+            }
         }
 
         /// <summary>

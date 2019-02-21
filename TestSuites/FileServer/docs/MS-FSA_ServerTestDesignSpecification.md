@@ -1,7 +1,7 @@
 ﻿# MS-FSA Protocol Server Test Design Specification 
 
-# Contents
-* [Contents](#_Toc427488644)
+## Contents
+
 * [Introduction](#_Toc427488645)
 * [MS-FSA Overview](#_Toc427488646)
 * [Test Approach](#_Toc427488647)
@@ -32,7 +32,7 @@
         * [FsCtl_IsEncryptionSupported](#_Toc427488672)
         * [FsCtl_IsAllocatedRangesSupported](#_Toc427488673)
         * [FsCtl_IsReparsePointSupported](#_Toc427488674)
-        * [FsCtl_ IsSparseFileSupported](#_Toc427488675)
+        * [FsCtl_IsSparseFileSupported](#_Toc427488675)
         * [FsCtl_IsZeroDataSupported](#_Toc427488676)
     * [Scenarios for Alternate Data Stream](#_Toc427488822)
         * [AlternateDataStream_CreateStream](#_Toc427488823)
@@ -43,6 +43,8 @@
         * [AlternateDataStream_LockAndUnlock](#_Toc427488828)
         * [AlternateDataStream_QueryAndSet_FileInformation](#_Toc427488829)
         * [AlternateDataStream_FsControl](#_Toc427488830)
+    * [Other Scenarios](#other-scenarios)
+        * [CreateFile](#createfile)
 * [Traditional Test Case Design](#_Toc427488677)
     * [Test cases for Win8 new added algorithm](#_Toc427488678)
         * [FsCtl_Get_IntegrityInformation_File_IsIntegritySupported (BVT)](#_Toc427488679)
@@ -137,8 +139,6 @@
     * [FileNormalizedNameInformation](#_Toc427488831)
         * [FileInfo_Query_FileNormalizedNameInfo_File](#_Toc427488832)
         * [FileInfo_Query_FileNormalizedNameInfo_Dir](#_Toc427488833)
-    * [CreateFile](#_Toc427488834)
-        * [CreateFile_InvalidStreamName](#_Toc427488835)
     * [Test cases for Alternate Data Stream](#_Toc427488768)
         * [AlternateDataStream_CreateStream](#_Toc427488769)
             * [BVT_AlternateDataStream_CreateStream_File (BVT)](#_Toc427488770)
@@ -186,6 +186,9 @@
             * [AlternateDataStream_FsCtl_Set_Compression_Dir](#_Toc427488812)
             * [AlternateDataStream_FsCtl_Set_ZeroData_File](#_Toc427488813)
             * [AlternateDataStream_FsCtl_Set_ZeroData_Dir](#_Toc427488814)
+    * [Test cases for Other Scenarios](#test-cases-for-other-scenarios)
+        * [CreateFile](#_Toc427488834)
+            * [CreateFile_InvalidStreamName](#_Toc427488835)
 * [MBT Test Design](#_Toc427488815)
     * [Model Design](#_Toc427488816)
     * [Adapter Design](#_Toc427488817)
@@ -254,7 +257,7 @@ There are 126 test cases in total:
 | Scenarios for Win8 new added algorithm| 5| 37 (7)| 
 | Scenarios for ReFS file system| 15| 51 (7)| 
 | Scenarios for Alternate Data Stream| 19|38 (12)| 
-
+| Other Scenarios| 1| 1|
 
 
 
@@ -265,36 +268,32 @@ There are 126 test cases in total:
 
 ### <a name="_Toc427488653"/>MBT Test cases
 Model-based test cases are designed to cover most of algorithm details.
-There are 399 test cases in total:
+There are 344 test cases in total:
 
 
-|  **Category**|  **Test Cases**| 
-| -------------| ------------- |
-| Create| 38| 
-| Open| 40| 
-| Read| 5| 
-| Write| 5| 
-| Flush Cache| 2| 
-| Query Directory| 14| 
-| ByteRangeLock| 4| 
-| oplocl/Break| 0| 
-| FsCtl Request| 103| 
-| Change Notification| 2| 
-| Query FileInfo| 44| 
-| Set FileInfo| 96| 
-| Query FsInfo| 13| 
-| Set FsInfo| 0| 
-| Query QuotaInfo| 7| 
-| Set Quotainfo| 0| 
-| Query SecurityInfo| 7| 
-| Set SecurityInfo| 18| 
-| CloseAnOpen| 1| 
+| **Category** | **Test Cases** | 
+| ------------ | -------------- |
+| Open | 31 | 
+| Create | 25 | 
+| Read | 3 | 
+| Write | 1 | 
+| Close | 1 | 
+| Flush Cached Data | 1 | 
+| Lock and Unlock | 2 | 
+| Change Notification | 2 | 
+| IoCtl Request | 71 | 
+| Query Directory | 20 | 
+| Query FileInfo | 44 | 
+| Query FsInfo | 24 | 
+| Query SecurityInfo | 12 | 
+| Set FileInfo | 89 | 
+| Set SecurityInfo | 18 | 
 
 
 ## <a name="_Toc427488654"/>Traditional Test Scenarios Design
 
 ### <a name="_Toc427488655"/>Scenarios for Win8 new added algorithm
-Here is a list for Win8 new added algorithms, the designed scenarios are based on them.
+Here is a list for Win8 newly added algorithms, the designed scenarios are based on them.
 
 * [FsCtl] 3.1.5.9.7   FSCTL_GET_INTEGRITY_INFORMATION
 
@@ -727,7 +726,7 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 
 
 
-#### <a name="_Toc427488675"/> FsCtl_ IsSparseFileSupported
+#### <a name="_Toc427488675"/> FsCtl_IsSparseFileSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -918,6 +917,18 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | | Request a FsControl on this Alternate Data Stream created on this file|
 | | Verify server return with **STATUS_SUCCESS** for supported file system|
 
+
+### Other Scenarios
+
+#### CreateFile
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To create a file in the file system.| 
+| | Test environment: NTFS, ReFS, FAT32| 
+| | Test object: DataFile, DirectoryFile| 
+| Message Sequence| CreateFile | 
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
 
 
 
@@ -2847,25 +2858,6 @@ Parameter combination
 
 
 
-
-### <a name="_Toc427488834"/> CreateFile
-
-#### <a name="_Toc427488835"/> CreateFile_InvalidStreamName
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| Try to create a directory with invalid stream name and expect failure.
-| | Note: Only the NTFS and ReFS file systems support complex name suffixes and StreamTypeNames. File systems that do not support this return STATUS_OBJECT_NAME_INVALID.
-| | Test object: DirectoryFile
-| Message Sequence| CreateFile (DirectoryFile)
-| | If (FileSystem == NTFS \|\| FileSystem == REFS) {
-| | Assert.AreEqual(STATUS_INVALID_PARAMETER,ActualResult);
-| | } Else {
-| | Assert.AreEqual(STATUS_OBJECT_NAME_INVALID,ActualResult);
-| | }
-
-
-
 ### <a name="_Toc427488768"/>Test cases for Alternate Data Stream
 
 #### <a name="_Toc427488770"/>BVT_AlternateDataStream_CreateStream_File (BVT)
@@ -3427,6 +3419,23 @@ Parameter combination
 
 
 
+### Test cases for Other Scenarios
+
+#### <a name="_Toc427488835"/> CreateFile_InvalidStreamName
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Try to create a directory with invalid stream name and expect failure.
+| | Note: Only the NTFS and ReFS file systems support complex name suffixes and StreamTypeNames. File systems that do not support this return STATUS_OBJECT_NAME_INVALID.
+| | Test object: DirectoryFile
+| Message Sequence| CreateFile (DirectoryFile)
+| | If (FileSystem == NTFS \|\| FileSystem == REFS) {
+| | Assert.AreEqual(STATUS_INVALID_PARAMETER,ActualResult);
+| | } Else {
+| | Assert.AreEqual(STATUS_OBJECT_NAME_INVALID,ActualResult);
+| | }
+
+
 
 
 
@@ -3436,7 +3445,7 @@ Parameter combination
 ## <a name="_Toc427488815"/>MBT Test Design
 
 ### <a name="_Toc427488816"/>Model Design
-Here is a list for Win8 new added algorithms, the designed scenarios are based on them.
+Here is a list for Win8 newly added algorithms, the designed scenarios are based on them.
 
 
 

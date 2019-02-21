@@ -138,9 +138,6 @@
           <Rule name = "OperateOneFileFromTwoNodes">
             <Category name = "OperateOneFileFromTwoNodes"/>
           </Rule>
-          <Rule name = "HVRS (Hyper-V Remote Storage)">
-            <Category name = "HVRS"/>
-          </Rule>
         </Rule>
         <Rule name = "FSRVP (File Server Remote VSS)">
           <Category name = "FSRVP"/>
@@ -275,8 +272,17 @@
           <Rule name = "LockUnlock">
             <Category name = "LockUnlock"/>
           </Rule>
+          <Rule name = "QueryInfo">
+            <Category name = "QueryInfo"/>
+          </Rule>
+          <Rule name = "QueryDir">
+            <Category name = "QueryDir"/>
+          </Rule>
           <Rule name = "QueryAndSetFileInfo">
             <Category name = "QueryAndSetFileInfo"/>
+          </Rule>
+          <Rule name = "HVRS (Hyper-V Remote Storage)">
+            <Category name = "HVRS-SMB"/>
           </Rule>
         </Rule>
         <Rule name = "FSRVP (File Server Remote VSS)">
@@ -342,6 +348,9 @@
           </Rule>
           <Rule name = "AlternateDataStream">
             <Category name = "AlternateDataStream"/>
+          </Rule>
+          <Rule name = "HVRS (Hyper-V Remote Storage)">
+            <Category name = "HVRS-FSA"/>
           </Rule>
         </Rule>
       </Rule>

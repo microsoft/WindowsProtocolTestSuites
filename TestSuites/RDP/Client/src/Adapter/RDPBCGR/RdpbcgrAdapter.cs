@@ -2407,13 +2407,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                         }
                         else
                         {
-                            site.Log.Add(LogEntryKind.TestInProgress, "Received and cached Pdu: {0}.", receivedPdu.GetType());
+                            site.Log.Add(LogEntryKind.Debug, "Received and cached Pdu: {0}.", receivedPdu.GetType());
                             pduCache.Add(receivedPdu);
                         }
                     }
                     else
                     {
-                        site.Log.Add(LogEntryKind.TestInProgress, "Received and cached Pdu: {0}.", receivedPdu.GetType());
+                        site.Log.Add(LogEntryKind.Debug, "Received and cached Pdu: {0}.", receivedPdu.GetType());
                         pduCache.Add(receivedPdu);
                     }
                 }
@@ -2484,13 +2484,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                         }
                         else
                         {
-                            site.Log.Add(LogEntryKind.TestInProgress, "Received and cached Pdu: {0}.", receivedPdu.GetType());
+                            site.Log.Add(LogEntryKind.Debug, "Received and cached Pdu: {0}.", receivedPdu.GetType());
                             pduCache.Add(receivedPdu);
                         }
                     }
                     else
                     {
-                        site.Log.Add(LogEntryKind.TestInProgress, "Received and cached Pdu: {0}.", receivedPdu.GetType());
+                        site.Log.Add(LogEntryKind.Debug, "Received and cached Pdu: {0}.", receivedPdu.GetType());
                         pduCache.Add(receivedPdu);
                     }
                 }
@@ -2561,13 +2561,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                         }
                         else
                         {
-                            site.Log.Add(LogEntryKind.TestInProgress, "Received and cached Pdu: {0}.", receivedPdu.GetType());
+                            site.Log.Add(LogEntryKind.Debug, "Received and cached Pdu: {0}.", receivedPdu.GetType());
                             pduCache.Add(receivedPdu);
                         }
                     }
                     else
                     {
-                        site.Log.Add(LogEntryKind.TestInProgress, "Received and cached Pdu: {0}.", receivedPdu.GetType());
+                        site.Log.Add(LogEntryKind.Debug, "Received and cached Pdu: {0}.", receivedPdu.GetType());
                         pduCache.Add(receivedPdu);
                     }
                 }

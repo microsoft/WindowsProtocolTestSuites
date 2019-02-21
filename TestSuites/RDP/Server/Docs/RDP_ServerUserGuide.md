@@ -76,7 +76,7 @@ Note
 | □| Configure the DC. (optional)| See [Configuring Computers that are Not Based on Windows](#_Toc396908242) | 
 | □| Configure the driver computer.| See [Configuring Windows-based Computers](#_Toc396908241)| 
 | □| Configure the test suite settings.| See [Configuring the Test Suite](#_Toc396908243).| 
-| □| Run test cases to verify that the test suite is properly installed and configured| See [Running Test Cases](#_Running_Test_Cases)[](#_Toc396908244).| 
+| □| Run test cases to verify that the test suite is properly installed and configured| See [Running Test Cases](#_Toc396908244).| 
 
 ## <a name="_Toc396908223"/>How Do I?
 Use the following quick reference to learn how to complete common tasks.
@@ -85,7 +85,7 @@ Use the following quick reference to learn how to complete common tasks.
 | -------------| ------------- |
 | Set up the test environment| [Network Setup](#_Toc396908230) and [Computer Setup](#_Toc396908235)| 
 | Verify the connection from the driver computer to other computers in the test environment| [Verify Connectivity from the Driver Computer](#_Toc396908234)| 
-| Configure a SUT| [Configure the SUT](#_Install_and_configure) or [Configuring Computers that are Not Based on Windows](#_Toc396908242)| 
+| Configure a SUT| [Configure the SUT](#_Toc396908241) or [Configuring Computers that are Not Based on Windows](#_Toc396908242)| 
 | Configure a DC| [Configuring Computers that are Not Based on Windows](#_Toc396908242)| 
 | Configure the driver computer| [Configuring Windows-based Computers](#_Toc396908241)| 
 | Configure the test suite settings| [Configuring the Test Suite](#_Toc396908243)| 

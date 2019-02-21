@@ -95,6 +95,26 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                         RdpPtfPropNames.RdpSecurityProtocol,
                         RdpPtfPropNames.RdpSecurityNegotiation);
                     transportProtocol = EncryptedProtocol.NegotiationTls;
+                    string strTlsVersion;
+                    if (PtfPropUtility.GetStringPtfProperty(Site, RdpPtfPropNames.RdpSecurityTlsVersion, out strTlsVersion))
+                    {
+                        if (!strTlsVersion.Equals("TLS1.0", StringComparison.CurrentCultureIgnoreCase) &&
+                            !strTlsVersion.Equals("TLS1.1", StringComparison.CurrentCultureIgnoreCase) &&
+                            !strTlsVersion.Equals("TLS1.2", StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            this.Site.Assume.Fail("When TLS is used as the security protocol, {0} must be one of TLS1.0, TLS1.1, or TLS1.2; actually it is set to {1}",
+                                RdpPtfPropNames.RdpSecurityTlsVersion,
+                                strTlsVersion);
+                        }
+                        else
+                        {
+                            this.Site.Log.Add(LogEntryKind.Comment, "TLS is used as security protocol and the TLS Version is {0}.", strTlsVersion);
+                        }
+                    }
+                    else
+                    {
+                        assumeFailForInvalidPtfProp(RdpPtfPropNames.RdpSecurityTlsVersion);
+                    }
                 }
                 else if (strRDPSecurityProtocol.Equals("CredSSP", StringComparison.CurrentCultureIgnoreCase))
                 {

@@ -56,8 +56,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Pac
             IntPtr Handle,
             ref MIDL_TYPE_PICKLING_INFO pPicklingInfo,
             ref MIDL_STUB_DESC pStubDesc,
-            [MarshalAs(UnmanagedType.LPArray)]
-            byte[] pFormatString,
+            IntPtr pFormatString,
             ref IntPtr pObject);
 
 

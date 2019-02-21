@@ -114,7 +114,7 @@
     <Target Name="GenDeployWxsFile" DependsOnTargets="ResolveWixExtensionReferences" BeforeTargets="Compile">
 	<Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\drop\TestSuites\MS-ADFSPIP\Bin" -out TestSuiteBinFiles.wxs -template fragment -gg -cg BIN_FILES -dr TESTSUITE_BIN_DIR -var wix.TESTSUITE_BIN_DIR -sreg -sfrag -srd' />
     <Exec Command='"$(WIX)\bin\heat.exe" dir ..\Batch -out TestSuiteBatchFiles.wxs -template fragment -gg -cg BATCH_FILES -dr TESTSUITE_BATCH_DIR -var wix.TESTSUITE_BATCH_DIR -sreg -sfrag -srd' />
-    <Exec Command='"$(WIX)\bin\heat.exe" dir ..\Scripts -out SCRIPT_FILES.wxs -template fragment -gg -cg SCRIPT_FILES -dr SCRIPT_FILES_DIR -var wix.SCRIPT_FILES_DIR -sreg -sfrag -srd' />
+    <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\drop\TestSuites\MS-ADFSPIP\Scripts" -out SCRIPT_FILES.wxs -template fragment -gg -cg SCRIPT_FILES -dr SCRIPT_FILES_DIR -var wix.SCRIPT_FILES_DIR -sreg -sfrag -srd' /> 
     <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\common&quot; -out CommonBatch.wxs -template fragment -gg -cg COMMON_BATCH_FILES -dr TESTSUITE_COMMON_SCRIPTS_DIR -var wix.TESTSUITE_COMMON_SCRIPTS_DIR -sreg -sfrag -srd" />
   </Target>
   <Target Name="AfterBuild">
@@ -125,6 +125,7 @@
     <SUTControlAdapter Include="..\Adapter\SUTControlAdapter\*.ps1" />
 	<Certificates Include="..\TestSuite\Certificates\*" />
 	<MetaTemplate Include="..\TestSuite\ServerDataModel\*.xml" />
+  <MSADFSPIPScriptFiles Include="..\..\Setup\Scripts\*" />
   </ItemGroup>
   <Target Name="CopyFilesToBin" BeforeTargets="GenDeployWxsFile" >
     <Copy SourceFiles="@(TestPTFConfigFile)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADFSPIP\Bin" />
@@ -132,5 +133,11 @@
     <Copy SourceFiles="@(SUTControlAdapter)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADFSPIP\Bin\Adapter\SUTControlAdapter\" />
 	<Copy SourceFiles="@(Certificates)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADFSPIP\Bin\Certificates\" />
 	<Copy SourceFiles="..\ClientLocal.TestSettings" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADFSPIP\Bin" />
+    <Copy SourceFiles="@(MSADFSPIPScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADFSPIP\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Disable_Firewall.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADFSPIP\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\GetVMNameByComputerName.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADFSPIP\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\GetVmParameters.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADFSPIP\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Join-Domain.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADFSPIP\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\TurnOff-FileReadonly.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-ADFSPIP\Scripts" />
   </Target>
 </Project>

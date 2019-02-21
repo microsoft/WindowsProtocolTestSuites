@@ -15,6 +15,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
     {
         [TestMethod]
         [Priority(0)]
+        [TestCategory("BVT")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPBCGR")]
         [Description(@"This test case is used to ensure SUT can complete the optional auto detect phase successfully.")]

@@ -17,6 +17,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.CreateFile)]
         [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.UnexpectedFields)]
         [Description("Try to create a directory with invalid stream name and expect failure.")]
         public void CreateFile_InvalidStreamName()
         {

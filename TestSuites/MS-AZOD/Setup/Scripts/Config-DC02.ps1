@@ -1,6 +1,9 @@
 #############################################################################
-## Copyright (c) Microsoft. All rights reserved.
+## Copyright (c) Microsoft Corporation. All rights reserved.
 ## Licensed under the MIT license. See LICENSE file in the project root for full license information.
+#############################################################################
+
+#############################################################################
 ##
 ## Microsoft Windows Powershell Scripting
 ## File:           Config-DC02.ps1
@@ -9,135 +12,6 @@
 ## Supported OS:   Windows Server 2012 +
 ##
 ##############################################################################
-Param
-(
-    [int]$Step = 1
-)
-
-Function Phase1
-{
-    $endPointPath = "$env:SystemDrive\MicrosoftProtocolTests\MS-AZOD\OD-Endpoint"
-    $azodTestSuites = Get-ChildItem -Path 'HKLM:\SOFTWARE\Wow6432Node\Microsoft\ProtocolTestSuites\MS-AZOD-OD-*'
-    $azodTestSuite = $azodTestSuites[0]
-    $version = $azodTestSuite.Name.Substring(80, $azodTestSuite.Name.Length-80)
-
-    $dataFile = "$endPointPath\$version\scripts\Config.xml"     
-    $logPath = $env:SystemDrive
-    $logFile = $MyInvocation.MyCommand.Name + ".log"
-    $domainName = "kerb.com"
-    $domainAdmin 	= "administrator"
-    $domainAdminPwd 	= "Password01!"
-
-    if(Test-Path -Path $dataFile)
-    {
-        try
-        {
-	        [xml]$configFile = Get-Content -Path $dataFile
-	        $logPath	= $configFile.Parameters.LogPath
-	        $logFile	= $logPath + "\" + $MyInvocation.MyCommand.Name + ".log"
-
-	        $domainName 	= $configFile.Parameters.TrustRealm.DomainName
-            $domainAdmin 	= $configFile.Parameters.TrustRealm.DomainAdministrator.UserName
-            $domainAdminPwd 	= $configFile.Parameters.TrustRealm.DomainAdministrator.Password
-        }
-        catch
-        {
-            .\Write-Info.ps1 "Failed to read data file $dataFile. Please check the file content. Error happened: $_.Exception.Message"
-            return
-        }
-    }
-    else
-    {
-	    .\Write-Info.ps1 "$dataFile not found.  Will keep the default setting of all the test context info..."
-    }
-
-    # Turn off firewall
-    Prompt "Turning off the firewall"
-    Turnoff-FireWall       
-
-    # Autologon config
-    Autologon -Domain $domainName -Username $domainAdmin -Password $domainAdminPwd
-    
-    # Promote DC
-    .\Write-Info.ps1 " Promoting this computer to DC" -ForegroundColor Yellow
-    PromptDC -DomainName $domainName -AdminPwd  $domainAdminPwd
-
-    sleep 15
-}
-#-----------------------------------------------------------------------------------------------
-# Set Autologon user, domain and password.
-#-----------------------------------------------------------------------------------------------
-Function Autologon(
-    [Parameter(Mandatory=$true)]
-    [ValidateNotNullOrEmpty()]    
-    [string]$Domain,
-    
-    [Parameter(Mandatory=$true)]
-    [ValidateNotNullOrEmpty()] 
-    [string]$Username,
-    
-    [Parameter(Mandatory=$true)]
-    [ValidateNotNullOrEmpty()] 
-    [string]$Password
-)
-{
-    .\Write-Info.ps1 "Set autologon account"    
-
-    .\Write-Info.ps1 "cmd /c REG ADD "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon" /v AutoAdminLogon /t REG_SZ /d 1 /f`n"
-    cmd /c REG ADD "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon" /v AutoAdminLogon /t REG_SZ /d 1 /f 2>&1 | Write-Host
-
-    .\Write-Info.ps1 "cmd /c REG ADD "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultDomainName /t REG_SZ /d  $Domain /f`n"
-    cmd /c REG ADD "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultDomainName /t REG_SZ /d  $Domain /f 2>&1 | Write-Host
-
-    .\Write-Info.ps1 "cmd /c REG ADD "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultUserName /t REG_SZ /d $Username /f`n"
-    cmd /c REG ADD "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultUserName /t REG_SZ /d $Username /f 2>&1 | Write-Host
-
-    .\Write-Info.ps1 "cmd /c REG ADD "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultPassword /t REG_SZ /d $Password /f`n"
-    cmd /c REG ADD "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultPassword /t REG_SZ /d $Password /f 2>&1 | Write-Host 
-}
-
-#-----------------------------------------------------------------------------------------------
-# Turn off windows firewall
-#-----------------------------------------------------------------------------------------------
-Function Turnoff-FireWall()
-{
-    cmd /c netsh advfirewall set allprofile state off 2>&1 | Write-Host
-}
-
-#-----------------------------------------------------------------------------
-# Function: PromoteDomainController
-# Usage   : Install ADDS feature on the server and promote it to DC.
-# Params  : [string]$DomainName: The name of the domain.
-#           [string]$AdminPwd  : The password of the Administrator.
-# Remark  : A reboot is needed after promoting to DC.
-#-----------------------------------------------------------------------------
-Function PromptDC(
-    [Parameter(Mandatory=$true)]
-    [ValidateNotNullOrEmpty()]
-    [string]$DomainName, 
-    
-    [Parameter(Mandatory=$true)]
-    [ValidateNotNullOrEmpty()]
-    [string]$AdminPwd)
-{
-    
-    Try
-    {
-        # Install ADDS
-        Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools -ErrorAction Stop
-        Import-Module ADDSDeployment -ErrorAction Stop
-
-        # Promote to DC
-        Install-ADDSForest -DomainName $DomainName -InstallDns `
-            -SafeModeAdministratorPassword (ConvertTo-SecureString $adminPwd -AsPlainText -Force) `
-            -NoRebootOnCompletion -ErrorAction Stop -Force           
-
-    }
-    catch
-    {
-        throw "Unable to promote DC. Error happened: " + $_.Exception.Message
-    }
-}
 
 Function SetupForestTransitiveTrust(
         [Parameter(Mandatory=$true)]
@@ -183,66 +57,7 @@ Function SetupForestTransitiveTrust(
     }
 }
 
-
-#-----------------------------------------------------------------------------
-# Function: RestartAndResume
-# Usage   : Restart the computer and run the specified script.
-#-----------------------------------------------------------------------------
-Function RestartAndResume(
-        [Parameter(Mandatory=$true)]
-        [ValidateNotNullOrEmpty()]
-        [String]$ScriptPath,
-        
-        [Parameter(Mandatory=$false)]
-        [ValidateNotNullOrEmpty()]
-        [String]$PhaseIndicator,
-
-        [Parameter(Mandatory=$false)]
-        [String]$ArgumentList,
-
-        [Parameter(Mandatory=$false)]
-        [bool]$AutoRestart = $false)   
-{        
-
-    # Only absolute path is accepted, because relative path may cause trouble after rebooting.
-    if([System.IO.Path]::IsPathRooted($ScriptPath) -eq $False)
-    {
-        throw "Argument ScriptPath must be absolute path"
-    }
-
-    $private:regRunPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" 
-    $private:regKeyName = "TKFRSAR"
-
-    # If the key has already been set, remove it
-    if (((Get-ItemProperty $regRunPath).$regKeyName) -ne $null)
-    {
-	    Remove-ItemProperty -Path $regRunPath -Name $regKeyName
-    }
-
-    try
-    {
-        Set-ItemProperty -Path $regRunPath -Name $regKeyName `
-                            -Value "cmd /c powershell $ScriptPath $PhaseIndicator $ArgumentList" `
-                            -Force -ErrorAction Stop
-    }
-    catch
-    {
-        throw "Unable to restart. Error happened: $_.Exception.Message"
-    }
-
-    .\Write-Info.ps1 " The computer is going to restart..." -ForegroundColor Yellow
-    if($AutoRestart -eq $false) 
-    { 
-        # Waiting for key stroke
-        Pause 
-    } 
-
-    # Restart
-    Restart-Computer
-    
-}
-
-Function Phase2
+Function ConfigTrustDomain
 {
 
     $endPointPath = "$env:SystemDrive\MicrosoftProtocolTests\MS-AZOD\OD-Endpoint"
@@ -251,16 +66,7 @@ Function Phase2
     $version = $azodTestSuite.Name.Substring(80, $azodTestSuite.Name.Length-80)
 
     $dataFile = "$endPointPath\$version\scripts\Config.xml"     
-    $logPath = $env:SystemDrive
-    $logFile = $MyInvocation.MyCommand.Name + ".log"
-    $domainName = "kerb.com"
-    $domainAdmin 	= "administrator"
-    $domainAdminPwd 	= "Password01!"
-
-    $trustedDomainName = "contoso.com"
-    $trustedDomainAdmin = "administrator"
-    $trustedDomainAdminPwd = "Password01!"
-
+    
     if(Test-Path -Path $dataFile)
     {
         try
@@ -270,12 +76,12 @@ Function Phase2
 	        $logFile	= $logPath + "\" + $MyInvocation.MyCommand.Name + ".log"
 
 	        $domainName 	= $configFile.Parameters.TrustRealm.DomainName
-            $domainAdmin 	= $configFile.Parameters.TrustRealm.DomainAdministrator.UserName
-            $domainAdminPwd 	= $configFile.Parameters.TrustRealm.DomainAdministrator.Password
+                $domainAdmin 	= $configFile.Parameters.TrustRealm.DomainAdministrator.UserName
+                $domainAdminPwd 	= $configFile.Parameters.TrustRealm.DomainAdministrator.Password
 
-            $trustedDomainName = $configFile.Parameters.TrustRealm.Trust.TrustedRealmName
-            $trustedDomainAdmin = $configFile.Parameters.TrustRealm.Trust.TrustedRealmAdmin
-            $trustedDomainAdminPwd = $configFile.Parameters.TrustRealm.Trust.TrustedRealmAdminPwd
+                $trustedDomainName = $configFile.Parameters.TrustRealm.Trust.TrustedRealmName
+                $trustedDomainAdmin = $configFile.Parameters.TrustRealm.Trust.TrustedRealmAdmin
+                $trustedDomainAdminPwd = $configFile.Parameters.TrustRealm.Trust.TrustedRealmAdminPwd
         }
         catch
         {
@@ -437,31 +243,31 @@ Function Phase2
     } 
 }
 
-Function Phase3
+Function DeployCAP
 {
     $endPointPath = "$env:SystemDrive\MicrosoftProtocolTests\MS-AZOD\OD-Endpoint"
     $azodTestSuites = Get-ChildItem -Path 'HKLM:\SOFTWARE\Wow6432Node\Microsoft\ProtocolTestSuites\MS-AZOD-OD-*'
     $azodTestSuite = $azodTestSuites[0]
-    $version = $azodTestSuite.Name.Substring(80, $azodTestSuite.Name.Length-80) 
+    $version = $azodTestSuite.Name.Substring(80, $azodTestSuite.Name.Length-80)  
+    $scriptLocation  = "$endPointPath\$version\scripts"
+    Push-Location $scriptLocation
 
     #-----------------------------------------------------------------------------------------------
     # Configure Group Policy for Claims
     #-----------------------------------------------------------------------------------------------
-    .\Write-Info.ps1 "Extract GPOBackup files"
+    Write-Host "Extract GPOBackup files"
     .\Extract-ZipFile.ps1 -ZipFile $endPointPath\$version\Scripts\DC02GPO.zip -Destination $endPointPath\$version\Scripts\DC02GPO
 
-    .\Write-Info.ps1 "Configuring Group Policy"
+    Write-Host "Configuring Group Policy"
     Import-GPO -BackupId 7D5F951C-D924-4118-80C9-DFCEC3B2FD08 -TargetName "Default Domain Policy" -Path "$endPointPath\$version\Scripts\DC02GPO\" -CreateIfNeeded
 
     gpupdate /force 
 
-    # Create claim transformation 
+    # Create claim transformation policy
     $dataFile = "$endPointPath\$version\scripts\Config.xml"     
     $logPath = $env:SystemDrive
     $logFile = $MyInvocation.MyCommand.Name + ".log"
-    $domainName = "kerb.com"
-    $domainAdmin 	= "administrator"
-    $domainAdminPwd 	= "Password01!"
+   
     $ClaimTransformPolicy  = $null
     $ClaimTransformPolicyDesc  = $null
     $ClaimTransformPolicyDenyAllExcept  = $null
@@ -529,67 +335,13 @@ Function Phase3
     gpupdate /force 
 }
 
-Function Finish
-{
-    # Finish script    
-    RestartAndRunFinish
-    .\Write-Info.ps1 "DONE" -ForegroundColor Green
-
-	#-----------------------------------------------------
-	# Finished to config Terminal Client
-	#-----------------------------------------------------
-	.\Write-Info.ps1 "Write signal file: config.finished.signal to system drive."
-	cmd /C ECHO CONFIG FINISHED>$env:HOMEDRIVE\config.finished.signal
-	
-	# Restart
-    Restart-Computer
-}
-
-#-----------------------------------------------------------------------------
-# Function: RestartAndRunFinish
-# Usage   : To clean up the registry entry
-#-----------------------------------------------------------------------------
-Function RestartAndRunFinish()
-{
-
-    $private:regRunPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" 
-    $private:regKeyName = "TKFRSAR"
-
-    if (((Get-ItemProperty $regRunPath).$regKeyName) -ne $null)
-    {
-	    Remove-ItemProperty -Path $regRunPath -Name $regKeyName
-    }
-}
-
 #-----------------------------------------------------------------------------
 # Main Script
 #-----------------------------------------------------------------------------
 Function Main
-{ 
-    switch($Step)
-    {
-        1 {
-	        
-            Phase1
-            $invocation = (get-variable MyInvocation -Scope 1).Value            
-            $NextStep =$step+1
-            RestartAndResume -ScriptPath  $invocation.MyCommand.Path `
-                        -PhaseIndicator "-Step $NextStep" -AutoRestart:$true
-        }
-        2 {
-            Phase2	        
-            $invocation = (get-variable MyInvocation -Scope 1).Value            
-            $NextStep =$step+1
-            RestartAndResume -ScriptPath  $invocation.MyCommand.Path `
-                        -PhaseIndicator "-Step $NextStep" -AutoRestart:$true
-            
-        }
-        3 {
-            phase3
-            Finish
-        }
-    }
-
+{
+    ConfigTrustDomain
+    DeployCAP
 }
 
 #----------------------------------------------------------------------------
@@ -609,7 +361,7 @@ if(Test-Path -Path $dataFile)
         {
             cmd /c mkdir $logPath 2>&1 | Write-Host
         }
-	    $logFile = $logPath + "\" = $MyInvocation.MyCommand.Name + ".log"
+	    $logFile = $logPath + "\" + $MyInvocation.MyCommand.Name + ".log"
     }
     catch
     {

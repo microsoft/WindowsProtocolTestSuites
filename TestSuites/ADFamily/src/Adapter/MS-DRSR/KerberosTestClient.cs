@@ -381,12 +381,10 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         /// <param name="kdcOptions">KDC options</param>
         /// <param name="seqPadata">A sequence of preauthentication data</param>
         /// <param name="checksumType">Checksum type of PA-TGS-REQ</param>
-        /// <param name="additionalTicket">Additional ticket</param>
         /// <param name="data">Authorization data</param>
         public void SendTgsRequest(string sName,
             KdcOptions kdcOptions,
             Asn1SequenceOf<PA_DATA> seqPadata = null,
-            Ticket additionalTicket = null,
             AuthorizationData dataInAuthenticator = null,
             AuthorizationData dataInEncAuthData = null)
         {
