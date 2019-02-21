@@ -1072,8 +1072,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             int pduSize = 0;
             pduSize += 1; // pdu.fpInputHeader
             pduSize += 1; // pdu.length1
-            if (pdu.length2 != 0x00)
+            if ((ConstValue.MOST_SIGNIFICANT_BIT_FILTER & pdu.length1) != pdu.length1)
             {
+                // length1's most significant bit is set, then length2 is present.
                 pduSize += 1; // Optional: pdu.length2;
             }
 
@@ -1125,8 +1126,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             int pduSize = 0;
             pduSize += 1; // pdu.fpInputHeader
             pduSize += 1; // pdu.length1
-            if (pdu.length2 != 0x00)
+            if ((ConstValue.MOST_SIGNIFICANT_BIT_FILTER & pdu.length1) != pdu.length1)
             {
+                // length1's most significant bit is set, then length2 is present.
                 pduSize += 1; // Optional: pdu.length2;
             }
 
