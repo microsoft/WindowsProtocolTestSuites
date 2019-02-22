@@ -14,9 +14,8 @@
     * [5.6 ContentServer Computer](#_Toc395793794)
     * [5.7 HostedCacheServer Computer](#_Toc395793795)
     * [5.8 BranchDC Computer](#_Toc395793796)
-    * [5.9 Client1 Computer](#_Toc395793797)
-    * [5.10 Client2 Computer](#_Toc395793798)
-    * [5.11 Software](#_Toc395793799)
+    * [5.9 Client Computer](#_Toc395793797)
+    * [5.10 Software](#_Toc395793799)
 * [Network Setup](#_Toc395793800)
     * [Domain Environment](#_Toc395793801)
 * [Computer Setup](#_Toc395793802)
@@ -24,13 +23,13 @@
     * [7.2 Setup the ContentServer Computer](#_Toc395793804)
     * [7.3 Setup the BranchDC Computer](#_Toc395793805)
     * [7.4 Setup the HostedCacheServer Computer](#_Toc395793806)
-    * [7.5 Setup the Client Computers](#_Toc395793807)
+    * [7.5 Setup the Client Computer](#_Toc395793807)
     * [7.6 Verify the Connectivity](#_Toc395793808)
     * [7.7 Installed Files and Folders](#_Toc395793809)
 * [Configuration](#_Toc395793810)
     * [8.1 Configure the Content Server Computer](#_Toc395793811)
     * [8.2 Configure the HostedCacheServer Computer](#_Toc395793812)
-    * [8.3 Configure the Client Computers](#_Toc395793813)
+    * [8.3 Configure the Client Computer](#_Toc395793813)
     * [8.4 Configure the Branch Cache Test Suite](#_Toc395793814)
 		* [8.4.1 Required Configuration Settings](#_Toc395793815)
 		* [8.4.2 Optional Configuration Settings](#_Toc395793816)
@@ -48,7 +47,7 @@
 
 This guide provides information about how to install, configure, and run Branch Cache family Test Suite and its environment. This suite of tools is designed to test implementations of Branch Cache family protocols, as specified in the Microsoft document. _The Content Caching and Retrieval System (also known as Branch Cache)_ consists of a set of protocols, including _MS-PCCRTP, MS-PCCRD, MS-PCCRR, MS-PCHC and MS-PCCRC,_ which collectively enable a content caching system. This guide provides information about using this test suite on the Microsoft® Windows® operating system. 
 
-This suite of tools tests only the protocol implementation behaviors that are observed on the wire. For detailed information about the design of this test suite, see _BranchCache_TestDesignSpecification.docx_. 
+This suite of tools tests only the protocol implementation behaviors that are observed on the wire. For detailed information about the design of this test suite, see _BranchCache_TestDesignSpecification.md. 
 
 ## <a name="_Toc395793785"/>License Information
 
@@ -78,10 +77,10 @@ Note
 | □| Setup the Content Server Computer.| See [Setup the Content Server](#_Toc395793804)| 
 | □| Setup the BranchDC.| See [Setup the BranchDC](#_Toc395793805)| 
 | □| Setup the HostedCacheServer Computer (Hosted Mode Only).| See [Setup the HostedCacheServer](#_Toc395793806)| 
-| □| Setup the Client Computers (Client1 and Client2).| See [Setup the Client](#_Toc395793807)| 
+| □| Setup the Client Computer.| See [Setup the Client](#_Toc395793807)| 
 | □| Configure the Content Server Computer.| See [Configure the Content Server Computer](#_Toc395793811) | 
 | □| Configure the HostedCacheServer Computer.| See [Configure the HostedCacheServer Computer](#_Toc395793812)| 
-| □| Configure the Client Computer (Client1 and Client2)| See [Configure the Client Computer](#_Toc395793813)| 
+| □| Configure the Client Computer | See [Configure the Client Computer](#_Toc395793813)| 
 | □| Configure the test suite settings| See [Configuring the Branche Cache Test Suite](#_Toc395793814)| 
 | □| Run a BVT test to verify that the test suite is properly installed and configured| See [Run the BVT Test](#_Toc395793818)| 
 
@@ -93,7 +92,7 @@ You can use the following quick reference to learn how to complete common tasks.
 | Verify the connectivity from the test driver computer to other computers in the test environment.| [Verify the connectivity](#_Toc395793808)| 
 | Configure the Content Server Computer.| [Configure the Content Server Computer](#_Toc395793811) | 
 | Configure the HostedCacheServer Computer.| [Configure the HostedCacheServer Computer](#_Toc395793812)| 
-| Configure the Client Computer (Client1 and Client2).| [Configure the Client Computer](#_Toc395793813)| 
+| Configure the Client Computer.| [Configure the Client Computer](#_Toc395793813)| 
 | Configure the test suite settings.| [Configuring the Test Suite](#_Toc395793814)| 
 | Run a BVT test.| [Run the BVT Test](#_Toc395793818)| 
 | Run test cases.| [Run All Test Cases](#_Toc395793819) [Run Specified Test Cases](#_Toc395793820)| 
@@ -132,15 +131,15 @@ Run this test suite in an environment that contains the following networks and c
 
 * Two separated networks.
 
-* A computer set up as DC which runs Windows Server 2012 R2(or above version).
+* A computer set up as DC which runs Windows Server 2012 R2 (or above version).
 
-* A computer set up as Content Server computer which runs Windows Server 2012 R2(or above version).
+* A computer set up as Content Server computer which runs Windows Server 2012 R2 (or above version).
 
-* A computer set up as BranchDC computer which runs Windows Server 2012 R2(or above version).
+* A computer set up as BranchDC computer which runs Windows Server 2012 R2 (or above version).
 
-* (Optional) A computer set up as HostedCacheServer computer which runs Windows Server 2012 R2(or above version). 
+* (Optional) A computer set up as HostedCacheServer computer which runs Windows Server 2012 R2 (or above version). 
 
-* Two computer set up as Client1 and Client2 which runs Windows 8.1(or above version).
+* Two computer set up as Client and runs Windows 8.1 (or above version).
 
 ### <a name="_Toc395793791"/>Hosted Cache Mode
 
@@ -150,11 +149,11 @@ The Hosted Cache Mode environment requires interactions between the following co
 
 * The ContentServer computer runs an implementation of the protocol that is being tested. It responds to the request that the client computer sends.
 
-* The HostedCacheServer computer runs an implementation of the protocol that is being tested. It sends a request to client computer and responds to the request that the client computer sends.
+* The HCServer computer runs an implementation of the protocol that is being tested. It sends a request to client computer and responds to the request that the client computer sends.
 
 * The BranchDC acts as Read-Only Domain Controller and provides domain service for branch network.
 
-* The Client1 computer runs the test cases and interacts with ContentServer computer and HostedCacheServer computer.
+* The Client computer runs the test cases and interacts with ContentServer computer and HostedCacheServer computer.
 
 ### <a name="_Toc395793792"/>Distributed Mode
 
@@ -166,9 +165,7 @@ The Distributed Mode environment requires interactions between the following com
 
 * The BranchDC hosts the Read-Only Domain Services (AD DS) and provides domain service for branch network.
 
-* The Client1 computer runs the test cases and interacts with ContentServer computer and Client2 computer.
-
-* The Client2 computer runs an implementation of the protocol that is being tested. It sends request to the other client computer and responds to the request that the other client computer sends.
+* The Client computer runs the test cases and interacts with ContentServer computer. It runs an implementation of the protocol that is being tested. It sends request to the other client computer and responds to the request that the other client computer sends.
 
 ### <a name="_Toc395793793"/>DC Computer
 
@@ -225,25 +222,14 @@ The minimum requirements for the Branch DC computer are as follows.
 | Memory| 1 GB RAM| 
 | Disk space| 60 GB| 
 
-### <a name="_Toc395793797"/>Client1 Computer
+### <a name="_Toc395793797"/>Client Computer
 
-The minimum requirements for the client1 computer are as follows. 
+The minimum requirements for the client computer are as follows. 
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
 | Operating system| Microsoft Windows 8.1, Enterprise Edition or later versions| 
 | Memory| 2 GB RAM| 
-| Services| BranchCache Feature| 
-| Disk space| 60 GB | 
-
-### <a name="_Toc395793798"/>Client2 Computer
-
-The minimum requirements for the second content client computer are as follows. 
-
-|  **Requirement**|  **Description**| 
-| -------------| ------------- |
-| Operating system| Microsoft Windows 8.1, Enterprise Edition or later versions| 
-| Memory| 1GB RAM| 
 | Services| BranchCache Feature| 
 | Disk space| 60 GB | 
 
@@ -254,7 +240,7 @@ All of the following software must be installed on the driver computer. They hav
 | ------------- |
 |  | 
 |  **Required Software**| 
-| Microsoft® Visual Studio® 2017 | 
+| Microsoft® Visual Studio® 2017 (or above version) | 
 | Execution of test cases requires vstest.console.exe utility which is included in Visual Studio.  | 
 | Visual Studio provides additional debugging and test case authoring ability for you to understand and update the test better.  | 
 | **Microsoft Protocol Test Framework**| 
@@ -282,18 +268,15 @@ The following figure shows the domain environment with recommended network confi
 
 ![image5.png](./image/BranchCache_UserGuide/image5.png)
 
-| &#32;| &#32;| &#32;| &#32;| &#32;| &#32; |
-| -------------| -------------| -------------| -------------| -------------| ------------- |
-| Machine Name/Address Point| NIC| IPv4| Subnet Mask| Default Gateway| DNS Server| 
-| DC| Private| 192.168.0.1| 255.255.255.0|  &#60; empty &#62; | 127.0.0.1| 
-|  | Private| 192.168.1.1| 255.255.255.0|  &#60; empty &#62; | 127.0.0.1| 
-| ContentServer| Private| 192.168.0.2| 255.255.255.0| 192.168.0.1| 192.168.0.1| 
-| BranchDC| Private| 192.168.1.2| 255.255.255.0| 192.168.1.1| 127.0.0.1| 
-| | | | | | 192.168.1.1| 
-| | | | | |  &#60; Alternative &#62; | 
-| HostedCacheServer| Private| 192.168.1.3| 255.255.255.0|  &#60; empty &#62; | 192.168.1.2| 
-| Client1| Private| 192.168.1.11| 255.255.255.0| 192.168.1.1| 192.168.1.2| 
-| Client2| Private| 192.168.1.12| 255.255.255.0| 192.168.1.1| 192.168.1.2| 
+| &#32;| &#32;| &#32;| &#32;| &#32;| &#32; | &#32; |
+| -------------| -------------| -------------| -------------| -------------| ------------- | ------------- |
+| Role Name| Machine Name/Address Point| NIC| IPv4| Subnet Mask| Default Gateway| DNS Server| 
+| DC| DC | Private| 192.168.0.1| 255.255.255.0|  &#60; empty &#62; | 127.0.0.1| 
+| | | Private| 192.168.1.1| 255.255.255.0|  &#60; empty &#62; | 127.0.0.1| 
+| ContentServer| ContentServer | Private| 192.168.0.2| 255.255.255.0| 192.168.0.1| 192.168.0.1| 
+| BranchDC| BranchDC| Private| 192.168.1.2| 255.255.255.0| 192.168.1.1| 192.168.1.1| 
+| HostedCacheServer | HCServer| Private| 192.168.1.3| 255.255.255.0|  &#60; empty &#62; | 192.168.1.2| 
+| Client| Client| Private| 192.168.1.11| 255.255.255.0| 192.168.1.1| 192.168.1.2| 
 
 ## <a name="_Toc395793802"/>Computer Setup 
 
@@ -301,7 +284,7 @@ This section provides a general list of steps that you can use to setup the comp
 
 ### <a name="_Toc395793803"/>Setup the DC Computer
 
-* Setup the machine with Microsoft Windows Server 2012R2. Create an account with name “administrator” and password “Password01!”
+* Setup the machine with Microsoft Windows Server 2012R2 or later. Create an account with name “administrator” and password “Password01!”
 
 * Turn off Windows Firewall from the control panel.
 
@@ -363,7 +346,7 @@ Click **Finish** with default settings to finish the configuration and click **S
 
 ### <a name="_Toc395793804"/>Setup the ContentServer Computer
 
-* Setup the machine with Microsoft Windows Server 2012R2. Create an account with name “administrator” and password “Password01!”
+* Setup the machine with Microsoft Windows Server 2012R2 (or above version). Create an account with name “administrator” and password “Password01!”
 
 *  Join domain “contoso.com”.
 
@@ -371,7 +354,7 @@ Click **Finish** with default settings to finish the configuration and click **S
 
 ### <a name="_Toc395793805"/>Setup the BranchDC Computer
 
-*  Setup the machine with Microsoft Windows Server 2012R2. Create an account with name “administrator” and password “Password01!”
+*  Setup the machine with Microsoft Windows Server 2012R2 (or above version). Create an account with name “administrator” and password “Password01!”
 
 * Turn off Windows Firewall from the control panel.
 
@@ -415,13 +398,13 @@ Click **Next** with default settings until reaching the **Prerequisites Check** 
 
 ### <a name="_Toc395793806"/>Setup the HostedCacheServer Computer
 
-* Setup the machine with Microsoft Windows Server 2012R2. Create an account with name “administrator” and password “Password01!”
+* Setup the machine with Microsoft Windows Server 2012R2 (or above version). Create an account with name “administrator” and password “Password01!”
 
 * Join domain “contoso.com”.
 
 * Turn off Windows Firewall from control panel.
 
-### <a name="_Toc395793807"/>Setup the Client Computers
+### <a name="_Toc395793807"/>Setup the Client Computer
 
 * Setup the machine with Microsoft Windows 8.1. Create an account with name “administrator” and password “Password01!”
 
@@ -431,21 +414,21 @@ Click **Next** with default settings until reaching the **Prerequisites Check** 
 
 ### <a name="_Toc395793808"/>Verify the Connectivity
 
-After the network setup is finished, verify the connectivity from Client to ContentServer and from Client to HostedCacheServer. Log in Client1 and then use the following command to check the connectivity between the computers:
+After the network setup is finished, verify the connectivity from Client to ContentServer and from Client to HostedCacheServer. Log in Client and then use the following command to check the connectivity between the computers:
 
 * Open PowerShell window;
 
 * Type following commands below to check:
 
-	_Ping ContentServer_
+	_Ping ContentServer_ 
 
-	_Ping HostedCacheServer_
+	_Ping HCServer_
 
 Do not proceed with the configuration of the test suite until connectivity is confirmed. Any issue with network connectivity must be resolved before test suite configuration.
 
 ### <a name="_Toc395793809"/>Installed Files and Folders
 
-Install BranchCache.msi on Client1, after installation succeed, the following folders and files will be added, which you can find in the location: C:\MicrosoftProtocolTests\BranchCache\ _&#60; version &#35;  &#62;_ \
+Install BranchCache.msi on Client, after installation succeed, the following folders and files will be added, which you can find in the location: C:\MicrosoftProtocolTests\BranchCache\ _&#60; version &#35;  &#62;_ \
 
 ![image3.png](./image/BranchCache_UserGuide/image3.png)
 Note 
@@ -460,10 +443,10 @@ Note
 | | **MS-PCCRC.pdf** | 
 | | **MS-PCCRD.pdf** | 
 | | **MS-PCCRTP.pdf** | 
-| |  **MS-PCCRR.pdf**| 
+| | **MS-PCCRR.pdf**| 
 | | **MS-PCHC.pdf** | 
-| | **BranchCache_UserGuide.docx** – A user guide that explains how to install and configure the DC, the ContentServer, the BranchDC, the HostedCacheServer, the Client1 and the Client2, and how to run test cases.| 
-| | **BranchCache_TestDesignSpecification.docx** – An overview document containing references to the test suite designs for MS-PCCRC, MS-PCCRD, MS-PCCRTP, MS-PCHC and MS-PCCRR.| 
+| | **BranchCache_UserGuide.md** – A user guide that explains how to install and configure the DC, the ContentServer, the BranchDC, the HostedCacheServer, the Client, and how to run test cases.| 
+| | **BranchCache_TestDesignSpecification.md** – An overview document containing references to the test suite designs for MS-PCCRC, MS-PCCRD, MS-PCCRTP, MS-PCHC and MS-PCCRR.| 
 | Infrastructure| The protocol SDK source code| 
 | Source| Test suite source code| 
 | EULA.rtf| The End User License Agreement| 
@@ -548,11 +531,11 @@ _Set-ExecutionPolicy Unrestricted_
 
 _If the OS is 64 bits, launch the 32 bits PowerShell with administrator privileges      from %SystemRoot%\SysWOW64\WindowsPowerShell\v1.0\PowerShell.exe and run the above command again._
 
-* Generate a self-signed certificate on the HostedCacheServer use MakeCert.exe. (This tool can be found under _C:\Program Files (x86)\Windows Kits\10\bin\10.0.16299.0\x64_ after Visual Studio installed (This path may vary based on your installation location))
+* Generate a self-signed certificate by command on the powershell.
 
 Start PowerShell window with administrator privileges and run the following command:
 
-_Makecert -r -pe -n "CN= HostedCacheServer" -ss My -sr localmachine_
+_New-SelfSignedCertificate -DnsName "CN= HCServer" -CertStoreLocation "cert:\LocalMachine\My"_
 
 * Run the command to add the cert to SSLCert. Copy the thumbprint value without spaces from the “Details” tab and insert into “ &#60; thumbprint &#62; ” in the command below.
 
@@ -572,11 +555,11 @@ Start PowerShell window with administrator privileges and run the following comm
 
  _Restart-service peerdistsvc_
 
-### <a name="_Toc395793813"/>Configure the Client Computers
+### <a name="_Toc395793813"/>Configure the Client Computer
 
 * **Note** 
 
-The following configuration is needed for both Client1 and Client2
+The following configuration is needed for Client
 
 * Set PowerShell execution policy
 
@@ -652,9 +635,7 @@ The following table describes the optional configuration properties and provides
 |  **ContentServerComputerName**| The machine name for the computer acts as content server.| 
 | | Default value: **ContentServer**| 
 |  **HostedCacheServerComputerName**| The machine name for the computer acts as hosted cache server (only in hosted cache mode).| 
-| | Default value: **HostedCacheServer**| 
-|  **ClientPeerComputerName**| The machine name for the computer acts as another client (only in distributed mode).| 
-| | Default value: **Client2**| 
+| | Default value: **HCServer**| 
 |  **ContentTransport**| The transport protocol used to retrieve content, the value can be set as **SMB2** or **PCCRTP** according to customer choice.| 
 | | Default value: **PCCRTP**| 
 |  **SupportBranchCacheV1**| The value specifies whether the test case supports BranchCache V1 or not.| 
@@ -701,7 +682,7 @@ Note
 
 Before running the test cases, you can modify the configuration file accordingly: from the              desktop double-click **Open Branch Cache Test Suite Directory** and go to **Bin** folder, open **BranchCache_TestSuite.deployment.ptfconfig** and modify it if needed.
 
-Log on to **Client1** with account **contoso\administrator** and password **Password01!**
+Log on to **Client** with account **contoso\administrator** and password **Password01!**
 
 ### <a name="_Toc395793818"/>Run the BVT Test
 
@@ -830,15 +811,15 @@ This section describes how to troubleshoot common issues in running test cases.
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| PROBLEM| The ContentServer does not respond to pings from the Client1 computer.| 
+| PROBLEM| The ContentServer does not respond to pings from the Client computer.| 
 | CAUSE| The LAN Routing service of DC hasn’t been started, or the ContentServer firewall is enabled. | 
 | RESOLUTION| Start the LAN Routing service or disable the SUT firewall.| 
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| PROBLEM| The HostedCacheServer does not respond to pings from the Client1 computer.| 
-| CAUSE| The Client1 computer is not in the same network segment, or the HostedCacheServer firewall is enabled. | 
-| RESOLUTION| Move the Client1 computer and the HostedCacheServer to the same network segment or disable the SUT firewall.| 
+| PROBLEM| The HostedCacheServer does not respond to pings from the Client computer.| 
+| CAUSE| The Client computer is not in the same network segment, or the HostedCacheServer firewall is enabled. | 
+| RESOLUTION| Move the Client computer and the HostedCacheServer to the same network segment or disable the SUT firewall.| 
 
 **Add SSL cert failure:**
 
