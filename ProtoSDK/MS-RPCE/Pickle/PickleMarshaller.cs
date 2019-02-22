@@ -322,14 +322,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
         /// <exception cref="PickleException">Internal NDR function failed.</exception>
         /// <exception cref="ArgumentNullException">Thrown when buffer is null.</exception>
         [SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter")]
-        public T Decode<T>(byte[] buffer, int formatStringOffset) where T : struct
+        public T Decode<T>(byte[] buffer, int formatStringOffset, bool force32Bit, int align) where T : struct
         {
             if (buffer == null)
             {
                 throw new ArgumentNullException("buffer");
             }
 
-            return Decode<T>(buffer, 0, buffer.Length, formatStringOffset);
+            return Decode<T>(buffer, 0, buffer.Length, formatStringOffset, force32Bit, align);
         }
 
 
@@ -346,11 +346,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
         /// <exception cref="ArgumentNullException">Thrown when buffer is null.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when index or count is out of range.</exception>
         [SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter")]
-        public T Decode<T>(byte[] buffer, int index, int count, int formatStringOffset) where T : struct
+        public T Decode<T>(byte[] buffer, int index, int count, int formatStringOffset, bool force32Bit, int alignment) where T : struct
         {
-            PicklePtrToStructure converter = delegate(IntPtr ptr)
+            PicklePtrToStructure converter = delegate (IntPtr ptr)
             {
-                return TypeMarshal.ToStruct<T>(ptr);
+                return TypeMarshal.ToStruct<T>(ptr, force32Bit, alignment);
             };
 
             return (T)Decode(converter, buffer, index, count, formatStringOffset);
@@ -395,14 +395,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
             IntPtr ndrHandle = IntPtr.Zero;
             IntPtr pObj = IntPtr.Zero;
             IntPtr pBuf = IntPtr.Zero;
+            IntPtr format = IntPtr.Zero;
+
             try
             {
                 #region init handle and environment
 
-                pBuf = Marshal.AllocHGlobal(buffer.Length);
+                pBuf = Marshal.AllocHGlobal(count);
                 Marshal.Copy(buffer, index, pBuf, count);
 
-                int rt = PickleNativeMethods.MesDecodeBufferHandleCreate(pBuf, (uint)buffer.Length, out ndrHandle);
+                int rt = PickleNativeMethods.MesDecodeBufferHandleCreate(pBuf, (uint)count, out ndrHandle);
                 if (rt != PickleError.RPC_S_OK)
                 {
                     throw new PickleException(rt, "Failed to create handle on given buffer.");
@@ -418,14 +420,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
 
                 #endregion
 
-                byte[] format = new byte[typeFormatString.Length - formatStringOffset];
-                Buffer.BlockCopy(typeFormatString, formatStringOffset, format, 0, format.Length);
+                format = Marshal.AllocHGlobal(typeFormatString.Length);
+
+                Marshal.Copy(typeFormatString, 0, format, typeFormatString.Length);
 
                 PickleNativeMethods.NdrMesTypeDecode2(
                      ndrHandle,
                      ref __MIDL_TypePicklingInfo,
                      ref stubDesc,
-                     format,
+                     format + formatStringOffset,
                      ref pObj);
 
                 if (pObj == IntPtr.Zero)
@@ -455,6 +458,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
                 {
                     Marshal.FreeHGlobal(pBuf);
                     pBuf = IntPtr.Zero;
+                }
+
+                if (format != IntPtr.Zero)
+                {
+                    Marshal.FreeHGlobal(format);
                 }
             }
         }
@@ -569,7 +577,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
         {
             byte offset = Marshal.ReadByte(IntPtrUtility.Add(f, -1));
             IntPtr pcAllocated = IntPtrUtility.Add(f, -offset);
-            
+
             Marshal.FreeHGlobal(pcAllocated);
         }
 

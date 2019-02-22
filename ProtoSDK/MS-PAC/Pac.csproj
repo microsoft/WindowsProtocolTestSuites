@@ -80,10 +80,6 @@
     <Compile Include="Message\PacSignatureData.cs" />
     <Compile Include="Message\PacType.cs" />
     <Compile Include="Ndr\MidlTypeFormatString.cs" />
-    <Compile Include="Pickle\PickleError.cs" />
-    <Compile Include="Pickle\PickleException.cs" />
-    <Compile Include="Pickle\PickleMarshaller.cs" />
-    <Compile Include="Pickle\PickleNativeMethods.cs" />
     <Compile Include="Types.cs" />
     <Compile Include="PacUtility.cs" />
     <Compile Include="Message\S4uDelegationInfo.cs" />
@@ -106,6 +102,10 @@
     <ProjectReference Include="..\Messages\Messages.csproj">
       <Project>{75544419-3F4E-4308-A676-165F45C1462E}</Project>
       <Name>Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MS-RPCE\Rpce.csproj">
+      <Project>{A5814E1E-D79C-49A9-A8EA-BA8ED6E0EB39}</Project>
+      <Name>Rpce</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
