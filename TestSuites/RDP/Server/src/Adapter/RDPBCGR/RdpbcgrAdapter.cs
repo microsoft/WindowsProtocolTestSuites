@@ -1513,39 +1513,41 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             PtfPropUtility.GetBoolPtfProperty(Site, "VerifyRdpbcgrMessages", out verifyPduEnabled);
             PtfPropUtility.GetBoolPtfProperty(Site, "VerifyShouldBehaviors", out verifyShouldBehaviors);
 
-            getTlsVersion();
-        }
+            string strRDPSecurityProtocol = string.Empty;
+            string strRDPSecurityTlsVersion = string.Empty;
 
-        private void getTlsVersion()
-        {
-            string strRDPSecurityTlsVersion;
-            if (PtfPropUtility.GetStringPtfProperty(Site, "RDP.Security.TLS.Version", out strRDPSecurityTlsVersion))
+            try
             {
-                // TLS1.0, TLS1.1, TLS1.2 or None
-                if (strRDPSecurityTlsVersion.Equals("TLS1.0", StringComparison.CurrentCultureIgnoreCase))
+                PtfPropUtility.GetStringPtfProperty(Site, "RDP.Security.Protocol", out strRDPSecurityProtocol);            
+                if (strRDPSecurityProtocol.Equals("TLS", StringComparison.CurrentCultureIgnoreCase))
                 {
-                    tlsVersion = SslProtocols.Tls;
-                }
-                else if (strRDPSecurityTlsVersion.Equals("TLS1.1", StringComparison.CurrentCultureIgnoreCase))
-                {
-                    tlsVersion = SslProtocols.Tls11;
-                }
-                else if (strRDPSecurityTlsVersion.Equals("TLS1.2", StringComparison.CurrentCultureIgnoreCase))
-                {
-                    tlsVersion = SslProtocols.Tls12;
-                }
-                else if (strRDPSecurityTlsVersion.Equals("None", StringComparison.CurrentCultureIgnoreCase))
-                {
-                    tlsVersion = SslProtocols.None;
-                }
-                else
-                {
-                    this.Site.Assume.Fail("The property value \"RDP.Security.TLS.Version\" is invalid in PTFConfig file.");
+                    PtfPropUtility.GetStringPtfProperty(Site, "RDP.Security.TLS.Version", out strRDPSecurityTlsVersion);
+                    // TLS1.0, TLS1.1, TLS1.2 or None
+                    if (strRDPSecurityTlsVersion.Equals("TLS1.0", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        tlsVersion = SslProtocols.Tls;
+                    }
+                    else if (strRDPSecurityTlsVersion.Equals("TLS1.1", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        tlsVersion = SslProtocols.Tls11;
+                    }
+                    else if (strRDPSecurityTlsVersion.Equals("TLS1.2", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        tlsVersion = SslProtocols.Tls12;
+                    }
+                    else if (strRDPSecurityTlsVersion.Equals("None", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        tlsVersion = SslProtocols.None;
+                    }
+                    else
+                    {
+                        this.Site.Assume.Fail("The property value \"RDP.Security.TLS.Version\" is invalid in PTFConfig file.");
+                    }
                 }
             }
-            else
+            catch
             {
-                this.Site.Assume.Fail("The property \"RDP.Security.TLS.Version\" is not present in PTFConfig file.");
+                this.Site.Assume.Fail("The properties \"RDP.Security.Protocol\" and \"RDP.Security.TLS.Version\" are not present properly in PTFConfig file.");
             }
         }
 

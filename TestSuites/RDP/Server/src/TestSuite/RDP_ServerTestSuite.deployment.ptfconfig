@@ -9,12 +9,14 @@
     <!--Whether a negotiation protocol is used.-->
     <Property name="RDP.Security.Negotiation" value="True"/>
     <!--One of the TLS, CredSSP, or RDP.-->
-    <Property name="RDP.Security.Protocol" value="TLS"/>
+    <Property name="RDP.Security.Protocol" value="TLS"/>    
+    <!--One of the TLS1.0, TLS1.1, or TLS1.2.-->
+    <Property name="RDP.Security.TLS.Version" value="TLS1.0"/>    
 
     <!-- Domain of the tested RDP Server -->
     <Property name="RDP.ServerDomain" value=""/>
     <!-- Computer name or IP of the tested RDP Server-->
-    <Property name="RDP.ServerName" value="192.168.173.210"/>
+    <Property name="RDP.ServerName" value="192.168.2.2"/>
     <!-- Port of RDP service on RDP Server-->
     <Property name="RDP.ServerPort" value="3389"/>
     <!--The user name of local host (RDP server). -->
@@ -22,7 +24,7 @@
     <!--The logon password of "RDP.ServerUserName". -->
     <Property name="RDP.ServerUserPassword" value="Password01!"/>
     <!-- Computer name or IP of the driver computer-->
-    <Property name="RDP.ClientName" value="192.168.173.211"/>
+    <Property name="RDP.ClientName" value="192.168.2.1"/>
     
     <!-- Whether verify RDPBCGR message received -->
     <Property name="VerifyRdpbcgrMessages" value="true"/>
