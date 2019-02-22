@@ -541,7 +541,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// Check if RDP Server support fast path input Quality of Experience (QoE) Timestamp event notification
         /// Check inputFlags flag of TS_INPUT_CAPABILITYSET
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Return true if supported; otherwise return false</returns>
         bool IsServerSupportFastpathInputQoeTimestampEvent();
 
         /// <summary>
