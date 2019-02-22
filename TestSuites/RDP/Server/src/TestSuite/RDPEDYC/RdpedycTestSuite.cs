@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +12,7 @@ using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestSuites.Rdp;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
+using System.Globalization;
 
 namespace Microsoft.Protocols.TestSuites.Rdpedyc
 {
@@ -33,6 +37,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
         protected override void TestInitialize()
         {
             base.TestInitialize();
+
+            string isEDYCSupported = this.Site.Properties["RDPEDYCSupported"];
+
+            if (string.IsNullOrEmpty(isEDYCSupported)
+                || String.Compare(isEDYCSupported, "true", StringComparison.OrdinalIgnoreCase) != 0
+                )
+            {
+                Site.Assert.Inconclusive("Skip this test case since SUT does not support RDPEDYC.");
+            }
         }
 
         protected override void TestCleanup()

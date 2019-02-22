@@ -97,17 +97,19 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         }
 
         /// <summary>
-        /// Exchange DVC capability, negotiate the version 
+        /// Exchange DVC capability, negotiate the version, return the cap version
         /// </summary>
         /// <param name="version"></param>
-        public void ExchangeCapabilities(TimeSpan timeout)
+        public DYNVC_CAPS_Version ExchangeCapabilities(TimeSpan timeout)
         {
             DynamicVCPDU pdu = this.ExpectDVCCapRequestPDU(timeout);
             if (pdu == null)
             {
                 throw new System.IO.IOException("Cannot receive a DVC Capabilities Request PDU!");
             }
+
             DYNVC_CAPS_Version version = DYNVC_CAPS_Version.VERSION3;
+
             if(pdu is CapsVer1ReqDvcPdu)
             {
                 version = DYNVC_CAPS_Version.VERSION1;
@@ -118,6 +120,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             }
 
             this.SendDVCCapResponsePDU(version);
+
+            return version;
             
         }
         

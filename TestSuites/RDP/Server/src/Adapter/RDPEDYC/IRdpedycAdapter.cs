@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,8 +34,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
             bool supportSVCCompression = false,
             bool supportRemoteFXCodec = false
            );
-        
-        void ExchangeCapabilities(TimeSpan timeout);
+
+        DYNVC_CAPS_Version ExchangeCapabilities(TimeSpan timeout);
         void SendUncompressedPdu(uint channelId, DynamicVC_TransportType transportType);
         DynamicVirtualChannel ExpectChannel(TimeSpan timeout, string channelName, DynamicVC_TransportType transportType);
         void CloseChannel(TimeSpan timeout, ushort channelId);

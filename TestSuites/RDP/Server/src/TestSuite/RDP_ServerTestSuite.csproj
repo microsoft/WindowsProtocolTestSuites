@@ -68,7 +68,7 @@
     <Compile Include="RDPBCGR\S4_OutputTest.cs" />
     <Compile Include="RDPBCGR\S5_StaticVirtualChannelTest.cs" />
     <Compile Include="RDPEDYC\RdpedycTestSuite.cs" />
-    <Compile Include="RDPEDYC\S9_EDYC.cs" />
+    <Compile Include="RDPEDYC\S1_EDYCBasicTest.cs" />
     <Compile Include="RdpTestClassBase.cs" />
   </ItemGroup>
   <ItemGroup>

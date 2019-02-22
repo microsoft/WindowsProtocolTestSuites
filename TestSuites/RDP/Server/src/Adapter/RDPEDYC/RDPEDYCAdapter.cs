@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -98,14 +101,16 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
         /// Expect the capabilites requset pdu from SUT
         /// </summary>
         /// <param name="timeout">Time span for waiting</param>
-        public void ExchangeCapabilities(TimeSpan timeout)
+        public DYNVC_CAPS_Version ExchangeCapabilities(TimeSpan timeout)
         {
             if(rdpedycClientStack == null)
             {
                 throw new Exception("RDPEDYC Client is required to be created before exchange capabilities.");
             }
 
-            rdpedycClientStack.ExchangeCapabilities(timeout);
+            DYNVC_CAPS_Version version = rdpedycClientStack.ExchangeCapabilities(timeout);
+
+            return version;            
         }
 
         /// <summary>
