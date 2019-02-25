@@ -380,17 +380,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
                 {
                     lock (unprocessedDVCPacketBuffer)
                     {
-                        if (unprocessedDVCPacketBuffer.Count > 0)
+                        for (int i = 0; i < unprocessedDVCPacketBuffer.Count; i++)
                         {
-                            for (int i = 0; i < unprocessedDVCPacketBuffer.Count; i++)
+                            if (transportType == unprocessedDVCPacketBuffer[i].TransportType
+                                && unprocessedDVCPacketBuffer[i].PDU is SoftSyncResDvcPdu)
                             {
-                                if (transportType == unprocessedDVCPacketBuffer[i].TransportType
-                                    && unprocessedDVCPacketBuffer[i].PDU is SoftSyncResDvcPdu)
-                                {
-                                    SoftSyncResDvcPdu capResp = unprocessedDVCPacketBuffer[i].PDU as SoftSyncResDvcPdu;
-                                    unprocessedDVCPacketBuffer.RemoveAt(i);
-                                    return capResp;
-                                }
+                                SoftSyncResDvcPdu capResp = unprocessedDVCPacketBuffer[i].PDU as SoftSyncResDvcPdu;
+                                unprocessedDVCPacketBuffer.RemoveAt(i);
+                                return capResp;
                             }
                         }
                     }
@@ -441,17 +438,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
                 {
                     lock (unprocessedDVCPacketBuffer)
                     {
-                        if (unprocessedDVCPacketBuffer.Count > 0)
+                        for (int i = 0; i < unprocessedDVCPacketBuffer.Count; i++)
                         {
-                            for (int i = 0; i < unprocessedDVCPacketBuffer.Count; i++)
+                            if (transportType == unprocessedDVCPacketBuffer[i].TransportType
+                                && unprocessedDVCPacketBuffer[i].PDU is CapsRespDvcPdu)
                             {
-                                if (transportType == unprocessedDVCPacketBuffer[i].TransportType
-                                    && unprocessedDVCPacketBuffer[i].PDU is CapsRespDvcPdu)
-                                {
-                                    CapsRespDvcPdu capResp = unprocessedDVCPacketBuffer[i].PDU as CapsRespDvcPdu;
-                                    unprocessedDVCPacketBuffer.RemoveAt(i);
-                                    return capResp;
-                                }
+                                CapsRespDvcPdu capResp = unprocessedDVCPacketBuffer[i].PDU as CapsRespDvcPdu;
+                                unprocessedDVCPacketBuffer.RemoveAt(i);
+                                return capResp;
                             }
                         }
                     }
@@ -491,18 +485,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
                 {
                     lock (unprocessedDVCPacketBuffer)
                     {
-                        if (unprocessedDVCPacketBuffer.Count > 0)
+                        for (int i = 0; i < unprocessedDVCPacketBuffer.Count; i++)
                         {
-                            for (int i = 0; i < unprocessedDVCPacketBuffer.Count; i++)
+                            if (transportType == unprocessedDVCPacketBuffer[i].TransportType
+                                && unprocessedDVCPacketBuffer[i].PDU is CreateRespDvcPdu
+                                && (unprocessedDVCPacketBuffer[i].PDU as CreateRespDvcPdu).ChannelId == channelId)
                             {
-                                if (transportType == unprocessedDVCPacketBuffer[i].TransportType
-                                    && unprocessedDVCPacketBuffer[i].PDU is CreateRespDvcPdu
-                                    && (unprocessedDVCPacketBuffer[i].PDU as CreateRespDvcPdu).ChannelId == channelId)
-                                {
-                                    CreateRespDvcPdu pdu = unprocessedDVCPacketBuffer[i].PDU as CreateRespDvcPdu;
-                                    unprocessedDVCPacketBuffer.RemoveAt(i);
-                                    return pdu;
-                                }
+                                CreateRespDvcPdu pdu = unprocessedDVCPacketBuffer[i].PDU as CreateRespDvcPdu;
+                                unprocessedDVCPacketBuffer.RemoveAt(i);
+                                return pdu;
                             }
                         }
                     }
@@ -556,18 +547,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
                 {
                     lock (unprocessedDVCPacketBuffer)
                     {
-                        if (unprocessedDVCPacketBuffer.Count > 0)
+                        for (int i = 0; i < unprocessedDVCPacketBuffer.Count; i++)
                         {
-                            for (int i = 0; i < unprocessedDVCPacketBuffer.Count; i++)
+                            if (transportType == unprocessedDVCPacketBuffer[i].TransportType
+                                && unprocessedDVCPacketBuffer[i].PDU is CloseDvcPdu
+                                && (unprocessedDVCPacketBuffer[i].PDU as CloseDvcPdu).ChannelId == channelId)
                             {
-                                if (transportType == unprocessedDVCPacketBuffer[i].TransportType
-                                    && unprocessedDVCPacketBuffer[i].PDU is CloseDvcPdu
-                                    && (unprocessedDVCPacketBuffer[i].PDU as CloseDvcPdu).ChannelId == channelId)
-                                {
-                                    CloseDvcPdu pdu = unprocessedDVCPacketBuffer[i].PDU as CloseDvcPdu;
-                                    unprocessedDVCPacketBuffer.RemoveAt(i);
-                                    return pdu;
-                                }
+                                CloseDvcPdu pdu = unprocessedDVCPacketBuffer[i].PDU as CloseDvcPdu;
+                                unprocessedDVCPacketBuffer.RemoveAt(i);
+                                return pdu;
                             }
                         }
                     }

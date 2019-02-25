@@ -37,7 +37,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
 
         DYNVC_CAPS_Version ExchangeCapabilities(TimeSpan timeout);
         void SendUncompressedPdu(uint channelId, DynamicVC_TransportType transportType);
-        DynamicVirtualChannel ExpectChannel(TimeSpan timeout, string channelName, DynamicVC_TransportType transportType);
+        DynamicVirtualChannel ExpectChannel(TimeSpan timeout, DynamicVC_TransportType transportType);
         void CloseChannel(TimeSpan timeout, ushort channelId);
         SoftSyncReqDvcPDU ExpectSoftSyncReqPDU(TimeSpan timeout, DynamicVC_TransportType transportType);
         void SendCompressedSequencePdu(uint channelId, DynamicVC_TransportType transportType);        

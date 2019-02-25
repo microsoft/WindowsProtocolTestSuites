@@ -17,6 +17,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
 {    
     public partial class RdpedycAdapter : ManagedAdapterBase, IRdpedycAdapter
     {
+        public const string SVCNameForEGT = "Microsoft::Windows::RDS::Geometry::v08.01";
+
         public RdpbcgrAdapter bcgrAdapter;
 
         public RdpedycClient rdpedycClientStack;          
@@ -120,13 +122,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
         /// <param name="channelName">Channel name to be created </param>
         /// <param name="transportType">Transport type, Tcp by default</param>
         /// <returns></returns>
-        public DynamicVirtualChannel ExpectChannel(TimeSpan timeout, string channelName, DynamicVC_TransportType transportType = DynamicVC_TransportType.RDP_TCP)
+        public DynamicVirtualChannel ExpectChannel(TimeSpan timeout, DynamicVC_TransportType transportType = DynamicVC_TransportType.RDP_TCP)
         {           
             if (rdpedycClientStack == null)
             {
                 throw new InvalidOperationException("RDPEDYC Client is required to be created before create channel!");
             }
-            DynamicVirtualChannel channel = rdpedycClientStack.ExpectChannel(timeout, channelName, transportType);
+            DynamicVirtualChannel channel = rdpedycClientStack.ExpectChannel(timeout, SVCNameForEGT, transportType);
 
             return channel;
         }

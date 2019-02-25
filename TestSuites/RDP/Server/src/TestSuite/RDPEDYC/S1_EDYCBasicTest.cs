@@ -39,7 +39,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
             // Expect the geometry channel create request from server
             this.Site.Log.Add(LogEntryKind.Debug, "Expect the DVC channel create PDU from SUT.");
 
-            DynamicVirtualChannel channel = this.rdpedycAdapter.ExpectChannel(timeout, "Microsoft::Windows::RDS::Geometry::v08.01", DynamicVC_TransportType.RDP_TCP);
+            DynamicVirtualChannel channel = this.rdpedycAdapter.ExpectChannel(timeout, DynamicVC_TransportType.RDP_TCP);
           
             // Expect the geometry channel close request from server
             this.Site.Log.Add(LogEntryKind.Debug, "Expect the DVC channel close PDU from SUT.");
@@ -74,7 +74,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
             // Expect the geometry channel create request from server
             this.Site.Log.Add(LogEntryKind.Debug, "Expect the DVC channel create PDU from SUT.");
 
-            DynamicVirtualChannel channel = this.rdpedycAdapter.ExpectChannel(timeout, "Microsoft::Windows::RDS::Geometry::v08.01", DynamicVC_TransportType.RDP_TCP);
+            DynamicVirtualChannel channel = this.rdpedycAdapter.ExpectChannel(timeout, DynamicVC_TransportType.RDP_TCP);
 
             // Send data to server
             this.Site.Log.Add(LogEntryKind.Debug, "Send the DYNVC_Data PDU to SUT.");
@@ -119,7 +119,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
             // Expect the geometry channel create request from server
             this.Site.Log.Add(LogEntryKind.Debug, "Expect the DVC channel create PDU from SUT.");
 
-            DynamicVirtualChannel channel = this.rdpedycAdapter.ExpectChannel(timeout, "Microsoft::Windows::RDS::Geometry::v08.01", DynamicVC_TransportType.RDP_TCP);
+            DynamicVirtualChannel channel = this.rdpedycAdapter.ExpectChannel(timeout, DynamicVC_TransportType.RDP_TCP);
 
             // Send compressed data sequence to server
             this.Site.Log.Add(LogEntryKind.Debug, "Expect the DYNVC_Data PDU from SUT.");
