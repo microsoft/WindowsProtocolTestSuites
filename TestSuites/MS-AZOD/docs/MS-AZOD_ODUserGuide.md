@@ -12,7 +12,7 @@
     * [Trust-Realm KDC](#_Toc426622592)
     * [Local-Realm Application Server (AP)](#_Toc426622593)
     * [Trust-Realm Application Server (AP)](#_Toc426622594)
-    * [Client Computer (Client)](#_Toc426622595)
+    * [Client Computer/Driver Computer](#_Toc426622595)
     * [Software](#_Toc426622596)
 * [Network Setup](#_Toc426622597)
     * [Network Infrastructure](#_Toc426622598)
@@ -22,14 +22,14 @@
 * [Computer Setup](#_Toc426622602)
     * [Set Up the Local /Trust-Realm KDC](#_Toc426622603)
     * [Set Up the Local /Trust-Realm AP](#_Toc426622604)
-    * [Set Up the Client Computer](#_Toc426622605)
+    * [Set Up the Client Computer/Driver Computer](#_Toc426622605)
     * [Installed Files and Folders](#_Toc426622606)
 * [Configuration](#_Toc426622607)
     * [Configure the Local-Realm KDC](#_Toc426622608)
     * [Configure the Local-Realm AP](#_Toc426622609)
     * [Configure the Trust-Realm KDC](#_Toc426622610)
     * [Configure the Trust-Realm AP](#_Toc426622611)
-    * [Configure the Client Computer](#_Toc426622612)
+    * [Configure the Client Computer/Driver Computer](#_Toc426622612)
 * [Configuring the Test Suite](#_Toc426622613)
     * [Required Configuration Settings](#_Toc426622614)
     * [Optional Configuration Settings](#_Toc426622615)
@@ -37,7 +37,6 @@
     * [Run All Test Cases](#_Toc426622617)
     * [Run Specified Test Cases](#_Toc426622618)
     * [Check Test Results](#_Toc426622619)
-* [Debugging Test Cases](#_Toc426622620)
 * [Troubleshooting](#_Toc426622621)
     * [Ping Failure](#_Toc426622622)
     * [Test Run Issues](#_Toc426622623)
@@ -64,7 +63,7 @@ This suite of tools tests only the protocol implementation behaviors that are ob
 
 ## <a name="_Toc426622585"/>License Information
 
-For licensing information, see the End User License Agreement (EULA) that was provided with this test suite. The EULA is contained in the EULA.rtf file in the installation folder.
+For licensing information, see the End User License Agreement (EULA) that was provided with this test suite. The EULA is contained in the LICENSE.rtf file in the installation folder.
 
 ## <a name="_Toc426622586"/>Further Assistance
 
@@ -85,16 +84,16 @@ The following checklist summarizes the steps required to get the test suite up a
 | □| Set up the Local-Realm Application Server (AP) Computer| See [Set Up the Local-Realm/Trust-Realm Application Server Computer](#_Toc426622604).| 
 | □| Set up the Trust-Realm Application Server (AP) Computer| See [Set Up the Local-Realm/Trust-Realm Application Server Computer](#_Toc426622604).| 
 | | | Note: only for cross realm scenario.| 
-| □| Set up the Client Computer| See [Set Up the Client Computer](#_Toc426622605).| 
+| □| Set up the Client Computer/Driver Computer| See [Set Up the Client Computer/Driver Computer](#_Toc426622605).| 
 | □| Set up the network| See [Network Setup.](#_Toc426622597)| 
-| □| Verify the connection from the driver computer to the SUT and other computers| See [Verify Connectivity](#_Toc426622601).| 
+| □| Verify the connection from the Client Computer/Driver Computer to the SUT and other computers| See [Verify Connectivity](#_Toc426622601).| 
 | □| Configure the Local-Realm KDC computer| See [Configure the Local-Realm KDC Computer](#_Toc426622608).| 
 | □| Configure the Trust-Realm KDC computer| See [Configure the Trust-Realm KDC Computer](#_Toc426622610).| 
 | | | Note: only for cross realm scenario.| 
 | □| Configure the Local-Realm Application Server computer| See [Configure the Local-Realm Application Server Computer](#_Toc426622609).| 
 | □| Configure the Trust-Realm Application Server computer| See [Configure the Trust-Realm Application Server Computer](#_Toc426622611).| 
 | | | Note: only for cross realm scenario.| 
-| □| Configure the Client computer| See [Configure the Client Computer](#_Toc426622612).| 
+| □| Configure the Client Computer/Driver Computer| See [Configure the Client Computer/Driver Computer](#_Toc426622612).| 
 | □| Configure test suite settings| See [Configuring the Test Suite](#_Toc426622613).| 
 
 ## <a name="_Toc426622588"/>How Do I?
@@ -102,16 +101,16 @@ Use the following quick reference to learn how to complete common tasks.
 
 |  **How do I…?**|  **For more information…**| 
 | -------------| ------------- |
-| Set up the test environment| [Network Setup](#_Network_Setup) and [Computer Setup](#_Toc426622602)| 
+| Set up the test environment| [Network Setup](#_Toc426622597) and [Computer Setup](#_Toc426622602)| 
 | Verify the connection from the driver computer to other computers and between other computers in the test environment| [Verify Connectivity](#_Toc426622601)| 
 | Setup the Local-Realm/Trust-Realm KDC Computer| [Set Up the Local-Realm/Trust-Realm KDC Computer](#_Toc426622603)| 
 | Setup the Local-Realm/Trust-Realm Application Server Computer| [Set Up the Local-Realm/Trust-Realm Application Server Computer](#_Toc426622603)| 
-| Setup the Client Computer| [Set Up the Client Computer](#_Toc426622605)| 
+| Setup the Client Computer/Driver Computer| [Set Up the Client Computer/Driver Computer](#_Toc426622605)| 
 | Configure the Local-Realm KDC Computer| [Configure the Local-Realm KDC Computer](#_Toc426622608) or [Configure a KDC Computer that is Not Windows-based](#_Toc426622613)| 
 | Configure the Trust-Realm KDC Computer| [Configure the Trust-Realm KDC Computer](#_Toc426622610) or [Configure a KDC Computer that is Not Windows-based](#_Toc426622613)| 
 | Configure the Local-Realm Application Server Computer| [Configure the Local-Realm Application Server Computer](#_Toc426622609) or [Configure an Application Server Computer that is Not Windows-based](#_Toc426622613)| 
 | Configure the Trust-Realm Application Server Computer| [Configure the Trust-Realm Application Server Computer](#_Toc426622611) or [Configure an Application Server Computer that is Not Windows-based](#_Toc426622613)| 
-| Configure the Client Computer| [Configure the Client Computer](#_Toc426622612)| 
+| Configure the Client Computer/Driver Computer| [Configure the Client Computer/Driver Computer](#_Toc426622612)| 
 | Configure the test suite settings| [Configuring the Test Suite](#_Toc426622613)| 
 | Run test cases| [Run All Test Cases](#_Toc426622617), [Run Specified Test Cases](#_Toc426622618)| 
 | Debug my own test cases| [Debugging Test Cases](#_Toc426622620)| 
@@ -146,7 +145,7 @@ Note
 
 * One computer configured as an Application Server (AP) joined to the trust realm. If the computer is running on Windows, it must be running on Microsoft® Windows Server® 2012 or later version, 64-bit edition, with the latest updates.
 
-* One client computer configured as an Application Client (Endpoint) joined to the local realm. If the computer is running on Windows, it is suggested to run on Microsoft® Windows® 2012 or later version, 64-bit edition, with the latest updates.
+* One Client Computer/Driver Computer configured as an Application Client (Endpoint) joined to the local realm. If the computer is running on Windows, it is suggested to run on Microsoft® Windows® 2012 or later version, 64-bit edition, with the latest updates.
 
 ### <a name="_Toc426622591"/>Local-Realm KDC
 
@@ -194,7 +193,7 @@ If the application server computer is running on Windows, the minimum requiremen
 | Memory| 1 GB RAM| 
 | Disk space| 30 GB| 
 
-### <a name="_Toc426622595"/>Client Computer (Client)
+### <a name="_Toc426622595"/>Client Computer/Driver Computer
 
 The minimum requirements for the driver computer are as follows:
 
@@ -218,7 +217,7 @@ All of the following software must be installed on the driver computer _before_ 
 | Message Analyzer is required for this test suite to analyze the network traces and validate the message sequences, structures and fields per scenario. |
 |        ![image3.png](./image/MS-AZOD_ODUserGuide/image3.png)Note| 
 |              You can download the latest Message Analyzer from below website [http://www.microsoft.com/en-us/download/details.aspx?id=44226](http://www.microsoft.com/en-us/download/details.aspx?id=44226) | 
-| Install Microsoft Message Analyzer (Complete) on the client computer which runs Windows operate system.       | 
+| Install Microsoft Message Analyzer (Complete) on the Client Computer/Driver Computer which runs Windows operate system.       | 
 |  | 
 |  **Optional Software that is Not Included**| 
 | N/A| 
@@ -227,7 +226,7 @@ All of the following software must be installed on the driver computer _before_ 
 
 Run this test suite in domain environment with an isolated Ethernet connection. You can use either physical or virtual machines. This section describes the domain test environment using physical computers. 
 
-For information about configuring a virtual machine, see [http://www.microsoft.com/virtualization/en/us/solution-appliance-test.aspx](http://www.microsoft.com/virtualization/en/us/solution-appliance-test.aspx). The configuration of virtual machines for use with this test suite is out of scope for this guide.
+For information about configuring a virtual machine, see [https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/create-virtual-machine](https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/create-virtual-machine). The configuration of virtual machines for use with this test suite is out of scope for this guide.
 
 ### <a name="_Toc426622598"/>Network Infrastructure
 
@@ -253,11 +252,11 @@ Refer to the Privacy Statement and EULA for further information.
 
 The single realm environment requires interactions between the following computers and server roles: 
 
-* The client computer runs the observer test cases by verifying the traffic messages captured on other computers.
+* The Client Computer/Driver Computer runs the observer test cases by verifying the traffic messages captured on other computers.
 
 * The KDC, AP, and Client run the implementation of the protocols that are being tested. 
 
-* The client computer also runs the traditional synthetic client test cases to test the claim based scenarios.
+* The Client Computer/Driver Computer also runs the traditional synthetic client test cases to test the claim based scenarios.
 
 The following figure shows a single realm environment using an isolated Ethernet connection. 
 
@@ -269,12 +268,12 @@ Single Realm Environment
 
 The following table lists a suggested network configurations for all the test machines:
 
-| &#32;| &#32;| &#32;| &#32;| &#32; |
-| -------------| -------------| -------------| -------------| ------------- |
-| Machine Name| Role| IPv4| Subnet Mask| DNS Server| 
-| DC01| Local-Realm KDC| 192.168.0.1| 255.255.255.0| 127.0.0.1| 
-| AP01| Local-Realm AP| 192.168.0.2| 255.255.255.0| 192.168.0.1| 
-| CLIENT01| Local-Realm Client| 192.168.0.3| 255.255.255.0| 192.168.0.1| 
+| &#32;| &#32;| &#32;| &#32;| &#32; | &#32; | &#32; | &#32; | &#32; |
+| -------------| -------------| -------------| -------------| ------------- |------------- | ------------- |------------- | ------------- |
+| Machine Name| Username| Password| Role| IPv4| Subnet Mask| DNS Server| Default Gateway| Domain Name| 
+| DC01| Administrator| Password01!| Local-Realm KDC| 192.168.0.1| 255.255.255.0| 127.0.0.1| 192.168.0.102| contoso.com| 
+| AP01| Administrator| Password01!| Local-Realm AP| 192.168.0.2| 255.255.255.0| 192.168.0.1| 192.168.0.102| contoso.com| 
+| CLIENT01| Administrator| Password01!| Local-Realm Client/Driver Computer| 192.168.0.3| 255.255.255.0| 192.168.0.1| 192.168.0.102|contoso.com| 
 
 ### <a name="_Toc426622600"/>Cross-Forest Trust Environment
 
@@ -292,15 +291,14 @@ Multiple Realm Environment
 
 The following table lists a suggested network configurations for all the test machines:
 
-| &#32;| &#32;| &#32;| &#32;| &#32; |
-| -------------| -------------| -------------| -------------| ------------- |
-| Machine Name| Role| IPv4| Subnet Mask| DNS Server| 
-| DC01| Local-Realm KDC| 192.168.0.1| 255.255.255.0| 127.0.0.1; 192.168.0.10| 
-| AP01| Local-Realm AP| 192.168.0.2| 255.255.255.0| 192.168.0.1| 
-| CLIENT01| Local-Realm Client| 192.168.0.3| 255.255.255.0| 192.168.0.1| 
-| DC02| Trust-Realm KDC| 192.168.0.10| 255.255.255.0| 127.0.0.1;| 
-| | | | | 192.168.0.1| 
-| AP02| Trust-Realm AP| 192.168.0.11| 255.255.255.0| 192.168.0.10| 
+| &#32;| &#32;| &#32;| &#32;| &#32; | &#32;| &#32;| &#32;| &#32; |
+| -------------| -------------| -------------| -------------| ------------- | -------------| -------------| -------------| ------------- |
+| Machine Name| Username| Password| Role| IPv4| Subnet Mask| DNS Server| Default Gateway| Domain Name| 
+| DC01| Administrator| Password01!| Local-Realm KDC| 192.168.0.1| 255.255.255.0| 127.0.0.1; 192.168.0.10| 192.168.0.254| contoso.com| 
+| AP01| Administrator| Password01!| Local-Realm AP| 192.168.0.2| 255.255.255.0| 192.168.0.1| 192.168.0.254| contoso.com| 
+| CLIENT01| Administrator| Password01!| Local-Realm Client/Driver Computer| 192.168.0.3| 255.255.255.0| 192.168.0.1| 192.168.0.254| contoso.com| 
+| DC02| Administrator| Password01!| Trust-Realm KDC| 192.168.0.10| 255.255.255.0| 127.0.0.1; 192.168.0.1| 192.168.0.254| kerb.com| 
+| AP02| Administrator| Password01!| Trust-Realm AP| 192.168.0.11| 255.255.255.0| 192.168.0.10| 192.168.0.254| kerb.com| 
 
 ### <a name="_Toc426622601"/>Verify Connectivity
 
@@ -311,7 +309,7 @@ To check the connection from a Windows-based computer
 ![image2.png](./image/MS-AZOD_ODUserGuide/image2.png)
 Note 
 
-* Disable active firewalls in the test environment.
+* Disable active firewalls in the test environment (Run Disable_Firewall.ps1 or do it manually).
 
 * Press Win Key + R. 
 
@@ -358,15 +356,15 @@ To set up a Windows-based Local /Trust-Realm AP:
 
 To set up an Application Server that is not based on the Windows operating system, see [Configuring an Application Server Computer that is Not Windows-based](#_Configuring_an_Application).
 
-### <a name="_Toc426622605"/>Set Up the Client Computer
-This section provides information about how to set up the Windows-based Client Computer for use with this test suite.
+### <a name="_Toc426622605"/>Set Up the Client Computer/Driver Computer
+This section provides information about how to set up the Windows-based Client Computer/Driver Computer for use with this test suite.
 
 ![image6.png](./image/MS-AZOD_ODUserGuide/image6.png)
 Important 
 
 To set up the driver computer:
 
-* Install Microsoft Visual Studio, Protocol Test Framework and Microsoft Message Analyzer.
+* Install Microsoft Visual Studio, SpecExplorer, Protocol Test Framework and Microsoft Message Analyzer.
 
 * Copy the MS-AZOD-TestSuite-ODEP.msi to the driver computer.
 
@@ -387,21 +385,20 @@ The  &#60; version &#35;  &#62;  placeholder indicates the installed build of th
 |  **File or Folder**|  **Description**| 
 | -------------| ------------- |
 | Batch| Command files that you can use to run all test cases or, BVT test cases.| 
-| Bin| Test suite binaries and configuration files.| 
-| Docs| **[MS-AZOD].pdf -** Protocol specification used to develop this test suite.| 
-| | **MS-AZOD_ODUserGuide.docx** – A user guide that explains how to install and configure the client computer, the Key Distribution Centers (KDC) and the Application Servers (AP), as well as how to run test cases.| 
-| | **MS-AZOD_ODTestDesignSpecification.docx** – An overview document containing conceptual information about a protocol including probable use, relationships to other protocols, message flow, state diagrams, a short list of properties, and a test approach describing justification and adapter approach.| 
-| | ![image2.png](./image/MS-AZOD_ODUserGuide/image2.png)Note | 
-| | The driver computer should include Microsoft Office or other programs that can open and display these documents. If it does not, you can copy these documents to a computer equipped with applications that can.| 
-| Scripts| Scripts that are used to set up and configure the client computer, the Key Distribution Centers and the Application Servers.| 
-| Source| Test suite source code.| 
-| EULA.rtf| The End User License Agreement.| 
+| Bin| Test suite binaries and configuration files.| | |  | 
+| Scripts| Scripts that are used to set up and configure the Client Computer/Driver Computer, the Key Distribution Centers and the Application Servers.| 
+| LICENSE.rtf| The End User License Agreement.| 
 
 ## <a name="_Toc426622607"/>Configuration
 
 This section explains how to configure the network and computers in the test environment for this test suite.
 
 This section explains how to configure the test environment for computers running Windows-based operating systems. For general information about configuring the test environment for computers that are not based on Windows, see [Configuring Computers that are Not Based on Windows.](#_Configuring_Computers_that)
+
+![image2.png](./image/MS-AZOD_ODUserGuide/image2.png) Note
+Before each configuration, go to C:\MicrosoftProtocolTests\MS-AZOD\OD-Endpoint\ < version # > \Scripts, and open the Config.xml file.
+Edit the properties according to the actual situation.
+
 
 ### <a name="_Toc426622608"/> Configure the Local-Realm KDC 
 
@@ -411,7 +408,7 @@ To configure the Local-Realm KDC
 
 * Log on the Local-Realm KDC computer as local administrator. 
 
-* Configure the Computer IP and Computer Name values as section [Network Setup](#_Setup).
+* Configure the Computer IP and Computer Name values as section [Network Setup](#_Toc426622597).
 
 * Turn off firewall.
 
@@ -422,9 +419,13 @@ _Start-process powershell -verb runAs_
 
 * Type _cd C:\MicrosoftProtocolTests\MS-AZOD\OD-Endpoint\_ &#60; version &#35;  &#62; _\Scripts,_ and press **Enter**.
 
-* Type _.\ Config-DC01.ps1_ and press **Enter**.
+* Install ADDS and DNS services, promote this computer as domain controller. To do this, you could Type _.\PromoteDomainController.ps1_ and press **Enter**. Or you could do it manually, for more information, please refer to https://blogs.technet.microsoft.com/canitpro/2017/02/22/step-by-step-setting-up-active-directory-in-windows-server-2016/
 
-* The script will promote the computer as domain controller, create required users, groups, Claim types, Resource property, Central access rule and central access policies to the local realm KDC computer.
+* Type _.\Set-AutoLogon.ps1_ and press **Enter** to set auto login.
+
+* Type _.\Config-DC01.ps1_ and press **Enter**.
+
+* The script will create required users, groups, Claim types, Resource property, Central access rule and central access policies to the local realm KDC computer.
 
 ### <a name="_Toc426622609"/>Configure the Local-Realm AP 
 
@@ -438,13 +439,17 @@ To configure the Local-Realm Application Server computer
 
 * Turn off firewall.
 
-* Configure the Computer IP and Computer Name values as section [Network Setup](#_Setup).
+* Configure the Computer IP and Computer Name values as section [Network Setup](#_Toc426622597).
 
 * Type _cd C:\MicrosoftProtocolTests\ MS-AZOD\OD-Endpoint\_ &#60; version &#35;  &#62; _\Scripts,_ and press **Enter**.
 
+* Type _.\Install-FSRM.ps1_, and press **Enter**.
+
+* Type _.\domainjoin.ps1_, and press **Enter**. When it is completed, restart the computer to confirm the success of joining domain.
+
 * Type _.\Config-AP01.ps1_, and press **Enter**.
 
-* The script will join the application server into local realm, create share folders to local realm application server, and apply resource property and central access policy to these folders.
+* These scripts will join the application server into local realm, create share folders to local realm application server, and apply resource property and central access policy to these folders.
 
 ### <a name="_Toc426622610"/>Configure the Trust-Realm KDC 
 
@@ -459,15 +464,19 @@ To configure the Trust-Realm KDC
 
 * Log on the Trust-Realm KDC computer as local administrator. 
 
-* Turn off firewall.
+* Configure the Computer IP and Computer Name values as section [Network Setup](#_Toc426622597).
 
-* Configure the Computer IP and Computer Name values as section [Network Setup](#_Setup).
+* Turn off firewall.
 
 * Type _cd C:\MicrosoftProtocolTests\ MS-AZOD\OD-Endpoint\_ &#60; version &#35;  &#62; _\Scripts,_ and press **Enter**.
 
+* Install ADDS and DNS services, promote this computer as domain controller. To do this, you could Type _.\PromoteDomainController.ps1_ and press **Enter**. Or you could do it manually, for more information, please refer to https://blogs.technet.microsoft.com/canitpro/2017/02/22/step-by-step-setting-up-active-directory-in-windows-server-2016/
+
+* Type _.\Set-AutoLogon.ps1_ and press **Enter** to set auto login.
+
 * Type _.\Config-DC02.ps1_, and press **Enter**.
 
-* The computer will promote itself as domain controller, restart automatically, then setup the forest trust with local realm, then define claims, central access rules and central access policy.
+* The computer will setup the forest trust with local realm, then define claims, central access rules and central access policy, and create ClaimTransformPolicy.
 
 ### <a name="_Toc426622611"/>Configure the Trust-Realm AP
 
@@ -485,31 +494,37 @@ To configure the Trust-Realm Application Server computer
 
 * Turn off firewall.
 
-* Configure the Computer IP and Computer Name values as section [Network Setup](#_Setup).
+* Configure the Computer IP and Computer Name values as section [Network Setup](#_Toc426622597).
 
 * Type cd _C:\MicrosoftProtocolTests\ MS-AZOD\OD-Endpoint\_ &#60; version &#35;  &#62; _\Scripts,_ and press **Enter**.
 
+* Type _.\Install-FSRM.ps1_, and press **Enter**.
+
+* Type _.\domainjoin.ps1_, and press **Enter**. When it is completed, restart the computer to confirm the success of joining domain.
+
 * Type _.\Config-AP02.ps1,_ and press **Enter**.
 
-* The script will join the application server in to trust realm, create share folder and apply central access policy to the share folder.
+* These scripts will join the application server into trust realm, create share folder and apply central access policy to the share folder.
 
-### <a name="_Toc426622612"/>Configure the Client Computer 
+### <a name="_Toc426622612"/>Configure the Client Computer/Driver Computer 
 
 This section provides a general list of steps that you can use to configure the driver computer in a Windows-based test environment. For specific information about how to complete these steps, see the administration guide for your operating system.
 
-To configure the client computer
+To configure the Client Computer/Driver Computer
 
-* Log on to the client computer as local Administrator.
+* Log on to the Client Computer/Driver Computer as local Administrator.
 
 * Turn off firewall.
 
-* Configure the Computer IP and Computer Name values as section [Network Setup](#_Setup).
+* Configure the Computer IP and Computer Name values as section [Network Setup](#_Toc426622597).
 
 * Type _cd C:\MicrosoftProtocolTests\ MS-AZOD\OD-Endpoint\_ &#60; version &#35;  &#62; _\Scripts,_ and press **Enter**.
 
+* Type _.\domainjoin.ps1_, and press **Enter**. When it is completed, restart the computer to confirm the success of joining domain.
+
 * Type _.\Config-client01.ps1_, and press **Enter**.
 
-* The script will create logging folders and join the client computer into local realm.
+* These scripts will create logging folders and join the Client Computer/Driver Computer into local realm.
 
 ## <a name="_Toc426622613"/>Configuring the Test Suite
 
@@ -558,13 +573,13 @@ The following table describes the required configuration properties and their va
 | | Default value: **claimuser**| 
 |  **KdcClaimUserPwd**| The default user password with claim in local realm.| 
 | | Default value: **Password01!**| 
-|  **ClientComputerName**| The default client computer name in local realm.| 
+|  **ClientComputerName**| The default Client Computer/Driver Computer name in local realm.| 
 | | Default value: **client01**| 
-|  **ClientComputerIp**| The default client computer IP in local realm.| 
+|  **ClientComputerIp**| The default Client Computer/Driver Computer IP in local realm.| 
 | | Default value: **192.168.0.3**| 
-|  **ClientAdminUser**| The default client computer administrator user name in local realm.| 
+|  **ClientAdminUser**| The default Client Computer/Driver Computer administrator user name in local realm.| 
 | | Default value: **administrator**| 
-|  **ClientAdminPwd**| The default client computer administrator password in local realm.| 
+|  **ClientAdminPwd**| The default Client Computer/Driver Computer administrator password in local realm.| 
 | | Default value: **Password01!**| 
 |  **CrossForestName**| The default forest name of cross realm.| 
 | | Default value: **kerb.com**| 
@@ -629,38 +644,13 @@ Use the steps below to run specific test cases.
 
 To run specified test cases
 
-* Refer to the section [Debugging Test Cases](#_Debugging_Test_Cases).
+* Refer to the section [Debugging Test Cases](#_Toc426622620).
 
 ### <a name="_Toc426622619"/>Check Test Results
 
-Test suite generates test result files in different paths based on the way how test case is executed.
-
-For running test case with batch: C:\MicrosoftProtocolTests\MS-AZOD\OD-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\TestResults
-
-For running test case with Visual Studio: C:\MicrosoftProtocolTests\MS-AZOD\OD-Endpoint\ _&#60; version &#35;  &#62;_ \Source\OD\TestCode\TestResults
+Test suite generates test result files in C:\MicrosoftProtocolTests\MS-AZOD\OD-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\TestResults
 
 For further information about test log settings, see the PTF User Guide in the PTF installation directory.
-
-## <a name="_Toc426622620"/>Debugging Test Cases
-
-You can use the Visual Studio solution file (.sln) included with this test suite to debug additional test cases that you create for your protocol implementation. 
-
-![image2.png](./image/MS-AZOD_ODUserGuide/image2.png)
-Note 
-
-Copy MS-AZOD_ODTestSuite.deployment.ptfconfig file from the C:\MicrosoftProtocolTests\MS-AZOD\OD-Endpoint\ &#60; version &#35;  &#62; \Bin folder to C:\MicrosoftProtocolTests\MS-AZOD\OD-Endpoint\ &#60; version &#35;  &#62; \Source\Server\TestSuite and replace the original files.
-
-To debug a test case
-
-* On the driver computer, use Visual Studio to open the following solution file:
-
-* C:\MicrosoftProtocolTests\MS-AZOD\OD-Endpoint\ _&#60; version &#35;  &#62;_ \Source\Server\TestCode\MS-AZOD_OD.sln
-
-* In Visual Studio, Open Test explorer window.
-
-* In Visual Studio, in the Solution Explorer window, right-click the ‘**MS-AZOD_OD’** solution, and select **Build Solution**.
-
-* Select the cases listed in the Test explorer window and run or debug cases.
 
 ## <a name="_Toc426622621"/>Troubleshooting
 
@@ -680,8 +670,8 @@ This section describes how to troubleshoot common issues in running test cases.
 | -------------| ------------- |
 | PROBLEM| 8 test cases failed with error cannot find the capture| 
 | CAUSE| The 8 cases are for the observer scenarios, which depend on the network capture for verification against TD message sequences.| 
-| | If the capture files don’t exist, the case will fail.| 
-| RESOLUTION| Capture the data on the wire by MMA and save the capture files to folder **LocalCapFilePath** specified and the case will go on. If the case still failed, it means the capture file doesn’t match the expected frames or miss some messages. This depends on the capture file quality.| 
+| | If the capture files don’t exist, the case will skip.| 
+| RESOLUTION| Capture the data on the wire by MMA and save the capture files to folder **LocalCapFilePath** specified and the case will go on. If the case still fails, it means the capture file doesn’t match the expected frames or some messages miss. This depends on the capture file quality.| 
 
 | &#32;| &#32; |
 | -------------| ------------- |

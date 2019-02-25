@@ -194,7 +194,7 @@ All of the following software must be installed on the driver computer ***before
 
 Run this test suite in a domain environment using either physical or virtual machines. This section describes the test environment using physical computers. 
 
-For information about configuring a virtual machine, see [http://www.microsoft.com/virtualization/en/us/solution-appliance-test.aspx](http://www.microsoft.com/virtualization/en/us/solution-appliance-test.aspx). The configuration of virtual machines for use with this test suite is out of the scope of this guide. 
+For information about configuring a virtual machine, see [https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/create-virtual-machine](https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/create-virtual-machine). The configuration of virtual machines for use with this test suite is out of the scope of this guide. 
 
 ### <a name="_Toc426644921"/>Domain Environment
 
