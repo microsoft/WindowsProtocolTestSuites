@@ -7,6 +7,7 @@ using System.Diagnostics;
 using Microsoft.Protocols.TestTools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Protocols.TestSuites.Rdpbcgr;
+using Microsoft.Protocols.TestSuites.Rdpedyc;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using System.Text.RegularExpressions;
@@ -18,6 +19,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
     {
         #region Adapter Instances
         protected IRdpbcgrAdapter rdpbcgrAdapter;
+        protected IRdpedycAdapter rdpedycAdapter;
 
         #endregion
 
@@ -49,6 +51,12 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             this.rdpbcgrAdapter = (IRdpbcgrAdapter)this.Site.GetAdapter(typeof(IRdpbcgrAdapter));
 
             this.rdpbcgrAdapter.Reset();
+            LoadConfig();
+
+           
+            this.rdpedycAdapter = (IRdpedycAdapter)this.Site.GetAdapter(typeof(IRdpedycAdapter));
+
+            this.rdpedycAdapter.Reset();
             LoadConfig();
 
         }

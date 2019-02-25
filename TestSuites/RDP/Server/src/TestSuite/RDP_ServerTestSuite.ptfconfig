@@ -13,7 +13,8 @@
   <Adapters>
     <!-- RDP Protocol Adapters-->
     <Adapter xsi:type="managed" name="IRdpbcgrAdapter" adaptertype="Microsoft.Protocols.TestSuites.Rdpbcgr.RdpbcgrAdapter"/>
-    
+    <Adapter xsi:type="managed" name="IRdpedycAdapter" adaptertype="Microsoft.Protocols.TestSuites.Rdpedyc.RdpedycAdapter"/>
+
     <!-- SUT Control Adapters-->
     
   </Adapters>
