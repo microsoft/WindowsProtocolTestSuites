@@ -116,6 +116,10 @@ build.cmd
 After the build succeeds, the MSI file of each test suite should be generated in the folder *WindowsProtocolTestSuite\drop\TestSuites\\[TestSuiteName]\deploy\.*
 Take SMB test suite as an example, **MS-SMB-TestSuite-ServerEP.msi** should be generated in the folder *WindowsProtocolTestSuite\drop\TestSuites\MS-SMB\deploy\.*
 
+## Upgrade from an older version
+
+You can download and install the latest msi of test suites, Protocol Test Manager and Protocol Test Framework to upgrade them to the latest version. Or uninstall the old version and then install the new one.
+
 ## Run
 After the build succeeds, you could set up the test environment and install/configure/run the test suite according to its **User Guide**.
 Each test suite has its own **User Guide** in the **WindowsProtocolTestSuites\TestSuites\\[TestSuiteName]\docs** folder.
@@ -131,7 +135,6 @@ You can find contributing guide [here](https://github.com/Microsoft/WindowsProto
 ## License
 
 Windows Protocol Test Suites are under the [MIT license](https://github.com/Microsoft/WindowsProtocolTestSuites/blob/master/LICENSE.txt).
-  
 
 ## Contact
 The following resources are for Windows protocol test suite news, discussion, and support:
