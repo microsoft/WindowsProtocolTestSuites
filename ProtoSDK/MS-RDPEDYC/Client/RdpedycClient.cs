@@ -305,7 +305,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
             if (!transportDic.ContainsKey(transportType))
             {
-                throw new InvalidOperationException("The DVC transport {0} is not created." + transportType);
+                throw new InvalidOperationException(string.Format("The DVC transport {0} is not created.", transportType));
             }
             transportDic[transportType].Send(pdu);
         }
