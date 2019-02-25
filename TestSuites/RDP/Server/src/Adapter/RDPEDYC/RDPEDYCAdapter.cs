@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +17,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
 {    
     public partial class RdpedycAdapter : ManagedAdapterBase, IRdpedycAdapter
     {
+        public const string SVCNameForEGT = "Microsoft::Windows::RDS::Geometry::v08.01";
+
         public RdpbcgrAdapter bcgrAdapter;
 
         public RdpedycClient rdpedycClientStack;          
@@ -98,14 +103,16 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
         /// Expect the capabilites requset pdu from SUT
         /// </summary>
         /// <param name="timeout">Time span for waiting</param>
-        public void ExchangeCapabilities(TimeSpan timeout)
+        public DYNVC_CAPS_Version ExchangeCapabilities(TimeSpan timeout)
         {
             if(rdpedycClientStack == null)
             {
                 throw new Exception("RDPEDYC Client is required to be created before exchange capabilities.");
             }
 
-            rdpedycClientStack.ExchangeCapabilities(timeout);
+            DYNVC_CAPS_Version version = rdpedycClientStack.ExchangeCapabilities(timeout);
+
+            return version;            
         }
 
         /// <summary>
@@ -115,13 +122,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
         /// <param name="channelName">Channel name to be created </param>
         /// <param name="transportType">Transport type, Tcp by default</param>
         /// <returns></returns>
-        public DynamicVirtualChannel ExpectChannel(TimeSpan timeout, string channelName, DynamicVC_TransportType transportType = DynamicVC_TransportType.RDP_TCP)
+        public DynamicVirtualChannel ExpectChannel(TimeSpan timeout, DynamicVC_TransportType transportType = DynamicVC_TransportType.RDP_TCP)
         {           
             if (rdpedycClientStack == null)
             {
                 throw new InvalidOperationException("RDPEDYC Client is required to be created before create channel!");
             }
-            DynamicVirtualChannel channel = rdpedycClientStack.ExpectChannel(timeout, channelName, transportType);
+            DynamicVirtualChannel channel = rdpedycClientStack.ExpectChannel(timeout, SVCNameForEGT, transportType);
 
             return channel;
         }
