@@ -126,6 +126,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpevor
         [Description("This test case is used to test video streaming over UDP transport, SUT (RDP client) is expected to decode and render the video.")]
         public void Rdpevor_VideoStreamingTest_Positive_OverUDPTransport()
         {
+            CheckSecurityProtocolForMultitransport();
 
             UInt64 geoId = testData.TestGeometryId;
             uint width = testData.TestVideoWidth;
