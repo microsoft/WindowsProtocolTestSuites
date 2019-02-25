@@ -147,11 +147,14 @@ Function Phase1
     .\PromoteDomainController.ps1 -DomainName $ParamArray["domain"] -AdminPwd $ParamArray["password"]
 
     Write-Host "Enable WinRM" -ForegroundColor Yellow
-    try {
-        .\Enable-WinRM.ps1
+    $serverIp = $ParamArray["ip"]
+    if (Test-WSMan -ComputerName $serverIp)
+    {
+        Write-Host "WinRM is running"
     }
-    catch {
-        Write-Warning "Enable remoteAccess exit code is not 0."
+    else
+    {
+        .\Enable-WinRM.ps1
     }
 }
 
