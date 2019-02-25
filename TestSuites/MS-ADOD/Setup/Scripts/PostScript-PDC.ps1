@@ -33,8 +33,8 @@ $LogFile           = "$LogPath\PostScript-PDC.ps1.log"                   # Log F
 #-----------------------------------------------------------------------------
 # Function: Prepare
 # Usage   : Start executing the script; Push directory to working directory
-# Params  : 
-# Remark  : 
+# Params  :
+# Remark  :
 #-----------------------------------------------------------------------------
 Function Prepare()
 {
@@ -58,12 +58,12 @@ Function Prepare()
 #-----------------------------------------------------------------------------
 # Function: ReadConfig
 # Usage   : Read Configuration Parameters from the default config file
-# Params  : 
-# Remark  : 
+# Params  :
+# Remark  :
 #-----------------------------------------------------------------------------
 Function ReadConfig()
 {
-    $VMName =  .\GetVMNameByComputerName.ps1 
+    $VMName =  .\GetVMNameByComputerName.ps1
 
     Write-Host "Getting the parameters from config file ..." -ForegroundColor Yellow
     .\GetVmParameters.ps1 -VMName $VMName -RefParamArray ([ref]$ParamArray)
@@ -73,8 +73,8 @@ Function ReadConfig()
 #-----------------------------------------------------------------------------
 # Function: SetLog
 # Usage   : Create Log File
-# Params  : 
-# Remark  : 
+# Params  :
+# Remark  :
 #-----------------------------------------------------------------------------
 Function SetLog(){
 
@@ -106,7 +106,7 @@ Function RestartAndResume
 Function Phase1
 {
     # Set Network
-    Write-Host "Setting network configuration" -ForegroundColor Yellow    
+    Write-Host "Setting network configuration" -ForegroundColor Yellow
     .\Set-NetworkConfiguration.ps1 -IPAddress $ParamArray["ip"] -SubnetMask $ParamArray["subnet"] -Gateway $ParamArray["gateway"] -DNS ($ParamArray["dns"].split(';'))
 
     # Disable ICMP Redirect
@@ -129,7 +129,7 @@ Function Phase1
     Write-Host "Getting Installed Script Path on Client Computer" -ForegroundColor Yellow
     .\WaitFor-ComputerReady.ps1 -computerName $ParamArray["clientip"] -usr $ParamArray["clientadmin"] -pwd $ParamArray["clientpwd"]
     $clientIP = $ParamArray["clientip"]
-    $clientSignalPath = "\\$clientIP\C`$\MSIInstalled.signal"
+    $clientSignalPath = "\\$clientIP\C$\MSIInstalled.signal"
     $clientScriptsPath = Get-Content -Path $clientSignalPath
 
     # Modify PTF configure file
@@ -143,12 +143,12 @@ Function Phase1
     .\Modify-TestRunConfig.ps1 -TestRunConfigPath $binPath
 
     # Promote DC
-    Write-Host "Promoting this computer to DC" -ForegroundColor Yellow    
+    Write-Host "Promoting this computer to DC" -ForegroundColor Yellow
     .\PromoteDomainController.ps1 -DomainName $ParamArray["domain"] -AdminPwd $ParamArray["password"]
 
-    Write-Host "Enabling Remote Access" -ForegroundColor Yellow
+    Write-Host "Enable WinRM" -ForegroundColor Yellow
     try {
-        .\EnableRemoteAccess.ps1    
+        .\Enable-WinRM.ps1
     }
     catch {
         Write-Warning "Enable remoteAccess exit code is not 0."
@@ -188,7 +188,7 @@ Function Main()
     {
         1 { Phase1; RestartAndResume; }
         2 { Finish; }
-        default 
+        default
         {
             Write-Host "Fail to execute the script" -ForegroundColor Red
             break
