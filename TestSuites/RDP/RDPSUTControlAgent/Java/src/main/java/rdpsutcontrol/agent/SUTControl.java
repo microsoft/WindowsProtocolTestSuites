@@ -71,9 +71,24 @@ public class SUTControl
                         errorMessage = "Take screen shot failed!";
                     }
                     break;
-
-                    //Add more command support here
-
+                case RDPSUTControl_CommandId.TOUCH_EVENT_SINGLE:
+                    // TODO
+                    break;
+                case RDPSUTControl_CommandId.TOUCH_EVENT_MULTIPLE:
+                    // TODO
+                    break;
+                case RDPSUTControl_CommandId.TOUCH_EVENT_DISMISS_HOVERING_CONTACT:
+                    // TODO
+                    break;
+                case RDPSUTControl_CommandId.DISPLAY_UPDATE_RESOLUTION:
+                    // TODO
+                    break;
+                case RDPSUTControl_CommandId.DISPLAY_UPDATE_MONITORS:
+                    // TODO
+                    break;
+                case RDPSUTControl_CommandId.DISPLAY_FULLSCREEN:
+                    // TODO
+                    break;
                 default:
                     errorMessage = "CommandID is not supported :"+request.commandId;
                     break;
