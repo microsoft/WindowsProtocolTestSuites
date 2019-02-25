@@ -49,7 +49,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegt
         {
             try
             {
-                rdpegtDVC = rdpedycClient.ExpectChannel(timeout, RdpegtChannelName, transportType, OnDataReceived);
+                rdpegtDVC = rdpedycClient.ExpectChannel(timeout, RdpegtChannelName, transportType);
             }
             catch
             {

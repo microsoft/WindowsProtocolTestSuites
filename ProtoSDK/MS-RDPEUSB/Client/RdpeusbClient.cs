@@ -53,7 +53,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeusb
             DynamicVirtualChannel channel = null;
             try
             {
-                channel = rdpedycClient.ExpectChannel(timeout, RdpeusbChannelName, transportType, OnDataReceived);
+                channel = rdpedycClient.ExpectChannel(timeout, RdpeusbChannelName, transportType);
             }
             catch
             {
