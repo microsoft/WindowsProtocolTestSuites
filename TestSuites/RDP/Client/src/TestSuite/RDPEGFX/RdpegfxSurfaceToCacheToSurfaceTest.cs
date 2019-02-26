@@ -36,6 +36,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Description("This test case is used to test SurfacetoCache, and CacheToSurface command over reliable UDP transport using Soft Sync Negotiation.")]
         public void RDPEGFX_CacheManagement_PositiveTest_OverUDP_Reliable_SoftSync()
         {
+            CheckSecurityProtocolForMultitransport();
+
             RDPEGFX_CacheManagement(DynamicVC_TransportType.RDP_UDP_Reliable, true);
         }
 
@@ -48,6 +50,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Description("This test case is used to test SurfacetoCache, and CacheToSurface command over lossy UDP transport using Soft Sync Negotiation.")]
         public void RDPEGFX_CacheManagement_PositiveTest_OverUDP_Lossy_SoftSync()
         {
+            CheckSecurityProtocolForMultitransport();
+
             RDPEGFX_CacheManagement(DynamicVC_TransportType.RDP_UDP_Lossy, true);
         }
 
