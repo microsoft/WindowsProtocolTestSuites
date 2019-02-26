@@ -30,6 +30,11 @@
     <Property name="VerifyRdpbcgrMessages" value="true"/>
     <!-- Whether verify SHOULD behaviors in TD -->
     <Property name="VerifyShouldBehaviors" value="true"/>
+    <!--Indicates if SUT is Windows Implementation.-->
+    <Property name="IsWindowsImplementation" value="true">
+      <Choice>true, false</Choice>
+      <Description>Indicates if SUT is Windows Implementation.</Description>
+    </Property>
     <Property name="WaitTime" value="20"/>
     
     <!--The version of the RDP intends to test. It should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4-->
