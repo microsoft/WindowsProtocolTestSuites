@@ -76,8 +76,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         }
         #endregion
 
-        #region Test Cleanup
-       
+        #region Test Initialization and Cleanup
+        protected override void TestInitialize()
+        {
+            base.TestInitialize();
+
+            CheckSecurityProtocolForMultitransport();
+        }
+
         protected override void TestCleanup()
         {
             base.TestCleanup();

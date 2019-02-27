@@ -91,6 +91,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expect Display Monitor Layout PDU to change resolution");
             DISPLAYCONTROL_MONITOR_LAYOUT_PDU monitorLayoutPDU = this.rdpedispAdapter.expectMonitorLayoutPDU();
+            this.Site.Assert.IsNotNull(monitorLayoutPDU, "Client should send a DISPLAYCONTROL_MONITOR_LAYOUT PDU to change resolution.");
             this.Site.Assert.AreEqual<uint>(40, monitorLayoutPDU.MonitorLayoutSize, "This field MUST be set to 40 bytes, the size of the DISPLAYCONTROL_MONITOR_LAYOUT structure (MS-RDPEDISP section 2.2.2.2.1).");
             this.Site.Assert.AreEqual<uint>(1, monitorLayoutPDU.NumMonitors, "Only one Monitor for this case");
             DISPLAYCONTROL_MONITOR_LAYOUT monitor = monitorLayoutPDU.Monitors[0];
