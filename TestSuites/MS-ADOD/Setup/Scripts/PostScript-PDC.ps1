@@ -137,7 +137,7 @@ Function Phase1
 
     if($Content.lab.core.environment -ne "Azure"){
         Write-Host "Enable WinRM" -ForegroundColor Yellow
-        if (Test-WSMan -ComputerName $pdcIp)
+        if (Test-WSMan -ComputerName $PDCSetting.ip)
         {
             Write-Host "WinRM is running"
         }
