@@ -11,6 +11,7 @@ using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestSuites.Rdp;
+using System.Security.Authentication;
 
 namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 {
@@ -20,7 +21,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         private const string SVCNameForRDPEDYC = "DRDYNVC";
 
-        private RdpbcgrClient rdpbcgrClientStack;
+        public RdpbcgrClient rdpbcgrClientStack;
 
         private TimeSpan pduWaitTimeSpan = new TimeSpan(0, 0, 20);
         
@@ -32,6 +33,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         private string localAddress;
         private bool verifyPduEnabled;
         private bool verifyShouldBehaviors;
+        private SslProtocols tlsVersion = SslProtocols.None;
         private int sendInterval = 100;
 
         private List<StackPacket> receiveBuffer;
@@ -199,7 +201,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 password,
                 localAddress,
                 serverPort);
-
+            rdpbcgrClientStack.TlsVersion = tlsVersion;
             isLogon = false;
         }
 
@@ -256,7 +258,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         {
             rdpbcgrClientStack.Connect(encryptedProtocol);
         }
-
+      
         /// <summary>
         /// Disconnect transport connection with RDP Server
         /// </summary>
@@ -1510,6 +1512,43 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             PtfPropUtility.GetBoolPtfProperty(Site, "VerifyRdpbcgrMessages", out verifyPduEnabled);
             PtfPropUtility.GetBoolPtfProperty(Site, "VerifyShouldBehaviors", out verifyShouldBehaviors);
+
+            string strRDPSecurityProtocol = string.Empty;
+            string strRDPSecurityTlsVersion = string.Empty;
+
+            try
+            {
+                PtfPropUtility.GetStringPtfProperty(Site, "RDP.Security.Protocol", out strRDPSecurityProtocol);            
+                if (strRDPSecurityProtocol.Equals("TLS", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    PtfPropUtility.GetStringPtfProperty(Site, "RDP.Security.TLS.Version", out strRDPSecurityTlsVersion);
+                    // TLS1.0, TLS1.1, TLS1.2 or None
+                    if (strRDPSecurityTlsVersion.Equals("TLS1.0", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        tlsVersion = SslProtocols.Tls;
+                    }
+                    else if (strRDPSecurityTlsVersion.Equals("TLS1.1", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        tlsVersion = SslProtocols.Tls11;
+                    }
+                    else if (strRDPSecurityTlsVersion.Equals("TLS1.2", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        tlsVersion = SslProtocols.Tls12;
+                    }
+                    else if (strRDPSecurityTlsVersion.Equals("None", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        tlsVersion = SslProtocols.None;
+                    }
+                    else
+                    {
+                        this.Site.Assume.Fail("The property value \"RDP.Security.TLS.Version\" is invalid in PTFConfig file.");
+                    }
+                }
+            }
+            catch
+            {
+                this.Site.Assume.Fail("The properties \"RDP.Security.Protocol\" and \"RDP.Security.TLS.Version\" are not present properly in PTFConfig file.");
+            }
         }
 
         /// <summary>

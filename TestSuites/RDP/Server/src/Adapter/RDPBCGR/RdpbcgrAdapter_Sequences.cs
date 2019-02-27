@@ -40,7 +40,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="supportRemoteFXCodec">Set the support of RemoteFX codecs</param>
         public void EstablishRDPConnection(requestedProtocols_Values requestedProtocols,
             string[] SVCNames,
-            CompressionType highestCompressionTypeSupported,
+            CompressionType highestCompressionTypeSupported = CompressionType.PACKET_COMPR_TYPE_RDP61,
             bool isReconnect = false,
             bool autoLogon = false,
             bool supportEGFX = false,

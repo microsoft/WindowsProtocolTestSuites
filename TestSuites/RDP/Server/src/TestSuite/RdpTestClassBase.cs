@@ -1,16 +1,13 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
-using System.IO;
-using System.Diagnostics;
-using Microsoft.Protocols.TestTools;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Protocols.TestSuites.Rdpbcgr;
-using Microsoft.Protocols.TestTools.StackSdk;
+using Microsoft.Protocols.TestSuites.Rdpedyc;
+using Microsoft.Protocols.TestSuites.Rdpemt;
+using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
-using System.Text.RegularExpressions;
-using System.Reflection;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace Microsoft.Protocols.TestSuites.Rdp
 {
@@ -18,6 +15,8 @@ namespace Microsoft.Protocols.TestSuites.Rdp
     {
         #region Adapter Instances
         protected IRdpbcgrAdapter rdpbcgrAdapter;
+        protected IRdpemtAdapter rdpemtAdapter;
+        protected IRdpedycAdapter rdpedycAdapter;
 
         #endregion
 
@@ -25,6 +24,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
         protected EncryptedProtocol transportProtocol;
         protected requestedProtocols_Values requestProtocol;
+        protected bool isWindowsImplementation;
         protected TimeSpan timeout;
 
         #endregion Variables
@@ -49,6 +49,17 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             this.rdpbcgrAdapter = (IRdpbcgrAdapter)this.Site.GetAdapter(typeof(IRdpbcgrAdapter));
 
             this.rdpbcgrAdapter.Reset();
+
+            this.rdpemtAdapter = (IRdpemtAdapter)this.Site.GetAdapter(typeof(IRdpemtAdapter));
+
+            this.rdpemtAdapter.Reset();
+
+            LoadConfig();
+
+           
+            this.rdpedycAdapter = (IRdpedycAdapter)this.Site.GetAdapter(typeof(IRdpedycAdapter));
+
+            this.rdpedycAdapter.Reset();
             LoadConfig();
 
         }
@@ -87,6 +98,26 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                         RdpPtfPropNames.RdpSecurityProtocol,
                         RdpPtfPropNames.RdpSecurityNegotiation);
                     transportProtocol = EncryptedProtocol.NegotiationTls;
+                    string strTlsVersion;
+                    if (PtfPropUtility.GetStringPtfProperty(Site, RdpPtfPropNames.RdpSecurityTlsVersion, out strTlsVersion))
+                    {
+                        if (!strTlsVersion.Equals("TLS1.0", StringComparison.CurrentCultureIgnoreCase) &&
+                            !strTlsVersion.Equals("TLS1.1", StringComparison.CurrentCultureIgnoreCase) &&
+                            !strTlsVersion.Equals("TLS1.2", StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            this.Site.Assume.Fail("When TLS is used as the security protocol, {0} must be one of TLS1.0, TLS1.1, or TLS1.2; actually it is set to {1}",
+                                RdpPtfPropNames.RdpSecurityTlsVersion,
+                                strTlsVersion);
+                        }
+                        else
+                        {
+                            this.Site.Log.Add(LogEntryKind.Comment, "TLS is used as security protocol and the TLS Version is {0}.", strTlsVersion);
+                        }
+                    }
+                    else
+                    {
+                        assumeFailForInvalidPtfProp(RdpPtfPropNames.RdpSecurityTlsVersion);
+                    }
                 }
                 else if (strRDPSecurityProtocol.Equals("CredSSP", StringComparison.CurrentCultureIgnoreCase))
                 {
@@ -110,6 +141,14 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                     assumeFailForInvalidPtfProp(RdpPtfPropNames.RdpSecurityProtocol);
                 }
             }
+
+            #region Is Windows Implementation
+            string strIsWindows = Site.Properties["IsWindowsImplementation"];
+            if (strIsWindows != null)
+            {
+                isWindowsImplementation = Boolean.Parse(strIsWindows);
+            }
+            #endregion
 
             #region WaitTime
             string strWaitTime = Site.Properties["WaitTime"];

@@ -48,7 +48,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei
         {
             try
             {
-                rdpeiDVC = rdpedycClient.ExpectChannel(timeout, rdpeiChannelName, transportType, OnDataReceived);
+                rdpeiDVC = rdpedycClient.ExpectChannel(timeout, rdpeiChannelName, transportType);
             }
             catch
             {

@@ -19,6 +19,10 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
         public string ServerUserPassword { get; set; }
 
+        public string ClientName { get; set; }
+
+        public string Version { get; set; }
+
         public void LoadDefaultValues()
         {
             Type cfg = typeof(Configs);

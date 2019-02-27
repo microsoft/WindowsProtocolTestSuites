@@ -298,7 +298,7 @@ This section gives you instructions on how to setup the network for both environ
 
 >	![](./image/FileServerUserGuide/image1.png)Note
 
->	&emsp;&emsp;This test suite can be deployed on either physical or virtual machines. This section will describe the deployment on physical machines. For more information about how to configure a virtual machine, please see <http://www.microsoft.com/virtualization/en/us/solution-appliance-test.aspx>.
+>	&emsp;&emsp;This test suite can be deployed on either physical or virtual machines. This section will describe the deployment on physical machines. For more information about how to configure a virtual machine, please see <https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/create-virtual-machine>.
 
 ###<a name="4.1"/> 4.1. Workgroup Environment
 
