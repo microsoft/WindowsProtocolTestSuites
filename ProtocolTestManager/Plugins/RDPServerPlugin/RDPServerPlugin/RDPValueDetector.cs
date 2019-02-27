@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Net;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 
 namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 {
@@ -182,9 +183,13 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             caseList.Add(CreateRule("Priority.NonBVT", true));
 
             #region RDP Version
-            caseList.Add(CreateRule("RDP Version.RDP 70", true));
-            caseList.Add(CreateRule("RDP Version.RDP 80", true));
-            caseList.Add(CreateRule("RDP Version.RDP 81", true));
+            TS_UD_SC_CORE_version_Values rdpVersion = getRdpVersion(config.Version);
+            if (rdpVersion > TS_UD_SC_CORE_version_Values.V1)
+            {
+                caseList.Add(CreateRule("RDP Version.RDP 70", true));
+                caseList.Add(CreateRule("RDP Version.RDP 80", true));
+                caseList.Add(CreateRule("RDP Version.RDP 81", true));
+            }
             #endregion RDP Version
 
             #region Protocols
@@ -192,6 +197,50 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             #endregion Protocols
 
             return caseList;
+        }
+
+        private TS_UD_SC_CORE_version_Values getRdpVersion(string version)
+        {
+            if (version.Equals("4.0"))
+            {
+                return TS_UD_SC_CORE_version_Values.V1;
+            }
+            else if (version.Equals("7.0") ||
+                     version.Equals("7.1") ||
+                     version.Equals("8.0") ||
+                     version.Equals("8.1"))
+            {
+                return TS_UD_SC_CORE_version_Values.V2;
+            }
+            else if (version.Equals("10.0"))
+            {
+                return TS_UD_SC_CORE_version_Values.V3;
+            }
+            else if (version.Equals("10.1"))
+            {
+                return TS_UD_SC_CORE_version_Values.V4;
+            }
+            else if (version.Equals("10.2"))
+            {
+                return TS_UD_SC_CORE_version_Values.V5;
+            }
+            else if (version.Equals("10.3"))
+            {
+                return TS_UD_SC_CORE_version_Values.V6;
+            }
+            else if (version.Equals("10.4"))
+            {
+                return TS_UD_SC_CORE_version_Values.V7;
+            }
+            else if (version.Equals("10.5"))
+            {
+                return TS_UD_SC_CORE_version_Values.V8;
+            }
+            else if (version.Equals("10.6"))
+            {
+                return TS_UD_SC_CORE_version_Values.V9;
+            }
+            return TS_UD_SC_CORE_version_Values.None;
         }
 
         /// <summary>
