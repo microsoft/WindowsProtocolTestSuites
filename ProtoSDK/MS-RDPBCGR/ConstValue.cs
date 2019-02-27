@@ -768,6 +768,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
         #region Fast-Path Input Event
         /// <summary>
+        /// The value of numberEvents field of section 2.2.8.1.2 Fast-Path Input Event(TS_FP_INPUT_PDU).
+        /// TS_FP_KEYBOARD_EVENT
+        /// TS_FP_UNICODE_KEYBOARD_EVENT
+        /// TS_FP_POINTER_EVENT
+        /// TS_FP_POINTERX_EVENT
+        /// TS_FP_SYNC_EVENT
+        /// TS_FP_QOETIMESTAMP_EVENT
+        /// </summary>
+        internal const byte FP_NUMBER_EVENTS = 0x06;
+
+        /// <summary>
         /// The value of keyboardEvent.keycode field of section 2.8.2.1.2.2.1 
         /// Fast-Path Keyboard Event(TS_FP_KEYBOARD_EVENT).
         /// </summary>
