@@ -16,19 +16,20 @@
 Param
 (
     [string]$WorkingPath = "C:\temp",                                    # Script working path
-    [bool]  $AutoReboot  = $false,                                       # Reboot when necessary without key pressing
     [int]   $Step        = 1                                             # For rebooting, indicate which step the script is running
 )
 
 #-----------------------------------------------------------------------------
 # Global variables
 #-----------------------------------------------------------------------------
-$ScriptsSignalFile = "$WorkingPath\Post.finished.signal" # Config signal file
-$ParamArray        = @{}                                                 # Parameters from the config file
-$CurrentScriptPath = $MyInvocation.MyCommand.Definition                  # Current Working Path
-$LogPath           = "$env:HOMEDRIVE\Logs"                               # Log Path
-$LogFile           = "$LogPath\PostScript-PDC.ps1.log"                   # Log File
+$ScriptsSignalFile      = "$env:SystemDrive\PostScript.Completed.signal"          # Config signal file
+$CurrentScriptPath      = $MyInvocation.MyCommand.Definition                  # Current Working Path
+$LogPath                = "$env:HOMEDRIVE\Logs"                               # Log Path
+$LogFile                = "$LogPath\PostScript-PDC.ps1.log"                   # Log File
+[string]$configPath	 	= "$WorkingPath\protocol.xml"
 
+Write-Host "Put current dir as $WorkingPath" -ForegroundColor Yellow
+Push-Location $WorkingPath
 
 #-----------------------------------------------------------------------------
 # Function: Prepare
@@ -46,28 +47,6 @@ Function Prepare()
         Write-Host "The script execution is complete." -ForegroundColor Red
         exit 0
     }
-
-    # Change to absolute path
-    Write-Host "Current path is $CurrentScriptPath" -ForegroundColor Cyan
-    $WorkingPath = (Get-Item $WorkingPath).FullName
-
-    Write-Host "Put current dir as $WorkingPath" -ForegroundColor Yellow
-    Push-Location $WorkingPath
-}
-
-#-----------------------------------------------------------------------------
-# Function: ReadConfig
-# Usage   : Read Configuration Parameters from the default config file
-# Params  : 
-# Remark  : 
-#-----------------------------------------------------------------------------
-Function ReadConfig()
-{
-    $VMName =  .\GetVMNameByComputerName.ps1 
-
-    Write-Host "Getting the parameters from config file ..." -ForegroundColor Yellow
-    .\GetVmParameters.ps1 -VMName $VMName -RefParamArray ([ref]$ParamArray)
-    $ParamArray
 }
 
 #-----------------------------------------------------------------------------
@@ -105,13 +84,20 @@ Function RestartAndResume
 #-----------------------------------------------------------------------------
 Function Phase1
 {
-    # Set Network
-    Write-Host "Setting network configuration" -ForegroundColor Yellow    
-    .\Set-NetworkConfiguration.ps1 -IPAddress $ParamArray["ip"] -SubnetMask $ParamArray["subnet"] -Gateway $ParamArray["gateway"] -DNS ($ParamArray["dns"].split(';'))
+    [xml]$content = Get-Content $configPath
+    $clientSetting = $Content.lab.servers.vm | where {$_.role -eq "Client"}
+    $PDCSetting = $Content.lab.servers.vm | where {$_.role -eq "DriverComputer"}
 
-    # Disable ICMP Redirect
-    Write-Host "Disabling ICMP Redirect" -ForegroundColor Yellow
-    .\Disable-ICMPRedirect.ps1
+    if($Content.lab.core.environment -ne "Azure"){ #azure regression do not neet set network configuration.
+        # Set Network
+        Write-Host "Setting network configuration" -ForegroundColor Yellow    
+        .\Set-NetworkConfiguration.ps1 -IPAddress $PDCSetting.ip -SubnetMask $PDCSetting.subnet -Gateway $PDCSetting.gateway -DNS (($PDCSetting.dns).split(';'))
+
+        # Disable ICMP Redirect
+        Write-Host "Disabling ICMP Redirect" -ForegroundColor Yellow
+        .\Disable-ICMPRedirect.ps1
+    }
+  
 
     # Disable IPv6
     Write-Host "Disabling IPv6" -ForegroundColor Yellow
@@ -126,9 +112,13 @@ Function Phase1
     .\SetStartupScript.ps1 -Script "$Path\Enable-RemoteSessionInServer.ps1"
 
     # Get Installed Script Path in Client Computer
+    $clientIP = $clientSetting.ip
+    $clientAdmin = $content.lab.core.username
+    $clientAdminPwd = $content.lab.core.password
+
     Write-Host "Getting Installed Script Path on Client Computer" -ForegroundColor Yellow
-    .\WaitFor-ComputerReady.ps1 -computerName $ParamArray["clientip"] -usr $ParamArray["clientadmin"] -pwd $ParamArray["clientpwd"]
-    $clientIP = $ParamArray["clientip"]
+    .\WaitFor-ComputerReady.ps1 -computerName $clientIP -usr $clientAdmin -pwd $clientAdminPwd
+    
     $clientSignalPath = "\\$clientIP\C`$\MSIInstalled.signal"
     $clientScriptsPath = Get-Content -Path $clientSignalPath
 
@@ -144,14 +134,16 @@ Function Phase1
 
     # Promote DC
     Write-Host "Promoting this computer to DC" -ForegroundColor Yellow    
-    .\PromoteDomainController.ps1 -DomainName $ParamArray["domain"] -AdminPwd $ParamArray["password"]
+    .\PromoteDomainController.ps1 -DomainName $PDCSetting.domain -AdminPwd $content.lab.core.password
 
-    Write-Host "Enabling Remote Access" -ForegroundColor Yellow
-    try {
-        .\EnableRemoteAccess.ps1    
-    }
-    catch {
-        Write-Warning "Enable remoteAccess exit code is not 0."
+    if($Content.lab.core.environment -ne "Azure"){
+        Write-Host "Enabling Remote Access" -ForegroundColor Yellow
+        try {
+            .\EnableRemoteAccess.ps1    
+        }
+        catch {
+            Write-Warning "Enable remoteAccess exit code is not 0."
+        }
     }
 }
 
@@ -162,7 +154,7 @@ Function Phase1
 Function Finish
 {
     # Write signal file
-    Write-Host "Write signal file: config.finished.signal to system drive."
+    Write-Host "Write signal file: PostScript.Completed.signal to system drive."
     cmd /C ECHO CONFIG FINISHED>$ScriptsSignalFile
 
     # Ending script
@@ -181,7 +173,7 @@ Function Finish
 Function Main()
 {
     Prepare
-    ReadConfig
+    
     SetLog
 
     switch ($Step)
@@ -197,3 +189,5 @@ Function Main()
 }
 
 Main
+
+Pop-Location
