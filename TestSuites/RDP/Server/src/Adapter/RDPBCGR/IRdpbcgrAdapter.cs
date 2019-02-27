@@ -624,7 +624,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <summary>
         /// Send Client Fast-Path Input Event PDU with all kinds of input events
         /// </summary>
-        void GenerateFastPathInputs(bool supportQoeTimestampEvent);
+        void GenerateFastPathInputs();
 
         /// <summary>
         /// Expect and verifies fast-path output events during a specific timespan

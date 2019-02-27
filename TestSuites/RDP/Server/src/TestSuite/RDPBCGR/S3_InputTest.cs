@@ -86,12 +86,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             this.Site.Assume.IsTrue(rdpbcgrAdapter.IsServerSupportFastpathInput(), "To run test case for fastpath input, the RDP server should be configured to support fastpath input.");
 
-            bool supportQoeTimestampEvent = rdpbcgrAdapter.IsServerSupportFastpathInputQoeTimestampEvent();
             this.Site.Log.Add(LogEntryKind.Comment, "Send several Client Fast-Path Input Event PDUs.");
-            rdpbcgrAdapter.GenerateFastPathInputs(supportQoeTimestampEvent);
+            rdpbcgrAdapter.GenerateFastPathInputs();
 
             this.Site.Log.Add(LogEntryKind.Comment, "Send several Client Fast-Path Input Event PDUs again to verify RDP connection.");
-            rdpbcgrAdapter.GenerateFastPathInputs(supportQoeTimestampEvent);
+            rdpbcgrAdapter.GenerateFastPathInputs();
             #endregion Test Code
         }
     }
