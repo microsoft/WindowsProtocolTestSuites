@@ -205,10 +205,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             {
                 return TS_UD_SC_CORE_version_Values.V1;
             }
-            else if (version.Equals("7.0") ||
-                     version.Equals("7.1") ||
-                     version.Equals("8.0") ||
-                     version.Equals("8.1"))
+            else if (version.Equals("8.1"))
             {
                 return TS_UD_SC_CORE_version_Values.V2;
             }
