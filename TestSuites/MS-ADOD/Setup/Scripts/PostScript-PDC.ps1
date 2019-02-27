@@ -105,9 +105,10 @@ Function RestartAndResume
 #-----------------------------------------------------------------------------
 Function Phase1
 {
+    $pdcIp = $ParamArray["ip"]
     # Set Network
     Write-Host "Setting network configuration" -ForegroundColor Yellow
-    .\Set-NetworkConfiguration.ps1 -IPAddress $ParamArray["ip"] -SubnetMask $ParamArray["subnet"] -Gateway $ParamArray["gateway"] -DNS ($ParamArray["dns"].split(';'))
+    .\Set-NetworkConfiguration.ps1 -IPAddress $pdcIp -SubnetMask $ParamArray["subnet"] -Gateway $ParamArray["gateway"] -DNS ($ParamArray["dns"].split(';'))
 
     # Disable ICMP Redirect
     Write-Host "Disabling ICMP Redirect" -ForegroundColor Yellow
@@ -147,8 +148,7 @@ Function Phase1
     .\PromoteDomainController.ps1 -DomainName $ParamArray["domain"] -AdminPwd $ParamArray["password"]
 
     Write-Host "Enable WinRM" -ForegroundColor Yellow
-    $serverIp = $ParamArray["ip"]
-    if (Test-WSMan -ComputerName $serverIp)
+    if (Test-WSMan -ComputerName $pdcIp)
     {
         Write-Host "WinRM is running"
     }
