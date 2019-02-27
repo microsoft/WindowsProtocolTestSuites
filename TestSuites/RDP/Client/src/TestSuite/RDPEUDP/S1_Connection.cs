@@ -88,6 +88,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [Description("Verify the RDP client will resend the ACK packet to keep alive.")]
         public void S1_Connection_Keepalive_ClientSendKeepAlive()
         {
+            CheckSecurityProtocolForMultitransport();
+
             Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
             StartRDPConnection();
 

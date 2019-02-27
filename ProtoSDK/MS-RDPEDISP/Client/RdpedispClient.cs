@@ -45,7 +45,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedisp
         {
             try
             {
-                RdpedispDVC = rdpedycClient.ExpectChannel(timeout, RdpedispChannelName, transportType, OnDataReceived);
+                RdpedispDVC = rdpedycClient.ExpectChannel(timeout, RdpedispChannelName, transportType);
             }
             catch
             {

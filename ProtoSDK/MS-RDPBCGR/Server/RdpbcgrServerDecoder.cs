@@ -2667,6 +2667,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     case eventCode_Values.FASTPATH_INPUT_EVENT_UNICODE:
                         inputEvent.eventData = ParseTsFpInputUnicode(data, ref currentIndex);
                         break;
+                    case eventCode_Values.FASTPATH_INPUT_EVENT_QOE_TIMESTAMP:
+                        inputEvent.eventData = ParseTsFpInputQoETimeStamp(data, ref currentIndex);
+                        break;
                     default:
                         throw new FormatException(ConstValue.ERROR_MESSAGE_ENUM_UNRECOGNIZED);
                 }
@@ -2744,6 +2747,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             unicode.unicodeCode = ParseUInt16(data, ref currentIndex, false);
 
             return unicode;
+        }
+
+        /// <summary>
+        /// Parse TS_FP_QOETIMESTAMP_EVENT
+        /// (parser index is updated according to parsed length)
+        /// </summary>
+        /// <param name="data">data to be parsed</param>
+        /// <param name="currentIndex">current parser index</param>
+        /// <returns>parsed TS_FP_QOETIMESTAMP_EVENT</returns>
+        private TS_FP_QOETIMESTAMP_EVENT ParseTsFpInputQoETimeStamp(byte[] data, ref int currentIndex)
+        {
+            TS_FP_QOETIMESTAMP_EVENT qoeTimeStamp = new TS_FP_QOETIMESTAMP_EVENT();
+
+            qoeTimeStamp.timestamp = ParseUInt32(data, ref currentIndex, false);
+
+            return qoeTimeStamp;
         }
         #endregion
 

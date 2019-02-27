@@ -18,6 +18,9 @@
       <Rule name = "RDPBCGR">
         <Category name = "RDPBCGR"/>
       </Rule>
+      <Rule name = "RDPEMT">
+        <Category name = "RDPEMT"/>
+      </Rule>
     </Group>
 
     <Group name = "RDP Version">

@@ -48,7 +48,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         {
             try
             {
-                RdpegfxDVC = rdpedycClient.ExpectChannel(timeout, RdpegfxGraphicChannelName, transportType, OnDataReceived);
+                RdpegfxDVC = rdpedycClient.ExpectChannel(timeout, RdpegfxGraphicChannelName, transportType);
             }
             catch
             {
