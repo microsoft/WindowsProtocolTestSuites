@@ -1,17 +1,13 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
-using System.IO;
-using System.Diagnostics;
-using Microsoft.Protocols.TestTools;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Protocols.TestSuites.Rdpbcgr;
 using Microsoft.Protocols.TestSuites.Rdpedyc;
-using Microsoft.Protocols.TestTools.StackSdk;
+using Microsoft.Protocols.TestSuites.Rdpemt;
+using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
-using System.Text.RegularExpressions;
-using System.Reflection;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace Microsoft.Protocols.TestSuites.Rdp
 {
@@ -19,6 +15,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
     {
         #region Adapter Instances
         protected IRdpbcgrAdapter rdpbcgrAdapter;
+        protected IRdpemtAdapter rdpemtAdapter;
         protected IRdpedycAdapter rdpedycAdapter;
 
         #endregion
@@ -27,6 +24,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
         protected EncryptedProtocol transportProtocol;
         protected requestedProtocols_Values requestProtocol;
+        protected bool isWindowsImplementation;
         protected TimeSpan timeout;
 
         #endregion Variables
@@ -51,6 +49,11 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             this.rdpbcgrAdapter = (IRdpbcgrAdapter)this.Site.GetAdapter(typeof(IRdpbcgrAdapter));
 
             this.rdpbcgrAdapter.Reset();
+
+            this.rdpemtAdapter = (IRdpemtAdapter)this.Site.GetAdapter(typeof(IRdpemtAdapter));
+
+            this.rdpemtAdapter.Reset();
+
             LoadConfig();
 
            
@@ -138,6 +141,14 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                     assumeFailForInvalidPtfProp(RdpPtfPropNames.RdpSecurityProtocol);
                 }
             }
+
+            #region Is Windows Implementation
+            string strIsWindows = Site.Properties["IsWindowsImplementation"];
+            if (strIsWindows != null)
+            {
+                isWindowsImplementation = Boolean.Parse(strIsWindows);
+            }
+            #endregion
 
             #region WaitTime
             string strWaitTime = Site.Properties["WaitTime"];

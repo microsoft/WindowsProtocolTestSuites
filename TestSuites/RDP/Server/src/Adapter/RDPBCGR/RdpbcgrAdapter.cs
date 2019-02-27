@@ -1040,6 +1040,22 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             return fpInputEvent;
         }
 
+        /// <summary>
+        /// Generate a TS_FP_INPUT_EVENT structure with a TS_FP_QOETIMESTAMP_EVENT
+        /// </summary>
+        /// <param name="timestamp">The timestamp indicates when the current input batch was encoded by the client</param>
+        /// <returns>TS_FP_INPUT_EVENT structure with a TS_FP_QOETIMESTAMP_EVENT</returns>
+        public TS_FP_INPUT_EVENT GenerateQoETimestampEvent(uint timestamp)
+        {
+            TS_FP_INPUT_EVENT fpInputEvent = new TS_FP_INPUT_EVENT();
+            TS_FP_QOETIMESTAMP_EVENT qoeTimestampEvent = new TS_FP_QOETIMESTAMP_EVENT();
+            qoeTimestampEvent.timestamp = timestamp;
+            fpInputEvent.eventHeader.eventFlagsAndCode =
+                (byte)((int)eventCode_Values.FASTPATH_INPUT_EVENT_QOE_TIMESTAMP << 5);
+            fpInputEvent.eventData = qoeTimestampEvent;
+            return fpInputEvent;
+        }
+
         #endregion TS_FP_INPUT_EVENT generation
 
         /// <summary>
@@ -1422,6 +1438,20 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 TS_INPUT_CAPABILITYSET inputCap = (TS_INPUT_CAPABILITYSET)capset;
                 if (inputCap.inputFlags.HasFlag(inputFlags_Values.INPUT_FLAG_FASTPATH_INPUT)
                     || inputCap.inputFlags.HasFlag(inputFlags_Values.INPUT_FLAG_FASTPATH_INPUT2))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool IsServerSupportFastpathInputQoeTimestampEvent()
+        {
+            ITsCapsSet capset = this.GetServerCapSet(capabilitySetType_Values.CAPSTYPE_INPUT);
+            if (capset != null)
+            {
+                TS_INPUT_CAPABILITYSET inputCap = (TS_INPUT_CAPABILITYSET)capset;
+                if (inputCap.inputFlags.HasFlag(inputFlags_Values.TS_INPUT_FLAG_QOE_TIMESTAMPS))
                 {
                     return true;
                 }

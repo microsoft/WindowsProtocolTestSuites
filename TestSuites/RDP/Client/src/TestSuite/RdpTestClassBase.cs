@@ -576,7 +576,19 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             bool compareRes = this.rdpbcgrAdapter.SimulatedScreen.Compare(image, sutDisplayShift, compareRect, usingRemoteFX);
             this.TestSite.Assert.IsTrue(compareRes, "SUT display verification should success, the output on RDP client should be equal (or similar enough if using RemoteFX codec) as expected.");
         }
-
+        
+        /// <summary>
+        /// End the test case with inconclusive if it's Windows implementation and using RDP security protocol
+        /// Used in test cases which need to establish TLS/DTLS on RDP-UDP connection.
+        /// Included in base class since it will be used in test cases of RDPEUDP, RDPEMT and RDPEVOR
+        /// </summary>
+        protected void CheckSecurityProtocolForMultitransport()
+        {
+            if (transportProtocol == EncryptedProtocol.Rdp && isWindowsImplementation)
+            {
+                Site.Assert.Inconclusive("Not Applicable, Microsoft RDP clients fail the TLS or DTLS handshake for a multitransport connection if Enhanced RDP Security is not in effect for the main RDP connection.");
+            }
+        }
         //override, assume fail for an invalid PTF property.
         private void assumeFailForInvalidPtfProp(string propName)
         {
@@ -610,7 +622,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 }
             }
         }
-
+                
         #endregion
         /// <summary>
         /// Provide a generic method to handle the invalid request from RDP server

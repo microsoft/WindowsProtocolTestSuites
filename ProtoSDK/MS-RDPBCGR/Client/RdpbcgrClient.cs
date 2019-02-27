@@ -356,7 +356,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                                           | inputFlags_Values.INPUT_FLAG_SCANCODES;
             if (supportFastPathInput)
             {
-                inputCapabilitySet.inputFlags |= inputFlags_Values.INPUT_FLAG_FASTPATH_INPUT2;
+                inputCapabilitySet.inputFlags |=
+                    (inputFlags_Values.INPUT_FLAG_FASTPATH_INPUT2 | inputFlags_Values.TS_INPUT_FLAG_QOE_TIMESTAMPS);
             }
             inputCapabilitySet.pad2octetsA = 0;
             inputCapabilitySet.keyboardLayout = ConstValue.LOCALE_ENGLISH_UNITED_STATES;
@@ -2454,9 +2455,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         }
 
         /// <summary>
-        /// Create Fast Path Input Event PDU. This PDU includes 5 event, 
-        /// FASTPATH_INPUT_EVENT_SCANCODE, FASTPATH_INPUT_EVENT_MOUSE, FASTPATH_INPUT_EVENT_MOUSEX,
-        /// FASTPATH_INPUT_EVENT_SYNC and FASTPATH_INPUT_EVENT_UNICODE for each.
+        /// Create Fast Path Input Event PDU. This PDU includes 6 event, 
+        /// TS_FP_KEYBOARD_EVENT, TS_FP_UNICODE_KEYBOARD_EVENT, TS_FP_POINTER_EVENT,
+        /// TS_FP_POINTERX_EVENT, TS_FP_SYNC_EVENT and TS_FP_QOETIMESTAMP_EVENT for each.
         /// 
         /// The default fields value of the PDU is determined by previous messages.
         /// User can set special value in the PDU other than the default after calling this method.
@@ -2482,7 +2483,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             // events is in the range 1 to 15.
             fastpathInputPdu.fpInputHeader.actionCode =
                 (byte)(((int)actionCode_Values.FASTPATH_INPUT_ACTION_FASTPATH & 0x03)
-                | ((int)(ConstValue.NUMBER_EVENTS & 0x0F) << 2));
+                | ((int)(ConstValue.FP_NUMBER_EVENTS & 0x0F) << 2));
 
             if (context.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE)
             {
@@ -2495,7 +2496,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             fastpathInputPdu.dataSignature = null;
             fastpathInputPdu.length1 = 0;
             fastpathInputPdu.length2 = 0;
-            fastpathInputPdu.numberEvents = ConstValue.NUMBER_EVENTS;
+            fastpathInputPdu.numberEvents = ConstValue.FP_NUMBER_EVENTS;
 
             if (context.RdpEncryptionLevel == EncryptionLevel.ENCRYPTION_LEVEL_FIPS)
             {
@@ -2545,6 +2546,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             fpInputEvent.eventHeader.eventFlagsAndCode =
                 (byte)((int)eventCode_Values.FASTPATH_INPUT_EVENT_MOUSEX << 5);
             fpInputEvent.eventData = extendedMouseEvent;
+            fastpathInputPdu.fpInputEvents.Add(fpInputEvent);
+
+            TS_FP_QOETIMESTAMP_EVENT qoeTimestampEvent = new TS_FP_QOETIMESTAMP_EVENT();
+            qoeTimestampEvent.timestamp = (uint)DateTime.Now.Millisecond;
+            fpInputEvent.eventHeader.eventFlagsAndCode =
+                (byte)((int)eventCode_Values.FASTPATH_INPUT_EVENT_QOE_TIMESTAMP << 5);
+            fpInputEvent.eventData = qoeTimestampEvent;
             fastpathInputPdu.fpInputEvents.Add(fpInputEvent);
             #endregion Fill in TS_FP_INPUT_EVENT
 

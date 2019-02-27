@@ -59,11 +59,16 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         private RdpbcgrClient rdpbcgrClient = null;
         private string[] SVCNames;
         private int defaultPort = 3389;
+        private string clientName;
         private IPAddress clientAddress;
         private EncryptedProtocol encryptedProtocol;
         private requestedProtocols_Values requestedProtocol;
         private TimeSpan timeout;
         #endregion Variables
+
+        #region Received Packets
+        Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response connectResponsePdu = null;
+        #endregion Received Packets
 
         private const string SVCNAME_RDPEDYC = "drdynvc";
 
@@ -113,6 +118,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             }
             CheckSupportedFeatures();
             CheckSupportedProtocols();
+            SetRdpVersion(config);
 
             // Disconnect
             ClientInitiatedDisconnect();
@@ -124,6 +130,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         {
             receiveBuffer = new List<StackPacket>();
             SVCNames = new string[] { SVCNAME_RDPEDYC };
+            clientName = config.ClientName;
             LoadConfig();
 
             int port;
@@ -139,7 +146,6 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
         private bool LoadConfig()
         {
-            string clientName = DetectorUtil.GetPropertyValue("RDP.ClientName");
             if (!IPAddress.TryParse(clientName, out clientAddress))
             {
                 clientAddress = Dns.GetHostEntry(clientName).AddressList.First();
@@ -256,7 +262,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 supportMultitransportReliable,
                 supportMultitransportLossy,
                 false);
-            Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response connectResponsePdu = ExpectPacket<Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response>(timeout);
+            connectResponsePdu = ExpectPacket<Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response>(timeout);
             if (connectResponsePdu == null)
             {
                 return false;
@@ -388,6 +394,52 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
         }
 
+        private void SetRdpVersion(Configs config)
+        {
+            config.Version = DetectorUtil.GetPropertyValue("RDP.Version");
+            if (connectResponsePdu.mcsCrsp.gccPdu.serverCoreData != null)
+            {
+                TS_UD_SC_CORE_version_Values rdpVersion = connectResponsePdu.mcsCrsp.gccPdu.serverCoreData.version;
+                if (rdpVersion == TS_UD_SC_CORE_version_Values.V1)
+                {
+                    config.Version = "4.0";
+                }
+                else if (rdpVersion == TS_UD_SC_CORE_version_Values.V2)
+                {
+                    config.Version = "8.1";
+                }
+                else if (rdpVersion == TS_UD_SC_CORE_version_Values.V3)
+                {
+                    config.Version = "10.0";
+                }
+                else if (rdpVersion == TS_UD_SC_CORE_version_Values.V4)
+                {
+                    config.Version = "10.1";
+                }
+                else if (rdpVersion == TS_UD_SC_CORE_version_Values.V5)
+                {
+                    config.Version = "10.2";
+                }
+                else if (rdpVersion == TS_UD_SC_CORE_version_Values.V6)
+                {
+                    config.Version = "10.3";
+                }
+                else if (rdpVersion == TS_UD_SC_CORE_version_Values.V7)
+                {
+                    config.Version = "10.4";
+                }
+                else if (rdpVersion == TS_UD_SC_CORE_version_Values.V8)
+                {
+                    config.Version = "10.5";
+                }
+                else if (rdpVersion == TS_UD_SC_CORE_version_Values.V9)
+                {
+                    config.Version = "10.6";
+                }
+            }
+            DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
+        }
+
         private void SendClientX224ConnectionRequest(
             requestedProtocols_Values requestedProtocols,
             bool isRdpNegReqPresent = true,
@@ -444,7 +496,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             bool isMonitorDataPresent)
         {
             Client_MCS_Connect_Initial_Pdu_with_GCC_Conference_Create_Request request = rdpbcgrClient.CreateMCSConnectInitialPduWithGCCConferenceCreateRequestPdu(
-                Dns.GetHostName(),
+                clientName,
                 RdpbcgrTestData.DefaultClientBuild,
                 System.Guid.NewGuid().ToString(),
                 encryptionMethod_Values._128BIT_ENCRYPTION_FLAG,

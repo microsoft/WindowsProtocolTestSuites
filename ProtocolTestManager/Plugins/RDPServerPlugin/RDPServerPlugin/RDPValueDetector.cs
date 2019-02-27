@@ -116,10 +116,12 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         public List<DetectingItem> GetDetectionSteps()
         {
             List<DetectingItem> DetectingItems = new List<DetectingItem>();
+            DetectingItems.Add(new DetectingItem("Detect Client HostName", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Ping Target SUT", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Establish RDP Connection with SUT", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Check Specified features Support", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Check Specified Protocols Support", DetectingStatus.Pending, LogStyle.Default));
+            DetectingItems.Add(new DetectingItem("Detect RDP Version", DetectingStatus.Pending, LogStyle.Default));
             return DetectingItems;
         }
 
@@ -139,6 +141,8 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             config.ServerPort = properties[RDPValueDetector.ServerPort];
             config.ServerUserName = properties[RDPValueDetector.ServerUserName];
             config.ServerUserPassword = properties[RDPValueDetector.ServerUserPassword];
+            config.ClientName = Dns.GetHostName();
+            DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
 
             if (!PingSUT())
             {
