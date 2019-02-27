@@ -21,9 +21,6 @@
       <Rule name = "RDPEMT">
         <Category name = "RDPEMT"/>
       </Rule>
-      <Rule name = "RDPEDYC">
-        <Category name = "RDPEDYC"/>
-      </Rule>
     </Group>
 
     <Group name = "RDP Version">
