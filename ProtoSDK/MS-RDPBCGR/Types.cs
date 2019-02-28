@@ -20190,6 +20190,109 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     {
         SEC_REDIRECTION_PKT = 0x0400
     }
+    
+    public enum CERTIFICATE_META_ELEMENT_TypeEnum : UInt32
+    {
+        ELEMENT_TYPE_CERTIFICATE = 32
+    }
+
+    public enum CERTIFICATE_META_ELEMENT_EncodingEnum : UInt32
+    {
+        ENCODING_TYPE_ASN1_DER = 1
+    }
+
+    /// <summary>
+    /// Certificate Meta Element (CERTIFICATE_META_ELEMENT)
+    /// The CERTIFICATE_META_ELEMENT structure specifies an element contained within a Target Certificate Container structure.
+    /// </summary>
+    public class CERTIFICATE_META_ELEMENT
+    {
+        /// <summary>
+        /// type (4 bytes): A 32-bit, unsigned integer specifying the type of the data in the elementData field.
+        /// All values SHOULD be ignored except for ELEMENT_TYPE_CERTIFICATE (32), which indicates that the element is an X.509 certificate.
+        /// </summary>
+        public UInt32 type;
+
+        /// <summary>
+        /// encoding (4 bytes): A 32-bit, unsigned integer specifying the encoding used to serialize the data in the elementData field.
+        /// All values SHOULD be ignored except for ENCODING_TYPE_ASN1_DER (1), which indicates that the element is encoded using the ASN.1 DER scheme.
+        /// </summary>
+        public UInt32 encoding;
+
+        /// <summary>
+        /// elementSize (4 bytes): A 32-bit, unsigned integer specifying the size, in bytes, of the elementData field.
+        /// </summary>
+        public UInt32 elementSize;
+
+        /// <summary>
+        /// elementData (variable): A variable-length array of bytes containing the certificate meta element data.
+        /// </summary>
+        public byte[] elementData;
+
+        public byte[] Encode()
+        {
+            var result = new List<byte>();
+
+            RdpbcgrEncoder.EncodeStructure(result, type);
+
+            RdpbcgrEncoder.EncodeStructure(result, encoding);
+
+            RdpbcgrEncoder.EncodeStructure(result, elementSize);
+
+            RdpbcgrEncoder.EncodeBytes(result, elementData);
+
+            return result.ToArray();
+        }
+
+        public CERTIFICATE_META_ELEMENT Clone()
+        {
+            var result = new CERTIFICATE_META_ELEMENT();
+
+            result.type = type;
+
+            result.encoding = encoding;
+
+            result.elementSize = elementSize;
+
+            result.elementData = RdpbcgrUtility.CloneByteArray(elementData);
+
+            return result;
+        }
+    }
+
+    /// <summary>
+    /// Target Certificate Container (TARGET_CERTIFICATE_CONTAINER)
+    /// The TARGET_CERTIFICATE_CONTAINER structure is used to wrap an X.509 certificate.
+    /// It contains an array of Certificate Meta Element structures.
+    /// The element of type ELEMENT_TYPE_CERTIFICATE(32) and encoding ENCODING_TYPE_ASN1_DER(1) contains the X.509 certificate.
+    /// </summary>
+    public class TARGET_CERTIFICATE_CONTAINER
+    {
+        /// <summary>
+        /// elements (variable): An array of Certificate Meta Element structures.
+        /// All elements in this array SHOULD be ignored, except for the element of type ELEMENT_TYPE_CERTIFICATE (32) and encoding ENCODING_TYPE_ASN1_DER (1).
+        /// </summary>
+        public CERTIFICATE_META_ELEMENT[] elements;
+
+        public byte[] Encode()
+        {
+            var result = elements
+                            .Select(element => element.Encode().AsEnumerable())
+                            .Aggregate((a, b) => a.Concat(b))
+                            .ToArray();
+
+            return result;
+        }
+
+        public TARGET_CERTIFICATE_CONTAINER Clone()
+        {
+            var result = new TARGET_CERTIFICATE_CONTAINER();
+
+            result.elements = elements.Select(element => element.Clone()).ToArray();
+
+            return result;
+        }
+    }
 
     /// <summary>
     /// 2.2.13.1	Server Redirection Packet (RDP_SERVER_REDIRECTION_PACKET)
@@ -20334,7 +20437,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         public UInt32 TargetCertificateLength;
 
         /// <summary>
-        /// TargetCertificate (variable): A variable-length array of bytes containing the X.509 certificate of the target server.
+        /// TargetCertificate (variable): A variable-length array of bytes containing a Base64-encoded Target Certificate Container structure in Unicode format that encapsulates the X.509 certificate of the target server.
         /// </summary>
         public byte[] TargetCertificate;
 
