@@ -1,4 +1,3 @@
-
 <Config>
   <ConfigFilePath>
     <PtfFileName>Bin\RDP_ClientTestSuite.deployment.ptfconfig</PtfFileName>
@@ -29,7 +28,7 @@
     <DllFileName>Bin\RDP_ClientTestSuite.dll</DllFileName>
   </DllFileNames>
   <AutoDetectionDllName>RDPClientPlugin.dll</AutoDetectionDllName>
- 
+
   <ConfigCaseRule>
     <Group name ="Protocol" >
       <Rule name = "RDPBCGR">
@@ -39,15 +38,15 @@
       <Rule name = "RDPEDISP">
         <Category name = "RDPEDISP"/>
       </Rule>
-	
+
       <Rule name = "RDPEGFX">
         <Category name = "RDPEGFX"/>
       </Rule>
-     
+
       <Rule name = "RDPEI">
         <Category name = "RDPEI"/>
-      </Rule>	
-	    
+      </Rule>
+
       <Rule name = "RDPEMT">
         <Category name = "RDPEMT"/>
       </Rule>
@@ -55,11 +54,11 @@
       <Rule name = "RDPEUDP">
         <Category name = "RDPEUDP"/>
       </Rule>
-	
+
       <Rule name = "RDPEUSB">
         <Category name = "RDPEUSB"/>
       </Rule>
-	
+
       <Rule name = "RDPEVOR">
         <Category name = "RDPEVOR"/>
       </Rule>
@@ -67,7 +66,7 @@
       <Rule name = "RDPRFX">
         <Category name = "RDPRFX"/>
       </Rule>
-      
+
     </Group>
 
     <Group name = "Priority">
@@ -79,7 +78,7 @@
         <Category name = "!BVT"/>
       </Rule>
     </Group>
-  
+
     <Group name="Enable Supported Feature" type="Remover">
       <Rule name = "AutoReconnect">
         <Category name = "AutoReconnect"/>
@@ -104,17 +103,21 @@
       <Rule name = "NetcharAutoDetect">
         <Category name = "NetcharAutoDetect"/>
       </Rule>
+
+      <Rule name = "RDSTLSAuthentication">
+        <Category name = "RDSTLSAuthentication"/>
+      </Rule>
     </Group>
 
     <Group name="Specific Requirements" type="Remover">
-    <Rule name = "Interactive">
-      <Category name = "Interactive"/>
-    </Rule>
+      <Rule name = "Interactive">
+        <Category name = "Interactive"/>
+      </Rule>
 
-    <Rule name = "DeviceNeeded">
-      <Category name = "DeviceNeeded"/>
-    </Rule>
+      <Rule name = "DeviceNeeded">
+        <Category name = "DeviceNeeded"/>
+      </Rule>
     </Group>
   </ConfigCaseRule>
-  <TestSetting>Bin\ClientLocal.TestSettings</TestSetting>  
+  <TestSetting>Bin\ClientLocal.TestSettings</TestSetting>
 </Config>

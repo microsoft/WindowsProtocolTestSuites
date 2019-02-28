@@ -21,6 +21,7 @@
 		* [S8\_ServerRedirection](#_Toc427051974)
 		* [S9\_HealthMonitoring](#_Toc427051975)
 		* [S10\_FastPathOutput](#_Toc427051976)
+        * [S11\_RDSTLSAuthentication](#_Toc427052077)
 * [Test Suite Design](#_Toc427051977)
     * [Test Suite Architecture](#_Toc427051978)
 		* [System under Test (SUT)](#_Toc427051979)
@@ -48,6 +49,7 @@
 		* [S8\_ServerRedirection](#_Toc427052001)
 		* [S9\_HealthMonitoring](#_Toc427052002)
 		* [S10\_FastPathOutput](#_Toc427052003)
+        * [S11\_RDSTLSAuthentication](#_Toc427052013)
 * [Appendix](#_Toc427052004)
     * [Glossary](#_Toc427052005)
     * [Reference](#_Toc427052006)
@@ -177,7 +179,7 @@ Reasons for choosing Traditional Testing
 * The combinations of parameters are not complex. Capability sets are the exception, which will be addressed through the use of configuration files.
 
 ### <a name="_Toc427051966"/>Test Scenarios
-There are seven scenarios defined in the MS-RDPBCGR client test suite for verifying client behavior:  
+There are 11 scenarios defined in the MS-RDPBCGR client test suite for verifying client behavior:  
 
 |  **Scenario**|  **Priority**|  **Test Approach**|  **Description**| 
 | -------------| -------------| -------------| ------------- |
@@ -191,6 +193,7 @@ There are seven scenarios defined in the MS-RDPBCGR client test suite for verify
 | [S8_ServerRedirection](#_Toc427052001)| 1| Traditional| Use to verify standard security server redirection PDU and enhanced security server redirection PDUs.| 
 | [S9_HealthMonitoring](#_Toc427052002)| 0| Traditional| Use to verify client can receive Server Heartbeat PDU, and will auto-reconnect if not receive heartbeat after certain time| 
 | [S10_FastPathOutput](#_Toc427052003)| 1| Traditional| Use to verify client can receive Server fast-path update PDUs to update pointers| 
+| [S11_RDSTLSAuthentication](#_Toc427052013)| 1| Traditional| Use to verify client can handle server redirection using RDSTLS authentication| 
 
 **Table 21 MS-RDPBCGR Test Suite Scenarios** 
 
@@ -336,7 +339,7 @@ The RDP connection has been established.
 
 **Typical Sequence:**
 
-The typical scenario sequence is as follows:
+The typical scenario sequence is as following:
 
 * The server sends a Deactivate All PDU to the client.
 
@@ -377,7 +380,7 @@ No message is verified in this scenario because all related messages have been v
 
 **Typical Sequence:**
 
-The typical scenario sequence is as follows:
+The typical scenario sequence is as following:
 
 * The client initializes a connection sequence.
 
@@ -429,7 +432,7 @@ N/A
 
 **Typical Sequence:**
 
-The typical scenario sequence is as follows:
+The typical scenario sequence is as following:
 
 * The client builds an RDP connection to the server.
 
@@ -539,7 +542,7 @@ N/A
 
 **Typical Sequence:**
 
-The typical scenario sequence is as follows:
+The typical scenario sequence is as following:
 
 * The client builds an RDP connection to the server.
 
@@ -589,7 +592,7 @@ N/A
 
 **Typical Sequence:**
 
-The typical scenario sequence is as follows:
+The typical scenario sequence is as following:
 
 * The client and server build an RDP connection to the server.
 
@@ -610,7 +613,7 @@ N/A
 
 **Typical Sequence:**
 
-The typical scenario sequence is as follows:
+The typical scenario sequence is as following:
 
 * The client establishes an RDP connection to the server.
 
@@ -635,6 +638,32 @@ Server Fast-Path Update PDUs with the following input events:
 * Fast-Path New Pointer Update
 
 * Fast-Path Cached Pointer Update
+
+#### <a name="_Toc427052077"/>S11_RDSTLSAuthentication
+**Preconditions:**
+
+Client should support server redirection.
+
+**Typical Sequence:**
+
+The typical scenario sequence is as following:
+
+* The client establishes an RDP connection to the server.
+
+* The server sends client Server Redirection PDU which contains the redirection GUID, certificate and credential.
+
+* The client terminates the RDP connection and connects to the server again using RDSTLS authentication.
+
+* The server disconnects.
+
+**Scenario Testing:**
+
+Client could be redirected to server with RDSTLS authentication as following:
+
+* In Client X.224 Connection Request PDU, the requested protocols includes RDSTLS.
+* In RDSTLS authentication PDU, the redirection GUID and credentials are expected to be those sent in Server Redirection PDU.
+* In Client Cluster Data within Client MCS Connect Initial PDU, the RefirectedSessionID field is expected to be set to the SessionID sent in Server Redirection PDU.
+* In Client Info PDU, it's expected that client sets the credentials to that sent in Server Redirection PDU.
 
 ## <a name="_Toc427051977"/>Test Suite Design
 
@@ -779,6 +808,7 @@ The following table shows the number of test cases for each scenario.
 | [S8\_ServerRedirection](#_Toc427051974)| 2| 1| 1| 1| 0| 
 | [S9\_HealthMonitoring](#_Toc427051975)| 1| 1| 1| 0| 0| 
 | [S10\_FastPathOutput](#_Toc427051976)| 20| 0| 6| 14| 0| 
+| [S11\_RDSTLSAuthentication](#_Toc427052077)| 2| 1| 0| 2 | 0| 
 
 ### <a name="_Toc427051992"/>Test Cases Description 
 The test suite is a synthetic RDP server. In the following descriptions, all instances of the term “Test Suite” can be understood as the RDP server.
@@ -1030,23 +1060,6 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 
 
 
-|  **S8_ServerRedirection**| | 
-| -------------| ------------- |
-|  **Test ID**| BVT\_ServerRedirection\_PositiveTest\_RDSTLSAuthenticationWithPasswordCredentials| 
-|  **Priority**| P1| 
-|  **Description** | This test case is used to ensure SUT can process server redirection successfully through RDSTLS authentication with the information sent in the Server Redirection PDU.| 
-|  **Prerequisites**| SUT supports server redirection and RDSTLS authentication.| 
-|  **Test Execution Steps**| Trigger SUT to initiate and complete an RDP connection. | 
-| | Test Suite sends SUT a Server Redirection PDU which sets the address, credential and certificate to the same machine where the Test Suite is located.| 
-| | Test Suite expects SUT terminates the current connection.| 
-| | Test Suite then expects SUT initiates a new connection. Expectation:| 
-| | In Client X.224 Connection Request PDU, the RDSTLS protocol is enabled.| 
-| | In Client RDSTLS Authentication Request PDU with Password Credentials, credential is those given in step 2.| 
-| | In Client Info PDU, it’s expected that SUT sets the credentials to that sent by Test Suite in step 2.|  
-|  **Cleanup**| N/A| 
-
-
-
 |  **S9_HealthMonitoring**| | 
 | -------------| ------------- |
 |  **Test ID**| BVT\_HealthMonitoring\_PositiveTest\_SendHeartbeat| 
@@ -1060,6 +1073,23 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Count2 is set to 2 (missed heartbeat number for reconnection)| 
 | | Wait 3 seconds and not send any Server heartbeat PDU.| 
 | | Expect client will initialize and complete an auto-reconnect sequence.|  
+|  **Cleanup**| N/A| 
+
+
+
+|  **S11_RDSTLSAuthentication**| | 
+| -------------| ------------- |
+|  **Test ID**| BVT\_RDSTLSAuthentication_PositiveTest\_ServerRedirectionWithPasswordCredentials| 
+|  **Priority**| P1| 
+|  **Description** | This test case is used to ensure SUT can process server redirection successfully through RDSTLS authentication with the information sent in the Server Redirection PDU.| 
+|  **Prerequisites**| SUT supports server redirection and RDSTLS authentication.| 
+|  **Test Execution Steps**| Trigger SUT to initiate and complete an RDP connection. | 
+| | Test Suite sends SUT a Server Redirection PDU which sets the address, credential and certificate to the same machine where the Test Suite is located.| 
+| | Test Suite expects SUT terminates the current connection.| 
+| | Test Suite then expects SUT initiates a new connection. Expectation:| 
+| | In Client X.224 Connection Request PDU, the RDSTLS protocol is enabled.| 
+| | In Client RDSTLS Authentication Request PDU with Password Credentials, credential is those given in step 2.| 
+| | In Client Info PDU, it’s expected that SUT sets the credentials to that sent by Test Suite in step 2.|  
 |  **Cleanup**| N/A| 
 
 #### <a name="_Toc427051994"/>S1\_Connection
@@ -2733,6 +2763,31 @@ This scenario only contains BVT test case.
 | | Test Suite sends another Fast-Path New Pointer Update (TS\_FP\_POINTERATTRIBUTE) to the client to set pointer shape, set cacheIndex to 1.| 
 | | Test Suite sends a Fast-Path Cached Pointer Update (TS\_FP\_CACHEDPOINTERATTRIBUTE) to the client to show the first pointer shape (cacheIndex = 0).| 
 | | Test Suite sends a Fast-Path Cached Pointer Update (TS\_FP\_CACHEDPOINTERATTRIBUTE) to the client to show the second pointer shape (cacheIndex = 1).| 
+|  **Cleanup**| N/A| 
+
+
+
+#### <a name="_Toc427052013"/>S11_RDSTLSAuthentication
+
+
+
+|  **S11_RDSTLSAuthentication**| | 
+| -------------| ------------- |
+|  **Test ID**| S11\_RDSTLSAuthentication\_PositiveTest_ServerRedirectionAndAutoReconnectWithCookie| 
+|  **Priority**| P1| 
+|  **Description** | This test case is used to ensure SUT can handle auto-reconnect through RDSTLS protocol successfully after server redirection by returning cookie obtained in Server Save Session Info PDU.| 
+|  **Prerequisites**| SUT supports server redirection, auto-reconnect and RDSTLS authentication.| 
+|  **Test Execution Steps**| Trigger SUT to initiate and complete an RDP connection. | 
+| | Test Suite sends SUT a Server Redirection PDU which sets the address, credential and certificate to the same machine where the Test Suite is located.| 
+| | Test Suite expects SUT terminates the current connection.| 
+| | Test Suite then expects SUT initiates a new connection. Expectation:| 
+| | In Client X.224 Connection Request PDU, the RDSTLS protocol is enabled.| 
+| | In Client RDSTLS Authentication Request PDU with Password Credentials, credential is those given in step 2.| 
+| | In Client Info PDU, it’s expected that SUT sets the credentials to that sent by Test Suite in step 2.|  
+| | Test Suite sends SUT with the auto-reconnect cookie in Server Save Session Info PDU.| 
+| | Test Suite then triggers a network failure and expects SUT reconnect through RDSTLS authentication. Expectation:| 
+| | In Client X.224 Connection Request PDU, the requested protocols includes RDSTLS.| 
+| | In RDSTLS authentication PDU, the auto-reconnect cookie is expected to that sent by Test Suite in Step 5.| 
 |  **Cleanup**| N/A| 
 
 ## <a name="_Toc427052004"/>Appendix

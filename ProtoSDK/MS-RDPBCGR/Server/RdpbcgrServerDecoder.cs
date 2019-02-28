@@ -4581,6 +4581,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     throw new FormatException(ConstValue.ERROR_MESSAGE_UNRECOGNIZED_PDU);
                 }
 
+                // check session ID
+                UInt32 sessionID = ParseUInt32(data, ref currentIndex, false);
+
                 // check auto reconnect cookie
                 int autoReconnectCookieLength = ParseUInt16(data, ref currentIndex, false);
                 currentIndex += autoReconnectCookieLength;
@@ -4697,6 +4700,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             int currentIndex = 0;
 
             pdu.Header = ParseRDSTLSCommonHeader(data, ref currentIndex);
+
+            // parse session ID
+            pdu.SessionID = ParseUInt32(data, ref currentIndex, false);
 
             // parse auto reconnect cookie
             pdu.AutoReconnectCookieLength = ParseUInt16(data, ref currentIndex, false);
