@@ -238,11 +238,16 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         {
             VerifySecurityHeader(confirmActivePdu.commonHeader.securityHeader, "Client Confirm Active");
 
+            VerifyStructure(confirmActivePdu.confirmActivePduData);
+
             //verify all the capability set:
             foreach (ITsCapsSet cap in confirmActivePdu.confirmActivePduData.capabilitySets)
             {
                 switch (cap.GetCapabilityType())
                 {
+                    case capabilitySetType_Values.CAPSTYPE_GENERAL:
+                        VerifyStructure((TS_GENERAL_CAPABILITYSET)cap);
+                        break;
                     case capabilitySetType_Values.CAPSTYPE_BITMAP:
                         VerifyStructure((TS_BITMAP_CAPABILITYSET)cap);
                         break;
@@ -864,28 +869,18 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                     + @"is 128 bytes.");
             }
         }
-        /// <summary>
-        /// 2.2.1.11.1.1.1
-        /// </summary>
-        /// <param name="zoneInfo"></param>
-        public void VerifyStructure(TS_TIME_ZONE_INFORMATION zoneInfo)
-        {
-            site.Assert.IsTrue(System.Runtime.InteropServices.Marshal.SizeOf(zoneInfo.DaylightName) == 64, 
-                @"In TS_TIME_ZONE_INFORMATION structure, DaylightName field must be 64 bytes");
-            site.Assert.IsTrue(System.Runtime.InteropServices.Marshal.SizeOf(zoneInfo.DaylightDate) == 16, 
-                @"In TS_TIME_ZONE_INFORMATION structure, DaylightDate must be 16 bytes");
-            site.Assert.IsTrue(System.Runtime.InteropServices.Marshal.SizeOf(zoneInfo.DaylightBias) == 4, 
-                @"In TS_TIME_ZONE_INFORMATION structure, DaylightBias must be 4 bytes");
-        }
+
         /// <summary>
         /// 2.2.1.13.2.1
         /// </summary>
         /// <param name="confirmActive"></param>
         public void VerifyStructure(TS_CONFIRM_ACTIVE_PDU confirmActive)
         {
-            site.Assert.AreEqual<ShareControlHeaderType>(ShareControlHeaderType.PDUTYPE_CONFIRMACTIVEPDU, (ShareControlHeaderType)(confirmActive.shareControlHeader.pduType.typeAndVersionLow & 0x15), 
+            site.Assert.AreEqual<ShareControlHeaderType>(ShareControlHeaderType.PDUTYPE_CONFIRMACTIVEPDU, (ShareControlHeaderType)(confirmActive.shareControlHeader.pduType.typeAndVersionLow & 0x0F), 
                 @"In TS_CONFIRM_ACTIVE_PDU structure, the type subfield of the pduType field of the Share Control Header MUST be set to"
                 + @" PDUTYPE_CONFIRMACTIVEPDU (3).");
+            site.Assert.AreEqual(1, confirmActive.shareControlHeader.pduType.typeAndVersionLow >>4 & 0x0F,
+                @"The PDUVersion subfield MUST be set to TS_PROTOCOL_VERSION (0x1).");
             site.Assert.AreEqual<originatorId_Values>(originatorId_Values.V1, confirmActive.originatorId, 
                 @"In TS_CONFIRM_ACTIVE_PDU structure, the originatorId MUST be set to the server channel ID (in Microsoft RDP server "
                 + @"implementations, this value is always 0x03EA)");
