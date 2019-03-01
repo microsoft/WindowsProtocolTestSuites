@@ -99,6 +99,12 @@ if(Test-WSMan -ComputerName $sutSetting.ip){
 }
 
 #-----------------------------------------------------
+# Get IP address of the driver computer
+#-----------------------------------------------------
+$ipV4 = Test-Connection $driverComputerName -Count 1 | Select -ExpandProperty IPV4Address
+$driverComputerIP = $ipV4.IPAddressToString
+
+#-----------------------------------------------------
 # Modify ChangeResolution.ps1 and ChangeOrientation.ps1
 #-----------------------------------------------------
 (Get-Content .\ChangeResolution_Template.ps1) | ForEach-Object {$_ -replace "ScriptPath", $scriptsPath} | Set-Content .\ChangeResolution.ps1
@@ -214,6 +220,13 @@ if ($workgroupDomain.ToUpper() -eq "DOMAIN")
 }
 New-ItemProperty HKCU:\Software\Microsoft\"Terminal Server Client"\Servers\$driverComputerName UsernameHint -value $usernameHint -PropertyType string -Force
 
+if($driverComputerIP -ne $driverComputerName)
+{
+    # Create registry key for IP address
+	New-Item -type Directory HKCU:\Software\Microsoft\"Terminal Server Client"\Servers\$driverComputerIP -Force
+	New-ItemProperty HKCU:\Software\Microsoft\"Terminal Server Client"\Servers\$driverComputerIP UsernameHint -value $usernameHint -PropertyType string -Force
+}
+
 # To avoid warning dialog
 New-ItemProperty HKCU:\Software\Microsoft\"Terminal Server Client"\LocalDevices $driverComputerName -value 588 -PropertyType DWORD -Force
 
@@ -233,7 +246,12 @@ New-ItemProperty HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANN
 #-----------------------------------------------------
 # Save CredSSP credential to Credential Manager
 #-----------------------------------------------------
-cmd /c cmdkey /add:$driverComputerName /user:$credSSPUser /pass:$credSSPPwd
+cmd /c cmdkey /add:"Domain:target=TERMSRV/$driverComputerName" /user:"$driverComputerName\$credSSPUser" /pass:$credSSPPwd
+if($driverComputerIP -ne $driverComputerName)
+{
+    # Save for IP address
+	cmd /c cmdkey /add:"Domain:target=TERMSRV/$driverComputerIP" /user:"$driverComputerName\$credSSPUser" /pass:$credSSPPwd
+}
 
 #-----------------------------------------------------
 # Finished to config Terminal Client
