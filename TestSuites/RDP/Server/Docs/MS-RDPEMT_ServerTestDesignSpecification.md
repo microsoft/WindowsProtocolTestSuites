@@ -109,7 +109,7 @@ Reasons for choosing Traditional Testing
 _Table 1 Test Suite Scenarios_
 
 #### <a name="_Toc3964682152"/>S1_MultitransportConnectionInitiation
-Preconditions:
+**Preconditions:**
 
 The server indicates support of multitransport by sending the Initiate Multitransport Request PDUs.
 
@@ -133,8 +133,6 @@ This scenario tests the following types:
 * Tunnel PDU Subheader (RDP_TUNNEL_SUBHEADER)
 * Tunnel Create Response PDU (RDP_TUNNEL_CREATERESPONSE)
 * Tunnel Data PDU (RDP_TUNNEL_DATA)
-
-
 
 ## <a name="_Toc3964682160"/>Test Suite Design
 

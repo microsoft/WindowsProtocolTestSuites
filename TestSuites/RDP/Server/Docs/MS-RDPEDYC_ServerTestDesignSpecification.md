@@ -77,8 +77,8 @@ Figure 1-4: MS-RDPEDYC close DVC message Sequence
 ### <a name="_Toc3964682147"/>Protocol Properties
 
 * Remote Desktop Protocol: Dynamic Virtual Channel Extension messages are passed between a DVC manager on a server and a DVC manager on a client, and are transmitted over one of the following underlying transport mechanisms:
-* §	A static virtual channel ([MS-RDPBCGR] sections 1.3.3 and 2.2.6), where the name of the channel is the ANSI character string "DRDYNVC" and bulk compression is enabled.
-* §	A lossy or reliable UDP multitransport connection ([MS-RDPEMT] sections 1.3 and 2.2.2.3).
+* A static virtual channel ([MS-RDPBCGR] sections 1.3.3 and 2.2.6), where the name of the channel is the ANSI character string "DRDYNVC" and bulk compression is enabled.
+* A lossy or reliable UDP multitransport connection ([MS-RDPEMT] sections 1.3 and 2.2.2.3).
 * The Remote Desktop Protocol: Dynamic Virtual Channel Extension does not establish any transport connections.
 
 ## <a name="_Toc3964682148"/>Test Method
@@ -123,13 +123,13 @@ Reasons for choosing Traditional Testing
 _Table 1 Test Suite Scenarios_
 
 #### <a name="_Toc3964682152"/>S1_EDYCBasicTest
-Preconditions:
+**Preconditions:**
 
 MS-RDPBCGR connection is setup.
 
 RDPServer supports EDYC.
 
-Typical Sequence:
+**Typical Sequence:**
 
 The typical scenario sequence is as follows:
 
