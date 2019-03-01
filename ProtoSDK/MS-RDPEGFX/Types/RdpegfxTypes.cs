@@ -2301,9 +2301,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// </summary>
         public ushort surfaceId;
         /// <summary>
-        /// A 16-bit unsigned integer that is reserved for future use. This field MUST be set to zero.
+        /// reserved in TD. outputId in Windows 0 by default.
         /// </summary>
-        public ushort reserved;
+        public ushort outputId;
         /// <summary>
         /// A 32-bit unsigned integer that specifies the x-coordinate of the point, relative to the origin of the Graphics Output Buffer ADM element, at which to map the top-left corner of the surface.
         /// </summary>
@@ -2345,7 +2345,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
             this.header.flags = 0x0;
             this.header.pduLength = (uint)Marshal.SizeOf(header) + 20;
 
-            this.reserved = 0;
+            this.outputId = 0;
             this.surfaceId = surfaceId;
 
             this.outputOriginX = x;
@@ -2361,8 +2361,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         public override void Encode(PduMarshaler marshaler)
         {
             base.Encode(marshaler);
-            marshaler.WriteUInt16(this.reserved);
             marshaler.WriteUInt16(this.surfaceId);
+            marshaler.WriteUInt16(this.outputId);            
             marshaler.WriteUInt32(this.outputOriginX);
             marshaler.WriteUInt32(this.outputOriginY);
             marshaler.WriteUInt32(this.targetWidth);
@@ -2377,16 +2377,19 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         {
             try
             {
-                base.Decode(marshaler);
-                this.reserved = marshaler.ReadUInt16();
-                pduLen += 2;
+                base.Decode(marshaler);              
                 this.surfaceId = marshaler.ReadUInt16();
+                pduLen += 2;
+                this.outputId = marshaler.ReadUInt16();
                 pduLen += 2;
                 this.outputOriginX = marshaler.ReadUInt32();
                 pduLen += 4;
                 this.outputOriginY = marshaler.ReadUInt32();
                 pduLen += 4;
-
+                this.targetWidth = marshaler.ReadUInt32();
+                pduLen += 4;
+                this.targetHeight = marshaler.ReadUInt32();
+                
                 return true;
             }
             catch
