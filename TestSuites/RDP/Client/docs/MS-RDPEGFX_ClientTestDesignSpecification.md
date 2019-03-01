@@ -230,11 +230,9 @@ Traditional testing is chosen as the test approach in MS-RDPEGFX.
 
   * RDP server instruct client to create a new surface by sending RDPGFX\_CREATE\_SURFACE\_PDU.
 
-  * RDP server instruct client to map the new surface to output by sending RDPGFX\_MAP\_SURFACE\_TO\_OUTPUT_PDU.
-
   * RDP Server instruct client to fill the surface with solid color by sending RDPGFX\_SOLIDFILL_PDU.
 
-  * If necessary, RDP server instruct client to map the new surface to scaled output by sending RDPGFX\_MAP\_SURFACE\_TO\_SCALEDOUTPUT_PDU, and fill the surface with solid color by sending RDPGFX\_SOLIDFILL_PDU.
+  * RDP server instruct client to map the new surface to scaled output by sending RDPGFX\_MAP\_SURFACE\_TO\_SCALEDOUTPUT_PDU
 
   * RDP Server instructs client to delete the surface by sending RDPGFX\_DELETE\_SURFACE\_PDU
 
@@ -1047,17 +1045,16 @@ None.
 | -------------| ------------- |
 |  **Test ID**| RDPEGFX\_SurfaceToScreen\_PositiveTest\_ScaledOutput|
 |  **Priority**| P1|
-|  **Description** | This test case is used to test create surface, solid fill, map to output, map to scaled output, and delete surface command.|
+|  **Description** | This test case is used to test create surface, solid fill,  map to scaled output, and delete surface command.|
 |  **Prerequisites**| N/A|
 |  **Test Execution Steps**| Step 1: Capability Exchange.|
 | | Step 2: Instruct client to create a surface.|
 | | Step 3: Sever encode a message to solid fill surface on client with green color.|
 | | Step 4: Server pack the message into a frame and sent it to client.|
 | | Step 5: Expect a frame acknowledge and validate frameId.|
-| | Step 6: Instruct client to map the surface to output.|
-| | Step 7: Instruct client to map the surface to scaled output. |
-| | Step 8: If the test suite is configured to verify image display, verify the graphic rendered on SUT.|
-| | Step 9: Delete the surface|
+| | Step 6: Instruct client to map the surface to scaled output. |
+| | Step 7: If the test suite is configured to verify image display, verify the graphic rendered on SUT.|
+| | Step 8: Delete the surface|
 |  **Cleanup**| N/A|
 
 |  **Surface To Screen Test**| |

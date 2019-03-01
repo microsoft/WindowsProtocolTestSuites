@@ -129,21 +129,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             // Expect the client to send a frame acknowledge pdu
             this.rdpegfxAdapter.ExpectFrameAck(fid);
-
-            // Map surface to Output
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Map surface to output.");
-            fid = this.rdpegfxAdapter.MapSurfaceToOutput(surf.Id, RdpegfxTestUtility.surfPos.x, RdpegfxTestUtility.surfPos.y);
-            this.rdpegfxAdapter.ExpectFrameAck(fid);
-
-            // Scaled Ouput
-            // The output will be scaled as the new targetWidth and targetHeight fields specified
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Scale the output");
-            RDPGFX_RECT16 newSurfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.surfPos4, RdpegfxTestUtility.largeSurfWidth, RdpegfxTestUtility.largeSurfHeight);
-            fid = this.rdpegfxAdapter.ScaledOutput(surf.Id, RdpegfxTestUtility.surfPos4.x, RdpegfxTestUtility.surfPos4.y, RdpegfxTestUtility.largeSurfWidth, RdpegfxTestUtility.largeSurfHeight);
             
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            this.VerifySUTDisplay(false, newSurfRect);
-
+            // The output will be scaled as the new targetWidth and targetHeight fields specified
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Scale the output to bigger size.");
+            fid = this.rdpegfxAdapter.ScaledOutput(surf.Id, RdpegfxTestUtility.surfPos4.x, RdpegfxTestUtility.surfPos4.y, RdpegfxTestUtility.largeSurfWidth, RdpegfxTestUtility.largeSurfHeight);
+            this.rdpegfxAdapter.ExpectFrameAck(fid);
+            
             // Delete the surface
             this.rdpegfxAdapter.DeleteSurface(surf.Id);
             this.TestSite.Log.Add(LogEntryKind.Debug, "Surface {0} is deleted", surf.Id);
