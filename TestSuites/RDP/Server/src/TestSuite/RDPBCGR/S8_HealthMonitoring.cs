@@ -24,17 +24,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Description(@"This test case is used to verify SUT can send Heartbeat PDU periodically to notify the connection exist. ")]
         public void S8_HealthMonitoring_PositiveTest()
         {
-            string rdpVersion = this.Site.Properties["RDP.Version"];
-            if (!string.IsNullOrEmpty(rdpVersion))
+            if (rdpVersion.CompareTo(new Version("8.1")) < 0) // RDP Version is bellow 8.1
             {
-                Version rdpVer = new Version(rdpVersion);
-                Version win81Ver = new Version("8.1");
-
-                var result = rdpVer.CompareTo(win81Ver);
-                if (result < 0) // RDP Version is bellow 8.1(Windows Server 2012R2)
-                {
-                    Site.Assert.Inconclusive("Skip this test case as RDP in Windows Server 2012 is RDP 8.0 and not support Heartbeat PDU.");
-                }
+                Site.Assert.Inconclusive("Skip this test case as RDP version before 8.1 does not support Heartbeat PDU.");
             }
 
             #region Test Steps

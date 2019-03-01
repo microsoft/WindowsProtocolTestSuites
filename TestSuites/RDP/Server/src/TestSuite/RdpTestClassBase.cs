@@ -27,6 +27,8 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         protected bool isWindowsImplementation;
         protected TimeSpan timeout;
 
+        protected Version rdpVersion;
+
         #endregion Variables
 
         #region Class Initialization and Cleanup
@@ -160,6 +162,17 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             #endregion
 
             #endregion
+
+
+            string rdpVersionProp = this.Site.Properties["RDP.Version"];
+            if (!string.IsNullOrEmpty(rdpVersionProp))
+            {
+                rdpVersion = new Version(rdpVersionProp);
+            }
+            else
+            {
+                this.Site.Assume.Fail("The property \"{0}\" is invalid or not present in PTFConfig file!", "RDP.Version");
+            }
         }
 
         //override, assume fail for an invalid PTF property.
