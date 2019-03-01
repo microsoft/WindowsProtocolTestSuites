@@ -55,6 +55,7 @@
 *.rc	binary
 *.docx  binary
 *.pfx	binary
+*.jar	binary
 
 #Images (Binary)
 *.png binary
