@@ -164,7 +164,6 @@ Reasons for choosing Traditional Testing
 | S6_AutoDetect| 0| Traditional| This scenario is used to verify auto-detect PDUs|
 | S7_MultitransportBootstrapping| 0| Traditional| This scenario is used to verify Multitransport initialization PDUs|
 | S8_HealthMonitoring| 1| Traditional| This scenario is used to Verify Heartbeat PDU|
-| S1_EDYCBasicTest| 0| Traditional| This scenario is used to Verify MS-RDPEDYC open channel, send and receive data, close channel and soft-sync PDUs|
 
 **Table 21 Test Suite Scenarios**
 
@@ -471,32 +470,6 @@ Scenario Testing:
 
 * Server Heartbeat PDU
 
-#### <a name="_Toc396468179"/>S1_EDYCBasicTest
-Preconditions:
-
-MS-RDPBCGR connection is setup.
-
-RDPServer supports EDYC.
-
-Typical Sequence:
-
-The typical scenario sequence is as follows:
-
-* The client and server build an RDPBCGR connection to the server.
-
-* The server sends DVC Capability exchange request and gets client response.
-
-* The server sends create DVC channel request and gets client response.
-
-* The client sends DVC data (compressed/uncompressed) to server and gets response.
-
-* The server sends DVC close channel request and close the channel.
-
-
-Scenario Testing:
-
-* Server Heartbeat PDU
-
 ## <a name="_Toc396468160"/>Test Suite Design
 
 ### <a name="_Toc396468161"/>Test Suite Architecture
@@ -567,7 +540,7 @@ The following table shows the number of test cases for each scenario.
 | S6_AutoDetect| 1| 1| 1| 0|
 | S7_MultitransportBootstrapping| 1| 1| 1| 0|
 | S8_HealthMonitoring| 1| 1| 1| 0|
-| S1_EDYCBasicTest| 3| 1| 1| 2|
+
 
 ### <a name="_Toc396468174"/>Test Cases Description
 The test suite is a synthetic RDP client. In the following descriptions, all instances of the term “Test Suite” can be understood as the RDP client.
@@ -894,49 +867,6 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 |  **Requirements Covered**| N/A|
 |  **Cleanup**| N/A|
 
-#### S1_EDYC_CreateAndCloseChannel
-| &#32;| &#32; |
-| -------------| ------------- |
-|  **S1_EDYCBasicTest**| |
-|  **Test ID**| S1_EDYC_CreateAndCloseChannel|
-|  **Priority**| P0|
-|  **Description** | This test case is used to verify SUT can create and close DVC channel. |
-|  **Prerequisites**| RDPBCGR connection is setup|
-|  **Test Execution Steps**| Initiate and complete an RDP connection to RDP Server (SUT).|
-| | RDP Server sends Capability exchange pdu|
-| | RDP Server requests to create DVC channel|
-| | RDP Server requests to close DVC channel|
-|  **Cleanup**| N/A|
-
-#### S1_EDYC_SendCompressedDataSequence
-| &#32;| &#32; |
-| -------------| ------------- |
-|  **S1_EDYCBasicTest**| |
-|  **Test ID**| S1_EDYC_SendCompressedDataSequence|
-|  **Priority**| P0|
-|  **Description** | This test case is used to verify SUT can create and close DVC channel. |
-|  **Prerequisites**| RDPBCGR connection is setup|
-|  **Test Execution Steps**| Initiate and complete an RDP connection to RDP Server (SUT).|
-| | RDP Server sends Capability exchange pdu|
-| | RDP Server requests to create DVC channel|
-| | RDP Client sends data to server and expect response|
-| | RDP Server requests to close DVC channel|
-|  **Cleanup**| N/A|
-
-#### S1_EDYC_SendCompressedDataSequence
-| &#32;| &#32; |
-| -------------| ------------- |
-|  **S1_EDYCBasicTest**| |
-|  **Test ID**| S1_EDYC_SendCompressedDataSequence|
-|  **Priority**| P0|
-|  **Description** | This test case is used to verify SUT can create and close DVC channel. |
-|  **Prerequisites**| RDPBCGR connection is setup|
-|  **Test Execution Steps**| Initiate and complete an RDP connection to RDP Server (SUT).|
-| | RDP Server sends Capability exchange pdu|
-| | RDP Server requests to create DVC channel|
-| | RDP Client sends data sequence (bigger than 1,590 bytes) to server and expect response|
-| | RDP Server requests to close DVC channel|
-|  **Cleanup**| N/A|
 
 ## <a name="_Toc396468176"/>Appendix
 

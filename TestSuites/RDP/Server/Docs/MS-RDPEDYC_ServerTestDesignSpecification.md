@@ -20,7 +20,7 @@
     * [Technical Dependencies/Considerations](#_Toc3964682164)
 		* [Dependencies](#_Toc3964682165)
 		* [Technical Difficulties](#_Toc3964682166)
-		* [Encryption Consideration](#_Toc3964682167)RDP
+		* [Encryption Consideration](#_Toc3964682167)
     * [Adapter Design](#_Toc3964682168)
 		* [Adapter Overview](#_Toc3964682169)
 		* [Technical Feasibility of Adapter Approach](#_Toc3964682170)
@@ -46,7 +46,6 @@ A multitransport connection is initiated by an RDP server sending the Initiate M
 ### <a name="_Toc3964682146"/>Protocol Operations/Messages
 There are 14 protocol data units (PDUs) described by [MS-RDPEDYC] protocol, and they can be classified into the following message flows:
 
-| &#32;| &#32; |
 | -------------| ------------- |
 |  **Message Flows** |  **Number of PDUs**|
 | DVC Capabilities Exchange| 4|
@@ -59,18 +58,18 @@ The following sequence diagram presents an overview of these messages and protoc
 
 The open dvc, send and receive data, close dvc message flows are defined in [MS-RDPEDYC]. The Connection Sequence is described in following figure (Figure 1-2, 1-3, 1-4 and 1-5). All message exchanges in this diagram are strictly sequential, except where noted in the text that follows.
 
-![edyc-open-dvc.png](./image/RDPEDYC_ServerTestDesignSpecification/edyc-cap-exchagne.png)
+![edyc-open-dvc.png](./image/MS-RDPEDYC_ServerTestDesignSpecification/edyc-cap-exchagne.png)
 
 Figure 1-1: MS-RDPEDYC open DVC message Sequence
 
-![edyc-open-dvc.png](./image/RDPEDYC_ServerTestDesignSpecification/edyc-open-dvc.png)
+![edyc-open-dvc.png](./image/MS-RDPEDYC_ServerTestDesignSpecification/edyc-open-dvc.png)
 
 Figure 1-2: MS-RDPEDYC open DVC message Sequence
 
-![edyc-send-data-sequence.png](./image/RDPEDYC_ServerTestDesignSpecification/edyc-send-data-sequence.png)
+![edyc-send-data-sequence.png](./image/MS-RDPEDYC_ServerTestDesignSpecification/edyc-send-data-sequence.png)
 
 Figure 1-3: MS-RDPEDYC send and receive data message Sequence
-![edyc-close-dvc.png](./image/RDPEDYC_ServerTestDesignSpecification/edyc-close-dvc.png)
+![edyc-close-dvc.png](./image/MS-RDPEDYC_ServerTestDesignSpecification/edyc-close-dvc.png)
 
 Figure 1-4: MS-RDPEDYC close DVC message Sequence
 
