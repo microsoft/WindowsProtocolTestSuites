@@ -34,8 +34,8 @@ Push-Location $WorkingPath
 #-----------------------------------------------------------------------------
 # Function: Prepare
 # Usage   : Start executing the script; Push directory to working directory
-# Params  : 
-# Remark  : 
+# Params  :
+# Remark  :
 #-----------------------------------------------------------------------------
 Function Prepare()
 {
@@ -52,8 +52,8 @@ Function Prepare()
 #-----------------------------------------------------------------------------
 # Function: SetLog
 # Usage   : Create Log File
-# Params  : 
-# Remark  : 
+# Params  :
+# Remark  :
 #-----------------------------------------------------------------------------
 Function SetLog(){
 
@@ -90,14 +90,14 @@ Function Phase1
 
     if($Content.lab.core.environment -ne "Azure"){ #azure regression do not neet set network configuration.
         # Set Network
-        Write-Host "Setting network configuration" -ForegroundColor Yellow    
+        Write-Host "Setting network configuration" -ForegroundColor Yellow
         .\Set-NetworkConfiguration.ps1 -IPAddress $PDCSetting.ip -SubnetMask $PDCSetting.subnet -Gateway $PDCSetting.gateway -DNS (($PDCSetting.dns).split(';'))
 
         # Disable ICMP Redirect
         Write-Host "Disabling ICMP Redirect" -ForegroundColor Yellow
         .\Disable-ICMPRedirect.ps1
     }
-  
+
 
     # Disable IPv6
     Write-Host "Disabling IPv6" -ForegroundColor Yellow
@@ -118,8 +118,7 @@ Function Phase1
 
     Write-Host "Getting Installed Script Path on Client Computer" -ForegroundColor Yellow
     .\WaitFor-ComputerReady.ps1 -computerName $clientIP -usr $clientAdmin -pwd $clientAdminPwd
-    
-    $clientSignalPath = "\\$clientIP\C`$\MSIInstalled.signal"
+    $clientSignalPath = "\\$clientIP\C$\MSIInstalled.signal"
     $clientScriptsPath = Get-Content -Path $clientSignalPath
 
     # Modify PTF configure file
@@ -133,16 +132,18 @@ Function Phase1
     .\Modify-TestRunConfig.ps1 -TestRunConfigPath $binPath
 
     # Promote DC
-    Write-Host "Promoting this computer to DC" -ForegroundColor Yellow    
+    Write-Host "Promoting this computer to DC" -ForegroundColor Yellow
     .\PromoteDomainController.ps1 -DomainName $PDCSetting.domain -AdminPwd $content.lab.core.password
 
     if($Content.lab.core.environment -ne "Azure"){
-        Write-Host "Enabling Remote Access" -ForegroundColor Yellow
-        try {
-            .\EnableRemoteAccess.ps1    
+        Write-Host "Enable WinRM" -ForegroundColor Yellow
+        if (Test-WSMan -ComputerName $PDCSetting.ip)
+        {
+            Write-Host "WinRM is running"
         }
-        catch {
-            Write-Warning "Enable remoteAccess exit code is not 0."
+        else
+        {
+            .\Enable-WinRM.ps1
         }
     }
 }
@@ -173,14 +174,13 @@ Function Finish
 Function Main()
 {
     Prepare
-    
     SetLog
 
     switch ($Step)
     {
         1 { Phase1; RestartAndResume; }
         2 { Finish; }
-        default 
+        default
         {
             Write-Host "Fail to execute the script" -ForegroundColor Red
             break
