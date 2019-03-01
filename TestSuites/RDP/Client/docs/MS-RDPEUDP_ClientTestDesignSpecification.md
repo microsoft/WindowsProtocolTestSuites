@@ -254,7 +254,7 @@ The common prerequisites and clean requirements are not listed in any of the tes
 
 #### <a name="_Toc350342287"/>S1_Connection
 
-#####Connection Initialization
+##### Connection Initialization
 
 
 |  **S1_Connection**| | 
@@ -266,7 +266,7 @@ The common prerequisites and clean requirements are not listed in any of the tes
 |  **Test Execution Steps**| For Reliable and Lossy transport mode, do the following respectively:| 
 | | In the RDP-TCP connection, test suite sends a Server Initiate Multitransport Request PDU, and set its requestedProtocol field to INITITATE\_REQUEST\_PROTOCOL\_UDPFECR (0x01) or INITITATE\_REQUEST\_PROTOCOL_UDPFECL (0x02) according to its transport mode.| 
 | | Test suite expect for a UDP connection from RDP client| 
-| | In the UDP connection, Test suite expects a  SYN datagram from RDP client, and  verify:| 
+| | In the UDP connection, Test suite expects a SYN datagram from RDP client, and verify:| 
 | | The snSourceAck variable MUST be set to -1| 
 | | uReceiveWindowSize must larger than 0.| 
 | | The RDPUDP\_FLAG_SYN flag MUST be set.| 
@@ -274,12 +274,56 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | The uUpStreamMtu and uDownStreamMtu must be in [1132, 1232].| 
 | | This datagram MUST be zero-padded to increase the size of this datagram to 1232 bytes.| 
 | | In the UDP connection, test suite sends a SYN and ACK Datagram.| 
-| | In the UDP connection, test suite expects a ACK Datagram to  acknowledge the receipt of the  SYN and ACK Datagram, verify:| 
+| | In the UDP connection, test suite expects a ACK Datagram to acknowledge the receipt of the SYN and ACK Datagram, verify:| 
 | | The RDPUDP\_FLAG_ACK flag MUST be set| 
 | | If contain source package, the sequence number must be **snInitialSequenceNumber** +1| 
 |  **Cleanup**| N/A| 
 
-#####Connection Keep Alive
+|  **S1_Connection**| | 
+| -------------| ------------- |
+|  **Test ID**| S1_Connection_Initialization_InitialUDPConnection_UUDPVer1| 
+|  **Priority**| P0| 
+|  **Description** | Verify the RDP client can initiate a reliable RDP-UDP (RDP-UDP-R) connection and a lossy RDP-UDP (RDP-UDP-L) connection. Server supports only RDPUDP_PROTOCOL_VERSION_1.| 
+|  **Prerequisites**| N/A| 
+|  **Test Execution Steps**| For Reliable and Lossy transport mode, do the following respectively:| 
+| | In the RDP-TCP connection, test suite sends a Server Initiate Multitransport Request PDU, and set its requestedProtocol field to INITITATE\_REQUEST\_PROTOCOL\_UDPFECR (0x01) or INITITATE\_REQUEST\_PROTOCOL_UDPFECL (0x02) according to its transport mode.| 
+| | Test suite expect for a UDP connection from RDP client| 
+| | In the UDP connection, Test suite expects a SYN datagram from RDP client, and verify:| 
+| | The snSourceAck variable MUST be set to -1| 
+| | uReceiveWindowSize must larger than 0.| 
+| | The RDPUDP\_FLAG_SYN flag MUST be set.| 
+| | If transport mode is reliable, the RDPUDP\_FLAG\_SYNLOSSY flag must not be set. Otherwise, the RDPUDP\_FLAG_SYNLOSSY flag must be set.| 
+| | The uUpStreamMtu and uDownStreamMtu must be in [1132, 1232].| 
+| | This datagram MUST be zero-padded to increase the size of this datagram to 1232 bytes.| 
+| | In the UDP connection, test suite sends a SYN and ACK Datagram with UDP version set to RDPUDP_PROTOCOL_VERSION_1.| 
+| | In the UDP connection, test suite expects a ACK Datagram to acknowledge the receipt of the SYN and ACK Datagram, verify:| 
+| | The RDPUDP\_FLAG_ACK flag MUST be set| 
+| | If contain source package, the sequence number must be **snInitialSequenceNumber** +1| 
+|  **Cleanup**| N/A| 
+
+|  **S1_Connection**| | 
+| -------------| ------------- |
+|  **Test ID**| S1_Connection_Initialization_InitialUDPConnection_UUDPVer2| 
+|  **Priority**| P0| 
+|  **Description** | Verify the RDP client can initiate a reliable RDP-UDP (RDP-UDP-R) connection and a lossy RDP-UDP (RDP-UDP-L) connection. Server supports highest version RDPUDP_PROTOCOL_VERSION_2.| 
+|  **Prerequisites**| N/A| 
+|  **Test Execution Steps**| For Reliable and Lossy transport mode, do the following respectively:| 
+| | In the RDP-TCP connection, test suite sends a Server Initiate Multitransport Request PDU, and set its requestedProtocol field to INITITATE\_REQUEST\_PROTOCOL\_UDPFECR (0x01) or INITITATE\_REQUEST\_PROTOCOL_UDPFECL (0x02) according to its transport mode.| 
+| | Test suite expect for a UDP connection from RDP client| 
+| | In the UDP connection, Test suite expects a SYN datagram from RDP client, and verify:| 
+| | The snSourceAck variable MUST be set to -1| 
+| | uReceiveWindowSize must larger than 0.| 
+| | The RDPUDP\_FLAG_SYN flag MUST be set.| 
+| | If transport mode is reliable, the RDPUDP\_FLAG\_SYNLOSSY flag must not be set. Otherwise, the RDPUDP\_FLAG_SYNLOSSY flag must be set.| 
+| | The uUpStreamMtu and uDownStreamMtu must be in [1132, 1232].| 
+| | This datagram MUST be zero-padded to increase the size of this datagram to 1232 bytes.| 
+| | In the UDP connection, test suite sends a SYN and ACK Datagram with UDP version set to RDPUDP_PROTOCOL_VERSION_1 | RDPUDP_PROTOCOL_VERSION_2.| 
+| | In the UDP connection, test suite expects a ACK Datagram to acknowledge the receipt of the SYN and ACK Datagram, verify:| 
+| | The RDPUDP\_FLAG_ACK flag MUST be set| 
+| | If contain source package, the sequence number must be **snInitialSequenceNumber** +1| 
+|  **Cleanup**| N/A| 
+
+##### Connection Keep Alive
 
 
 |  **S1_Connection**| | 
@@ -297,7 +341,7 @@ The common prerequisites and clean requirements are not listed in any of the tes
 
 #### <a name="_Toc350342288"/>S2_DataTransfer
 
-#####Data Transfer Test
+##### Data Transfer Test
 
 
 |  **S2_DataTransfer**| | 
@@ -314,7 +358,7 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | ACK Vector in the RDPUDP_ACK_VECTOR_HEADER Structure|  
 |  **Cleanup**| N/A| 
 
-#####Acknowledge Test
+##### Acknowledge Test
 
 
 |  **S2_DataTransfer**| | 
@@ -363,7 +407,7 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | Expect the ACK datagrams to acknowledge the receipt of the 3 **ACK and Source Packet**, at least one of them must contain  RDPUDP\_FLAG_ACKDELAYED flag.| 
 |  **Cleanup**| N/A| 
 
-#####Data Retransmit Test
+##### Data Retransmit Test
 
 
 |  **S2_DataTransfer**| | 
@@ -379,7 +423,7 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | Test suite expects Client to resend the 1st **ACK and Source Packet.**|  
 |  **Cleanup**| N/A| 
 
-#####Security Channel Creation
+##### Security Channel Creation
 
 
 |  **S2_DataTransfer**| | 
@@ -405,7 +449,7 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | Test suite expects for a ACK and Source Packets( The high-layer data is encrypted RDP_TUNNEL_CREATEREQUEST PDU);|  
 |  **Cleanup**| N/A| 
 
-#####Congestion Control test
+##### Congestion Control test
 
 
 |  **S2_DataTransfer**| | 
