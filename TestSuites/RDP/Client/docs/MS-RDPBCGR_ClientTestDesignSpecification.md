@@ -1094,7 +1094,7 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 
 #### <a name="_Toc427051994"/>S1\_Connection
 
-#####Connection Initiation Test
+##### Connection Initiation Test
 
 
 
@@ -1169,7 +1169,7 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite expects SUT drops the connection.| 
 |  **Cleanup**|  | 
 
-#####Basic Setting Exchange Test
+##### Basic Setting Exchange Test
 
 
 |  **S1\_Connection**| | 
@@ -1444,7 +1444,7 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite expects a Client MCS Erect Domain Request PDU to indicate the successful process of the Server MCS Connect Response PDU with GCC Conference Create Response.| 
 |  **Cleanup**| N/A| 
 
-#####Channel Connection Test
+##### Channel Connection Test
 
 
 |  **S1\_Connection**| | 
@@ -1545,7 +1545,7 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite expects SUT drops the connection.|  
 |  **Cleanup**| N/A| 
 
-#####Security Setting Exchange Test
+##### Security Setting Exchange Test
 
 
 |  **S1\_Connection**| | 
@@ -1603,7 +1603,7 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite expects SUT drops the connection.|  
 |  **Cleanup**| N/A| 
 
-#####Capability Exchange Test
+##### Capability Exchange Test
 
 
 |  **S1\_Connection**| | 
@@ -2068,7 +2068,7 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
 |  **Cleanup**| N/A| 
 
-#####Connection Finalization Test
+##### Connection Finalization Test
 
 
 |  **S1\_Connection**| | 
@@ -2156,7 +2156,7 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 | | Server Font Map PDU | 
 |  **Cleanup**| N/A| 
 
-#####Disconnection Test
+##### Disconnection Test
 
 
 |  **S1\_Connection**| | 

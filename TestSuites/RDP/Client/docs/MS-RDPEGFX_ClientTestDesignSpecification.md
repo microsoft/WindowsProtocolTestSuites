@@ -797,23 +797,6 @@ None.
 | | Step 8: Delete the surface|
 |  **Cleanup**| N/A|
 
-|  **Surface To Screen  Test**| |
-| -------------| ------------- |
-|  **Test ID**| RDPEGFX\_SurfaceToScreen\_PositiveTest\_ScaledOutput|
-|  **Priority**| P1|
-|  **Description** | This test case is used to test create surface, solid fill, map to output, map to scaled output, and delete surface command.|
-|  **Prerequisites**| N/A|
-|  **Test Execution Steps**| Step 1: Capability Exchange.|
-| | Step 2: Instruct client to create a surface.|
-| | Step 3: Sever encode a message to solid fill surface on client with green color.|
-| | Step 4: Server pack the message into a frame and sent it to client.|
-| | Step 5: Expect a frame acknowledge and validate frameId.|
-| | Step 6: Instruct client to map the surface to output.|
-| | Step 7: Instruct client to map the surface to scaled output. |
-| | Step 8: If the test suite is configured to verify image display, verify the graphic rendered on SUT.|
-| | Step 9: Delete the surface|
-|  **Cleanup**| N/A|
-
 |  **Cache Management Test**| |
 | -------------| ------------- |
 |  **Test ID**| RDPEGFX\_CacheManagement\_PositiveTest|
@@ -1030,33 +1013,15 @@ None.
 | | Step 5: Delete the surface.|
 |  **Cleanup**| N/A|
 
-|  **H264 Codec Test**| |
-| -------------| ------------- |
-|  **Test ID**| RDPEGFX\_H264Codec\_PositiveTest\_AVC444v2|
-|  **Priority**| P1|
-|  **Description** | Verify client can accept a RFX\_AVC444V2\_BITMAP\_STREAM structure with H264 encoded bitmap using YUV444v2 mode.|
-|  **Prerequisites**| N/A|
-|  **Test Execution Steps**| Step 1: Capability Exchange|
-| | Step 2: Create a surface, instruct client to output bitmap data of surface and fill the surface with green color.|
-| | Step 3: Get H264 encoded data frames, the H264 data is encoded as following:|
-| | Using YUV444v2 mode|
-| | Step 4: For each frame:|
-| | Create a RFX\_AVC444V2\_BITMAP\_STREAM structure for its frame.|
-| | Encode the  RFX\_AVC444V2\_BITMAP\_STREAM structure into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_1 and send it as a frame to client.|
-| | Expect a frame acknowledge and validate frameId.|
-| | If the test suite is configured to verify image display, verify the graphic rendered on SUT.|
-| | Step 5: Delete the surface.|
-|  **Cleanup**| N/A|
-
 #### Non BVT Test Cases
 
-#####Capability Exchange Test
+##### Capability Exchange Test
 
 |  **Capability Exchange Test**| |
 | -------------| ------------- |
 |  **Test ID**| RDPEGFX\_CapabilityExchange\_Negative\_IncorrectVersion  |
 |  **Priority**| P1|
-|  **Description** | Server set an  incorrect capability version in CapabilityConfirm response|
+|  **Description** | Server set an incorrect capability version in CapabilityConfirm response|
 |  **Prerequisites**| N/A|
 |  **Test Execution Steps**| Step 1: Expect SUT send a capability advertise request|
 | | Step 2: Validate version and flags in the request is OK|
@@ -1068,15 +1033,32 @@ None.
 | -------------| ------------- |
 |  **Test ID**| RDPEGFX\_CapabilityExchange\_Negative\_IncorrectCapsDataLength |
 |  **Priority**| P1|
-|  **Description** | Server set an incorrect CapsDataLength  in CapabilityConfirm response|
+|  **Description** | Server set an incorrect CapsDataLength in CapabilityConfirm response|
 |  **Prerequisites**| N/A|
 |  **Test Execution Steps**| Step 1: Expect SUT send a capability advertise request|
 | | Step 2: Validate version and flags in the request is OK|
-| | Step 3: set an  incorrect  CapsDataLength (e.g 0x01)) in RDPGFX\_CAPSET_VERSION8 structure  and send capability confirm PDU to client|
+| | Step 3: set an  incorrect  CapsDataLength (e.g 0x01)) in RDPGFX\_CAPSET_VERSION8 structure and send capability confirm PDU to client|
 | | Step 4: Expect the client to drop the connection|
 |  **Cleanup**| N/A|
 
-#####Surface to Screen Test
+##### Surface to Screen Test
+
+|  **Surface To Screen  Test**| |
+| -------------| ------------- |
+|  **Test ID**| RDPEGFX\_SurfaceToScreen\_PositiveTest\_ScaledOutput|
+|  **Priority**| P1|
+|  **Description** | This test case is used to test create surface, solid fill, map to output, map to scaled output, and delete surface command.|
+|  **Prerequisites**| N/A|
+|  **Test Execution Steps**| Step 1: Capability Exchange.|
+| | Step 2: Instruct client to create a surface.|
+| | Step 3: Sever encode a message to solid fill surface on client with green color.|
+| | Step 4: Server pack the message into a frame and sent it to client.|
+| | Step 5: Expect a frame acknowledge and validate frameId.|
+| | Step 6: Instruct client to map the surface to output.|
+| | Step 7: Instruct client to map the surface to scaled output. |
+| | Step 8: If the test suite is configured to verify image display, verify the graphic rendered on SUT.|
+| | Step 9: Delete the surface|
+|  **Cleanup**| N/A|
 
 |  **Surface To Screen Test**| |
 | -------------| ------------- |
@@ -1336,7 +1318,7 @@ None.
 | | Step 4: Expect the client to drop the connection|
 |  **Cleanup**| N/A|
 
-#####CacheManagement Test
+##### CacheManagement Test
 
 |  **Cache Management Test**| |
 | -------------| ------------- |
@@ -1436,6 +1418,23 @@ None.
 | | Step 6: Expect a frame acknowledge and validate frameId.|
 | | Step 7: If the test suite is configured to verify image display, verify the graphic rendered on SUT|
 | | Step 8: Delete the surface.|
+|  **Cleanup**| N/A|
+
+|  **Cache Management Test**| |
+| -------------| ------------- |
+|  **Test ID**| RDPEGFX\_CacheManagement\_PositiveTest\_EvictCache|
+|  **Priority**| P1|
+|  **Description** | This test case is used to verify RDP client can process cache correctly when receiving RDPGFX\_EVICT\_CACHE\_ENTRY_PDU to delete a slot.|
+|  **Prerequisites**| N/A|
+|  **Test Execution Steps**| Step 1: Capability Exchange|
+| | Step 2: Create a surface, instruct client to map it to output |
+| | Step 3: Server encode a message to send a rectangle to client and instruct client to copy the rectangle of bitmap area of the surface to cache slot 0x01.|
+| | Step 4: Server pack messages into a frame and sent it to client |
+| | Step 5: Expect a frame acknowledge and validate frameId.|
+| | Step 6: Instruct client to evict this cache entry|
+| | Step 7: Expect a frame acknowledge and validate frameId.|
+| | Step 8: Instruct client to evict this cache entry again.|
+| | Step 9: Expect a frame acknowledge and validate frameId.|
 |  **Cleanup**| N/A|
 
 |  **Cache Management Test**| |
@@ -1548,7 +1547,7 @@ None.
 | | Step 8: Delete the surface.|
 |  **Cleanup**| N/A|
 
-#####Surface to Surface Test
+##### Surface to Surface Test
 
 |  **Surface To Surface Test**| |
 | -------------| ------------- |
@@ -1680,7 +1679,7 @@ None.
 | | Step 6: Expect the client to drop the connection|
 |  **Cleanup**| N/A|
 
-#####Wire to Surface Test
+##### Wire to Surface Test
 
 |  **Wire To Surface Test**| |
 | -------------| ------------- |
@@ -1699,7 +1698,7 @@ None.
 | | Step 9: Delete the surface.|
 |  **Cleanup**| N/A|
 
-#####ClearCodec Test
+##### ClearCodec Test
 
 |  **ClearCodec Stream Test**| |
 | -------------| ------------- |
@@ -2165,7 +2164,7 @@ None.
 | | Step 6: Expect RDP Connection is stopped|
 |  **Cleanup**| N/A|
 
-#####RemoteFX Progressive Codec Test
+##### RemoteFX Progressive Codec Test
 
 |  **RFX Progressive Codec Stream Test**| |
 | -------------| ------------- |
@@ -2706,7 +2705,7 @@ None.
 | | Step 7: Expect RDP connection is stopped|
 |  **Cleanup**| N/A|
 
-#####Frame Segmentation Test
+##### Frame Segmentation Test
 
 |  **Frame Segmentation Test**| |
 | -------------| ------------- |
@@ -2843,7 +2842,7 @@ None.
 | | Step 4: Expect the client to drop the connection|
 |  **Cleanup**| N/A|
 
-#####RDP 8 Compression Test
+##### RDP 8 Compression Test
 
 |  **RDP 8 Compression Test**| |
 | -------------| ------------- |
@@ -2881,7 +2880,7 @@ None.
 | | Step 4: Expect the client to drop the connection.|
 |  **Cleanup**| N/A|
 
-#####RemoteFX Codec Test
+##### RemoteFX Codec Test
 
 |  **RFX Codec Stream Test**| |
 | -------------| ------------- |
@@ -2925,7 +2924,25 @@ None.
 | | Step 6: Delete the surface|
 |  **Cleanup**| N/A|
 
-#####H264 Codec Test
+##### H264 Codec Test
+
+|  **H264 Codec Test**| |
+| -------------| ------------- |
+|  **Test ID**| RDPEGFX\_H264Codec\_PositiveTest\_AVC444v2|
+|  **Priority**| P1|
+|  **Description** | Verify client can accept a RFX\_AVC444V2\_BITMAP\_STREAM structure with H264 encoded bitmap using YUV444v2 mode.|
+|  **Prerequisites**| N/A|
+|  **Test Execution Steps**| Step 1: Capability Exchange|
+| | Step 2: Create a surface, instruct client to output bitmap data of surface and fill the surface with green color.|
+| | Step 3: Get H264 encoded data frames, the H264 data is encoded as following:|
+| | Using YUV444v2 mode|
+| | Step 4: For each frame:|
+| | Create a RFX\_AVC444V2\_BITMAP\_STREAM structure for its frame.|
+| | Encode the  RFX\_AVC444V2\_BITMAP\_STREAM structure into RDPGFX\_WIRE\_TO\_SURFACE\_PDU_1 and send it as a frame to client.|
+| | Expect a frame acknowledge and validate frameId.|
+| | If the test suite is configured to verify image display, verify the graphic rendered on SUT.|
+| | Step 5: Delete the surface.|
+|  **Cleanup**| N/A|
 
 |  **H264 Codec Test**| |
 | -------------| ------------- |
@@ -2936,7 +2953,7 @@ None.
 |  **Test Execution Steps**| Step 1: Expect SUT send a capability advertise request|
 | | Step 2: Verify the capability request include a CAPSET as following|
 | | If the version is RDPGFX\_CAPVERSION\_81, flags should contains RDPGFX\_CAPS\_FLAG\_H264ENABLED and RDPGFX\_CAPS\_FLAG\_SMALL_CACHE.|
-| | Or if the version is RDPGFX\_CAPVERSION\_10, flags not contains  RDPGFX\_CAPS\_FLAG\_AVC_DISABLED|
+| | Or if the version is RDPGFX\_CAPVERSION\_10, flags not contains RDPGFX\_CAPS\_FLAG\_AVC_DISABLED|
 |  **Cleanup**| N/A|
 
 |  **H264 Codec Test**| |

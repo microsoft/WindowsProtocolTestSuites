@@ -348,7 +348,7 @@ The common prerequisites and clean requirements are not listed in any of the tes
 
 |  **S2_OrientationChange**| | 
 | -------------| ------------- |
-|  **Test ID**| S2\_ RDPEDISP\_OrientationChange_DeactivationReactivation| 
+|  **Test ID**| S2\_RDPEDISP\_OrientationChange_DeactivationReactivation| 
 |  **Priority**| P0| 
 |  **Description** | Verify the RDP client can change the screen orientation of remote desktop session by sending Display Control Messages and receiving the Deactivation-Reactivation from the remote desktop session host.| 
 |  **Prerequisites**| RDP Client should not be thin client.| 
@@ -369,7 +369,7 @@ The common prerequisites and clean requirements are not listed in any of the tes
 
 |  **S2_OrientationChange**| | 
 | -------------| ------------- |
-|  **Test ID**| S2\_ RDPEDISP\_OrientationChange_RestartGraphicsPipeline| 
+|  **Test ID**| S2\_RDPEDISP\_OrientationChange_RestartGraphicsPipeline| 
 |  **Priority**| P0| 
 |  **Description** | Verify the RDP client can change the screen orientation of remote desktop session by sending Display Control Messages and receiving the surface management commands to restart the graphics pipeline from the remote desktop session host.| 
 |  **Prerequisites**| RDP Client should not be thin client.| 
@@ -412,7 +412,7 @@ The common prerequisites and clean requirements are not listed in any of the tes
 
 |  **S2_OrientationChange**| | 
 | -------------| ------------- |
-|  **Test ID**| S2\_ RDPEDISP\_OrientationAllChange_DeactivationReactivation| 
+|  **Test ID**| S2\_RDPEDISP\_OrientationAllChange_DeactivationReactivation| 
 |  **Priority**| P1| 
 |  **Description** | Verify the RDP client can change the screen orientation of remote desktop session by sending Display Control Messages and receiving the Deactivation-Reactivation from the remote desktop session host.| 
 |  **Prerequisites**| RDP Client should not be thin client.| 
@@ -437,7 +437,7 @@ The common prerequisites and clean requirements are not listed in any of the tes
 
 |  **S2_OrientationChange**| | 
 | -------------| ------------- |
-|  **Test ID**| S2\_ RDPEDISP\_OrientationAllChange_RestartGraphicsPipeline| 
+|  **Test ID**| S2\_RDPEDISP\_OrientationAllChange_RestartGraphicsPipeline| 
 |  **Priority**| P1| 
 |  **Description** | Verify the RDP client can change the screen orientation of remote desktop session by sending Display Control Messages and receiving the surface management commands to restart the graphics pipeline from the remote desktop session host.| 
 |  **Prerequisites**| RDP Client should not be thin client.| 
@@ -464,7 +464,7 @@ The common prerequisites and clean requirements are not listed in any of the tes
 
 |  **S3_MonitorAdditionRemoval**| | 
 | -------------| ------------- |
-|  **Test ID**| S3\_ RDPEDISP\_MonitorAdditionRemoval_DeactivationReactivation| 
+|  **Test ID**| S3\_RDPEDISP\_MonitorAdditionRemoval_DeactivationReactivation| 
 |  **Priority**| P1| 
 |  **Description** | Verify the RDP client can change the number of monitors for remote desktop session by sending Display Control Messages and receiving the Deactivation-Reactivation from the remote desktop session host.| 
 |  **Prerequisites**| RDP Client should not be thin client.| 
@@ -487,9 +487,9 @@ The common prerequisites and clean requirements are not listed in any of the tes
 
 |  **S3_MonitorAdditionRemoval**| | 
 | -------------| ------------- |
-|  **Test ID**| S2\_ RDPEDISP\_MonitorAdditionRemoval_RestartGraphicsPipeline| 
+|  **Test ID**| S3\_RDPEDISP\_MonitorAdditionRemoval_RestartGraphicsPipeline| 
 |  **Priority**| P1| 
-|  **Description** | Verify the RDP client can change the number of monitors for remote desktop session by sending Display Control Messages and receiving the Deactivation-Reactivation from the remote desktop session host.| 
+|  **Description** | Verify the RDP client can change the number of monitors for remote desktop session by sending Display Control Messages and receiving the surface management commands to restart the graphics pipeline from the remote desktop session host.| 
 |  **Prerequisites**| RDP Client should not be thin client.| 
 | | RDP Server and Client version should be higher than 8.1.| 
 | | The SUT has the ability of addition and removal of monitors.| 
@@ -510,11 +510,11 @@ The common prerequisites and clean requirements are not listed in any of the tes
 #### <a name="_Toc427063096"/>S4_MonitorReposition
 
 
-|  **S3_MonitorAdditionRemoval**| | 
+|  **S4_MonitorReposition**| | 
 | -------------| ------------- |
-|  **Test ID**| S3\_ RDPEDISP\_MonitorReposition_DeactivationReactivation| 
+|  **Test ID**| S4\_RDPEDISP\_MonitorReposition_DeactivationReactivation| 
 |  **Priority**| P1| 
-|  **Description** | Verify the RDP client can change the number of monitors for remote desktop session by sending Display Control Messages and receiving the Deactivation-Reactivation from the remote desktop session host.| 
+|  **Description** | Verify the RDP client can change the position of monitors for remote desktop session by sending Display Control Messages and receiving the Deactivation-Reactivation from the remote desktop session host.| 
 |  **Prerequisites**| RDP Client should not be thin client.| 
 | | RDP Server and Client version should be higher than 8.1.| 
 | | The SUT has at least two monitors.| 
@@ -531,11 +531,11 @@ The common prerequisites and clean requirements are not listed in any of the tes
 |  **Cleanup**| Restore the position of monitors to default.| 
 
 
-|  **S3_MonitorAdditionRemoval**| | 
+|  **S4_MonitorReposition**| | 
 | -------------| ------------- |
-|  **Test ID**| S2\_ RDPEDISP\_MonitorReposition_RestartGraphicsPipeline| 
+|  **Test ID**| S4\_RDPEDISP\_MonitorReposition_RestartGraphicsPipeline| 
 |  **Priority**| P1| 
-|  **Description** | Verify the RDP client can change the position of monitors for remote desktop session by sending Display Control Messages and receiving the Deactivation-Reactivation from the remote desktop session host.| 
+|  **Description** | Verify the RDP client can change the position of monitors for remote desktop session by sending Display Control Messages and receiving the surface management commands to restart the graphics pipeline from the remote desktop session host.| 
 |  **Prerequisites**| RDP Client should not be thin client.| 
 | | RDP Server and Client version should be higher than 8.1.| 
 | | The SUT has at least two monitors.| 
