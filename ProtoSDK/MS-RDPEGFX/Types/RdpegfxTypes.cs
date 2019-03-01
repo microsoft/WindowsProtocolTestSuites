@@ -2292,18 +2292,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
     public class RDPGFX_MAP_SURFACE_TO_SCALED_OUTPUT_PDU : RdpegfxServerPdu
     {
         #region Message Fields
-        /// <summary>
-        /// An RDPGFX_HEADER structure  
-        /// </summary>
-        public RDPGFX_HEADER header;
+        
         /// <summary>
         /// A 16-bit unsigned integer that specifies the ID of the surface to be associated with the output-to-surface mapping.
         /// </summary>
         public ushort surfaceId;
         /// <summary>
-        /// reserved in TD. outputId in Windows 0 by default.
+        /// A 16-bit unsigned integer that is reserved for future use. This field MUST be set to zero. 
         /// </summary>
-        public ushort outputId;
+        public ushort reserved;
         /// <summary>
         /// A 32-bit unsigned integer that specifies the x-coordinate of the point, relative to the origin of the Graphics Output Buffer ADM element, at which to map the top-left corner of the surface.
         /// </summary>
@@ -2341,13 +2338,19 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// <param name="height">target height</param>
         public RDPGFX_MAP_SURFACE_TO_SCALED_OUTPUT_PDU(ushort surfaceId, uint x, uint y, uint width, uint height)
         {            
-            this.header.cmdId = PacketTypeValues.RDPGFX_CMDID_MAPSURFACETOSCALEDOUTPUT;
-            this.header.flags = 0x0;
-            this.header.pduLength = (uint)Marshal.SizeOf(header) + 20;
-
-            this.outputId = 0;
+            this.Header.cmdId = PacketTypeValues.RDPGFX_CMDID_MAPSURFACETOSCALEDOUTPUT;
+            this.Header.flags = 0x0;
+            this.Header.pduLength = (uint)Marshal.SizeOf(Header) 
+                + (uint)Marshal.SizeOf(this.surfaceId)
+                + (uint)Marshal.SizeOf(this.reserved)
+                + (uint)Marshal.SizeOf(this.outputOriginX)
+                + (uint)Marshal.SizeOf(this.outputOriginY)
+                + (uint)Marshal.SizeOf(this.targetHeight)
+                + (uint)Marshal.SizeOf(this.targetWidth)
+                ;
+            
             this.surfaceId = surfaceId;
-
+            this.reserved = 0;
             this.outputOriginX = x;
             this.outputOriginY = y;
             this.targetHeight = height;
@@ -2362,7 +2365,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         {
             base.Encode(marshaler);
             marshaler.WriteUInt16(this.surfaceId);
-            marshaler.WriteUInt16(this.outputId);            
+            marshaler.WriteUInt16(this.reserved);            
             marshaler.WriteUInt32(this.outputOriginX);
             marshaler.WriteUInt32(this.outputOriginY);
             marshaler.WriteUInt32(this.targetWidth);
@@ -2380,7 +2383,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                 base.Decode(marshaler);              
                 this.surfaceId = marshaler.ReadUInt16();
                 pduLen += 2;
-                this.outputId = marshaler.ReadUInt16();
+                this.reserved = marshaler.ReadUInt16();
                 pduLen += 2;
                 this.outputOriginX = marshaler.ReadUInt32();
                 pduLen += 4;
