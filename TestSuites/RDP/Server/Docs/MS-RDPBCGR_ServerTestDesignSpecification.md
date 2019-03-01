@@ -1,4 +1,4 @@
-﻿
+
 # MS-RDPBCGR Server Test Design Specification
 
 ## Contents
@@ -19,8 +19,7 @@
 		* [S5_StaticVirtualChannel](#_Toc396468156)
 		* [S6_AutoDetectTest](#_Toc396468157)
 		* [S7_MultitransportBootstrapping](#_Toc396468158)
-		* [S8_HealthMonitoring](#_Toc396468159)
-		* [S1_EDYCBasicTest](#_Toc396468179)
+		* [S8_HealthMonitoring](#_Toc396468159)		
 * [Test Suite Design](#_Toc396468160)
     * [Test Suite Architecture](#_Toc396468161)
 		* [System under Test (SUT)](#_Toc396468162)
@@ -46,7 +45,6 @@
 ### <a name="_Toc396468144"/>Technical Document Overview
 The Remote Desktop Protocol: Basic Connectivity and Graphics Remoting is designed to facilitate user interaction with a remote computer system by transferring graphics display information from the remote computer to the user and transporting input commands from the user to the remote computer, where the input commands are replayed on the remote computer. RDP also provides an extensible transport mechanism which allows specialized communication to take place between components on the user computer and components running on the remote computer.
 
-The Remote Desktop Protocol: Dynamic Channel Virtual Channel Extension, which supports features such as classes of priority (that may be used to implement bandwidth allocation) and individually connected endpoints using dynamic virtual channel (DVC) listeners.
 
 ### <a name="_Toc396468145"/>Relationship to Other Protocols
 [MS-RDPBCGR] is based on the ITU (International Telecommunication Union) T.120 series of protocols. The T.120 standard is composed of a suite of communication and application-layer protocols that enable implementers to create compatible products and services for real-time, multipoint data connections and conferencing.
@@ -72,7 +70,7 @@ The following protocols are tunneled within an [MS-RDPBCGR] static virtual chann
 * Smart Card Virtual Channel Extension [MS-RDPESC]
 
 ### <a name="_Toc396468146"/>Protocol Operations/Messages
-There are 64 protocol data units (PDUs) described by [MS-RDPBCGF] and [MS-RDPEDYC] protocols, and they can be classified into the following message flows:
+There are 50 protocol data units (PDUs) described by [MS-RDPBCGR] protocol, and they can be classified into the following message flows:
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -92,35 +90,12 @@ There are 64 protocol data units (PDUs) described by [MS-RDPBCGF] and [MS-RDPEDY
 | Network Characteristics Detection| 2|
 | Multitransport Bootstrapping| 2|
 | Connection Health Monitoring| 1|
-| DVC Capabilities Exchange| 4|
-| Open DVC| 2|
-| Send and receive DVC data| 4|
-| Close DVC| 1|
-| Soft-sync| 3|
-
 
 The Connection Sequence is one of the most important message flows; it exchanges client and server settings and negotiates common settings to use for the duration of the connection so that the input, graphics, and other data can be exchanged and processed between the client and server. The Connection Sequence is described in following figure (Figure 1-1). All message exchanges in this diagram are strictly sequential, except where noted in the text that follows.
 
 ![image1.png](./image/RDP_ServerTestDesignSpecification/image1.png)
 
 Figure 1-1: Remote Desktop Protocol (RDP) connection sequence
-
-The open dvc, send and receive data, close dvc message flows are defined in [MS-RDPEDYC]. The Connection Sequence is described in following figure (Figure 1-2, 1-3, 1-4 and 1-5). All message exchanges in this diagram are strictly sequential, except where noted in the text that follows.
-
-![edyc-open-dvc.png](./image/RDP_ServerTestDesignSpecification/edyc-cap-exchagne.png)
-
-Figure 1-2: MS-RDPEDYC open DVC message Sequence
-
-![edyc-open-dvc.png](./image/RDP_ServerTestDesignSpecification/edyc-open-dvc.png)
-
-Figure 1-3: MS-RDPEDYC open DVC message Sequence
-
-![edyc-send-data-sequence.png](./image/RDP_ServerTestDesignSpecification/edyc-send-data-sequence.png)
-
-Figure 1-4: MS-RDPEDYC send and receive data message Sequence
-![edyc-close-dvc.png](./image/RDP_ServerTestDesignSpecification/edyc-close-dvc.png)
-
-Figure 1-5: MS-RDPEDYC close DVC message Sequence
 
 ### <a name="_Toc396468147"/>Protocol Properties
 
@@ -189,7 +164,6 @@ Reasons for choosing Traditional Testing
 | S6_AutoDetect| 0| Traditional| This scenario is used to verify auto-detect PDUs|
 | S7_MultitransportBootstrapping| 0| Traditional| This scenario is used to verify Multitransport initialization PDUs|
 | S8_HealthMonitoring| 1| Traditional| This scenario is used to Verify Heartbeat PDU|
-| S1_EDYCBasicTest| 0| Traditional| This scenario is used to Verify MS-RDPEDYC open channel, send and receive data, close channel and soft-sync PDUs|
 
 **Table 21 Test Suite Scenarios**
 
@@ -496,32 +470,6 @@ Scenario Testing:
 
 * Server Heartbeat PDU
 
-#### <a name="_Toc396468179"/>S1_EDYCBasicTest
-Preconditions:
-
-MS-RDPBCGR connection is setup.
-
-RDPServer supports EDYC.
-
-Typical Sequence:
-
-The typical scenario sequence is as follows:
-
-* The client and server build an RDPBCGR connection to the server.
-
-* The server sends DVC Capability exchange request and gets client response.
-
-* The server sends create DVC channel request and gets client response.
-
-* The client sends DVC data (compressed/uncompressed) to server and gets response.
-
-* The server sends DVC close channel request and close the channel.
-
-
-Scenario Testing:
-
-* Server Heartbeat PDU
-
 ## <a name="_Toc396468160"/>Test Suite Design
 
 ### <a name="_Toc396468161"/>Test Suite Architecture
@@ -592,7 +540,7 @@ The following table shows the number of test cases for each scenario.
 | S6_AutoDetect| 1| 1| 1| 0|
 | S7_MultitransportBootstrapping| 1| 1| 1| 0|
 | S8_HealthMonitoring| 1| 1| 1| 0|
-| S1_EDYCBasicTest| 3| 1| 1| 2|
+
 
 ### <a name="_Toc396468174"/>Test Cases Description
 The test suite is a synthetic RDP client. In the following descriptions, all instances of the term “Test Suite” can be understood as the RDP client.
@@ -919,49 +867,6 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 |  **Requirements Covered**| N/A|
 |  **Cleanup**| N/A|
 
-#### S1_EDYC_CreateAndCloseChannel
-| &#32;| &#32; |
-| -------------| ------------- |
-|  **S1_EDYCBasicTest**| |
-|  **Test ID**| S1_EDYC_CreateAndCloseChannel|
-|  **Priority**| P0|
-|  **Description** | This test case is used to verify SUT can create and close DVC channel. |
-|  **Prerequisites**| RDPBCGR connection is setup|
-|  **Test Execution Steps**| Initiate and complete an RDP connection to RDP Server (SUT).|
-| | RDP Server sends Capability exchange pdu|
-| | RDP Server requests to create DVC channel|
-| | RDP Server requests to close DVC channel|
-|  **Cleanup**| N/A|
-
-#### S1_EDYC_SendCompressedDataSequence
-| &#32;| &#32; |
-| -------------| ------------- |
-|  **S1_EDYCBasicTest**| |
-|  **Test ID**| S1_EDYC_SendCompressedDataSequence|
-|  **Priority**| P0|
-|  **Description** | This test case is used to verify SUT can create and close DVC channel. |
-|  **Prerequisites**| RDPBCGR connection is setup|
-|  **Test Execution Steps**| Initiate and complete an RDP connection to RDP Server (SUT).|
-| | RDP Server sends Capability exchange pdu|
-| | RDP Server requests to create DVC channel|
-| | RDP Client sends data to server and expect response|
-| | RDP Server requests to close DVC channel|
-|  **Cleanup**| N/A|
-
-#### S1_EDYC_SendCompressedDataSequence
-| &#32;| &#32; |
-| -------------| ------------- |
-|  **S1_EDYCBasicTest**| |
-|  **Test ID**| S1_EDYC_SendCompressedDataSequence|
-|  **Priority**| P0|
-|  **Description** | This test case is used to verify SUT can create and close DVC channel. |
-|  **Prerequisites**| RDPBCGR connection is setup|
-|  **Test Execution Steps**| Initiate and complete an RDP connection to RDP Server (SUT).|
-| | RDP Server sends Capability exchange pdu|
-| | RDP Server requests to create DVC channel|
-| | RDP Client sends data sequence (bigger than 1,590 bytes) to server and expect response|
-| | RDP Server requests to close DVC channel|
-|  **Cleanup**| N/A|
 
 ## <a name="_Toc396468176"/>Appendix
 
