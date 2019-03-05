@@ -11,6 +11,8 @@ using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp;
 using System.Runtime.InteropServices;
 
 namespace Microsoft.Protocols.TestManager.RDPServerPlugin
@@ -57,6 +59,8 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         private DetectionInfo detectInfo;
         private List<StackPacket> receiveBuffer = null;
         private RdpbcgrClient rdpbcgrClient = null;
+        private RdpedycClient rdpedycClient = null;
+      
         private string[] SVCNames;
         private int defaultPort = 3389;
         private string clientName;
@@ -71,6 +75,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         #endregion Received Packets
 
         private const string SVCNAME_RDPEDYC = "drdynvc";
+        private const string DYVNAME_RDPEDYC = "Microsoft::Windows::RDS::Geometry::v08.01";
 
         #region Constructor
         public RDPDetector(DetectionInfo detectInfo)
@@ -96,7 +101,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                     config, requestedProtocol, SVCNames,
                     CompressionType.PACKET_COMPR_TYPE_NONE,
                     false,
-                    true);
+                    true,false,false, false, true,true);
                 if (!status)
                 {
                     DetectorUtil.WriteLog("Failed", false, LogStyle.StepPassed);
@@ -119,6 +124,25 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             CheckSupportedFeatures();
             CheckSupportedProtocols();
             SetRdpVersion(config);
+
+            rdpedycClient = new RdpedycClient(rdpbcgrClient, rdpbcgrClient.Context, false);
+
+            try
+            {
+                DynamicVirtualChannel channel = rdpedycClient.ExpectChannel(timeout, DYVNAME_RDPEDYC, DynamicVC_TransportType.RDP_TCP);
+                if(channel != null)
+                {
+                    detectInfo.IsSupportRDPEDYC = true;
+
+                }
+                rdpedycClient.CloseChannel((ushort)channel.ChannelId);
+
+            }
+            catch
+            {
+                detectInfo.IsSupportRDPEDYC = false;
+            }
+           
 
             // Disconnect
             ClientInitiatedDisconnect();
@@ -267,6 +291,22 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             {
                 return false;
             }
+
+            bool serverSupportUDPFECR = false;
+            bool serverSupportUDPFECL = false;
+            if (connectResponsePdu.mcsCrsp.gccPdu.serverMultitransportChannelData != null)
+            {
+                if (connectResponsePdu.mcsCrsp.gccPdu.serverMultitransportChannelData.flags.HasFlag(MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDPFECR))
+                {
+                    serverSupportUDPFECR = true;
+                }
+                if (connectResponsePdu.mcsCrsp.gccPdu.serverMultitransportChannelData.flags.HasFlag(MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDPFECL))
+                {
+                    serverSupportUDPFECL = true;
+                }
+            }
+            detectInfo.IsSupportRDPEMT = serverSupportUDPFECR || serverSupportUDPFECL;
+
 
             // Channel Connection
             SendClientMCSErectDomainRequest();
