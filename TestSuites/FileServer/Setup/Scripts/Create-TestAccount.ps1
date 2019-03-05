@@ -76,15 +76,15 @@ if((gwmi win32_computersystem).partofdomain -eq $true)
     $adminDN = dsquery user -name $domainAdmin
 
     .\Write-Info.ps1 "Create user account: nonadmin"
-    $nonadminDN = $adminDN.Replace($domainAdmin,"nonadmin")
+    $nonadminDN = $adminDN -Replace $domainAdmin, "nonadmin"
     CMD /C dsadd user $nonadminDN -pwd $password -desc testaccount -disabled no -mustchpwd no -pwdneverexpires yes 2>&1 | .\Write-Info.ps1
 
     .\Write-Info.ps1 "Create group: AzGroup01"
-    $azGroup01DN = $adminDN.Replace($domainAdmin,"AzGroup01")
+    $azGroup01DN = $adminDN -Replace $domainAdmin, "AzGroup01"
     CMD /C dsadd group $azGroup01DN 2>&1 | .\Write-Info.ps1
 
     .\Write-Info.ps1 "Create user account: AzUser01, and add to AzGroup01"
-    $azUser01DN = $adminDN.Replace($domainAdmin,"AzUser01")
+    $azUser01DN = $adminDN -Replace $domainAdmin, "AzUser01"
     CMD /C dsadd user $azUser01DN  -pwd $password -desc testaccount -memberof $azGroup01DN -disabled no -mustchpwd no -pwdneverexpires yes 2>&1 | .\Write-Info.ps1
 
     .\Write-Info.ps1 "Enable Guest account"
