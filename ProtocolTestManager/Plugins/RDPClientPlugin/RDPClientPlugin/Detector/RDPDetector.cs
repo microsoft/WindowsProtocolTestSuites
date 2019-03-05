@@ -75,10 +75,12 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         /// </summary>
         /// <returns></returns>
         public bool DetectRDPFeature()
-        {           
+        {
             // Establish a RDP connection with RDP client
             try
             {
+                DetectorUtil.WriteLog("Establish RDP connection with SUT...");
+
                 StartRDPListening();
                 triggerClientRDPConnect(detectInfo.TriggerMethod);
                 EstablishRDPConnection();
@@ -86,7 +88,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             catch (Exception e)
             {
                 DetectorUtil.WriteLog("Exception occured when establishing RDP connection: " + e.Message);
-                DetectorUtil.WriteLog(""+e.StackTrace);
+                DetectorUtil.WriteLog("" + e.StackTrace);
                 if (e.InnerException != null)
                 {
                     DetectorUtil.WriteLog("**" + e.InnerException.Message);
@@ -101,6 +103,32 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 
             // Set RDP Version
             SetRdpVersion();
+
+            CheckSupportedFeatures();
+
+            CheckSupportedProtocols();
+
+
+            // Trigger client to close the RDP connection
+            TriggerClientDisconnectAll(detectInfo.TriggerMethod);
+
+            if (this.rdpedycServer != null)
+            {
+                this.rdpedycServer.Dispose();
+                this.rdpedycServer = null;
+            }
+            if (this.rdpbcgrServerStack != null)
+            {
+                this.rdpbcgrServerStack.Dispose();
+                this.rdpbcgrServerStack = null;
+            }
+
+            return true;
+        }
+
+        private void CheckSupportedFeatures()
+        {
+            DetectorUtil.WriteLog("Check specified features support...");
 
             // Set result according to messages during connection
             if (mscConnectionInitialPDU.mcsCi.gccPdu.clientCoreData != null && mscConnectionInitialPDU.mcsCi.gccPdu.clientCoreData.earlyCapabilityFlags != null)
@@ -159,15 +187,15 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             {
                 detectInfo.IsSupportAutoReconnect = false;
             }
-               
+
             detectInfo.IsSupportRDPRFX = false;
             ITsCapsSet codecCapSet = this.clientCapSet.FindCapSet(capabilitySetType_Values.CAPSETTYPE_BITMAP_CODECS);
-            if(codecCapSet != null)
+            if (codecCapSet != null)
             {
                 foreach (TS_BITMAPCODEC codec in ((TS_BITMAPCODECS_CAPABILITYSET)codecCapSet).supportedBitmapCodecs.bitmapCodecArray)
                 {
                     if (is_REMOTEFX_CODEC_GUID(codec.codecGUID))
-                    {                        
+                    {
                         detectInfo.IsSupportRDPRFX = true;
                         break;
                     }
@@ -183,6 +211,12 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             }
             // Notify the UI for detecting feature finished
             DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
+        }
+
+        private void CheckSupportedProtocols()
+        {
+            DetectorUtil.WriteLog("Check specified protocols support...");
+
             detectInfo.IsSupportRDPEFS = false;
             if (mscConnectionInitialPDU.mcsCi.gccPdu.clientNetworkData != null && mscConnectionInitialPDU.mcsCi.gccPdu.clientNetworkData.channelCount > 0)
             {
@@ -212,9 +246,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             detectInfo.IsSupportRDPEVOR = (CreateEDYCChannel(RDPDetector.RdpegtChannelName)
                 && CreateEDYCChannel(RDPDetector.RdpevorControlChannelName)
                 && CreateEDYCChannel(RDPDetector.RdpevorDataChannelName));
-            
-            // Trigger client to close the RDP connection
-            TriggerClientDisconnectAll(detectInfo.TriggerMethod);
+
 
             if (detectInfo.IsSupportStaticVirtualChannel != null && detectInfo.IsSupportStaticVirtualChannel.Value
                 && ((detectInfo.IsSupportTransportTypeUdpFECR != null && detectInfo.IsSupportTransportTypeUdpFECR.Value)
@@ -230,19 +262,6 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             }
             // Notify the UI for detecting protocol supported finished
             DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
-
-            if (this.rdpedycServer != null)
-            {
-                this.rdpedycServer.Dispose();
-                this.rdpedycServer = null;
-            }
-            if (this.rdpbcgrServerStack != null)
-            {
-                this.rdpbcgrServerStack.Dispose();
-                this.rdpbcgrServerStack = null;
-            }
-
-            return true;
         }
 
         private void SetRdpVersion()

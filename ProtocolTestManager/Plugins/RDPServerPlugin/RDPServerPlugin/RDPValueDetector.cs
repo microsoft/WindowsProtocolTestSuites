@@ -132,32 +132,43 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         /// <returns>Return true if the function succeeded.</returns>
         public bool RunDetection()
         {
-            // set config if properties changed
-            config.ServerName = properties[RDPValueDetector.ServerName];
-            config.ServerDomain = properties[RDPValueDetector.ServerDomain];
-            if (config.ServerDomain != null && config.ServerDomain.Length == 0)
+            try
             {
-                config.ServerDomain = config.ServerName;
-            }
-            config.ServerPort = properties[RDPValueDetector.ServerPort];
-            config.ServerUserName = properties[RDPValueDetector.ServerUserName];
-            config.ServerUserPassword = properties[RDPValueDetector.ServerUserPassword];
-            config.ClientName = Dns.GetHostName();
-            DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
+                DetectorUtil.WriteLog("Detect Client HostName...");
 
-            if (!PingSUT())
+                // set config if properties changed
+                config.ServerName = properties[RDPValueDetector.ServerName];
+                config.ServerDomain = properties[RDPValueDetector.ServerDomain];
+                if (config.ServerDomain != null && config.ServerDomain.Length == 0)
+                {
+                    config.ServerDomain = config.ServerName;
+                }
+                config.ServerPort = properties[RDPValueDetector.ServerPort];
+                config.ServerUserName = properties[RDPValueDetector.ServerUserName];
+                config.ServerUserPassword = properties[RDPValueDetector.ServerUserPassword];
+                config.ClientName = Dns.GetHostName();
+
+                DetectorUtil.WriteLog("Finished!", false, LogStyle.StepPassed);
+
+                if (!PingSUT())
+                {
+                    return false;
+                }
+
+                using (var detector = new RDPDetector(detectionInfo))
+                {
+                    if (!detector.DetectRDPFeature(config))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
             {
+                DetectorUtil.WriteLog(String.Format("RunDetection() threw exception: {0}", ex));
                 return false;
             }
-
-            RDPDetector detector = new RDPDetector(detectionInfo);
-            if (!detector.DetectRDPFeature(config))
-            {
-                detector.Dispose();
-                return false;
-            }
-            detector.Dispose();
-            return true;
         }
 
         /// <summary>
@@ -319,16 +330,14 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 }
 
             }
-            catch
+            catch (Exception ex)
             {
-                DetectorUtil.WriteLog("Error", false, LogStyle.Error);
+                DetectorUtil.WriteLog(String.Format("PingSUT() threw exception: {0}", ex));
 
-                //return false;
-                throw;
+                return false;
             }
             foreach (var reply in replies)
             {
-
                 result |= (reply.Status == IPStatus.Success);
             }
             if (result)
