@@ -89,6 +89,8 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         {
             try
             {
+                DetectorUtil.WriteLog("Establish RDP connection with SUT...");
+
                 Initialize(config);
                 ConnectRDPServer();
 
@@ -99,7 +101,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                     true);
                 if (!status)
                 {
-                    DetectorUtil.WriteLog("Failed", false, LogStyle.StepPassed);
+                    DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
                     return false;
                 }
                 DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
@@ -336,6 +338,8 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
         private void CheckSupportedFeatures()
         {
+            DetectorUtil.WriteLog("Check specified features support...");
+
             detectInfo.IsSupportAutoReconnect = SupportAutoReconnect();
             detectInfo.IsSupportFastPathInput = SupportFastPathInput();
 
@@ -391,11 +395,14 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         private void CheckSupportedProtocols()
         {
             // Notify the UI for detecting protocol supported finished
+            DetectorUtil.WriteLog("Check specified protocols support...");
             DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
         }
 
         private void SetRdpVersion(Configs config)
         {
+            DetectorUtil.WriteLog("Detect RDP version...");
+
             config.Version = DetectorUtil.GetPropertyValue("RDP.Version");
             if (connectResponsePdu.mcsCrsp.gccPdu.serverCoreData != null)
             {
