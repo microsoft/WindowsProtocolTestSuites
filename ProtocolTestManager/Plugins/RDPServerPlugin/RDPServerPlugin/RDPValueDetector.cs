@@ -205,6 +205,8 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
             #region Protocols
             caseList.Add(CreateRule("Protocol.RDPBCGR", true));
+            caseList.Add(CreateRule("Protocol.RDPEDYC", true));
+            caseList.Add(CreateRule("Protocol.RDPEMT", true));
             #endregion Protocols
 
             return caseList;

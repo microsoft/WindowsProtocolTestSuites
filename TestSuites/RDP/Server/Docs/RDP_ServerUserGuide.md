@@ -275,7 +275,7 @@ This section describes how to set up the driver computer.
 ![image6.png](./image/RDP_ServerUserGuide/image6.png)
 Important 
 
->Microsoft Visual Studio 2017 and Protocol Test Framework (build 1.0.6000.0) must be installed on the driver computer before you run the test suite installer.
+>Microsoft Visual Studio 2017 and Protocol Test Framework (build 1.0.6000.0) and Spec Explorer (3.5.3146.0) must be installed on the driver computer before you run the test suite installer.
 
 To set up the driver computer
 
