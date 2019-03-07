@@ -155,7 +155,7 @@
 								</Directory>
 								<Directory Id="SCRIPT_FILES_DIR" Name="Scripts" />
 								<Directory Id="TESTSUITE_PlayLists_DIR" Name="PlayLists" />
-								<Directory Id="DOCS_FILES_DIR" Name="Docs" >
+								<Directory Id="DATA_FILES_DIR" Name="Data" >
 									<Directory Id="COMMON_TD_DIR" Name="Common-TD-XML" />
 									<Directory Id="WIN2016_TD_DIR" Name="Win2016-TD-XML" />
 									<Directory Id="WIN8_TD_DIR" Name="Win8-TD-XML" />
