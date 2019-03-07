@@ -22,7 +22,7 @@
         <Category name = "RDPEMT"/>
       </Rule>
       <Rule name = "RDPEDYC">
-        <Category name = "RDPDYC"/>
+        <Category name = "RDPEDYC"/>
       </Rule>
     </Group>
 
