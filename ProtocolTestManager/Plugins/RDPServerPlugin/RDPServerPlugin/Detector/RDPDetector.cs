@@ -11,6 +11,8 @@ using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp;
 using System.Runtime.InteropServices;
 
 namespace Microsoft.Protocols.TestManager.RDPServerPlugin
@@ -57,6 +59,8 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         private DetectionInfo detectInfo;
         private List<StackPacket> receiveBuffer = null;
         private RdpbcgrClient rdpbcgrClient = null;
+        private RdpedycClient rdpedycClient = null;
+      
         private string[] SVCNames;
         private int defaultPort = 3389;
         private string clientName;
@@ -71,6 +75,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         #endregion Received Packets
 
         private const string SVCNAME_RDPEDYC = "drdynvc";
+        private const string DYVNAME_RDPEDYC = "Microsoft::Windows::RDS::Geometry::v08.01";
 
         #region Constructor
         public RDPDetector(DetectionInfo detectInfo)
@@ -98,6 +103,11 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                     config, requestedProtocol, SVCNames,
                     CompressionType.PACKET_COMPR_TYPE_NONE,
                     false,
+                    true,
+                    false,
+                    false,
+                    false,
+                    true,
                     true);
                 if (!status)
                 {
@@ -120,7 +130,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             }
             CheckSupportedFeatures();
             CheckSupportedProtocols();
-            SetRdpVersion(config);
+            SetRdpVersion(config);            
 
             // Disconnect
             ClientInitiatedDisconnect();
@@ -270,6 +280,22 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 return false;
             }
 
+            bool serverSupportUDPFECR = false;
+            bool serverSupportUDPFECL = false;
+            if (connectResponsePdu.mcsCrsp.gccPdu.serverMultitransportChannelData != null)
+            {
+                if (connectResponsePdu.mcsCrsp.gccPdu.serverMultitransportChannelData.flags.HasFlag(MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDPFECR))
+                {
+                    serverSupportUDPFECR = true;
+                }
+                if (connectResponsePdu.mcsCrsp.gccPdu.serverMultitransportChannelData.flags.HasFlag(MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDPFECL))
+                {
+                    serverSupportUDPFECL = true;
+                }
+            }
+            detectInfo.IsSupportRDPEMT = serverSupportUDPFECR || serverSupportUDPFECL;
+
+
             // Channel Connection
             SendClientMCSErectDomainRequest();
             SendClientMCSAttachUserRequest();
@@ -396,7 +422,58 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         {
             // Notify the UI for detecting protocol supported finished
             DetectorUtil.WriteLog("Check specified protocols support...");
-            DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
+            bool serverSupportUDPFECR = false;
+            bool serverSupportUDPFECL = false;
+
+            if (connectResponsePdu.mcsCrsp.gccPdu.serverMultitransportChannelData != null)
+            {
+                if (connectResponsePdu.mcsCrsp.gccPdu.serverMultitransportChannelData.flags.HasFlag(MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDPFECR))
+                {
+                    serverSupportUDPFECR = true;
+                }
+                if (connectResponsePdu.mcsCrsp.gccPdu.serverMultitransportChannelData.flags.HasFlag(MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDPFECL))
+                {
+                    serverSupportUDPFECL = true;
+                }
+            }
+            detectInfo.IsSupportRDPEMT = serverSupportUDPFECR || serverSupportUDPFECL;
+
+            if(detectInfo.IsSupportRDPEMT)
+            {
+                DetectorUtil.WriteLog("Detect RDPEMT supported", false, LogStyle.StepPassed);
+            }
+            else
+            {
+                DetectorUtil.WriteLog("Detect RDPEMT unsupported", false, LogStyle.StepPassed);
+            }
+
+            rdpedycClient = new RdpedycClient(rdpbcgrClient, rdpbcgrClient.Context, false);
+
+            try
+            {
+                DynamicVirtualChannel channel = rdpedycClient.ExpectChannel(timeout, DYVNAME_RDPEDYC, DynamicVC_TransportType.RDP_TCP);
+                if (channel != null)
+                {
+                    detectInfo.IsSupportRDPEDYC = true;
+
+                }
+                rdpedycClient.CloseChannel((ushort)channel.ChannelId);
+
+            }
+            catch
+            {
+                detectInfo.IsSupportRDPEDYC = false;
+            }
+
+            if (detectInfo.IsSupportRDPEDYC)
+            {
+                DetectorUtil.WriteLog("Detect RDPEDYC supported", false, LogStyle.StepPassed);
+            }
+            else
+            {
+                DetectorUtil.WriteLog("Detect RDPEDYC unsupported", false, LogStyle.StepPassed);
+            }
+
         }
 
         private void SetRdpVersion(Configs config)

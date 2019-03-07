@@ -35,7 +35,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
             #endregion Test Code
         }
 
-
         [TestMethod]
         [Priority(1)]
         [TestCategory("RDP8.0")]

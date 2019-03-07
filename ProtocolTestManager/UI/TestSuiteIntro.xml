@@ -35,11 +35,11 @@
   <Group name="Remote Desktop">
     <TestSuite name="RDP-Client" folder="C:\MicrosoftProtocolTests\RDP\Client-Endpoint\$(TestSuiteVersion)">
       <Description></Description>
-      <TestSuiteDetail>RDP test suite is designed to test client implementation of Remote Desktop Protocol family.</TestSuiteDetail>
+      <TestSuiteDetail>RDP Client test suite is designed to test client implementation of Remote Desktop Protocol family.</TestSuiteDetail>
     </TestSuite>
     <TestSuite name="RDP-Server" folder="C:\MicrosoftProtocolTests\RDP\Server-Endpoint\$(TestSuiteVersion)">
       <Description></Description>
-      <TestSuiteDetail>RDP test suite is designed to test server implementation of Remote Desktop Protocol family.</TestSuiteDetail>
+      <TestSuiteDetail>RDP Server test suite is designed to test server implementation of Remote Desktop Protocol family.</TestSuiteDetail>
     </TestSuite>
   </Group>
   <Group name="MS-ADFSPIP">

@@ -25,6 +25,9 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         // Detect Result
         public bool? IsSupportAutoReconnect;
         public bool? IsSupportFastPathInput;
+
+        public bool IsSupportRDPEDYC = false;
+        public bool IsSupportRDPEMT = false;
     }
 
     public class ResultItemMap
