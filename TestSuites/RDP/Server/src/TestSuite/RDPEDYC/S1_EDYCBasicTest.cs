@@ -55,7 +55,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
         [Priority(1)]
         [TestCategory("RDP8.1")]
         [TestCategory("RDPEDYC")]
-        [TestCategory("NonBVT")]
         [Description(@"This test case is used to verify SUT can process DYNVC_DATA data. ")]
         public void S1_EDYC_SendUncompressedData()
         {
@@ -94,7 +93,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
         [Priority(1)]
         [TestCategory("RDP8.1")]
         [TestCategory("RDPEDYC")]
-        [TestCategory("NonBVT")]
         [Description(@"This test case is used to verify SUT can can process compreseed data sequence. ")]
         public void S1_EDYC_SendCompressedDataSequence()
         {
