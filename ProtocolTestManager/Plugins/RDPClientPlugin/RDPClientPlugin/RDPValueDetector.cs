@@ -330,7 +330,10 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             hiddenProp.Add("RdpedispMonitorRemoveImage");
 
             // Other properties should be hidden
-            hiddenProp.Add("IsTDI67289Fixed");
+            hiddenProp.Add("TestName");
+            hiddenProp.Add("ProtocolName");
+            hiddenProp.Add("Version");
+
             return hiddenProp;
         }
 
