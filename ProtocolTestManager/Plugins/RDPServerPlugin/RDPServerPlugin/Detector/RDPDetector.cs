@@ -130,7 +130,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             }
             CheckSupportedFeatures();
             CheckSupportedProtocols();
-            SetRdpVersion(config);            
+            SetRdpVersion(config);
 
             // Disconnect
             ClientInitiatedDisconnect();
@@ -440,11 +440,11 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
             if(detectInfo.IsSupportRDPEMT)
             {
-                DetectorUtil.WriteLog("Detect RDPEMT supported", false, LogStyle.StepPassed);
+                DetectorUtil.WriteLog("Detect RDPEMT supported");
             }
             else
             {
-                DetectorUtil.WriteLog("Detect RDPEMT unsupported", false, LogStyle.StepPassed);
+                DetectorUtil.WriteLog("Detect RDPEMT unsupported");
             }
 
             rdpedycClient = new RdpedycClient(rdpbcgrClient, rdpbcgrClient.Context, false);
@@ -467,13 +467,14 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
             if (detectInfo.IsSupportRDPEDYC)
             {
-                DetectorUtil.WriteLog("Detect RDPEDYC supported", false, LogStyle.StepPassed);
+                DetectorUtil.WriteLog("Detect RDPEDYC supported");
             }
             else
             {
-                DetectorUtil.WriteLog("Detect RDPEDYC unsupported", false, LogStyle.StepPassed);
+                DetectorUtil.WriteLog("Detect RDPEDYC unsupported");
             }
 
+            DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
         }
 
         private void SetRdpVersion(Configs config)
