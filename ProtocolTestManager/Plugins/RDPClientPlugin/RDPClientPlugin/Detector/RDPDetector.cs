@@ -97,6 +97,22 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
                 DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
                 return false;
             }
+            finally
+            {
+                // Trigger client to close the RDP connection
+                TriggerClientDisconnectAll(detectInfo.TriggerMethod);
+
+                if (this.rdpedycServer != null)
+                {
+                    this.rdpedycServer.Dispose();
+                    this.rdpedycServer = null;
+                }
+                if (this.rdpbcgrServerStack != null)
+                {
+                    this.rdpbcgrServerStack.Dispose();
+                    this.rdpbcgrServerStack = null;
+                }
+            }
 
             // Notify the UI for establishing RDP connection successfully.
             DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
@@ -107,21 +123,6 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             CheckSupportedFeatures();
 
             CheckSupportedProtocols();
-
-
-            // Trigger client to close the RDP connection
-            TriggerClientDisconnectAll(detectInfo.TriggerMethod);
-
-            if (this.rdpedycServer != null)
-            {
-                this.rdpedycServer.Dispose();
-                this.rdpedycServer = null;
-            }
-            if (this.rdpbcgrServerStack != null)
-            {
-                this.rdpbcgrServerStack.Dispose();
-                this.rdpbcgrServerStack = null;
-            }
 
             return true;
         }
