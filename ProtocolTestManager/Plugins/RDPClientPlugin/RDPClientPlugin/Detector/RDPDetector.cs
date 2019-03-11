@@ -84,6 +84,13 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
                 StartRDPListening();
                 triggerClientRDPConnect(detectInfo.TriggerMethod);
                 EstablishRDPConnection();
+                // Set RDP Version
+                SetRdpVersion();
+
+                CheckSupportedFeatures();
+
+                CheckSupportedProtocols();
+
             }
             catch (Exception e)
             {
@@ -117,12 +124,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             // Notify the UI for establishing RDP connection successfully.
             DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
 
-            // Set RDP Version
-            SetRdpVersion();
 
-            CheckSupportedFeatures();
-
-            CheckSupportedProtocols();
 
             return true;
         }
@@ -263,6 +265,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             }
             // Notify the UI for detecting protocol supported finished
             DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
+            DetectorUtil.WriteLog("Check specified protocols support finished.");
         }
 
         private void SetRdpVersion()
