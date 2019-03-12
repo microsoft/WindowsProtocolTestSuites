@@ -1,141 +1,16 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <ProjectGuid>{DEDA188C-C97E-4968-BC31-594925631E9F}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Asn1Base</RootNamespace>
-    <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.Asn1Base</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.Asn1</AssemblyName>
+    <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.Asn1</RootNamespace>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
-      <Link>SharedAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="AbstractClass\Asn1ByteString.cs" />
-    <Compile Include="AbstractClass\Asn1Choice.cs" />
-    <Compile Include="AbstractClass\Asn1HeterogeneousComposition.cs" />
-    <Compile Include="AbstractClass\Asn1HomogeneousComposition.cs" />
-    <Compile Include="AbstractClass\Asn1Enumerated.cs" />
-    <Compile Include="AbstractClass\Asn1ConstraintedFieldMetadata.cs" />
-    <Compile Include="AbstractClass\Asn1Sequence.cs" />
-    <Compile Include="AbstractClass\Asn1SequenceOf.cs" />
-    <Compile Include="AbstractClass\Asn1Set.cs" />
-    <Compile Include="AbstractClass\Asn1SetOf.cs" />
-    <Compile Include="AbstractClass\Asn1StandardProcedure.cs" />
-    <Compile Include="AbstractClass\Asn1String.cs" />
-    <Compile Include="Attributes\Asn1Attribute.cs" />
-    <Compile Include="Attributes\Asn1ChoiceElement.cs" />
-    <Compile Include="Attributes\Asn1ChoiceIndex.cs" />
-    <Compile Include="Attributes\Asn1EnumeratedElement.cs" />
-    <Compile Include="Attributes\Asn1Extension.cs" />
-    <Compile Include="Attributes\Asn1Field.cs" />
-    <Compile Include="Attributes\Asn1Constraint.cs" />
-    <Compile Include="Attributes\Asn1IntegerBound.cs" />
-    <Compile Include="Attributes\Asn1SizeConstraint.cs" />
-    <Compile Include="Attributes\Asn1StringConstraint.cs" />
-    <Compile Include="Attributes\Asn1Tag.cs" />
-    <Compile Include="Buffers\Asn1BerEncodingBuffer.cs" />
-    <Compile Include="Buffers\Asn1PerEncodingBuffer.cs" />
-    <Compile Include="Configuration\Asn1Tag.cs" />
-    <Compile Include="Exceptions\Asn1ConstraintsNotSatisfied.cs" />
-    <Compile Include="Exceptions\Asn1DecodingOutOfBufferRangeException.cs" />
-    <Compile Include="Exceptions\Asn1DecodingUnexpectedData.cs" />
-    <Compile Include="Buffers\Asn1DecodingBuffer.cs" />
-    <Compile Include="Configuration\ExceptionMessages.cs" />
-    <Compile Include="Exceptions\Asn1EmptyDataException.cs" />
-    <Compile Include="Exceptions\Asn1Exception.cs" />
-    <Compile Include="Exceptions\Asn1InvalidArgument.cs" />
-    <Compile Include="Exceptions\Asn1InvalidOperation.cs" />
-    <Compile Include="Exceptions\Asn1UndefinedEnumeratedData.cs" />
-    <Compile Include="Exceptions\Asn1UnreachableExcpetion.cs" />
-    <Compile Include="Exceptions\Asn1UserDefinedTypeInconsistent.cs" />
-    <Compile Include="Interfaces\IAsn1BerEncodingBuffer.cs" />
-    <Compile Include="Interfaces\IAsn1DecodingBuffer.cs" />
-    <Compile Include="AbstractClass\Asn1Object.cs" />
-    <Compile Include="Interfaces\IAsn1PerEncodingBuffer.cs" />
-    <Compile Include="PrimitiveTypes\Asn1BitString.cs" />
-    <Compile Include="PrimitiveTypes\Asn1BmpString.cs" />
-    <Compile Include="PrimitiveTypes\Asn1Boolean.cs" />
-    <Compile Include="PrimitiveTypes\Asn1GeneralizedTime.cs" />
-    <Compile Include="PrimitiveTypes\Asn1GeneralString.cs" />
-    <Compile Include="PrimitiveTypes\Asn1Integer.cs" />
-    <Compile Include="PrimitiveTypes\Asn1NumericString.cs" />
-    <Compile Include="PrimitiveTypes\Asn1ObjectIdentifier.cs" />
-    <Compile Include="PrimitiveTypes\Asn1OctetString.cs" />
-    <Compile Include="PrimitiveTypes\Asn1OpenExt.cs" />
-    <Compile Include="PrimitiveTypes\Asn1UniversalString.cs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Target Name="AfterBuild">
-    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="..\..\drop\ProtoSDK\Bin\" />
-    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="..\..\drop\ProtoSDK\Bin\" />
-  </Target>
+
 </Project>
