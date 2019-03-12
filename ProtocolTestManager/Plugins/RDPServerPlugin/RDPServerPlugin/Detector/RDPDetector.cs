@@ -114,7 +114,12 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                     DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
                     return false;
                 }
+
                 DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
+
+                CheckSupportedFeatures();
+                CheckSupportedProtocols();
+                SetRdpVersion(config);
             }
             catch (Exception e)
             {
@@ -128,13 +133,13 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
                 return false;
             }
-            CheckSupportedFeatures();
-            CheckSupportedProtocols();
-            SetRdpVersion(config);
+
 
             // Disconnect
             ClientInitiatedDisconnect();
             Disconnect();
+
+            DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
             return true;
         }
 
@@ -523,6 +528,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 }
             }
             DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
+            DetectorUtil.WriteLog("Detect RDP version finished.");
         }
 
         private void SendClientX224ConnectionRequest(
