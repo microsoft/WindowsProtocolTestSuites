@@ -5,7 +5,6 @@ using System;
 using System.Text;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
-using System.Security.Permissions;
 using System.Globalization;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
@@ -289,7 +288,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// Free un-managed resources in SecurityWinntAuthIdentity
         /// </summary>
         /// <param name="authIdentity">Security Winnt Auth Identity.</param>
-        [SecurityPermission(SecurityAction.Demand)]
         internal static void FreeSecurityWinntAuthIdentity(SecurityWinntAuthIdentity authIdentity)
         {
             if (authIdentity.User != IntPtr.Zero)
@@ -316,7 +314,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// Free un-managed memory in SchannelCred.
         /// </summary>
         /// <param name="schannelCred">SchannelCred structure</param>
-        [SecurityPermission(SecurityAction.Demand)]
         internal static void FreeSchannelCred(SchannelCred schannelCred)
         {
             if (schannelCred.paCred != IntPtr.Zero)
@@ -331,7 +328,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// Free un-managed memory in CredSspCred
         /// </summary>
         /// <param name="credSsp">CredSspCred structure</param>
-        [SecurityPermission(SecurityAction.Demand)]
         internal static void FreeCredSspCred(CredSspCred credSsp)
         {
             if (credSsp.pSchannelCred != IntPtr.Zero)
@@ -385,7 +381,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// </summary>
         /// <param name="authIndentity">SecurityWinntAuthIdentity structure</param>
         /// <returns>IntPtr of SecurityWinntAuthIdentity</returns>
-        [SecurityPermission(SecurityAction.Demand)]
         internal static IntPtr CreateAuthData(SecurityWinntAuthIdentity authIndentity)
         {
             IntPtr pAuthData = Marshal.AllocHGlobal(Marshal.SizeOf(authIndentity));
@@ -400,7 +395,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// </summary>
         /// <param name="schannelCred">Schannel_Cred structure</param>
         /// <returns>IntPtr of SchannelCred</returns>
-        [SecurityPermission(SecurityAction.Demand)]
         internal static IntPtr CreateAuthData(SchannelCred schannelCred)
         {
             IntPtr pAuthData = Marshal.AllocHGlobal(Marshal.SizeOf(schannelCred));
@@ -415,7 +409,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// </summary>
         /// <param name="credSsp">CredSspCred structure</param>
         /// <returns>IntPtr of CredSspCred</returns>
-        [SecurityPermission(SecurityAction.Demand)]
         internal static IntPtr CreateAuthData(CredSspCred credSsp)
         {
             IntPtr pAuthData = Marshal.AllocHGlobal(Marshal.SizeOf(credSsp));
@@ -431,7 +424,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <param name="packageType">Package type</param>
         /// <param name="contextHandle">context handle</param>
         /// <returns>Session key</returns>
-        [SecurityPermission(SecurityAction.Demand)]
         internal static byte[] QuerySessionKey(SecurityPackageType packageType, ref SecurityHandle contextHandle)
         {
             IntPtr pSessionKey = IntPtr.Zero;
@@ -486,7 +478,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <param name="contextHandle">context handle</param>
         /// <returns>Context sizes</returns>
         /// <exception cref="SspiException">If verify fail, throw this exception.</exception>
-        [SecurityPermission(SecurityAction.Demand)]
         internal static SecurityPackageContextSizes QueryContextSizes(ref SecurityHandle contextHandle)
         {
             IntPtr pContextSizes = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(SecurityPackageContextSizes)));
@@ -519,7 +510,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <param name="sequenceNumber">Sequence number</param>
         /// <param name="securityBuffers">SecurityBufferDesc for MakeSignature.</param>
         /// <exception cref="SspiException">If verify fail, throw this exception.</exception>
-        [SecurityPermission(SecurityAction.Demand)]
         internal static void MakeSignature(
             ref SecurityHandle contextHandle,
             uint sequenceNumber,
@@ -568,7 +558,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <returns>If successful, return true.</returns>
         /// <param name="sequenceNumber">Sequence number</param>
         /// <exception cref="SspiException">If verify fail, throw this exception.</exception>
-        [SecurityPermission(SecurityAction.Demand)]
         internal static bool VerifySignature(
             ref SecurityHandle contextHandle, 
             uint sequenceNumber, 
@@ -602,7 +591,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <param name="qualityOfProtection">The quality of protection flag</param>
         /// <param name="securityBuffers">SecurityBufferDesc for EncryptMessage</param>
         /// <exception cref="SspiException">If verify fail, throw this exception.</exception>
-        [SecurityPermission(SecurityAction.Demand)]
         internal static void Encrypt(
             ref SecurityHandle contextHandle,
             uint sequenceNumber,
@@ -647,7 +635,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <param name="sequenceNumber">sequence number</param>
         /// <param name="securityBuffers">SecurityBufferDesc for DecryptMessage</param>
         /// <exception cref="SspiException">If verify fail, throw this exception.</exception>
-        [SecurityPermission(SecurityAction.Demand)]
         internal static bool Decrypt(
             ref SecurityHandle contextHandle,
             uint sequenceNumber,
@@ -727,7 +714,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <param name="serverPrincipal">Server principal name</param>
         /// <param name="fCredentialUse">A flag that indicates how these credentials will be used.</param>
         /// <param name="credentialHandle">Credential handle</param>
-        [SecurityPermission(SecurityAction.Demand)]
         internal static void AcquireCredentialsHandle(
             SecurityPackageType packageType,
             AccountCredential accountCredential,
@@ -815,7 +801,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <param name="serverPrincipal">Server principal name</param>
         /// <param name="fCredentialUse">A flag that indicates how these credentials will be used.</param>
         /// <param name="credentialHandle">Credential handle</param>
-        [SecurityPermission(SecurityAction.Demand)]
         internal static void AcquireCredentialsHandle(
             SecurityPackageType packageType,
             CertificateCredential certificateCredential,
@@ -888,7 +873,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <param name="serverPrincipal">Server principal name</param>
         /// <param name="fCredentialUse">A flag that indicates how these credentials will be used.</param>
         /// <param name="credentialHandle">Credential handle</param>
-        [SecurityPermission(SecurityAction.Demand)]
         internal static void DtlsAcquireCredentialsHandle(
             SecurityPackageType packageType,
             CertificateCredential certificateCredential,
@@ -960,7 +944,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <param name="contextAttribute">context attribute name</param>
         /// <returns>Pointer of attribute value.</returns>
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
-        [SecurityPermission(SecurityAction.Demand)]
         internal static object QueryContextAttributes(ref SecurityHandle contextHandle, string contextAttribute)
         {
             uint attribute = 0;
@@ -1230,7 +1213,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <exception cref="InvalidOperationException">
         /// thrown when local machine account password is invalid
         /// </exception>
-        [SecurityPermission(SecurityAction.Demand)]
         public static string RetrieveLocalMachineAccountPassword()
         {
             NtStatus ntsResult = NtStatus.STATUS_SUCCESS;

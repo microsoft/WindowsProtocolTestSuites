@@ -3,7 +3,6 @@
 
 using System;
 using System.Runtime.InteropServices;
-using System.Security.Permissions;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
 {

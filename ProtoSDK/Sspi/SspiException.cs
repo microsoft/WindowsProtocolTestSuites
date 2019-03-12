@@ -5,7 +5,6 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Runtime.Serialization;
-using System.Security.Permissions;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
 {
@@ -81,7 +80,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <param name="info">Serialization information</param>
         /// <param name="context">Streaming context</param>
         /// <exception cref="ArgumentNullException">If info is null, this exception will be thrown.</exception>
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]        
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null)

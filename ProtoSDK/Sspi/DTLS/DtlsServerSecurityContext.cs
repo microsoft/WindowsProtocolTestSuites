@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Security.Permissions;
 
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
@@ -34,7 +33,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// </summary>
         public SecurityPackageContextStreamSizes StreamSizes
         {
-            [SecurityPermission(SecurityAction.Demand)]
             get
             {
                 if (!bStreamSizes)
@@ -58,7 +56,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// the context</param>
         /// <param name="targetDataRep">The data representation, such as byte ordering, on the target. This parameter 
         /// can be either SECURITY_NATIVE_DREP or SECURITY_NETWORK_DREP.</param>
-        [SecurityPermission(SecurityAction.Demand)]
         public DtlsServerSecurityContext(
             SecurityPackageType packageType,
             CertificateCredential serverCredential, 
@@ -86,7 +83,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// </summary>
         /// <param name="clientToken">Token of client</param>
         /// <exception cref="SspiException">If Accept fail, this exception will be thrown.</exception>
-        [SecurityPermission(SecurityAction.Demand)]
         public override void Accept(byte[] clientToken)
         {
             SecurityBuffer[] inSecurityBuffers;

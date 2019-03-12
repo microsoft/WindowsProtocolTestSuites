@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
-using System.Security.Permissions;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
 {
@@ -111,7 +110,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// Get byte array of Session key
         /// </summary>
         /// <returns></returns>
-        [SecurityPermission(SecurityAction.Demand)]
         internal byte[] GetSessionKey()
         {
             byte[] key = null;
@@ -355,7 +353,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// Get buffers from buffer pointer.
         /// </summary>
         /// <returns>SecBuffers contained in SecBufferDesc</returns>
-        [SecurityPermission(SecurityAction.Demand)]
         internal SspiSecurityBuffer[] GetBuffers()
         {
             SspiSecurityBuffer[] securityBuffers = new SspiSecurityBuffer[this.cBuffers];
@@ -433,7 +430,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <summary>
         /// Free memory in SecurityBufferDesc.
         /// </summary>
-        [SecurityPermission(SecurityAction.Demand)]
         internal void FreeSecurityBufferDesc()
         {
             SspiSecurityBuffer[] buffers = this.securityBufferDesc.GetBuffers();
@@ -752,7 +748,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// </summary>
         internal IntPtr MarshalledTargetInfo;
 
-        [SecurityPermission(SecurityAction.Demand)]
         internal byte[] GetTargetInfo()
         {
             byte[] targetInfo = null;
@@ -841,7 +836,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// </summary>
         internal IntPtr pbData;
 
-        [SecurityPermission(SecurityAction.Demand)]
         internal byte[] GetData()
         {
             byte[] data = null;
@@ -946,7 +940,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// Get byte array of AppData.
         /// </summary>
         /// <returns>byte array of app data</returns>
-        [SecurityPermission(SecurityAction.Demand)]
         internal byte[] GetAppData()
         {
             byte[] appData = null;

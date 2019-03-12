@@ -4,7 +4,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
-using System.Security.Permissions;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
 {
@@ -94,7 +93,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <param name="contextAttributes">Context attributes</param>
         /// <param name="targetDataRep">The data representation, such as byte ordering, on the target. 
         /// This parameter can be either SECURITY_NATIVE_DREP or SECURITY_NETWORK_DREP.</param>
-        [SecurityPermission(SecurityAction.Demand)]
         public SspiClientSecurityContext(
             SecurityPackageType packageType,
             AccountCredential clientCredential,
@@ -126,7 +124,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <param name="contextAttributes">Context attributes</param>
         /// <param name="targetDataRep">The data representation, such as byte ordering, on the target. 
         /// This parameter can be either SECURITY_NATIVE_DREP or SECURITY_NETWORK_DREP.</param>
-        [SecurityPermission(SecurityAction.Demand)]
         public SspiClientSecurityContext(
             SecurityPackageType packageType,
             CertificateCredential clientCredential,
@@ -162,7 +159,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// </summary>
         /// <param name="securityBuffers">SecurityBuffer array</param>
         /// <exception cref="SspiException">If Sign fail, this exception will be thrown.</exception>
-        [SecurityPermission(SecurityAction.Demand)]
         public override void Sign(params SecurityBuffer[] securityBuffers)
         {
             SspiUtility.MakeSignature(ref this.contextHandle, this.sequenceNumber, securityBuffers);
@@ -174,7 +170,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// </summary>
         /// <param name="securityBuffers">SecBuffers.</param>
         /// <exception cref="SspiException">If encrypt fail, this exception will be thrown.</exception>
-        [SecurityPermission(SecurityAction.Demand)]
         public override bool Verify(params SecurityBuffer[] securityBuffers)
         {
             return SspiUtility.VerifySignature(ref this.contextHandle, this.sequenceNumber, securityBuffers);
@@ -186,7 +181,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// </summary>
         /// <param name="securityBuffers">SecBuffers.</param>
         /// <exception cref="SspiException">If encrypt fail, this exception will be thrown.</exception>
-        [SecurityPermission(SecurityAction.Demand)]
         public override void Encrypt(params SecurityBuffer[] securityBuffers)
         {
             SspiUtility.Encrypt(ref this.contextHandle, this.sequenceNumber, this.qualityOfProtection, securityBuffers);
@@ -199,7 +193,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <param name="securityBuffers">SecBuffer.Encrypted data will be filled in SecBuffers.</param>
         /// <returns>If successful, returns true, otherwise false.</returns>
         /// <exception cref="SspiException">If sign fail, this exception will be thrown.</exception>
-        [SecurityPermission(SecurityAction.Demand)]
         public override bool Decrypt(params SecurityBuffer[] securityBuffers)
         {
             return SspiUtility.Decrypt(ref this.contextHandle, this.sequenceNumber, securityBuffers);
@@ -211,7 +204,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// </summary>
         /// <param name="serverToken">Server Token</param>
         /// <exception cref="SspiException">If Initialize fail, this exception will be thrown.</exception>
-        [SecurityPermission(SecurityAction.Demand)]
         public override void Initialize(byte[] serverToken)
         {
             uint hResult;
@@ -375,7 +367,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// http://msdn.microsoft.com/en-us/library/aa379326(VS.85).aspx</param>
         /// <returns>The attribute value</returns>
         /// <exception cref="SspiException">If QueryContextAttributes fail, this exception will be thrown.</exception>
-        [SecurityPermission(SecurityAction.Demand)]
         public object QueryContextAttributes(string contextAttribute)
         {
             return SspiUtility.QueryContextAttributes(ref this.contextHandle, contextAttribute);
@@ -429,7 +420,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// </summary>
         public override byte[] SessionKey
         {
-            [SecurityPermission(SecurityAction.Demand)]
             get
             {
                 return SspiUtility.QuerySessionKey(this.packageType, ref this.contextHandle);
@@ -454,7 +444,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// </summary>
         public override SecurityPackageContextSizes ContextSizes
         {
-            [SecurityPermission(SecurityAction.Demand)]
             get
             {
                 return SspiUtility.QueryContextSizes(ref this.contextHandle);
