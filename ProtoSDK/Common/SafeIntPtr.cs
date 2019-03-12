@@ -3,7 +3,6 @@
 
 using System;
 using System.Runtime.InteropServices;
-using System.Security.Permissions;
 
 namespace Microsoft.Protocols.TestTools.StackSdk
 {
@@ -67,7 +66,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// <summary>
         /// Dispose method.
         /// </summary>
-        [SecurityPermission(SecurityAction.Demand)]
         public void Dispose()
         {
             Dispose(true);
@@ -82,7 +80,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// True to release both managed and unmanaged resources.<para/>
         /// False to release unmanaged resources only.
         /// </param>
-        [SecurityPermission(SecurityAction.Demand)]
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
@@ -102,7 +99,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// <summary>
         /// finalizer
         /// </summary>
-        [SecurityPermission(SecurityAction.Demand)]
         ~SafeIntPtr()
         {
             Dispose(false);

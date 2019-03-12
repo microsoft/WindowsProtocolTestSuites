@@ -3,7 +3,6 @@
 
 using System;
 using Microsoft.Protocols.TestTools.StackSdk.Messages.Runtime.Marshaling;
-using System.Security.Permissions;
 
 namespace Microsoft.Protocols.TestTools.StackSdk
 {
@@ -37,7 +36,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// True to release both managed and unmanaged resources.<para/>
         /// False to release unmanaged resources only.
         /// </param>
-        [SecurityPermission(SecurityAction.Demand)]
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Security.Permissions;
 
 namespace Microsoft.Protocols.TestTools.StackSdk
 {
@@ -38,7 +37,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// and set pointer to zero.
         /// </summary>
         /// <param name="p">Pointer to a block of unmanaged memory.</param>
-        [SecurityPermission(SecurityAction.Demand)]        
         public static void FreePtr(ref IntPtr p)
         {
             if (p != IntPtr.Zero)
@@ -159,7 +157,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// <returns>Pointer to an unmanaged block of memory.</returns>
         // suppress CA1004 because this is utility method for array,
         // and returning object[] is not user-friendly.
-        [SecurityPermission(SecurityAction.Demand)]
         [SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter")]
         public static IntPtr ArrayToPtr<T>(T[] array) where T : struct
         {
@@ -191,7 +188,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// <param name="ptr">The unmanaged base address to write, must 
         /// have been allocated of enough memory by the caller.</param>
         /// <param name="offset">The offset to write to.</param>
-        [SecurityPermission(SecurityAction.Demand)]
         public static void ArrayToPtr<T>(T[] array, IntPtr ptr, int offset) where T : struct
         {
             // 32 bits platform

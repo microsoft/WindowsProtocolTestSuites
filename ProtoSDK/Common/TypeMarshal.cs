@@ -9,7 +9,6 @@ using System.Runtime.InteropServices;
 using Microsoft.Protocols.TestTools.StackSdk.Messages;
 using Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling;
 using Microsoft.Protocols.TestTools.StackSdk.Messages.Runtime.Marshaling;
-using System.Security.Permissions;
 using System.Globalization;
 
 namespace Microsoft.Protocols.TestTools.StackSdk
@@ -84,7 +83,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// <typeparam name="T">Type of struct.</typeparam>
         /// <param name="t">A value of a structure to marshal.</param>
         /// <returns>Marshalled unmanaged memory.</returns>
-        [SecurityPermission(SecurityAction.Demand)]
         public static SafeIntPtr ToIntPtr<T>(T t) where T : struct
         {
             return ToIntPtr(t, null, null, null);
@@ -100,7 +98,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// <param name="sizeValue">Size attribute value if presents.</param>
         /// <param name="lengthValue">Length attribute value if presents.</param>
         /// <returns>Marshalled unmanaged memory.</returns>
-        [SecurityPermission(SecurityAction.Demand)]
         public static SafeIntPtr ToIntPtr<T>(
             T t,
             object switchValue,
@@ -133,7 +130,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// <typeparam name="T">Type of elements in the array.</typeparam>
         /// <param name="array">An array to marshal.</param>
         /// <returns>Marshalled unmanaged memory.</returns>
-        [SecurityPermission(SecurityAction.Demand)]
         public static SafeIntPtr ToIntPtr<T>(T[] array) where T : struct
         {
             if (array == null)
@@ -167,7 +163,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// <typeparam name="T">Type of structure.</typeparam>
         /// <param name="t">A nullable structure to marshal.</param>
         /// <returns>Marshalled unmanaged memory.</returns>
-        [SecurityPermission(SecurityAction.Demand)]
         public static SafeIntPtr ToIntPtr<T>(T? t) where T : struct
         {
             if (t == null)
@@ -190,7 +185,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// <param name="sizeValue">Size attribute value if presents.</param>
         /// <param name="lengthValue">Length attribute value if presents.</param>
         /// <returns>Marshalled unmanaged memory.</returns>
-        [SecurityPermission(SecurityAction.Demand)]
         public static SafeIntPtr ToIntPtr<T>(
             T? t,
             object switchValue,
