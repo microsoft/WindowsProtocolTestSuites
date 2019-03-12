@@ -7,7 +7,6 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
-using System.Security.Permissions;
 using System.Text;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Transport
@@ -68,7 +67,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
         /// </summary>
         /// <param name="rawData">Received raw data. </param>
         /// <returns>Decoded strong-typed LspMessage.</returns>
-        [SecurityPermission(SecurityAction.Demand)]
         public static LspRegistrationRequest Decode(byte[] rawData)
         {
             if (rawData == null || rawData.Length != Marshal.SizeOf(typeof(LspRegistrationRequestMsg)))

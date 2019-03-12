@@ -8,7 +8,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
-using System.Security.Permissions;
 using System.Threading;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Transport
@@ -349,7 +348,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
         /// </summary>
         /// <param name="localServerEndpoint">the lsp hooked server endpoint</param>
         /// <param name="transportType">Tcp or Udp</param>
-        [SecurityPermission(SecurityAction.Demand)]
         internal void ChangeToBlockingMode(IPEndPoint localServerEndpoint, StackTransportType transportType)
         {
             if (disposed)
@@ -608,7 +606,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
         /// </summary>
         /// <param name="localServerEndpoint">the lsp hooked server endpoint</param>
         /// <param name="transportType">Tcp or Udp</param>
-        [SecurityPermission(SecurityAction.Demand)]
         internal void UnblockTraffic(IPEndPoint localServerEndpoint, StackTransportType transportType)
         {
             if (disposed)

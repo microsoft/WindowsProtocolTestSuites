@@ -7,7 +7,6 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
-using System.Security.Permissions;
 using System.Text;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Transport
@@ -108,7 +107,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
         /// Encode the Lsp message into byte array.
         /// </summary>
         /// <returns>Encoded byte array.</returns>
-        [SecurityPermission(SecurityAction.Demand)]
         public override byte[] Encode()
         {
             LspInterceptionResponseMsg msg;
@@ -128,7 +126,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
         /// </summary>
         /// <param name="rawData">Received raw data. </param>
         /// <returns>Decoded strong-typed LspMessage.</returns>
-        [SecurityPermission(SecurityAction.Demand)]
         public static LspInterceptionResponse Decode(byte[] rawData)
         {
             if (rawData == null || rawData.Length != Marshal.SizeOf(typeof(LspInterceptionResponseMsg)))

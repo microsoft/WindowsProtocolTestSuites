@@ -8,7 +8,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
-using System.Security.Permissions;
 using System.Text;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Transport
@@ -320,7 +319,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
         /// <param name="rawData">byte array</param>
         /// <param name="header">message header</param>
         /// <returns>0 if it's of right format, otherwise -1</returns>
-        [SecurityPermission(SecurityAction.Demand)]
         public static int DecodeMessageHeader(byte[] rawData, out LspMessageHeader header)
         {
             header = new LspMessageHeader();
