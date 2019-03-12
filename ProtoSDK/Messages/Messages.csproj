@@ -1,165 +1,21 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <ProductVersion>9.0.21022</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{75544419-3F4E-4308-A676-165F45C1462E}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.Messages</RootNamespace>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.Messages</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>4.0</OldToolsVersion>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.Messages</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CodeAnalysisRuleSet>Sdl7.0.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>Sdl7.0.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>Sdl7.0.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <ProjectReference Include="..\Asn1Base\Asn1Base.csproj" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
-      <Link>SharedAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="Channel.cs" />
-    <Compile Include="DefaultRuntimeHost.cs" />
-    <Compile Include="EventQueue.cs" />
-    <Compile Include="IdentifierBinding.cs" />
-    <Compile Include="IRuntimeHost.cs" />
-    <Compile Include="Marshaling.cs" />
-    <Compile Include="MessageAttributes.cs" />
-    <Compile Include="messagecommon\BaseExpression.cs" />
-    <Compile Include="messagecommon\BaseNode.cs" />
-    <Compile Include="messagecommon\BinaryExpression.cs" />
-    <Compile Include="messagecommon\ConditionalExpression.cs" />
-    <Compile Include="messagecommon\DatatypeInfoProvider.cs" />
-    <Compile Include="messagecommon\ExpressionBuilder.cs" />
-    <Compile Include="messagecommon\ExpressionEvaluatorException.cs" />
-    <Compile Include="messagecommon\ExpressionLexer.cs" />
-    <Compile Include="messagecommon\ExpressionNode.cs" />
-    <Compile Include="messagecommon\ExpressionParser.cs" />
-    <Compile Include="messagecommon\ExpressionVisitor.cs" />
-    <Compile Include="messagecommon\FunctionExpression.cs" />
-    <Compile Include="messagecommon\IEvaluationContext.cs" />
-    <Compile Include="messagecommon\IExpression.cs" />
-    <Compile Include="messagecommon\IExpressionVisitor.cs" />
-    <Compile Include="messagecommon\INode.cs" />
-    <Compile Include="messagecommon\IToken.cs" />
-    <Compile Include="messagecommon\ITokenStream.cs" />
-    <Compile Include="messagecommon\MarshallingAttributes.cs" />
-    <Compile Include="messagecommon\MultipleExpressionEvaluator.cs" />
-    <Compile Include="messagecommon\RequirementAttribute.cs" />
-    <Compile Include="messagecommon\SingleExpressionEvaluator.cs" />
-    <Compile Include="messagecommon\Token.cs" />
-    <Compile Include="messagecommon\TokenStream.cs" />
-    <Compile Include="messagecommon\UnaryExpression.cs" />
-    <Compile Include="messagecommon\ValueExpression.cs" />
-    <Compile Include="MessageRuntimeHelper.cs" />
-    <Compile Include="MessageRuntime.cs" />
-    <Compile Include="MessageUtils.cs" />
-    <Compile Include="ObservationQueue.cs" />
-    <Compile Include="RuntimeAppLog.cs" />
-    <Compile Include="RuntimeMarshaler.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ValidationChannel.cs" />
+    <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Asn1Base\Asn1Base.csproj">
-      <Project>{deda188c-c97e-4968-bc31-594925631e9f}</Project>
-      <Name>Asn1Base</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Target Name="AfterBuild">
-    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="..\..\drop\ProtoSDK\Bin\" />
-    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="..\..\drop\ProtoSDK\Bin\" />
-  </Target>
+
 </Project>

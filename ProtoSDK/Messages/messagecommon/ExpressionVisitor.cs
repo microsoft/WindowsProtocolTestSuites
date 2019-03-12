@@ -4,7 +4,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.Permissions;
 using System.Globalization;
 using System.Text;
 
@@ -317,7 +316,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling
         /// </summary>
         /// <param name="expression">The expression</param>
         /// <exception cref="ArgumentNullException">Thrown when the input parameter is null</exception>        
-        [SecurityPermission(SecurityAction.Demand)]
         public void Visit(UnaryExpression expression)
         {
             if (expression == null)

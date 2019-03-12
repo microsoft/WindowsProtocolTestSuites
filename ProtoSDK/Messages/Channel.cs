@@ -14,7 +14,6 @@ using System.Reflection;
 
 using Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling;
 using Microsoft.Protocols.TestTools.StackSdk.Messages.Runtime.Marshaling;
-using System.Security.Permissions;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Messages
 {
@@ -117,7 +116,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Messages
         /// <summary>
         /// Implements <see cref="IDisposable.Dispose"/>
         /// </summary>
-        [SecurityPermission(SecurityAction.Demand)]
         public void Dispose()
         {
             Dispose(true);
@@ -127,7 +125,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Messages
         /// <summary>
         /// Finalizes this object.
         /// </summary>
-        [SecurityPermission(SecurityAction.Demand)]
         ~Channel()
         {
             Dispose(false);
@@ -146,7 +143,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Messages
         /// other objects. Therefore, only unmanaged resources can be disposed.
         /// </remarks>
         /// <param name="disposing">Indicates if Dispose is called by user.</param>
-        [SecurityPermission(SecurityAction.Demand)]
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)

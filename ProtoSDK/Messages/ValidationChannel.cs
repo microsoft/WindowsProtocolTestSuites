@@ -5,7 +5,6 @@ using Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Permissions;
 using System.Text;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Messages
@@ -78,7 +77,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Messages
         /// other objects. Therefore, only unmanaged resources can be disposed.
         /// </remarks>
         /// <param name="disposing">Indicates if Dispose is called by user.</param>
-        [SecurityPermission(SecurityAction.Demand)]
         protected override void Dispose(bool disposing)
         {
             try

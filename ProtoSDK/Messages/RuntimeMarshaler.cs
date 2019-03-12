@@ -5,7 +5,6 @@ using Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Security.Permissions;
 using System.Globalization;
 using System.Text;
 using IOP = System.Runtime.InteropServices;
@@ -816,7 +815,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Messages.Runtime.Marshaling
         /// </summary>
         /// <param name="size">The size of memory to be allocated in the region</param>
         /// <returns>The allocated region</returns>
-        [SecurityPermission(SecurityAction.Demand)]
         public IRegion AllocateRegion(int size)
         {
             IntPtr r = IOP.Marshal.AllocHGlobal(size);
@@ -859,7 +857,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Messages.Runtime.Marshaling
         /// <summary>
         /// Disposes the marshaler and frees all allocated regions.
         /// </summary>
-        [SecurityPermission(SecurityAction.Demand)]
         public void Dispose()
         {
             Dispose(true);
@@ -869,7 +866,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Messages.Runtime.Marshaling
         /// <summary>
         /// Finalizes this object.
         /// </summary>
-        [SecurityPermission(SecurityAction.Demand)]
         ~Marshaler()
         {
             Dispose(false);
@@ -879,7 +875,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Messages.Runtime.Marshaling
         /// Releases resources.
         /// </summary>
         /// <param name="disposing">Indicates if Dispose is called by user.</param>
-        [SecurityPermission(SecurityAction.Demand)]
         protected virtual void Dispose(bool disposing)
         {
             FreeMemory();
@@ -888,7 +883,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Messages.Runtime.Marshaling
         /// <summary>
         /// Frees allocated regions and leaves the marshaler functional for future use.
         /// </summary>
-        [SecurityPermission(SecurityAction.Demand)]
         public void FreeMemory()
         {
             foreach (IntPtr r in allocatedMemory)
@@ -1035,7 +1029,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Messages.Runtime.Marshaling
         /// </summary>
         /// <param name="value">The value to be written</param>
         /// <param name="size">The unmanaged size of the structure</param>
-        [SecurityPermission(SecurityAction.Demand)]
         public void WriteStructure(object value, int size)
         {
             IntPtr rawBuffer = IOP.Marshal.AllocHGlobal(size);
@@ -1138,7 +1131,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Messages.Runtime.Marshaling
         /// <param name="type">The type of the structure to be read from current region</param>
         /// <param name="size">The number of bytes to be read from current region</param>
         /// <returns>The value</returns>
-        [SecurityPermission(SecurityAction.Demand)]
         public object ReadStructure(Type type, int size)
         {
             byte[] bytes = new byte[size];
