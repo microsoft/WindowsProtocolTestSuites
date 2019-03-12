@@ -166,14 +166,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         public DataFirstCompressedDvcPdu CreateDataFristCompressedReqPdu(uint channelId, byte[] data)
         {
             DataFirstCompressedDvcPdu firstCompressedPdu = null;
-            //int maxDataBlockLen = 1599- 
-            if (data.Length < 1599)
+           
+            if (data.Length <= ConstLength.MAX_FIRST_COMPRESSED_DATA_LENGTH)
             {
                 firstCompressedPdu = new DataFirstCompressedDvcPdu(channelId, (uint)data.Length, data);
             }
             else
             {
-
                 byte[] firstBlockData = new byte[(int)SEGMENT_PART_SISE.MAX_PACKET_COMPR_TYPE_RDP8_LITE_SEGMENT_PART_SIZE];
                 Array.Copy(data, firstBlockData, (long)SEGMENT_PART_SISE.MAX_PACKET_COMPR_TYPE_RDP8_LITE_SEGMENT_PART_SIZE);
 
@@ -257,15 +256,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         /// Create a DataCompressedDvcPdu
         /// </summary>
         /// <param name="channelId"></param>
-        /// <param name="data"></param>
-        /// <param name="channelChunkLength"></param>
+        /// <param name="data"></param>       
         /// <returns></returns>
-        public DataCompressedDvcPdu[] CreateCompressedDataPdu(uint channelId, byte[] data, int channelChunkLength = 1599)
+        public DataCompressedDvcPdu[] CreateCompressedDataPdu(uint channelId, byte[] data)
         {
             MemoryStream ms = new MemoryStream(data);
             List<DataCompressedDvcPdu> pdus = new List<DataCompressedDvcPdu>();
 
-            //TODO: Here the compress algorithm has bug and cannot compress the data correctly. The size will become bigger than before comprssion
             byte[] compressed = CompressDataToRdp8BulkEncodedData(data, PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_LITE | PACKET_COMPR_FLAG.PACKET_COMPRESSED);
             
             DataCompressedDvcPdu pdu = new DataCompressedDvcPdu();
@@ -274,18 +271,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             pdu.HeaderBits.CbChannelId = cbChId_Values.OneByte;
             pdu.ChannelId = channelId;
 
-            //RDP8_BULK_ENCODED_DATA rdp8BulkEncodedData = new RDP8_BULK_ENCODED_DATA();
-            //rdp8BulkEncodedData.descriptor = 0xE0; //Single 
-            //rdp8BulkEncodedData.header = 0x26;//PACKET_COMPRESSED (0x2), PACKET_CMPR_TYPE_RDP8_LITE (0x06)
-            //rdp8BulkEncodedData.data = compressed;
-            
-            byte[] rdp8Header = new byte[] { 0xE0, 0x26 }; //0xE0; Single 0x26:PACKET_COMPRESSED (0x2), PACKET_CMPR_TYPE_RDP8_LITE (0x06)
+            RDP_SEGMENTED_DATA rdpSegmentedData = new RDP_SEGMENTED_DATA();
+            rdpSegmentedData.descriptor = DescriptorTypes.SINGLE;
 
-            var s = new MemoryStream();
-            s.Write(rdp8Header, 0, rdp8Header.Length);
-            s.Write(compressed, 0, compressed.Length);
-            byte[] rdp8BulkEncodedData = s.ToArray();
-            pdu.Data = rdp8BulkEncodedData;
+            RDP8_BULK_ENCODED_DATA rdp8BulkEncodedData = new RDP8_BULK_ENCODED_DATA();
+            rdp8BulkEncodedData.header = (byte) (PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_LITE | PACKET_COMPR_FLAG.PACKET_COMPRESSED);
+            rdp8BulkEncodedData.data = compressed;
+
+            pdu.Data = PduMarshaler.Marshal(rdpSegmentedData);
             pdus.Add(pdu);
             return pdus.ToArray();
         }
@@ -333,6 +326,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             // to indicate that it supports version 2 of the Remote Desktop Protocol: Dynamic 
             // Channel Virtual Channel Extension.<3>
             regsiteredPDUs.Add(new CapsVer2ReqDvcPdu());
+            // The DYNVC_CAPS_VERSION3(section 2.2.1.1.3) PDU is sent by the DVC server manager 
+            // to indicate that it supports version 3 of the Remote Desktop Protocol: Dynamic 
+            // Channel Virtual Channel Extension.<5>
+            regsiteredPDUs.Add(new CapsVer3ReqDvcPdu());
             // The DYNVC_CREATE_REQ (section 2.2.2.1) PDU is sent by the DVC server manager 
             // to the DVC client manager to request that a channel be opened.
             regsiteredPDUs.Add(new CreateReqDvcPdu());

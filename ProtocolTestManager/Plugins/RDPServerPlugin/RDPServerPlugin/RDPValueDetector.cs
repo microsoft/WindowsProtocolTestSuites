@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
+using System.Net;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 
 namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 {
@@ -49,22 +51,20 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         private const string ServerPort = "Server Port";
         private const string ServerUserName = "Server User Name";
         private const string ServerUserPassword = "Server User Password";
-        private const string ClientName = "Client Name";
-        private const string RDPVersion = "RDP Version";
 
         #endregion Private Types
 
         #region Variables
 
         private EnvironmentType env = EnvironmentType.Workgroup;
-        private DetectionInfo detectionInfo = new DetectionInfo();       
+        private DetectionInfo detectionInfo = new DetectionInfo();
 
         #endregion Variables
 
         #region Implemented IValueDetector
 
         /// <summary>
-        /// Sets selected test environment.
+        /// Set selected test environment.
         /// </summary>
         /// <param name="Environment"></param>
         public void SelectEnvironment(string NetworkEnvironment)
@@ -73,7 +73,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         }
 
         /// <summary>
-        /// Gets the prerequisites for auto-detection.
+        /// Get the prerequisites for auto-detection.
         /// </summary>
         /// <returns>A instance of Prerequisites class.</returns>
         public Prerequisites GetPrerequisites()
@@ -90,23 +90,19 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             prereq.AddProperty(RDPValueDetector.ServerDomain, config.ServerDomain);
             prereq.AddProperty(RDPValueDetector.ServerName, config.ServerName);
             prereq.AddProperty(RDPValueDetector.ServerPort, config.ServerPort);
-
             prereq.AddProperty(RDPValueDetector.ServerUserName, config.ServerUserName);
             prereq.AddProperty(RDPValueDetector.ServerUserPassword, config.ServerUserPassword);
-            prereq.AddProperty(RDPValueDetector.ClientName, config.ClientName);
-            prereq.AddProperty(RDPValueDetector.RDPVersion, config.Version);
-
             return prereq;
         }
 
         private Dictionary<string, string> properties;
         /// <summary>
-        /// Sets the values for the required properties.
+        /// Set the values for the required properties.
         /// </summary>
         /// <param name="properties">Property name and values.</param>
         /// <returns>
-        /// Return true if no other property needed. Return false means there are 
-        /// other property required. PTF Tool will invoke GetPrerequisites and 
+        /// Return true if no property is needed. Return false means there are
+        /// other property required. PTF Tool will invoke GetPrerequisites and
         /// pop up a dialog to set the value of the properties.
         /// </returns>
         public bool SetPrerequisiteProperties(Dictionary<string, string> properties)
@@ -116,55 +112,70 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         }
 
         /// <summary>
-        /// Adds Detection steps to the log shown when detecting
+        /// Add Detection steps to the log when detecting
         /// </summary>
         public List<DetectingItem> GetDetectionSteps()
         {
             List<DetectingItem> DetectingItems = new List<DetectingItem>();
+            DetectingItems.Add(new DetectingItem("Detect Client HostName", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Ping Target SUT", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Establish RDP Connection with SUT", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Check Specified features Support", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Check Specified Protocols Support", DetectingStatus.Pending, LogStyle.Default));
+            DetectingItems.Add(new DetectingItem("Detect RDP Version", DetectingStatus.Pending, LogStyle.Default));
             return DetectingItems;
         }
 
         /// <summary>
-        /// Runs property autodetection.
+        /// Run auto detection properly.
         /// </summary>
-        /// <returns>Return true if the function is succeeded.</returns>
+        /// <returns>Return true if the function succeeded.</returns>
         public bool RunDetection()
         {
-            // set config if properties changed
-            config.ServerDomain = properties[RDPValueDetector.ServerDomain];
-            config.ServerName = properties[RDPValueDetector.ServerName];
-            config.ServerPort = properties[RDPValueDetector.ServerPort];
-
-            config.ServerUserName = properties[RDPValueDetector.ServerUserName];
-            config.ServerUserPassword = properties[RDPValueDetector.ServerUserPassword];
-            config.ClientName = properties[RDPValueDetector.ClientName];
-            config.Version = properties[RDPValueDetector.RDPVersion];
-
-            if (!PingSUT())
+            try
             {
+                DetectorUtil.WriteLog("Detect Client HostName...");
+
+                // set config if properties changed
+                config.ServerName = properties[RDPValueDetector.ServerName];
+                config.ServerDomain = properties[RDPValueDetector.ServerDomain];
+                if (config.ServerDomain != null && config.ServerDomain.Length == 0)
+                {
+                    config.ServerDomain = config.ServerName;
+                }
+                config.ServerPort = properties[RDPValueDetector.ServerPort];
+                config.ServerUserName = properties[RDPValueDetector.ServerUserName];
+                config.ServerUserPassword = properties[RDPValueDetector.ServerUserPassword];
+                config.ClientName = Dns.GetHostName();
+
+                DetectorUtil.WriteLog("Finished!", false, LogStyle.StepPassed);
+
+                if (!PingSUT())
+                {
+                    return false;
+                }
+
+                using (var detector = new RDPDetector(detectionInfo))
+                {
+                    if (!detector.DetectRDPFeature(config))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                DetectorUtil.WriteLog(String.Format("RunDetection() threw exception: {0}", ex));
                 return false;
             }
-
-            RDPDetector detector = new RDPDetector(detectionInfo);
-            if (!detector.DetectRDPFeature())
-            {
-                detector.Dispose();
-                return false;
-            }
-            detector.Dispose();
-            return true;
         }
 
         /// <summary>
-        /// Gets the detect result.
+        /// Get the detection result.
         /// </summary>
-        /// <param name="name">Property name</param>
-        /// <param name="value">Property value</param>
-        /// <returns>Return true if the property value is successfully got.</returns>
+        /// <param name="propertiesDic">Dictionary which contains property information</param>
+        /// <returns>Return true if the property information is successfully obtained.</returns>
         public bool GetDetectedProperty(out Dictionary<string, List<string>> propertiesDic)
         {
             propertiesDic = config.ToDictionary();
@@ -172,7 +183,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         }
 
         /// <summary>
-        /// Gets selected rules
+        /// Get selected rules
         /// </summary>
         /// <returns>Selected rules</returns>
         public List<CaseSelectRule> GetSelectedRules()
@@ -182,22 +193,70 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             caseList.Add(CreateRule("Priority.BVT", true));
             caseList.Add(CreateRule("Priority.NonBVT", true));
 
+            #region RDP Version
+            TS_UD_SC_CORE_version_Values rdpVersion = getRdpVersion(config.Version);
+            if (rdpVersion > TS_UD_SC_CORE_version_Values.V1)
+            {
+                caseList.Add(CreateRule("RDP Version.RDP 70", true));
+                caseList.Add(CreateRule("RDP Version.RDP 80", true));
+                caseList.Add(CreateRule("RDP Version.RDP 81", true));
+            }
+            #endregion RDP Version
+
             #region Protocols
-
             caseList.Add(CreateRule("Protocol.RDPBCGR", true));
-
+            caseList.Add(CreateRule("Protocol.RDPEDYC", detectionInfo.IsSupportRDPEDYC));
+            caseList.Add(CreateRule("Protocol.RDPEMT", detectionInfo.IsSupportRDPEMT));
             #endregion Protocols
-
-            caseList.Add(CreateRule("Specific Requirements.DeviceNeeded", false));
-            caseList.Add(CreateRule("Specific Requirements.Interactive", false));
 
             return caseList;
         }
 
+        private TS_UD_SC_CORE_version_Values getRdpVersion(string version)
+        {
+            if (version.Equals("4.0"))
+            {
+                return TS_UD_SC_CORE_version_Values.V1;
+            }
+            else if (version.Equals("8.1"))
+            {
+                return TS_UD_SC_CORE_version_Values.V2;
+            }
+            else if (version.Equals("10.0"))
+            {
+                return TS_UD_SC_CORE_version_Values.V3;
+            }
+            else if (version.Equals("10.1"))
+            {
+                return TS_UD_SC_CORE_version_Values.V4;
+            }
+            else if (version.Equals("10.2"))
+            {
+                return TS_UD_SC_CORE_version_Values.V5;
+            }
+            else if (version.Equals("10.3"))
+            {
+                return TS_UD_SC_CORE_version_Values.V6;
+            }
+            else if (version.Equals("10.4"))
+            {
+                return TS_UD_SC_CORE_version_Values.V7;
+            }
+            else if (version.Equals("10.5"))
+            {
+                return TS_UD_SC_CORE_version_Values.V8;
+            }
+            else if (version.Equals("10.6"))
+            {
+                return TS_UD_SC_CORE_version_Values.V9;
+            }
+            return TS_UD_SC_CORE_version_Values.None;
+        }
+
         /// <summary>
-        /// Gets a summary of the detect result.
+        /// Get a summary of the detection result.
         /// </summary>
-        /// <returns>Detect result.</returns>
+        /// <returns>Detection result.</returns>
         public object GetSUTSummary()
         {
             DetectionResultControl SUTSummaryControl = new DetectionResultControl();
@@ -206,17 +265,24 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         }
 
         /// <summary>
-        /// Gets the list of properties that will be hidder in the configure page.
+        /// Get the list of properties that will be hidden in the configure page.
         /// </summary>
         /// <param name="rules">Selected rules.</param>
-        /// <returns>The list of properties whick will not be shown in the configure page.</returns>
+        /// <returns>The list of properties which will not be shown in the configure page.</returns>
         public List<string> GetHiddenProperties(List<CaseSelectRule> rules)
         {
-            return new List<string>();
+            List<string> hiddenPropertiesList = new List<string>();
+
+            // Hidden the following properties in RDP_ServerTestSuite.ptfconfig:
+            // 1. TestName
+            // 2. ProtocolName
+            // 3. Version
+            hiddenPropertiesList.AddRange(DetectorUtil.GetPropertiesByFile("RDP_ServerTestSuite.ptfconfig"));
+            return hiddenPropertiesList;
         }
 
         /// <summary>
-        /// Returns false if check failed and set failed property in dictionary
+        /// Return false if check failed and set failed property in dictionary
         /// </summary>
         /// <param name="properties"></param>
         /// <returns></returns>
@@ -229,7 +295,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         /// Dispose
         /// </summary>
         public void Dispose()
-        {            
+        {
         }
 
         #endregion Implemented IValueDetector
@@ -250,27 +316,30 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             // Create a buffer of 32 bytes of data to be transmitted.
             string data = "0123456789ABCDEF0123456789ABCDEF";
             byte[] buffer = Encoding.ASCII.GetBytes(data);
+            IPAddress address;
+            if (!IPAddress.TryParse(config.ServerName, out address))
+            {
+                address = Dns.GetHostEntry(config.ServerName).AddressList.First();
+            }
             int timeout = 5000;
             bool result = false;
-            List<PingReply> replys = new List<PingReply>();
+            List<PingReply> replies = new List<PingReply>();
             try
             {
                 for (int i = 0; i < 4; i++)
                 {
-                    replys.Add(pingSender.Send(config.ServerName, timeout, buffer, options));
+                    replies.Add(pingSender.Send(address, timeout, buffer, options));
                 }
 
             }
-            catch
+            catch (Exception ex)
             {
-                DetectorUtil.WriteLog("Error", false, LogStyle.Error);
+                DetectorUtil.WriteLog(String.Format("PingSUT() threw exception: {0}", ex));
 
-                //return false;
-                throw;
+                return false;
             }
-            foreach (var reply in replys)
+            foreach (var reply in replies)
             {
-
                 result |= (reply.Status == IPStatus.Success);
             }
             if (result)
@@ -281,8 +350,8 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             else
             {
                 DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
-                DetectorUtil.WriteLog("Taget SUT don't respond.");
-                return false;          
+                DetectorUtil.WriteLog("Target SUT has no response.");
+                return false;
             }
 
         }
@@ -308,7 +377,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
             return rule;
         }
-        
+
         private string NullableBoolToString(bool? value)
         {
             if (value == null)

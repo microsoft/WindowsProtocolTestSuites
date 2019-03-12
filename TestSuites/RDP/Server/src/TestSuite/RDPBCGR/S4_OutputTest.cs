@@ -15,6 +15,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
     {
         [TestMethod]
         [Priority(0)]
+        [TestCategory("BVT")]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
         [Description(@"This test case is used to verify SUT can send fast-path update message correctly.")]
@@ -30,7 +31,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             //    Fast-Path Synchronize Event
             //    Fast-Path Unicode Keyboard Event
             //4. Test suite wait for 3 minutes, and verify each Server Fast-Path Update PDU received. The Server Fast-Path Update PDU may include:
-            //    Fast-Path Orders Update 
+            //    Fast-Path Orders Update
             //    Fast-Path Bitmap Update
             //    Fast-Path Palette Update
             //    Fast-Path Synchronize Update
@@ -53,7 +54,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 true,  // Is auto logon
                 supportFastPathInput:true,
                 supportFastPathOutput:true);
-            
+
             this.Site.Log.Add(LogEntryKind.Comment, "Send several Client Fast-Path Input Event PDUs.");
             rdpbcgrAdapter.GenerateFastPathInputs();
 

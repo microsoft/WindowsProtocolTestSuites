@@ -16,49 +16,33 @@
 Param
 (
     [string]$WorkingPath = "C:\temp",                                     # Script working path
-    [bool]  $AutoReboot  = $false,                                        # Reboot when necessary without key pressing
     [int]   $Step        = 1                                              # For rebooting, indicate which step the script is runing
 )
 
 #-----------------------------------------------------------------------------
 # Global variables
 #-----------------------------------------------------------------------------
-$ScriptsSignalFile  = "$env:HOMEDRIVE\PostConfig-SUT.ps1.finished.signal" # Config signal file
-$ParamArray         = @{}                                                 # Parameters from the config file
-$CurrentScriptPath  = $MyInvocation.MyCommand.Definition                  # Current Working Path
-$LogPath            = "$env:HOMEDRIVE\Logs"                               # Log Path
-$LogFile            = "$LogPath\PostConfig-SUT.ps1.log"                   # Log File
+$ScriptsSignalFile      = "$env:SystemDrive\PostScript.Completed.signal"        # Config signal file
+$CurrentScriptPath      = $MyInvocation.MyCommand.Definition                    # Current Working Path
+$LogPath                = "$env:HOMEDRIVE\Logs"                                 # Log Path
+$LogFile                = "$LogPath\PostScript-Client.ps1.log"                  # Log File
+[string]$configPath	 	= "$WorkingPath\protocol.xml"
+
+Write-Host "Put current dir as $WorkingPath" -ForegroundColor Yellow
+Push-Location $WorkingPath
 
 #-----------------------------------------------------------------------------
 # Prepare Work Before Script Start
 #-----------------------------------------------------------------------------
 Function Prepare(){
 
-    Write-Host "Executing [PostConfig-SUT.ps1] ..." -ForegroundColor Cyan
+    Write-Host "Executing [PostConfig-Client.ps1] ..." -ForegroundColor Cyan
 
     # Check signal file
     if(Test-Path -Path $ScriptsSignalFile){
         Write-Host "The script execution is complete." -ForegroundColor Red
         exit 0
     }
-
-    # Change to absolute path
-    Write-Host "Current path is $CurrentScriptPath" -ForegroundColor Cyan
-    $WorkingPath = (Get-Item $WorkingPath).FullName
-
-    Write-Host "Put current dir as $WorkingPath" -ForegroundColor Yellow
-    Push-Location $WorkingPath
-}
-
-#-----------------------------------------------------------------------------
-# Read Config Parameters
-#-----------------------------------------------------------------------------
-Function ReadConfig()
-{
-    $VMName =  .\GetVMNameByComputerName.ps1
-    Write-Host "Getting the parameters from config file ..." -ForegroundColor Yellow
-    .\GetVmParameters.ps1 -VMName $VMName -RefParamArray ([ref]$ParamArray)
-    $ParamArray
 }
 
 #-----------------------------------------------------------------------------
@@ -93,21 +77,26 @@ Function RestartAndResume
 #-----------------------------------------------------------------------------
 Function Phase1
 {
-    # Set Network
-    Write-Host "Setting network configuration" -ForegroundColor Yellow    
-    .\Set-NetworkConfiguration.ps1 -IPAddress $ParamArray["ip"] -SubnetMask $ParamArray["subnet"] -Gateway $ParamArray["gateway"] -DNS ($ParamArray["dns"].split(';'))
-
-    # Disable ICMP Redirect
-    Write-Host "Disabling ICMP Redirect" -ForegroundColor Yellow
-    .\Disable-ICMPRedirect.ps1
+    [xml]$content = Get-Content $configPath
+    $clientSetting = $Content.lab.servers.vm | Where-Object {$_.role -eq "Client"}
 
     # Disable IPv6
     Write-Host "Disabling IPv6" -ForegroundColor Yellow
     .\Disable-IPv6.ps1
 
-    # Set Network Location
-    Write-Host "Setting network location to Private" -ForegroundColor Yellow
-    .\Set-NetworkLocation.ps1 -NetworkLocation "Private"
+    if($Content.lab.core.environment -ne "Azure"){ #azure regression do not neet set network configuration.
+        # Set Network
+        Write-Host "Setting network configuration" -ForegroundColor Yellow    
+        .\Set-NetworkConfiguration.ps1 -IPAddress $clientSetting.ip -SubnetMask $clientSetting.subnet -Gateway $clientSetting.gateway -DNS (($clientSetting.dns).split(';'))
+
+        # Disable ICMP Redirect
+        Write-Host "Disabling ICMP Redirect" -ForegroundColor Yellow
+        .\Disable-ICMPRedirect.ps1
+
+        # Set Network Location
+        Write-Host "Setting network location to Private" -ForegroundColor Yellow
+        .\Set-NetworkLocation.ps1 -NetworkLocation "Private"
+    }
 
     # Get Installed Script Path
     Write-Host "Getting the Installed Script Path" -ForegroundColor Yellow
@@ -124,7 +113,7 @@ Function Phase1
 Function Finish
 {
     # Write signal file
-    Write-Host "Write signal file: config.finished.signal to system drive."
+    Write-Host "Write signal file: PostScript.Completed.signal to system drive."
     cmd /C ECHO CONFIG FINISHED>$ScriptsSignalFile
 
     # Ending script
@@ -143,7 +132,7 @@ Function Finish
 Function Main()
 {
     Prepare
-    ReadConfig
+    
     SetLog
 
     switch ($Step)
@@ -159,3 +148,5 @@ Function Main()
 }
 
 Main
+
+Pop-Location

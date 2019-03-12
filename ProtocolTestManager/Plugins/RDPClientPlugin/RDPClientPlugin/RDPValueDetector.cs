@@ -26,7 +26,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         #region Variables
 
         private EnvironmentType env = EnvironmentType.Workgroup;
-        private DetectionInfo detectionInfo = new DetectionInfo();       
+        private DetectionInfo detectionInfo = new DetectionInfo();
 
         #endregion Variables
 
@@ -35,7 +35,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         private const string isWindowsImplementationTitle = "IsWindowsImplementation";
         private const string dropConnectionForInvalidRequestTitle = "DropConnectionForInvalidRequest";
         private const string triggerMethodTitle = "Trigger RDP Client By";
-        private const string userNameInTCTitle =  "SUT User Name \n* Only for PowerShell Trigger";
+        private const string userNameInTCTitle = "SUT User Name \n* Only for PowerShell Trigger";
         private const string userPwdInTCTitle = "SUT Password \n* Only for PowerShell Trigger";
         private const string agentPortTitle = "Agent Listen Port \n* Only for Managed Trigger";
 
@@ -69,7 +69,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             string userNameInTC = DetectorUtil.GetPropertyValue("SUTUserName");
             string userPwdInTC = DetectorUtil.GetPropertyValue("SUTUserPassword");
             string isWindowsImplementation = DetectorUtil.GetPropertyValue("IsWindowsImplementation");
-            string DropConnectionForInvalidRequest = isWindowsImplementation.ToUpper().Equals("TRUE") ? "true": DetectorUtil.GetPropertyValue("DropConnectionForInvalidRequest"); // The value is always true for Windows implementation.
+            string DropConnectionForInvalidRequest = isWindowsImplementation.ToUpper().Equals("TRUE") ? "true" : DetectorUtil.GetPropertyValue("DropConnectionForInvalidRequest"); // The value is always true for Windows implementation.
 
             List<string> sutNames = new List<string>();
             List<string> userNamesInTC = new List<string>();
@@ -93,28 +93,28 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
                 sutNames.Add(sutName);
                 userNamesInTC.Add(userNameInTC);
                 userPwdsInTC.Add(userPwdInTC);
-               
+
                 isWindowsImplementationList.Add(isWindowsImplementation);
                 if (isWindowsImplementation.ToUpper().Equals("TRUE"))
-                {                    
+                {
                     isWindowsImplementationList.Add("false");
                 }
                 else
                 {
-                    isWindowsImplementationList.Add("true");                    
+                    isWindowsImplementationList.Add("true");
                 }
             }
 
             dropConnectionForInvalidRequestList.Add("true");
             dropConnectionForInvalidRequestList.Add("false");
 
-            propertiesDic.Add(tcComputerNameTitle, sutNames);            
+            propertiesDic.Add(tcComputerNameTitle, sutNames);
             propertiesDic.Add(isWindowsImplementationTitle, isWindowsImplementationList);
             propertiesDic.Add(dropConnectionForInvalidRequestTitle, dropConnectionForInvalidRequestList);
-            propertiesDic.Add(triggerMethodTitle, new List<string>() { "Powershell", "Managed", "Interactive"});
+            propertiesDic.Add(triggerMethodTitle, new List<string>() { "Powershell", "Managed", "Interactive" });
             propertiesDic.Add(userNameInTCTitle, userNamesInTC);
             propertiesDic.Add(userPwdInTCTitle, userPwdsInTC);
-            propertiesDic.Add(agentPortTitle, new List<string>() {"4488"});
+            propertiesDic.Add(agentPortTitle, new List<string>() { "4488" });
 
             prerequisites.Properties = propertiesDic;
 
@@ -178,19 +178,27 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         /// <returns>Return true if the function is succeeded.</returns>
         public bool RunDetection()
         {
-            if (!PingSUT())
+            try
             {
-                return false;
-            }
+                if (!PingSUT())
+                {
+                    return false;
+                }
 
-            RDPDetector detector = new RDPDetector(detectionInfo);
-            if (!detector.DetectRDPFeature())
+                using (var detector = new RDPDetector(detectionInfo))
+                {
+                    if (!detector.DetectRDPFeature())
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
             {
-                detector.Dispose();
+                DetectorUtil.WriteLog(String.Format("RunDetection() threw exception: {0}", ex));
                 return false;
             }
-            detector.Dispose();
-            return true;
         }
 
         /// <summary>
@@ -208,15 +216,17 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             propertiesDic.Add("SUTUserPassword", new List<string>() { detectionInfo.UserPwdInTC });
             propertiesDic.Add("IsWindowsImplementation", new List<string>() { detectionInfo.IsWindowsImplementation });
             propertiesDic.Add("DropConnectionForInvalidRequest", new List<string>() { detectionInfo.DropConnectionForInvalidRequest });
-            
+
             propertiesDic.Add("RDP.Client.SupportAutoReconnect", new List<string>() { NullableBoolToString(detectionInfo.IsSupportAutoReconnect) });
             propertiesDic.Add("RDP.Client.SupportServerRedirection", new List<string>() { NullableBoolToString(detectionInfo.IsSupportServerRedirection) });
             propertiesDic.Add("RDP.Client.SupportRDPEFS", new List<string>() { NullableBoolToString(detectionInfo.IsSupportRDPEFS) });
 
-            propertiesDic.Add("SUTControl.AgentAddress", new List<string>() { detectionInfo.SUTName+":"+detectionInfo.AgentListenPort });
+            propertiesDic.Add("RDP.Version", new List<string>() { detectionInfo.RdpVersion });
+
+            propertiesDic.Add("SUTControl.AgentAddress", new List<string>() { detectionInfo.SUTName + ":" + detectionInfo.AgentListenPort });
             propertiesDic.Add("SUTControl.ClientSupportRDPFile", new List<string>() { detectionInfo.IsWindowsImplementation });
 
-            
+
 
             return true;
         }
@@ -236,16 +246,16 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 
             caseList.Add(CreateRule("Protocol.RDPBCGR", true));
             caseList.Add(CreateRule("Protocol.RDPRFX", detectionInfo.IsSupportRDPRFX));
-            
+
             caseList.Add(CreateRule("Protocol.RDPEDISP", detectionInfo.IsSupportRDPEDISP));
             caseList.Add(CreateRule("Protocol.RDPEGFX", detectionInfo.IsSupportRDPEGFX));
             caseList.Add(CreateRule("Protocol.RDPEI", detectionInfo.IsSupportRDPEI));
             bool isSupportMultitransport = false;
             if (detectionInfo.IsSupportStaticVirtualChannel != null && detectionInfo.IsSupportStaticVirtualChannel.Value
-                && ((detectionInfo.IsSupportTransportTypeUdpFECR != null && detectionInfo.IsSupportTransportTypeUdpFECR.Value) 
-                || (detectionInfo.IsSupportTransportTypeUdpFECL != null&& detectionInfo.IsSupportTransportTypeUdpFECL.Value)))
+                && ((detectionInfo.IsSupportTransportTypeUdpFECR != null && detectionInfo.IsSupportTransportTypeUdpFECR.Value)
+                || (detectionInfo.IsSupportTransportTypeUdpFECL != null && detectionInfo.IsSupportTransportTypeUdpFECL.Value)))
             {
-                isSupportMultitransport = true;                
+                isSupportMultitransport = true;
             }
             caseList.Add(CreateRule("Protocol.RDPEMT", isSupportMultitransport));
             caseList.Add(CreateRule("Protocol.RDPEUDP", isSupportMultitransport));
@@ -270,7 +280,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
                 bothSupportSVCAndEFS = true;
             }
             caseList.Add(CreateRule("Enable Supported Feature.StaticVirtualChannel", bothSupportSVCAndEFS));
-            
+
             return caseList;
         }
 
@@ -320,7 +330,10 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             hiddenProp.Add("RdpedispMonitorRemoveImage");
 
             // Other properties should be hidden
-            hiddenProp.Add("IsTDI67289Fixed");
+            hiddenProp.Add("TestName");
+            hiddenProp.Add("ProtocolName");
+            hiddenProp.Add("Version");
+
             return hiddenProp;
         }
 
@@ -338,7 +351,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         /// Dispose
         /// </summary>
         public void Dispose()
-        {            
+        {
         }
 
         #endregion Implemented IValueDetector
@@ -370,12 +383,11 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
                 }
 
             }
-            catch
+            catch (Exception ex)
             {
-                DetectorUtil.WriteLog("Error", false, LogStyle.Error);
+                DetectorUtil.WriteLog(String.Format("PingSUT() threw exception: {0}", ex));
 
-                //return false;
-                throw;
+                return false;
             }
             foreach (var reply in replys)
             {
@@ -391,7 +403,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             {
                 DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
                 DetectorUtil.WriteLog("Taget SUT don't respond.");
-                return false;          
+                return false;
             }
 
         }
@@ -417,7 +429,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 
             return rule;
         }
-        
+
         private string NullableBoolToString(bool? value)
         {
             if (value == null)

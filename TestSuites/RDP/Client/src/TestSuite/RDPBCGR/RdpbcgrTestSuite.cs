@@ -66,7 +66,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         }
         #endregion
 
-        #region Test Cleanup       
+        #region Test Initialize and Cleanup       
+        protected override void TestInitialize()
+        {
+            base.TestInitialize();
+
+            // Turn on verification
+            this.rdpbcgrAdapter.TurnVerificationOff(false);
+        }
 
         protected override void TestCleanup()
         {

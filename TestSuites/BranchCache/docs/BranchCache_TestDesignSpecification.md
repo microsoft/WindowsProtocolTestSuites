@@ -94,22 +94,21 @@ The following environment topology is used to demonstrate how Windows uses Branc
 | ContentServer| 192.168.0.2| Windows Server 8| Content server| 
 | | | | Replaceable SUT| 
 | BranchDC| 192.168.1.2| Windows Server 8| Branch side Read-only DC| 
-| HostedCacheServer| 192.168.1.3| Windows Server 8| Hosted cache server| 
+| HCServer| 192.168.1.3| Windows Server 8| Hosted cache server| 
 | | | | Replaceable SUT| 
-| Client1| 192.168.1.11| Windows 8| Client| 
+| Client| 192.168.1.11| Windows 8| Client| 
 | | | | Test driver machine| 
-| Client2| 192.168.1.12| Windows 8| Client| 
 
 ### <a name="_Toc462327668"/>Partner Test Environment
-Partners should replace ContentServer, HostedCacheServer or Client2 respectively according to the testing scenarios. 
+Partners should replace ContentServer, HostedCacheServer respectively according to the testing scenarios. 
 
 | &#32;| &#32;| &#32;| &#32;| &#32; |
 | -------------| -------------| -------------| -------------| ------------- |
 | Partner Implements| Partner Replaces (SUT)| Mode| Test Suite Acts as| Major Scenario| 
-| Content Server| ContentServer| Distributed| Client1 & Client2| Client requests content informationinformation from SUT| 
+| Content Server| ContentServer| Distributed| Client| Client requests content informationinformation from SUT| 
 |  |  | Hosted|  |  | 
 | Hosted Cache Server| HostedCacheServer| Distributed| NA| NA| 
-|  |  | Hosted| Client1 & Client2| Client retrieves cache from SUTClient offers content to SUTSUT retrieves content from client| 
+|  |  | Hosted| Client| Client retrieves cache from SUT. Client offers content to SUT. SUT retrieves content from client| 
 
 ## <a name="_Toc462327669"/>Test Scenario Design
 
@@ -145,17 +144,17 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| ------------- |
 |  **Description**| Client retrieves content information from content server| 
 |  **Message Sequence**| HTTP:| 
-| | Client1 sends content information request to ContentServer| 
-| | ContentServer sends content to Client1| 
-| | Client1 sends content information request to ContentServer| 
-| | ContentServer sends content information to Client1| 
+| | Client sends content information request to ContentServer| 
+| | ContentServer sends content to Client| 
+| | Client sends content information request to ContentServer| 
+| | ContentServer sends content information to Client| 
 | | SMB2:| 
-| | Client1 sends content information request to ContentServer| 
-| | ContentServer sends error code to Client1| 
-| | Client1 sends content request to ContentServer| 
-| | ContentServer sends content response to Client1| 
-| | Client1 sends content information request to ContentServer| 
-| | ContentServer sends content information to Client1| 
+| | Client sends content information request to ContentServer| 
+| | ContentServer sends error code to Client| 
+| | Client sends content request to ContentServer| 
+| | ContentServer sends content response to Client| 
+| | Client sends content information request to ContentServer| 
+| | ContentServer sends content information to Client| 
 
 #### <a name="_Toc462327673"/>ContentServer_ForcedHashGenerationContentInformationRetrieval
 
@@ -163,18 +162,18 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| ------------- |
 |  **Description**| Client retrieves force generated content information from content server| 
 |  **Message Sequence**| Force content server to generate content information| 
-| | Client1 sends content information request to ContentServer| 
-| | ContentServer sends content information to Client1| 
+| | Client sends content information request to ContentServer| 
+| | ContentServer sends content information to Client| 
 
 #### <a name="_Toc462327674"/>ContentServer_MissingContentRetrieval_HTTPOnly
 
 | &#32;| &#32; |
 | -------------| ------------- |
 |  **Description**| Client retrieves missing content from content server| 
-|  **Message Sequence**| Client1 sends content information request to ContentServer| 
-| | ContentServer sends content information to Client1| 
-| | Client1 sends file download request to ContentServer via HTTP with PCCRTP MissingContentRequest header| 
-| | ContentServer sends file content response to Client1| 
+|  **Message Sequence**| Client sends content information request to ContentServer| 
+| | ContentServer sends content information to Client| 
+| | Client sends file download request to ContentServer via HTTP with PCCRTP MissingContentRequest header| 
+| | ContentServer sends file content response to Client| 
 
 #### <a name="_Toc462327675"/>ContentServer_PCCRTPServer
 
@@ -211,14 +210,14 @@ There are also some additional test cases for individual protocols to test bound
 | &#32;| &#32; |
 | -------------| ------------- |
 |  **Description**| Client retrieves content from hosted cache server| 
-|  **Message Sequence**| Client1 sends cached content retrieval request to HostedCacheServer| 
-| | Server sends cache missing response to Client1| 
-| | Client1 sends cache offering request to HostedCacheServer| 
-| | HostedCacheServer sends interested response to Client1| 
-| | HostedCacheServer sends cache retrieval request to Client1| 
-| | Client1 sends cached content to HostedCacheServer| 
-| | Client1 sends cached content retrieval request to HostedCacheServer| 
-| | Server sends cached content response to Client1| 
+|  **Message Sequence**| Client sends cached content retrieval request to HostedCacheServer| 
+| | Server sends cache missing response to Client| 
+| | Client sends cache offering request to HostedCacheServer| 
+| | HostedCacheServer sends interested response to Client| 
+| | HostedCacheServer sends cache retrieval request to Client| 
+| | Client sends cached content to HostedCacheServer| 
+| | Client sends cached content retrieval request to HostedCacheServer| 
+| | Server sends cached content response to Client| 
 
 #### <a name="_Toc462327680"/>HostedCacheServer_PCHCServer_MessageHeader
 
@@ -329,17 +328,17 @@ There are also some additional test cases for individual protocols to test bound
 |  **Description**| BranchCache1.0: Client retrieves content information from content server| 
 |  **Test Initialization**|  | 
 |  **Message Sequence**| HTTP:| 
-| | Client1 sends HTTP request with PCCRTP “Accept-Encoding: peerdist” to ContentServer| 
-| | ContentServer sends content to Client1| 
-| | Client1 sends HTTP request with PCCRTP “Accept-Encoding: peerdist” to ContentServer| 
-| | ContentServer sends v1 content information to Client1| 
+| | Client sends HTTP request with PCCRTP “Accept-Encoding: peerdist” to ContentServer| 
+| | ContentServer sends content to Client| 
+| | Client sends HTTP request with PCCRTP “Accept-Encoding: peerdist” to ContentServer| 
+| | ContentServer sends v1 content information to Client| 
 | | SMB2:| 
-| | Client1 sends SRV_READ_HASH v1 request to ContentServer| 
-| | ContentServer sends error response to Client1| 
-| | Client1 sends READ request to ContentServer| 
-| | ContentServer sends content to Client1| 
-| | Client1 sends SRV_READ_HASH v1 request to ContentServer| 
-| | ContentServer sends SRV_READ_HASH v1 response to Client1| 
+| | Client sends SRV_READ_HASH v1 request to ContentServer| 
+| | ContentServer sends error response to Client| 
+| | Client sends READ request to ContentServer| 
+| | ContentServer sends content to Client| 
+| | Client sends SRV_READ_HASH v1 request to ContentServer| 
+| | ContentServer sends SRV_READ_HASH v1 response to Client| 
 |  **Test Cleanup**| Clear hash on ContentServer| 
 
 #### <a name="_Toc462327695"/>ContentServer_ContentInformationRetrieval_V2 (BVT)
@@ -349,17 +348,17 @@ There are also some additional test cases for individual protocols to test bound
 |  **Description**| BranchCache2.0: Client retrieves content information from content server| 
 |  **Test Initialization**|  | 
 |  **Message Sequence**| HTTP:| 
-| | Client1 sends HTTP request with PCCRTP “Accept-Encoding: peerdist; X-P2P-PeerDist: Version=1.1; X-P2P-PeerDistEx: MinContentInformation=1.0, MaxContentInformation=2.0” to ContentServer| 
-| | ContentServer sends content to Client1| 
-| | Client1 sends HTTP request with PCCRTP “Accept-Encoding: peerdist; X-P2P-PeerDist: Version=1.1; X-P2P-PeerDistEx: MinContentInformation=1.0, MaxContentInformation=2.0” to ContentServer| 
-| | ContentServer sends v2 content information to Client1| 
+| | Client sends HTTP request with PCCRTP “Accept-Encoding: peerdist; X-P2P-PeerDist: Version=1.1; X-P2P-PeerDistEx: MinContentInformation=1.0, MaxContentInformation=2.0” to ContentServer| 
+| | ContentServer sends content to Client| 
+| | Client sends HTTP request with PCCRTP “Accept-Encoding: peerdist; X-P2P-PeerDist: Version=1.1; X-P2P-PeerDistEx: MinContentInformation=1.0, MaxContentInformation=2.0” to ContentServer| 
+| | ContentServer sends v2 content information to Client| 
 | | SMB2:| 
-| | Client1 sends SRV_READ_HASH v2 request to ContentServer| 
-| | ContentServer sends error response to Client1| 
-| | Client1 sends READ request to ContentServer| 
-| | ContentServer sends content to Client1| 
-| | Client1 sends SRV_READ_HASH v2 request to ContentServer| 
-| | ContentServer sends SRV_READ_HASH v2 response to Client1| 
+| | Client sends SRV_READ_HASH v2 request to ContentServer| 
+| | ContentServer sends error response to Client| 
+| | Client sends READ request to ContentServer| 
+| | ContentServer sends content to Client| 
+| | Client sends SRV_READ_HASH v2 request to ContentServer| 
+| | ContentServer sends SRV_READ_HASH v2 response to Client| 
 |  **Test Cleanup**| Clear hash on ContentServer| 
 
 #### <a name="_Toc462327696"/>ContentServer_ForcedHashGenerationContentInformationRetrieval_V1 (BVT)
@@ -370,11 +369,11 @@ There are also some additional test cases for individual protocols to test bound
 |  **Test Initialization**|  | 
 |  **Message Sequence**| Force content server to generate v1 content information| 
 | | HTTP:| 
-| | Client1 sends HTTP request with PCCRTP “Accept-Encoding: peerdist” to ContentServer| 
-| | ContentServer sends v1 content information to Client1| 
+| | Client sends HTTP request with PCCRTP “Accept-Encoding: peerdist” to ContentServer| 
+| | ContentServer sends v1 content information to Client| 
 | | SMB2:| 
-| | Client1 sends SRV_READ_HASH v1 request to ContentServer| 
-| | ContentServer sends SRV_READ_HASH v1 response to Client1| 
+| | Client sends SRV_READ_HASH v1 request to ContentServer| 
+| | ContentServer sends SRV_READ_HASH v1 response to Client| 
 |  **Test Cleanup**| Clear hash on ContentServer| 
 
 #### <a name="_Toc462327697"/>ContentServer_ForcedHashGenerationContentInformationRetrieval_V2 (BVT)
@@ -385,11 +384,11 @@ There are also some additional test cases for individual protocols to test bound
 |  **Test Initialization**|  | 
 |  **Message Sequence**| Force content server to generate v2 content information| 
 | | HTTP:| 
-| | Client1 sends HTTP request with PCCRTP “Accept-Encoding: peerdist; X-P2P-PeerDist: Version=1.1; X-P2P-PeerDistEx: MinContentInformation=1.0, MaxContentInformation=2.0” to ContentServer| 
-| | ContentServer sends v2 content information to Client1| 
+| | Client sends HTTP request with PCCRTP “Accept-Encoding: peerdist; X-P2P-PeerDist: Version=1.1; X-P2P-PeerDistEx: MinContentInformation=1.0, MaxContentInformation=2.0” to ContentServer| 
+| | ContentServer sends v2 content information to Client| 
 | | SMB2:| 
-| | Client1 sends SRV_READ_HASH v2 request to ContentServer| 
-| | ContentServer sends SRV_READ_HASH v2 response to Client1| 
+| | Client sends SRV_READ_HASH v2 request to ContentServer| 
+| | ContentServer sends SRV_READ_HASH v2 response to Client| 
 |  **Test Cleanup**| Clear hash on ContentServer| 
 
 #### <a name="_Toc462327698"/>ContentServer_MissingContentRetrieval_HTTPOnly_V1 (BVT)
@@ -398,10 +397,10 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| ------------- |
 |  **Description**| BranchCache1.0: Client retrieves missing content from content server| 
 |  **Test Initialization**|  | 
-|  **Message Sequence**| Client1 sends HTTP request with PCCRTP “Accept-Encoding: peerdist” to ContentServer| 
-| | ContentServer sends content to Client1 and generates hash| 
-| | Client1 sends HTTP request with PCCRTP “Accept-Encoding: peerdist; X-P2P-PeerDist: Version=1.0;MissingDataRequest=true” to ContentServer| 
-| | ContentServer sends content to Client1| 
+|  **Message Sequence**| Client sends HTTP request with PCCRTP “Accept-Encoding: peerdist” to ContentServer| 
+| | ContentServer sends content to Client and generates hash| 
+| | Client sends HTTP request with PCCRTP “Accept-Encoding: peerdist; X-P2P-PeerDist: Version=1.0;MissingDataRequest=true” to ContentServer| 
+| | ContentServer sends content to Client| 
 |  **Test Cleanup**| Clear hash on ContentServer| 
 
 #### <a name="_Toc462327699"/>ContentServer_MissingContentRetrieval_HTTPOnly_V2 (BVT)
@@ -410,10 +409,10 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| ------------- |
 |  **Description**| BranchCache2.0: Client retrieves missing content from content server| 
 |  **Test Initialization**|  | 
-|  **Message Sequence**| Client1 sends HTTP request with PCCRTP “Accept-Encoding: peerdist” to ContentServer| 
-| | ContentServer sends content to Client1 and generates hash| 
-| | Client1 sends HTTP request with PCCRTP “Accept-Encoding: peerdist; X-P2P-PeerDist: Version=1.1;MissingDataRequest=true to ContentServer| 
-| | ContentServer sends content to Client1| 
+|  **Message Sequence**| Client sends HTTP request with PCCRTP “Accept-Encoding: peerdist” to ContentServer| 
+| | ContentServer sends content to Client and generates hash| 
+| | Client sends HTTP request with PCCRTP “Accept-Encoding: peerdist; X-P2P-PeerDist: Version=1.1;MissingDataRequest=true to ContentServer| 
+| | ContentServer sends content to Client| 
 |  **Test Cleanup**| Clear hash on ContentServer| 
 
 #### <a name="_Toc462327700"/>ContentServer_SmbServer_HashV1FileBased
@@ -422,7 +421,7 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| ------------- |
 |  **Description**| BranchCache1.0 &2.0: Client receives error response from ContentServer| 
 |  **Test Initialization**|  | 
-|  **Message Sequence**| Client1 sends SRV_READ_HASH v1 and SRV_HASH_RETRIEVE_FILE_BASED request to ContentServer| 
+|  **Message Sequence**| Client sends SRV_READ_HASH v1 and SRV_HASH_RETRIEVE_FILE_BASED request to ContentServer| 
 | | ContentServer sends response with error code| 
 |  **Test Cleanup**| Clear hash on ContentServer| 
 
@@ -432,8 +431,8 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| ------------- |
 |  **Description**| BranchCache1.0 &2.0: Client receives error response from ContentServer | 
 |  **Test Initialization**|  | 
-|  **Message Sequence**| Client1 sends request with invalid offset to ContentServer| 
-| | ContentServer sends error response to Client1| 
+|  **Message Sequence**| Client sends request with invalid offset to ContentServer| 
+| | ContentServer sends error response to Client| 
 |  **Test Cleanup**| Clear hash on ContentServer| 
 
 #### <a name="_Toc462327702"/>ContentServer_SmbServer_HashVersionInvalid
@@ -442,8 +441,8 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| ------------- |
 |  **Description**| BranchCache1.0 &2.0: Client receives error response from ContentServer| 
 |  **Test Initialization**|  | 
-|  **Message Sequence**| Client1 sends request with invalid hash version to ContentServer| 
-| | ContentServer sends error response to Client1| 
+|  **Message Sequence**| Client sends request with invalid hash version to ContentServer| 
+| | ContentServer sends error response to Client| 
 |  **Test Cleanup**| Clear hash on ContentServer| 
 
 #### <a name="_Toc462327703"/>ContentServer_SmbServer_HashRetrivalTypeInvalid
@@ -452,8 +451,8 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| ------------- |
 |  **Description**| BranchCache1.0 &2.0: Client receives error response from ContentServer| 
 |  **Test Initialization**|  | 
-|  **Message Sequence**| Client1 sends request with invalid hash retrieval type to ContentServer| 
-| | ContentServer sends error response to Client1| 
+|  **Message Sequence**| Client sends request with invalid hash retrieval type to ContentServer| 
+| | ContentServer sends error response to Client| 
 |  **Test Cleanup**| Clear hash on ContentServer| 
 
 #### <a name="_Toc462327704"/>ContentServer_SmbServer_HashV2HashBased
@@ -462,8 +461,8 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| ------------- |
 |  **Description**| BranchCache1.0 &2.0: Client receives error response from ContentServer| 
 |  **Test Initialization**|  | 
-|  **Message Sequence**| Client1 sends request with SRV_HASH_VER_2 and SRV_HASH_RETRIEVE_HASH_BASED to ContentServer| 
-| | ContentServer sends error response to Client1| 
+|  **Message Sequence**| Client sends request with SRV_HASH_VER_2 and SRV_HASH_RETRIEVE_HASH_BASED to ContentServer| 
+| | ContentServer sends error response to Client| 
 |  **Test Cleanup**| Clear hash on ContentServer| 
 
 #### <a name="_Toc462327705"/>ContentServer_SmbServer_HashTypeInvalid
@@ -472,8 +471,8 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| ------------- |
 |  **Description**| BranchCache1.0 &2.0: Client receives error response from ContentServer| 
 |  **Test Initialization**|  | 
-|  **Message Sequence**| Client1 sends request with invalid hash type to ContentServer| 
-| | ContentServer sends error response to Client1| 
+|  **Message Sequence**| Client sends request with invalid hash type to ContentServer| 
+| | ContentServer sends error response to Client| 
 |  **Test Cleanup**| Clear hash on ContentServer| 
 
 #### <a name="_Toc462327706"/>ContentServer_SmbServer_HashV1FileBased_Smb2002
@@ -482,8 +481,8 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| ------------- |
 |  **Description**| BranchCache1.0 &2.0: Client receives error response from ContentServer| 
 |  **Test Initialization**|  | 
-|  **Message Sequence**| Client1 sends request with invalid hash type to ContentServer| 
-| | ContentServer sends error response to Client1| 
+|  **Message Sequence**| Client sends request with invalid hash type to ContentServer| 
+| | ContentServer sends error response to Client| 
 |  **Test Cleanup**| Clear hash on ContentServer| 
 
 #### <a name="_Toc462327707"/>ContentServer_SmbServer_HashV2HashBased_Smb21
@@ -492,8 +491,8 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| ------------- |
 |  **Description**| BranchCache1.0 &2.0: Client receives error response from ContentServer| 
 |  **Test Initialization**|  | 
-|  **Message Sequence**| Client1 sends request with invalid hash type to ContentServer| 
-| | ContentServer sends error response to Client1| 
+|  **Message Sequence**| Client sends request with invalid hash type to ContentServer| 
+| | ContentServer sends error response to Client| 
 |  **Test Cleanup**| Clear hash on ContentServer| 
 
 #### <a name="_Toc462327708"/>ContentServer_PccrtpServer_MissingDataRequestInvalid
@@ -502,10 +501,10 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| ------------- |
 |  **Description**| BranchCache1.0 &2.0: Client retrieves missing data from ContentServer| 
 |  **Test Initialization**|  | 
-|  **Message Sequence**| Client1 sends PCCRTP request to ContentServer| 
+|  **Message Sequence**| Client sends PCCRTP request to ContentServer| 
 | | ContentServer sends content to Cient1 and generate hash| 
-| | Client1 sends PCCRTP request with “Version=1.0, MissingDataRequest=Invalid Value”| 
-| | ContentServer sends missing content to Client1| 
+| | Client sends PCCRTP request with “Version=1.0, MissingDataRequest=Invalid Value”| 
+| | ContentServer sends missing content to Client| 
 |  **Test Cleanup**| Clear hash on ContentServer| 
 
 #### <a name="_Toc462327709"/>ContentServer_PccrtpServer_MissingDataRequestFalse
@@ -514,10 +513,10 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| ------------- |
 |  **Description**| BranchCache1.0 &2.0: Client retrieves missing data from ContentServer| 
 |  **Test Initialization**|  | 
-|  **Message Sequence**| Client1 sends PCCRTP request to ContentServer| 
-| | ContentServer sends content to Client1 and generate hash| 
-| | Client1 sends PCCRTP request with “Version=1.0, MissingDataRequest=false”| 
-| | ContentServer sends content information to Client1| 
+|  **Message Sequence**| Client sends PCCRTP request to ContentServer| 
+| | ContentServer sends content to Client and generate hash| 
+| | Client sends PCCRTP request with “Version=1.0, MissingDataRequest=false”| 
+| | ContentServer sends content information to Client| 
 |  **Test Cleanup**| Clear hash on ContentServer| 
 
 #### <a name="_Toc462327710"/>ContentServer_PccrtpServer_ContentEncodingNotHavaPeerDist
@@ -526,9 +525,9 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| ------------- |
 |  **Description**| BranchCache1.0 &2.0: Client retrieves content from ContentServer| 
 |  **Test Initialization**|  | 
-|  **Message Sequence**| Client1 sends PCCRTP request to ContentServer| 
-| | ContentServer sends content to Client1 and generate hash| 
-| | Client1 sends PCCRTP request without peerdist Accept-Encoding to ContentServer| 
+|  **Message Sequence**| Client sends PCCRTP request to ContentServer| 
+| | ContentServer sends content to Client and generate hash| 
+| | Client sends PCCRTP request without peerdist Accept-Encoding to ContentServer| 
 | | ContentServer sends content to Clietn1| 
 |  **Test Cleanup**| Clear hash on ContentServer| 
 
@@ -538,9 +537,9 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| ------------- |
 |  **Description**| BranchCache1.0 &2.0: Client sends invalid request to ContentServer| 
 |  **Test Initialization**|  | 
-|  **Message Sequence**| Client1 sends PCCRTP request to ContentServer| 
-| | ContentServer sends content to Client1 and generate hash| 
-| | Client1 sends PCCRTP request with incompatible version to ContentServer sends response with ContentEncoding not equal “peerdist” and content to Client1| 
+|  **Message Sequence**| Client sends PCCRTP request to ContentServer| 
+| | ContentServer sends content to Client and generate hash| 
+| | Client sends PCCRTP request with incompatible version to ContentServer sends response with ContentEncoding not equal “peerdist” and content to Client| 
 |  **Test Cleanup**| Clear hash on ContentServer| 
 
 #### <a name="_Toc462327712"/>ContentServer_PccrcServer_MultipleSegments
@@ -549,10 +548,10 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| ------------- |
 |  **Description**| BranchCache1.0: Client retrieves multiple segments from ContentServer| 
 |  **Test Initialization**|  | 
-|  **Message Sequence**| Client1 sends request to ContentServer to retrieve the file with multiple segments| 
-| | ContentServer sends content to Client1 and generate hash| 
-| | Client1 sends request to ContentServer| 
-| | ContentServer sends content information to Client1| 
+|  **Message Sequence**| Client sends request to ContentServer to retrieve the file with multiple segments| 
+| | ContentServer sends content to Client and generate hash| 
+| | Client sends request to ContentServer| 
+| | ContentServer sends content information to Client| 
 |  **Test Cleanup**| Clear hash on ContentServer| 
 
 ### <a name="_Toc462327713"/>Hosted Cache Server
@@ -564,39 +563,39 @@ There are also some additional test cases for individual protocols to test bound
 |  **Description**| BranchCache1.0: Client downloads content from content server and offers to hosted cache server, then download the cache from hosted cache server| | 
 |  **Test Initialization**| |  | 
 |  **Message Sequence**| HTTP:| | 
-| | Client1 sends HTTP request with PCCRTP “Accept-Encoding: peerdist” to ContentServer| | 
-| | ContentServer sends content to Client1| | 
-| | Client1 sends HTTP request with PCCRTP “Accept-Encoding: peerdist” to ContentServer| | 
-| | ContentServer sends v1 content information to Client1| | 
+| | Client sends HTTP request with PCCRTP “Accept-Encoding: peerdist” to ContentServer| | 
+| | ContentServer sends content to Client| | 
+| | Client sends HTTP request with PCCRTP “Accept-Encoding: peerdist” to ContentServer| | 
+| | ContentServer sends v1 content information to Client| | 
 | | SMB2:| | 
-| | Client1 sends SRV_READ_HASH v1 request to ContentServer| | 
-| | ContentServer sends error response to Client1| | 
-| | Client1 sends READ request to ContentServer| | 
-| | ContentServer sends content to Client1| | 
-| | Client1 sends SRV_READ_HASH v1 request to ContentServer| | 
-| | ContentServer sends SRV_READ_HASH v1 response to Client1| | 
-| | Client1 sends MSG_NEGO_REQ cached content retrieval request to HostedCacheServer with MinSupportedProtocolVersion and MaxSupportedProtocolVersion set to 1.0| | 
-| | Server sends MSG_NEGO_RESP to Client1| | 
-| | Client1 sends MSG_GETBLKLIST to HostedCacheServer| | 
-| | HostedCacheServer sends MSG_BLKLIST to Client1 indicating cache missing| | 
-| | Client1 sends MSG_GETBLK to HostedCacheServer| | 
-| | HostedCacheServer sends MSG_BLK to Client1 indicating cache missing| | 
-| | Client1 sends INITIAL_OFFER_MESSAGE to HostedCacheServer| | 
-| | HostedCacheServer sends response code INTERESTED to Client1| | 
-| | Client1 sends SEGMENT_INFO_MESSAGE to HostedCacheServer| | 
-| | HostedCacheServer sends response code OK to Client1| | 
-| | HostedCacheServer optionally sends MSG_NEGO_REQ to Client1| | 
-| | Client1 sends MSG_NEGO_RESP to HostedCacheServer with MinSupportedProtocolVersion and MaxSupportedProtocolVersion set to 1.0 if negotiation request is received| | 
-| | HostedCacheServer optionally sends MSG_GETBLKLIST to Client1| | 
-| | Client1 sends MSG_BLKLIST to HostedCacheServer| | 
-| | HostedCacheServer sends MSG_GETBLKS to Client1| | 
-| | Client1 sends MSG_BLKS to HostedCacheServer| | 
-| | Client1 sends MSG_NEGO_REQ to HostedCacheServer with MinSupportedProtocolVersion and MaxSupportedProtocolVersion set to 1.0| | 
-| | Server sends MSG_NEGO_RESP to Client1| | 
-| | Client1 sends MSG_GETBLKLIST to HostedCacheServer| | 
-| | HostedCacheServer sends MSG_BLKLIST to Client1| | 
-| | Client1 sends MSG_GETBLKS to HostedCacheServer| | 
-| | HostedCacheServer sends MSG_BLKS to Client1| | 
+| | Client sends SRV_READ_HASH v1 request to ContentServer| | 
+| | ContentServer sends error response to Client| | 
+| | Client sends READ request to ContentServer| | 
+| | ContentServer sends content to Client| | 
+| | Client sends SRV_READ_HASH v1 request to ContentServer| | 
+| | ContentServer sends SRV_READ_HASH v1 response to Client| | 
+| | Client sends MSG_NEGO_REQ cached content retrieval request to HostedCacheServer with MinSupportedProtocolVersion and MaxSupportedProtocolVersion set to 1.0| | 
+| | Server sends MSG_NEGO_RESP to Client| | 
+| | Client sends MSG_GETBLKLIST to HostedCacheServer| | 
+| | HostedCacheServer sends MSG_BLKLIST to Client indicating cache missing| | 
+| | Client sends MSG_GETBLK to HostedCacheServer| | 
+| | HostedCacheServer sends MSG_BLK to Client indicating cache missing| | 
+| | Client sends INITIAL_OFFER_MESSAGE to HostedCacheServer| | 
+| | HostedCacheServer sends response code INTERESTED to Client| | 
+| | Client sends SEGMENT_INFO_MESSAGE to HostedCacheServer| | 
+| | HostedCacheServer sends response code OK to Client| | 
+| | HostedCacheServer optionally sends MSG_NEGO_REQ to Client| | 
+| | Client sends MSG_NEGO_RESP to HostedCacheServer with MinSupportedProtocolVersion and MaxSupportedProtocolVersion set to 1.0 if negotiation request is received| | 
+| | HostedCacheServer optionally sends MSG_GETBLKLIST to Client| | 
+| | Client sends MSG_BLKLIST to HostedCacheServer| | 
+| | HostedCacheServer sends MSG_GETBLKS to Client| | 
+| | Client sends MSG_BLKS to HostedCacheServer| | 
+| | Client sends MSG_NEGO_REQ to HostedCacheServer with MinSupportedProtocolVersion and MaxSupportedProtocolVersion set to 1.0| | 
+| | Server sends MSG_NEGO_RESP to Client| | 
+| | Client sends MSG_GETBLKLIST to HostedCacheServer| | 
+| | HostedCacheServer sends MSG_BLKLIST to Client| | 
+| | Client sends MSG_GETBLKS to HostedCacheServer| | 
+| | HostedCacheServer sends MSG_BLKS to Client| | 
 |  **Test Cleanup**| Clear hash on ContentServer| | 
 | | Clear cache on HostedCacheServer| | 
 
@@ -607,39 +606,39 @@ There are also some additional test cases for individual protocols to test bound
 |  **Description**| BranchCache2.0: Client downloads content from content server and offers to hosted cache server, then download the cache from hosted cache server| | 
 |  **Test Initialization**| |  | 
 |  **Message Sequence**| HTTP:| | 
-| | Client1 sends HTTP request with PCCRTP “Accept-Encoding: peerdist; X-P2P-PeerDist: Version=1.1; X-P2P-PeerDistEx: MinContentInformation=1.0, MaxContentInformation=2.0” to ContentServer| | 
-| | ContentServer sends content to Client1| | 
-| | Client1 sends HTTP request with PCCRTP “Accept-Encoding: peerdist; X-P2P-PeerDist: Version=1.1; X-P2P-PeerDistEx: MinContentInformation=1.0, MaxContentInformation=2.0” to ContentServer| | 
-| | ContentServer sends v2 content information to Client1| | 
+| | Client sends HTTP request with PCCRTP “Accept-Encoding: peerdist; X-P2P-PeerDist: Version=1.1; X-P2P-PeerDistEx: MinContentInformation=1.0, MaxContentInformation=2.0” to ContentServer| | 
+| | ContentServer sends content to Client| | 
+| | Client sends HTTP request with PCCRTP “Accept-Encoding: peerdist; X-P2P-PeerDist: Version=1.1; X-P2P-PeerDistEx: MinContentInformation=1.0, MaxContentInformation=2.0” to ContentServer| | 
+| | ContentServer sends v2 content information to Client| | 
 | | SMB2:| | 
-| | Client1 sends SRV_READ_HASH v2 request to ContentServer| | 
-| | ContentServer sends error response to Client1| | 
-| | Client1 sends READ request to ContentServer| | 
-| | ContentServer sends content to Client1| | 
-| | Client1 sends SRV_READ_HASH v2 request to ContentServer| | 
-| | ContentServer sends SRV_READ_HASH v2 response to Client1| | 
-| | Client1 sends MSG_NEGO_REQ cached content retrieval request to HostedCacheServer with MinSupportedProtocolVersion set to 1.0 and MaxSupportedProtocolVersion set to 2.0| | 
-| | Server sends MSG_NEGO_RESP to Client1| | 
-| | Client1 sends MSG_GETSEGLIST to HostedCacheServer| | 
-| | HostedCacheServer sends MSG_SEGLIST to Client1 indicating cache missing| | 
-| | Client1 sends MSG_GETBLK to HostedCacheServer| | 
-| | HostedCacheServer sends MSG_BLK to Client1 indicating cache missing| | 
-| | Client1 sends BATCHED_OFFER_MESSAGE to HostedCacheServer| | 
-| | HostedCacheServer sends response code OK to Client1| | 
-| | Client1 sends SEGMENT_INFO_MESSAGE to HostedCacheServer| | 
-| | HostedCacheServer sends response code OK to Client1| | 
-| | HostedCacheServer optionally sends MSG_NEGO_REQ to Client1| | 
-| | Client1 sends MSG_NEGO_RESP to HostedCacheServer with MinSupportedProtocolVersion to 2.0 and MaxSupportedProtocolVersion set to 2.0 if negotiation request is received| | 
-| | HostedCacheServer optionally sends MSG_GETBLKLIST to Client1| | 
-| | Client1 sends MSG_BLKLIST to HostedCacheServer| | 
-| | HostedCacheServer sends MSG_GETBLKS to Client1| | 
-| | Client1 sends MSG_BLKS to HostedCacheServer| | 
-| | Client1 sends MSG_NEGO_REQ to HostedCacheServer with MinSupportedProtocolVersion and MaxSupportedProtocolVersion set to 1.0| | 
-| | Server sends MSG_NEGO_RESP to Client1| | 
-| | Client1 sends MSG_GETBLKLIST to HostedCacheServer| | 
-| | HostedCacheServer sends MSG_BLKLIST to Client1| | 
-| | Client1 sends MSG_GETBLKS to HostedCacheServer| | 
-| | HostedCacheServer sends MSG_BLKS to Client1| | 
+| | Client sends SRV_READ_HASH v2 request to ContentServer| | 
+| | ContentServer sends error response to Client| | 
+| | Client sends READ request to ContentServer| | 
+| | ContentServer sends content to Client| | 
+| | Client sends SRV_READ_HASH v2 request to ContentServer| | 
+| | ContentServer sends SRV_READ_HASH v2 response to Client| | 
+| | Client sends MSG_NEGO_REQ cached content retrieval request to HostedCacheServer with MinSupportedProtocolVersion set to 1.0 and MaxSupportedProtocolVersion set to 2.0| | 
+| | Server sends MSG_NEGO_RESP to Client| | 
+| | Client sends MSG_GETSEGLIST to HostedCacheServer| | 
+| | HostedCacheServer sends MSG_SEGLIST to Client indicating cache missing| | 
+| | Client sends MSG_GETBLK to HostedCacheServer| | 
+| | HostedCacheServer sends MSG_BLK to Client indicating cache missing| | 
+| | Client sends BATCHED_OFFER_MESSAGE to HostedCacheServer| | 
+| | HostedCacheServer sends response code OK to Client| | 
+| | Client sends SEGMENT_INFO_MESSAGE to HostedCacheServer| | 
+| | HostedCacheServer sends response code OK to Client| | 
+| | HostedCacheServer optionally sends MSG_NEGO_REQ to Client| | 
+| | Client sends MSG_NEGO_RESP to HostedCacheServer with MinSupportedProtocolVersion to 2.0 and MaxSupportedProtocolVersion set to 2.0 if negotiation request is received| | 
+| | HostedCacheServer optionally sends MSG_GETBLKLIST to Client| | 
+| | Client sends MSG_BLKLIST to HostedCacheServer| | 
+| | HostedCacheServer sends MSG_GETBLKS to Client| | 
+| | Client sends MSG_BLKS to HostedCacheServer| | 
+| | Client sends MSG_NEGO_REQ to HostedCacheServer with MinSupportedProtocolVersion and MaxSupportedProtocolVersion set to 1.0| | 
+| | Server sends MSG_NEGO_RESP to Client| | 
+| | Client sends MSG_GETBLKLIST to HostedCacheServer| | 
+| | HostedCacheServer sends MSG_BLKLIST to Client| | 
+| | Client sends MSG_GETBLKS to HostedCacheServer| | 
+| | HostedCacheServer sends MSG_BLKS to Client| | 
 |  **Test Cleanup**| Clear hash on ContentServer| | 
 | | Clear cache on HostedCacheServer| | 
 
@@ -649,12 +648,12 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| -------------| ------------- |
 |  **Description**| BranchCache1.0: Client sends initial offer message to HostedCacheServer| | 
 |  **Test Initialization**| |  | 
-|  **Message Sequence**| Client1 sends INITIAL_OFFER_MESSAGE to HostedCacheServer| | 
-| | HostedCacheServer sends response with INTERESTED code to Client1| | 
-| | Client1 sends SEGMENT_INFO_MESSAGE to HostedCacheServer| | 
-| | HostedCacheServer sends request to Client1 to retrieve content| | 
-| | Client1 sends the same INITIAL_OFFER_MESSAGE to HostedCacheServer again| | 
-| | HostedCacheServer sends response with OK code to Client1| | 
+|  **Message Sequence**| Client sends INITIAL_OFFER_MESSAGE to HostedCacheServer| | 
+| | HostedCacheServer sends response with INTERESTED code to Client| | 
+| | Client sends SEGMENT_INFO_MESSAGE to HostedCacheServer| | 
+| | HostedCacheServer sends request to Client to retrieve content| | 
+| | Client sends the same INITIAL_OFFER_MESSAGE to HostedCacheServer again| | 
+| | HostedCacheServer sends response with OK code to Client| | 
 |  **Test Cleanup**| Clear hash on ContentServer| | 
 | | Clear cache on HostedCacheServer| | 
 
@@ -664,11 +663,11 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| -------------| ------------- |
 |  **Description**| BranchCache1.0: Client offers segment information to HostedCacheServer| | 
 |  **Test Initialization**| |  | 
-|  **Message Sequence**| Client1 sends INITIAL_OFFER_MESSAGE to HostedCacheServer| | 
-| | HostedCacheServer sends response with INTERESTED code to Client1| | 
-| | Client1 sends SEGMENT_INFO_MESSAGE to HostedCacheServer| | 
-| | Client1 sends the same INITIAL_OFFER_MESSAGE to HostedCacheServer again| | 
-| | HostedCacheServer sends response with OK code to Client1| | 
+|  **Message Sequence**| Client sends INITIAL_OFFER_MESSAGE to HostedCacheServer| | 
+| | HostedCacheServer sends response with INTERESTED code to Client| | 
+| | Client sends SEGMENT_INFO_MESSAGE to HostedCacheServer| | 
+| | Client sends the same INITIAL_OFFER_MESSAGE to HostedCacheServer again| | 
+| | HostedCacheServer sends response with OK code to Client| | 
 |  **Test Cleanup**| Clear hash on ContentServer| | 
 | | Clear cache on HostedCacheServer| | 
 
@@ -678,11 +677,11 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| -------------| ------------- |
 |  **Description**| BranchCache1.0&2.0: Client retrieves content from HostedCacheServer| | 
 |  **Test Initialization**| |  | 
-|  **Message Sequence**| Client1 sends SEGMENT_INFO_MESSAGE to HostedCacheServer| | 
+|  **Message Sequence**| Client sends SEGMENT_INFO_MESSAGE to HostedCacheServer| | 
 | | HostedCacheServer sends request to Clietn1 to retrieve content| | 
-| | Client1 sends response with SizeOfIVBlock field set to 0 to HostedCacheServer| | 
-| | Client1 sends request to HostedCacheServer to retrieve content| | 
-| | HostedCacheServer sends response with SizeOfBlock field set to 0 to Client1| | 
+| | Client sends response with SizeOfIVBlock field set to 0 to HostedCacheServer| | 
+| | Client sends request to HostedCacheServer to retrieve content| | 
+| | HostedCacheServer sends response with SizeOfBlock field set to 0 to Client| | 
 |  **Test Cleanup**| Clear hash on ContentServer| | 
 | | Clear cache on HostedCacheServer| | 
 
@@ -692,11 +691,11 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| -------------| ------------- |
 |  **Description**| BranchCache1.0&2.0: Client retrieves content from HostedCacheServer| | 
 |  **Test Initialization**| |  | 
-|  **Message Sequence**| Client1 sends SEGMENT_INFO_MESSAGE to HostedCacheServer| | 
+|  **Message Sequence**| Client sends SEGMENT_INFO_MESSAGE to HostedCacheServer| | 
 | | HostedCacheServer sends request to Clietn1 to retrieve content| | 
-| | Client1 sends response with SizeOfIVBlock field set to 0 to HostedCacheServer| | 
-| | Client1 sends request to HostedCacheServer to retrieve content| | 
-| | HostedCacheServer sends response with SizeOfBlock field set to 0 to Client1| | 
+| | Client sends response with SizeOfIVBlock field set to 0 to HostedCacheServer| | 
+| | Client sends request to HostedCacheServer to retrieve content| | 
+| | HostedCacheServer sends response with SizeOfBlock field set to 0 to Client| | 
 |  **Test Cleanup**| Clear hash on ContentServer| | 
 | | Clear cache on HostedCacheServer| | 
 
@@ -706,7 +705,7 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| -------------| ------------- |
 |  **Description**| BranchCache1.0&2.0: Client sends initial offer request to HostedCacheServer with invalid message header| | 
 |  **Test Initialization**| |  | 
-|  **Message Sequence**| Client1 sends INITIAL_OFFER_REQUEST with incompatible version or invalid type to HostedCacheServer| | 
+|  **Message Sequence**| Client sends INITIAL_OFFER_REQUEST with incompatible version or invalid type to HostedCacheServer| | 
 | | HostedCacheServer silently discards the error messages.| | 
 |  **Test Cleanup**| Clear hash on ContentServer| | 
 | | Clear cache on HostedCacheServer| | 
@@ -717,8 +716,8 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| -------------| ------------- |
 |  **Description**| BranchCache1.0: Client sends segment info message to HostedCacheServer with invalid message header| | 
 |  **Test Initialization**| |  | 
-|  **Message Sequence**| Client1 sends SEGMENT_INFO_MESSAGE with invalid HashAlgo\incompatible Version to HostedCacheServer| | 
-| | HostedCacheServer sends response with OK code to Client1| | 
+|  **Message Sequence**| Client sends SEGMENT_INFO_MESSAGE with invalid HashAlgo\incompatible Version to HostedCacheServer| | 
+| | HostedCacheServer sends response with OK code to Client| | 
 |  **Test Cleanup**| Clear hash on ContentServer| | 
 | | Clear cache on HostedCacheServer| | 
 
@@ -728,8 +727,8 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| -------------| ------------- |
 |  **Description**| BranchCache1.0: Client sends segment info message to HostedCacheServer| | 
 |  **Test Initialization**| |  | 
-|  **Message Sequence**| Client1 sends SEGMENT_INFO_MESSAGE with empty\multiple segments to HostedCacheServer| | 
-| | HostedCacheServer sends response with OK code to Client1.| | 
+|  **Message Sequence**| Client sends SEGMENT_INFO_MESSAGE with empty\multiple segments to HostedCacheServer| | 
+| | HostedCacheServer sends response with OK code to Client.| | 
 |  **Test Cleanup**| Clear hash on ContentServer| | 
 | | Clear cache on HostedCacheServer| | 
 
@@ -739,7 +738,7 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| -------------| ------------- |
 |  **Description**| BranchCache2.0: Client sends batched offer with invalid segment descriptor to HostedCacheServer| | 
 |  **Test Initialization**| |  | 
-|  **Message Sequence**| Client1 sends BATCHED_OFFER_MESSAGE with many\empty segments to HostedCacheServer| | 
+|  **Message Sequence**| Client sends BATCHED_OFFER_MESSAGE with many\empty segments to HostedCacheServer| | 
 | | HostedCacheServer silently drop invalid batched offer message.| | 
 |  **Test Cleanup**| Clear hash on ContentServer| | 
 | | Clear cache on HostedCacheServer| | 
@@ -750,7 +749,7 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| -------------| ------------- |
 |  **Description**| BranchCache2.0: Client sends invalid batched offer to HostedCacheServer| | 
 |  **Test Initialization**| |  | 
-|  **Message Sequence**| Client1 sends BATCHED_OFFER_MESSAGE with invalid HashAlgo\empty ContentTag to HostedCacheServer| | 
+|  **Message Sequence**| Client sends BATCHED_OFFER_MESSAGE with invalid HashAlgo\empty ContentTag to HostedCacheServer| | 
 | | HostedCacheServer silently drop invalid batched offer message.| | 
 |  **Test Cleanup**| Clear hash on ContentServer| | 
 | | Clear cache on HostedCacheServer| | 
@@ -761,9 +760,9 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| -------------| ------------- |
 |  **Description**| BranchCache2.0: Client sends batched offer to HostedCacheServer| | 
 |  **Test Initialization**| |  | 
-|  **Message Sequence**| Client1 sends BATCHED_OFFER_MESSAGE to HostedCacheServer| | 
+|  **Message Sequence**| Client sends BATCHED_OFFER_MESSAGE to HostedCacheServer| | 
 | | HostedCacheServer retrieves content from HostedCacheServer| | 
-| | Client1 sends BATCHED_OFFER_MESSAGE to HostedCacheServer again| | 
+| | Client sends BATCHED_OFFER_MESSAGE to HostedCacheServer again| | 
 | | HosteCacheServer sends response with OK code to HostedCacheServer| | 
 |  **Test Cleanup**| Clear hash on ContentServer| | 
 | | Clear cache on HostedCacheServer| | 
@@ -774,7 +773,7 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| -------------| ------------- |
 |  **Description**| BranchCache1.0&2.0: Client sends PCCRR request with invalid message header to HostedCacheServer| | 
 |  **Test Initialization**| |  | 
-|  **Message Sequence**| Client1 sends pccrr negotiate request with incompatible ProtoVer, incompatible version or invalid CryptoAlgoId to HostedCacheServer| | 
+|  **Message Sequence**| Client sends pccrr negotiate request with incompatible ProtoVer, incompatible version or invalid CryptoAlgoId to HostedCacheServer| | 
 | | HostedCacheServer silently discards the error messages.| | 
 |  **Test Cleanup**| Clear hash on ContentServer| | 
 | | Clear cache on HostedCacheServer| | 
@@ -785,8 +784,8 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| -------------| ------------- |
 |  **Description**| BranchCache1.0&2.0: Client sends PCCRR request with different CryptoAlgoId to HostedCacheServer| | 
 |  **Test Initialization**| |  | 
-|  **Message Sequence**| Client1 sends pccrr request with CryptoAlgoId value set as NoEncryption, AES192, or AES256 to HostedCacheServer| | 
-| | HostedCacheServer sends response to Client1.| | 
+|  **Message Sequence**| Client sends pccrr request with CryptoAlgoId value set as NoEncryption, AES192, or AES256 to HostedCacheServer| | 
+| | HostedCacheServer sends response to Client.| | 
 |  **Test Cleanup**| Clear hash on ContentServer| | 
 | | Clear cache on HostedCacheServer| | 
 
@@ -796,9 +795,9 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| -------------| ------------- |
 |  **Description**| BranchCache1.0&2.0: Client offers PCCRR response with different CryptoAlgoId to HostedCacheServer| | 
 |  **Test Initialization**| |  | 
-|  **Message Sequence**| Client1 sends PCHC request to HostedCacheServer.| | 
-| | Client1 sends PCCRR response with CryptoAlgoId value set as CryptoAlgoIdNoEncryption, CryptoAlgoIdAES192, or CryptoAlgoIdAES256| | 
-| | Client1 sends PCCRR request to HostedCacheServer to retrieve content.| | 
+|  **Message Sequence**| Client sends PCHC request to HostedCacheServer.| | 
+| | Client sends PCCRR response with CryptoAlgoId value set as CryptoAlgoIdNoEncryption, CryptoAlgoIdAES192, or CryptoAlgoIdAES256| | 
+| | Client sends PCCRR request to HostedCacheServer to retrieve content.| | 
 | | HostedCacheServer sends content to HostedCacheServer.| | 
 |  **Test Cleanup**| Clear hash on ContentServer| | 
 | | Clear cache on HostedCacheServer| | 
@@ -809,8 +808,8 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| -------------| ------------- |
 |  **Description**| BranchCache1.0&2.0: Client offers PCCRR response with invalid message header to HostedCacheServer| | 
 |  **Test Initialization**| |  | 
-|  **Message Sequence**| Client1 sends PCHC request to HostedCacheServer.| | 
-| | Client1 sends PCCRR response with invalid type or incompatible protover to HostedCacheServer| | 
+|  **Message Sequence**| Client sends PCHC request to HostedCacheServer.| | 
+| | Client sends PCCRR response with invalid type or incompatible protover to HostedCacheServer| | 
 | | HostedCacheServer silently discards the error message.| | 
 |  **Test Cleanup**| Clear hash on ContentServer| | 
 | | Clear cache on HostedCacheServer| | 
@@ -821,8 +820,8 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| -------------| ------------- |
 |  **Description**| BranchCache1.0&2.0: Client offers PCCRR response with invalid message header to HostedCacheServer| | 
 |  **Test Initialization**| |  | 
-|  **Message Sequence**| Client1 sends PCHC request to HostedCacheServer.| | 
-| | Client1 sends PCCRR response with invalid type or incompatible protover to HostedCacheServer| | 
+|  **Message Sequence**| Client sends PCHC request to HostedCacheServer.| | 
+| | Client sends PCCRR response with invalid type or incompatible protover to HostedCacheServer| | 
 | | HostedCacheServer silently discards the error message.| | 
 |  **Test Cleanup**| Clear hash on ContentServer| | 
 | | Clear cache on HostedCacheServer| | 
@@ -833,8 +832,8 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| -------------| ------------- |
 |  **Description**| BranchCache1.0&2.0: Client offers PCCRR response with invalid message header to HostedCacheServer| | 
 |  **Test Initialization**| |  | 
-|  **Message Sequence**| Client1 sends PCHC request to HostedCacheServer.| | 
-| | Client1 sends PCCRR response with invalid type or incompatible protover to HostedCacheServer| | 
+|  **Message Sequence**| Client sends PCHC request to HostedCacheServer.| | 
+| | Client sends PCCRR response with invalid type or incompatible protover to HostedCacheServer| | 
 | | HostedCacheServer silently discards the error message.| | 
 |  **Test Cleanup**| Clear hash on ContentServer| | 
 | | Clear cache on HostedCacheServer| | 
@@ -845,8 +844,8 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| -------------| ------------- |
 |  **Description**| BranchCache1.0&2.0: Client offers PCCRR response with invalid message header to HostedCacheServer| | 
 |  **Test Initialization**| |  | 
-|  **Message Sequence**| Client1 sends PCHC request to HostedCacheServer.| | 
-| | Client1 sends PCCRR response with invalid type or incompatible protover to HostedCacheServer| | 
+|  **Message Sequence**| Client sends PCHC request to HostedCacheServer.| | 
+| | Client sends PCCRR response with invalid type or incompatible protover to HostedCacheServer| | 
 | | HostedCacheServer silently discards the error message.| | 
 |  **Test Cleanup**| Clear hash on ContentServer| | 
 | | Clear cache on HostedCacheServer| | 
@@ -857,8 +856,8 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| -------------| ------------- |
 |  **Description**| BranchCache1.0&2.0: Client offers PCCRR response with invalid message header to HostedCacheServer| | 
 |  **Test Initialization**| |  | 
-|  **Message Sequence**| Client1 sends PCHC request to HostedCacheServer.| | 
-| | Client1 sends PCCRR response with invalid type or incompatible protover to HostedCacheServer| | 
+|  **Message Sequence**| Client sends PCHC request to HostedCacheServer.| | 
+| | Client sends PCCRR response with invalid type or incompatible protover to HostedCacheServer| | 
 | | HostedCacheServer silently discards the error message.| | 
 |  **Test Cleanup**| Clear hash on ContentServer| | 
 | | Clear cache on HostedCacheServer| | 
@@ -869,8 +868,8 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| -------------| ------------- |
 |  **Description**| BranchCache1.0&2.0: Client offers PCCRR response with invalid message header to HostedCacheServer| | 
 |  **Test Initialization**| |  | 
-|  **Message Sequence**| Client1 sends PCHC request to HostedCacheServer.| | 
-| | Client1 sends PCCRR response with invalid type or incompatible protover to HostedCacheServer| | 
+|  **Message Sequence**| Client sends PCHC request to HostedCacheServer.| | 
+| | Client sends PCCRR response with invalid type or incompatible protover to HostedCacheServer| | 
 | | HostedCacheServer silently discards the error message.| | 
 |  **Test Cleanup**| Clear hash on ContentServer| | 
 | | Clear cache on HostedCacheServer| | 
@@ -881,8 +880,8 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| -------------| ------------- |
 |  **Description**| BranchCache1.0&2.0: Client offers PCCRR response with invalid message header to HostedCacheServer| | 
 |  **Test Initialization**| |  | 
-|  **Message Sequence**| Client1 sends PCHC request to HostedCacheServer.| | 
-| | Client1 sends PCCRR response with invalid type or incompatible protover to HostedCacheServer| | 
+|  **Message Sequence**| Client sends PCHC request to HostedCacheServer.| | 
+| | Client sends PCCRR response with invalid type or incompatible protover to HostedCacheServer| | 
 | | HostedCacheServer silently discards the error message.| | 
 |  **Test Cleanup**| Clear hash on ContentServer| | 
 | | Clear cache on HostedCacheServer| | 
@@ -893,8 +892,8 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| -------------| ------------- |
 |  **Description**| BranchCache1.0&2.0: Client offers PCCRR response with invalid message header to HostedCacheServer| | 
 |  **Test Initialization**| |  | 
-|  **Message Sequence**| Client1 sends PCHC request to HostedCacheServer.| | 
-| | Client1 sends PCCRR response with invalid type or incompatible protover to HostedCacheServer| | 
+|  **Message Sequence**| Client sends PCHC request to HostedCacheServer.| | 
+| | Client sends PCCRR response with invalid type or incompatible protover to HostedCacheServer| | 
 | | HostedCacheServer silently discards the error message.| | 
 |  **Test Cleanup**| Clear hash on ContentServer| | 
 | | Clear cache on HostedCacheServer| | 
@@ -905,8 +904,8 @@ There are also some additional test cases for individual protocols to test bound
 | -------------| -------------| ------------- |
 |  **Description**| BranchCache1.0&2.0: Client offers PCCRR response with invalid message header to HostedCacheServer| | 
 |  **Test Initialization**| |  | 
-|  **Message Sequence**| Client1 sends PCHC request to HostedCacheServer.| | 
-| | Client1 sends PCCRR response with invalid type or incompatible protover to HostedCacheServer| | 
+|  **Message Sequence**| Client sends PCHC request to HostedCacheServer.| | 
+| | Client sends PCCRR response with invalid type or incompatible protover to HostedCacheServer| | 
 | | HostedCacheServer silently discards the error message.| | 
 |  **Test Cleanup**| Clear hash on ContentServer| | 
 | | Clear cache on HostedCacheServer| | 

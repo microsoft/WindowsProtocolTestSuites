@@ -180,13 +180,17 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
             if (filter != null)
             {
-                Dictionary<string, List<Rule>> featureMappingTable = CreateFeatureMappingTable();
+                Dictionary<string, List<Rule>> reverseMappingTable;
+                Dictionary<string, List<Rule>> featureMappingTable = CreateFeatureMappingTable(out reverseMappingTable);
                 if (featureMappingTable != null)
                 {
                     RuleGroup targetFilterGroup = filter[targetFilterIndex];
                     RuleGroup mappingFilterGroup = filter[mappingFilterIndex];
                     targetFilterGroup.featureMappingTable = featureMappingTable;
                     targetFilterGroup.mappingRuleGroup = mappingFilterGroup;
+
+                    mappingFilterGroup.reverseFeatureMappingTable = reverseMappingTable;
+                    mappingFilterGroup.targetRuleGroup = targetFilterGroup;
                 }
             }
         }
@@ -381,15 +385,15 @@ namespace Microsoft.Protocols.TestManager.Kernel
                         r.Status = RuleSupportStatus.Selected;
                         break;
                     case Microsoft.Protocols.TestManager.Detector.RuleStatus.NotSupported:
-                        r.SelectStatus = RuleSelectStatus.NotSelected;
+                        r.SelectStatus = RuleSelectStatus.UnSelected;
                         r.Status = RuleSupportStatus.NotSupported;
                         break;
                     case Microsoft.Protocols.TestManager.Detector.RuleStatus.Unknown:
-                        r.SelectStatus = RuleSelectStatus.NotSelected;
+                        r.SelectStatus = RuleSelectStatus.UnSelected;
                         r.Status = RuleSupportStatus.Unknown;
                         break;
                     default:
-                        r.SelectStatus = RuleSelectStatus.NotSelected;
+                        r.SelectStatus = RuleSelectStatus.UnSelected;
                         r.Status = RuleSupportStatus.Default;
                         break;
                 }
@@ -517,11 +521,12 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// Create a feature mapping table
         /// </summary>
         /// <returns>A feature mapping table</returns>
-        private Dictionary<string, List<Rule>> CreateFeatureMappingTable()
+        private Dictionary<string, List<Rule>> CreateFeatureMappingTable(out Dictionary<string, List<Rule>> outReverseMappingTable)
         {
             if (targetFilterIndex == -1 ||
                 mappingFilterIndex == -1)
             {
+                outReverseMappingTable = null;
                 return null;
             }
             Dictionary<string, List<Rule>> featureMappingTable = new Dictionary<string, List<Rule>>();
@@ -529,6 +534,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
             RuleGroup mappingFilterGroup = filter[mappingFilterIndex];
             Dictionary<string, Rule> mappingRuleTable = createRuleTableFromRuleGroup(mappingFilterGroup);
             Dictionary<string, Rule> targetRuleTable = createRuleTableFromRuleGroup(targetFilterGroup);
+
+            Dictionary<string, List<Rule>> reverseMappingTable = new Dictionary<string, List<Rule>>();
 
             List<TestCase> testCaseList = testSuite.TestCaseList;
             foreach (TestCase testCase in testCaseList)
@@ -556,12 +563,26 @@ namespace Microsoft.Protocols.TestManager.Kernel
                                 {
                                     featureMappingTable[target] = new List<Rule> { currentRule };
                                 }
+
+                                // Add item to reverse mapping table
+                                if (reverseMappingTable.ContainsKey(category))
+                                {
+                                    if (!reverseMappingTable[category].Contains(targetRuleTable[target]))
+                                    {
+                                        reverseMappingTable[category].Add(targetRuleTable[target]);
+                                    }
+                                }
+                                else
+                                {
+                                    reverseMappingTable[category] = new List<Rule> { targetRuleTable[target] };
+                                }
                             }
                         }
                         break;
                     }
                 }
             }
+            outReverseMappingTable = reverseMappingTable;
             return featureMappingTable;
         }
 

@@ -110,6 +110,8 @@ Note
 
 Refer to the Privacy Statement and EULA for further information
 
+[Please refer to the Tested RDMA Adapter](#_Toc395696837)
+
 ### <a name="_Toc395696798"/>Environment
 
 Run this test suite in a domain or non-domain environment that contains the following computers (physical or virtual): 
@@ -167,7 +169,7 @@ All of the following software must be installed on the driver computer before in
 
 Run this test suite in a domain or a non-domain environment using either physical or virtual machines. This section is about the non-domain test environment using physical machines. 
 
-For information about configuring a virtual machine, see [http://www.microsoft.com/virtualization/en/us/solution-appliance-test.aspx](http://www.microsoft.com/virtualization/en/us/solution-appliance-test.aspx). The configuration of virtual machines for this test suite is not covered in this user guide. 
+For information about configuring a virtual machine, see [https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/create-virtual-machine](https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/create-virtual-machine). The configuration of virtual machines for this test suite is not covered in this user guide. 
 
 #### <a name="_Toc395696821"/>Network Environment
 
@@ -433,10 +435,10 @@ C:\MicrosoftProtocolTests\MS-SMBD\Server-Endpoint\ _&#60; version &#35;  &#62;_ 
 ## <a name="_Toc395696837"/>Tested RDMA Adapter
 Here we list the RDMA adapter we tested.
 
-| &#32;| &#32;| &#32; |
-| -------------| -------------| ------------- |
-| Manufacturer| Model| Driver| 
-| Chelsio | T580-LP-CR| [Unified Wire v6.0.19.0](https://service.chelsio.com/downloads/Microsoft/)|
-| Mellanox| ConnectX-2 IPoIB| [WinOF v5.35](http://www.mellanox.com/page/products_dyn?product_family=32&mtag=windows_sw_drivers)| 
+| &#32;| &#32;| &#32; | &#32; |
+| -------------| -------------| ------------- | ------------- |
+| Manufacturer| Model| Driver| UserGuide|
+| Chelsio | T580-LP-CR| [Unified Wire v6.11.4.0](https://service.chelsio.com/downloads/Microsoft/)| [Chelsio-UnifiedWire-Windows-UserGuide](https://service.chelsio.com/downloads/Microsoft/Drivers/ChelsioUwire_6.11.4.0_WIN_006.0.33/Chelsio-UnifiedWire-Windows-UserGuide.pdf)|
+| Mellanox| ConnectX-2 IPoIB| [WinOF v5.50](http://www.mellanox.com/page/products_dyn?product_family=32&mtag=windows_sw_drivers)| [WinOF_VPI_User_Manual_v5.50](http://www.mellanox.com/related-docs/prod_software/WinOF_VPI_User_Manual_v5.50.pdf)|
 |  |  |  | 
 

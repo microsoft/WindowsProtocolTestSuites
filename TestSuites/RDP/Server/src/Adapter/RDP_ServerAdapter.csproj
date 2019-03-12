@@ -62,6 +62,11 @@
     <Compile Include="RDPBCGR\RdpbcgrConstValue.cs" />
     <Compile Include="RDPBCGR\RdpbcgrTypes.cs" />
     <Compile Include="RDPBCGR\RdpbcgrAdapter_ReceiveMethod.cs" />
+    <Compile Include="RDPEDYC\IRdpedycAdapter.cs" />
+    <Compile Include="RDPEDYC\RDPEDYCAdapter.cs" />
+    <Compile Include="RDPEMT\IRdpemtAdapter.cs" />
+    <Compile Include="RDPEMT\RdpemtAdapter.cs" />
+    <Compile Include="RDPEMT\RdpemtTypes.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\Asn1Base\Asn1Base.csproj">
@@ -79,6 +84,14 @@
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEDYC\Rdpedyc.csproj">
       <Project>{cfbafde2-f509-4ac8-817a-0c26c1b27653}</Project>
       <Name>Rdpedyc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEMT\Rdpemt.csproj">
+      <Project>{9E44ED93-D10D-42E3-A8BF-AD1923859857}</Project>
+      <Name>Rdpemt</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEUDP\Rdpeudp.csproj">
+      <Project>{B6F8EB97-B6A5-4092-9ED0-12C0487DA124}</Project>
+      <Name>Rdpeudp</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPRFX\Rdprfx.csproj">
       <Project>{9dd86de1-3231-4713-9b45-493f4fe4199c}</Project>

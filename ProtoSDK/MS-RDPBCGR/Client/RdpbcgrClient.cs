@@ -13,6 +13,7 @@ using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
+using System.Security.Authentication;
 
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.Mcs;
@@ -43,6 +44,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         private StreamConfig transportConfig;
         private bool isAutoReactivate;
         protected const ushort TS_UD_CS_SEC_SecurityDataSize = 12;
+        private SslProtocols tlsVersion;
 
         /// <summary>
         /// A TCP transport instance, sending and receiving all the PDUs.
@@ -140,6 +142,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             }
         }
 
+        public SslProtocols TlsVersion
+        {
+            get
+            {
+                return tlsVersion;
+            }
+            set
+            {
+                tlsVersion = value;
+            }
+        }
+
         /// <summary>
         /// Get all virtual channels' names and ids that have been allocated.
         /// This method can be called after receiving MCS Connect Response PDU with GCC Conference Create Response.
@@ -213,7 +227,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// User can add, remove or update the capability sets with the return value.
         /// </summary>
         /// <returns>The capability sets created.</returns>
-        public Collection<ITsCapsSet> CreateCapabilitySets()
+        public Collection<ITsCapsSet> CreateCapabilitySets(
+            bool supportAutoReconnect = true,
+            bool supportFastPathInput = false,
+            bool supportFastPathOutput = false,
+            bool supportSVCCompression = false)
         {
             Collection<ITsCapsSet> capabilitySets = new Collection<ITsCapsSet>();
 
@@ -229,8 +247,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             generalCapabilitySet.generalCompressionTypes = generalCompressionTypes_Values.V1;
             generalCapabilitySet.extraFlags = extraFlags_Values.NO_BITMAP_COMPRESSION_HDR
                                             | extraFlags_Values.ENC_SALTED_CHECKSUM
-                                            | extraFlags_Values.AUTORECONNECT_SUPPORTED
                                             | extraFlags_Values.LONG_CREDENTIALS_SUPPORTED;
+            if (supportAutoReconnect)
+            {
+                generalCapabilitySet.extraFlags |= extraFlags_Values.AUTORECONNECT_SUPPORTED;
+            }
+            if (supportFastPathOutput)
+            {
+                generalCapabilitySet.extraFlags |= extraFlags_Values.FASTPATH_OUTPUT_SUPPORTED;
+            }
             generalCapabilitySet.updateCapabilityFlag = updateCapabilityFlag_Values.V1;
             generalCapabilitySet.remoteUnshareFlag = remoteUnshareFlag_Values.V1;
             generalCapabilitySet.generalCompressionLevel = generalCompressionLevel_Values.V1;
@@ -308,10 +333,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             bitmapCacheCapabilitySet.BitmapCache4CellInfo.NumEntriesAndK = 0;
             bitmapCacheCapabilitySet.BitmapCache5CellInfo.NumEntriesAndK = 0;
             bitmapCacheCapabilitySet.Pad3 = ConstValue.BITMAP_CACHE_PAD3;
-            bitmapCacheCapabilitySet.lengthCapability = (ushort)(Marshal.SizeOf(bitmapCacheCapabilitySet)
-                                                      + bitmapCacheCapabilitySet.Pad3.Length
-                                                      - sizeof(int));
-
+            bitmapCacheCapabilitySet.lengthCapability = (ushort)(TypeMarshal.ToBytes(bitmapCacheCapabilitySet).Length);
             capabilitySets.Add(bitmapCacheCapabilitySet);
             #endregion Populating BitmapCache Capability Set
 
@@ -331,18 +353,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             inputCapabilitySet.capabilitySetType = capabilitySetType_Values.CAPSTYPE_INPUT;
             inputCapabilitySet.inputFlags = inputFlags_Values.INPUT_FLAG_UNICODE
                                           | inputFlags_Values.INPUT_FLAG_MOUSEX
-                                          | inputFlags_Values.INPUT_FLAG_SCANCODES
-                                          | inputFlags_Values.INPUT_FLAG_FASTPATH_INPUT2;
+                                          | inputFlags_Values.INPUT_FLAG_SCANCODES;
+            if (supportFastPathInput)
+            {
+                inputCapabilitySet.inputFlags |=
+                    (inputFlags_Values.INPUT_FLAG_FASTPATH_INPUT2 | inputFlags_Values.TS_INPUT_FLAG_QOE_TIMESTAMPS);
+            }
             inputCapabilitySet.pad2octetsA = 0;
             inputCapabilitySet.keyboardLayout = ConstValue.LOCALE_ENGLISH_UNITED_STATES;
             inputCapabilitySet.keyboardType = TS_INPUT_CAPABILITYSET_keyboardType_Values.V4;
             inputCapabilitySet.keyboardSubType = 0;
             inputCapabilitySet.keyboardFunctionKey = ConstValue.KEYBOARD_FUNCTION_KEY_NUMBER_DEFAULT;
             inputCapabilitySet.imeFileName = string.Empty;
-            inputCapabilitySet.lengthCapability = (ushort)(Marshal.SizeOf(inputCapabilitySet)
-                                                - sizeof(int)
-                                                + ConstValue.INPUT_CAP_IME_FLIENAME_SIZE);
-
+            inputCapabilitySet.lengthCapability = (ushort)(
+                                                    TypeMarshal.ToBytes(inputCapabilitySet).Length -
+                                                    2 * (inputCapabilitySet.imeFileName.Length + 1) + // length of (inputCapabilitySet.imeFileName + null terminator) in bytes[]
+                                                    ConstValue.INPUT_CAP_IME_FILENAME_SIZE);
             capabilitySets.Add(inputCapabilitySet);
             #endregion Populating Input Capability Set
 
@@ -408,7 +434,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             #region Populating Virtual Channel Capability Set
             TS_VIRTUALCHANNEL_CAPABILITYSET virtualCapabilitySet = new TS_VIRTUALCHANNEL_CAPABILITYSET();
             virtualCapabilitySet.capabilitySetType = capabilitySetType_Values.CAPSTYPE_VIRTUALCHANNEL;
-            virtualCapabilitySet.flags = TS_VIRTUALCHANNEL_CAPABILITYSET_flags_Values.VCCAPS_COMPR_SC;
+            if (supportSVCCompression)
+            {
+                virtualCapabilitySet.flags = TS_VIRTUALCHANNEL_CAPABILITYSET_flags_Values.VCCAPS_COMPR_SC;
+            }
+            else
+            {
+                virtualCapabilitySet.flags = TS_VIRTUALCHANNEL_CAPABILITYSET_flags_Values.VCCAPS_NO_COMPR;
+            }
             virtualCapabilitySet.lengthCapability = (ushort)Marshal.SizeOf(virtualCapabilitySet);
             virtualCapabilitySet.VCChunkSize = 0;
 
@@ -617,7 +650,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                         new RemoteCertificateValidationCallback(ValidateServerCertificate),
                         null
                         );
-                    ((SslStream)clientStream).AuthenticateAsClient(serverName);
+                    ((SslStream)clientStream).AuthenticateAsClient(serverName, null, TlsVersion, false);
                     transportConfig.Stream = clientStream;
                     transportStack.UpdateConfig(transportConfig);
                 }
@@ -2422,9 +2455,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         }
 
         /// <summary>
-        /// Create Fast Path Input Event PDU. This PDU includes 5 event, 
-        /// FASTPATH_INPUT_EVENT_SCANCODE, FASTPATH_INPUT_EVENT_MOUSE, FASTPATH_INPUT_EVENT_MOUSEX,
-        /// FASTPATH_INPUT_EVENT_SYNC and FASTPATH_INPUT_EVENT_UNICODE for each.
+        /// Create Fast Path Input Event PDU. This PDU includes 6 event, 
+        /// TS_FP_KEYBOARD_EVENT, TS_FP_UNICODE_KEYBOARD_EVENT, TS_FP_POINTER_EVENT,
+        /// TS_FP_POINTERX_EVENT, TS_FP_SYNC_EVENT and TS_FP_QOETIMESTAMP_EVENT for each.
         /// 
         /// The default fields value of the PDU is determined by previous messages.
         /// User can set special value in the PDU other than the default after calling this method.
@@ -2450,7 +2483,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             // events is in the range 1 to 15.
             fastpathInputPdu.fpInputHeader.actionCode =
                 (byte)(((int)actionCode_Values.FASTPATH_INPUT_ACTION_FASTPATH & 0x03)
-                | ((int)(ConstValue.NUMBER_EVENTS & 0x0F) << 2));
+                | ((int)(ConstValue.FP_NUMBER_EVENTS & 0x0F) << 2));
 
             if (context.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE)
             {
@@ -2463,7 +2496,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             fastpathInputPdu.dataSignature = null;
             fastpathInputPdu.length1 = 0;
             fastpathInputPdu.length2 = 0;
-            fastpathInputPdu.numberEvents = ConstValue.NUMBER_EVENTS;
+            fastpathInputPdu.numberEvents = ConstValue.FP_NUMBER_EVENTS;
 
             if (context.RdpEncryptionLevel == EncryptionLevel.ENCRYPTION_LEVEL_FIPS)
             {
@@ -2513,6 +2546,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             fpInputEvent.eventHeader.eventFlagsAndCode =
                 (byte)((int)eventCode_Values.FASTPATH_INPUT_EVENT_MOUSEX << 5);
             fpInputEvent.eventData = extendedMouseEvent;
+            fastpathInputPdu.fpInputEvents.Add(fpInputEvent);
+
+            TS_FP_QOETIMESTAMP_EVENT qoeTimestampEvent = new TS_FP_QOETIMESTAMP_EVENT();
+            qoeTimestampEvent.timestamp = (uint)DateTime.Now.Millisecond;
+            fpInputEvent.eventHeader.eventFlagsAndCode =
+                (byte)((int)eventCode_Values.FASTPATH_INPUT_EVENT_QOE_TIMESTAMP << 5);
+            fpInputEvent.eventData = qoeTimestampEvent;
             fastpathInputPdu.fpInputEvents.Add(fpInputEvent);
             #endregion Fill in TS_FP_INPUT_EVENT
 

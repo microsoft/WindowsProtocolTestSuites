@@ -29,7 +29,7 @@
     <Parameter Name="ContentTransport" Value="PCCRTP" Comment="Transport for PTF config." />
     <Parameter Name="ContentServerComputerName" Value="ContentServer" Comment="ContentServerComputerName for PTF config." />
     <Parameter Name="ContentServerFQDN" Value="ContentServer.contoso.com" Comment="ContentServer Full Qualified Domain Name." />
-    <Parameter Name="HostedCacheServerComputerName" Value="HostedServer" Comment="HostedCacheServerComputerName for PTF config." />
+    <Parameter Name="HostedCacheServerComputerName" Value="HCServer" Comment="HostedCacheServerComputerName for PTF config." />
     <Parameter Name="DomainName" Value="contoso" Comment="DomainName for PTF config." />
     <Parameter Name="SecurityPackageType" Value="Negotiate" Comment="SupportedSecurityPackages for PTF config." />
     <!--Parameters for automation run-->
@@ -39,7 +39,7 @@
     <Parameter Name="userName" Value="Administrator" Comment="" />
     <Parameter Name="password" Value="Password01!" Comment="" />
     <Parameter Name="domain" Value="contoso.com" Comment="" />
-    <Parameter Name="testDriverName" Value="BranchCache_Client1" Comment="" />
+    <Parameter Name="testDriverName" Value="BranchCache_Client" Comment="" />
     <Parameter Name="contentServerCtrlIp" Value="192.168.0.2" Comment="" />
     <Parameter Name="testDriverCtrlIp" Value="192.168.1.11" Comment="" />
     <Parameter Name="testDirInVM" Value="C:\Test" Comment="" />
@@ -120,7 +120,7 @@
     <vm>
       <installorder>4</installorder>
       <hypervname>BranchCache_HostedServer</hypervname>
-      <name>HostedServer</name>
+      <name>HCServer</name>
       <role>SUT02</role>
       <domain>contoso.com</domain>
       <vnet>BranchCache_BranchNetwork</vnet>

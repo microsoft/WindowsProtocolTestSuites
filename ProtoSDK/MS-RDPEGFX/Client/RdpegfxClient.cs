@@ -48,7 +48,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         {
             try
             {
-                RdpegfxDVC = rdpedycClient.ExpectChannel(timeout, RdpegfxGraphicChannelName, transportType, OnDataReceived);
+                RdpegfxDVC = rdpedycClient.ExpectChannel(timeout, RdpegfxGraphicChannelName, transportType);
             }
             catch
             {
@@ -156,7 +156,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                 if (segData.descriptor == DescriptorTypes.SINGLE)
                 {
                     byte[] rawData = Compressor.Decompress(segData.bulkData.data, segData.bulkData.header); ;
-                    
+
 
                     return DecodePdus(rawData);
                 }
@@ -168,7 +168,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                     for (int i = 0; i < dataSegs.Length; i++)
                     {
                         RDP8_BULK_ENCODED_DATA bulkData = dataSegs[i].bulkData;
-                        rawData = Compressor.Decompress(bulkData.data, bulkData.header);                        
+                        rawData = Compressor.Decompress(bulkData.data, bulkData.header);
                         dataList.AddRange(rawData);
                     }
 
@@ -192,7 +192,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         {
             List<RdpegfxPdu> pduList = new List<RdpegfxPdu>();
             while (data != null && data.Length > 0)
-            {                
+            {
                 RdpegfxPdu receivedPdu = DecodeSinglePdu(data);
                 if (receivedPdu is RdpegfxUnkownPdu)
                 {
@@ -200,7 +200,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                 }
                 else
                 {
-                    int consumedLen =(int) receivedPdu.Header.pduLength;
+                    int consumedLen = (int)receivedPdu.Header.pduLength;
                     int resLen = data.Length - consumedLen;
                     if (resLen == 0)
                     {
@@ -214,7 +214,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                     }
                     pduList.Add(receivedPdu);
                 }
-                
+
             }
 
             return pduList.ToArray();
@@ -227,7 +227,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// <returns></returns>
         public static RdpegfxPdu DecodeSinglePdu(byte[] data)
         {
-            
+
             RdpegfxPdu pdu = new RdpegfxPdu();
             bool fResult = PduMarshaler.Unmarshal(data, pdu);
             if (fResult)
@@ -235,7 +235,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                 RdpegfxServerPdu receivedPdu = null;
                 if (pdu.Header.cmdId == PacketTypeValues.RDPGFX_CMDID_WIRETOSURFACE_1)
                 {
-                    receivedPdu = new RDPGFX_WIRE_TO_SURFACE_PDU_1();                    
+                    receivedPdu = new RDPGFX_WIRE_TO_SURFACE_PDU_1();
                 }
                 else if (pdu.Header.cmdId == PacketTypeValues.RDPGFX_CMDID_WIRETOSURFACE_2)
                 {
@@ -301,6 +301,19 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                 {
                     receivedPdu = new RDPGFX_MAP_SURFACE_TO_WINDOW();
                 }
+                else if (pdu.Header.cmdId == PacketTypeValues.RDPGFX_CMDID_QOEFRAMEACKNOWLEDGE)
+                {
+                    receivedPdu = new RDPGFX_QOE_FRAME_ACKNOWLEDGE_PDU();
+                }
+                else if (pdu.Header.cmdId == PacketTypeValues.RDPGFX_CMDID_MAPSURFACETOSCALEDOUTPUT)
+                {
+                    receivedPdu = new RDPGFX_MAP_SURFACE_TO_SCALED_OUTPUT_PDU();
+                }
+                else if (pdu.Header.cmdId == PacketTypeValues.RDPGFX_CMDID_MAPSURFACETOSCALEDWINDOW)
+                {
+                    receivedPdu = new RDPGFX_MAP_SURFACE_TO_SCALED_WINDOW_PDU();
+                }
+
                 if (receivedPdu != null && PduMarshaler.Unmarshal(data, receivedPdu))
                 {
                     return receivedPdu;
@@ -310,6 +323,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
             PduMarshaler.Unmarshal(data, unkown);
             return unkown;
         }
-        
+
     }
 }

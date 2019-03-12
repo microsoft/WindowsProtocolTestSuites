@@ -74,11 +74,7 @@
     <Compile Include="DetectionResultControl.xaml.cs">
       <DependentUpon>DetectionResultControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Detector\RDPBCGRCapSet.cs" />
     <Compile Include="Detector\RDPDetector.cs" />
-    <Compile Include="Detector\SUTControlMessage.cs" />
-    <Compile Include="Detector\SUTControlMessageExRDP.cs" />
-    <Compile Include="Detector\TCPSUTControlTransport.cs" />
     <Compile Include="RDPValueDetector.cs" />
     <Compile Include="Types.cs" />
   </ItemGroup>
@@ -136,6 +132,7 @@
     <Content Include="config.xml" />
     <Resource Include="Docs\arrow_right.png" />
     <Resource Include="Docs\domain.png" />
+    <Content Include="Docs\configure.html" />
     <Content Include="Docs\index.html" />
     <Content Include="Docs\network.html" />
     <Resource Include="Docs\note.png" />

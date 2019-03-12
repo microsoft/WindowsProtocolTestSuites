@@ -571,8 +571,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
             {
                 try
                 {
-                    SslStream secStream = new SslStream(innerStream, false, remoteCertValCallback);
-                    secStream.AuthenticateAsClient(targetHost as string, null, System.Security.Authentication.SslProtocols.Tls, false);
+                    sslStream = new SslStream(innerStream, false, remoteCertValCallback);
+                    sslStream.AuthenticateAsClient(targetHost as string, null, System.Security.Authentication.SslProtocols.Tls, false);
                     isAuthenticated = true;
                 }
                 catch

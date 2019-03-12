@@ -52,7 +52,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 {
                     Rule topRule = ruleStack.Pop();
                     string parent = path.Pop();
-                    if (topRule.SelectStatus != RuleSelectStatus.NotSelected && topRule.Count == 0)
+                    if (topRule.SelectStatus != RuleSelectStatus.UnSelected && topRule.Count == 0)
                     {
                         // Normalize rule name by removing dot since FindRuleByName will use dot as split delimiter
                         writer.WriteStartElement("Rule");
@@ -132,7 +132,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         {
             foreach (RuleGroup ruleGroup in this)
             {
-                ruleGroup.SelectStatus = RuleSelectStatus.NotSelected;
+                ruleGroup.SelectStatus = RuleSelectStatus.UnSelected;
             }
         }
         public new void Add(RuleGroup group)

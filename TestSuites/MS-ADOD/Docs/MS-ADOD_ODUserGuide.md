@@ -2,17 +2,14 @@
 
 ## Contents
 * [Introduction](#_Toc474756889)
-* [Further Assistance](#_Toc474756891)
 * [Quick Start Checklist](#_Toc474756892)
 * [How Do I?](#_Toc474756893)
 * [Requirements](#_Toc474756894)
     * [Network Infrastructure](#_Toc474756895)
     * [Environment](#_Toc474756896)
     * [Windows Primary Domain Controller (PDC)](#_Toc474756897)
-    * [Non-Windows Primary Domain Controller (PDC)](#_Toc474756898)
     * [Windows Active Directory Client Computer](#_Toc474756899)
     * [Non-Windows Active Directory Client Computer](#_Toc474756900)
-    * [Driver Computer](#_Toc474756901)
     * [Software](#_Toc474756902)
 * [Network Setup](#_Toc474756903)
     * [Domain Environment](#_Toc474756904)
@@ -26,16 +23,13 @@
 		* [Create a New Forest Root Domain](#_Toc474756912)
 		* [Set private network](#_Toc474756913)
 		* [Disable ICMP redirect](#_Toc474756914)
-    * [Setup a Non-Windows-based PDC](#_Toc474756915)
     * [Setup a Windows-based Client Computer](#_Toc474756916)
 		* [Install Test Suite Package](#_Toc474756917)
     * [Setup a Non-Windows-based Client Computer](#_Toc474756918)
-    * [Setup the Driver Computer](#_Toc474756919)
 * [Installed Files and Folders](#_Toc474756920)
 * [Configuration](#_Toc474756921)
     * [Configure the Windows-based Client Computer](#_Toc474756922)
-    * [Configure the Driver Computer](#_Toc474756923)
-    * [Configuring the Non-Windows PDC](#_Toc474756924)
+    * [Configure the PDC](#_Toc474756923)
     * [Configuring the Non-Windows Client Computer](#_Toc474756925)
     * [Configuring the Test Suite](#_Toc474756926)
 		* [Required Configuration Settings](#_Toc474756927)
@@ -79,24 +73,22 @@ The following checklist summarizes the steps required to complete in order to ge
 
 |  **Check**|  **Task**|  **Topic**| 
 | -------------| -------------| ------------- |
-| □| Download the test suite for the protocol implementation| For a list of the files that the download package contains, see [section 9](#_Toc474756920).| 
-| □| Confirm that your test environment and computers meet the requirements of the test suite| For information about the requirements of the test suite, see [section 6](#_Toc474756894). | 
-| □| Set up the Primary Domain Controller (PDC)| If the PDC is setup on Windows, see [section 8.1](#_Toc474756907).| 
-| | | If the PDC is setup on non-Windows, see [section 8.3](#_Toc474756915).| 
-| □| Set up the Active Directory (AD) Client Computer| If the AD Client Computer is setup on Windows, see [section 8.4](#_Toc474756916).| 
-| | | If the AD Client Computer is setup on non-Windows, see [section 8.5](#_Toc474756918).| 
-| □| Set up the Driver Computer| See [section 8.6](#_Toc474756919).| 
-| □| Set up the network| See [section 7](#_Toc474756903).| 
-| □| Verify the connections from the Driver Computer to the PDC and the AD Client Computer| See [section 7.2](#_Toc474756905).| 
-| □| Verify the connections from the AD Client Computer to the PDC| See [section 7.2](#_Toc474756905).| 
-| □| Install the software prerequisites| For information about software that must be installed on the computers in your test environment before the test suite is installed, see [section 6.8](#_Toc474756902).| 
-| □| Configure the AD Client Computer| See [section 10.1](#_Toc474756922).| 
-| □| Configure the Driver Computer| See [section 10.2](#_Toc474756923).| 
-| □| Configure the test suite settings| See [section 10.5](#_Toc474756926).| 
-| □| Run all test cases| See [section 11.1](#_Toc474756931).| 
-| □| Run specified test case| See [section 11.2](#_Toc474756932).| 
-| □| Debug my own test cases| See [section 12](#_Toc474756937).| 
-| □| Get the results of test runs| See [section 11.3](#_Toc474756933).| 
+| □| Download the test suite for the protocol implementation| For a list of the files that the download package contains, see [Installed Files and Folders](#_Toc474756920).| 
+| □| Confirm that your test environment and computers meet the requirements of the test suite| For information about the requirements of the test suite, see [Requirements](#_Toc474756894). | 
+| □| Set up the Primary Domain Controller (PDC)| See [Setup a Windows-based PDC](#_Toc474756907).| 
+| □| Set up the Active Directory (AD) Client Computer| If the AD Client Computer is setup on Windows, see [Setup a Windows-based Client Computer](#_Toc474756916).| 
+| | | If the AD Client Computer is setup on non-Windows, see [Setup a Non-Windows-based Client Computer](#_Toc474756918).| 
+| □| Set up the network| See [Set up the network](#_Toc474756903).| 
+| □| Verify the connections from the PDC to the AD Client Computer| See [Verify Connectivity](#_Toc474756905).| 
+| □| Verify the connections from the AD Client Computer to the PDC| See [Verify Connectivity](#_Toc474756905).| 
+| □| Install the software prerequisites| For information about software that must be installed on the computers in your test environment before the test suite is installed, see [Software](#_Toc474756902).| 
+| □| Configure the AD Client Computer| See [Configure the Windows-based Client Computer](#_Toc474756922).| 
+| □| Configure the PDC| See [Configure the PDC](#_Toc474756923).| 
+| □| Configure the test suite settings| See [Configuring the Test Suite](#_Toc474756926).| 
+| □| Run all test cases| See [Run All Test Cases](#_Toc474756931).| 
+| □| Run specified test case| See [Run Specified Test Cases](#_Toc474756932).| 
+| □| Debug my own test cases| See [Debugging Test Cases](#_Toc474756937).| 
+| □| Get the results of test runs| See [Check Test Results](#_Toc474756933).| 
 
 ## <a name="_Toc474756893"/>How Do I?
 Use the following quick reference to learn how to complete common tasks.
@@ -104,10 +96,8 @@ Use the following quick reference to learn how to complete common tasks.
 |  **How do I…?**|  **For more information…**| 
 | -------------| ------------- |
 | Set up the test environment| [Network Setup](#_Toc474756903), [Computer Setup](#_Toc474756906)| 
-| Verify the connection from the driver computer to the PDC computer in the test environment| [Verify Connectivity](#_Toc474756905)| 
-| Setup a non-Windows-based PDC| [Setup a Non-Windows-based PDC](#_Toc474756915)| 
+| Verify the connection from the PDC to the client computer in the test environment| [Verify Connectivity](#_Toc474756905)| 
 | Setup a non-Windows-based AD Client Computer| [Setup a Non-Windows-based Client Computer](#_Toc474756918)| 
-| Setup and configure the driver computer| [Setup the Driver Computer](#_Toc474756919), [Configure the Driver Computer](#_Toc474756923)| 
 | Configure the test suite settings| [Configuring the Test Suite](#_Toc474756926)| 
 | Run test cases| [Run All Test Cases](#_Toc474756931), [Run Specified Test Cases](#_Toc474756932)| 
 | Debug my own test cases| [Debugging Test Cases](#_Toc474756937)| 
@@ -142,11 +132,10 @@ This section describes the requirements for the test environments that are used 
 
 Run this test suite in a domain environment that contains the following computers (can be either physical machines or virtual machines): 
 
-* A computer setup as the Driver Computer running Microsoft® Windows Server® 2012 R2 with the latest updates.
-
-* A computer setup as the Primary Domain Controller (PDC) running Microsoft® Windows Server® 2012 R2 with the latest updates, or a computer setup as PDC that is not based on the Windows operating system.
+* A computer setup as the Primary Domain Controller (PDC) running Microsoft® Windows Server® 2012 R2 with the latest updates.
 
 * A computer setup as the AD Client Computer running Microsoft® Windows 8.1 Enterprise with the latest updates, or a computer setup as the AD Client Computer that is not based on the Windows operating system.
+
 
 ### <a name="_Toc474756897"/>Windows Primary Domain Controller (PDC)
 
@@ -156,20 +145,11 @@ If the PDC is running Windows, the minimum requirements are as follows:
 | -------------| ------------- |
 | Operating system| Microsoft® Windows Server® 2012 R2 or later versions| 
 | Services| Active Directory Domain Services (AD DS)| 
-| | DNS Server| 
-| Memory| 1 GB RAM| 
-| Disk space| 60 GB| 
-
-### <a name="_Toc474756898"/>Non-Windows Primary Domain Controller (PDC)
-
-If the PDC is not running a Windows-based operating system, the minimum requirements are as follows:
-
-|  **Requirement**|  **Description**| 
-| -------------| ------------- |
-| Operating system| Non-Windows operating system| 
-| Services| Active Directory Domain Services (such as the Windows Active Directory Domain Services (AD DS)), for example Samba;| 
-| | DNS server| 
-| Memory| 1 GB RAM| 
+| | DNS Server|
+| | Windows Remote Management (WinRM) Client;| 
+| | Routing Services;|
+| |  &#42; Telnet Client (only needed if the client computer is non-Windows Operating System.) |  
+| Memory| 2 GB RAM| 
 | Disk space| 60 GB| 
 
 ### <a name="_Toc474756899"/>Windows Active Directory Client Computer
@@ -195,21 +175,9 @@ If the AD client computer is not running a non-Windows operating system, the min
 | Memory| 1 GB RAM| 
 | Disk space| 60 GB| 
 
-### <a name="_Toc474756901"/>Driver Computer 
-
-The minimum requirements for the driver computer are as follows:
-
-|  **Requirement**|  **Description**| 
-| -------------| ------------- |
-| Operating system| Microsoft® Windows Server® 2012 R2 or later versions| 
-| Services| Windows Remote Management (WinRM) Client;| 
-| | Routing Services;| 
-| |  &#42; Telnet Client (only needed if the client computer is non-Windows Operating System.) | 
-| Memory| 2 GB RAM| 
-| Disk space| 60 GB| 
 
 ### <a name="_Toc474756902"/>Software 
-All of the following software must be installed on the driver computer before the installation of this test suite. 
+All of the following software must be installed on the PDC computer before the installation of this test suite. 
 
 |  **Required Software** | 
 | ------------- |
@@ -229,28 +197,26 @@ All of the following software must be installed on the driver computer before th
 | We need to install Microsoft Message Analyzer (MMA) so that our test cases will call MMA library to do live capture and verification of the network trace. It’s all automatic process, so users will only need to install the latest version of MMA. | 
 |        ![image3.png](./image/MS-ADOD_ODUserGuide/image3.png)Note| 
 |              You can download the latest Message Analyzer from the website below [http://www.microsoft.com/en-us/download/details.aspx?id=44226](http://www.microsoft.com/en-us/download/details.aspx?id=44226) | 
-| Install Microsoft Message Analyzer (Complete) on the driver computer which runs Windows operating system.| 
+| Install Microsoft Message Analyzer (Complete) on the PDC computer which runs Windows operating system.| 
 
 ## <a name="_Toc474756903"/>Network Setup
 
 This test suite should be run in a domain environment with an isolated Ethernet connection using either physical machines or virtual machines. This section explains how to setup and configure the network for the test environment using physical machines.
 
-For information about configuring a virtual machine, see [http://www.microsoft.com/virtualization/en/us/solution-appliance-test.aspx](http://www.microsoft.com/virtualization/en/us/solution-appliance-test.aspx). The configuration of virtual machines for use with this test suite is out of the scope of this guide
+For information about configuring a virtual machine, see [https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/create-virtual-machine](https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/create-virtual-machine). The configuration of virtual machines for use with this test suite is out of the scope of this guide
 
 ### <a name="_Toc474756904"/>Domain Environment
 
 The domain environment requires interactions between the following computers and server roles: 
 
-* The driver computer runs the test cases, triggers the AD client computer to send request messages over the wire in the form specified in the protocol specifications to the PDC, and verifies the captured traffics. 
+* The AD client computer will triggered by the PDC to join the domain.
 
-* The AD client computer and the PDC should be located in different subnets and must use the driver computer as their common gateway. This setting is to ensure that the driver computer can monitor all the traffics between the AD client computer and the PDC.
-
-* The PDC provides the functions of the Active Directory Domain Services that are required to be tested. The AD client computer should provide the protocol implementations in order to interoperate with the PDC.
+* The PDC provides functionality that is required to test the protocol implementation. Specifically, the DC hosts Active Directory Domain Services (AD DS). PDC also runs the test cases by sending requests over the wire in the form specified in the protocol specifications.
 
 ![image2.png](./image/MS-ADOD_ODUserGuide/image2.png)
 Note 
 
-The Ethernet network must be configured as a private network. Otherwise, the driver computer cannot use WinRM to setup remote sessions to the AD client computer and the PDC. For information on how to set the private network, refer to [Set private network](#_Toc474756913).
+The Ethernet network must be configured as a private network. Otherwise, the PDC cannot use WinRM to setup remote sessions to the AD client computer. For information on how to set the private network, refer to [Set private network](#_Toc474756913).
 
 ![image2.png](./image/MS-ADOD_ODUserGuide/image2.png)
 Note
@@ -263,18 +229,17 @@ The following figure shows a domain environment using an isolated Ethernet conne
 | &#32;| &#32;| &#32;| &#32;| &#32;| &#32; |
 | -------------| -------------| -------------| -------------| -------------| ------------- |
 | Machine Name/Access Point| NIC| IPv4| Subnet Mask| Default Gateway| DNS Server| 
-| PDC| External1| 192.168.1.201| 255.255.255.0| 192.168.1.101| 127.0.0.1| 
-| Client Computer| External1| 192.168.2.1| 255.255.255.0| 192.168.2.101| 192.168.1.201| 
-| Driver Computer| External1| 192.168.1.101| 255.255.255.0|  &#60; empty &#62; | 192.168.1.201| 
-|  | External1| 192.168.2.101| 255.255.255.0|  &#60; empty &#62; |  &#60; empty &#62; | 
+| PDC| External1| 192.168.2.101| 255.255.255.0| 192.168.2.101| 192.168.2.101| 
+| Client Computer| External1| 192.168.2.1| 255.255.255.0| 192.168.2.101| 192.168.2.101| 
+ 
 
 ![image2.png](./image/MS-ADOD_ODUserGuide/image2.png)
 Note
-For Non-Windows, PDC, AD Client Computer could be replaced by the implementation-specific SUT.
+For Non-Windows, AD Client Computer could be replaced by the implementation-specific SUT.
 
 ### <a name="_Toc474756905"/>Verify Connectivity 
 
-After you configure the environment, verify connections from the Driver Computer to the PDC and the AD Client Computer, and from the client computer to the PDC computer. The following provides a general list of steps that you can use to check for connectivity. For further information, see the administration guide for your operating system.
+After you configure the environment, verify connections from the PDC Computer to the AD Client Computer, and from the client computer to the PDC computer. The following provides a general list of steps that you can use to check for connectivity. For further information, see the administration guide for your operating system.
 
 To check the connection from a Windows-based computer
 
@@ -287,8 +252,8 @@ Disable active firewalls in the test environment.
 
 * In the **Run** dialog box, type **cmd** and then click **OK**.
 
-* At the command prompt, type **ping** followed by the hostname or IP address of the PDC or the client computer, and then press **Enter**. The following example checks the connection to the PDC with IP address 192.168.1.201:
->ping 192.168.1.201
+* At the command prompt, type **ping** followed by the hostname or IP address of the client computer, and then press **Enter**. The following example checks the connection to the client computer with IP address 192.168.2.1:
+>ping 192.168.2.1
 
 * Repeat to confirm connectivity between all computers in the test environment.
 
@@ -300,9 +265,9 @@ Disable active firewalls in the test environment.
 
 * Start the terminal console.
 
-* At the command prompt, type **ping** followed by the hostname or IP address of the PDC or the client computer, and then press **Enter**. The following example checks the connection to the PDC with IP address 192.168.1.201:
+* At the command prompt, type **ping** followed by the hostname or IP address of the client computer, and then press **Enter**. The following example checks the connection to the PDC with IP address 192.168.2.1:
 
->ping 192.168.1.201
+>ping 192.168.2.1
 
 * Repeat to confirm connectivity between all computers in the test environment.
 
@@ -317,6 +282,11 @@ This section explains how to setup the computers for the test environment.
 ### <a name="_Toc474756907"/>Setup a Windows-based PDC
 This section provides information about how to setup a Windows-based PDC for use with this test suite.
 
+![image5.png](./image/MS-ADOD_ODUserGuide/image5.png)
+Important 
+
+Message Analyzer and its parsers, Visual Studio 2017, and the Protocol Test Framework must be installed on the PDC computer before running the MS-ADOD -TestSuite-ODEP.msi installer.
+
 To set up a Windows-based PDC:
 
 * Configure IP addresses on the PDC and set the computer name.
@@ -326,6 +296,7 @@ To set up a Windows-based PDC:
 * Install Active Directory Domain Services. For Windows platform, refer to [Install Active Directory Domain Services](#_Toc474756910).
 * Install DNS Service, refer to [Install DNS Service](#_Toc474756911).
 * Create a forest root domain (i.e., contoso.com), and set domain Administrator’s password to “**Password01!**”. For Windows platform, refer to [Create a New Forest Root Domain](#_Toc474756912).
+* Install test suite package to the PDC, refer to [Install Test Suite Package](#_Toc474756917).
 
 ![image2.png](./image/MS-ADOD_ODUserGuide/image2.png)
 Note 
@@ -363,6 +334,8 @@ Execute the following steps to install DNS service:
 Run the following command in PowerShell.exe:
 Install-ADDSForest –DomainName contoso.com
 
+set domain Administrator’s password to “**Password01!**”
+
 #### <a name="_Toc474756913"/>Set private network
 To configure computer to use private network:
 
@@ -377,18 +350,9 @@ To configure computer to use private network:
 * Set "Location Type" to "Private"
 
 #### <a name="_Toc474756914"/>Disable ICMP redirect
-To disable ICMP redirect, set the following registry key value:
+To disable ICMP redirect, run the following command in PowerShell.exe:
 
-HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters
-
-### <a name="_Toc474756915"/>Setup a Non-Windows-based PDC
-This section provides information about how to set up a non-Windows-based PDC for use with this test suite.
-
-To set up a Non-Windows-based PDC (i.e., Samba):
-
-* Install Samba 4 manually. See the guidelines for [How to Install Samba 4](#_Toc474756924) or go to the website at [http://www.samba.org](http://www.samba.org/).
-* Configure Samba 4 as a PDC computer. See the guidelines for [How to Provision Samba 4 as a PDC](#z3e851c98bb1f412da82c849d3ce30dd1).
-* Install the DNS server manually. For instructions, see the product documentation.
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" -Name EnableICMPRedirect -value 0
 
 ### <a name="_Toc474756916"/>Setup a Windows-based Client Computer
 This section provides information about how to set up a Windows-based client computer for use with this test suite.
@@ -407,7 +371,7 @@ Execute the following steps to install the test suite package.
 
 * Install the required software, refer to [Software](#_Toc474756902).
 * Extract all the files from the install package, find and run the extracted MS-ADOD-TestSuite-ODEP.msi file.
-* For AD Client Computer, select Install and configure Windows System Under Test (SUT); For Driver Computer, select Install Test Suite on Driver Computer.
+* For AD Client Computer, select Install and configure Windows System Under Test (SUT); For PDC Computer, select Install Test Suite on Driver Computer.
 
 ### <a name="_Toc474756918"/>Setup a Non-Windows-based Client Computer
 This section provides information about how to set up a non-Windows-based client computer for use with this test suite.
@@ -416,30 +380,15 @@ To setup a non-Windows-based Client Computer:
 
 * Install Samba 4 manually. See the guidelines for [How to Install Samba 4](#_Guidelines_for_Configuring_1) or go to the website at [http://www.samba.org](http://www.samba.org/).
 
-* Set up the driver computer first. Non-Windows client computers cannot install MSI packages.
+* Set up the PDC computer first. Non-Windows client computers cannot install MSI packages.
 
-* After configuring the driver computer, copy the files under %systemdrive%\MicrosoftProtocolTests\MS-ADOD\OD-Endpoint\ &#60; _version_  &#35;  &#62; \Scripts\NonWindows\ to a folder on the non-Windows client computer. Record the path for later use.
+* After configuring the PDC computer, copy the files under %systemdrive%\MicrosoftProtocolTests\MS-ADOD\OD-Endpoint\ &#60; _version_  &#35;  &#62; \Scripts\NonWindows\ to a folder on the non-Windows client computer. Record the path for later use.
 
 * Install the Telnet server manually. For more information, see the product documentation.
 
-### <a name="_Toc474756919"/>Setup the Driver Computer
-
-![image5.png](./image/MS-ADOD_ODUserGuide/image5.png)
-Important 
-
-Message Analyzer and its parsers, Visual Studio 2017, and the Protocol Test Framework must be installed on the driver computer before running the MS-ADOD -TestSuite-ODEP.msi installer.
-
-To set up the Driver Computer:
-
-* Configure IP addresses on the Driver Computer and set the computer name.
-* Disable IPv6.
-* Turn off firewall. For Windows platform, refer to [Turn off Firewall](#_Toc474756909).
-* Make sure the network is set to use private network, refer to [Set private network](#_Toc474756913).
-* Install test suite package to the Driver Computer, refer to [Install Test Suite Package](#_Toc474756917).
-
 ## <a name="_Toc474756920"/>Installed Files and Folders
 
-The installation process for this test suite adds the following folders and files to the driver computer at %systemdrive%\MicrosoftProtocolTests\MS-ADOD\OD-Endpoint\ &#60; version &#35;  &#62; \.
+The installation process for this test suite adds the following folders and files to the PDC computer at %systemdrive%\MicrosoftProtocolTests\MS-ADOD\OD-Endpoint\ &#60; version &#35;  &#62; \.
 
 ![image2.png](./image/MS-ADOD_ODUserGuide/image2.png)
 Note 
@@ -449,12 +398,12 @@ The  &#60; version &#35;  &#62;  placeholder indicates the installed build of th
 
 |  **File or Folder**|  **Description**| 
 | -------------| ------------- |
-| Batch| Command files that you can use to configure the Driver Computer, the Client Computer and the PDC; command files that you can use to run individual test cases, BVT test cases, or all test cases| 
+| Batch| Command files that you can use to configure the PDC Computer and the Client Computer; command files that you can use to run individual test cases, BVT test cases, or all test cases| 
 | Bin| Test suite binaries and configuration files| 
 | Docs|  **[MS-ADOD].pdf**| 
-| | **MS-ADOD _ODUserGuide.docx** – A user guide that explains how to install and configure the driver computer, the Client Computer, and the PDC, as well as how to run test cases.| 
+| | **MS-ADOD _ODUserGuide.docx** – A user guide that explains how to install and configure the PDC computer and the Client Computer, as well as how to run test cases.| 
 | | **MS-ADOD_ODTestDesignSpecification.docx** – describes the MS-ADOD test suite design.| 
-| Scripts| Scripts that are used to setup and configure the Windows-based Driver Computer, the Windows-based Client Computer and the Windows-based PDC. (To setup and configure the non-Windows-based computers, the scripts are listed under the “.\NonWindows” directory)| 
+| Scripts| Scripts that are used to setup and configure the Windows-based Client Computer and the Windows-based PDC. (To setup and configure the non-Windows-based computers, the scripts are listed under the “.\NonWindows” directory)| 
 
 
 ## <a name="_Toc474756921"/>Configuration
@@ -465,7 +414,7 @@ This section explains how to configure the computers in the test environment for
 
 This section provides a general list of steps that you can use to configure the client computer in a Windows-based test environment. For specific information about how to complete these steps, see the administration guide for your operating system.
 
-To configure the driver computer
+To configure the client computer
 
 * **Log on** to the client computer as the local administrator.
 
@@ -491,15 +440,15 @@ Start-process PowerShell -verb runAs
 
 * **Restart** the computer.
 
-### <a name="_Toc474756923"/>Configure the Driver Computer 
+### <a name="_Toc474756923"/>Configure the PDC
 
-This section provides a general list of steps that you can use to configure the driver computer in a Windows-based test environment. For specific information about how to complete these steps, see the administration guide for your operating system.
+This section provides a general list of steps that you can use to configure the PDC computer in a Windows-based test environment. For specific information about how to complete these steps, see the administration guide for your operating system.
 
-To configure the driver computer
+To configure the PDC
 
 * Verify that the client computer is configured and running.
 
-* **Log on** to the driver computer as the local administrator.
+* **Log on** to the PDC computer as the local administrator.
 
 * Go to %systemdrive%\MicrosoftProtocolTests\MS-ADOD\OD-Endpoint\ &#60; version &#35;  &#62; \Scripts, and open the ParamConfig.xml file.
 
@@ -509,7 +458,7 @@ To configure the driver computer
 | -------------| ------------- |
 | clientLogPath| The client computer path for configuration logs and test suite adapter script logs. | 
 | | Default value: %systemdrive%\Logs| 
-| driverLogPath| The driver computer path for configuration logs and test suite adapter scripts logs.  | 
+| PDCLogPath| The PDC computer path for configuration logs and test suite adapter scripts logs.  | 
 | | Default value: %systemdrive%\Logs| 
 | localCapFilePath| The local computer path for Message Analyzer Capture files. “Local” refers to all computers that have Message Analyzer installed.| 
 | | Default value: %systemdrive%\Logs\Capture| 
@@ -524,13 +473,13 @@ To configure the driver computer
 | pdcComputerName| The computer name of the PDC computer.| 
 | | Default value: PDC.contoso.com| 
 | pdcIP| The computer IP address of the PDC computer.| 
-| | Default value: 192.168.1.201| 
+| | Default value: 192.168.2.101| 
 | clientOperatingSystem| The operating system of the client computer. The value can be Windows or NonWindows.| 
 | | Default value: Windows| 
 | clientComputerName| The computer name of the client computer.| 
 | | Default value: ENDPOINT01| 
 | clientIP| The computer IP address of the client computer.| 
-| | Default value: 192.168.2.101| 
+| | Default value: 192.168.2.1| 
 | clientAdminUserName| The username for the administrator account on the client computer.| 
 | | Default value: Administrator| 
 | clientAdminUserPwd| The password for the administrator account on the client computer.| 
@@ -549,7 +498,7 @@ Set-ExecutionPolicy Unrestricted –F, and press **Enter**.
 
 * Type cd %systemdrive%\MicrosoftProtocolTests\MS-ADOD\OD-Endpoint\ &#60; version &#35;  &#62; \Scripts, and press **Enter**.
 
-* **Restart** the driver computer and log on as the local administrator.
+* **Restart** the PDC computer and log on as the local administrator.
 
 * Type .\Config-DriverComputer.ps1, and press **Enter**.
 
@@ -558,34 +507,6 @@ Set-ExecutionPolicy Unrestricted –F, and press **Enter**.
 * Set the **Remote Access Connection Manager** service startup type to **Automatic**.
 
 * **Restart** the computer.
-
-### <a name="_Toc474756924"/>Configuring the Non-Windows PDC
-This section provides general instructions for configuring a PDC computer that runs an operating system other than the Windows operating system. For detailed instructions about how to complete the tasks that this process requires, see the administration guide for your operating system.
-
-To configure the non-Windows PDC
-
-* Before installing Samba 4, make sure you remove any current Samba  4 files:
-		_rm –rf /usr/local/samba_
-
-* Extract all of the Samba 4 TAR files.
-
-* Build Samba 4:
-	_cd samba-master_
-	_./configure.developer_
-	_make_
-
-* Install Samba 4:
-	_cd samba-master_
-	_make install_
-
-* Provision Samba 4 as a PDC, create a Kerberos realm, define a NT4 domain name, and define the domain administrator password on the PDC computer:
-	_source4/setup/provision --realm=contoso.com --domain=CONTOSO --adminpass=Password01! --server-role=dc_
-
-* Optionally, set environment variables to simplify Samba usage.
-
-* Configure DNS.
-
-* Start Samba.
 
 ### <a name="_Toc474756925"/>Configuring the Non-Windows Client Computer
 
@@ -649,7 +570,7 @@ The following table describes the required configuration properties and their va
 | PDCComputerName| The PDC computer name.| 
 | | Default value: PDC.contoso.com| 
 | PDCIP| The PDC IP address.| 
-| | Default value: 192.168.1.201| 
+| | Default value: 192.168.2.101| 
 | ClientOperatingSystem| The operating system of the client computer. The value can be Windows or Non-Windows.| 
 | | Default value: Windows| 
 | ClientOSVersion| The operating system version of the client computer. If the client computer is non-windows, this value should be the Windows OS Version that the client computer is referring to.| 
@@ -664,8 +585,8 @@ The following table describes the required configuration properties and their va
 | | Default value: Password01!| 
 | LocalCapFilePath| The local path for Message Analyzer capture files.  “Local” refers to all computers that have Message Analyzer installed.| 
 | | Default value: %systemdrive%\Logs\Capture| 
-| DriverLogPath| The driver computer path for configuration logs and test suite adapter scripts logs.| 
-| | Default value: %systemdrive%\Logs\Driver| 
+| PDCLogPath| The PDC computer path for configuration logs and test suite adapter scripts logs.| 
+| | Default value: %systemdrive%\Logs\PDC| 
 | ClientLogPath| The client computer path for configuration logs and test suite adapter scripts logs.| 
 | | Default value: %systemdrive%\Logs\Client| 
 | TriggerDisabled| The boolean flag indicating whether the client triggering should be disabled or not. If disabled, the test case will only verify the captured messages; else, client computer will be triggered to send some requests to the PDC for a particular test purpose.| 
@@ -680,17 +601,17 @@ The following table describes the optional configuration properties and their va
 |  **Property**|  **Description**| 
 | TelnetPort| The telnet port number for a telnet connection, this configuration is for non-Windows operating systems only.| 
 | | Default value: 23| 
-| LocateDomainControllerScript| The script name for the “locate domain controller” test case. Use this configuration option only when the driver computer is not running the Windows operating system and it is using a telnet connection to trigger the test case.| 
+| LocateDomainControllerScript| The script name for the “locate domain controller” test case. Use this configuration option only when the PDC computer is not running the Windows operating system and it is using a telnet connection to trigger the test case.| 
 | | Default value: LocateDomainController.sh| 
-| JoinDomainCreateAcctLDAPScript| The script name for the “join domain by creating an account using LDAP” test case. Use this configuration option only when the driver computer is not running the Windows operating system and it is using a telnet connection to trigger the test case.| 
+| JoinDomainCreateAcctLDAPScript| The script name for the “join domain by creating an account using LDAP” test case. Use this configuration option only when the PDC computer is not running the Windows operating system and it is using a telnet connection to trigger the test case.| 
 | | Default value: JoinDomainCreateAcctLDAP.sh| 
-| JoinDomainPredefAcctScript| The script name for the “join domain by a predefined account” test case. Use this configuration option only when the driver computer is not running the Windows operating system and it is using a telnet connection to trigger the test case.| 
+| JoinDomainPredefAcctScript| The script name for the “join domain by a predefined account” test case. Use this configuration option only when the PDC computer is not running the Windows operating system and it is using a telnet connection to trigger the test case.| 
 | | Default value: JoinDomainPredefAcct.sh| 
-| UnjoinDomainScript| The script name for the “unjoin domain” test case. Use this configuration option only when the driver computer is not running the Windows operating system and it is using a telnet connection to trigger the test case.| 
+| UnjoinDomainScript| The script name for the “unjoin domain” test case. Use this configuration option only when the PDC computer is not running the Windows operating system and it is using a telnet connection to trigger the test case.| 
 | | Default value: UnjoinDomain.sh| 
-| IsJoinDomainSuccessScript| The script name for the “checking if joining domain is successful” test case. Use this configuration option only when the driver computer is not running the Windows operating system and it is using a telnet connection to trigger the test case.| 
+| IsJoinDomainSuccessScript| The script name for the “checking if joining domain is successful” test case. Use this configuration option only when the PDC computer is not running the Windows operating system and it is using a telnet connection to trigger the test case.| 
 | | Default value: IsJoinDomainSuccess.sh| 
-| IsUnjoinDomainSuccessScript| The script name for the “checking if unjoining domain is successful” test case. Use this configuration option only when the driver computer is not running the Windows operating system and it is using a telnet connection to trigger the test case.| 
+| IsUnjoinDomainSuccessScript| The script name for the “checking if unjoining domain is successful” test case. Use this configuration option only when the PDC computer is not running the Windows operating system and it is using a telnet connection to trigger the test case.| 
 | | Default value: IsUnjoinDomainSuccess.sh| 
 
 #### <a name="_Toc474756929"/>Protocol Test Manager
@@ -702,7 +623,7 @@ This test suite includes command files that you can use to complete basic test c
 
 A common pattern for the test scenarios is as follows:
 
-* Ensure the remote session successfully established between driver computer and the target computer (PDC or client computer).
+* Ensure the remote session successfully established between PDC computer and the client computer.
 
 * Initialize the test case on the PDC computer.
 
@@ -726,7 +647,7 @@ Use the steps below to run all test cases. Shortcuts listed are created during t
 
 ###To run all test cases###
 
-* From the desktop of the driver computer, double-click the **Run MS-ADOD-OD EP Test Cases** shortcut. 
+* From the desktop of the PDC computer, double-click the **Run MS-ADOD-OD EP Test Cases** shortcut. 
 
 * Alternatively, go to %systemdrive%\MicrosoftProtocolTests\MS-ADOD\OD-Endpoint\ _&#60; version &#35;  &#62;_ \Batch and double-click the **RunAllTestCases.cmd** file. 
 
@@ -752,7 +673,7 @@ The following instruction provides an example of how to prevent log entries for 
  &#60; File id="ReqLog" directory=".\" file="MS-ADOD_Log.xml" format="xml"/ &#62; 
 
 #### <a name="_Toc474756935"/>Review the PowerShell Log Files
-PowerShell log file locations are set to use the **DriverLogPath** value in the  &#42; **.deployment.ptfconfig** configuration file. The log files that contain PowerShell runtime logs use the  &#60; testcase &#35;  &#62; **.log** naming convention.
+PowerShell log file locations are set to use the **PDCLogPath** value in the  &#42; **.deployment.ptfconfig** configuration file. The log files that contain PowerShell runtime logs use the  &#60; testcase &#35;  &#62; **.log** naming convention.
 
 #### <a name="_Toc474756936"/>Manage the Generation of Log Files
 
@@ -800,7 +721,9 @@ For further information about logging in the Protocol Test Framework (PTF), see 
 
 ## <a name="_Toc474756937"/>Debugging Test Cases
 
-You can use the Visual Studio solution (.sln) file included with this test suite to debug additional test cases that you create for your protocol implementation. 
+Clone or download the WindowsProtocolTestSuites from [https://github.com/Microsoft/WindowsProtocolTestSuites/](https://github.com/Microsoft/WindowsProtocolTestSuites/), save and extract to PDC local directory, open the test suite ..\WindowsProtocolTestSuites\TestSuites\MS-AZOD\src\MS-AZOD_OD.sln with visual studio 2017. 
+
+Then you can start to debug  test cases against your protocol implementation.
 
 ![image2.png](./image/MS-ADOD_ODUserGuide/image2.png)
 Note 
@@ -818,7 +741,7 @@ Remember to copy MS-ADOD_ODTestSuite.deployment.ptfconfig file from the %systemd
 
 ###To debug a test case###
 
-* On the driver computer, use Microsoft® Visual Studio® to open the following solution file:
+* On the PDC computer, use Microsoft® Visual Studio® to open the following solution file:
 %systemdrive%\MicrosoftProtocolTests\MS-ADOD\OD-Endpoint\ _&#60; version &#35;  &#62;_ \Source\OD\TestCode\MS-ADOD_OD.sln
 
 * In Visual Studio, in the Solution Explorer window, right-click the ‘**MS-ADOD_OD**’ solution, and select **Build Solution**.
@@ -941,15 +864,15 @@ This section describes how to troubleshoot common issues in running test cases.
 | &#32;| &#32; |
 | -------------| ------------- |
 | PROBLEM| The domain controller does not respond to pings from the client computer.| 
-| CAUSE| The driver computer is not in the same subnet as the domain controller, or the domain controller firewall is enabled. | 
-| RESOLUTION| Move the driver computer and the domain controller to the same subnet, or disable the domain controller firewall.| 
+| CAUSE| The PDC computer is not in the same subnet as the domain controller, or the domain controller firewall is enabled. | 
+| RESOLUTION| Move the PDC computer and the domain controller to the same subnet, or disable the domain controller firewall.| 
 
 ### <a name="_Toc474756951"/>Remote Session Setup Failure
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| PROBLEM| Remote sessions cannot be established from the driver computer to the client computer.| 
-| CAUSE| The client computer and driver computer network sharing is not turned on. | 
+| PROBLEM| Remote sessions cannot be established from the PDC computer to the client computer.| 
+| CAUSE| The client computer and PDC computer network sharing is not turned on. | 
 | RESOLUTION| Turn on the sharing and connect to devices by changing the network settings to private networks.| 
 
 ### <a name="_Toc474756952"/>Test Run Issues
