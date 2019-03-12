@@ -415,36 +415,36 @@ namespace Microsoft.Protocols.TestManager.ADFamilyPlugin
             // Get TD Path
             string installDir = @"C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\" + Utility.GetInstalledTestSuiteVersion();
             StringBuilder tddocs = new StringBuilder();
-            tddocs.AppendFormat(@"{0}\Docs\Common-TD-XML\MS-ADA1\*,", installDir);
-            tddocs.AppendFormat(@"{0}\Docs\Common-TD-XML\MS-ADA2\*,", installDir);
-            tddocs.AppendFormat(@"{0}\Docs\Common-TD-XML\MS-ADA3\*,", installDir);
-            tddocs.AppendFormat(@"{0}\Docs\Common-TD-XML\MS-ADSC\*,", installDir);
+            tddocs.AppendFormat(@"{0}\Data\Common-TD-XML\MS-ADA1\*,", installDir);
+            tddocs.AppendFormat(@"{0}\Data\Common-TD-XML\MS-ADA2\*,", installDir);
+            tddocs.AppendFormat(@"{0}\Data\Common-TD-XML\MS-ADA3\*,", installDir);
+            tddocs.AppendFormat(@"{0}\Data\Common-TD-XML\MS-ADSC\*,", installDir);
             if (functionLevel <= 5)
             {
-                tddocs.AppendFormat(@"{0}\Docs\Win8-TD-XML\MS-ADSC\*,", installDir);
-                tddocs.AppendFormat(@"{0}\Docs\Win8-TD-XML\MS-ADA2\*", installDir);
+                tddocs.AppendFormat(@"{0}\Data\Win8-TD-XML\MS-ADSC\*,", installDir);
+                tddocs.AppendFormat(@"{0}\Data\Win8-TD-XML\MS-ADA2\*", installDir);
             }
             else
             {
-                tddocs.AppendFormat(@"{0}\Docs\WinBlue-TD-XML\MS-ADSC\*,", installDir);
-                tddocs.AppendFormat(@"{0}\Docs\WinBlue-TD-XML\MS-ADA2\*", installDir);
+                tddocs.AppendFormat(@"{0}\Data\WinBlue-TD-XML\MS-ADSC\*,", installDir);
+                tddocs.AppendFormat(@"{0}\Data\WinBlue-TD-XML\MS-ADA2\*", installDir);
             }
             ptfcfg.SchemaTdPath = tddocs.ToString();
 
             StringBuilder ldstddocs = new StringBuilder();
-            ldstddocs.AppendFormat(@"{0}\Docs\Common-TD-XML\MS-ADLS\*,", installDir);
+            ldstddocs.AppendFormat(@"{0}\Data\Common-TD-XML\MS-ADLS\*,", installDir);
             if (functionLevel <= 5)
             {
-                ldstddocs.AppendFormat(@"{0}\Docs\Win8-TD-XML\MS-ADLS\*", installDir);
+                ldstddocs.AppendFormat(@"{0}\Data\Win8-TD-XML\MS-ADLS\*", installDir);
             }
             else
             {
-                ldstddocs.AppendFormat(@"{0}\Docs\WinBlue-TD-XML\MS-ADLS\*", installDir);
+                ldstddocs.AppendFormat(@"{0}\Data\WinBlue-TD-XML\MS-ADLS\*", installDir);
             }
             ptfcfg.SchemaLdsTdPath = ldstddocs.ToString();
 
-            ptfcfg.SchemaOpenXmlPath = String.Format(@"{0}\Docs\Win2016-TD-XML\DS\*", installDir);
-            ptfcfg.SchemaLdsOpenXmlPath = String.Format(@"{0}\Docs\Win2016-TD-XML\LDS\*", installDir);
+            ptfcfg.SchemaOpenXmlPath = String.Format(@"{0}\Data\Win2016-TD-XML\DS\*", installDir);
+            ptfcfg.SchemaLdsOpenXmlPath = String.Format(@"{0}\Data\Win2016-TD-XML\LDS\*", installDir);
 
             return true;
         }
