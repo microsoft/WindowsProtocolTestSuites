@@ -5,9 +5,9 @@
 
 if not exist "%programfiles(x86)%\Microsoft Message Analyzer\MessageAnalyzer.exe" (
     if not exist "%programfiles%\Microsoft Message Analyzer\MessageAnalyzer.exe" (
-		echo Error: Microsoft Message Analyzer should be installed
-		exit /b 1
-	)
+        echo Error: Microsoft Message Analyzer should be installed
+        exit /b 1
+    )
 )
 
 exit /b 0
