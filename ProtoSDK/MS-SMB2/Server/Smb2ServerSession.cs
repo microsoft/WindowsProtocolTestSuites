@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Modeling;
+using System.Collections.Generic;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 {
@@ -21,9 +21,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
         public bool ShouldSign;
 
-        public MapContainer<ulong, Smb2ServerOpen> OpenTable;
+        public Dictionary<ulong, Smb2ServerOpen> OpenTable;
 
-        public MapContainer<uint, Smb2ServerTreeConnect> TreeConnectTable;
+        public Dictionary<uint, Smb2ServerTreeConnect> TreeConnectTable;
 
         // ExpirationTime
 
@@ -40,7 +40,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         // --------
         // SMB2.2
         // --------
-        public SetContainer<Smb2ServerChannel> ChannelList;
+        public HashSet<Smb2ServerChannel> ChannelList;
     }
 
     public enum SessionState

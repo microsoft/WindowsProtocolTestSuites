@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using Microsoft.Modeling;
+using System.Collections.Generic;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 {
@@ -12,13 +12,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
         // ServerEnabled
 
-        public MapContainer<string, Smb2ServerShare> ShareList;
+        public Dictionary<string, Smb2ServerShare> ShareList;
 
-        public MapContainer<ulong, Smb2ServerOpen> GlobalOpenTable;
+        public Dictionary<ulong, Smb2ServerOpen> GlobalOpenTable;
 
-        public MapContainer<ulong, Smb2ServerSession> GlobalSessionTable;
+        public Dictionary<ulong, Smb2ServerSession> GlobalSessionTable;
 
-        public MapContainer<string, Smb2ServerConnection> ConnectionList;
+        public Dictionary<string, Smb2ServerConnection> ConnectionList;
 
         // ServerGuid
 
@@ -38,7 +38,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
         public ServerHashLevel ServerHashLevel;
 
-        public MapContainer<Guid, Smb2ServerLeaseTable> GlobalLeaseTableList;
+        public Dictionary<Guid, Smb2ServerLeaseTable> GlobalLeaseTableList;
 
         public uint MaxResiliencyTimeout;
 
