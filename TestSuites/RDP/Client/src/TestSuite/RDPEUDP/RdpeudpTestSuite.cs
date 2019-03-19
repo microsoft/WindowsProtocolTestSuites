@@ -110,8 +110,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             this.clientRdpudpVerfionInfoValidFlag = null;
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger client to close all RDP connections for clean up.");
-            int iResult = this.sutControlAdapter.TriggerClientDisconnectAll(this.TestContext.TestName);
-            this.TestSite.Log.Add(LogEntryKind.Debug, "The result of TriggerClientDisconnectAll is {0}.", iResult);
+            this.sutControlAdapter.TriggerClientDisconnectAll(this.TestContext.TestName);
+            //this.TestSite.Log.Add(LogEntryKind.Debug, "The result of TriggerClientDisconnectAll is {0}.", iResult);
 
             if (rdpemtServerL != null)
                 rdpemtServerL.Dispose();

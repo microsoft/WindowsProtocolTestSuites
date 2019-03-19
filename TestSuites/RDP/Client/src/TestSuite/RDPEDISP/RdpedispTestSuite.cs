@@ -206,8 +206,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
         /// </summary>
         private void StopRDPConnection()
         {
-            int iResult = this.sutControlAdapter.TriggerClientDisconnectAll(this.TestContext.TestName);
-            this.TestSite.Log.Add(LogEntryKind.Debug, "The result of TriggerClientDisconnectAll is {0}.", iResult);
+            this.sutControlAdapter.TriggerClientDisconnectAll(this.TestContext.TestName);
+            //this.TestSite.Log.Add(LogEntryKind.Debug, "The result of TriggerClientDisconnectAll is {0}.", iResult);
             this.rdpbcgrAdapter.Reset();
             if(this.rdpegfxAdapter != null)
                 this.rdpegfxAdapter.Reset();

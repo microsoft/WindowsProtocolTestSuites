@@ -25,7 +25,7 @@
 # Sources (Script)
 *.cmd	wintext
 *.bat	wintext
-*.sh	wintext
+*.sh	eol=lf
 *.vbs	wintext
 
 

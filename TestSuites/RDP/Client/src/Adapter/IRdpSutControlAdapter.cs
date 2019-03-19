@@ -22,8 +22,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         [MethodHelp("1.Initiate a remote desktop connection from the client using the Direct Approach connection sequence and the CredSSP security protocol.\r\n\r\n"+
                     "2.Enter a return value, using a positive value for a successful connection or a negative value for a failed connection.\r\n\r\n" +
                     "3.To pass the value to the test case, click the Succeed button. Or, to end the test case, enter a message into the Failure Message dialog box and then click Fail.")]
-        [DefaultValue("1")]
-        int RDPConnectWithDirectCredSSP(string caseName);
+        void RDPConnectWithDirectCredSSP(string caseName);
 
         /// <summary>
         /// This method used to trigger client to initiate a full screen RDP connection from RDP client, 
@@ -34,8 +33,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         [MethodHelp("1.Initiate a full screen remote desktop connection from the client using the Direct Approach connection sequence and the CredSSP security protocol.\r\n\r\n" +
                     "2.Enter a return value, using a positive value for a successful connection or a negative value for a failed connection.\r\n\r\n" +
                     "3.To pass the value to the test case, click the Succeed button. Or, to end the test case, enter a message into the Failure Message dialog box and then click Fail.")]
-        [DefaultValue("1")]
-        int RDPConnectWithDirectCredSSPFullScreen(string caseName);
+        void RDPConnectWithDirectCredSSPFullScreen(string caseName);
 
         /// <summary>
         /// This method used to trigger client to initiate a RDP connection from RDP client, 
@@ -46,8 +44,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         [MethodHelp("1.Initiate a remote desktop connection from the client using the negotiation-based approach and the TLS, CredSSP, or RDP standard security protocol.\r\n\r\n"+
                     "2.Enter a return value, using a positive value for a successful connection or a negative value for a failed connection.\r\n\r\n"+
                     "3.To pass the value to the test case, click the Succeed button. Or, to end the test case, enter a message into the Failure Message dialog box and then click Fail.")]
-        [DefaultValue("1")]
-        int RDPConnectWithNegotiationApproach(string caseName);
+        void RDPConnectWithNegotiationApproach(string caseName);
 
         /// <summary>
         /// This method used to trigger client to initiate a full screen RDP connection from RDP client, 
@@ -58,8 +55,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         [MethodHelp("1.Initiate a full screen remote desktop connection from the client using the negotiation-based approach and the TLS, CredSSP, or RDP standard security protocol.\r\n\r\n" +
                     "2.Enter a return value, using a positive value for a successful connection or a negative value for a failed connection.\r\n\r\n" +
                     "3.To pass the value to the test case, click the Succeed button. Or, to end the test case, enter a message into the Failure Message dialog box and then click Fail.")]
-        [DefaultValue("1")]
-        int RDPConnectWithNegotiationApproachFullScreen(string caseName);
+        void RDPConnectWithNegotiationApproachFullScreen(string caseName);
 
         /// <summary>
         /// This method is used to trigger RDP client initiate a disconnection of current session.
@@ -69,8 +65,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         [MethodHelp("1.Disconnect a remote desktop session between the client and server.\r\n\r\n" +
                     "2.Enter a return value, using a positive value if the disconnect succeeds or a negative value if the disconnect fails.\r\n\r\n" +
                     "3.To pass the value to the test case, click the Succeed button. Or, to end the test case, enter a message into the Failure Message dialog box and then click Fail.")]
-        [DefaultValue("1")]
-        int TriggerClientDisconnect(string caseName);
+        void TriggerClientDisconnect(string caseName);
 
         /// <summary>
         /// This method is used to trigger RDP client to close all RDP connection to a server for clean up.
@@ -80,8 +75,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         [MethodHelp("1.Close all remote desktop sessions between the client and server.\r\n\r\n" +
                     "2.Enter a return value, using a positive value if all connections close successfully, or a negative value if any connections fail to close.\r\n\r\n" +
                     "3.To pass the value to the test case, click the Succeed button. Or, to end the test case, enter a message into the Failure Message dialog box and then click Fail.")]
-        [DefaultValue("1")]
-        int TriggerClientDisconnectAll(string caseName);
+        void TriggerClientDisconnectAll(string caseName);
 
         /// <summary>
         /// This method is used to trigger RDP client to start an Auto-Reconnect sequence after a network interruption.
