@@ -769,11 +769,11 @@ namespace Microsoft.Protocols.TestManager.Kernel
                             adapter.Type = AdapterType.Managed;
                         }
                         break;
-                    case "script":
+                    case "shell":
                         {
                             string scriptDir = xmlNode.Attributes["scriptdir"].Value;
-                            adapter.ScriptAdapter = new ScriptAdapterNode(name, adapter.FriendlyName, scriptDir);
-                            adapter.Type = AdapterType.Script;
+                            adapter.ShellAdapter = new ShellAdapterNode(name, adapter.FriendlyName, scriptDir);
+                            adapter.Type = AdapterType.Shell;
                         }
                         break;
                 }
