@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using Microsoft.Modeling;
+using System.Collections.Generic;
 using Microsoft.Protocols.TestTools.StackSdk.Dtyp;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
@@ -61,7 +61,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
         // ResilientOpenTimeout
 
-        public SequenceContainer<byte> LockSequenceArray;
+        public List<byte> LockSequenceArray;
 
         // --------
         // SMB2.2
