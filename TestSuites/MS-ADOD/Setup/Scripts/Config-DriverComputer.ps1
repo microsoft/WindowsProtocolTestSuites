@@ -13,9 +13,9 @@
 ##
 ##############################################################################
 Param(
-[String]$scriptsPath     = "."
+  [String]$scriptsPath     = (Split-Path $MyInvocation.MyCommand.Definition -Parent)
 )
-$ScriptsSignalFile = "$env:HOMEDRIVE\config-drivercomputer.finished.signal"
+$ScriptsSignalFile = "$env:HOMEDRIVE\ConfigScript.finished.signal"
 if (Test-Path -Path $ScriptsSignalFile)
 {
     Write-Host "The script execution is complete." -foregroundcolor Red
@@ -23,8 +23,7 @@ if (Test-Path -Path $ScriptsSignalFile)
 }
 
 Write-Host "Put current dir as $scriptsPath."
-$scriptsPath = Get-Location
-pushd $scriptsPath
+Push-Location $scriptsPath
 
 #----------------------------------------------------------------------------
 # Starting script
@@ -229,8 +228,8 @@ $settingXml.Save("$settingFile")
 #-----------------------------------------------------
 # Finished to config driver computer
 #-----------------------------------------------------
-popd
-Write-Host "Write signal file: config-drivercomputer.finished.signal to system drive."
+Pop-Location
+Write-Host "Write signal file: ConfigScript.finished.signal to system drive."
 cmd /C ECHO CONFIG FINISHED>$ScriptsSignalFile
 
 #----------------------------------------------------------------------------
@@ -239,7 +238,6 @@ cmd /C ECHO CONFIG FINISHED>$ScriptsSignalFile
 Write-Host "Config finished."
 Write-Host "EXECUTE [Config-DriverComputer.ps1] FINISHED (NOT VERIFIED)."
 
-cmd /C Pause
 Stop-Transcript
 
 exit 0

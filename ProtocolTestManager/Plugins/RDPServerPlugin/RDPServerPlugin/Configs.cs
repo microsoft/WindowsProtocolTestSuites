@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 {
-    class Configs
+    public class Configs
     {
         public string ServerDomain { get; set; }
 

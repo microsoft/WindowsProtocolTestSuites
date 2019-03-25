@@ -76,7 +76,7 @@ Note
 | □| Configure the DC. (optional)| See [Configuring Computers that are Not Based on Windows](#_Toc396908242) | 
 | □| Configure the driver computer.| See [Configuring Windows-based Computers](#_Toc396908241)| 
 | □| Configure the test suite settings.| See [Configuring the Test Suite](#_Toc396908243).| 
-| □| Run test cases to verify that the test suite is properly installed and configured| See [Running Test Cases](#_Running_Test_Cases)[](#_Toc396908244).| 
+| □| Run test cases to verify that the test suite is properly installed and configured| See [Running Test Cases](#_Toc396908244).| 
 
 ## <a name="_Toc396908223"/>How Do I?
 Use the following quick reference to learn how to complete common tasks.
@@ -85,7 +85,7 @@ Use the following quick reference to learn how to complete common tasks.
 | -------------| ------------- |
 | Set up the test environment| [Network Setup](#_Toc396908230) and [Computer Setup](#_Toc396908235)| 
 | Verify the connection from the driver computer to other computers in the test environment| [Verify Connectivity from the Driver Computer](#_Toc396908234)| 
-| Configure a SUT| [Configure the SUT](#_Install_and_configure) or [Configuring Computers that are Not Based on Windows](#_Toc396908242)| 
+| Configure a SUT| [Configure the SUT](#_Toc396908241) or [Configuring Computers that are Not Based on Windows](#_Toc396908242)| 
 | Configure a DC| [Configuring Computers that are Not Based on Windows](#_Toc396908242)| 
 | Configure the driver computer| [Configuring Windows-based Computers](#_Toc396908241)| 
 | Configure the test suite settings| [Configuring the Test Suite](#_Toc396908243)| 
@@ -188,7 +188,7 @@ Visual Studio 2017 Community is the minimum requirement.
 
 ## <a name="_Toc396908230"/>Network Setup
 
-You can run this test suite in a workgroup or domain environment using either physical or virtual machines. This section describes the test environment using physical computers. For information about configuring a virtual machine, see [http://www.microsoft.com/virtualization/en/us/solution-appliance-test.aspx](http://www.microsoft.com/virtualization/en/us/solution-appliance-test.aspx). 
+You can run this test suite in a workgroup or domain environment using either physical or virtual machines. This section describes the test environment using physical computers. For information about configuring a virtual machine, see [https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/create-virtual-machine](https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/create-virtual-machine). 
 
 ### <a name="_Toc396908231"/>Network Infrastructure
 
@@ -275,7 +275,7 @@ This section describes how to set up the driver computer.
 ![image6.png](./image/RDP_ServerUserGuide/image6.png)
 Important 
 
->Microsoft Visual Studio 2017 and Protocol Test Framework (build 1.0.6000.0) must be installed on the driver computer before you run the test suite installer.
+>Microsoft Visual Studio 2017 and Protocol Test Framework (build 1.0.6000.0) and Spec Explorer (3.5.3146.0) must be installed on the driver computer before you run the test suite installer.
 
 To set up the driver computer
 

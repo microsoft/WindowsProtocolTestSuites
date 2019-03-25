@@ -6,7 +6,7 @@ Param(
 )
 
 Write-Host "Put current dir as $scriptsPath."
-pushd $scriptsPath
+Push-Location $scriptsPath
 
 #----------------------------------------------------------------------------
 # Starting script
@@ -28,8 +28,10 @@ if(Test-Path -Path $settingFile)
     $driverComputerName = .\Get-Parameter.ps1 $settingFile driverComputerName
     $listeningPort      = .\Get-Parameter.ps1 $settingFile RDPListeningPort
     $ipVersion          = .\Get-Parameter.ps1 $settingFile ipVersion
+	$securityProtocol   = .\Get-Parameter.ps1 $settingFile securityProtocol
+	$negotiationBased   = .\Get-Parameter.ps1 $settingFile negotiationBasedApproach
     $osVersion          = .\Get-Parameter.ps1 $settingFile osVersion
-	$RDPVersion          = .\Get-Parameter.ps1 $settingFile RDPVersion
+	$RDPVersion         = .\Get-Parameter.ps1 $settingFile RDPVersion
     $workgroupDomain    = .\Get-Parameter.ps1 $settingFile workgroupDomain
     $tcSystemDrive      = .\Get-Parameter.ps1 $settingFile tcSystemDrive
     .\Set-Parameter.ps1 $settingFile LogFile $logFile "If no log file path specified, this value should be used."
@@ -56,7 +58,6 @@ if([double]$SutOSVersion -ge "10.0")
         $DropConnectionForInvalidRequest = "false"
     }
 }
-
 
 #-----------------------------------------------------
 # Create $logPath if not exist
@@ -91,7 +92,9 @@ Write-Host "`$dcComputerName     = $dcComputerName"
 Write-Host "`$tcComputerName     = $tcComputerName" 
 Write-Host "`$driverComputerName = $driverComputerName"
 Write-Host "`$listeningPort      = $listeningPort"
-Write-Host "`$ipVersion          = $ipVersion"     
+Write-Host "`$ipVersion          = $ipVersion"
+Write-Host "`$securityProtocol   = $securityProtocol"  
+Write-Host "`$negotiationBased   = $negotiationBased"       
 Write-Host "`$osVersion          = $osVersion" 
 Write-Host "`$RDPVersion         = $RDPVersion" 
 Write-Host "`$workgroupDomain    = $workgroupDomain"
@@ -140,8 +143,7 @@ if (Test-Path -Path "$env:HOMEDRIVE\$certFileName.pfx")
     Remove-Item "$env:HOMEDRIVE\$certFileName.pfx" -Force
 }
 
-New-SelfSignedCertificate -DnsName $certCN -CertStoreLocation "cert:\LocalMachine\My"
-$cert = Get-ChildItem -path cert:\localmachine\my | Where-Object { $_.Subject -eq "CN=$certCN" } | Select-Object -First 1
+$cert = New-SelfSignedCertificate -DnsName $certCN -CertStoreLocation "cert:\LocalMachine\My"
 $securePwd = (ConvertTo-SecureString -string "$certPwd" -Force -AsPlainText)
 Export-PfxCertificate -Cert $cert -Force -Password $securePwd -FilePath "$env:HOMEDRIVE\$certFileName.pfx"
 Export-Certificate -Cert $cert -FilePath "$env:HOMEDRIVE\$certFileName.cer" -Type CERT
@@ -155,7 +157,13 @@ if($listeningPort -eq "3389")
    if(Get-Service | Where-Object{$_.name -eq "TermService"} | where-object{$_.status -eq "Running"})
    {
        Set-ItemProperty HKLM:\SYSTEM\CurrentControlSet\Control\"Terminal Server"\Winstations\RDP-Tcp PortNumber -value 4488 -Type DWORD
-       Restart-Service TermService -F
+       try {
+            Restart-Service TermService -Force 
+       }
+       catch {
+            Write-Warning  "Restart-Service TermService failed..."
+       }
+       
    }
 }
 
@@ -170,26 +178,26 @@ Write-Host  "TurnOff FileReadonly for $DepPtfConfig..."
 .\TurnOff-FileReadonly.ps1 $DepPtfConfig
 
 Write-Host "Begin to update RDP_ClientTestSuite.deployment.ptfconfig..."
-.\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.ServerPort"         $listeningPort
-.\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.IpVersion"          $ipVersion
-.\Modify-ConfigFileNode.ps1 $DepPtfConfig "CertificatePath"        "$env:HOMEDRIVE\$certFileName.pfx"
-.\Modify-ConfigFileNode.ps1 $DepPtfConfig "CertificatePassword"    $certPwd
-.\Modify-ConfigFileNode.ps1 $DepPtfConfig "SUTName"                $tcComputerName
-.\Modify-ConfigFileNode.ps1 $DepPtfConfig "SUTUserPassword"        $userPwdInTC
-.\Modify-ConfigFileNode.ps1 $DepPtfConfig "SUTSystemDrive"         $tcSystemDrive
-.\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.ServerDomain"       $domainName
-.\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.ServerUserName"     $CredSSPUser
-.\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.ServerUserPassword" $CredSSPPwd
-.\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Version"            $RDPVersion
+.\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.ServerPort"            $listeningPort
+.\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.IpVersion"             $ipVersion
+.\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Security.Protocol"     $securityProtocol
+.\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Security.Negotiation"  $negotiationBased
+.\Modify-ConfigFileNode.ps1 $DepPtfConfig "CertificatePath"           "$env:HOMEDRIVE\$certFileName.pfx"
+.\Modify-ConfigFileNode.ps1 $DepPtfConfig "CertificatePassword"       $certPwd
+.\Modify-ConfigFileNode.ps1 $DepPtfConfig "SUTName"                   $tcComputerName
+.\Modify-ConfigFileNode.ps1 $DepPtfConfig "SUTUserPassword"           $userPwdInTC
+.\Modify-ConfigFileNode.ps1 $DepPtfConfig "SUTSystemDrive"            $tcSystemDrive
+.\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.ServerDomain"          $domainName
+.\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.ServerUserName"        $CredSSPUser
+.\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.ServerUserPassword"    $CredSSPPwd
+.\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Version"               $RDPVersion
 
 if ($osVersion.ToUpper() -eq "NONWINDOWS")
 {
     .\Modify-ConfigFileNode.ps1 $DepPtfConfig "IsWindowsImplementation"      "false"
-    
+	
     # Update default RDP security protocol as RDP/Low/128bit for NonWindows AutoTest
-    .\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Security.Protocol" "RDP" 
-    .\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Security.Encryption.Level" "Low" 
-    .\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Security.Encryption.Method" "128bit" 
+    .\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Security.Protocol" "RDP"    
     .\Modify-ConfigFileNode.ps1 $DepPtfConfig "DropConnectionForInvalidRequest" "true"
     
 }
@@ -197,6 +205,17 @@ else
 {
     .\Modify-ConfigFileNode.ps1 $DepPtfConfig "IsWindowsImplementation"      "true"
     .\Modify-ConfigFileNode.ps1 $DepPtfConfig "DropConnectionForInvalidRequest" $DropConnectionForInvalidRequest
+}
+
+if ($securityProtocol.ToUpper() -eq "RDP")
+{
+    .\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Security.Encryption.Level" "Low" 
+    .\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Security.Encryption.Method" "128bit" 
+}
+else
+{
+    .\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Security.Encryption.Level" "None" 
+    .\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Security.Encryption.Method" "None" 
 }
 
 if ($workgroupDomain.ToUpper() -eq "DOMAIN")
@@ -239,7 +258,7 @@ cmd /c schtasks /Create /SC Weekly /TN WaitForSUTControlAdapterReady /TR "powers
 #-----------------------------------------------------
 # Finished to config driver computer
 #-----------------------------------------------------
-popd
+Pop-Location
 Write-Host "Write signal file: config.finished.signal to system drive."
 cmd /C ECHO CONFIG FINISHED>$env:HOMEDRIVE\config.finished.signal
 
@@ -249,7 +268,4 @@ cmd /C ECHO CONFIG FINISHED>$env:HOMEDRIVE\config.finished.signal
 Write-Host "Config finished."
 Write-Host "EXECUTE [Config-DriverComputer.ps1] FINISHED (NOT VERIFIED)."
 
-
-
 exit 0
-

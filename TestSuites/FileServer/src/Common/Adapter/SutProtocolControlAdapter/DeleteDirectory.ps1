@@ -25,8 +25,7 @@ if ($exist -eq $true)
 	Try
 	{
 		CMD /C "net.exe use $share $password /user:$account"
-		Get-ChildItem -Path "$share\$directoryName" -Recurse | Remove-Item -force -recurse
-		Remove-Item "$share\$directoryName" -force
+		Remove-Item -path "$share\$directoryName" -Force -Recurse -ErrorAction SilentlyContinue
 	}
 	Finally
 	{

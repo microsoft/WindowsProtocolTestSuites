@@ -11,6 +11,7 @@ using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestSuites.Rdp;
+using System.Security.Authentication;
 
 namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 {
@@ -20,7 +21,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         private const string SVCNameForRDPEDYC = "DRDYNVC";
 
-        private RdpbcgrClient rdpbcgrClientStack;
+        public RdpbcgrClient rdpbcgrClientStack;
 
         private TimeSpan pduWaitTimeSpan = new TimeSpan(0, 0, 20);
         
@@ -32,6 +33,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         private string localAddress;
         private bool verifyPduEnabled;
         private bool verifyShouldBehaviors;
+        private SslProtocols tlsVersion = SslProtocols.None;
         private int sendInterval = 100;
 
         private List<StackPacket> receiveBuffer;
@@ -199,7 +201,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 password,
                 localAddress,
                 serverPort);
-
+            rdpbcgrClientStack.TlsVersion = tlsVersion;
             isLogon = false;
         }
 
@@ -256,7 +258,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         {
             rdpbcgrClientStack.Connect(encryptedProtocol);
         }
-
+      
         /// <summary>
         /// Disconnect transport connection with RDP Server
         /// </summary>
@@ -1038,6 +1040,22 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             return fpInputEvent;
         }
 
+        /// <summary>
+        /// Generate a TS_FP_INPUT_EVENT structure with a TS_FP_QOETIMESTAMP_EVENT
+        /// </summary>
+        /// <param name="timestamp">The timestamp indicates when the current input batch was encoded by the client</param>
+        /// <returns>TS_FP_INPUT_EVENT structure with a TS_FP_QOETIMESTAMP_EVENT</returns>
+        public TS_FP_INPUT_EVENT GenerateQoETimestampEvent(uint timestamp)
+        {
+            TS_FP_INPUT_EVENT fpInputEvent = new TS_FP_INPUT_EVENT();
+            TS_FP_QOETIMESTAMP_EVENT qoeTimestampEvent = new TS_FP_QOETIMESTAMP_EVENT();
+            qoeTimestampEvent.timestamp = timestamp;
+            fpInputEvent.eventHeader.eventFlagsAndCode =
+                (byte)((int)eventCode_Values.FASTPATH_INPUT_EVENT_QOE_TIMESTAMP << 5);
+            fpInputEvent.eventData = qoeTimestampEvent;
+            return fpInputEvent;
+        }
+
         #endregion TS_FP_INPUT_EVENT generation
 
         /// <summary>
@@ -1249,7 +1267,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         }
 
         #endregion Multitransport Bootstrapping
-                
+
         #region Expect Methods
 
         /// <summary>
@@ -1302,6 +1320,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                         {
                             return packet as T;
                         }
+                        else if (packet is ErrorPdu)
+                        {
+                            // Print out the error message if there is an exception when expecting the pdu.
+                            this.Site.Assert.Fail("An Exception happened when expecting the packet: {0}", ((ErrorPdu)packet).ErrorMessage);
+                        }
                         else
                         {
                             // If the type of received packet is not T, add it into receive buffer
@@ -1312,7 +1335,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                         }
                     }
                 }
-            }
+            } 
             this.Site.Log.Add(LogEntryKind.Debug, "Timeout when expecting a {0}.", typeof(T).Name);
             return null;
         }
@@ -1422,6 +1445,20 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             return false;
         }
 
+        public bool IsServerSupportFastpathInputQoeTimestampEvent()
+        {
+            ITsCapsSet capset = this.GetServerCapSet(capabilitySetType_Values.CAPSTYPE_INPUT);
+            if (capset != null)
+            {
+                TS_INPUT_CAPABILITYSET inputCap = (TS_INPUT_CAPABILITYSET)capset;
+                if (inputCap.inputFlags.HasFlag(inputFlags_Values.TS_INPUT_FLAG_QOE_TIMESTAMPS))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         /// <summary>
         /// Whether server support RDP-UDP FEC reliable transport
         /// Check flags field of TS_UD_SC_MULTITRANSPORT
@@ -1505,6 +1542,43 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             PtfPropUtility.GetBoolPtfProperty(Site, "VerifyRdpbcgrMessages", out verifyPduEnabled);
             PtfPropUtility.GetBoolPtfProperty(Site, "VerifyShouldBehaviors", out verifyShouldBehaviors);
+
+            string strRDPSecurityProtocol = string.Empty;
+            string strRDPSecurityTlsVersion = string.Empty;
+
+            try
+            {
+                PtfPropUtility.GetStringPtfProperty(Site, "RDP.Security.Protocol", out strRDPSecurityProtocol);            
+                if (strRDPSecurityProtocol.Equals("TLS", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    PtfPropUtility.GetStringPtfProperty(Site, "RDP.Security.TLS.Version", out strRDPSecurityTlsVersion);
+                    // TLS1.0, TLS1.1, TLS1.2 or None
+                    if (strRDPSecurityTlsVersion.Equals("TLS1.0", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        tlsVersion = SslProtocols.Tls;
+                    }
+                    else if (strRDPSecurityTlsVersion.Equals("TLS1.1", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        tlsVersion = SslProtocols.Tls11;
+                    }
+                    else if (strRDPSecurityTlsVersion.Equals("TLS1.2", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        tlsVersion = SslProtocols.Tls12;
+                    }
+                    else if (strRDPSecurityTlsVersion.Equals("None", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        tlsVersion = SslProtocols.None;
+                    }
+                    else
+                    {
+                        this.Site.Assume.Fail("The property value \"RDP.Security.TLS.Version\" is invalid in PTFConfig file.");
+                    }
+                }
+            }
+            catch
+            {
+                this.Site.Assume.Fail("The properties \"RDP.Security.Protocol\" and \"RDP.Security.TLS.Version\" are not present properly in PTFConfig file.");
+            }
         }
 
         /// <summary>

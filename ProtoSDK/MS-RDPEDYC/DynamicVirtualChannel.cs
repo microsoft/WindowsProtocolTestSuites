@@ -17,10 +17,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
     {
         #region Variables
 
-        /// <summary>
-        /// Max length of a Data PDU
-        /// </summary>
-        private const int MAX_CHUNK_LEN = 1600;
 
         /// <summary>
         /// Channel Id;
@@ -136,7 +132,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             }
             else
             {
-                dataPdus = pduBuilder.CreateDataPdu(channelId, data, MAX_CHUNK_LEN);
+                dataPdus = pduBuilder.CreateDataPdu(channelId, data, ConstLength.MAX_CHUNK_LEN);
             }
 
             if (dataPdus != null)
@@ -154,8 +150,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             
             dataPdus = pduBuilder.CreateCompressedDataPdu(
                 channelId,
-                pduBuilder.CompressDataToRdp8BulkEncodedData(data, PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_LITE | PACKET_COMPR_FLAG.PACKET_COMPRESSED),
-                1599);
+                pduBuilder.CompressDataToRdp8BulkEncodedData(data, PACKET_COMPR_FLAG.PACKET_COMPR_TYPE_LITE | PACKET_COMPR_FLAG.PACKET_COMPRESSED));
            
 
             if (dataPdus != null)

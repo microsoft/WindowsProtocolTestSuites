@@ -18,7 +18,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         private Multitransport_Protocol_value transportProtocol;
 
         private TimeSpan timeout = new TimeSpan(0, 0, 20);
-        
+
         private RdpbcgrServer rdpbcgrServer = null;
         private RdpbcgrServerSessionContext serverSessionContext = null;
         private RdpemtServer rdpemtServer = null;
@@ -75,8 +75,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
                 throw new NotSupportedException("This RDP connection doesn't support multiple transport!");
             }
 
-            EstablishTransportConnection();
-            
+            try
+            {
+                EstablishTransportConnection();
+            }
+            catch (Exception)
+            {
+                // Ensure resource can be released properly if exception occurred in Constructor 
+                Dispose();
+                // Not suppress the exception, transfer the error to test result. 
+                throw;
+            }
+
             decoder = new ServerDecodingPduBuilder();
             pduBuilder = new PduBuilder();
         }
@@ -156,7 +166,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             }
 
             rdpeudpSocket = rdpeudpServer.Accept(((IPEndPoint)serverSessionContext.Identity).Address, transMode, timeout);
-            if(rdpeudpSocket == null)
+            if (rdpeudpSocket == null)
             {
                 if (rdpeudpServer != null && rdpeudpServer.Running)
                     rdpeudpServer.Dispose();
@@ -197,7 +207,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             {
                 rdpeudpServer = new RdpeudpServer((IPEndPoint)context.LocalIdentity);
             }
-            if(!rdpeudpServer.Running)
+            if (!rdpeudpServer.Running)
                 rdpeudpServer.Start();
         }
 

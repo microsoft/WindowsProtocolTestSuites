@@ -1,14 +1,11 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
-using System.IO;
-using System.Runtime.InteropServices;
-
-using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.Dtyp;
 using Microsoft.Protocols.TestTools.StackSdk.Messages;
-using Microsoft.Protocols.TestTools.StackSdk.Messages.Runtime.Marshaling;
+using Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce;
+using System;
+using System.IO;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.Pac
 {

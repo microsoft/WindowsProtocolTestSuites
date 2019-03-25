@@ -1,0 +1,166 @@
+<lab>
+  <core>
+    <username>administrator</username>
+    <password>Password01!</password>
+    <legacyclient>true</legacyclient>
+    <basecpu>1</basecpu>
+    <Description>DC x 2 and Member x 4(NIC x 2), BranchCache sample setup static ip address</Description>
+  </core>
+
+  <network>
+    <vnet>
+      <hostisgateway>true</hostisgateway>
+      <networktype>Internal</networktype>
+      <name>BranchCache_BranchNetwork</name>
+      <ip>192.168.1.253</ip>
+      <subnet>255.255.255.0</subnet>
+    </vnet>
+    <vnet>
+      <hostisgateway>true</hostisgateway>
+      <networktype>Internal</networktype>
+      <name>BranchCache_HeadquartersNetwork</name>
+      <ip>192.168.0.250</ip>
+      <subnet>255.255.255.0</subnet>
+    </vnet>
+  </network>
+
+  <Parameters>
+    <!--Parameters for Config Driver Computer-->
+    <Parameter Name="ContentTransport" Value="PCCRTP" Comment="Transport for PTF config." />
+    <Parameter Name="ContentServerComputerName" Value="ContentServer" Comment="ContentServerComputerName for PTF config." />
+    <Parameter Name="ContentServerFQDN" Value="ContentServer.contoso.com" Comment="ContentServer Full Qualified Domain Name." />
+    <Parameter Name="HostedCacheServerComputerName" Value="HCServer" Comment="HostedCacheServerComputerName for PTF config." />
+    <Parameter Name="DomainName" Value="contoso" Comment="DomainName for PTF config." />
+    <Parameter Name="SecurityPackageType" Value="Negotiate" Comment="SupportedSecurityPackages for PTF config." />
+    <!--Parameters for automation run-->
+    <Parameter Name="TestCase" Value="Domain-RunAllTestCases.ps1" Comment="Which test case to run." />
+    <Parameter Name="TestCaseTimeout" Value="14400" Comment="Test case time out in seconds." />
+    <!--Parameters for Computer information-->
+    <Parameter Name="userName" Value="Administrator" Comment="" />
+    <Parameter Name="password" Value="Password01!" Comment="" />
+    <Parameter Name="domain" Value="contoso.com" Comment="" />
+    <Parameter Name="testDriverName" Value="BranchCache_Client" Comment="" />
+    <Parameter Name="contentServerCtrlIp" Value="192.168.0.2" Comment="" />
+    <Parameter Name="testDriverCtrlIp" Value="192.168.1.11" Comment="" />
+    <Parameter Name="testDirInVM" Value="C:\Test" Comment="" />
+    <Parameter Name="testServerName" Value="BranchCache_HostedCacheServer" Comment="" />
+    <Parameter Name="testServerCtrlIp" Value="192.168.1.3" Comment="" />
+    <Parameter Name="testDCCtrlIp" Value="192.168.1.1" Comment="" />
+  </Parameters>
+
+  <servers>
+    <vm>
+      <installorder>1</installorder>
+      <hypervname>BranchCache_HeadquarterDC</hypervname>
+      <name>DC</name>
+      <role>DC</role>
+      <domain>contoso.com</domain>
+      <username>Administrator</username>
+      <password>Password01!</password>
+      <isdc>true</isdc>
+      <vnet>BranchCache_HeadquartersNetwork</vnet>
+      <ip>192.168.0.1</ip>
+      <gateway>Empty</gateway>
+      <dns>127.0.0.1</dns>
+      <vnet>BranchCache_BranchNetwork</vnet>
+      <ip>192.168.1.1</ip>
+      <gateway>Empty</gateway>
+      <dns>127.0.0.1</dns>
+      <subnet>255.255.255.0</subnet>
+      <memory>1024</memory>
+      <cpu>1</cpu> 
+      <minimumram>1024</minimumram> 
+      <maximumram>2048</maximumram> 
+      <installscript>createdc.ps1</installscript>
+      <installfeaturescript>Install_RemoteAccess_Feature.ps1</installfeaturescript>
+      <postscript>Disable_Firewall.ps1</postscript>
+    </vm>
+
+    <vm>
+      <installorder>2</installorder>
+      <hypervname>BranchCache_BranchDC</hypervname>
+      <name>BranchDC</name>
+      <role>RODC</role>
+      <domain>contoso.com</domain>
+      <username>Administrator</username>
+      <password>Password01!</password>
+      <isdc>true</isdc>
+      <vnet>BranchCache_BranchNetwork</vnet>
+      <ip>192.168.1.2</ip>
+      <gateway>192.168.1.1</gateway>
+      <dns>192.168.1.1</dns>
+      <subnet>255.255.255.0</subnet>
+      <memory>1024</memory>
+      <cpu>1</cpu> 
+      <minimumram>1024</minimumram> 
+      <maximumram>2048</maximumram> 
+      <postscript>Disable_Firewall.ps1;CreateRODC.ps1</postscript>
+      <replicasourcedc>DC.contoso.com</replicasourcedc>
+    </vm>
+
+    <vm>
+      <installorder>3</installorder>
+      <hypervname>BranchCache_ContentServer</hypervname>
+      <name>ContentServer</name>
+      <role>SUT01</role>
+      <domain>contoso.com</domain>
+      <vnet>BranchCache_HeadquartersNetwork</vnet>
+      <ip>192.168.0.2</ip>
+      <gateway>192.168.0.1</gateway>
+      <dns>192.168.0.1</dns>
+      <subnet>255.255.255.0</subnet>
+      <memory>1024</memory>
+      <cpu>1</cpu> 
+      <minimumram>1024</minimumram> 
+      <maximumram>2048</maximumram> 
+      <installscript>domainjoin.ps1</installscript>
+      <postscript>Disable_Firewall.ps1;ConfigContentServer.ps1;DeployTestFile.ps1</postscript>
+    </vm>
+
+    <vm>
+      <installorder>4</installorder>
+      <hypervname>BranchCache_HostedServer</hypervname>
+      <name>HCServer</name>
+      <role>SUT02</role>
+      <domain>contoso.com</domain>
+      <vnet>BranchCache_BranchNetwork</vnet>
+      <ip>192.168.1.3</ip>
+      <gateway>192.168.1.1</gateway>
+      <dns>192.168.1.2</dns>
+      <subnet>255.255.255.0</subnet>
+      <memory>1200</memory>
+      <cpu>1</cpu> 
+      <minimumram>1024</minimumram> 
+      <maximumram>2048</maximumram> 
+      <installscript>domainjoin.ps1</installscript>
+      <postscript>Disable_Firewall.ps1;ConfigHostedCacheServer.ps1;BindSSLCert.ps1</postscript>
+    </vm>
+
+    <vm>
+      <installorder>5</installorder>
+      <hypervname>BranchCache_Client</hypervname>
+      <name>Client</name>
+      <role>DriverComputer</role>
+      <domain>contoso.com</domain>
+      <vnet>BranchCache_BranchNetwork</vnet>
+      <ip>192.168.1.11</ip>
+      <gateway>192.168.1.1</gateway>
+      <dns>192.168.1.2</dns>
+      <subnet>255.255.255.0</subnet>
+      <username>Administrator</username>
+      <password>Password01!</password>
+      <memory>4096</memory>
+	  <cpu>4</cpu> 
+      <minimunram>1024</minimunram>
+      <maximunram>4096</maximunram>
+      <installscript>domainjoin.ps1</installscript>
+      <postscript>Disable_Firewall.ps1;TrustHostedCacheServer.ps1</postscript>
+      <skipwaitingforpostscript>false</skipwaitingforpostscript>
+      <tools>
+        <tool name="SE" MSIName="SpecExplorer.msi" version="3.5.3146.0" CPUArchitecture="x86" />
+        <tool name="PTF" MSIName="ProtocolTestFrameworkInstaller.msi" version="1.0.6000.0" CPUArchitecture="x86" />
+        <TestsuiteMSI MSIName="BranchCache.msi" targetEndpoint="" />
+      </tools>
+    </vm>
+  </servers>
+</lab>

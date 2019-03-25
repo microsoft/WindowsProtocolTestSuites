@@ -33,7 +33,7 @@ namespace CodeCoverage
             Rule rule12 = new Rule()
             {
                 Name = "Rule12",
-                SelectStatus = RuleSelectStatus.NotSelected,
+                SelectStatus = RuleSelectStatus.UnSelected,
                 CategoryList = new System.Collections.Generic.List<string>() { "Cat4", "Cat5", "Cat6" }
             };
             rule1.Add(rule11);
@@ -49,7 +49,7 @@ namespace CodeCoverage
             Rule rule2 = new Rule()
             {
                 Name = "Rule2",
-                SelectStatus = RuleSelectStatus.NotSelected,
+                SelectStatus = RuleSelectStatus.UnSelected,
                 CategoryList = new System.Collections.Generic.List<string>() { "Cat1", "Cat2", "Cat3" }
             };
             group2.Add(rule2);
@@ -74,7 +74,7 @@ namespace CodeCoverage
             filter.Add(group3);
 
             rule11.SelectStatus = RuleSelectStatus.Selected;
-            rule3.SelectStatus = RuleSelectStatus.NotSelected;
+            rule3.SelectStatus = RuleSelectStatus.UnSelected;
             return filter;
         }
 
@@ -151,7 +151,7 @@ namespace CodeCoverage
                 "The rule is selected");
             Rule notSelectedRule = filter.FindRuleByName("Group1.Rule1.Rule11");
             Assert.AreEqual(
-                RuleSelectStatus.NotSelected,
+                RuleSelectStatus.UnSelected,
                 notSelectedRule.SelectStatus,
                 "The rule is not selected");
         }

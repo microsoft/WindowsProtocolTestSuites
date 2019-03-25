@@ -21,21 +21,13 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
     {
         // Parameters for Detecting
         public string SUTName;
-        public string UserNameInTC;
-        public string UserPwdInTC;
-        public string IsWindowsImplementation;
-        public string DropConnectionForInvalidRequest;
-        public int AgentListenPort;
-        public TriggerMethod TriggerMethod;
                 
         // Detect Result
         public bool? IsSupportAutoReconnect;
-        public bool? IsSupportServerRedirection;
-        public bool? IsSupportNetcharAutoDetect;
-        public bool? IsSupportHeartbeatPdu;
-        public bool? IsSupportStaticVirtualChannel;
-        
-        public bool? IsSupportRDPEUDP;
+        public bool? IsSupportFastPathInput;
+
+        public bool IsSupportRDPEDYC = false;
+        public bool IsSupportRDPEMT = false;
     }
 
     public class ResultItemMap

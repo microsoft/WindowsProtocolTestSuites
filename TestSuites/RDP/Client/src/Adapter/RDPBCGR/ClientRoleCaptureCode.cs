@@ -182,13 +182,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 @"[In Client Info PDU Data (CLIENT_INFO_PDU)]securityHeader (variable):   This field MUST contain one"
                 + @" of the following headers:[Basic Security Header,Non-FIPS Security Header, FIPS Security Header ].");
 
+            // The security header of Client Info PDU is different from other PDU.
             if (serverConfig.encryptionLevel == EncryptionLevel.ENCRYPTION_LEVEL_NONE)
             {
                 bool isValidEncryptionLevel = (clientInfo.commonHeader.securityHeader is TS_SECURITY_HEADER) &&
                     (!(clientInfo.commonHeader.securityHeader is TS_SECURITY_HEADER1)) &&
                     (!(clientInfo.commonHeader.securityHeader is TS_SECURITY_HEADER2));
-                site.Assert.IsTrue(isValidEncryptionLevel, 
-                    @"[In Client Info PDU Data (CLIENT_INFO_PDU)]securityHeader (variable):The securityHeader in "
+                site.Assert.IsTrue(isValidEncryptionLevel,
+                    @"The securityHeader in "
                     + @"CLIENT_INFO_PDU structure is a Basic Security Header if the Encryption Level  selected by"
                     + @" the server is ENCRYPTION_LEVEL_NONE (0).");
             }
@@ -196,16 +197,23 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_56BIT ||
                 serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_128BIT)
             {
-                //<bug>sdk bug 
                 site.Assert.IsInstanceOfType(clientInfo.commonHeader.securityHeader, typeof(TS_SECURITY_HEADER1),
-                    @"[In Client Info PDU Data (CLIENT_INFO_PDU)]securityHeader (variable):The securityHeader in CLIENT_INFO_PDU structure is a Non-FIPS Security Header (section 2.2.8.1.1.2.2) if the Encryption LevelMethod selected by the server (see sections 5.3.2 and 2.2.1.4.3) is ENCRYPTION_LEVEL_LOW (1METHOD_40BIT (0x00000001), ENCRYPTION_LEVEL_CLIENT_COMPATIBLE (2METHOD_56BIT (0x00000008), or ENCRYPTION_LEVEL_HIGH (3METHOD_128BIT (0x00000002).");
+                    @"The securityHeader in CLIENT_INFO_PDU structure is a Non-FIPS Security Header (section 2.2.8.1.1.2.2) if the "
+                    + @"Encryption Method selected by the server is "
+                    + @"ENCRYPTION_METHOD_40BIT (0x00000001), ENCRYPTION_METHOD_56BIT (0x00000008), "
+                    + @"ENCRYPTION_METHOD_128BIT (0x00000002).");
             }
             else if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_FIPS)
             {
-                site.Assert.IsInstanceOfType(clientInfo.commonHeader.securityHeader, typeof(TS_SECURITY_HEADER2), 
-                    @"[In Client Info PDU Data (CLIENT_INFO_PDU)]securityHeader (variable):The securityHeader in "
+                site.Assert.IsInstanceOfType(clientInfo.commonHeader.securityHeader, typeof(TS_SECURITY_HEADER2),
+                    @"The securityHeader in "
                     + @"CLIENT_INFO_PDU structure is a FIPS Security Header (section 2.2.8.1.1.2.3) if the Encryption"
-                    + @" Level Method  selected by the server  is ENCRYPTION_LEVELMethod _FIPS ( 4 0x00000010).");
+                    + @" Method selected by the server is ENCRYPTION_METHOD_FIPS (0x00000010).");
+            }
+            else
+            {
+                site.Assert.Fail("Check the code, something is wrong with the test case. encryptionMethod: {0}, encryptionLevel: {1}",
+                    serverConfig.encryptionMethod, serverConfig.encryptionLevel);
             }
 
             if (serverConfig.encryptedProtocol == EncryptedProtocol.Rdp)
@@ -228,42 +236,18 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="confirmActivePdu"></param>
         public void VerifyPdu(Client_Confirm_Active_Pdu confirmActivePdu)
         {
-            //Bug to be confirmed
-            if (this.serverConfig.encryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE || this.serverConfig.encryptionMethod != EncryptionMethods.ENCRYPTION_METHOD_NONE)
-            {
-                bool isValidEncryptionMethod = confirmActivePdu.commonHeader.securityHeader.GetType() == typeof(TS_SECURITY_HEADER1) ||
-                    confirmActivePdu.commonHeader.securityHeader.GetType() == typeof(TS_SECURITY_HEADER2);
-                site.Assert.IsTrue(isValidEncryptionMethod, 
-                    @"In Client Confirm Active PDU, if the Encryption Level selected by the server is greater"
-                    + @" than ENCRYPTION_LEVEL_NONE (0) and the Encryption Method selected by the server is "
-                    + @"greater than ENCRYPTION_METHOD_NONE (0) then this field MUST contain one of the "
-                    + @"following headers:");
-            }
+            VerifySecurityHeader(confirmActivePdu.commonHeader.securityHeader, "Client Confirm Active");
 
-            if (this.serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_40BIT ||
-                this.serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_56BIT ||
-                this.serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_128BIT)
-            {
-                site.Assert.IsInstanceOfType(confirmActivePdu.commonHeader.securityHeader, typeof(TS_SECURITY_HEADER1), 
-                    @"[In Client Confirm Active PDU]securityHeader (variable):  The securityHeader in Server"
-                    + @" Demand Active PDU is a Non-FIPS Security Header (section 2.2.8.1.1.2.2) if the "
-                    + @"Encryption LevelMethod selected by the server (see sections 5.3.2 and 2.2.1.4.3) is "
-                    + @"ENCRYPTION_LEVEL_CLIENT_COMPATIBLE (2)METHOD_40BIT (0x00000001), ENCRYPTION_METHOD_56BIT"
-                    + @" (0x00000008), or ENCRYPTION_LEVEL_HIGH (3METHOD_128BIT (0x00000002).");
-            }
-            else if (this.serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_FIPS)
-            {
-                site.Assert.IsInstanceOfType(confirmActivePdu.commonHeader.securityHeader, typeof(TS_SECURITY_HEADER2), 
-                    @"[In Client Confirm Active PDU]securityHeader (variable):The securityHeader in Server "
-                    + @"Demand Active PDU is a FIPS Security Header,if the Encryption LevelMethod selected "
-                    + @"by the server is ENCRYPTION_METHOD_FIPS (0x00000010).");
-            }
+            VerifyStructure(confirmActivePdu.confirmActivePduData);
 
             //verify all the capability set:
             foreach (ITsCapsSet cap in confirmActivePdu.confirmActivePduData.capabilitySets)
             {
                 switch (cap.GetCapabilityType())
                 {
+                    case capabilitySetType_Values.CAPSTYPE_GENERAL:
+                        VerifyStructure((TS_GENERAL_CAPABILITYSET)cap);
+                        break;
                     case capabilitySetType_Values.CAPSTYPE_BITMAP:
                         VerifyStructure((TS_BITMAP_CAPABILITYSET)cap);
                         break;
@@ -307,26 +291,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="clientSyncPdu"></param>
         public void VerifyPdu(Client_Synchronize_Pdu clientSyncPdu)
         {
-            if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_40BIT ||
-                serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_56BIT ||
-                serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_128BIT)
-            {
-                site.Assert.IsInstanceOfType(clientSyncPdu.commonHeader.securityHeader, typeof(TS_SECURITY_HEADER1), 
-                    @"In Client Synchronize PDU, securityHeader (variable):  The securityHeader in Server"
-                    + @" Demand Active PDU is a Non-FIPS Security Header (section 2.2.8.1.1.2.2) if the "
-                    + @"Encryption LevelMethod selected by the server (see sections 5.3.2 and 2.2.1.4.3) is"
-                    + @" ENCRYPTION_METHOD_40BIT (0x00000001), ENCRYPTION_METHOD_56BIT (0x00000008), "
-                    + @"ENCRYPTIONMETHOD_128BIT (0x00000002)");
+            VerifySecurityHeader(clientSyncPdu.commonHeader.securityHeader, "Client Synchronize");
 
-            }
-            else if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_FIPS)
-            {
-                site.Assert.IsInstanceOfType(clientSyncPdu.commonHeader.securityHeader, typeof(TS_SECURITY_HEADER2), 
-                    @"In Client Synchronize PDU, securityHeader (variable):The securityHeader in Server Demand"
-                    + @" Active PDU is a FIPS Security Header,if the Encryption LevelMethod selected by the server"
-                    + @" is ENCRYPTION_METHOD_FIPS (0x00000010).");
-
-            }
             site.Assert.AreEqual<int>(7, (clientSyncPdu.synchronizePduData.shareDataHeader.shareControlHeader.pduType.typeAndVersionLow & 0xf), 
                 @"In TS_SYNCHONIZE_PDU the type subfield of the pduType field of the Share Control Header "
                 + @"MUST be set to PDUTYPE_DATAPDU (7).");
@@ -343,31 +309,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="clientCoopPdu"></param>
         public void VerifyPdu(Client_Control_Pdu_Cooperate clientCoopPdu)
         {
-            if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_40BIT ||
-                serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_56BIT ||
-                serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_128BIT)
-            {
-                site.Assert.IsInstanceOfType(clientCoopPdu.commonHeader.securityHeader, typeof(TS_SECURITY_HEADER1), 
-                    @"[In Client Control PDU - Cooperate]securityHeader (variable):  The securityHeader in "
-                    + @"Server Demand Active PDU is a Non-FIPS Security Header (section 2.2.8.1.1.2.2) if "
-                    + @"the Encryption LevelMethod selected by the server (see sections 5.3.2 and 2.2.1.4.3) "
-                    + @"is ENCRYPTION_LEVEL_CLIENT_COMPATIBLE (2)METHOD_40BIT (0x00000001), ENCRYPTION_METHOD_56BIT"
-                    + @" (0x00000008), or ENCRYPTION_LEVEL_HIGH (3METHOD_128BIT (0x00000002).");
-            }
-            else if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_FIPS)
-            {
-                site.Assert.IsInstanceOfType(clientCoopPdu.commonHeader.securityHeader, typeof(TS_SECURITY_HEADER2), 
-                    @"[In Client Control PDU - Cooperate]securityHeader (variable):The securityHeader in Server"
-                    + @" Demand Active PDU is a FIPS Security Header,if the Encryption LevelMethod selected by "
-                    + @"the server is ENCRYPTION_METHOD_FIPS (0x00000010).");
-            }
-            else if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_NONE)
-            {
-                site.Assert.IsNull(clientCoopPdu.commonHeader.securityHeader, 
-                    @" Client Control PDU - Cooperate ,If Enhanced RDP Security is in effect or the Encryption "
-                    + @"Method selected by the server is ENCRYPTION_METHOD_NONE (0), then securityHeader MUST NOT"
-                    + @" be  included in the Client Control PDU - Cooperate.");
-            }
+            VerifySecurityHeader(clientCoopPdu.commonHeader.securityHeader, "Client Control (Cooperate)");
+
             site.Assert.IsTrue(clientCoopPdu.controlPduData.controlId == 0 && clientCoopPdu.controlPduData.grantId == 0, 
                 @"In controlPduData of Client Control PDU - Cooperate, The grantId and controlId fields of the "
                 + @"Control PDU Data MUST both be set to zero.");
@@ -399,30 +342,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="clientCtlRequestPdu"></param>
         public void VerifyPdu(Client_Control_Pdu_Request_Control clientCtlRequestPdu)
         {
-            if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_40BIT ||
-                serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_56BIT ||
-                serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_128BIT)
-            {
-                site.Assert.IsInstanceOfType(clientCtlRequestPdu.commonHeader.securityHeader, typeof(TS_SECURITY_HEADER1), 
-                    @"[In Client Control PDU - Request Control]securityHeader (variable):  The securityHeader in Server "
-                    + @"Demand Active PDU is a Non-FIPS Security Header (section 2.2.8.1.1.2.2) if the Encryption LevelMethod"
-                    + @" selected by the server (see sections 5.3.2 and 2.2.1.4.3) is ENCRYPTION_LEVEL_CLIENT_COMPATIBLE (2)"
-                    + @"METHOD_40BIT (0x00000001), ENCRYPTION_METHOD_56BIT (0x00000008), or ENCRYPTION_LEVEL_HIGH (3METHOD_128BIT"
-                    + @" (0x00000002).");
-            }
-            else if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_FIPS)
-            {
-                site.Assert.IsInstanceOfType(clientCtlRequestPdu.commonHeader.securityHeader, typeof(TS_SECURITY_HEADER2),
-                    @"[In Client Control PDU - Request Control]securityHeader (variable):The securityHeader in Server Demand Active "
-                    + @"PDU is a FIPS Security Header,if the Encryption LevelMethod selected by the server is ENCRYPTION_METHOD_FIPS (0x00000010).");
-            }
-            else if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_NONE)
-            {
-                site.Assert.IsNull(clientCtlRequestPdu.commonHeader.securityHeader, 
-                    @"For Client Control PDU - Request Control, if Enhanced RDP Security is in effect or the Encryption Method selected "
-                    + @"by the server is ENCRYPTION_METHOD_NONE (0), then securityHeader MUST NOT be included in the Client Control PDU"
-                    + @" - Request Control.");
-            }
+            VerifySecurityHeader(clientCtlRequestPdu.commonHeader.securityHeader, "Client Control (Request Control)");
+
             site.Assert.IsTrue(clientCtlRequestPdu.controlPduData.controlId == 0 && clientCtlRequestPdu.controlPduData.grantId == 0, 
                 @"In Client Control PDU - Request Control, the grantId and controlId fields of the Control PDU Data MUST both be set to zero.");
 
@@ -436,29 +357,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="keyListPdu"></param>
         public void VerifyPdu(Client_Persistent_Key_List_Pdu keyListPdu)
         {
-            if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_40BIT ||
-                serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_56BIT ||
-                serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_128BIT)
-            {
-                site.Assert.IsInstanceOfType(keyListPdu.commonHeader.securityHeader, typeof(TS_SECURITY_HEADER1), 
-                    @"In Client Persistent Key List PDU, securityHeader (variable):  The securityHeader  is a Non-FIPS Security Header"
-                    + @" (section 2.2.8.1.1.2.2) if the Encryption LevelMethod selected by the server (see sections 5.3.2 and 2.2.1.4.3)"
-                    + @" is ENCRYPTION_LEVEL_CLIENT_COMPATIBLE (2)METHOD_40BIT (0x00000001), ENCRYPTION_METHOD_56BIT (0x00000008), or "
-                    + @"ENCRYPTION_LEVEL_HIGH (3METHOD_128BIT (0x00000002).");
-            }
-            else if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_FIPS)
-            {
-                site.Assert.IsInstanceOfType(keyListPdu.commonHeader.securityHeader, typeof(TS_SECURITY_HEADER2), 
-                    @"In Client Persistent Key List PDU, securityHeader (variable):The securityHeaderis a FIPS Security Header,if the"
-                    + @" Encryption LevelMethod selected by the server is ENCRYPTION_METHOD_FIPS (0x00000010).");
-            }
-            else if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_NONE)
-            {
-                site.Assert.IsNull(keyListPdu.commonHeader.securityHeader,
-                    @"In Client Persistent Key List PDU, if Enhanced RDP Security is in effect or the Encryption Method selected by "
-                    + @"the server is ENCRYPTION_METHOD_NONE (0), then the securityHeader MUST NOT be included in the Client"
-                    + @" Persistent Key List PDU.");
-            }
+            VerifySecurityHeader(keyListPdu.commonHeader.securityHeader, "Client Persistent Key List");
 
             site.Assert.AreEqual<int>(7, (keyListPdu.persistentKeyListPduData.shareDataHeader.shareControlHeader.pduType.typeAndVersionLow & 0xf), 
                 @"In Client Persistent Key List PDU, the type subfield of the pduType field of the Share Control Header of Client "
@@ -478,28 +377,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="fontListPdu"></param>
         public void VerifyPdu(Client_Font_List_Pdu fontListPdu)
         {
-            if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_40BIT ||
-                serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_56BIT ||
-                serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_128BIT)
-            {
-                site.Assert.IsInstanceOfType(fontListPdu.commonHeader.securityHeader, typeof(TS_SECURITY_HEADER1),
-                    @"In Client Font List PDU, securityHeader (variable): The securityHeader in Server Demand Active PDU is a Non-FIPS"
-                    + @" Security Header (section 2.2.8.1.1.2.2) if the Encryption LevelMethod selected by the server (see sections 5.3.2"
-                    + @" and 2.2.1.4.3) is ENCRYPTION_LEVEL_CLIENT_COMPATIBLE (2)METHOD_40BIT (0x00000001), ENCRYPTION_METHOD_56BIT "
-                    + @"(0x00000008), or ENCRYPTION_LEVEL_HIGH (3METHOD_128BIT (0x00000002).");
-            }
-            else if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_FIPS)
-            {
-                site.Assert.IsInstanceOfType(fontListPdu.commonHeader.securityHeader, typeof(TS_SECURITY_HEADER2),
-                    @"In Client Font List PDU, securityHeader (variable): The securityHeader in Server Demand Active PDU is a FIPS Security"
-                    + @" Header,if the Encryption LevelMethod selected by the server is ENCRYPTION_METHOD_FIPS (0x00000010).");
-            }
-            else if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_NONE)
-            {
-                site.Assert.IsNull(fontListPdu.commonHeader.securityHeader, 
-                    @"In the Client Font List PDU, if Enhanced RDP Security is in effect or the Encryption Method selected by the server "
-                    + @"is ENCRYPTION_METHOD_NONE (0), then securityHeader MUST NOT be included in the Client Font List PDU.");
-            }
+            VerifySecurityHeader(fontListPdu.commonHeader.securityHeader, "Client Font List");
 
             site.Assert.AreEqual<int>(7, (fontListPdu.fontListPduData.shareDataHeader.shareControlHeader.pduType.typeAndVersionLow & 0xf), 
                 @"In TS_FONT_LIST_PDU, the type subfield of the pduType field of the Share Control Header MUST be set to PDUTYPE_DATAPDU (7).");
@@ -525,29 +403,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="shutdownPdu"></param>
         public void VerifyPdu(Client_Shutdown_Request_Pdu shutdownPdu)
         {
-            if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_40BIT ||
-                serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_56BIT ||
-                serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_128BIT)
-            {
-                site.Assert.IsInstanceOfType(shutdownPdu.commonHeader.securityHeader, typeof(TS_SECURITY_HEADER1), 
-                    @"[In Client Shutdown Request PDU,securityHeader (variable) is a Non-FIPS Security Header (section 2.2.8.1.1.2.2)"
-                    + @" if the Encryption Method selected by the server is ENCRYPTION_METHOD_40BIT (0x00000001), ENCRYPTION_METHOD_56BIT"
-                    + @" (0x00000008), or ENCRYPTION_METHOD_128BIT (0x00000002).");
-
-            }
-            else if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_FIPS)
-            {
-                site.Assert.IsInstanceOfType(shutdownPdu.commonHeader.securityHeader, typeof(TS_SECURITY_HEADER2),
-                    @"[In Client Shutdown Request PDU,securityHeader (variable) is a FIPS Security Header (section 2.2.8.1.1.2.3) if the "
-                    + @"Encryption Method selected by the server is ENCRYPTION_METHOD_FIPS (0x00000010).");
-            }
-            else if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_NONE)
-            {
-                site.Assert.IsNull(shutdownPdu.commonHeader.securityHeader, 
-                    @"[In Client Shutdown Request PDU,securityHeader (variable):If the Encryption Level (sections 5.3.2 and 2.2.1.4.3)"
-                    + @" selected by the server is ENCRYPTION_LEVEL_NONE (0) and the Encryption Method (sections 5.3.2 and 2.2.1.4.3) "
-                    + @"selected by the server is ENCRYPTION_METHOD_NONE (0), then this header is not included in the PDU.");
-            }
+            VerifySecurityHeader(shutdownPdu.commonHeader.securityHeader, "Client Shutdown Request");
             site.Assert.AreEqual<byte>(7, (byte)(shutdownPdu.shutdownRequestPduData.shareDataHeader.shareControlHeader.pduType.typeAndVersionLow & 0xF), 
                 @"In Shutdown Request PDU Data (TS_SHUTDOWN_REQ_PDU), shareDataHeader (18 bytes): The type subfield of the pduType field"
                 + @" of the Share Control Header (section 2.2.8.1.1.1.1) MUST be set to PDUTYPE_DATAPDU (7).");
@@ -596,35 +452,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                     @"In TS_SECURITY_HEADER2 structure,the version field SHOULD be set to TSFIPS_VERSION1 (0x01).");
             }
 
-            //2.2.8.1.1.3
-            if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_40BIT ||
-                serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_56BIT ||
-                serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_128BIT)
-            {
-                site.Assert.IsInstanceOfType(inputPdu.commonHeader.securityHeader, typeof(TS_SECURITY_HEADER1), 
-                    @"In Client Input Event PDU (TS_INPUT_PDU), If Standard RDP Security is in effect and the "
-                    + @"Encryption Method selected by the server is greater than ENCRYPTION_METHOD_NONE (0),"
-                    + @" then this securityHeader field will contain Non-FIPS Security Header (section 2.2.8.1.1.2.2)"
-                    + @" if the Encryption Level Method selected by the server (see sections 5.3.2 and 2.2.1.4.3)"
-                    + @" is ENCRYPTION_LEVEL_LOW (1METHOD_40BIT (0x00000001), ENCRYPTION_LEVEL_CLIENT_COMPATIBLE"
-                    + @" (2METHOD_56BIT (0x00000008), or ENCRYPTION_LEVEL_HIGH (3). METHOD_128BIT (0x00000002).");
-            }
-            else if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_FIPS)
-            {
-                site.Assert.IsInstanceOfType(inputPdu.commonHeader.securityHeader, typeof(TS_SECURITY_HEADER2),
-                    @"In Client Input Event PDU (TS_INPUT_PDU),If Standard RDP Security is in effect and the "
-                    + @"Encryption Method selected by the server is greater than ENCRYPTION_METHOD_NONE (0),"
-                    + @" then this securityHeader field will contain FIPS Security Header (section 2.2.8.1.1.2.3)"
-                    + @" if the Encryption LevelMethod selected by the server (see sections 5.3.2 and 2.2.1.4.3) "
-                    + @"is ENCRYPTION_METHOD_FIPS (0x00000010). ");
-            }
-            else if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_NONE)
-            {
-                site.Assert.IsNull(inputPdu.commonHeader.securityHeader, 
-                    @"In Client Input Event PDU (TS_INPUT_PDU),If Enhanced RDP Security is in effect or the "
-                    + @"Encryption Method selected by the server  is ENCRYPTION_METHOD_NONE (0), then this "
-                    + @"securityHeader field MUST NOT be included in the PDU.");
-            }
+            VerifySecurityHeader(inputPdu.commonHeader.securityHeader, "Client Input Event");
 
             //2.2.8.1.1.3.1            
             site.Assert.AreEqual<ShareControlHeaderType>(ShareControlHeaderType.PDUTYPE_DATAPDU, (ShareControlHeaderType)(inputPdu.shareDataHeader.shareControlHeader.pduType.typeAndVersionLow & 0x0F), 
@@ -672,15 +500,20 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 CaptureRequirement(fpInputPdu.numberEvents != 0,
                  @"In TS_FP_INPUT_PDU structure, if the number of input events in fpInputHeader is greater than 15, then the numEvents bit field in the fast-path header byte MUST be set to zero, and the numEvents optional field inserted after the dataSignature field. This allows up to 255 input events in one PDU."
                  );
-            }           
+            }
 
-            if (this.serverConfig.encryptionLevel == EncryptionLevel.ENCRYPTION_LEVEL_FIPS)
+            int pduSize = RdpbcgrUtility.GetPduSize(fpInputPdu);
+            int length = RdpbcgrUtility.CalculateFpUpdatePduLength(fpInputPdu.length1, fpInputPdu.length2);
+            site.Assert.AreEqual(pduSize, length, "The length ({0}) of TS_FP_INPUT_PDU calculated by length1 & length2 must be equal to the real size ({1}) of the pdu.", length, pduSize);
+
+            if ((0x7f & fpInputPdu.length1) == fpInputPdu.length1)
             {
-                site.Assert.AreEqual<TS_FP_FIPS_INFO_length_Values>(TS_FP_FIPS_INFO_length_Values.V1, fpInputPdu.fipsInformation.length, 
-                    @"In TS_FP_INPUT_PDU structure, the fipsInformation is present when the Encryption Level "
-                    + @"selected by the server is ENCRYPTION_LEVEL_FIPS (4).In TS_FP_INPUT_PDU structure, the"
-                    + @" fipsInformation is present when the Encryption Level selected by the server is "
-                    + @"ENCRYPTION_LEVEL_FIPS (4).");
+                // length1's most significant bit is not set
+                site.Assert.AreEqual(true, fpInputPdu.length1 >= 1 && fpInputPdu.length1 <= 127, "If the most significant bit of the length1 field is not set, then the size of the PDU is in the range 1 to 127 bytes ");
+            }
+            else
+            {
+                site.Assert.AreEqual(true, length <= 16383, "If the most significant bit of the length1 field is set, the overall PDU length SHOULD be less than or equal to 16,383 bytes.");
             }
 
             Console.WriteLine("encryptionFlags= " + encryptionFlags);
@@ -742,31 +575,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="refreshPdu"></param>
         public void VerifyPdu(Client_Refresh_Rect_Pdu refreshPdu)
         {
-            if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_40BIT ||
-                serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_56BIT ||
-                serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_128BIT)
-            {
-                site.Assert.IsInstanceOfType(refreshPdu.commonHeader.securityHeader, typeof(TS_SECURITY_HEADER1), 
-                    @"In Client Refresh Rect PDU, The securityHeader in Server Set Keyboard Indicators PDU is a "
-                    + @"Non-FIPS Security Header (section 2.2.8.1.1.2.2) if the Encryption Level Method selected"
-                    + @" by the server (see sections 5.3.2 and 2.2.1.4.3) is ENCRYPTION_LEVEL_CLIENT_COMPATIBLE "
-                    + @"(2)METHOD_40BIT (0x00000001), ENCRYPTION_METHOD_56BIT (0x00000008), or ENCRYPTION_LEVEL_HIGH"
-                    + @" (3METHOD_128BIT (0x00000002). ");
-            }
-            else if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_FIPS)
-            {
-                site.Assert.IsInstanceOfType(refreshPdu.commonHeader.securityHeader, typeof(TS_SECURITY_HEADER2), 
-                    @"In Client Refresh Rect PDU, The securityHeader in Server Set Keyboard Indicators PDU is a "
-                    + @"FIPS Security Header if the Encryption Level Method selected by the server is "
-                    + @"ENCRYPTION_METHOD_FIPS (0x00000010).");
-            }
-            else if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_NONE)
-            {
-                site.Assert.IsNull(refreshPdu.commonHeader.securityHeader, 
-                    @"In Client Refresh Rect PDU, If Enhanced RDP Security  is in effect or the Encryption Method"
-                    + @" selected by the server  is ENCRYPTION_METHOD_NONE (0), then securityHeader  MUST NOT be"
-                    + @" included in the PDU.");
-            }
+            VerifySecurityHeader(refreshPdu.commonHeader.securityHeader, "Client Refresh Rect");
             site.Assert.AreEqual<ShareControlHeaderType>((ShareControlHeaderType)(refreshPdu.refreshRectPduData.shareDataHeader.shareControlHeader.pduType.typeAndVersionLow & 0xF), ShareControlHeaderType.PDUTYPE_DATAPDU, 
                 @"In Refresh Rect PDU Data,the type subfield of the pduType field of the Share Control Header MUST"
                 + @" be set to PDUTYPE_DATAPDU (7).");
@@ -784,29 +593,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="suppressPdu"></param>
         public void VerifyPdu(Client_Suppress_Output_Pdu suppressPdu)
         {
-            if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_40BIT ||
-                serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_56BIT ||
-                serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_128BIT)
-            {
-                site.Assert.IsInstanceOfType(suppressPdu.commonHeader.securityHeader, typeof(TS_SECURITY_HEADER1), 
-                    @"[In Client Suppress Output PDU]The securityHeader in Server Set Keyboard Indicators PDU is a Non-FIPS "
-                    + @"Security Header (section 2.2.8.1.1.2.2) if the Encryption Level Method selected by the server (see "
-                    + @"sections 5.3.2 and 2.2.1.4.3) is ENCRYPTION_LEVEL_CLIENT_COMPATIBLE (2)METHOD_40BIT (0x00000001), "
-                    + @"ENCRYPTION_METHOD_56BIT (0x00000008), or ENCRYPTION_LEVEL_HIGH (3METHOD_128BIT (0x00000002). ");
-            }
-            else if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_FIPS)
-            {
-                site.Assert.IsInstanceOfType(suppressPdu.commonHeader.securityHeader, typeof(TS_SECURITY_HEADER2), 
-                    @"In Client Suppress Output PDU, the securityHeader in Server Set Keyboard Indicators PDU is a FIPS "
-                    + @"Security Header if the Encryption Level Method selected by the server is ENCRYPTION_METHOD_FIPS"
-                    + @" (0x00000010).");
-            }
-            else if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_NONE)
-            {
-                site.Assert.IsNull(suppressPdu.commonHeader.securityHeader, 
-                    @"In Client Suppress Output PDU,If Enhanced RDP Security  is in effect or the Encryption Method selected"
-                    + @" by the server is ENCRYPTION_METHOD_NONE (0), then this securityHeader MUST NOT be included in the PDU.");
-            }
+            VerifySecurityHeader(suppressPdu.commonHeader.securityHeader, "Client Suppress Output");
             site.Assert.AreEqual<ShareControlHeaderType>(ShareControlHeaderType.PDUTYPE_DATAPDU, (ShareControlHeaderType)(suppressPdu.suppressOutputPduData.shareDataHeader.shareControlHeader.pduType.typeAndVersionLow & 0xF), 
                 @"In Suppress Output PDU Data, the type subfield of the pduType field of the Share Control Header (section 2.2.8.1.1.1.1)"
                 + @" MUST be set to PDUTYPE_DATAPDU (7).");
@@ -1082,28 +869,18 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                     + @"is 128 bytes.");
             }
         }
-        /// <summary>
-        /// 2.2.1.11.1.1.1
-        /// </summary>
-        /// <param name="zoneInfo"></param>
-        public void VerifyStructure(TS_TIME_ZONE_INFORMATION zoneInfo)
-        {
-            site.Assert.IsTrue(System.Runtime.InteropServices.Marshal.SizeOf(zoneInfo.DaylightName) == 64, 
-                @"In TS_TIME_ZONE_INFORMATION structure, DaylightName field must be 64 bytes");
-            site.Assert.IsTrue(System.Runtime.InteropServices.Marshal.SizeOf(zoneInfo.DaylightDate) == 16, 
-                @"In TS_TIME_ZONE_INFORMATION structure, DaylightDate must be 16 bytes");
-            site.Assert.IsTrue(System.Runtime.InteropServices.Marshal.SizeOf(zoneInfo.DaylightBias) == 4, 
-                @"In TS_TIME_ZONE_INFORMATION structure, DaylightBias must be 4 bytes");
-        }
+
         /// <summary>
         /// 2.2.1.13.2.1
         /// </summary>
         /// <param name="confirmActive"></param>
         public void VerifyStructure(TS_CONFIRM_ACTIVE_PDU confirmActive)
         {
-            site.Assert.AreEqual<ShareControlHeaderType>(ShareControlHeaderType.PDUTYPE_CONFIRMACTIVEPDU, (ShareControlHeaderType)(confirmActive.shareControlHeader.pduType.typeAndVersionLow & 0x15), 
+            site.Assert.AreEqual<ShareControlHeaderType>(ShareControlHeaderType.PDUTYPE_CONFIRMACTIVEPDU, (ShareControlHeaderType)(confirmActive.shareControlHeader.pduType.typeAndVersionLow & 0x0F), 
                 @"In TS_CONFIRM_ACTIVE_PDU structure, the type subfield of the pduType field of the Share Control Header MUST be set to"
                 + @" PDUTYPE_CONFIRMACTIVEPDU (3).");
+            site.Assert.AreEqual(1, confirmActive.shareControlHeader.pduType.typeAndVersionLow >>4 & 0x0F,
+                @"The PDUVersion subfield MUST be set to TS_PROTOCOL_VERSION (0x1).");
             site.Assert.AreEqual<originatorId_Values>(originatorId_Values.V1, confirmActive.originatorId, 
                 @"In TS_CONFIRM_ACTIVE_PDU structure, the originatorId MUST be set to the server channel ID (in Microsoft RDP server "
                 + @"implementations, this value is always 0x03EA)");
@@ -1555,6 +1332,46 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             }
         }
 
+        /// <summary>
+        /// Verify the security header for all PDUs except for Client Info PDU.
+        /// </summary>
+        /// <param name="securityHeader">The security header to be verified</param>
+        /// <param name="pduName">The pdu name</param>
+        private void VerifySecurityHeader(TS_SECURITY_HEADER securityHeader, string pduName)
+        {
+            if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_40BIT ||
+                serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_56BIT ||
+                serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_128BIT)
+            {
+                site.Assert.IsInstanceOfType(securityHeader, typeof(TS_SECURITY_HEADER1),
+                    @"The securityHeader in "
+                    + @"{0} PDU is a Non-FIPS Security Header (section 2.2.8.1.1.2.2) if the "
+                    + @"Encryption Method selected by the server is "
+                    + @"ENCRYPTION_METHOD_40BIT (0x00000001), ENCRYPTION_METHOD_56BIT (0x00000008), "
+                    + @"ENCRYPTION_METHOD_128BIT (0x00000002).", pduName);
+            }
+            else if (serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_FIPS)
+            {
+                site.Assert.IsInstanceOfType(securityHeader, typeof(TS_SECURITY_HEADER2),
+                    @"The securityHeader in "
+                    + @"{0} PDU is a FIPS Security Header,if the Encryption Method selected by "
+                    + @"the server is ENCRYPTION_METHOD_FIPS (0x00000010).", pduName);
+            }
+            else if (serverConfig.encryptionLevel == EncryptionLevel.ENCRYPTION_LEVEL_NONE &&
+                serverConfig.encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_NONE)
+            {
+                site.Assert.IsNull(securityHeader,
+                    @"{0} PDU: " +
+                    @"If the Encryption Level selected by the server is ENCRYPTION_LEVEL_NONE (0) and the Encryption  "
+                    + @"Method selected by the server is ENCRYPTION_METHOD_NONE (0), then securityHeader MUST NOT "
+                    + @"be included in the PDU.", pduName);
+            }
+            else
+            {
+                site.Assert.Fail("Check the code, something is wrong with the test case. encryptionMethod: {0}, encryptionLevel: {1}", 
+                    serverConfig.encryptionMethod, serverConfig.encryptionLevel);
+            }
+        }
         #endregion "Helper functions"
     }
 }

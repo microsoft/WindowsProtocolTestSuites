@@ -278,11 +278,11 @@ All of the following software must be installed on the [**Driver Computer**](#3.
 
 	-	Spec Explorer is a model based testing tool used by the test suite to design models and generate test cases. It has some dependencies on [VC++ 9.0 redistributable package](https://www.microsoft.com/en-us/download/details.aspx?id=5582) which should also be installed.
 
-3. 	Install **Protocol Test Framework** [1.0.6000.0](https://github.com/Microsoft/ProtocolTestFramework/releases/download/1.0.6000.0/ProtocolTestFrameworkInstaller.msi) or clone the [repository](https://github.com/Microsoft/ProtocolTestFramework.git) to build one msi package by yourself.
+3. 	Install the latest **Protocol Test Framework** from [GitHub](https://github.com/Microsoft/ProtocolTestFramework/releases/latest) or clone the [repository](https://github.com/Microsoft/ProtocolTestFramework.git) to build the msi package by yourself.
 
-4.	Install **File Server Test Suite** [3.18.9.0](https://github.com/Microsoft/WindowsProtocolTestSuites/releases/download/3.18.9.0/FileServer-TestSuite-ServerEP.msi) or clone the [repository](https://github.com/Microsoft/WindowsProtocolTestSuites.git) and build one msi package by yourself.
+4.	Install the latest **File Server Test Suite** from [GitHub](https://github.com/Microsoft/WindowsProtocolTestSuites/releases/latest) or clone the [repository](https://github.com/Microsoft/WindowsProtocolTestSuites.git) and build the msi package by yourself.
 
-5.	(Optional) Install **Protocol Test Manager** [3.18.9.0](https://github.com/Microsoft/WindowsProtocolTestSuites/releases/download/3.18.9.0//ProtocolTestManager.msi) or clone the [repository](https://github.com/Microsoft/WindowsProtocolTestSuites.git) and build one msi package by yourself.
+5.	(Optional) Install the latest **Protocol Test Manager** from [GitHub](https://github.com/Microsoft/WindowsProtocolTestSuites/releases/latest) or clone the [repository](https://github.com/Microsoft/WindowsProtocolTestSuites.git) and build the msi package by yourself.
 
     -	**Protocol Test Manager** provides a graphical UI to facilitate your configuration and execution of the Microsoft® Windows Protocol Test Suites.
 
@@ -298,7 +298,7 @@ This section gives you instructions on how to setup the network for both environ
 
 >	![](./image/FileServerUserGuide/image1.png)Note
 
->	&emsp;&emsp;This test suite can be deployed on either physical or virtual machines. This section will describe the deployment on physical machines. For more information about how to configure a virtual machine, please see <http://www.microsoft.com/virtualization/en/us/solution-appliance-test.aspx>.
+>	&emsp;&emsp;This test suite can be deployed on either physical or virtual machines. This section will describe the deployment on physical machines. For more information about how to configure a virtual machine, please see <https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/create-virtual-machine>.
 
 ###<a name="4.1"/> 4.1. Workgroup Environment
 

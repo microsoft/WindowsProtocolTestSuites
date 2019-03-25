@@ -45,7 +45,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEUDP")]
-        [Description("Verify the RDP client can initiate a reliable RDP-UDP (RDP-UDP-R) connection and a lossy RDP-UDP (RDP-UDP-L) connection. Server support only RDPUDP_PROTOCOL_VERSION_1.")]
+        [Description("Verify the RDP client can initiate a reliable RDP-UDP (RDP-UDP-R) connection and a lossy RDP-UDP (RDP-UDP-L) connection. Server supports only RDPUDP_PROTOCOL_VERSION_1.")]
         public void S1_Connection_Initialization_InitialUDPConnection_UUDPVer1()
         {
             Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
@@ -88,6 +88,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [Description("Verify the RDP client will resend the ACK packet to keep alive.")]
         public void S1_Connection_Keepalive_ClientSendKeepAlive()
         {
+            CheckSecurityProtocolForMultitransport();
+
             Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
             StartRDPConnection();
 

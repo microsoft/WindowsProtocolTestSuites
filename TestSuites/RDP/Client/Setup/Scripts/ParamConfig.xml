@@ -11,6 +11,8 @@
 	<Parameter Name="driverComputerName" Value="DriverComputer" Comment="The machine name or ip address of driver computer." />
 	<Parameter Name="RDPListeningPort" Value="3389" Comment="The listening port of driver computer." />
 	<Parameter Name="ipVersion" Value="IPv4" Comment="The ip version used in test enviornment, can be IPv4 or IPv6." />
+	<Parameter Name="securityProtocol" Value="TLS" Comment="The security protocol used to establish RDP connection, can be TLS, CredSSP, or RDP." />
+	<Parameter Name="negotiationBasedApproach" Value="True" Comment="Whether the connection sequence is Negotiation-Based Approach or Direct Approach." />
 	<Parameter Name="osVersion" Value="Windows" Comment="The operating system of terminal client.It can be set to Windows or NonWindows." />
 	<Parameter Name="RDPVersion" Value="8.1" Comment="The version of the RDP intends to test, it should be one of 7.0, 7.1, 8.0, 8.1." />
 	<Parameter Name="workgroupDomain" Value="Workgroup" Comment="Indicates the test environment is in Domain or Workgroup." />

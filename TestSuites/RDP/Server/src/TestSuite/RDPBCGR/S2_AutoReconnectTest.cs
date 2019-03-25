@@ -15,6 +15,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
     {
         [TestMethod]
         [Priority(0)]
+        [TestCategory("BVT")]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
         [Description(@"This test case is used to ensure SUT can process the Auto-Reconnection sequence successfully. ")]
