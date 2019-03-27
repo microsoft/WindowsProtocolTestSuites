@@ -3,7 +3,6 @@
 
 using System;
 using System.Runtime.Serialization;
-using System.Security.Permissions;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
 {
@@ -117,7 +116,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
         /// object data about the exception being thrown.</param>
         /// <param name="context">The System.Runtime.Serialization.StreamingContext that contains contextual
         /// information about the source or destination.</param>
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);

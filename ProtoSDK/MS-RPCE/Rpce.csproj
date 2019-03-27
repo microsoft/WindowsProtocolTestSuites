@@ -1,206 +1,21 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <ProductVersion>9.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A5814E1E-D79C-49A9-A8EA-BA8ED6E0EB39}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce</RootNamespace>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation />
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile />
+    <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce</RootNamespace>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
-    <NoWarn>3021</NoWarn>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <DocumentationFile>bin\Debug\Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce.XML</DocumentationFile>
-    <CodeAnalysisRuleSet>Sdl7.0.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DocumentationFile>bin\Debug\Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce.XML</DocumentationFile>
-    <NoWarn>3021</NoWarn>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>Sdl7.0.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DocumentationFile>bin\Debug\Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce.XML</DocumentationFile>
-    <NoWarn>3021</NoWarn>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>Sdl7.0.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Xml" />
-    <Reference Include="System.ServiceModel" />
+    <ProjectReference Include="..\MS-SMB\Smb.csproj" />
+    <ProjectReference Include="..\MS-SMB2\Smb2.csproj" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
-      <Link>SharedAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="Client\RpceClient.cs" />
-    <Compile Include="Client\RpceClientContext.cs" />
-    <Compile Include="Client\RpceClientTransport.cs" />
-    <Compile Include="Pdu\RpceCoAuth3Pdu.cs" />
-    <Compile Include="Pickle\PickleError.cs" />
-    <Compile Include="Pickle\PickleException.cs" />
-    <Compile Include="Pickle\PickleMarshaller.cs" />
-    <Compile Include="Pickle\PickleNativeMethods.cs" />
-    <Compile Include="RpceAuthenticationType.cs" />
-    <Compile Include="RpceDataRepresentationFormat.cs" />
-    <Compile Include="RpceEndpointMapper.cs" />
-    <Compile Include="RpceNdrVersion.cs" />
-    <Compile Include="Pdu\RpceCoAlterContextPdu.cs" />
-    <Compile Include="Pdu\RpceCoAlterContextRespPdu.cs" />
-    <Compile Include="Pdu\RpceCoBindAckPdu.cs" />
-    <Compile Include="Pdu\RpceCoBindNakPdu.cs" />
-    <Compile Include="Pdu\RpceCoBindPdu.cs" />
-    <Compile Include="Pdu\RpceCoCancelPdu.cs" />
-    <Compile Include="Pdu\RpceCoFaultPdu.cs" />
-    <Compile Include="Pdu\RpceCoOrphanedPdu.cs" />
-    <Compile Include="Pdu\RpceCoRequestPdu.cs" />
-    <Compile Include="Pdu\RpceCoResponsePdu.cs" />
-    <Compile Include="Pdu\RpceCoPdu.cs" />
-    <Compile Include="Pdu\RpceCoShutdownPdu.cs" />
-    <Compile Include="Pdu\RpcePdu.cs" />
-    <Compile Include="RpceAuthenticationLevel.cs" />
-    <Compile Include="RpceBindTimeFeatureNegotiationBitmask.cs" />
-    <Compile Include="RpceContext.cs" />
-    <Compile Include="RpcePacketType.cs" />
-    <Compile Include="RpceCoPfcFlags.cs" />
-    <Compile Include="RpceTypes.cs" />
-    <Compile Include="RpceUtility.cs" />
-    <Compile Include="RpceVerificationTrailer.cs" />
-    <Compile Include="Server\RpceContextManager.cs" />
-    <Compile Include="Server\RpceSecurityContextCreatingEventHandler.cs" />
-    <Compile Include="Server\RpceServer.cs" />
-    <Compile Include="Server\RpceServerContext.cs" />
-    <Compile Include="Server\RpceServerSessionContext.cs" />
-    <Compile Include="Server\RpceServerTransport.cs" />
-    <Compile Include="Server\RpceTransportEvent.cs" />
-    <Compile Include="Server\RpceTransportEventFilter.cs" />
-    <Compile Include="Stub\RpceFormatCharType.cs" />
-    <Compile Include="Stub\RpceInt3264Collection.cs" />
-    <Compile Include="Stub\RpceInterpreterOptFlags2.cs" />
-    <Compile Include="Stub\RpceParameterAttributes.cs" />
-    <Compile Include="Stub\RpceProcedureHeaderDescriptor.cs" />
-    <Compile Include="Stub\RpceStubExprEval.cs" />
-    <Compile Include="Stub\RpceStubExprEvalCallback.cs" />
-    <Compile Include="Stub\NativeMethods.cs" />
-    <Compile Include="Stub\RpceBindOnlyServer.cs" />
-    <Compile Include="Stub\RpceStub.cs" />
-    <Compile Include="Stub\RpceStubDecoder.cs" />
-    <Compile Include="Stub\RpceStubEncoder.cs" />
-    <Compile Include="Stub\RpceStubHelper.cs" />
-    <Compile Include="Stub\RpceStubTargetPlatform.cs" />
+    <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{FE653643-6342-4300-871E-683C7BA31494}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\FileAccessService\FileAccessService.csproj">
-      <Project>{AB191B32-B12D-42CB-976D-CEA2C5BAD8BE}</Project>
-      <Name>FileAccessService</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MS-CIFS\Cifs.csproj">
-      <Project>{0129B48E-2977-4E87-ADB0-A024A69C1CCC}</Project>
-      <Name>Cifs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MS-SMB2\Smb2.csproj">
-      <Project>{C7F08825-D3C9-4DDD-9BA3-06733B1ABE36}</Project>
-      <Name>Smb2</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MS-SMB\Smb.csproj">
-      <Project>{C3C96860-5D29-4797-A311-CC568CC8B699}</Project>
-      <Name>Smb</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Sspi\Sspi.csproj">
-      <Project>{D0CB354B-2CD3-49C1-8ECA-2F6EBADBCCEE}</Project>
-      <Name>Sspi</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TransportStack\TransportStack.csproj">
-      <Project>{F8CDC462-0754-4BEA-B048-33AC1A5855C4}</Project>
-      <Name>TransportStack</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Target Name="AfterBuild">
-    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="..\..\drop\ProtoSDK\Bin\" />
-    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="..\..\drop\ProtoSDK\Bin\" />
-  </Target>
+
 </Project>
