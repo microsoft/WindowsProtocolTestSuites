@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.Messages;
 using Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling;
 using System;
 using System.Runtime.InteropServices;
@@ -17,7 +15,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Srvs
     }
 
     /// <summary>
-    /// Specifies the information level of the data. 
+    /// Specifies the information level of the data.
     /// </summary>
     public enum SHARE_ENUM_STRUCT_LEVEL : uint
     {
@@ -53,7 +51,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Srvs
     }
 
     /// <summary>
-    /// The SHARE_INFO_0_CONTAINER structure contains a value that indicates the number of entries that 
+    /// The SHARE_INFO_0_CONTAINER structure contains a value that indicates the number of entries that
     /// the NetrShareEnum method returns and a pointer to the buffer that contains the entries.
     /// </summary>
     public struct SHARE_INFO_0_CONTAINER
@@ -72,7 +70,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Srvs
     }
 
     /// <summary>
-    /// The SHARE_INFO_1_CONTAINER structure contains a value that indicates the number of entries that the NetrShareEnum 
+    /// The SHARE_INFO_1_CONTAINER structure contains a value that indicates the number of entries that the NetrShareEnum
     /// method returns and a pointer to the buffer that contains the entries.
     /// </summary>
     public struct SHARE_INFO_1_CONTAINER
@@ -90,7 +88,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Srvs
     }
 
     /// <summary>
-    /// The SHARE_ENUM_UNION union contains information about shares. 
+    /// The SHARE_ENUM_UNION union contains information about shares.
     /// It is used in the definition of the SHARE_ENUM_STRUCT structure.
     /// </summary>
     [Union("System.Int32")]
@@ -115,7 +113,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Srvs
         /// Specifies the information level of the data. This parameter MUST have one of the following values.
         public uint Level;
 
-        /// Contains a share information container whose type is specified by the Level parameter as the 
+        /// Contains a share information container whose type is specified by the Level parameter as the
         /// preceding table shows. The enumerated share entries are returned in this member.
         [Switch("Level")]
         public SHARE_ENUM_UNION ShareInfo;
@@ -142,7 +140,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Srvs
     }
 
     /// <summary>
-    /// The SHARE_INFO_0 structure contains the name of the shared resource. 
+    /// The SHARE_INFO_0 structure contains the name of the shared resource.
     /// </summary>
     public struct SHARE_INFO_0
     {
@@ -155,8 +153,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Srvs
     }
 
     /// <summary>
-    /// The SHARE_INFO_1 structure contains information about the shared resource, 
-    /// including the name and type of the resource and a comment associated with the resource. 
+    /// The SHARE_INFO_1 structure contains information about the shared resource,
+    /// including the name and type of the resource and a comment associated with the resource.
     /// </summary>
     public struct SHARE_INFO_1
     {
@@ -180,7 +178,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Srvs
     }
 
     /// <summary>
-    /// The SHARE_INFO_502_I structure contains information about the shared resource, 
+    /// The SHARE_INFO_502_I structure contains information about the shared resource,
     /// including the name of the resource, type, and permissions, the number of connections, and other pertinent information.
     /// </summary>
     public struct SHARE_INFO_502_I
@@ -209,19 +207,19 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Srvs
         public uint shi502_permissions;
 
         /// <summary>
-        /// Specifies a DWORD value that indicates the maximum number of concurrent connections that the shared resource can accommodate. 
+        /// Specifies a DWORD value that indicates the maximum number of concurrent connections that the shared resource can accommodate.
         /// If the value that is specified by shi502_max_uses is 0xFFFFFFFF, the maximum number of connections MUST be unlimited.
         /// </summary>
         public uint shi502_max_uses;
 
         /// <summary>
-        /// Specifies a DWORD value that indicates the number of current connections to the resource. 
+        /// Specifies a DWORD value that indicates the number of current connections to the resource.
         /// The server MUST ignore this member on receipt.
         /// </summary>
         public uint shi502_current_users;
 
         /// <summary>
-        /// A pointer to a null-terminated Unicode UTF-16 string that contains the local path for the shared resource. 
+        /// A pointer to a null-terminated Unicode UTF-16 string that contains the local path for the shared resource.
         /// For disks, shi502_path is the path that is being shared. For print queues, shi502_path is the name of the print queue that is being shared.
         /// For communication devices, shi502_path is the name of the communication device that is being shared. For interprocess communications (IPC),
         /// shi502_path is the name of the interprocess communication that is being shared.
