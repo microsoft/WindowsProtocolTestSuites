@@ -34,7 +34,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Dfsc
         /// <summary>
         /// Specify the error code
         /// </summary>
-        [CLSCompliant(false)]
         public uint NTStatus
         {
             get
@@ -110,7 +109,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Dfsc
         /// Fail to decode buffer data to RESP_GET_DFS_REFERRAL structure
         /// </exception>
         /// <exception cref=" System.FormatException">payload is null or empty</exception>
-        [CLSCompliant(false)]
         public DfscReferralResponsePacket(uint ntStatus, byte[] payload)
         {
             this.ntStatus = ntStatus;
