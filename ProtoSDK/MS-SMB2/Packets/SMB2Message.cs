@@ -7850,12 +7850,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
     public struct PRIVILEGE_DATA
     {
         /// <summary>
-        /// 
+        /// BlobSize MUST be set to the size of LUID_ATTR_DATA structure
         /// </summary>
         public ushort BlobSize;
 
         /// <summary>
-        /// 
+        /// BlobData MUST be set to the LUID_ATTR_DATA specified in section 2.2.9.2.1.4
         /// </summary>
         [Size("BlobSize")]
         public byte[] BlobData;

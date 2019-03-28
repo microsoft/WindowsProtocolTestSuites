@@ -386,6 +386,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             }
         }
 
+        public string ClusteredInfrastructureFileServerName
+        {
+            get
+            {
+                return GetProperty("ClusteredInfrastructureFileServerName");
+            }
+        }
+
+        public string InfrastructureRootShare
+        {
+            get
+            {
+                return GetProperty("InfrastructureRootShare");
+            }
+        }
+
         public bool IsServerSigningRequired
         {
             get
