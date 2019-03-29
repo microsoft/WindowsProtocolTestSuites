@@ -1,0 +1,27 @@
+
+
+
+Install-DC:
+===========
+Config-Server:
+==============
+1.Installating IIS6.0--> Checked and working fine:
+================================================
+        Write-Host "Installing IIS..." -foregroundcolor yellow
+        cmd.exe /c start /w sysocmgr /i:"%windir%\inf\sysoc.inf" /u:"$dataPath\IIS_W2k3_File.txt" /q /r 2>&1 | Write-Host
+
+2.Changing Status of webdav as enabled using the below script:
+===========================================================
+Checked and it is working fine.
+Control-WebServiceExtension.ps1
+
+3.Creation of virtual directory:
+==============================
+Need to check the script
+
+Create-VirtualDirectory.ps1
+
+
+4.Remove readonly from general tab and check all option from webshare option from properties of Virtual folder:
+
+ Need to write the script:

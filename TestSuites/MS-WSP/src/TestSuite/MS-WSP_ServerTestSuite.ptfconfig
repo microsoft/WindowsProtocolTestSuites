@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+  <Properties/>
+
+  
+  <Adapters>
+    <Adapter xsi:type="managed" name="IWspAdapter" adaptertype="Microsoft.Protocols.TestSuites.WspTS.WspAdapter"/>
+    <Adapter xsi:type="powershell" name="IWSPSUTAdapter" scriptdir="."/>
+  </Adapters>
+  <TestLog defaultprofile="Verbose">
+    <Sinks>
+      <File id="XmlLog" directory=".\TestLog" file="MS-WSP-Vista-2K8-Domain-64-FetchMore.xml" format="xml"/>
+      <Sink id="Beacon" type="Microsoft.Protocols.TestTools.Logging.BeaconLogSink"/>
+    </Sinks>
+    <Profiles>
+      <Profile name="Verbose" extends="Error">
+        <!-- START: XML LOGGING RULES-->
+        <Rule kind="CheckSucceeded" sink="XmlLog"/>
+        <Rule kind ="Comment" sink="XmlLog"/>
+        <Rule kind="CheckFailed" sink="XmlLog" />
+        <Rule kind="Checkpoint" sink="XmlLog"/>
+        <!-- END: XML LOGGING RULES-->
+        <!-- START: BEACON LOGGING RULES-->
+        <Rule kind="EnterMethod" sink="Beacon" />
+        <Rule kind="ExitMethod" sink="Beacon" />
+        <Rule kind="CheckFailed" sink="Beacon" />
+        <Rule kind="CheckSucceeded" sink="Beacon" />
+        <Rule kind="Checkpoint" sink="Beacon" />
+        <!-- END: BEACON LOGGING RULES-->
+      </Profile>
+    </Profiles>
+  </TestLog>
+</TestSite>
+

@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+  <Properties>
+    <!-- IP/ Machine Name for the Beacon Logging-->
+    <Property name="ServerComputerName" value="192.168.0.1" />    
+    <!-- Name of the Server Machine Under test-->
+    <Property name="SERVER_MACHINE_NAME" value="SUT01" />
+    <!-- Name of the Domain Under test-->
+    <Property name="DomainName" value="contoso.com" />
+    <!-- Password of user Under test-->
+    <Property name="Password" value="Password01!" />
+    <!--Win2003,Win2008,Other-->
+    <Property name="ServerOSVersion" value="Win7"/>
+    <!-- Path of shared folder on server machine-->
+    <Property name="SharedPath" value="C:\Test\Data\Test" />
+    <!-- Name of the Client User name initiating the MS-WSP request messages-->
+    <Property name="CLIENT_USERNAME" value="Administrator" />
+    <!-- Name of the Client Machine name initiating the MS-WSP request messages-->
+    <Property name="CLIENT_MACHINE_NAME" value="ENDPOINT01" />
+    <!-- Name of the Catalog to be searched-->
+    <Property name="CatalogName" value="Windows\SYSTEMINDEX" />
+    <!-- Name of the Language Locale of all query string and query text-->
+    <Property name="LanguageLocale" value="EN" />
+    <!--en-us -->
+    <!-- Name of the Language Locale ID value of all query string and query text-->
+    <Property name="LCID_VALUE" value="1033" />
+    <!-- Specify the Machine Architecture of the Server Under Test
+    Whether it is 64 bit or 32 bit-->
+    <Property name="ServerOffset" value="64" />
+    <!-- Specify the Machine Architecture of the WSP Client 
+    Whether it is 64 bit or 32 bit-->
+    <Property name="ClientOffset" value="32" />
+    <!-- Specify whether the Server Under Test is a Windows or Non-Windows Sever
+    This is required for Windows Specific requirement validation-->
+    <Property name="IsServerWindows" value="true" />
+    <!--Specify whether Windows Desktop Search is installed on Windows Server under test
+    Only applicable when 'IsServerWindows' is set to true -->
+    <Property name="IsWDSInstalled" value="true" />
+    <!--
+     Please specify the version number (uint) of  32 bit server
+     Windows Server:
+                 Windows 2003 32 it must be 265 (with Windows Desktop Search Installed)
+                 Windows 2008 32 it must be 258 (without Windows Desktop Search)
+                 Windows 2003 64 it must be 65801 (with Windows Desktop Search Installed)
+                 Windows 2008 64 it must be 65794 (without Windows Desktop Search)
+     For Non-Windows Server:
+           The value should be less than 0x00010000 for 32 bit server.
+           The value should be greater than or equal to 0x00010000 for 64 bit server. 
+    -->
+    <Property name="ServerVersion" value="67328" />
+    <!--
+    Please specify the version number (uint) of  32 bit client
+                 For Windows XP 32 it must be 265 (with Windows Desktop Search Installed)
+                 Vista 32 it must be 258          (without Windows Desktop Search)  
+    Please specify the version number (uint) of  64 bit client                 
+                 For Windows XP 64 it must be 65801 (with Windows Desktop Search Installed)
+                 Vista 64 it must be 65794          (without Windows Desktop Search) 
+     
+    -->
+    <Property name="ClientVersion" value="265" />
+    <!-- See if TDI-19919 is still open
+    If the Server Under Test is Windows 2008, put it as 'Open'
+    else put any value
+    It is not applicable for Windows 2003
+    -->
+    <Property name="TDI42066Fixed" value="false" />
+    <Property name="TDI42067Fixed" value="false" />
+    <Property name="TDI42332Fixed" value="false" />
+    <Property name="TDI42128Fixed" value="false" />
+    <Property name="TDI42428Fixed" value="false" />
+    <Property name="TDQ41693Fixed" value="false" />
+    <Property name="TDQ42166Fixed" value="false" />
+    <Property name="TDI42414Fixed" value="false" />
+    <Property name="NewFile1" value="File1.txt" />
+    <Property name="NewFile2" value="File2.txt" />
+    <Property name="ExistFile1" value="ExistFile1.txt" />
+    <Property name="ExistFile2" value="ExistFile2.txt" />
+    <Property name="ExistFile3" value="ExistFile3.txt" />
+    <Property name="ExistFile4" value="ExistFile4.txt" />
+
+    <Property name="R1122Implementated" value="true" />
+    <Property name="R1127Implementated" value="true" />
+    <Property name="R1134Implementated" value="true" />
+    <Property name="R1137Implementated" value="true" />
+    <Property name="R1157Implementated" value="true" />
+    <Property name="R549Implementated" value="true" />
+
+    <!-- It specifies the Search Scope. (Path of the Network folder to be searched)-->
+    <Property name="QueryPath" value="file://SUT01/Data/Test" />
+    <!-- It specifies the Search Query.Text to be present in name of Searched File -->
+    <Property name="QueryText" value="a*" />
+       
+    <!--  Fetch Value In-->
+    <!--  If the CbChunk value is large enough, it retrieves all the value is one go
+    otherwise it is fetched in fragments Use value 4096 4 KB for retrieval at one
+    otherwise put value large enough for FetchValueIn message but small to retrieval all values
+    HINT: SIZE around 40 is sufficient for retrieve values in fragments
+    -->
+    <Property name="CbChunk" value="38" />
+    <!-- Property to Fetch from the Server-->
+    <Property name="PropertyGuidToFetch" value="6B8DA074-3B5C-43BC-886F-0A2CDCE00B6F" />
+    <Property name="PropertyIdToFetch" value="100" />
+    <!-- Properties that are unlikely to change-->
+    <Property name="TestName" value="MS-WSP Test" />
+    <Property name="FeatureName" value="Sample" />
+    <!-- Configurable properties related to CPMConnectIn message -->
+    <!-- 32 for 32-bit systems and 64 for 64-bit systems-->
+    <Property name="EmptyGuid" value="{00000000-0000-0000-0000-000000000000}" />
+    <!-- ConnectIn and Connect Out-->
+    <Property name="PropertySet_One_Guid" value="A9BD1526-6A80-11D0-8C9D-0020AF1D740E" />
+    <Property name="PropertySet_One_DBProperties" value="2,7,4,3" />
+    <Property name="PropertySet_Two_Guid" value="AFAFACA5-B5D1-11D0-8C62-00C04FC2DB8D" />
+    <Property name="PropertySet_Two_DBProperties" value="2" />
+    <!-- Array of Property Sets-->
+    <!--*******************************************-->
+    <Property name="Array_PropertySet_One_Guid" value="AA6EE6B0-E828-11D0-B23E-00AA0047FC01" />
+    <Property name="Array_PropertySet_One_DBProperties" value="2,3,4,5,6,7" />
+    <Property name="Array_PropertySet_Two_Guid" value="A7AC77ED-F8D7-11CE-A798-0020F8008025" />
+    <Property name="Array_PropertySet_Two_DBProperties" value="2,3,4,5,6,8,14,10,12,13" />
+    <Property name="Array_PropertySet_Three_Guid" value="AFAFACA5-B5D1-11D0-8C62-00C04FC2DB8D" />
+    <Property name="Array_PropertySet_Three_DBProperties" value="2" />
+    <Property name="Array_PropertySet_Four_Guid" value="A9BD1526-6A80-11D0-8C9D-0020AF1D740E" />
+    <Property name="Array_PropertySet_Four_DBProperties" value="3,4,2" />
+    <!--*******************************************-->
+    <!--   Column to Query-->
+    <Property name="NumberOfColumnsToQuery" value="4" />
+    <Property name="columnGuid_0" value="6B8DA074-3B5C-43BC-886F-0A2CDCE00B6F" />
+    <Property name="columnPropertyId_0" value="100" />
+    <Property name="columnValueOffset_0" value="8" />
+    <Property name="columnStatusOffset_0" value="2" />
+    <Property name="columnLengthOffset_0" value="4" />
+    <Property name="columnStorageType_0" value="12" />
+    <!-- VT_VARIANT-->
+    <Property name="columnGuid_1" value="B725F130-47EF-101A-A5F1-02608C9EEBAC" />
+    <Property name="columnPropertyId_1" value="12" />
+    <Property name="columnValueOffset_1" value="24" />
+    <Property name="columnStatusOffset_1" value="3" />
+    <Property name="columnLengthOffset_1" value="40" />
+    <Property name="columnStorageType_1" value="12" />
+    <!-- VT_VARIANT-->
+    <Property name="columnGuid_2" value="B725F130-47EF-101A-A5F1-02608C9EEBAC" />
+    <Property name="columnPropertyId_2" value="15" />
+    <Property name="columnValueOffset_2" value="48" />
+    <Property name="columnStatusOffset_2" value="44" />
+    <Property name="columnLengthOffset_2" value="64" />
+    <Property name="columnStorageType_2" value="12" />
+    <!-- VT_VARIANT-->
+    <Property name="columnGuid_3" value="49691C90-7E17-101A-A91C-08002B2ECDA9" />
+    <Property name="columnPropertyId_3" value="5" />
+    <!-- Work Id VT_I4-->
+    <Property name="columnValueOffset_3" value="72" />
+    <Property name="columnStatusOffset_3" value="45" />
+    <Property name="columnLengthOffset_3" value="0" />
+    <!-- Not using-->
+    <Property name="columnStorageType_3" value="3" />
+    <!-- VT_I4-->
+    <!-- GUID and Property that specifies Query Work Id-->
+    <Property name="WorkIdPropertyGuid" value="49691C90-7E17-101A-A91C-08002B2ECDA9" />
+    <Property name="WorkId" value="5" />
+    <!-- Size of each row-->
+    <Property name="EachRowSize" value="80" />
+    <!-- Should be calculated on the basis of row layout-->
+    <Property name="ClientBase" value="63513800" />
+    <Property name="BufferSize" value="4096" />
+    <Property name="RowsToTransfer" value="20" />
+    <Property name="EType" value="1" />
+    <Property name="ContentRestrictionGuid" value="49691C90-7E17-101A-A91C-08002B2ECDA9" />
+    <Property name="ContentRestrictionProperty" value="6" />
+    <Property name="PropertyRestrictionGuid" value="B725F130-47EF-101A-A5F1-02608C9EEBAC" />
+    <Property name="PropertyRestrictionProperty" value="22" />
+  </Properties>
+  <!-- The default profile name.-->
+  <TestLog defaultprofile="Verbose">
+    <Sinks>
+    </Sinks>
+    <Profiles>
+    </Profiles>
+  </TestLog>
+</TestSite>

@@ -1,0 +1,20 @@
+[DCInstall]
+ReplicaOrNewDomain          = Domain
+NewDomain                   = Forest
+NewDomainDNSName            = contoso.com
+DomainNetbiosName           = CONTOSO
+ForestLevel                 = 2
+DomainLevel                 = 2
+AutoConfigDNS               = Yes
+DatabasePath                = %systemroot%\NTDS
+LogPath                     = %systemroot%\NTDS
+SYSVOLPath                  = %systemroot%\SYSVOL
+SafeModeAdminPassword       = Password01!
+TreeOrChild                 = Tree
+CreateOrJoin                = Create
+DisableCancelForDnsInstall  = Yes
+;;DNSOnNetwork              = Yes
+SetForestVersion            = Yes
+CriticalReplicationOnly     = No
+RebootOnCompletion          = No
+RebootOnSuccess             = NoAndNoPromptEither

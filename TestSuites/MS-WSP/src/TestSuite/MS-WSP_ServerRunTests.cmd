@@ -1,0 +1,1 @@
+MSTEST /testcontainer:.\Bin\Debug\MS-WSP_ServerAdapter.dll /runconfig:"..\ServerLocalTestRun.testrunconfig"
