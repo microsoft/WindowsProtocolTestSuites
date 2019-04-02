@@ -110,7 +110,6 @@
 		* [ FileServerFailover\_Lock](#3.4.8)
 		* [ FileServerFailover\_DurableHandleV2](#3.4.9)
 		* [ FileServerFailover\_SMB311\_Redirect\_To\_Owner\_SOFS](#3.4.10)
-		* [ FileServerFailover\_SMB311\_TREE\_CONNECT\_EXTENSION\_PRESENT](#3.4.11)
 	* [FSRVP Test](#3.5)
 		* [ VSSOperateShadowCopySet](#3.5.1)
 		* [ VSSSetContext](#3.5.2)
@@ -5705,6 +5704,18 @@ This model has one scenario:
 |**Prerequisites**|The server implements dialect 3.11.|
 |**Test Execution Steps**|Start a client by sending the following requests: NEGOTIATE (dialect 3.11); SESSION_SETUP.|
 ||Client sends TREE_CONNECT request with flag SMB2_SHAREFLAG_CLUSTER_RECONNECT and expects STATUS_SUCCESS.|
+||Tear down the client.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|TreeMgmt_SMB311_TREE_CONNECT_EXTENSION_PRESENT|
+|**Description**|Once a client has successfully connected to a infrastructure share it must set the SMB2_SHAREFLAG_EXTENSION_PRESENT flag and use SMB2 TREE_CONNECT Request Extension for tree connect requests.|
+||This test case is designed to test server can handle a TreeConnect request with flag SMB2_SHAREFLAG_EXTENSION_PRESENT successfully.|
+|**Prerequisites**|The server implements dialect 3.11.|
+|**Test Execution Steps**|Start a client by sending the following requests: NEGOTIATE (dialect 3.11); SESSION_SETUP.|
+||Client sends TREE_CONNECT request with flag SMB2_SHAREFLAG_EXTENSION_PRESENT and expects STATUS_SUCCESS.|
 ||Tear down the client.|
 |**Cleanup**||
 
