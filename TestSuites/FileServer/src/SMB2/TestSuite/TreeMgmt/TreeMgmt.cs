@@ -76,6 +76,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.TreeMgmt
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends TREE_DISCONNECT request.");
             client.TreeDisconnect(treeId);
         }
+
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Smb311)]
@@ -173,13 +174,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.TreeMgmt
             client.TreeDisconnect(treeId);
         }
 
-        #region Failover_SMB311_TREE_CONNECT_EXTENSION_PRESENT
         [TestMethod]
         [TestCategory(TestCategories.Smb311)]
         [TestCategory(TestCategories.Tree)]
         [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test server can handle a TreeConnect request with flag SMB2_SHAREFLAG_EXTENSION_PRESENT successfully.")]
-        public void Failover_SMB311_TREE_CONNECT_EXTENSION_PRESENT()
+        public void TreeMgmt_SMB311_TREE_CONNECT_EXTENSION_PRESENT()
         {
             #region Check Applicability
             TestConfig.CheckPlatform(Platform.WindowsServer2019);
@@ -214,8 +214,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.TreeMgmt
                     if (!response.ShareFlags.HasFlag(ShareFlags_Values.SHAREFLAG_IDENTITY_REMOTING))
                     {
                         Site.Assert.Inconclusive(
-                            "The share should support identity remoting, actually server returns {0}.",
-                            response.ShareFlags.ToString());
+                            "The share {0} does not support identity remoting.",
+                            infraSharePath);
                     }
                 },
                 TreeConnect_Flags.SMB2_SHAREFLAG_NONE);
@@ -231,12 +231,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.TreeMgmt
                        "{0} should be successful, actually server returns {1}.", header.Command, Smb2Status.GetStatusCode(header.Status));
                     BaseTestSite.Assert.IsTrue(
                         response.ShareFlags.HasFlag(ShareFlags_Values.SHAREFLAG_IDENTITY_REMOTING),
-                        "The share should support identity remoting, actually server returns {0}.", response.ShareFlags.ToString());
+                        "The share {0} should support identity remoting.", infraSharePath);
                 },
                 TreeConnect_Flags.SMB2_SHAREFLAG_EXTENSION_PRESENT);
             client.TreeDisconnect(treeId);
             client.LogOff();
         }
-        #endregion
     }
 }

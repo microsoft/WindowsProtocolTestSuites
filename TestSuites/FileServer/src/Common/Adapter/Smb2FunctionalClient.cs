@@ -3195,6 +3195,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             currentOffset += 2 * 14;  // TicketType, TicketSize, User, UserName, Domain, Groups, RestrictedGroups, Privileges, PrimaryGroup, Owner, DefaultDacl, DeviceGroups, UserClaims, DeviceClaims
 
             WindowsIdentity identity = WindowsIdentity.GetCurrent(TokenAccessLevels.MaximumAllowed);
+            string currentDomainName = identity.Name.Split('\\')[0];
+            string currentUserName = identity.Name.Split('\\')[1];
 
             // User: SID_ATTR_DATA
             remotedIdentity.User = currentOffset;
@@ -3209,13 +3211,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
             // UserName: null-terminated Unicode string
             remotedIdentity.UserName = currentOffset;
-            remotedIdentity.TicketInfo.UserName = Encoding.Unicode.GetBytes(testConfig.UserName + '\x0');
+            remotedIdentity.TicketInfo.UserName = Encoding.Unicode.GetBytes(currentUserName + '\x0');
             ushort userNameLen = (ushort)remotedIdentity.TicketInfo.UserName.Length;
             currentOffset += (ushort)(remotedIdentity.TicketInfo.UserName.Length + 2 /* '\x0' */);
 
             // Domain: null-terminated Unicode string
             remotedIdentity.Domain = currentOffset;
-            remotedIdentity.TicketInfo.Domain = Encoding.Unicode.GetBytes(testConfig.DomainName + '\x0');
+            remotedIdentity.TicketInfo.Domain = Encoding.Unicode.GetBytes(currentDomainName + '\x0');
             ushort domainLen = (ushort)remotedIdentity.TicketInfo.Domain.Length;
             currentOffset += (ushort)(remotedIdentity.TicketInfo.Domain.Length + 2 /* '\x0' */);
 
