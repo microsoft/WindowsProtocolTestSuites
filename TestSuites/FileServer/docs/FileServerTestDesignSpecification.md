@@ -7829,7 +7829,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Description**        |Test server can handle a TreeConnect request with flag SMB2\_SHAREFLAG\_REDIRECT\_TO\_OWNER when SMB dialect is 3.1.1 and share type includes STYPE\_CLUSTER\_SOFS.|
 | **Message Sequence**  | 1.  Start a client by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; |
 |                       | 2.  Client sends TREE\_CONNECT request with TREE\_CONNECT flag SMB2\_SHAREFLAG\_REDIRECT\_TO\_OWNER. |
-|                       | 3.  Tear down the client by sending TREE\_DISCONNECT and LOG\_OFF |
+|                       | 3.  Tear down the client by sending LOG\_OFF |
 |**Cluster Involved Scenario**|**YES**|
 
 
@@ -7844,39 +7844,6 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |                          | NEGOTIATE |
 |                          | SESSION\_SETUP |
 |                          | TREE\_CONNECT (with SMB2\_SHAREFLAG\_REDIRECT\_TO\_OWNER) |
-|                          | TREE\_DISCONNECT |
-|                          | LOGOFF |
-|**Cleanup**||
-
-#### <a name="3.4.11"> FileServerFailover\_SMB311\_TREE\_CONNECT\_EXTENSION\_PRESENT
-
-##### <a name="3.4.11.1"> Scenario
-
-|||
-|---|---|
-|**Description**        |Test server can handle a TreeConnect request with flag SMB2\_SHAREFLAG\_EXTENSION\_PRESENT to an scaleout infrastructure share when SMB dialect is 3.1.1.|
-| **Message Sequence**  | 1.  Start a client by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; |
-|                       | 2.  Client sends TREE\_CONNECT request with TREE\_CONNECT flag SMB2\_SHAREFLAG\_NONE. |
-|                       | 3.  Client sends TREE\_DISCONNECT. |
-|                       | 4.  Client sends TREE\_CONNECT request with TREE\_CONNECT flag SMB2\_SHAREFLAG\_REDIRECT\_TO\_OWNER. |
-|                       | 5.  Tear down the client by sending TREE\_DISCONNECT and LOG\_OFF |
-|**Cluster Involved Scenario**|**YES**|
-
-
-##### <a name="3.4.11.2"> Test Case
-
-|||
-|---|---|
-|**Test ID**|FileServerFailover\_SMB311\_TREE\_CONNECT\_EXTENSION\_PRESENT|
-|**Description**|Test server can handle a TreeConnect request with flag SMB2\_SHAREFLAG\_EXTENSION\_PRESENT when SMB dialect is 3.1.1 to an scaleout infrastructure share.|
-|**Prerequisites**||
-| **Test Execution Steps** | Create Client |
-|                          | NEGOTIATE |
-|                          | SESSION\_SETUP |
-|                          | TREE\_CONNECT (with SMB2\_SHAREFLAG\_NONE) |
-|                          | TREE\_DISCONNECT |
-|                          | TREE\_CONNECT (with SMB2\_SHAREFLAG\_REDIRECT\_TO\_OWNER) |
-|                          | TREE\_DISCONNECT |
 |                          | LOGOFF |
 |**Cleanup**||
 
