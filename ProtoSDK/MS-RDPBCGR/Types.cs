@@ -1,16 +1,16 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using Microsoft.Protocols.TestTools.StackSdk.Asn1;
+using Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.Gcc;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.Mcs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Runtime.InteropServices;
-using Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.Gcc;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.Mcs;
-using Microsoft.Protocols.TestTools.StackSdk.Asn1;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 {
@@ -6692,7 +6692,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  number is stored in the high 2 bytes, while the minor
         ///  version number is stored in the low 2 bytes.
         /// </summary>
-        public version_Values version;
+        public TS_UD_CS_CORE_version_Values version;
 
         /// <summary>
         ///  A 16-bit unsigned integer. The requested desktop width
@@ -6910,13 +6910,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     /// <summary>
     /// The type of version.
     /// </summary>
-    public enum version_Values : uint
+    public enum TS_UD_CS_CORE_version_Values : uint
     {
-        /// <summary>
-        /// None.
-        /// </summary>
-        None = 0,
-
         /// <summary>
         ///  RDP 4.0 clients
         /// </summary>
@@ -6960,7 +6955,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         ///  RDP 10.6 clients
         /// </summary>
-        V9 = 0x0008000B
+        V9 = 0x0008000B,
+
+        /// <summary>
+        /// RDP 10.7 clients
+        /// </summary>
+        V10 = 0x0008000C,
     }
 
     /// <summary>
@@ -7847,11 +7847,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     public enum TS_UD_SC_CORE_version_Values : uint
     {
         /// <summary>
-        /// None.
-        /// </summary>
-        None = 0,
-
-        /// <summary>
         ///  RDP 4.0 servers.
         /// </summary>
         V1 = 0x00080001,
@@ -7894,7 +7889,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// RDP 10.6 servers
         /// </summary>
-        V9 = 0x0008000B
+        V9 = 0x0008000B,
+
+        /// <summary>
+        /// RDP 10.7 servers
+        /// </summary>
+        V10 = 0x0008000C,
     }
 
     /// <summary>

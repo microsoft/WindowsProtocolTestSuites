@@ -1368,7 +1368,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             int coreDataSize = 0;
             clientCoreData.header.type = TS_UD_HEADER_type_Values.CS_CORE;
             coreDataSize += Marshal.SizeOf(clientCoreData.header);
-            clientCoreData.version = version_Values.V2;
+            clientCoreData.version = TS_UD_CS_CORE_version_Values.V2;
             coreDataSize += sizeof(uint);
             clientCoreData.desktopWidth = ConstValue.DESKTOP_WIDTH_DEFAULT;
             coreDataSize += Marshal.SizeOf(clientCoreData.desktopWidth);
