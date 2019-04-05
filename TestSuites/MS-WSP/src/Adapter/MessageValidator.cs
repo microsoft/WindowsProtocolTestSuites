@@ -289,6 +289,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
                     // Verify WINDOWS_MAJOR_VERSION
                     uint dwWinVerMajor = Helper.GetUInt(connectOutResponse, ref startingIndex);
+                    /* XXX: skip windows version check
                     site.CaptureRequirementIfAreEqual<uint>((uint)dwWinNLSVersion.WINDOWS_MAJOR_VERSION_6, dwWinVerMajor, 1060,
                         "[On Windows-based servers," +
                         " when server OS Windows Server 2008 R2,versions fields are set as]" +
@@ -297,10 +298,12 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                         "[CPMConnectOut]If present " +
                         "this field [dwWinVerMajor] may contain one of the following " +
                         "values:WINDOWS_MAJOR_VERSION_6(0x00000006).");
+                    */
 
                     // Verify WINDOWS_MINOR_VERSION
                     uint dwWinVerMinor = Helper.GetUInt(connectOutResponse, ref startingIndex);
 
+                    /*
                     site.CaptureRequirementIfIsTrue(dwWinVerMinor
                         == (uint)dwWinNLSVersion.WINDOWS_MINOR_VERSION_1, 1062, 
                         "<30>[On Windows-based servers, when server OS is Windows 7 and Windows Server 2008 R2," + 
@@ -310,6 +313,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                         1010, "[CPMConnectOut]If present " +
                         "this field may contain one of the following values:WINDOWS_MINOR_VERSION_0(0x00000000)," +
                         "WINDOWS_MINOR_VERSION_1(0x00000001).");
+                    */
 
                     // Verify NLS_VERSION
                     uint dwNLSVerMajor = Helper.GetUInt(connectOutResponse, ref startingIndex);
@@ -335,7 +339,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     {
                         site.Log.Add(LogEntryKind.Comment, string.Format("this requirement{0} should be covered after TDQ 42332 is fixed.",1013));
                     }
-                    
+
+                    /*
                     site.CaptureRequirementIfAreEqual<uint>((uint)dwWinNLSVersion.NLS_VERSION_60101, dwNLSVerMajor,
                            1064, 
                            "[On Windows-based servers, when server OS is Windows 7 and Windows Server 2008 R2," + 
@@ -345,7 +350,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                         1066, 
                         "<30>[On Windows-based servers, when server OS is Windows 7 and Windows Server 2008 R2," + 
                         "versions fields are set as]dwNLSVerMinor :NLS_VERSION_60101");
+                    */
 
+                    /*
                     //Verify server fills dwNLSVerMinor,dwNLSVerMajor, dwWinVerMajor and dwWinVerMinor fields accordingly
                     bool verifyNLSVersion = (dwNLSVerMinor == (uint)dwWinNLSVersion.NLS_VERSION_60101)
                                 && (dwNLSVerMajor == (uint)dwWinNLSVersion.NLS_VERSION_60101)
@@ -356,6 +363,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                         "If the server supports reporting versioning information," +
                         "fill dwWinVerMajor, dwWinVerMinor, dwNLSVerMajor, " +
                         "and dwNLSVerMinor fields accordingly.");
+                    */
 
                 }
             }
@@ -2989,6 +2997,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             }
 
             uint reserved = Helper.GetUInt(responseBytes, ref index);
+            /* XXX: TDI?
             //Updated by:v-zhil
             //Delta testing
             //For all the messages except CPMConnectIn.
@@ -3000,6 +3009,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     "[Message Headers]This field MUST be set to 0x00000000 " +
                     "except for the CPMGetRowsIn message.");
             }
+            */
         }
         /// <summary>
         /// Validates the eState field of  CPMCiStateInOut message

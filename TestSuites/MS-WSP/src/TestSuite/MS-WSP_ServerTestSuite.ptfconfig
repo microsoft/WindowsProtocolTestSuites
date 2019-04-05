@@ -12,7 +12,6 @@
   <TestLog defaultprofile="Verbose">
     <Sinks>
       <File id="XmlLog" directory=".\TestLog" file="MS-WSP-Vista-2K8-Domain-64-FetchMore.xml" format="xml"/>
-      <Sink id="Beacon" type="Microsoft.Protocols.TestTools.Logging.BeaconLogSink"/>
     </Sinks>
     <Profiles>
       <Profile name="Verbose" extends="Error">
@@ -22,13 +21,6 @@
         <Rule kind="CheckFailed" sink="XmlLog" />
         <Rule kind="Checkpoint" sink="XmlLog"/>
         <!-- END: XML LOGGING RULES-->
-        <!-- START: BEACON LOGGING RULES-->
-        <Rule kind="EnterMethod" sink="Beacon" />
-        <Rule kind="ExitMethod" sink="Beacon" />
-        <Rule kind="CheckFailed" sink="Beacon" />
-        <Rule kind="CheckSucceeded" sink="Beacon" />
-        <Rule kind="Checkpoint" sink="Beacon" />
-        <!-- END: BEACON LOGGING RULES-->
       </Profile>
     </Profiles>
   </TestLog>

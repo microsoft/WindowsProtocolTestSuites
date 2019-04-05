@@ -29,7 +29,7 @@
     <Property name="ServerOffset" value="64" />
     <!-- Specify the Machine Architecture of the WSP Client 
     Whether it is 64 bit or 32 bit-->
-    <Property name="ClientOffset" value="32" />
+    <Property name="ClientOffset" value="64" />
     <!-- Specify whether the Server Under Test is a Windows or Non-Windows Sever
     This is required for Windows Specific requirement validation-->
     <Property name="IsServerWindows" value="true" />
@@ -43,6 +43,7 @@
                  Windows 2008 32 it must be 258 (without Windows Desktop Search)
                  Windows 2003 64 it must be 65801 (with Windows Desktop Search Installed)
                  Windows 2008 64 it must be 65794 (without Windows Desktop Search)
+                 Windows 2008R2 64 it must be 67328 (without Windows Desktop Search)
      For Non-Windows Server:
            The value should be less than 0x00010000 for 32 bit server.
            The value should be greater than or equal to 0x00010000 for 64 bit server. 
@@ -52,12 +53,14 @@
     Please specify the version number (uint) of  32 bit client
                  For Windows XP 32 it must be 265 (with Windows Desktop Search Installed)
                  Vista 32 it must be 258          (without Windows Desktop Search)  
+                 Windows 7 32 it must be 1792     (without Windows Desktop Search)  
     Please specify the version number (uint) of  64 bit client                 
                  For Windows XP 64 it must be 65801 (with Windows Desktop Search Installed)
                  Vista 64 it must be 65794          (without Windows Desktop Search) 
+                 Windows 7 64 it must be 67328          (without Windows Desktop Search) 
      
     -->
-    <Property name="ClientVersion" value="265" />
+    <Property name="ClientVersion" value="67328" />
     <!-- See if TDI-19919 is still open
     If the Server Under Test is Windows 2008, put it as 'Open'
     else put any value
@@ -86,7 +89,7 @@
     <Property name="R549Implementated" value="true" />
 
     <!-- It specifies the Search Scope. (Path of the Network folder to be searched)-->
-    <Property name="QueryPath" value="file://SUT01/Data/Test" />
+    <Property name="QueryPath" value="file://SUT01/Test/Data/Test/" />
     <!-- It specifies the Search Query.Text to be present in name of Searched File -->
     <Property name="QueryText" value="a*" />
        

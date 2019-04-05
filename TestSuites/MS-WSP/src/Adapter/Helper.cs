@@ -123,8 +123,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public static void Requires(bool condition, 
             int requirementId, string description)
         {
-            Contracts.Requires(condition, 
-                MakeReqId(requirementId, description));
+            //Contracts.Requires(condition, 
+            //    MakeReqId(requirementId, description));
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public static void RequiresCapture(int requirementId,
             string description)
         {
-            Requirements.Capture(MakeReqId(requirementId, description));
+            //Requirements.Capture(MakeReqId(requirementId, description));
         }
 
         /// <summary>

@@ -184,9 +184,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             string locale = Helper.AddNull
                 (wspTestSite.Properties.Get("LanguageLocale"));
 
+            string serverNameWithNull = Helper.AddNull(serverMachineName);
             byte[] connectInMessage = builder.GetConnectInMessage
                 (clientVersion, 1, userName, clientMachineName,
-                serverMachineName, catalogName, locale);
+                serverNameWithNull, catalogName, locale);
             uint checkSum = GetCheckSumField(connectInMessage);
             //Send the connectIn message to Server.
             Byte[] connectOutMessage;

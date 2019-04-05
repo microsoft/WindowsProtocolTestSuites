@@ -198,7 +198,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             // PropertySet1 specifying CatalogName
             propSet1 = GetPropertySet1(ref messageOffSet, catalogName);
             // PropertySet1 specifying MachineName
-            propSet2 = GetPropertySet2(ref messageOffSet, machineName); 
+            propSet2 = GetPropertySet2(ref messageOffSet, serverMachineName); 
             cbBlob1 += (uint)propSet1.Length + (uint)propSet2.Length;
             byte[] secondPadding = null;
             totalLength = messageOffSet;
@@ -742,7 +742,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                         //for GUID type FCCIFRMWRK
                         byte[] value_FCCIFRMWRK_3 = 
                             GetVector
-                            (StorageType.VT_LPWSTR, new string[] { "\\\0" });
+                            (StorageType.VT_LPWSTR, new string[] { "/\0" });
                         AppendDBProp
                             (ref propertySet, 
                             3, value_FCCIFRMWRK_3, ref messageOffset);
