@@ -193,7 +193,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
         #endregion
         
         #region Test Starting in S0
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        //[Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute(@"MS-WSP_R592, MS-WSP_R599, MS-WSP_R647, MS-WSP_R651, MS-WSP_R653, MS-WSP_R654, MS-WSP_R655, MS-WSP_R657, MS-WSP_R672, MS-WSP_R674, MS-WSP_R679, MS-WSP_R680, MS-WSP_R682, MS-WSP_R692, MS-WSP_R693, MS-WSP_R695, MS-WSP_R702, MS-WSP_R751, MS-WSP_R791, MS-WSP_R793")]
         public virtual void TestCaseQueryForDifferentQueryStatusS0() {
             this.Manager.BeginTest("TestCaseQueryForDifferentQueryStatusS0");

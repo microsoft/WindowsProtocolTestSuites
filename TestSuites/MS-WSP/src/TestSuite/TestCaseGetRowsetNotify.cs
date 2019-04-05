@@ -428,7 +428,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
         #endregion
         
         #region Test Starting in S6
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        //[Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("MS-WSP_R592, MS-WSP_R599, MS-WSP_R647, MS-WSP_R651, MS-WSP_R653, MS-WSP_R654, MS-" +
             "WSP_R655, MS-WSP_R657, MS-WSP_R791, MS-WSP_R793")]
         public virtual void TestCaseGetRowsetNotifyS6() {
@@ -508,7 +508,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
         #endregion
         
         #region Test Starting in S8
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        //[Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("MS-WSP_R592, MS-WSP_R599, MS-WSP_R647, MS-WSP_R651, MS-WSP_R653, MS-WSP_R654, MS-" +
             "WSP_R655, MS-WSP_R657, MS-WSP_R791, MS-WSP_R793")]
         public virtual void TestCaseGetRowsetNotifyS8() {
@@ -588,7 +588,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
         #endregion
         
         #region Test Starting in S10
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        //[Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("MS-WSP_R592, MS-WSP_R599, MS-WSP_R647, MS-WSP_R651, MS-WSP_R653, MS-WSP_R654, MS-" +
             "WSP_R655, MS-WSP_R657, MS-WSP_R791, MS-WSP_R793")]
         public virtual void TestCaseGetRowsetNotifyS10() {
@@ -668,7 +668,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
         #endregion
         
         #region Test Starting in S12
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        //[Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("MS-WSP_R592, MS-WSP_R599, MS-WSP_R647, MS-WSP_R651, MS-WSP_R653, MS-WSP_R654, MS-" +
             "WSP_R655, MS-WSP_R657, MS-WSP_R791, MS-WSP_R793")]
         public virtual void TestCaseGetRowsetNotifyS12() {
@@ -748,7 +748,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
         #endregion
         
         #region Test Starting in S14
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        //[Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("MS-WSP_R592, MS-WSP_R599, MS-WSP_R647, MS-WSP_R651, MS-WSP_R653, MS-WSP_R654, MS-" +
             "WSP_R655, MS-WSP_R657, MS-WSP_R791, MS-WSP_R793")]
         public virtual void TestCaseGetRowsetNotifyS14() {
@@ -828,7 +828,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
         #endregion
         
         #region Test Starting in S16
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        //[Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("MS-WSP_R592, MS-WSP_R599, MS-WSP_R647, MS-WSP_R651, MS-WSP_R653, MS-WSP_R654, MS-" +
             "WSP_R655, MS-WSP_R657, MS-WSP_R791, MS-WSP_R793")]
         public virtual void TestCaseGetRowsetNotifyS16() {

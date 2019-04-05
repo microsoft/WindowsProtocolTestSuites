@@ -193,7 +193,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
         #endregion
         
         #region Test Starting in S0
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        //[Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("MS-WSP_R592, MS-WSP_R599, MS-WSP_R647, MS-WSP_R651, MS-WSP_R653, MS-WSP_R654, MS-" +
             "WSP_R655, MS-WSP_R657, MS-WSP_R693, MS-WSP_R695, MS-WSP_R702")]
         public virtual void TestcaseRatioFinishInFor_E_FailS0() {
@@ -254,7 +254,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
         #endregion
         
         #region Test Starting in S2
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        //[Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("MS-WSP_R592, MS-WSP_R599, MS-WSP_R647, MS-WSP_R651, MS-WSP_R653, MS-WSP_R654, MS-" +
             "WSP_R655, MS-WSP_R657, MS-WSP_R699")]
         public virtual void TestcaseRatioFinishInFor_E_FailS2() {

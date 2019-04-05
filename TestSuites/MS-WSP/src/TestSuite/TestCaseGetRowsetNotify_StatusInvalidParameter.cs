@@ -326,7 +326,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
         #endregion
         
         #region Test Starting in S6
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        //[Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("MS-WSP_R1112, MS-WSP_R592, MS-WSP_R647, MS-WSP_R651, MS-WSP_R653, MS-WSP_R654")]
         public virtual void TestCaseGetRowsetNotify_StatusInvalidParameterS6() {
             this.Manager.BeginTest("TestCaseGetRowsetNotify_StatusInvalidParameterS6");
@@ -372,7 +372,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
         #endregion
         
         #region Test Starting in S8
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        //[Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("MS-WSP_R1112, MS-WSP_R592, MS-WSP_R647, MS-WSP_R651, MS-WSP_R653, MS-WSP_R654")]
         public virtual void TestCaseGetRowsetNotify_StatusInvalidParameterS8() {
             this.Manager.BeginTest("TestCaseGetRowsetNotify_StatusInvalidParameterS8");
@@ -418,7 +418,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
         #endregion
         
         #region Test Starting in S10
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        //[Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("MS-WSP_R1112, MS-WSP_R592, MS-WSP_R647, MS-WSP_R651, MS-WSP_R653, MS-WSP_R654")]
         public virtual void TestCaseGetRowsetNotify_StatusInvalidParameterS10() {
             this.Manager.BeginTest("TestCaseGetRowsetNotify_StatusInvalidParameterS10");
@@ -464,7 +464,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
         #endregion
         
         #region Test Starting in S12
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        //[Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("MS-WSP_R1112, MS-WSP_R592, MS-WSP_R647, MS-WSP_R651, MS-WSP_R653, MS-WSP_R654")]
         public virtual void TestCaseGetRowsetNotify_StatusInvalidParameterS12() {
             this.Manager.BeginTest("TestCaseGetRowsetNotify_StatusInvalidParameterS12");
@@ -510,7 +510,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
         #endregion
         
         #region Test Starting in S14
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        //[Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("MS-WSP_R1112, MS-WSP_R592, MS-WSP_R647, MS-WSP_R651, MS-WSP_R653, MS-WSP_R654")]
         public virtual void TestCaseGetRowsetNotify_StatusInvalidParameterS14() {
             this.Manager.BeginTest("TestCaseGetRowsetNotify_StatusInvalidParameterS14");
@@ -556,7 +556,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
         #endregion
         
         #region Test Starting in S16
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        //[Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("MS-WSP_R1112, MS-WSP_R592, MS-WSP_R647, MS-WSP_R651, MS-WSP_R653, MS-WSP_R654")]
         public virtual void TestCaseGetRowsetNotify_StatusInvalidParameterS16() {
             this.Manager.BeginTest("TestCaseGetRowsetNotify_StatusInvalidParameterS16");

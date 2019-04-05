@@ -188,7 +188,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
         #endregion
         
         #region Test Starting in S0
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        //[Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("MS-WSP_R592, MS-WSP_R599, MS-WSP_R630, MS-WSP_R632, MS-WSP_R641, MS-WSP_R643, MS-" +
             "WSP_R647, MS-WSP_R651, MS-WSP_R653, MS-WSP_R654")]
         public virtual void TestCaseQueryAdminMessagesS0() {
@@ -253,7 +253,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
         #endregion
         
         #region Test Starting in S2
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        //[Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("MS-WSP_R592, MS-WSP_R599, MS-WSP_R630, MS-WSP_R632, MS-WSP_R644, MS-WSP_R647, MS-" +
             "WSP_R651, MS-WSP_R653, MS-WSP_R654")]
         public virtual void TestCaseQueryAdminMessagesS2() {

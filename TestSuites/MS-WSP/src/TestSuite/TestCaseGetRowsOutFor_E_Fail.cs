@@ -193,7 +193,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
         #endregion
         
         #region Test Starting in S0
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        //[Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("MS-WSP_R592, MS-WSP_R599, MS-WSP_R647, MS-WSP_R651, MS-WSP_R653, MS-WSP_R654, MS-" +
             "WSP_R655, MS-WSP_R657, MS-WSP_R703, MS-WSP_R705, MS-WSP_R707, MS-WSP_R723, MS-WS" +
             "P_R742, MS-WSP_R744, MS-WSP_R746, MS-WSP_R791, MS-WSP_R793")]
@@ -294,7 +294,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
         #endregion
         
         #region Test Starting in S2
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        //[Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("MS-WSP_R592, MS-WSP_R599, MS-WSP_R647, MS-WSP_R651, MS-WSP_R653, MS-WSP_R654, MS-" +
             "WSP_R655, MS-WSP_R657, MS-WSP_R706, MS-WSP_R742, MS-WSP_R744, MS-WSP_R746, MS-WS" +
             "P_R791, MS-WSP_R793")]
