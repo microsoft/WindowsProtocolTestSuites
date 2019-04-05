@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+  <String Id="WelcomeDlgDescription">The Setup Wizard will install [ProductName] (version [ProductVersion]) on your computer. Click Next to continue or Cancel to exit the Setup Wizard.</String>
+  <String Id="MaintenanceWelcomeDlgDescription">The Setup Wizard allows you to change the way [ProductName] (version [ProductVersion]) features are installed on your computer or to remove it from your computer. Click Next to continue or Cancel to exit the Setup Wizard.</String>
+  <String Id="DependencyCheckWarningDigMessage">
+The test suite has the software dependencies listed below. It is recommended to install by the following order so that they can work correctly.
+[VS2017_VSTA2017_Higher][SPEC_EXPLORER][PTF_BuildVersion]
+
+Warning:
+The following software are not installed on this machine, the test suite still can be installed but may not function properly.
+[VSTEST_AGENT_NOT_INSTALLED_WARNING_TEXT][PTF_NOT_INSTALLED_WARNING_TEXT][SE_NOT_INSTALLED_WARNING_TEXT]
+  </String>
+</WixLocalization>

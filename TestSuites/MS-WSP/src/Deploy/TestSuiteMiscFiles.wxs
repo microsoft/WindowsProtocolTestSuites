@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?define SYMBOLS_DIR=$(env.TestSuiteRoot)\drop\TestSuites\MS-WSP\Bin?>
+<?define TESTSUITE_DROP_DIR=$(env.TestSuiteRoot)\drop\TestSuites\MS-WSP\Bin?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Fragment>
+
+    <!-- Files to be installed to test suite. -->
+    <!-- Source code and files in drop folder are automatically installed. -->
+    <ComponentGroup Id="TESTSUITE_MISC_FILES">
+
+      <!-- Test Suite binaries and symbols. -->
+      <ComponentRef Id="MS_WSP_ServerAdapter.dll" />
+      <ComponentRef Id="MS_WSP_ServerAdapter.pdb" />
+      <ComponentRef Id="MS_WSP_ServerTestSuite.dll" />
+      <ComponentRef Id="MS_WSP_ServerTestSuite.pdb" />
+    </ComponentGroup>
+
+
+    <!-- Files to be installed to SUT. -->
+    <!-- Scripts in drop folder are automatically installed. -->
+    <ComponentGroup Id="TESTSUITE_SUT_FILES">
+      <!--
+      <ComponentRef Id="FILENAME"/>
+      -->
+    </ComponentGroup>
+
+    
+    <!-- Files to be installed to domain. -->
+    <!-- Scripts in drop folder are automatically installed. -->
+    <ComponentGroup Id="TESTSUITE_DOMAIN_FILES">
+      <!--
+      <ComponentRef Id="FILENAME"/>
+      -->
+    </ComponentGroup>
+
+
+    <!-- This is installed directory on target machine: TestSuite\docs -->
+    <!-- There are some other Directory Ids pre-defined: TESTSUITE_BIN_DIR, TESTSUITE_SOURCE_DIR, TESTSUITE_SCRIPTS_DIR. -->
+  
+    <DirectoryRef Id="TESTSUITE_BIN_DIR">
+      <!-- Test Suite binaries. -->
+      <Component Id="MS_WSP_ServerAdapter.dll" Guid="E279A909-A475-435A-BEC5-70CA2C1E514F">
+        <File Id="MS_WSP_ServerAdapter.dll"
+              Source="$(var.TESTSUITE_DROP_DIR)\MS-WSP_ServerAdapter.dll" />
+      </Component>
+
+      <Component Id="MS_WSP_ServerTestSuite.dll" Guid="3FA99999-4C24-464B-97F9-3D07D64F136C">
+        <File Id="MS_WSP_ServerTestSuite.dll"
+              Source="$(var.TESTSUITE_DROP_DIR)\MS-WSP_ServerTestSuite.dll" />
+      </Component>
+
+      <!-- Test Suite symbols. -->
+      <Component Id="MS_WSP_ServerAdapter.pdb" Guid="5DF6F531-9220-41d4-BE17-F95527DC7368">
+        <File Id="MS_WSP_ServerAdapter.pdb"
+              Source="$(var.SYMBOLS_DIR)\MS-WSP_ServerAdapter.pdb" />
+      </Component>
+
+      <Component Id="MS_WSP_ServerTestSuite.pdb" Guid="2193E76B-932F-437d-8E6F-B1641557AF60">
+        <File Id="MS_WSP_ServerTestSuite.pdb"
+              Source="$(var.SYMBOLS_DIR)\MS-WSP_ServerTestSuite.pdb" />
+      </Component>
+            
+    </DirectoryRef>
+    
+	</Fragment>
+</Wix>
