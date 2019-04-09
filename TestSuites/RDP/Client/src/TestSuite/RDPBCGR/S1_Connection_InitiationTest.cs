@@ -142,13 +142,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #region Test Steps
             //1.	Trigger SUT to initiate a RDP connection with sending a Client X.224 Connection Request PDU.
             //2.	Test Suite responds a Server X.224 Connection Confirm PDU and set the requestedProtocols field to PROTOCOL_HYBRID_EX.
-            //3.	Test Suite and RDP client complete security headshake and the subsequent connection phase.
+            //3.	Test Suite and RDP client complete CredSSP security headshake.
+            //4.    Test Suite send Early User Authorization Result PDU if it's Negotiation-Based.
+            //5.    Test Suite and RDP client complete the subsequent connection phase.
             #endregion
 
-            if (this.selectedProtocol != selectedProtocols_Values.PROTOCOL_HYBRID_FLAG)
+            #region Test Implementation
+            if (transportProtocol != EncryptedProtocol.NegotiationCredSsp && transportProtocol != EncryptedProtocol.DirectCredSsp)
             {
-                this.TestSite.Log.Add(LogEntryKind.Debug, "This case requires using CredSSP encrypted protocol");
-                return;
+                this.TestSite.Assert.Inconclusive("This case requires using CredSSP encrypted protocol");
             }
             this.selectedProtocol = selectedProtocols_Values.PROTOCOL_HYBRID_EX;
             
@@ -178,10 +180,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #endregion Connection Initiation phase
 
             #region Send Early User Authorization Result PDU
-
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Early User Authorization Result PDU");
-            this.rdpbcgrAdapter.SendEarlyUserAuthorizationResultPDU(Authorization_Result_value.AUTHZ_SUCCESS);
-            
+            if (transportProtocol == EncryptedProtocol.NegotiationCredSsp)
+            {
+                // For Negotiation based CredSSP, send Early User Authorization Result PDU after Connection Initiation phase and CredSSP handshake 
+                this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Early User Authorization Result PDU");
+                this.rdpbcgrAdapter.SendEarlyUserAuthorizationResultPDU(Authorization_Result_value.AUTHZ_SUCCESS);
+            }
             #endregion Send Early User Authorization Result PDU
 
             #region Basic Setting Exchange phase
@@ -290,8 +294,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.rdpbcgrAdapter.ServerFontMap();
 
             #endregion
-            
 
+            #endregion
         }
 
         [TestMethod]

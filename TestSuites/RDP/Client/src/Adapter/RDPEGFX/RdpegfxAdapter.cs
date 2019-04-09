@@ -209,6 +209,29 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                 this.bcgrAdapter.SimulatedScreen.MapSurfaceToOutput(sid, x, y);
             }
         }
+        /// <summary>
+        /// Method to make a map Surface to scaled output Pdu
+        /// </summary>
+        /// <param name="sid">surface ID</param>
+        /// <param name="x">the top-left corner of the surface</param>
+        /// <param name="y">map the upper-left corner of the surface</param>
+        /// <param name="width">the width of the target surface</param>
+        /// <param name="height">the height of the target surface</param>
+        void MakeMapSurfaceToScaledOutputPdu(ushort sid, uint x, uint y, uint width, uint height)
+        {
+            RDPGFX_MAP_SURFACE_TO_SCALED_OUTPUT_PDU surf2ScaledOutput = egfxServer.CreateMapSurfaceToScaledOutputPdu(sid, x, y, width, height);
+            
+            // Change pdu based testtype. 
+            if (currentTestType == RdpegfxNegativeTypes.SurfaceManagement_MapInexistentSurfaceToOutput)
+                surf2ScaledOutput.surfaceId = 0xffff;  // Set the surface id to an inexsit surface's id 0xffff
+
+            AddPdusToBuffer(surf2ScaledOutput);
+
+            if (this.bcgrAdapter.SimulatedScreen != null)
+            {
+                this.bcgrAdapter.SimulatedScreen.MapSurfaceToScaledOutput(sid, x, y, width, height);
+            }
+        }
 
         /// <summary>
         /// Method to make a solid fill Pdu
@@ -542,14 +565,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                                             capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE ||
                                             capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_THINCLIENT
                                             );
-                        if (validFlag)
-                        {
-                            Site.Log.Add(LogEntryKind.Comment, "Capability flags {0} (Section 2.2.3.1).", capsFlag);
-                        }
-                        else
-                        {
-                            Site.Log.Add(LogEntryKind.CheckFailed, "Unknown capability flags {0} (Section 2.2.3.1).", capsFlag);
-                        }
+                        Site.Assert.IsTrue(validFlag, "Unknown capability flags {0} (Section 2.2.3.1).", capsFlag);
                         break;
                     case CapsVersions.RDPGFX_CAPVERSION_81:
                         Site.Assert.AreEqual((uint)4, adv.capsSets[index].capsDataLength,
@@ -563,14 +579,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                                             capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC420_ENABLED) ||
                                             capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC420_ENABLED | CapsFlags.RDPGFX_CAPS_FLAG_THINCLIENT)
                                             );
-                        if (validFlag)
-                        {
-                            Site.Log.Add(LogEntryKind.Comment, "Capability flags {0} (Section 2.2.3.2).", capsFlag);
-                        }
-                        else
-                        {
-                            Site.Log.Add(LogEntryKind.CheckFailed, "Unknown capability flags {0} (Section 2.2.3.2).", capsFlag);
-                        }
+                        Site.Assert.IsTrue(validFlag, "Unknown capability flags {0} (Section 2.2.3.2).", capsFlag);
                         break;
                     case CapsVersions.RDPGFX_CAPVERSION_10:
                         Site.Assert.AreEqual((uint)4, adv.capsSets[index].capsDataLength,
@@ -583,14 +592,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                                             capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_AVC_DISABLED ||
                                             capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC_DISABLED)
                                             );
-                        if (validFlag)
-                        {
-                            Site.Log.Add(LogEntryKind.Comment, "Capability flags {0} (Section 2.2.3.3).", capsFlag);
-                        }
-                        else
-                        {
-                            Site.Log.Add(LogEntryKind.CheckFailed, "Unknown capability flags {0} (Section 2.2.3.3).", capsFlag);
-                        }
+                        Site.Assert.IsTrue(validFlag, "Unknown capability flags {0} (Section 2.2.3.3).", capsFlag);
                         break;
                     case CapsVersions.RDPGFX_CAPVERSION_101:
                         Site.Assert.AreEqual((uint)16, adv.capsSets[index].capsDataLength,
@@ -617,14 +619,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                                             capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_AVC_DISABLED ||
                                             capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC_DISABLED)
                                             );
-                        if (validFlag)
-                        {
-                            Site.Log.Add(LogEntryKind.Comment, "Capability flags {0} (Section 2.2.3.5).", capsFlag);
-                        }
-                        else
-                        {
-                            Site.Log.Add(LogEntryKind.CheckFailed, "Unknown capability flags {0} (Section 2.2.3.5).", capsFlag);
-                        }
+                        Site.Assert.IsTrue(validFlag, "Unknown capability flags {0} (Section 2.2.3.5).", capsFlag);
                         break;
                     case CapsVersions.RDPGFX_CAPVERSION_103:
                         Site.Assert.AreEqual((uint)4, adv.capsSets[index].capsDataLength,
@@ -636,14 +631,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                                             capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_AVC_DISABLED ||
                                             capsFlag == (uint)CapsFlags.RDPGFX_CAPS_FLAG_AVC_THINCLIENT
                                             );
-                        if (validFlag)
-                        {
-                            Site.Log.Add(LogEntryKind.Comment, "Capability flags {0} (Section 2.2.3.6).", capsFlag);
-                        }
-                        else
-                        {
-                            Site.Log.Add(LogEntryKind.CheckFailed, "Unknown capability flags {0} (Section 2.2.3.6).", capsFlag);
-                        }
+                        Site.Assert.IsTrue(validFlag, "Unknown capability flags {0} (Section 2.2.3.6).", capsFlag);
                         break;
                     case CapsVersions.RDPGFX_CAPVERSION_104:
                         Site.Assert.AreEqual((uint)4, adv.capsSets[index].capsDataLength,
@@ -658,14 +646,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                                             capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC_THINCLIENT) ||
                                             capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC_DISABLED)
                                             );
-                        if (validFlag)
-                        {
-                            Site.Log.Add(LogEntryKind.Comment, "Capability flags {0} (Section 2.2.3.7).", capsFlag);
-                        }
-                        else
-                        {
-                            Site.Log.Add(LogEntryKind.CheckFailed, "Unknown capability flags {0} (Section 2.2.3.7).", capsFlag);
-                        }
+                        Site.Assert.IsTrue(validFlag, "Unknown capability flags {0} (Section 2.2.3.7).", capsFlag);
                         break;
                     case CapsVersions.RDPGFX_CAPVERSION_105:
                         Site.Assert.AreEqual((uint)4, adv.capsSets[index].capsDataLength,
@@ -680,14 +661,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                                             capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC_THINCLIENT) ||
                                             capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC_DISABLED)
                                             );
-                        if (validFlag)
-                        {
-                            Site.Log.Add(LogEntryKind.Comment, "Capability flags {0} (Section 2.2.3.8).", capsFlag);
-                        }
-                        else
-                        {
-                            Site.Log.Add(LogEntryKind.CheckFailed, "Unknown capability flags {0} (Section 2.2.3.8).", capsFlag);
-                        }
+                        Site.Assert.IsTrue(validFlag, "Unknown capability flags {0} (Section 2.2.3.8).", capsFlag);
                         break;
                     case CapsVersions.RDPGFX_CAPVERSION_106:
                         Site.Assert.AreEqual((uint)4, adv.capsSets[index].capsDataLength,
@@ -702,18 +676,21 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                                             capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC_THINCLIENT) ||
                                             capsFlag == (uint)(CapsFlags.RDPGFX_CAPS_FLAG_SMALL_CACHE | CapsFlags.RDPGFX_CAPS_FLAG_AVC_DISABLED)
                                             );
-                        if (validFlag)
-                        {
-                            Site.Log.Add(LogEntryKind.Comment, "Capability flags {0} (Section 2.2.3.9).", capsFlag);
-                        }
-                        else
-                        {
-                            Site.Log.Add(LogEntryKind.CheckFailed, "Unknown capability flags {0} (Section 2.2.3.9).", capsFlag);
-                        }
+                        Site.Assert.IsTrue(validFlag, "Unknown capability flags {0} (Section 2.2.3.9).", capsFlag);
                         break;
                     default:
                         Site.Assert.Fail("The version of RDPEGFX capability set MUST be set to : {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7} or {8}. Received version: {9} in capset[{10}]",
-                            CapsVersions.RDPGFX_CAPVERSION_8, CapsVersions.RDPGFX_CAPVERSION_81, CapsVersions.RDPGFX_CAPVERSION_10, CapsVersions.RDPGFX_CAPVERSION_101, CapsVersions.RDPGFX_CAPVERSION_102, CapsVersions.RDPGFX_CAPVERSION_103, CapsVersions.RDPGFX_CAPVERSION_104, CapsVersions.RDPGFX_CAPVERSION_105, CapsVersions.RDPGFX_CAPVERSION_106, adv.capsSets[index].version, index);
+                            CapsVersions.RDPGFX_CAPVERSION_8,
+                            CapsVersions.RDPGFX_CAPVERSION_81, 
+                            CapsVersions.RDPGFX_CAPVERSION_10, 
+                            CapsVersions.RDPGFX_CAPVERSION_101,
+                            CapsVersions.RDPGFX_CAPVERSION_102, 
+                            CapsVersions.RDPGFX_CAPVERSION_103, 
+                            CapsVersions.RDPGFX_CAPVERSION_104, 
+                            CapsVersions.RDPGFX_CAPVERSION_105, 
+                            CapsVersions.RDPGFX_CAPVERSION_106, 
+                            adv.capsSets[index].version, 
+                            index);
                         break;
                 }
             }
@@ -859,6 +836,24 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         public uint MapSurfaceToOutput(ushort surfaceId, uint outputOriginX, uint outputOriginY)
         {
             MakeMapSurfaceToOutputPdu(surfaceId, outputOriginX, outputOriginY);
+            uint fid = MakeStartFramePdu();
+            MakeEndFramePdu(fid);
+            PackAndSendServerPdu();
+            return fid;
+        }
+
+        /// <summary>
+        /// Method to instruct scale output
+        /// </summary>
+        /// <param name="surfaceId">surface ID</param>
+        /// <param name="outputOriginX">x-coordinate of the scaled output point</param>
+        /// <param name="outputOriginY">y-coordinate of the scaled output point</param>
+        /// <param name="targetWidth">target width of the scaled output</param>
+        /// <param name="targetHeight">target height of the scaled output</param>
+        /// <returns></returns>
+        public uint ScaledOutput(ushort surfaceId, uint outputOriginX, uint outputOriginY, uint targetWidth, uint targetHeight)
+        {
+            MakeMapSurfaceToScaledOutputPdu(surfaceId, outputOriginX, outputOriginY, targetWidth, targetHeight);
             uint fid = MakeStartFramePdu();
             MakeEndFramePdu(fid);
             PackAndSendServerPdu();

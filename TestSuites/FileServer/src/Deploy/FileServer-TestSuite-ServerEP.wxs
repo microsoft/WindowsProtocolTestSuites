@@ -35,10 +35,6 @@
     <WixVariable Id="PROTOSDK_DROP_DIR" Value="$(env.TestSuiteRoot)\drop\ProtoSDK\Bin" />
     <WixVariable Id="TESTSUITE_COMMON_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\common" />
     <WixVariable Id="TESTSUITE_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\drop\TestSuites\FileServer\Scripts" />
-    
-    <WixVariable Id="CONFIG_TESTSUITE_SCRIPT" Value="Config-TestSuite.cmd" />
-    <WixVariable Id="CONFIG_SUT_SCRIPT" Value="Config-SUT.cmd" />
-    <WixVariable Id="CONFIG_DOMAIN_SCRIPT" Value="Config-Domain.cmd" />
 
     <WixVariable Id="DOMAIN_RUN_ALLTCS_COMMAND" Value="Domain_RunAllTestCases.cmd" />
     <WixVariable Id="DOMAIN_RUN_BVT_COMMAND" Value="Domain_RunBVTTestCases.cmd" />

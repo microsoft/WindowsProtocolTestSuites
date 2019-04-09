@@ -159,7 +159,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                                           | inputFlags_Values.INPUT_FLAG_SCANCODES;
             if (supportFastPathInput)
             {
-                inputCapabilitySet.inputFlags |= inputFlags_Values.INPUT_FLAG_FASTPATH_INPUT2;
+                inputCapabilitySet.inputFlags |=
+                    (inputFlags_Values.INPUT_FLAG_FASTPATH_INPUT2 | inputFlags_Values.TS_INPUT_FLAG_QOE_TIMESTAMPS);
             }
             inputCapabilitySet.pad2octetsA = 0;
             inputCapabilitySet.keyboardLayout = RdpConstValue.LOCALE_ENGLISH_UNITED_STATES;
@@ -169,7 +170,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             inputCapabilitySet.imeFileName = string.Empty;
             inputCapabilitySet.lengthCapability = (ushort)(Marshal.SizeOf(inputCapabilitySet)
                                                 - sizeof(int)
-                                                + RdpConstValue.INPUT_CAP_IME_FLIENAME_SIZE);
+                                                + RdpConstValue.INPUT_CAP_IME_FILENAME_SIZE);
 
             capabilitySets.Add(inputCapabilitySet);
             #endregion Populating Input Capability Set

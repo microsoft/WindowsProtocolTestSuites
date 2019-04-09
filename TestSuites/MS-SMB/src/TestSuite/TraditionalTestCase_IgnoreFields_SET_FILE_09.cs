@@ -246,7 +246,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
 
             linkPacket.Payload = TypeMarshal.ToBytes<StackFscc.FileLinkInformation>(fileLinkInformation);
             byte[] data = linkPacket.ToBytes();
-            smbClientStack.Capability.IsUsePathThrough = false;
+            smbClientStack.Capability.IsUsePassThrough = false;
 
             // Create a TRANS2_SET_FILE_INFORMATION Request. 
             SmbTrans2SetFileInformationRequestPacket trans2SetFileInformationRequest =
@@ -301,7 +301,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             fileLinkInformation.RootDirectory = 0;
 
             linkPacket2.Payload = TypeMarshal.ToBytes<StackFscc.FileLinkInformation>(fileLinkInformation);
-            smbClientStack.Capability.IsUsePathThrough = false;
+            smbClientStack.Capability.IsUsePassThrough = false;
 
             // Create a TRANS2_SET_FILE_INFORMATION request.
             SmbTrans2SetFileInformationRequestPacket trans2SetFileInformationRequest2 =

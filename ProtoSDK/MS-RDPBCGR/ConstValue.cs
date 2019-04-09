@@ -547,7 +547,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// The size of imeFileName field of 2.2.7.1.6 Input Capability Set (TS_INPUT_CAPABILITYSET).
         /// </summary>
-        internal const uint INPUT_CAP_IME_FLIENAME_SIZE = 64;
+        internal const uint INPUT_CAP_IME_FILENAME_SIZE = 64;
 
         /// <summary>
         /// The number of GlyphCache field of 2.2.7.1.8 Glyph Cache Capability Set (TS_GLYPHCACHE_CAPABILITYSET).
@@ -767,6 +767,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
 
         #region Fast-Path Input Event
+        /// <summary>
+        /// The value of numberEvents field of section 2.2.8.1.2 Fast-Path Input Event(TS_FP_INPUT_PDU).
+        /// TS_FP_KEYBOARD_EVENT
+        /// TS_FP_UNICODE_KEYBOARD_EVENT
+        /// TS_FP_POINTER_EVENT
+        /// TS_FP_POINTERX_EVENT
+        /// TS_FP_SYNC_EVENT
+        /// TS_FP_QOETIMESTAMP_EVENT
+        /// </summary>
+        internal const byte FP_NUMBER_EVENTS = 0x06;
+
         /// <summary>
         /// The value of keyboardEvent.keycode field of section 2.8.2.1.2.2.1 
         /// Fast-Path Keyboard Event(TS_FP_KEYBOARD_EVENT).
@@ -1051,9 +1062,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         internal const UInt16 TS_GLYPHCACHE_CAPABILITYSET_GLYPHCACHE_LENGTH = 10;
 
         /// <summary>
-        /// (64 bytes) TS_INPUT_CAPABILITY_SET ime file name length
+        /// (64 bytes) TS_INPUT_CAPABILITYSET ime file name length
         /// </summary>
-        internal const UInt16 TS_INPUT_CAPABILITY_SET_IME_FILE_NAME_LENGTH = 64;
+        internal const UInt16 TS_INPUT_CAPABILITYSET_IME_FILE_NAME_LENGTH = 64;
 
         /// <summary>
         /// (12 bytes) TS_BITMAPCACHE_CAPABILITYSET_REV2 pad3 length
@@ -1069,7 +1080,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// (16 bytes) ARC_SC_PRIVATE_PACKET arc random bits length
         /// </summary>
         internal const UInt16 ARC_SC_PRIVATE_PACKET_ARC_RANDOM_BITS_LENGTH = 16;
-        
+
         /// <summary>
         /// (16 bytes) TS_ORDER_CAPABILITYSET terminal descriptor
         /// </summary>

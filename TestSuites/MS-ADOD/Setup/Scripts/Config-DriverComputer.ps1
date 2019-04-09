@@ -1,5 +1,5 @@
 #############################################################################
-## Copyright (c) Microsoft. All rights reserved.
+## Copyright (c) Microsoft Corporation. All rights reserved.
 ## Licensed under the MIT license. See LICENSE file in the project root for full license information.
 #############################################################################
 
@@ -13,9 +13,9 @@
 ##
 ##############################################################################
 Param(
-[String]$scriptsPath     = "."
+  [String]$scriptsPath     = (Split-Path $MyInvocation.MyCommand.Definition -Parent)
 )
-$ScriptsSignalFile = "$env:HOMEDRIVE\config-drivercomputer.finished.signal"
+$ScriptsSignalFile = "$env:HOMEDRIVE\ConfigScript.finished.signal"
 if (Test-Path -Path $ScriptsSignalFile)
 {
     Write-Host "The script execution is complete." -foregroundcolor Red
@@ -23,8 +23,7 @@ if (Test-Path -Path $ScriptsSignalFile)
 }
 
 Write-Host "Put current dir as $scriptsPath."
-$scriptsPath = Get-Location
-pushd $scriptsPath
+Push-Location $scriptsPath
 
 #----------------------------------------------------------------------------
 # Starting script
@@ -47,6 +46,7 @@ if(Test-Path -Path $settingFile)
     $clientAdminUserName   = .\Get-Parameter.ps1 $settingFile clientAdminUserName
     $clientAdminUserPwd    = .\Get-Parameter.ps1 $settingFile clientAdminUserPwd
     $ipVersion             = .\Get-Parameter.ps1 $settingFile ipVersion
+    $RemoteIP              = .\Get-Parameter.ps1 $settingFile clientIP
     $driverLogFile         = $driverLogPath + "\Config-DriverComputer.ps1.log"
     .\Set-Parameter.ps1 $settingFile driverLogFile $driverlogFile "If no log file path specified, this value should be used."
 }
@@ -91,6 +91,7 @@ Write-Host "`$clientIP              = $clientIP"
 Write-Host "`$clientAdminUserName   = $clientAdminUserName"
 Write-Host "`$clientAdminUserPwd    = $clientAdminUserPwd"
 Write-Host "`$ipVersion             = $ipVersion"
+Write-Host "`$RemoteIP              = $RemoteIP"
 
 #-----------------------------------------------------
 # Begin to config Driver Computer
@@ -103,27 +104,34 @@ Write-Host "Turn off firewall"
 cmd /c netsh advfirewall set allprofile state off 2>&1 | Write-Host
 
 #-----------------------------------------------------
-# Wait Until Client Computer is ready
-#-----------------------------------------------------
-$signalFolder   = "$env:HOMEDRIVE"
-$signalFileName = "config-clientcomputer.finished.signal"
-$timeoutSec     = 600
-.\WaitFor-ComputerReady.ps1 $clientIP "$clientIP\$clientAdminUserName" $clientAdminUserPwd $signalFolder $signalFileName $timeoutSec
-
-#-----------------------------------------------------
 # Start the Windows Remote Management Service
 #-----------------------------------------------------
 Write-Host "Enable Windows Remote Management Service..."
 Enable-PSRemoting -Force
-Set-Item wsman:\localhost\client\trustedhosts -value * -force
+Write-Host "Start to connect to $clientIP use $clientIP\$clientAdminUserName"
+
+#check if Remote machine is in TrustedHosts
+$originalValue = (get-item WSMan:\localhost\Client\TrustedHosts).value
+[string]$originalValue = $originalValue.Replace("*","");
+    
+if([String]$originalValue.Contains($RemoteIP) -eq $false)
+{
+	if($originalValue.Length -gt 0){
+		$originalValue = $originalValue + ",$RemoteIP"
+	}else{
+		$originalValue = "$RemoteIP"
+	}
+    
+    Write-Host "Add $RemoteIP to Trusted Hosts"
+    set-item WSMan:\localhost\Client\TrustedHosts -Value $originalValue -force
+}
 $remoteSession = .\New-RemoteSession $clientIP "$clientIP\$clientAdminUserName" $clientAdminUserPwd
 
 #-----------------------------------------------------
 # Get Information from Client Computer
 #-----------------------------------------------------
-$clientInfoFolder = "$env:HOMEDRIVE\MicrosoftProtocolTests\MS-ADOD"
-$clientInfoFile = "MSIInstalled.signal"
-$clientInfo = Invoke-Command -Session $remoteSession -ScriptBlock {Param ($filePath, $fileName) Get-Content "$filePath\$fileName"} -ArgumentList $clientInfoFolder, $clientInfoFile
+$clientInfoFile = "$env:HOMEDRIVE\MSIInstalled.signal"
+$clientInfo = Invoke-Command -Session $remoteSession -ScriptBlock {Param ($fileName) Get-Content "$fileName"} -ArgumentList $clientInfoFile
 $clientScriptPath = $clientInfo
 Remove-PSSession -Session $remoteSession
 
@@ -220,8 +228,8 @@ $settingXml.Save("$settingFile")
 #-----------------------------------------------------
 # Finished to config driver computer
 #-----------------------------------------------------
-popd
-Write-Host "Write signal file: config-drivercomputer.finished.signal to system drive."
+Pop-Location
+Write-Host "Write signal file: ConfigScript.finished.signal to system drive."
 cmd /C ECHO CONFIG FINISHED>$ScriptsSignalFile
 
 #----------------------------------------------------------------------------
@@ -230,8 +238,6 @@ cmd /C ECHO CONFIG FINISHED>$ScriptsSignalFile
 Write-Host "Config finished."
 Write-Host "EXECUTE [Config-DriverComputer.ps1] FINISHED (NOT VERIFIED)."
 
-
 Stop-Transcript
 
 exit 0
-

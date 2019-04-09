@@ -1,9 +1,7 @@
 ﻿
   <Parameters>   
 	<LogPath>C:\Test\TestLog</LogPath>
-    <CapturePath>c:\Test\TestLog\MA</CapturePath>
-	
-	
+    <CapturePath>c:\Test\TestLog\MA</CapturePath>	
 	<LocalRealm>
 		<DomainName>CONTOSO.COM</DomainName>			
 		<DomainAdministrator>

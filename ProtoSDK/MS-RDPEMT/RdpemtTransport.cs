@@ -8,22 +8,23 @@ using System.Threading;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
 {
+    public delegate void PDUReceived(RdpemtBasePDU pdu);
 
     public delegate void ReceiveData(byte[] data);
 
     public abstract class RdpemtTransport : IDisposable
     {
         #region Private/Protected Methods
-             
 
-        private bool autoHandle;        
+
+        private bool autoHandle;
 
         private RdpemtDecoder decoder;
 
         /// <summary>
         /// Secure channel which is encrypted by using TLS/DTLS 
         /// </summary>
-        protected ISecureChannel secureChannel;   
+        protected ISecureChannel secureChannel;
 
         protected bool connected;
 
@@ -131,6 +132,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
             this.SendRdpemtPacket(tunnelData);
         }
 
+        public event PDUReceived PDUReceived;
+
         public event ReceiveData Received;
 
 
@@ -141,7 +144,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
         public void ReceiveBytes(byte[] data)
         {
             RdpemtBasePDU[] pdus = decoder.Decode(data);
-            if(pdus != null && pdus.Length > 0)
+            if (pdus != null && pdus.Length > 0)
             {
                 if (!AutoHandle)
                 {
@@ -164,6 +167,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
                         {
                             receiveBuffer.Add(pdu);
                         }
+                    }
+                }
+
+                foreach (var pdu in pdus)
+                {
+                    if (PDUReceived != null)
+                    {
+                        PDUReceived(pdu);
                     }
                 }
             }
@@ -226,7 +237,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
         /// <param name="Payload"></param>
         /// <param name="SubheaderList"></param>
         /// <returns></returns>
-        public RDP_TUNNEL_DATA CreateTunnelDataPdu(byte[] Payload, List<byte[]> SubheaderList = null, 
+        public RDP_TUNNEL_DATA CreateTunnelDataPdu(byte[] Payload, List<byte[]> SubheaderList = null,
             RDP_TUNNEL_SUBHEADER_TYPE_Values subHeaderType = RDP_TUNNEL_SUBHEADER_TYPE_Values.TYPE_ID_AUTODETECT_REQUEST)
         {
             RDP_TUNNEL_DATA tunnelData = new RDP_TUNNEL_DATA();
@@ -289,7 +300,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
         /// </summary>
         /// <param name="pdu"></param>
         public abstract void ProcessSubHeaders(RdpemtBasePDU pdu);
-        
+
 
         #endregion abstract methods
 
@@ -301,7 +312,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
         /// <param name="pdu"></param>
         private void ProcessTunnelData(RDP_TUNNEL_DATA pdu)
         {
-            if(pdu.HigherLayerData != null && pdu.HigherLayerData.Length > 0)
+            if (pdu.HigherLayerData != null && pdu.HigherLayerData.Length > 0)
             {
                 if (Received != null)
                 {

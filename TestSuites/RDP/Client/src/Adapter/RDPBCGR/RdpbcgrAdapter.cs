@@ -89,6 +89,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         public event VirtualChannelRequestHandler VirtualChannelRequest;
         public event TS_FRAME_ACKNOWLEDGE_PDUHandler TS_FRAME_ACKNOWLEDGE_PDUReceived;
         public event RDSTLS_AuthenticationRequestPDUwithPasswordCredentialsHandler RDSTLS_AuthenticationRequestPDUwithPasswordCredentialsReceived;
+        public event RDSTLS_AuthenticationRequestPDUwithAutoReconnectCookieHandler RDSTLS_AuthenticationRequestPDUwithAutoReconnectCookieReceived;
         #endregion
 
         #region Constructor
@@ -1425,9 +1426,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                             logonInfoVersion2.Size = 576;
                             logonInfoVersion2.SessionId = 0;
                             logonInfoVersion2.cbDomain = tsInfoPacket.cbDomain;
-                            logonInfoVersion2.Domain = tsInfoPacket.Domain;
+                            logonInfoVersion2.Domain = tsInfoPacket.Domain.Trim('\0');
                             logonInfoVersion2.cbUserName = tsInfoPacket.cbUserName;
-                            logonInfoVersion2.UserName = tsInfoPacket.UserName;
+                            logonInfoVersion2.UserName = tsInfoPacket.UserName.Trim('\0');
                             logonInfoVersion2.Pad = new byte[558];
 
                             saveSessionPdu = rdpbcgrServerStack.CreateSaveSessionInfoPdu(sessionContext, logonInfoVersion2);
@@ -1436,9 +1437,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                         else
                         {
                             logonInfoVersion1.cbDomain = tsInfoPacket.cbDomain;
-                            logonInfoVersion1.Domain = tsInfoPacket.Domain;
+                            logonInfoVersion1.Domain = tsInfoPacket.Domain.Trim('\0');
                             logonInfoVersion1.cbUserName = tsInfoPacket.cbUserName;
-                            logonInfoVersion1.UserName = tsInfoPacket.UserName;
+                            logonInfoVersion1.UserName = tsInfoPacket.UserName.Trim('\0');
                             logonInfoVersion1.SessionId = 0;
 
                             saveSessionPdu = rdpbcgrServerStack.CreateSaveSessionInfoPdu(sessionContext, logonInfoVersion1);
@@ -1672,6 +1673,32 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             }
         }
 
+        private byte[] EncodeCertificate(X509Certificate2 certificate)
+        {
+            var container = new TARGET_CERTIFICATE_CONTAINER();
+
+            container.elements = new CERTIFICATE_META_ELEMENT[1];
+
+            var element = new CERTIFICATE_META_ELEMENT();
+
+            element.type = (UInt32)CERTIFICATE_META_ELEMENT_TypeEnum.ELEMENT_TYPE_CERTIFICATE;
+
+            element.encoding = (UInt32)CERTIFICATE_META_ELEMENT_EncodingEnum.ENCODING_TYPE_ASN1_DER;
+
+            element.elementSize = (UInt32)certificate.RawData.Length;
+
+            element.elementData = certificate.RawData;
+
+            container.elements[0] = element;
+
+            // Encode using Base64 in Unicode format
+            var encodedString = Convert.ToBase64String(container.Encode());
+
+            var result = RdpbcgrUtility.EncodeUnicodeStringToBytes(encodedString);
+
+            return result;
+        }
+
         public void SendServerRedirectionPduRDSTLS()
         {
             UnicodeEncoding encoder = new UnicodeEncoding();
@@ -1705,7 +1732,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             redirectPacket.RedirFlags |= RedirectionFlags.LB_REDIRECTION_GUID;
 
             var certificate = new X509Certificate2(certFile, certPwd);
-            redirectPacket.TargetCertificate = RdpbcgrUtility.EncodeCertificate(certificate);
+            redirectPacket.TargetCertificate = EncodeCertificate(certificate);
             redirectPacket.RedirFlags |= RedirectionFlags.LB_TARGET_CERTIFICATE;
 
             redirectPacket.TargetFQDN = RdpbcgrTestData.Test_FullQualifiedDomainName;
@@ -2407,13 +2434,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                         }
                         else
                         {
-                            site.Log.Add(LogEntryKind.TestInProgress, "Received and cached Pdu: {0}.", receivedPdu.GetType());
+                            site.Log.Add(LogEntryKind.Debug, "Received and cached Pdu: {0}.", receivedPdu.GetType());
                             pduCache.Add(receivedPdu);
                         }
                     }
                     else
                     {
-                        site.Log.Add(LogEntryKind.TestInProgress, "Received and cached Pdu: {0}.", receivedPdu.GetType());
+                        site.Log.Add(LogEntryKind.Debug, "Received and cached Pdu: {0}.", receivedPdu.GetType());
                         pduCache.Add(receivedPdu);
                     }
                 }
@@ -2484,13 +2511,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                         }
                         else
                         {
-                            site.Log.Add(LogEntryKind.TestInProgress, "Received and cached Pdu: {0}.", receivedPdu.GetType());
+                            site.Log.Add(LogEntryKind.Debug, "Received and cached Pdu: {0}.", receivedPdu.GetType());
                             pduCache.Add(receivedPdu);
                         }
                     }
                     else
                     {
-                        site.Log.Add(LogEntryKind.TestInProgress, "Received and cached Pdu: {0}.", receivedPdu.GetType());
+                        site.Log.Add(LogEntryKind.Debug, "Received and cached Pdu: {0}.", receivedPdu.GetType());
                         pduCache.Add(receivedPdu);
                     }
                 }
@@ -2561,13 +2588,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                         }
                         else
                         {
-                            site.Log.Add(LogEntryKind.TestInProgress, "Received and cached Pdu: {0}.", receivedPdu.GetType());
+                            site.Log.Add(LogEntryKind.Debug, "Received and cached Pdu: {0}.", receivedPdu.GetType());
                             pduCache.Add(receivedPdu);
                         }
                     }
                     else
                     {
-                        site.Log.Add(LogEntryKind.TestInProgress, "Received and cached Pdu: {0}.", receivedPdu.GetType());
+                        site.Log.Add(LogEntryKind.Debug, "Received and cached Pdu: {0}.", receivedPdu.GetType());
                         pduCache.Add(receivedPdu);
                     }
                 }
@@ -2716,6 +2743,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             else if (request is RDSTLS_AuthenticationRequestPDUwithPasswordCredentials)
             {
                 ReceivedRDSTLS_AuthenticationRequestPDUwithPasswordCredentials((RDSTLS_AuthenticationRequestPDUwithPasswordCredentials)request);
+            }
+            else if (request is RDSTLS_AuthenticationRequestPDUwithAutoReconnectCookie)
+            {
+                ReceivedRDSTLS_AuthenticationRequestPDUwithAutoReconnectCookie((RDSTLS_AuthenticationRequestPDUwithAutoReconnectCookie)request);
             }
 
             TS_FRAME_ACKNOWLEDGE_PDU ackPdu = request as TS_FRAME_ACKNOWLEDGE_PDU;
@@ -3053,6 +3084,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             if (RDSTLS_AuthenticationRequestPDUwithPasswordCredentialsReceived != null)
             {
                 RDSTLS_AuthenticationRequestPDUwithPasswordCredentialsReceived(pdu);
+            }
+        }
+
+        private void ReceivedRDSTLS_AuthenticationRequestPDUwithAutoReconnectCookie(RDSTLS_AuthenticationRequestPDUwithAutoReconnectCookie pdu)
+        {
+            if (RDSTLS_AuthenticationRequestPDUwithAutoReconnectCookieReceived != null)
+            {
+                RDSTLS_AuthenticationRequestPDUwithAutoReconnectCookieReceived(pdu);
             }
         }
 

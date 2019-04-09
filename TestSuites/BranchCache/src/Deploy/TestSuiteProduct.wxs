@@ -313,8 +313,8 @@
         <ComponentGroupRef Id="TESTSUITE_PTFCONFIG_FILES"/>
         <ComponentGroupRef Id="BATCH_FILES" />
         <ComponentGroupRef Id="BIN_FILES" />
+        <ComponentGroupRef Id="Scripts_FILES" />
         <ComponentGroupRef Id="COMMON_BATCH_FILES" />
-
       </Feature>
 
       <Feature Id="SutFeature" Level="1">

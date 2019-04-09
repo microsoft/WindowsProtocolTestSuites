@@ -1,0 +1,78 @@
+<lab>
+	<core>
+		<username>Administrator</username>
+		<password>Password01!2</password>
+		<legacyclient>true</legacyclient>
+		<basecpu>1</basecpu>
+		<Description>DC x 1 and Member x 1 (NIC x 1)</Description>
+	</core>
+
+	<network>
+		<vnet>
+			<hostisgateway>true</hostisgateway>
+			<name>MS-ADFSPIP-Internal</name>
+			<ip>30.10.1.254</ip>
+			<subnet>255.255.255.0</subnet>
+		</vnet>
+	</network>
+	<servers>
+		<vm>
+			<role>dc</role>
+			<installorder>1</installorder>
+			<hypervname>MS-ADFSPIP-DCCA</hypervname>  
+			<name>DC01</name>
+			<username>Administrator</username>   
+			<password>Password01!2</password>	  
+			<domain>contoso.com</domain>
+			<isdc>true</isdc>	  
+			<vnet>MS-ADFSPIP-Internal</vnet>
+			<ip>30.10.1.1</ip>
+			<subnet>255.255.255.0</subnet>
+			<gateway/>		
+			<dns>127.0.0.1</dns>		
+			<memory>1024</memory> 	  
+			<skipwaitingforpostscript>false</skipwaitingforpostscript>
+			<postscript>Disable_Firewall.ps1;Config-DCCA.ps1</postscript>
+		</vm>
+
+		<vm>
+			<role>proxy</role>
+			<installorder>2</installorder>
+			<hypervname>MS-ADFSPIP-PROXY</hypervname>
+			<name>PROXY01</name>
+			<username>Administrator</username>
+			<password>Password01!2</password>
+			<vnet>MS-ADFSPIP-Internal</vnet>
+			<ip>30.10.1.50</ip>
+			<subnet>255.255.255.0</subnet>
+			<gateway/>
+			<dns>30.10.1.1</dns>
+			<memory>2048</memory>
+			<skipwaitingforpostscript>false</skipwaitingforpostscript>
+			<postscript>Disable_Firewall.ps1;Config-PROXY.ps1</postscript>
+		</vm>
+
+		<vm>
+			<role>driver</role>
+			<installorder>3</installorder>
+			<hypervname>MS-ADFSPIP-DRIVER</hypervname>
+			<name>DRIVER01</name>
+			<username>Administrator</username>
+			<password>Password01!2</password>
+			<domain>contoso.com</domain>
+			<vnet>MS-ADFSPIP-Internal</vnet>
+			<ip>30.10.1.100</ip>
+			<subnet>255.255.255.0</subnet>
+			<gateway/>
+			<dns>30.10.1.1</dns>
+			<memory>2048</memory>
+			<skipwaitingforpostscript>false</skipwaitingforpostscript>
+			<postscript>Disable_Firewall.ps1;Config-Driver.ps1</postscript>
+			<tools>
+				<tool name="SE" MSIName="SpecExplorer.msi" version="3.5.3146.0" CPUArchitecture="x86" />
+                <tool name="PTF" MSIName="ProtocolTestFrameworkInstaller.msi" version="1.0.6000.0" CPUArchitecture="x86" />
+				<TestsuiteMSI MSIName="MS-ADFSPIP-TestSuite-ClientEP.msi" targetEndpoint="" />
+			</tools>
+		</vm>
+	</servers>	
+</lab>

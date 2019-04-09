@@ -95,7 +95,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
                 SendRDSTLSCapabilityPDU();
 
-                ExpectPacket<RDSTLS_AuthenticationRequestPDUwithPasswordCredentials>(sessionContext, pduWaitTimeSpan);
+                if (expectAutoReconnect)
+                {
+                    ExpectPacket<RDSTLS_AuthenticationRequestPDUwithAutoReconnectCookie>(sessionContext, pduWaitTimeSpan);
+                }
+                else
+                {
+                    ExpectPacket<RDSTLS_AuthenticationRequestPDUwithPasswordCredentials>(sessionContext, pduWaitTimeSpan);
+                }
 
                 sessionContext.IsAuthenticatingRDSTLS = false;
 

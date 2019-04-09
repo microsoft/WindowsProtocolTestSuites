@@ -2,21 +2,21 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using Microsoft.Modeling;
+using System.Collections.Generic;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 {
     public class Smb2ServerConnection
     {
-        public SequenceContainer<ulong> CommandSequenceWindow;
+        public List<ulong> CommandSequenceWindow;
 
-        public MapContainer<ulong, Smb2ServerRequest> RequestList;
+        public Dictionary<ulong, Smb2ServerRequest> RequestList;
 
         public SESSION_SETUP_Request_Capabilities_Values ClientCapabilities;
 
         public ushort NegotiateDialect;
 
-        public MapContainer<ulong, Smb2ServerRequest> AsyncCommandList;
+        public Dictionary<ulong, Smb2ServerRequest> AsyncCommandList;
 
         public string Dialect;
 
@@ -30,7 +30,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
         public Smb2TransportType TransportName;
 
-        public MapContainer<ulong, Smb2ServerSession> SessionTable;
+        public Dictionary<ulong, Smb2ServerSession> SessionTable;
 
         // --------
         // SMB2.1

@@ -176,24 +176,33 @@ namespace Microsoft.Protocols.TestSuites
         /// <returns>An IP address list specified by hostname or IP</returns>
         public static List<IPAddress> GetHostIPs(ITestSite site, string hostnameOrIP)
         {
-            try
+            List<IPAddress> ipList = new List<IPAddress>();
+            IPAddress address;
+
+            if (IPAddress.TryParse(hostnameOrIP, out address))
             {
-                IPHostEntry host = Dns.GetHostEntry(hostnameOrIP);
-                List<IPAddress> ipList = new List<IPAddress>(); 
-                foreach (IPAddress ip in host.AddressList)
+                ipList.Add(address);
+            }
+            else
+            {
+                try
                 {
-                    if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    IPHostEntry host = Dns.GetHostEntry(hostnameOrIP);
+                    foreach (IPAddress ip in host.AddressList)
                     {
-                        ipList.Add(ip);
+                        if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                        {
+                            ipList.Add(ip);
+                        }
                     }
                 }
-                return ipList;
+                catch (Exception e)
+                {
+                    site.Assume.Fail(String.Format("GetHostIPs failed with exception: {0}.", e.Message));
+                }
             }
-            catch (Exception e)
-            {
-                site.Assume.Fail(String.Format("GetHostIPs failed with exception: {0}.", e.Message));
-            }
-            return null;
+
+            return ipList;
         }
     }
 }

@@ -73,8 +73,9 @@ catch
 
 # Show prompt
 Write-Host "The computer is going to restart..." -ForegroundColor Yellow
-if($AutoRestart -eq $false) { Pause } # Waiting for key stoke
-else { sleep 3 } # Auto restart
-
-# Restart
-Restart-Computer -Force
+if($AutoRestart -eq $true) { 
+    sleep 3
+    # Auto restart
+    # Restart
+    Restart-Computer -Force
+ } 

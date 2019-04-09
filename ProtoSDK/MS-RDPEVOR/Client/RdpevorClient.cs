@@ -47,8 +47,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpevor.Client
         {
             try
             {
-                rdpevorControlDVC = rdpedycClient.ExpectChannel(timeout, RdpevorControlChannelName, transportType, OnDataReceived);
-                rdpevorDataDVC = rdpedycClient.ExpectChannel(timeout, RdpevorDataChannelName, transportType, OnDataReceived);
+                rdpevorControlDVC = rdpedycClient.ExpectChannel(timeout, RdpevorControlChannelName, transportType);
+                rdpevorDataDVC = rdpedycClient.ExpectChannel(timeout, RdpevorDataChannelName, transportType);
             }
             catch
             {

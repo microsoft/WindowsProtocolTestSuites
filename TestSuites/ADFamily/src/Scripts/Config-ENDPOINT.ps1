@@ -355,18 +355,18 @@ Function Phase4
         if($ptfconfig.DirectoryName.Contains("Server\TestCode\TestSuite"))
         {
             $ParentPath = $ptfconfig.DirectoryName.Replace("\Source\Server\TestCode\TestSuite","")
-            $TDXmlPath = "$ParentPath\Docs\Common-TD-XML\MS-ADA1\*,$ParentPath\Docs\Common-TD-XML\MS-ADA2\*,$ParentPath\Docs\Win8-TD-XML\MS-ADA2\*,$ParentPath\Docs\Common-TD-XML\MS-ADA3\*,$ParentPath\Docs\Common-TD-XML\MS-ADSC\*,$ParentPath\Docs\Win8-TD-XML\MS-ADSC\*"
-            $LdsTDXmlPath = "$ParentPath\Docs\Common-TD-XML\MS-ADLS\*,$ParentPath\Docs\Win8-TD-XML\MS-ADLS\* "
-            $OpenXmlPath2016 = "$ParentPath\Docs\Win2016-TD-XML\DS\*"
-            $LdsOpenXmlPath2016 = "$ParentPath\Docs\Win2016-TD-XML\LDS\*"
+            $TDXmlPath = "$ParentPath\Data\Common-TD-XML\MS-ADA1\*,$ParentPath\Data\Common-TD-XML\MS-ADA2\*,$ParentPath\Data\Win8-TD-XML\MS-ADA2\*,$ParentPath\Data\Common-TD-XML\MS-ADA3\*,$ParentPath\Data\Common-TD-XML\MS-ADSC\*,$ParentPath\Data\Win8-TD-XML\MS-ADSC\*"
+            $LdsTDXmlPath = "$ParentPath\Data\Common-TD-XML\MS-ADLS\*,$ParentPath\Data\Win8-TD-XML\MS-ADLS\* "
+            $OpenXmlPath2016 = "$ParentPath\Data\Win2016-TD-XML\DS\*"
+            $LdsOpenXmlPath2016 = "$ParentPath\Data\Win2016-TD-XML\LDS\*"
         }
         else
         {
             $ParentPath = $ptfconfig.DirectoryName.Replace("\Bin","")
-            $TDXmlPath = "$ParentPath\Docs\Common-TD-XML\MS-ADA1\*,$ParentPath\Docs\Common-TD-XML\MS-ADA2\*,$ParentPath\Docs\Win8-TD-XML\MS-ADA2\*,$ParentPath\Docs\Common-TD-XML\MS-ADA3\*,$ParentPath\Docs\Common-TD-XML\MS-ADSC\*,$ParentPath\Docs\Win8-TD-XML\MS-ADSC\*"
-            $LdsTDXmlPath = "$ParentPath\Docs\Common-TD-XML\MS-ADLS\*,$ParentPath\Docs\Win8-TD-XML\MS-ADLS\* "
-            $OpenXmlPath2016 = "$ParentPath\Docs\Win2016-TD-XML\DS\*"
-            $LdsOpenXmlPath2016 = "$ParentPath\Docs\Win2016-TD-XML\LDS\*"
+            $TDXmlPath = "$ParentPath\Data\Common-TD-XML\MS-ADA1\*,$ParentPath\Data\Common-TD-XML\MS-ADA2\*,$ParentPath\Data\Win8-TD-XML\MS-ADA2\*,$ParentPath\Data\Common-TD-XML\MS-ADA3\*,$ParentPath\Data\Common-TD-XML\MS-ADSC\*,$ParentPath\Data\Win8-TD-XML\MS-ADSC\*"
+            $LdsTDXmlPath = "$ParentPath\Data\Common-TD-XML\MS-ADLS\*,$ParentPath\Data\Win8-TD-XML\MS-ADLS\* "
+            $OpenXmlPath2016 = "$ParentPath\Data\Win2016-TD-XML\DS\*"
+            $LdsOpenXmlPath2016 = "$ParentPath\Data\Win2016-TD-XML\LDS\*"
         }
         if($domainfunctionallv -ge "6")
         {

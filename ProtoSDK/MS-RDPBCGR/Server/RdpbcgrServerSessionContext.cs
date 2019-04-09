@@ -1988,7 +1988,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 clientRandom = null;
                 serverRandom = null;
                 lastDisconnectReason = 0;
-                lastErrorInfo = errorInfo_Values.ERRINFO_NOERROR;
+                lastErrorInfo = errorInfo_Values.ERRINFO_NONE;
                 lastStatusInfo = StatusCode_Values.TS_STATUS_NO_STATUS;
                 pduCountToUpdate = ConstValue.PDU_COUNT_TO_UPDATE_SESSION_KEY;
                 identity = null;

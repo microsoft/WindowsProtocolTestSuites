@@ -7,9 +7,8 @@ Param(
 [String]$scriptsPath  = [System.IO.Path]::GetDirectoryName($myInvocation.MyCommand.Definition)
 )
 
-pushd $scriptsPath
+Push-Location $scriptsPath
 $dataPath = "$scriptsPath\..\Data"
-$toolPath = "$env:HOMEDRIVE\Test\Tools" #For Temporarily use, will be removed in released version.
 
 #----------------------------------------------------------------------------
 # Starting script
@@ -21,6 +20,8 @@ if(Test-Path -Path $settingFile)
     $logFile            = $logPath + "\Config-TerminalClient.ps1.log"
     $userNameInTC       = .\Get-Parameter.ps1 $settingFile userNameInTC
     $userPwdInTC        = .\Get-Parameter.ps1 $settingFile userPwdInTC
+	$credSSPUser        = .\Get-Parameter.ps1 $settingFile CredSSPUser
+    $credSSPPwd         = .\Get-Parameter.ps1 $settingFile CredSSPPwd
     $domainName         = .\Get-Parameter.ps1 $settingFile domainName
     $dcComputerName     = .\Get-Parameter.ps1 $settingFile dcComputerName
     $tcComputerName     = .\Get-Parameter.ps1 $settingFile tcComputerName
@@ -57,12 +58,14 @@ Start-Transcript $logFile -Append
 #-----------------------------------------------------
 # Write value for all the parameters
 #-----------------------------------------------------
-Write-Host "EXECUTING [Config-DriverComputer.ps1] ..." -foregroundcolor cyan
+Write-Host "EXECUTING [Config-TerminalClient.ps1] ..." -foregroundcolor cyan
 Write-Host "`$scriptsPath        = $scriptsPath"
 Write-Host "`$logPath            = $logPath"       
 Write-Host "`$logFile            = $logFile"
 Write-Host "`$userNameInTC       = $userNameInTC" 
 Write-Host "`$userPwdInTC        = $userPwdInTC"
+Write-Host "`$credSSPUser        = $credSSPUser" 
+Write-Host "`$credSSPPwd         = $credSSPPwd"
 Write-Host "`$domainName         = $domainName" 
 Write-Host "`$dcComputerName     = $dcComputerName"
 Write-Host "`$tcComputerName     = $tcComputerName" 
@@ -86,10 +89,20 @@ cmd /c netsh advfirewall set allprofile state off 2>&1 | Write-Host
 #-----------------------------------------------------
 # Enable Powershell Remoting
 #-----------------------------------------------------
-Set-NetConnectionProfile -NetworkCategory Private -ErrorAction Ignore
-Enable-PSRemoting -Force
-Set-Item wsman:\localhost\client\trustedhosts *  -Force
-Restart-Service WinRM
+if(Test-WSMan -ComputerName $sutSetting.ip){
+    Write-Host "WinRM is running"
+}else{
+    Set-NetConnectionProfile -NetworkCategory Private -ErrorAction Ignore
+    Enable-PSRemoting -Force
+    Set-Item wsman:\localhost\client\trustedhosts *  -Force
+    Restart-Service WinRM
+}
+
+#-----------------------------------------------------
+# Get IP address of the driver computer
+#-----------------------------------------------------
+$ipV4 = Test-Connection $driverComputerName -Count 1 | Select -ExpandProperty IPV4Address
+$driverComputerIP = $ipV4.IPAddressToString
 
 #-----------------------------------------------------
 # Modify ChangeResolution.ps1 and ChangeOrientation.ps1
@@ -153,42 +166,20 @@ if (Test-Path -Path "$dataPath\Base\DirectCredSSPFullScreen.RDP")
     Copy-Item $dataPath\DirectCredSSPFullScreen.RDP $dataPath\Base\DirectCredSSPFullScreen.RDP -Force
 }
 
-if (Test-Path -Path "$dataPath\Base\DirectTls.RDP")
-{
-    Copy-Item $dataPath\Base\DirectTls.RDP $dataPath\DirectTls.RDP -Force
-}else
-{
-    Copy-Item $dataPath\DirectTls.RDP $dataPath\Base\DirectTls.RDP -Force
-}
-
-if (Test-Path -Path "$dataPath\Base\DirectTlsFullScreen.RDP")
-{
-    Copy-Item $dataPath\Base\DirectTlsFullScreen.RDP $dataPath\DirectTlsFullScreen.RDP -Force
-}else
-{
-    Copy-Item $dataPath\DirectTlsFullScreen.RDP $dataPath\Base\DirectTlsFullScreen.RDP -Force
-}
-
 "`nfull address:s:${driverComputerName}:${listeningPort}" | out-file "$dataPath\Negotiate.RDP" -Append -Encoding Unicode
 "`nfull address:s:${driverComputerName}:${listeningPort}" | out-file "$dataPath\DirectCredSSP.RDP" -Append -Encoding Unicode
-"`nfull address:s:${driverComputerName}:${listeningPort}" | out-file "$dataPath\DirectTls.RDP" -Append -Encoding Unicode
 "`nfull address:s:${driverComputerName}:${listeningPort}" | out-file "$dataPath\NegotiateFullScreen.RDP" -Append -Encoding Unicode
 "`nfull address:s:${driverComputerName}:${listeningPort}" | out-file "$dataPath\DirectCredSSPFullScreen.RDP" -Append -Encoding Unicode
-"`nfull address:s:${driverComputerName}:${listeningPort}" | out-file "$dataPath\DirectTlsFullScreen.RDP" -Append -Encoding Unicode
 
 "`n$compressionStr" | out-file "$dataPath\Negotiate.RDP" -Append -Encoding Unicode
 "`n$compressionStr" | out-file "$dataPath\DirectCredSSP.RDP" -Append -Encoding Unicode
-"`n$compressionStr" | out-file "$dataPath\DirectTls.RDP" -Append -Encoding Unicode
 "`n$compressionStr" | out-file "$dataPath\NegotiateFullScreen.RDP" -Append -Encoding Unicode
 "`n$compressionStr" | out-file "$dataPath\DirectCredSSPFullScreen.RDP" -Append -Encoding Unicode
-"`n$compressionStr" | out-file "$dataPath\DirectTlsFullScreen.RDP" -Append -Encoding Unicode
 
 "`nusbdevicestoredirect:s:*" | out-file "$dataPath\Negotiate.RDP" -Append -Encoding Unicode
 "`nusbdevicestoredirect:s:*" | out-file "$dataPath\DirectCredSSP.RDP" -Append -Encoding Unicode
-"`nusbdevicestoredirect:s:*" | out-file "$dataPath\DirectTls.RDP" -Append -Encoding Unicode
 "`nusbdevicestoredirect:s:*" | out-file "$dataPath\NegotiateFullScreen.RDP" -Append -Encoding Unicode
 "`nusbdevicestoredirect:s:*" | out-file "$dataPath\DirectCredSSPFullScreen.RDP" -Append -Encoding Unicode
-"`nusbdevicestoredirect:s:*" | out-file "$dataPath\DirectTlsFullScreen.RDP" -Append -Encoding Unicode
 
 Write-Host "Allow RDP connecting to unkown publisher for $driverComputerName..."
 cmd /c reg add "HKCU\Software\Microsoft\Terminal Server Client\LocalDevices" /v $driverComputerName /t REG_DWORD /d 68 /F
@@ -199,17 +190,11 @@ cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN Negotiate_RDPConnect /TR "$
 Write-Host "Creating task to trigger client to initiate a RDP connection using CredSSP security protocol with Direct Approach..."
 cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN DirectCredSSP_RDPConnect /TR "$dataPath\DirectCredSSP.RDP" /IT /F
 
-Write-Host "Creating task to trigger client to initiate a RDP connection using TLS security protocol with Direct Approach..."
-cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN DirectTls_RDPConnect /TR "$dataPath\DirectTls.RDP" /IT /F
-
 Write-Host "Creating task to trigger client to initiate a full screen RDP connection with Negotiation Approach..."
 cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN Negotiate_FullScreen_RDPConnect /TR "$dataPath\NegotiateFullScreen.RDP" /IT /F
 
 Write-Host "Creating task to trigger client to initiate a full screen RDP connection using CredSSP security protocol with Direct Approach..."
 cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN DirectCredSSP_FullScreen_RDPConnect /TR "$dataPath\DirectCredSSPFullScreen.RDP" /IT /F
-
-Write-Host "Creating task to trigger client to initiate a full screen RDP connection using TLS security protocol with Direct Approach..."
-cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN DirectTls_FullScreen_RDPConnect /TR "$dataPath\DirectTlsFullScreen.RDP" /IT /F
 
 Write-Host "Creating task to maximize mstsc window..."
 cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN MaximizeMstsc /TR "powershell $scriptsPath\MaximizeMstsc.ps1" /IT /F
@@ -228,14 +213,22 @@ New-Item -type Directory HKCU:\Software\Microsoft\"Terminal Server Client"\Serve
 New-Item -type Directory HKCU:\Software\Microsoft\"Terminal Server Client"\Servers\$driverComputerName -Force
 if ($workgroupDomain.ToUpper() -eq "DOMAIN")
 {
-    $usernameHint = "$domainName\administrator"
+    $usernameHint = "$domainName\$taskUser"
 }else
 {
-    $usernameHint = "$driverComputerName\administrator"
+    $usernameHint = "$driverComputerName\$taskUser"
 }
 New-ItemProperty HKCU:\Software\Microsoft\"Terminal Server Client"\Servers\$driverComputerName UsernameHint -value $usernameHint -PropertyType string -Force
 
-New-ItemProperty HKCU:\Software\Microsoft\"Terminal Server Client"\LocalDevices $driverComputerName -value 580 -PropertyType DWORD -Force
+if($driverComputerIP -ne $driverComputerName)
+{
+    # Create registry key for IP address
+	New-Item -type Directory HKCU:\Software\Microsoft\"Terminal Server Client"\Servers\$driverComputerIP -Force
+	New-ItemProperty HKCU:\Software\Microsoft\"Terminal Server Client"\Servers\$driverComputerIP UsernameHint -value $usernameHint -PropertyType string -Force
+}
+
+# To avoid warning dialog
+New-ItemProperty HKCU:\Software\Microsoft\"Terminal Server Client"\LocalDevices $driverComputerName -value 588 -PropertyType DWORD -Force
 
 #-----------------------------------------------------
 # Edit registery.
@@ -251,9 +244,19 @@ New-Item -type Directory HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProvider
 New-ItemProperty HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\"TLS 1.2"\Client Enabled -value 0 -PropertyType DWORD -Force
 
 #-----------------------------------------------------
+# Save CredSSP credential to Credential Manager
+#-----------------------------------------------------
+cmd /c cmdkey /add:"Domain:target=TERMSRV/$driverComputerName" /user:"$driverComputerName\$credSSPUser" /pass:$credSSPPwd
+if($driverComputerIP -ne $driverComputerName)
+{
+    # Save for IP address
+	cmd /c cmdkey /add:"Domain:target=TERMSRV/$driverComputerIP" /user:"$driverComputerName\$credSSPUser" /pass:$credSSPPwd
+}
+
+#-----------------------------------------------------
 # Finished to config Terminal Client
 #-----------------------------------------------------
-popd
+Pop-Location
 Write-Host "Write signal file: config.finished.signal to system drive."
 cmd /C ECHO CONFIG FINISHED>$env:HOMEDRIVE\config.finished.signal
 
@@ -261,7 +264,7 @@ cmd /C ECHO CONFIG FINISHED>$env:HOMEDRIVE\config.finished.signal
 # Ending script
 #----------------------------------------------------------------------------
 Write-Host "Config finished."
-Write-Host "EXECUTE [Config-DriverComputer.ps1] FINISHED (NOT VERIFIED)."
+Write-Host "EXECUTE [Config-TerminalClient.ps1] FINISHED (NOT VERIFIED)."
 
 # cmd /C Pause
 

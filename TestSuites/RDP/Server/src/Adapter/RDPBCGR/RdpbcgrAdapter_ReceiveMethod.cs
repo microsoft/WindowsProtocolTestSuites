@@ -1,15 +1,10 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
-using System.Net;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
+using System;
+using System.Linq;
 
 namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 {
@@ -835,6 +830,21 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 return;
             }
 
+            // Verify the pdu size
+            int pduSize = RdpbcgrUtility.GetPduSize(updatePdu);
+            int length = RdpbcgrUtility.CalculateFpUpdatePduLength(updatePdu.length1, updatePdu.length2);
+            Site.Assert.AreEqual(pduSize, length, "The length ({0}) of TS_FP_UPDATE_PDU calculated by length1 & length2 must be equal to the real size ({1}) of the pdu.", length, pduSize);
+
+            if ((0x7f & updatePdu.length1) == updatePdu.length1)
+            {
+                // length1's most significant bit is not set
+                Site.Assert.AreEqual(true, updatePdu.length1 >= 1 && updatePdu.length1 <= 127, "If the most significant bit of the length1 field is not set, then the size of the PDU is in the range 1 to 127 bytes ");
+            }
+            else
+            {
+                Site.Assert.AreEqual(true, length <= 16383, "If the most significant bit of the length1 field is set, the overall PDU length SHOULD be less than or equal to 16,383 bytes.");
+            }
+
             if (updatePdu.fpOutputUpdates != null)
             {
                 foreach (TS_FP_UPDATE update in updatePdu.fpOutputUpdates)
@@ -1032,16 +1042,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 return;
             }
 
-            Site.Assert.IsTrue(serverCoreData.version == TS_UD_SC_CORE_version_Values.V1
-                || serverCoreData.version == TS_UD_SC_CORE_version_Values.V2
-                || serverCoreData.version == TS_UD_SC_CORE_version_Values.V3
-                || serverCoreData.version == TS_UD_SC_CORE_version_Values.V4
-                || serverCoreData.version == TS_UD_SC_CORE_version_Values.V5
-                || serverCoreData.version == TS_UD_SC_CORE_version_Values.V6
-                || serverCoreData.version == TS_UD_SC_CORE_version_Values.V7
-                || serverCoreData.version == TS_UD_SC_CORE_version_Values.V8
-                || serverCoreData.version == TS_UD_SC_CORE_version_Values.V9,
-                "The version field of TS_UD_SC_CORE contains value: 0x00080001,0x00080004,0x00080005,0x00080006,0x00080007,0x00080008,0x00080009,0x0008000A,0x0008000B.");
+            var serverVersions = Enum.GetValues(typeof(TS_UD_SC_CORE_version_Values)).Cast<uint>();
+
+            Site.Assert.IsTrue(
+                serverVersions.Any(version => version == (uint)serverCoreData.version),
+                String.Format("The version field of TS_UD_SC_CORE contains value: {0}.", String.Join(", ", serverVersions.Select(version => String.Format("0x{0:X08}",version)))));
 
 
             uint flags =(uint)(requestedProtocols_Values.PROTOCOL_RDP_FLAG | requestedProtocols_Values.PROTOCOL_SSL_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_EX);

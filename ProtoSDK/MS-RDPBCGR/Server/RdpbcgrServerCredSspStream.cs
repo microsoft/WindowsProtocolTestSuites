@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 
@@ -429,26 +430,45 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 throw new ArgumentOutOfRangeException("count");
             }
 
-            byte[] outBuffer = new byte[count];
-            Array.Copy(buffer, offset, outBuffer, 0, count);
-
-            // Encrypt message
+            // Get stream attribute
             SecurityPackageContextStreamSizes streamSizes =
                 (SecurityPackageContextStreamSizes)context.QueryContextAttributes("SECPKG_ATTR_STREAM_SIZES");
-            SecurityBuffer messageBuffer = new SecurityBuffer(SecurityBufferType.Data, buffer);
-            SecurityBuffer headerBuffer = new SecurityBuffer(
-                SecurityBufferType.StreamHeader,
-                new byte[streamSizes.Header]);
-            SecurityBuffer trailerBuffer = new SecurityBuffer(
-                SecurityBufferType.StreamTrailer,
-                new byte[streamSizes.Trailer]);
-            SecurityBuffer emptyBuffer = new SecurityBuffer(SecurityBufferType.Empty, null);
 
-            context.Encrypt(headerBuffer, messageBuffer, trailerBuffer, emptyBuffer);
-            byte[] encryptedMsg = ArrayUtility.ConcatenateArrays(
-                headerBuffer.Buffer,
-                messageBuffer.Buffer,
-                trailerBuffer.Buffer);
+            int chunckSize = (int)streamSizes.MaximumMessage;
+            List<byte> byteList = new List<byte>();
+
+            while (count > 0)
+            {
+                int bufferSize = count;
+                if(bufferSize > chunckSize)
+                {
+                    bufferSize = chunckSize;
+                }
+
+                byte[] outBuffer = new byte[bufferSize];
+                Array.Copy(buffer, offset, outBuffer, 0, bufferSize);
+                count -= bufferSize;
+                offset += bufferSize;
+
+                // Encrypt Chunck
+                SecurityBuffer messageBuffer = new SecurityBuffer(SecurityBufferType.Data, outBuffer);
+                SecurityBuffer headerBuffer = new SecurityBuffer(
+                    SecurityBufferType.StreamHeader,
+                    new byte[streamSizes.Header]);
+                SecurityBuffer trailerBuffer = new SecurityBuffer(
+                    SecurityBufferType.StreamTrailer,
+                    new byte[streamSizes.Trailer]);
+                SecurityBuffer emptyBuffer = new SecurityBuffer(SecurityBufferType.Empty, null);
+
+                context.Encrypt(headerBuffer, messageBuffer, trailerBuffer, emptyBuffer);
+                byte[] encryptedChunck = ArrayUtility.ConcatenateArrays(
+                    headerBuffer.Buffer,
+                    messageBuffer.Buffer,
+                    trailerBuffer.Buffer);
+                byteList.AddRange(encryptedChunck);
+            }
+
+            byte[] encryptedMsg = byteList.ToArray();
             serverStream.Write(encryptedMsg, 0, encryptedMsg.Length);
         }
 

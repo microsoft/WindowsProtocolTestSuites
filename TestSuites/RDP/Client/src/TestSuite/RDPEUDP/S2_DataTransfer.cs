@@ -66,6 +66,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [Description("Verify the RDP client will send an ACK to acknowledge the package loss when detect a package loss in a reliable connection.")]
         public void S2_DataTransfer_AcknowledgeTest_AcknowlegeLossyPackage()
         {
+            CheckSecurityProtocolForMultitransport();
+
             Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
             StartRDPConnection();
 
@@ -153,6 +155,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [Description("Verify the RDP client support congestion control as a receiver.")]
         public void S2_DataTransfer_CongestionControlTest_ClientReceiveData()
         {
+            CheckSecurityProtocolForMultitransport();
+
             Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
             StartRDPConnection();
 
@@ -203,6 +207,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [Description("Verify the TLS handshake process on the reliable RDP-UDP connection.")]
         public void S2_DataTransfer_SecurityChannelCreation_ReliableConnection()
         {
+            CheckSecurityProtocolForMultitransport();
+
             Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
             StartRDPConnection();
 
@@ -233,6 +239,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [Description("Verify the DTLS handshake process on the lossy RDP-UDP connection.")]
         public void S2_DataTransfer_SecurityChannelCreation_LossyConnection()
         {
+            CheckSecurityProtocolForMultitransport();
+
             Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
             StartRDPConnection();
 
@@ -311,6 +319,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [Description("Verify the RDP client will send ACK correctly when sequence number is wrapped around")]
         public void S2_DataTransfer_SequenceNumberWrapAround()
         {
+            CheckSecurityProtocolForMultitransport();
+
             Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
             StartRDPConnection();
 
@@ -361,6 +371,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [Description("Verify the RDP client will add RDPUDP_FLAG_ACKDELAYED flag in uFlags field of ACK packet if client delayed the ack")]
         public void S2_DataTransfer_ClientAckDelay()
         {
+            CheckSecurityProtocolForMultitransport();
+
             Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
             StartRDPConnection();
 

@@ -53,7 +53,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         {
             if (Connected) return false;
             RdpeudpPacket SynAndAckPacket = new RdpeudpPacket();
-            SynAndAckPacket.fecHeader.snSourceAck = SnSourceAck;
+            SynAndAckPacket.fecHeader.snSourceAck = UInt32.MaxValue;
             SynAndAckPacket.fecHeader.uReceiveWindowSize = UReceiveWindowSize;
             SynAndAckPacket.fecHeader.uFlags = RDPUDP_FLAG.RDPUDP_FLAG_SYN;
             if (this.TransMode == TransportMode.Lossy)

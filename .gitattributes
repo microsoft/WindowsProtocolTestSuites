@@ -6,9 +6,6 @@
 
 * text=auto
 
-# Default
-*.* wintext
-
 # Build Specifications
 *.sln	wintext
 *.csproj	wintext
@@ -55,6 +52,10 @@
 *.rc	binary
 *.docx  binary
 *.pfx	binary
+*.jar	binary
+*.eot   binary
+*.ttf   binary
+*.woff  binary
 
 #Images (Binary)
 *.png binary

@@ -172,11 +172,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         {
             get
             {
-                return this.smbClient.Capability.IsUsePathThrough;
+                return this.smbClient.Capability.IsUsePassThrough;
             }
             set
             {
-                this.smbClient.Capability.IsUsePathThrough = value;
+                this.smbClient.Capability.IsUsePassThrough = value;
             }
         }
 

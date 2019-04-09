@@ -40,7 +40,6 @@
     <Compile Include="Bin.wxs" />
     <Compile Include="CommonBatch.wxs" />
     <Compile Include="DependencyCheckWarningDlg.wxs" />
-    <Compile Include="EndpointDlg.wxs" />
     <Compile Include="FileServer-TestSuite-ServerEP.wxs" />
     <Compile Include="TestSuiteMiscFiles.wxs" />
     <Compile Include="TestSuitePtfconfigFiles.wxs" />

@@ -5,6 +5,7 @@
 #############################################################################
 
 param(
+    $workingDir = "$env:SystemDrive\Temp",
     [ValidateSet("CreateCheckerTask", "StartChecker")]
     [string]$action="CreateCheckerTask"
 )
@@ -15,7 +16,7 @@ param(
 $scriptPath = Split-Path $MyInvocation.MyCommand.Definition -parent
 $scriptName = $MyInvocation.MyCommand.Path
 $env:Path += ";$scriptPath;$scriptPath\Scripts"
-
+Push-Location $workingDir
 #----------------------------------------------------------------------------
 # Start loging using start-transcript cmdlet
 #----------------------------------------------------------------------------
@@ -156,5 +157,6 @@ if($action -eq "StartChecker")
 #----------------------------------------------------------------------------
 # Ending
 #----------------------------------------------------------------------------
+Pop-Location
 Stop-Transcript
 exit 0

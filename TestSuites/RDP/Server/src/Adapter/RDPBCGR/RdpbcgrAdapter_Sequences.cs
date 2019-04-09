@@ -40,7 +40,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="supportRemoteFXCodec">Set the support of RemoteFX codecs</param>
         public void EstablishRDPConnection(requestedProtocols_Values requestedProtocols,
             string[] SVCNames,
-            CompressionType highestCompressionTypeSupported,
+            CompressionType highestCompressionTypeSupported = CompressionType.PACKET_COMPR_TYPE_RDP61,
             bool isReconnect = false,
             bool autoLogon = false,
             bool supportEGFX = false,
@@ -354,28 +354,41 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 // Send Sync event
                 TS_FP_INPUT_EVENT synchronizeEvent = this.GenerateFPSynchronizeEvent(false, true, false, false);
                 this.SendClientFastPathInputEventPDU(NegativeType.None, new TS_FP_INPUT_EVENT[] { synchronizeEvent });
+                Site.Log.Add(LogEntryKind.Comment, "TS_FP_INPUT_PDU with Synchronize Event has been sent");
 
                 // Send mouse event
                 TS_FP_INPUT_EVENT mouseEvent = this.GenerateFPMouseEvent(pointerFlags_Values.PTRFLAGS_WHEEL, RdpConstValue.X_POS, RdpConstValue.Y_POS);
                 this.SendClientFastPathInputEventPDU(NegativeType.None, new TS_FP_INPUT_EVENT[] { mouseEvent });
+                Site.Log.Add(LogEntryKind.Comment, "TS_FP_INPUT_PDU with Mouse Event has been sent");
 
                 TS_FP_INPUT_EVENT extendedMouseEvent = this.GenerateFPExtendedMouseEvent(TS_POINTERX_EVENT_pointerFlags_Values.PTRXFLAGS_BUTTON1, RdpConstValue.X_POS, RdpConstValue.Y_POS);
                 this.SendClientFastPathInputEventPDU(NegativeType.None, new TS_FP_INPUT_EVENT[] { extendedMouseEvent });
+                Site.Log.Add(LogEntryKind.Comment, "TS_FP_INPUT_PDU with Extended Mouse Event has been sent");
 
                 // Send keyboard event
                 TS_FP_INPUT_EVENT keyboardEvent = this.GenerateFPKeyboardEvent(TS_FP_KEYBOARD_EVENT_Eventflags.FASTPATH_INPUT_KBDFLAGS_EXTENDED, RdpConstValue.FP_KEY_CODE);
                 this.SendClientFastPathInputEventPDU(NegativeType.None, new TS_FP_INPUT_EVENT[] { keyboardEvent });
+                Site.Log.Add(LogEntryKind.Comment, "TS_FP_INPUT_PDU with Keyboard Event has been sent");
 
                 TS_FP_INPUT_EVENT unicodeKeyboardEvent = this.GenerateFPUnicodeKeyboardEvent(TS_FP_KEYBOARD_EVENT_Eventflags.FASTPATH_INPUT_KBDFLAGS_RELEASE, RdpConstValue.FP_UNICODE_CODE);
                 this.SendClientFastPathInputEventPDU(NegativeType.None, new TS_FP_INPUT_EVENT[] { unicodeKeyboardEvent });
+                Site.Log.Add(LogEntryKind.Comment, "TS_FP_INPUT_PDU with Unicode Keyboard Event has been sent");
+
+                if (IsServerSupportFastpathInputQoeTimestampEvent())
+                {
+                    // Send QoE Timestamp Event
+                    TS_FP_INPUT_EVENT qoeTimestampEvent = this.GenerateQoETimestampEvent((uint)DateTime.Now.Millisecond);
+                    this.SendClientFastPathInputEventPDU(NegativeType.None, new TS_FP_INPUT_EVENT[] { qoeTimestampEvent });
+                    Site.Log.Add(LogEntryKind.Comment, "TS_FP_INPUT_PDU with QoE Timestamp Event has been sent");
+                }
             }
             catch (System.IO.IOException ioE)
             {
-                Site.Assert.Fail("Send fast-path input packets failed, got IOException: {1}.", ioE.Message);
+                Site.Assert.Fail("Send fast-path input packets failed, got IOException: {0}.", ioE.Message);
             }
             catch (InvalidOperationException invalidE)
             {
-                Site.Assert.Fail("Send fast-path input packets failed, got InvalidOperationException: {1}.", invalidE.Message);
+                Site.Assert.Fail("Send fast-path input packets failed, got InvalidOperationException: {0}.", invalidE.Message);
             }
         }
 

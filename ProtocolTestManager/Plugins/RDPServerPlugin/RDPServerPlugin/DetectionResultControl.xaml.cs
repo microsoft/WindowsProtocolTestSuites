@@ -215,15 +215,12 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
             // Add protocolItems
             AddResultItem(ref protocolItems, "MS-RDPBCGR", true);
+            AddResultItem(ref protocolItems, "MS-RDPEDYC", detectionInfo.IsSupportRDPEDYC);
+            AddResultItem(ref protocolItems, "MS-RDPEMT", detectionInfo.IsSupportRDPEMT);
 
             // Add featuresItems
-
             AddResultItem(ref featureItems, "Auto Reconnect", detectionInfo.IsSupportAutoReconnect);
-            AddResultItem(ref featureItems, "Server Redirection", detectionInfo.IsSupportServerRedirection);
-            AddResultItem(ref featureItems, "Network Characteristics Detection", detectionInfo.IsSupportNetcharAutoDetect);
-            
-            AddResultItem(ref featureItems, "Connection Health Monitoring", detectionInfo.IsSupportHeartbeatPdu);
-            AddResultItem(ref featureItems, "Static Virtual Channels", detectionInfo.IsSupportStaticVirtualChannel);
+            AddResultItem(ref featureItems, "FastPath Input", detectionInfo.IsSupportFastPathInput);
 
             this.resultItemMapList.Add(protocolItems);
             this.resultItemMapList.Add(featureItems);

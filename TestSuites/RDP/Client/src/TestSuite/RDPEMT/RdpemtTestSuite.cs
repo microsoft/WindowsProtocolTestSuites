@@ -80,7 +80,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         protected override void TestInitialize()
         {
             base.TestInitialize();
-            this.rdpbcgrAdapter.TurnVerificationOff(!bVerifyRdpbcgrMessage);
+
+            CheckSecurityProtocolForMultitransport();
         }
 
         protected override void TestCleanup()

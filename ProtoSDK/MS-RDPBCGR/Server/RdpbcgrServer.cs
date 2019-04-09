@@ -1674,7 +1674,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             RdpbcgrUtility.FillShareControlHeader(ref demandActivePduData.shareControlHeader,
                                            (ushort)totalLength,
                                            ShareControlHeaderType.PDUTYPE_DEMANDACTIVEPDU,
-                                           (ushort)sessionContext.UserChannelId);
+                                           (ushort)sessionContext.ServerChannelId);
 
             demandActivePdu.demandActivePduData = demandActivePduData;
 
@@ -2363,7 +2363,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             updatePalette.paletteData.pad2Octets = 0;
             updatePalette.paletteData.numberColors = ConstValue.NUMBER_COLORS;
             updatePalette.paletteData.paletteEntries = new TS_PALETTE_ENTRY[ConstValue.NUMBER_COLORS];
-                    
+
             for (int i = 0; i < updatePalette.paletteData.paletteEntries.Length; i++)
             {
                 updatePalette.paletteData.paletteEntries[i] = paletteEntry;
@@ -2699,11 +2699,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             paletteEntry.green = ConstValue.PALETTE_ENTRY_GREEN;
 
             paletteUpdate.paletteUpdateData.paletteEntries = new TS_PALETTE_ENTRY[ConstValue.NUMBER_COLORS];
-            for (int i =0; i< paletteUpdate.paletteUpdateData.paletteEntries.Length; i++)
+            for (int i = 0; i < paletteUpdate.paletteUpdateData.paletteEntries.Length; i++)
             {
                 paletteUpdate.paletteUpdateData.paletteEntries[i] = paletteEntry;
-            }               
-            
+            }
+
 
             paletteUpdate.size = (ushort)(Marshal.SizeOf((ushort)paletteUpdate.paletteUpdateData.updateType)
                                 + Marshal.SizeOf(paletteUpdate.paletteUpdateData.pad2Octets)
@@ -4141,7 +4141,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     "00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-" +
                     "00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-" +
                     "00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00";
-            inputCapabilitySet.lengthCapability = (ushort)(24 + ConstValue.INPUT_CAP_IME_FLIENAME_SIZE); // the other fields(except imeFileName field) totoal length is 24
+            inputCapabilitySet.lengthCapability = (ushort)(24 + ConstValue.INPUT_CAP_IME_FILENAME_SIZE); // the other fields(except imeFileName field) totoal length is 24
 
             capabilitySets.Add(inputCapabilitySet);
             #endregion Populating Input Capability Set

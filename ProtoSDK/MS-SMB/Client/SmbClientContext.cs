@@ -247,7 +247,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
                     if (Capabilities.CAP_INFOLEVEL_PASSTHRU
                         == (connection.ServerCapabilities & Capabilities.CAP_INFOLEVEL_PASSTHRU))
                     {
-                        smbClient.Capability.IsUsePathThrough = true;
+                        smbClient.Capability.IsUsePassThrough = true;
                     }
 
                     #endregion

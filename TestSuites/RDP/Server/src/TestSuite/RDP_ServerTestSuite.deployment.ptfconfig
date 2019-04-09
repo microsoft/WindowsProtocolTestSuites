@@ -9,12 +9,14 @@
     <!--Whether a negotiation protocol is used.-->
     <Property name="RDP.Security.Negotiation" value="True"/>
     <!--One of the TLS, CredSSP, or RDP.-->
-    <Property name="RDP.Security.Protocol" value="TLS"/>
+    <Property name="RDP.Security.Protocol" value="TLS"/>    
+    <!--One of the TLS1.0, TLS1.1, or TLS1.2.-->
+    <Property name="RDP.Security.TLS.Version" value="TLS1.0"/>    
 
     <!-- Domain of the tested RDP Server -->
     <Property name="RDP.ServerDomain" value=""/>
     <!-- Computer name or IP of the tested RDP Server-->
-    <Property name="RDP.ServerName" value="192.168.2.4"/>
+    <Property name="RDP.ServerName" value="192.168.2.1"/>
     <!-- Port of RDP service on RDP Server-->
     <Property name="RDP.ServerPort" value="3389"/>
     <!--The user name of local host (RDP server). -->
@@ -22,20 +24,29 @@
     <!--The logon password of "RDP.ServerUserName". -->
     <Property name="RDP.ServerUserPassword" value="Password01!"/>
     <!-- Computer name or IP of the driver computer-->
-    <Property name="RDP.ClientName" value="192.168.2.1"/>
+    <Property name="RDP.ClientName" value="192.168.2.0"/>
     
     <!-- Whether verify RDPBCGR message received -->
     <Property name="VerifyRdpbcgrMessages" value="true"/>
     <!-- Whether verify SHOULD behaviors in TD -->
     <Property name="VerifyShouldBehaviors" value="true"/>
-    <Property name="WaitTime" value="20"/>
-    
-    <!--The version of the RDP intends to test. It should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4-->
+   
+    <!--Indicates if SUT is Windows Implementation.-->
+    <Property name="IsWindowsImplementation" value="true">
+      <Choice>true, false</Choice>
+      <Description>Indicates if SUT is Windows Implementation.</Description>
+    </Property>
+
     <!--The seperator between the RDP.Version is required to be ".".-->
     <Property name="RDP.Version" value="8.1">
-      <Choice>7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4</Choice>
-      <Description>The version of the RDP intends to test, it should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4</Description>
+      <Choice>7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6</Choice>
+      <Description>The version of the RDP intends to test, it should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6</Description>
     </Property>
+
+    <!-- Whether the SUT supports RDPEDYC. The value should be true or false.-->
+    <Property name="RDPEDYCSupported" value="true"/>
+
+    <Property name="WaitTime" value="60"/>
     <!-- Block End -->
     
   </Properties>

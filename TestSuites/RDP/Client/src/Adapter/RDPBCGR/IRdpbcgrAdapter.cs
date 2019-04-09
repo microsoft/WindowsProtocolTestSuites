@@ -54,6 +54,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
     public delegate void TS_FRAME_ACKNOWLEDGE_PDUHandler(TS_FRAME_ACKNOWLEDGE_PDU ackPdu);
 
     public delegate void RDSTLS_AuthenticationRequestPDUwithPasswordCredentialsHandler(RDSTLS_AuthenticationRequestPDUwithPasswordCredentials pdu);
+
+    public delegate void RDSTLS_AuthenticationRequestPDUwithAutoReconnectCookieHandler(RDSTLS_AuthenticationRequestPDUwithAutoReconnectCookie pdu);
     #endregion
 
     public interface IRdpbcgrAdapter : IAdapter
@@ -81,6 +83,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         event VirtualChannelRequestHandler VirtualChannelRequest;
         event TS_FRAME_ACKNOWLEDGE_PDUHandler TS_FRAME_ACKNOWLEDGE_PDUReceived;
         event RDSTLS_AuthenticationRequestPDUwithPasswordCredentialsHandler RDSTLS_AuthenticationRequestPDUwithPasswordCredentialsReceived;
+        event RDSTLS_AuthenticationRequestPDUwithAutoReconnectCookieHandler RDSTLS_AuthenticationRequestPDUwithAutoReconnectCookieReceived;
         #endregion
 
         #region Properties

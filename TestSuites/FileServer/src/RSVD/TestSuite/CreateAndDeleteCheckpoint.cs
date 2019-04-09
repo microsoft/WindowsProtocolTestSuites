@@ -11,6 +11,7 @@ using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Text;
+using System.Collections.Generic;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
 {
@@ -227,9 +228,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
             eaInfo.EaName = RsvdConst.RSVD_TARGET_SPECIFIER_EA;
             eaInfo.EaValue = client.CreateTargetSpecifier(snapshotId);
             eaInfo.Flags = FileFullEaInformation_Flags_Values.FILE_NEED_EA;
-            createEaBuffer.FileFullEaInformations = new Modeling.Sequence<FsccFileFullEaInformation>();
+            createEaBuffer.FileFullEaInformations = new List<FsccFileFullEaInformation>();
 
-            createEaBuffer.FileFullEaInformations = createEaBuffer.FileFullEaInformations.Add(eaInfo);
+            createEaBuffer.FileFullEaInformations.Add(eaInfo);
 
             Smb2CreateContextRequest[] contexts = new Smb2CreateContextRequest[]{
                     createEaBuffer};

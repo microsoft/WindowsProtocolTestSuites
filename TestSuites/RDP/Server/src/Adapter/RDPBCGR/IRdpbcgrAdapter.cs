@@ -416,6 +416,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <returns>TS_FP_INPUT_EVENT structure with a TS_FP_UNICODE_KEYBOARD_EVENT</returns>
         TS_FP_INPUT_EVENT GenerateFPUnicodeKeyboardEvent(TS_FP_KEYBOARD_EVENT_Eventflags eventFlag, ushort unicodeCode);
 
+        /// <summary>
+        /// Generate a TS_FP_INPUT_EVENT structure with a TS_FP_QOETIMESTAMP_EVENT
+        /// </summary>
+        /// <param name="timestamp">The timestamp indicates when the current input batch was encoded by the client</param>
+        /// <returns>TS_FP_INPUT_EVENT structure with a TS_FP_QOETIMESTAMP_EVENT</returns>
+        TS_FP_INPUT_EVENT GenerateQoETimestampEvent(uint timestamp);
+
         #endregion TS_FP_INPUT_EVENT generation
 
         /// <summary>
@@ -529,6 +536,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// </summary>
         /// <returns>Return true if supported, otherwise, return false</returns>
         bool IsServerSupportFastpathInput();
+
+        /// <summary>
+        /// Check if RDP Server support fast path input Quality of Experience (QoE) Timestamp event notification
+        /// Check inputFlags flag of TS_INPUT_CAPABILITYSET
+        /// </summary>
+        /// <returns>Return true if supported; otherwise return false</returns>
+        bool IsServerSupportFastpathInputQoeTimestampEvent();
 
         /// <summary>
         /// Whether server support RDP-UDP FEC reliable transport

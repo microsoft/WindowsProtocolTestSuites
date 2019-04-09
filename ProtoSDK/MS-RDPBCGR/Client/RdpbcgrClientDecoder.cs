@@ -1653,7 +1653,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             // TS_INPUT_CAPABILITYSET: imeFileName
             byte[] imeFileName = GetBytes(data, ref currentIndex,
-                ConstValue.TS_INPUT_CAPABILITY_SET_IME_FILE_NAME_LENGTH);
+                ConstValue.TS_INPUT_CAPABILITYSET_IME_FILE_NAME_LENGTH);
             set.imeFileName = BitConverter.ToString(imeFileName);
 
             // Check if data length is consistent with the decoded struct length
@@ -3757,7 +3757,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             attribute.andMaskData = GetBytes(data, ref currentIndex, (int)attribute.lengthAndMask);
 
             // TS_COLORPOINTERATTRIBUTE: pad
-            attribute.pad = ParseByte(data, ref currentIndex);
+            if (currentIndex < data.Length)
+            {
+                attribute.pad = ParseByte(data, ref currentIndex);
+            }
 
             return attribute;
         }
@@ -4421,7 +4424,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     client.UpdateTransport();
                 }
             }
-            catch (FormatException e)
+            catch (Exception e)
             {
                 pdu = new ErrorPdu(e);
             }
@@ -4479,7 +4482,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
                 // receivedBytes[1] and receivedBytes[2] are the corresponding
                 // "length1" and "length2" fields in TS_FP_UPDATE_PDU
-                packetLength = CalculateFpUpdatePduLength(receivedBytes[1], receivedBytes[2]);
+                packetLength = RdpbcgrUtility.CalculateFpUpdatePduLength(receivedBytes[1], receivedBytes[2]);
             }
 
             // Received bytes does not contain enough data
@@ -4495,32 +4498,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         }
 
 
-        /// <summary>
-        /// Calculate the overall length of Server Fast-Path Update PDU 
-        /// (based on field values of "length1" and "length2")
-        /// </summary>
-        /// <param name="length1">value of length1 field</param>
-        /// <param name="length2">value of length2 field</param>
-        /// <returns>caculated PDU length</returns>
-        private UInt16 CalculateFpUpdatePduLength(byte length1, byte length2)
-        {
-            if ((ConstValue.MOST_SIGNIFICANT_BIT_FILTER & length1) == length1)
-            {
-                // when length1's most significant bit is not set
-                // only length1 is considered
-                return (UInt16)length1;
-            }
-            else
-            {
-                // when length1's most significant bit is set
-                // length1 and length2 are concatenated
-                byte[] buffer = new byte[2];
-                buffer[0] = length2;
-                buffer[1] = (byte)(ConstValue.MOST_SIGNIFICANT_BIT_FILTER & length1);
-                UInt16 length = BitConverter.ToUInt16(buffer, 0);
-                return length;
-            }
-        }
+
         #endregion Private Methods: Decoder Callback
 
 

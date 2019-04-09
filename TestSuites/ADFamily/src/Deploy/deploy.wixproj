@@ -342,10 +342,10 @@
     <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;..\Batch&quot; -out Batch.wxs -template fragment -gg -cg BATCH_FILES -dr TESTSUITE_BATCH_DIR -var wix.TESTSUITE_BATCH_DIR -sreg -sfrag -srd" />
     <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;..\PlayLists&quot; -out PlayLists.wxs -template fragment -gg -cg PlayLists_FILES -dr TESTSUITE_PlayLists_DIR -var wix.TESTSUITE_PlayLists_DIR -sreg -sfrag -srd" />
     <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts&quot; -out SCRIPT_FILES.wxs -template fragment -gg -cg SCRIPT_FILES -dr SCRIPT_FILES_DIR -var wix.SCRIPT_FILES_DIR -sreg -sfrag -srd" />
-    <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\TestSuites\ADFamily\docs\Common-TD-XML&quot; -out COMMON_TD_FILES.wxs -template fragment -gg -cg COMMON_TD_FILES -dr COMMON_TD_DIR -var wix.COMMON_TD_DIR -sreg -sfrag -srd" />
-    <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\TestSuites\ADFamily\docs\Win2016-TD-XML&quot; -out WIN2016_TD_FILES.wxs -template fragment -gg -cg WIN2016_TD_FILES -dr WIN2016_TD_DIR -var wix.WIN2016_TD_DIR -sreg -sfrag -srd" />
-    <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\TestSuites\ADFamily\docs\Win8-TD-XML&quot; -out WIN8_TD_FILES.wxs -template fragment -gg -cg WIN8_TD_FILES -dr WIN8_TD_DIR -var wix.WIN8_TD_DIR -sreg -sfrag -srd" />
-    <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\TestSuites\ADFamily\docs\WinBlue-TD-XML&quot; -out WINBLUE_TD_FILES.wxs -template fragment -gg -cg WINBLUE_TD_FILES -dr WINBLUE_TD_DIR -var wix.WINBLUE_TD_DIR -sreg -sfrag -srd" />
+    <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\TestSuites\ADFamily\Setup\Data\Common-TD-XML&quot; -out COMMON_TD_FILES.wxs -template fragment -gg -cg COMMON_TD_FILES -dr COMMON_TD_DIR -var wix.COMMON_TD_DIR -sreg -sfrag -srd" />
+    <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\TestSuites\ADFamily\Setup\Data\Win2016-TD-XML&quot; -out WIN2016_TD_FILES.wxs -template fragment -gg -cg WIN2016_TD_FILES -dr WIN2016_TD_DIR -var wix.WIN2016_TD_DIR -sreg -sfrag -srd" />
+    <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\TestSuites\ADFamily\Setup\Data\Win8-TD-XML&quot; -out WIN8_TD_FILES.wxs -template fragment -gg -cg WIN8_TD_FILES -dr WIN8_TD_DIR -var wix.WIN8_TD_DIR -sreg -sfrag -srd" />
+    <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\TestSuites\ADFamily\Setup\Data\WinBlue-TD-XML&quot; -out WINBLUE_TD_FILES.wxs -template fragment -gg -cg WINBLUE_TD_FILES -dr WINBLUE_TD_DIR -var wix.WINBLUE_TD_DIR -sreg -sfrag -srd" />
     <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\common&quot; -out CommonBatch.wxs -template fragment -gg -cg COMMON_BATCH_FILES -dr TESTSUITE_COMMON_SCRIPTS_DIR -var wix.TESTSUITE_COMMON_SCRIPTS_DIR -sreg -sfrag -srd" />
   </Target>
   <ItemGroup>
@@ -386,7 +386,6 @@
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Install-Iis-Feature.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Install-SelfSignedCert.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Join-Domain.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
-    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\makecert.exe" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Modify-PtfConfigFiles.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\PromoteChildDomain.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\PromoteDomainController.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />

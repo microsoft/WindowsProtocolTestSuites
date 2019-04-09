@@ -59,7 +59,6 @@ if($config -eq $null)
 #----------------------------------------------------------------------------
 $sut = $config.lab.servers.vm | Where {$_.role -match "SUT" -or $_.role -match "Node01"}
 $sutComputerName = $sut.name
-$scaleoutFSName = $config.lab.ha.scaleoutfs.name
 
 $endPointPath = "$env:SystemDrive\MicrosoftProtocolTests\FileServer\Server-Endpoint"
 $version = Get-ChildItem $endPointPath | where {$_.Attributes -match "Directory" -and $_.Name -match "\d+\.\d+\.\d+\.\d+"} | Sort-Object Name -descending | Select-Object -first 1
@@ -72,12 +71,15 @@ $ShareUtil = "$binDir\ShareUtil.exe"
 Write-Info.ps1 "Configure forcelevel2 for share: ShareForceLevel2"
 CMD /C "$ShareUtil $sutComputerName ShareForceLevel2 SHI1005_FLAGS_FORCE_LEVELII_OPLOCK true" 2>&1 | Write-Info.ps1
 
-if((gwmi win32_computersystem).partofdomain -eq $true -and (Test-Connection -ComputerName $scaleoutFSName -Quiet))
-{
-    Write-Info.ps1 "Configure forcelevel2 for share: SMBClusteredForceLevel2"
-    CMD /C "$ShareUtil $scaleoutFSName SMBClusteredForceLevel2 SHI1005_FLAGS_FORCE_LEVELII_OPLOCK true" 2>&1 | Write-Info.ps1
+if($config.lab.ha){
+    $scaleoutFSName = $config.lab.ha.scaleoutfs.name
+    if((gwmi win32_computersystem).partofdomain -eq $true -and (Test-Connection -ComputerName $scaleoutFSName -Quiet))
+    {
+        Write-Info.ps1 "Configure forcelevel2 for share: SMBClusteredForceLevel2"
+        CMD /C "$ShareUtil $scaleoutFSName SMBClusteredForceLevel2 SHI1005_FLAGS_FORCE_LEVELII_OPLOCK true" 2>&1 | Write-Info.ps1
+    }
+    sleep 5
 }
-sleep 5
 
 #----------------------------------------------------------------------------
 # Ending

@@ -88,7 +88,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpevor
             }
             catch(Exception e)
             {
-                Site.Log.Add(LogEntryKind.Comment, "Exception occurred when creating RDPEVOR channels: {1}", e.Message);
+                Site.Log.Add(LogEntryKind.Comment, "Exception occurred when creating RDPEVOR channels: {0}", e.Message);
             }
 
             return success;

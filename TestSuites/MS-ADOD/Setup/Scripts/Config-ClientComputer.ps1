@@ -1,21 +1,21 @@
 #############################################################################
-## Copyright (c) Microsoft. All rights reserved.
+## Copyright (c) Microsoft Corporation. All rights reserved.
 ## Licensed under the MIT license. See LICENSE file in the project root for full license information.
 #############################################################################
 
 #############################################################################
 ##
 ## Microsoft Windows PowerShell Scripting
-## File:           Config-DriverComputer.ps1
-## Purpose:        Configure Driver Computer for MS-ADOD OD test suite.
+## File:           Config-ClientComputer.ps1
+## Purpose:        Configure Client Computer for MS-ADOD OD test suite.
 ## Requirements:   Windows PowerShell 2.0
 ## Supported OS:   Windows 7 or later versions
 ##
 ##############################################################################
 Param(
-[String]$scriptsPath     = "."
+    [String]$scriptsPath     = (Split-Path $MyInvocation.MyCommand.Definition -Parent)
 )
-$ScriptsSignalFile = "$env:HOMEDRIVE\config-clientcomputer.finished.signal"
+$ScriptsSignalFile = "$env:HOMEDRIVE\ConfigScript.finished.signal"
 if (Test-Path -Path $ScriptsSignalFile)
 {
     Write-Host "The script execution is complete." -foregroundcolor Red
@@ -23,9 +23,7 @@ if (Test-Path -Path $ScriptsSignalFile)
 }
 
 Write-Host "Put current dir as $scriptsPath."
-$scriptsPath = Get-Location
-pushd $scriptsPath
-$dataPath = "$scriptsPath\..\Data"
+Push-Location $scriptsPath
 
 #----------------------------------------------------------------------------
 # Starting script
@@ -111,10 +109,12 @@ Write-Host "Enable Windows Remote Management Service on Server..."
 # Store Useful Information from Client Computer for configuring Driver Computer
 #-----------------------------------------------------
 Write-Host "Get the Installation Path for Test Scripts..."
-$MSIScriptsFile = [System.IO.Directory]::GetFiles("$env:HOMEDRIVE\MicrosoftProtocolTests", "ParamConfig.xml", [System.IO.SearchOption]::AllDirectories)
-[string]$MSIFullPath = [System.IO.Directory]::GetParent($MSIScriptsFile)
-"$MSIFullPath" | out-file "$env:HOMEDRIVE\MicrosoftProtocolTests\MS-ADOD\MSIInstalled.signal"
-
+if(-not (Test-Path -Path "$env:HOMEDRIVE\MSIInstalled.signal"))
+{
+	$MSIScriptsFile = [System.IO.Directory]::GetFiles("$env:HOMEDRIVE\MicrosoftProtocolTests", "ParamConfig.xml", [System.IO.SearchOption]::AllDirectories)
+	[string]$MSIFullPath = [System.IO.Directory]::GetParent($MSIScriptsFile)
+	"$MSIFullPath" | out-file "$env:HOMEDRIVE\MSIInstalled.signal"
+}
 #-----------------------------------------------------
 # Set Group Policy to Start Remote Management Service when startup
 #-----------------------------------------------------
@@ -141,8 +141,8 @@ if(Test-Path -path $regKey) {
 #-----------------------------------------------------
 # Finished to config client computer
 #-----------------------------------------------------
-popd
-Write-Host "Write signal file: config-clientcomputer.finished.signal to system drive."
+Pop-Location
+Write-Host "Write signal file: ConfigScript.finished.signal to system drive."
 cmd /C ECHO CONFIG FINISHED>$ScriptsSignalFile
 
 #----------------------------------------------------------------------------
@@ -151,7 +151,6 @@ cmd /C ECHO CONFIG FINISHED>$ScriptsSignalFile
 Write-Host "Config finished."
 Write-Host "EXECUTE [Config-ClientComputer.ps1] FINISHED (NOT VERIFIED)."
 
-cmd /C Pause
 Stop-Transcript
 
 exit 0

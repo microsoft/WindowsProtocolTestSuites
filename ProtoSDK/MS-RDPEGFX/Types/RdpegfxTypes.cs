@@ -81,7 +81,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
     /// </summary>
     public struct RDPGFX_RECT16
     {
-        
+
         /// <summary>
         /// A 16-bit unsigned integer, specifies  the leftmost bound of the rectangle.
         /// </summary>
@@ -132,15 +132,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// <summary>
         /// A 8-bit unsigned integer, specifies the blue ARGB or XRGB color component.
         /// </summary>
-        public byte B;     
+        public byte B;
         /// <summary>
         /// A 8-bit unsigned integer, specifies the green ARGB or XRGB color component.
         /// </summary>
-        public byte G;     
+        public byte G;
         /// <summary>
         /// A 8-bit unsigned integer, specifies the red ARGB or XRGB color component.
         /// </summary>
-        public byte R;     
+        public byte R;
         /// <summary>
         /// A 8-bit unsigned integer, that in the case of ARGB specifies the alpha color component or in the case of XRGB MUST be ignored.
         /// </summary>
@@ -159,7 +159,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
     /// This structure specifies attributes of a bitmap cache entry stored on the client
     /// </summary>
     public struct RDPGFX_CACHE_ENTRY_METADATA
-    { 
+    {
         /// <summary>
         /// A 64-bit unsigned integer, specifies a unique key associated with the bitmap cache entry.
         /// </summary>
@@ -169,7 +169,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// </summary>
         public uint bitmapLength;
     }
-    
+
     #endregion
 
     #region Base PDUs
@@ -367,7 +367,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         #endregion
 
         #region Methods
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -438,7 +438,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         #endregion
 
         #region Methods
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -507,7 +507,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         #endregion
 
         #region Methods
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -559,7 +559,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
             try
             {
                 base.Decode(marshaler);
-                this.capsSet.version = (CapsVersions) marshaler.ReadUInt32();
+                this.capsSet.version = (CapsVersions)marshaler.ReadUInt32();
                 pduLen += 4;
                 this.capsSet.capsDataLength = marshaler.ReadUInt32();
                 pduLen += 4;
@@ -615,7 +615,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         #endregion
 
         #region Methods
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -644,8 +644,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
             // set monitor width and height to 65535 to avoid impact to any rdpegfx test cases.
             monitorDef.left = 0;
             monitorDef.top = 0;
-            monitorDef.right = 0xffff;  
-            monitorDef.bottom = 0xffff;  
+            monitorDef.right = 0xffff;
+            monitorDef.bottom = 0xffff;
             monitorDef.flags = Flags_TS_MONITOR_DEF.TS_MONITOR_PRIMARY;
             this.monitorDefArray = new Collection<TS_MONITOR_DEF>();
             for (uint i = 0; i < this.monitorCount; i++)
@@ -656,7 +656,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
             uint currentLength = (uint)Marshal.SizeOf(Header) + 12 + (uint)(Marshal.SizeOf(monitorDef) * this.monitorCount);
             if (currentLength < Header.pduLength)
             {
-                this.pad = new byte[Header.pduLength-currentLength];
+                this.pad = new byte[Header.pduLength - currentLength];
             }
 
         }
@@ -700,14 +700,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                 this.monitorCount = marshaler.ReadUInt32();
                 pduLen += 4;
 
-                for(int i=0; i < this.monitorCount; i++ )
+                for (int i = 0; i < this.monitorCount; i++)
                 {
                     TS_MONITOR_DEF monitorDef;
                     monitorDef.left = marshaler.ReadUInt32();
                     monitorDef.top = marshaler.ReadUInt32();
                     monitorDef.right = marshaler.ReadUInt32();
                     monitorDef.bottom = marshaler.ReadUInt32();
-                    monitorDef.flags = (Flags_TS_MONITOR_DEF) marshaler.ReadUInt32();
+                    monitorDef.flags = (Flags_TS_MONITOR_DEF)marshaler.ReadUInt32();
 
                     monitorDefArray.Add(monitorDef);
                     pduLen += (uint)Marshal.SizeOf(monitorDef);
@@ -754,8 +754,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// </summary>
         public PixelFormat pixFormat;
 
-        #endregion 
-        
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -791,12 +791,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         public override void Encode(PduMarshaler marshaler)
         {
             base.Encode(marshaler);
-            marshaler.WriteUInt16(this.surfaceId);         
-            marshaler.WriteUInt16(this.width);           
+            marshaler.WriteUInt16(this.surfaceId);
+            marshaler.WriteUInt16(this.width);
             marshaler.WriteUInt16(this.height);
             marshaler.WriteByte((byte)this.pixFormat);
         }
-        
+
         /// <summary>
         /// Encode this PDU to the PduMarshaler.
         /// </summary>
@@ -880,7 +880,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                 base.Decode(marshaler);
                 this.surfaceId = marshaler.ReadUInt16();
                 pduLen += 2;
-                
+
                 return true;
             }
             catch
@@ -888,7 +888,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                 marshaler.Reset();
                 throw new PDUDecodeException(this.GetType(), marshaler.ReadToEnd());
             }
-        }       
+        }
 
         #endregion
     }
@@ -922,7 +922,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         #endregion
 
         #region Methods
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -989,6 +989,104 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         #endregion
     }
 
+    /// <summary>
+    /// The RDPGFX_MAP_SURFACE_TO_WINDOW_PDU message is sent by the server to instruct the client to map a surface to a RAIL window on the client.
+    /// </summary>
+    public class RDPGFX_MAPSURFACE_TO_WINDOW : RdpegfxServerPdu
+    {
+        #region Message Fields
+        /// <summary>
+        /// A 16-bit unsigned integer that specifies the ID of the surface to be associated with the surface-to-window mapping.
+        /// </summary>
+        public ushort surfaceId;
+
+        /// <summary>
+        ///  A 64-bit unsigned integer that specifies the ID of the RAIL window to be associated with the surface-to-window mapping
+        /// </summary>
+        public ulong windowId;
+
+        /// <summary>
+        ///  A 32-bit unsigned integer that specifies the width of the rectangular region on the surface to which the window is mapped.
+        /// </summary>
+        public uint mappedWidth;
+
+        /// <summary>
+        ///  A 32-bit unsigned integer that specifies the height of the rectangular region on the surface to which the window is mapped.
+        /// </summary>
+        public uint mappedHeight;
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public RDPGFX_MAPSURFACE_TO_WINDOW()
+        {
+        }
+
+        /// <summary>
+        /// Constructor, create a map surface to window message.
+        /// </summary>
+        /// <param name="sid">This is used to indicate surface id.</param>
+        /// <param name="wid">Window ID to be mapped.</param>
+        /// <param name="w">The width of the rectangular region on the surface to which the window is mapped.</param>
+        /// <param name="h">The height of the rectangular region on the surface to which the window is mapped.</param>
+
+        public RDPGFX_MAPSURFACE_TO_WINDOW(ushort sid, ulong wid, uint w, uint h)
+        {
+            this.Header.cmdId = PacketTypeValues.RDPGFX_CMDID_MAPSURFACETOWINDOW;
+            this.Header.flags = 0x0;
+            this.Header.pduLength = (uint)Marshal.SizeOf(Header) + (uint) Marshal.SizeOf(windowId) + (uint) Marshal.SizeOf(mappedWidth) + (uint) Marshal.SizeOf(mappedHeight);
+            this.surfaceId = sid;
+            this.windowId = wid;
+            this.mappedWidth = w;
+            this.mappedHeight = h;
+        }
+
+        /// <summary>
+        /// Encode this PDU to the PduMarshaler.
+        /// </summary>
+        /// <param name="marshaler">This is used to encode the fields of this PDU.</param>
+        public override void Encode(PduMarshaler marshaler)
+        {
+            base.Encode(marshaler);
+            marshaler.WriteUInt16(this.surfaceId);
+            marshaler.WriteUInt64(this.windowId);
+            marshaler.WriteUInt32(this.mappedWidth);
+            marshaler.WriteUInt32(this.mappedHeight);
+        }
+
+        /// <summary>
+        /// Decode this PDU from the PduMarshaler.
+        /// </summary>
+        /// <param name="marshaler">This is used to encode the fields of this PDU.</param>
+        public override bool Decode(PduMarshaler marshaler)
+        {
+            try
+            {
+                base.Decode(marshaler);
+                this.surfaceId = marshaler.ReadUInt16();
+                pduLen += 2;
+                this.windowId = marshaler.ReadUInt64();
+                pduLen += 8;
+                this.mappedWidth = marshaler.ReadUInt32();
+                pduLen += 4;
+                this.mappedHeight = marshaler.ReadUInt32();
+                pduLen += 4;
+
+                return true;
+            }
+            catch
+            {
+                marshaler.Reset();
+                throw new PDUDecodeException(this.GetType(), marshaler.ReadToEnd());
+            }
+        }
+        #endregion
+    }
+
+    
     /// <summary>
     /// The RDPGFX_SOLIDFILL message is to instruct the client to fill a collection of rectangles on a destination surface with a solid color.
     /// </summary>
@@ -1074,7 +1172,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                 marshaler.WriteUInt16(rect.top);
                 marshaler.WriteUInt16(rect.right);
                 marshaler.WriteUInt16(rect.bottom);
-            }        
+            }
         }
 
         /// <summary>
@@ -1154,7 +1252,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         #endregion
 
         #region Methods
-        
+
 
         /// <summary>
         /// Constructor
@@ -1176,10 +1274,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
             this.Header.pduLength = (uint)Marshal.SizeOf(Header) + 14;
 
             this.surfaceIdSrc = srcSID;
-            this.surfaceIdDest = destSID; 
+            this.surfaceIdDest = destSID;
             this.rectSrc = srcRect;
             this.destPtsCount = 0;
-            this.destPtsList =  new List<RDPGFX_POINT16>();
+            this.destPtsList = new List<RDPGFX_POINT16>();
             this.destPtsList.Clear();
         }
 
@@ -1412,7 +1510,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
             this.surfaceId = sid;
             this.destPtsCount = 0;
             this.destPtsList = new List<RDPGFX_POINT16>();
-            this.destPtsList.Clear();      
+            this.destPtsList.Clear();
         }
 
         /// <summary>
@@ -1566,7 +1664,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         #endregion
 
         #region Methods
-        
+
         /// <summary>
         /// Constructor, create a cache to surface message, with only 1 destination copy position.
         /// </summary>
@@ -1575,7 +1673,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         {
             this.Header.cmdId = PacketTypeValues.RDPGFX_CMDID_CACHEIMPORTREPLY;
             this.Header.flags = 0x0;
-            this.Header.pduLength = (uint)Marshal.SizeOf(Header) + 2 ;
+            this.Header.pduLength = (uint)Marshal.SizeOf(Header) + 2;
 
             this.importedEntriesCount = 0;
             this.cacheSlotsList = new List<ushort>();
@@ -1675,7 +1773,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         #endregion
 
         #region Methods
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -1712,7 +1810,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
             }
             this.Header.pduLength += 4;  // 4 bytes for bitmapDataLength field.
 
-            
+
         }
 
         /// <summary>
@@ -1735,7 +1833,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
             // Bitmap.
             marshaler.WriteUInt32(this.bitmapDataLength);
             marshaler.WriteBytes(this.bitmapData);
-            
+
         }
 
         /// <summary>
@@ -1752,7 +1850,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                 this.codecId = (CodecType)marshaler.ReadUInt16();
                 pduLen += 2;
                 this.pixelFormat = (PixelFormat)marshaler.ReadByte();
-                pduLen ++;
+                pduLen++;
 
                 // Destination rectangle.
                 this.destRect.left = marshaler.ReadUInt16();
@@ -1856,7 +1954,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
             base.Encode(marshaler);
             marshaler.WriteUInt16(this.surfaceId);
             marshaler.WriteUInt16((ushort)this.codecId);
-            marshaler.WriteUInt32(this.codecContextId); 
+            marshaler.WriteUInt32(this.codecContextId);
             marshaler.WriteByte((byte)this.pixelFormat);
 
             // Bitmap.
@@ -1938,7 +2036,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         {
             this.Header.cmdId = PacketTypeValues.RDPGFX_CMDID_DELETEENCODINGCONTEXT;
             this.Header.flags = 0x0;
-            this.Header.pduLength = (uint)Marshal.SizeOf(Header) + 6;  
+            this.Header.pduLength = (uint)Marshal.SizeOf(Header) + 6;
 
             this.surfaceId = sId;
             this.codecContextId = codecCtxId;
@@ -2028,7 +2126,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         {
             this.Header.cmdId = PacketTypeValues.RDPGFX_CMDID_MAPSURFACETOWINDOW;
             this.Header.flags = 0x0;
-            this.Header.pduLength = (uint)Marshal.SizeOf(Header) + 18;  
+            this.Header.pduLength = (uint)Marshal.SizeOf(Header)
+                + (uint) Marshal.SizeOf(this.surfaceId)
+                + (uint)Marshal.SizeOf(this.windowId)
+                + (uint)Marshal.SizeOf(this.mappedWidth)
+                + (uint)Marshal.SizeOf(this.mappedHeight)
+                ;
 
             this.surfaceId = surfaceId;
             this.windowId = windowId;
@@ -2078,10 +2181,353 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         }
         #endregion
     }
+
+    /// <summary>
+    /// The optional RDPGFX_QOE_FRAME_ACKNOWLEDGE_PDU message is sent by the client to enable the calculation of Quality of Experience (QoE) metrics.
+    /// </summary>
+    public class RDPGFX_QOE_FRAME_ACKNOWLEDGE_PDU : RdpegfxServerPdu
+    {
+        #region Message Fields
+        /// <summary>
+        /// An RDPGFX_HEADER structure  
+        /// </summary>
+        public RDPGFX_HEADER header;
+        /// <summary>
+        /// A 32-bit unsigned integer that contains the ID of the frame being annotated.
+        /// </summary>
+        public uint frameId;
+        /// <summary>
+        /// A 32-bit unsigned integer that specifies the timestamp (in milliseconds) when the client started decoding the RDPGFX_START_FRAME_PDU message.
+        /// </summary>
+        public uint timestamp;
+        /// <summary>
+        /// A 16-bit unsigned integer that specifies the time, in milliseconds, that elapsed between the decoding of the RDPGFX_START_FRAME_PDU and RDPGFX_END_FRAME_PDU messages.
+        /// </summary>
+        public ushort timeDiffSE;
+        /// <summary>
+        /// A 16-bit unsigned integer that specifies the time, in milliseconds, that elapsed between the decoding of the RDPGFX_END_FRAME_PDU message and the completion of the rendering operation for the commands contained in the logical graphics frame.
+        /// </summary>
+        public ushort timeDiffEDR;
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public RDPGFX_QOE_FRAME_ACKNOWLEDGE_PDU()
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="frameId"></param>
+        /// <param name="timestamp"></param>
+        /// <param name="timeDiffSE"></param>
+        /// <param name="timeDiffEDR"></param>
+        public RDPGFX_QOE_FRAME_ACKNOWLEDGE_PDU(uint frameId, uint timestamp, ushort timeDiffSE, ushort timeDiffEDR)
+        {
+            this.header.cmdId = PacketTypeValues.RDPGFX_CMDID_QOEFRAMEACKNOWLEDGE;
+            this.header.flags = 0x0;
+            this.header.pduLength = (uint)Marshal.SizeOf(header) 
+                + (uint) Marshal.SizeOf(this.frameId)
+                + (uint) Marshal.SizeOf(this.timestamp)
+                + (uint) Marshal.SizeOf(this.timeDiffSE)
+                + (uint) Marshal.SizeOf(this.timeDiffEDR);
+
+            this.frameId = frameId;
+            this.timestamp = timestamp;
+            this.timeDiffSE = timeDiffSE;
+            this.timeDiffEDR = timeDiffEDR;
+        }
+
+        /// <summary>
+        /// Encode this PDU to the PduMarshaler.
+        /// </summary>
+        /// <param name="marshaler">This is used to encode the fields of this PDU.</param>
+        public override void Encode(PduMarshaler marshaler)
+        {
+            base.Encode(marshaler);
+            marshaler.WriteUInt32(this.frameId);
+            marshaler.WriteUInt32(this.timestamp);
+            marshaler.WriteUInt16(this.timeDiffSE);
+            marshaler.WriteUInt16(this.timeDiffEDR);
+
+        }
+
+        /// <summary>
+        /// Decode this PDU from the PduMarshaler.
+        /// </summary>
+        /// <param name="marshaler">This is used to decode the fields of this PDU.</param>
+        public override bool Decode(PduMarshaler marshaler)
+        {
+            try
+            {
+                base.Decode(marshaler);
+                this.frameId = marshaler.ReadUInt32();
+                pduLen += 4;
+                this.timestamp = marshaler.ReadUInt32();
+                pduLen += 4;
+                this.timeDiffEDR = marshaler.ReadUInt16();
+                pduLen += 2;
+                this.timeDiffSE = marshaler.ReadUInt16();
+                pduLen += 2;
+
+                return true;
+            }
+            catch
+            {
+                marshaler.Reset();
+                throw new PDUDecodeException(this.GetType(), marshaler.ReadToEnd());
+            }
+        }
+        #endregion
+    }
+
+    /// <summary>
+    /// The RDPGFX_MAP_SURFACE_TO_SCALED_OUTPUT_PDU message is sent by the server to instruct the client to map a surface to a rectangular area of the Graphics Output Buffer ADM element, 
+    /// including a target width and height to which the surface MUST be scaled.
+    /// </summary>
+    public class RDPGFX_MAP_SURFACE_TO_SCALED_OUTPUT_PDU : RdpegfxServerPdu
+    {
+        #region Message Fields
         
+        /// <summary>
+        /// A 16-bit unsigned integer that specifies the ID of the surface to be associated with the output-to-surface mapping.
+        /// </summary>
+        public ushort surfaceId;
+        /// <summary>
+        /// A 16-bit unsigned integer that is reserved for future use. This field MUST be set to zero. 
+        /// </summary>
+        public ushort reserved;
+        /// <summary>
+        /// A 32-bit unsigned integer that specifies the x-coordinate of the point, relative to the origin of the Graphics Output Buffer ADM element, at which to map the top-left corner of the surface.
+        /// </summary>
+        public uint outputOriginX;
+        /// <summary>
+        /// A 32-bit unsigned integer that specifies the y-coordinate of the point, relative to the origin of the Graphics Output Buffer ADM element, at which to map the upper-left corner of the surface.
+        /// </summary>
+        public uint outputOriginY;
+        /// <summary>
+        /// A 32-bit unsigned integer that specifies the width of the target Graphics Output Buffer ADM element to which the surface will be mapped.
+        /// </summary>
+        public uint targetWidth;
+        /// <summary>
+        /// A 32-bit unsigned integer that specifies the height of the target Graphics Output Buffer ADM element to which the surface will be mapped.
+        /// </summary>
+        public uint targetHeight;
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public RDPGFX_MAP_SURFACE_TO_SCALED_OUTPUT_PDU()
+        {            
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="surfaceId">surface id</param>
+        /// <param name="x">output origin x</param>
+        /// <param name="y">output origin y</param>
+        /// <param name="width">target width</param>
+        /// <param name="height">target height</param>
+        public RDPGFX_MAP_SURFACE_TO_SCALED_OUTPUT_PDU(ushort surfaceId, uint x, uint y, uint width, uint height)
+        {            
+            this.Header.cmdId = PacketTypeValues.RDPGFX_CMDID_MAPSURFACETOSCALEDOUTPUT;
+            this.Header.flags = 0x0;
+            this.Header.pduLength = (uint)Marshal.SizeOf(Header) 
+                + (uint)Marshal.SizeOf(this.surfaceId)
+                + (uint)Marshal.SizeOf(this.reserved)
+                + (uint)Marshal.SizeOf(this.outputOriginX)
+                + (uint)Marshal.SizeOf(this.outputOriginY)
+                + (uint)Marshal.SizeOf(this.targetHeight)
+                + (uint)Marshal.SizeOf(this.targetWidth)
+                ;
+            
+            this.surfaceId = surfaceId;
+            this.reserved = 0;
+            this.outputOriginX = x;
+            this.outputOriginY = y;
+            this.targetHeight = height;
+            this.targetWidth = width;
+        }
+
+        /// <summary>
+        /// Encode this PDU to the PduMarshaler.
+        /// </summary>
+        /// <param name="marshaler">This is used to encode the fields of this PDU.</param>
+        public override void Encode(PduMarshaler marshaler)
+        {
+            base.Encode(marshaler);
+            marshaler.WriteUInt16(this.surfaceId);
+            marshaler.WriteUInt16(this.reserved);            
+            marshaler.WriteUInt32(this.outputOriginX);
+            marshaler.WriteUInt32(this.outputOriginY);
+            marshaler.WriteUInt32(this.targetWidth);
+            marshaler.WriteUInt32(this.targetHeight);
+        }
+
+        /// <summary>
+        /// Decode this PDU from the PduMarshaler.
+        /// </summary>
+        /// <param name="marshaler">This is used to decode the fields of this PDU.</param>
+        public override bool Decode(PduMarshaler marshaler)
+        {
+            try
+            {
+                base.Decode(marshaler);              
+                this.surfaceId = marshaler.ReadUInt16();
+                pduLen += 2;
+                this.reserved = marshaler.ReadUInt16();
+                pduLen += 2;
+                this.outputOriginX = marshaler.ReadUInt32();
+                pduLen += 4;
+                this.outputOriginY = marshaler.ReadUInt32();
+                pduLen += 4;
+                this.targetWidth = marshaler.ReadUInt32();
+                pduLen += 4;
+                this.targetHeight = marshaler.ReadUInt32();
+                
+                return true;
+            }
+            catch
+            {
+                marshaler.Reset();
+                throw new PDUDecodeException(this.GetType(), marshaler.ReadToEnd());
+            }
+        }
+        #endregion
+    }
+
+    /// <summary>
+    /// The RDPGFX_MAP_SURFACE_TO_SCALED_WINDOW_PDU message is sent by the server to instruct the client to map a surface to a RAIL window on the client, 
+    /// including a target width and height to which the surface should be scaled.
+    /// </summary>
+    public class RDPGFX_MAP_SURFACE_TO_SCALED_WINDOW_PDU : RdpegfxServerPdu
+    {
+        #region Message Fields
+        /// <summary>
+        /// An RDPGFX_HEADER structure  
+        /// </summary>
+        public RDPGFX_HEADER header;
+        /// <summary>
+        /// A 16-bit unsigned integer that specifies the ID of the surface to be associated with the surface-to-window mapping.
+        /// </summary>
+        public ushort surfaceId;
+        /// <summary>
+        /// A 64-bit unsigned integer that specifies the ID of the RAIL window to be associated with the surface-to-window mapping.
+        /// </summary>
+        public ulong windowId;
+        /// <summary>
+        /// A 32-bit unsigned integer that specifies the width of the rectangular region on the surface to which the window is mapped.
+        /// </summary>
+        public uint mappedWidth;
+        /// <summary>
+        /// A 32-bit unsigned integer that specifies the height of the rectangular region on the surface to which the window is mapped.
+        /// </summary>
+        public uint mappedHeight;
+        /// <summary>
+        /// A 32-bit unsigned integer that specifies the width of the target graphics output to which the surface will be mapped.
+        /// </summary>
+        public uint targetWidth;
+        /// <summary>
+        /// A 32-bit unsigned integer that specifies the height of the target graphics output to which the surface will be mapped.
+        /// </summary>
+        public uint targetHeight;
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public RDPGFX_MAP_SURFACE_TO_SCALED_WINDOW_PDU()
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="frameId"></param>
+        /// <param name="timestamp"></param>
+        /// <param name="timeDiffSE"></param>
+        /// <param name="timeDiffEDR"></param>
+        public RDPGFX_MAP_SURFACE_TO_SCALED_WINDOW_PDU(ushort surfaceId, ulong windowId, uint mappedWidth, uint mappedHeight, uint targetWidth, uint targetHeight)
+        {
+            this.header.cmdId = PacketTypeValues.RDPGFX_CMDID_MAPSURFACETOSCALEDWINDOW;
+            this.header.flags = 0x0;
+            this.header.pduLength = (uint)Marshal.SizeOf(header) 
+                + (uint) Marshal.SizeOf(this.surfaceId)
+                + (uint)Marshal.SizeOf(this.windowId)
+                + (uint)Marshal.SizeOf(this.mappedWidth)
+                + (uint)Marshal.SizeOf(this.mappedHeight)
+                + (uint)Marshal.SizeOf(this.targetWidth)
+                + (uint)Marshal.SizeOf(this.targetHeight)
+                ;
+
+            this.surfaceId = surfaceId;
+            this.windowId = windowId;
+            this.mappedWidth = mappedWidth;
+            this.mappedHeight = mappedHeight;            
+            this.targetWidth = targetWidth;
+            this.targetHeight = targetHeight;            
+        }
+
+        /// <summary>
+        /// Encode this PDU to the PduMarshaler.
+        /// </summary>
+        /// <param name="marshaler">This is used to encode the fields of this PDU.</param>
+        public override void Encode(PduMarshaler marshaler)
+        {
+            base.Encode(marshaler);
+            marshaler.WriteUInt16(this.surfaceId);
+            marshaler.WriteUInt64(this.windowId);
+            marshaler.WriteUInt32(this.mappedWidth);
+            marshaler.WriteUInt32(this.mappedHeight);
+            marshaler.WriteUInt32(this.targetWidth);
+            marshaler.WriteUInt32(this.targetHeight);
+        }
+
+        /// <summary>
+        /// Decode this PDU from the PduMarshaler.
+        /// </summary>
+        /// <param name="marshaler">This is used to decode the fields of this PDU.</param>
+        public override bool Decode(PduMarshaler marshaler)
+        {
+            try
+            {
+                base.Decode(marshaler);
+                this.surfaceId = marshaler.ReadUInt16();
+                pduLen += 2;
+                this.windowId = marshaler.ReadUInt64();
+                pduLen += 8;
+                this.mappedWidth = marshaler.ReadUInt32();
+                pduLen += 4;
+                this.mappedHeight = marshaler.ReadUInt32();
+                pduLen += 4;
+                this.targetWidth = marshaler.ReadUInt32();
+                pduLen += 4;
+                this.targetHeight = marshaler.ReadUInt32();
+                pduLen += 4;
+
+                return true;
+            }
+            catch
+            {
+                marshaler.Reset();
+                throw new PDUDecodeException(this.GetType(), marshaler.ReadToEnd());
+            }
+        }
+        #endregion
+    }
     #endregion
 
- 
+
     #region Client Messages
     /// <summary>
     /// This message is sent by the client to server to advertise supported capabilities. 
@@ -2111,11 +2557,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
             base.Encode(marshaler);
             marshaler.WriteUInt16(this.capsSetCount);
 
-            for (int i = 0; i < this.capsSetCount; i++ )
+            for (int i = 0; i < this.capsSetCount; i++)
             {
                 marshaler.WriteUInt32((uint)capsSets[i].version);
                 marshaler.WriteUInt32(capsSets[i].capsDataLength);
-                marshaler.WriteBytes(capsSets[i].capsData);             
+                marshaler.WriteBytes(capsSets[i].capsData);
             }
         }
 
@@ -2131,7 +2577,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                 capsSetCount = marshaler.ReadUInt16();
                 pduLen += 2;
                 capsSets = new RDPGFX_CAPSET[capsSetCount];
-                
+
                 for (ushort i = 0; i < capsSetCount; i++)
                 {
                     CapsVersions version = (CapsVersions)marshaler.ReadUInt32();
@@ -2142,8 +2588,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                     capsSets[i].capsData = new byte[capsSets[i].capsDataLength];
                     capsSets[i].capsData = marshaler.ReadBytes((int)capsSets[i].capsDataLength);
                     pduLen += capsSets[i].capsDataLength;
-                } 
-               
+                }
+
                 return true;
             }
             catch
@@ -2152,7 +2598,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                 throw new PDUDecodeException(this.GetType(), marshaler.ReadToEnd());
             }
         }
-        
+
     }
 
     /// <summary>
@@ -2216,7 +2662,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                 throw new PDUDecodeException(this.GetType(), marshaler.ReadToEnd());
             }
         }
-        
+
         #endregion
     }
 

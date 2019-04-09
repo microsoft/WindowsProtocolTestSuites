@@ -224,6 +224,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
         /// <param name="content">The content to write.</param>
         /// <param name="clientGuid">Smb2 client Guid.</param>
         /// <param name="createGuid">The Guid for smb2 create request.</param>
+        /// <param name="fileId">File id returned by server</param>
         /// <returns></returns>
         protected bool WriteContentBeforeFailover(
             FileServerType fsType,
@@ -233,9 +234,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             string file,
             string content,            
             Guid clientGuid,
-            Guid createGuid)
+            Guid createGuid,
+            out FILEID fileId)
         {
             uint status = 0;
+            fileId = FILEID.Zero;
             beforeFailover = new Smb2FunctionalClient(TestConfig.FailoverTimeout, TestConfig, BaseTestSite);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT to {0}", uncSharePath);            
@@ -294,7 +297,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                     "ScaleOut FS should have SHARE_CAP_SCALEOUT bit set for Capabilities in TreeConnect response.");
             }
 
-            FILEID fileId;
             Smb2CreateContextResponse[] serverCreateContexts;
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends CREATE request with SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 with PERSISTENT flag set.");
             status = beforeFailover.Create(
@@ -350,6 +352,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
         /// <param name="content">The content to read.</param>
         /// <param name="clientGuid">Smb2 client Guid.</param>
         /// <param name="createGuid">The Guid for smb2 create request.</param>
+        /// <param name="fileId">FileId used in DH2C create context</param>
         /// <returns></returns>
         protected bool ReadContentAfterFailover(string server,
             IPAddress serverAccessIp,
@@ -357,7 +360,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             string file,
             string content,
             Guid clientGuid,
-            Guid createGuid)
+            Guid createGuid,
+            FILEID fileId)
         {
             uint status;
 
@@ -410,7 +414,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
 
             // Retry Create because file may not be available immediately
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client retries to send CREATE request with SMB2_CREATE_DURABLE_HANDLE_RECONNECT_V2 context with PERSISTENT flag set until succeed or timeout in {0}.", TestConfig.FailoverTimeout);
-            FILEID fileId = new FILEID();
             Smb2CreateContextResponse[] serverCreateContexts;
             status = DoUntilSucceed(
                 () => afterFailover.Create(
