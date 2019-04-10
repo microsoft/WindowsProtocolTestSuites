@@ -11808,14 +11808,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         ///  A FILE_BASIC_INFORMATION structure specified in section
         ///  .
         /// </summary>
-        [StaticSize(36)]
+        [StaticSize(40)]
         public FileBasicInformation BasicInformation;
 
         /// <summary>
         ///  A FILE_STANDARD_INFORMATION structure specified in section
         ///  .
         /// </summary>
-        [StaticSize(22)]
+        [StaticSize(24)]
         public FileStandardInformation StandardInformation;
 
         /// <summary>

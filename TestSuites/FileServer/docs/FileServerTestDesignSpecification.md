@@ -68,6 +68,7 @@
 		* [ QueryDir\_Reopen\_OnDir](#3.1.53)
 		* [ QueryDir\_Reopen\_OnFile](#3.1.54)
 		* [ Query\_Quota\_Info](#3.1.55)
+		* [ BVT\_SMB2Basic\_Query\_FileAllInformation](#3.1.56)
 	* [SMB2 Feature Test](#3.2)
 		* [ AppInstanceId](#3.2.1)
 		* [ AppInstanceVersion](#3.2.2)
@@ -212,7 +213,7 @@ Test scenarios are categorized as below table and will be described in following
 
 | Category                 | Test Cases | Comments                                                                                                          |
 |--------------------------|------------|-------------------------------------------------------------------------------------------------------------------|
-| SMB2 BVT                 | 78         | SMB2 common scenarios.                                                                                            |
+| SMB2 BVT                 | 79         | SMB2 common scenarios.                                                                                            |
 | SMB2 Feature Test        | 2591       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
 | SMB2 Feature Combination | 12         | Extended test with more complex message sequence for new features in SMB 3.0 dialect and later.                   |
 | FSRVP Test               | 14         | Test for MS-FSRVP                                                                                                 |
@@ -2886,6 +2887,36 @@ This is used to test SMB2 common user scenarios.
 |                          | TREE\_CONNECT|
 |                          | CREATE (File)|
 |                          | QUERY_INFO(SMB2\_0\_INFO\_QUOTA) |
+|                          | CLOSE |
+|                          | TREE\_DISCONNECT |
+|                          | LOGOFF |
+| **Cleanup**              ||
+
+####<a name="3.1.56"> BVT\_SMB2Basic\_Query\_FileAllInformation
+
+#####<a name="3.1.56.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Verify whether server can handle QUERY requests to a file for FileAllInformation correctly. |
+| **Message Sequence**          | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                               | 2.  Client queries FileAllInformation by sending QUERY\_INFO request. |
+|                               | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cluster Involved Scenario** | **NO** |
+
+#####<a name="3.1.56.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT\_SMB2Basic\_Query\_FileAllInformation |
+| **Description** | Verify whether server can handle QUERY requests to a file for FileAllInformation correctly. |
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT|
+|                          | CREATE (File)|
+|                          | QUERY\_INFO(SMB2\_0\_INFO\_FILE) |
 |                          | CLOSE |
 |                          | TREE\_DISCONNECT |
 |                          | LOGOFF |
