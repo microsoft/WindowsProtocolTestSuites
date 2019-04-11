@@ -124,7 +124,7 @@ Refer to the Privacy Statement and EULA for further information.
 
 Run this test suite in a domain environment that contains the following computers (physical or virtual): 
 
-* A driver computer running Microsoft® Windows 8.1 Enterprise or later versions or running Microsoft® Windows Server® 2012 R2 or later versions.
+* A driver computer running Microsoft® Windows 8.1 Enterprise or later versions, or running Microsoft® Windows Server® 2012 R2 or later versions.
 
 * Five computers set up as Domain Controllers (DCs) - 3 in the primary domain (Primary DC, Secondary DC, and Read-Only DC), 1 in the child domain (Child DC), and 1 in the trusted domain (Trusted DC) - running Microsoft® Windows Server® 2012 R2 or later, or computers set up as domain controllers that are not based on the Windows operating system service. 
 
@@ -1109,11 +1109,11 @@ You can use the Visual Studio solution (.sln) file included with this test suite
 ![image2.png](./image/ADFamily_ServerUserGuide/image2.png)
 Note
 
-* Clone the source code from [**GitHub**](https://github.com/Microsoft/WindowsProtocolTestSuites) and open the solution file(AD_Server.sln) under **WindowsProtocolTestSuites/TestSuites/ADFamily/src/** folder.
+* Clone the source code from [**GitHub**](https://github.com/Microsoft/WindowsProtocolTestSuites) and open the solution file(AD_Server.sln) under **WindowsProtocolTestSuites\TestSuites\ADFamily\src** folder.
 
 * While using Microsoft® Visual Studio® 2017 or above to run test cases, test suite may throw exception with message of “Cannot get test site”. To solve this issue, please select the test settings file under test settings menu.
 
-* Test result can be checked under C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\ _&#60; version_ &#35;  &#62; \Source\Server\TestCode\TestResults folder.
+* Test result can be checked under WindowsProtocolTestSuites\TestSuites\ADFamily\src\TestResults folder.
 
 >
 
