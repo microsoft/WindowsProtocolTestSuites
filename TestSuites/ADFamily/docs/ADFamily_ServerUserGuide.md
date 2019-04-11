@@ -124,7 +124,7 @@ Refer to the Privacy Statement and EULA for further information.
 
 Run this test suite in a domain environment that contains the following computers (physical or virtual): 
 
-* A driver computer running Microsoft® Windows 8.1 Enterprise or later or Microsoft® Windows Server® 2012 R2 or later
+* A driver computer running Microsoft® Windows 8.1 Enterprise or later versions or running Microsoft® Windows Server® 2012 R2 or later versions.
 
 * Five computers set up as Domain Controllers (DCs) - 3 in the primary domain (Primary DC, Secondary DC, and Read-Only DC), 1 in the child domain (Child DC), and 1 in the trusted domain (Trusted DC) - running Microsoft® Windows Server® 2012 R2 or later, or computers set up as domain controllers that are not based on the Windows operating system service. 
 
