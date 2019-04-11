@@ -241,7 +241,7 @@ This section is about how to set up a Windows-based the test environment.
 
 * Install the ADFamily_ServerTestSuite.msi, and choose **“Install and configure Windows System Under Test (SUT)”** in the “Select the endpoint you are installing on” page;
 
-* Go to C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\ &#60; version &#35;  &#62; \Scripts, and open the ADFamily.xml file;
+* Go to C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\ &#60; version &#35;  &#62; \Scripts, and open the Protocol.xml file;
 
 * Find the element “/lab/server/vm” which has property “hypervname==AD_PDC”, and then edit the properties as shown in the following table:
 
@@ -299,7 +299,7 @@ This section is about how to set up a Windows-based the test environment.
 ![image2.png](./image/ADFamily_ServerUserGuide/image2.png)
 Note 
 
->Please rename ADFamily.xml to Protocol.xml under folder "C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\Scripts" before running following PowerShell scripts.
+>Please rename Protocol.xml to Protocol.xml under folder "C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\Scripts" before running following PowerShell scripts.
 
 * Start Windows PowerShell by right-click on the **Windows PowerShell** icon, and then click **Run as Administrator**, or type following command in a Windows PowerShell command window, and then press **Enter**:
 Start-process powershell -verb runAs
@@ -314,75 +314,75 @@ Start-process powershell -verb runAs
 
 The actual steps of the Config-PDC.ps1 script are as the following. So if you are configuring a non-Windows environment, you could also follow the steps below:
 
-#####Configure IP addresses and set the computer name
+##### Configure IP addresses and set the computer name
 Set the IP addresses and computer name according to the table in section [6.1](#_Toc426644921).
 
 For Windows platform, refer to [http://windows.microsoft.com/en-us/windows/change-tcp-ip-settings &#35; 1TC=windows-7](http://windows.microsoft.com/en-us/windows/change-tcp-ip-settings) about “How to Configure IP Addresses” and refer to [http://windows.microsoft.com/en-us/windows/change-computer-name &#35; 1TC=windows-7](http://windows.microsoft.com/en-us/windows/change-computer-name) about “How to Configure Computer Name”.
 
-#####Turn off UAC
+##### Turn off UAC
 For Windows platform, refer to [http://windows.microsoft.com/en-us/windows/turn-user-account-control-on-off &#35; 1TC=windows-7](http://windows.microsoft.com/en-us/windows/turn-user-account-control-on-off) about “How to Turn On/Off UAC”.
 
-#####Promote DC
+##### Promote DC
 Promote the computer to be a Domain Controller.
 For Windows platform, refer to section [7.2.1](#_Toc426644933).
 
-#####Turn off Firewall
+##### Turn off Firewall
 For Windows platform, refer to section [7.2.2](#_Toc426644934).
 
-#####Set Computer Password
+##### Set Computer Password
 For Windows platform, refer to section [7.2.3](#_Toc426644935).
 
-#####Configure the Netlogon Service to Depend on the DNS Service
+##### Configure the Netlogon Service to Depend on the DNS Service
 For Windows platform, refer to section [7.2.4](#_Toc426644936).
 
-#####Set Machine Account Privilege
+##### Set Machine Account Privilege
 For Windows platform, refer to section [7.2.5](#_Toc426644937).
 
-#####Install Active Directory Certificate Services
+##### Install Active Directory Certificate Services
 For Windows platform, refer to section [7.2.6](#_Toc426644938).
 
-#####Install Active Directory Lightweight Directory Services
+##### Install Active Directory Lightweight Directory Services
 For Windows platform, refer to section [7.2.7](#_Toc426644938_1).
 
-#####Install DFS Management Tools
+##### Install DFS Management Tools
 For Windows platform, refer to section [7.2.8](#_Toc426644940).
 
-#####Set DFS Replication Debug Log Level to 5
+##### Set DFS Replication Debug Log Level to 5
 For Windows platform, refer to section [7.2.9](#_Toc426644941).
 
-#####Install IIS
+##### Install IIS
 For Windows platform, refer to section [7.2.10](#_Toc426644942).
 
-#####Create client user for AD LDS instance
+##### Create client user for AD LDS instance
 For Windows platform, refer to section [7.2.12](#_Toc426644944).
 
-#####Add client user to “Domain Admins”, “Domain Users”, “Enterprise Admins”, “Schema Admins”, and “Group Policy Creator Owners” groups
+##### Add client user to “Domain Admins”, “Domain Users”, “Enterprise Admins”, “Schema Admins”, and “Group Policy Creator Owners” groups
 For Windows platform, refer to section [7.2.13](#_Toc426644945).
 
-#####Set UPN for Client User
+##### Set UPN for Client User
 For Windows platform, refer to section [7.2.14](#_Toc426644946).
 
-#####Install AD LDS Instance under Client User
+##### Install AD LDS Instance under Client User
 For Windows platform, refer to [https://technet.microsoft.com/en-us/library/cc816778(v=ws.10).aspx](https://technet.microsoft.com/en-us/library/cc816778(v=ws.10).aspx). Also import all available LDIF files.
 
-#####Enable Optional Feature
+##### Enable Optional Feature
 For Windows platform, refer to section [7.2.15](#_Toc426644947).
 
-#####Other Settings in AD DS
+##### Other Settings in AD DS
 Set attribute “msDS-Other-Settings” on object “CN=Directory Service, CN=Windows NT, CN=Services, CN=Configuration,  &#60; DomainNC &#62; ”, and add “ADAMAllowADAMSecurityPrincipalsInConfigPartition=1” to the original value.
 
 Set attribute “msDS-Behavior-Version” on object “CN=Partitions, CN=Configuration,  &#60; DomainNC &#62; ” to the expected value under testing.
 
 Set attribute “msDS-AdditionalDnsHostName” on DC computer object to “ &#60; hostname &#62; . &#60; domain name &#62; ”.
 
-#####Other Settings in AD LDS
+##### Other Settings in AD LDS
 Set attribute “msDS-Other-Settings” on object “CN=Directory Service, CN=Windows NT, CN=Services, CN=Configuration,  &#60; ADAMDomainDN &#62; ”, and add “ADAMAllowADAMSecurityPrincipalsInConfigPartition=1” to the original value.
 
-#####Update msDS-AdditionalDnsHostName of the driver computer object
+##### Update msDS-AdditionalDnsHostName of the driver computer object
 This setting should be conducted after the configuration of the driver computer.
 Set the msDS-AdditionalDnsHostName attribute of the driver computer object to be “ &#60; driver hostname &#62; . &#60; domain name &#62; ”.
 
-#####Export SSL certificate and Configure SSL Binding for IIS WebSite
+##### Export SSL certificate and Configure SSL Binding for IIS WebSite
 This setting should be conducted after the configuration of the driver computer.
 For Windows platform, refer to section [7.2.19](#_Toc426644951), [7.2.20](#_Toc426644952). 
 
@@ -393,7 +393,7 @@ This section provides information about how to setup a Windows-based SDC for use
 
 * Install the ADFamily_ServerTestSuite.msi, and choose **“Install and configure Windows System Under Test (SUT)”** in the “Select the endpoint you are installing on” page;
 
-* Go to C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\ &#60; version &#35;  &#62; \Scripts, and open the ADFamily.xml file;
+* Go to C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\ &#60; version &#35;  &#62; \Scripts, and open the Protocol.xml file;
 
 * Find the element “/lab/server/vm” which has property “hypervname==AD_SDC”, and then edit the properties as shown in the following table:
 
@@ -431,28 +431,28 @@ Start-process powershell -verb runAs
 
 The actual steps of the Config-SDC.ps1 script are as the following:
 
-#####Configure IP addresses and set the computer name to “SDC”
+##### Configure IP addresses and set the computer name to “SDC”
 
-#####Promote DC
+##### Promote DC
 Promote the computer to be a Domain Controller.
 For Windows platform, refer to section [7.2.1](#_Toc426644933).
 
-#####Turn off Firewall
+##### Turn off Firewall
 For Windows platform, refer to section [7.2.2](#_Toc426644934).
 
-#####Set Domain Administrator Account
+##### Set Domain Administrator Account
 Set the Domain Administrator Account with  &#60; password &#62; , and set the account to be “Must Change Password = false”, “Can Change Password = false”, “Password Never Expires = true”.
 
-#####Set Computer Password
+##### Set Computer Password
 For Windows platform, refer to section [7.2.3](#_Toc426644935).
 
-#####Configure the Netlogon Service to Depend on the DNS Service
+##### Configure the Netlogon Service to Depend on the DNS Service
 For Windows platform, refer to section [7.2.4](#_Toc426644936).
 
-#####Replicate from PDC
+##### Replicate from PDC
 For Windows platform, refer to section [7.2.16](#_Toc426644948).
 
-#####Install DFS Management Tools
+##### Install DFS Management Tools
 For Windows platform, refer to section [7.2.8](#_Toc426644940).
 
 #### <a name="_Toc426644927"/>Set up the Read Only Domain Controller (RODC)
@@ -462,7 +462,7 @@ This section provides information about how to setup a Windows-based RODC for us
 
 * Install the ADFamily_ServerTestSuite.msi, and choose **“Install and configure Windows System Under Test (SUT)”** in the “Select the endpoint you are installing on” page;
 
-* Go to C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\ &#60; version &#35;  &#62; \Scripts, and open the ADFamily.xml file;
+* Go to C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\ &#60; version &#35;  &#62; \Scripts, and open the Protocol.xml file;
 
 * Find the element “/lab/server/vm” which has property “hypervname==AD_RODC”, and then edit the properties as shown in the following table:
 
@@ -500,28 +500,28 @@ Start-process powershell -verb runAs
 
 The actual steps of the Config-RODC.ps1 script are as the following:
 
-#####Configure IP addresses and set the computer name to “RODC”
+##### Configure IP addresses and set the computer name to “RODC”
 
-#####Promote DC
+##### Promote DC
 Promote the computer to be a Read Only Domain Controller.
 For Windows platform, refer to section [7.2.1](#_Toc426644933).
 
-#####Turn off Firewall
+##### Turn off Firewall
 For Windows platform, refer to section [7.2.2](#_Toc426644934).
 
-#####Set Domain Administrator Account
+##### Set Domain Administrator Account
 Set the Domain Administrator Account with  &#60; password &#62; , and set the account to be “Must Change Password = false”, “Can Change Password = false”, “Password Never Expires = true”.
 
-#####Set Computer Password
+##### Set Computer Password
 For Windows platform, refer to section [7.2.3](#_Toc426644935).
 
-#####Configure the Netlogon Service to Depend on the DNS Service
+##### Configure the Netlogon Service to Depend on the DNS Service
 For Windows platform, refer to section [7.2.4](#_Toc426644936).
 
-#####Replicate from PDC
+##### Replicate from PDC
 For Windows platform, refer to section [7.2.16](#_Toc426644948).
 
-#####Install DFS Management Tools
+##### Install DFS Management Tools
 For Windows platform, refer to section [7.2.8](#_Toc426644940).
 
 #### <a name="_Toc426644928"/>Set up the Child Domain Controller (CDC)
@@ -531,7 +531,7 @@ This section provides information about how to setup a Windows-based CDC for use
 
 * Install the ADFamily_ServerTestSuite.msi, and choose **“Install and configure Windows System Under Test (SUT)”** in the “Select the endpoint you are installing on” page;
 
-* Go to C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\ &#60; version &#35;  &#62; \Scripts, and open the ADFamily.xml file;
+* Go to C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\ &#60; version &#35;  &#62; \Scripts, and open the Protocol.xml file;
 
 * Find the element “/lab/server/vm” which has property “hypervname==AD_CDC”, and then edit the properties as shown in the following table:
 
@@ -573,25 +573,25 @@ Start-process powershell -verb runAs
 
 The actual steps of the Config-CDC.ps1 script are as the following:
 
-#####Configure IP addresses and set the computer name to “CDC”
+##### Configure IP addresses and set the computer name to “CDC”
 
-#####Promote DC
+##### Promote DC
 Promote the computer to be a Domain Controller for child domain.
 For Windows platform, refer to section [7.2.1](#_Toc426644933).
 
-#####Turn off Firewall
+##### Turn off Firewall
 For Windows platform, refer to section [7.2.2](#_Toc426644934).
 
-#####Set Domain Administrator Account
+##### Set Domain Administrator Account
 Set the Domain Administrator Account with  &#60; password &#62; , and set the account to be “Must Change Password = false”, “Can Change Password = false”, “Password Never Expires = true”.
 
-#####Set Computer Password
+##### Set Computer Password
 For Windows platform, refer to section [7.2.3](#_Toc426644935).
 
-#####Configure the Netlogon Service to Depend on the DNS Service
+##### Configure the Netlogon Service to Depend on the DNS Service
 For Windows platform, refer to section [7.2.4](#_Toc426644936).
 
-#####Install DFS Management Tools
+##### Install DFS Management Tools
 For Windows platform, refer to section [7.2.8](#_Toc426644940).
 
 #### <a name="_Toc426644929"/>Set up the Trusted Domain Controller (TDC)
@@ -601,7 +601,7 @@ This section provides information about how to setup a Windows-based TDC for use
 
 * Install the ADFamily_ServerTestSuite.msi, and choose **“Install and configure Windows System Under Test (SUT)”** in the “Select the endpoint you are installing on” page;
 
-* Go to C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\ &#60; version &#35;  &#62; \Scripts, and open the ADFamily.xml file;
+* Go to C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\ &#60; version &#35;  &#62; \Scripts, and open the Protocol.xml file;
 
 * Find the element “/lab/server/vm” which has property “hypervname==AD_TDC”, and then edit the properties as shown in the following table:
 
@@ -645,34 +645,34 @@ Start-process powershell -verb runAs
 
 The actual steps of the Config-TDC.ps1 script are as the following:
 
-#####Configure IP addresses and set the computer name to “TDC”
+##### Configure IP addresses and set the computer name to “TDC”
 
-#####Promote DC
+##### Promote DC
 Promote the computer to be a Domain Controller for trust domain.
 For Windows platform, refer to section [7.2.1](#_Toc426644933).
 
-#####Set Security Level
+##### Set Security Level
 For Windows platform, refer to section [7.2.17](#_Toc426644949).
 
-#####Turn off Firewall
+##### Turn off Firewall
 For Windows platform, refer to section [7.2.2](#_Toc426644934).
 
-#####Configure the Netlogon Service to Depend on the DNS Service
+##### Configure the Netlogon Service to Depend on the DNS Service
 For Windows platform, refer to section [7.2.4](#_Toc426644936).
 
-#####Create Forest Trust from Both Local Side and Remote Side
+##### Create Forest Trust from Both Local Side and Remote Side
 For Windows platform, refer to [https://technet.microsoft.com/en-us/library/cc780479(v=ws.10).aspx](https://technet.microsoft.com/en-us/library/cc780479(v=ws.10).aspx).
 
 #### <a name="_Toc426644930"/>Set up the Domain Member
 
-#####Configure IP addresses and set the computer name to “DM”
+##### Configure IP addresses and set the computer name to “DM”
 This section provides information about how to setup a Windows-based DM for use with this test suite.
 
 * Log on to the DM computer as local administrator;
 
 * Install the ADFamily_ServerTestSuite.msi, and choose **“Install and configure Windows System Under Test (SUT)”** in the “Select the endpoint you are installing on” page;
 
-* Go to C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\ &#60; version &#35;  &#62; \Scripts, and open the ADFamily.xml file;
+* Go to C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\ &#60; version &#35;  &#62; \Scripts, and open the Protocol.xml file;
 
 * Find the element “/lab/server/vm” which has property “hypervname==AD_DM”, and then edit the properties as shown in the following table:
 
@@ -712,14 +712,14 @@ Start-process powershell -verb runAs
 
 The actual steps of the Config-DM.ps1 script are as the following:
 
-#####Join Domain
+##### Join Domain
 Join the computer to be a member of the domain provided by PDC.
 For Windows platform, refer to [https://technet.microsoft.com/en-us/library/bb456990.aspx](https://technet.microsoft.com/en-us/library/bb456990.aspx).
 
-#####Turn off Firewall
+##### Turn off Firewall
 For Windows platform, refer to section [7.2.2](#_Toc426644934).
 
-#####Set Computer Password
+##### Set Computer Password
 For Windows platform, refer to section [7.2.3](#_Toc426644935).
 
 #### <a name="_Toc426644931"/>Set up the Driver Computer
@@ -727,9 +727,9 @@ This section provides information about how to setup a Windows-based Driver for 
 
 * Log on to the Driver computer as local administrator;
 
-* Install the ADFamily_ServerTestSuite.msi, and choose **“Install and configure Windows System Under Test (SUT)”** in the “Select the endpoint you are installing on” page;
+* Install the ADFamily_ServerTestSuite.msi, and choose **“Install Test Suite on Driver Computer”** in the “Select the endpoint you are installing on” page;
 
-* Go to C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\ &#60; version &#35;  &#62; \Scripts, and open the ADFamily.xml file;
+* Go to C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\ &#60; version &#35;  &#62; \Scripts, and open the Protocol.xml file;
 
 * Find the element “/lab/server/vm” which has property “hypervname==AD_ENDPOINT”, and then edit the properties as shown in the following table:
 
@@ -758,9 +758,9 @@ This section provides information about how to setup a Windows-based Driver for 
 | | The default value is “SDC.contoso.com”.| 
 |  **readonlydc**| The read-only DC in the current domain that driver computer is joined.| 
 | | The default value is “RODC.contoso.com”.| 
-|  **childdc**| The child DC in the current domain that driver computer is joined.| 
+|  **childdcip**| The child DC in the current domain that driver computer is joined.| 
 | | The default value is “192.168.111.4”.| 
-|  **trustdc**| The primary DC in the trusted domain by the domain that the driver is currently joined.| 
+|  **trustdcip**| The primary DC in the trusted domain by the domain that the driver is currently joined.| 
 | | The default value is “192.168.111.5”.| 
 |  **clientuser**| The user name of the default test user.| 
 | | The default value is “userADTSSecurity”.| 
@@ -782,22 +782,22 @@ Start-process powershell -verb runAs
 
 The actual steps of the Config-ENDPOINT.ps1 script are as the following:
 
-#####Configure IP addresses and set the computer name to “ENDPOINT”
+##### Configure IP addresses and set the computer name to “ENDPOINT”
 
-#####Turn off UAC
+##### Turn off UAC
 For Windows platform, refer to [http://windows.microsoft.com/en-us/windows/turn-user-account-control-on-off &#35; 1TC=windows-7](http://windows.microsoft.com/en-us/windows/turn-user-account-control-on-off) about “How to Turn On/Off UAC”.
 
-#####Turn off Firewall
+##### Turn off Firewall
 For Windows platform, refer to section [7.2.2](#_Toc426644934).
 
-#####Set Computer Password
+##### Set Computer Password
 For Windows platform, refer to section [7.2.3](#_Toc426644935).
 
-#####Install Certificate from PDC
+##### Install Certificate from PDC
 Copy the certificate generated in PDC to the Driver computer under the specified folder indicated by  &#60; certpath &#62; .
 For Windows platform, refer to section [7.2.18](#_Toc426644950).
 
-#####Restart DFSR service on SDC if SDC exists
+##### Restart DFSR service on SDC if SDC exists
 
 ### <a name="_Toc426644932"/>Computer Setup for Windows platform
 
@@ -810,11 +810,11 @@ Run the following command in console window:
 
 #### <a name="_Toc426644935"/>Set Computer Password
 
-#####Manually Set Local Computer Password
+##### Manually Set Local Computer Password
 Run the following command in console window: 
 **ksetup /SetComputerPassword  &#60; password &#62;** 
 
-#####Set Computer Password using ADSI
+##### Set Computer Password using ADSI
 Run the following command in PowerShell window:
 **$dcADSI=[ADSI]"LDAP://CN= &#60; hostname &#62; ,OU=Domain Controllers, &#60; domainnamingcontext &#62; "**
 **$dcADSI.SetPassword( &#60; password &#62; )**
@@ -828,15 +828,15 @@ Where,
 
 *  &#60; password &#62;  is the new password for the computer;
 
-#####Disable Auto Computer Password Change
+##### Disable Auto Computer Password Change
 Run the following command in console windows:
 **reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\Netlogon\Parameters /v DisablePasswordChange /t REG_DWORD /d 1 /f**
 
-#####Refuse Password Change Request
+##### Refuse Password Change Request
 Run the following command in console windows:
 **reg add HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\Netlogon\Parameters /v RefusePasswordChange /t REG_DWORD /d 1 /f**
 
-#####Restart Computer
+##### Restart Computer
 
 #### <a name="_Toc426644936"/>Configure the Netlogon Service to Depend on the DNS Service
 Run the following command in console windows:
@@ -844,9 +844,9 @@ Run the following command in console windows:
 
 #### <a name="_Toc426644937"/>Set Machine Account Privilege
 
-#####Log on to the computer as a user who has administrative rights
+##### Log on to the computer as a user who has administrative rights
 
-#####Modify the Gpttmpl.inf file for the default domain policy
+##### Modify the Gpttmpl.inf file for the default domain policy
 Modify the Gpttmpl.inf file for the default domain policy. By default, the default domain policy GPO is where user rights are defined for a domain controller. By default, the Gpttmpl.inf file for the default domain policy GPO is located in the following folder: 
 
 %SystemRoot%\Sysvol\Sysvol\ &#60; Domain Name &#62; \Policies\ &#60; Domain Policy Identifier &#62; \Computer\Microsoft\Windows NT\SecEdit
