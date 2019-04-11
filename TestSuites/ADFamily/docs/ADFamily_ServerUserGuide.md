@@ -124,11 +124,11 @@ Refer to the Privacy Statement and EULA for further information.
 
 Run this test suite in a domain environment that contains the following computers (physical or virtual): 
 
-* A driver computer running Microsoft® Windows 8.1 Enterprise or Microsoft® Windows Server® 2012 R2
+* A driver computer running Microsoft® Windows 8.1 Enterprise or later or Microsoft® Windows Server® 2012 R2 or later
 
-* Five computers set up as Domain Controllers (DCs) - 3 in the primary domain (Primary DC, Secondary DC, and Read-Only DC), 1 in the child domain (Child DC), and 1 in the trusted domain (Trusted DC) - running Microsoft® Windows Server® 2012 R2, or computers set up as domain controllers that are not based on the Windows operating system service. 
+* Five computers set up as Domain Controllers (DCs) - 3 in the primary domain (Primary DC, Secondary DC, and Read-Only DC), 1 in the child domain (Child DC), and 1 in the trusted domain (Trusted DC) - running Microsoft® Windows Server® 2012 R2 or later, or computers set up as domain controllers that are not based on the Windows operating system service. 
 
-* A computer setup as Domain Member (DM) running Microsoft® Windows Server® 2012 R2 or a computer set up as DM that is not based on the Windows operating system service.
+* A computer setup as Domain Member (DM) running Microsoft® Windows Server® 2012 R2 or later or a computer set up as DM that is not based on the Windows operating system service.
 
 ### <a name="_Toc426644916"/>Driver Computer 
 
@@ -1007,7 +1007,7 @@ Note
 
 |  **File or Folder**|  **Description**| 
 | -------------| ------------- |
-| Batch| Command files you can use to run individual test cases or all test cases.| 
+| Batch| Command files you can use to run individual test case or all test cases.| 
 | Bin| Test suite binaries and configuration files.| 
 | Docs| **[MS-ADA1].pdf** | 
 | |  **[MS-ADA2].pdf**| 
@@ -1025,7 +1025,6 @@ Note
 | | **ADFamily_ServerUserGuide.docx** – A user guide that explains how to install and configure the driver computer, the DCs, and the domain members, as well as how to run test cases.| 
 | | **ADFamily_ServerTestDesignSpecification.docx** – An overview document containing conceptual information about AD environment and test scenario design.| 
 | Scripts| Scripts that are used to set up and configure the driver computer, the DCs and the domain members.| 
-| Source| Test suite source code.| 
 | License.rtf| The End User License Agreement.| 
 
 Additionally the installation process also adds following folders and files to the driver computer at C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\Infrastructure\src\, which contains the protocol SDK source code of projects that test suite will referenced.
@@ -1097,10 +1096,11 @@ Alternatively, go to C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\ _&#60; 
 
 ### <a name="_Toc426644961"/>Check Test Results
 Test suite generates test result files in different paths based on the way how test case is executed.
-For running test case with batch: C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\ _&#60; version_ &#35;  &#62; \Batch\TestResults
-For running test case with Visual Studio: C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\ _&#60; version_ &#35;  &#62; \Source\Server\TestCode\TestResults
-For running test case with PTM: C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\ _&#60; version_ &#35;  &#62; \TestResults
-For further information about logging in the Protocol Test Framework (PTF), see the _PTF User Guide_ in the PTF installation directory
+* For running test case with batch: C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\ _&#60; version_ &#35;  &#62; \Batch\TestResults
+
+* For running test case with PTM: C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\ _&#60; version_ &#35;  &#62; \TestResults
+
+* For further information about logging in the Protocol Test Framework (PTF), see the _PTF User Guide_ in the PTF installation directory
 
 ## <a name="_Toc426644962"/>Debugging Test Cases
 
@@ -1109,7 +1109,11 @@ You can use the Visual Studio solution (.sln) file included with this test suite
 ![image2.png](./image/ADFamily_ServerUserGuide/image2.png)
 Note
 
-While using Microsoft® Visual Studio® 2017 or above to run test cases, test suite may throw exception with message of “Cannot get test site”. To solve this issue, please select the test settings file under test settings menu.
+* Clone the source code from [**GitHub**](https://github.com/Microsoft/WindowsProtocolTestSuites) and open the solution file(AD_Server.sln) under **WindowsProtocolTestSuites/TestSuites/ADFamily/src/** folder.
+
+* While using Microsoft® Visual Studio® 2017 or above to run test cases, test suite may throw exception with message of “Cannot get test site”. To solve this issue, please select the test settings file under test settings menu.
+
+* Test result can be checked under C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\ _&#60; version_ &#35;  &#62; \Source\Server\TestCode\TestResults folder.
 
 >
 
