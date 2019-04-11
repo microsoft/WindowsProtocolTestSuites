@@ -273,40 +273,40 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             detectInfo.RdpVersion = DetectorUtil.GetPropertyValue("RDP.Version");
             if (mscConnectionInitialPDU.mcsCi.gccPdu.clientCoreData != null)
             {
-                version_Values rdpVersion = mscConnectionInitialPDU.mcsCi.gccPdu.clientCoreData.version;
-                if (rdpVersion == version_Values.V1)
+                var rdpVersion = mscConnectionInitialPDU.mcsCi.gccPdu.clientCoreData.version;
+                if (rdpVersion == TS_UD_CS_CORE_version_Values.V1)
                 {
                     detectInfo.RdpVersion = "4.0";
                 }
-                else if (rdpVersion == version_Values.V2)
+                else if (rdpVersion == TS_UD_CS_CORE_version_Values.V2)
                 {
                     detectInfo.RdpVersion = "8.1";
                 }
-                else if (rdpVersion == version_Values.V3)
+                else if (rdpVersion == TS_UD_CS_CORE_version_Values.V3)
                 {
                     detectInfo.RdpVersion = "10.0";
                 }
-                else if (rdpVersion == version_Values.V4)
+                else if (rdpVersion == TS_UD_CS_CORE_version_Values.V4)
                 {
                     detectInfo.RdpVersion = "10.1";
                 }
-                else if (rdpVersion == version_Values.V5)
+                else if (rdpVersion == TS_UD_CS_CORE_version_Values.V5)
                 {
                     detectInfo.RdpVersion = "10.2";
                 }
-                else if (rdpVersion == version_Values.V6)
+                else if (rdpVersion == TS_UD_CS_CORE_version_Values.V6)
                 {
                     detectInfo.RdpVersion = "10.3";
                 }
-                else if (rdpVersion == version_Values.V7)
+                else if (rdpVersion == TS_UD_CS_CORE_version_Values.V7)
                 {
                     detectInfo.RdpVersion = "10.4";
                 }
-                else if (rdpVersion == version_Values.V8)
+                else if (rdpVersion == TS_UD_CS_CORE_version_Values.V8)
                 {
                     detectInfo.RdpVersion = "10.5";
                 }
-                else if (rdpVersion == version_Values.V9)
+                else if (rdpVersion == TS_UD_CS_CORE_version_Values.V9)
                 {
                     detectInfo.RdpVersion = "10.6";
                 }
