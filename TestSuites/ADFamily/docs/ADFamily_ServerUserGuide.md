@@ -299,8 +299,6 @@ This section is about how to set up a Windows-based the test environment.
 ![image2.png](./image/ADFamily_ServerUserGuide/image2.png)
 Note 
 
->Please rename Protocol.xml to Protocol.xml under folder "C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\Scripts" before running following PowerShell scripts.
-
 * Start Windows PowerShell by right-click on the **Windows PowerShell** icon, and then click **Run as Administrator**, or type following command in a Windows PowerShell command window, and then press **Enter**:
 Start-process powershell -verb runAs
 
