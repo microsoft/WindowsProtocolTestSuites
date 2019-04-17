@@ -34,6 +34,7 @@
         * [FsCtl_IsReparsePointSupported](#_Toc427488674)
         * [FsCtl_IsSparseFileSupported](#_Toc427488675)
         * [FsCtl_IsZeroDataSupported](#_Toc427488676)
+        * [FsCtl_IsDuplicateExtentsToFileExSupported](#_Toc437488670)
     * [Scenarios for Alternate Data Stream](#_Toc427488822)
         * [AlternateDataStream_CreateStream](#_Toc427488823)
         * [AlternateDataStream_ListStreams](#_Toc427488824)
@@ -73,6 +74,8 @@
         * [IsShortNameSupported](#_Toc427488702)
         * [FileInfo_Set_FileShortNameInfo_File_IsShortNameSupported](#_Toc427488703)
         * [FileInfo_Set_FileShortNameInfo_Dir_IsShortNameSupported](#_Toc427488704)
+        * [BVT_FsCtl_DuplicateExtentsToFileEx_IsBasicSupported](#_Toc437488671)
+        * [BVT_FsCtl_DuplicateExtentsToFileEx_IsSourceAtomicSupported](#_Toc437488672)
     * [IsObjectIdSupported](#_Toc427488705)
         * [FsInfo_Query_FileFsAttributeInformation_File_IsObjectIdSupported(BVT)](#_Toc427488706)
         * [FsInfo_Query_FileFsAttributeInformation_Dir_IsObjectIdSupported](#_Toc427488707)
@@ -255,7 +258,7 @@ There are 126 test cases in total:
 |  **Category**|  **Scenarios**|  **Test cases (BVT)**| 
 | -------------| -------------| ------------- |
 | Scenarios for Win8 new added algorithm| 5| 37 (7)| 
-| Scenarios for ReFS file system| 15| 51 (7)| 
+| Scenarios for ReFS file system| 16| 53 (9)| 
 | Scenarios for Alternate Data Stream| 19|38 (12)| 
 | Other Scenarios| 1| 1|
 
@@ -762,6 +765,25 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | | FsCtl request with FSCTL_SET_ZERO_DATA| 
 | | Verify server returns STATUS_SUCCESS for supported file system| 
 | | Or returns STATUS_INVALID_DEVICE_REQUEST for unsupported file system.| 
+
+
+
+
+#### <a name="_Toc437488670"/> FsCtl_IsDuplicateExtentsToFileExSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX with DUPLICATE_EXTENTS_DATA_EX_SOURCE_ATOMIC is supported.| 
+| | Note: This is only implemented by the **REFS** file system.| 
+| | Test environment: ReFS| 
+| | Test object: DataFile| 
+| | Test coverage:| 
+| | FsCtl: FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX| 
+| Message Sequence| Create test file and fill up first two clusters with random data.| 
+| | FSCTL request with FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX and different additional flags to duplicate the file extent of first cluster to the second.| 
+| | Verify returned NTSTATUS code and file content by checking the following:| 
+| | 1. The returned status is STATUS_SUCCESS.| 
+| | 2. The file content of the second cluster is the same as the first.| 
 
 
 
@@ -1651,6 +1673,44 @@ Parameter combination
 | | } Else {
 | | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
 | | }
+
+
+
+
+#### <a name="_Toc437488671"/> BVT_FsCtl_DuplicateExtentsToFileEx_IsBasicSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX without additional flags is supported.| 
+| | Note: This is only implemented by the **REFS** file system.| 
+| | Test environment: ReFS| 
+| | Test object: DataFile| 
+| | Test coverage:| 
+| | FsCtl: FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX| 
+| Message Sequence| Create test file and fill up first two clusters with random data.| 
+| | FSCTL request with FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX and no additional flags to duplicate the file extent of first cluster to the second.| 
+| | Verify returned NTSTATUS code and file content by checking the following:| 
+| | 1. The returned status is STATUS_SUCCESS.| 
+| | 2. The file content of the second cluster is the same as the first.| 
+
+
+
+
+#### <a name="_Toc437488672"/> BVT_FsCtl_DuplicateExtentsToFileEx_IsSourceAtomicSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX with DUPLICATE_EXTENTS_DATA_EX_SOURCE_ATOMIC is supported.| 
+| | Note: This is only implemented by the **REFS** file system.| 
+| | Test environment: ReFS| 
+| | Test object: DataFile| 
+| | Test coverage:| 
+| | FsCtl: FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX| 
+| Message Sequence| Create test file and fill up first two clusters with random data.| 
+| | FSCTL request with FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX and DUPLICATE_EXTENTS_DATA_EX_SOURCE_ATOMIC to duplicate the file extent of first cluster to the second.| 
+| | Verify returned NTSTATUS code and file content by checking the following:| 
+| | 1. The returned status is STATUS_SUCCESS.| 
+| | 2. The file content of the second cluster is the same as the first.| 
 
 
 

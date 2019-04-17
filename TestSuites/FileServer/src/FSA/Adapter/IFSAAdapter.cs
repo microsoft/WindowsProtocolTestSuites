@@ -129,7 +129,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         #endregion
 
         #region 3.1.5.2   Server Requests a Read
-        /// <summary>
+        // <summary>
         /// Implement ReadFile Interface
         /// </summary>
         /// <param name="valueOffset">The absolute byte offset in the stream from which to read data.</param>
@@ -140,6 +140,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             long valueOffset,
             int valueCount,
             out long byteRead);
+
+        /// <summary>
+        /// Implement ReadFile Interface
+        /// </summary>
+        /// <param name="valueOffset">The absolute byte offset in the stream from which to read data.</param>
+        /// <param name="valueCount">The desired number of bytes to read.</param>
+        /// <param name="byteRead">The number of bytes that were read.</param>
+        /// <param name="buffer">The buffer which contains file content read out.</param>
+        /// <returns>An NTSTATUS code that specifies the result</returns>
+        MessageStatus ReadFile(
+            long valueOffset,
+            int valueCount,
+            out long byteRead,
+            out byte[] outBuffer
+            );
         #endregion
 
         #region 3.1.5.3   Server Requests a Write
@@ -503,6 +518,23 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             InputBufferFSCTL_SIS_COPYFILE inputBuffer,
             bool isCopyFileSisLinkTrue,
             bool isIsEncryptedTrue
+            );
+        #endregion
+
+        #region FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX
+        /// <summary>
+        /// Implement FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX, which duplicates file extents from the same opened file.
+        /// </summary>
+        /// <param name="sourceFileOffset">Offset of source file.</param>
+        /// <param name="targetFileOffset">Offset of target file.</param>
+        /// <param name="byteCount">The number of bytes of duplicate.</param>
+        /// <param name="flags">Flags for duplicate file.</param>
+        /// <returns></returns>
+        MessageStatus FsctlDuplicateExtentsToFileEx(
+            long sourceFileOffset,
+            long targetFileOffset,
+            long byteCount,
+            FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX_Request_Flags_Values flags
             );
         #endregion
 

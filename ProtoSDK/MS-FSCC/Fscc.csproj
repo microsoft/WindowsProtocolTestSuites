@@ -87,6 +87,10 @@
       <Project>{75544419-3F4E-4308-A676-165F45C1462E}</Project>
       <Name>Messages</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MS-SMB2\Smb2.csproj">
+      <Project>{C7F08825-D3C9-4DDD-9BA3-06733B1ABE36}</Project>
+      <Name>Smb2</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
