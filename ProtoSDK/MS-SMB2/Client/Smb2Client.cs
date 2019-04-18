@@ -213,7 +213,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// </summary>
         private Exception exceptionWhenReceivingPacket;
 
-        private Thread thread;
+        CancellationTokenSource eventCts;
+        private Thread eventThread;
+
+        CancellationTokenSource notificationCts;
         private Thread notificationThread;
 
         private Queue<Smb2SinglePacket> receivedNotifications = new Queue<Smb2SinglePacket>();
@@ -389,10 +392,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// Notifications will be received in EventLoop but are handled in this method.
         /// NotificationEventLoop is called in a different thread from which EventLoop is called.
         /// </summary>
-        private void NotificationEventLoop()
+        private void NotificationEventLoop(object obj)
         {
+            CancellationToken ct = (CancellationToken)obj;
+
             while (true)
             {
+                if (ct.IsCancellationRequested)
+                {
+                    break;
+                }
+
                 try
                 {
                     if (notificationReceivedEvent.WaitOne())
@@ -504,10 +514,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// <summary>
         /// Event loop to handle all received packets.
         /// </summary>
-        private void EventLoop()
+        private void EventLoop(object obj)
         {
+            CancellationToken ct = (CancellationToken)obj;
+
             while (true)
             {
+                if (ct.IsCancellationRequested)
+                {
+                    break;
+                }
+
                 TransportEvent transEvent = null;
                 try
                 {
@@ -791,14 +808,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             transport = new TransportStack(transportConfig, decoder.Smb2DecodePacketCallback);
             transport.Connect();
 
-            thread = new Thread(new ThreadStart(EventLoop));
-            thread.IsBackground = true;
-            thread.Start();
+            eventCts = new CancellationTokenSource();
+            eventThread = new Thread(new ParameterizedThreadStart(EventLoop));
+            eventThread.IsBackground = true;
+            eventThread.Start(eventCts.Token);
             connected = true;
 
-            notificationThread = new Thread(new ThreadStart(NotificationEventLoop));
+            notificationCts = new CancellationTokenSource();
+            notificationThread = new Thread(new ParameterizedThreadStart(NotificationEventLoop));
             notificationThread.IsBackground = true;
-            notificationThread.Start();
+            notificationThread.Start(notificationCts.Token);
         }
 
         /// <summary>
@@ -817,16 +836,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 {
                     // Sometimes transport will throw an exception.
                 }
-                if (!thread.Join(new TimeSpan(0, 0, 2)))
+
+                if (!eventThread.Join(new TimeSpan(0, 0, 2)))
                 {
-                    thread.Abort();
+                    eventCts.Cancel();
                 }
-                thread = null;
+                eventThread = null;
+                eventCts.Dispose();
+
                 if (!notificationThread.Join(new TimeSpan(0, 0, 2)))
                 {
-                    notificationThread.Abort();
+                    notificationCts.Cancel();
                 }
                 notificationThread = null;
+                notificationCts.Dispose();
 
                 transport.Dispose();
 
