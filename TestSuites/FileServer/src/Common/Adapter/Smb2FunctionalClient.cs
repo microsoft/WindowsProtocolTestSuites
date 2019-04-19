@@ -880,14 +880,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             string uncSharePath,
             out uint treeId,
             ResponseChecker<TREE_CONNECT_Response> checker = null,
-            TreeConnect_Flags flags = TreeConnect_Flags.SMB2_SHAREFLAG_NONE)
+            TreeConnect_Flags flags = TreeConnect_Flags.SMB2_SHAREFLAG_NONE,
+            WindowsIdentity identity = null)
         {
             return TreeConnect(
                 testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
                 uncSharePath,
                 out treeId,
                 checker,
-                flags);
+                flags,
+                identity);
         }
 
         /// <summary>
@@ -903,7 +905,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             string uncSharePath,
             out uint treeId,
             ResponseChecker<TREE_CONNECT_Response> checker = null,
-            TreeConnect_Flags flags = TreeConnect_Flags.SMB2_SHAREFLAG_NONE)
+            TreeConnect_Flags flags = TreeConnect_Flags.SMB2_SHAREFLAG_NONE,
+            WindowsIdentity identity = null)
         {
             Packet_Header header;
             TREE_CONNECT_Response treeConnectResponse;
@@ -942,7 +945,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
              */
             else
             {
-                byte[] buffer = CreateTreeConnectRequestExt(uncSharePath);
+                byte[] buffer = CreateTreeConnectRequestExt(uncSharePath, identity);
                 status = client.TreeConnect(
                     creditCharge,
                     generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
@@ -3147,7 +3150,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         }
 
         #region SMB2 TREE_CONNECT Request Extension
-        private byte[] CreateTreeConnectRequestExt(string sharePath)
+        private byte[] CreateTreeConnectRequestExt(string sharePath, WindowsIdentity identity)
         {
             ushort treeConnectContextCount = 1;
             byte[] pathName = Encoding.Unicode.GetBytes(sharePath);
@@ -3168,18 +3171,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             buffer = buffer.Concat(pathName).ToArray();
             Smb2Utility.Align8(0, ref buffer);
 
-            byte[] ctxBuf = CreateTreeConnectContext();
+            byte[] ctxBuf = CreateTreeConnectContext(identity);
             Smb2Utility.Align8(0, ref ctxBuf);
             buffer = buffer.Concat(ctxBuf).ToArray();
             return buffer;
         }
 
-        private byte[] CreateTreeConnectContext()
+        private byte[] CreateTreeConnectContext(WindowsIdentity identity)
         {
             byte[] buffer;
             Tree_Connect_Context ctx = new Tree_Connect_Context();
             ctx.ContextType = Context_Type.RESERVED_TREE_CONNECT_CONTEXT_ID;
-            byte[] remotedIdentityBuf = CreateRemotedIdentity(out ctx.DataLength);
+            byte[] remotedIdentityBuf = CreateRemotedIdentity(out ctx.DataLength, identity);
             buffer = TypeMarshal.ToBytes<Context_Type>(ctx.ContextType);
             buffer = buffer.Concat(TypeMarshal.ToBytes<ushort>(ctx.DataLength)).ToArray();
             buffer = buffer.Concat(TypeMarshal.ToBytes<uint>(ctx.Reserved)).ToArray();
@@ -3187,17 +3190,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             return buffer;
         }
 
-        private byte[] CreateRemotedIdentity(out ushort dataLength)
+        private byte[] CreateRemotedIdentity(out ushort dataLength, WindowsIdentity identity)
         {
             REMOTED_IDENTITY_TREE_CONNECT_Context remotedIdentity = new REMOTED_IDENTITY_TREE_CONNECT_Context();
             ushort currentOffset = 0;
             remotedIdentity.TicketType = 0x0001;
             currentOffset += 2 * 14;  // TicketType, TicketSize, User, UserName, Domain, Groups, RestrictedGroups, Privileges, PrimaryGroup, Owner, DefaultDacl, DeviceGroups, UserClaims, DeviceClaims
-
-            WindowsIdentity identity = WindowsIdentity.GetCurrent(TokenAccessLevels.MaximumAllowed);
-            string currentDomainName = identity.Name.Split('\\')[0];
-            string currentUserName = identity.Name.Split('\\')[1];
-
+            
             // User: SID_ATTR_DATA
             remotedIdentity.User = currentOffset;
             byte[] userBinary = new byte[identity.User.BinaryLength];
@@ -3211,13 +3210,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
             // UserName: null-terminated Unicode string
             remotedIdentity.UserName = currentOffset;
-            remotedIdentity.TicketInfo.UserName = Encoding.Unicode.GetBytes(currentUserName + '\x0');
+            remotedIdentity.TicketInfo.UserName = Encoding.Unicode.GetBytes(identity.Name.Split('\\')[1] + '\x0');
             ushort userNameLen = (ushort)remotedIdentity.TicketInfo.UserName.Length;
             currentOffset += (ushort)(remotedIdentity.TicketInfo.UserName.Length + 2 /* '\x0' */);
 
             // Domain: null-terminated Unicode string
             remotedIdentity.Domain = currentOffset;
-            remotedIdentity.TicketInfo.Domain = Encoding.Unicode.GetBytes(currentDomainName + '\x0');
+            remotedIdentity.TicketInfo.Domain = Encoding.Unicode.GetBytes(identity.Name.Split('\\')[0] + '\x0');
             ushort domainLen = (ushort)remotedIdentity.TicketInfo.Domain.Length;
             currentOffset += (ushort)(remotedIdentity.TicketInfo.Domain.Length + 2 /* '\x0' */);
 

@@ -1,14 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
   <Properties>
-
     <!--
         Tag named Choice is used for the ComboBox in UI design
         Tag named Description is used for the comment
     -->
-
     <Group name="PTF">
       <Group name="NetworkCapture">
         <Property name="Enabled" value="false">
@@ -30,107 +26,100 @@
         </Property>
       </Group>
     </Group>
-
     <Group name="Common">
-
       <Property name="Timeout" value="6">
         <Description>
           Timeout in seconds for SMB2 connection over transport
         </Description>
       </Property>
-
       <Property name="LongerTimeout" value="120">
         <Description>
           The longer timeout in seconds for the connection against SUT
         </Description>
       </Property>
-
       <Property name="RetryInterval" value="10">
         <Description>
           The time interval to retry the SMB2 connection, in seconds
         </Description>
       </Property>
-
       <Property name="UnderlyingTransport" value="Tcp">
         <Choice>Tcp, NetBios</Choice>
         <Description>
           The underlying transport of SMB2 protocol
         </Description>
       </Property>
-
-      <Property name="SutComputerName" value="node01">
+      <Property name="DriverComputerName" value="CLS-CLI01">
+        <Description>
+          Computer name of driver computer
+        </Description>
+      </Property>
+      <Property name="SutComputerName" value="CLS-NODE01">
         <Description>
           Computer name of system under test (SUT)
           If SUT does not have a computer name, set the value to SUT's IP address
         </Description>
       </Property>
-
-      <Property name="SutIPAddress" value="192.168.1.11" >
+      <Property name="SutIPAddress" value="10.16.0.82">
         <Description>
           IP address or Host Name of SUT to establish connections
         </Description>
       </Property>
-
-      <Property name="DomainName" value="contoso.com" >
+      <Property name="DomainName" value="contoso.com">
         <Description>
           Domain name where the SUT locates
           If SUT is in WORKGROUP, set it to the value of SutComputerName
           If SUT does not have a computer name, leave it blank
         </Description>
       </Property>
-
       <Property name="AdminUserName" value="Administrator">
         <Description>
           Administrator user account name of the SUT
         </Description>
       </Property>
-
-      <Property name="NonAdminUserName" value="nonadmin" >
+      <Property name="NonAdminUserName" value="nonadmin">
         <Description>
           Non administrator user account name of the SUT. If no such user, leave it blank
         </Description>
       </Property>
-
       <Property name="GuestUserName" value="Guest">
         <Description>
           Domain guest account name. If no such user, leave it blank
         </Description>
       </Property>
-
+      <Property name="TestUserName" value="Test">
+        <Description>
+          Local test user account name. If no such user, leave it blank
+        </Description>
+      </Property>
       <Property name="PasswordForAllUsers" value="Password01!">
         <Description>
           Password for all the users listed as above: AdminUserName, NonAdminUserName, GuestUserName.
           (To simplify the config, the 3 accounts use the same password.)
         </Description>
       </Property>
-
       <Property name="BasicFileShare" value="SMBBasic">
         <Description>
           Name for file share without encryption enabled
         </Description>
       </Property>
-
       <Property name="EncryptedFileShare" value="SMBEncrypted">
         <Description>
           Name for file share name with encryption enabled
           If SUT does not have such share, leave it blank
         </Description>
       </Property>
-
       <Property name="MaxSmbVersionSupported" value="Smb311">
         <Choice>Smb2002, Smb21, Smb30, Smb302, Smb311</Choice>
         <Description>
           Max version which the server supports: Smb2002, Smb21, Smb30, Smb302, Smb311
         </Description>
       </Property>
-
       <Property name="MaxSmbVersionClientSupported" value="Smb311">
         <Choice>Smb2002, Smb21, Smb30, Smb302, Smb311</Choice>
         <Description>
           Max version which the client supports: Smb2002, Smb21, Smb30, Smb302, Smb311
         </Description>
       </Property>
-
       <Property name="IsSMB1NegotiateEnabled" value="true">
         <Choice>true,false</Choice>
         <Description>
@@ -138,21 +127,18 @@
           Otherwise, the client will send Negotiate request directly.
         </Description>
       </Property>
-
       <Property name="IsLeasingSupported" value="true">
         <Choice>true,false</Choice>
         <Description>
           Set true if SUT supports leasing, otherwise set it to false
         </Description>
       </Property>
-
       <Property name="IsMultiChannelCapable" value="true">
         <Choice>true,false</Choice>
         <Description>
           Set true if SUT supports multiple channel, otherwise set it to false
         </Description>
       </Property>
-
       <Property name="SendSignedRequest" value="true">
         <Choice>true,false</Choice>
         <Description>
@@ -167,35 +153,30 @@
           Otherwise, the client will verify the signature of recieved message.
         </Description>
       </Property>
-
       <Property name="IsDirectoryLeasingSupported" value="true">
         <Choice>true,false</Choice>
         <Description>
           Set true if SUT supports directory leasing, otherwise set it to false
         </Description>
       </Property>
-
       <Property name="IsPersistentHandlesSupported" value="true">
         <Choice>true,false</Choice>
         <Description>
           Set true if SUT supports persistent handle, otherwise set it to false
         </Description>
       </Property>
-
       <Property name="IsEncryptionSupported" value="true">
         <Choice>true,false</Choice>
         <Description>
           Set true if SUT supports encryption, otherwise set it to false
         </Description>
       </Property>
-
       <Property name="IsMultiCreditSupported" value="true">
         <Choice>true,false</Choice>
         <Description>
           Set true if SUT supports multiple credit and the transport is not NetBIOS, otherwise set it to false
         </Description>
       </Property>
-
       <Property name="UnsupportedIoCtlCodes" value="FSCTL_OFFLOAD_READ;FSCTL_OFFLOAD_WRITE;FSCTL_FILE_LEVEL_TRIM">
         <Description>
           List all unsupported IoCtl codes. Current IoCtl codes covered in this test suite include
@@ -210,7 +191,6 @@
           Multiple values should be separated by semicolons
         </Description>
       </Property>
-
       <Property name="UnsupportedCreateContexts" value="">
         <Description>
           List all unsupported Create Contexts. Current Create Contexts covered includes
@@ -226,22 +206,19 @@
           Multiple values should be separated by semicolons
         </Description>
       </Property>
-
       <Property name="CAShareName" value="SMBClustered">
         <Description>
           Name of file share that supports Continuous Availability (CA)
           If SUT does not have such share, leave it blank
         </Description>
       </Property>
-
-      <Property name="CAShareServerName" value="GeneralFS">
+      <Property name="CAShareServerName" value="GENERALFS01">
         <Description>
           Computer name of server which hosts Continuous Availability (CA) share
           If the server does not have a computer name, set it with IP address
           If it is not applicable, leave it blank
         </Description>
       </Property>
-
       <Property name="ClusteredInfrastructureFileServerName" value="InfraFS">
         <Description>
           Computer name of infrastructure CA file server which hosts the CA share.
@@ -258,21 +235,18 @@
           If SUT does not have such share, leave it blank
         </Description>
       </Property>
-
-      <Property name="ClientNic1IPAddress" value="192.168.1.111">
+      <Property name="ClientNic1IPAddress" value="10.16.0.100">
         <Description>
           One IP address or host name on local test drive computer to establish connections to SUT
         </Description>
       </Property>
-
-      <Property name="ClientNic2IPAddress" value="192.168.2.111">
+      <Property name="ClientNic2IPAddress" value="10.16.0.101">
         <Description>
           Another IP address or host name on local test drive computer to establish connections to SUT
           If test drive computer only has one IP address, leave it blank
         </Description>
       </Property>
-
-      <Property name="Platform" value="WindowsServer2016">
+      <Property name="Platform" value="WindowsServer2019">
         <Choice>
           NonWindows,WindowsServer2008,WindowsServer2008R2,WindowsServer2012,WindowsServer2012R2,WindowsServer2016,WindowsServerV1709,WindowsServerV1803,WindowsServer2019
         </Choice>
@@ -280,14 +254,12 @@
           Platform type of the SUT
         </Description>
       </Property>
-
       <Property name="SupportedSecurityPackage" value="Negotiate">
         <Choice>Negotiate,Kerberos,Ntlm</Choice>
         <Description>
           Supported security packages, should be one of them
         </Description>
       </Property>
-
       <Property name="UseServerGssToken" value="true">
         <Choice>true,false</Choice>
         <Description>
@@ -296,7 +268,6 @@
           Only applicable when SupportedSecurityPackage is set to Negotiate.
         </Description>
       </Property>
-
       <Property name="SupportedEncryptionAlgorithms" value="ENCRYPTION_AES128_GCM;ENCRYPTION_AES128_CCM">
         <Description>
           List all supportd encryption algorithms, possible values: ENCRYPTION_AES128_GCM, ENCRYPTION_AES128_CCM
@@ -304,28 +275,24 @@
           If it is not applicable, leave it blank
         </Description>
       </Property>
-
       <Property name="IsRequireMessageSigning" value="true">
         <Choice>true,false</Choice>
         <Description>
           Set true if SUT requires that messages MUST be signed, otherwise set it to false
         </Description>
       </Property>
-
       <Property name="IsGlobalEncryptDataEnabled" value="false">
         <Choice>true,false</Choice>
         <Description>
           Set true if SUT requires messages to be encrypted after session establishment, otherwise set it to false
         </Description>
       </Property>
-
       <Property name="IsGlobalRejectUnencryptedAccessEnabled" value="true">
         <Choice>true,false</Choice>
         <Description>
           Set true if SUT will reject any unencrypted messages, otherwise set it to false
         </Description>
       </Property>
-
       <Property name="MaxResiliencyTimeout" value="300000">
         <Description>
           Max Resiliencency Timeout in milliseconds

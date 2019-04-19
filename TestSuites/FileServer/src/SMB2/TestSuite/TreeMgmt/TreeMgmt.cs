@@ -6,6 +6,13 @@ using Microsoft.Protocols.TestSuites.FileSharing.Common.TestSuite;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Runtime.InteropServices;
+using Microsoft.Win32.SafeHandles;
+using System.Runtime.ConstrainedExecution;
+using System.Security;
+using System.Security.Permissions;
+using System;
+using System.Security.Principal;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.TreeMgmt
 {
@@ -15,6 +22,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.TreeMgmt
         #region Variables
         private Smb2FunctionalClient client;
         private string sharePath;
+
+        [DllImport("advapi32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        public static extern bool LogonUser(String lpszUsername, String lpszDomain, String lpszPassword,
+        int dwLogonType, int dwLogonProvider, out SafeTokenHandle phToken);
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
+        public extern static bool CloseHandle(IntPtr handle);
         #endregion
 
         #region Test Initialize and Cleanup
@@ -76,7 +90,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.TreeMgmt
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends TREE_DISCONNECT request.");
             client.TreeDisconnect(treeId);
         }
-
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Smb311)]
@@ -173,12 +186,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.TreeMgmt
                 TreeConnect_Flags.SMB2_SHAREFLAG_CLUSTER_RECONNECT);
             client.TreeDisconnect(treeId);
         }
-
+        
         [TestMethod]
         [TestCategory(TestCategories.Smb311)]
         [TestCategory(TestCategories.Tree)]
         [TestCategory(TestCategories.Positive)]
-        [Description("This test case is designed to test server can handle a TreeConnect request with flag SMB2_SHAREFLAG_EXTENSION_PRESENT successfully.")]
+        [PermissionSetAttribute(SecurityAction.Demand, Name = "FullTrust")]
+        [Description("This test case is designed to test server can handle a TreeConnect request with flag SMB2_SHAREFLAG_EXTENSION_PRESENT successfully.")]       
         public void TreeMgmt_SMB311_TREE_CONNECT_EXTENSION_PRESENT()
         {
             #region Check Applicability
@@ -198,44 +212,92 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.TreeMgmt
                 TestConfig.UseServerGssToken);
 
             string infraSharePath = string.Format(@"\\{0}\{1}", TestConfig.ClusteredInfrastructureFileServerName, TestConfig.InfrastructureRootShare);
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends TREE_CONNECT request with flag SMB2_SHAREFLAG_EXTENSION_PRESENT and expects STATUS_SUCCESS.");
-            uint treeId;
-            client.TreeConnect(
-                infraSharePath,
-                out treeId,
-                (header, response) =>
+            uint treeId;            
+
+            string domainName = TestConfig.DriverComputerName;
+            string userName = TestConfig.TestUserName;
+            string password = TestConfig.UserPassword;
+            const int LOGON32_PROVIDER_DEFAULT = 0;           
+            const int LOGON32_LOGON_INTERACTIVE = 2; //This parameter causes LogonUser to create a primary token.            
+            SafeTokenHandle safeTokenHandle; // Call LogonUser to obtain a handle to an access token.
+            bool returnValue = LogonUser(userName, domainName, password,
+                LOGON32_LOGON_INTERACTIVE, LOGON32_PROVIDER_DEFAULT,
+                out safeTokenHandle);
+            if (false == returnValue)
+            {
+                int ret = Marshal.GetLastWin32Error();
+                throw new System.ComponentModel.Win32Exception(ret);
+            }
+            using (safeTokenHandle)
+            {
+                using (WindowsIdentity identity = new WindowsIdentity(safeTokenHandle.DangerousGetHandle()))
                 {
-                    if (header.Status == Smb2Status.STATUS_BAD_NETWORK_NAME)
+                    BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends TREE_CONNECT request with extension context and expects success");
+                    //Use current login user identity to do tree connect
+                    client.TreeConnect(
+                        infraSharePath,
+                        out treeId,
+                        (header, response) =>
+                        {
+                            BaseTestSite.Assert.AreEqual(
+                                Smb2Status.STATUS_SUCCESS,
+                                header.Status,
+                               "{0} should be successful, actually server returns {1}.", header.Command, Smb2Status.GetStatusCode(header.Status));
+                            BaseTestSite.Assert.IsTrue(
+                                response.ShareFlags.HasFlag(ShareFlags_Values.SHAREFLAG_IDENTITY_REMOTING),
+                                "The share should support identity remoting, actually server returns {0}.", response.ShareFlags.ToString());
+                        },
+                        TreeConnect_Flags.SMB2_SHAREFLAG_EXTENSION_PRESENT,
+                        identity);
+
+                    using (WindowsImpersonationContext impersonatedUser = identity.Impersonate())
                     {
-                        Site.Assert.Inconclusive(
-                            "Infrastructure share {0} is not existed.",
-                            infraSharePath);
+                        //Use the configured user to impernate login user to create
+                        FILEID fileId;
+                        Smb2CreateContextResponse[] serverCreateContexts;
+                        BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client impersonates another log in user to send CREATE request and expects success.");
+                        client.Create(
+                            treeId,
+                            GetTestFileName(infraSharePath),
+                            CreateOptions_Values.FILE_DIRECTORY_FILE,
+                            out fileId,
+                            out serverCreateContexts,
+                            checker: (header, response) =>
+                            {
+                                BaseTestSite.Assert.AreEqual(
+                                    Smb2Status.STATUS_SUCCESS,
+                                    header.Status,
+                                   "{0} should be successful, actually server returns {1}.", header.Command, Smb2Status.GetStatusCode(header.Status));
+                            }
+                            );
+
+                        BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down the client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+                        client.Close(treeId, fileId);
                     }
-                    if (!response.ShareFlags.HasFlag(ShareFlags_Values.SHAREFLAG_IDENTITY_REMOTING))
-                    {
-                        Site.Assert.Inconclusive(
-                            "The share {0} does not support identity remoting.",
-                            infraSharePath);
-                    }
-                },
-                TreeConnect_Flags.SMB2_SHAREFLAG_NONE);
-            client.TreeDisconnect(treeId);
-            client.TreeConnect(
-                infraSharePath,
-                out treeId,
-                (header, response) =>
-                {
-                    BaseTestSite.Assert.AreEqual(
-                        Smb2Status.STATUS_SUCCESS,
-                        header.Status,
-                       "{0} should be successful, actually server returns {1}.", header.Command, Smb2Status.GetStatusCode(header.Status));
-                    BaseTestSite.Assert.IsTrue(
-                        response.ShareFlags.HasFlag(ShareFlags_Values.SHAREFLAG_IDENTITY_REMOTING),
-                        "The share {0} should support identity remoting.", infraSharePath);
-                },
-                TreeConnect_Flags.SMB2_SHAREFLAG_EXTENSION_PRESENT);
+                }
+            }
+            
             client.TreeDisconnect(treeId);
             client.LogOff();
+        }
+
+        public sealed class SafeTokenHandle : SafeHandleZeroOrMinusOneIsInvalid
+        {
+            private SafeTokenHandle()
+                : base(true)
+            {
+            }
+
+            [DllImport("kernel32.dll")]
+            [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
+            [SuppressUnmanagedCodeSecurity]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            private static extern bool CloseHandle(IntPtr handle);
+
+            protected override bool ReleaseHandle()
+            {
+                return CloseHandle(handle);
+            }
         }
     }
 }

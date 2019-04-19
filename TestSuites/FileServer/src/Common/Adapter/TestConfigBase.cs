@@ -285,6 +285,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         #endregion
 
         #region SUT Common Configuration
+        public string DriverComputerName
+        {
+            get
+            {
+                return GetProperty("DriverComputerName");
+            }
+        }
+
         public string SutComputerName
         {
             get
@@ -333,6 +341,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             get
             {
                 return GetProperty("GuestUserName");
+            }
+        }
+
+        public string TestUserName
+        {
+            get
+            {
+                return GetProperty("TestUserName");
             }
         }
 
