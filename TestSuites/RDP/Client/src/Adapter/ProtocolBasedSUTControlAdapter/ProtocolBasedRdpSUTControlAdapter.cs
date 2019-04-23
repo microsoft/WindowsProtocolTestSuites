@@ -39,14 +39,14 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// and the client should use Direct Approach with CredSSP as the security protocol.
         /// </summary>
         /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        public void RDPConnectWithDirectCredSSP(string caseName)
+        public int RDPConnectWithDirectCredSSP(string caseName)
         {
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
             // Create payload
             byte[] payload = CreateRDPConncectPayload(connectPayloadType, localIP, localPort, true, false);
 
-            Start_RDP_Connection(caseName, payload, helpMessage);
+            return Start_RDP_Connection(caseName, payload, helpMessage);
         }
 
         /// <summary>
@@ -54,14 +54,14 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// and the client should use Direct Approach with CredSSP as the security protocol.
         /// </summary>
         /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        public void RDPConnectWithDirectCredSSPFullScreen(string caseName)
+        public int RDPConnectWithDirectCredSSPFullScreen(string caseName)
         {
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
             // Create payload
             byte[] payload = CreateRDPConncectPayload(connectPayloadType, localIP, localPort, true, true);
 
-            Start_RDP_Connection(caseName, payload, helpMessage);
+            return Start_RDP_Connection(caseName, payload, helpMessage);
         }
 
         /// <summary>
@@ -69,14 +69,14 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// and the client should use Negotiation-Based Approach to advertise the support for TLS, CredSSP or RDP standard security protocol.
         /// </summary>
         /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        public void RDPConnectWithNegotiationApproach(string caseName)
+        public int RDPConnectWithNegotiationApproach(string caseName)
         {
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
             // Create payload
             byte[] payload = CreateRDPConncectPayload(connectPayloadType, localIP, localPort, false, false);
 
-            Start_RDP_Connection(caseName, payload, helpMessage);
+            return Start_RDP_Connection(caseName, payload, helpMessage);
         }
 
         /// <summary>
@@ -84,21 +84,21 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// and the client should use Negotiation-Based Approach to advertise the support for TLS, CredSSP or RDP standard security protocol.
         /// </summary>
         /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        public void RDPConnectWithNegotiationApproachFullScreen(string caseName)
+        public int RDPConnectWithNegotiationApproachFullScreen(string caseName)
         {
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
             // Create payload
             byte[] payload = CreateRDPConncectPayload(connectPayloadType, localIP, localPort, false, true);
 
-            Start_RDP_Connection(caseName, payload, helpMessage);
+            return Start_RDP_Connection(caseName, payload, helpMessage);
         }
 
         /// <summary>
         /// This method is used to trigger RDP client initiate a disconnection of current session.
         /// </summary>
         /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        public void TriggerClientDisconnect(string caseName)
+        public int TriggerClientDisconnect(string caseName)
         {      
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
@@ -112,7 +112,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             
             //Send the request and get response if necessary
             byte[] resposePayload = null;
-            controlHandler.OperateSUTControl(requestMessage, false, out resposePayload);
+            return controlHandler.OperateSUTControl(requestMessage, false, out resposePayload);
                         
         }
 
@@ -120,7 +120,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// This method is used to trigger RDP client to close all RDP connection to a server for clean up.
         /// </summary>
         /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        public void TriggerClientDisconnectAll(string caseName)
+        public int TriggerClientDisconnectAll(string caseName)
         {
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
@@ -134,7 +134,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
             //Send the request and get response if necessary
             byte[] resposePayload = null;
-            controlHandler.OperateSUTControl(requestMessage, false, out resposePayload);
+            return controlHandler.OperateSUTControl(requestMessage, false, out resposePayload);
         }
 
         /// <summary>

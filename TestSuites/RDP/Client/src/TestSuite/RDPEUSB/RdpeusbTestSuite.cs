@@ -80,8 +80,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
             this.rdpbcgrAdapter.StopRDPListening();
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger client to close all RDP connections for clean up.");
-            this.sutControlAdapter.TriggerClientDisconnectAll(this.TestContext.TestName);
-            //this.TestSite.Log.Add(LogEntryKind.Debug, "The result of TriggerClientDisconnectAll is {0}.", iResult);
+            int iResult = this.sutControlAdapter.TriggerClientDisconnectAll(this.TestContext.TestName);
+            this.TestSite.Log.Add(LogEntryKind.Debug, "The result of TriggerClientDisconnectAll is {0}.", iResult);
 
             DynamicVCException.SetCleanUp(false);
         }
@@ -138,8 +138,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         //Stop RDP connection.
         private void StopRDPConnection()
         {
-            this.sutControlAdapter.TriggerClientDisconnectAll(this.TestContext.TestName);
-            //this.TestSite.Log.Add(LogEntryKind.Debug, "The result of TriggerClientDisconnectAll is {0}.", iResult);
+            int iResult = this.sutControlAdapter.TriggerClientDisconnectAll(this.TestContext.TestName);
+            this.TestSite.Log.Add(LogEntryKind.Debug, "The result of TriggerClientDisconnectAll is {0}.", iResult);
             this.rdpbcgrAdapter.Reset();
             this.rdpeusbAdapter.Reset();
         }

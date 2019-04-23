@@ -199,6 +199,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
         protected void triggerClientRDPConnect(EncryptedProtocol enProtocol, bool fullScreen = false)
         {
+            int iResult = 0;
             string strMethod = null;
             switch (enProtocol)
             {
@@ -209,11 +210,11 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                     {
                         if (fullScreen)
                         {
-                            this.sutControlAdapter.RDPConnectWithNegotiationApproachFullScreen(this.TestContext.TestName);
+                            iResult = this.sutControlAdapter.RDPConnectWithNegotiationApproachFullScreen(this.TestContext.TestName);
                         }
                         else
                         {
-                            this.sutControlAdapter.RDPConnectWithNegotiationApproach(this.TestContext.TestName);
+                            iResult = this.sutControlAdapter.RDPConnectWithNegotiationApproach(this.TestContext.TestName);
                         }
                         strMethod = "RDPConnectWithNegotiationApproach";
                     }
@@ -223,16 +224,16 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 case EncryptedProtocol.DirectCredSsp:
                     {
                         if (fullScreen)
-                            this.sutControlAdapter.RDPConnectWithDirectCredSSPFullScreen(this.TestContext.TestName);
+                            iResult = this.sutControlAdapter.RDPConnectWithDirectCredSSPFullScreen(this.TestContext.TestName);
                         else
-                            this.sutControlAdapter.RDPConnectWithDirectCredSSP(this.TestContext.TestName);
+                            iResult = this.sutControlAdapter.RDPConnectWithDirectCredSSP(this.TestContext.TestName);
                         strMethod = "RDPConnectWithDirectCredSSP";
                     }
                     break;
             }
 
             TestSite.Assert.IsTrue(strMethod != null, "Unknown encryption protocol: {0}!", enProtocol);
-            //TestSite.Assert.IsTrue(iResult >= 0, "SUT Control Adapter: {0} should be successful: {1}.", strMethod, iResult);
+            TestSite.Assert.IsTrue(iResult >= 0, "SUT Control Adapter: {0} should be successful: {1}.", strMethod, iResult);
         }
 
         protected void LoadConfig()

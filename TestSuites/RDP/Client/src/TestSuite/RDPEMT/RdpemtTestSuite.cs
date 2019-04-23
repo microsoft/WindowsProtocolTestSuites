@@ -94,8 +94,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
                 rdpedycServer.Dispose();
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger client to close all RDP connections for clean up.");
-            this.sutControlAdapter.TriggerClientDisconnectAll(this.TestContext.TestName);
-            //this.TestSite.Log.Add(LogEntryKind.Debug, "The result of TriggerClientDisconnectAll is {0}.", iResult);
+            int iResult = this.sutControlAdapter.TriggerClientDisconnectAll(this.TestContext.TestName);
+            this.TestSite.Log.Add(LogEntryKind.Debug, "The result of TriggerClientDisconnectAll is {0}.", iResult);
 
             if (rdpemtServerL != null)
                 rdpemtServerL.Dispose();

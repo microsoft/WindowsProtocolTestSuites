@@ -925,8 +925,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             //Trigger SUT to initiate a disconnection
             this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger SUT to initiate a disconnection.");
-            this.sutControlAdapter.TriggerClientDisconnect(this.TestContext.TestName);//Trigger client disconnect the current session.
-            //TestSite.Assume.IsTrue(iResult >= 0, "SUT Control Adapter: TriggerClientDisconnect should be successful: {0}.", iResult);
+            int iResult = this.sutControlAdapter.TriggerClientDisconnect(this.TestContext.TestName);//Trigger client disconnect the current session.
+            TestSite.Assume.IsTrue(iResult >= 0, "SUT Control Adapter: TriggerClientDisconnect should be successful: {0}.", iResult);
             
             this.rdpbcgrAdapter.ExpectClientInitiatedDisconnect(waitTime, false, false);
             
