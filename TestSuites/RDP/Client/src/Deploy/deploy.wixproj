@@ -207,7 +207,7 @@
     <H264TestData Include="..\TestSuite\RDPEGFX\H264TestData\*" />
     <H264TestDataBaseImage Include="..\TestSuite\RDPEGFX\H264TestData\BaseImage\*" />
     <SUTControlAdapter Include="..\Adapter\SUTControlAdapter\*.ps1" />
-    <LinuxSUTControlAdapter Include="..\Adapter\LinuxSUTControlAdapter\*.sh" />
+    <ShellSUTControlAdapter Include="..\Adapter\ShellSUTControlAdapter\*.sh" />
     <RdpeiSUTControlAdapter Include="..\Adapter\RdpeiSUTControlAdapter\*.ps1" />
     <NonWindowsSUTImplementation Include="..\Adapter\NonWindowsSUTImplementation\*.ps1" />
     <RdpedispSUTControlAdapter Include="..\Adapter\RdpedispSUTControlAdapter\*.ps1" />
@@ -222,7 +222,7 @@
     <Copy SourceFiles="@(RdpedispEnhancedAdapterImages)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin" />
     <Copy SourceFiles="@(H264TestDataBaseImage)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin" />
     <Copy SourceFiles="@(SUTControlAdapter)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin" />
-    <Copy SourceFiles="@(LinuxSUTControlAdapter)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin" />
+    <Copy SourceFiles="@(ShellSUTControlAdapter)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin" />
     <Copy SourceFiles="@(RdpeiSUTControlAdapter)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin" />
     <Copy SourceFiles="@(NonWindowsSUTImplementation)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin\NonWindowsSUTImplementation" />
     <Copy SourceFiles="@(RdpedispSUTControlAdapter)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin" />
