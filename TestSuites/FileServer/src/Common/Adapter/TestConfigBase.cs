@@ -285,14 +285,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         #endregion
 
         #region SUT Common Configuration
-        public string DriverComputerName
-        {
-            get
-            {
-                return GetProperty("DriverComputerName");
-            }
-        }
-
         public string SutComputerName
         {
             get
@@ -392,23 +384,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 Site.Assume.IsTrue(result != IPAddress.None, "CAShareServerIP should be a valid IP address or a resolvable host name!");
                 return result;
             }
-        }
-
-        public string ClusteredInfrastructureFileServerName
-        {
-            get
-            {
-                return GetProperty("ClusteredInfrastructureFileServerName");
-            }
-        }
-
-        public string InfrastructureRootShare
-        {
-            get
-            {
-                return GetProperty("InfrastructureRootShare");
-            }
-        }
+        }        
 
         public bool IsServerSigningRequired
         {
