@@ -215,7 +215,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.TreeMgmt
             uint treeId;            
 
             string domainName = TestConfig.DriverComputerName;
-            string userName = TestConfig.TestUserName;
+            string userName = TestConfig.UserName;
             string password = TestConfig.UserPassword;
             const int LOGON32_PROVIDER_DEFAULT = 0;           
             const int LOGON32_LOGON_INTERACTIVE = 2; //This parameter causes LogonUser to create a primary token.            
@@ -252,7 +252,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.TreeMgmt
 
                     using (WindowsImpersonationContext impersonatedUser = identity.Impersonate())
                     {
-                        //Use the configured user to impernate login user to create
+                        //Use the configured user to impersonate login user to create
                         FILEID fileId;
                         Smb2CreateContextResponse[] serverCreateContexts;
                         BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client impersonates another log in user to send CREATE request and expects success.");

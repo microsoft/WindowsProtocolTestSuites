@@ -48,7 +48,30 @@
           This is used to test FSCTL_SRV_ENUMERATE_SNAPSHOTS.
           If not supported, leave it blank.
         </Description>
-      </Property>      
+      </Property>
+
+      <Property name="ClusteredInfrastructureFileServerName" value="InfraFS">
+        <Description>
+          Computer name of infrastructure CA file server which hosts the CA share.
+          This type of file server keeps online on all servers (nodes) which construct the file server.
+          It is also referred to active-active mode.
+          If the server does not have a computer name, set it to the IP address of the file server.
+          If the file server is not of this type, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="InfrastructureRootShare" value="Volume1">
+        <Description>
+          Name for infrastructure root share.
+          If SUT does not have such share, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="DriverComputerName" value="CLS-CLI01">
+        <Description>
+          Computer name of driver computer
+        </Description>
+      </Property>
 
     </Group>
       <Group name="HVRS">

@@ -344,14 +344,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             }
         }
 
-        public string TestUserName
-        {
-            get
-            {
-                return GetProperty("TestUserName");
-            }
-        }
-
         public string UserPassword
         {
             get

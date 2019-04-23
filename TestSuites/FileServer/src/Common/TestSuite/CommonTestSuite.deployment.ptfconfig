@@ -63,13 +63,7 @@
           Computer name of system under test (SUT)
           If SUT does not have a computer name, set the value to SUT's IP address
         </Description>
-      </Property>
-
-      <Property name="DriverComputerName" value="CLS-CLI01">
-        <Description>
-          Computer name of driver computer
-        </Description>
-      </Property>
+      </Property>      
 
       <Property name="SutIPAddress" value="192.168.1.11" >
         <Description>
@@ -100,12 +94,6 @@
       <Property name="GuestUserName" value="Guest">
         <Description>
           Domain guest account name. If no such user, leave it blank
-        </Description>
-      </Property>
-
-      <Property name="TestUserName" value="Test">
-        <Description>
-          Local test user account name. If no such user, leave it blank
         </Description>
       </Property>
 
@@ -252,24 +240,7 @@
           If the server does not have a computer name, set it with IP address
           If it is not applicable, leave it blank
         </Description>
-      </Property>
-
-      <Property name="ClusteredInfrastructureFileServerName" value="InfraFS">
-        <Description>
-          Computer name of infrastructure CA file server which hosts the CA share.
-          This type of file server keeps online on all servers (nodes) which construct the file server.
-          It is also referred to active-active mode.
-          If the server does not have a computer name, set it to the IP address of the file server.
-          If the file server is not of this type, leave it blank
-        </Description>
-      </Property>
-
-      <Property name="InfrastructureRootShare" value="Volume1">
-        <Description>
-          Name for infrastructure root share.
-          If SUT does not have such share, leave it blank
-        </Description>
-      </Property>
+      </Property>      
 
       <Property name="ClientNic1IPAddress" value="192.168.1.111">
         <Description>
