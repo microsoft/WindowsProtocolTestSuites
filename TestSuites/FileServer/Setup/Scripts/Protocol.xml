@@ -167,8 +167,6 @@
       <memory>2048</memory>
       <minimumram>2048</minimumram>
       <maximumram>4096</maximumram>
-      <installscript>InstallMSIAndTools.ps1;domainjoin.ps1</installscript>
-      <postscript>Disable_Firewall.ps1;SetPasswordNeverExpires.ps1;Config-ForceLevel2.ps1;Add-SmbGlobalMapping.ps1</postscript>
       <tools>
         <tool name="MMA" MSIName="MessageAnalyzer64.msi" version="4.0.8112.0" CPUArchitecture="x64" />
         <tool name="SE" MSIName="SpecExplorer.msi" version="3.5.3146.0" CPUArchitecture="x86" />
