@@ -757,9 +757,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             return response;
         }
 
-        public KerberosKrbError GetKrbErrorFromToken(byte[] token)
+        public KerberosKrbError GetKrbErrorFromToken(byte[] token, KerberosConstValue.GSSToken gssToken)
         {
-            token = KerberosUtility.DecodeNegotiationToken(token);
+            if (gssToken == KerberosConstValue.GSSToken.GSSSPNG)
+            {
+                token = KerberosUtility.DecodeNegotiationToken(token);
+            }
 
             if (token[0] == KerberosConstValue.KERBEROS_TAG)
             {

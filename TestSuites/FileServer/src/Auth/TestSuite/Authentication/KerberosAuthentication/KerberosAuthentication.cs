@@ -441,7 +441,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
 
             if (TestConfig.IsWindowsPlatform)
             {
-                krbError = kerberosClient.GetKrbErrorFromToken(repToken);
+                krbError = kerberosClient.GetKrbErrorFromToken(repToken, GssToken);
                 BaseTestSite.Assert.AreEqual(KRB_ERROR_CODE.KRB_AP_ERR_REPEAT, krbError.ErrorCode,
                     "SMB Server should return {0}", KRB_ERROR_CODE.KRB_AP_ERR_REPEAT);
             }
@@ -681,7 +681,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                     "Session Setup should fail because the cname or crealm in the authenticator does not match the same field in the Ticket");
                 if (TestConfig.IsWindowsPlatform)
                 {
-                    KerberosKrbError krbError = kerberosClient.GetKrbErrorFromToken(repToken);
+                    KerberosKrbError krbError = kerberosClient.GetKrbErrorFromToken(repToken, GssToken);
                     BaseTestSite.Assert.AreEqual(KRB_ERROR_CODE.KRB_AP_ERR_BADMATCH, krbError.ErrorCode,
                         "SMB Server should return {0}", KRB_ERROR_CODE.KRB_AP_ERR_BADMATCH);
                 }
@@ -699,7 +699,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                     "Session Setup should fail because Ticket or Authenticator cannot be correctly decrypted");
                 if (TestConfig.IsWindowsPlatform)
                 {
-                    KerberosKrbError krbError = kerberosClient.GetKrbErrorFromToken(repToken);
+                    KerberosKrbError krbError = kerberosClient.GetKrbErrorFromToken(repToken, GssToken);
                     BaseTestSite.Assert.AreEqual(KRB_ERROR_CODE.KRB_AP_ERR_MODIFIED, krbError.ErrorCode,
                         "SMB Server should return {0}", KRB_ERROR_CODE.KRB_AP_ERR_MODIFIED);
                 }
@@ -720,7 +720,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                     "in the Authenticator differ by (1 hour) more than the allowable clock skew");
                 if (TestConfig.IsWindowsPlatform)
                 {
-                    KerberosKrbError krbError = kerberosClient.GetKrbErrorFromToken(repToken);
+                    KerberosKrbError krbError = kerberosClient.GetKrbErrorFromToken(repToken, GssToken);
                     BaseTestSite.Assert.AreEqual(KRB_ERROR_CODE.KRB_AP_ERR_SKEW, krbError.ErrorCode,
                         "SMB Server should return {0}", KRB_ERROR_CODE.KRB_AP_ERR_SKEW);
                 }
@@ -747,7 +747,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                     "is later than the current time by more than the allowable clock skew");
                 if (TestConfig.IsWindowsPlatform)
                 {
-                    KerberosKrbError krbError = kerberosClient.GetKrbErrorFromToken(repToken);
+                    KerberosKrbError krbError = kerberosClient.GetKrbErrorFromToken(repToken, GssToken);
                     BaseTestSite.Assert.AreEqual(KRB_ERROR_CODE.KRB_AP_ERR_TKT_NYV, krbError.ErrorCode,
                         "SMB Server should return {0}", KRB_ERROR_CODE.KRB_AP_ERR_TKT_NYV);
                 }
@@ -766,7 +766,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                     " in the Ticket by more than the allowable clock skew");
                 if (TestConfig.IsWindowsPlatform)
                 {
-                    KerberosKrbError krbError = kerberosClient.GetKrbErrorFromToken(repToken);
+                    KerberosKrbError krbError = kerberosClient.GetKrbErrorFromToken(repToken, GssToken);
                     BaseTestSite.Assert.AreEqual(KRB_ERROR_CODE.KRB_AP_ERR_TKT_EXPIRED, krbError.ErrorCode,
                         "SMB Server should return {0}", KRB_ERROR_CODE.KRB_AP_ERR_TKT_EXPIRED);
                 }
