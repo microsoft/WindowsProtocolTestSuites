@@ -35,6 +35,9 @@
     <scaleoutfs>
       <name>SCALEOUTFS01</name>
     </scaleoutfs>
+	<infrastructurefs>
+      <name>InfraFS</name>
+    </infrastructurefs>
   </ha>
   <servers>
     <vm>
