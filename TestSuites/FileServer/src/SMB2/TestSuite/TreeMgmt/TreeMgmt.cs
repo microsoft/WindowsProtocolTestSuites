@@ -205,6 +205,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.TreeMgmt
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client by sending the following requests: CONNECT; NEGOTIATE; SESSION_SETUP");
             client.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             client.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            //Use domain credential to do session setup (e.g. contoso.com\administrator)
             client.SessionSetup(
                 TestConfig.DefaultSecurityPackage,
                 TestConfig.SutComputerName,
@@ -233,7 +234,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.TreeMgmt
                 using (WindowsIdentity identity = new WindowsIdentity(safeTokenHandle.DangerousGetHandle()))
                 {
                     BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends TREE_CONNECT request with extension context and expects success");
-                    //Use current login user identity to do tree connect
+                    //Use another local account(e.g. local\administrator) as an idenity passed in tree connect extension
                     client.TreeConnect(
                         infraSharePath,
                         out treeId,
