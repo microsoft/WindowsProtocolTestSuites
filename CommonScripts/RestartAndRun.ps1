@@ -74,8 +74,7 @@ catch
 # Show prompt
 Write-Host "The computer is going to restart..." -ForegroundColor Yellow
 if($AutoRestart -eq $true) { 
-    sleep 3
     # Auto restart
     # Restart
-    Restart-Computer -Force
+    shutdown -r -t 10 -f
  } 
