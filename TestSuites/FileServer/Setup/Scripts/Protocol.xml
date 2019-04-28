@@ -36,7 +36,7 @@
       <name>SCALEOUTFS01</name>
     </scaleoutfs>
 	<infrastructurefs>
-      <name>InfraFS</name>
+      <name>InfraFS01</name>
     </infrastructurefs>
   </ha>
   <servers>
