@@ -388,10 +388,10 @@ namespace Microsoft.Protocols.TestManager.Kernel
                                     adapterView.ManagedAdapter = new ManagedAdapterNode(name, displayName, adapterType);
                                 }
                                 break;
-                            case "script":
+                            case "shell":
                                 {
                                     string scriptDir = subnode.Attributes["scriptdir"].Value;
-                                    adapterView.ScriptAdapter = new ScriptAdapterNode(name, displayName, scriptDir);
+                                    adapterView.ShellAdapter = new ShellAdapterNode(name, displayName, scriptDir);
                                 }
                                 break;
                         }

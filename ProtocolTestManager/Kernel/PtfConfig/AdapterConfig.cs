@@ -221,9 +221,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
     }
 
     /// <summary>
-    /// This class defines script adapter node.
+    /// This class defines shell adapter node.
     /// </summary>
-    public class ScriptAdapterNode : IAdapterConfig
+    public class ShellAdapterNode : IAdapterConfig
     {
         private string displayName;
 
@@ -270,7 +270,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         {
             XmlNode node = doc.CreateNode(XmlNodeType.Element, "Adapter", StringResource.DefaultNamespace);
             XmlAttribute typeAttr = doc.CreateAttribute("xsi", "type", "http://www.w3.org/2001/XMLSchema-instance");
-            typeAttr.Value = "script";
+            typeAttr.Value = "shell";
             XmlAttribute nameAttr = doc.CreateAttribute(null, "name", null);
             nameAttr.Value = name;
             XmlAttribute scriptDirAttr = doc.CreateAttribute(null, "scriptdir", null);
@@ -282,12 +282,12 @@ namespace Microsoft.Protocols.TestManager.Kernel
         }
 
         /// <summary>
-        /// Constructor of ScriptAdapterNode.
+        /// Constructor of ShellAdapterNode.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="displayName"></param>
         /// <param name="scriptdir"></param>
-        public ScriptAdapterNode(string name, string displayName, string scriptdir)
+        public ShellAdapterNode(string name, string displayName, string scriptdir)
         {
             this.name = name;
             this.displayName = displayName;
