@@ -40,7 +40,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts
         /// </param>
         /// <param name="destination">The target object converted from byte array.</param>
         /// <exception cref="System.ArgumentNullException">thrown if source is null</exception>
-        [System.Security.Permissions.SecurityPermission(System.Security.Permissions.SecurityAction.Demand)]
         internal static void BytesToObject<T>(byte[] source, ref uint offset, out T destination) where T : struct
         {
             if (source == null)
