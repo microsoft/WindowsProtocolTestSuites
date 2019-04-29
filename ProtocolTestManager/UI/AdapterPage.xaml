@@ -22,7 +22,7 @@
                                         <TextBlock>Interactive</TextBlock>
                                         <TextBlock>Managed</TextBlock>
                                         <TextBlock>PowerShell</TextBlock>
-                                        <TextBlock>Script</TextBlock>
+                                        <TextBlock>Shell</TextBlock>
                                     </ComboBox.Items>
                                 </ComboBox>
                             </StackPanel>
@@ -92,12 +92,12 @@
                             <Setter TargetName="AdapterContent" Property="Content">
                                 <Setter.Value>
                                     <StackPanel>
-                                        <TextBlock>Script Adapter uses cmd scripts to implement the methods in the adapter.</TextBlock>
-                                        <TextBlock>One script file for each method.</TextBlock>
+                                        <TextBlock>Shell Adapter uses shell scripts to implement the methods in the adapter.</TextBlock>
+                                        <TextBlock>One .sh file for each method.</TextBlock>
                                         <TextBlock>You need to configure the location of the scripts.</TextBlock>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Margin="0,0,5,0" FontWeight="Bold" >Script Directory:</TextBlock>
-                                            <TextBox AutomationProperties.Name="Adapter script directory" DataContext="{Binding ScriptAdapter}" Text="{Binding ScriptDir}" Width="300"/>
+                                            <TextBox AutomationProperties.Name="Adapter script directory" DataContext="{Binding ShellAdapter}" Text="{Binding ScriptDir}" Width="300"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </Setter.Value>

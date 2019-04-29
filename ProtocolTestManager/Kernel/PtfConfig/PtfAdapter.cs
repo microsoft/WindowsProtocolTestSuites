@@ -13,7 +13,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
     /// </summary>
     public enum AdapterType
     {
-        Interactive = 0, Managed = 1, PowerShell = 2, Script = 3
+        Interactive = 0, Managed = 1, PowerShell = 2, Shell = 3
     }
 
     /// <summary>
@@ -70,8 +70,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
                         return PowerShellAdapter;
                     case AdapterType.Managed:
                         return ManagedAdapter;
-                    case AdapterType.Script:
-                        return ScriptAdapter;
+                    case AdapterType.Shell:
+                        return ShellAdapter;
                 }
                 return null;
             }
@@ -147,7 +147,25 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
         }
 
-        public ScriptAdapterNode ScriptAdapter { get; set; }
+        private ShellAdapterNode shellAdapter;
+        public ShellAdapterNode ShellAdapter
+        {
+            get
+            {
+                if (shellAdapter == null)
+                {
+                    shellAdapter = new ShellAdapterNode(Name, FriendlyName, ".\\");
+                    shellAdapter.ContentModified += Modified;
+                }
+                return shellAdapter;
+            }
+            set
+            {
+                shellAdapter = value;
+                shellAdapter.ContentModified += Modified;
+            }
+
+        }
 
         public string Description { get; set; }
 

@@ -60,7 +60,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         private List<StackPacket> receiveBuffer = null;
         private RdpbcgrClient rdpbcgrClient = null;
         private RdpedycClient rdpedycClient = null;
-      
+
         private string[] SVCNames;
         private int defaultPort = 3389;
         private string clientName;
@@ -443,7 +443,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             }
             detectInfo.IsSupportRDPEMT = serverSupportUDPFECR || serverSupportUDPFECL;
 
-            if(detectInfo.IsSupportRDPEMT)
+            if (detectInfo.IsSupportRDPEMT)
             {
                 DetectorUtil.WriteLog("Detect RDPEMT supported");
             }
@@ -487,46 +487,58 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             DetectorUtil.WriteLog("Detect RDP version...");
 
             config.Version = DetectorUtil.GetPropertyValue("RDP.Version");
-            if (connectResponsePdu.mcsCrsp.gccPdu.serverCoreData != null)
+
+            if (connectResponsePdu.mcsCrsp.gccPdu.serverCoreData == null)
             {
-                TS_UD_SC_CORE_version_Values rdpVersion = connectResponsePdu.mcsCrsp.gccPdu.serverCoreData.version;
-                if (rdpVersion == TS_UD_SC_CORE_version_Values.V1)
-                {
-                    config.Version = "4.0";
-                }
-                else if (rdpVersion == TS_UD_SC_CORE_version_Values.V2)
-                {
-                    config.Version = "8.1";
-                }
-                else if (rdpVersion == TS_UD_SC_CORE_version_Values.V3)
-                {
-                    config.Version = "10.0";
-                }
-                else if (rdpVersion == TS_UD_SC_CORE_version_Values.V4)
-                {
-                    config.Version = "10.1";
-                }
-                else if (rdpVersion == TS_UD_SC_CORE_version_Values.V5)
-                {
-                    config.Version = "10.2";
-                }
-                else if (rdpVersion == TS_UD_SC_CORE_version_Values.V6)
-                {
-                    config.Version = "10.3";
-                }
-                else if (rdpVersion == TS_UD_SC_CORE_version_Values.V7)
-                {
-                    config.Version = "10.4";
-                }
-                else if (rdpVersion == TS_UD_SC_CORE_version_Values.V8)
-                {
-                    config.Version = "10.5";
-                }
-                else if (rdpVersion == TS_UD_SC_CORE_version_Values.V9)
-                {
-                    config.Version = "10.6";
-                }
+                DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
+                DetectorUtil.WriteLog("Detect RDP version failed, serverCoreData in Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response does not exist!");
             }
+
+            TS_UD_SC_CORE_version_Values rdpVersion = connectResponsePdu.mcsCrsp.gccPdu.serverCoreData.version;
+            if (rdpVersion == TS_UD_SC_CORE_version_Values.V1)
+            {
+                config.Version = "4.0";
+            }
+            else if (rdpVersion == TS_UD_SC_CORE_version_Values.V2)
+            {
+                config.Version = "8.1";
+            }
+            else if (rdpVersion == TS_UD_SC_CORE_version_Values.V3)
+            {
+                config.Version = "10.0";
+            }
+            else if (rdpVersion == TS_UD_SC_CORE_version_Values.V4)
+            {
+                config.Version = "10.1";
+            }
+            else if (rdpVersion == TS_UD_SC_CORE_version_Values.V5)
+            {
+                config.Version = "10.2";
+            }
+            else if (rdpVersion == TS_UD_SC_CORE_version_Values.V6)
+            {
+                config.Version = "10.3";
+            }
+            else if (rdpVersion == TS_UD_SC_CORE_version_Values.V7)
+            {
+                config.Version = "10.4";
+            }
+            else if (rdpVersion == TS_UD_SC_CORE_version_Values.V8)
+            {
+                config.Version = "10.5";
+            }
+            else if (rdpVersion == TS_UD_SC_CORE_version_Values.V9)
+            {
+                config.Version = "10.6";
+            }
+            else
+            {
+                DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
+                DetectorUtil.WriteLog("Detect RDP version failed, unknown version detected!");
+            }
+
+            detectInfo.Version = connectResponsePdu.mcsCrsp.gccPdu.serverCoreData.version;
+
             DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
             DetectorUtil.WriteLog("Detect RDP version finished.");
         }

@@ -60,9 +60,9 @@ Details of the environment is specified in section 1 of FileSharing_ServerTestDe
 
 #### <a name="_Toc427487699"/>Test Case Design
 Synthetic Kerberos client is used to communicate with KDC to get the cifs Service Ticket of the target SUT.
-Service Tickets and Authenticators are modified in each case to simulate different situations. Synthetic SMB2 client will then send the Kerberos tokens (included in SMB2 SESSION_SETUP Request) to the SUT, to see whether SUT can handle them correctly according to RFC 4120 and MS-KILE.
+Service Tickets, Authenticators of Kerberos and mechListMIC of GSSPNG are modified in each case to simulate different situations. Synthetic SMB2 client will then send the Kerberos tokens (included in SMB2 SESSION_SETUP Request) to the SUT, to see whether SUT can handle them correctly according to RFC 4120, RFC 4178, RFC 4121 and MS-KILE.
 Service password/keytab file may be needed in order for synthetic Kerberos client to modify the Service Ticket.
-15 traditional cases are designed to cover the above scenarios.
+17 traditional cases are designed to cover the above scenarios.
 
 #### <a name="_Toc427487700"/>BVT cases
 
@@ -474,6 +474,59 @@ Service password/keytab file may be needed in order for synthetic Kerberos clien
 | | SMB2 Server should return KRB_AP_ERR_REPEAT in GSS Token| 
 | | Try accessing file using another SMB2 Client, which should succeed| 
 
+
+
+
+
+
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Test ID**| KerbAuth_Negotiate_MechListMIC_Exchange| 
+|  **Description**| This test case is designed to test whether server can handle mechListMIC in the negTokenInit correctly.| 
+|  **Test Execution Steps**| Kerberos client sends AS-REQ without PA-DATA to KDC| 
+| | Kerberos client expects KRB-ERROR from KDC| 
+| | Kerberos client sends AS-REQ with PA-DATA to KDC| 
+| | Kerberos client expects AS-REP from KDC| 
+| | Kerberos client sends TGS-REQ to KDC| 
+| | Kerberos client expects TGS-REP from KDC| 
+| | Decrypt SMB2 Service Ticket| 
+| | Create Authenticator| 
+| | Create AP-REQ| 
+| | Create GSS Token| 
+| | Add mechListMIC to negTokenInit| 
+| | SMB2 client sends SMB2 NEGOTIATE request to AP| 
+| | SMB2 client expects SMB2 NEOGTIATE response from AP| 
+| | SMB2 client sends SMB2 SESSION_SETUP request to AP with GSS Token| 
+| | SMB2 client expects SMB2 SESSION_SETUP response with GSS Token| 
+| | Try accessing files, which should be successful| 
+
+
+
+
+
+
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Test ID**| KerbAuth_Negotiate_MechListMIC_InvalidChecksum| 
+|  **Description**| This test case is designed to test whether server can handle mechListMIC with invalid checksum in the negTokenInit correctly.| 
+|  **Test Execution Steps**| Kerberos client sends AS-REQ without PA-DATA to KDC| 
+| | Kerberos client expects KRB-ERROR from KDC| 
+| | Kerberos client sends AS-REQ with PA-DATA to KDC| 
+| | Kerberos client expects AS-REP from KDC| 
+| | Kerberos client sends TGS-REQ to KDC| 
+| | Kerberos client expects TGS-REP from KDC| 
+| | Decrypt SMB2 Service Ticket| 
+| | Create Authenticator| 
+| | Create AP-REQ| 
+| | Create GSS Token| 
+| | Add mechListMIC with invalid checksum to negTokenInit| 
+| | SMB2 client sends SMB2 NEGOTIATE request to AP| 
+| | SMB2 client expects SMB2 NEOGTIATE response from AP| 
+| | SMB2 client sends SMB2 SESSION_SETUP request to AP with GSS Token| 
+| | SMB2 client expects SMB2 SESSION_SETUP response with GSS Token| 
+| | Session Setup should fail because of the invalid checksum in mechListMIC| 
 
 
 

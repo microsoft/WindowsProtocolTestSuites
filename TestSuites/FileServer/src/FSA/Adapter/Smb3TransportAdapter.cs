@@ -216,6 +216,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             }
         }
 
+        internal FILEID FileId
+        {
+            get
+            {
+                return fileId;
+            }
+        }
+
         #endregion
 
         #region adapter Initializeation and CleanUp

@@ -1,15 +1,10 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
-using System.Net;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
+using System;
+using System.Linq;
 
 namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 {
@@ -1047,16 +1042,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 return;
             }
 
-            Site.Assert.IsTrue(serverCoreData.version == TS_UD_SC_CORE_version_Values.V1
-                || serverCoreData.version == TS_UD_SC_CORE_version_Values.V2
-                || serverCoreData.version == TS_UD_SC_CORE_version_Values.V3
-                || serverCoreData.version == TS_UD_SC_CORE_version_Values.V4
-                || serverCoreData.version == TS_UD_SC_CORE_version_Values.V5
-                || serverCoreData.version == TS_UD_SC_CORE_version_Values.V6
-                || serverCoreData.version == TS_UD_SC_CORE_version_Values.V7
-                || serverCoreData.version == TS_UD_SC_CORE_version_Values.V8
-                || serverCoreData.version == TS_UD_SC_CORE_version_Values.V9,
-                "The version field of TS_UD_SC_CORE contains value: 0x00080001,0x00080004,0x00080005,0x00080006,0x00080007,0x00080008,0x00080009,0x0008000A,0x0008000B.");
+            var serverVersions = Enum.GetValues(typeof(TS_UD_SC_CORE_version_Values)).Cast<uint>();
+
+            Site.Assert.IsTrue(
+                serverVersions.Any(version => version == (uint)serverCoreData.version),
+                String.Format("The version field of TS_UD_SC_CORE contains value: {0}.", String.Join(", ", serverVersions.Select(version => String.Format("0x{0:X08}",version)))));
 
 
             uint flags =(uint)(requestedProtocols_Values.PROTOCOL_RDP_FLAG | requestedProtocols_Values.PROTOCOL_SSL_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_EX);

@@ -1227,7 +1227,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         #endregion
 
         #region 3.1.5.2   Server Requests a Read
-
         /// <summary>
         /// Implement ReadFile method
         /// </summary>
@@ -1240,7 +1239,25 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             int byteCount,
             out long byteRead)
         {
-            byte[] outBuffer = null;
+            byte[] outBuffer;
+            return ReadFile(byteOffset, byteCount, out byteRead, out outBuffer);
+        }
+
+        /// <summary>
+        /// Implement ReadFile method
+        /// </summary>
+        /// <param name="byteOffset">The absolute byte offset in the stream from which to read data.</param>
+        /// <param name="byteCount">The desired number of bytes to read.</param>
+        /// <param name="byteRead">The number of bytes that were read.</param>
+        /// <param name="buffer">The buffer which contains file content read out.</param>
+        /// <returns>An NTSTATUS code that specifies the result</returns>
+        public MessageStatus ReadFile(
+            long byteOffset,
+            int byteCount,
+            out long byteRead,
+            out byte[] buffer
+            )
+        {
             MessageStatus returnedStatus = MessageStatus.INVALID_PARAMETER;
 
             try
@@ -1249,21 +1266,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     (ulong)byteOffset,
                     (uint)byteCount,
                     true,
-                    out outBuffer);
+                    out buffer);
 
                 if (returnedStatus == MessageStatus.SUCCESS)
                 {
-                    bool isReturned = (outBuffer != null);
+                    bool isReturned = (buffer != null);
                     this.VerifyServerRequestsRead(isReturned);
                 }
             }
             catch (Exception ex)
             {
+                buffer = new byte[0];
                 site.Log.Add(LogEntryKind.Debug, "Read file get exception: " + ex.Message);
             }
 
             //When outBuffer is null, byteRead is 0
-            byteRead = ((outBuffer == null) ? 0 : outBuffer.Length);
+            byteRead = ((buffer == null) ? 0 : buffer.Length);
 
             if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
             {
@@ -3479,6 +3497,53 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             return returnedStatus;
         }
 
+        #endregion
+
+        #region FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX
+        /// <summary>
+        /// Implement FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX, which duplicates file extents from the same opened file.
+        /// </summary>
+        /// <param name="sourceFileOffset">Offset of source file.</param>
+        /// <param name="targetFileOffset">Offset of target file.</param>
+        /// <param name="byteCount">The number of bytes of duplicate.</param>
+        /// <param name="flags">Flags for duplicate file.</param>
+        /// <returns></returns>
+        public MessageStatus FsctlDuplicateExtentsToFileEx(
+            long sourceFileOffset,
+            long targetFileOffset,
+            long byteCount,
+            FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX_Request_Flags_Values flags
+            )
+        {
+            if (!(transAdapter is Smb2TransportAdapter))
+            {
+                Site.Assume.Inconclusive("FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX is only supported by SMB2 transport!");
+            }
+
+            var sourceFileId = (transAdapter as Smb2TransportAdapter).FileId;
+
+            var request = new FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX_Request();
+
+            request.StructureSize = 0x30;
+            request.SourceFileId = sourceFileId;
+            request.SourceFileOffset = sourceFileOffset;
+            request.TargetFileOffset = targetFileOffset;
+            request.ByteCount = byteCount;
+            request.Flags = flags;
+            request.Reserved = 0;
+
+            var input = TypeMarshal.ToBytes(request);
+            byte[] output;
+
+            var status = transAdapter.IOControl(
+                (uint)Smb2.CtlCode_Values.FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX,
+                0,
+                input,
+                out output
+                );
+
+            return status;
+        }
         #endregion
 
         #endregion

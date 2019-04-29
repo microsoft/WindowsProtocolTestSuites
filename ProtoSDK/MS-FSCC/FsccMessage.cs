@@ -3782,6 +3782,80 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         public long Length;
     }
 
+    /// <summary>
+    /// A 32-bit unsigned integer that contains zero or more of the following flag values. 
+    /// Flag values not specified SHOULD be set to 0 and MUST be ignored.
+    /// </summary>
+    [Flags]
+    public enum FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX_Request_Flags_Values : UInt32
+    {
+        /// <summary>
+        /// None.
+        /// </summary>
+        NONE = 0x00000000,
+
+        /// <summary>
+        /// Indicates that duplication is atomic from source point of view.
+        /// </summary>
+        DUPLICATE_EXTENTS_DATA_EX_SOURCE_ATOMIC = 0x00000001
+    }
+
+    /// <summary>
+    /// FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX Request
+    /// </summary>
+    public struct FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX_Request
+    {
+        /// <summary>
+        /// A 64-bit unsigned integer value that specifies the size of the structure, in bytes. 
+        /// This field MUST be set to 0x30.
+        /// </summary>
+        public ulong StructureSize;
+
+        /// <summary>
+        /// An SMB2_FILEID structure, that is an identifier of the open to the source file.
+        /// </summary>
+        public Smb2.FILEID SourceFileId;
+
+        /// <summary>
+        /// A 64-bit signed integer that contains the file offset, in bytes, 
+        /// of the start of a range of bytes in a source file from which the data is to be copied. 
+        /// The value of this field MUST be greater than or equal to 0x0000000000000000 and MUST be aligned to a logical cluster boundary.
+        /// </summary>
+        public long SourceFileOffset;
+
+        /// <summary>
+        /// A 64-bit signed integer that contains the file offset, in bytes, 
+        /// of the start of a range of bytes in a target file to which the data is to be copied. 
+        /// The value of this field MUST be greater than or equal to 0x0000000000000000 and MUST be aligned to a logical cluster boundary.
+        /// </summary>
+        public long TargetFileOffset;
+
+        /// <summary>
+        /// A 64-bit signed integer that contains the number of bytes to copy from source to target. 
+        /// The value of this field MUST be greater than or equal to 0x0000000000000000 and MUST be aligned to a logical cluster boundary.
+        /// </summary>
+        public long ByteCount;
+
+        /// <summary>
+        /// A 32-bit unsigned integer that contains zero or more of the following flag values. 
+        /// Flag values not specified SHOULD be set to 0 and MUST be ignored.
+        /// </summary>
+        public FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX_Request_Flags_Values Flags;
+
+        /// <summary>
+        /// This field SHOULD be set to zero and MUST be ignored.
+        /// </summary>
+        public UInt32 Reserved;
+    }
+
+    /// <summary>
+    /// FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX Reply
+    /// </summary>
+    public struct FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX_Response
+    {
+
+    }
+
     #endregion
 
     #endregion
@@ -8172,19 +8246,19 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// Specifies the NULL SID authority. It defines only the  NULL well-known-SID: S-1-0-0. 
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2105:ArrayFieldsShouldNotBeReadOnly")]            
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2105:ArrayFieldsShouldNotBeReadOnly")]
         public static readonly byte[] NULL_SID_AUTHORITY = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
         /// <summary>
         /// Specifies the World SID authority. It only defines the  Everyone well-known-SID: S-1-1-0. 
         /// </summary>        
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2105:ArrayFieldsShouldNotBeReadOnly")]                    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2105:ArrayFieldsShouldNotBeReadOnly")]
         public static readonly byte[] WORLD_SID_AUTHORITY = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x01 };
 
         /// <summary>
         /// Specifies the Local SID authority. It defines only the  Local well-known-SID: S-1-2-0. 
         /// </summary>        
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2105:ArrayFieldsShouldNotBeReadOnly")]                    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2105:ArrayFieldsShouldNotBeReadOnly")]
         public static readonly byte[] LOCAL_SID_AUTHORITY = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x02 };
 
         /// <summary>
@@ -8192,25 +8266,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// Server  well-known-SIDs: S-1-3-0, S-1-3-1, and S-1-3-2. These  SIDs are used as placeholders in an access  
         /// control  list (ACL) and are replaced by the user, group, and  machine SIDs of the security principal. 
         /// </summary>        
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2105:ArrayFieldsShouldNotBeReadOnly")]                    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2105:ArrayFieldsShouldNotBeReadOnly")]
         public static readonly byte[] CREATOR_SID_AUTHORITY = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x03 };
 
         /// <summary>
         /// Not used. 
         /// </summary>        
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2105:ArrayFieldsShouldNotBeReadOnly")]                    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2105:ArrayFieldsShouldNotBeReadOnly")]
         public static readonly byte[] NON_UNIQUE_AUTHORITY = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x04 };
 
         /// <summary>
         /// Specifies the windows_nt security subsystem SID authority.  It defines all other SIDs in the forest. 
         /// </summary>        
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2105:ArrayFieldsShouldNotBeReadOnly")]                    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2105:ArrayFieldsShouldNotBeReadOnly")]
         public static readonly byte[] NT_AUTHORITY = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x05 };
 
         /// <summary>
         /// Specifies the Mandatory label authority. It defines  the integrity level SIDs. 
         /// </summary>        
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2105:ArrayFieldsShouldNotBeReadOnly")]            
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2105:ArrayFieldsShouldNotBeReadOnly")]
         public static readonly byte[] SECURITY_MANDATORY_LABEL_AUTHORITY = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x10 };
     }
     #endregion

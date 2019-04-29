@@ -4993,6 +4993,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
         FSCTL_DUPLICATE_EXTENTS_TO_FILE = 0x00098344,
 
+        FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX = 0x000983E8,
+
         /// <summary>
         /// Control code for STORAGE_QOS_CONTROL_REQUEST
         /// </summary>
@@ -12264,14 +12266,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         ///  A FILE_BASIC_INFORMATION structure specified in section
         ///  .
         /// </summary>
-        [StaticSize(36)]
+        [StaticSize(40)]
         public FileBasicInformation BasicInformation;
 
         /// <summary>
         ///  A FILE_STANDARD_INFORMATION structure specified in section
         ///  .
         /// </summary>
-        [StaticSize(22)]
+        [StaticSize(24)]
         public FileStandardInformation StandardInformation;
 
         /// <summary>
