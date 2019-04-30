@@ -644,6 +644,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             WRITE_Response writeResponse;
             int creditCharge = 1 + ((buffer.Length - 1) / 65535);
 
+            WRITE_Request_Flags_Values writeFlag = WRITE_Request_Flags_Values.None;
+            if (isWriteThrough)
+            {
+                writeFlag |= WRITE_Request_Flags_Values.SMB2_WRITEFLAG_WRITE_THROUGH;
+            }
+
+            if (isNonCached)
+            {
+                writeFlag |= WRITE_Request_Flags_Values.SMB2_WRITEFLAG_WRITE_UNBUFFERED;
+            }
+
             uint status = this.smb2Client.Write(
                 (ushort)creditCharge,
                 64,
@@ -654,7 +665,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 offset,
                 this.fileId,
                 Channel_Values.CHANNEL_NONE,
-                WRITE_Request_Flags_Values.None,
+                writeFlag,
                 new byte[0],
                 buffer,
                 out packetHeader,
