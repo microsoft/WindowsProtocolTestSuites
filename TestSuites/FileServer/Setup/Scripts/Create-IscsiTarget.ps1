@@ -23,7 +23,7 @@ if(!(Test-Path "$workingDir"))
 if(!(Test-Path "$protocolConfigFile"))
 {
     $protocolConfigFile = "$workingDir\Protocol.xml"
-    if(!(Test-Path "$protocolConfigFile"))
+    if(!(Test-Path "$protocolConfigFile")) 
     {
         Write-Error.ps1 "No protocol.xml found."
         exit ExitCode
@@ -40,8 +40,8 @@ Start-Transcript -Path "$logFile" -Append -Force
 # Define common functions
 #----------------------------------------------------------------------------
 function ExitCode()
-{
-    return $MyInvocation.ScriptLineNumber
+{ 
+    return $MyInvocation.ScriptLineNumber 
 }
 
 function Write-ConfigFailureSignal()
@@ -65,7 +65,7 @@ if($config -eq $null)
 #----------------------------------------------------------------------------
 $storageServer = $config.lab.servers.vm | Where {$_.isiscsitarget -eq "true"}
 $targetname = $storageServer.iscsitargetname
-if([System.String]::IsNullOrEmpty($targetname))
+if([System.String]::IsNullOrEmpty($targetname)) 
 {
     $targetname = "ClusterTarget"
 }
@@ -82,7 +82,6 @@ else
 $iscsiDiskPath = $env:SystemDrive + "\iscsidisk"
 $disk1 = "$iscsiDiskPath\disk1.$vhdExtension"
 $disk2 = "$iscsiDiskPath\disk2.$vhdExtension"
-$disk3 = "$iscsiDiskPath\disk3.$vhdExtension"
 $diskq = "$iscsiDiskPath\diskq.$vhdExtension"
 
 #----------------------------------------------------------------------------
@@ -103,7 +102,7 @@ for($i=0;$i -lt 5;$i++)
         break
     }
     catch
-    {
+    {			
         Write-Info.ps1 "Get exception: $_"
         Start-Sleep 10
     }
@@ -129,7 +128,6 @@ Set-IscsiServerTarget -TargetName $targetname -InitiatorId IQN:*
 Write-Info.ps1 "Create Iscsi virtual disks"
 New-IscsiVirtualdisk $disk1 -size 10GB
 New-IscsiVirtualdisk $disk2 -size 10GB
-New-IscsiVirtualdisk $disk3 -size 10GB
 New-IscsiVirtualdisk $diskq -size 1GB
 
 #----------------------------------------------------------------------------
@@ -138,7 +136,6 @@ New-IscsiVirtualdisk $diskq -size 1GB
 Write-Info.ps1 "Map Iscsi virtual disk to Iscsi Target"
 Add-IscsiVirtualDiskTargetMapping -TargetName $targetname -devicepath $disk1
 Add-IscsiVirtualDiskTargetMapping -TargetName $targetname -devicepath $disk2
-Add-IscsiVirtualDiskTargetMapping -TargetName $targetname -devicepath $disk3
 Add-IscsiVirtualDiskTargetMapping -TargetName $targetname -devicepath $diskq
 
 #----------------------------------------------------------------------------
