@@ -35,9 +35,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
+            string path;
+            if (this.PayLoad.PathOffset - this.BufferOffset != 0)   // Path is in TreeConnectContext
+            {
+                var buffer = this.Buffer.Skip(this.PayLoad.PathOffset - this.BufferOffset).ToArray();
+                path = Encoding.Unicode.GetString(buffer.Take(this.PayLoad.PathLength).ToArray());
+            }
+            else
+            {
+                // Path is in Buffer
+                path = Encoding.Unicode.GetString(this.Buffer);
+            }
 
             sb.Append("C TREE CONNECT");
-            sb.Append(", Path=" + Encoding.Unicode.GetString(this.Buffer));
+            sb.Append(", Path=" + path);
             return sb.ToString();
         }
 

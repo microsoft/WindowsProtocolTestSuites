@@ -384,7 +384,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 Site.Assume.IsTrue(result != IPAddress.None, "CAShareServerIP should be a valid IP address or a resolvable host name!");
                 return result;
             }
-        }
+        }        
 
         public bool IsServerSigningRequired
         {
@@ -575,6 +575,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             if (MaxSmbVersionClientSupported < dialect)
             {
                 Site.Assert.Inconclusive("Test case is applicable when the ptf property value of MaxSmbVersionClientSupported is larger than or equal to {0}.", dialect);
+            }
+        }
+
+        public void CheckPlatform(Platform platform)
+        {
+            if (Platform < platform)
+            {
+                Site.Assert.Inconclusive("The case is applicable in {0}.", platform);
             }
         }
 

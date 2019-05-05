@@ -13,7 +13,7 @@
       <hostisgateway>true</hostisgateway>
       <ip>10.16.1.1</ip>
       <subnet>255.255.254.0</subnet>
-    </vnet>      
+    </vnet>
   </network>
   <Parameters>
   <!--Parameters for automation run-->
@@ -34,7 +34,10 @@
     </generalfs>
     <scaleoutfs>
       <name>SCALEOUTFS01</name>
-    </scaleoutfs>    
+    </scaleoutfs>
+	<infrastructurefs>
+      <name>InfraFS01</name>
+    </infrastructurefs>
   </ha>
   <servers>
     <vm>
@@ -55,7 +58,7 @@
       <postscript>Disable_Firewall.ps1;SetPasswordNeverExpires.ps1;Create-IscsiTarget.ps1;Check-StorageStatus.ps1</postscript>
       <isiscsitarget>true</isiscsitarget>
       <iscsitargetname>ClusterTarget</iscsitargetname>
-    </vm>  
+    </vm>
     <vm>
       <installorder>2</installorder>
       <role>DC</role>
@@ -68,17 +71,17 @@
       <password>Password01!</password>
       <vnet>FS-Cluster-Internal</vnet>
       <ip>10.16.0.253</ip>
-      <gateway>Empty</gateway>      
+      <gateway>Empty</gateway>
       <dns>127.0.0.1</dns>
       <cpu>1</cpu>
       <memory>1024</memory>
       <minimunram>800</minimunram>
       <maximunram>1024</maximunram>
-      <installscript>createdc.ps1</installscript> 
-      <installfeaturescript>Install_RemoteAccess_Feature.ps1</installfeaturescript>           
+      <installscript>createdc.ps1</installscript>
+      <installfeaturescript>Install_RemoteAccess_Feature.ps1</installfeaturescript>
       <postscript>Disable_Firewall.ps1;Create-TestAccount.ps1;SetPasswordNeverExpires.ps1;Create-CbacObjectsInDC.ps1;Import-GPOForClaims.ps1;Check-DCStatus.ps1</postscript>
       <skipwaitingforpostscript>false</skipwaitingforpostscript>
-    </vm>  
+    </vm>
 
     <vm>
       <installorder>3</installorder>
@@ -173,6 +176,6 @@
         <tool name="PTF" MSIName="ProtocolTestFrameworkInstaller.msi" version="1.0.6000.0" CPUArchitecture="x86" />
         <TestsuiteMSI MSIName="FileServer-TestSuite-ServerEP.msi" targetEndpoint="" />
       </tools>
-    </vm>    
+    </vm>
   </servers>
 </lab>

@@ -213,7 +213,7 @@ Test scenarios are categorized as below table and will be described in following
 
 | Category                 | Test Cases | Comments                                                                                                          |
 |--------------------------|------------|-------------------------------------------------------------------------------------------------------------------|
-| SMB2 BVT                 | 79         | SMB2 common scenarios.                                                                                            |
+| SMB2 BVT                 | 80         | SMB2 common scenarios.                                                                                            |
 | SMB2 Feature Test        | 2591       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
 | SMB2 Feature Combination | 12         | Extended test with more complex message sequence for new features in SMB 3.0 dialect and later.                   |
 | FSRVP Test               | 14         | Test for MS-FSRVP                                                                                                 |
@@ -1615,6 +1615,18 @@ This is used to test SMB2 common user scenarios.
 ||Client sends TREE_CONNECT request which is not signed or not encrypted and expects server disconnects the connection.|
 |**Cleanup**||
 
+
+|||
+|---|---|
+|**Test ID**|TreeMgmt_SMB311_TREE_CONNECT_EXTENSION_PRESENT|
+|**Description**|Once a client has successfully connected to a infrastructure share it must set the SMB2_SHAREFLAG_EXTENSION_PRESENT flag and use SMB2 TREE_CONNECT Request Extension for tree connect requests.|
+||This test case is designed to test server can handle a TreeConnect request with flag SMB2_SHAREFLAG_EXTENSION_PRESENT successfully.|
+|**Prerequisites**|The server implements dialect 3.11 and the server supports infrastructure share (for windows)|
+|**Test Execution Steps**|Start a client by sending the following requests: NEGOTIATE (dialect 3.11); SESSION_SETUP (with domain credential).|
+||Client sends TREE_CONNECT request with flag SMB2_SHAREFLAG_EXTENSION_PRESENT and SMB2_REMOTED_IDENTITY_TREE_CONNECT context (with local administrator account passed in the context) and expects STATUS_SUCCESS.|
+||Client sends CREATE request and expects STATUS_SUCCESS.|
+||Tear down the client.|
+|**Cleanup**||
 
 #### <a name="3.1.22">SessionMgmt
 

@@ -63,7 +63,7 @@
           Computer name of system under test (SUT)
           If SUT does not have a computer name, set the value to SUT's IP address
         </Description>
-      </Property>
+      </Property>      
 
       <Property name="SutIPAddress" value="192.168.1.11" >
         <Description>
@@ -240,7 +240,7 @@
           If the server does not have a computer name, set it with IP address
           If it is not applicable, leave it blank
         </Description>
-      </Property>
+      </Property>      
 
       <Property name="ClientNic1IPAddress" value="192.168.1.111">
         <Description>

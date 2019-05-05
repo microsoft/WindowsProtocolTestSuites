@@ -1228,6 +1228,54 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             Packet_Header_Flags_Values flags,
             ulong messageId,
             ulong sessionId,
+            int pathLength,
+            byte[] buffer,
+            out uint treeId,
+            out Packet_Header responseHeader,
+            out TREE_CONNECT_Response responsePayload,
+            ushort channelSequence = 0,
+            TreeConnect_Flags treeConnectFlags = TreeConnect_Flags.SMB2_SHAREFLAG_NONE)
+        {
+            var request = new Smb2TreeConnectRequestPacket();
+
+            request.Header.CreditCharge = creditCharge;
+            request.Header.Command = Smb2Command.TREE_CONNECT;
+            request.Header.CreditRequestResponse = creditRequest;
+            request.Header.MessageId = messageId;
+            request.Header.Flags = flags;
+            request.Header.SessionId = sessionId;
+            request.Header.Status = channelSequence;
+
+            request.Buffer = buffer;
+            if (treeConnectFlags.HasFlag(TreeConnect_Flags.SMB2_SHAREFLAG_EXTENSION_PRESENT))
+            {
+                request.PayLoad.PathOffset = (ushort)(request.BufferOffset +
+                                                      4 +   // TreeConnectContextOffset
+                                                      2 +   // TreeConnectContextCount
+                                                      10);  // Reserved
+            }
+            else
+            {
+                request.PayLoad.PathOffset = request.BufferOffset;
+            }
+            request.PayLoad.PathLength = (ushort)pathLength;
+            request.PayLoad.Flags = treeConnectFlags;
+
+            var response = SendPacketAndExpectResponse<Smb2TreeConnectResponsePacket>(request);
+
+            treeId = response.Header.TreeId;
+            responseHeader = response.Header;
+            responsePayload = response.PayLoad;
+
+            return response.Header.Status;
+        }
+
+        public uint TreeConnect(
+            ushort creditCharge,
+            ushort creditRequest,
+            Packet_Header_Flags_Values flags,
+            ulong messageId,
+            ulong sessionId,
             string path,
             out uint treeId,
             out Packet_Header responseHeader,
@@ -1245,10 +1293,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             request.Header.SessionId = sessionId;
             request.Header.Status = channelSequence;
 
+            request.PayLoad.Flags = treeConnectFlags;
+
             request.Buffer = Encoding.Unicode.GetBytes(path);
             request.PayLoad.PathOffset = request.BufferOffset;
             request.PayLoad.PathLength = (ushort)request.Buffer.Length;
-            request.PayLoad.Flags = treeConnectFlags;
 
             var response = SendPacketAndExpectResponse<Smb2TreeConnectResponsePacket>(request);
 

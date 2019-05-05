@@ -136,6 +136,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// via a Share Redirect error context response as specified in section 2.2.2.2.2.
         /// </summary>
         SMB2_SHAREFLAG_REDIRECT_TO_OWNER = 0x0002,
+
+        /// <summary>
+        /// When set, indicates that a tree connect request extension,
+        /// as specified in section 2.2.9.1, is present,
+        /// starting at the Buffer field of this tree connect request.
+        /// </summary>
+        SMB2_SHAREFLAG_EXTENSION_PRESENT = 0x0004,
     }
 
     /// <summary>
@@ -222,6 +229,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// If set, the server supports the encryption of remote file access messages on this share. 
         /// </summary>
         SHAREFLAG_ENCRYPT_DATA = 0x00008000,
+
+        /// <summary>
+        /// If set, the share supports identity remoting.
+        /// The client can request remoted identity access for the share via the SMB2_REMOTED_IDENTITY_TREE_CONNECT context
+        /// as specified in section 2.2.9.2.1.
+        /// </summary>
+        SHAREFLAG_IDENTITY_REMOTING = 0x00040000,
     }
 
     /// <summary>
@@ -7419,6 +7433,448 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         ///  Possible value.
         /// </summary>
         V1 = 0,
+    }
+
+    /// <summary>
+    /// If the Flags field of the SMB2 TREE_CONNECT request has the
+    /// SMB2_TREE_CONNECT_FLAG_EXTENSION_PRESENT bit set,
+    /// the following structure MUST be added at the beginning of the Buffer field.
+    /// </summary>
+    public struct TREE_CONNECT_Request_Extension
+    {
+        /// <summary>
+        /// The offset from the start of the SMB2 TREE_CONNECT request of an array of tree connect contexts.
+        /// </summary>
+        [StaticSize(4)]
+        public uint TreeConnectContextOffset;
+
+        /// <summary>
+        /// The count of elements in the tree connect context array.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort TreeConnectContextCount;
+
+        /// <summary>
+        /// MUST be set to zero.
+        /// </summary>
+        [StaticSize(10)]
+        public byte[] Reserved;
+
+        /// <summary>
+        /// This field is a variable-length buffer that contains the full share path name
+        /// as specified in section 2.2.9.
+        /// </summary>
+        public byte[] PathName;
+
+        /// <summary>
+        /// A variable length array of SMB2_TREE_CONNECT_CONTEXT structures
+        /// as described in section 2.2.9.2.
+        /// </summary>
+        [Size("TreeConnectContextCount")]
+        public Tree_Connect_Context[] TreeConnectContexts;
+    }
+
+    /// <summary>
+    /// The SMB2_TREE_CONNECT_CONTEXT structure is used by the SMB2 TREE_CONNECT request and
+    /// the SMB2 TREE_CONNECT response to encode additional properties.
+    /// </summary>
+    public struct Tree_Connect_Context
+    {
+        /// <summary>
+        /// Specifies the type of context in the Data field.
+        /// </summary>
+        [StaticSize(2)]
+        public Context_Type ContextType;
+
+        /// <summary>
+        /// The length, in bytes, of the Data field
+        /// </summary>
+        [StaticSize(2)]
+        public ushort DataLength;
+
+        /// <summary>
+        /// This field MUST NOT be used and MUST be reserved.
+        /// This value MUST be set to 0 by the client, and MUST be ignored by the server.
+        /// </summary>
+        [StaticSize(4)]
+        public uint Reserved;
+
+        /// <summary>
+        /// A variable-length field that contains the tree connect context specified by the ContextType field.
+        /// </summary>
+        public REMOTED_IDENTITY_TREE_CONNECT_Context data;
+    }
+
+    /// <summary>
+    /// Specifies the type of context in the Data field. This field MUST be one of the following values.
+    /// </summary>
+    public enum Context_Type : ushort
+    {
+        /// <summary>
+        /// This value is reserved.
+        /// </summary>
+        RESERVED_TREE_CONNECT_CONTEXT_ID = 0x0000,
+
+        /// <summary>
+        /// The Data field contains remoted identity tree connect context data
+        /// as specified in section 2.2.9.2.1.
+        /// </summary>
+        REMOTED_IDENTITY_TREE_CONNECT_CONTEXT_ID = 0x0001,
+    }
+
+    /// <summary>
+    /// The SMB2_REMOTED_IDENTITY_TREE_CONNECT context is specified in SMB2_TREE_CONNECT_CONTEXT structure
+    /// when the ContextType is set to SMB2_REMOTED_IDENTITY_TREE_CONNECT_CONTEXT_ID.
+    /// The format of the data in the Data field of this SMB2_TREE_CONNECT_CONTEXT is as follows.
+    /// </summary>
+    public struct REMOTED_IDENTITY_TREE_CONNECT_Context
+    {
+        /// <summary>
+        /// A 16-bit integer specifying the type of ticket requested.
+        /// The value in this field MUST be set to 0x0001.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort TicketType;
+
+        /// <summary>
+        /// A 16-bit integer specifying the total size of this structure.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort TicketSize;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes,
+        /// from the beginning of this structure to the user information in the TicketInfo buffer.
+        /// The user information is stored in SID_ATTR_DATA format as specified in section 2.2.9.2.1.2.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort User;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes,
+        /// from the beginning of this structure to the null-terminated Unicode string
+        /// containing the username in the TicketInfo field.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort UserName;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes,
+        /// from the beginning of this structure to the null-terminated Unicode string
+        /// containing the domain name in the TicketInfo field.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort Domain;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes,
+        /// from the beginning of this structure to the information
+        /// about the groups in the TicketInfo buffer.
+        /// The information is stored in SID_ARRAY_DATA format as specified in section 2.2.9.2.1.3.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort Groups;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes,
+        /// from the beginning of this structure to the information
+        /// about the restricted groups in the TicketInfo field.
+        /// The information is stored in SID_ARRAY_DATA format as specified in section 2.2.9.2.1.3.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort RestrictedGroups;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes,
+        /// from the beginning of this structure to the information
+        /// about the privileges in the TicketInfo field.
+        /// The information is stored in PRIVILEGE_ARRAY_DATA format as specified in section 2.2.9.2.1.6.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort Privileges;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes,
+        /// from the beginning of this structure to the information
+        /// about the primary group in the TicketInfo field.
+        /// The information is stored in SID_ARRAY_DATA format as specified in section 2.2.9.2.1.3.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort PrimaryGroup;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes,
+        /// from the beginning of this structure to the information
+        /// about the owner in the TicketInfo field.
+        /// The information is stored in BLOB_DATA format as specified in section 2.2.9.2.1.1,
+        /// where BlobData contains the SID, as specified in [MS-DTYP] section 2.4.2.2,
+        /// representing the owner, and BlobSize contains the size of SID.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort Owner;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes,
+        /// from the beginning of this structure to the information about the DACL,
+        /// as specified in [MS-DTYP] section 2.5.2, in the TicketInfo field.
+        /// Information about the DACL is stored in BLOB_DATA format
+        /// as specified in section 2.2.9.2.1.1, where BlobSize contains the size of the ACL structure,
+        /// as specified in [MS-DTYP] section 2.4.5, and BlobData contains the DACL data.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort DefaultDacl;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes,
+        /// from the beginning of this structure to the information
+        /// about the device groups in the TicketInfo field.
+        /// The information is stored in SID_ARRAY_DATA format as specified in section 2.2.9.2.1.3.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort DeviceGroups;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes,
+        /// from the beginning of this structure to the user claims data in the TicketInfo field.
+        /// Information about user claims is stored in BLOB_DATA format
+        /// as specified in section 2.2.9.2.1.1,
+        /// where BlobData contains an array of CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1 structures,
+        /// as specified in [MS-DTYP] section 2.4.10.1, representing the claims issued to the user,
+        /// and BlobSize contains the size of the user claims data.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort UserClaims;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes,
+        /// from the beginning of this structure to the device claims data in the TicketInfo field.
+        /// Information about device claims is stored in BLOB_DATA format
+        /// as specified in section 2.2.9.2.1.1,
+        /// where BlobData contains an array of CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1 structures,
+        /// as specified in [MS-DTYP] section 2.4.10.1,
+        /// representing the claims issued to the account of the device which the user is connected from,
+        /// and BlobSize contains the size of the device claims data.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort DeviceClaims;
+
+        /// <summary>
+        /// A variable-length buffer containing the remoted identity tree connect context data,
+        /// including the information about all the previously defined fields in this structure.
+        /// </summary>
+        public Ticket_Info TicketInfo;
+    }
+
+    public struct Ticket_Info
+    {
+        /// <summary>
+        /// The user information is stored in SID_ATTR_DATA format as specified in section 2.2.9.2.1.2.
+        /// </summary>
+        public SID_ATTR_DATA User;
+
+        /// <summary>
+        /// Null-terminated Unicode string containing the username.
+        /// </summary>
+        public byte[] UserName;
+
+        /// <summary>
+        /// Null-terminated Unicode string containing the domain name.
+        /// </summary>
+        public byte[] Domain;
+
+        /// <summary>
+        /// The information is stored in SID_ARRAY_DATA format as specified in section 2.2.9.2.1.3.
+        /// </summary>
+        public SID_ARRAY_DATA Groups;
+
+        /// <summary>
+        /// The information is stored in SID_ARRAY_DATA format as specified in section 2.2.9.2.1.3.
+        /// </summary>
+        public SID_ARRAY_DATA RestrictedGroups;
+
+        /// <summary>
+        /// The information is stored in PRIVILEGE_ARRAY_DATA format as specified in section 2.2.9.2.1.6.
+        /// </summary>
+        public PRIVILEGE_ARRAY_DATA Privileges;
+
+        /// <summary>
+        /// The information is stored in SID_ARRAY_DATA format as specified in section 2.2.9.2.1.3.
+        /// </summary>
+        public SID_ARRAY_DATA PrimaryGroup;
+
+        /// <summary>
+        /// The information is stored in BLOB_DATA format as specified in section 2.2.9.2.1.1,
+        /// where BlobData contains the SID, as specified in [MS-DTYP] section 2.4.2.2, representing the owner,
+        /// and BlobSize contains the size of SID.
+        /// </summary>
+        public BLOB_DATA Owner;
+
+        /// <summary>
+        /// Information about the DACL is stored in BLOB_DATA format as specified in section 2.2.9.2.1.1,
+        /// where BlobSize contains the size of the ACL structure, as specified in [MS-DTYP] section 2.4.5,
+        /// and BlobData contains the DACL data.
+        /// </summary>
+        public BLOB_DATA DefaultDacl;
+
+        /// <summary>
+        /// The information is stored in SID_ARRAY_DATA format as specified in section 2.2.9.2.1.3.
+        /// </summary>
+        public SID_ARRAY_DATA DeviceGroups;
+
+        /// <summary>
+        /// Information about user claims is stored in BLOB_DATA format as specified in section 2.2.9.2.1.1,
+        /// where BlobData contains an array of CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1 structures,
+        /// as specified in [MS-DTYP] section 2.4.10.1, representing the claims issued to the user,
+        /// and BlobSize contains the size of the user claims data.
+        /// </summary>
+        public BLOB_DATA UserClaims;
+
+        /// <summary>
+        /// Information about device claims is stored in BLOB_DATA format as specified in section 2.2.9.2.1.1,
+        /// where BlobData contains an array of CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1 structures,
+        /// as specified in [MS-DTYP] section 2.4.10.1, representing the claims issued to the account of the device which the user is connected from,
+        /// and BlobSize contains the size of the device claims data.
+        /// </summary>
+        public BLOB_DATA DeviceClaims;
+    }
+
+    public struct BLOB_DATA
+    {
+        /// <summary>
+        /// Size of the data, in bytes, in BlobData.
+        /// </summary>
+        public ushort BlobSize;
+
+        /// <summary>
+        /// Blob data
+        /// </summary>
+        [Size("BlobSize")]
+        public byte[] BlobData;
+    }
+
+    public struct SID_ATTR_DATA
+    {
+        /// <summary>
+        /// SID, as specified in [MS-DTYP] section 2.4.2.2,
+        /// information in BLOB_DATA format as specified in section 2.2.9.2.1.1.
+        /// BlobSize MUST be set to the size of SID and BlobData MUST be set to the SID value.
+        /// </summary>
+        public BLOB_DATA SidData;
+
+        /// <summary>
+        /// Specified attributes of the SID.
+        /// </summary>
+        public SID_ATTR Attr;
+    }
+
+    /// <summary>
+    /// Specified attributes of the SID, containing the following values.
+    /// </summary>
+    public enum SID_ATTR : uint
+    {
+        /// <summary>
+        /// The SID is enabled for access checks.
+        /// A SID without this attribute is ignored during an access check
+        /// unless the SE_GROUP_USE_FOR_DENY_ONLY attribute is set.
+        /// </summary>
+        SE_GROUP_ENABLED = 0x00000004,
+
+        /// <summary>
+        /// The SID is enabled by default.
+        /// </summary>
+        SE_GROUP_ENABLED_BY_DEFAULT = 0x00000002,
+
+        /// <summary>
+        /// The SID is a mandatory integrity SID.
+        /// </summary>
+        SE_GROUP_INTEGRITY = 0x00000020,
+
+        /// <summary>
+        /// The SID is enabled for mandatory integrity checks.
+        /// </summary>
+        SE_GROUP_INTEGRITY_ENABLED = 0x00000040,
+
+        /// <summary>
+        /// The SID is a logon SID that identifies the logon session associated with an access token.
+        /// </summary>
+        SE_GROUP_LOGON_ID = 0xc0000000,
+
+        /// <summary>
+        /// The SID cannot have the SE_GROUP_ENABLED attribute cleared.
+        /// </summary>
+        SE_GROUP_MANDATORY = 0x00000001,
+
+        /// <summary>
+        /// The SID identifies a group account for which the user of the token is the owner of the group,
+        /// or the SID can be assigned as the owner of the token or objects.
+        /// </summary>
+        SE_GROUP_OWNER = 0x00000008,
+
+        /// <summary>
+        /// The SID identifies a domain-local group.
+        /// </summary>
+        SE_GROUP_RESOURCE = 0x20000000,
+
+        /// <summary>
+        /// The SID is a deny-only SID in a restricted token.
+        /// If this attribute is set, SE_GROUP_ENABLED is not set, and the SID cannot be reenabled.
+        /// </summary>
+        SE_GROUP_USE_FOR_DENY_ONLY = 0x00000010,
+    }
+
+    public struct SID_ARRAY_DATA
+    {
+        /// <summary>
+        /// Number of SID_ATTR_DATA elements in SidAttrList array.
+        /// </summary>
+        public ushort SidAttrCount;
+
+        /// <summary>
+        /// An array with SidAttrCount number of SID_ATTR_DATA elements as specified in section 2.2.9.2.1.2.
+        /// </summary>
+        [Size("SidAttrCount")]
+        public SID_ATTR_DATA[] SidAttrList;
+    }
+
+    public struct LUID_ATTR_DATA
+    {
+        /// <summary>
+        /// LUID is a locally unique identifier, as specified in [MS-DTYP] section 2.3.7.
+        /// </summary>
+        public _LUID Luid;
+
+        /// <summary>
+        /// LUID attributes as specified in [MS-LSAD] section 2.2.5.4.
+        /// </summary>
+        public uint Attr;
+    }
+
+    public struct PRIVILEGE_DATA
+    {
+        /// <summary>
+        /// BlobSize MUST be set to the size of LUID_ATTR_DATA structure
+        /// </summary>
+        public ushort BlobSize;
+
+        /// <summary>
+        /// BlobData MUST be set to the LUID_ATTR_DATA specified in section 2.2.9.2.1.4
+        /// </summary>
+        [Size("BlobSize")]
+        public byte[] BlobData;
+    }
+
+    public struct PRIVILEGE_ARRAY_DATA
+    {
+        /// <summary>
+        /// Number of PRIVILEGE_DATA elements in PrivilegeList array.
+        /// </summary>
+        public ushort PrivilegeCount;
+
+        /// <summary>
+        /// An array with PrivilegeCount number of PRIVILEGE_DATA elements as specified in section 2.2.9.2.1.5.
+        /// </summary>
+        [Size("PrivilegeCount")]
+        public PRIVILEGE_DATA[] PrivilegeList;
     }
 
     /// <summary>
