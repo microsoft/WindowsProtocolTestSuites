@@ -16,7 +16,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
     {
         #region Variables
         private Smb2FunctionalClient client;
-        private uint status;
         #endregion
 
         #region Test Initialize and Cleanup
@@ -137,42 +136,111 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         {
             TestValidateNegotiateInfo(client, ValidateNegotiateInfoRequestType.InvalidMaxOutputResponse);
         }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.FsctlValidateNegotiateInfo)]
+        [TestCategory(TestCategories.Compatibility)]
+        [Description("Test whether the server can terminate the transport connection when receiving a VALIDATE_NEGOTIATE_INFO request with dialect 3.1.1.")]
+        public void ValidateNegotiateInfo_Negative_SMB311()
+        {
+            #region Check Applicability
+            TestConfig.CheckDialect(DialectRevision.Smb311);
+            // Server will terminate connection if Validate Negotiate Info Request is not signed.
+            TestConfig.CheckSigning();
+            #endregion
+
+            Smb2FunctionalClient testClient = new Smb2FunctionalClient(testConfig.Timeout, testConfig, this.Site);
+            testClient.ConnectToServer(testConfig.UnderlyingTransport, testConfig.SutComputerName, testConfig.SutIPAddress);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client by sending the following requests: NEGOTIATE;  SESSION_SETUP; TREE_CONNECT");
+
+            Guid clientGuid = Guid.NewGuid();
+            DialectRevision[] requestDialects = Smb2Utility.GetDialects(DialectRevision.Smb311);
+            Capabilities_Values clientCapabilities = Capabilities_Values.GLOBAL_CAP_DFS | Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING | Capabilities_Values.GLOBAL_CAP_LARGE_MTU | Capabilities_Values.GLOBAL_CAP_LEASING | Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL | Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES;
+            SecurityMode_Values clientSecurityMode = SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED;
+            NEGOTIATE_Response? negotiateResponse = null;
+            client.Negotiate(
+                requestDialects,
+                TestConfig.IsSMB1NegotiateEnabled,
+                clientSecurityMode,
+                clientCapabilities,
+                clientGuid,
+                (Packet_Header header, NEGOTIATE_Response response) =>
+                {
+                    BaseTestSite.Assert.AreEqual(
+                        Smb2Status.STATUS_SUCCESS,
+                        header.Status,
+                        "Negotiation should succeed, actually server returns {0}.", Smb2Status.GetStatusCode(header.Status));
+
+                    TestConfig.CheckNegotiateDialect(DialectRevision.Smb311, response);
+
+                    negotiateResponse = response;
+                });
+
+            client.SessionSetup(
+                TestConfig.DefaultSecurityPackage,
+                TestConfig.SutComputerName,
+                TestConfig.AccountCredential,
+                TestConfig.UseServerGssToken);
+
+            uint treeId;
+            string ipcPath = Smb2Utility.GetIPCPath(TestConfig.SutComputerName);
+            client.TreeConnect(ipcPath, out treeId);
+
+            VALIDATE_NEGOTIATE_INFO_Request validateNegotiateInfoReq = new VALIDATE_NEGOTIATE_INFO_Request();
+            validateNegotiateInfoReq.Guid = clientGuid;
+            validateNegotiateInfoReq.Capabilities = clientCapabilities;
+            validateNegotiateInfoReq.SecurityMode = SecurityMode_Values.NONE;
+            validateNegotiateInfoReq.DialectCount = (ushort)requestDialects.Length;
+            validateNegotiateInfoReq.Dialects = requestDialects;
+
+            byte[] inputBuffer = TypeMarshal.ToBytes<VALIDATE_NEGOTIATE_INFO_Request>(validateNegotiateInfoReq);
+            byte[] outputBuffer;
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Attempt to validate negotiate info with info Guid: {0}, Capabilities: {1}, SecurityMode: {2}, DialectCount: {3}, Dialects: {4}",
+                validateNegotiateInfoReq.Guid, validateNegotiateInfoReq.Capabilities, validateNegotiateInfoReq.SecurityMode, validateNegotiateInfoReq.DialectCount, Smb2Utility.GetArrayString(validateNegotiateInfoReq.Dialects));
+
+            try
+            {
+                BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Attempt to send a request with an SMB2 header with a Command value equal to SMB2 IOCTL, and a CtlCode of FSCTL_VALIDATE_NEGOTIATE_INFO.");
+
+                client.ValidateNegotiateInfo(
+                 treeId,
+                 inputBuffer,
+                 out outputBuffer
+                );
+            }
+            catch
+            {
+            }
+
+            BaseTestSite.Assert.IsTrue(client.Smb2Client.IsServerDisconnected, "Transport connection should be terminated when Connection.Dialect is \"3.1.1\".");
+        }
         #endregion
 
         #region Common Methods
-
-        // section 3.3.5.15: The server SHOULD<290> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server
-        private void HandleValidateNegotiateInfoNotSupported()
-        {
-            if (testConfig.Platform != Platform.NonWindows)
-            {
-                BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_NOT_SUPPORTED, status,
-                    "The server should fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server");
-            }
-            else
-            {
-                BaseTestSite.Assert.AreNotEqual(Smb2Status.STATUS_SUCCESS, status, "FSCTL_VALIDATE_NEGOTIATE_INFO is not supported in Server, so server should not return STATUS_SUCCESS");
-            }
-        }
-
         private void TestValidateNegotiateInfo(Smb2FunctionalClient client, ValidateNegotiateInfoRequestType requestType, DialectRevision[] invalidDialects = null)
         {
             #region Check Applicability
             TestConfig.CheckDialect(DialectRevision.Smb30);
             TestConfig.CheckIOCTL(CtlCode_Values.FSCTL_VALIDATE_NEGOTIATE_INFO);
-            TestConfig.CheckDialectIOCTLCompatibility(CtlCode_Values.FSCTL_VALIDATE_NEGOTIATE_INFO);
             // Server will terminate connection if Validate Negotiate Info Request is not signed.
             TestConfig.CheckSigning();
             #endregion
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client by sending the following requests: NEGOTIATE;  SESSION_SETUP; TREE_CONNECT");
 
+            // FSCTL_VALIDATE_NEGOTIATE_INFO is only supported in SMB30 and SMB302. For SMB311 and later, we use SMB30 to test the server behavior.
+            DialectRevision[] requestDialects = (TestConfig.MaxSmbVersionClientSupported > DialectRevision.Smb302) ? Smb2Utility.GetDialects(DialectRevision.Smb30) : TestConfig.RequestDialects;
             Guid clientGuid = Guid.NewGuid();
-            DialectRevision[] requestDialects = TestConfig.RequestDialects;
             Capabilities_Values clientCapabilities = Capabilities_Values.GLOBAL_CAP_DFS | Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING | Capabilities_Values.GLOBAL_CAP_LARGE_MTU | Capabilities_Values.GLOBAL_CAP_LEASING | Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL | Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES | Capabilities_Values.GLOBAL_CAP_ENCRYPTION;
             SecurityMode_Values clientSecurityMode = SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED;
             NEGOTIATE_Response? negotiateResponse = null;
-            status = client.Negotiate(
+            client.Negotiate(
                 requestDialects,
                 TestConfig.IsSMB1NegotiateEnabled,
                 clientSecurityMode,
@@ -191,7 +259,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 });
 
 
-            status = client.SessionSetup(
+            client.SessionSetup(
                 TestConfig.DefaultSecurityPackage,
                 TestConfig.SutComputerName,
                 TestConfig.AccountCredential,
@@ -199,7 +267,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             uint treeId;
             string ipcPath = Smb2Utility.GetIPCPath(TestConfig.SutComputerName);
-            status = client.TreeConnect(ipcPath, out treeId);
+            client.TreeConnect(ipcPath, out treeId);
 
             VALIDATE_NEGOTIATE_INFO_Request validateNegotiateInfoReq;
             switch (requestType)
@@ -259,7 +327,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             if (requestType == ValidateNegotiateInfoRequestType.None)
             {
-                status = client.ValidateNegotiateInfo(treeId, inputBuffer, out outputBuffer, checker: (header, response) => { });
+                uint status = client.ValidateNegotiateInfo(treeId, inputBuffer, out outputBuffer, checker: (header, response) => { });
 
                 BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, status,
                     "ValidateNegotiateInfo should succeed ");
@@ -320,90 +388,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "MaxOutputResponse in the request is less than the size of a VALIDATE_NEGOTIATE_INFO Response" : "there's invalid info in the request";
 
             BaseTestSite.Assert.IsTrue(client.Smb2Client.IsServerDisconnected, "Transport connection should be terminated when {0}", errCondition);
-        }
-
-        [TestMethod]
-        [TestCategory(TestCategories.Smb311)]
-        [TestCategory(TestCategories.FsctlValidateNegotiateInfo)]
-        [TestCategory(TestCategories.Compatibility)]
-        [Description("Test whether the server can terminate the transport connection when receiving a VALIDATE_NEGOTIATE_INFO request with dialect 3.1.1.")]
-        public void ValidateNegotiateInfo_Negative_SMB311()
-        {
-            #region Check Applicability
-            TestConfig.CheckDialect(DialectRevision.Smb311);
-            // Server will terminate connection if Validate Negotiate Info Request is not signed.
-            TestConfig.CheckSigning();
-            #endregion
-
-            Smb2FunctionalClient testClient = new Smb2FunctionalClient(testConfig.Timeout, testConfig, this.Site);
-            testClient.ConnectToServer(testConfig.UnderlyingTransport, testConfig.SutComputerName, testConfig.SutIPAddress);
-
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client by sending the following requests: NEGOTIATE;  SESSION_SETUP; TREE_CONNECT");
-
-            Guid clientGuid = Guid.NewGuid();
-            DialectRevision[] requestDialects = Smb2Utility.GetDialects(DialectRevision.Smb311);
-            Capabilities_Values clientCapabilities = Capabilities_Values.GLOBAL_CAP_DFS | Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING | Capabilities_Values.GLOBAL_CAP_LARGE_MTU | Capabilities_Values.GLOBAL_CAP_LEASING | Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL | Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES;
-            SecurityMode_Values clientSecurityMode = SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED;
-            NEGOTIATE_Response? negotiateResponse = null;
-            status = client.Negotiate(
-                requestDialects,
-                TestConfig.IsSMB1NegotiateEnabled,
-                clientSecurityMode,
-                clientCapabilities,
-                clientGuid,
-                (Packet_Header header, NEGOTIATE_Response response) =>
-                {
-                    BaseTestSite.Assert.AreEqual(
-                        Smb2Status.STATUS_SUCCESS,
-                        header.Status,
-                        "Negotiation should succeed, actually server returns {0}.", Smb2Status.GetStatusCode(header.Status));
-
-                    TestConfig.CheckNegotiateDialect(DialectRevision.Smb311, response);
-
-                    negotiateResponse = response;
-                });
-
-            status = client.SessionSetup(
-                TestConfig.DefaultSecurityPackage,
-                TestConfig.SutComputerName,
-                TestConfig.AccountCredential,
-                TestConfig.UseServerGssToken);
-
-            uint treeId;
-            string ipcPath = Smb2Utility.GetIPCPath(TestConfig.SutComputerName);
-            status = client.TreeConnect(ipcPath, out treeId);
-
-            VALIDATE_NEGOTIATE_INFO_Request validateNegotiateInfoReq = new VALIDATE_NEGOTIATE_INFO_Request();
-            validateNegotiateInfoReq.Guid = clientGuid;
-            validateNegotiateInfoReq.Capabilities = clientCapabilities;
-            validateNegotiateInfoReq.SecurityMode = SecurityMode_Values.NONE;
-            validateNegotiateInfoReq.DialectCount = (ushort)requestDialects.Length;
-            validateNegotiateInfoReq.Dialects = requestDialects;
-
-            byte[] inputBuffer = TypeMarshal.ToBytes<VALIDATE_NEGOTIATE_INFO_Request>(validateNegotiateInfoReq);
-            byte[] outputBuffer;
-            BaseTestSite.Log.Add(
-                LogEntryKind.TestStep,
-                "Attempt to validate negotiate info with info Guid: {0}, Capabilities: {1}, SecurityMode: {2}, DialectCount: {3}, Dialects: {4}",
-                validateNegotiateInfoReq.Guid, validateNegotiateInfoReq.Capabilities, validateNegotiateInfoReq.SecurityMode, validateNegotiateInfoReq.DialectCount, Smb2Utility.GetArrayString(validateNegotiateInfoReq.Dialects));
-
-            try
-            {
-                BaseTestSite.Log.Add(
-                LogEntryKind.TestStep,
-                "Attempt to send a request with an SMB2 header with a Command value equal to SMB2 IOCTL, and a CtlCode of FSCTL_VALIDATE_NEGOTIATE_INFO.");
-
-                client.ValidateNegotiateInfo(
-                 treeId,
-                 inputBuffer,
-                 out outputBuffer
-                );
-            }
-            catch
-            {
-            }
-
-            BaseTestSite.Assert.IsTrue(client.Smb2Client.IsServerDisconnected, "Transport connection should be terminated when Connection.Dialect is \"3.1.1\".");
         }
         #endregion
     }

@@ -586,24 +586,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             }
         }
 
-        /// <summary>
-        /// Validate IOCTL and Dialect compatibility 
-        /// </summary>        
-        /// <param name="IOCTL">The IOCTL to check against dialect</param>        
-        public void CheckDialectIOCTLCompatibility(CtlCode_Values IOCTL)
-        {
-            switch (IOCTL)
-            {
-                case CtlCode_Values.FSCTL_VALIDATE_NEGOTIATE_INFO:
-                    // FSCTL_VALIDATE_NEGOTIATE_INFO is not supported by SMB311 any more
-                    if (MaxSmbVersionSupported >= DialectRevision.Smb311 && MaxSmbVersionClientSupported >= DialectRevision.Smb311)
-                    {
-                        Site.Assert.Inconclusive("The VALIDATE_NEGOTIATE_INFO request is valid for the client and servers which implement the SMB 3.0 and SMB 3.0.2 dialects");
-                    }
-                    break;
-                    // Add other IOCTL and Dialect compatibility validation if any.
-            }
-        }
         public void CheckCapabilities(NEGOTIATE_Response_Capabilities_Values capabilities)
         {
             foreach (NEGOTIATE_Response_Capabilities_Values capability in Enum.GetValues(typeof(NEGOTIATE_Response_Capabilities_Values)))
