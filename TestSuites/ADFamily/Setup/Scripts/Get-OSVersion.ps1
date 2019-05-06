@@ -15,13 +15,14 @@
 param(
 [string]$computerName,
 [string]$userName,
-[string]$password
+[string]$password,
+[switch]$log
 )
 
 #----------------------------------------------------------------------------
 # Print execution information
 #----------------------------------------------------------------------------
-Write-Host "EXECUTING [Get-OSVersion.ps1] ..." -foregroundcolor cyan
+Write-Host "EXECUTING [Get-OsVersion.ps1] ..." -foregroundcolor cyan
 Write-Host "`$computerName = $computerName"
 Write-Host "`$userName     = $userName"
 Write-Host "`$password     = $password"
@@ -259,4 +260,10 @@ if($result -eq $null)
 #----------------------------------------------------------------------------
 Write-Host "OS version is: $result" -foregroundcolor Green
 Write-Host "EXECUTE [Get-OSVersion.ps1] SUCCEED." -foregroundcolor Green
+
+if($log)
+{
+    $result > "$env:SystemDrive\osversion.txt"
+}
+
 return $result
