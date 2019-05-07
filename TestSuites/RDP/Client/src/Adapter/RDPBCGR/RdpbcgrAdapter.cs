@@ -1673,32 +1673,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             }
         }
 
-        private byte[] EncodeCertificate(X509Certificate2 certificate)
-        {
-            var container = new TARGET_CERTIFICATE_CONTAINER();
-
-            container.elements = new CERTIFICATE_META_ELEMENT[1];
-
-            var element = new CERTIFICATE_META_ELEMENT();
-
-            element.type = (UInt32)CERTIFICATE_META_ELEMENT_TypeEnum.ELEMENT_TYPE_CERTIFICATE;
-
-            element.encoding = (UInt32)CERTIFICATE_META_ELEMENT_EncodingEnum.ENCODING_TYPE_ASN1_DER;
-
-            element.elementSize = (UInt32)certificate.RawData.Length;
-
-            element.elementData = certificate.RawData;
-
-            container.elements[0] = element;
-
-            // Encode using Base64 in Unicode format
-            var encodedString = Convert.ToBase64String(container.Encode());
-
-            var result = RdpbcgrUtility.EncodeUnicodeStringToBytes(encodedString);
-
-            return result;
-        }
-
         public void SendServerRedirectionPduRDSTLS()
         {
             UnicodeEncoding encoder = new UnicodeEncoding();
@@ -1732,7 +1706,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             redirectPacket.RedirFlags |= RedirectionFlags.LB_REDIRECTION_GUID;
 
             var certificate = new X509Certificate2(certFile, certPwd);
-            redirectPacket.TargetCertificate = EncodeCertificate(certificate);
+            redirectPacket.TargetCertificate = RdpbcgrUtility.EncodeCertificate(certificate);
             redirectPacket.RedirFlags |= RedirectionFlags.LB_TARGET_CERTIFICATE;
 
             redirectPacket.TargetFQDN = RdpbcgrTestData.Test_FullQualifiedDomainName;
