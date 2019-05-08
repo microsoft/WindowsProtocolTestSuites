@@ -72,76 +72,77 @@
         * [FsInfo_Set_FileFsSectorSizeInformation_Dir_InvalidInfoClass](#_Toc427488700)
     * [Test cases for ReFS file system](#_Toc427488701)
         * [IsShortNameSupported](#_Toc427488702)
-        * [FileInfo_Set_FileShortNameInfo_File_IsShortNameSupported](#_Toc427488703)
-        * [FileInfo_Set_FileShortNameInfo_Dir_IsShortNameSupported](#_Toc427488704)
-        * [BVT_FsCtl_DuplicateExtentsToFileEx_IsBasicSupported](#_Toc437488671)
-        * [BVT_FsCtl_DuplicateExtentsToFileEx_IsSourceAtomicSupported](#_Toc437488672)
-    * [IsObjectIdSupported](#_Toc427488705)
-        * [FsInfo_Query_FileFsAttributeInformation_File_IsObjectIdSupported(BVT)](#_Toc427488706)
-        * [FsInfo_Query_FileFsAttributeInformation_Dir_IsObjectIdSupported](#_Toc427488707)
-        * [FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported (BVT)](#_Toc427488708)
-        * [FsInfo_Query_FileFsObjectIdInformation_Dir_IsObjectIdSupported](#_Toc427488709)
-        * [FsInfo_Set_FileFsObjectIdInformation_File_IsObjectIdSupported](#_Toc427488710)
-        * [FsInfo_Set_FileFsObjectIdInformation_Dir_IsObjectIdSupported](#_Toc427488711)
-    * [IsCompressionSupported](#_Toc427488712)
-        * [FsInfo_Query_FileFsAttributeInformation_File_IsCompressionSupported(BVT)](#_Toc427488713)
-        * [FsInfo_Query_FileFsAttributeInformation_Dir_IsCompressionSupported](#_Toc427488714)
-        * [FileInfo_Query_FileCompressionInfo_File_IsCompressionSupported](#_Toc427488715)
-        * [FileInfo_Query_FileCompressionInfo_Dir_IsCompressionSupported](#_Toc427488716)
-        * [FsCtl_Get_Compression_File_IsCompressionSupported](#_Toc427488717)
-        * [FsCtl_Get_Compression_Dir_IsCompressionSupported](#_Toc427488718)
-        * [FsCtl_Set_Compression_File_IsCompressionSupported](#_Toc427488719)
-        * [FsCtl_Set_Compression_Dir_IsCompressionSupported](#_Toc427488720)
-    * [IsEASupported](#_Toc427488721)
-        * [FileInfo_Set_FileFullEaInformation_File_IsEASupported](#_Toc427488722)
-        * [FileInfo_Set_FileFullEaInformation_Dir_IsEASupported](#_Toc427488723)
-        * [FileInfo_Query_FileFullEaInformation_File_IsEASupported](#_Toc427488724)
-        * [FileInfo_Query_FileFullEaInformation_Dir_IsEASupported](#_Toc427488725)
-        * [FileInfo_Set_FileEaInformation_File_IsEASupported](#_Toc427488726)
-        * [FileInfo_Set_FileEaInformation_Dir_IsEASupported](#_Toc427488727)
-        * [FileInfo_Query_FileEaInformation_File_IsEASupported](#_Toc427488728)
-        * [FileInfo_Query_FileEaInformation_Dir_IsEASupported](#_Toc427488729)
-    * [IsIntegritySupported](#_Toc427488730)
-        * [FsInfo_Query_FileFsAttributeInformation_File_IsIntegritySupported(BVT)](#_Toc427488731)
-        * [FsInfo_Query_FileFsAttributeInformation_Dir_IsIntegritySupported](#_Toc427488732)
-        * [FileInfo_Query_FileBasicInfo_File_IsIntegritySupported (BVT)](#_Toc427488733)
-        * [FileInfo_Query_FileBasicInfo_Dir_IsIntegritySupported](#_Toc427488734)
-        * [FileInfo_Query_FileAttributeTagInfo_File_IsIntegritySupported](#_Toc427488735)
-        * [FileInfo_Query_FileAttributeTagInfo_Dir_IsIntegritySupported](#_Toc427488736)
-        * [FileInfo_Query_FileNetworkOpenInfo_File_IsIntegritySupported](#_Toc427488737)
-        * [FileInfo_Query_FileNetworkOpenInfo_Dir_IsIntegritySupported](#_Toc427488738)
-    * [IsFileLinkInfoSupported](#_Toc427488739)
-        * [FileInfo_Set_FileLinkInfo_File_IsFileLinkInfoSupported](#_Toc427488740)
-        * [FileInfo_Set_FileLinkInfo_DIr_IsFileLinkInfoSupported](#_Toc427488741)
-    * [IsFileValidDataLengthInfoSupported](#_Toc427488742)
-        * [FileInfo_Set_FileValidDataLengthInformation_File_IsSupported](#_Toc427488743)
-        * [FileInfo_Set_FileValidDataLengthInformation_Dir_IsSupported](#_Toc427488744)
-    * [ClusterSize](#_Toc427488745)
-        * [FsInfo_Query_FileFsSizeInformation_File_SectorsPerAllocationUnit (BVT)](#_Toc427488746)
-        * [FsInfo_Query_FileFsSizeInformation_Dir_SectorsPerAllocationUnit](#_Toc427488747)
-    * [IsQuotaInfoSupported](#_Toc427488748)
-        * [QuotaInfo_Query_QuotaInformation_IsQuotaInfoSupported](#_Toc427488749)
-        * [QuotaInfo_Set_QuotaInformation_IsQuotaInfoSupported](#_Toc427488750)
-    * [IsEncryptionSupported](#_Toc427488751)
-        * [FsInfo_Query_FileFsAttributeInformation_File_IsEncryptionSupported(BVT)](#_Toc427488752)
-        * [FsInfo_Query_FileFsAttributeInformation_Dir_IsEncryptionSupported](#_Toc427488753)
-        * [FsCtl_Set_Encryption_File_IsEncryptionSupported](#_Toc427488754)
-        * [FsCtl_Set_Encryption_Dir_IsEncryptionSupported](#_Toc427488755)
-    * [IsAllocatedRangesSupported](#_Toc427488756)
-        * [FsCtl_Query_AllocatedRanges_File_IsAllocatedRangesSupported](#_Toc427488757)
-        * [FsCtl_Query_AllocatedRanges_Dir_IsAllocatedRangesSupported](#_Toc427488758)
-    * [IsReparsePointSupported](#_Toc427488759)
-        * [FsCtl_Set_ReparsePoint_File_IsReparsePointSupported](#_Toc427488760)
-        * [FsCtl_Set_ReparsePoint_Dir_IsReparsePointSupported](#_Toc427488761)
-    * [IsSparseFileSupported](#_Toc427488762)
-        * [FsCtl_Set_Sparse_File_IsSparseFileSupported](#_Toc427488763)
-        * [FsCtl_Set_Sparse_Dir_IsSparseFileSupported](#_Toc427488764)
-    * [IsZeroDataSupported](#_Toc427488765)
-        * [FsCtl_Set_ZeroData_File_IsSetZeroDataSupported](#_Toc427488766)
-        * [FsCtl_Set_ZeroData_Dir_IsZeroDataSupported](#_Toc427488767)
-    * [FileNormalizedNameInformation](#_Toc427488831)
-        * [FileInfo_Query_FileNormalizedNameInfo_File](#_Toc427488832)
-        * [FileInfo_Query_FileNormalizedNameInfo_Dir](#_Toc427488833)
+            * [FileInfo_Set_FileShortNameInfo_File_IsShortNameSupported](#_Toc427488703)
+            * [FileInfo_Set_FileShortNameInfo_Dir_IsShortNameSupported](#_Toc427488704)
+        * [IsObjectIdSupported](#_Toc427488705)
+            * [FsInfo_Query_FileFsAttributeInformation_File_IsObjectIdSupported(BVT)](#_Toc427488706)
+            * [FsInfo_Query_FileFsAttributeInformation_Dir_IsObjectIdSupported](#_Toc427488707)
+            * [FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported (BVT)](#_Toc427488708)
+            * [FsInfo_Query_FileFsObjectIdInformation_Dir_IsObjectIdSupported](#_Toc427488709)
+            * [FsInfo_Set_FileFsObjectIdInformation_File_IsObjectIdSupported](#_Toc427488710)
+            * [FsInfo_Set_FileFsObjectIdInformation_Dir_IsObjectIdSupported](#_Toc427488711)
+        * [IsCompressionSupported](#_Toc427488712)
+            * [FsInfo_Query_FileFsAttributeInformation_File_IsCompressionSupported(BVT)](#_Toc427488713)
+            * [FsInfo_Query_FileFsAttributeInformation_Dir_IsCompressionSupported](#_Toc427488714)
+            * [FileInfo_Query_FileCompressionInfo_File_IsCompressionSupported](#_Toc427488715)
+            * [FileInfo_Query_FileCompressionInfo_Dir_IsCompressionSupported](#_Toc427488716)
+            * [FsCtl_Get_Compression_File_IsCompressionSupported](#_Toc427488717)
+            * [FsCtl_Get_Compression_Dir_IsCompressionSupported](#_Toc427488718)
+            * [FsCtl_Set_Compression_File_IsCompressionSupported](#_Toc427488719)
+            * [FsCtl_Set_Compression_Dir_IsCompressionSupported](#_Toc427488720)
+        * [IsEASupported](#_Toc427488721)
+            * [FileInfo_Set_FileFullEaInformation_File_IsEASupported](#_Toc427488722)
+            * [FileInfo_Set_FileFullEaInformation_Dir_IsEASupported](#_Toc427488723)
+            * [FileInfo_Query_FileFullEaInformation_File_IsEASupported](#_Toc427488724)
+            * [FileInfo_Query_FileFullEaInformation_Dir_IsEASupported](#_Toc427488725)
+            * [FileInfo_Set_FileEaInformation_File_IsEASupported](#_Toc427488726)
+            * [FileInfo_Set_FileEaInformation_Dir_IsEASupported](#_Toc427488727)
+            * [FileInfo_Query_FileEaInformation_File_IsEASupported](#_Toc427488728)
+            * [FileInfo_Query_FileEaInformation_Dir_IsEASupported](#_Toc427488729)
+        * [IsIntegritySupported](#_Toc427488730)
+            * [FsInfo_Query_FileFsAttributeInformation_File_IsIntegritySupported(BVT)](#_Toc427488731)
+            * [FsInfo_Query_FileFsAttributeInformation_Dir_IsIntegritySupported](#_Toc427488732)
+            * [FileInfo_Query_FileBasicInfo_File_IsIntegritySupported (BVT)](#_Toc427488733)
+            * [FileInfo_Query_FileBasicInfo_Dir_IsIntegritySupported](#_Toc427488734)
+            * [FileInfo_Query_FileAttributeTagInfo_File_IsIntegritySupported](#_Toc427488735)
+            * [FileInfo_Query_FileAttributeTagInfo_Dir_IsIntegritySupported](#_Toc427488736)
+            * [FileInfo_Query_FileNetworkOpenInfo_File_IsIntegritySupported](#_Toc427488737)
+            * [FileInfo_Query_FileNetworkOpenInfo_Dir_IsIntegritySupported](#_Toc427488738)
+        * [IsFileLinkInfoSupported](#_Toc427488739)
+            * [FileInfo_Set_FileLinkInfo_File_IsFileLinkInfoSupported](#_Toc427488740)
+            * [FileInfo_Set_FileLinkInfo_DIr_IsFileLinkInfoSupported](#_Toc427488741)
+        * [IsFileValidDataLengthInfoSupported](#_Toc427488742)
+            * [FileInfo_Set_FileValidDataLengthInformation_File_IsSupported](#_Toc427488743)
+            * [FileInfo_Set_FileValidDataLengthInformation_Dir_IsSupported](#_Toc427488744)
+        * [ClusterSize](#_Toc427488745)
+            * [FsInfo_Query_FileFsSizeInformation_File_SectorsPerAllocationUnit (BVT)](#_Toc427488746)
+            * [FsInfo_Query_FileFsSizeInformation_Dir_SectorsPerAllocationUnit](#_Toc427488747)
+        * [IsQuotaInfoSupported](#_Toc427488748)
+            * [QuotaInfo_Query_QuotaInformation_IsQuotaInfoSupported](#_Toc427488749)
+            * [QuotaInfo_Set_QuotaInformation_IsQuotaInfoSupported](#_Toc427488750)
+        * [IsEncryptionSupported](#_Toc427488751)
+            * [FsInfo_Query_FileFsAttributeInformation_File_IsEncryptionSupported(BVT)](#_Toc427488752)
+            * [FsInfo_Query_FileFsAttributeInformation_Dir_IsEncryptionSupported](#_Toc427488753)
+            * [FsCtl_Set_Encryption_File_IsEncryptionSupported](#_Toc427488754)
+            * [FsCtl_Set_Encryption_Dir_IsEncryptionSupported](#_Toc427488755)
+        * [IsAllocatedRangesSupported](#_Toc427488756)
+            * [FsCtl_Query_AllocatedRanges_File_IsAllocatedRangesSupported](#_Toc427488757)
+            * [FsCtl_Query_AllocatedRanges_Dir_IsAllocatedRangesSupported](#_Toc427488758)
+        * [IsReparsePointSupported](#_Toc427488759)
+            * [FsCtl_Set_ReparsePoint_File_IsReparsePointSupported](#_Toc427488760)
+            * [FsCtl_Set_ReparsePoint_Dir_IsReparsePointSupported](#_Toc427488761)
+        * [IsSparseFileSupported](#_Toc427488762)
+            * [FsCtl_Set_Sparse_File_IsSparseFileSupported](#_Toc427488763)
+            * [FsCtl_Set_Sparse_Dir_IsSparseFileSupported](#_Toc427488764)
+        * [IsZeroDataSupported](#_Toc427488765)
+            * [FsCtl_Set_ZeroData_File_IsSetZeroDataSupported](#_Toc427488766)
+            * [FsCtl_Set_ZeroData_Dir_IsZeroDataSupported](#_Toc427488767)
+        * [FileNormalizedNameInformation](#_Toc427488831)
+            * [FileInfo_Query_FileNormalizedNameInfo_File](#_Toc427488832)
+            * [FileInfo_Query_FileNormalizedNameInfo_Dir](#_Toc427488833)
+        * [IsDuplicateExtentsToFileExSupported](#_Toc437488671)
+            * [BVT_FsCtl_DuplicateExtentsToFileEx_IsBasicSupported](#_Toc437488672)
+            * [BVT_FsCtl_DuplicateExtentsToFileEx_IsSourceAtomicSupported](#_Toc437488673)
     * [Test cases for Alternate Data Stream](#_Toc427488768)
         * [AlternateDataStream_CreateStream](#_Toc427488769)
             * [BVT_AlternateDataStream_CreateStream_File (BVT)](#_Toc427488770)
@@ -1654,7 +1655,7 @@ Parameter combination
 
 #### <a name="_Toc427488702"/>IsShortNameSupported
 
-#### <a name="_Toc427488703"/>FileInfo_Set_FileShortNameInfo_File_IsShortNameSupported
+##### <a name="_Toc427488703"/>FileInfo_Set_FileShortNameInfo_File_IsShortNameSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1677,45 +1678,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc437488671"/> BVT_FsCtl_DuplicateExtentsToFileEx_IsBasicSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX without additional flags is supported.| 
-| | Note: This is only implemented by the **REFS** file system.| 
-| | Test environment: ReFS| 
-| | Test object: DataFile| 
-| | Test coverage:| 
-| | FsCtl: FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX| 
-| Message Sequence| Create test file and fill up first two clusters with random data.| 
-| | FSCTL request with FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX and no additional flags to duplicate the file extent of first cluster to the second.| 
-| | Verify returned NTSTATUS code and file content by checking the following:| 
-| | 1. The returned status is STATUS_SUCCESS.| 
-| | 2. The file content of the second cluster is the same as the first.| 
-
-
-
-
-#### <a name="_Toc437488672"/> BVT_FsCtl_DuplicateExtentsToFileEx_IsSourceAtomicSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX with DUPLICATE_EXTENTS_DATA_EX_SOURCE_ATOMIC is supported.| 
-| | Note: This is only implemented by the **REFS** file system.| 
-| | Test environment: ReFS| 
-| | Test object: DataFile| 
-| | Test coverage:| 
-| | FsCtl: FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX| 
-| Message Sequence| Create test file and fill up first two clusters with random data.| 
-| | FSCTL request with FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX and DUPLICATE_EXTENTS_DATA_EX_SOURCE_ATOMIC to duplicate the file extent of first cluster to the second.| 
-| | Verify returned NTSTATUS code and file content by checking the following:| 
-| | 1. The returned status is STATUS_SUCCESS.| 
-| | 2. The file content of the second cluster is the same as the first.| 
-
-
-
-
-#### <a name="_Toc427488704"/>FileInfo_Set_FileShortNameInfo_Dir_IsShortNameSupported
+##### <a name="_Toc427488704"/>FileInfo_Set_FileShortNameInfo_Dir_IsShortNameSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1738,25 +1701,10 @@ Parameter combination
 
 
 
-### <a name="_Toc427488705"/>IsObjectIdSupported
 
-#### <a name="_Toc427488706"/>FsInfo_Query_FileFsAttributeInformation_File_IsObjectIdSupported(BVT)
+#### <a name="_Toc427488705"/>IsObjectIdSupported
 
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if compression is supported for different file systems.| 
-| | Test environment: NTFS, ReFS| 
-| Message Sequence| CreateFile | 
-| | QueryInfo for FileInfoClass. FileFsAttributeInformation| 
-| | If (IsCompressionSupported == True) {| 
-| | Verify FileAttribute.FILE_ FILE_SUPPORTS_OBJECT_IDS is set.| 
-| | } Else {| 
-| |     Verify FileAttribute..FILE_ FILE_SUPPORTS_OBJECT_IDS is not set.}| 
-
-
-
-
-#### <a name="_Toc427488707"/>FsInfo_Query_FileFsAttributeInformation_Dir_IsObjectIdSupported
+##### <a name="_Toc427488706"/>FsInfo_Query_FileFsAttributeInformation_File_IsObjectIdSupported(BVT)
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1772,7 +1720,23 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488708"/>FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported (BVT)
+##### <a name="_Toc427488707"/>FsInfo_Query_FileFsAttributeInformation_Dir_IsObjectIdSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if compression is supported for different file systems.| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile | 
+| | QueryInfo for FileInfoClass. FileFsAttributeInformation| 
+| | If (IsCompressionSupported == True) {| 
+| | Verify FileAttribute.FILE_ FILE_SUPPORTS_OBJECT_IDS is set.| 
+| | } Else {| 
+| |     Verify FileAttribute..FILE_ FILE_SUPPORTS_OBJECT_IDS is not set.}| 
+
+
+
+
+##### <a name="_Toc427488708"/>FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported (BVT)
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1795,7 +1759,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488709"/>FsInfo_Query_FileFsObjectIdInformation_Dir_IsObjectIdSupported
+##### <a name="_Toc427488709"/>FsInfo_Query_FileFsObjectIdInformation_Dir_IsObjectIdSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1818,7 +1782,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488710"/>FsInfo_Set_FileFsObjectIdInformation_File_IsObjectIdSupported 
+##### <a name="_Toc427488710"/>FsInfo_Set_FileFsObjectIdInformation_File_IsObjectIdSupported 
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1841,7 +1805,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488711"/>FsInfo_Set_FileFsObjectIdInformation_Dir_IsObjectIdSupported 
+##### <a name="_Toc427488711"/>FsInfo_Set_FileFsObjectIdInformation_Dir_IsObjectIdSupported 
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1864,9 +1828,9 @@ Parameter combination
 
 
 
-### <a name="_Toc427488712"/>IsCompressionSupported
+#### <a name="_Toc427488712"/>IsCompressionSupported
 
-#### <a name="_Toc427488713"/>FsInfo_Query_FileFsAttributeInformation_File_IsCompressionSupported(BVT)
+##### <a name="_Toc427488713"/>FsInfo_Query_FileFsAttributeInformation_File_IsCompressionSupported(BVT)
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1882,7 +1846,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488714"/>FsInfo_Query_FileFsAttributeInformation_Dir_IsCompressionSupported
+##### <a name="_Toc427488714"/>FsInfo_Query_FileFsAttributeInformation_Dir_IsCompressionSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1899,7 +1863,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488715"/>FileInfo_Query_FileCompressionInfo_File_IsCompressionSupported
+##### <a name="_Toc427488715"/>FileInfo_Query_FileCompressionInfo_File_IsCompressionSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1922,7 +1886,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488716"/>FileInfo_Query_FileCompressionInfo_Dir_IsCompressionSupported
+##### <a name="_Toc427488716"/>FileInfo_Query_FileCompressionInfo_Dir_IsCompressionSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1945,7 +1909,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488717"/>FsCtl_Get_Compression_File_IsCompressionSupported
+##### <a name="_Toc427488717"/>FsCtl_Get_Compression_File_IsCompressionSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1968,7 +1932,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488718"/>FsCtl_Get_Compression_Dir_IsCompressionSupported
+##### <a name="_Toc427488718"/>FsCtl_Get_Compression_Dir_IsCompressionSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1991,7 +1955,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488719"/>FsCtl_Set_Compression_File_IsCompressionSupported
+##### <a name="_Toc427488719"/>FsCtl_Set_Compression_File_IsCompressionSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2013,7 +1977,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488720"/>FsCtl_Set_Compression_Dir_IsCompressionSupported
+##### <a name="_Toc427488720"/>FsCtl_Set_Compression_Dir_IsCompressionSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2036,9 +2000,9 @@ Parameter combination
 
 
 
-### <a name="_Toc427488721"/>IsEASupported
+#### <a name="_Toc427488721"/>IsEASupported
 
-#### <a name="_Toc427488722"/>FileInfo_Set_FileFullEaInformation_File_IsEASupported
+##### <a name="_Toc427488722"/>FileInfo_Set_FileFullEaInformation_File_IsEASupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2060,7 +2024,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488723"/>FileInfo_Set_FileFullEaInformation_Dir_IsEASupported
+##### <a name="_Toc427488723"/>FileInfo_Set_FileFullEaInformation_Dir_IsEASupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2082,7 +2046,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488724"/>FileInfo_Query_FileFullEaInformation_File_IsEASupported
+##### <a name="_Toc427488724"/>FileInfo_Query_FileFullEaInformation_File_IsEASupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2104,7 +2068,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488725"/>FileInfo_Query_FileFullEaInformation_Dir_IsEASupported
+##### <a name="_Toc427488725"/>FileInfo_Query_FileFullEaInformation_Dir_IsEASupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2126,7 +2090,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488726"/>FileInfo_Set_FileEaInformation_File_IsEASupported
+##### <a name="_Toc427488726"/>FileInfo_Set_FileEaInformation_File_IsEASupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2170,7 +2134,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488728"/>FileInfo_Query_FileEaInformation_File_IsEASupported
+##### <a name="_Toc427488728"/>FileInfo_Query_FileEaInformation_File_IsEASupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2192,7 +2156,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488729"/>FileInfo_Query_FileEaInformation_Dir_IsEASupported
+##### <a name="_Toc427488729"/>FileInfo_Query_FileEaInformation_Dir_IsEASupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2214,25 +2178,9 @@ Parameter combination
 
 
 
-### <a name="_Toc427488730"/>IsIntegritySupported
+#### <a name="_Toc427488730"/>IsIntegritySupported
 
-#### <a name="_Toc427488731"/>FsInfo_Query_FileFsAttributeInformation_File_IsIntegritySupported(BVT)
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if compression is supported for different file systems.| 
-| | Test environment: NTFS, ReFS| 
-| Message Sequence| CreateFile | 
-| | QueryInfo for FileInfoClass. FileFsAttributeInformation| 
-| | If (IsCompressionSupported == True) {| 
-| | Verify FileAttribute.FILE_SUPPORT_INTEGRITY_STREAMS is set.| 
-| | } Else {| 
-| |     Verify FileAttribute.FILE_SUPPORT_INTEGRITY_STREAMS is not set.}| 
-
-
-
-
-#### <a name="_Toc427488732"/>FsInfo_Query_FileFsAttributeInformation_Dir_IsIntegritySupported
+##### <a name="_Toc427488731"/>FsInfo_Query_FileFsAttributeInformation_File_IsIntegritySupported(BVT)
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2248,7 +2196,23 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488733"/>FileInfo_Query_FileBasicInfo_File_IsIntegritySupported (BVT)
+##### <a name="_Toc427488732"/>FsInfo_Query_FileFsAttributeInformation_Dir_IsIntegritySupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if compression is supported for different file systems.| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile | 
+| | QueryInfo for FileInfoClass. FileFsAttributeInformation| 
+| | If (IsCompressionSupported == True) {| 
+| | Verify FileAttribute.FILE_SUPPORT_INTEGRITY_STREAMS is set.| 
+| | } Else {| 
+| |     Verify FileAttribute.FILE_SUPPORT_INTEGRITY_STREAMS is not set.}| 
+
+
+
+
+##### <a name="_Toc427488733"/>FileInfo_Query_FileBasicInfo_File_IsIntegritySupported (BVT)
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2270,7 +2234,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488734"/>FileInfo_Query_FileBasicInfo_Dir_IsIntegritySupported
+##### <a name="_Toc427488734"/>FileInfo_Query_FileBasicInfo_Dir_IsIntegritySupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2292,7 +2256,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488735"/>FileInfo_Query_FileAttributeTagInfo_File_IsIntegritySupported
+##### <a name="_Toc427488735"/>FileInfo_Query_FileAttributeTagInfo_File_IsIntegritySupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2314,7 +2278,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488736"/>FileInfo_Query_FileAttributeTagInfo_Dir_IsIntegritySupported
+##### <a name="_Toc427488736"/>FileInfo_Query_FileAttributeTagInfo_Dir_IsIntegritySupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2336,7 +2300,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488737"/>FileInfo_Query_FileNetworkOpenInfo_File_IsIntegritySupported
+##### <a name="_Toc427488737"/>FileInfo_Query_FileNetworkOpenInfo_File_IsIntegritySupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2358,7 +2322,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488738"/>FileInfo_Query_FileNetworkOpenInfo_Dir_IsIntegritySupported
+##### <a name="_Toc427488738"/>FileInfo_Query_FileNetworkOpenInfo_Dir_IsIntegritySupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2380,9 +2344,9 @@ Parameter combination
 
 
 
-### <a name="_Toc427488739"/>IsFileLinkInfoSupported
+#### <a name="_Toc427488739"/>IsFileLinkInfoSupported
 
-#### <a name="_Toc427488740"/>FileInfo_Set_FileLinkInfo_File_IsFileLinkInfoSupported
+##### <a name="_Toc427488740"/>FileInfo_Set_FileLinkInfo_File_IsFileLinkInfoSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2406,7 +2370,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488741"/>FileInfo_Set_FileLinkInfo_DIr_IsFileLinkInfoSupported
+##### <a name="_Toc427488741"/>FileInfo_Set_FileLinkInfo_DIr_IsFileLinkInfoSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2430,32 +2394,9 @@ Parameter combination
 
 
 
-### <a name="_Toc427488742"/>IsFileValidDataLengthInfoSupported
+#### <a name="_Toc427488742"/>IsFileValidDataLengthInfoSupported
 
-#### <a name="_Toc427488743"/>FileInfo_Set_FileValidDataLengthInformation_File_IsSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test the FileValidDataLengthInformation for different file systems.
-| | Test environment: NTFS, ReFS, FAT32
-| | Test object: DataFile, DirectoryFile
-| | Input parameter: FileInfoClass.FileValidDataLengthInformation
-| | Parameter combination.
-| | Parameter&emsp;&emsp;&nbsp;&#124;&nbsp;Expected Result
-| | IsFileValidDataLengthInfoSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsFileValidDataLengthInfoSupported == False &nbsp;&#124;&nbsp;STATUS_NOT_SUPPORTED
-| Message Sequence| CreateFile
-| | SetInfo with FileInfoClass = FileValidDataLengthInformation 
-| | If (IsFileValidDataLengthInfoSupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
-| | }
-
-
-
-
-#### <a name="_Toc427488744"/>FileInfo_Set_FileValidDataLengthInformation_Dir_IsSupported
+##### <a name="_Toc427488743"/>FileInfo_Set_FileValidDataLengthInformation_File_IsSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2478,9 +2419,32 @@ Parameter combination
 
 
 
-### <a name="_Toc427488745"/>ClusterSize
+##### <a name="_Toc427488744"/>FileInfo_Set_FileValidDataLengthInformation_Dir_IsSupported
 
-#### <a name="_Toc427488746"/>FsInfo_Query_FileFsSizeInformation_File_SectorsPerAllocationUnit (BVT)
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test the FileValidDataLengthInformation for different file systems.
+| | Test environment: NTFS, ReFS, FAT32
+| | Test object: DataFile, DirectoryFile
+| | Input parameter: FileInfoClass.FileValidDataLengthInformation
+| | Parameter combination.
+| | Parameter&emsp;&emsp;&nbsp;&#124;&nbsp;Expected Result
+| | IsFileValidDataLengthInfoSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsFileValidDataLengthInfoSupported == False &nbsp;&#124;&nbsp;STATUS_NOT_SUPPORTED
+| Message Sequence| CreateFile
+| | SetInfo with FileInfoClass = FileValidDataLengthInformation 
+| | If (IsFileValidDataLengthInfoSupported == True) {
+| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
+| | } Else {
+| | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
+| | }
+
+
+
+
+#### <a name="_Toc427488745"/>ClusterSize
+
+##### <a name="_Toc427488746"/>FsInfo_Query_FileFsSizeInformation_File_SectorsPerAllocationUnit (BVT)
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2514,7 +2478,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488747"/>FsInfo_Query_FileFsSizeInformation_Dir_SectorsPerAllocationUnit
+##### <a name="_Toc427488747"/>FsInfo_Query_FileFsSizeInformation_Dir_SectorsPerAllocationUnit
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2548,9 +2512,9 @@ Parameter combination
 
 
 
-### <a name="_Toc427488748"/> IsQuotaInfoSupported
+#### <a name="_Toc427488748"/> IsQuotaInfoSupported
 
-#### <a name="_Toc427488749"/>QuotaInfo_Query_QuotaInformation_IsQuotaInfoSupported
+##### <a name="_Toc427488749"/>QuotaInfo_Query_QuotaInformation_IsQuotaInfoSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2572,7 +2536,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488750"/>QuotaInfo_Set_QuotaInformation_IsQuotaInfoSupported
+##### <a name="_Toc427488750"/>QuotaInfo_Set_QuotaInformation_IsQuotaInfoSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2594,25 +2558,9 @@ Parameter combination
 
 
 
-### <a name="_Toc427488751"/>IsEncryptionSupported
+#### <a name="_Toc427488751"/>IsEncryptionSupported
 
-#### <a name="_Toc427488752"/>FsInfo_Query_FileFsAttributeInformation_File_IsEncryptionSupported(BVT)
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if compression is supported for different file systems.| 
-| | Test environment: NTFS, ReFS| 
-| Message Sequence| CreateFile | 
-| | QueryInfo for FileInfoClass. FileFsAttributeInformation| 
-| | If (IsCompressionSupported == True) {| 
-| | Verify FileAttribute.FILE_SUPPORTS_ENCRYPTION is set.| 
-| | } Else {| 
-| |     Verify FileAttribute.FILE_SUPPORTS_ENCRYPTION is not set.}| 
-
-
-
-
-#### <a name="_Toc427488753"/>FsInfo_Query_FileFsAttributeInformation_Dir_IsEncryptionSupported
+##### <a name="_Toc427488752"/>FsInfo_Query_FileFsAttributeInformation_File_IsEncryptionSupported(BVT)
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2628,7 +2576,23 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488754"/>FsCtl_Set_Encryption_File_IsEncryptionSupported
+##### <a name="_Toc427488753"/>FsInfo_Query_FileFsAttributeInformation_Dir_IsEncryptionSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if compression is supported for different file systems.| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile | 
+| | QueryInfo for FileInfoClass. FileFsAttributeInformation| 
+| | If (IsCompressionSupported == True) {| 
+| | Verify FileAttribute.FILE_SUPPORTS_ENCRYPTION is set.| 
+| | } Else {| 
+| |     Verify FileAttribute.FILE_SUPPORTS_ENCRYPTION is not set.}| 
+
+
+
+
+##### <a name="_Toc427488754"/>FsCtl_Set_Encryption_File_IsEncryptionSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2652,7 +2616,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488755"/>FsCtl_Set_Encryption_Dir_IsEncryptionSupported
+##### <a name="_Toc427488755"/>FsCtl_Set_Encryption_Dir_IsEncryptionSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2678,9 +2642,9 @@ Parameter combination
 
 
 
-### <a name="_Toc427488756"/> IsAllocatedRangesSupported
+#### <a name="_Toc427488756"/> IsAllocatedRangesSupported
 
-#### <a name="_Toc427488757"/>FsCtl_Query_AllocatedRanges_File_IsAllocatedRangesSupported
+##### <a name="_Toc427488757"/>FsCtl_Query_AllocatedRanges_File_IsAllocatedRangesSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2703,7 +2667,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488758"/>FsCtl_Query_AllocatedRanges_Dir_IsAllocatedRangesSupported
+##### <a name="_Toc427488758"/>FsCtl_Query_AllocatedRanges_Dir_IsAllocatedRangesSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2726,33 +2690,9 @@ Parameter combination
 
 
 
-### <a name="_Toc427488759"/> IsReparsePointSupported
+#### <a name="_Toc427488759"/> IsReparsePointSupported
 
-#### <a name="_Toc427488760"/>FsCtl_Set_ReparsePoint_File_IsReparsePointSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if FSCTL_SET_REPARSE_POINT is supported for different file systems.
-| | Note: This is only implemented by the ReFS and NTFS file systems.
-| | Test environment: NTFS, ReFS, FAT32
-| | Test object: DataFile, DirectoryFile
-| | FsCtl Request: FSCTL_SET_REPARSE_POINT
-| | Parameter combination
-| | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsReparsePointSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsReparsePointSupported == False&nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
-| Message Sequence| CreateFile
-| | FsCtl request with FSCTL_SET_REPARSE_POINT
-| | If (IsReparsePointSupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
-| | }
-
-
-
-
-#### <a name="_Toc427488761"/>FsCtl_Set_ReparsePoint_Dir_IsReparsePointSupported
+##### <a name="_Toc427488760"/>FsCtl_Set_ReparsePoint_File_IsReparsePointSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2776,9 +2716,33 @@ Parameter combination
 
 
 
-### <a name="_Toc427488762"/> IsSparseFileSupported
+##### <a name="_Toc427488761"/>FsCtl_Set_ReparsePoint_Dir_IsReparsePointSupported
 
-#### <a name="_Toc427488763"/>FsCtl_Set_Sparse_File_IsSparseFileSupported
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if FSCTL_SET_REPARSE_POINT is supported for different file systems.
+| | Note: This is only implemented by the ReFS and NTFS file systems.
+| | Test environment: NTFS, ReFS, FAT32
+| | Test object: DataFile, DirectoryFile
+| | FsCtl Request: FSCTL_SET_REPARSE_POINT
+| | Parameter combination
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsReparsePointSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsReparsePointSupported == False&nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| Message Sequence| CreateFile
+| | FsCtl request with FSCTL_SET_REPARSE_POINT
+| | If (IsReparsePointSupported == True) {
+| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
+| | } Else {
+| | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
+| | }
+
+
+
+
+#### <a name="_Toc427488762"/> IsSparseFileSupported
+
+##### <a name="_Toc427488763"/>FsCtl_Set_Sparse_File_IsSparseFileSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2802,7 +2766,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488764"/>FsCtl_Set_Sparse_Dir_IsSparseFileSupported
+##### <a name="_Toc427488764"/>FsCtl_Set_Sparse_Dir_IsSparseFileSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2826,9 +2790,9 @@ Parameter combination
 
 
 
-### <a name="_Toc427488765"/> IsZeroDataSupported
+#### <a name="_Toc427488765"/> IsZeroDataSupported
 
-#### <a name="_Toc427488766"/>FsCtl_Set_ZeroData_File_IsSetZeroDataSupported
+##### <a name="_Toc427488766"/>FsCtl_Set_ZeroData_File_IsSetZeroDataSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2851,7 +2815,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488767"/>FsCtl_Set_ZeroData_Dir_IsZeroDataSupported
+##### <a name="_Toc427488767"/>FsCtl_Set_ZeroData_Dir_IsZeroDataSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2875,9 +2839,9 @@ Parameter combination
 
 
 
-### <a name="_Toc427488831"/> FileNormalizedNameInformation
+#### <a name="_Toc427488831"/> FileNormalizedNameInformation
 
-#### <a name="_Toc427488832"/>FileInfo_Query_FileNormalizedNameInfo_File
+##### <a name="_Toc427488832"/>FileInfo_Query_FileNormalizedNameInfo_File
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2898,7 +2862,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488833"/>FileInfo_Query_FileNormalizedNameInfo_Dir
+##### <a name="_Toc427488833"/>FileInfo_Query_FileNormalizedNameInfo_Dir
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2915,6 +2879,49 @@ Parameter combination
 | | Else {
 | | Assert.Fail();
 | | }
+
+
+
+
+
+#### <a name="_Toc437488671">IsDuplicateExtentsToFileExSupported
+
+##### <a name="_Toc437488672"/> BVT_FsCtl_DuplicateExtentsToFileEx_IsBasicSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX without additional flags is supported.| 
+| | Note: This is only implemented by the **REFS** file system.| 
+| | Test environment: ReFS| 
+| | Test object: DataFile| 
+| | Test coverage:| 
+| | FsCtl: FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX| 
+| Message Sequence| Create test file and fill up first two clusters with random data.| 
+| | FSCTL request with FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX and no additional flags to duplicate the file extent of first cluster to the second.| 
+| | Verify returned NTSTATUS code and file content by checking the following:| 
+| | 1. The returned status is STATUS_SUCCESS.| 
+| | 2. The file content of the second cluster is the same as the first.| 
+
+
+
+
+##### <a name="_Toc437488673"/> BVT_FsCtl_DuplicateExtentsToFileEx_IsSourceAtomicSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX with DUPLICATE_EXTENTS_DATA_EX_SOURCE_ATOMIC is supported.| 
+| | Note: This is only implemented by the **REFS** file system.| 
+| | Test environment: ReFS| 
+| | Test object: DataFile| 
+| | Test coverage:| 
+| | FsCtl: FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX| 
+| Message Sequence| Create test file and fill up first two clusters with random data.| 
+| | FSCTL request with FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX and DUPLICATE_EXTENTS_DATA_EX_SOURCE_ATOMIC to duplicate the file extent of first cluster to the second.| 
+| | Verify returned NTSTATUS code and file content by checking the following:| 
+| | 1. The returned status is STATUS_SUCCESS.| 
+| | 2. The file content of the second cluster is the same as the first.| 
+
+
 
 
 
