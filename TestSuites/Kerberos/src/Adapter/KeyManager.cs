@@ -33,13 +33,13 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
             {
                 if (kvno != 0)
                 {
-                    if (item.Principal == principal && item.Realm == realm && item.KeyType == type && item.Kvno == kvno)
+                    if (item.Principal == principal && item.Realm.ToLower() == realm.ToLower() && item.KeyType == type && item.Kvno == kvno)
                         return item.Key;
                 }
                 else
                 {
                     // Ignore the kvno if 0
-                    if (item.Principal == principal && item.Realm == realm && item.KeyType == type)
+                    if (item.Principal == principal && item.Realm.ToLower() == realm.ToLower() && item.KeyType == type)
                         return item.Key;
                 }
             }
