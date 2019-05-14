@@ -240,33 +240,14 @@ Function Config-AP02()
 	# Enable compound identity to the file server
 	#-----------------------------------------------------------------------------------------------
 
-	$IsCompoundEnable= '$true'
-	$FileServerName= $KrbParams.Parameters.TrustRealm.FileShare.NetBiosName
+	#-----------------------------------------------------------------------------------------------
+	# Enable compound identity to the file server
+	#-----------------------------------------------------------------------------------------------
+	$FileServerName= $KrbParams.Parameters.LocalRealm.FileShare.NetBiosName
 
-	# The command to run after restart
-	$Command= "cmd /c powershell Set-ADComputer -Identity $FileServerName -CompoundIdentitySupported $IsCompoundEnable"
-
-	#restart and run command 
-	Write-ConfigLog "Computer must restart now..." -ForegroundColor Red
-	$regRunPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" 
-	$regKeyName = "TKFRSAR"
-
-	# If the key has already been set, remove it
-	if (((Get-ItemProperty $regRunPath).$regKeyName) -ne $null)
-	{
-		Remove-ItemProperty -Path $regRunPath -Name $regKeyName
-	}
-
-	try
-	{
-		Set-ItemProperty -Path $regRunPath -Name $regKeyName `
-							-Value "$Command" `
-							-Force -ErrorAction Stop
-	}
-	catch
-	{
-		throw "Unable to set registry key $regKeyName. Error happened: $_.Exception.Message"
-	}
+	# Enable compound identity for file server
+	Set-ADComputer -Identity $FileServerName -CompoundIdentitySupported $true
+	
 }
 
 #------------------------------------------------------------------------------------------

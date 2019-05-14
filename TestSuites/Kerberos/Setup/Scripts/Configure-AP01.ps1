@@ -241,9 +241,8 @@ Function Config-AP01()
 	#-----------------------------------------------------------------------------------------------
 	$FileServerName= $KrbParams.Parameters.LocalRealm.FileShare.NetBiosName
 
-	# The command to run after restart
-	$IsCompoundEnable= '$true'
-	$Command= "cmd /c powershell Set-ADComputer -Identity $FileServerName -CompoundIdentitySupported $IsCompoundEnable"
+	# Enable compound identity for file server
+	Set-ADComputer -Identity $FileServerName -CompoundIdentitySupported $true
 
 	# For 2012R2, need to set the policy
 	$OsVersion = .\Get-OSVersionNumber.ps1
@@ -251,30 +250,9 @@ Function Config-AP01()
 
 	if([double]$SutOSVersion -ge [double]$0S2012R2)
 	{
-		$Command += " -AuthenticationPolicy ComputerRestrictedPolicy"
+		Set-ADComputer -Identity $FileServerName  -AuthenticationPolicy ComputerRestrictedPolicy
 	}
-
-	#restart and run command 
-	Write-ConfigLog "Computer must restart now..." -ForegroundColor Red
-	$regRunPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" 
-	$regKeyName = "TKFRSAR"
-
-	# If the key has already been set, remove it
-	if (((Get-ItemProperty $regRunPath).$regKeyName) -ne $null)
-	{
-		Remove-ItemProperty -Path $regRunPath -Name $regKeyName
-	}
-
-	try
-	{
-		Set-ItemProperty -Path $regRunPath -Name $regKeyName `
-							-Value "$Command" `
-							-Force -ErrorAction Stop
-	}
-	catch
-	{
-		throw "Unable to set registry key $regKeyName. Error happened: $_.Exception.Message"
-	}
+	
 }
 
 #------------------------------------------------------------------------------------------
