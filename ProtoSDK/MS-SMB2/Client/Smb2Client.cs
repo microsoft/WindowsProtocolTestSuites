@@ -1169,7 +1169,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             responseHeader = response.Header;
             responsePayload = response.PayLoad;
 
-            if (preauthContext != null)
+            // Only update the context when session setup response returns STATUS_SUCCESS or STATUS_MORE_PROCESSING_REQUIRED
+            if (preauthContext != null && (response.Header.Status == Smb2Status.STATUS_SUCCESS || response.Header.Status == Smb2Status.STATUS_MORE_PROCESSING_REQUIRED))
             {
                 ulong responseSessionId = response.Header.SessionId;
                 preauthContext.UpdateSessionState(responseSessionId, request);
