@@ -239,10 +239,24 @@ Function Config-AP01()
 	#-----------------------------------------------------------------------------------------------
 	# Enable compound identity to the file server
 	#-----------------------------------------------------------------------------------------------
-	$FileServerName= $KrbParams.Parameters.LocalRealm.FileShare.NetBiosName
+	
+	# Enable compound identity for file server 
+    # This command will be run every 30 minutes to make sure the configuration does not expire
 
-	# Enable compound identity for file server
-	Set-ADComputer -Identity $FileServerName -CompoundIdentitySupported $true
+    $FileServerName= $KrbParams.Parameters.LocalRealm.FileShare.NetBiosName 
+
+    $TaskName ="EnableCompoundIdentity"
+    
+    $Command = "Set-ADComputer -Identity $FileServerName -CompoundIdentitySupported 1" 
+    
+    $Task = "PowerShell $Command"
+
+    # Create task
+    cmd /c schtasks /Create /RL HIGHEST /RU Administrators /SC minute /MO 30 /ST 00:00 /TN $TaskName /TR $Task /IT /F
+    Sleep 10
+    
+    # Run task
+    cmd /c schtasks /Run /TN $TaskName  
 
 	# For 2012R2, need to set the policy
 	$OsVersion = .\Get-OSVersionNumber.ps1
