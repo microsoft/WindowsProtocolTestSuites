@@ -23,6 +23,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         private Smb2TransportType transportType;
 
         private Dictionary<ulong, Smb2CryptoInfo> cryptoInfoTable;
+        private Smb2CompressionInfo compressionInfo;
 
         //The share name of named pipe
         private const string NamedPipeShareName = "IPC$";
@@ -58,10 +59,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// </summary>
         /// <param name="decodeRole">The decode role, client or server</param>
         /// <param name="cryptoInfoTable">Crypto info table indexed by session ID</param>
-        public Smb2Decoder(Smb2Role decodeRole, Dictionary<ulong, Smb2CryptoInfo> cryptoInfoTable)
+        public Smb2Decoder(Smb2Role decodeRole, Dictionary<ulong, Smb2CryptoInfo> cryptoInfoTable, Smb2CompressionInfo compressionInfo)
         {
             this.decodeRole = decodeRole;
             this.cryptoInfoTable = cryptoInfoTable;
+            this.compressionInfo = compressionInfo;
         }
 
         /// <summary>
@@ -222,6 +224,34 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     out expectedLength
                     );
             }
+            else if (version == SmbVersion.Version2Compressed)
+            {
+                var decompressedPacket = DecodeCompressedSmb2Packet(
+                    messageBytes,
+                    role,
+                    realSessionId,
+                    realTreeId,
+                    out consumedLength,
+                    out expectedLength,
+                    null
+                    );
+
+                //For single packet signature verification
+                if (decompressedPacket is Smb2SinglePacket)
+                {
+                    //verify signature of a single packet
+                    Smb2SinglePacket singlePacket = decompressedPacket as Smb2SinglePacket;
+
+                    TryVerifySignatureExceptSessionSetupResponse(singlePacket, singlePacket.Header.SessionId, messageBytes);
+                }
+                else if (decompressedPacket is Smb2CompoundPacket)//For Compound packet signature verification
+                {
+                    //verify signature of the compound packet
+                    TryVerifySignature(decompressedPacket as Smb2CompoundPacket, messageBytes);
+                }
+
+                return decompressedPacket;
+            }
             else
             {
                 // SMB2 packet not encrypted
@@ -288,15 +318,71 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         {
             Transform_Header transformHeader;
             var decryptedBytes = Smb2Crypto.Decrypt(messageBytes, cryptoInfoTable, decodeRole, out transformHeader);
-            return DecodeSmb2Packet(
-                    decryptedBytes,
-                    role,
-                    realSessionId,
-                    realTreeId,
-                    out consumedLength,
-                    out expectedLength,
-                    transformHeader
-                    );
+
+            byte[] protocolVersion = new byte[sizeof(uint)];
+            Array.Copy(decryptedBytes, 0, protocolVersion, 0, protocolVersion.Length);
+
+            SmbVersion version = DecodeVersion(protocolVersion);
+
+            if (version == SmbVersion.Version2Compressed)
+            {
+                return DecodeCompressedSmb2Packet(
+                        decryptedBytes,
+                        role,
+                        realSessionId,
+                        realTreeId,
+                        out consumedLength,
+                        out expectedLength,
+                        transformHeader
+                        );
+            }
+            else if (version == SmbVersion.Version2)
+            {
+
+                return DecodeSmb2Packet(
+                        decryptedBytes,
+                        role,
+                        realSessionId,
+                        realTreeId,
+                        out consumedLength,
+                        out expectedLength,
+                        transformHeader
+                        );
+            }
+            else
+            {
+                throw new InvalidOperationException("Unkown ProtocolId!");
+            }
+        }
+
+        private Smb2Packet DecodeCompressedSmb2Packet(
+            byte[] messageBytes,
+            Smb2Role role,
+            ulong realSessionId,
+            uint realTreeId,
+            out int consumedLength,
+            out int expectedLength,
+            Transform_Header? transformHeader
+            )
+        {
+            var compressedPacket = new Smb2CompressedPacket();
+            compressedPacket.FromBytes(messageBytes, out consumedLength, out expectedLength);
+            var orignialPacketBytes = Smb2Compression.Decompress(compressedPacket, compressionInfo, role);
+            var decodedPacket = DecodeSmb2Packet(
+                        orignialPacketBytes,
+                        role,
+                        realSessionId,
+                        realTreeId,
+                        out consumedLength,
+                        out expectedLength,
+                        transformHeader
+                        );
+
+
+            decodedPacket.Compressed = true;
+            decodedPacket.CompressedPacket = compressedPacket;
+
+            return decodedPacket;
         }
 
         /// <summary>
@@ -310,7 +396,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// <param name="expectedLength">[OUT]The expected length</param>
         /// <param name="transformHeader">The optional transform header</param>
         /// <returns>A Smb2Packet</returns>
-        private Smb2Packet DecodeSmb2Packet(
+        private Smb2CompressiblePacket DecodeSmb2Packet(
             byte[] messageBytes,
             Smb2Role role,
             ulong realSessionId,
@@ -363,7 +449,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// <param name="expectedLength">[OUT]The expected length</param>
         /// <param name="transformHeader">The optional transform header</param>
         /// <returns>A Smb2Packet</returns>
-        public Smb2Packet DecodeCompoundPacket(
+        public Smb2CompressiblePacket DecodeCompoundPacket(
             byte[] messageBytes,
             Smb2Role role,
             out int consumedLength,
@@ -460,7 +546,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// <param name="consumedLength">[OUT]The consumed length of the message</param>
         /// <param name="expectedLength">[OUT]The expected length</param>
         /// <returns>A Smb2Packet</returns>
-        public Smb2Packet DecodeSinglePacket(
+        public Smb2CompressiblePacket DecodeSinglePacket(
             byte[] messageBytes,
             Smb2Role role,
             ulong realSessionId,
@@ -497,7 +583,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// <param name="consumedLength">[OUT]The consumed length of the message</param>
         /// <param name="expectedLength">[OUT]The expected length</param>
         /// <returns>A Smb2Packet</returns>
-        private static Smb2Packet DecodeSingleRequestPacket(byte[] messageBytes, out int consumedLength, out int expectedLength)
+        private static Smb2CompressiblePacket DecodeSingleRequestPacket(byte[] messageBytes, out int consumedLength, out int expectedLength)
         {
             Packet_Header smb2Header;
 
@@ -509,7 +595,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 ushort structureSize = TypeMarshal.ToStruct<ushort>(messageBytes, ref offset);
             }
 
-            Smb2Packet packet = null;
+            Smb2CompressiblePacket packet = null;
 
             switch (smb2Header.Command)
             {
@@ -539,7 +625,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// <returns>A Smb2Packet</returns>
         [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
-        private Smb2Packet DecodeSingleResponsePacket(
+        private Smb2CompressiblePacket DecodeSingleResponsePacket(
             byte[] messageBytes,
             ulong realSessionId,
             uint realTreeId,
@@ -693,6 +779,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 else if (message[0] == 0xFD) // ProtocolId of SMB2 TRANSFORM_HEADER
                 {
                     return SmbVersion.Version2Encrypted;
+                }
+                else if (message[0] == 0xFC) // ProtocolId of SMB2 COMPRESSION_TRANSFORM_HEADER
+                {
+                    return SmbVersion.Version2Compressed;
                 }
                 else
                 {

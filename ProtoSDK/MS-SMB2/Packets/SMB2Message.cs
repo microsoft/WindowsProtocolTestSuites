@@ -2678,6 +2678,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         ///  The server or underlying object store SHOULD NOT cache the read data at intermediate layers.
         /// </summary>
         SMB2_READFLAG_READ_UNBUFFERED = 0x01,
+
+        /// <summary>
+        /// The server is requested to compress the read response when responding to the request. 
+        /// This flag is not valid for the SMB 2.0.2, 2.1, 3.0 and 3.0.2 dialects.
+        /// </summary>
+        SMB2_READFLAG_REQUEST_COMPRESSED = 0x02,
     }
 
     /// <summary>
@@ -2781,6 +2787,38 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         HashAlgorithm_NONE = 0,
         SHA_512 = 1,
         HashAlgorithm_Invalid = 0xFFFF
+    }
+
+    /// <summary>
+    /// The SMB2 COMPRESSION_TRANSFORM_HEADER is used by the client or server when sending compressed messages.
+    /// This optional header is only valid for the SMB 3.1.1 dialect.
+    /// </summary>
+    public struct Compression_Transform_Header
+    {
+        /// <summary>
+        /// The protocol identifier. The value MUST be (in network order) 0xFC, 'S', 'M', and 'B'.
+        /// </summary>
+        public uint ProtocolId;
+
+        /// <summary>
+        /// The size, in bytes, of the uncompressed data segment.
+        /// </summary>
+        public uint OriginalCompressedSegmentSize;
+
+        /// <summary>
+        /// This field MUST contain one of the algorithms used to compress the SMB2 message except "NONE".
+        /// </summary>
+        public CompressionAlgorithm CompressionAlgorithm;
+
+        /// <summary>
+        /// This field MUST NOT be used and MUST be reserved. The sender MUST set this to 0, and the receiver MUST ignore it.
+        /// </summary>
+        public ushort Reserved;
+
+        /// <summary>
+        /// The offset, in bytes, from the end of this structure to the start of compressed data segment.
+        /// </summary>
+        public uint Offset;
     }
 
     /// <summary>
@@ -4675,8 +4713,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// <summary>
         /// The Data field contains a list of encryption algorithms, as specified in section 2.2.3.1.2.
         /// </summary>
-        SMB2_ENCRYPTION_CAPABILITIES = 0x0002
+        SMB2_ENCRYPTION_CAPABILITIES = 0x0002,
 
+        /// <summary>
+        /// The Data field contains a list of compression algorithms.
+        /// </summary>
+        SMB2_COMPRESSION_CAPABILITIES = 0x0003,
     }
 
     /// <summary>
@@ -4758,6 +4800,74 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         {
             int dataLength = sizeof(ushort); // CipherCount
             if (Ciphers != null) dataLength += Ciphers.Length * sizeof(EncryptionAlgorithm);
+            return dataLength;
+        }
+    }
+
+    public enum CompressionAlgorithm : short
+    {
+        /// <summary>
+        /// No compression
+        /// </summary>
+        NONE = 0x0000,
+
+        /// <summary>
+        /// LZNT1 compression algorithm
+        /// </summary>
+        LZNT1 = 0x0001,
+
+        /// <summary>
+        /// LZ77 compression algorithm
+        /// </summary>
+        LZ77 = 0x0002,
+
+        /// <summary>
+        /// LZ77+Huffman compression algorithm
+        /// </summary>
+        LZ77Huffman = 0x0003,
+    }
+
+    /// <summary>
+    /// The SMB2_COMPRESSION_CAPABILITIES context is specified in an SMB2 NEGOTIATE request by the client
+    /// to indicate which compression algorithms the client supports.
+    /// </summary>
+    public struct SMB2_COMPRESSION_CAPABILITIES
+    {
+        /// <summary>
+        /// Header.
+        /// </summary>
+        public SMB2_NEGOTIATE_CONTEXT_Header Header;
+
+        /// <summary>
+        /// The number of elements in CompressionAlgorithms array.
+        /// </summary>
+        public ushort CompressionAlgorithmCount;
+
+        /// <summary>
+        /// The sender MUST set this to 0, and the receiver MUST ignore it on receipt.
+        /// </summary>
+        public ushort Padding;
+
+        /// <summary>
+        /// This field MUST NOT be used and MUST be reserved.
+        /// The sender MUST set this to 0, and the receiver MUST ignore it on receipt.
+        /// </summary>
+        public uint Reserved;
+
+        /// <summary>
+        /// An array of 16-bit integer IDs specifying the supported compression algorithms.
+        /// These IDs MUST be in order of preference from most to least.
+        /// </summary>
+        [Size("CompressionAlgorithmCount")]
+        public CompressionAlgorithm[] CompressionAlgorithms;
+
+        public int GetDataLength()
+        {
+            int dataLength = Marshal.SizeOf(CompressionAlgorithmCount) + Marshal.SizeOf(Padding) + Marshal.SizeOf(Reserved);
+            if (CompressionAlgorithms != null)
+            {
+                dataLength += CompressionAlgorithms.Length * sizeof(CompressionAlgorithm);
+            }
             return dataLength;
         }
     }
