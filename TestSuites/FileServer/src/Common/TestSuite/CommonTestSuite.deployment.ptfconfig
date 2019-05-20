@@ -257,7 +257,7 @@
 
       <Property name="Platform" value="WindowsServer2016">
         <Choice>
-          NonWindows,WindowsServer2008,WindowsServer2008R2,WindowsServer2012,WindowsServer2012R2,WindowsServer2016,WindowsServerV1709,WindowsServerV1803,WindowsServer2019
+          NonWindows,WindowsServer2008,WindowsServer2008R2,WindowsServer2012,WindowsServer2012R2,WindowsServer2016,WindowsServerV1709,WindowsServerV1803,WindowsServer2019, WindowsServerV1903
         </Choice>
         <Description>
           Platform type of the SUT
