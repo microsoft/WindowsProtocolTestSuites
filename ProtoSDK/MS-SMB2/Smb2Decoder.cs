@@ -59,6 +59,19 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// </summary>
         /// <param name="decodeRole">The decode role, client or server</param>
         /// <param name="cryptoInfoTable">Crypto info table indexed by session ID</param>
+        public Smb2Decoder(Smb2Role decodeRole, Dictionary<ulong, Smb2CryptoInfo> cryptoInfoTable)
+        {
+            this.decodeRole = decodeRole;
+            this.cryptoInfoTable = cryptoInfoTable;
+            this.compressionInfo = new Smb2CompressionInfo();
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="decodeRole">The decode role, client or server</param>
+        /// <param name="cryptoInfoTable">Crypto info table indexed by session ID</param>
+        /// <param name="compressionInfo">Compression information for SMB2 connection.</param>
         public Smb2Decoder(Smb2Role decodeRole, Dictionary<ulong, Smb2CryptoInfo> cryptoInfoTable, Smb2CompressionInfo compressionInfo)
         {
             this.decodeRole = decodeRole;

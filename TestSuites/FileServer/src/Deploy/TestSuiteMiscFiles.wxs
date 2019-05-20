@@ -22,7 +22,7 @@
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd.dll"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd.pdb"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Sqos.dll"/>
-      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Sqos.pdb"/>	  
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Sqos.pdb"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.dll"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.pdb"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fsrvp.dll"/>
@@ -70,6 +70,8 @@
       <ComponentRef Id="MS_FSA_ServerAdapter.pdb"/>
       <ComponentRef Id="MS_FSA_ServerModel.pdb"/>
       <ComponentRef Id="MS_FSA_ServerTestSuite.pdb"/>
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.dll"/>
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.pdb"/>
     </ComponentGroup>
 
     <DirectoryRef Id="TESTSUITE_BIN_DIR">
@@ -122,10 +124,10 @@
       <Component Id="MS_FSA_ServerTestSuite.pdb" Guid="{FA12B3D3-5B53-474E-A997-FA10C07B2F21}">
         <File Id="fil3D7FAF9F6804D19280253F565FD4CFA1" Source="$(var.TESTSUITE_SYMBOLS_DIR)\MS-FSA_ServerTestSuite.pdb" />
       </Component>
-	  <Component Id="Auth_ServerTestSuite.pdb" Guid="{181074AA-0FEA-4AD6-A7AA-C945131E69F0}">
+      <Component Id="Auth_ServerTestSuite.pdb" Guid="{181074AA-0FEA-4AD6-A7AA-C945131E69F0}">
         <File Id="filF1AB0A5E20BD4F3C9BCDC1EB9EB81D32" Source="$(var.TESTSUITE_SYMBOLS_DIR)\Auth_ServerTestSuite.pdb" />
       </Component>
-            
+
     </DirectoryRef>
 
 
@@ -171,7 +173,7 @@
       </Component>
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Sqos.pdb" Guid="{8081FF54-0E1B-4EB9-9D59-8DD5973E9C60}">
         <File Id="fil5F944709C1414EEEBED70E715A8FACCF" Source="$(var.PROTOSDK_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Sqos.pdb" />
-      </Component>	  
+      </Component>
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.dll" Guid="{0D2C0A17-9A8B-4C6E-96B7-5F7EC3E98EBB}">
         <File Id="filF5F1FC7433635A82592387076ECBCFC7" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.dll" />
       </Component>
@@ -263,6 +265,12 @@
       </Component>
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.Srvs.pdb" Guid="{492AB369-9E94-48B7-A143-858937DE970B}">
         <File Id="fil95246E057EEF45F3AACD2E70575752D5" Source="$(var.PROTOSDK_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.Srvs.pdb" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.dll" Guid="{B6232ABA-9239-4C80-A091-A96E56A0D74B}">
+        <File Id="fil020E3D34B07C493380905EE190EA147D" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.pdb" Guid="{44D187D1-3B66-4B81-AAFD-F633818B193F}">
+        <File Id="filE46572A239C24010955556CC3DB2E5A2" Source="$(var.PROTOSDK_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.pdb" />
       </Component>
 
     </DirectoryRef>

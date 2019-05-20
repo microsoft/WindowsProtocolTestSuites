@@ -688,7 +688,7 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
 
             request.Buffer = content;
 
-            return Smb2Crypto.SignAndEncrypt((Smb2SinglePacket)request, cryptoInfoTable, Smb2Role.Client);
+            return Smb2Crypto.SignCompressAndEncrypt((Smb2SinglePacket)request, cryptoInfoTable, CompressionInfo, Smb2Role.Client);
         }
 
 
@@ -782,7 +782,7 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
 
             messageId += request.Header.CreditCharge;
 
-            return Smb2Crypto.SignAndEncrypt((Smb2SinglePacket)request, cryptoInfoTable, Smb2Role.Client);
+            return Smb2Crypto.SignCompressAndEncrypt((Smb2SinglePacket)request, cryptoInfoTable, CompressionInfo, Smb2Role.Client);
         }
 
         public uint Smb2CloseFile()
