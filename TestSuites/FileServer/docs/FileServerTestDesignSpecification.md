@@ -5617,6 +5617,25 @@ Scenario see [Scenario](#3.1.7.1)
 |**Cluster Involved Scenario**|NO|
 
 
+|||
+|---|---|
+|**Test ID**|MultipleChannel_SecondChannelSessionSetupFailAtFirstTime|
+|**Description**|This case is to test whether server calculates PreauthIntegrityHashValue correctly if it returns failure for the first session setup.|
+|**Message Sequence**|**SETUP_CONNECTION from client NIC_1 to SUT NIC_1**|
+||NEGOTIATE|
+||SESSION_SETUP|
+||TREE_CONNECT|
+||CREATE|
+||WRITE|
+||**SETUP_CONNECTION from client NIC_2 to SUT NIC_2**|
+||NEGOTIATE|
+||SESSION_SETUP binding to the previous one but with an invalid token|
+||SESSION_SETUP binding to the previous one and succeed|
+||READ|
+||**Verify WRITE and READ data should be identical**|
+|**Cluster Involved Scenario**|NO|
+
+
 #### <a name="3.2.15">Signing
 
 **Signing** Model is designed to test the server can handle signing according to client request and server configuration.
