@@ -743,7 +743,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             bool useServerGssToken,
             SESSION_SETUP_Request_SecurityMode_Values securityMode = SESSION_SETUP_Request_SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
             SESSION_SETUP_Request_Capabilities_Values capabilities = SESSION_SETUP_Request_Capabilities_Values.GLOBAL_CAP_DFS,
-            ResponseChecker<SESSION_SETUP_Response> checker = null)
+            ResponseChecker<SESSION_SETUP_Response> checker = null,
+            bool invalidToken = false)
         {
             #region Check Applicability
             // According to TD, server must support signing when it supports multichannel.
@@ -770,7 +771,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 serverName,
                 credential,
                 useServerGssToken,
-                checker: checker);
+                checker: checker,
+                invalidToken: invalidToken);
         }
 
         public uint ReconnectSessionSetup(
@@ -3005,7 +3007,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             bool useServerGssToken,
             bool allowPartialAuthentication = false,
             bool isMultipleChannelSupported = true,
-            ResponseChecker<SESSION_SETUP_Response> checker = null)
+            ResponseChecker<SESSION_SETUP_Response> checker = null,
+            bool invalidToken = false)
         {
             Packet_Header header;
             SESSION_SETUP_Response sessionSetupResponse;
@@ -3037,6 +3040,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
                 // Need to consume credit from sequence window first according to TD
                 ConsumeCredit(messageId, creditCharge);
+
+                // Modify the first byte of token to make it invalid.
+                if (invalidToken)
+                    sspiClientGss.Token[0] = (byte)(sspiClientGss.Token[0] + 1);
 
                 status = client.SessionSetup(
                     creditCharge,

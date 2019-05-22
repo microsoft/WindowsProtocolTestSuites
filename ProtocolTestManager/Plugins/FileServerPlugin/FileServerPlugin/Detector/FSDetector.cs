@@ -728,9 +728,13 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 {
                     return Platform.WindowsServerV1803;
                 }
-                else
+                else if(build < 18362)
                 {
                     return Platform.WindowsServer2019;
+                }
+                else
+                {
+                    return Platform.WindowsServerV1903;
                 }
             }
             else if (osVersion.StartsWith("6.3."))

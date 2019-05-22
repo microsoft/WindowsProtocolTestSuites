@@ -152,7 +152,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// <summary>
         /// Smb2 Encrypted
         /// </summary>
-        Version2Encrypted
+        Version2Encrypted,
+
+        /// <summary>
+        /// Smb2 Compressed
+        /// </summary>
+        Version2Compressed,
     }
 
     /// <summary>

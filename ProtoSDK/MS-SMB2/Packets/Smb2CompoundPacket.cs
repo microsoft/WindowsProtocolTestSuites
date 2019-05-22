@@ -12,7 +12,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
     /// <summary>
     /// CompoundPacket is composed by several single packet
     /// </summary>
-    public class Smb2CompoundPacket : Smb2Packet
+    public class Smb2CompoundPacket : Smb2CompressiblePacket
     {
         private List<Smb2SinglePacket> packets;
         internal Smb2Decoder decoder;

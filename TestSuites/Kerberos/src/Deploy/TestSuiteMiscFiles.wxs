@@ -52,6 +52,8 @@
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb.pdb"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc.dll"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc.pdb"/>
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.dll"/>
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.pdb"/>
     </ComponentGroup>
 
     <DirectoryRef Id="TESTSUITE_BIN_DIR">
@@ -190,7 +192,13 @@
       </Component>
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc.pdb" Guid="{8DAF9457-E0C1-4894-9D89-2004E4B95EAE}">
         <File Id="filEE411704CD9A0C84C1E5431117125790" Source="$(var.PROTOSDK_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc.pdb" />
-      </Component>	  
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.dll" Guid="{4E98D7F9-9DF2-467F-8AD1-911CE8866A5D}">
+        <File Id="fil24BD719DB3E24F578F75F0D6C50A7D05" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.pdb" Guid="{D76A9A53-5233-4414-A9CA-742E881BFBDA}">
+        <File Id="fil85ADB540D94348E290460CD3A0E66C5A" Source="$(var.PROTOSDK_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.pdb" />
+      </Component>
     </DirectoryRef>
   </Fragment>
 </Wix>

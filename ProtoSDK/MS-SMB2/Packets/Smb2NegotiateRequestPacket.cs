@@ -54,6 +54,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// </summary>
         public SMB2_ENCRYPTION_CAPABILITIES? NegotiateContext_ENCRYPTION;
 
+        /// <summary>
+        /// Indicates which compression algorithms the client supports.
+        /// </summary>
+        public SMB2_COMPRESSION_CAPABILITIES? NegotiateContext_COMPRESSION;
+
 
         /// <summary>
         /// Covert to a byte array
@@ -79,6 +84,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             {
                 Smb2Utility.Align8(ref messageData);
                 messageData = messageData.Concat(TypeMarshal.ToBytes<SMB2_ENCRYPTION_CAPABILITIES>(NegotiateContext_ENCRYPTION.Value)).ToArray();
+            }
+
+            if (NegotiateContext_COMPRESSION != null)
+            {
+                Smb2Utility.Align8(ref messageData);
+                messageData = messageData.Concat(TypeMarshal.ToBytes<SMB2_COMPRESSION_CAPABILITIES>(NegotiateContext_COMPRESSION.Value)).ToArray();
             }
 
             return messageData;
@@ -127,6 +138,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 else if (contextType == SMB2_NEGOTIATE_CONTEXT_Type_Values.SMB2_ENCRYPTION_CAPABILITIES)
                 {
                     this.NegotiateContext_ENCRYPTION = TypeMarshal.ToStruct<SMB2_ENCRYPTION_CAPABILITIES>(data, ref consumedLen);
+                }
+                else if (contextType == SMB2_NEGOTIATE_CONTEXT_Type_Values.SMB2_COMPRESSION_CAPABILITIES)
+                {
+                    this.NegotiateContext_COMPRESSION = TypeMarshal.ToStruct<SMB2_COMPRESSION_CAPABILITIES>(data, ref consumedLen);
                 }
             }
 

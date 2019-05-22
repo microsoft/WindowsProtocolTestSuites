@@ -36,6 +36,8 @@
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Asn1Base.pdb"/>	  
       <ComponentRef Id="MS_SMBD_ServerAdapter.pdb"/>
       <ComponentRef Id="MS_SMBD_ServerTestSuite.pdb"/>
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.dll"/>
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.pdb"/>
     </ComponentGroup>
   
     <DirectoryRef Id="PROTOCOLSDK_BIN_DIR">
@@ -110,6 +112,12 @@
       </Component>
       <Component Id="MS_SMBD_ServerTestSuite.pdb" Guid="{AB4ECAA9-A589-4FB3-968A-4D8D296E252E}">
         <File Id="filD5607F2C825C61188F0E36799F0BF481" Source="$(var.TESTSUITE_SYMBOLS_DIR)\MS-SMBD_ServerTestSuite.pdb" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.dll" Guid="{5E129CD4-0C88-4420-9E8E-724E60C0CBAD}">
+        <File Id="filDCE5A29220054FDD9F7CC1AB646D31A6" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.pdb" Guid="{1D044776-F34B-487B-9F73-4D29924CE343}">
+        <File Id="fil2B7DF893596A450B8068D4CE485E05CA" Source="$(var.PROTOSDK_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.pdb" />
       </Component>
     </DirectoryRef>
   </Fragment>

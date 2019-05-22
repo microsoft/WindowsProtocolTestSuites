@@ -18,14 +18,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
             Decrypt
         }
         /// <summary>
-        /// Sign and encrypt for Single or Compound packet.
+        /// Sign, compress and encrypt for Single or Compound packet.
         /// </summary>
-        public static byte[] SignAndEncrypt(Smb2Packet originalPacket, Dictionary<ulong, Smb2CryptoInfo> cryptoInfoTable, Smb2Role role)
+        public static byte[] SignCompressAndEncrypt(Smb2Packet originalPacket, Dictionary<ulong, Smb2CryptoInfo> cryptoInfoTable, Smb2CompressionInfo compressioninfo, Smb2Role role)
         {
             ulong sessionId;
             bool isCompound = false;
             bool notEncryptNotSign = false;
             bool notEncrypt = false;
+            var compressedPacket = originalPacket;
 
             if (originalPacket is Smb2SinglePacket)
             {
@@ -58,7 +59,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
 
             if (sessionId == 0 || notEncryptNotSign || !cryptoInfoTable.ContainsKey(sessionId))
             {
-                return originalPacket.ToBytes();
+                if (originalPacket is Smb2CompressiblePacket)
+                {
+                    compressedPacket = Smb2Compression.Compress(originalPacket as Smb2CompressiblePacket, compressioninfo, role);
+                }
+                return compressedPacket.ToBytes();
             }
 
             Smb2CryptoInfo cryptoInfo = cryptoInfoTable[sessionId];
@@ -69,7 +74,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
             // For compound packet, the encryption is done for the entire message.
             if (!notEncrypt)
             {
-                byte[] encryptedBinary = Encrypt(sessionId, cryptoInfo, role, originalPacket);
+                if (originalPacket is Smb2CompressiblePacket)
+                {
+                    compressedPacket = Smb2Compression.Compress(originalPacket as Smb2CompressiblePacket, compressioninfo, role);
+                }
+                byte[] encryptedBinary = Encrypt(sessionId, cryptoInfo, role, compressedPacket, originalPacket);
                 if (encryptedBinary != null)
                 {
                     return encryptedBinary;
@@ -102,7 +111,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
                 }
             }
             #endregion
-            return originalPacket.ToBytes();
+            if (originalPacket is Smb2CompressiblePacket)
+            {
+                compressedPacket = Smb2Compression.Compress(originalPacket as Smb2CompressiblePacket, compressioninfo, role);
+            }
+            return compressedPacket.ToBytes();
         }
 
         public static byte[] Decrypt(byte[] bytes, Dictionary<ulong, Smb2CryptoInfo> cryptoInfoTable, Smb2Role role, out Transform_Header transformHeader)
@@ -168,16 +181,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
             }
         }
 
-        private static byte[] Encrypt(ulong sessionId, Smb2CryptoInfo cryptoInfo, Smb2Role role, Smb2Packet originalPacket)
+        private static byte[] Encrypt(ulong sessionId, Smb2CryptoInfo cryptoInfo, Smb2Role role, Smb2Packet packet, Smb2Packet packetBeforCompression)
         {
             Packet_Header header;
-            if (originalPacket is Smb2SinglePacket)
+            if (packetBeforCompression is Smb2SinglePacket)
             {
-                header = (originalPacket as Smb2SinglePacket).Header;
+                header = (packetBeforCompression as Smb2SinglePacket).Header;
+            }
+            else if (packetBeforCompression is Smb2CompoundPacket)
+            {
+                header = (packetBeforCompression as Smb2CompoundPacket).Packets[0].Header;
             }
             else
             {
-                header = (originalPacket as Smb2CompoundPacket).Packets[0].Header;
+                throw new InvalidOperationException("Unsupported SMB2 packet type!");
             }
 
             // Encrypt all messages after session setup if global encryption enabled.
@@ -191,7 +208,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
             {
                 using (var bcrypt = new BCryptAlgorithm("AES"))
                 {
-                    byte[] originalBinary = originalPacket.ToBytes();
+                    byte[] originalBinary = packet.ToBytes();
                     Transform_Header transformHeader = new Transform_Header
                     {
                         ProtocolId = Smb2Consts.ProtocolIdInTransformHeader,

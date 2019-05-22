@@ -9,6 +9,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 
@@ -200,6 +201,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         private PreauthIntegrityHashID hashId;
 
         protected Dictionary<ulong, Smb2CryptoInfo> cryptoInfoTable = new Dictionary<ulong, Smb2CryptoInfo>();
+        private Smb2CompressionInfo compressionInfo;
         private Smb2Decoder decoder;
 
         private bool disposed;
@@ -317,6 +319,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 return error;
             }
         }
+
+        public Smb2CompressionInfo CompressionInfo
+        {
+            get
+            {
+                return compressionInfo;
+            }
+        }
         #endregion
 
         #region Constructor
@@ -325,7 +335,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         {
             this.timeout = timeout;
 
-            this.decoder = new Smb2Decoder(Smb2Role.Client, cryptoInfoTable);
+            compressionInfo = new Smb2CompressionInfo();
+
+            this.decoder = new Smb2Decoder(Smb2Role.Client, cryptoInfoTable, compressionInfo);
 
             receivedPackets = new ReceivedPackets(timeout);
 
@@ -577,7 +589,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             }
             else
             {
-                SendPacket(Smb2Crypto.SignAndEncrypt(packet, cryptoInfoTable, Smb2Role.Client));
+                var encryptedBytes = Smb2Crypto.SignCompressAndEncrypt(packet, cryptoInfoTable, CompressionInfo, Smb2Role.Client);
+
+                SendPacket(encryptedBytes);
             }
         }
 
@@ -1008,6 +1022,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             ushort channelSequence = 0,
             PreauthIntegrityHashID[] preauthHashAlgs = null,
             EncryptionAlgorithm[] encryptionAlgs = null,
+            CompressionAlgorithm[] compressionAlgorithms = null,
             bool addDefaultEncryption = false)
         {
             var request = new Smb2NegotiateRequestPacket();
@@ -1055,6 +1070,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 request.PayLoad.NegotiateContextCount++;
             }
 
+            if (compressionAlgorithms != null)
+            {
+                var compresssionCapbilities = new SMB2_COMPRESSION_CAPABILITIES();
+                compresssionCapbilities.Header.ContextType = SMB2_NEGOTIATE_CONTEXT_Type_Values.SMB2_COMPRESSION_CAPABILITIES;
+                compresssionCapbilities.CompressionAlgorithmCount = (ushort)compressionAlgorithms.Length;
+                compresssionCapbilities.Padding = 0;
+                compresssionCapbilities.Reserved = 0;
+                compresssionCapbilities.CompressionAlgorithms = compressionAlgorithms;
+                compresssionCapbilities.Header.DataLength = (ushort)(compresssionCapbilities.GetDataLength());
+                request.NegotiateContext_COMPRESSION = compresssionCapbilities;
+
+                request.PayLoad.NegotiateContextCount++;
+            }
+
             if (request.PayLoad.NegotiateContextCount > 0)
             {
                 request.PayLoad.NegotiateContextOffset = (uint)(64 + // Header
@@ -1085,6 +1114,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 {
                     this.cipherId = response.NegotiateContext_ENCRYPTION.Value.Ciphers[0];
                 }
+                if (response.NegotiateContext_COMPRESSION != null)
+                {
+                    UpdateNegotiateContext(compressionAlgorithms, response);
+
+                }
 
                 // In SMB 311, client use SMB2_ENCRYPTION_CAPABILITIES context to indicate whether it 
                 // support Encryption rather than SMB2_GLOBAL_CAP_ENCRYPTION as SMB 30/302
@@ -1101,6 +1135,55 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             }
 
             return response.Header.Status;
+        }
+
+        private void UpdateNegotiateContext(CompressionAlgorithm[] compressionAlgorithms, Smb2NegotiateResponsePacket response)
+        {
+            // If CompressionAlgorithmCount is zero, the client MUST return an error to the calling application.
+            if (response.NegotiateContext_COMPRESSION.Value.CompressionAlgorithmCount == 0)
+            {
+                throw new InvalidOperationException("CompressionAlgorithmCount should not be zero!");
+            }
+
+            // If the length of the negotiate context is greater than DataLength of the negotiate context, the client MUST return an error to the calling application.
+            if (response.NegotiateContext_COMPRESSION.Value.GetDataLength() > response.NegotiateContext_COMPRESSION.Value.Header.DataLength)
+            {
+                throw new InvalidOperationException("DataLength is inconsistent with context size!");
+            }
+
+            // For each algorithm in CompressionAlgorithms, if the value of algorithm is greater than 32, the client MUST return an error to the calling application.
+            if (response.NegotiateContext_COMPRESSION.Value.CompressionAlgorithms.Any(compressionAlgorithm => (ushort)compressionAlgorithm > 32))
+            {
+                throw new InvalidOperationException("Each item in CompressionAlgorithms should not be greater than 32!");
+            }
+
+            // If there is a duplicate value in CompressionAlgorithms, the client MUST return an error to the calling application.
+            if (response.NegotiateContext_COMPRESSION.Value.CompressionAlgorithms.GroupBy(compressionAlgorithm => compressionAlgorithm).Any(compressionAlgorithm => compressionAlgorithm.Count() > 1))
+            {
+                throw new InvalidOperationException("Duplicate item is found in CompressionAlgorithms!");
+            }
+
+            if (response.NegotiateContext_COMPRESSION.Value.CompressionAlgorithmCount == 1 && response.NegotiateContext_COMPRESSION.Value.CompressionAlgorithms[0] == CompressionAlgorithm.NONE)
+            {
+                // If CompressionAlgorithmCount is 1 and CompressionAlgorithms contains "NONE", the client MUST set Connection.CompressionIds to an empty list.
+                // If Connection.CompressionIds is empty,
+                // Set CompressionAlgorithmCount to 1.
+                // Set CompressionAlgorithms to “NONE
+                this.CompressionInfo.CompressionIds = response.NegotiateContext_COMPRESSION.Value.CompressionAlgorithms;
+            }
+            else if (response.NegotiateContext_COMPRESSION.Value.CompressionAlgorithms.Any(compressionAlgorithm => !compressionAlgorithms.Contains(compressionAlgorithm)))
+            {
+                // Otherwise, for each algorithm in CompressionAlgorithms, if the value of algorithm does not match any of the algorithms sent in SMB2 NEGOTIATE request, the client MUST return an error to the calling application
+                throw new InvalidOperationException("Each item in CompressionAlgorithms should be some one sent in request!");
+            }
+            else
+            {
+                // Otherwise, the client MUST set Connection.CompressionIds to all the algorithms received in CompressionAlgorithms.
+                // Otherwise,
+                // Set CompressionAlgorithmCount to the number of compression algorithms in Connection.CompressionIds.
+                // Set CompressionAlgorithms to Connection.CompressionIds.
+                this.CompressionInfo.CompressionIds = response.NegotiateContext_COMPRESSION.Value.CompressionAlgorithms;
+            }
         }
 
         #endregion
@@ -1583,7 +1666,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             out byte[] content,
             out Packet_Header responseHeader,
             out READ_Response responsePayload,
-            ushort channelSequence = 0
+            ushort channelSequence = 0,
+            bool compressRead = false
             )
         {
             var request = new Smb2ReadRequestPacket();
@@ -1603,6 +1687,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             request.PayLoad.MinimumCount = minimumCount;
             request.PayLoad.Channel = channel;
             request.PayLoad.RemainingBytes = remainingBytes;
+            request.PayLoad.Flags = READ_Request_Flags_Values.ZERO;
+            if (compressRead)
+            {
+                request.PayLoad.Flags |= READ_Request_Flags_Values.SMB2_READFLAG_REQUEST_COMPRESSED;
+            }
 
             if (readChannelInfo != null && readChannelInfo.Length > 0)
             {
@@ -1647,10 +1736,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             byte[] content,
             out Packet_Header responseHeader,
             out WRITE_Response responsePayload,
-            ushort channelSequence = 0
+            ushort channelSequence = 0,
+            bool compressWrite = false
             )
         {
-            WriteRequest(creditCharge, creditRequest, flags, messageId, sessionId, treeId, offset, fileId, channel, writeFlags, writeChannelInfo, content, channelSequence);
+            WriteRequest(creditCharge, creditRequest, flags, messageId, sessionId, treeId, offset, fileId, channel, writeFlags, writeChannelInfo, content, channelSequence, compressWrite);
 
             return WriteResponse(messageId, out responseHeader, out responsePayload);
         }
@@ -1668,7 +1758,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             WRITE_Request_Flags_Values writeFlags,
             byte[] writeChannelInfo,
             byte[] content,
-            ushort channelSequence = 0
+            ushort channelSequence = 0,
+            bool compressWrite = false
             )
         {
             var request = new Smb2WriteRequestPacket();
@@ -1692,6 +1783,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             request.PayLoad.Flags = writeFlags;
 
             request.Buffer = writeChannelInfo.Concat(content).ToArray();
+
+            request.EligibleForCompression = compressWrite;
 
             SendPacket(request);
         }
