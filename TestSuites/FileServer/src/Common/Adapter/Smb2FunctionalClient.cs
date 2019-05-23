@@ -595,6 +595,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 clientGuid,
                 preauthHashAlgs,
                 encryptionAlgs,
+                null,
                 checker,
                 ifHandleRejectUnencryptedAccessSeparately,
                 ifAddGLOBAL_CAP_ENCRYPTION,
@@ -610,6 +611,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             Guid? clientGuid = null,
             PreauthIntegrityHashID[] preauthHashAlgs = null,
             EncryptionAlgorithm[] encryptionAlgs = null,
+            CompressionAlgorithm[] compressionAlgorithms = null,
             ResponseChecker<NEGOTIATE_Response> checker = null,
             bool ifHandleRejectUnencryptedAccessSeparately = false,
             bool ifAddGLOBAL_CAP_ENCRYPTION = true,
@@ -660,6 +662,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 out negotiateResponse,
                 preauthHashAlgs: preauthHashAlgs,
                 encryptionAlgs: encryptionAlgs,
+                compressionAlgorithms: compressionAlgorithms,
                 addDefaultEncryption: addDefaultEncryption);
             if (!ifHandleRejectUnencryptedAccessSeparately)
             {
@@ -1316,7 +1319,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             uint lengthToRead,
             out byte[] data,
             ResponseChecker<READ_Response> checker = null,
-            bool isReplay = false)
+            bool isReplay = false,
+            bool compressRead = false)
         {
             Packet_Header header;
             READ_Response readResponse;
@@ -1343,7 +1347,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 new byte[0],
                 out data,
                 out header,
-                out readResponse);
+                out readResponse,
+                compressRead: compressRead);
 
             ProduceCredit(messageId, header);
 
@@ -1369,7 +1374,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             byte[] data,
             ulong offset = 0,
             ResponseChecker<WRITE_Response> checker = null,
-            bool isReplay = false)
+            bool isReplay = false,
+            bool compressWrite = false)
         {
             Packet_Header header;
             WRITE_Response writeResponse;
@@ -1395,7 +1401,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 data,
                 out header,
                 out writeResponse,
-                sessionChannelSequence);
+                sessionChannelSequence,
+                compressWrite);
 
             ProduceCredit(messageId, header);
 
@@ -3203,7 +3210,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             ushort currentOffset = 0;
             remotedIdentity.TicketType = 0x0001;
             currentOffset += 2 * 14;  // TicketType, TicketSize, User, UserName, Domain, Groups, RestrictedGroups, Privileges, PrimaryGroup, Owner, DefaultDacl, DeviceGroups, UserClaims, DeviceClaims
-            
+
             // User: SID_ATTR_DATA
             remotedIdentity.User = currentOffset;
             byte[] userBinary = new byte[identity.User.BinaryLength];

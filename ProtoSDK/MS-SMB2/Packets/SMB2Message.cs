@@ -4825,6 +4825,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// LZ77+Huffman compression algorithm
         /// </summary>
         LZ77Huffman = 0x0003,
+
+        /// <summary>
+        /// Not a real compression algorithm value, SHOULD be unsupported
+        /// </summary>
+        Unsupported = 0x0004,
     }
 
     /// <summary>

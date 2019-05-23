@@ -193,6 +193,7 @@
     <Compile Include="Packets\Smb2CreateResponsePacket.cs" />
     <Compile Include="Packets\Smb2EchoRequestPacket.cs" />
     <Compile Include="Packets\Smb2EchoResponsePacket.cs" />
+    <Compile Include="Packets\Smb2EncryptedPacket.cs" />
     <Compile Include="Packets\Smb2ErrorResponsePacket.cs" />
     <Compile Include="Packets\Smb2FlushRequestPacket.cs" />
     <Compile Include="Packets\Smb2FlushResponsePacket.cs" />

@@ -8,29 +8,22 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Packets
 {
     /// <summary>
-    /// SMB2 compressed packet.
+    /// SMB2 encrypted packet.
     /// </summary>
-    public class Smb2CompressedPacket : Smb2Packet
+    public class Smb2EncryptedPacket : Smb2Packet
     {
         /// <summary>
         /// Header.
         /// </summary>
-        public Compression_Transform_Header Header;
-
-        /// <summary>
-        /// Uncompressed data part.
-        /// </summary>
-        public byte[] UncompressedData;
+        public Transform_Header Header;
 
         /// <summary>
         /// Compressed data part.
         /// </summary>
-        public byte[] CompressedData;
-
-        public Smb2CompressiblePacket OriginalPacket { get; internal set; }
+        public byte[] EncryptdData;
 
         /// <summary>
         /// Marshaling this packet to bytes.
@@ -40,11 +33,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         {
             var result = new List<byte>();
 
-            result.AddRange(TypeMarshal.ToBytes(Header));
+            result.AddRange(Smb2Utility.MarshalStructure(Header));
 
-            result.AddRange(UncompressedData);
-
-            result.AddRange(CompressedData);
+            result.AddRange(EncryptdData);
 
             return result.ToArray();
         }
@@ -60,21 +51,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             int minimumLength = Marshal.SizeOf(Header);
             if (data.Length < minimumLength)
             {
-                throw new InvalidOleVariantTypeException("Not enough data for Compression_Transform_Header!");
+                throw new InvalidOleVariantTypeException("Not enough data for Transform_Header!");
             }
-            int offset = 0;
-            Header = TypeMarshal.ToStruct<Compression_Transform_Header>(data, ref offset);
 
-            if (offset + Header.Offset > data.Length)
-            {
-                throw new InvalidOleVariantTypeException("Not enough data for Smb2CompressedPacket!");
-            }
-            UncompressedData = new byte[Header.Offset];
-            Array.Copy(data, offset, UncompressedData, 0, Header.Offset);
+            Header = Smb2Utility.UnmarshalStructure<Transform_Header>(data.Take(minimumLength).ToArray());
 
-            long compressedDataLength = data.Length - offset - Header.Offset;
-            CompressedData = new byte[compressedDataLength];
-            Array.Copy(data, offset + Header.Offset, CompressedData, 0, compressedDataLength);
+            EncryptdData = data.Skip(minimumLength).ToArray();
 
             consumedLen = data.Length;
             expectedLen = 0;
