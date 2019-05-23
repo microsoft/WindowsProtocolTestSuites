@@ -30,11 +30,13 @@ namespace Microsoft.Protocols.TestManager.Kernel
         private TestEngine testEngine = null;
         private int targetFilterIndex = -1;
         private int mappingFilterIndex = -1;
+        private DateTime sessionStartTime;
 
         public Utility()
         {
             string exePath = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
             installDir = Path.GetFullPath(Path.Combine(exePath, ".."));
+            sessionStartTime = DateTime.Now;
         }
 
         /// <summary>
@@ -859,6 +861,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 TestAssemblies = appConfig.TestSuiteAssembly,
                 TestSetting = appConfig.TestSetting,
                 PipeName = appConfig.PipeName,
+                ResultOutputFolder = String.Format("{0}-{1}", appConfig.TestSuiteName, sessionStartTime.ToString("yyyy-MM-dd-HH-mm-ss")),
             };
             testEngine.InitializeLogger(selectedCases);
         }
