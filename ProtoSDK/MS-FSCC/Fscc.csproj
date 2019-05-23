@@ -232,7 +232,6 @@
     <Compile Include="Messages\FsccFsctlGetCompressionRequestPacket.cs" />
     <Compile Include="Messages\FsccFsctlGetCompressionResponsePacket.cs" />
     <Compile Include="Messages\FsccFsctlGetNtfsVolumeDataRequestPacket.cs" />
-    <Compile Include="Messages\FsccFsctlGetNtfsVolumeDataResponsePacket.cs" />
     <Compile Include="Messages\FsccFsctlGetObjectIdRequestPacket.cs" />
     <Compile Include="Messages\FsccFsctlGetObjectIdResponsePacket.cs" />
     <Compile Include="Messages\FsccFsctlGetReparsePointRequestPacket.cs" />
@@ -258,7 +257,6 @@
     <Compile Include="Messages\FsccFsctlQuerySparingInfoRequestPacket.cs" />
     <Compile Include="Messages\FsccFsctlQuerySparingInfoResponsePacket.cs" />
     <Compile Include="Messages\FsccFsctlReadFileUsnDataRequestPacket.cs" />
-    <Compile Include="Messages\FsccFsctlReadFileUsnDataResponsePacket.cs" />
     <Compile Include="Messages\FsccFsctlRecallFileRequestPacket.cs" />
     <Compile Include="Messages\FsccFsctlRecallFileResponsePacket.cs" />
     <Compile Include="Messages\FsccFsctlSetCompressionRequestPacket.cs" />

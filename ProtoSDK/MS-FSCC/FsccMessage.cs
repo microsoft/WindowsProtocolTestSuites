@@ -73,6 +73,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         FSCTL_GET_NTFS_VOLUME_DATA = 0x90064,
 
         /// <summary>
+        /// This message requests that the server return information about the ReFS file system volume that contains
+        /// the file or directory that is associated with the handle on which this FSCTL was invoked.
+        /// </summary>
+        FSCTL_GET_REFS_VOLUME_DATA = 0X902D8,
+
+        /// <summary>
         /// This message requests that the server return the object identifier for the file or directory associated  
         /// with the handle on which this FSCTL was invoked. 
         /// </summary>
@@ -2133,129 +2139,293 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         V2 = 0x00000001,
     }
 
+    #region FSCTL_READ_FILE_USN_DATA
+
     /// <summary>
-    /// The FSCTL_READ_FILE_USN_DATA reply message returns the  results of the FSCTL_READ_FILE_USN_DATA request as  a  
-    /// USN_RECORD.  The USN_RECORD element is as follows. 
+    /// FSCTL_READ_FILE_USN_DATA requests that the server return the most recent change journal USN for the file or directory 
+    /// associated with the handle on which this FSCTL was invoked. This message contains an optional READ_FILE_USN_DATA data element.
+    /// The READ_FILE_USN_DATA data element is as follows.
     /// </summary>
-    //  <remarks>
-    //   MS-fscc\8a86ae68-6d15-487c-b2b7-da83a5ad5329.xml
-    //  </remarks>
-    public partial struct FSCTL_READ_FILE_USN_DATA_Reply
+    public partial struct READ_FILE_USN_DATA
     {
+        /// <summary>
+        /// A 16-bit unsigned integer that contains the minimum major version of records returned in the results of this request.
+        /// </summary>
+        public ushort MinMajorVersion;
 
         /// <summary>
-        /// A 32-bit unsigned integer that contains the total length  of the update sequence number (USN) record in  
-        /// bytes. 
+        /// A 16-bit unsigned integer that contains the maximum major version of records returned in the results of this request.
         /// </summary>
+        public ushort MaxMajorVersion;
+    }
+
+    /// <summary>
+    ///  The FSCTL_READ_FILE_USN_DATA reply message returns the results of the FSCTL_READ_FILE_USN_DATA request as 
+    ///  a USN_RECORD_V2 or a USN_RECORD_V3. Both forms of reply message begin with a USN_RECORD_COMMON_HEADER, 
+    ///  which can be used to determine the form of the full reply message.
+    ///  The USN_RECORD_COMMON_HEADER element is as follows.
+    /// </summary>
+    public partial struct USN_RECORD_COMMON_HEADER
+    {
+        /// <summary>
+        ///  A 32-bit unsigned integer that contains the total length of the update sequence number (USN) record, in bytes.
+        /// </summary>
+        [StaticSize(4)]
         public uint RecordLength;
 
         /// <summary>
-        /// A 16-bit unsigned integer that contains the major version  of the change journal software for this record. 
-        ///  For  example, if the change journal software is version  2.0, the major version number is 2. The major  
-        /// version  number is 2 for file systems created on windows_2000,  windows_xp, windows_server_2003,  
-        /// windows_vista, and  windows_server_2008. 
+        ///  A 16-bit unsigned integer that contains the major version of the change journal software for this record. For
+        ///  example, if the change journal software is version 2.0, the major version number is 2.
         /// </summary>
+        [StaticSize(2)]
         public ushort MajorVersion;
 
         /// <summary>
-        /// A 16-bit unsigned integer that contains the minor version  of the change journal software for this record. 
-        ///  For  example, if the change journal software is version  2.0, the minor version number is 0 (zero). The  
-        /// minor  version number is 0 for file systems created on windows_2000,  windows_xp, windows_server_2003,  
-        /// windows_vista, and  windows_server_2008. 
+        ///  A 16-bit unsigned integer that contains the minor version of the change journal software for this record. For
+        ///  example, if the change journal software is version 2.0, the minor version number is 0 (zero).
         /// </summary>
+        [StaticSize(2)]
+        public ushort MinorVersion;
+    }
+
+    /// <summary>
+    ///  The FSCTL_READ_FILE_USN_DATA reply message returns the results of the FSCTL_READ_FILE_USN_DATA request as 
+    ///  a USN_RECORD_V2 or a USN_RECORD_V3. 
+    ///  The USN_RECORD_V2 element is as follows.
+    /// </summary>
+    public partial struct USN_RECORD_V2
+    {
+        /// <summary>
+        ///  A 32-bit unsigned integer that contains the total length of the update sequence number (USN) record, in bytes.
+        /// </summary>
+        [StaticSize(4)]
+        public uint RecordLength;
+
+        /// <summary>
+        ///  A 16-bit unsigned integer that contains the major version of the change journal software for this record. For
+        ///  example, if the change journal software is version 2.0, the major version number is 2.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort MajorVersion;
+
+        /// <summary>
+        ///  A 16-bit unsigned integer that contains the minor version of the change journal software for this record. For
+        ///  example, if the change journal software is version 2.0, the minor version number is 0 (zero).
+        /// </summary>
+        [StaticSize(2)]
         public ushort MinorVersion;
 
         /// <summary>
-        /// A 64-bit unsigned integer, opaque to the client, containing  the number (assigned by the file system when  
-        /// the file  is created) of the file or directory for which this  record notes changes. The  
-        /// FileReferenceNumber is an  arbitrarily assigned value (unique within the volume  on which the file is  
-        /// stored) that associates a journal  record with a file. This value SHOULD always be unique  within the  
-        /// volume on which the file is stored over  the life of the volume.windows computes the file reference   
-        /// number as follows: 48 bits are the index of the file's  primary record in the master file table (MFT), and 
-        ///   the other 16 bits are a sequence number. Therefore,  it is possible that a different file can have the  
-        /// same  FileReferenceNumber as a file on that volume had in  the past; however, this is an unlikely  
-        /// scenario. 
+        ///  A 64-bit unsigned integer, opaque to the client, containing the number (assigned by the file system when the file
+        ///  is created) of the file or directory for which this record notes changes. The FileReferenceNumber is an arbitrarily 
+        ///  assigned value (unique within the volume on which the file is stored) that associates a journal record with a file. 
+        ///  If the value is -1, its meaning is undefined; otherwise this value SHOULD always be unique within the volume on 
+        ///  which the file is stored over the life of the volume.
         /// </summary>
+        [StaticSize(8)]
         public ulong FileReferenceNumber;
 
         /// <summary>
-        /// A 64-bit unsigned integer, opaque to the client, containing  the ordinal number of the directory on which  
-        /// the file  or directory that is associated with this record is  located. This is an arbitrarily assigned  
-        /// value (unique  within the volume on which the file is stored) that  associates a journal record with a  
-        /// parent directory. 
+        ///  A 64-bit signed integer, opaque to the client, containing the ordinal number of the directory on which the file or 
+        ///  directory that is associated with this record is located. This is an arbitrarily assigned value that associates a 
+        ///  journal record with a parent directory. If the value is -1, its meaning is undefined; otherwise this value SHOULD 
+        ///  always be unique within the volume on which the file is stored over the life of the volume.
         /// </summary>
+        [StaticSize(8)]
         public ulong ParentFileReferenceNumber;
 
         /// <summary>
-        /// A 64-bit signed integer, opaque to the client, containing  the USN of the record. This value is unique  
-        /// within  the volume on which the file is stored. This value  MUST be greater than or equal to 0. This value 
-        ///  MUST  be 0 if no USN change journal records have been logged  for the file or directory associated with  
-        /// this record.  For more information, see [MSDN-CJ]. 
+        ///  A 64-bit signed integer, opaque to the client, containing the USN of the record. This value is unique within the 
+        ///  volume on which the file is stored. This value MUST be greater than or equal to 0. This value MUST be 0 if no 
+        ///  USN change journal records have been logged for the file or directory associated with this record. 
+        ///  For more information, see [MSDN-CJ].
         /// </summary>
+        [StaticSize(8)]
         public long Usn;
 
         /// <summary>
-        /// A structure containing the absolute system time this  change journal event was logged, expressed as the  
-        /// number  of 100-nanosecond intervals since January 1, 1601 (UTC),  in the format of a FILETIME structure. 
+        ///  A structure containing the absolute system time in UTC expressed as the number of 100-nanosecond intervals
+        ///  since January 1, 1601 (UTC), in the format of a FILETIME structure.
         /// </summary>
-        public FILETIME TimeStamp;
+        [StaticSize(8)]
+        public _FILETIME TimeStamp;
 
         /// <summary>
-        /// A 32-bit unsigned integer that contains flags that indicate  reasons for changes that have accumulated in  
-        /// this file  or directory journal record since the file or directory  was opened. When a file or directory  
-        /// is closed, a final  USN record is generated with the USN_REASON_CLOSE flag  set in this field. The next  
-        /// change, occurring after  the next open operation or deletion, starts a new record  with a new set of  
-        /// reason flags. A rename or move operation  generates two USN records: one that records the old  parent  
-        /// directory for the item and one that records  the new parent in the ParentFileReferenceNumber member.   
-        /// Possible values for the reason code are as follows  (all unused bits are reserved for future use and MUST  
-        ///  NOT be used). 
+        ///  A 32-bit unsigned integer that contains flags that indicate reasons for changes that have accumulated in this file 
+        ///  or directory journal record since the file or directory was opened. When a file or directory is closed, a final 
+        ///  USN record is generated with the USN_REASON_CLOSE flag set in this field. The next change, occurring after the 
+        ///  next open operation or deletion, starts a new record with a new set of reason flags. A rename or move operation 
+        ///  generates two USN records: one that records the old parent directory for the item and one that records the new
+        ///  parent in the ParentFileReferenceNumber member. Possible values for the reason code are as follows (all unused 
+        ///  bits are reserved for future use and MUST NOT be used).
         /// </summary>
+        [StaticSize(4)]
         public Reason_Values Reason;
 
         /// <summary>
-        /// A 32-bit unsigned integer that provides additional information  about the source of the change. When a  
-        /// thread writes  a new USN record, the source information flags in the  prior record continue to be present  
-        /// only if the thread  also sets those flags. Therefore, the source information  structure allows  
-        /// applications to filter out USN records  that are set only by a known source, for example, an  antivirus  
-        /// filter. This flag MUST contain one of the  following values. 
+        ///  A 32-bit unsigned integer that provides additional information about the source of the change. When a thread 
+        ///  writes a new USN record, the source information flags in the prior record continue to be present only if the 
+        ///  thread also sets those flags. Therefore, the source information structure allows applications to filter out 
+        ///  USN records that are set only by a known source, for example, an antivirus filter. 
         /// </summary>
+        [StaticSize(4)]
         public SourceInfo_Values SourceInfo;
 
         /// <summary>
-        /// A 32-bit unsigned integer that contains an index of  a unique security identifier assigned to the file or  
-        ///  directory associated with this record. This index is  internal to the underlying object store and MUST be 
-        ///   ignored. 
+        ///  A 32-bit unsigned integer that contains an index of a unique security identifier assigned to the file or 
+        ///  directory associated with this record. This index is internal to the underlying object store and MUST be ignored.
         /// </summary>
+        [StaticSize(4)]
         public uint SecurityId;
 
         /// <summary>
-        /// A 32-bit unsigned integer that contains attributes for  the file or directory associated with this record. 
-        ///   Attributes of streams associated with the file or directory  are excluded. Valid file attributes are  
-        /// specified in  section . 
+        ///  A 32-bit unsigned integer that contains attributes for the file or directory associated with this record. 
+        ///  Attributes of streams associated with the file or directory are excluded. Valid file attributes are specified 
+        ///  in section 2.6.
         /// </summary>
+        [StaticSize(4)]
         public uint FileAttributes;
 
         /// <summary>
-        /// A 16-bit unsigned integer that contains the length of  the file or directory name associated with this  
-        /// record  in bytes. The FileName member contains this name. Use  this member to determine file name length  
-        /// rather than  depending on a trailing NULL to delimit the file name  in FileName. 
+        ///  A 16-bit unsigned integer that contains the length of the file or directory name associated with this record, 
+        ///  in bytes. The FileName member contains this name. Use this member to determine file name length rather than 
+        ///  depending on a trailing null to delimit the file name in FileName.
         /// </summary>
+        [StaticSize(2)]
         public ushort FileNameLength;
 
         /// <summary>
-        /// A 16-bit unsigned integer that contains the offset in  bytes of the FileName member from the beginning of  
-        ///  the structure. 
+        ///  A 16-bit unsigned integer that contains the offset, in bytes, of the FileName member from the beginning of the structure.
         /// </summary>
+        [StaticSize(2)]
         public ushort FileNameOffset;
 
         /// <summary>
-        /// A variable-length field of UNICODE characters containing  the name of the file or directory associated  
-        /// with this  record in Unicode format. When working with this field,  do not assume that the file name will  
-        /// contain a trailing  Unicode NULL character. 
+        ///  A variable-length field of Unicode characters containing the name of the file or directory associated with this record 
+        ///  in Unicode format. When working with this field, do not assume that the file name will contain a trailing Unicode null character.
         /// </summary>
-        [Size("FileNameLength")]
+        [Size("(FileNameOffset == 0) ? FileNameLength : (FileNameOffset - 60 + FileNameLength)")] //60 is the length is fields before this one
         public byte[] FileName;
     }
+
+    /// <summary>
+    ///  The FSCTL_READ_FILE_USN_DATA reply message returns the results of the FSCTL_READ_FILE_USN_DATA request as 
+    ///  a USN_RECORD_V2 or a USN_RECORD_V3. 
+    ///  The USN_RECORD_V3 element is as follows.
+    /// </summary>
+    public partial struct USN_RECORD_V3
+    {
+        /// <summary>
+        ///  A 32-bit unsigned integer that contains the total length of the update sequence number (USN) record, in bytes.
+        /// </summary>
+        [StaticSize(4)]
+        public uint RecordLength;
+
+        /// <summary>
+        ///  A 16-bit unsigned integer that contains the major version of the change journal software for this record. For
+        ///  example, if the change journal software is version 2.0, the major version number is 2.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort MajorVersion;
+
+        /// <summary>
+        ///  A 16-bit unsigned integer that contains the minor version of the change journal software for this record. For
+        ///  example, if the change journal software is version 2.0, the minor version number is 0 (zero).
+        /// </summary>
+        [StaticSize(2)]
+        public ushort MinorVersion;
+
+        /// <summary>
+        ///  A 128-bit signed integer, opaque to the client, containing the number (assigned by the file system when the file is created) 
+        ///  of the file or directory for which this record notes changes. The FileReferenceNumber is an arbitrarily assigned value 
+        ///  (unique within the volume on which the file is stored) that associates a journal record with a file. This value SHOULD always 
+        ///  be unique within the volume on which the file is stored over the life of the volume. 
+        /// </summary>
+        [StaticSize(16)]
+        public Guid FileReferenceNumber;
+
+        /// <summary>
+        ///  A 128-bit signed integer, opaque to the client, containing the ordinal number of the directory on which the file or directory 
+        ///  that is associated with this record is located. This is an arbitrarily assigned value (unique within the volume on which the 
+        ///  file is stored) that associates a journal record with a parent directory.
+        /// </summary>
+        [StaticSize(16)]
+        public Guid ParentFileReferenceNumber;
+
+        /// <summary>
+        ///  A 64-bit signed integer, opaque to the client, containing the USN of the record. This value is unique within the 
+        ///  volume on which the file is stored. This value MUST be greater than or equal to 0. This value MUST be 0 if no 
+        ///  USN change journal records have been logged for the file or directory associated with this record. 
+        ///  For more information, see [MSDN-CJ].
+        /// </summary>
+        [StaticSize(8)]
+        public long Usn;
+
+        /// <summary>
+        ///  A structure containing the absolute system time in UTC expressed as the number of 100-nanosecond intervals
+        ///  since January 1, 1601 (UTC), in the format of a FILETIME structure.
+        /// </summary>
+        [StaticSize(8)]
+        public _FILETIME TimeStamp;
+
+        /// <summary>
+        ///  A 32-bit unsigned integer that contains flags that indicate reasons for changes that have accumulated in this file 
+        ///  or directory journal record since the file or directory was opened. When a file or directory is closed, a final 
+        ///  USN record is generated with the USN_REASON_CLOSE flag set in this field. The next change, occurring after the 
+        ///  next open operation or deletion, starts a new record with a new set of reason flags. A rename or move operation 
+        ///  generates two USN records: one that records the old parent directory for the item and one that records the new
+        ///  parent in the ParentFileReferenceNumber member. Possible values for the reason code are as follows (all unused 
+        ///  bits are reserved for future use and MUST NOT be used).
+        /// </summary>
+        [StaticSize(4)]
+        public Reason_Values Reason;
+
+        /// <summary>
+        ///  A 32-bit unsigned integer that provides additional information about the source of the change. When a thread 
+        ///  writes a new USN record, the source information flags in the prior record continue to be present only if the 
+        ///  thread also sets those flags. Therefore, the source information structure allows applications to filter out 
+        ///  USN records that are set only by a known source, for example, an antivirus filter. 
+        /// </summary>
+        [StaticSize(4)]
+        public SourceInfo_Values SourceInfo;
+
+        /// <summary>
+        ///  A 32-bit unsigned integer that contains an index of a unique security identifier assigned to the file or 
+        ///  directory associated with this record. This index is internal to the underlying object store and MUST be ignored.
+        /// </summary>
+        [StaticSize(4)]
+        public uint SecurityId;
+
+        /// <summary>
+        ///  A 32-bit unsigned integer that contains attributes for the file or directory associated with this record. 
+        ///  Attributes of streams associated with the file or directory are excluded. Valid file attributes are specified 
+        ///  in section 2.6.
+        /// </summary>
+        [StaticSize(4)]
+        public uint FileAttributes;
+
+        /// <summary>
+        ///  A 16-bit unsigned integer that contains the length of the file or directory name associated with this record, 
+        ///  in bytes. The FileName member contains this name. Use this member to determine file name length rather than 
+        ///  depending on a trailing null to delimit the file name in FileName.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort FileNameLength;
+
+        /// <summary>
+        ///  A 16-bit unsigned integer that contains the offset, in bytes, of the FileName member from the beginning of the structure.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort FileNameOffset;
+
+        /// <summary>
+        ///  A variable-length field of Unicode characters containing the name of the file or directory associated with this record 
+        ///  in Unicode format. When working with this field, do not assume that the file name will contain a trailing Unicode null character.
+        /// </summary>
+        [Size("(FileNameOffset == 0) ? FileNameLength : (FileNameOffset - 76 + FileNameLength)")] //76 is the length is fields before this one
+        public byte[] FileName;
+    }
+    #endregion
 
     /// <summary>
     /// A 32-bit unsigned integer that contains flags that indicate  reasons for changes that have accumulated in this 
@@ -2559,29 +2729,29 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     //  <remarks>
     //   MS-fscc\a5bae3a3-9025-4f07-b70d-e2247b01faa6.xml
     //  </remarks>
-    public partial struct NTFS_VOLUME_DATA_BUFFER_Reply
+    public partial struct NTFS_VOLUME_DATA_BUFFER
     {
 
         /// <summary>
         /// A 64-bit signed integer that contains the serial number  of the volume. This is a unique number assigned  
         /// to  the volume media by the operating system when the volume  is formatted. 
         /// </summary>
-        public _LARGE_INTEGER VolumeSerialNumber;
+        public long VolumeSerialNumber;
 
         /// <summary>
         /// A 64-bit signed integer that contains the number of  sectors in the specified volume. 
         /// </summary>
-        public _LARGE_INTEGER NumberSectors;
+        public long NumberSectors;
 
         /// <summary>
         /// A 64-bit signed integer that contains the total number  of clusters in the specified volume. 
         /// </summary>
-        public _LARGE_INTEGER TotalClusters;
+        public long TotalClusters;
 
         /// <summary>
         /// A 64-bit signed integer that contains the number of  free clusters in the specified volume. 
         /// </summary>
-        public _LARGE_INTEGER FreeClusters;
+        public long FreeClusters;
 
         /// <summary>
         /// A 64-bit signed integer that contains the number of  reserved clusters in the specified volume. Reserved   
@@ -2589,7 +2759,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         ///  either  the master file table grows beyond its allocated space  (the volume has a large number of small  
         /// files) or the  volume becomes full (the volume has a small number  of large files). 
         /// </summary>
-        public _LARGE_INTEGER TotalReserved;
+        public long TotalReserved;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the number of  bytes in a sector on the specified volume. 
@@ -2615,28 +2785,107 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A 64-bit signed integer that contains the size of the  master file table in bytes. 
         /// </summary>
-        public _LARGE_INTEGER MftValidDataLength;
+        public ulong MftValidDataLength;
 
         /// <summary>
         /// A 64-bit signed integer that contains the starting logical  cluster number of the master file table. 
         /// </summary>
-        public _LARGE_INTEGER MftStartLcn;
+        public ulong MftStartLcn;
 
         /// <summary>
         /// A 64-bit signed integer that contains the starting logical  cluster number of the master file table  
         /// mirror. 
         /// </summary>
-        public _LARGE_INTEGER Mft2StartLcn;
+        public ulong Mft2StartLcn;
 
         /// <summary>
         /// A 64-bit signed integer that contains the starting logical  cluster number of the master file table zone. 
         /// </summary>
-        public _LARGE_INTEGER MftZoneStart;
+        public ulong MftZoneStart;
 
         /// <summary>
         /// A 64-bit signed integer that contains the ending logical  cluster number of the master file table zone. 
         /// </summary>
-        public _LARGE_INTEGER MftZoneEnd;
+        public ulong MftZoneEnd;
+    }
+
+    /// <summary>
+    /// The FSCTL_GET_REFS_VOLUME_DATA reply message returns the results of the FSCTL_GET_REFS_VOLUME_DATA request as an REFS_VOLUME_DATA_BUFFER element.
+    /// The REFS_VOLUME_DATA_BUFFER contains information on a volume.
+    /// </summary>
+    public partial struct REFS_VOLUME_DATA_BUFFER
+    {
+
+        /// <summary>
+        /// A 32-bit unsigned integer that contains the valid data length for this structure. 
+        /// ByteCount can be less than the size of this structure. Only the fields that entirely fit within the valid data 
+        /// length for this structure, as defined by ByteCount, are valid.
+        /// </summary>
+        public uint ByteCount;
+
+        /// <summary>
+        /// A 32-bit unsigned integer that contains the major version of the ReFS volume.
+        /// </summary>
+        public uint MajorVersion;
+
+        /// <summary>
+        /// A 32-bit unsigned integer that contains the minor version of the ReFS volume.
+        /// </summary>
+        public uint MinorVersion;
+
+        /// <summary>
+        /// A 32-bit unsigned integer that defines the number of bytes in a physical sector on the specified volume.
+        /// </summary>
+        public uint BytesPerPhysicalSector;
+
+        /// <summary>
+        /// A 64-bit signed integer that contains the serial number of the volume. This is a unique number assigned to 
+        /// the volume media by the operating system when the volume is formatted.
+        /// </summary>
+        public long VolumeSerialNumber;
+
+        /// <summary>
+        /// A 64-bit signed integer that contains the number of sectors in the specified volume.
+        /// </summary>
+        public long NumberSectors;
+
+        /// <summary>
+        /// A 64-bit signed integer that contains the total number of clusters in the specified volume.
+        /// </summary>
+        public long TotalClusters;
+
+        /// <summary>
+        /// A 64-bit signed integer that contains the number of free clusters in the specified volume.
+        /// </summary>
+        public long FreeClusters;
+
+        /// <summary>
+        /// A 64-bit signed integer that contains the number of reserved clusters in the specified volume. Reserved clusters 
+        /// are used to guarantee clusters are available at points when the file system can't properly report allocation failures.
+        /// </summary>
+        public long TotalReserved;
+
+        /// <summary>
+        /// A 32-bit unsigned integer that contains the number of bytes in a sector on the specified volume.
+        /// </summary>
+        public uint BytesPerSector;
+
+        /// <summary>
+        /// A 32-bit unsigned integer that contains the number of bytes in a cluster on the specified volume. This value is also known as the cluster factor.
+        /// </summary>
+        public uint BytesPerCluster;
+
+        /// <summary>
+        /// A 64-bit unsigned integer that defines the maximum number of bytes a file can contain and be co-located with 
+        /// the file system metadata that describes the file (commonly known as resident files).
+        /// </summary>
+        public long MaximumSizeOfResidentFile;
+
+        /// <summary>
+        /// 80 bytes which, if included, as per the ByteCount field, are reserved, have an undefined value, and are not interpreted.
+        /// </summary>
+        [StaticSize(80)]
+        public byte[] Reserved;
     }
 
     #region FSCTL_GET_INTEGRITY_INFORMATION_BUFFER
@@ -6532,6 +6781,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         ///  that has not been zeroed  or left uninitialized. 
         /// </summary>
         public long ValidDataLength;
+    }
+
+    #endregion
+
+    #region 2.4.41   FileIdInformation
+    /// <summary>
+    /// This information class is used to query the volume serial number and fileid information for a file.
+    /// </summary>
+    public partial struct FileIdInformation
+    {
+        /// <summary>
+        /// A 64-bit unsigned integer that contains the serial number of the volume where the file is located.
+        /// </summary>
+        public long VolumeSerialNumber;
+
+        /// <summary>
+        /// An opaque 128-bit signed integer that is an identifier of the file.
+        /// </summary>
+        public Guid FileId;
     }
 
     #endregion

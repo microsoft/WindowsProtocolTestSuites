@@ -74,7 +74,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         private IpVersion ipVersion;
         private ITestSite site;
         private ITransportAdapter transAdapter;
-        private UInt32 transBufferSize;
+        public UInt32 transBufferSize; // Make it accessible from test cases' code.
         private string rootDirectory;
         private string quotaFile;
         private string reparsePointFile;
@@ -2328,6 +2328,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             return returnedStatus;
         }
 
+        public MessageStatus FsCtlForEasyRequest(FsControlCommand ctlCode, out byte[] outputBuffer)
+        {
+            MessageStatus status = this.transAdapter.IOControl(
+                (uint)ctlCode,
+                transBufferSize,
+                null,
+                out outputBuffer);
+
+            return status;
+        }
+
         #endregion
 
         #region 3.1.5.9.11   FSCTL_GET_REPARSE_POINT
@@ -2774,7 +2785,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
         #endregion
 
-        #region 3.1.5.9.22   FSCTL_READ_FILE_USN_DATA
+        #region 2.1.5.9.24   FSCTL_READ_FILE_USN_DATA
 
         /// <summary>
         /// Implement FsCtlReadFileUSNData method
@@ -2813,7 +2824,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
             // The control code must be set to 0x900eb, according to FSCC 2.3
             MessageStatus returnedStatus = transAdapter.IOControl(
-                0x900eb,
+                (uint)FsControlCommand.FSCTL_READ_FILE_USN_DATA,
                 outBufferSize,
                 fsccPacket.ToBytes(),
                 out outbuffer);
@@ -2842,6 +2853,25 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             {
                 returnedStatus = SMB_TDIWorkaround.WorkAroundFsCtlReadFileUSNData(bufferSize, returnedStatus, site);
             }
+            return returnedStatus;
+        }
+
+
+        public MessageStatus FsCtlReadFileUSNData(ushort minMajorVersion, ushort maxMajorVersion, out byte[] outbuffer)
+        {
+            FsccFsctlReadFileUsnDataRequestPacket fsccPacket = new FsccFsctlReadFileUsnDataRequestPacket();
+            READ_FILE_USN_DATA readFileUSNDataRequestPayload = new READ_FILE_USN_DATA();
+            readFileUSNDataRequestPayload.MinMajorVersion = minMajorVersion;
+            readFileUSNDataRequestPayload.MaxMajorVersion = maxMajorVersion;
+
+            fsccPacket.Payload = readFileUSNDataRequestPayload;
+
+            MessageStatus returnedStatus = this.transAdapter.IOControl(
+                (uint)FsControlCommand.FSCTL_READ_FILE_USN_DATA,
+                transBufferSize,
+                fsccPacket.ToBytes(),
+                out outbuffer);
+
             return returnedStatus;
         }
         #endregion
