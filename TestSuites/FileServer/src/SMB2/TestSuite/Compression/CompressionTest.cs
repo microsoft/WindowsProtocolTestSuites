@@ -19,7 +19,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         #region Variables
         private Smb2FunctionalClient client;
         private string uncSharePath;
-        private Dictionary<CompressionAlgorithm, CompressionTestData> compressibleTestDataset;
         #endregion
 
         #region Test Initialize and Cleanup
@@ -41,7 +40,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         {
             base.TestInitialize();
             uncSharePath = Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare);
-            InitializeTestDataset();
         }
 
         protected override void TestCleanup()
@@ -262,53 +260,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             IncompressibleRead,
         }
 
-        private class CompressionTestData
-        {
-            /// <summary>
-            /// Example data from [MS-XCA].
-            /// </summary>
-            public byte[] ExampleData;
-
-            /// <summary>
-            /// Compressible data.
-            /// </summary>
-            public byte[] CompresseibleData;
-
-            /// <summary>
-            /// Incompressible data.
-            /// </summary>
-            public byte[] IncompressibleData;
-        }
-
-        private void InitializeTestDataset()
-        {
-            compressibleTestDataset = new Dictionary<CompressionAlgorithm, CompressionTestData>();
-
-            // Construct compressible data by repeat 0xE0 1024 times.
-            var compressibleData = Enumerable.Repeat<byte>(0xE0, 1024).ToArray();
-            // Construct incompressible data with only 1 0xE0.
-            var incompressibleData = new byte[] { 0xE0 };
-            var commonTestData = new CompressionTestData();
-            compressibleTestDataset[CompressionAlgorithm.NONE] = commonTestData;
-            commonTestData.CompresseibleData = compressibleData;
-            commonTestData.IncompressibleData = incompressibleData;
-
-            var lzntTestData = new CompressionTestData();
-            compressibleTestDataset[CompressionAlgorithm.LZNT1] = lzntTestData;
-            string lznt1ExampleInput = "F# F# G A A G F# E D D E F# F# E E F# F# G A A G F# E D D E F# E D D E E F# D E F# G F# D E F# G F# E D E A F# F# G A A G F# E D D E F# E D D\0";
-            lzntTestData.ExampleData = Encoding.ASCII.GetBytes(lznt1ExampleInput);
-
-            var lz77TestData = new CompressionTestData();
-            compressibleTestDataset[CompressionAlgorithm.LZ77] = lz77TestData;
-            string lz77ExampleInput = "abcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabc";
-            lz77TestData.ExampleData = Encoding.ASCII.GetBytes(lz77ExampleInput);
-
-            var lz77HuffmanTestData = new CompressionTestData();
-            compressibleTestDataset[CompressionAlgorithm.LZ77Huffman] = lz77HuffmanTestData;
-            string lz77HuffmanExampleInput = "abcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabc";
-            lz77HuffmanTestData.ExampleData = Encoding.ASCII.GetBytes(lz77HuffmanExampleInput);
-        }
-
         private void BasicSMB2Compression(CompressionAlgorithm compressionAlgorithm)
         {
             CheckCompressionAndEncryptionApplicability(compressionAlgorithm);
@@ -336,88 +287,147 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             FILEID fileId;
             CreateTestFile(compressionAlgorithms, enableEncryption, out treeId, out fileId);
 
-            bool compressWriteRequest;
-            bool compressReadRequest;
-            bool readResponseShouldBeCompressed;
-            CompressionAlgorithm[] compressionAlgorithmForTest;
-            switch (variant)
+            var instances = CompressionTestRunner.Generate(variant);
+
+            foreach (var instance in instances)
             {
-                case CompressionTestVariant.BasicReadWrite:
-                    {
-                        // Use specific test data for all supported compression algorithms
-                        compressionAlgorithmForTest = client.Smb2Client.CompressionInfo.CompressionIds;
-                        compressWriteRequest = true;
-                        compressReadRequest = true;
-                        readResponseShouldBeCompressed = true;
-                    }
-                    break;
-                case CompressionTestVariant.CompressibleWrite:
-                    {
-                        // Use common test data
-                        compressionAlgorithmForTest = new CompressionAlgorithm[] { CompressionAlgorithm.NONE };
-                        compressWriteRequest = true;
-                        compressReadRequest = false;
-                        readResponseShouldBeCompressed = false;
-                    }
-                    break;
-                case CompressionTestVariant.CompressibleRead:
-                    {
-                        // Use common test data
-                        compressionAlgorithmForTest = new CompressionAlgorithm[] { CompressionAlgorithm.NONE };
-                        compressWriteRequest = false;
-                        compressReadRequest = true;
-                        readResponseShouldBeCompressed = true;
-                    }
-                    break;
-                case CompressionTestVariant.IncompressibleRead:
-                    {
-                        // Use common test data
-                        compressionAlgorithmForTest = new CompressionAlgorithm[] { CompressionAlgorithm.NONE };
-                        compressWriteRequest = false;
-                        compressReadRequest = true;
-                        readResponseShouldBeCompressed = false;
-                    }
-                    break;
-                default:
-                    throw new InvalidOperationException("Unknown test variant!");
+                instance.Run(client, treeId, fileId);
             }
 
-            foreach (var compressionAlgorithm in compressionAlgorithmForTest)
+            client.Close(treeId, fileId);
+            client.TreeDisconnect(treeId);
+            client.LogOff();
+        }
+
+        private class CompressionTestRunner
+        {
+            private static CompressionAlgorithm[] compressionAlgorithms;
+            private static Dictionary<CompressionAlgorithm, byte[]> exampleTestData;
+            private static byte[] commonCompressibleData;
+            private static byte[] commonIncompressibleData;
+
+            static CompressionTestRunner()
             {
-                var testData = GetCompressionTestData(compressionAlgorithm);
+                compressionAlgorithms = new CompressionAlgorithm[] { CompressionAlgorithm.LZ77, CompressionAlgorithm.LZ77Huffman, CompressionAlgorithm.LZNT1 };
+                // Example test data for LZ77 and LZ77 Huffman is from [MS-XCA], "abc" repeated 100 times(300 bytes).
+                var lznt1ExampleTestData = Encoding.ASCII.GetBytes("F# F# G A A G F# E D D E F# F# E E F# F# G A A G F# E D D E F# E D D E E F# D E F# G F# D E F# G F# E D E A F# F# G A A G F# E D D E F# E D D\0");
+                // Example test data for LZNT1 is from [MS-XCA].
+                var lz77AndLZ77HuffmanExampleTestData = Encoding.ASCII.GetBytes(String.Join("", Enumerable.Repeat("abc", 100).ToArray()));
+                exampleTestData = new Dictionary<CompressionAlgorithm, byte[]>
+                {
+                    [CompressionAlgorithm.LZ77] = lz77AndLZ77HuffmanExampleTestData,
+                    [CompressionAlgorithm.LZ77Huffman] = lz77AndLZ77HuffmanExampleTestData,
+                    [CompressionAlgorithm.LZNT1] = lznt1ExampleTestData,
+                };
 
-                byte[] data;
+                // Construct compressible data by repeat 0xE0 1024 times.
+                commonCompressibleData = Enumerable.Repeat<byte>(0xE0, 1024).ToArray();
 
+                // Construct incompressible data with only 1 0xE0.
+                commonIncompressibleData = new byte[] { 0xE0 };
+            }
+
+            private bool compressWriteRequest;
+            private bool compressReadRequest;
+            private bool readResponseShouldBeCompressed;
+            private CompressionAlgorithm compressionAlgorithmForTest;
+            private byte[] testData;
+
+            public static CompressionTestRunner[] Generate(CompressionTestVariant variant)
+            {
+                CompressionTestRunner[] result = null;
                 switch (variant)
                 {
                     case CompressionTestVariant.BasicReadWrite:
                         {
-                            data = testData.ExampleData;
+                            // Use specific test data for all supported compression algorithms
+                            result = compressionAlgorithms.Select(compressionAlgorithm =>
+                            {
+                                var instance = new CompressionTestRunner();
+
+                                instance.compressionAlgorithmForTest = compressionAlgorithm;
+                                instance.compressWriteRequest = true;
+                                instance.compressReadRequest = true;
+                                instance.readResponseShouldBeCompressed = true;
+                                // Use example test data.
+                                instance.testData = exampleTestData[compressionAlgorithm];
+
+                                return instance;
+                            }).ToArray();
                         }
                         break;
                     case CompressionTestVariant.CompressibleWrite:
                         {
-                            data = testData.CompresseibleData;
+                            // Use common test data for all supported compression algorithms
+                            result = compressionAlgorithms.Select(compressionAlgorithm =>
+                            {
+                                var instance = new CompressionTestRunner();
+
+                                instance.compressionAlgorithmForTest = compressionAlgorithm;
+                                instance.compressWriteRequest = true;
+                                instance.compressReadRequest = false;
+                                instance.readResponseShouldBeCompressed = false;
+                                // Use example test data.
+                                instance.testData = commonCompressibleData;
+
+                                return instance;
+                            }).ToArray();
                         }
                         break;
                     case CompressionTestVariant.CompressibleRead:
                         {
-                            data = testData.CompresseibleData;
+                            // Use common test data
+                            var instance = new CompressionTestRunner();
+                            instance.compressionAlgorithmForTest = CompressionAlgorithm.NONE;
+                            instance.compressWriteRequest = false;
+                            instance.compressReadRequest = true;
+                            instance.readResponseShouldBeCompressed = true;
+                            instance.testData = commonCompressibleData;
+
+                            result = new CompressionTestRunner[] { instance };
                         }
                         break;
                     case CompressionTestVariant.IncompressibleRead:
                         {
-                            data = testData.IncompressibleData;
+                            // Use common test data
+                            var instance = new CompressionTestRunner();
+                            instance.compressionAlgorithmForTest = CompressionAlgorithm.NONE;
+                            instance.compressWriteRequest = false;
+                            instance.compressReadRequest = true;
+                            instance.readResponseShouldBeCompressed = false;
+                            instance.testData = commonIncompressibleData;
+
+                            result = new CompressionTestRunner[] { instance };
                         }
                         break;
                     default:
                         throw new InvalidOperationException("Unknown test variant!");
                 }
+                return result;
+            }
+
+            public void Run(Smb2FunctionalClient client, uint treeId, FILEID fileId)
+            {
+                if (compressionAlgorithmForTest != CompressionAlgorithm.NONE)
+                {
+                    if (!client.Smb2Client.CompressionInfo.CompressionIds.Any(compressionAlgorithmSupported => compressionAlgorithmSupported == compressionAlgorithmForTest))
+                    {
+                        // The specified compression algorithm is not supported by SUT.
+                        return;
+                    }
+                }
+
+                BaseTestSite.Log.Add(
+                    LogEntryKind.TestStep,
+                    "Test will trigger WRITE request with CompressWrite: {0} and preferred compression algorithm: {1}.",
+                    compressWriteRequest,
+                    compressionAlgorithmForTest
+                    );
 
                 // Specify the compression algorithm for write request.
-                client.Smb2Client.CompressionInfo.PreferredCompressionAlgorithm = compressionAlgorithm;
+                client.Smb2Client.CompressionInfo.PreferredCompressionAlgorithm = compressionAlgorithmForTest;
 
-                client.Write(treeId, fileId, data, compressWrite: compressWriteRequest);
+                client.Write(treeId, fileId, testData, compressWrite: compressWriteRequest);
 
                 byte[] readOutData = null;
 
@@ -436,29 +446,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                     }
                 };
 
+                BaseTestSite.Log.Add(
+                    LogEntryKind.TestStep,
+                    "Test will trigger READ request with CompressRead: {0} and check whether READ response is compressed: {1}.",
+                    compressReadRequest,
+                    readResponseShouldBeCompressed
+                    );
+
                 client.Smb2Client.PacketReceived += Smb2Client_PacketReceived;
-                client.Read(treeId, fileId, 0, (uint)data.Length, out readOutData, compressRead: compressReadRequest);
+                client.Read(treeId, fileId, 0, (uint)testData.Length, out readOutData, compressRead: compressReadRequest);
                 client.Smb2Client.PacketReceived -= Smb2Client_PacketReceived;
 
                 if (compressReadRequest)
                 {
-                    if (!readResponseShouldBeCompressed)
-                    {
-                        // test if the size of read response could be shrunk by compression using supported compression algorithms
-                        readResponsePacket.EligibleForCompression = true;
-
-                        var compressionInfo = new Smb2CompressionInfo();
-                        compressionInfo.CompressionIds = client.Smb2Client.CompressionInfo.CompressionIds;
-
-                        // read response should still be compressed if its size is shrinkable
-                        readResponseShouldBeCompressed = client.Smb2Client.CompressionInfo.CompressionIds.Any(compressionAlgorithmToTest =>
-                        {
-                            compressionInfo.PreferredCompressionAlgorithm = compressionAlgorithmToTest;
-                            var t = Smb2Compression.Compress(readResponsePacket, compressionInfo, Smb2Role.Server);
-                            return t is Smb2CompressedPacket;
-                        });
-                    }
-
                     if (readResponseShouldBeCompressed)
                     {
                         BaseTestSite.Assert.IsTrue(readResponseIsCompressed && compressedPacket != null, "[MS-SMB2] section 3.3.5.12: When SMB2_READFLAG_REQUEST_COMPRESSED is specified in read request, the server MUST compress the message if compression will shrink the message size.");
@@ -481,12 +481,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                     }
                 }
 
-                BaseTestSite.Assert.IsTrue(Enumerable.SequenceEqual(data, readOutData), "The read out content MUST be the same with that is written.");
+                BaseTestSite.Assert.IsTrue(Enumerable.SequenceEqual(testData, readOutData), "The read out content MUST be the same with that is written.");
             }
-
-            client.Close(treeId, fileId);
-            client.TreeDisconnect(treeId);
-            client.LogOff();
         }
 
         private void Smb2CompressionNegativeTest(Action<Smb2Packet> unprocessedPacketModifier, Action<Smb2Packet> processedPacketModifier, Func<byte[], byte[]> onWirePacketModifier)
@@ -503,8 +499,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             // Specify no preference, first compression algorithm is to be used.
             client.Smb2Client.CompressionInfo.PreferredCompressionAlgorithm = CompressionAlgorithm.NONE;
 
-            // Use common test data
-            var data = GetCompressionTestData(CompressionAlgorithm.NONE).CompresseibleData;
+            // Construct compressible data by repeat 0xE0 1024 times.
+            var commonCompressibleData = Enumerable.Repeat<byte>(0xE0, 1024).ToArray();
+
+            // Use common compressible test data
+            var data = commonCompressibleData;
 
             try
             {
@@ -590,13 +589,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 accessMask: AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE
                 );
         }
-
-        private CompressionTestData GetCompressionTestData(CompressionAlgorithm compressionAlgorithm)
-        {
-            var result = compressibleTestDataset[compressionAlgorithm];
-            return result;
-        }
-
 
         private void CheckCompressionAndEncryptionApplicability(CompressionAlgorithm? compressionAlgorithm = null, bool needEncryption = false)
         {

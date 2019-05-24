@@ -495,7 +495,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
                     bool isExpectedCompressionContext = client.Smb2Client.CompressionInfo.CompressionIds.Length == 1 && client.Smb2Client.CompressionInfo.CompressionIds[0] == CompressionAlgorithm.NONE;
 
-                    BaseTestSite.Assert.IsTrue(isExpectedCompressionContext, "[MS-SMB2] section 3.3.5.4: If the server does not support any of the algorithms provided by the client, the server MUST build an SMB2_COMPRESSION_CAPABILITIES negotiate response context with CompressionAlgorithmCount set to 1 and CompressionAlgorithms set to \"NONE\".");
+                    BaseTestSite.Assert.IsTrue(
+                        isExpectedCompressionContext, 
+                        "[MS-SMB2] section 3.3.5.4: If the server does not support any of the algorithms provided by the client, " +
+                        "the server MUST build an SMB2_COMPRESSION_CAPABILITIES negotiate response context with CompressionAlgorithmCount set to 1 and CompressionAlgorithms set to \"NONE\"."
+                        );
                 });
         }
 
@@ -564,7 +568,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 compressionAlgorithms: compressionAlgorithms,
                 checker: (Packet_Header header, NEGOTIATE_Response response) =>
                 {
-                    BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_INVALID_PARAMETER, header.Status, "[MS-SMB2] section 3.3.5.4: The server MUST fail the negotiate request with STATUS_INVALID_PARAMETER, if the DataLength of the negotiate context is less than the size of the SMB2_COMPRESSION_CAPABILITIES structure.");
+                    BaseTestSite.Assert.AreEqual(
+                        Smb2Status.STATUS_INVALID_PARAMETER,
+                        header.Status,
+                        "[MS-SMB2] section 3.3.5.4: The server MUST fail the negotiate request with STATUS_INVALID_PARAMETER, " +
+                        "if the DataLength of the negotiate context is less than the size of the SMB2_COMPRESSION_CAPABILITIES structure."
+                        );
                 });
 
             client.Smb2Client.PacketSending -= negotiatePacketModifier;

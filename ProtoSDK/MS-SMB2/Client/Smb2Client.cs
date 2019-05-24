@@ -1179,7 +1179,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 // If CompressionAlgorithmCount is 1 and CompressionAlgorithms contains "NONE", the client MUST set Connection.CompressionIds to an empty list.
                 // If Connection.CompressionIds is empty,
                 // Set CompressionAlgorithmCount to 1.
-                // Set CompressionAlgorithms to “NONE
+                // Set CompressionAlgorithms to "NONE".
                 this.CompressionInfo.CompressionIds = response.NegotiateContext_COMPRESSION.Value.CompressionAlgorithms;
             }
             else if (response.NegotiateContext_COMPRESSION.Value.CompressionAlgorithms.Any(compressionAlgorithm => !compressionAlgorithms.Contains(compressionAlgorithm)))
