@@ -558,7 +558,7 @@ This is used to test SMB2 common user scenarios.
 | **Test Execution Steps** | 1.  Client send Negotiate request with dialect SMB 3.11, SMB2_PREAUTH_INTEGRITY_CAPABILITIES context and SMB2_COMPRESSION_CAPABILITIES context with all supported compression algorithms. |
 |                          | 2.  Server returns SMB2 NEGOTIATE response with the expected SMB2_COMPRESSION_CAPABILITIES, if it supports the compression feature, as below: |
 |                          |     a.  If server is Windows, CompressionAlgorithms is set to the first common algorithm supported by the client and server. |
-|                          |     b.  If server is non-Windows, CompressionAlgorithms is set to set all the algorithms in the CompressionAlgorithms field of Negotiate request, in the order they are received. |
+|                          |     b.  If server is non-Windows, CompressionAlgorithms is set to all the algorithms in the CompressionAlgorithms field of Negotiate request, in the order they are received. |
 | **Cleanup**              |                                                                                                                                                                                           |
 
 
@@ -3004,7 +3004,7 @@ This is used to test SMB2 common user scenarios.
 |||
 |---|---|
 | **Test ID** | BVT_SMB2Compression_LZNT1_Encrypted |
-| **Description** | This test case is designed to test whether server can decompress WRITE request and compress read response correctly using LZNT1. |
+| **Description** | This test case is designed to test whether server can decompress WRITE request and compress read response correctly using LZNT1 when encryption is enabled. |
 | **Prerequisites** | The server implements dialect 3.11, encryption and compression feature. |
 | **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with global encryption enabled and compression algorithms set to LZNT1; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
 |                          | 2.  Client write copmressible data to server by sending WRITE request compressed with LZNT1. |
@@ -3016,7 +3016,7 @@ This is used to test SMB2 common user scenarios.
 |||
 |---|---|
 | **Test ID** | BVT_SMB2Compression_LZ77_Encrypted |
-| **Description** | This test case is designed to test whether server can decompress WRITE request and compress read response correctly using LZ77. |
+| **Description** | This test case is designed to test whether server can decompress WRITE request and compress read response correctly using LZ77 when encryption is enabled. |
 | **Prerequisites** | The server implements dialect 3.11, encryption and compression feature. |
 | **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with global encryption enabled and compression algorithms set to LZ77; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
 |                          | 2.  Client write copmressible data to server by sending WRITE request compressed with LZ77. |
@@ -3028,7 +3028,7 @@ This is used to test SMB2 common user scenarios.
 |||
 |---|---|
 | **Test ID** | BVT_SMB2Compression_LZ77Huffman_Encrypted |
-| **Description** | This test case is designed to test whether server can decompress WRITE request and compress read response correctly using LZ77 Huffman. |
+| **Description** | This test case is designed to test whether server can decompress WRITE request and compress read response correctly using LZ77 Huffman when encryption is enabled. |
 | **Prerequisites** | The server implements dialect 3.11, encryption and compression feature. |
 | **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with global encryption enabled and compression algorithms set to LZ77 Huffman; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
 |                          | 2.  Client write copmressible data to server by sending WRITE request compressed with LZ77 Huffman. |

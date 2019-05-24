@@ -30,6 +30,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// </summary>
         public byte[] CompressedData;
 
+        /// <summary>
+        /// The original packet before compression.
+        /// </summary>
         public Smb2CompressiblePacket OriginalPacket { get; internal set; }
 
         /// <summary>

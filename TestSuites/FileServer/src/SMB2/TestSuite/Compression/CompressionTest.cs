@@ -54,7 +54,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 }
                 catch (Exception ex)
                 {
-                    BaseTestSite.Log.Add(LogEntryKind.Debug, "Unexpected exception when disconnect client1: {0}", ex.ToString());
+                    BaseTestSite.Log.Add(LogEntryKind.Debug, "Unexpected exception when disconnect client: {0}", ex.ToString());
                 }
             }
 
@@ -68,7 +68,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Smb311)]
         [TestCategory(TestCategories.Compression)]
-        [Description("This test case is designed to test whether server can decompress WRITE request and compress read response correctly using LZNT1.")]
+        [Description("This test case is designed to test whether server can decompress WRITE request and compress READ response correctly using LZNT1.")]
         public void BVT_SMB2Compression_LZNT1()
         {
             var compressionAlgorithm = CompressionAlgorithm.LZNT1;
@@ -461,13 +461,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
                     if (readResponseShouldBeCompressed)
                     {
-                        BaseTestSite.Assert.IsTrue(readResponseIsCompressed && compressedPacket != null, "When SMB2_READFLAG_REQUEST_COMPRESSED is specified in read request, the server MUST compress the message if compression will shrink the message size.");
+                        BaseTestSite.Assert.IsTrue(readResponseIsCompressed && compressedPacket != null, "[MS-SMB2] section 3.3.5.12: When SMB2_READFLAG_REQUEST_COMPRESSED is specified in read request, the server MUST compress the message if compression will shrink the message size.");
 
                         BaseTestSite.Log.Add(LogEntryKind.Debug, "Read response is compressed using {0}.", compressedPacket.Header.CompressionAlgorithm);
                     }
                     else
                     {
-                        BaseTestSite.Assert.IsTrue(!readResponseIsCompressed && compressedPacket == null, "When SMB2_READFLAG_REQUEST_COMPRESSED is specified in read request, the server MUST NOT compress the message if compression will not shrink the message size.");
+                        BaseTestSite.Assert.IsTrue(!readResponseIsCompressed && compressedPacket == null, "[MS-SMB2] section 3.3.5.12: When SMB2_READFLAG_REQUEST_COMPRESSED is specified in read request, the server MUST NOT compress the message if compression will not shrink the message size.");
                     }
                 }
                 else
@@ -515,7 +515,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 BaseTestSite.Log.Add(LogEntryKind.Debug, "Exception is thrown by SMB2 client: {0}", ex);
             }
 
-            BaseTestSite.Assert.IsTrue(client.Smb2Client.IsServerDisconnected, "The server MUST disconnect the connection.");
+            BaseTestSite.Assert.IsTrue(client.Smb2Client.IsServerDisconnected, "[MS-SMB2] section 3.3.5.2.13: The server MUST disconnect the connection.");
 
             client.Smb2Client.PacketSending -= unprocessedPacketModifier;
             client.Smb2Client.ProcessedPacketModifier -= processedPacketModifier;
@@ -559,7 +559,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                     {
                         bool isExpectedNonWindowsCompressionContext = Enumerable.SequenceEqual(client.Smb2Client.CompressionInfo.CompressionIds, compressionAlgorithms);
                         {
-                            BaseTestSite.Assert.IsTrue(isExpectedNonWindowsCompressionContext, "Non-Windows implementation MUST set CompressionAlgorithms to the CompressionIds in request if they are all supported by SUT.");
+                            BaseTestSite.Assert.IsTrue(isExpectedNonWindowsCompressionContext, "[MS-SMB2] section 3.3.5.4: Non-Windows implementation MUST set CompressionAlgorithms to the CompressionIds in request if they are all supported by SUT.");
                         }
                     }
                 });
