@@ -716,7 +716,7 @@ This guide provides only basic information about configuring the test environmen
 
 * For domain environments, join all computers to the domain of the domain controller.
 
-* Disable active firewalls on all computers(Run Disable_Firewall.ps1 or do it manually).
+* Disable active firewalls on all computers.
 
 For detailed instructions about how to complete the tasks that this process requires, see the administration guide for your operating system.
 
