@@ -3,22 +3,13 @@
 ## Licensed under the MIT license. See LICENSE file in the project root for full license information.
 #############################################################################
 
-# parameters passed by PTF
-# parameters used in remoting
-function GetPtfVariable
-{
-    param($name)
-	$v = Get-Variable -Name ("PTFProp"+$name)
-	return $v.Value
-}
-
-$MachineName = GetPtfVariable "Common.TDC.NetbiosName"
-$DomainName  = GetPtfVariable "Common.TrustDomain.DNSName"
-$AdminUserName = GetPtfVariable "Common.DomainAdministratorName"
-$AdminPassword = GetPtfVariable "Common.DomainUserPassword"
+$MachineName      = $PTFProp_Common_TDC_NetbiosName
+$DomainName       = $PTFProp_Common_TrustDomain_DNSName
+$AdminUserName    = $PTFProp_Common_DomainAdministratorName
+$AdminPassword    = $PTFProp_Common_DomainUserPassword
 
 # the target account on which the A2AF will apply
-$TargetAccount    = GetPtfVariable "Common.DomainAdministratorName"
+$TargetAccount    = $PTFProp_Common_DomainAdministratorName
 
 # RestrictedPrinciple will be passed in from Adapter
 

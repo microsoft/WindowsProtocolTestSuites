@@ -3,22 +3,15 @@
 ## Licensed under the MIT license. See LICENSE file in the project root for full license information.
 #############################################################
 
-function GetPtfVariable
-{
-    param($name)
-	$v = Get-Variable -Name ("PTFProp"+$name)
-	return $v.Value
-}
-
-$waitingTime = GetPtfVariable "MS_NRPC.Adapter.WaitingTime"
+$waitingTime = $PTFProp_MS_NRPC_Adapter_WaitingTime
 
 if($sutType -eq "PrimaryDc")
 {
-    $computerName = GetPtfVariable "Common.WritableDC1.NetbiosName"
+    $computerName = $PTFProp_Common_WritableDC1_NetbiosName
 }
 if($sutType -eq "TrustDc")
 {
-    $computerName = GetPtfVariable "Common.TDC.NetbiosName"
+    $computerName = $PTFProp_Common_TDC_NetbiosName
 }
 
 #try
