@@ -11,11 +11,11 @@ $SUTParamArray = @{}
 # Execute Configure Script
 #-------------------------
 
-Push-Location $WorkingPath 
+#Push-Location $WorkingPath 
 #----------------------------------------------------------------------------
 # Start logging using start-transcript cmdlet
 #----------------------------------------------------------------------------
-$logFile =  $WorkingPath + $MyInvocation.MyCommand.Name + ".log"
+$logFile =  $WorkingPath + "\"+$MyInvocation.MyCommand.Name + ".log"
 
 Start-Transcript -Path "$logFile" -Append -Force
 	
@@ -43,7 +43,8 @@ Function UpdateConfigFile
 {
 
     Write-TestSuiteInfo "Start to update config file."
-    [string] $ProtocolXmlConfigFile = "$WorkingPath\protocol.xml"
+    #[string] $ProtocolXmlConfigFile = "$WorkingPath\protocol.xml"
+    [string] $ProtocolXmlConfigFile = "protocol.xml"
     [xml]$XmlContent = Get-Content $ProtocolXmlConfigFile -ErrorAction Stop
 
     try 
@@ -239,4 +240,3 @@ UpdateConfigFile
 # Stop logging
 #----------------------------------------------------------------------------
 Stop-Transcript
-

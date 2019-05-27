@@ -27,6 +27,8 @@ Param
 
     [string]$WorkingPath = "C:\temp" 
 )
+$newEnvPath=$env:Path+";.\;.\scripts\"
+$env:Path=$newEnvPath
 
 #------------------------------------------------------------------------------------------
 # Global Variables:
@@ -100,8 +102,8 @@ Function Write-ConfigLog
 Function Read-ConfigParameters()
 {
     Write-ConfigLog "Getting the parameters from environment config file..." -ForegroundColor Yellow
-    $VMName = .\GetVMNameByComputerName.ps1
-    .\GetVmParameters.ps1 -VMName $VMName -RefParamArray ([ref]$Parameters)
+    $VMName = GetVMNameByComputerName.ps1
+    GetVmParameters.ps1 -VMName $VMName -RefParamArray ([ref]$Parameters)
     $Parameters
 	
 	if(Test-Path -Path $DataFile)
@@ -135,7 +137,7 @@ Function Init-Environment()
 	
 	# Switch to the script path
 	Write-ConfigLog "Switching to $WorkingPath..." -ForegroundColor Yellow
-	Push-Location $WorkingPath
+	#Push-Location $WorkingPath
 
     # Check completion signal file. If signal file exists, exit with 0
     if (Test-Path -Path $SignalFileFullPath) 
@@ -164,7 +166,7 @@ Function Complete-Configure
     Stop-Transcript
 
     # remove the schedule task to execute the script next step after restart
-    .\RestartAndRunFinish.ps1
+    RestartAndRunFinish.ps1
 }
 
 Function Config-Driver
@@ -438,137 +440,137 @@ Function Config-Driver
 	$DepPtfConfig = "$binPath\Kerberos_ServerTestSuite.deployment.ptfconfig"
 
 	Write-ConfigLog "TurnOff FileReadonly for $DepPtfConfig..."
-	.\TurnOff-FileReadonly.ps1 $DepPtfConfig
+	TurnOff-FileReadonly.ps1 $DepPtfConfig
 	
 	Write-ConfigLog "Begin to update Kerberos_ServerTestSuite.deployment.ptfconfig..."
 
 	if($TrustPassword -ne $null -and $TrustPassword -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.TrustPassword" $TrustPassword
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.TrustPassword" $TrustPassword
 	}
 	if($UseProxy -ne $null -and $UseProxy -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "UseProxy" $UseProxy
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "UseProxy" $UseProxy
 	}
 	if($KKDCPServerUrl -ne $null -and $KKDCPServerUrl -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "KKDCPServerUrl" $KKDCPServerUrl
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "KKDCPServerUrl" $KKDCPServerUrl
 	}
 	if($LocalRealmName -ne $null -and $LocalRealmName -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.RealmName" $LocalRealmName
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.RealmName" $LocalRealmName
 	}
 	if($LocalRealmKDCFQDN -ne $null -and $LocalRealmKDCFQDN -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.KDC01.FQDN" $LocalRealmKDCFQDN
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.KDC01.FQDN" $LocalRealmKDCFQDN
 	}
 	if($LocalRealmKDCNetBiosName -ne $null -and $LocalRealmKDCNetBiosName -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.KDC01.NetBiosName" $LocalRealmKDCNetBiosName
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.KDC01.NetBiosName" $LocalRealmKDCNetBiosName
 	}
 	if($LocalRealmKDCIPv4Address -ne $null -and $LocalRealmKDCIPv4Address -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.KDC01.IPv4Address" $LocalRealmKDCIPv4Address
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.KDC01.IPv4Address" $LocalRealmKDCIPv4Address
 	}
 	if($LocalRealmKDCPassword -ne $null -and $LocalRealmKDCPassword -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.KDC01.Password" $LocalRealmKDCPassword
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.KDC01.Password" $LocalRealmKDCPassword
 	}
 	if($LocalRealmClientNetBiosName -ne $null -and $LocalRealmClientNetBiosName -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.ClientComputer.NetBiosName" $LocalRealmClientNetBiosName 
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.ClientComputer.NetBiosName" $LocalRealmClientNetBiosName 
 	}
 	if($LocalRealmClientPassword -ne $null -and $LocalRealmClientPassword -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.ClientComputer.Password" $LocalRealmClientPassword
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.ClientComputer.Password" $LocalRealmClientPassword
 	}
 	if($LocalRealmClientIPv4Address -ne $null -and $LocalRealmClientIPv4Address -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.ClientComputer.IPv4Address" $LocalRealmClientIPv4Address
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.ClientComputer.IPv4Address" $LocalRealmClientIPv4Address
 	}
 	if($LocalRealmAuthNotRequiredFQDN -ne $null -and $LocalRealmAuthNotRequiredFQDN -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.AuthNotRequired.FQDN" $LocalRealmAuthNotRequiredFQDN
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.AuthNotRequired.FQDN" $LocalRealmAuthNotRequiredFQDN
 	}
 	if($LocalRealmAuthNotRequiredNetBiosName -ne $null -and $LocalRealmAuthNotRequiredNetBiosName -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.AuthNotRequired.NetBiosName" $LocalRealmAuthNotRequiredNetBiosName
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.AuthNotRequired.NetBiosName" $LocalRealmAuthNotRequiredNetBiosName
 	}
 	if($LocalRealmAuthNotRequiredPassword -ne $null -and $LocalRealmAuthNotRequiredPassword -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.AuthNotRequired.Password" $LocalRealmAuthNotRequiredPassword
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.AuthNotRequired.Password" $LocalRealmAuthNotRequiredPassword
 	}
 	if($LocalRealmAuthNotRequiredDefaultServiceName -ne $null -and $LocalRealmAuthNotRequiredDefaultServiceName -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.AuthNotRequired.DefaultServiceName" $LocalRealmAuthNotRequiredDefaultServiceName
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.AuthNotRequired.DefaultServiceName" $LocalRealmAuthNotRequiredDefaultServiceName
 	}
 	if($LocalRealmAuthNotRequiredServiceSalt -ne $null -and $LocalRealmAuthNotRequiredServiceSalt -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.AuthNotRequired.ServiceSalt" $LocalRealmAuthNotRequiredServiceSalt
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.AuthNotRequired.ServiceSalt" $LocalRealmAuthNotRequiredServiceSalt
 	}
 	if($LocalRealmLocalResource01FQDN -ne $null -and $LocalRealmLocalResource01FQDN -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LocalResource01.FQDN" $LocalRealmLocalResource01FQDN
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LocalResource01.FQDN" $LocalRealmLocalResource01FQDN
 	}
 	if($LocalRealmLocalResource01NetBiosName -ne $null -and $LocalRealmLocalResource01NetBiosName -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LocalResource01.NetBiosName" $LocalRealmLocalResource01NetBiosName
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LocalResource01.NetBiosName" $LocalRealmLocalResource01NetBiosName
 	}
 	if($LocalRealmLocalResource01Password -ne $null -and $LocalRealmLocalResource01Password -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LocalResource01.Password" $LocalRealmLocalResource01Password
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LocalResource01.Password" $LocalRealmLocalResource01Password
 	}
 	if($LocalRealmLocalResource01DefaultServiceName -ne $null -and $LocalRealmLocalResource01DefaultServiceName -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LocalResource01.DefaultServiceName" $LocalRealmLocalResource01DefaultServiceName
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LocalResource01.DefaultServiceName" $LocalRealmLocalResource01DefaultServiceName
 	}
 	if($LocalRealmLocalResource01ServiceSalt -ne $null -and $LocalRealmLocalResource01ServiceSalt -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LocalResource01.ServiceSalt" $LocalRealmLocalResource01ServiceSalt
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LocalResource01.ServiceSalt" $LocalRealmLocalResource01ServiceSalt
 	}
 	if($LocalRealmLocalResource02FQDN -ne $null -and $LocalRealmLocalResource02FQDN -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LocalResource02.FQDN" $LocalRealmLocalResource02FQDN
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LocalResource02.FQDN" $LocalRealmLocalResource02FQDN
 	}
 	if($LocalRealmLocalResource02NetBiosName -ne $null -and $LocalRealmLocalResource02NetBiosName -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LocalResource02.NetBiosName" $LocalRealmLocalResource02NetBiosName
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LocalResource02.NetBiosName" $LocalRealmLocalResource02NetBiosName
 	}
 	if($LocalRealmLocalResource02Password -ne $null -and $LocalRealmLocalResource02Password -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LocalResource02.Password" $LocalRealmLocalResource02Password
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LocalResource02.Password" $LocalRealmLocalResource02Password
 	}
 	if($LocalRealmLocalResource02DefaultServiceName -ne $null -and $LocalRealmLocalResource02DefaultServiceName -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LocalResource02.DefaultServiceName" $LocalRealmLocalResource02DefaultServiceName
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LocalResource02.DefaultServiceName" $LocalRealmLocalResource02DefaultServiceName
 	}
 	if($LocalRealmLocalResource02ServiceSalt -ne $null -and $LocalRealmLocalResource02ServiceSalt -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LocalResource02.ServiceSalt" $LocalRealmLocalResource02ServiceSalt
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LocalResource02.ServiceSalt" $LocalRealmLocalResource02ServiceSalt
 	}
 	if($LocalRealmWebServerNetBiosName -ne $null -and $LocalRealmWebServerNetBiosName -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.WebServer01.NetBiosName" $LocalRealmWebServerNetBiosName
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.WebServer01.NetBiosName" $LocalRealmWebServerNetBiosName
 	}
 	if($LocalRealmWebServerPassword -ne $null -and $LocalRealmWebServerPassword -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.WebServer01.Password" $LocalRealmWebServerPassword
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.WebServer01.Password" $LocalRealmWebServerPassword
 	}
 	if($LocalRealmWebServerIPv4Address -ne $null -and $LocalRealmWebServerIPv4Address -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.WebServer01.IPv4Address" $LocalRealmWebServerIPv4Address
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.WebServer01.IPv4Address" $LocalRealmWebServerIPv4Address
 	}
 	if($LocalRealmFileShareNetBiosName -ne $null -and $LocalRealmFileShareNetBiosName -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.FileServer01.NetBiosName" $LocalRealmFileShareNetBiosName
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.FileServer01.NetBiosName" $LocalRealmFileShareNetBiosName
 	}
 	if($LocalRealmFileSharePassword -ne $null -and $LocalRealmFileSharePassword -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.FileServer01.Password" $LocalRealmFileSharePassword
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.FileServer01.Password" $LocalRealmFileSharePassword
 	}
 	if($LocalRealmFileShareIPv4Address -ne $null -and $LocalRealmFileShareIPv4Address -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.FileServer01.IPv4Address" $LocalRealmFileShareIPv4Address
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.FileServer01.IPv4Address" $LocalRealmFileShareIPv4Address
 	}
 
 	$OS2012 = "6.2"
@@ -577,216 +579,216 @@ Function Config-Driver
 	if($SUTOSVersion -eq $OS2012)
 	{
 		Write-ConfigLog "Smb2Dialect is change to Smb30" -ForegroundColor Yellow
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.FileServer01.Smb2Dialect" "Smb30"
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.FileServer01.Smb2Dialect" "Smb30"
 	}
 
 	if($LocalRealmLdapServerNetBiosName -ne $null -and $LocalRealmLdapServerNetBiosName -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LdapServer01.NetBiosName" $LocalRealmLdapServerNetBiosName
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LdapServer01.NetBiosName" $LocalRealmLdapServerNetBiosName
 	}
 	if($LocalRealmLdapServerPassword -ne $null -and $LocalRealmLdapServerPassword -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LdapServer01.Password" $LocalRealmLdapServerPassword
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LdapServer01.Password" $LocalRealmLdapServerPassword
 	}
 	if($LocalRealmLdapServerIPv4Address -ne $null -and $LocalRealmLdapServerIPv4Address -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LdapServer01.IPv4Address" $LocalRealmLdapServerIPv4Address
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LdapServer01.IPv4Address" $LocalRealmLdapServerIPv4Address
 	} 
 	if($LocalRealmResourceGroup01Name -ne $null -and $LocalRealmResourceGroup01Name -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.resourceGroups.resourceGroup01.GroupName" $LocalRealmResourceGroup01Name
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.resourceGroups.resourceGroup01.GroupName" $LocalRealmResourceGroup01Name
 	}
 	if($LocalRealmResourceGroup02Name -ne $null -and $LocalRealmResourceGroup02Name -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.resourceGroups.resourceGroup02.GroupName" $LocalRealmResourceGroup02Name
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.resourceGroups.resourceGroup02.GroupName" $LocalRealmResourceGroup02Name
 	}
 	if($LocalRealmAdministratorUsername -ne $null -and $LocalRealmAdministratorUsername -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.Admin.Username" $LocalRealmAdministratorUsername
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.Admin.Username" $LocalRealmAdministratorUsername
 	}
 	if($LocalRealmAdministratorPassword -ne $null -and $LocalRealmAdministratorPassword -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.Admin.Password" $LocalRealmAdministratorPassword
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.Admin.Password" $LocalRealmAdministratorPassword
 	}
 	if($LocalRealmUser01Username -ne $null -and $LocalRealmUser01Username -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User01.Username" $LocalRealmUser01Username
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User01.Username" $LocalRealmUser01Username
 	}
 	if($LocalRealmUser01Password -ne $null -and $LocalRealmUser01Password -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User01.Password" $LocalRealmUser01Password
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User01.Password" $LocalRealmUser01Password
 	}
 	if($LocalRealmUser02Username -ne $null -and $LocalRealmUser02Username -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User02.Username" $LocalRealmUser02Username
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User02.Username" $LocalRealmUser02Username
 	}
 	if($LocalRealmUser02Password -ne $null -and $LocalRealmUser02Password -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User02.Password" $LocalRealmUser02Password
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User02.Password" $LocalRealmUser02Password
 	}
 	if($LocalRealmUser03Username -ne $null -and $LocalRealmUser03Username -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User03.Username" $LocalRealmUser03Username
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User03.Username" $LocalRealmUser03Username
 	}
 	if($LocalRealmUser03Password -ne $null -and $LocalRealmUser03Password -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User03.Password" $LocalRealmUser03Password
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User03.Password" $LocalRealmUser03Password
 	}
 	if($LocalRealmUser04Username -ne $null -and $LocalRealmUser04Username -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User04.Username" $LocalRealmUser04Username
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User04.Username" $LocalRealmUser04Username
 	}
 	if($LocalRealmUser04Password -ne $null -and $LocalRealmUser04Password -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User04.Password" $LocalRealmUser04Password
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User04.Password" $LocalRealmUser04Password
 	}
 	if($LocalRealmUser05Username -ne $null -and $LocalRealmUser05Username -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User05.Username" $LocalRealmUser05Username
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User05.Username" $LocalRealmUser05Username
 	}
 	if($LocalRealmUser05Password -ne $null -and $LocalRealmUser05Password -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User05.Password" $LocalRealmUser05Password
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User05.Password" $LocalRealmUser05Password
 	}
 	if($LocalRealmUser06Username -ne $null -and $LocalRealmUser06Username -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User06.Username" $LocalRealmUser06Username
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User06.Username" $LocalRealmUser06Username
 	}
 	if($LocalRealmUser06Password -ne $null -and $LocalRealmUser06Password -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User06.Password" $LocalRealmUser06Password
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User06.Password" $LocalRealmUser06Password
 	}
 	if($LocalRealmUser07Username -ne $null -and $LocalRealmUser07Username -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User07.Username" $LocalRealmUser07Username
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User07.Username" $LocalRealmUser07Username
 	}
 	if($LocalRealmUser07Password -ne $null -and $LocalRealmUser07Password -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User07.Password" $LocalRealmUser07Password
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User07.Password" $LocalRealmUser07Password
 	}
 	if($LocalRealmUser08Username -ne $null -and $LocalRealmUser08Username -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User08.Username" $LocalRealmUser08Username
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User08.Username" $LocalRealmUser08Username
 	}
 	if($LocalRealmUser08Password -ne $null -and $LocalRealmUser08Password -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User08.Password" $LocalRealmUser08Password
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User08.Password" $LocalRealmUser08Password
 	}
 	if($LocalRealmUser09Username -ne $null -and $LocalRealmUser09Username -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User09.Username" $LocalRealmUser09Username
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User09.Username" $LocalRealmUser09Username
 	}
 	if($LocalRealmUser09Password -ne $null -and $LocalRealmUser09Password -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User09.Password" $LocalRealmUser09Password
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User09.Password" $LocalRealmUser09Password
 	}
 	if($LocalRealmUser10Username -ne $null -and $LocalRealmUser10Username -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User10.Username" $LocalRealmUser10Username
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User10.Username" $LocalRealmUser10Username
 	}
 	if($LocalRealmUser10Password -ne $null -and $LocalRealmUser10Password -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User10.Password" $LocalRealmUser10Password
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User10.Password" $LocalRealmUser10Password
 	}
 	if($LocalRealmUser11Username -ne $null -and $LocalRealmUser11Username -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User11.Username" $LocalRealmUser11Username
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User11.Username" $LocalRealmUser11Username
 	}
 	if($LocalRealmUser11Password -ne $null -and $LocalRealmUser11Password -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User11.Password" $LocalRealmUser11Password
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User11.Password" $LocalRealmUser11Password
 	}
 	if($LocalRealmUser12Username -ne $null -and $LocalRealmUser12Username -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User12.Username" $LocalRealmUser12Username
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User12.Username" $LocalRealmUser12Username
 	}
 	if($LocalRealmUser12Password -ne $null -and $LocalRealmUser12Password -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User12.Password" $LocalRealmUser12Password
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User12.Password" $LocalRealmUser12Password
 	}
 	if($LocalRealmUser13Username -ne $null -and $LocalRealmUser13Username -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User13.Username" $LocalRealmUser13Username
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User13.Username" $LocalRealmUser13Username
 	}
 	if($LocalRealmUser13Password -ne $null -and $LocalRealmUser13Password -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User13.Password" $LocalRealmUser13Password
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.Users.User13.Password" $LocalRealmUser13Password
 	}
 	if($TrustRealmName -ne $null -and $TrustRealmName -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.RealmName" $TrustRealmName
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.RealmName" $TrustRealmName
 	}
 	if($TrustRealmKDCNetBiosName -ne $null -and $TrustRealmKDCNetBiosName -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.KDC01.NetBiosName" $TrustRealmKDCNetBiosName
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.KDC01.NetBiosName" $TrustRealmKDCNetBiosName
 	}
 	if($TrustRealmKDCPassword -ne $null -and $TrustRealmKDCPassword -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.KDC01.Password" $TrustRealmKDCPassword
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.KDC01.Password" $TrustRealmKDCPassword
 	}
 	if($TrustRealmKDCIPv4Address -ne $null -and $TrustRealmKDCIPv4Address -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.KDC01.IPv4Address" $TrustRealmKDCIPv4Address
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.KDC01.IPv4Address" $TrustRealmKDCIPv4Address
 	}
 	if($TrustRealmWebServerNetBiosName -ne $null -and $TrustRealmWebServerNetBiosName -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.WebServer01.NetBiosName" $TrustRealmWebServerNetBiosName
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.WebServer01.NetBiosName" $TrustRealmWebServerNetBiosName
 	}
 	if($TrustRealmWebServerPassword -ne $null -and $TrustRealmWebServerPassword -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.WebServer01.Password" $TrustRealmWebServerPassword
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.WebServer01.Password" $TrustRealmWebServerPassword
 	}
 	if($TrustRealmWebServerIPv4Address -ne $null -and $TrustRealmWebServerIPv4Address -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.WebServer01.IPv4Address" $TrustRealmWebServerIPv4Address
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.WebServer01.IPv4Address" $TrustRealmWebServerIPv4Address
 	}
 	if($TrustRealmFileShareNetBiosName -ne $null -and $TrustRealmFileShareNetBiosName -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.FileServer01.NetBiosName" $TrustRealmFileShareNetBiosName
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.FileServer01.NetBiosName" $TrustRealmFileShareNetBiosName
 	}
 	if($TrustRealmFileSharePassword -ne $null -and $TrustRealmFileSharePassword -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.FileServer01.Password" $TrustRealmFileSharePassword
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.FileServer01.Password" $TrustRealmFileSharePassword
 	}
 	if($TrustRealmFileShareIPv4Address -ne $null -and $TrustRealmFileShareIPv4Address -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.FileServer01.IPv4Address" $TrustRealmFileShareIPv4Address
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.FileServer01.IPv4Address" $TrustRealmFileShareIPv4Address
 	}
 	if($TrustRealmLdapServerNetBiosName -ne $null -and $TrustRealmLdapServerNetBiosName -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.LdapServer01.NetBiosName" $TrustRealmLdapServerNetBiosName
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.LdapServer01.NetBiosName" $TrustRealmLdapServerNetBiosName
 	}
 	if($TrustRealmLdapServerPassword -ne $null -and $TrustRealmLdapServerPassword -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.LdapServer01.Password" $TrustRealmLdapServerPassword
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.LdapServer01.Password" $TrustRealmLdapServerPassword
 	}
 	if($TrustRealmLdapServerIPv4Address -ne $null -and $TrustRealmLdapServerIPv4Address -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.LdapServer01.IPv4Address" $TrustRealmLdapServerIPv4Address
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.LdapServer01.IPv4Address" $TrustRealmLdapServerIPv4Address
 	}
 	if($TrustRealmAdministratorUsername -ne $null -and $TrustRealmAdministratorUsername -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.Users.Admin.Username" $TrustRealmAdministratorUsername
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.Users.Admin.Username" $TrustRealmAdministratorUsername
 	}
 	if($TrustRealmAdministratorPassword -ne $null -and $TrustRealmAdministratorPassword -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.Users.Admin.Password" $TrustRealmAdministratorPassword
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.Users.Admin.Password" $TrustRealmAdministratorPassword
 	}
 	if($TrustRealmUser01Username -ne $null -and $TrustRealmUser01Username -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.Users.User01.Username" $TrustRealmUser01Username
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.Users.User01.Username" $TrustRealmUser01Username
 	}
 	if($TrustRealmUser01Password -ne $null -and $TrustRealmUser01Password -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.Users.User01.Password" $TrustRealmUser01Password
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.Users.User01.Password" $TrustRealmUser01Password
 	}
 	if($TrustRealmUser02Username -ne $null -and $TrustRealmUser02Username -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.Users.User02.Username" $TrustRealmUser02Username
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.Users.User02.Username" $TrustRealmUser02Username
 	}
 	if($TrustRealmUser02Password -ne $null -and $TrustRealmUser02Password -ne "")
 	{
-		.\Scripts\Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.Users.User02.Password" $TrustRealmUser02Password
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.Users.User02.Password" $TrustRealmUser02Password
 	}
 
 	#-----------------------------------------------------------------------------------------------
@@ -822,7 +824,7 @@ Function Main
     Init-Environment
 	
     # Update ParamConfig.xml
-	.\Scripts\UpdateConfigFile.ps1
+	UpdateConfigFile.ps1 -WorkingPath $WorkingPath
 	
 	Config-Driver
 	
