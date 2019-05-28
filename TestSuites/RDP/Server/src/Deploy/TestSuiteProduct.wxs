@@ -134,7 +134,6 @@
               <Directory Id="TESTSUITE_ROOT_DIR" Name="!(wix.TESTSUITE_VERSION)">
                 <Directory Id="TESTSUITE_BATCH_DIR" Name="Batch" />
                 <Directory Id="TESTSUITE_BIN_DIR" Name="Bin" />
-                <Directory Id="DOCS_FILES_DIR" Name="Docs" />
                 <Directory Id="TESTSUITE_COMMON_SCRIPTS_DIR" Name="Batch" />
                 <Directory Id="TESTSUITE_SCRIPTS_DIR" Name="Scripts" />
               </Directory>
@@ -257,7 +256,6 @@
       <ComponentRef Id="DesktopShortcuts" />
       <ComponentGroupRef Id="BATCH_FILES" />
       <ComponentGroupRef Id="COMMON_BATCH_FILES" />
-      <ComponentGroupRef Id="DOCS_FILES" />
       <ComponentGroupRef Id="TESTSUITE_SCRIPTS_FILES" />
       <ComponentGroupRef Id="TESTSUITE_MISC_FILES"/>
       <ComponentGroupRef Id="TESTSUITE_PTFCONFIG_FILES"/>
