@@ -13,10 +13,23 @@ Param
 	$WorkingPath      	 = "C:\Temp"
 )
 
+$ConfigFile = "c:\temp\Protocol.xml"
 $Parameters              = @{}
 $CurrentScriptPath 		 = $MyInvocation.MyCommand.Definition
 $ScriptsSignalFile = "$WorkingPath\post.finished.signal" # Config signal file
+$IsAzure                 = $false
 
+try {
+    [xml]$content = Get-Content $ConfigFile -ErrorAction Stop
+    $currentCore = $content.lab.core
+    if(![string]::IsNullOrEmpty($currentCore.regressiontype) -and ($currentCore.regressiontype -eq "Azure")){
+        $IsAzure = $true;
+        $ScriptsSignalFile = "C:\PostScript.Completed.signal"
+    }
+}
+catch {
+    
+}
 #------------------------------------------------------------------------------------------
 # Function: Write-ConfigLog
 # Write information to log file
@@ -39,8 +52,13 @@ Function Write-ConfigLog
 Function Read-ConfigParameters()
 {
     Write-ConfigLog "Getting the parameters from environment config file..." -ForegroundColor Yellow
-    $VMName = .\GetVMNameByComputerName.ps1
-    .\GetVmParameters.ps1 -VMName $VMName -RefParamArray ([ref]$Parameters)
+    if($IsAzure)
+    {
+        .\GetVmParametersByComputerName.ps1 -RefParamArray ([ref]$Parameters)
+    } else {
+        $VMName = .\GetVMNameByComputerName.ps1
+        .\GetVmParameters.ps1 -VMName $VMName -RefParamArray ([ref]$Parameters)
+    }
     $Parameters
 }
 
@@ -62,10 +80,13 @@ Function Config-Phase1()
     Write-ConfigLog "Setting execution policy..." -ForegroundColor Yellow
     .\Set-ExecutionPolicy-Unrestricted.ps1
 
-    # Set network configurations
-    Write-ConfigLog "Setting network configurations..." -ForegroundColor Yellow
-    .\Set-NetworkConfiguration.ps1 -IPAddress $Parameters["ip"] -SubnetMask $Parameters["subnet"] -Gateway $Parameters["gateway"] -DNS ($Parameters["dns"].Split(';'))
-
+    if(-not $IsAzure)
+    {
+        # Set network configurations
+        Write-ConfigLog "Setting network configurations..." -ForegroundColor Yellow
+        .\Set-NetworkConfiguration.ps1 -IPAddress $Parameters["ip"] -SubnetMask $Parameters["subnet"] -Gateway $Parameters["gateway"] -DNS ($Parameters["dns"].Split(';'))
+    }
+    
     # Get domain account
     Write-ConfigLog "Trying to get the domain account" -ForegroundColor Yellow
     $DomainParameters = @{}
@@ -83,7 +104,9 @@ Function Config-Phase1()
 	# Turn off firewall
     Write-ConfigLog "Turn off firewall..." -ForegroundColor Yellow
     .\Disable_Firewall.ps1
-	
+    
+
+    
     # Register Windbg dbgsrv
     if($EnableDebugging)
     {
@@ -116,7 +139,7 @@ Function Main
 	cmd /C ECHO CONFIG FINISHED > $ScriptsSignalFile
 
 	Sleep 5
-	Restart-Computer
+	Restart-Computer -Force
 }
 
 Main
