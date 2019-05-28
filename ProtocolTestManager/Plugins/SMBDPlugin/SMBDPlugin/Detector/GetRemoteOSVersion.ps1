@@ -4,8 +4,8 @@
 # This script is used to get the OS version of SUT computer
 # Return Value: OS version string or $null if failed
 
-$pwdConverted = ConvertTo-SecureString $ptfpropSUTUserPassword -AsPlainText -Force
-$cred = New-Object System.Management.Automation.PSCredential "$ptfpropDomainName\$ptfpropSUTUserName", $pwdConverted -ErrorAction Stop
+$pwdConverted = ConvertTo-SecureString $ptfprop_SUTUserPassword -AsPlainText -Force
+$cred = New-Object System.Management.Automation.PSCredential "$ptfprop_DomainName\$ptfprop_SUTUserName", $pwdConverted -ErrorAction Stop
 
 $scriptblock = {
 	try {
@@ -21,7 +21,7 @@ $scriptblock = {
 }
 
 try{
-	$cmdOutput = Invoke-Command -ComputerName $ptfpropSUTName -credential $cred -ScriptBlock $scriptblock
+	$cmdOutput = Invoke-Command -ComputerName $ptfprop_SUTName -credential $cred -ScriptBlock $scriptblock
 
 	return $cmdOutput  #operation succeed
 }

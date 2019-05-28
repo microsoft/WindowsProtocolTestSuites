@@ -333,6 +333,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             private CompressionAlgorithm compressionAlgorithmForTest;
             private byte[] testData;
 
+            /// <summary>
+            /// Generate a series of compression test runner with given test variant.
+            /// </summary>
+            /// <param name="variant">Compression test variant to use.</param>
+            /// <returns></returns>
             public static CompressionTestRunner[] Generate(CompressionTestVariant variant)
             {
                 CompressionTestRunner[] result = null;
@@ -406,6 +411,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 return result;
             }
 
+            /// <summary>
+            /// Run compression test against given input parameters.
+            ///     1. Write testData to test file given by treeId and fileId, and compress message based on compressWriteRequest using compressionAlgorithmForTest.
+            ///     2. Read out the data just written, and request compressing READ response message based on compressReadRequest.
+            ///     3. Check whether the READ response based on readResponseShouldBeCompressed.
+            ///     4. Check whether data read out is equal to test data.
+            /// </summary>
+            /// <param name="client">SMB2 functional client to use.</param>
+            /// <param name="treeId">TreeId to use.</param>
+            /// <param name="fileId">FileId to use.</param>
             public void Run(Smb2FunctionalClient client, uint treeId, FILEID fileId)
             {
                 if (compressionAlgorithmForTest != CompressionAlgorithm.NONE)

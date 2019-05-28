@@ -4,9 +4,9 @@
 #This script is used to trigger RDP client initiate a disconnection of current session.
 
 # Check SUT started the PS Remoting
-$isSutPSRemotingStarted = .\Check-PSRemoting.ps1 $PtfPropSUTName
+$isSutPSRemotingStarted = .\Check-PSRemoting.ps1 $PtfProp_SUTName
 if(-not $isSutPSRemotingStarted) {return -1}
 
 # Run task to simulate a client initiated disconnect request
-$returnValue = .\Run-TaskWithPSRemoting.ps1 $PtfPropSUTName $PtfPropTriggerClientDisconnectAll_Task $PtfPropSUTUserName $PtfPropSUTUserPassword
+$returnValue = .\Run-TaskWithPSRemoting.ps1 $PtfProp_SUTName $PtfProp_TriggerClientDisconnectAll_Task $PtfProp_SUTUserName $PtfProp_SUTUserPassword
 return $returnValue

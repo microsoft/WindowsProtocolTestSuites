@@ -13,7 +13,7 @@
 #-------------------------------------------------------------------------------------#
 # Create $logFile if not exist
 #-------------------------------------------------------------------------------------#
-[string]$logPath = $PtfPropDriverLogPath
+[string]$logPath = $PtfProp_DriverLogPath
 if ($logPath -eq $null -or $LogPath -eq "")
 {
 	$logPath = "..\Logs"

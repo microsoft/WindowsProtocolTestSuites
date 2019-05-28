@@ -154,6 +154,8 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
         public string shareSupportingIntegrityInfo;
 
+        public List<CompressionAlgorithm> supportedCompresionAlgorithms = new List<CompressionAlgorithm>(); 
+
         #endregion
 
         /// <summary>

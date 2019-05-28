@@ -12,18 +12,18 @@
 ##
 ##############################################################################
 
-[string]$clientComputerName  = $PtfPropClientIP
-[string]$clientAdminUserName = $PtfPropClientAdminUsername
-[string]$clientAdminPwd      = $PtfPropClientAdminPwd
-[string]$scriptPath          = $PtfPropClientScriptPath
-[string]$fullDomainName      = $PtfPropFullDomainName
-[string]$domainAdminUserName = $PtfPropDomainAdminUsername
-[string]$domainAdminPwd      = $PtfPropDomainAdminPwd
+[string]$clientComputerName  = $PtfProp_ClientIP
+[string]$clientAdminUserName = $PtfProp_ClientAdminUsername
+[string]$clientAdminPwd      = $PtfProp_ClientAdminPwd
+[string]$scriptPath          = $PtfProp_ClientScriptPath
+[string]$fullDomainName      = $PtfProp_FullDomainName
+[string]$domainAdminUserName = $PtfProp_DomainAdminUsername
+[string]$domainAdminPwd      = $PtfProp_DomainAdminPwd
 
 #-------------------------------------------------------------------------------------#
 # Create $logFile if not exist
 #-------------------------------------------------------------------------------------#
-[string]$logPath = $PtfDriverPropLogPath
+[string]$logPath = $PtfProp_DriverLogPath
 if ($logPath -eq $null -or $LogPath -eq "")
 {
   $logPath = "..\Logs"

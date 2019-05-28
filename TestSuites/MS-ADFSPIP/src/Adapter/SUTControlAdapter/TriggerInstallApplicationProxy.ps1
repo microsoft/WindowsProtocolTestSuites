@@ -3,12 +3,12 @@
 ## Licensed under the MIT license. See LICENSE file in the project root for full license information.
 ########################################################################################################
 
-$SutIpAddress               = ${PTFPropSUT.SutIPAddress}
-$SutAdminUserName           = ${PTFPropSUT.Username}
-$SutAdminPassword           = ${PTFPropSUT.Password}
-$AdfsName                   = ${PTFPropADFS.AdfsDns}
-$AdfsCert                   = ${PTFPropADFS.AdfsCert}
-$PfxPwd                     = ${PTFPropCommon.PfxPassword}
+$SutIpAddress               = $PTFProp_SUT_SutIPAddress
+$SutAdminUserName           = $PTFProp_SUT_Username
+$SutAdminPassword           = $PTFProp_SUT_Password
+$AdfsName                   = $PTFProp_ADFS_AdfsDns
+$AdfsCert                   = $PTFProp_ADFS_AdfsCert
+$PfxPwd                     = $PTFProp_Common_PfxPassword
 
 $DomainAdminCred = New-Object System.Management.Automation.PSCredential -ArgumentList $SutAdminUserName,`
                         $(ConvertTo-SecureString -AsPlainText $SutAdminPassword -Force)

@@ -5,8 +5,8 @@
 
 param
 (
-[string]$remoteSignalShare = ${PTFPropCommon.SutShareFolder},
-[string]$remoteFile = ${PTFPropCommon.SutShareFolder} + "proxy.pfx"
+[string]$remoteSignalShare = $PTFProp_Common_SutShareFolder,
+[string]$remoteFile = $PTFProp_Common_SutShareFolder + "proxy.pfx"
 )
 
 $tmp = $remoteSignalShare + "remoteresponse.txt"

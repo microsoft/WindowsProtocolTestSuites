@@ -1,14 +1,14 @@
 # Copyright (c) Microsoft. All rights reserved.
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.-
 
-$sutName      = $PtfPropSutMachineName
-$sharefolder1 = $PtfPropSutNtfsShare1
-$sharefolder2 = $PtfPropSutNtfsShare2
-$sharefolder3 = $PtfPropSutFatShare1
-$sharefolder4 = $PtfPropSutFatShare2
-$testfile1    = $PtfPropSutShareTest1
-$testfile2    = $PtfPropSutShareTest2
-$newfile      = $PtfPropSutShareNewName
+$sutName      = $PtfProp_SutMachineName
+$sharefolder1 = $PtfProp_SutNtfsShare1
+$sharefolder2 = $PtfProp_SutNtfsShare2
+$sharefolder3 = $PtfProp_SutFatShare1
+$sharefolder4 = $PtfProp_SutFatShare2
+$testfile1    = $PtfProp_SutShareTest1
+$testfile2    = $PtfProp_SutShareTest2
+$newfile      = $PtfProp_SutShareNewName
 
 Remove-Item \\$sutName\$sharefolder1\$testfile1 -Force
 Remove-Item \\$sutName\$sharefolder1\$testfile2 -Force

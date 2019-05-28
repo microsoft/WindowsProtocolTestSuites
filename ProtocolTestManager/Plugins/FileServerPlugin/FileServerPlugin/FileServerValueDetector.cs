@@ -282,6 +282,16 @@ namespace Microsoft.Protocols.TestManager.Detector
                 propertiesDic.Add("Common.IsEncryptionSupported", new List<string>() { detectionInfo.smb2Info.SupportedCapabilities.HasFlag(Capabilities_Values.GLOBAL_CAP_ENCRYPTION).ToString().ToLower() });
             }
             propertiesDic.Add("Common.IsRequireMessageSigning", new List<string>() { detectionInfo.smb2Info.IsRequireMessageSigning.ToString().ToLower() });
+
+            if(detectionInfo.supportedCompresionAlgorithms.Count > 0)
+            {
+                propertiesDic.Add("Common.SupportedCompressionAlgorithms", new List<string> { detectionInfo.supportedCompresionAlgorithms.ToString() });
+            }
+            else
+            {
+                propertiesDic.Add("Common.SupportedCompressionAlgorithms", new List<string>() { "NONE" });
+            }
+
             propertiesDic.Add("Common.IsMultiCreditSupported", new List<string>() { detectionInfo.smb2Info.SupportedCapabilities.HasFlag(Capabilities_Values.GLOBAL_CAP_LARGE_MTU).ToString().ToLower() });
             propertiesDic.Add("Common.UnsupportedIoCtlCodes", new List<string>() { GetUnsupportedItems(detectionInfo.unsupportedIoctlCodes) });
             propertiesDic.Add("Common.UnsupportedCreateContexts", new List<string>() { GetUnsupportedItems(detectionInfo.unsupportedCreateContexts) });
@@ -500,6 +510,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             if (detectionInfo.CheckHigherDialect(detectionInfo.smb2Info.MaxSupportedDialectRevision, DialectRevision.Smb311))
             {
                 selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.Encryption", detectionInfo.smb2Info.SelectedCipherID > EncryptionAlgorithm.ENCRYPTION_NONE));
+                selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.Compression", detectionInfo.supportedCompresionAlgorithms.Count > 1 && detectionInfo.supportedCompresionAlgorithms[0] != CompressionAlgorithm.NONE));
             }
             else
             {
@@ -958,6 +969,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             logWriter.AddLog(LogLevel.Information, "Target SUT SMB2 Info:");
             logWriter.AddLog(LogLevel.Information, string.Format("MaxSupportedDialectRevision: {0}", detectionInfo.smb2Info.MaxSupportedDialectRevision));
             logWriter.AddLog(LogLevel.Information, string.Format("SupportedCapabilities: {0}", detectionInfo.smb2Info.SupportedCapabilities));
+            logWriter.AddLog(LogLevel.Information, string.Format("SupportedCompressionAlgorithms: {0}", detectionInfo.smb2Info.SupportedCompressionAlogrithms.ToString()));
             logWriter.AddLineToLog(LogLevel.Information);
 
             return true;
