@@ -1151,6 +1151,23 @@ namespace Microsoft.Protocols.TestManager.Kernel
             }
         }
 
+        private static string ReadFileWithRetry(string filePath, int timeoutInSecond = 10)
+        {
+            var time = Stopwatch.StartNew();
+            while (time.ElapsedMilliseconds < timeoutInSecond * 1000)
+            {
+                try
+                {
+                    return File.ReadAllText(filePath);
+                }
+                catch (IOException e)
+                {
+                }
+            }
+
+            throw new TimeoutException(String.Format("Failed to read {0} within {1}s.", filePath, timeoutInSecond));
+        }
+
         /// <summary>
         /// Parse the file content to get the case status
         /// Result format in file: "Result":"Result: Passed"
@@ -1159,7 +1176,10 @@ namespace Microsoft.Protocols.TestManager.Kernel
         {
             status = TestCaseStatus.NotRun;
 
-            string content = File.ReadAllText(filePath);
+            // The file may be opened exclusively by vstest.console.exe. Retry opening here
+            // to wait for vstest.console.exe writing logs.
+            string content = ReadFileWithRetry(filePath);
+
             int startIndex = content.IndexOf(AppConfig.ResultKeyword);
             startIndex += AppConfig.ResultKeyword.Length;
             int endIndex = content.IndexOf("\"", startIndex);
