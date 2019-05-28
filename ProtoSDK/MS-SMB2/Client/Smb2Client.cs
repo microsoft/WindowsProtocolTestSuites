@@ -351,6 +351,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         #region Events
 
         public event Action<Smb2Packet> PacketSending;
+        public event Action<Smb2Packet> ProcessedPacketModifier;
+        public event Func<byte[], byte[]> OnWirePacketModifier;
         public event Action<Smb2Packet> PacketReceived;
         public event Action Disconnected;
 
@@ -589,14 +591,24 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             }
             else
             {
-                var encryptedBytes = Smb2Crypto.SignCompressAndEncrypt(packet, cryptoInfoTable, CompressionInfo, Smb2Role.Client);
+                var processedPacket = Smb2Crypto.SignCompressAndEncrypt(packet, cryptoInfoTable, CompressionInfo, Smb2Role.Client);
 
-                SendPacket(encryptedBytes);
+                if (ProcessedPacketModifier != null)
+                {
+                    ProcessedPacketModifier(processedPacket);
+                }
+
+                SendPacket(processedPacket.ToBytes());
             }
         }
 
         public virtual void SendPacket(byte[] data)
         {
+            if (OnWirePacketModifier != null)
+            {
+                data = OnWirePacketModifier(data);
+            }
+
             if (transportType == Smb2TransportType.NetBios)
             {
                 try
@@ -1117,7 +1129,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 if (response.NegotiateContext_COMPRESSION != null)
                 {
                     UpdateNegotiateContext(compressionAlgorithms, response);
-
                 }
 
                 // In SMB 311, client use SMB2_ENCRYPTION_CAPABILITIES context to indicate whether it 
@@ -1168,7 +1179,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 // If CompressionAlgorithmCount is 1 and CompressionAlgorithms contains "NONE", the client MUST set Connection.CompressionIds to an empty list.
                 // If Connection.CompressionIds is empty,
                 // Set CompressionAlgorithmCount to 1.
-                // Set CompressionAlgorithms to “NONE
+                // Set CompressionAlgorithms to "NONE".
                 this.CompressionInfo.CompressionIds = response.NegotiateContext_COMPRESSION.Value.CompressionAlgorithms;
             }
             else if (response.NegotiateContext_COMPRESSION.Value.CompressionAlgorithms.Any(compressionAlgorithm => !compressionAlgorithms.Contains(compressionAlgorithm)))

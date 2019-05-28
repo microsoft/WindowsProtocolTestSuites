@@ -98,6 +98,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
             // Check whether compression shrinks the on-wire packet size
             if (compressedPackectBytes.Length < packetBytes.Length)
             {
+                compressedPacket.OriginalPacket = packet;
                 return compressedPacket;
             }
             else

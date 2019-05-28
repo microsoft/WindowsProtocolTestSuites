@@ -134,6 +134,7 @@
     <Compile Include="Basic\MultiCredit.cs" />
     <Compile Include="Basic\SMB2Basic.cs" />
     <Compile Include="Compound\Compound.cs" />
+    <Compile Include="Compression\CompressionTest.cs" />
     <Compile Include="CreateClose\CreateClose.cs" />
     <Compile Include="DurableHandle\SMB2DurableHandleTestBase.cs" />
     <Compile Include="HVRS\MS-FSA_Clarification.cs" />
@@ -172,6 +173,7 @@
     </Content>
     <Content Include="MS-SMB2_ServerTestSuite.ptfconfig" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
     <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\" />
