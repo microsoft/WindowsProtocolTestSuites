@@ -2824,7 +2824,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             bool isImplemented = false;
             byte[] outbuffer = new byte[0];
             UInt32 outBufferSize = this.transBufferSize;
-            FsccFsctlReadFileUsnDataRequestPacket fsccPacket = new FsccFsctlReadFileUsnDataRequestPacket();
 
             // According to different condition, set the buffer size value 
             switch (bufferSize)
@@ -2849,7 +2848,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             MessageStatus returnedStatus = transAdapter.IOControl(
                 (uint)FsControlCommand.FSCTL_READ_FILE_USN_DATA,
                 outBufferSize,
-                fsccPacket.ToBytes(),
+                null,
                 out outbuffer);
 
             if (MessageStatus.SUCCESS == returnedStatus)

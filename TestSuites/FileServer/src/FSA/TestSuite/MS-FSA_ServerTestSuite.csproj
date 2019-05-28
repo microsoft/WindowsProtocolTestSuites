@@ -173,6 +173,7 @@
     <Compile Include="TraditionalTestCases\FsControlRequest\FsCtlTestCases.cs" />
     <Compile Include="TraditionalTestCases\FsControlRequest\FSCTL_GET_COMPRESSION.cs" />
     <Compile Include="TraditionalTestCases\FsControlRequest\FSCTL_GET_INTEGRITY_INFORMATION.cs" />
+    <Compile Include="TraditionalTestCases\FsControlRequest\FSCTL_Get_Volume_Data.cs" />
     <Compile Include="TraditionalTestCases\FsControlRequest\FSCTL_QUERY_ALLOCATED_RANGES.cs" />
     <Compile Include="TraditionalTestCases\FsControlRequest\FSCTL_OFFLOAD_READ.cs" />
     <Compile Include="TraditionalTestCases\FsControlRequest\FSCTL_OFFLOAD_WRITE.cs" />

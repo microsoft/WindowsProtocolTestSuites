@@ -67,14 +67,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                 FileNameStatus.PathNameValid
                 );
 
-            BaseTestSite.Assert.AreEqual(MessageStatus.SUCCESS, status, "Create test file should success.");
+            BaseTestSite.Assert.AreEqual(MessageStatus.SUCCESS, status, "Create test file should succeed.");
 
             uint writeLength = 2 * 1024 * fsaAdapter.ClusterSizeInKB;
 
             long bytesWritten;
             status = fsaAdapter.WriteFile(0, writeLength, out bytesWritten);
 
-            BaseTestSite.Assert.AreEqual(MessageStatus.SUCCESS, status, "Fill up first two clusters should success.");
+            BaseTestSite.Assert.AreEqual(MessageStatus.SUCCESS, status, "Fill up first two clusters should succeed.");
 
 
             //Step 2: FSCTL request with FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX to duplicate the file extent of first cluster to the second.
@@ -99,7 +99,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             byte[] outBuffer;
             status = fsaAdapter.ReadFile(0, readLength, out bytesRead, out outBuffer);
 
-            BaseTestSite.Assert.AreEqual(MessageStatus.SUCCESS, status, "Read should success.");
+            BaseTestSite.Assert.AreEqual(MessageStatus.SUCCESS, status, "Read should succeed.");
 
             BaseTestSite.Assert.AreEqual(readLength, bytesRead, "The length of data read out should be the same as expect to read(2 cluster).");
 
