@@ -176,6 +176,7 @@
     <Compile Include="TraditionalTestCases\FsControlRequest\FSCTL_QUERY_ALLOCATED_RANGES.cs" />
     <Compile Include="TraditionalTestCases\FsControlRequest\FSCTL_OFFLOAD_READ.cs" />
     <Compile Include="TraditionalTestCases\FsControlRequest\FSCTL_OFFLOAD_WRITE.cs" />
+    <Compile Include="TraditionalTestCases\FsControlRequest\FSCTL_QUERY_FILE_REGIONS.cs" />
     <Compile Include="TraditionalTestCases\FsControlRequest\FSCTL_SET_COMPRESSION.cs" />
     <Compile Include="TraditionalTestCases\FsControlRequest\FSCTL_SET_INTEGRITY_INFORMATION.cs" />
     <Compile Include="TraditionalTestCases\FsControlRequest\FSCTL_GET_REPARSE_POINT.cs" />
