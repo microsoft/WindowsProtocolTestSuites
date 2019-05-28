@@ -3,7 +3,7 @@
 
 # This script is used to trigger one touch event on client.
 
-cmd /c schtasks /run /s $PtfPropSUTName /U $PtfPropSUTUserName /P $PtfPropSUTUserPassword /TN $PtfPropTriggerSingleTouchPositionEvent_Task 2>&1 | out-file ".\error.txt"
+cmd /c schtasks /run /s $PtfProp_SUTName /U $PtfProp_SUTUserName /P $PtfProp_SUTUserPassword /TN $PtfProp_TriggerSingleTouchPositionEvent_Task 2>&1 | out-file ".\error.txt"
 
 $cmdError = get-content ".\error.txt"
 if($cmdError -ne $null)

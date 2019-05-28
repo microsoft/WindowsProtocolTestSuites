@@ -69,6 +69,7 @@
 		* [ QueryDir\_Reopen\_OnFile](#3.1.54)
 		* [ Query\_Quota\_Info](#3.1.55)
 		* [ BVT\_SMB2Basic\_Query\_FileAllInformation](#3.1.56)
+        * [ Compression](#3.1.57)
 	* [SMB2 Feature Test](#3.2)
 		* [ AppInstanceId](#3.2.1)
 		* [ AppInstanceVersion](#3.2.2)
@@ -91,6 +92,7 @@
 		* [ CopyOfflaod](#3.2.19)
 		* [ OperateOneFileFromTwoNodes](#3.2.20)
 		* [ MixedOplockLease](#3.2.21)
+		* [ Compression](#3.2.22)
 	* [SMB2 Feature Combination](#3.3)
 		* [ MultipleChannelWithReplay](#3.3.1)
 		* [ MultipleChannelWithEncryption](#3.3.2)
@@ -213,8 +215,8 @@ Test scenarios are categorized as below table and will be described in following
 
 | Category                 | Test Cases | Comments                                                                                                          |
 |--------------------------|------------|-------------------------------------------------------------------------------------------------------------------|
-| SMB2 BVT                 | 80         | SMB2 common scenarios.                                                                                            |
-| SMB2 Feature Test        | 2591       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
+| SMB2 BVT                 | 87         | SMB2 common scenarios.                                                                                            |
+| SMB2 Feature Test        | 2608       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
 | SMB2 Feature Combination | 12         | Extended test with more complex message sequence for new features in SMB 3.0 dialect and later.                   |
 | FSRVP Test               | 14         | Test for MS-FSRVP                                                                                                 |
 | Server Failover Test     | 48         | Test server failover for MS-SMB2, MS-SWN and MS-FSRVP                                                             |
@@ -545,6 +547,18 @@ This is used to test SMB2 common user scenarios.
 | **Prerequisites**        | The server implements dialect 3.11.                                                                                                                                                       |
 | **Test Execution Steps** | 1.  Client send Negotiate request with dialect SMB 3.11, SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context and SMB2\_ENCRYPTION\_CAPABILITIES context with AES-128-GCM preferred.            |
 |                          | 2.  Server returns SMB2 NEGOTIATE response with dialect 3.11 and the correct Ciphers in SMB2\_ENCRYPTION\_CAPABILITIES  context.                                                          |
+| **Cleanup**              |                                                                                                                                                                                           |
+
+
+|                          |                                                                                                                                                       |
+|--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Test ID**              | BVT_Negotiate_SMB311_CompressionEnabled |
+| **Description**          | This test case is designed to test whether server can handle NEGOTIATE with supported compression algorithms in SMB2_COMPRESSION_CAPABILITIES context. |
+| **Prerequisites**        | The server implements dialect 3.11 and compression feature. |
+| **Test Execution Steps** | 1.  Client send Negotiate request with dialect SMB 3.11, SMB2_PREAUTH_INTEGRITY_CAPABILITIES context and SMB2_COMPRESSION_CAPABILITIES context with all supported compression algorithms. |
+|                          | 2.  Server returns SMB2 NEGOTIATE response with the expected SMB2_COMPRESSION_CAPABILITIES, if it supports the compression feature, as below: |
+|                          |     a.  If server is Windows, CompressionAlgorithms is set to the first common algorithm supported by the client and server. |
+|                          |     b.  If server is non-Windows, CompressionAlgorithms is set to all the algorithms in the CompressionAlgorithms field of Negotiate request, in the order they are received. |
 | **Cleanup**              |                                                                                                                                                                                           |
 
 
@@ -2934,6 +2948,95 @@ This is used to test SMB2 common user scenarios.
 |                          | LOGOFF |
 | **Cleanup**              ||
 
+
+#### <a name="3.1.57"> Compression
+
+##### <a name="3.1.57.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Verify whether server can decompress WRITE request and compress read response correctly. |
+| **Message Sequence**          | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                               | 2.  Client write copmressible data to server by sending compressed WRITE request. |
+|                               | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified. | 
+|                               | 4.  Verifies the READ reponse is compressed correctly and data read out are equal to the written one. | 
+|                               | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cluster Involved Scenario** | **NO** |
+
+##### <a name="3.1.57.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT_SMB2Compression_LZNT1 |
+| **Description** | This test case is designed to test whether server can decompress WRITE request and compress read response correctly using LZNT1. |
+| **Prerequisites** | The server implements dialect 3.11 and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to LZNT1; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client write copmressible data to server by sending WRITE request compressed with LZNT1. |
+|                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified. | 
+|                          | 4.  Verifies the READ reponse is compressed with LZNT1 and data read out are equal to the written one. | 
+|                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+| **Test ID** | BVT_SMB2Compression_LZ77 |
+| **Description** | This test case is designed to test whether server can decompress WRITE request and compress read response correctly using LZ77. |
+| **Prerequisites** | The server implements dialect 3.11 and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to LZ77; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client write copmressible data to server by sending WRITE request compressed with LZ77. |
+|                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified. | 
+|                          | 4.  Verifies the READ reponse is compressed with LZ77 and data read out are equal to the written one. | 
+|                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+| **Test ID** | BVT_SMB2Compression_LZ77Huffman |
+| **Description** | This test case is designed to test whether server can decompress WRITE request and compress read response correctly using LZ77 Huffman. |
+| **Prerequisites** | The server implements dialect 3.11 and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to LZ77 Huffman; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client write copmressible data to server by sending WRITE request compressed with LZ77 Huffman. |
+|                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified. | 
+|                          | 4.  Verifies the READ reponse is compressed with LZ77 Huffman and data read out are equal to the written one. | 
+|                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+| **Test ID** | BVT_SMB2Compression_LZNT1_Encrypted |
+| **Description** | This test case is designed to test whether server can decompress WRITE request and compress read response correctly using LZNT1 when encryption is enabled. |
+| **Prerequisites** | The server implements dialect 3.11, encryption and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with global encryption enabled and compression algorithms set to LZNT1; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client write copmressible data to server by sending WRITE request compressed with LZNT1. |
+|                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified. | 
+|                          | 4.  Verifies the READ reponse is compressed with LZNT1 and data read out are equal to the written one. | 
+|                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+| **Test ID** | BVT_SMB2Compression_LZ77_Encrypted |
+| **Description** | This test case is designed to test whether server can decompress WRITE request and compress read response correctly using LZ77 when encryption is enabled. |
+| **Prerequisites** | The server implements dialect 3.11, encryption and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with global encryption enabled and compression algorithms set to LZ77; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client write copmressible data to server by sending WRITE request compressed with LZ77. |
+|                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified. | 
+|                          | 4.  Verifies the READ reponse is compressed with LZ77 and data read out are equal to the written one. | 
+|                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+| **Test ID** | BVT_SMB2Compression_LZ77Huffman_Encrypted |
+| **Description** | This test case is designed to test whether server can decompress WRITE request and compress read response correctly using LZ77 Huffman when encryption is enabled. |
+| **Prerequisites** | The server implements dialect 3.11, encryption and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with global encryption enabled and compression algorithms set to LZ77 Huffman; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client write copmressible data to server by sending WRITE request compressed with LZ77 Huffman. |
+|                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified. | 
+|                          | 4.  Verifies the READ reponse is compressed with LZ77 Huffman and data read out are equal to the written one. | 
+|                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
 ### <a name="3.2">SMB2 Feature Test
 
 Test scenarios are prioritized and designed based on customer interests and SMB3 new features.
@@ -4968,6 +5071,46 @@ Scenario see section [Scenario](#3.1.6.1).
 |**Cleanup**||
 
 
+|||
+|---|---|
+|**Test ID**|Negotiate_SMB311_Compression_CompressionAlgorithmNotSupported|
+|**Description**|This test case is designed to test whether server can handle NEGOTIATE with unsupported compression algorithms in SMB2_COMPRESSION_CAPABILITIES context.|
+|**Prerequisites**|The server implements dialect 3.11 and compression feature.|
+|**Test Execution Steps**|Client Send Negotiate request with dialect SMB 3.11, SMB2_COMPRESSION_CAPABILITIES context and set CompressionAlgorithms to a unsupported value: 0x0004.|
+||Verify that server returns a Negotiate response, setting SMB2_COMPRESSION_CAPABILITIES negotiate response context with CompressionAlgorithmCount set to 1 and CompressionAlgorithms set to "NONE".|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|Negotiate_SMB311_Compression_InvalidSmbDialect|
+|**Description**|This test case is designed to test whether server ignores SMB2_COMPRESSION_CAPABILITIES context when negotiate with SMB dialect less than 3.1.1.|
+|**Prerequisites**|The server implements dialect 3.11 and compression feature.|
+|**Test Execution Steps**|Client Send Negotiate request with dialects less than SMB 3.11, SMB2_COMPRESSION_CAPABILITIES context and set CompressionAlgorithms to all supported compression algorithms.|
+||Verify that server returns a Negotiate response without SMB2_COMPRESSION_CAPABILITIES.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|Negotiate_SMB311_Compression_CompressionContextInvalidDataLength|
+|**Description**|This test case is designed to test whether server handle SMB2_COMPRESSION_CAPABILITIES context with invalid DataLength field when negotiate.|
+|**Prerequisites**|The server implements dialect 3.11 and compression feature.|
+|**Test Execution Steps**|Client Send Negotiate request with dialect SMB 3.11, SMB2_COMPRESSION_CAPABILITIES context and set DataLength to 4 which is less than the size of SMB2_COMPRESSION_CAPABILITIES.|
+||Verify that server returns a Negotiate response with Status set to STATUS_INVALID_PARAMETER.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|Negotiate_SMB311_Compression_CompressionAlgorithmEmpty|
+|**Description**|This test case is designed to test whether server handle SMB2_COMPRESSION_CAPABILITIES context with invalid CompressionAlgorithmCount field when negotiate.|
+|**Prerequisites**|The server implements dialect 3.11 and compression feature.|
+|**Test Execution Steps**|Client Send Negotiate request with dialect SMB 3.11, SMB2_COMPRESSION_CAPABILITIES context and set CompressionAlgorithmCount field to zero.|
+||Verify that server returns a Negotiate response with Status set to STATUS_INVALID_PARAMETER.|
+|**Cleanup**||
+
+
 #### <a name="3.2.10">Oplock
 
 **Oplock** model verifies that server handles Oplock request and acknowledgement correctly when client requests different Oplock levels on various types of shares with a follow-up request break previous Oplock.
@@ -6081,6 +6224,85 @@ N/A
 ##### <a name="3.2.21.2"> Traditional Case
 
 No traditional cases for this feature.
+
+#### <a name="3.2.22"> Compression
+
+**Compression** tests the server behavior of sending and receiving compressed SMB2 messages.
+
+##### <a name="3.2.22.1"> Model
+
+Will not cover this feature in model.
+
+##### <a name="3.2.22.2"> Traditional Case
+
+Scenario see [Scenario](#3.1.57).
+
+|||
+|---|---|
+|**Test ID**| SMB2Compression_CompressedWriteRequest|
+|**Description**| This test case is designed to test whether server can handle compressed WRITE request correctly using supported compression algorithms. |
+| **Prerequisites** | The server implements dialect 3.11 and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to all supported ones; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client iterates through all comression algorithm supported by SUT as below: 
+|                          |         a.  Client write copmressible data to server by sending WRITE request compressed with the given compression algorithm. |
+|                          |         b.  Client read the data just written by sending READ request without SMB2_READFLAG_REQUEST_COMPRESSED specified. | 
+|                          |         c.  Verifies the READ reponse is compressed with supported algorithm and data read out are equal to the written one. | 
+|                          | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+|**Test ID**| SMB2Compression_CompressibleReadResponse |
+|**Description**| This test case is designed to test whether server can compress read request correctly if SMB2_READFLAG_REQUEST_COMPRESSED is specified in request and response is compressible. |
+| **Prerequisites** | The server implements dialect 3.11 and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to all supported ones; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client write copmressible data to server by sending uncompressed WRITE request. |
+|                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified. | 
+|                          | 4.  Verifies the READ reponse is compressed with supported algorithm and data read out are equal to the written one. | 
+|                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+|**Test ID**| SMB2Compression_IncompressibleReadResponse |
+|**Description**| This test case is designed to test whether server will not compress read request if SMB2_READFLAG_REQUEST_COMPRESSED is specified in request and response is incompressible. |
+| **Prerequisites** | The server implements dialect 3.11 and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to all supported ones; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client write incopmressible data to server by sending uncompressed WRITE request. |
+|                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified. | 
+|                          | 4.  Verifies the READ reponse is not compressed with supported algorithm is the reponse is not shrinkable by compression and data read out are equal to the written one. | 
+|                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+|**Test ID**| SMB2Compression_InvalidCompressedPacketLength |
+|**Description**| This test case is designed to test whether server will disconnect the connection if it received a compressed message with invalid length. |
+| **Prerequisites** | The server implements dialect 3.11 and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to all supported ones; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client send a compressed message with invalid length, which is less than the size of SMB2 COMPRESSION_TRANSFORM_HEADER. |
+|                          | 3.  Verifies the SMB2 connection is closed by SUT. | 
+| **Cleanup**              ||
+
+|||
+|---|---|
+|**Test ID**| SMB2Compression_InvalidDecompressedProtocolId |
+|**Description**| This test case is designed to test whether server will disconnect the connection if the ProtocolId in the decompressed message is invalid. |
+| **Prerequisites** | The server implements dialect 3.11 and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to all supported ones; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client send a compressed message with the ProtocolId in the decompressed message is invalid, which is of value 0xFFFFFFFF. |
+|                          | 3.  Verifies the SMB2 connection is closed by SUT. | 
+| **Cleanup**              ||
+
+|||
+|---|---|
+|**Test ID**| SMB2Compression_InvalidCompressionAlgorithm |
+|**Description**| This test case is designed to test whether server will disconnect the connection if the CompressionAlgorithm in the compressed message is invalid. |
+| **Prerequisites** | The server implements dialect 3.11 and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to all supported ones; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client send a compressed message with invalid CompressionAlgorithm with value 0x0004, which should be unsupported by SUT. |
+|                          | 3.  Verifies the SMB2 connection is closed by SUT. | 
+| **Cleanup**              ||
 
 ### <a name="3.3">SMB2 Feature Combination
 

@@ -3,23 +3,16 @@
 ## Licensed under the MIT license. See LICENSE file in the project root for full license information.
 #############################################################
 
-function GetPtfVariable
-{
-    param($name)
-	$v = Get-Variable -Name ("PTFProp"+$name)
-	return $v.Value
-}
-
-$computerName = GetPtfVariable "Common.ENDPOINT.NetbiosName"
-$domainName   = GetPtfVariable "Common.PrimaryDomain.DNSName"
-$domainNetBiosName   = GetPtfVariable "Common.PrimaryDomain.NetBiosName"
+$computerName = $PTFProp_Common_ENDPOINT_NetbiosName
+$domainName   = $PTFProp_Common_PrimaryDomain_DNSName
+$domainNetBiosName   = $PTFProp_Common_PrimaryDomain_NetBiosName
 
 $domainNC = "DC=" + $domainName.Replace(".",",DC=")
 
-$primaryDCName = GetPtfVariable "Common.WritableDC1.NetbiosName"
-$domainUserAccount = GetPtfVariable "Common.DomainAdministratorName"
+$primaryDCName = $PTFProp_Common_WritableDC1_NetbiosName
+$domainUserAccount = $PTFProp_Common_DomainAdministratorName
 $userName = "$domainNetBiosName\$domainUserAccount"
-$password = GetPtfVariable "Common.DomainUserPassword"
+$password = $PTFProp_Common_DomainUserPassword
 #----------------------------------------------------------------------------
 # Get Object instance
 #----------------------------------------------------------------------------

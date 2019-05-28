@@ -767,18 +767,18 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
                 null
                 );
 
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfPropSUTName", detectInfo.SUTName });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfPropSUTUserName", detectInfo.UserNameInTC });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfPropSUTUserPassword", detectInfo.UserPwdInTC });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfPropRDPConnectWithNegotiationAppoachFullScreen_Task", DetectorUtil.GetPropertyValue("RDPConnectWithNegotiationAppoachFullScreen_Task") });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfPropRDPConnectWithDrectCredSSPFullScreen_Task", DetectorUtil.GetPropertyValue("RDPConnectWithDrectCredSSPFullScreen_Task") }); methodSetVariable.Invoke(proxyInstance, new object[] { "PtfPropRDPConnectWithDrectCredSSP_Task", DetectorUtil.GetPropertyValue("RDPConnectWithDrectCredSSP_Task") });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfPropRDPConnectWithDrectTLS_Task", DetectorUtil.GetPropertyValue("RDPConnectWithDrectTLS_Task") });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfPropRDPConnectWithDrectTLSFullScreen_Task", DetectorUtil.GetPropertyValue("RDPConnectWithDrectTLSFullScreen_Task") });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfPropRDPConnectWithNegotiationApproach_Task", DetectorUtil.GetPropertyValue("RDPConnectWithNegotiationApproach_Task") });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfPropTriggerClientDisconnectAll_Task", DetectorUtil.GetPropertyValue("TriggerClientDisconnectAll_Task") });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfPropTriggerClientAutoReconnect_Task", DetectorUtil.GetPropertyValue("TriggerClientAutoReconnect_Task") });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfPropSUTSystemDrive", DetectorUtil.GetPropertyValue("SUTSystemDrive") });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfPropTriggerInputEvents_Task", DetectorUtil.GetPropertyValue("TriggerInputEvents_Task") });
+            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfProp_SUTName", detectInfo.SUTName });
+            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfProp_SUTUserName", detectInfo.UserNameInTC });
+            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfProp_SUTUserPassword", detectInfo.UserPwdInTC });
+            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfProp_RDPConnectWithNegotiationAppoachFullScreen_Task", DetectorUtil.GetPropertyValue("RDPConnectWithNegotiationAppoachFullScreen_Task") });
+            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfProp_RDPConnectWithDrectCredSSPFullScreen_Task", DetectorUtil.GetPropertyValue("RDPConnectWithDrectCredSSPFullScreen_Task") }); methodSetVariable.Invoke(proxyInstance, new object[] { "PtfProp_RDPConnectWithDrectCredSSP_Task", DetectorUtil.GetPropertyValue("RDPConnectWithDrectCredSSP_Task") });
+            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfProp_RDPConnectWithDrectTLS_Task", DetectorUtil.GetPropertyValue("RDPConnectWithDrectTLS_Task") });
+            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfProp_RDPConnectWithDrectTLSFullScreen_Task", DetectorUtil.GetPropertyValue("RDPConnectWithDrectTLSFullScreen_Task") });
+            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfProp_RDPConnectWithNegotiationApproach_Task", DetectorUtil.GetPropertyValue("RDPConnectWithNegotiationApproach_Task") });
+            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfProp_TriggerClientDisconnectAll_Task", DetectorUtil.GetPropertyValue("TriggerClientDisconnectAll_Task") });
+            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfProp_TriggerClientAutoReconnect_Task", DetectorUtil.GetPropertyValue("TriggerClientAutoReconnect_Task") });
+            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfProp_SUTSystemDrive", DetectorUtil.GetPropertyValue("SUTSystemDrive") });
+            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfProp_TriggerInputEvents_Task", DetectorUtil.GetPropertyValue("TriggerInputEvents_Task") });
 
             Type pipelineType = sysMgmtAutoAssembly.GetType("System.Management.Automation.Runspaces.Pipeline");
             object pipelineInstance = runspaceType.InvokeMember(

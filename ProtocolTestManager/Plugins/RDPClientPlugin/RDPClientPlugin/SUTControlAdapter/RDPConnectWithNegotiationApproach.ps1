@@ -6,9 +6,9 @@
 # CredSSP or RDP standard security protocol.
 
 # Check SUT started the PS Remoting
-$isSutPSRemotingStarted = .\Check-PSRemoting.ps1 $PtfPropSUTName
+$isSutPSRemotingStarted = .\Check-PSRemoting.ps1 $PtfProp_SUTName
 if(-not $isSutPSRemotingStarted) {return -1}
 
 # Run task to start RDP connection remotely
-$returnValue = .\Run-TaskWithPSRemoting.ps1 $PtfPropSUTName $PtfPropRDPConnectWithNegotiationApproach_Task $PtfPropSUTUserName $PtfPropSUTUserPassword
+$returnValue = .\Run-TaskWithPSRemoting.ps1 $PtfProp_SUTName $PtfProp_RDPConnectWithNegotiationApproach_Task $PtfProp_SUTUserName $PtfProp_SUTUserPassword
 return $returnValue

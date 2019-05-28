@@ -26,10 +26,10 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
                     runspace.Open();
 
-                    runspace.SessionStateProxy.SetVariable("PtfPropSUTName", DetectionInfo.SUTName);
-                    runspace.SessionStateProxy.SetVariable("PtfPropDomainName", DetectionInfo.DomainName);
-                    runspace.SessionStateProxy.SetVariable("PtfPropSUTUserName", DetectionInfo.UserName);
-                    runspace.SessionStateProxy.SetVariable("PtfPropSUTUserPassword", DetectionInfo.Password);
+                    runspace.SessionStateProxy.SetVariable("PtfProp_SUTName", DetectionInfo.SUTName);
+                    runspace.SessionStateProxy.SetVariable("PtfProp_DomainName", DetectionInfo.DomainName);
+                    runspace.SessionStateProxy.SetVariable("PtfProp_SUTUserName", DetectionInfo.UserName);
+                    runspace.SessionStateProxy.SetVariable("PtfProp_SUTUserPassword", DetectionInfo.Password);
 
                     using (var pipeline = runspace.CreatePipeline())
                     {

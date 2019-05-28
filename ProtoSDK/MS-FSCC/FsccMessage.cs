@@ -269,12 +269,129 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         ///   file or directory was closed. This FSCTL can be called independently of the actual file close operation 
         /// to  write a USN record and cause a post of any pending USN updates for the indicated file. 
         /// </summary>
-        FSCTL_WRITE_USN_CLOSE_RECORD = 0x900ef
+        FSCTL_WRITE_USN_CLOSE_RECORD = 0x900ef,
+
+        /// <summary>
+        /// The FSCTL_QUERY_FILE_REGIONS request message requests that the server return a list of file regions, based 
+        /// on a specified usage parameter, for the file associated with the handle on which this FSCTL was invoked. 
+        /// </summary>
+        FSCTL_QUERY_FILE_REGIONS = 0x90284,
     }
 
     #endregion
 
     #region FSCTL Structures
+
+    /// <summary>
+    /// There is a DesiredUsage field in both FILE_REGION_INPUT data element and FILE_REGION_INFO data element.
+    /// The following table provides the currently defined usage parameters. 
+    /// </summary>
+    public enum FILE_REGION_USAGE : uint
+    {
+        None = 0,
+
+        /// <summary>
+        /// Information about the valid data length for the specified file and file range in the cache will be returned.
+        /// </summary>
+        FILE_REGION_USAGE_VALID_CACHED_DATA = 0x00000001,
+
+        /// <summary>
+        /// Information about the valid data length for the specified file and file range on disk will be returned.
+        /// </summary>
+        FILE_REGION_USAGE_VALID_NONCACHED_DATA = 0x00000002,
+    }
+    /// <summary>
+    /// The FSCTL_QUERY_FILE_REGIONS request message requests that the server return a list of file regions, 
+    /// based on a specified usage parameter, for the file associated with the handle on which this FSCTL was invoked. 
+    /// This message contains an optional FILE_REGION_INPUT data element. 
+    /// A FILE_REGION_INPUT data element is as follows. 
+    /// </summary>
+    public partial struct FILE_REGION_INPUT
+    {
+        /// <summary>
+        /// A 64-bit signed integer that contains the file offset, in bytes, of the start of a range of bytes in a file.
+        /// </summary>
+        public long FileOffset;
+
+        /// <summary>
+        /// A 64-bit signed integer that contains the size, in bytes, of the range.
+        /// </summary>
+        public long Length;
+
+        /// <summary>
+        /// A 32-bit unsigned integer that indicates usage parameters for this operation. 
+        /// </summary>
+        public FILE_REGION_USAGE DesiredUsage;
+
+        /// <summary>
+        /// Reserved.
+        /// </summary>
+        public uint Reserved;
+    }
+
+    /// <summary>
+    /// The FSCTL_QUERY_FILE_REGIONS reply message returns the results of the FSCTL_QUERY_FILE_REGION Request as a 
+    /// variably sized data element, FILE_REGION_OUTPUT, which contains one or more FILE_REGION_INFO elements that contain 
+    /// the ranges computed as a result of the desired usage.
+    /// </summary>
+    public partial struct FILE_REGION_OUTPUT
+    {
+        /// <summary>
+        /// A 32-bit unsigned integer that indicates the flags for this operation. No flags are currently defined, 
+        /// thus this field SHOULD be set to 0x00000000 and MUST be ignored.
+        /// </summary>
+        public uint Flags;
+
+        /// <summary>
+        /// A 32-bit unsigned integer that indicates the total number of regions that could be returned.
+        /// </summary>
+        public uint TotalRegionEntryCount;
+
+        /// <summary>
+        /// A 32-bit unsigned integer that indicates the number of regions that were actually returned and which are contained in this structure.
+        /// </summary>
+        public uint RegionEntryCount;
+
+        /// <summary>
+        /// A 32-bit unsigned integer that is reserved. This field SHOULD be set to 0x00000000 and MUST be ignored.
+        /// </summary>
+        public uint Reserved;
+
+        /// <summary>
+        /// One or more FILE_REGION_INFO structures, as specified in section 2.3.42.1, that contain information on the desired ranges based on the desired usage indicated by the DesiredUsage field.
+        /// </summary>
+        [Size("RegionEntryCount")]
+        public FILE_REGION_INFO[] Region;
+    }
+
+    /// <summary>
+    /// The FILE_REGION_INFO structure contains a computed region of a file based on a desired usage. 
+    /// This structure is used to store region information for the FSCTL_QUERY_FILE_REGIONS reply message, 
+    /// with the FILE_REGION_OUTPUT structure containing one or more FILE_REGION_INFO structures.
+    /// A FILE_REGION_INFO data element is as follows.
+    /// </summary>
+    public partial struct FILE_REGION_INFO
+    {
+        /// <summary>
+        /// A 64-bit signed integer that contains the file offset, in bytes, of the region.
+        /// </summary>
+        public long FileOffset;
+
+        /// <summary>
+        /// A 64-bit signed integer that contains the size, in bytes, of the region.
+        /// </summary>
+        public long Length;
+
+        /// <summary>
+        /// A 32-bit unsigned integer that indicates the usage for the given region of the file. 
+        /// </summary>
+        public FILE_REGION_USAGE DesiredUsage;
+
+        /// <summary>
+        /// A 32-bit unsigned integer field that is reserved. This field SHOULD be set to 0x00000000 and MUST be ignored.
+        /// </summary>
+        public uint Reserved;
+    }
 
     /// <summary>
     /// This message requests that the server set the short  name behavior for the volume associated with the file   

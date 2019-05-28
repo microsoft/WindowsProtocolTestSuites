@@ -384,7 +384,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 Site.Assume.IsTrue(result != IPAddress.None, "CAShareServerIP should be a valid IP address or a resolvable host name!");
                 return result;
             }
-        }        
+        }
 
         public bool IsServerSigningRequired
         {
@@ -395,6 +395,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         }
 
         public List<EncryptionAlgorithm> SupportedEncryptionAlgorithmList;
+
+        public List<CompressionAlgorithm> SupportedCompressionAlgorithmList;
 
         #endregion
 
@@ -421,6 +423,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             MaxSmbVersionClientSupported = ParsePropertyToEnum<DialectRevision>(GetProperty("MaxSmbVersionClientSupported"), "MaxSmbVersionClientSupported");
 
             SupportedEncryptionAlgorithmList = ParsePropertyToList<EncryptionAlgorithm>("SupportedEncryptionAlgorithms");
+
+            SupportedCompressionAlgorithmList = ParsePropertyToList<CompressionAlgorithm>("SupportedCompressionAlgorithms");
         }
 
         public bool IsIoCtlCodeSupported(CtlCode_Values ioCtlCode)
@@ -650,6 +654,23 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             if (!SupportedEncryptionAlgorithmList.Contains(cipherId))
             {
                 Site.Assert.Inconclusive("Test case is applicable for the server that supports {0}", cipherId);
+            }
+        }
+
+        public void CheckCompressionAlgorithm(CompressionAlgorithm? compressionAlgorithm = null)
+        {
+            if (SupportedCompressionAlgorithmList.Count == 0
+                || (SupportedCompressionAlgorithmList.Count == 1 && SupportedCompressionAlgorithmList[0] == CompressionAlgorithm.NONE))
+            {
+                Site.Assert.Inconclusive("SUT does not support compression!");
+            }
+
+            if (compressionAlgorithm != null)
+            {
+                if (!SupportedCompressionAlgorithmList.Contains(compressionAlgorithm.Value))
+                {
+                    Site.Assert.Inconclusive("The specified compression algorithm {0} is not supported by SUT!", compressionAlgorithm);
+                }
             }
         }
         #endregion

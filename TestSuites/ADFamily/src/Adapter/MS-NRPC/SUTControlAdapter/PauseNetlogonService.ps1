@@ -3,25 +3,17 @@
 ## Licensed under the MIT license. See LICENSE file in the project root for full license information.
 #############################################################
 
-function GetPtfVariable
-{
-    param($name)
-	$v = Get-Variable -Name ("PTFProp"+$name)
-	return $v.Value
-}
-
-
 New-Item -Force -ItemType directory -Path c:\temp\
 $strFileName="c:\temp\changednetlogonservicestatus.txt"
 "DONE" >> $strFileName
 
 if($sutType -eq "PrimaryDc")
 {
-    $computerName = GetPtfVariable "Common.WritableDC1.NetbiosName"
+    $computerName = $PTFProp_Common_WritableDC1_NetbiosName
 }
 if($sutType -eq "TrustDc")
 {
-    $computerName = GetPtfVariable "Common.TDC.NetbiosName"
+    $computerName = $PTFProp_Common_TDC_NetbiosName
 }
 
 

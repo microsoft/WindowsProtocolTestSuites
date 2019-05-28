@@ -3,24 +3,15 @@
 ## Licensed under the MIT license. See LICENSE file in the project root for full license information.
 #############################################################################
 
-# parameters passed by PTF
-# parameters used in remoting
-function GetPtfVariable
-{
-    param($name)
-	$v = Get-Variable -Name ("PTFProp"+$name)
-	return $v.Value
-}
-
-$MachineName      = GetPtfVariable "Common.WritableDC1.NetbiosName"
-$DomainName       = GetPtfVariable "Common.PrimaryDomain.DNSName"
-$AdminUserName    = GetPtfVariable "Common.DomainAdministratorName"
-$AdminPassword    = GetPtfVariable "Common.DomainUserPassword"
+$MachineName      = $PTFProp_Common_WritableDC1_NetbiosName
+$DomainName       = $PTFProp_Common_PrimaryDomain_DNSName
+$AdminUserName    = $PTFProp_Common_DomainAdministratorName
+$AdminPassword    = $PTFProp_Common_DomainUserPassword
 
 # the target account on which the A2A2 will apply
 # this is the driver computer name, A2A2 must apply
 # to server principle account, or it won't work
-$TargetAccount    = GetPtfVariable "Common.ENDPOINT.NetbiosName"
+$TargetAccount    = $PTFProp_Common_ENDPOINT_NetbiosName
 
 # RestrictedPrinciple will be passed in from Adapter
 

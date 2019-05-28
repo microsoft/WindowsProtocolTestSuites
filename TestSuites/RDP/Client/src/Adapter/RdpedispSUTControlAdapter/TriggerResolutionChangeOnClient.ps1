@@ -6,8 +6,8 @@
 
 
 # Run Task to change remote screen orientation
-$pwdConverted = ConvertTo-SecureString $ptfpropSUTUserPassword -AsPlainText -Force
-$cred = New-Object System.Management.Automation.PSCredential $ptfpropSUTUserName, $pwdConverted -ErrorAction Stop
+$pwdConverted = ConvertTo-SecureString $ptfprop_SUTUserPassword -AsPlainText -Force
+$cred = New-Object System.Management.Automation.PSCredential $ptfprop_SUTUserName, $pwdConverted -ErrorAction Stop
 # use regular expression to extract build number from the path or current script
 $buildFolderRegEx = New-Object -TypeName regex -ArgumentList "^C:\\MicrosoftProtocolTests\\RDP\\Client-Endpoint\\(?<buildNo>\d+\.\d+\.\d+\.\d+)\\"
 $buildNo = $null
@@ -31,7 +31,7 @@ $scriptblock = {
 	cmd /c schtasks /Delete /TN $taskname /F
 	}
 	
-$cmdOutput = Invoke-Command -ComputerName $ptfpropSUTName -credential $cred -ScriptBlock $scriptblock -ArgumentList ($width, $height, $path)
+$cmdOutput = Invoke-Command -ComputerName $ptfprop_SUTName -credential $cred -ScriptBlock $scriptblock -ArgumentList ($width, $height, $path)
 
 $cmdOutput | out-file ".\ChangeResolution.log"
 

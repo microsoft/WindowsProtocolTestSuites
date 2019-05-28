@@ -47,7 +47,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             status = this.fsaAdapter.CreateFile(fileType);
             BaseTestSite.Assert.AreEqual(MessageStatus.SUCCESS, status, "Create should succeed.");
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "2. Query FileId information.");
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "2. Query FileIdInformation.");
             byte[] outputBuffer;
             long byteCount;
             status = this.fsaAdapter.QueryFileInformation(FileInfoClass.FileIdInformation, this.fsaAdapter.transBufferSize, out byteCount, out outputBuffer);
