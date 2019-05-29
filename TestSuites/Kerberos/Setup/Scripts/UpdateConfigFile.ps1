@@ -236,8 +236,9 @@ Function UpdateConfigFile
         if($currentCore)
         {
             $node.Username = $currentCore.username
+            $node.Password = $currentCore.password
         }
-        
+
         ## Trust Realm
         Write-Host "Configure parameters.TrustRealm"
         $node = $configContent.parameters.TrustRealm
@@ -273,6 +274,7 @@ Function UpdateConfigFile
         if($currentCore)
         {
             $node.Username = $currentCore.username
+            $node.Password = $currentCore.password
         }
         Write-Host "Configure parameters.TrustRealm.LdapServer"
         $node = $configContent.parameters.TrustRealm.LdapServer
