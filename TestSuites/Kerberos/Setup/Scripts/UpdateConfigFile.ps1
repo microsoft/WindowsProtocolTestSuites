@@ -50,6 +50,12 @@ Function UpdateConfigFile
         $ProtocolXmlConfigFile = "$WorkingPath\protocol.xml"
     }
     [xml]$XmlContent = Get-Content $ProtocolXmlConfigFile -ErrorAction Stop
+    try {
+        $currentCore = $XmlContent.lab.core
+    }
+    catch {
+        
+    }
 
     try 
     {
@@ -227,7 +233,11 @@ Function UpdateConfigFile
 
         Write-Host "Configure LocalRealm.Administrator"
         $node = $configContent.parameters.LocalRealm.Administrator
-
+        if($currentCore)
+        {
+            $node.Username = $currentCore.username
+        }
+        
         ## Trust Realm
         Write-Host "Configure parameters.TrustRealm"
         $node = $configContent.parameters.TrustRealm
@@ -260,7 +270,10 @@ Function UpdateConfigFile
 
         Write-Host "Configure parameters.TrustRealm.Administrator"
         $node = $configContent.parameters.TrustRealm.Administrator
-        
+        if($currentCore)
+        {
+            $node.Username = $currentCore.username
+        }
         Write-Host "Configure parameters.TrustRealm.LdapServer"
         $node = $configContent.parameters.TrustRealm.LdapServer
         $node.FQDN = "$TrustDCComputerName.$TrustDomainName"
