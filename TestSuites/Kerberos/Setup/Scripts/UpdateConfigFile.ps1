@@ -11,7 +11,6 @@ $SUTParamArray = @{}
 # Execute Configure Script
 #-------------------------
 
-#Push-Location $WorkingPath 
 #----------------------------------------------------------------------------
 # Start logging using start-transcript cmdlet
 #----------------------------------------------------------------------------
@@ -43,7 +42,6 @@ Function UpdateConfigFile
 {
 
     Write-TestSuiteInfo "Start to update config file."
-    #[string] $ProtocolXmlConfigFile = "$WorkingPath\protocol.xml"
     [string] $ProtocolXmlConfigFile = "protocol.xml"
     if(Test-Path -Path $WorkingPath)
     {

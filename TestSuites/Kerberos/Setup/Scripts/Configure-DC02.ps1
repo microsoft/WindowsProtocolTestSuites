@@ -43,7 +43,6 @@ $ScriptFileFullPath      = $MyInvocation.MyCommand.Definition
 $ScriptName              = [System.IO.Path]::GetFileName($ScriptFileFullPath)
 $SignalFileFullPath      = "$WorkingPath\Configure-DC02.finished.signal"
 $LogFileFullPath         = "$ScriptFileFullPath.log"
-#$Parameters              = @{}
 $DataFile                = "$WorkingPath\Scripts\ParamConfig.xml"
 [xml]$KrbParams          = $null
 
@@ -101,11 +100,6 @@ Function Write-ConfigLog
 #------------------------------------------------------------------------------------------
 Function Read-ConfigParameters()
 {
-    #Write-ConfigLog "Getting the parameters from environment config file..." -ForegroundColor Yellow
-    #$VMName = GetVMNameByComputerName.ps1
-    #GetVmParameters.ps1 -VMName $VMName -RefParamArray ([ref]$Parameters)
-    #$Parameters
-
     Write-ConfigLog "Getting the parameters from Kerberos config file..." -ForegroundColor Yellow
     if(Test-Path -Path $DataFile)
     {
