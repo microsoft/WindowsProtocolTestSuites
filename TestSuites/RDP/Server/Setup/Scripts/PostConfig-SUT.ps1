@@ -19,7 +19,16 @@ $param                   = @{}
 $ScriptFileFullPath      = $MyInvocation.MyCommand.Definition
 $ScriptName              = [System.IO.Path]::GetFileName($ScriptFileFullPath)
 $LogFileFullPath         = "$ScriptFileFullPath.log"
-$SignalFileFullPath      = "$env:SystemDrive\PostScript.Completed.signal"
+
+# Check WorkingPath
+if($WorkingPath -eq "$env:SystemDrive\")
+{
+    Write-ConfigLog "Make path to C:\Temp to run script" -ForegroundColor Yellow
+    $WorkingPath = $WorkingPath + "Temp"
+    Write-ConfigLog "WorkingPath is : $WorkingPath" -ForegroundColor Yellow
+}
+
+$SignalFileFullPath      = "$WorkingPath\post.finished.signal"
 $configPath				 = "$WorkingPath\protocol.xml"
 
 # Switch to the working path
