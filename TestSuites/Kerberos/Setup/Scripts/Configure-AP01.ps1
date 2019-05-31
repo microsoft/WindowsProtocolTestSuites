@@ -235,11 +235,24 @@ Function Config-AP01()
 	#-----------------------------------------------------------------------------------------------
 	# Enable compound identity to the file server
 	#-----------------------------------------------------------------------------------------------
-	$FileServerName= $KrbParams.Parameters.LocalRealm.FileShare.NetBiosName
+	
+	# Enable compound identity for file server 
+    # This command will be run every 30 minutes to make sure the configuration does not expire
 
-	# The command to run after restart
-	$IsCompoundEnable= '$true'
-	$Command= "cmd /c powershell Set-ADComputer -Identity $FileServerName -CompoundIdentitySupported $IsCompoundEnable"
+    $FileServerName= $KrbParams.Parameters.LocalRealm.FileShare.NetBiosName 
+
+    $TaskName ="EnableCompoundIdentity"
+    
+    $Command = "Set-ADComputer -Identity $FileServerName -CompoundIdentitySupported 1" 
+    
+    $Task = "PowerShell $Command"
+
+    # Create task
+    cmd /c schtasks /Create /RL HIGHEST /RU Administrators /SC minute /MO 30 /ST 00:00 /TN $TaskName /TR $Task /IT /F
+    Sleep 10
+    
+    # Run task
+    cmd /c schtasks /Run /TN $TaskName  
 
 	# For 2012R2, need to set the policy
 	$OsVersion = Get-OSVersionNumber.ps1
@@ -247,29 +260,7 @@ Function Config-AP01()
 
 	if([double]$SutOSVersion -ge [double]$0S2012R2)
 	{
-		$Command += " -AuthenticationPolicy ComputerRestrictedPolicy"
-	}
-
-	#restart and run command 
-	Write-ConfigLog "Computer must restart now..." -ForegroundColor Red
-	$regRunPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" 
-	$regKeyName = "TKFRSAR"
-
-	# If the key has already been set, remove it
-	if (((Get-ItemProperty $regRunPath).$regKeyName) -ne $null)
-	{
-		Remove-ItemProperty -Path $regRunPath -Name $regKeyName
-	}
-
-	try
-	{
-		Set-ItemProperty -Path $regRunPath -Name $regKeyName `
-							-Value "$Command" `
-							-Force -ErrorAction Stop
-	}
-	catch
-	{
-		throw "Unable to set registry key $regKeyName. Error happened: $_.Exception.Message"
+		Set-ADComputer -Identity $FileServerName  -AuthenticationPolicy ComputerRestrictedPolicy
 	}
 }
 
