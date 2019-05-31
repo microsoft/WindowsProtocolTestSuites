@@ -326,6 +326,8 @@ namespace Microsoft.Protocols.TestManager.Detector
             propertiesDic.Add("Common.Platform", new List<string>() { detectionInfo.platform.ToString() });
             propertiesDic.Add("Common.SupportedSecurityPackage", new List<string>() { detectionInfo.securityPackageType.ToString() });
 
+            propertiesDic.Add("Common.SupportedCompressionAlgorithms", new List<string>() { String.Join(", ", detectionInfo.smb2Info.SupportedCompressionAlgorithms.Select(compressionAlgorithm => compressionAlgorithm.ToString())) });
+
             #endregion
 
             #region DFSC
@@ -559,6 +561,8 @@ namespace Microsoft.Protocols.TestManager.Detector
                 detectionInfo.F_IntegrityInfo[0] == DetectResult.Supported || detectionInfo.F_IntegrityInfo[1] == DetectResult.Supported));
             selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.FSCTL/IOCTL.FsctlOffloadReadWrite",
                 detectionInfo.F_CopyOffload[0] == DetectResult.Supported || detectionInfo.F_CopyOffload[1] == DetectResult.Supported));
+
+            selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.Compression", detectionInfo.smb2Info.SupportedCompressionAlgorithms.Length > 0));
 
             selectedRuleList.Add(CreateRule(
                 "Feature.Cluster Required.RSVD (Remote Shared Virtual Disk).RSVDVersion1",
