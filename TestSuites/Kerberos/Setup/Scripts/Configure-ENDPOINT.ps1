@@ -574,7 +574,7 @@ Function Config-Driver
 	}
 
 	$OS2012 = "6.2"
-	$SUTOSVersion = Invoke-Command -ComputerName "dc01" -ScriptBlock {"" + [System.Environment]::OSVersion.Version.Major + "." + [System.Environment]::OSVersion.Version.Minor}
+	$SUTOSVersion = Invoke-Command -ComputerName "$LocalRealmKDCFQDN" -ScriptBlock {"" + [System.Environment]::OSVersion.Version.Major + "." + [System.Environment]::OSVersion.Version.Minor}
 	Write-ConfigLog "SUT OS version is $SUTOSVersion" -ForegroundColor Yellow
 	if($SUTOSVersion -eq $OS2012)
 	{
