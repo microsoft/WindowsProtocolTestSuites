@@ -206,13 +206,12 @@ The minimum requirements for the driver computer are as follows:
 ### <a name="_Toc426622596"/>Software 
 All of the following software must be installed on the driver computer _before_ the installation of this test suite.
 
-|  **Required Software** | 
+| &#32; |
 | ------------- |
-| Microsoft® Visual Studio® 2017 | 
-| Microsoft® Protocol Test Framework 1.0.6000.0| 
-| Spec Explorer (build 3.5.3146.0 or later)| 
-|              You can download Spec Explorer from below website| 
-|              [http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/](http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/)| 
+|  **Required Software** | 
+| All common softwares listed in [prerequisites](https://github.com/microsoft/WindowsProtocolTestSuites#prerequisites) for running Windows Protocol Test Suites. |
+| **Protocol Test Manager**| 
+| Protocol Test Manager provides a graphical UI for easily configuring and running Microsoft Windows Protocol Test Suites.| 
 | Microsoft® Message Analyzer| 
 | Message Analyzer is required for this test suite to analyze the network traces and validate the message sequences, structures and fields per scenario. |
 |        ![image3.png](./image/MS-AZOD_ODUserGuide/image3.png)Note| 

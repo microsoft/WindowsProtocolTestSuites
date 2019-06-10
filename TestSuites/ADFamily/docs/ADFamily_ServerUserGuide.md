@@ -163,19 +163,10 @@ The minimum requirements for a domain member.
 ### <a name="_Toc426644919"/>Software 
 All of the following software must be installed on the driver computer ***before*** the installation of this test suite. 
 
-|  **Required Software** | 
+| &#32; |
 | ------------- |
-| **Microsoft® Visual Studio® 2017**| 
-| **Spec Explorer** (build 3.5.3146.0 or later)| 
-| Spec Explorer is a model based testing tool used by test suite to design model and generate test cases.| 
-|      ![image2.png](./image/ADFamily_ServerUserGuide/image2.png)Note| 
-|            You can download Spec Explorer from the website below| 
-|            [http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/](http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/)| 
-| **Microsoft Protocol Test Framework**| 
-| Microsoft Protocol Test Framework is a common framework to support protocol test suite. | 
-|      ![image2.png](./image/ADFamily_ServerUserGuide/image2.png)Note| 
-|            You can download Microsoft protocol Test Framework from the website below| 
-|            [https://github.com/microsoft/protocoltestframework](https://github.com/microsoft/protocoltestframework) | 
+|  **Required Software** | 
+| All common softwares listed in [prerequisites](https://github.com/microsoft/WindowsProtocolTestSuites#prerequisites) for running Windows Protocol Test Suites. |
 | **Windows PowerShell 3.0** is required.| 
 | **Protocol Test Manager**| 
 | Protocol Test Manager provides a graphical UI for easily configuring and running Microsoft Windows Protocol Test Suites.| 
@@ -188,7 +179,7 @@ All of the following software must be installed on the driver computer ***before
 |              You can download the latest Open XML SDK from the website below. It is used to load the schema definitions in XML format from technical documents. | 
 |[https://www.microsoft.com/en-us/download/details.aspx?id=30425](https://www.microsoft.com/en-us/download/details.aspx?id=30425)|
 |  **Optional Software** | 
-|  | 
+| N/A | 
 
 ## <a name="_Toc426644920"/>Network Setup
 

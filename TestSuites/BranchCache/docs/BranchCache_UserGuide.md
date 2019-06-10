@@ -238,19 +238,10 @@ All of the following software must be installed on the driver computer. They hav
 
 | &#32; |
 | ------------- |
-|  | 
 |  **Required Software**| 
-| Microsoft® Visual Studio® 2017 (or above version) | 
-| Execution of test cases requires vstest.console.exe utility which is included in Visual Studio.  | 
-| Visual Studio provides additional debugging and test case authoring ability for you to understand and update the test better.  | 
-| **Microsoft Protocol Test Framework**| 
-| Microsoft Protocol Test Framework is a common framework to support protocol test suite. | 
-|      ![image4.png](./image/BranchCache_UserGuide/image4.png)Note| 
-|            You can download Microsoft protocol Test Framework from below website| 
-|            [https://github.com/microsoft/protocoltestframework](https://github.com/microsoft/protocoltestframework) | 
-| Spec Explorer (build 3.5.3146.0 or later)| 
-|    You can download Spec Explorer from below website| 
-|    [http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/](http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/)| 
+| All common softwares listed in [prerequisites](https://github.com/microsoft/WindowsProtocolTestSuites#prerequisites) for running Windows Protocol Test Suites. |
+| **Protocol Test Manager**| 
+| Protocol Test Manager provides a graphical UI for easily configuring and running Microsoft Windows Protocol Test Suites.| 
 |  **Optional Software**| 
 | Microsoft Message Analyzer| 
 | ![image3.png](./image/BranchCache_UserGuide/image3.png)Note| 
@@ -835,7 +826,7 @@ This section describes how to troubleshoot common issues in running test cases.
 | -------------| ------------- |
 | PROBLEM| Unable to load the test container or one of its dependencies.| 
 | CAUSE| Protocol Test Framework is not installed.| 
-| RESOLUTION| Install Protocol Test Framework with 1.0.6000.0, refer to [section 5.11](#_Toc395793799) for more details.| 
+| RESOLUTION| Install Protocol Test Framework, refer to [section 5.11](#_Toc395793799) for more details.| 
 
 ![image34.png](./image/BranchCache_UserGuide/image34.png)
 
