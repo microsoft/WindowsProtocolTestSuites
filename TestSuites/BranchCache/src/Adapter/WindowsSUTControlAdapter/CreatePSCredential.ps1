@@ -3,9 +3,9 @@
 ## Licensed under the MIT license. See LICENSE file in the project root for full license information.
 ######################################################################################################
 
-[string]$domain = $PtfPropDomainName
-[string]$userName = $PtfPropUserName
-[string]$password = $PtfPropUserPassword
+[string]$domain = $PtfProp_DomainName
+[string]$userName = $PtfProp_UserName
+[string]$password = $PtfProp_UserPassword
 
 $SecurePassword = New-Object System.Security.SecureString
 if($Domain -eq $null -or $Domain.trim() -eq "")

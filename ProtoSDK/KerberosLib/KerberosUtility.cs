@@ -954,6 +954,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             }
         }
 
+        public static T DecodeNegotiationToken<T>(byte[] token) where T : class
+        {
+            var negotiationToken = new NegotiationToken();
+            negotiationToken.BerDecode(new Asn1DecodingBuffer(token));
+
+            var data = negotiationToken.GetData();
+            if (data is T)
+            {
+                return data as T;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public static byte[] EncodeInitialNegToken(byte[] token,
             KerberosConstValue.OidPkt oidPkt)
         {
@@ -969,7 +985,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
 
             MechTypeList mechTypeList = new MechTypeList(
                 new MechType[]
-                {                   
+                {
                     new MechType(oidInt)
                 }
                 );
@@ -1018,7 +1034,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             string messageDescription,
             DumpLevel dumpLevel,
             byte[] payload);
-        
+
         /// <summary>
         /// Occur when messages are ready for dumping
         /// </summary>

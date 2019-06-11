@@ -72,6 +72,13 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         /// Windows Server 2019 
         /// </summary>
         WindowsServer2019 = 0x1000000B,
+
+        /// <summary>
+        /// Windows Server v1903
+        /// </summary>
+        WindowsServerV1903 = 0x1000000C,
+
+
     }
 
     /// <summary>

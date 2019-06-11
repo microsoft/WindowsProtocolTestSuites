@@ -396,6 +396,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
         public List<EncryptionAlgorithm> SupportedEncryptionAlgorithmList;
 
+        public List<CompressionAlgorithm> SupportedCompressionAlgorithmList;
+
         #endregion
 
         #endregion
@@ -421,6 +423,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             MaxSmbVersionClientSupported = ParsePropertyToEnum<DialectRevision>(GetProperty("MaxSmbVersionClientSupported"), "MaxSmbVersionClientSupported");
 
             SupportedEncryptionAlgorithmList = ParsePropertyToList<EncryptionAlgorithm>("SupportedEncryptionAlgorithms");
+
+            SupportedCompressionAlgorithmList = ParsePropertyToList<CompressionAlgorithm>("SupportedCompressionAlgorithms");
         }
 
         public bool IsIoCtlCodeSupported(CtlCode_Values ioCtlCode)
@@ -578,24 +582,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             }
         }
 
-        /// <summary>
-        /// Validate IOCTL and Dialect compatibility 
-        /// </summary>        
-        /// <param name="IOCTL">The IOCTL to check against dialect</param>        
-        public void CheckDialectIOCTLCompatibility(CtlCode_Values IOCTL)
+        public void CheckPlatform(Platform platform)
         {
-            switch (IOCTL)
+            if (Platform < platform)
             {
-                case CtlCode_Values.FSCTL_VALIDATE_NEGOTIATE_INFO:
-                    // FSCTL_VALIDATE_NEGOTIATE_INFO is not supported by SMB311 any more
-                    if (MaxSmbVersionSupported >= DialectRevision.Smb311 && MaxSmbVersionClientSupported >= DialectRevision.Smb311)
-                    {
-                        Site.Assert.Inconclusive("The VALIDATE_NEGOTIATE_INFO request is valid for the client and servers which implement the SMB 3.0 and SMB 3.0.2 dialects");
-                    }
-                    break;
-                    // Add other IOCTL and Dialect compatibility validation if any.
+                Site.Assert.Inconclusive("The case is applicable in {0}.", platform);
             }
         }
+
         public void CheckCapabilities(NEGOTIATE_Response_Capabilities_Values capabilities)
         {
             foreach (NEGOTIATE_Response_Capabilities_Values capability in Enum.GetValues(typeof(NEGOTIATE_Response_Capabilities_Values)))
@@ -662,6 +656,23 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 Site.Assert.Inconclusive("Test case is applicable for the server that supports {0}", cipherId);
             }
         }
+
+        public void CheckCompressionAlgorithm(CompressionAlgorithm? compressionAlgorithm = null)
+        {
+            if (SupportedCompressionAlgorithmList.Count == 0
+                || (SupportedCompressionAlgorithmList.Count == 1 && SupportedCompressionAlgorithmList[0] == CompressionAlgorithm.NONE))
+            {
+                Site.Assert.Inconclusive("SUT does not support compression!");
+            }
+
+            if (compressionAlgorithm != null)
+            {
+                if (!SupportedCompressionAlgorithmList.Contains(compressionAlgorithm.Value))
+                {
+                    Site.Assert.Inconclusive("The specified compression algorithm {0} is not supported by SUT!", compressionAlgorithm);
+                }
+            }
+        }
         #endregion
     }
 
@@ -711,5 +722,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// Windows Server 2019 
         /// </summary>
         WindowsServer2019 = 0x1000000B,
+
+        /// <summary>
+        /// Windows Server v1903 
+        /// </summary>
+        WindowsServerV1903 = 0x1000000C,
     }
 }

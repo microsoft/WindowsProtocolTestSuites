@@ -3,10 +3,10 @@
 ## Licensed under the MIT license. See LICENSE file in the project root for full license information.
 #############################################################################
 
-[string]$RemotePassword = ${PtfPropLocalRealm.Users.Admin.Password}
-[string]$RemoteUserName = ${PtfPropLocalRealm.Users.Admin.Username}
-[string]$RemoteComputerName = ${PtfPropLocalRealm.KDC01.FQDN}
-[string]$Command = "ksetup /DelEncTypeAttr " + ${PtfPropTrustedRealm.RealmName}
+[string]$RemotePassword = $PtfProp_LocalRealm_Users_Admin_Password
+[string]$RemoteUserName = $PtfProp_LocalRealm_Users_Admin_Username
+[string]$RemoteComputerName = $PtfProp_LocalRealm_KDC01_FQDN
+[string]$Command = "ksetup /DelEncTypeAttr " + $PtfProp_TrustedRealm_RealmName
 
 $PWD = ConvertTo-SecureString $RemotePassword -AsPlainText -Force
 $Cred = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $RemoteUserName, $PWD

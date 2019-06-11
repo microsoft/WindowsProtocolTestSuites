@@ -47,6 +47,8 @@
       <ComponentRef Id="Pccrtp_Stack.pdb" />
       <ComponentRef Id="Pchc_Stack.pdb" />
       <ComponentRef Id="WsDiscovery_Stack.pdb" />
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.dll"/>
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.pdb"/>
     </ComponentGroup>
 
     <DirectoryRef Id="TESTSUITE_BIN_DIR">
@@ -206,6 +208,12 @@
       </Component>
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.CryptoLib.pdb" Guid="{3C6DC8AB-0582-46B5-B400-E05AB9B6DE96}">
         <File Id="filBC8F4F0BD9B1799FAC1BACA981C5268E" Source="$(var.PROTOSDK_TESTSUITE_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.CryptoLib.pdb" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.dll" Guid="{2BC17D69-219B-4780-AA7F-59136AA23113}">
+        <File Id="fil1BC8086F6C9E4BF5A60EF29B6CF19863" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.pdb" Guid="{39046331-BF74-45B2-BCFC-A4F10374E55A}">
+        <File Id="filC03908EEB95B4EDEB5E8034958243DDA" Source="$(var.PROTOSDK_TESTSUITE_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.pdb" />
       </Component>
     </DirectoryRef>
   </Fragment>

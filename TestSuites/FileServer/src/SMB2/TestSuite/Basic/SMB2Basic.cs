@@ -315,6 +315,104 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Smb2002)]
         [TestCategory(TestCategories.QueryInfo)]
+        [Description("This test case is designed to test whether server can handle QUERY requests to a file for FileAllInformation correctly.")]
+        public void BVT_SMB2Basic_Query_FileAllInformation()
+        {
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Starts a client by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT.");
+            client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            client1.SessionSetup(
+                TestConfig.DefaultSecurityPackage,
+                TestConfig.SutComputerName,
+                TestConfig.AccountCredential,
+                TestConfig.UseServerGssToken);
+            uint treeId1;
+            client1.TreeConnect(uncSharePath, out treeId1);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends CREATE request with desired access set to GENERIC_READ and GENERIC_WRITE to create a file.");
+            Smb2CreateContextResponse[] serverCreateContexts;
+            string fileName = GetTestFileName(uncSharePath);
+            FILEID fileId1;
+            client1.Create(
+                treeId1,
+                fileName,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out fileId1,
+                out serverCreateContexts,
+                accessMask: AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends QUERY_INFO request to query file attributes.");
+            byte[] outputBuffer;
+            uint status = client1.QueryFileAttributes(
+                treeId1,
+                (byte)FileInformationClasses.FileAllInformation,
+                QUERY_INFO_Request_Flags_Values.SL_RESTART_SCAN,
+                fileId1,
+                new byte[0] { },
+                out outputBuffer);
+
+            ushort filenameInfoOffset = 40 + // BasicInformation (40 bytes)
+                                        24 + // StandardInformation (24 bytes)
+                                        8 +  // InternalInformation (8 bytes)
+                                        4 +  // EaInformation (4 bytes)
+                                        4 +  // AccessInformation (4 bytes)
+                                        8 +  // PositionInformation (8 bytes)
+                                        4 +  // ModeInformation (4 bytes)
+                                        4;   // AlignmentInformation (4 bytes)
+            byte[] filenameInfoBuffer = new byte[outputBuffer.Length - filenameInfoOffset];
+            Array.Copy(outputBuffer, filenameInfoOffset, filenameInfoBuffer, 0, outputBuffer.Length - filenameInfoOffset);
+            FileNameInformation filenameInfo = TypeMarshal.ToStruct<FileNameInformation>(filenameInfoBuffer);
+
+            /*
+             * If the information class is FileAllInformation,
+             * the server SHOULD return an empty FileNameInformation
+             * by setting FileNameLength field to zero and FileName field
+             * to an empty string.
+             */
+            if ((testConfig.Platform >= Platform.WindowsServer2016) ||
+                (testConfig.Platform == Platform.NonWindows))
+            {
+                BaseTestSite.Assert.IsTrue(
+                    0 == filenameInfo.FileNameLength,
+                    "FileNameLength in FileNameInformation should be set to 0, actually server returns {0}",
+                    filenameInfo.FileNameLength);
+                BaseTestSite.Assert.IsTrue(
+                    0 == filenameInfo.FileName.Length,
+                    "FileName in FileNameInformation should be set to an empty string, actually server returns {0}.",
+                    Encoding.Unicode.GetString(filenameInfo.FileName));
+            }
+            /*
+             * <357>
+             * If the information class is FileAllInformation, Windows Vista SP1,
+             * Windows Server 2008, Windows 7, Windows Server 2008 R2, Windows 8,
+             * Windows Server 2012, Windows 8.1, and Windows Server 2012 R2
+             * return an absolute path to the file name as part of FileNameInformation.
+             */
+            else
+            {
+                string absoluteFilePath = "\\" + TestConfig.BasicFileShare + "\\" + fileName;
+                string filenameInFilenameInfo = Encoding.Unicode.GetString(filenameInfo.FileName);
+                BaseTestSite.Assert.IsTrue(
+                    absoluteFilePath.Length * 2 == filenameInfo.FileNameLength, // FileNameLength is the length of unicode characters
+                    "FileNameLength should be set as the length of the absolute path to the file, actually server returns {0}.",
+                    filenameInfo.FileNameLength);
+                BaseTestSite.Assert.AreEqual(
+                    absoluteFilePath, filenameInFilenameInfo,
+                    "FileName should be set as the absolute path to the file, actually server returns {0}.",
+                    filenameInFilenameInfo);
+            }
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down the client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client1.Close(treeId1, fileId1);
+            client1.TreeDisconnect(treeId1);
+            client1.LogOff();
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb2002)]
+        [TestCategory(TestCategories.QueryInfo)]
         [Description("This test case is designed to verify the behavior of querying quota information with FILE_GET_QUOTA_INFO in SidBuffer.")]
         public void BVT_SMB2Basic_Query_Quota_Info()
         {

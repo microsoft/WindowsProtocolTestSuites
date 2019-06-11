@@ -3,15 +3,7 @@
 ## Licensed under the MIT license. See LICENSE file in the project root for full license information.
 #############################################################
 
-function GetPtfVariable
-{
-    param($name)
-	$v = Get-Variable -Name ("PTFProp"+$name)
-	return $v.Value
-}
-
-
-$computerName = GetPtfVariable "Common.WritableDC1.NetbiosName"
+$computerName = $PTFProp_Common_WritableDC1_NetbiosName
 
 
 ####################################

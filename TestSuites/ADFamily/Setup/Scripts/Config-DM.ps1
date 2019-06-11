@@ -29,7 +29,10 @@ Param
     $EnableDebugging,
     
     [int]
-    $Step = 1
+    $Step = 1,
+
+    [String]
+    $ConfigFile = "c:\temp\Protocol.xml"
 )
 
 #------------------------------------------------------------------------------------------
@@ -47,6 +50,19 @@ $ScriptPath              = Split-Path $ScriptFileFullPath
 $SignalFileFullPath      = "$ScriptPath\post.finished.signal"
 $LogFileFullPath         = "$ScriptFileFullPath.log"
 $Parameters              = @{}
+$IsAzure                 = $false
+
+try {
+    [xml]$content = Get-Content $ConfigFile -ErrorAction Stop
+    $currentCore = $content.lab.core
+    if(![string]::IsNullOrEmpty($currentCore.regressiontype) -and ($currentCore.regressiontype -eq "Azure")){
+        $IsAzure = $true;
+        $SignalFileFullPath = "C:\PostScript.Completed.signal"
+    }
+}
+catch {
+    
+}
 
 #------------------------------------------------------------------------------------------
 # Function: Display-Help
@@ -102,8 +118,13 @@ Function Write-ConfigLog
 Function Read-ConfigParameters()
 {
     Write-ConfigLog "Getting the parameters from config file..." -ForegroundColor Yellow
+    if($IsAzure)
+    {
+        .\GetVmParametersByComputerName.ps1 -RefParamArray ([ref]$Parameters)
+    } else {
     $VMName = .\GetVMNameByComputerName.ps1
-    .\GetVmParameters.ps1 -VMName $VMName -RefParamArray ([ref]$Parameters)
+        .\GetVmParameters.ps1 -VMName $VMName -RefParamArray ([ref]$Parameters)
+    }
     $Parameters
 }
 
@@ -192,10 +213,12 @@ Function Config-Phase1()
     # Set execution policy as unrestricted
     Write-ConfigLog "Setting execution policy..." -ForegroundColor Yellow
     .\Set-ExecutionPolicy-Unrestricted.ps1
-
-    # Set network configurations
-    Write-ConfigLog "Setting network configurations..." -ForegroundColor Yellow
-    .\Set-NetworkConfiguration.ps1 -IPAddress $Parameters["ip"] -SubnetMask $Parameters["subnet"] -Gateway $Parameters["gateway"] -DNS ($Parameters["dns"].Split(';'))
+    if(-not $IsAzure)
+    {
+        # Set network configurations
+        Write-ConfigLog "Setting network configurations..." -ForegroundColor Yellow
+        .\Set-NetworkConfiguration.ps1 -IPAddress $Parameters["ip"] -SubnetMask $Parameters["subnet"] -Gateway $Parameters["gateway"] -DNS ($Parameters["dns"].Split(';'))
+    }
 
     # Set autologon
     Write-ConfigLog "Setting autologon..." -ForegroundColor Yellow

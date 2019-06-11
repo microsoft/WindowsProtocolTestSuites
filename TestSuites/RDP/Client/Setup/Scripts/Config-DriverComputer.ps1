@@ -143,8 +143,7 @@ if (Test-Path -Path "$env:HOMEDRIVE\$certFileName.pfx")
     Remove-Item "$env:HOMEDRIVE\$certFileName.pfx" -Force
 }
 
-New-SelfSignedCertificate -DnsName $certCN -CertStoreLocation "cert:\LocalMachine\My"
-$cert = Get-ChildItem -path cert:\localmachine\my | Where-Object { $_.Subject -eq "CN=$certCN" } | Select-Object -First 1
+$cert = New-SelfSignedCertificate -DnsName $certCN -CertStoreLocation "cert:\LocalMachine\My"
 $securePwd = (ConvertTo-SecureString -string "$certPwd" -Force -AsPlainText)
 Export-PfxCertificate -Cert $cert -Force -Password $securePwd -FilePath "$env:HOMEDRIVE\$certFileName.pfx"
 Export-Certificate -Cert $cert -FilePath "$env:HOMEDRIVE\$certFileName.cer" -Type CERT

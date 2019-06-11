@@ -297,12 +297,6 @@
                  Description="Run test cases by category in the test suite"
                  Target="[TESTSUITE_BATCH_DIR]!(wix.RUN_BY_CATEGORY_COMMAND)"
                  WorkingDirectory="TESTSUITE_BATCH_DIR" />
-        <Shortcut Id="QuickStartGuideShortcut"
-                 Name="Open !(wix.TESTSUITE_NAME) !(wix.TESTSUITE_ENDPOINT)-EP User Guide"
-                 Description="User Guide for !(wix.TESTSUITE_NAME)"
-                 Target="[TESTSUITE_DOCS_DIR]!(wix.QUICK_START_GUIDE)"
-                 WorkingDirectory="TESTSUITE_DOCS_DIR" />
-
         <RegistryValue Id="TestSuiteShortcutsKeyPath_Desktop"
                         Root="HKCU"
                         Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_ENDPOINT)-!(wix.TESTSUITE_VERSION)"

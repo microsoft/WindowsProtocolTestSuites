@@ -1049,7 +1049,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                         var createQueryOnDiskIdResponse = TypeMarshal.ToStruct<CREATE_QUERY_ON_DISK_ID_RESPONSE>(contextStruct.Data);
                         createContexts.Add(new Smb2CreateQueryOnDiskIdResponse()
                         {
-                            DiskIdBuffer = new Modeling.Sequence<byte>(createQueryOnDiskIdResponse.DiskIDBuffer)
+                            DiskIdBuffer = new List<byte>(createQueryOnDiskIdResponse.DiskIDBuffer)
                         });
                         break;
 

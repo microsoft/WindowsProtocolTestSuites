@@ -264,11 +264,6 @@
                   Description="Run BVT test cases in the test suite"
                   Target="[TESTSUITE_BATCH_DIR]!(wix.RUN_BVT_COMMAND)"
                   WorkingDirectory="TESTSUITE_BATCH_DIR" />
-        <Shortcut Id="HashGenerationAndVerificationTool_Desktop"
-                  Name="Hash Generation and Verification Tool"
-                  Description="Hash Generation and Verification Tool"
-                  Target="[TESTSUITE_BATCH_DIR]MS-PCCRC_TestTool.exe"
-                  WorkingDirectory="TESTSUITE_BATCH_DIR" />
         <RegistryValue Id="TestSuiteShortcutsKeyPath_Desktop"
                         Root="HKCU"
                         Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_VERSION)"

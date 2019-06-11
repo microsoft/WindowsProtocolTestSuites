@@ -4,9 +4,9 @@
 #############################################################################
 
 [string]$share
-[string]$domain = ${PtfPropCommon.DomainName}
-[string]$userName = ${PtfPropCommon.AdminUserName}
-[string]$password = ${PtfPropCommon.PasswordForAllUsers}
+[string]$domain = $PtfProp_Common_DomainName
+[string]$userName = $PtfProp_Common_AdminUserName
+[string]$password = $PtfProp_Common_PasswordForAllUsers
 
 if([System.String]::IsNullOrEmpty($domain))
 {

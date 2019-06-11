@@ -63,6 +63,30 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.Adapter
             }
         }
 
+        public string DriverComputerName
+        {
+            get
+            {
+                return GetProperty("DriverComputerName");
+            }
+        }
+
+        public string ClusteredInfrastructureFileServerName
+        {
+            get
+            {
+                return GetProperty("ClusteredInfrastructureFileServerName");
+            }
+        }
+
+        public string InfrastructureRootShare
+        {
+            get
+            {
+                return GetProperty("InfrastructureRootShare");
+            }
+        }
+
         #region Symbolic link configuration
         public string Symboliclink
         {

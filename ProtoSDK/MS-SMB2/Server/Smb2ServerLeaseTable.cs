@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using Microsoft.Modeling;
+using System.Collections.Generic;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 {
@@ -10,6 +10,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
     {
         public Guid ClientGuid;
 
-        public MapContainer<SequenceContainer<byte>, Smb2ServerLease> LeaseList;
+        public Dictionary<List<byte>, Smb2ServerLease> LeaseList;
     }
 }

@@ -365,6 +365,106 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Content read should be identical to content written.");
             #endregion
         }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.MultipleChannel)]
+        [TestCategory(TestCategories.UnexpectedFields)]
+        [Description("This case is to test whether server calculates PreauthIntegrityHashValue correctly if it returns failure for the first session setup in the alternative channel.")]
+        public void MultipleChannel_SecondChannelSessionSetupFailAtFirstTime()
+        {
+            #region Check Applicability
+            TestConfig.CheckDialect(DialectRevision.Smb311);
+            TestConfig.CheckCapabilities(NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL);
+            #endregion
+
+            string contentWrite;
+            string contentRead;
+            uint treeId;
+            FILEID fileId;
+
+            contentWrite = Smb2Utility.CreateRandomString(TestConfig.WriteBufferLengthInKb);
+
+            BaseTestSite.Assert.IsTrue(
+                clientIps.Count > 0,
+                "Client should have at least one IP address");
+            BaseTestSite.Assert.IsTrue(
+                serverIps.Count > 0,
+                "Server should have more than one IP address");
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Start to write content to file from main channel with client {0} and server {1}", clientIps[0].ToString(), serverIps[0].ToString());
+            WriteFromMainChannel(
+                serverIps[0],
+                clientIps[0],
+                contentWrite,
+                false,
+                out treeId,
+                out fileId);
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Set up alternative channel with client {0} and server {1}", clientIps[0].ToString(), serverIps[0].ToString());
+            
+            alternativeChannelClient.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, serverIps[1], clientIps[1]);
+            alternativeChannelClient.Negotiate(
+                TestConfig.RequestDialects,
+                TestConfig.IsSMB1NegotiateEnabled,
+                capabilityValue: Capabilities_Values.GLOBAL_CAP_DFS | Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING | Capabilities_Values.GLOBAL_CAP_LARGE_MTU | Capabilities_Values.GLOBAL_CAP_LEASING | Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL | Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES,
+                clientGuid: clientGuid,
+                checker: (Packet_Header header, NEGOTIATE_Response response) =>
+                {
+                    BaseTestSite.Assert.AreEqual(
+                        Smb2Status.STATUS_SUCCESS,
+                        header.Status,
+                        "Negotiation should succeed, actually server returns {0}.", Smb2Status.GetStatusCode(header.Status));
+
+                    TestConfig.CheckNegotiateDialect(DialectRevision.Smb311, response);
+                    if (Smb2Utility.IsSmb3xFamily(DialectRevision.Smb311))
+                        TestConfig.CheckNegotiateCapabilities(NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL, response);
+                });
+
+            status = alternativeChannelClient.AlternativeChannelSessionSetup(
+                        mainChannelClient,
+                        TestConfig.DefaultSecurityPackage,
+                        TestConfig.SutComputerName,
+                        TestConfig.AccountCredential,
+                        TestConfig.UseServerGssToken,
+                        checker: (header, response) => { },
+                        invalidToken: true);
+
+            BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_INVALID_PARAMETER, status, 
+                "The first SessionSetup from alternative channel should return STATUS_INVALID_PARAMETER since the token in buffer field is set to an invalid value.");
+
+            status = alternativeChannelClient.AlternativeChannelSessionSetup(
+                        mainChannelClient,
+                        TestConfig.DefaultSecurityPackage,
+                        TestConfig.SutComputerName,
+                        TestConfig.AccountCredential,
+                        TestConfig.UseServerGssToken,
+                        checker: (header, response) => { });
+            BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, status, "The second SessionSetup from alternative channel should succeed");
+
+            contentRead = "";
+            status = alternativeChannelClient.Read(treeId, fileId, 0, (uint)contentWrite.Length, out contentRead);
+
+            // Read should succeed. 
+            // If Read response returns STATUS_ACCESS_DEINIED, it means signingkey used by server is wrong, and so that the PreauthIntegrityHashValue (which is used to generate the signingkey) calculated by server is wrong.
+            // It is very possible that server uses the first failed session setup request/response (alternative channel) to calculate PreauthIntegrityHashValue, which is wrong.
+            BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, status, "Read from the alternative channel should succeed");
+
+            alternativeChannelClient.Close(treeId, fileId);
+            alternativeChannelClient.TreeDisconnect(treeId);
+            alternativeChannelClient.LogOff();
+
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "Verify the contents read from alternative channel are the same as the one written by main channel.");
+            BaseTestSite.Assert.IsTrue(
+                contentWrite.Equals(contentRead),
+                "Content read should be identical to content written.");
+        }
         #endregion
 
         #region Test Common Methods

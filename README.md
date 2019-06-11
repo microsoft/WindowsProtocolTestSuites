@@ -48,7 +48,7 @@ You should install the software listed below based on your testing purpose, incl
 
     <small><1> These individual components are required by ADFamily, MS-SMBD or Protocol Test Manager which have C++ code.</small>
 
-* [Protocol Test Framework build 1.0 (build 1.0.6000.0)](https://github.com/Microsoft/ProtocolTestFramework/releases/tag/1.0.6000.0). You can use a released MSI file or build it from source code.
+* [Protocol Test Framework build 1.0 (build 1.0.6500.0)](https://github.com/Microsoft/ProtocolTestFramework/releases/tag/1.0.6500.0). You can use a released MSI file or build it from source code.
 * [Spec Explorer 2010 v3.5.3146.0](https://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/). It is only required if you want to build or run the test suites that contain Model-Based Test cases. If you want to regenerate Model-Based Test cases, you must install Visual Studio 2012.
 * [Wix Toolset v3.11](https://github.com/wixtoolset/wix3/releases/tag/wix3111rtm) and [Wix Toolset Visual Studio 2017 Extension](https://marketplace.visualstudio.com/items?itemName=RobMensching.WixToolsetVisualStudio2017Extension). It is required if your want to build test suites or Protocol Test Manager from source code.
 * [Microsoft Message Analyzer](https://www.microsoft.com/en-us/download/details.aspx?id=44226). It is required if your want to build or run ADFamily, ADOD and AZOD test suites.

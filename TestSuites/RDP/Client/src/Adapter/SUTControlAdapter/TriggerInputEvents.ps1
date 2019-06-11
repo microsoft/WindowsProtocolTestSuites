@@ -15,10 +15,10 @@
 # Step 4: Maximize and minimize the remote desktop
 
 # Check SUT started the PS Remoting
-$isSutPSRemotingStarted = .\Check-PSRemoting.ps1 $PtfPropSUTName
+$isSutPSRemotingStarted = .\Check-PSRemoting.ps1 $PtfProp_SUTName
 if(-not $isSutPSRemotingStarted) {return -1}
 
 # Run task to trigger different input events
-$returnValue = .\Run-TaskWithPSRemoting.ps1 $PtfPropSUTName $PtfPropTriggerInputEvents_Task $PtfPropSUTUserName $PtfPropSUTUserPassword
+$returnValue = .\Run-TaskWithPSRemoting.ps1 $PtfProp_SUTName $PtfProp_TriggerInputEvents_Task $PtfProp_SUTUserName $PtfProp_SUTUserPassword
 sleep 20 # take couple of seconds to generate input events
 return $returnValue

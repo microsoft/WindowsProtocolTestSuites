@@ -240,11 +240,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// <summary>
         /// The ProtocolId used in SMB2 Transform_Header
         /// </summary>
-        public const int ProtocolIdInTransformHeader = 0x424d53FD;
+        public const uint ProtocolIdInTransformHeader = 0x424d53FD;
 
         /// <summary>
         /// The length of preauthentication integrity hash salt value
         /// </summary>
-        public const int PreauthIntegrityHashSaltLength = 32; 
+        public const int PreauthIntegrityHashSaltLength = 32;
+
+        /// <summary>
+        /// The ProtocolId used in SMB2 Compression Transform Header.
+        /// </summary>
+        public const uint ProtocolIdInCompressionTransformHeader = 0x424D53FC;
     }
 }

@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Security.Principal;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 {
@@ -594,6 +595,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 clientGuid,
                 preauthHashAlgs,
                 encryptionAlgs,
+                null,
                 checker,
                 ifHandleRejectUnencryptedAccessSeparately,
                 ifAddGLOBAL_CAP_ENCRYPTION,
@@ -609,6 +611,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             Guid? clientGuid = null,
             PreauthIntegrityHashID[] preauthHashAlgs = null,
             EncryptionAlgorithm[] encryptionAlgs = null,
+            CompressionAlgorithm[] compressionAlgorithms = null,
             ResponseChecker<NEGOTIATE_Response> checker = null,
             bool ifHandleRejectUnencryptedAccessSeparately = false,
             bool ifAddGLOBAL_CAP_ENCRYPTION = true,
@@ -659,6 +662,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 out negotiateResponse,
                 preauthHashAlgs: preauthHashAlgs,
                 encryptionAlgs: encryptionAlgs,
+                compressionAlgorithms: compressionAlgorithms,
                 addDefaultEncryption: addDefaultEncryption);
             if (!ifHandleRejectUnencryptedAccessSeparately)
             {
@@ -742,7 +746,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             bool useServerGssToken,
             SESSION_SETUP_Request_SecurityMode_Values securityMode = SESSION_SETUP_Request_SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
             SESSION_SETUP_Request_Capabilities_Values capabilities = SESSION_SETUP_Request_Capabilities_Values.GLOBAL_CAP_DFS,
-            ResponseChecker<SESSION_SETUP_Response> checker = null)
+            ResponseChecker<SESSION_SETUP_Response> checker = null,
+            bool invalidToken = false)
         {
             #region Check Applicability
             // According to TD, server must support signing when it supports multichannel.
@@ -769,7 +774,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 serverName,
                 credential,
                 useServerGssToken,
-                checker: checker);
+                checker: checker,
+                invalidToken: invalidToken);
         }
 
         public uint ReconnectSessionSetup(
@@ -879,14 +885,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             string uncSharePath,
             out uint treeId,
             ResponseChecker<TREE_CONNECT_Response> checker = null,
-            TreeConnect_Flags flags = TreeConnect_Flags.SMB2_SHAREFLAG_NONE)
+            TreeConnect_Flags flags = TreeConnect_Flags.SMB2_SHAREFLAG_NONE,
+            WindowsIdentity identity = null)
         {
             return TreeConnect(
                 testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
                 uncSharePath,
                 out treeId,
                 checker,
-                flags);
+                flags,
+                identity);
         }
 
         /// <summary>
@@ -902,7 +910,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             string uncSharePath,
             out uint treeId,
             ResponseChecker<TREE_CONNECT_Response> checker = null,
-            TreeConnect_Flags flags = TreeConnect_Flags.SMB2_SHAREFLAG_NONE)
+            TreeConnect_Flags flags = TreeConnect_Flags.SMB2_SHAREFLAG_NONE,
+            WindowsIdentity identity = null)
         {
             Packet_Header header;
             TREE_CONNECT_Response treeConnectResponse;
@@ -913,7 +922,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             // Need to consume credit from sequence window first according to TD
             ConsumeCredit(messageId, creditCharge);
 
-            uint status = client.TreeConnect(
+            uint status;
+            /*
+             *  According to [MS-SMB2] section 2.2.9
+             *  1. If SMB2_TREE_CONNECT_FLAG_EXTENSION_PRESENT is not set in the Flags field of this structure,
+             *     this field is a variable-length buffer that contains the full share path name.
+             */
+            if (!flags.HasFlag(TreeConnect_Flags.SMB2_SHAREFLAG_EXTENSION_PRESENT))
+            {
+                status = client.TreeConnect(
                     creditCharge,
                     generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
                     headerFlags,
@@ -925,6 +942,29 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                     out treeConnectResponse,
                     0,
                     flags);
+            }
+            /*
+             *  2. If SMB2_TREE_CONNECT_FLAG_EXTENSION_PRESENT is set in the Flags field in this structure,
+             *     this field is a variable-length buffer that contains the tree connect request extension,
+             *     as specified in section 2.2.9.1.
+             */
+            else
+            {
+                byte[] buffer = CreateTreeConnectRequestExt(uncSharePath, identity);
+                status = client.TreeConnect(
+                    creditCharge,
+                    generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
+                    headerFlags,
+                    messageId,
+                    sessionId,
+                    Encoding.Unicode.GetBytes(uncSharePath).Length,
+                    buffer,
+                    out treeId,
+                    out header,
+                    out treeConnectResponse,
+                    0,
+                    flags);
+            }
 
             ProduceCredit(messageId, header);
 
@@ -1279,7 +1319,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             uint lengthToRead,
             out byte[] data,
             ResponseChecker<READ_Response> checker = null,
-            bool isReplay = false)
+            bool isReplay = false,
+            bool compressRead = false)
         {
             Packet_Header header;
             READ_Response readResponse;
@@ -1306,7 +1347,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 new byte[0],
                 out data,
                 out header,
-                out readResponse);
+                out readResponse,
+                compressRead: compressRead);
 
             ProduceCredit(messageId, header);
 
@@ -1332,7 +1374,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             byte[] data,
             ulong offset = 0,
             ResponseChecker<WRITE_Response> checker = null,
-            bool isReplay = false)
+            bool isReplay = false,
+            bool compressWrite = false)
         {
             Packet_Header header;
             WRITE_Response writeResponse;
@@ -1358,7 +1401,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 data,
                 out header,
                 out writeResponse,
-                sessionChannelSequence);
+                sessionChannelSequence,
+                compressWrite);
 
             ProduceCredit(messageId, header);
 
@@ -2970,7 +3014,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             bool useServerGssToken,
             bool allowPartialAuthentication = false,
             bool isMultipleChannelSupported = true,
-            ResponseChecker<SESSION_SETUP_Response> checker = null)
+            ResponseChecker<SESSION_SETUP_Response> checker = null,
+            bool invalidToken = false)
         {
             Packet_Header header;
             SESSION_SETUP_Response sessionSetupResponse;
@@ -3002,6 +3047,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
                 // Need to consume credit from sequence window first according to TD
                 ConsumeCredit(messageId, creditCharge);
+
+                // Modify the first byte of token to make it invalid.
+                if (invalidToken)
+                    sspiClientGss.Token[0] = (byte)(sspiClientGss.Token[0] + 1);
 
                 status = client.SessionSetup(
                     creditCharge,
@@ -3113,6 +3162,156 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             // Set creditGoal to expect server grant credits that could at leaset accept request with max buffer size
             CreditGoal = maxBufferSizeInCredit;
         }
+
+        #region SMB2 TREE_CONNECT Request Extension
+        private byte[] CreateTreeConnectRequestExt(string sharePath, WindowsIdentity identity)
+        {
+            ushort treeConnectContextCount = 1;
+            byte[] pathName = Encoding.Unicode.GetBytes(sharePath);
+            uint treeConnectContextOffset = (uint)(64 + // SMB2 header
+                                                   2 +  // StructureSize
+                                                   2 +  // Flags
+                                                   2 +  // PathOffset
+                                                   2 +  // PathLength
+                                                   4 +  // TreeConnectContextOffset
+                                                   2 +  // TreeConnectContextCount
+                                                   10 + // Reserved
+                                                   pathName.Length);
+            Smb2Utility.Align8(ref treeConnectContextOffset);
+
+            byte[] buffer = TypeMarshal.ToBytes<uint>(treeConnectContextOffset);
+            buffer = buffer.Concat(TypeMarshal.ToBytes<ushort>(treeConnectContextCount)).ToArray();
+            buffer = buffer.Concat(new byte[10]).ToArray();
+            buffer = buffer.Concat(pathName).ToArray();
+            Smb2Utility.Align8(0, ref buffer);
+
+            byte[] ctxBuf = CreateTreeConnectContext(identity);
+            Smb2Utility.Align8(0, ref ctxBuf);
+            buffer = buffer.Concat(ctxBuf).ToArray();
+            return buffer;
+        }
+
+        private byte[] CreateTreeConnectContext(WindowsIdentity identity)
+        {
+            byte[] buffer;
+            Tree_Connect_Context ctx = new Tree_Connect_Context();
+            ctx.ContextType = Context_Type.RESERVED_TREE_CONNECT_CONTEXT_ID;
+            byte[] remotedIdentityBuf = CreateRemotedIdentity(out ctx.DataLength, identity);
+            buffer = TypeMarshal.ToBytes<Context_Type>(ctx.ContextType);
+            buffer = buffer.Concat(TypeMarshal.ToBytes<ushort>(ctx.DataLength)).ToArray();
+            buffer = buffer.Concat(TypeMarshal.ToBytes<uint>(ctx.Reserved)).ToArray();
+            buffer = buffer.Concat(remotedIdentityBuf).ToArray();
+            return buffer;
+        }
+
+        private byte[] CreateRemotedIdentity(out ushort dataLength, WindowsIdentity identity)
+        {
+            REMOTED_IDENTITY_TREE_CONNECT_Context remotedIdentity = new REMOTED_IDENTITY_TREE_CONNECT_Context();
+            ushort currentOffset = 0;
+            remotedIdentity.TicketType = 0x0001;
+            currentOffset += 2 * 14;  // TicketType, TicketSize, User, UserName, Domain, Groups, RestrictedGroups, Privileges, PrimaryGroup, Owner, DefaultDacl, DeviceGroups, UserClaims, DeviceClaims
+
+            // User: SID_ATTR_DATA
+            remotedIdentity.User = currentOffset;
+            byte[] userBinary = new byte[identity.User.BinaryLength];
+            identity.User.GetBinaryForm(userBinary, 0);
+            remotedIdentity.TicketInfo.User = new SID_ATTR_DATA();
+            remotedIdentity.TicketInfo.User.SidData = new BLOB_DATA();
+            remotedIdentity.TicketInfo.User.SidData.BlobData = userBinary;
+            remotedIdentity.TicketInfo.User.SidData.BlobSize = (ushort)identity.User.BinaryLength;
+            remotedIdentity.TicketInfo.User.Attr = (SID_ATTR)0;
+            currentOffset += (ushort)(2 /* BlobSize */ + remotedIdentity.TicketInfo.User.SidData.BlobSize + 4 /* Attr */);
+
+            // UserName: null-terminated Unicode string
+            remotedIdentity.UserName = currentOffset;
+            remotedIdentity.TicketInfo.UserName = Encoding.Unicode.GetBytes(identity.Name.Split('\\')[1] + '\x0');
+            ushort userNameLen = (ushort)remotedIdentity.TicketInfo.UserName.Length;
+            currentOffset += (ushort)(remotedIdentity.TicketInfo.UserName.Length + 2 /* '\x0' */);
+
+            // Domain: null-terminated Unicode string
+            remotedIdentity.Domain = currentOffset;
+            remotedIdentity.TicketInfo.Domain = Encoding.Unicode.GetBytes(identity.Name.Split('\\')[0] + '\x0');
+            ushort domainLen = (ushort)remotedIdentity.TicketInfo.Domain.Length;
+            currentOffset += (ushort)(remotedIdentity.TicketInfo.Domain.Length + 2 /* '\x0' */);
+
+            // Groups: SID_ARRAY_DATA
+            remotedIdentity.Groups = currentOffset;
+            remotedIdentity.TicketInfo.Groups = new SID_ARRAY_DATA();
+            remotedIdentity.TicketInfo.Groups.SidAttrCount = (ushort)identity.Groups.Count;
+            SID_ATTR_DATA[] groups = new SID_ATTR_DATA[identity.Groups.Count];
+            for (int i = 0; i < identity.Groups.Count; i++)
+            {
+                SecurityIdentifier curGroupSid = (SecurityIdentifier)identity.Groups[i];
+                byte[] curGroupBinary = new byte[curGroupSid.BinaryLength];
+                curGroupSid.GetBinaryForm(curGroupBinary, 0);
+                groups[i].SidData.BlobSize = (ushort)curGroupSid.BinaryLength;
+                groups[i].SidData.BlobData = curGroupBinary;
+                groups[i].Attr = SID_ATTR.SE_GROUP_ENABLED;
+                currentOffset += (ushort)(2 /* BlobSize */ + groups[i].SidData.BlobSize + 4 /* Attr */);
+            }
+            currentOffset += 2; // SidAttrCount
+
+            // RestrictedGroups: SID_ARRAY_DATA
+            remotedIdentity.RestrictedGroups = 0;
+
+            // PrimaryGroup: SID_ARRAY_DATA
+            remotedIdentity.PrimaryGroup = 0;
+
+            // Owner: BLOB_DATA
+            remotedIdentity.Owner = currentOffset;
+            remotedIdentity.TicketInfo.Owner = new BLOB_DATA();
+            byte[] ownerBinary = new byte[identity.Owner.BinaryLength];
+            identity.Owner.GetBinaryForm(ownerBinary, 0);
+            remotedIdentity.TicketInfo.Owner.BlobData = ownerBinary;
+            remotedIdentity.TicketInfo.Owner.BlobSize = (ushort)identity.Owner.BinaryLength;
+            currentOffset += (ushort)(2 /* BlobSize */ + remotedIdentity.TicketInfo.Owner.BlobSize);
+
+            // DefaultDacl: BLOB_DATA
+            remotedIdentity.DefaultDacl = 0;
+
+            // DeviceGroups: SID_ARRAY_DATA
+            remotedIdentity.DeviceGroups = 0;
+
+            // UserClaims: BLOB_DATA
+            remotedIdentity.UserClaims = 0;
+
+            // DeviceClaims: BLOB_DATA
+            remotedIdentity.DeviceClaims = 0;
+
+            remotedIdentity.TicketSize = currentOffset;
+            dataLength = currentOffset;
+
+            byte[] ctxBuf = TypeMarshal.ToBytes<ushort>(remotedIdentity.TicketType);
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(remotedIdentity.TicketSize)).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(remotedIdentity.User)).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(remotedIdentity.UserName)).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(remotedIdentity.Domain)).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(remotedIdentity.Groups)).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(remotedIdentity.RestrictedGroups)).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(remotedIdentity.Privileges)).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(remotedIdentity.PrimaryGroup)).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(remotedIdentity.Owner)).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(remotedIdentity.DefaultDacl)).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(remotedIdentity.DeviceGroups)).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(remotedIdentity.UserClaims)).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(remotedIdentity.DeviceClaims)).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<SID_ATTR_DATA>(remotedIdentity.TicketInfo.User)).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(userNameLen)).ToArray();
+            ctxBuf = ctxBuf.Concat(remotedIdentity.TicketInfo.UserName).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(domainLen)).ToArray();
+            ctxBuf = ctxBuf.Concat(remotedIdentity.TicketInfo.Domain).ToArray();
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(remotedIdentity.TicketInfo.Groups.SidAttrCount)).ToArray();
+            for (int i = 0; i < identity.Groups.Count; i++)
+            {
+                ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<ushort>(groups[i].SidData.BlobSize)).ToArray();
+                ctxBuf = ctxBuf.Concat(groups[i].SidData.BlobData).ToArray();
+                ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<SID_ATTR>(groups[i].Attr)).ToArray();
+            }
+            ctxBuf = ctxBuf.Concat(TypeMarshal.ToBytes<BLOB_DATA>(remotedIdentity.TicketInfo.Owner)).ToArray();
+            return ctxBuf;
+        }
+        #endregion
+
         #endregion
 
     }

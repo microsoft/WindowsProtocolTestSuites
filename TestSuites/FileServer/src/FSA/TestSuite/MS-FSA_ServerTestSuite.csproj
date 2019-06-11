@@ -155,6 +155,7 @@
     <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Query_FileCompressionInformation.cs" />
     <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Query_FileEaInformation.cs" />
     <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Query_FileFullEaInformation.cs" />
+    <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Query_FileIdInformation.cs" />
     <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Query_FileNetworkOpenInformation.cs" />
     <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Query_FileNormalizedNameInformation.cs" />
     <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Set_FileLinkInformation.cs" />
@@ -168,12 +169,15 @@
     <Compile Include="TraditionalTestCases\FileSystemInformation\FsInfo_Query_FileFsSectorSizeInformation.cs" />
     <Compile Include="TraditionalTestCases\FileSystemInformation\FsInfo_Query_FileFsSizeInformation.cs" />
     <Compile Include="TraditionalTestCases\FileSystemInformation\FsInfo_Set_FileFsSectorSizeInformation.cs" />
+    <Compile Include="TraditionalTestCases\FsControlRequest\FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX.cs" />
     <Compile Include="TraditionalTestCases\FsControlRequest\FsCtlTestCases.cs" />
     <Compile Include="TraditionalTestCases\FsControlRequest\FSCTL_GET_COMPRESSION.cs" />
     <Compile Include="TraditionalTestCases\FsControlRequest\FSCTL_GET_INTEGRITY_INFORMATION.cs" />
+    <Compile Include="TraditionalTestCases\FsControlRequest\FSCTL_Get_Volume_Data.cs" />
     <Compile Include="TraditionalTestCases\FsControlRequest\FSCTL_QUERY_ALLOCATED_RANGES.cs" />
     <Compile Include="TraditionalTestCases\FsControlRequest\FSCTL_OFFLOAD_READ.cs" />
     <Compile Include="TraditionalTestCases\FsControlRequest\FSCTL_OFFLOAD_WRITE.cs" />
+    <Compile Include="TraditionalTestCases\FsControlRequest\FSCTL_QUERY_FILE_REGIONS.cs" />
     <Compile Include="TraditionalTestCases\FsControlRequest\FSCTL_SET_COMPRESSION.cs" />
     <Compile Include="TraditionalTestCases\FsControlRequest\FSCTL_SET_INTEGRITY_INFORMATION.cs" />
     <Compile Include="TraditionalTestCases\FsControlRequest\FSCTL_GET_REPARSE_POINT.cs" />
@@ -191,6 +195,10 @@
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-FSCC\Fscc.csproj">
       <Project>{124E0F6D-57D7-4582-AF9A-3DE11B358E76}</Project>
       <Name>Fscc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SMB2\Smb2.csproj">
+      <Project>{C7F08825-D3C9-4DDD-9BA3-06733B1ABE36}</Project>
+      <Name>Smb2</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Common\Adapter\CommonAdapter.csproj">
       <Project>{3fd566ba-e398-461e-b1b6-464b117ed422}</Project>

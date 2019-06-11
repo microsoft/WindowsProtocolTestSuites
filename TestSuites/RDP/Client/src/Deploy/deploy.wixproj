@@ -195,7 +195,7 @@
     <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\TestSuites\RDP\Client\Setup\Data" -out TestSuiteDataFiles.wxs -template fragment -gg -cg TESTSUITE_DATA_FILES -dr TESTSUITE_DATA_DIR -var wix.TESTSUITE_DATA_DIR -sreg -sfrag -srd' />
     <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\common&quot; -out CommonBatch.wxs -template fragment -gg -cg COMMON_BATCH_FILES -dr TESTSUITE_COMMON_SCRIPTS_DIR -var wix.TESTSUITE_COMMON_SCRIPTS_DIR -sreg -sfrag -srd" />
   </Target>
-  
+
   <Target Name="AfterBuild">
     <Copy SourceFiles="$(TargetDir)en-us\$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\deploy\" />
   </Target>
@@ -207,6 +207,7 @@
     <H264TestData Include="..\TestSuite\RDPEGFX\H264TestData\*" />
     <H264TestDataBaseImage Include="..\TestSuite\RDPEGFX\H264TestData\BaseImage\*" />
     <SUTControlAdapter Include="..\Adapter\SUTControlAdapter\*.ps1" />
+    <ShellSUTControlAdapter Include="..\Adapter\ShellSUTControlAdapter\*.sh" />
     <RdpeiSUTControlAdapter Include="..\Adapter\RdpeiSUTControlAdapter\*.ps1" />
     <NonWindowsSUTImplementation Include="..\Adapter\NonWindowsSUTImplementation\*.ps1" />
     <RdpedispSUTControlAdapter Include="..\Adapter\RdpedispSUTControlAdapter\*.ps1" />
@@ -221,6 +222,7 @@
     <Copy SourceFiles="@(RdpedispEnhancedAdapterImages)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin" />
     <Copy SourceFiles="@(H264TestDataBaseImage)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin" />
     <Copy SourceFiles="@(SUTControlAdapter)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin" />
+    <Copy SourceFiles="@(ShellSUTControlAdapter)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin" />
     <Copy SourceFiles="@(RdpeiSUTControlAdapter)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin" />
     <Copy SourceFiles="@(NonWindowsSUTImplementation)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin\NonWindowsSUTImplementation" />
     <Copy SourceFiles="@(RdpedispSUTControlAdapter)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\Bin" />
