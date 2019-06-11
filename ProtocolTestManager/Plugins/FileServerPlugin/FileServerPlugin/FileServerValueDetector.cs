@@ -326,7 +326,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             propertiesDic.Add("Common.Platform", new List<string>() { detectionInfo.platform.ToString() });
             propertiesDic.Add("Common.SupportedSecurityPackage", new List<string>() { detectionInfo.securityPackageType.ToString() });
 
-            propertiesDic.Add("Common.SupportedCompressionAlgorithms", new List<string>() { String.Join(", ", detectionInfo.smb2Info.SupportedCompressionAlgorithms.Select(compressionAlgorithm => compressionAlgorithm.ToString())) });
+            propertiesDic.Add("Common.SupportedCompressionAlgorithms", new List<string>() { String.Join(";", detectionInfo.smb2Info.SupportedCompressionAlgorithms.Select(compressionAlgorithm => compressionAlgorithm.ToString())) });
 
             #endregion
 
