@@ -258,7 +258,7 @@ if($driverComputerIP -ne $driverComputerName)
 #-----------------------------------------------------
 Pop-Location
 Write-Host "Write signal file: config.finished.signal to system drive."
-cmd /C ECHO CONFIG FINISHED>$env:HOMEDRIVE\config.finished.signal
+cmd /C ECHO CONFIG FINISHED>$env:HOMEDRIVE\configTC.finished.signal
 
 #----------------------------------------------------------------------------
 # Ending script
