@@ -213,7 +213,7 @@
     </Property>
     <!-- Set threshold value for expected assess value, which is used for IQA algorithm when verifying RemoteFX codec, the test suite concludes two images similar if the IQA value not smaller than this bar -->
     <Property name="VerifySUTDisplay.IQA.AssessValueThreshold" value="0.98">
-      <Description>Set threshold value for expected assess value, which should not be larger than 1. It is used for IQA algorithm when verifying RemoteFX codec, the test suite concludes two images similar if the IQA value not smaller than this bar.</Description>
+      <Description>Set threshold value for expected assess value, which should be in the range of 0(included) and 1(included). It is used for IQA algorithm when verifying RemoteFX codec, the test suite concludes two images similar if the IQA value not smaller than this bar.</Description>
     </Property>
     <!-- Shift for the window of RDP client (SUT), set them to zero if the RDP client uses full screen mode-->
     <Property name="VerifySUTDisplay.Shift.X" value="0">
