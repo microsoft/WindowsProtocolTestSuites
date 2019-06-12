@@ -4,7 +4,7 @@
 ###########################################################################################
 
 ###########################################################################################
-## Test
+## Test Test Test
 ## Microsoft Windows Powershell Scripting
 ## File:           Config-CDC.ps1
 ## Purpose:        Configure Domain Controller in Child Domain for Active Directory Family Test Suite.
