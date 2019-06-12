@@ -1,4 +1,4 @@
-Windows-Protocol-Test-Suites
+Windows-Protocol-Test-Suites AAA
 
 Copyright (c) Microsoft Corporation
 
