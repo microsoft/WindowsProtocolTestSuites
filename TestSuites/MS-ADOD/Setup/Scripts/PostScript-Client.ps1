@@ -15,7 +15,7 @@
 
 Param
 (
-    [string]$WorkingPath = "C:\temp",                                     # Script working path
+    [string]$WorkingPath = (split-path -parent ([System.IO.Path]::GetDirectoryName($myInvocation.MyCommand.Definition))),
     [int]   $Step        = 1                                              # For rebooting, indicate which step the script is runing
 )
 
@@ -26,6 +26,15 @@ $ScriptsSignalFile      = "$env:SystemDrive\PostScript.Completed.signal"        
 $CurrentScriptPath      = $MyInvocation.MyCommand.Definition                    # Current Working Path
 $LogPath                = "$env:HOMEDRIVE\Logs"                                 # Log Path
 $LogFile                = "$LogPath\PostScript-Client.ps1.log"                  # Log File
+
+# Check WorkingPath
+if($WorkingPath -eq "$env:SystemDrive\")
+{
+    Write-Host "Make path to C:\Temp to run script" -ForegroundColor Yellow
+    $WorkingPath = $WorkingPath + "Temp"
+    Write-Host "WorkingPath is : $WorkingPath" -ForegroundColor Yellow
+    $ScriptsSignalFile = "$WorkingPath\post.finished.signal"
+}
 [string]$configPath	 	= "$WorkingPath\protocol.xml"
 
 Write-Host "Put current dir as $WorkingPath" -ForegroundColor Yellow
@@ -73,6 +82,26 @@ Function RestartAndResume
 }
 
 #-----------------------------------------------------------------------------
+# Remove Controller.ps1 run step registry key
+#-----------------------------------------------------------------------------
+Function RemoveControllerRegistryKey
+{
+    $ControllerPhase = (Get-ItemProperty -Path HKLM:\Software\Microsoft\Windows\CurrentVersion\Run -Name Install).Install
+    Write-Host "Remove Controller.ps1 registry key: $ControllerPhase"
+    Remove-ItemProperty -Path HKLM:\Software\Microsoft\Windows\CurrentVersion\Run -Name Install
+}
+
+#-----------------------------------------------------------------------------
+# Add back Controller.ps1 run step registry key
+#-----------------------------------------------------------------------------
+Function AddBackControllerRegistryKey
+{
+    Write-Host "Post script run finished, add back Controller.ps1 registry key"
+    $ControllerRegistryPhase = "C:\Windows\System32\WindowsPowerShell\v1.0\PowerShell.exe -NoExit -Command `"c:\temp\controller.ps1 -phase 4`""
+    Set-ItemProperty -Path HKLM:\Software\Microsoft\Windows\CurrentVersion\Run -Name Install -Value "$ControllerRegistryPhase"
+}
+
+#-----------------------------------------------------------------------------
 # Phase1: SetNetworkConfiguration; DisableICMPRedirect; DisableIPv6; SetNetworkLocation; GetInstalledScriptPath; SetStartupScript
 #-----------------------------------------------------------------------------
 Function Phase1
@@ -113,7 +142,7 @@ Function Phase1
 Function Finish
 {
     # Write signal file
-    Write-Host "Write signal file: PostScript.Completed.signal to system drive."
+    Write-Host "Write signal file: $ScriptsSignalFile."
     cmd /C ECHO CONFIG FINISHED>$ScriptsSignalFile
 
     # Ending script
@@ -123,6 +152,8 @@ Function Finish
 
     # Cancel RestartAndRun
     .\RestartAndRunFinish.ps1
+
+     shutdown /r /f
 }
 
 #-------------------------------------------------------------------------------
@@ -137,8 +168,8 @@ Function Main()
 
     switch ($Step)
     {
-        1 { Phase1; RestartAndResume; }
-        2 { Finish; }
+        1 { RemoveControllerRegistryKey; Phase1; RestartAndResume; }
+        2 { AddBackControllerRegistryKey; Finish; }
         default 
         {
             Write-Host "Fail to execute the script" -ForegroundColor Red
