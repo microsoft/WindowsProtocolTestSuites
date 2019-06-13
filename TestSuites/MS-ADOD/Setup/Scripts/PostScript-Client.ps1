@@ -150,7 +150,7 @@ Function Finish
     Write-Host "EXECUTE [PostScript-Client.ps1] FINISHED (NOT VERIFIED)." -ForegroundColor Green
     Stop-Transcript
 
-    # Cancel RestartAndRun
+    # Stop restart of postscript
     .\RestartAndRunFinish.ps1
 
      shutdown /r /f
