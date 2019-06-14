@@ -192,10 +192,8 @@ Function Finish
     Write-Host "EXECUTE [PostScript-PDC.ps1] FINISHED (NOT VERIFIED)." -ForegroundColor Green
     Stop-Transcript
 
-    # Stop restart of postscript
+    # Finish execution of PostScript-PDC.ps1
     .\RestartAndRunFinish.ps1
-
-    shutdown /r /f
 }
 
 #-------------------------------------------------------------------------------
@@ -217,6 +215,7 @@ Function Main()
             break
         }
     }
+    shutdown /r /f
 }
 
 Main
