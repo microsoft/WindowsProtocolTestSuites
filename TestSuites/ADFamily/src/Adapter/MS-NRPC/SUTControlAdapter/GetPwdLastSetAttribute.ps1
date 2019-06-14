@@ -10,17 +10,10 @@
 $PSScriptRoot = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
 Push-Location $PSScriptRoot
 
-function GetPtfVariable
-{
-    param($name)
-	$v = Get-Variable -Name ("PTFProp"+$name)
-	return $v.Value
-}
-
 $objectPath = .\GetAdministratorObjPath.ps1
 $attribute = "pwdLastSet"
-$primaryDCName = GetPtfVariable "Common.WritableDC1.NetbiosName" 
-$primaryDomainNetBiosName = GetPtfVariable "Common.PrimaryDomain.NetBiosName"
+$primaryDCName = $PTFProp_Common_WritableDC1_NetbiosName
+$primaryDomainNetBiosName = $PTFProp_Common_PrimaryDomain_NetBiosName
 
 # Get Information
 $objectInstance = New-Object System.DirectoryServices.DirectoryEntry("LDAP://$primaryDCName/$objectPath","$primaryDomainNetBiosName\$username",$password)

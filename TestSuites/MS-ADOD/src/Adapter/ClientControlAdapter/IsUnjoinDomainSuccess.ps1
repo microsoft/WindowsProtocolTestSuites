@@ -13,15 +13,15 @@
 ##
 ##############################################################################
 
-[string]$clientComputerName  = $PtfPropClientIP
-[string]$clientAdminUserName = $PtfPropClientAdminUsername
-[string]$clientAdminPwd      = $PtfPropClientAdminPwd
-[string]$scriptPath          = $PtfPropClientScriptPath
+[string]$clientComputerName  = $PtfProp_ClientIP
+[string]$clientAdminUserName = $PtfProp_ClientAdminUsername
+[string]$clientAdminPwd      = $PtfProp_ClientAdminPwd
+[string]$scriptPath          = $PtfProp_ClientScriptPath
 
 #-------------------------------------------------------------------------------------#
 # Create $logFile if not exist
 #-------------------------------------------------------------------------------------#
-[string]$logPath = $PtfPropDriverLogPath
+[string]$logPath = $PtfProp_DriverLogPath
 if ($logPath -eq $null -or $LogPath -eq "")
 {
 	$logPath = "..\Logs"

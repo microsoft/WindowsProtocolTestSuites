@@ -4,11 +4,11 @@
 #############################################################################
 
 [string]$fileName
-[string]$domain = $PtfPropDomainName
-[string]$userName = $PtfPropSutUserName
-[string]$password = $PtfPropSutPassword
+[string]$domain = $PtfProp_DomainName
+[string]$userName = $PtfProp_SutUserName
+[string]$password = $PtfProp_SutPassword
 
-$share = "\\" + $PtfPropSutComputerName + "\" + $PtfPropShareFolder
+$share = "\\" + $PtfProp_SutComputerName + "\" + $PtfProp_ShareFolder
 
 if($Domain -eq $null -or $Domain.trim() -eq "")
 {

@@ -192,7 +192,7 @@
       <!-- EULA and Uninstall shortcuts -->
       <Component Id="GeneralShortcuts" Guid="*">
 
-        <Shortcut Id="EulaShortcut" Name="EULA" Description="Open end user license agreement" Target="[TESTSUITE_ROOT_DIR]EULA.rtf" WorkingDirectory="TESTSUITE_ROOT_DIR"/>
+        <Shortcut Id="EulaShortcut" Name="LICENSE" Description="Open end user license agreement" Target="[TESTSUITE_ROOT_DIR]LICENSE.rtf" WorkingDirectory="TESTSUITE_ROOT_DIR"/>
 
         <Shortcut Id="UninstallProductShortcut" Name="Uninstall" Description="Uninstall the test suite" Target="[System64Folder]msiexec.exe" Arguments="/x [ProductCode]"/>
 
@@ -202,8 +202,6 @@
 
       <Component Id="TestSuiteShortcuts" Guid="*">
         <Shortcut Id="OpenTestSuiteDirShortcut" Name="Open Test Suite Directory" Description="Open root directory of the test suite" Target="[WindowsFolder]explorer.exe" Arguments="." WorkingDirectory="TESTSUITE_ROOT_DIR"/>
-
-        <Shortcut Id="QuickStartGuideShortcut_ProgramsMenu" Name="Open User Guide" Description="User Guide for !(wix.TESTSUITE_NAME)" Target="[TESTSUITE_DOCS_DIR]!(wix.QUICK_START_GUIDE)" WorkingDirectory="TESTSUITE_DOCS_DIR" />
 
         <Shortcut Id="RunAllTestCasesShortcut_ProgramsMenu" Name="RunAllTestCases" Description="Run all test cases." Target="[TESTSUITE_BATCH_DIR]!(wix.RUN_ALLTCS_COMMAND)" WorkingDirectory="TESTSUITE_BATCH_DIR" />
 
@@ -218,8 +216,6 @@
     <DirectoryRef Id="DesktopFolder">
       <Component Id="DesktopShortcuts" Guid="*">
         <Shortcut Id="OpenTestSuiteDirShortcut_Desktop" Name="Open !(wix.TESTSUITE_NAME) !(wix.TESTSUITE_ENDPOINT)-EP Test Suite Directory" Description="Open root directory of the test suite" Target="[WindowsFolder]explorer.exe" Arguments="." WorkingDirectory="TESTSUITE_ROOT_DIR"/>
-
-        <Shortcut Id="QuickStartGuideShortcut_Desktop" Name="Open !(wix.TESTSUITE_NAME) !(wix.TESTSUITE_ENDPOINT)-EP User Guide" Description="User Guide for !(wix.TESTSUITE_NAME)" Target="[TESTSUITE_DOCS_DIR]!(wix.QUICK_START_GUIDE)" WorkingDirectory="TESTSUITE_DOCS_DIR" />
 
         <RegistryValue Id="TestSuiteShortcutsKeyPath_Desktop" Root="HKCU" Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_ENDPOINT)-!(wix.TESTSUITE_VERSION)-Desktop" Name="Installed" Type="integer" Value="1" KeyPath="yes" />
 

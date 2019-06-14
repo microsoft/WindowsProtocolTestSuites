@@ -206,21 +206,23 @@ The minimum requirements for the driver computer are as follows:
 ### <a name="_Toc426622596"/>Software 
 All of the following software must be installed on the driver computer _before_ the installation of this test suite.
 
-|  **Required Software** | 
-| ------------- |
-| Microsoft® Visual Studio® 2017 | 
-| Microsoft® Protocol Test Framework 1.0.6000.0| 
-| Spec Explorer (build 3.5.3146.0 or later)| 
-|              You can download Spec Explorer from below website| 
-|              [http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/](http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/)| 
-| Microsoft® Message Analyzer| 
-| Message Analyzer is required for this test suite to analyze the network traces and validate the message sequences, structures and fields per scenario. |
-|        ![image3.png](./image/MS-AZOD_ODUserGuide/image3.png)Note| 
-|              You can download the latest Message Analyzer from below website [http://www.microsoft.com/en-us/download/details.aspx?id=44226](http://www.microsoft.com/en-us/download/details.aspx?id=44226) | 
-| Install Microsoft Message Analyzer (Complete) on the Client Computer/Driver Computer which runs Windows operate system.       | 
-|  | 
-|  **Optional Software that is Not Included**| 
-| N/A| 
+**Required Software**
+
+All common softwares listed in [prerequisites](https://github.com/microsoft/WindowsProtocolTestSuites#prerequisites) for running Windows Protocol Test Suites.
+
+* **Microsoft® Message Analyzer**
+
+    **Microsoft® Message Analyzer** (MMA) is required for this test suite to analyze the network traces and validate the message sequences, structures and fields per scenario. Install **Microsoft Message Analyzer** (Complete) on the Client Computer/Driver Computer which runs Windows operate system.
+
+    ![image3.png](./image/MS-AZOD_ODUserGuide/image3.png)Note
+
+    You can download the latest Message Analyzer from below website [http://www.microsoft.com/en-us/download/details.aspx?id=44226](http://www.microsoft.com/en-us/download/details.aspx?id=44226).
+
+**Optional Software**
+
+* **Protocol Test Manager**
+
+    **Protocol Test Manager** provides a graphical user interface (UI) to facilitate configuration and execution of Microsoft® Windows Protocol Test Suite tests. Its use is highly recommended.
 
 ## <a name="_Toc426622597"/>Network Setup
 

@@ -284,6 +284,9 @@
           <Rule name = "HVRS (Hyper-V Remote Storage)">
             <Category name = "HVRS-SMB"/>
           </Rule>
+          <Rule name = "Compression">
+            <Category name = "Compression"/>
+          </Rule>
         </Rule>
         <Rule name = "FSRVP (File Server Remote VSS)">
           <Category name = "FSRVPNonClusterRequired"/>

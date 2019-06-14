@@ -4,14 +4,14 @@
 ########################################################################################################
 
 param(
-[string]$proxyAddr             = ${PTFPropSUT.SutIPAddress},
-[string]$proxyAdmin            = ${PTFPropSUT.Username},
-[string]$proxyAdminPwd         = ${PTFPropSUT.Password},
-[string]$domainAdmin           = ${PTFPropDomain.Username},
-[string]$domainAdminPwd        = ${PTFPropDomain.Password},
-[string]$adfsName              = ${PTFPropADFS.AdfsDns},
-[string]$AdfsCert              = ${PTFPropADFS.AdfsCert},
-[string]$PfxPwd                = ${PTFPropCommon.PfxPassword}
+[string]$proxyAddr             = $PTFProp_SUT_SutIPAddress,
+[string]$proxyAdmin            = $PTFProp_SUT_Username,
+[string]$proxyAdminPwd         = $PTFProp_SUT_Password,
+[string]$domainAdmin           = $PTFProp_Domain_Username,
+[string]$domainAdminPwd        = $PTFProp_Domain_Password,
+[string]$adfsName              = $PTFProp_ADFS_AdfsDns,
+[string]$AdfsCert              = $PTFProp_ADFS_AdfsCert,
+[string]$PfxPwd                = $PTFProp_Common_PfxPassword
 )
 
 # variables used for remoting

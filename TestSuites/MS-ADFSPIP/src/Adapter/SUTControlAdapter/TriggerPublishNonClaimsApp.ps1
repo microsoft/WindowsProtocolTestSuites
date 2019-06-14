@@ -4,17 +4,17 @@
 ########################################################################################################
 
 # Remote SUT computer
-$SutIpAddress         = ${PTFPropSUT.SutIPAddress}
-$SutAdminUserName     = ${PTFPropSUT.Username}
-$SutAdminPassword     = ${PTFPropSUT.Password}
+$SutIpAddress         = $PTFProp_SUT_SutIPAddress
+$SutAdminUserName     = $PTFProp_SUT_Username
+$SutAdminPassword     = $PTFProp_SUT_Password
 # Web application properties
-$ProxyHostName        = ${PTFPropWebApp.ProxyHostName}
-$ProxyAppName         = ${PTFPropWebApp.App2Name}
-$ExternalUrl          = ${PTFPropWebApp.App2Url}
-$BackendServerUrl     = ${PTFPropWebApp.App2Url}
-$AdfsRelyingPartyName = ${PTFPropWebApp.App2Name}
-$WebAppCert           = ${PTFPropWebApp.WebAppCert}
-$PfxPwd               = ${PTFPropCommon.PfxPassword}
+$ProxyHostName        = $PTFProp_WebApp_ProxyHostName
+$ProxyAppName         = $PTFProp_WebApp_App2Name
+$ExternalUrl          = $PTFProp_WebApp_App2Url
+$BackendServerUrl     = $PTFProp_WebApp_App2Url
+$AdfsRelyingPartyName = $PTFProp_WebApp_App2Name
+$WebAppCert           = $PTFProp_WebApp_WebAppCert
+$PfxPwd               = $PTFProp_Common_PfxPassword
 
 # Script to be run remotely on SUT
 $RunCommand = [ScriptBlock] {

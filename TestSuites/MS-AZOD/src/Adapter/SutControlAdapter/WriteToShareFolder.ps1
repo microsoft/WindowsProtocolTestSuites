@@ -29,7 +29,7 @@ $uncPath = $uncPath.Replace("/","\")
 $workingDir=$MyInvocation.MyCommand.path
 $workingDir =Split-Path $workingDir
 $runningScriptName=$MyInvocation.MyCommand.Name
-$logFile = "$PtfPropDriverLogPath\$logFileName"
+$logFile = "$PtfProp_DriverLogPath\$logFileName"
 $signalFile="$workingDir\$runningScriptName.signal"
 
 
