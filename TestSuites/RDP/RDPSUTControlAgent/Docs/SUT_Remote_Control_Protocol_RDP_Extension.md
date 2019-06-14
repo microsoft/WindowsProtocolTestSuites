@@ -1,4 +1,4 @@
-# SUT Remote Control Protocol for Windows Protocol Interoperability Test Suites: RDP Extension
+# SUT Remote Control Protocol for Windows Protocol Test Suites: RDP Extension
 
 ## Contents
 * [1 Introduction](#1-Introduction)

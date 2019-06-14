@@ -1,4 +1,4 @@
-# SUT Remote Control Protocol for Windows Protocol Interoperability Test Suites WindowsWindows
+# SUT Remote Control Protocol for Windows Protocol Test Suites
 
 ## Contents
 * [1 Introduction](#1-Introduction)
