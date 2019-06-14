@@ -1,21 +1,4 @@
-# SUT Remote Control Protocol for Microsoft Protocol Interoperability Test Suites: RDP Extension
-
-_Windows is built to be the most interoperable platform_ 
-
-**MICROSOFT CORPORATION**
-
-
-**February 16, 2016**
-
-
-
-
-**Revision Summary**
-
-| Revision summary   |   |   |
-| --- | --- | --- |
-| Date  | Revision history   | Comments   |
-| 01/20/2014 | 1.0 | Initial version |
+# SUT Remote Control Protocol for Windows Protocol Interoperability Test Suites: RDP Extension
 
 ## Contents
 * [1 Introduction](#1-Introduction)

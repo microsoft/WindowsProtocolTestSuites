@@ -1,18 +1,4 @@
-# SUT Remote Control Protocol for Microsoft Protocol Interoperability Test Suites 
-
-_Windows is built to be the most interoperable platform_
-
-**MICROSOFT CORPORATION** 
-
-_January 18, 2019_
-
-
-## Revision Summary
-|  **Date**|  **Revision history**|  **Comments**|
-| -------------| -------------| ------------- |
-| 1/20/2014| 1.0| Initial version|
-| 1/18/2019| 1.1| Add more request and response|
-
+# SUT Remote Control Protocol for Windows Protocol Interoperability Test Suites WindowsWindows
 
 ## Contents
 * [1 Introduction](#1-Introduction)
