@@ -192,7 +192,7 @@ Function Finish
     Write-Host "EXECUTE [PostScript-PDC.ps1] FINISHED (NOT VERIFIED)." -ForegroundColor Green
     Stop-Transcript
 
-    # Finish execution of PostScript-PDC.ps1
+    # Remove the registry key for postscript auto run and finish the postscript execution.
     .\RestartAndRunFinish.ps1
 }
 
