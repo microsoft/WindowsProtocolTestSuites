@@ -191,8 +191,6 @@ Write-Host "Begin to update RDP_ClientTestSuite.deployment.ptfconfig..."
 .\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.ServerUserName"        $CredSSPUser
 .\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.ServerUserPassword"    $CredSSPPwd
 .\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Version"               $RDPVersion
-.\Modify-ConfigFileNode.ps1 $DepPtfConfig "DriverComputerFullQualifiedDomainName"               "$domainName.CONTOSO.com"
-.\Modify-ConfigFileNode.ps1 $DepPtfConfig "DriverComputerNetBiosName"               $domainName
 
 if ($osVersion.ToUpper() -eq "NONWINDOWS")
 {
