@@ -571,7 +571,7 @@ To configure the Trust-Realm KDC
 | -------------| ------------- |
 |  **Property**|  **Description**| 
 |  **LogPath**| The log path for configuration logs and test suite adapter script logs. | 
-| | Default value: **C:\temp**| 
+| | Default value: **C:\TestLogs**| 
 |  **LocalRealm.RealmName**| The name of the local realm being configured.| 
 | | Default value: **contoso.com**| 
 |  **TrustRealm.RealmName**| The name of the trust realm being configured.| 

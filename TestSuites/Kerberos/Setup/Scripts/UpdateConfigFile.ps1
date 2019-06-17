@@ -43,7 +43,6 @@ Function UpdateConfigFile
 {
 
     Write-TestSuiteInfo "Start to update config file."
-    #[string] $ProtocolXmlConfigFile = "$WorkingPath\protocol.xml"
     [string] $ProtocolXmlConfigFile = "protocol.xml"
     [xml]$XmlContent = Get-Content $ProtocolXmlConfigFile -ErrorAction Stop
 

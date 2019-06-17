@@ -127,7 +127,6 @@ Function Init-Environment()
 {
 	# Switch to the script path
     Write-ConfigLog "Switching to $WorkingPath..." -ForegroundColor Yellow
-    #Push-Location $WorkingPath
 	
     # Start logging
     Start-ConfigLog

@@ -133,7 +133,6 @@ Function Init-Environment()
 
     # Switch to the script path
     Write-ConfigLog "Switching to $WorkingPath..." -ForegroundColor Yellow
-    #Push-Location $WorkingPath
 
     # Update ParamConfig.xml
     UpdateConfigFile.ps1 -WorkingPath $WorkingPath
