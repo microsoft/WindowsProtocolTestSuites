@@ -428,14 +428,6 @@ The  &#60; version &#35;  &#62;  placeholder indicates the installed build of th
 | -------------| ------------- |
 | Batch| Command files that you can use to run individual test cases, BVT test cases, Categorized test cases or all test cases.| 
 | Bin| Test suite binaries and configuration files.| 
-| Docs| The version of each of the following protocol specifications used to develop this test suite:| 
-| |  **[MS-KILE].pdf**| 
-| |  **[MS-PAC].pdf**| 
-| |  **[MS-KKDCP].pdf**| 
-| | **Kerberos_ServerUserGuide.md** – A user guide that explains how to install and configure the driver computer, the Domain Controllers (DC), the Key Distribution Centers (KDC) and the Application Servers (AP), as well as how to run test cases.| 
-| | **Kerberos_ServerTestDesignSpecification.md** – An overview document containing conceptual information about a protocol including probable use, relationships to other protocols, message flow, state diagrams, a short list of properties, and a test approach describing justification and adapter approach.| 
-| | ![notice.png](./image/notice.png)Note | 
-| | The driver computer should include Microsoft Office or other programs that can open and display these documents. If it does not, you can copy these documents to a computer equipped with applications that can.| 
 | Scripts| Scripts that are used to set up and configure the Driver Computer, the Key Distribution Centers and the Application Servers.| 
 | LICENSE.rtf| The End User License Agreement.| 
 
@@ -455,7 +447,7 @@ To configure the Local-Realm KDC
 
 * Log on the Local-Realm KDC computer as domain administrator. 
 
-* Go to C:\MicrosoftProtocolTests\Kerberos\Server-Endpoint\ _&#60; version &#35;  &#62;_ \Data, and open the ParamConfig.xml file.
+* Go to C:\MicrosoftProtocolTests\Kerberos\Server-Endpoint\ _&#60; version &#35;  &#62;_ \Scripts, and open the ParamConfig.xml file.
 
 * Edit the properties as shown in the following table.
 
@@ -463,21 +455,25 @@ To configure the Local-Realm KDC
 | -------------| ------------- |
 |  **Property**|  **Description**| 
 |  **LogPath**| The log path for configuration logs and test suite adapter script logs. | 
-| | Default value: **C:\TestLogs**| 
+| | Default value: **C:\temp**| 
 |  **LocalRealm.RealmName**| The name of the local realm being configured.| 
 | | Default value: **contoso.com**| 
 |  **LocalRealm.KDC.NetBiosName**| The NetBiosName of the KDC in local realm.| 
 | | Default value: **DC01$**| 
-|  **LocalRealm.AP01.NetBiosName**| The NetBiosName of the Application Server in the local realm.| 
+|  **LocalRealm.FileShare.NetBiosName**| The NetBiosName of the FileShare Server in the local realm.| 
 | | Default value: **AP01$**| 
-|  **LocalRealm.AP01.Password**| The Password of the Application Server Account in the local realm.| 
+|  **LocalRealm.FileShare.Password**| The Password of the FileShare Server Account in the local realm.| 
+| | Default value: **Password02!**| 
+|  **LocalRealm.WebServer.NetBiosName**| The NetBiosName of the WebServer  in the local realm.| 
+| | Default value: **AP01$**| 
+|  **LocalRealm.WebServer.Password**| The Password of the WebServer  Account in the local realm.| 
 | | Default value: **Password02!**| 
 |  **LocalRealm.ClientComputer.NetBiosName**| The NetBiosName of the Client Computer in the local realm.| 
 | | Default value: **ENDPOINT01$**| 
 |  **LocalRealm.ClientComputer.Password**| The Password of the Client Computer in the local realm.| 
 | | Default value: **Password05!**| 
-|  **LocalRealm.AuthNotRequired.Name**| The Account Name of the “AuthorizationNotRequired” Service Account in the local realm.| 
-| | Default value: **AuthNotRequired**| 
+|  **LocalRealm.AuthNotRequired.NetBiosName**| The Account Name of the “AuthorizationNotRequired” Service Account in the local realm.| 
+| | Default value: **AuthNotRequired$**| 
 |  **LocalRealm.AuthNotRequired.Password**| The Password of the Application Server Account in the local realm.| 
 | | Default value: **Password01!**| 
 |  **LocalRealm.Administrator.Username**| The user name for the administrator account in the local realm.| 
@@ -535,7 +531,7 @@ To configure the Local-Realm KDC
 |  **LocalRealm.User12.Password**| The password for the user account that must change password, but the PasswordMustChange is set to zero.| 
 | | Default value: **Yangguo;**| 
 |  **LocalRealm.ClaimType.DisplayName**| The display name for the newly created claim type.| 
-| | Default value: **description**| 
+| | Default value: **Department**| 
 |  **LocalRealm.ResourceProperties.DisplayName**| The display name for the newly created resource property.| 
 | | Default value: **PET_ImpactLevel**| 
 |  **LocalRealm.Rules.Name**| The name for the newly created central access rule.| 
@@ -552,7 +548,7 @@ Start-process powershell -verb runAs
 
 * Type cd C:\MicrosoftProtocolTests\Kerberos\Server-Endpoint\ _&#60; version &#35;  &#62;_ \Scripts, and press **Enter**.
 
-* Type .\Config-DC01.ps1 –WorkingPath “..\”, and press **Enter**.
+* Type .\Configure-DC01.ps1 –WorkingPath “C:\MicrosoftProtocolTests\Kerberos\Server-Endpoint\ _&#60; version &#35;  &#62;_”, and press **Enter**.
 
 * The script will restart the computer automatically. After restart, Administrator account password will be changed as “Password01@”. When there’s UI automatically run, please don’t move the cursor, otherwise some UI automation focus will miss and environment will not be setup correctly.
 
@@ -572,7 +568,7 @@ To configure the Trust-Realm KDC
 
 * Log on the Trust-Realm KDC computer as domain administrator. 
 
-* Go to C:\MicrosoftProtocolTests\Kerberos\Server-Endpoint\ _&#60; version &#35;  &#62;_ \Data, and open the ParamConfig.xml file.
+* Go to C:\MicrosoftProtocolTests\Kerberos\Server-Endpoint\ _&#60; version &#35;  &#62;_ \Scripts, and open the ParamConfig.xml file.
 
 * Edit the properties as shown in the following table.
 
@@ -587,9 +583,13 @@ To configure the Trust-Realm KDC
 | | Default value: **kerb.com**| 
 |  **TrustRealm.KDC.NetBiosName**| The NetBiosName of the KDC in trust realm.| 
 | | Default value: **DC02$**| 
-|  **TrustRealm.AP02.NetBiosName**| The NetBiosName of the Application Server in the trust realm.| 
+|  **TrustRealm.FileShare.NetBiosName**| The NetBiosName of the FileShare Server in the trust realm.| 
 | | Default value: **AP02$**| 
-|  **TrustRealm.AP02.Password**| The Password of the Application Server Account in the trust realm.| 
+|  **TrustRealm.FileShare.Password**| The Password of the FileShare Server Account in the trust realm.| 
+| | Default value: **Password04!**| 
+|  **TrustRealm.WebServer.NetBiosName**| The NetBiosName of the WebServer  in the trust realm.| 
+| | Default value: **AP02$**| 
+|  **TrustRealm.WebServer.Password**| The Password of the WebServer  Account in the trust realm.| 
 | | Default value: **Password04!**| 
 |  **TrustRealm.Administrator.Username**| The user name for the administrator account in the trust realm.| 
 | | Default value: **administrator**| 
@@ -621,7 +621,7 @@ Start-process powershell -verb runAs
 
 * Type cd C:\MicrosoftProtocolTests\Kerberos\Server-Endpoint\ _&#60; version &#35;  &#62;_ \Scripts, and press **Enter**.
 
-* Type .\Config-DC02.ps1 –WorkingPath “..\”, and press **Enter**.
+* Type .\Configure-DC02.ps1 –WorkingPath “C:\MicrosoftProtocolTests\Kerberos\Server-Endpoint\ _&#60; version &#35;  &#62;_”, and press **Enter**.
 
 * The script will restart the computer automatically. After restart, Administrator account password will be changed as “Password01 &#35; ”. When there’s UI automatically run, please don’t move the cursor, otherwise some UI automation focus will miss and environment will not be setup correctly.
 
@@ -637,7 +637,7 @@ To configure the Local-Realm Application Server computer
 
 * Log on to the Local-Realm Application Server computer as local administrator.
 
-* Go to C:\MicrosoftProtocolTests\Kerberos\Server-Endpoint\ _&#60; version &#35;  &#62;_ \Data, and open the ParamConfig.xml file.
+* Go to C:\MicrosoftProtocolTests\Kerberos\Server-Endpoint\ _&#60; version &#35;  &#62;_ \Scripts, and open the ParamConfig.xml file.
 
 * Edit the properties as shown in the following table.
 
@@ -645,7 +645,7 @@ To configure the Local-Realm Application Server computer
 | -------------| ------------- |
 |  **Property**|  **Description**| 
 |  **LogPath**| The log path for configuration logs and test suite adapter script logs. | 
-| | Default value: **C:\TestLogs**| 
+| | Default value: **C:\temp**| 
 |  **LocalRealm.WebServer.wwwroot**| The path of the webserver site wwwroot.| 
 | | Default value: **C:\inetpub\wwwroot**| 
 |  **LocalRealm.WebServer.user**| The user account that the Webserver is granted privilege to.| 
@@ -662,7 +662,7 @@ Start-process powershell -verb runAs
 
 * Type cd C:\MicrosoftProtocolTests\Kerberos\Server-Endpoint\ _&#60; version &#35;  &#62;_ \Scripts, and press **Enter**.
 
-* Type .\Config-AP01.ps1 –WorkingPath “..\”, and press **Enter**.
+* Type .\Configure-AP01.ps1 –WorkingPath “C:\MicrosoftProtocolTests\Kerberos\Server-Endpoint\ _&#60; version &#35;  &#62;_”, and press **Enter**.
 
 * The script will restart your computer. After restart, Administrator account password will be changed as “Password01@”.
 
@@ -678,7 +678,7 @@ To configure the Trust-Realm Application Server computer
 
 * Log on to the Trust-Realm Application Server computer as local administrator.
 
-* Go to C:\MicrosoftProtocolTests\Kerberos\Server-Endpoint\ _&#60; version &#35;  &#62;_ \Data, and open the ParamConfig.xml file.
+* Go to C:\MicrosoftProtocolTests\Kerberos\Server-Endpoint\ _&#60; version &#35;  &#62;_ \Scripts, and open the ParamConfig.xml file.
 
 * Edit the properties as shown in the following table.
 
@@ -686,7 +686,7 @@ To configure the Trust-Realm Application Server computer
 | -------------| ------------- |
 |  **Property**|  **Description**| 
 |  **LogPath**| The log path for configuration logs and test suite adapter script logs. | 
-| | Default value: **C:\TestLogs**| 
+| | Default value: **C:\temp**| 
 |  **TrustRealm.WebServer.wwwroot**| The path of the webserver site wwwroot.| 
 | | Default value: **C:\inetpub\wwwroot**| 
 |  **TrustRealm.WebServer.user**| The user account that the Webserver is granted privilege to.| 
@@ -703,7 +703,7 @@ Start-process powershell -verb runAs
 
 * Type cd C:\MicrosoftProtocolTests\Kerberos\Server-Endpoint\ _&#60; version &#35;  &#62;_ \Scripts, and press **Enter**.
 
-* Type .\Config-AP02.ps1 –WorkingPath “..\”, and press **Enter**.
+* Type .\Configure-AP02.ps1 –WorkingPath “C:\MicrosoftProtocolTests\Kerberos\Server-Endpoint\ _&#60; version &#35;  &#62;_”, and press **Enter**.
 
 * The script will restart your computer. After restart, Administrator account password will be changed as “Password01 &#35; ”
 
@@ -719,7 +719,7 @@ To configure the Local-Realm KKDCP computer
 
 * Log on to the Local-Realm KKDCP computer as local administrator.
 
-* Go to C:\MicrosoftProtocolTests\Kerberos\Server-Endpoint\ _&#60; version &#35;  &#62;_ \Data, and open the ParamConfig.xml file.
+* Go to C:\MicrosoftProtocolTests\Kerberos\Server-Endpoint\ _&#60; version &#35;  &#62;_ \Scripts, and open the ParamConfig.xml file.
 
 * Edit the properties as shown in the following table.
 
@@ -727,9 +727,9 @@ To configure the Local-Realm KKDCP computer
 | -------------| ------------- |
 |  **Property**|  **Description**| 
 |  **LogPath**| The log path for configuration logs and test suite adapter script logs. | 
-| | Default value: **C:\TestLogs**| 
+| | Default value: **C:\temp**| 
 |  **UseProxy**| Whether or not to use the proxy server.| 
-| | Default Value: **false**| 
+| | Default Value: **true**| 
 |  **KKDCPServerUrl**| The Url of Kerberos Proxy Service.| 
 | | Default Value: **https://proxy01.contoso.com/KdcProxy**| 
 
@@ -740,7 +740,7 @@ Start-process powershell -verb runAs
 
 * Type cd C:\MicrosoftProtocolTests\Kerberos\Server-Endpoint\ _&#60; version &#35;  &#62;_ \Scripts, and press **Enter**.
 
-* Type .\Config-PROXY01.ps1 –WorkingPath “..\”, and press **Enter**.
+* Type .\Configure-PROXY.ps1 –WorkingPath “C:\MicrosoftProtocolTests\Kerberos\Server-Endpoint\ _&#60; version &#35;  &#62;_”, and press **Enter**.
 
 * The scripts will restart the computer automatically. After restart, Administrator account password will be changed as “Password01@”.
 
@@ -754,9 +754,9 @@ To configure the driver computer
 
 * Verify that the other computers are configured and running.
 
-* Log on to the driver computer as local Administrator.
+* Log on to the driver computer as domain administrator.
 
-* Go to C:\MicrosoftProtocolTests\Kerberos\Server-Endpoint\ &#60; version &#35;  &#62; \Data, and open the ParamConfig.xml file.
+* Go to C:\MicrosoftProtocolTests\Kerberos\Server-Endpoint\ &#60; version &#35;  &#62; \Scripts, and open the ParamConfig.xml file.
 
 * Edit the properties as shown in the following table.
 
@@ -764,7 +764,7 @@ To configure the driver computer
 | -------------| ------------- |
 |  **Property**|  **Description**| 
 |  **LogPath**| The log path for configuration logs and test suite adapter script logs. | 
-| | Default value: **C:\TestLogs**| 
+| | Default value: **C:\temp**| 
 
 * Start Windows® PowerShell by right-clicking on the **Windows PowerShell** icon, and then click **Run as Administrator.** Or, from a Windows PowerShell command window, type:
 Start-process powershell -verb runAs
@@ -773,7 +773,7 @@ Start-process powershell -verb runAs
 
 * Type cd C:\MicrosoftProtocolTests\Kerberos\Server-Endpoint\ _&#60; version &#35;  &#62;_ \Scripts, and press **Enter**.
 
-* Type .\Config-Driver.ps1 –WorkingPath “..\”, and press **Enter**.
+* Type .\Configure-ENDPOINT.ps1 –WorkingPath “C:\MicrosoftProtocolTests\Kerberos\Server-Endpoint\ _&#60; version &#35;  &#62;_”, and press **Enter**.
 
 * The script will restart your computer. After restart, Administrator account password will be changed as “Password01@”.
 
