@@ -208,6 +208,7 @@
       <Password>Password04!</Password>
       <user>contoso\test01</user>
       <Rights>ReadAndExecute,ListDirectory</Rights>
+      <wwwroot>C:\inetpub\wwwroot</wwwroot>
       <Permission>Allow</Permission>
     </WebServer>
     <LdapServer>
