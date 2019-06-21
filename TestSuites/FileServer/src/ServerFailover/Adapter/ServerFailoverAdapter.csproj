@@ -83,6 +83,8 @@
     <Content Include="WindowsSutControlAdapter\MoveSmbWitnessClient.ps1" />
     <Content Include="WindowsSutControlAdapter\RefreshNetAdapter.ps1" />
     <Content Include="WindowsSutControlAdapter\MoveClusterResourceOwner.ps1" />
+    <Content Include="ShellSutControlAdapter\RestoreToInitialState.sh" />
+    <Content Include="ShellSutControlAdapter\TriggerFailover.sh" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
