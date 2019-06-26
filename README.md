@@ -32,9 +32,9 @@ Windows Protocol Test Suites contain 4 components:
 The Test Suites are developed and must be installed on a Windows platform.
 You should install the software listed below based on your testing purpose, including their own dependencies.
 
-1. [Visual Studio 2017](https://visualstudio.microsoft.com/downloads/) with these individual components:
+1. [Visual Studio 2017](https://visualstudio.microsoft.com/downloads/) installed with these individual components from the installer:
  
-    |Visual Studio Install Section|Individual Component\Purpose|Run Windows Protocol Test Suites|Build Windows Protocol Test Suites from source code|
+    |Section|Individual Component|Run Windows Protocol Test Suites|Build Windows Protocol Test Suites from source code|
     |---|---|---|---|
     |.NET|.NET Framework 4.7.1 SDK||Required|
     |.NET|.NET Framework 4.7.1 targeting pack|Required|Required|
@@ -44,30 +44,30 @@ You should install the software listed below based on your testing purpose, incl
     |Debugging and testing|Testing tools core features|Required|Required|
     |Developent Activities|Visual Studio C++ core features||Required<sup>1</sup>|
     |SDKs, libraries, and frameworks|Windows 10 SDK (10.0.16299.0) for Desktop C++ [x86 and x64]||Required<sup>1</sup>|
-1. [Spec Explorer 2010 v3.5.3146.0](https://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/)
+1. [Spec Explorer 2010 v3.5.3146.0](https://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/)<br />
    It is only required if you want to build or run the test suites that contain Model-Based Test cases. If you want to regenerate Model-Based Test cases, you must install Visual Studio 2012.
-1. [Protocol Test Framework build 1.0 (build 1.0.6500.0)](https://github.com/Microsoft/ProtocolTestFramework/releases/tag/1.0.6500.0)
+1. [Protocol Test Framework build 1.0 (build 1.0.6500.0)](https://github.com/Microsoft/ProtocolTestFramework/releases/tag/1.0.6500.0)<br />
    You can use a released MSI file or build it from source code.
-1. Enable .NET Framework 3.5.1
-   _Turn Windows features on or off_
-   ☑ _.NET Framework 3.5 (includes .NET 2.0 and 3.0)
+1. Enable .NET Framework 3.5.1<br/>
+   1. _Turn Windows features on or off_
+   1. Enable _.NET Framework 3.5 (includes .NET 2.0 and 3.0)<br />
    This is necessary for WiX Toolset.
-1. [WiX Toolset v3.11](https://github.com/wixtoolset/wix3/releases/tag/wix3111rtm)
-1. [WiX Toolset Visual Studio 2017 Extension](https://marketplace.visualstudio.com/items?itemName=RobMensching.WixToolsetVisualStudio2017Extension)
-   It is required if your want to build test suites or Protocol Test Manager from source code.
-1. [Microsoft Message Analyzer](https://www.microsoft.com/en-us/download/details.aspx?id=44226)
+1. [WiX Toolset v3.11](https://github.com/wixtoolset/wix3/releases/tag/wix3111rtm)<br />
+1. [WiX Toolset Visual Studio 2017 Extension](https://marketplace.visualstudio.com/items?itemName=RobMensching.WixToolsetVisualStudio2017Extension)<br />
+   WiX Toolset components required if you want to build test suites or Protocol Test Manager from source code.
+1. [Microsoft Message Analyzer](https://www.microsoft.com/en-us/download/details.aspx?id=44226)<br />
    It is required if your want to build or run ADFamily, ADOD and AZOD test suites.
-1. [Open XML SDK](https://www.microsoft.com/en-us/download/details.aspx?id=30425)
+1. [Open XML SDK](https://www.microsoft.com/en-us/download/details.aspx?id=30425)<br />
    It is required if your want to build or run ADFamily test suite.
-1. [Network Direct DDK](https://www.microsoft.com/en-us/download/details.aspx?id=26645)
+1. [Network Direct DDK](https://www.microsoft.com/en-us/download/details.aspx?id=26645)<br />
    From  `NetworkDirect_DDK.zip` extract `ndspi.h` and `ndstatus.h` into project path `ProtoSDK\RDMA\include`. This is to build SMBD test suite.
 
 
 <sup>1</sup>: <small>These individual components are required by ADFamily, MS-SMBD or Protocol Test Manager which have C++ code.</small>
 
-You can use the script in **InstallPrerequisites** folder to automatically download and install these software.
+You can use the script in `InstallPrerequisites` folder to automatically download and install these software.
 
-Tips when using the script in **InstallPrerequisites** folder:
+Tips when using the script in `InstallPrerequisites` folder:
 
 * To run the script, open **Windows PowerShell**, and execute the commands below in the **PowerShell Window**:
 
@@ -122,8 +122,8 @@ cd WindowsProtocolTestSuites\TestSuites\MS-SMB\src
 build.cmd
 ```
 
-After the build succeeds, the MSI file of each test suite should be generated in the folder *WindowsProtocolTestSuite\drop\TestSuites\\[TestSuiteName]\deploy\.*
-Take SMB test suite as an example, **MS-SMB-TestSuite-ServerEP.msi** should be generated in the folder *WindowsProtocolTestSuite\drop\TestSuites\MS-SMB\deploy\.*
+After the build succeeds, the MSI file of each test suite should be generated in the folder `WindowsProtocolTestSuite\drop\TestSuites\\[TestSuiteName]\deploy\`.
+Take SMB test suite as an example, `MS-SMB-TestSuite-ServerEP.msi` should be generated in the folder `WindowsProtocolTestSuite\drop\TestSuites\MS-SMB\deploy\`.
 
 ## Upgrade from an older version
 
@@ -131,8 +131,8 @@ You can download and install the latest msi of test suites, Protocol Test Manage
 
 ## Run
 After the build succeeds, you could set up the test environment and install/configure/run the test suite according to its **User Guide**.
-Each test suite has its own **User Guide** in the **WindowsProtocolTestSuites\TestSuites\\[TestSuiteName]\docs** folder.
-There're two more documents in the same folder:
+Each test suite has its own **User Guide** in the `WindowsProtocolTestSuites\TestSuites\\[TestSuiteName]\docs` folder.
+There are two more documents in the same folder:
 
 * **Technical Document**. The Open Specifications documentation for protocols, published by Microsoft. It's the basis of developing Test Suites.
 * **Test Design Spec**.  It provides information about the test scope and test suite design.
