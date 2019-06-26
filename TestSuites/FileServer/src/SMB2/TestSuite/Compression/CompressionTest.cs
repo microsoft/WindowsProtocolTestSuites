@@ -132,6 +132,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Smb311)]
         [TestCategory(TestCategories.Compression)]
+        [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether server can handle compressed WRITE request correctly using supported compression algorithms.")]
         public void SMB2Compression_CompressedWriteRequest()
         {
@@ -141,6 +142,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Smb311)]
         [TestCategory(TestCategories.Compression)]
+        [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether server can compress read request correctly if SMB2_READFLAG_REQUEST_COMPRESSED is specified in request and response is compressible.")]
         public void SMB2Compression_CompressibleReadResponse()
         {
@@ -150,6 +152,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Smb311)]
         [TestCategory(TestCategories.Compression)]
+        [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether server will not compress read request if SMB2_READFLAG_REQUEST_COMPRESSED is specified in request and response is incompressible.")]
         public void SMB2Compression_IncompressibleReadResponse()
         {

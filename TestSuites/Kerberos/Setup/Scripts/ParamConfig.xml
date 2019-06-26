@@ -224,6 +224,7 @@
       <wwwroot>C:\inetpub\wwwroot</wwwroot>
       <user>contoso\test01</user>
       <Rights>ReadAndExecute,ListDirectory</Rights>
+      <wwwroot>C:\inetpub\wwwroot</wwwroot>
       <Permission>Allow</Permission>
       <DefaultServiceName>host/ap02.kerb.com</DefaultServiceName>
       <ServiceSalt>KERB.COMhostap02.kerb.com</ServiceSalt>

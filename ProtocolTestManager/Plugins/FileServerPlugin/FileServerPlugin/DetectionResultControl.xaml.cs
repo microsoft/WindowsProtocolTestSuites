@@ -44,6 +44,9 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             AddCapability(Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL, "Multiple Channel");
             AddCapability(Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES, "Persistent Handle");
 
+            // Add compression capabilities
+            AddCompressionCapabilities(detectionInfo);
+
             // Add/Update detected IoCtl codes
             AddIoctlCode(CtlCode_Values.FSCTL_OFFLOAD_READ, this.info.F_CopyOffload[0]);
             AddIoctlCode(CtlCode_Values.FSCTL_OFFLOAD_WRITE, this.info.F_CopyOffload[1]);
@@ -86,6 +89,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             //Bind the data to the control
             resultItemMapList.Add(dialectsItems);
             resultItemMapList.Add(capabilitiesItems);
+            resultItemMapList.Add(compressionItems);
             resultItemMapList.Add(ioctlCodesItems);
             resultItemMapList.Add(createContextsItems);
             resultItemMapList.Add(rsvdItems);
@@ -103,7 +107,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         private const string createContextsDescription = "\"Creat Contexts\" are found supported or not supported by analyzing Create Responses when the Create Requests with the following create contexts are sent to SUT.";
         private const string rsvdDescription = "\"RSVD Implementation\" is detected by sending Create Request with SVHDX_OPEN_DEVICE_CONTEXT\\SVHDX_OPEN_DEVICE_CONTEXT_V2.";
         private const string sqosDescription = "\"SQOS Implementation\" is detected by sending SQOS get status request.";
-
+        private const string compressionDescription = "\"Supported SMB2 compression algorithms\" is detected by sending NEGOTIATE request with compression negotiate context when SMB2 dialect is greater than 3.1.1.";
 
         private ResultItemMap dialectsItems = new ResultItemMap() { Header = "Max Smb Version Supported", Description = dialectsDescription };
         private ResultItemMap capabilitiesItems = new ResultItemMap() { Header = "Capabilities", Description = capabilitiesDescription };
@@ -112,6 +116,8 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
         private ResultItemMap rsvdItems = new ResultItemMap() { Header = "Remote Shared Virtual Disk (RSVD)", Description = rsvdDescription };
         private ResultItemMap sqosItems = new ResultItemMap() { Header = "Storage Quality of Service (SQOS)", Description = sqosDescription };
+
+        private ResultItemMap compressionItems = new ResultItemMap() { Header = "SMB2 Compression Feature", Description = compressionDescription };
 
         private List<ResultItemMap> resultItemMapList = new List<ResultItemMap>();
 
@@ -160,7 +166,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 AddResultItem(ref this.capabilitiesItems, featureName, this.info.smb2Info.SupportedCapabilities.HasFlag(capabilityName) ? DetectResult.Supported : DetectResult.UnSupported);
             }
         }
-        
+
         private void AddIoctlCode(CtlCode_Values value, DetectResult result)
         {
             AddResultItem(ref this.ioctlCodesItems, value.ToString(), result);
@@ -236,6 +242,23 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 AddResultItem(ref this.sqosItems, "SQOS", info.SqosSupport);
             }
         }
+
+        private void AddCompressionCapabilities(DetectionInfo info)
+        {
+            var possibleCompressionAlogrithms = new CompressionAlgorithm[] { CompressionAlgorithm.LZ77, CompressionAlgorithm.LZ77Huffman, CompressionAlgorithm.LZNT1 };
+
+            foreach (var compressionAlgorithm in possibleCompressionAlogrithms)
+            {
+                if (info.smb2Info.SupportedCompressionAlgorithms.Contains(compressionAlgorithm))
+                {
+                    AddResultItem(ref this.compressionItems, compressionAlgorithm.ToString(), DetectResult.Supported);
+                }
+                else
+                {
+                    AddResultItem(ref this.compressionItems, compressionAlgorithm.ToString(), DetectResult.UnSupported);
+                }
+            }
+        }
         #endregion
 
         #region Private events
@@ -296,7 +319,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     DataTemplate tempDataTemplate = tempContentPresenter.ContentTemplate;
                     Expander mapHeader = tempDataTemplate.FindName("ResultMapHeader", tempContentPresenter) as Expander;
                     ListBox itemList = tempDataTemplate.FindName("ResultItemList", tempContentPresenter) as ListBox;
-                    
+
                     //Keep the current selection
                     if (!itemList.Items.Contains(selectedItem))
                         itemList.UnselectAll();

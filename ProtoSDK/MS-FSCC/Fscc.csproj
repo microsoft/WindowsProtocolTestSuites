@@ -101,10 +101,12 @@
     <Compile Include="Messages\FsccFileFsSectorSizeInformationResponsePacket.cs" />
     <Compile Include="Messages\FsccFsctlGetIntegrityInformationRequestPacket.cs" />
     <Compile Include="Messages\FsccFsctlGetIntegrityInformationResponsePacket.cs" />
+    <Compile Include="Messages\FsccFsctlGetNtfsVolumeDataResponsePacket.cs" />
     <Compile Include="Messages\FsccFsctlOffloadReadRequestPacket.cs" />
     <Compile Include="Messages\FsccFsctlOffloadReadResponsePacket.cs" />
     <Compile Include="Messages\FsccFsctlOffloadWriteRequestPacket.cs" />
     <Compile Include="Messages\FsccFsctlOffloadWriteResponsePacket.cs" />
+    <Compile Include="Messages\FsccFsctlReadFileUsnDataResponsePacket.cs" />
     <Compile Include="Messages\FsccFsctlSetIntegrityInformationRequestPacket.cs" />
     <Compile Include="Messages\FsccStandardBytesPacket.cs" />
     <Compile Include="Messages\FsccErrorPacket.cs" />
