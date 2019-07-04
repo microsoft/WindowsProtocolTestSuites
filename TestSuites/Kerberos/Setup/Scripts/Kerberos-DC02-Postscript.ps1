@@ -107,9 +107,6 @@ Function Phase1
     if(-not $IsAzure)
     {
         Remove-ItemProperty -Path HKLM:\Software\Microsoft\Windows\CurrentVersion\Run -Name Install;
-        # Set network configurations
-        Write-ConfigLog "Setting network configurations..." -ForegroundColor Yellow
-        .\Set-NetworkConfiguration.ps1 -IPAddress $Parameters["ip"] -SubnetMask $Parameters["subnet"] -Gateway $Parameters["gateway"] -DNS ($Parameters["dns"].Split(';'))
     }
 
     # Promote Domain Controller

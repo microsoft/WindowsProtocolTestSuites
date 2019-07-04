@@ -80,13 +80,6 @@ Function Config-Phase1()
     Write-ConfigLog "Setting execution policy..." -ForegroundColor Yellow
     .\Set-ExecutionPolicy-Unrestricted.ps1
 
-    if(-not $IsAzure)
-    {
-        # Set network configurations
-        Write-ConfigLog "Setting network configurations..." -ForegroundColor Yellow
-        .\Set-NetworkConfiguration.ps1 -IPAddress $Parameters["ip"] -SubnetMask $Parameters["subnet"] -Gateway $Parameters["gateway"] -DNS ($Parameters["dns"].Split(';'))
-    }
-    
     # Get domain account
     Write-ConfigLog "Trying to get the domain account" -ForegroundColor Yellow
     $DomainParameters = @{}
