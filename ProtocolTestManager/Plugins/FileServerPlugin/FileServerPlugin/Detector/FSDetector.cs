@@ -5,6 +5,7 @@ using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Management;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -31,7 +32,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
         public bool IsRequireMessageSigning { get; set; }
 
-        public List<CompressionAlgorithm> SupportedCompressionAlogrithms = new List<CompressionAlgorithm> {CompressionAlgorithm.NONE};
+        public CompressionAlgorithm[] SupportedCompressionAlgorithms { get; set; }
     }
 
     /// <summary>
@@ -234,57 +235,6 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             logWriter.AddLog(LogLevel.Information, "ipconfig /all");
             string result = logWriter.RunCmdAndGetOutput("ipconfig /all");
             logWriter.AddLog(LogLevel.Information, result);
-        }   
-       
-        public uint FetchCompressionCapabilites( CompressionAlgorithm compressionAlgo, ref DetectionInfo info)
-        {
-            uint messageId = 1;
-            using (Smb2Client smb2Client = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
-            {
-                logWriter.AddLog(LogLevel.Information, "Client connects to server");
-                smb2Client.ConnectOverTCP(SUTIpAddress);
-
-                DialectRevision selectedDialect;
-                byte[] gssToken;
-                Packet_Header responseHeader;
-                NEGOTIATE_Response responsePayload;
-                logWriter.AddLog(LogLevel.Information, "Client sends Negotiate with compression algorithms to detect server compression capability.");
-                CompressionAlgorithm[] compressionAlgs = new CompressionAlgorithm[]
-                {
-                        compressionAlgo
-                };
-                uint status = 0;
-                status = smb2Client.Negotiate(
-                    1,
-                    1,
-                    Packet_Header_Flags_Values.NONE,
-                    messageId++,
-                    info.requestDialect,
-                    SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
-                    Capabilities_Values.GLOBAL_CAP_DFS | Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING | Capabilities_Values.GLOBAL_CAP_LARGE_MTU
-                    | Capabilities_Values.GLOBAL_CAP_LEASING | Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL | Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES | Capabilities_Values.GLOBAL_CAP_ENCRYPTION,
-                    Guid.NewGuid(),
-                    out selectedDialect,
-                    out gssToken,
-                    out responseHeader,
-                    out responsePayload,
-                    0,
-                    compressionAlgorithms: compressionAlgs
-                    );
-
-                if (smb2Client.CompressionInfo.CompressionIds != null)
-                {
-                    foreach (CompressionAlgorithm algo in smb2Client.CompressionInfo.CompressionIds)
-                    {
-                        if (!info.supportedCompresionAlgorithms.Contains(algo))
-                        {
-                            info.supportedCompresionAlgorithms.Add(algo);
-                        }
-                    }
-                }
-
-                return status;
-            }
         }
 
         /// <summary>
@@ -325,7 +275,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             }
 
             PreauthIntegrityHashID[] preauthHashAlgs = null;
-            EncryptionAlgorithm[] encryptionAlgs = null;         
+            EncryptionAlgorithm[] encryptionAlgs = null;
 
             // For back compatibility, if dialects contains SMB 3.11, preauthentication integrity context should be present.
             if (Array.IndexOf(dialects, DialectRevision.Smb311) >= 0)
@@ -333,7 +283,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 preauthHashAlgs = new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 };
                 encryptionAlgs = new EncryptionAlgorithm[] {
                 EncryptionAlgorithm.ENCRYPTION_AES128_GCM,
-                EncryptionAlgorithm.ENCRYPTION_AES128_CCM };       
+                EncryptionAlgorithm.ENCRYPTION_AES128_CCM };
             }
 
             status = client.Negotiate(
@@ -351,8 +301,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 out responsePayload,
                 0,
                 preauthHashAlgs,
-                encryptionAlgs
-                );
+                encryptionAlgs);
 
             return status;
         }
@@ -564,15 +513,67 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 smb2Info.SupportedCapabilities = (Capabilities_Values)responsePayload.Capabilities;
                 smb2Info.SelectedCipherID = smb2Client.SelectedCipherID;
                 smb2Info.IsRequireMessageSigning = responsePayload.SecurityMode.HasFlag(NEGOTIATE_Response_SecurityMode_Values.NEGOTIATE_SIGNING_REQUIRED);
-
-                FetchCompressionCapabilites(CompressionAlgorithm.LZ77, ref info);
-                FetchCompressionCapabilites(CompressionAlgorithm.LZ77Huffman, ref info);
-                FetchCompressionCapabilites(CompressionAlgorithm.LZNT1, ref info);
-
-                smb2Info.SupportedCompressionAlogrithms = info.supportedCompresionAlgorithms;
-
-                return smb2Info;
             }
+
+            FetchSmb2CompressionInfo(smb2Info);
+
+            return smb2Info;
+        }
+
+        private void FetchSmb2CompressionInfo(Smb2Info smb2Info)
+        {
+            if (smb2Info.MaxSupportedDialectRevision < DialectRevision.Smb311)
+            {
+                logWriter.AddLog(LogLevel.Information, "SMB dialect less than 3.1.1 does not support compression.");
+                smb2Info.SupportedCompressionAlgorithms = new CompressionAlgorithm[0];
+                return;
+            }
+
+            var possibleCompressionAlogrithms = new CompressionAlgorithm[] { CompressionAlgorithm.LZ77, CompressionAlgorithm.LZ77Huffman, CompressionAlgorithm.LZNT1 };
+
+            // Iterate all possible compression algorithm for Windows will only return only one supported compression algorithm in response.
+            var result = possibleCompressionAlogrithms.Where(compressionAlgorithm =>
+            {
+                using (var client = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
+                {
+                    client.ConnectOverTCP(SUTIpAddress);
+
+                    DialectRevision selectedDialect;
+                    byte[] gssToken;
+                    Packet_Header responseHeader;
+                    NEGOTIATE_Response responsePayload;
+
+                    uint status = client.Negotiate(
+                        0,
+                        1,
+                        Packet_Header_Flags_Values.NONE,
+                        0,
+                        new DialectRevision[] { DialectRevision.Smb311 },
+                        SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
+                        Capabilities_Values.NONE,
+                        Guid.NewGuid(),
+                        out selectedDialect,
+                        out gssToken,
+                        out responseHeader,
+                        out responsePayload,
+                        preauthHashAlgs: new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 },
+                        compressionAlgorithms: new CompressionAlgorithm[] { compressionAlgorithm }
+                        );
+
+                    if (status == Smb2Status.STATUS_SUCCESS && client.CompressionInfo.CompressionIds.Length == 1 && client.CompressionInfo.CompressionIds[0] == compressionAlgorithm)
+                    {
+                        logWriter.AddLog(LogLevel.Information, $"Compression algorithm: {compressionAlgorithm} is supported by SUT.");
+                        return true;
+                    }
+                    else
+                    {
+                        logWriter.AddLog(LogLevel.Information, $"Compression algorithm: {compressionAlgorithm} is not supported by SUT.");
+                        return false;
+                    }
+                }
+            });
+
+            smb2Info.SupportedCompressionAlgorithms = result.ToArray();
         }
 
         public ShareInfo[] FetchShareInfo(DetectionInfo info)
@@ -588,10 +589,11 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 logWriter.AddLog(LogLevel.Information, string.Format("EnumShares failed, reason: {0}", ex.Message));
             }
 
+
             if (shareList == null)
             {
                 // EnumShares may fail because the SUT doesn't support SRVS.
-                // Try to connect the default share "SMBBasic"
+                // Try to connect the share which is input by the user in the "Target Share" field of Auto-Detection page.
                 using (Smb2Client client = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
                 {
                     ulong messageId;
@@ -599,8 +601,9 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     uint treeId;
                     try
                     {
-                        ConnectToShare(defautBasicShare, info, client, out messageId, out sessionId, out treeId);
-                        shareList = new string[] { defautBasicShare };
+                        logWriter.AddLog(LogLevel.Information, string.Format("Try to connect share {0}.", info.BasicShareName));
+                        ConnectToShare(info.BasicShareName, info, client, out messageId, out sessionId, out treeId);
+                        shareList = new string[] { info.BasicShareName };
                     }
                     catch
                     {
@@ -789,7 +792,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 {
                     return Platform.WindowsServerV1803;
                 }
-                else if(build < 18362)
+                else if (build < 18362)
                 {
                     return Platform.WindowsServer2019;
                 }

@@ -62,9 +62,6 @@
     </ComponentGroup>
 
 
-    <!-- This is installed directory on target machine: TestSuite\docs -->
-    <!-- There are some other Directory Ids pre-defined: TESTSUITE_BIN_DIR, TESTSUITE_SOURCE_DIR, TESTSUITE_SCRIPTS_DIR. -->
-  
     <DirectoryRef Id="TESTSUITE_BIN_DIR">
       <!-- Test Suite binaries. -->
       <Component Id="MS_SMB_ServerAdapter.dll" Guid="E279A909-A475-435A-BEC5-70CA2C1E514F">

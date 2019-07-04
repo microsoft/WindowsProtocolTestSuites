@@ -1,324 +1,389 @@
-﻿# File Server Protocol Family Test Suite User Guide
-> This guide takes you through the fundamentals of using the **File Server Protocol Family Test Suite**. You will learn how to setup the test environment, how to install and configure the test suite, and how to run test cases.
+# File Server Protocol Family Test Suite User Guide
 
 ## Table of Contents
 
-* [1. Introduction](#1)
-* [2. Quickstart Checklist](#2)
-* [3. Requirements](#3)
-    * [3.1. Network Infrastructure](#3.1)
-    * [3.2. Environment](#3.2)
-    * [3.3. Driver Computer](#3.3)
-    * [3.4. System Under Test (SUT)](#3.4)
-    * [3.5. Domain Controller (DC)](#3.5)
-	* [3.6. SAN Storage Server](#3.6)
-    * [3.7. Software](#3.7)
-* [4. Network Setup](#4)
-    * [4.1. Workgroup Environment](#4.1)
-    * [4.2. Domain Environment](#4.2)
-    * [4.3. Verify Connectivity from the Driver Computer](#4.3)
-* [5. Computer Setup](#5)
-    * [5.1. Workgroup Environment](#5.1)
-		* [5.1.1. Setup the Driver Computer](#5.1.1)
-		* [5.1.2. Setup the SUT](#5.1.2)
-			* [5.1.2.1. Common Setup](#5.1.2.1)
-			* [5.1.2.2. Setup to test SMB2](#5.1.2.2)
-				* [5.1.2.2.1. Create a basic share](#5.1.2.2.1)
-				* [5.1.2.2.2. Create a share with Encrypt data access enabled](#5.1.2.2.2)
-				* [5.1.2.2.3. Other configurations](#5.1.2.2.3)
-					* [5.1.2.2.3.1 Create a share with Oplock Force Level 2 enabled](#5.1.2.2.3.1)
-					* [5.1.2.2.3.2. Create a share named SameWithSMBBasic](#5.1.2.2.3.2)
-					* [5.1.2.2.3.3. Create a share named DifferentFromSMBBasic](#5.1.2.2.3.3)
-					* [5.1.2.2.3.4. Create Symbolic Links](#5.1.2.2.3.4)
-					* [5.1.2.2.3.5. Create a share on volume supporting integrity](#5.1.2.2.3.5)
-					* [5.1.2.2.3.6. Modify the Signing configurations](#5.1.2.2.3.6)
-			* [5.1.2.3. Setup to test DFSC](#5.1.2.3)
-			* [5.1.2.4. Setup to test RSVD](#5.1.2.4)
-			* [5.1.2.5. Setup to test SQOS](#5.1.2.5)
-			* [5.1.2.6. Setup to test FSA](#5.1.2.6)
-    * [5.2. Domain Environment](#5.2)
-		* [5.2.1. Setup the Domain Controller (DC)](#5.2.1)
-			* [5.2.1.1. Promote DC](#5.2.1.1)
-			* [5.2.1.2. Start the Routing service](#5.2.1.2)
-			* [5.2.1.3. Create Domain User accounts](#5.2.1.3)
-			* [5.2.1.4. Setup to test Claimed Based Access Control (CBAC)](#5.2.1.4)
-		* [5.2.2. Setup the Driver Computer](#5.2.2)
-		* [5.2.3. Setup the SAN storage server](*5.2.3)
-		* [5.2.4. Setup the SUT](#5.2.4)
-			* [5.2.4.1. Common Setup](#5.2.4.1)
-			* [5.2.4.2. Setup to test SMB2](#5.2.4.2)
-			* [5.2.4.3. Setup to test DFSC](#5.2.4.3)
-			* [5.2.4.4. Setup to test Server Failover/FSRVP/SWN](#5.2.4.4)
-			* [5.2.4.5. Setup to test RSVD](#5.2.4.5)
-			* [5.2.4.6. Setup to test SQOS](#5.2.4.6)
-			* [5.2.4.7. Setup to test Authorization](#5.2.4.7)
-			* [5.2.4.8. Setup to test FSA](#5.2.4.8)
-	* [5.3. Setup Details for Windows Platform](#5.3)
-		* [5.3.1. Create a share](#5.3.1)
-		* [5.3.2. Set NTFS Permissions](#5.3.2)
-		* [5.3.3. Set Share Permissions](#5.3.3)
-		* [5.3.4. Add a share SameWithSMBBasic to an existing share SMBBasic](#5.3.4)
-		* [5.3.5. Create symbolic links](#5.3.5)
-		* [5.3.6. Enable Encrypt Data Access on a share named SMBEncrypted](#5.3.6)
-		* [5.3.7. Enable FORCE_LEVELII_OPLOCK on a share named ShareForceLevel2](#5.3.7)
-		* [5.3.8. Create a share on a volume supporting integrity](#5.3.8)
-		* [5.3.9. Setup a Windows-based DC](#5.3.9)
-			* [5.3.9.1. Install DNS and Active Directory Domain Services and create a specific domain](#5.3.9.1)
-			* [5.3.9.2. Install Routing Service](#5.3.9.2)
-			* [5.3.9.3. Configure and start Routing service](#5.3.9.3)
-			* [5.3.9.4. Create a Domain Non-Admin user account](#5.3.9.4)
-			* [5.3.9.5. Enable Guest user account](#5.3.9.5)
-			* [5.3.9.6. Create a Domain group](#5.3.9.6)
-			* [5.3.9.7. Create a Domain account that belongs to a Domain group](#5.3.9.7)
-			* [5.3.9.8. Configure Claimed Based Access Control (CBAC)](#5.3.9.8)
-				* [5.3.9.8.1. Create User Claim](#5.3.9.8.1)
-				* [5.3.9.8.2. Create Central Access Rules](#5.3.9.8.2)
-				* [5.3.9.8.3. Create Central Access Policies](#5.3.9.8.3)
-				* [5.3.9.8.4. Create Users](#5.3.9.8.4)
-				* [5.3.9.8.5. Apply Central Access Policies](#5.3.9.8.5)
-		* [5.3.10. Setup Distributed File System (DFS)](#5.3.10)
-			* [5.3.10.1. Install Roles and Features for DFS](#5.3.10.1)
-			* [5.3.10.2. Create a share named FileShare](#5.3.10.2)
-			* [5.3.10.3. Create DFS name spaces](#5.3.10.3)
-				* [5.3.10.3.1. Create Stand-alone namespace: SMBDfs](#5.3.10.3.1)
-				* [5.3.10.3.2. Create Stand-alone namespace: Standalone](#5.3.10.3.2)
-				* [5.3.10.3.3. Create Domain-based namespace: DomainBased](#5.3.10.3.3)
-			* [5.3.10.4. Create DFS link for the namespaces](#5.3.10.4)
-				* [5.3.10.4.1. Add folder SMBDfsLink to namespace SMBDfs](#5.3.10.4.1)
-				* [5.3.10.4.2. Add two folders to namespace: Standalone](#5.3.10.4.2)
-				* [5.3.10.4.3. Add two folders to namespace: DomainBased](#5.3.10.4.3)
-		* [5.3.11. Setup SAN Storage Server](#5.3.11)
-			* [5.3.11.1. Install iSCSI Target](#5.3.11.1)
-			* [5.3.11.2. Create virtual disks for failover cluster nodes](#5.3.11.2)
-		* [5.3.12. Setup Cluster](#5.3.12)
-			* [5.3.12.1. Connect to the iSCSI disks provided by the SAN Storage Server from two nodes](#5.3.12.1)
-			* [5.3.12.2. Install Roles and Features on each failover cluster node](#5.3.12.2)
-			* [5.3.12.3. Create failover cluster in either node](#5.3.12.3)
-			* [5.3.12.4. Create file server on failover cluster](#5.3.12.4)
-			* [5.3.12.5. Add Scale-out Share volume](#5.3.12.5)
-			* [5.3.12.6. Create file share for cluster](#5.3.12.6)
-			* [5.3.12.7. Create file share with Oplock Force Level 2 enabled for cluster](#5.3.12.7)
-			* [5.3.12.8. Create file share with Encrypt data enabled for cluster](#5.3.12.8)
-		* [5.3.13. Turn off Firewall](#5.3.13)
-		* [5.3.14. Create a Local Admin User Account](#5.3.14)
-		* [5.3.15. Create a Local Non-Admin User Account](#5.3.15)
-		* [5.3.16. Enable the Local Guest Account](#5.3.16)
-		* [5.3.17. Reset Password to Local Users](#5.3.17)
-		* [5.3.18. Create an Asymmetric share](#5.3.18)
-		* [5.3.19. Create the virtual hard disk file](#5.3.19)
-		* [5.3.20. Create the virtual hard disk set file](#5.3.20)
-		* [5.3.21. Modify the Signing configuration](#5.3.21)
-		* [5.3.22. Manually Setup Computer Password](#5.3.22)
-		* [5.3.23. Create an SQOS policy](#5.3.23)
-		* [5.3.24. How to start console with Administrator privilege](#5.3.24)
-		* [5.3.25. Enable short name](#5.3.25)
-		* [5.3.26. Create a volume shadow copy](#5.3.26)
-		* [5.3.27. Create a volume mount point](#5.3.27)
-* [6. Installed Files and Folders](#6)
-* [7. Configure and Run Test Cases](#7)
-    * [7.1. Configure and Run Test Cases Using Protocol Test Manager](#7.1)
-    * [7.2. Configure Test Suite Manually](#7.2)
-		* [7.2.1. Brief introduction to Configuration Settings](#7.2.1)
-	* [7.3. Run Test Cases by Batch Script](#7.3)
-		* [7.3.1. Run the BVT Test](#7.3.1)
-		* [7.3.2. Run All Test Cases](#7.3.2)
-		* [7.3.3. Check Test Results](#7.3.3)
-    * [7.3.3. Check Test Results](#7.3)
-* [8. Debugging Test Cases](#8)
+* [1 Introduction](#1)
+  * [1.1 Testing Environments](#1.1)
+* [2 Test Suite Setup Overview](#2)
+  * [2.1 Installed Files and Folders](#2.1)
+* [3 Requirements](#3)
+  * [3.1 Network Infrastructure](#3.1)
+  * [3.2 Environment Configuration](#3.2)
+  * [3.3 Hardware](#3.3)
+    * [3.3.1 Driver Computer Minimum Requirements](#3.3.1)
+    * [3.3.2 System Under Test (SUT) Minimum Requirements](#3.3.2)
+    * [3.3.3 Domain Controller (DC) Minimum Requirements](#3.3.3)
+    * [3.3.4 SAN Storage Server Minimum Requirements](#3.3.4)
+  * [3.4 Software](#3.4)
+* [4 Network Setup](#4)
+  * [4.1 Workgroup Network Environment](#4.1)
+    * [4.1.1 Workgroup Message Architecture](#4.1.1)
+    * [4.1.2 Workgroup Network Architecture](#4.1.2)
+  * [4.2 Domain Network Environment](#4.2)
+    * [4.2.1 Domain Message Architecture](#4.2.1)
+    * [4.2.2 Domain Network Architecture](#4.2.2)
+  * [4.3 Verify Connectivity from the Driver Computer](#4.3)
+* [5 Computer Setup](#5)
+  * [5.1 Workgroup Environment](#5.1)
+    * [5.1.1 Set up the Driver Computer for the Workgroup Environment](#5.1.1)
+    * [5.1.2 Set up the SUT Computer in the Workgroup Environment](#5.1.2)
+  * [5.2 Domain Environment](#5.2)
+    * [5.2.1 Set up the Domain Controller (DC) for the Domain Environment](#5.2.1)
+    * [5.2.2 Set up the Driver Computer for the Domain Environment](#5.2.2)
+    * [5.2.3 Set up the SAN Storage Server in the Domain Environment](#5.2.3)
+    * [5.2.4 Set up the SUT in the Domain Environment](#5.2.4)
+  * [5.3 General Setup Details for Windows Platforms](#5.3)
+    * [5.3.1 Create a share](#5.3.1)
+    * [5.3.2 Set NTFS Permissions](#5.3.2)
+    * [5.3.3 Set Share Permissions](#5.3.3)
+    * [5.3.4 Add a share SameWithSMBBasic with the same Path of Share SMBBasic](#5.3.4)
+    * [5.3.5 Create symbolic links](#5.3.5)
+    * [5.3.6 Enable Encrypt Data Access on a Share Named SMBEncrypted](#5.3.6)
+    * [5.3.7 Enable FORCE_LEVELII_OPLOCK on a Share Named ShareForceLevel2](#5.3.7)
+    * [5.3.8 Create a Share on a Volume Supporting Integrity](#5.3.8)
+    * [5.3.9 Set up a Windows-based Domain Controller](#5.3.9)
+    * [5.3.10 Set up the Distributed File System (DFS)](#5.3.10)
+    * [5.3.11 Set up the SAN Storage Server](#5.3.11)
+    * [5.3.12 Set up a Cluster](#5.3.12)
+    * [5.3.13 Turn off Firewalls](#5.3.13)
+    * [5.3.14 Enable the Local Administrator Account](#5.3.14)
+    * [5.3.15 Create a Local Non-Admin User Account](#5.3.15)
+    * [5.3.16 Enable the Local Guest Account](#5.3.16)
+    * [5.3.17 Reset the Password for Local Users](#5.3.17)
+    * [5.3.18 Create an Asymmetric Share](#5.3.18)
+    * [5.3.19 Create a Virtual Hard Disk File](#5.3.19)
+    * [5.3.20 Create a Shared Virtual Hard Disk File](#5.3.20)
+    * [5.3.21 Modify the Signing Configuration](#5.3.21)
+    * [5.3.22 Manually Set the Domain Account Computer Password](#5.3.22)
+    * [5.3.23 Create an SQOS Policy](#5.3.23)
+    * [5.3.24 How to Start the Command Console with Administrator Privileges](#5.3.24)
+    * [5.3.25 Enable Short Name format](#5.3.25)
+    * [5.3.26 Create a Volume Shadow Copy](#5.3.26)
+    * [5.3.27 Create a Volume Mount Point](#5.3.27)
+* [6 Installed Files and Folders](#6)
+* [7 Configure and Run Test Cases](#7)
+  * [7.1 Configure and Run Test Cases Using Protocol Test Manager](#7.1)
+  * [7.2 Configure Test Suite Manually](#7.2)
+  * [7.3 Run Test Cases with Batch Script](#7.3)
+    * [7.3.1 Run the BVT Test](#7.3.1)
+    * [7.3.2 Run All Test Cases](#7.3.2)
+  * [7.4 Reviewing Test Results](#7.4)
+* [8 Creating a Custom Test Environment](#8)
+* [9 Debugging Test cases](#9)
+
+## <a name="1"/> 1 Introduction
+
+This user guide provides the fundamentals for using the **File Server Protocol Family Test Suite**. In this guide, you will learn how to do the following:
+
+* Install the test suite.
+* Configure the network for the test environment.
+* Set up the Driver computer, system under test (SUT), and other computers.
+* Set up the test configuration.
+* Run the test cases
+
+The **File Server Protocol Family Test Suite**, hereinafter referred to as the **Test Suite**, is designed to test implementations of the File Server protocol family, which includes [the following protocols that are documented on the Microsoft Technical Documents site](https://msdn.microsoft.com/en-us/library/jj712081.aspx):
+
+* [**[MS-SMB2]**](https://msdn.microsoft.com/en-us/library/cc246482.aspx) (Server Message Block (SMB) Protocol Version 2 and 3)
+* [**[MS-FSRVP]**](https://msdn.microsoft.com/en-us/library/hh554852.aspx) (File Server Remote VSS Protocol)
+* [**[MS-SWN]**](https://msdn.microsoft.com/en-us/library/hh536748.aspx) (Service Witness Protocol)
+* [**[MS-DFSC]**](https://msdn.microsoft.com/en-us/library/cc226982.aspx) Distributed File System (DFS): Namespace Referral Protocol
+* [**[MS-SQOS]**](https://msdn.microsoft.com/en-us/library/mt226249.aspx) (Storage Quality of Service Protocol)
+* [**[MS-RSVD]**](https://msdn.microsoft.com/en-us/library/dn393384.aspx) (Remote Shared Virtual Disk Protocol
+* [**[MS-FSA]**](https://msdn.microsoft.com/en-us/library/ff469524.aspx) (File System Algorithms)
+
+This guide specifies the details for using the **Test Suite**  with both Microsoft® Windows® operating system and non-Windows based operating system environments. However, the details about non-Windows systems are limited to generalities, as the focus of setup and configuration is on Windows systems in this User Guide.
+
+### <a name="1.1"/> 1.1 Testing Environments
+
+You can use the **Test Suite** to perform test cases against your implementation in either a **WORKGROUP** or **DOMAIN** environment. You might choose the **WORKGROUP** environment if you are new to the protocol test suites or if you want to simplify the setup and environment in which to perform test cases. On the other hand, you might choose the **DOMAIN** environment if you want to run test cases against your implementation in a more comprehensive environment that more closely resembles a real world environment containing a Domain Controller, File Server, Storage Server, and Clustering.
+
+Whichever environment you choose, the details in this document specify the steps you should take to set up the chosen environment in which you plan to run your tests. For example, if you choose the **WORKGROUP** environment, you would simply ignore the steps that apply to the **DOMAIN** environment and vice-versa.
+
+![](./image/FileServerUserGuide/image1.png)**Note**
+
+The **Test Suite** examines protocol implementation behaviors that are observed over the wire only.
+
+**More Information**
 
-## <a name="1"/> 1. Introduction
+To learn more about File Server Test Suite design, see the following documentation:
+  
+* [File Server Protocol Family Test Design Specification](https://github.com/Microsoft/WindowsProtocolTestSuites/blob/staging/TestSuites/FileServer/docs/FileServerTestDesignSpecification.md)
+* [Authentication Protocol Server Test Design Specification](https://github.com/Microsoft/WindowsProtocolTestSuites/blob/staging/TestSuites/FileServer/docs/Auth_ServerTestDesignSpecification.md)
+* [MS-FSA Protocol Server Test Design Specification](https://github.com/Microsoft/WindowsProtocolTestSuites/blob/staging/TestSuites/FileServer/docs/MS-FSA_ServerTestDesignSpecification.md)
+* [MS-SQOS Protocol Server Test Design Specification](https://github.com/Microsoft/WindowsProtocolTestSuites/blob/staging/TestSuites/FileServer/docs/MS-SQOS_ServerTestDesignSpecification.md)
 
-This test suite is designed to test the implementations of file server protocol family including [**[MS-SMB2]**](https://msdn.microsoft.com/en-us/library/cc246482.aspx) (Server Message Block (SMB) Protocol Version 2 and 3), [**[MS-FSRVP]**](https://msdn.microsoft.com/en-us/library/hh554852.aspx) (File Server Remote VSS Protocol), [**[MS-SWN]**](https://msdn.microsoft.com/en-us/library/hh536748.aspx) (Service Witness Protocol), [**[MS-DFSC]**](https://msdn.microsoft.com/en-us/library/cc226982.aspx) Distributed File System (DFS): Namespace Referral Protocol, [**[MS-FSA]**](https://msdn.microsoft.com/en-us/library/ff469524.aspx) (File System Algorithms), [**[MS-SQOS]**](https://msdn.microsoft.com/en-us/library/mt226249.aspx) (Storage Quality of Service Protocol) and [**[MS-RSVD]**](https://msdn.microsoft.com/en-us/library/dn393384.aspx) (Remote Shared Virtual Disk Protocol) as specified in the Microsoft® [Windows Protocols](https://msdn.microsoft.com/en-us/library/jj712081.aspx). This guide provides you detailed information about how to use this test suite on both Microsoft® Windows® operating systems and non-Windows based operating systems.
+![](./image/FileServerUserGuide/image1.png)**Tip**
 
-This suite tests only the protocol implementation behaviors that are observed over the wire. For detailed information about the design of this test suite, please see more in [File Server Protocol Family Test Design Specification](./FileServerTestDesignSpecification.md), [Authentication Protocol Server Test Design Specification](./Auth_ServerTestDesignSpecification.md), [MS-FSA Protocol Server Test Design Specification](./MS-FSA_ServerTestDesignSpecification.md), and [MS-SQOS Protocol Server Test Design Specification](./MS-SQOS_ServerTestDesignSpecification.md).
+To learn more about the common environment in which test cases are run for all **Test Suites**, see the [Protocol Test Framework User Guide](https://github.com/microsoft/ProtocolTestFramework/blob/staging/docs/PTFUserGuide.md).
 
-## <a name="2"/> 2. Quickstart Checklist
+## <a name="2"/> 2 Test Suite Setup Overview
 
-The following checklist summarizes the tasks you will need to complete in order to get the test suite up and running. It also links you to the right sections that is providing you more details on how to complete the task.
+The following table summarizes the tasks that are required to get the **File Server Test Suite** up and running. Each task in the list also provides one or more links to related topics in this User Guide that you can review prior to actually performing the tasks. After you review (or complete) each task, you can optionally print out Table 1 and check off completed items.
 
->	![](./image/FileServerUserGuide/image1.png)Note
+<a name="table.1"></a>
 
->	&emsp;&emsp;The test suite supports running in two kinds of test environments, **WORKGROUP** and **DOMAIN**. If you only want to run your tests in a **WORKGROUP** environment, please skip all the steps that are related to the **DOMAIN** environment within each task. Whether the step is domain related or not will be mentioned in the detailed sections.
+**Table 1. Overview of Test Suite setup tasks**
 
-| Check | Task                                                                                     | Topic                                                                                                                            |
-|-------|------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|
-| □     | Download the test suite for the protocol implementation                                  | For a complete list of files that the download package contains, please see [6. Installed Files and Folders](#6).                |
-| □     | Confirm that your test environment and computers meet the requirements of the test suite | For requirements of the test suite, please see [3. Requirements](#3).                                                            |
-| □     | Setup the Domain Controller (DC)                                                         | For more details, please see [5.2.1. Setup the Domain Controller (DC)](#5.2.1).                                                  |
-| □     | Setup the system under test (SUT)                                                        | For more details, plase see [Setup the SUT in Workgroup Environment](#5.1.2) or [Setup the SUT in Domain Environment](#5.2.4).   |
-| □     | Setup the driver computer                                                                | For more details, see [5.1.1. Setup the Driver Computer](#5.1.1) in **WORKGROUP** Environment or [5.2.2 Setup the Driver Computer](#5.2.2) in **DOMAIN** Environment. |
-| □     | Setup the network                                                                        | For more details, see [4. Network Setup](#4).                                                                                    |
-| □     | Verify the connections from the driver computer to the SUT and other computers           | For more details, see [4.3. Verify Connectivity from the Driver Computer](#4.3).                                                 |
-| □     | Install the software prerequisites                                                       | For a complete list of software that must be installed prior to the test suite installation, please see [3.7. Software](#3.7).   |
-| □     | Configure the test suite settings                                                        | For how to configure your test suite settings, please see [7. Configure and Run Test Cases](#7).                                 |
-| □     | Run a BVT test                                                                           | For more details, see [7.3.1. Run the BVT Test](#7.3.1).                                                                         |
-| □     | Run test cases                                                                           | For more details, see [7.3.2. Run All Test Cases](#7.3.2).                                                                       |
-| □     | Debug my own test cases                                                                  | For more details, see [8. Debugging Test Cases](#8).                                                                             |
-| □     | Get the results of test runs                                                             | For more details, see [7.3.3. Check Test Results](#7.3.3).                                                                       |
+| Check | Task Overview                                                                                                       | Related Topic                                                                                                                                                                          |
+|-------|---------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| □     | Download the Test Suite installer file **FileServer-TestSuite-ServerEP.msi** here.                                  | For a complete list of files contained in the Test Suite installer, please see section [6 Installed Files and Folders](#6).                                                            |
+| □     | Plan your test environment and computer configurations with respect to the **File Server Test Suite** requirements. | To review the network, environment, and hardware requirements for the **Test Suite**, see section [3 Requirements](#3).                                                                |
+| □     | Install the **File Server Test Suite** and supporting software on what will be your Driver computer.                | To review the complete list of software that must be sequentially installed, which includes the **Test Suite** and supporting software, see section [3.4 Software Requirements](#3.4). |
+| □     | Set up the network.                                                                                                 | To review details, see section [4 Network Setup](#4).                                                                                                                                  |
+| □     | Verify connectivity between the Driver computer, SUT, and other network computers, as necessary.                    | To review details, see section [4.3 Verifying Network Computer Connectivity](#4.3).                                                                                                    |
+| □     | Set up a Workgroup environment.                                                                                     | To review details, see section [5.1 Workgroup Environment](#5.1).                                                                                                                      |
+| □     | Set up a Domain environment.                                                                                        | To review details, see section [5.2 Domain Environment](#5.2).                                                                                                                         |
+| □     | Configure the **Test Suite** settings.                                                                              | To review the details about configuring your Test Suite settings, see section [7 Configure and Run Test Cases Using Protocol Test Manager](#7).                                        |
+| □     | Run build verification tests (BVT).                                                                                 | To review details, see section [7.3.1 Run the BVT Tests](#7.3.1).                                                                                                                      |
+| □     | Run test cases.                                                                                                     | To review details, see section [7.3.2 Run All Test Cases](#7.3.2).                                                                                                                     |
+| □     | Assess the results of test cases you have run.                                                                      | To review details, see section [7.4 Reviewing Test Results](#7.4).                                                                                                                     |
+| □     | Create your own test cases.                                                                                         | For further details, see section [8 Creating a Custom Test Environment](#8).                                                                                                           |
+| □     | Debug your test cases.                                                                                              | For further details, see section [9 Debugging Test Cases](#9).                                                                                                                         |
 
-## <a name="3"/> 3. Requirements 
+## <a name="3"/> 3 Requirements
 
-This section lists all the requirements to setup the test environment, including network infrastructure, hardware requirements, and software requirements.
+This section specifies what is necessary to set up the test environment, which includes requirements for the following:
+  
+* [Network Infrastructure](#3.1)
+* [Environment Configuration](#3.2)
+* [Hardware](#3.3)
+* [Software](#3.4)
 
-### <a name="3.1"/> 3.1. Network Infrastructure
+### <a name="3.1"/> 3.1 Network Infrastructure
 
-The network infrastructure for this test suite requires the following:
+The network infrastructure for the Test Suite requires the following:
 
--   A test network is required to connect the test computer systems.
+* A test network that connects the test computer systems and has the following characteristics:
+  * It must utilize an isolated hub or switch.
+  * It must not be connected to a production network nor should it be used for any other business or personal operations.
+  * It must not be connected to the internet.
+* IP addresses that you will assign for this test network.
+* Computer names that you will assign in the test network.
+* User credentials that are dedicated to the test network components.
 
-	-   It must consist of an isolated hub or switch.
+### <a name="3.2"/> 3.2 Environment Configuration
 
-	-   It must neither be connected to a production network, nor be used for any other business or personal communications and operations.
+You can execute the Test Suite test cases in either a **WORKGROUP** or **DOMAIN** environment.
 
-	-   It must not be connected to the internet.
+* To run the **Test Suite** in a **WORKGROUP** environment, the test machines in the list that follows are required (either physical or virtual). See [Figure 1: Workgroup environment network configuration](#fig.1) for reference.
 
--   IP addresses must be assigned for this test network.
+  ![](./image/FileServerUserGuide/image1.png)**Note**
+  
+  Although you can install and run the **Test Suite** components on virtual machines, this User Guide describes the setup of physical machines only.
 
--   Computer names must be assigned in the test network infrastructure.
+  * **Driver computer** (Client01) − this machine must be running the Microsoft® Windows 8.1 Enterprise operating system or later.
 
--   User credentials used on the system must be dedicated to the test network infrastructure.
+    See section [3.3.1 Driver Computer Minimum Requirements](#3.3.1) for hardware requirements and section [5.1.1 Set up the Driver Computer in the Workgroup Environment](#5.1.1) for setup instructions.
 
-### <a name="3.2"/> 3.2. Environment
+  * **SUT computer** (Node01) − this machine can be for hosting either a Windows or non-Windows implementation. For a Windows implementation, the SUT computer must be running the Microsoft® Windows Server 2012 R2, Standard Edition or later operating system.
 
-This test suite can be executed in two kinds of environments, **WORKGROUP** and **DOMAIN**.
+    See section [3.3.2 System Under Test (SUT) Minimum Requirements](#3.3.2) for hardware requirements and section [5.1.2 Setup the SUT Computer in the Workgroup Environment](#5.1.2) for setup instructions.
 
--	In order to run the test suite in a **WORKGROUP** environment, the following test machines are required (either physical or virtual):
+* To run the Test Suite in a DOMAIN environment, the test machines in the list that follows are required (either physical or virtual). See [Figure 2: Domain environment network configuration](#fig.2) for reference.
 
-	-   A driver computer, it must be the Microsoft® Windows 8.1 Enterprise operating system or later. Please see [3.3. Driver Computer](#3.3) for hardware requirements, and [5.1.1. Setup the Driver Computer](#5.1.1) for how to setup.
+  * **Domain Controller** (DC01) – this machine can be running either a Windows or non-Windows operating system.
 
-	-   An SUT computer, it can be either Windows or Non-Windows implementation. Please see [3.4. System Under Test (SUT)](#3.4) for hardware requirements, and [5.1.2. Setup the SUT](#5.1.2) for how to setup. 
+    ![](./image/FileServerUserGuide/image1.png)**Note**
 
--	In order to run the test suite in a **DOMAIN** environment, the following test machines are required (either physical or virtual):
+    If you choose to set up a non-Windows computer, you do so at your own discretion.
 
-	-   A Domain Controller (DC), it can be either Windows or Non-Windows implementation. Please see [3.5. Domain Controller (DC)](#3.5) for hardware requirements, and [5.2.1. Setup the Domain Controller](#5.2.1) for how to setup.
-	
-	-   A driver computer, it must be the Microsoft® Windows 8.1 Enterprise operating system or later. Please see [3.3. Driver Computer](#3.3) for hardware requirements, and [5.2.2. Setup the Driver Computer](#5.2.2) for how to setup.
+    See section [3.3.3 Domain Controller (DC) Minimum Requirements](#3.3.3) for hardware requirements and section [5.2.1 Set up the Domain Controller for the Domain Environment](#5.2.1) for setup instructions.
 
-	-	If you want to test the cluster scenarios, you will need:
+  * **Driver computer** (Client01) − this machine must be running the Microsoft® Windows 8.1 Enterprise operating system or later.
 
-		-   A SAN storage server, it can be either Windows or Non-Windows implementation. Please see [3.6. SAN Storage Server](#3.6) for hardware requirements, and [5.2.3. Setup the SAN storage server](#5.2.3) for how to setup.
+    See section [3.3.1 Driver Computer Minimum Requirements](#3.3.1) for hardware requirements and section [5.2.2 Set up the Driver Computer for the Domain Environment](#5.2.2) for setup instructions.
 
-		-   A failover cluster, it can be either Windows or Non-Windows implementation. Two SUT computers will be needed if you are deploying a Windows implementation. Please see [3.4. System Under Test (SUT)](#3.4) for hardware requirements, and [5.2.4. Setup the SUT](#5.2.4) for how to setup.
+  * **Clustering** − if you want to test cluster scenarios, you will need the following machines:
 
-	-   If you do not want to test cluster involving scenarios, you will need:
-		
-		-	An SUT computer, it can be either Windows or Non-Windows implementation. To simplify your deployment steps and reuse what you already have, you can choose any one node in the failover cluster as an SUT computer for testing the non-cluster scenarios.
+    * **Storage Area Network (SAN) server** (Storage01) − as part of the SUT configuration, this machine can be for testing either a Windows or non-Windows implementation.
 
->	![](./image/FileServerUserGuide/image1.png)Note
+      See section [3.3.4 SAN Storage Server](#3.3.4) for hardware requirements and section [5.2.3 Set up the SAN Storage Server](#5.2.3) for setup instructions.
 
->	&emsp;&emsp;For more information about failover cluster scenarios, please refer to the [File Server Protocol Family Test Design Specification](./FileServerTestDesignSpecification.md) section "Test Suite Design".
+    * **Failover cluster computers** (Node01, Node02) − as part of the SUT configuration, these machines can be for testing either a Windows or non-Windows implementation. Note that 2 SUT computers are required if you are deploying a Windows implementation.
 
-### <a name="3.3"/> 3.3 Driver Computer 
+      See section [3.3.2 System Under Test (SUT) Minimum Requirements](#3.2.2) for hardware requirements and section [5.2.4 Set up the SUT for the Domain Environment](#5.2.4) for setup instructions.
 
-The minimum requirements for the Driver computer are as follows.
+  * **Non Clustering** − if you are not testing clustering scenarios, you will need the following:
 
-| Requirement      | Description                                                  |                          
-|:-----------------|:-------------------------------------------------------------|
-| Operating system | Microsoft® Windows 8.1, Enterprise Edition or later versions |
-| Memory           | 2 GB RAM                                                     |
-| Disk space       | 60 GB                                                        |
+    * **SUT computer** − this machine can be for testing either a Windows or non-Windows implementation.
 
-### <a name="3.4"/> 3.4. System Under Test (SUT)
+      ![](./image/FileServerUserGuide/image1.png)**Note**
 
-The minimum requirements for the SUT computer are as follows. The requirements apply to both SUT computers in the cluster for a **DOMAIN** environment. 
+      If you want to adjust an existing environment for testing non-clustering scenarios, you can simplify your deployment steps by using a node in an existing Failover Cluster configuration as the SUT computer.
 
->	![](./image/FileServerUserGuide/image1.png)Note
+**More Information**
 
->	&emsp;&emsp;The requirements in this section apply only to the Windows-based computers in the test environment.
+To learn more about Failover Cluster scenarios, see the **Test Suite Design** section in the [File Server Protocol Family Test Design Specification](https://github.com/Microsoft/WindowsProtocolTestSuites/blob/staging/TestSuites/FileServer/docs/FileServerTestDesignSpecification.md).
 
-| Requirement      | Description                                                                              |
-|:-----------------|:-----------------------------------------------------------------------------------------|
-| Operating system | Microsoft® Windows Server 2012 R2, Standard Edition or later versions                    |
-| Features         | Failover Clustering                                                                      |                  
-| Role Services    | File Server, DFS Namespaces, File Server Resource Manager, File Server VSS Agent Service | 
-| Memory           | 2 GB RAM                                                                                 |
-| Disk space       | 60 GB                                                                                    |
+### <a name="3.3"/> 3.3 Hardware
 
-### <a name="3.5"/> 3.5 Domain Controller (DC)
+Hardware requirements for the test computers in the **WORKGROUP** and **DOMAIN** environments are described in this section.
 
-The minimum requirements for the Domain Controller computer are as follows.
+#### <a name="3.3.1"/> 3.3.1 Driver Computer Minimum Requirements
 
->	![](./image/FileServerUserGuide/image1.png)Note
+The minimum requirements for the Driver computer are specified in Table 2 that follows.
 
->	&emsp;&emsp;The requirements in this section apply only to the Windows-based computers in the test environment.
+![](./image/FileServerUserGuide/image1.png)**Note**
 
-| Requirement      | Description                                                           |
-|:-----------------|:----------------------------------------------------------------------|
-| Operating system | Microsoft® Windows Server 2012 R2, Standard Edition or later versions |
-| Services         | Active Directory Domain Services (AD DS)                              |
-| Memory           | 1 GB RAM                                                              |
-| Disk space       | 60 GB                                                                 |
+The requirements that follow apply only to a Windows-based Driver computer in the **WORKGROUP** or **DOMAIN** environments.
 
-### <a name="3.6"/> 3.6. SAN Storage Server
+<a name="table.2"></a>
 
-The minimum requirements for the SAN storage server computer are as follows.
+**Table 2. Driver computer minimum requirements in WORKGROUP or DOMAIN environment**
 
->	![](./image/FileServerUserGuide/image1.png)Note
+| Requirement       | Description                                                  |
+|-------------------|--------------------------------------------------------------|
+| Computer name     | Client01                                                     |
+| Operating system  | Microsoft® Windows 8.1, Enterprise Edition or later versions |
+| Memory            | 2 GB RAM                                                     |
+| Disk space        | 60 GB                                                        |
+| Network interface | Requires dual network interface cards (NICs)                 |
 
->	&emsp;&emsp;The requirements in this section apply only to the Windows-based computers in the test environment.
+#### <a name="3.3.2"/> 3.3.2 System Under Test (SUT) Minimum Requirements
 
-| Requirement      | Description                                                           |
-|:-----------------|:----------------------------------------------------------------------|
-| Operating system | Microsoft® Windows Server 2012 R2, Standard Edition or later versions |
-| Services         | File Server, iSCSI Target Server                                      |
-| Memory           | 1 GB RAM                                                              |
-| Disk space       | 60 GB                                                                 | 
+The minimum requirements for the SUT computer in the Windows environment are specified herein. Table 3 below specifies the requirements that apply to the SUT computer in the **WORKGROUP** environment. Table 4 specifies the requirements that apply to both SUT computers for a Windows implementation that uses a File Server, Storage, and Failover clustering configuration in the **DOMAIN** environment.  
 
-### <a name="3.7"/> 3.7. Software
+![](./image/FileServerUserGuide/image1.png)**Note**
 
-All of the following software must be installed on the [**Driver Computer**](#3.2) before the test suite can be executed. There are some dependencies between each other, so it is truely recommended to install them sequentially in the order below.
+The requirements that follow apply only to Windows-based SUT computers in the test environment.
 
-1.  Install **Microsoft® Visual Studio®**.
+<a name="table.3"></a>
 
-	-	The test execution requires the `vstest.console.exe` utility which is installed along with Visual Studio.
+**Table 3. SUT computer minimum requirements in the WORKGROUP environment**
 
-	-	**Microsoft® Visual Studio®** provides you the capability to run test cases. Additionally it provides you the capability to update, build, debug and contribute to the test cases. You can download Visual Studio 2017 Community. The optional components of Visual Studio are not required to be installed.
+| Requirement       | Description                                                                                                                               |
+|-------------------|-------------------------------------------------------------------------------------------------------------------------------------------|
+| Computer name     | Node01                                                                                                                                    |
+| Operating system  | Microsoft® Windows Server 2012 R2, Standard Edition or later versions. Note that this computer is **not** set up as a domain controller (DC). |
+| Features          | N/A                                                                                                                                       |
+| Role Services     | File Server                                                                                                                               |
+| Memory            | 2 GB RAM                                                                                                                                  |
+| Disk space        | 60 GB                                                                                                                                     |
+| Network interface | Requires dual network interface cards (NICs)                                                                                              |
 
-2.	Install **Spec Explorer** [3.5.3146.0](<http://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/>) or later versions.
+<a name="table.4"></a>
 
-	-	Spec Explorer is a model based testing tool used by the test suite to design models and generate test cases. It has some dependencies on [VC++ 9.0 redistributable package](https://www.microsoft.com/en-us/download/details.aspx?id=5582) which should also be installed.
+**Table 4. SUT computer minimum requirements in the DOMAIN environment**
 
-3. 	Install the latest **Protocol Test Framework** from [GitHub](https://github.com/Microsoft/ProtocolTestFramework/releases/latest) or clone the [repository](https://github.com/Microsoft/ProtocolTestFramework.git) to build the msi package by yourself.
+| Requirement       | Description                                                                              |
+|-------------------|------------------------------------------------------------------------------------------|
+| Computer name     | Node01,Node02                                                                            |
+| Operating system  | Microsoft® Windows Server 2012 R2, Standard Edition or later versions.                   |
+| Features          | Failover Clustering                                                                      |
+| Role Services     | File Server, DFS Namespaces, File Server Resource Manager, File Server VSS Agent Service |
+| Memory            | 2 GB RAM                                                                                 |
+| Disk space        | 60 GB                                                                                    |
+| Network interface | Requires dual network interface cards (NICs)                                             |
 
-4.	Install the latest **File Server Test Suite** from [GitHub](https://github.com/Microsoft/WindowsProtocolTestSuites/releases/latest) or clone the [repository](https://github.com/Microsoft/WindowsProtocolTestSuites.git) and build the msi package by yourself.
+#### <a name="3.3.3"/> 3.3.3 Domain Controller (DC) Minimum Requirements
 
-5.	(Optional) Install the latest **Protocol Test Manager** from [GitHub](https://github.com/Microsoft/WindowsProtocolTestSuites/releases/latest) or clone the [repository](https://github.com/Microsoft/WindowsProtocolTestSuites.git) and build the msi package by yourself.
+The minimum requirements for the Domain Controller computer are specified in Table 5 that follows.
 
-    -	**Protocol Test Manager** provides a graphical UI to facilitate your configuration and execution of the Microsoft® Windows Protocol Test Suites.
+![](./image/FileServerUserGuide/image1.png)**Note**
 
-6. 	(Optional) Install **Microsoft® Message Analyzer** [1.4](http://www.microsoft.com/en-us/download/details.aspx?id=44226) or later versions.
+The requirements that follow apply only to a Windows-based DC in the test environment.
 
-    -	**Microsoft® Message Analyzer** is listed as an optional tool because our test cases won’t do live capture and capture verification during execution. MMA can be helpful with debugging when users want to look at any issues in the test results. In other words, these test suites don’t have dependencies on MMA. It is a useful tool that can help you view the network traces and ETW logs which could possibly be generated by Automatic Network Capturing feature in Protocol Test Framework.
+<a name="table.5"></a>
 
-## <a name="4"/> 4. Network Setup
+**Table 5. Domain Controller computer minimum requirements in the DOMAIN environment**
 
-This test suite can be executed in two kinds of environments, **WORKGROUP** and **DOMAIN**, see [3.2. Environment](#3.2).
+| Requirement       | Description                                                            |
+|-------------------|------------------------------------------------------------------------|
+| Computer name     | DC01                                                                   |
+| Operating system  | Microsoft® Windows Server 2012 R2, Standard Edition or later versions. |
+| Features          | AD DS Tools, DNS Server Tools                                          |
+| Role Services     | Active Directory Domain Services (AD DS), DNS Server                   |
+| Memory            | 1 GB RAM                                                               |
+| Disk space        | 60 GB                                                                  |
+| Network interface | Requires dual network interface cards (NICs)                           |
 
-This section gives you instructions on how to setup the network for both environments.
+#### <a name="3.3.4"/> 3.3.4 SAN Storage Server Minimum Requirements
 
->	![](./image/FileServerUserGuide/image1.png)Note
+The minimum requirements for the storage area network (SAN) server computer are as follows.
 
->	&emsp;&emsp;This test suite can be deployed on either physical or virtual machines. This section will describe the deployment on physical machines. For more information about how to configure a virtual machine, please see <https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/create-virtual-machine>.
+![](./image/FileServerUserGuide/image1.png)**Note**
 
-### <a name="4.1"/> 4.1. Workgroup Environment
+The requirements that follow apply only to a Windows-based SAN server in the test environment.
 
-Computers in the **WORKGROUP** environment interact with each other according to the following rules:
+<a name="table.6"></a>
 
--   A driver computer sends requests over the wire in the form of protocol messages by running the test cases.
+**Table 6. SAN server computer minimum requirements in DOMAIN environment**
 
--   An SUT responds to the requests from the driver computer by running an implementation of the protocol.
+| Requirement      | Description                                                            |
+|------------------|------------------------------------------------------------------------|
+| Computer name    | Storage01                                                              |
+| Operating system | Microsoft® Windows Server 2012 R2, Standard Edition or later versions. |
+| Features         | N/A                                                                    |
+| Role Services    | File Server, iSCSI Target Server                                       |
+| Memory           | 1 GB RAM                                                               |
+| Disk space       | 60 GB                                                                  |
 
-The following diagram shows the **WORKGROUP** environment with recommended network configurations for your reference, all the settings are configurable:
+### <a name="3.4"/> 3.4 Software
 
->	![](./image/FileServerUserGuide/image1.png)Note
+All of the following software must be installed on the driver computer. They have some dependencies on each other, it is recommended to install them in the order listed below so that they can work correctly.
 
->	&emsp;&emsp;The following diagram applies to both Windows based computers and Non-Windows based computers in the **WORKGROUP** environment.
+**Required Software**
+
+All common softwares listed in [prerequisites](https://github.com/microsoft/WindowsProtocolTestSuites#prerequisites) for running Windows Protocol Test Suites.
+
+**Optional Software**
+
+* **Protocol Test Manager**
+
+    **Protocol Test Manager** provides a graphical user interface (UI) to facilitate configuration and execution of Microsoft® Windows Protocol Test Suite tests. Its use is highly recommended.
+
+* **Microsoft Message Analyzer**
+
+    **Microsoft® Message Analyzer** (MMA) is listed here as an optional tool because the test cases of themselves neither perform live captures or capture verifications during execution. However, MMA can be helpful with debugging test case results, by analyzing ETL files that are generated by the Test Cases, that is, if you enable the the Automatic Network Capturing feature in the Protocol Test Manager (PTM) during test case configuration. The Automatic Network Capturing feature is further described in the [PTF User Guide](https://github.com/Microsoft/ProtocolTestFramework/blob/staging/docs/PTFUserGuide.md#-automatic-network-capturing).
+
+    ![](./image/FileServerUserGuide/image1.png)Note
+
+    You can download the latest Message Analyzer from below website. [http://www.microsoft.com/en-us/download/details.aspx?id=44226](http://www.microsoft.com/en-us/download/details.aspx?id=44226)
+
+## <a name="4"/> 4 Network Setup
+
+This section describes how to set up the network for both the **WORKGROUP** and **DOMAIN** environments, which are described earlier in section [3.2 Environment Configuration](#3.2).
+
+![](./image/FileServerUserGuide/image1.png)**Note**
+
+You can deploy the **Test Suite** on either physical or virtual machines. However, the sections that follow describe the deployment on physical machines only.
+
+**More Information**
+
+To learn more about how to configure a virtual machine, see
+[Create Virtual Machine with Hyper-V on Windows 10](https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/create-virtual-machine)
+
+### <a name="4.1"/> 4.1 Workgroup Network Environment
+
+#### <a name="4.1.1"/> 4.1.1 Workgroup Message Architecture
+
+Computers in the **WORKGROUP** network environment interact with each other as follows:
+
+* The Driver computer (Client01) runs test cases which generate  requests that are sent over the wire as protocol messages to the SUT (Node01) computer.
+
+* The SUT computer responds to the requests from the Driver computer by running an implementation of the test protocol, which returns a response that is evaluated by a particular test case.
+
+#### <a name="4.1.2"/> 4.1.2 Workgroup Network Architecture
+
+The following diagram shows the **WORKGROUP** environment with recommended network configurations for reference. Note that all the settings are configurable.
+
+![](./image/FileServerUserGuide/image1.png)**Note**
+
+The suggested settings in the following diagram apply to both Windows-based computers and non-Windows based computers in a **WORKGROUP** environment, however, note that this User Guide documents the Windows case only.
+
+<a name="fig.1"></a>
 
 ![](./image/FileServerUserGuide/image3.png)
 
->	![](./image/FileServerUserGuide/image1.png)Note
+Figure 1. Workgroup environment network configuration
 
->	&emsp;&emsp;For Non-Windows, `Node01` could be replaced by the implementation-specific SUT.
+![](./image/FileServerUserGuide/image1.png)**Note**
+
+As a non-Windows SUT computer, **Node01** should host an implementation-specific system under test.
+
+<a name="table.7"></a>
+
+**Table 7. Suggested machine names and network configuration for the WORKGROUP environment**
 
 | Machine Name/Access Point | NIC       | IPv4          | Subnet Mask   |
 |---------------------------|-----------|---------------|---------------|
@@ -327,2064 +392,3278 @@ The following diagram shows the **WORKGROUP** environment with recommended netwo
 | Node01                    | External1 | 192.168.1.11  | 255.255.255.0 |
 |                           | External2 | 192.168.1.12  | 255.255.255.0 |
 
-### <a name="4.2"/> 4.2. Domain Environment
+![](./image/FileServerUserGuide/image1.png)**Note**
 
-Computers in the **DOMAIN** environment interact with each other according to the following rules:
+The addresses that are specified in the IPv4 column of this table and other tables are placeholders for actual addresses that you should specify. Also, note that the Driver computer (Client01) and the SUT computer (Node01) each require dual network interface cards (NICs), as indicated by the "External1" and "External2" designations, for complete testing of all scenarios.
 
--   A driver computer that sends requests over the wire in the form of protocol messages by running the test cases.
+### <a name="4.2"/> 4.2 Domain Network Environment
 
--   An SUT that responds to the requests from the driver computer by running an implementation of the protocol.
+#### <a name="4.2.1"/> 4.2.1 Domain Message Architecture
 
--   A domain controller (DC) that responds to the security authentication requests (logging in, checking permissions, etc.) within the domain.
+Computers in the **DOMAIN** environment interact with each other as follows:
 
--   Any other additional computers that are specified to provide functionality that is required to test the protocol implementation.
+* The Driver computer runs test cases which generate requests that are sent over the wire as protocol messages to one or more SUT computers, for example, computers comprising a Failover Cluster configuration.
 
-The following diagram shows the **DOMAIN** environment with recommended network configurations for your reference, all the settings are configurable:
+* The SUT/s respond/s to requests from the Driver computer by running an implementation of the protocol which returns a reply that is evaluated by a particular test case.
 
->	![](./image/FileServerUserGuide/image1.png)Note
+* The domain controller (DC) responds to security authentication requests such as logging in, checking permissions, and so on, within the domain.
 
->	&emsp;&emsp;The following diagram applies only to the Windows based computers in the **DOMAIN** environment.
+* Other interactions include when the Driver computer runs test cases to generate messages over the wire that run protocol implementations for testing the functions and capabilities of the storage area network (SAN) backend storage for the Failover Cluster.
 
->	&emsp;&emsp;For cluster scenarios, the driver computer will simulate a physical machine to contact `Node01` and `Node02` which are built as failover cluster nodes for the SUT. SAN storage server `Storage01` is on an isolated network to provide backend storage for the failover cluster.
+#### <a name="4.2.2"/> 4.2.2 Domain Network Architecture
 
->	&emsp;&emsp;For non-cluster scenarios, the driver computer will simulate a physical machine that contacts either node which is acting as the SUT.
+The following diagram shows the **DOMAIN** environment with recommended network configurations for reference. Note that all settings are configurable.
+
+![](./image/FileServerUserGuide/image1.png)**Note**
+
+The suggested settings in the following diagram apply to Windows based computers in the DOMAIN environment only.  However, non-Windows based computers are also supported in this environment. Note that dual network interface cards (NICs) are required on the Driver, SUT, and DC computers, as indicated by the "External1" and "External2" designations.
+
+In Clustering scenarios, the Driver computer (Client01 in figure 2) contacts the **Node01** and **Node02** SUT computers, which are configured as Failover Cluster nodes. The Storage Area Network (SAN) server computer **Storage01** is on an isolated network and provides backend storage for the Failover Cluster.
+
+In non-clustering scenarios as well, the Driver computer contacts whichever node is acting as the SUT computer.
+
+<a name="fig.2"></a>
 
 ![](./image/FileServerUserGuide/image4.png)
 
->	![](./image/FileServerUserGuide/image1.png)Note
+Figure 2. Domain environment network configuration
 
->	&emsp;&emsp;`Cluster01` represents the Failover Cluster while `GeneralFS` represents the File Server role provided by the Failover Cluster.
+![](./image/FileServerUserGuide/image1.png)**Note**
 
->	&emsp;&emsp;For Non-Windows, `Node01`, `Node02` and `Storage01` could be replaced by the implementation-specific SUT.
+In Figure 2, **Cluster01** represents the Failover Cluster computers that are identified as **Node01** and **Node02**, while **GeneralFS** represents the File Server role provided by the Failover Cluster, and **ScaleOutFS** represents the Scale-Out File Server role provided by the same cluster.
 
-| Machine Name/Access Point | NIC       | IPv4          | Subnet Mask   | Default Gateway | DNS Server    |
-|---------------------------|-----------|---------------|---------------|-----------------|---------------|
-| DC01                      | External1 | 192.168.1.1   | 255.255.255.0 | &lt;empty&gt;   | 127.0.0.1     |
-|                           | External2 | 192.168.2.1   | 255.255.255.0 | &lt;empty&gt;   | 127.0.0.1     |
-| Client01                  | External1 | 192.168.1.111 | 255.255.255.0 | 192.168.1.1     | 192.168.1.1   |
-|                           | External2 | 192.168.2.111 | 255.255.255.0 | 192.168.2.1     | 192.168.2.1   |
-| Node01                    | External1 | 192.168.1.11  | 255.255.255.0 | 192.168.1.1     | 192.168.1.1   |
-|                           | External2 | 192.168.2.11  | 255.255.255.0 | 192.168.2.1     | 192.168.2.1   |
-|                           | Cluster   | 10.10.0.11    | 255.255.255.0 | &lt;empty&gt;   | &lt;empty&gt; |
-|                           | iSCSI     | 192.168.0.11  | 255.255.255.0 | &lt;empty&gt;   | &lt;empty&gt; |
-| Node02                    | External1 | 192.168.1.12  | 255.255.255.0 | 192.168.1.1     | 192.168.1.1   |
-|                           | External2 | 192.168.2.12  | 255.255.255.0 | 192.168.2.1     | 192.168.2.1   |
-|                           | Cluster   | 10.10.0.12    | 255.255.255.0 | &lt;empty&gt;   | &lt;empty&gt; |
-|                           | iSCSI     | 192.168.0.12  | 255.255.255.0 | &lt;empty&gt;   | &lt;empty&gt; |
-| Storage01                 | iSCSI     | 192.168.0.1   | 255.255.255.0 | &lt;empty&gt;   | &lt;empty&gt; |
-| Cluster01                 | External1 | 192.168.1.100 |               |                 |               |
-|                           | External2 | 192.168.2.100 |               |                 |               |
-| GeneralFS                 | External1 | 192.168.1.200 |               |                 |               |
-|                           | External2 | 192.168.2.200 |               |                 |               |
+In non-Windows environments, the **Node01**, **Node02**, and **Storage01** computers could be replaced by  some other implementation-specific system under test (SUT).
 
-### <a name="4.3"/> 4.3. Verify Connectivity from the Driver Computer
+<a name="table.8"></a>
 
-After setting up the hostnames and networks in either **WORKGROUP** or **DOMAIN** environment, verify the connectivity between any of the two computers in your test environment. 
+**Table 8. Suggested machine names and network configuration for the DOMAIN environment**
 
-You can perform the following steps to test the connectivity between two Windows based computers. For further information, please see administrative guide of your operating system.
+| Machine Name/EndPoint | NIC       | IPv4          | Subnet Mask   | Default Gateway | DNS Server    |
+|-----------------------|-----------|---------------|---------------|-----------------|---------------|
+| DC01                  | External1 | 192.168.1.1   | 255.255.255.0 | &lt;empty&gt;   | 127.0.0.1     |
+|                       | External2 | 192.168.2.1   | 255.255.255.0 | &lt;empty&gt;   | 127.0.0.1     |
+| Client01              | External1 | 192.168.1.111 | 255.255.255.0 | 192.168.1.1     | 192.168.1.1   |
+|                       | External2 | 192.168.2.111 | 255.255.255.0 | 192.168.2.1     | 192.168.2.1   |
+| Node01                | External1 | 192.168.1.11  | 255.255.255.0 | 192.168.1.1     | 192.168.1.1   |
+|                       | External2 | 192.168.2.11  | 255.255.255.0 | 192.168.2.1     | 192.168.2.1   |
+|                       | Cluster   | 10.10.0.11    | 255.255.255.0 | &lt;empty&gt;   | &lt;empty&gt; |
+|                       | iSCSI     | 192.168.0.11  | 255.255.255.0 | &lt;empty&gt;   | &lt;empty&gt; |
+| Node02                | External1 | 192.168.1.12  | 255.255.255.0 | 192.168.1.1     | 192.168.1.1   |
+|                       | External2 | 192.168.2.12  | 255.255.255.0 | 192.168.2.1     | 192.168.2.1   |
+|                       | Cluster   | 10.10.0.12    | 255.255.255.0 | &lt;empty&gt;   | &lt;empty&gt; |
+|                       | iSCSI     | 192.168.0.12  | 255.255.255.0 | &lt;empty&gt;   | &lt;empty&gt; |
+| Storage01             | iSCSI     | 192.168.0.1   | 255.255.255.0 | &lt;empty&gt;   | &lt;empty&gt; |
+| Cluster01             | External1 | 192.168.1.100 |               |                 |               |
+|                       | External2 | 192.168.2.100 |               |                 |               |
+| GeneralFS             | External1 | 192.168.1.200 |               |                 |               |
+|                       | External2 | 192.168.2.200 |               |                 |               |
 
->	![](./image/FileServerUserGuide/image1.png)Note
+### <a name="4.3"/> 4.3 Verify Network Computer Connectivity
 
->	&emsp;&emsp;Disable active firewalls in the test environment before you go through the following steps. For Windows, please refer to [5.3.13. Turn off Firewall](#5.3.13).
+After setting up the host computers and the network configurations in either the **WORKGROUP** or **DOMAIN** environment, perform the following steps to test connectivity between Windows-based computers.
 
-To check the connectivity from the driver computer to the SUT:
+**More Information**
 
-1.  Click the **Start** button, and then click **Run**.
+To learn more about testing computer connectivity, see the Administrative Guide for your operating system.
 
-2.  In the **Run** dialog box, type `cmd` and then click **OK**.
+![](./image/FileServerUserGuide/image1.png)**Note**
 
-3.  At the command prompt, type `ping` followed by the hostname or IP address of the SUT, and then press **Enter**. The following example checks the connectivity from driver to an SUT named `Node01`:
-	```
-		ping Node01
-	```
+Before performing the steps that follow, disable all active firewalls in the test environment . For Windows computers, see section [5.3.13 Turn off Firewalls](#5.3.13).
 
-4.  Repeat these steps until you confirm the connectivity between all computers in the test environment.
+To check connectivity from the Driver computer to the SUT computer/s as well as other computers in your test environment, perform the following steps:
 
->	![](./image/FileServerUserGuide/image1.png)Note
+  1. Click the **Start** button on the Driver computer **Client01** and then click **Run**.
 
->	&emsp;&emsp;Do not proceed until connectivity is verified for all the machines. Any issues with network connectivity may block you in further configuration steps.
+  2. In the **Run** dialog box, type `cmd` and then click **OK**.
 
-## <a name="5"/> 5. Computer Setup 
+  3. At the command prompt on the Driver computer, type the command `ping` followed by a space and then type the hostname or IP address of the SUT **Node01** computer, for example:
 
-This test suite can be executed in two kinds of environments, **WORKGROUP** and **DOMAIN**, see [3.2. Environment](#3.2).
+  ```
+      ping Node01
+  ```
 
-This section gives you instructions on how to setup the computers for both environments.
+  4. Press the **Enter** key on the Driver computer keyboard and verify that you receive 4 ping responses at the command line from the **pinged** computer.
 
-### <a name="5.1"/> 5.1. Workgroup Environment
+  5. Repeat these steps for other computers in your test environment to confirm that there are no network connectivity issues.
 
-The **WORKGROUP** environment consists of two test machines, see [3.2. Environment](#3.2):
+![](./image/FileServerUserGuide/image1.png)**Caution**
 
--   A driver computer, operating system must be Microsoft® Windows 8.1 Enterprise or later versions.
+Do not proceed further with the setup until you have verified the proper connectivity of all machines in your environment, according to the previous procedure. Otherwise, network connectivity issues may block  further configuration in the steps that follow.
 
--   An SUT computer, can be either Windows or Non-Windows implementation.
+## <a name="5"/> 5 Computer Setup
 
-#### <a name="5.1.1"/> 5.1.1. Setup the Driver Computer
+As indicated earlier, the Test Suite can be executed in either the **WORKGROUP** or **DOMAIN** environment, as described in section [3.2 Environment Configuration](#3.2).
 
-This section describes how to Setup the driver computer.
+![](./image/FileServerUserGuide/image2.png)**Important**
 
->	![](./image/FileServerUserGuide/image2.png)Important
+When setting up the Driver and SUT computers in either the **WORKGROUP** or **DOMAIN** environment, the procedures specify the use of particular names for items such as passwords, sharenames, and so on. Note that in most cases these are only suggested names that you can change to accommodate your specific environment, at your discretion.
 
->	&emsp;&emsp;Microsoft® Visual Studio, Protocol Test Framework, and Spec Explorer must be installed on the driver computer before you run the test suite installer. See [Software Requirements](#3.7).
+### <a name="5.1"/> 5.1 Workgroup Environment
 
-To setup the driver computer:
+The **WORKGROUP** environment consists of two test machines as follows:
 
-1.  Configure IP addresses and set the computer name to `Client01`. See [4.1. Workgroup Environment](#4.1).
+* **Driver computer** – must be running the Microsoft® Windows 8.1 Enterprise or later operating system version.
 
-2.  Make sure firewalls are turned off. 
->	For Windows platform, please refer to [5.3.13. Turn off Firewall](#5.3.13).
+* **SUT computer** – must be running the Microsoft® Windows Server 2012 R2, Standard Edition or later version operating system for implementations in the Windows environment; in non-Windows environments, the operating system running on the SUT computer is at your own discretion, as is the implementation being tested on that computer.
 
-3.  Install the required and optional software. See [3.7. Software](#3.7).
+#### <a name="5.1.1"/> 5.1.1 Set up the Driver Computer for the Workgroup Environment
 
-4.  Start Windows PowerShell (x64) from `%SystemRoot%\System32\WindowsPowerShell\v1.0\` with Administrator privilege, and then type following command.
-	```
-		Set-ExecutionPolicy Unrestricted
-	```
+This section describes how to set up the Driver computer for the **WORKGROUP** environment.
 
-5.  Start Windows PowerShell (x86) from `%SystemRoot%\syswow64\WindowsPowerShell\v1.0\` with Administrator privilege, and execute the same command as above.
+![](./image/FileServerUserGuide/image2.png)**Important**
 
-6.  Copy the **FileServer-TestSuite-ServerEP.msi** package onto the driver computer, double click the package and install it with the **Install Test Suite on Driver Computer** option. See [3.7. Software](#3.7).
+Microsoft® Visual Studio, the Protocol Test Framework, and Spec Explorer must be installed on the Driver computer **before** you run the **Test Suite** installer. See section [3.4 Software Requirements](#3.4).
 
-7.  Create a new folder with path `%SystemDrive%\FileServerCaptureFileDirectory`. This folder will be used to save the capture files automatically generated by the [Microsoft® Message Analyzer](#3.7).
+Perform the steps that follow to set up the Driver computer:
 
-#### <a name="5.1.2"/> 5.1.2. Setup the SUT
+1. Configure IP addresses along with subnet masks and set the computer name to **Client01**. See section [4.1 Workgroup Environment](#4.1).
 
-This section describes how to Setup the SUT computer.
+2. Make sure all firewall are turned off.
 
-##### <a name="5.1.2.1"/> 5.1.2.1. Common Setup
+![](./image/FileServerUserGuide/image1.png)**Note**
 
-To setup the SUT computer:
+For more information about turning off the firewall on Windows platforms, see section [5.3.13 Turn off Firewalls](#5.3.13).
 
-1.  Configure IP addresses on the SUT node and set the computer name to `Node01`. See [4.1. Workgroup Environment](#4.1).
+3. Install the required software, as described in section [3.4 Software Requirements](#3.4), which includes installing the **FileServer-TestSuite-ServerEP.msi** package onto the Driver computer.
 
-2.  Make sure firewalls are turned off.
->	For Windows platform, please refer to [5.3.13. Turn off Firewall](#5.3.13).
+4. For x64-based machines, start Windows PowerShell (x64) with Administrator privileges by right-clicking the Windows **Start** menu and selecting **Windows Power Shell (Admin)**; then type following command:  
 
-3.  Create a local Administrator account named **Administrator** and a local Non-Admin account named **nonadmin**. 
->	For Windows platform, please refer to [5.3.14. Create a Local Admin User Account](#5.3.14) for creating an Admin user and [5.3.15. Create a Local Non-Admin User Account](#5.3.15) for creating a Non-Admin user.
+  ```
+    Set-ExecutionPolicy Unrestricted
+  ```
 
-4.  Enable the **Guest** account.
->	For Windows platform, please refer to [5.3.16. Enable the Local Guest Account](#5.3.16).
+5. For x86-based machines, start Windows PowerShell (x86) with Administrator privileges by right-clicking the Windows **Start** menu and selecting **Windows Power Shell (Admin)**; then execute the same command as immediately above.
 
-5.  The password for all the above accounts should be set to **Password01!**. 
->	For Windows platform, please refer to [5.3.17. Reset Password to Local Users](#5.3.17).
+6. Create a new folder with path **%SystemDrive%\\FileServerCaptureFileDirectory**. This folder can be used to save the event trace log (ETL) files automatically generated by the Test Cases, which files you can analyze with Microsoft® Message Analyzer. Note that generation of ETL files will occur only if you enable **NetworkCapture** on the **Configure Test Cases** tab of the PTM and that you run the PTM as Administrator.
 
-6.	Configure the following steps from [5.1.2.2. Setup to test SMB2](#5.1.2.2) to [5.1.2.5. Setup to test SQOS](#5.1.2.5) regarding to your test requirements.
+#### <a name="5.1.2"/> 5.1.2 Setup the SUT Computer in the Workgroup Environment
 
-##### <a name="5.1.2.2"/> 5.1.2.2. Setup to test SMB2
+This section describes several ways to set up the SUT computer, according to the subsections that  follow:
 
-This configuration is used to test the **[MS-SMB2]** protocol.
+* [Common Setup](#5.1.2.1)(section 5.1.2.1)
+* [Setup to test SMB2](#5.1.2.2)(section 5.1.2.2)
+* [Setup to test DFSC](#5.1.2.3)(section 5.1.2.3)
+* [Setup to test RSVD](#5.1.2.4)(section 5.1.2.4)
+* [Setup to test SQOS](#5.1.2.5)(section 5.1.2.5)
+* [Setup to test FSA](#5.1.2.6)(section 5.1.2.6)
 
-###### <a name="5.1.2.2.1"/> 5.1.2.2.1. Create a basic share
+##### <a name="5.1.2.1"/> 5.1.2.1 Common Setup
 
-This configuration is used to test **Basic** features of **[MS-SMB2]** protocol.
+Perform the following steps to create a common setup for the SUT computer in a Windows **WORKGROUP** environment:
 
-1.  Create a share named **SMBBasic** on `Node01`.
+1. Configure IP addresses on the SUT computer and set the computer name to **Node01**, as described in section [4.1 Workgroup Environment](#4.1).
 
-2.  Share it with **Read/Write** permission level to the local Administrator account **Administrator**.
->	For Windows platform, please refer to [5.3.1. Create a share](#5.3.1).
+2. Turn off the SUT computer firewall.
 
-###### <a name="5.1.2.2.2"/> 5.1.2.2.2. Create a share with Encrypt data access enabled
+    For Windows platforms, see section [5.3.13 Turn off Firewalls](#5.3.13).
 
-This configuration is used to test **Encryption** feature of **[MS-SMB2]** protocol. If **Encryption** is not supported, this section can be ignored.
+3. Ensure that the local **Administrator** account is enabled (which should be enabled by default) and create a local non-Administrative account named **nonadmin** for use with some test cases.
 
-1.  Create a share named **SMBEncrypted** on `Node01`.
+    For Windows platforms, see the following sections:
 
-2.  Share it with **Read/Write** permission level to the local Administrator account **Administrator**.
->	For Windows platform, please refer to [5.3.1. Create a share](#5.3.1).
+    [5.3.14 Enable the Local Administrator Account](#5.3.14)
 
-3.  Enable **Encrypt data access** on the share which indicates that the server requires messages to be encrypted when accessing this share.
->	For Windows platform, please refer to [5.3.6. Enable Encrypt Data Access on a share named SMBEncrypted](#5.3.6).
+    [5.3.15 Create a Local Non-Admin User Account](#5.3.15)
 
-###### <a name="5.1.2.2.3"/> 5.1.2.2.3. Other configurations
+4. Ensure that the password for the local **Administrator** and **nonadmin** accounts are set to **Password01!**.
 
-####### <a name="5.1.2.2.3.1"/> 5.1.2.2.3.1. Create a share with Oplock Force Level 2 enabled
+    See section [5.3.17 Reset Password for Local Users](#5.3.17).
 
-This configuration is used to test **Oplock** feature of **[MS-SMB2]** protocol.
+5. Enable the Windows **Guest** account as described in section [5.3.16 Enable the Local Guest Account](#5.3.16). The Guest account is used in some test cases.
 
-1.  Create a share named **ShareForceLevel2** on `Node01`.
+6. Reset the password for the **Guest** account to **Password01!**.
 
-2.  Share it with **Read/Write** permission level to the local Administrator account **Administrator**.
->	For Windows platform, please refer to [5.3.1. Create a share](#5.3.1).
+    See section [5.3.17 Reset Password for Local Users](#5.3.17).
 
-3.  Enable **FORCE_LEVELII_OPLOCK** on the share.
->	For Windows platform, please refer to [5.3.7. Enable FORCE_LEVELII_OPLOCK on a share named ShareForceLevel2](#5.3.7).
+In sections [5.1.2.2 Setup to test SMB2](#5.1.2.2) through [5.1.2.5 Setup to test SQOS](#5.1.2.5) that follow, you will create the configurations necessary for testing the Server Message Block (SMB) and other protocols.
 
-####### <a name="5.1.2.2.3.2"/> 5.1.2.2.3.2. Create a share named SameWithSMBBasic
+##### <a name="5.1.2.2"/> 5.1.2.2 Setup to test SMB2
 
-This configuration is used to test some negative cases of **AppInstanceId** feature of **[MS-SMB2]** protocol. If **AppInstanceId** is not supported, this section can be ignored.
+The procedures in the subsections that follow create the  test configurations that you will use to test an MSSMB2 protocol implementation.
 
-1.	Create a share named **SameWithSMBBasic** on `Node01`, this share should have the same path as the **SMBBasic** share.
->	For Windows platform, please refer to [5.3.4. Add a share SameWithSMBBasic to an existing share SMBBasic](#5.3.4).
+###### <a name="5.1.2.2.1"/> 5.1.2.2.1 Create a basic share
 
-Summary of the test case design:
+This configuration is used to test the basic features of an MS-SMB2 protocol implementation, for example, the **Encryption** and **Oplock** features.
 
--	The case creates an Open under the share **SMBBasic**. There's an **AppInstanceId** in the Create Request.
+To create a basic SMB share, perform the steps that follow:
 
--	The case connects the share **SameWithSMBBasic** and sends a second Create Request to SUT with the same **AppInstanceId**.
+  1. Create a shared folder named **SMBBasic** on the SUT computer (**Node01**).
 
--	Verify the first Open is not forced to close by the second create request because the second create request is connecting to a different share.
+  2. Ensure that the **SMBBasic** folder is shared with **Read/Write** permissions to the local **Administrator** account that is enabled by default or you enabled earlier in section [5.1.2.1 Common Setup](#5.1.2.1).
 
-####### <a name="5.1.2.2.3.3"/> 5.1.2.2.3.3. Create a share named DifferentFromSMBBasic
+  3. For Windows platforms, see section [5.3.1 Create a share](#5.3.1) for additional process details.
 
-This configuration is used to test some negative cases (similar to [5.1.2.2.3.2. Create a share named SameWithSMBBasic](#5.1.2.2.3.2)) of **AppInstanceId** feature of **[MS-SMB2]** protocol. If **AppInstanceId** is not supported, this section can be ignored.
+###### <a name="5.1.2.2.2"/> 5.1.2.2.2 Create a share with Encrypt data access enabled
 
-1.  Create a share named **DifferentFromSMBBasic** on `Node01`, this share should have a different path from **SMBBasic** share. For example, if **SMBBasic** has path `%SystemDrive%\SMBBasic`, then **DifferentFromSMBBasic** should have path `%SystemDrive%\DifferentFromSMBBasic`.
+This configuration is used to test the **Encryption** feature of an MS-SMB2 protocol implementation.  If **Encryption** is not supported in your implementation, please ignore this section.
 
-2.  Share it with **Read/Write** permission level to the local Administrator account **Administrator**.
->	For Windows platform, please refer to [5.3.1. Create a share](#5.3.1).
+To create a share with encrypted access, perform the steps that follow:
 
-####### <a name="5.1.2.2.3.4"/> 5.1.2.2.3.4. Create Symbolic Links
+  1. Create a shared folder named **SMBEncrypted** on **%systemdrive%** of the SUT (**Node01**) computer.  
 
-This configuration is used to test some negative cases of **Create/Close** feature of **[MS-SMB2]** protocol. For more details, please see **[MS-SMB2]** section 3.3.5.9.
+  2. Share the **SMBEncrypted** folder with **Read/Write** permissions to the local **Administrator** account that you enabled in section [5.1.2.1 Common Setup](#5.1.2.1). For Windows and non-Windows platforms, proceed to section [5.3.1 Create a share](#5.3.1) for additional process details.
 
-1.  Add a **Symbolic Link** to **%SystemDrive%**.
+  3. For Windows and non-Windows platforms, after step 3 is complete, proceed to section [5.3.6 Enable Encrypt Data Access on a share named SMBEncrypted](#5.3.6) for additional process details.  
 
-	-	In folder **SMBBasic**, add a symbolic link named **Symboliclink**, which links to **%SystemDrive%**.
+      This will enable **Encrypt data access** on the **SMBEncrypted** share, to enforce the requirement that messages must be encrypted whenever this share is accessed.
 
-2.	Add a **Symbolic Link** to **SMBBasic**.
-	
-	-	Add a new folder **Sub** under **SMBBasic**.
-	
-	-	In folder **Sub**, add another symbolic link named **Symboliclink2**, which links to **SMBBasic**.
+###### <a name="5.1.2.2.3"/> 5.1.2.2.3 Other configurations
 
->	For Windows platform, please refer to [5.3.5. Create symbolic links](#5.3.5).
+###### <a name="5.1.2.2.3.1"/> 5.1.2.2.3.1 Create a share with Oplock Force Level 2 enabled
 
-####### <a name="5.1.2.2.3.5"/> 5.1.2.2.3.5. Create a share on volume supporting integrity
+This configuration is used to test the **Oplock** feature of an MS-SMB2 protocol implementation.
 
-This configuration is used to test **Integrity** feature of **[MS-SMB2]** protocol, namely the IoCtl codes **FSCTL\_GET\_INTEGRITY\_INFORMATION** and **FSCTL\_SET\_INTEGRITY\_INFORMATION**. If **Integrity** is not supported by file system, this section can be ignored. For more details about the two IoCtl codes, please see **[MS-FSCC]**.
+To create a share with Oplock Force Level 2 enabled, perform the steps that follow:
 
-1.  Create a share named **SMBReFSShare** in the **ReFS** format volume on `Node01`.
+  1. Create a shared folder named **ShareForceLevel2** on the SUT (**Node01**) computer, as described in section [5.3.1 Create a share](#5.3.1).
 
-	-	The file system of the volume containing the specified share should support the use of **Integrity**.
+  2. Share the **ShareForceLevel2** folder with **Read/Write** permissions to the local **Administrator** account.
 
-2.  Share it with **Read/Write** permission level to the local Administrator account **Administrator**.
+  3. For Windows platforms, proceed to section [5.3.7 Enable FORCE_LEVELII_OPLOCK on a share named ShareForceLevel2](5.3.7) to enable **FORCE_LEVELII_OPLOCK** on the specified share.
 
->	For Windows platform, please refer to [5.3.8. Create a share on a volume supporting integrity](#5.3.8).
+###### <a name="5.1.2.2.3.2"/> 5.1.2.2.3.2 Create a Share Named SameWithSMBBasic
 
-####### <a name="5.1.2.2.3.6"/> 5.1.2.2.3.6. Modify the Signing configurations
+This configuration is used to test some negative cases of the **AppInstanceId** feature in a Windows implementation of the MS-SMB2 protocol. If **AppInstanceId** is not supported in your implementation, please ignore this section.
 
-This configuration is used to test the **Signing** feature of the **[MS-SMB2]** protocol. If **Signing** is not supported, this section can be ignored.
+To create a share named SameWithSMBBasic, perform the steps that follow:
 
-1. 	Enable or disable the **SigningRequired** on the SUT computer on your demand.
->	For Windows platform, please refer to [5.3.21. Modify the Signing configuration](#5.3.21) on how to enable or disable **SigningRequired**.
+  1. Create a shared folder named **SameWithSMBBasic** on the SUT (**Node01**) computer. This share should have the same path as the **SMBBasic** shared folder that you created in section [5.1.2.2.1 Create a basic share](#5.1.2.2.1).
 
-2.  Open the [CommonTestSuite.deployment.ptfconfig](#7.2) file on the driver computer.
+  2. For Windows platforms, proceed to section [5.3.4 Add a share SameWithSMBBasic with the same Path of Share SMBBasic](#5.3.4) for the process to create and locate the SameWithSMBBasic share.
 
-	-  If **SigningRequired** is enabled on SUT, set the value of property **IsRequireMessageSigning** to **TRUE** in the ptfconfig file mentioned above.
+![](./image/FileServerUserGuide/image1.png)**Note**
 
-	-  If **SigningRequired** is disabled on SUT, set the value of property **IsRequireMessageSigning** to **FALSE** in the ptfconfig file mentioned above.
+* The test case creates a file under the **SMBBasic** share in the first create request and a second create request creates a file of the same name under the **SameWithSMBBasic** share.
 
-##### <a name="5.1.2.3"/> 5.1.2.3. Setup to test DFSC
+* The test case then connects with the share **SameWithSMBBasic** and sends a second Create Request to the SUT with the same **AppInstanceId**.
 
-This configuration is used to test the **[MS-DFSC]** protocol. If **DFS** is not supported, this section can be ignored.
+* The test case verifies that the first Open is not forced to close by the second Create Request because the second Create Request is connecting to a different share.
 
-1.  Create DFS namespaces.
+###### <a name="5.1.2.2.3.3"/> 5.1.2.2.3.3 Create a share named DifferentFromSMBBasic
 
-	-    Two Stand-alone namespaces: **SMBDfs** and **Standalone**.
+This configuration is used to test some negative cases (similar to section [5.1.2.2.3.2 Create a share named SameWithSMBBasic](#5.1.2.2.3.2)) of the **AppInstanceId** feature of an MS-SMB2 protocol implementation. If **AppInstanceId** is not supported in your implementation, please ignore this section.
 
-2.  Create a share **FileShare** on SUT.
+To create a share named **DifferentFromSMBBasic**, perform the steps that follow:
 
-    -	Share with Read/Write permission level to Admin User.
+  1. Create a shared folder named **DifferentFromSMBBasic** on the SUT (**Node01**) computer. This share should have a different path from that of the **SMBBasic** share. For example, if the path to **SMBBasic** is **%SystemDrive%\SMBBasic**, then the path to **DifferentFromSMBBasic** should be **%SystemDrive%\DifferentFromSMBBasic**.
 
-3.  Add one folder to namespace **SMBDfs**.
+  2. Share the **DifferentFromSMBBasic** with **Read/Write** permissions to the local Administrator account **Administrator**.
 
-    -	Folder name is **SMBDfsLink** and link target is **\\\\Node01\\FileShare**.
+For Windows platforms, see section [5.3.1 Create a share](#5.3.1) for additional information.
 
-4.  Add two folders to namespace **Standalone**.
+###### <a name="5.1.2.2.3.4"/> 5.1.2.2.3.4 Create Symbolic Links
 
-    -	Folder name is **DFSLink** and link target is **\\\\Node01\\FileShare**.
+This configuration is used to test some negative cases of the **Create/Close** feature of an **MS-SMB2** protocol implementation. For more details, see section 3.3.5.9 of the [**MS-SMB2**] document.
 
-    -	Folder name is **Interlink** and link target is **\\\\Node01\\SMBDfs\\SMBDfsLink**.
+This configuration is used to test some negative cases of **Create/Close** feature of **[MS-SMB2]** protocol.
 
->	For Windows platform, please refer to [5.3.10. Setup Distributed File System (DFS)](#5.3.10).
+The following summarizes the steps for creating symbolic links.
 
-##### <a name="5.1.2.4"/> 5.1.2.4. Setup to test RSVD
+  1. Add a **Symbolic Link** to **%SystemDrive%**.  
 
->	![](./image/FileServerUserGuide/image1.png)Note
+      * In the folder **SMBBasic**, add a symbolic link named **Symboliclink**, which will link to **%SystemDrive%**.
 
->	&emsp;&emsp;The testing of RSVD is not applicable for **WORKGROUP** environment in Windows platform. But you could still test it if your implementation supports this feature in **WORKGROUP** environment.
+  2. Add a **Symbolic Link** to the **SMBBasic\Sub** folder:
 
->	Please reference [5.2.4.5. Setup to test RSVD](#5.2.4.5) for how to setup.
+      * Add a new folder named **Sub** under the **SMBBasic** folder.
 
-##### <a name="5.1.2.5"/> 5.1.2.5. Setup to test SQOS
+      * In the **Sub** folder, add a symbolic link named **Symboliclink2**, which will link to **SMBBasic**.
 
->	![](./image/FileServerUserGuide/image1.png)Note
+For Windows platforms, proceed to section [5.3.5 Create symbolic links](#5.3.5) for the details on creating the specified symbolic links for the applicable share and folder mentioned in the previous steps.
 
->	&emsp;&emsp;The testing of SQOS is not applicable for **WORKGROUP** environment of Windows platform. But you could still test it if your implementation supports this feature in **WORKGROUP** environment.
+###### <a name="5.1.2.2.3.5"/> 5.1.2.2.3.5 Create a Share on a Volume that Supports Integrity
 
->	Please reference [5.2.4.6. Setup to test SQOS](#5.2.4.6) for how to setup.
+This configuration is used to test the **Integrity** feature of an **MS-SMB2** protocol implementation, namely the **IoCtl** codes **FSCTL_GET_INTEGRITY_INFORMATION** and **FSCTL_SET_INTEGRITY_INFORMATION**. If Integrity is not supported by your file system, please ignore this section. For more details about the cited **IoCtl** codes, please see the [MS-FSCC] document.
 
-##### <a name="5.1.2.6"/> 5.1.2.6. Setup to test FSA
+To create a shared folder named **SMBReFSShare** in a new **ReFS**-formatted volume, you will perform the tasks described in the steps that follow:
 
-This configuration is used to test the **[MS-FSA]** protocol. 
+  1. On the SUT (**Node01**) computer, use the **Disk Management** console to allocate a new 5 GB volume and configure the volume to the resilient file system (**ReFS**) format.
 
-1.  Create a share **FileShare** on SUT. If this share is already created, skip this step.
+  2. Create a shared folder named **SMBReFSShare** on the **ReFS**-formatted volume on the SUT (**Node01**) computer.
 
-    -	Share with Read/Write permission level to Admin User.
-	
->	For Windows platform, please refer to [5.3.1. Create a share](#5.3.1).	
-	
-2.  Create a folder **ExistingFolder** under the **FileShare**.
+  ![](./image/FileServerUserGuide/image1.png)**Note**
+  
+  The file system of the volume containing the specified share must support the use of **Integrity**, such as **ReFS**-formatted volumes do.
 
-3.  Create a file **ExistingFile.txt** under the **FileShare**.
+  3. Share the **SMBReFSShare** folder with **Read/Write** permissions to the local **Administrator** account that you enabled earlier.
 
-4.  Create a link **link.txt** under the **FileShare**, and link it to **ExistingFile.txt**.
+For Windows platforms, see section [5.3.8 Create a share on a volume supporting integrity](#5.3.8) for further details on creating the new volume and share.
 
->	For Windows platform, please refer to [5.3.5. Create symbolic links](#5.3.5).	
+###### <a name="5.1.2.2.3.6"/> 5.1.2.2.3.6 Modify the Signing configurations
 
-5.  Create a mount point **MountPoint**, link to the volume where the **FileShare** locates.
+This configuration is used to test the **Signing** feature of an **MS-SMB2** protocol implementation. If **Signing** is not supported in your implementation, please ignore this section.
 
->   For Windows platform, please refer to [5.3.27. Create a volume mount point](#5.3.27).
+To enable the Signing feature on the SUT (**Node01**) computer, perform the steps that follow.
 
-6.  Enable **short name** (**8.3 filename**) on the volume where the **FileShare** locates.
+  1. Enable the **SigningRequired** feature on the SUT (**Node01**) computer at your discretion. Note that you can also disable SigningRequired.
 
->   For Windows platform, please refer to [5.3.25. Enable short name](#5.3.25).
+      For Windows platforms, see section [5.3.21 Modify the Signing configuration](#5.3.21), on how to enable (or disable) **SigningRequired**.
+  
+  2. On the Driver (**Client01**) computer, open the [CommonTestSuite.deployment.ptfconfig](#7.2) file with Microsoft Visual Studio Ultimate 2012 and do one of the following:
 
-7.  Create 3 volume shadow copies on the volume where the **FileShare** locates. Modify the file **ExistingFile.txt** before every creation, then **ExistingFile.txt** will have 3 previous versions.
+      * If you enabled **SigningRequired** on the SUT (**Node01**) computer, set the value of the **IsRequireMessageSigning** property to `true` in the specified ptfconfig file. Note that `true` should be the default.
 
->   For Windows platform, please refer to [5.3.26. Create a volume shadow copy](#5.3.26).
+      * If you disabled **SigningRequired** on the SUT computer, set the value of the **IsRequireMessageSigning** property to `false` in the specified ptfconfig file.
 
-8.  Repeat step 2 to 7 under the share **SMBReFSShare**, which is created in section [5.1.2.2.3.5 Create a share on volume supporting integrity](#5.1.2.2.3.5).
+##### <a name="5.1.2.3"/> 5.1.2.3 Setup to test DFSC
 
-	If **Integrity** is not supported by file system, this step can be ignored.
+This configuration is used to test an implementation of the [**MS-DFSC**] protocol. If the distributed file system (**DFS**) is not supported, please ignore this section.
 
-### <a name="5.2"/> 5.2. Domain Environment
+The following steps summarize the tasks that enable you to set up DFS on the SUT (**Node01**) computer.
 
-The **DOMAIN** environment consists of 4-5 test machines, see [3.2. Environment](#3.2):
+  1. Use **Server Manager** to install DFS services on the SUT.
 
--   A driver computer, operating system must be Microsoft® Windows 8.1 Enterprise or later versions.
+  2. Create two stand-alone DFS namespaces entitled **SMBDfs** and **Standalone**.
 
--   A failover cluster SUT, can be either Windows or Non-Windows implementation.
+  3. Create a shared folder named **FileShare** on the SUT computer.
 
-	-   If you want to test cluster involving scenarios, you will have to prepare a failover cluster SUT. Two computers will be needed if you are deploying a Windows implementation.
+  4. Share the **FileShare** folder with Read/Write permissions to the Administrator account that you enabled earlier.
 
-	-   If you do not want to test cluster involving scenarios, you will only need one SUT computer. To simplify your deployment steps and reuse what you already have, you can use any one node in the failover cluster as the SUT computer for testing non-cluster scenarios.
+      For Windows platforms, see section [5.3.1 Create a share](#5.3.1) for additional information.
 
--   A Domain Controller (DC), can be either Windows or Non-Windows implementation.
+  5. Add a folder named **SMBDfsLink** with a symbolic link target as **\\\\Node01\\FileShare** to the **SMBDfs** namespace.
 
--   A SAN storage server, can be either Windows or Non-Windows implementation.
+  6. Add the following two folders to the **Standalone** namespace.
 
-#### <a name="5.2.1"/> 5.2.1. Setup the Domain Controller (DC)
+      * A folder named **DFSLink** with a symbolic link target as **\\\\Node01\\FileShare**.
 
-This section describes how to setup the Domain Controller (DC).
+      * A folder named **Interlink** with a symbolic link target as **\\\\Node01\\SMBDfs\\SMBDfsLink**.
 
-To setup the Domain Controller:
+To complete these tasks on Windows platforms, see section [5.3.10 Set up Distributed File System (DFS)](#5.3.10). Perform all procedures in this section with exception of those that apply to the **DOMAIN** environment only.
 
-1.  Configure IP addresses on the Domain Controller and set the computer name to `DC01`. See [4.2. Domain Environment](#4.2).
+##### <a name="5.1.2.4"/> 5.1.2.4 Setup to test RSVD
 
-2.  Make sure firewalls are turned off.
->	For Windows platform, please refer to [5.3.13. Turn off Firewall](#5.3.13).
+![](./image/FileServerUserGuide/image1.png)**Note**
 
-3.  Create a local Administrator account named **Administrator**.
->	For Windows platform, please refer to [5.3.14. Create a Local Admin User Account](#5.3.14) for creating an Admin user.
+RSVD testing is not applicable to the Windows **WORKGROUP** environment. However, you can still perform RSVD testing if you have a non-Windows computer as the SUT and your implementation supports this feature in the **WORKGROUP** environment. To perform RSVD testing in the **DOMAIN** environment, see section [5.2.4.5 Setup to test RSVD](#5.2.4.5).
 
-4.  The password for Administrator account should be set to **Password01!**. 
->	For Windows platform, please refer to [5.3.17. Reset Password to Local Users](#5.3.17).
+##### <a name="5.1.2.5"/> 5.1.2.5 Setup to test SQOS
 
-5.	Configure the following steps from [5.2.1.1. Promote DC](#5.2.1.1) to [5.2.1.4. Setup to test Claimed Based Access Control (CBAC)](#5.2.1.4) regarding to your test requirements.
+![](./image/FileServerUserGuide/image1.png)**Note**
 
-##### <a name="5.2.1.1"/> 5.2.1.1. Promote DC
+Storage Quality of Service (SQOS) testing is not applicable to the Windows **WORKGROUP** environment. However, you can still perform SQOS testing if your implementation supports this feature in the **WORKGROUP** environment. To perform SQOS testing in the **DOMAIN** environment, see section [5.2.4.6 Setup to test SQOS](#5.2.4.6).
 
-1. Promote the computer to be a Domain Controller.
+##### <a name="5.1.2.6"/> 5.1.2.6 Setup to test the File System Algorithms (FSA)
 
->	For Windows platform, please refer to [5.3.9.1. Install DNS and Active Directory Domain Services and create a specific domain](#5.3.9.1).
+This configuration is used to test the [**MS-FSA**] protocol.
 
->	![](./image/FileServerUserGuide/image1.png)Note
+The general tasks you will need to perform are outlined in the steps that follow:
 
->	&emsp;&emsp;Non-Windows Domain Controllers may need to configure DNS records for all the test machines manually.
+  1. Create a share named **FileShare** on the SUT computer. Skip this step and the next if this share already exists and Read/Write permissions have been set.
 
-##### <a name="5.2.1.2"/> 5.2.1.2. Start the Routing service
+  2. Configure the share with the Read/Write permissions to the Administrator account.
 
-This configuration is for routing two different networks which are used in multiple channel test cases.
+      On Windows platforms, see section [5.3.1 Create a share](#5.3.1), for further details.
 
-1. Install Remote Access Role and configure the Routing and Remote Access service.
->	For Windows platform, please refer to [5.3.9.2. Install Routing Service](#5.3.9.2).
+  3. Create a folder named **ExistingFolder** under the **FileShare**.
 
-2. Configure and start the Routing service.
->	For Windows platform, please refer to [5.3.9.3. Configure and start Routing service](#5.3.9.3).
+  4. Create a file named **ExistingFile.txt** under the **FileShare**.
 
-##### <a name="5.2.1.3"/> 5.2.1.3. Create Domain User accounts 
+  5. Create a symbolic link named **link.txt** under the **FileShare** folder and link it to the **ExistingFile.txt** file.
 
-To create domain (Non-Admin) users:
+      On Windows platforms, see section [5.3.5 Create symbolic links](#5.3.5), for further details.
 
-1.  Create a non-admin domain user account named **nonadmin** in Active Directory.
->	For Windows platform, please refer to [5.3.9.4. Create a Domain Non-Admin user account](#5.3.9.4).
+  6. Create a mount point named **MountPoint** under the **FileShare** and link to the volume where the **FileShare** folder is located.
 
-2.  Enable the **Guest** account.
->	For Windows platform, please refer to [5.3.9.5. Enable Guest user account](#5.3.9.5).
+      On Windows platforms, see section [5.3.27 Create a volume mount point](#5.2.27), for further details.
 
-3.  Create a domain group **AzGroup01** in Active Directory.
->	For Windows platform, please refer to [5.3.9.6. Create a Domain group](#5.3.9.6).
+  7. Enable **short name** (**8.3 filename**) on the volume where the **FileShare** folder is located.
 
-4.  Create a domain user **AzUser01** within the domain group **AzGroup01** in Active Directory.
->	For Windows platform, please refer to [5.3.9.7. Create a Domain account that belongs to a Domain group](#5.3.9.7).
+      On Windows platforms, see section [5.3.25 Enable short name](#5.3.25) for further details.
 
-5.  Password of all the accounts should be set to **Password01!**.
+  8. Create 3 volume shadow copies on the volume where the **FileShare folder** is located. Modify and save the contents of file **ExistingFile.txt** prior to creating each volume shadow copy, so that the **ExistingFile.txt** file will have 3 previous versions.
 
-##### <a name="5.2.1.4"/> 5.2.1.4. Setup to test Claimed Based Access Control (CBAC)
+      On Windows platforms, see section [5.3.26 Create a volume shadow copy](#5.3.26), for further details.
+
+  9. Repeat steps 3 through 6 for the share **SMBReFSShare**, which should have been already created in section [5.1.2.2.3.5 Create the share on a volume supporting integrity](#5.1.2.2.3.5).
+
+      ![](./image/FileServerUserGuide/image1.png)**Note**
+
+      If **Integrity** is not supported by the file system, please ignore this step.
+
+### <a name="5.2"/> 5.2 Domain Environment
+
+The **DOMAIN** environment consists of 4-5 test machines, as described in section [3.2 Environment](#3.2). The following requirements apply to the domain environment:
+
+* The Driver computer must use the Microsoft® Windows 8.1 Enterprise or later version operating system.
+
+* The failover cluster SUT, can be for either a Windows or Non-Windows implementation.
+
+  * If you want to test cluster scenarios, you will need to prepare a Failover Cluster SUT. Moreover, for a Windows implementation, two computers are required.
+
+  * If you do not want to test cluster scenarios, you will need a single SUT computer only. To simplify your deployment steps and reuse any existing configurations you might already have, you can use any one node in the Failover Cluster as the SUT computer when testing non-cluster scenarios.
+
+* The Domain Controller (DC) can be either a Windows or non-Windows system.
+
+* The SAN storage server can be for either a Windows or non-Windows implementation.
+
+#### <a name="5.2.1"/> 5.2.1 Set up the Domain Controller (DC) for the Domain Environment
+
+This section describes how to set up a computer as the Domain Controller (DC). For a basic setup in Windows, perform the following steps:
+
+  1. Configure IP addresses on the **DC** and configure the computer name as **DC01**. For further details, see section [4.2 Domain Environment](#4,2).
+
+  2. Turn off all firewalls on all computers in the Domain Environment.
+
+      For Windows platforms, see section [5.3.13 Turn off the Firewall](#5.3.13).
+
+  3. Create a local Administrator account named **Administrator**.
+
+      For Windows platforms, see section [5.3.14 Create a Local Admin User Account](#5.3.14).
+
+  4. Set the Administrator account password to **Password01!**.
+
+      For Windows platforms, see section [5.3.17 Reset the Password for Local Users](#5.3.17).
+
+  5. Perform the steps in the following subsections [5.2.1.1](#5.2.1.1) through [5.2.1.4](5.2.1.4) to continue DC setup.
+
+##### <a name="5.2.1.1"/> 5.2.1.1 Promote the DC
+
+1. Promote the computer to Domain Controller.
+
+  For Windows platforms, see section [5.3.9.1 Install DNS and Active Directory Domain Services](#5.3.9.1) to create a specified domain.
+
+![](./image/FileServerUserGuide/image1.png)**Note**
+
+In non-Windows Domain Controller environments, it may be necessary to manually configure DNS records for all test machines.
+
+##### <a name="5.2.1.2"/> 5.2.1.2 Start the Routing service
+
+The steps that follow create the configuration for routing two different networks that are used in multiplechannel test cases.
+
+  1. Install the Routing Service and configure the Remote Access Role feature.
+
+      For Windows platforms, see section [5.3.9.2 Install Routing Service](5.3.9.2).
+
+  2. Configure and start the Routing and Remote Access service.
+
+      For Windows platforms, see section [5.3.9.3 Configure and start Routing service](5.3.9.3).
+
+##### <a name="5.2.1.3"/> 5.2.1.3 Create the Domain User accounts
+
+To create domain (non-Admin) user accounts:
+
+  1. Create a non-Admin domain user account named **nonadmin** in Active Directory.
+
+      For Windows platforms, see section [5.3.9.4 Create a Domain Non-Admin user account](#5.3.9.4).
+
+  2. Enable the **Guest** account.
+
+      For Windows platforms, see section [5.3.9.5 Enable Guest user account](#5.3.9.5).
+
+  3. Create a domain group **AzGroup01** in Active Directory.
+
+      For Windows platforms, see section [5.3.9.6 Create a Domain group](#5.3.9.6).
+
+  4. Create a domain user **AzUser01** within the domain group **AzGroup01** in Active Directory.
+
+      For Windows platforms, see section [5.3.9.7 Create a Domain account that belongs to a Domain group](#5.3.9.7).
+
+  5. Set the password for all the accounts to **Password01!**.
+
+##### <a name="5.2.1.4"/> 5.2.1.4 Setup to test Claimed Based Access Control (CBAC)
 
 This configuration is used to test the authentication and authorization protocols.
 
->	For Windows platform, please refer to [5.3.9.8. Configure Claimed Based Access Control (CBAC)](#5.3.9.8).
+For Windows platforms, see section [5.3.9.8 Configure Claimed Based Access Control (CBAC)](#5.3.9.8).
 
-#### <a name="5.2.2"/> 5.2.2. Setup the Driver Computer
+#### <a name="5.2.2"/> 5.2.2 Set up the Driver Computer for the Domain Environment
 
-To setup the driver computer:
+To set up the Driver computer:
 
-1.  Complete steps specified in [5.1.1. Setup the Driver Computer](#5.1.1). See [4.2. Domain Environment](#4.2) for hostname and IP address configurations.
+  1. Complete the steps specified in [5.1.1 Set up the Driver computer for the Workgroup Environment](#5.1.1).
 
-2.  Join the Driver Computer to the domain provided by the DC.
+  2. See section [4.2 Domain Environment](#4.2) for hostname and IP address configurations.
 
-#### <a name="5.2.3"/> 5.2.3. Setup the SAN storage server
+  3. Join the Driver computer to the domain provided by the DC.
 
-The whole section can be ignored if you do not want to test the cluster scenarios.  
+#### <a name="5.2.3"/> 5.2.3 Set up the SAN Storage Server in the Domain Environment
 
-To setup the SAN storage server computer:
+Perform the following steps to set up the SAN storage server computer:
 
-1.  Configure IP addresses on the SAN storage server and set the computer name to `Storage01`. See [4.2. Domain Environment](#4.2).
+![](./image/FileServerUserGuide/image1.png)**Note**
 
-2.  Make sure firewalls are turned off.
->	For Windows platform, please refer to [5.3.13. Turn off Firewall](#5.3.13).
+If you will not be testing cluster scenarios, please ignore this section.
 
-3.	Install iSCSI target and create virtual disks for the failover cluster.
->	For Windows platform, please refer to [5.3.11. Setup SAN Storage Server](#5.3.11)
+  1. Configure IP addresses on the SAN storage server and set the computer name to **Storage01**. See section [4.2 Domain Environment](#4.2) for IP details.
 
-#### <a name="5.2.4"/> 5.2.4. Setup the SUT
+  2. Install iSCSI target and create virtual disks for the Failover cluster.
 
-This section describes how to setup the SUT computer. For the two SUT computers in a cluster environment, the setup steps are the same.
+For Windows platforms, see section [5.3.11 Set up SAN Storage Server](#5.3.11).
 
-##### <a name="5.2.4.1"/> 5.2.4.1. Common Setup 
+#### <a name="5.2.4"/> 5.2.4 Set up the SUT in the Domain Environment
 
-To setup the SUT computer:
+The subsections that follow describe how to setup the SUT computer. For all SUT computers in a Cluster environment, the setup steps are identical.
 
-1.  Join the SUT to the domain provided by the DC. And logon with domain administrator account.
->	If there are two SUT computers in the environment (i.e. `Node01` and `Node02`), join both to the domain then continue.
+##### <a name="5.2.4.1"/> 5.2.4.1 Common Setup
 
-2.  Complete [5.1.2.1. Common Setup](#5.1.2.1) specified in the **WORKGROUP** environment. See [4.2. Domain Environment](#4.2) for hostname and IP address configurations.
+Perform the steps that follow to set up the SUT computer:
 
-3.  Setup the computer password for SUT.
->	For Windows platform, please refer to [5.3.22. Manually Setup Computer Password](#5.3.22).
+  1. Join the SUT to the Domain provided by the DC.
 
-4.	Configure the following steps from [5.2.4.2. Setup to test SMB2](#5.2.4.2) to [5.2.4.7. Setup to test Authorization](#5.2.4.7) regarding to your test requirements.
+      If there are two SUT computers in the environment (i.e. **Node01** and **Node02**), join both to the Domain and continue.
 
-##### <a name="5.2.4.2"/> 5.2.4.2. Setup to test SMB2
+  2. Logon to the SUT computers with Domain Administrator account.
 
-This configuration is used to test the **[MS-SMB2]** protocol.
+  3. Complete section [5.1.2.1 Common Setup](#5.1.2.1) specified for the **WORKGROUP** environment. See section [4.2 Domain Environment](#4.2) for hostname and IP address configurations.
 
-1.  Complete [5.1.2.2. Setup to test SMB2](#5.1.2.2) specified in the **WORKGROUP** environment.
+  4. Create the password/s for the SUT computer/s.
 
-2.  Share all the shares with Domain Admin User.
+      For Windows platforms, see section [5.3.22 Manually Set up Computer Password](#5.3.22).
 
-##### <a name="5.2.4.3"/> 5.2.4.3. Setup to test DFSC
+  5. Perform the steps in the following subsections [5.2.4.2](5.2.4.2) through [5.2.4.7](5.2.4.7) to continue set up of Test Suite components.
 
-This configuration is used to test the **[MS-DFSC]** protocol. If **DFS** is not supported, this section can be ignored.
+##### <a name="5.2.4.2"/> 5.2.4.2  Set up to test SMB2
 
-1.  Complete [5.1.2.3. Setup to test DFSC](#5.1.2.3) specified in the **WORKGROUP** environment.
+Perform the steps that follow to create the configuration that is used to test the **MS-SMB2** protocol.
 
-2.  Create one Domain-based namespace: **DomainBased**.
+1. Complete the steps in section [5.1.2.2 Setup to test SMB2](5.1.2.2), as specified for the **WORKGROUP** environment.
 
-3.  Add two folders to namespace **DomainBased**.
+2. Share all the shares with the Domain Admin User.
 
-	-	One folder is **DFSLink.** If there is a `Node02` in the environment, link target is **\\\\Node02\\FileShare**, otherwise link target is **\\\\Node01\\FileShare**.
+##### <a name="5.2.4.3"/> 5.2.4.3 Setup to test DFSC
 
-	-	The other is **Interlink**, link target is **\\\\Node01\\SMBDfs\\SMBDfsLink**.
+Perform the steps that follow to create the configuration that is used to test the **MS-DFSC** protocol. If **DFS** is not supported, please ignore this section.
 
->	For Windows platform, please refer to [5.3.10. Setup Distributed File System (DFS)](#5.3.10).
+1. Complete the steps in section [5.1.2.3 Setup to test DFSC](#5.1.2.3), as specified for the **WORKGROUP** environment.
 
-##### <a name="5.2.4.4"/> 5.2.4.4. Setup to test Server Failover/FSRVP/SWN (cluster scenarios in domain environment only)
+2. Create a Domain-based namespace entitled **DomainBased**.
 
->	![](./image/FileServerUserGuide/image1.png)Note
+3. Add two folders to the namespace **DomainBased**.
 
->	&emsp;&emsp;The testing of Server Failover/FSRVP/SWN is not applicable for **WORKGROUP** environment in Windows platform.
+    * Add the first folder named **DFSLink**. If there is a **Node02** in the environment, the link target is **\\\\Node02\\FileShare**, otherwise the link target is **\\\\Node01\\FileShare**.
 
-This configuration is used to test the **[MS-FSRVP]**, **[MS-SWN]**, **[MS-SRVS]** protocols. it can be ignored if you do not want to test the cluster scenarios. 
+    * Add another folder named **Interlink**, with the link target set to **\\\\Node01\\SMBDfs\\SMBDfsLink**.
 
-1.  Create a share named **SMBClustered**, set the property **Share.IsCA** to **TRUE**, set **Share.Type** to include **STYPE\_CLUSTER\_SOFS**, and make the share is asymmetric.
->	For Windows platform, please refer to [5.3.18. Create an Asymmetric share](#5.3.18).
+    For Windows platforms, see section [5.3.10 Set up the Distributed File System (DFS)](#5.3.10).
 
-    - **Share.IsCA** is set to **TRUE** when **SHI1005\_FLAGS\_ENABLE\_CA** bit in **shi1005\_flags** is set as documented in **[MS-SRVS]** section 2.2.4.29.
+##### <a name="5.2.4.4"/> 5.2.4.4 Setup to test Server Failover/FSRVP/SWN (cluster scenarios in Domain environment only)
 
-    - **STYPE\_CLUSTER\_SOFS** is one of **Share Types** documented in **[MS-SRVS]** section 2.2.2.4.
+Perform the steps that follow to create the configuration that is used to test the **MS-FSRVP**, **MS-SWN**, and **MS-SRVS** protocols. Please ignore this section, if you are not planning to test the Cluster scenarios.
 
-2.  Create a share named **SMBClusteredEncrypted** with the properties **Share.IsCA** and **Share.EncryptData** set to **TRUE**.
+![](./image/FileServerUserGuide/image1.png)**Note**
 
-3.  Create a share named **SMBClusteredForceLevel2**, set the property **Share.ForceLevel2Oplock** to **TRUE** and set **Share.Type** to include **STYPE\_CLUSTER\_SOFS**. 
+Server Failover/FSRVP/SWN testing is not applicable to the **WORKGROUP** environment on Windows platforms.
 
-	- **Share.ForceLevel2Oplock** is set to **TRUE** when **SHI1005\_FLAGS\_FORCE\_LEVELII\_OPLOCK** bit in **shi1005\_flags** is set as specified in **[MS-SRVS]** section 2.2.4.29.
+1. Create a share named **SMBClustered**, set the property **Share.IsCA** to **TRUE**, set **Share.Type** to include **STYPE_CLUSTER_SOFS**, and make the share is asymmetric.
+  
+    For Windows platforms, see section [5.3.18 Create an Asymmetric share](#5.3.18).
 
-	- **STYPE\_CLUSTER\_SOFS** is one of **Share Types** documented in **[MS-SRVS]** section 2.2.2.4.
+    * **Share.IsCA** is set to **TRUE** when the **SHI1005\_FLAGS\_ENABLE\_CA** bit in the **shi005\_flags** is set as documented in **[MS-SRVS]** section 2.2.4.29.
 
-4.	Connect to the iSCSI disks and setup the failover cluster.
->	For Windows platform, please refer to [5.3.12. Setup Cluster](#5.3.12).
+    * **STYPE\_CLUSTER\_SOFS** is one of **Share Types** documented in **[MS-SRVS]** section 2.2.2.4.
 
-##### <a name="5.2.4.5"/> 5.2.4.5. Setup to test RSVD
+2. Create a share named **SMBClusteredEncrypted** with the properties **Share.IsCA** and **Share.EncryptData** set to **TRUE**.
 
->	![](./image/FileServerUserGuide/image1.png)Note
+3. Create a share named **SMBClusteredForceLevel2**, set the property **Share.ForceLevel2Oplock** to **TRUE**, and set **Share.Type** to include **STYPE_CLUSTER_SOFS**.
 
->	&emsp;&emsp;The testing of RSVD is not applicable for **WORKGROUP** environment in Windows platform. But your could still test it if your implementation supports this feature in **WORKGROUP** environment.
+    * **Share.ForceLevel2Oplock** is set to **TRUE** when **SHI1005\_FLAGS\_FORCE\_LEVELII\_OPLOCK** bit in **shi1005\_flags** is set as specified in **[MS-SRVS]** section 2.2.4.29.
 
-This configuration is used to test the **[MS-RSVD]** protocol. If **RSVD** is not supported, this section can be ignored.
+    * **STYPE\_CLUSTER\_SOFS** is one of **Share Types** documented in **[MS-SRVS]** section 2.2.2.4.4.
 
-1. 	Create a share on SUT where virtual hard disk files will be copied. For Windows platform, name the share as **\\\\scaleoutfs\\SMBClustered**.
+4. Connect to the iSCSI disks and set up the failover Cluster.
 
-2.	Save the share name to the property: **ShareContainingSharedVHD** in the [MS-RSVD_ServerTestSuite.deployment.ptfconfig](#7.2) file.
+    For Windows platforms, see section [5.3.12 Set up the Cluster](#5.3.12).
 
->	For Windows platform,
+##### <a name="5.2.4.5"/> 5.2.4.5 Setup to test RSVD
 
->	&emsp;&emsp;About how to create a virtual hard disk file, please refer to [5.3.19. Create the virtual hard disk file](#5.3.19).
+Perform the steps that follow to create the configuration that is used to test the **MS-RSVD** protocol. If the **RSVD** protocol is not supported, please ignore this section.
 
-##### <a name="5.2.4.6"/> 5.2.4.6. Setup to test SQOS
+![](./image/FileServerUserGuide/image1.png)**Note**
 
->	![](./image/FileServerUserGuide/image1.png)Note
+RSVD testing is not applicable in the **WORKGROUP** environment on Windows platforms. However, you can still test it if your implementation is on a non-windows computer that supports this feature in the **WORKGROUP** environment.
 
->	&emsp;&emsp;The testing of SQOS is not applicable for **WORKGROUP** environment of Windows platform. But your could still test it if your implementation supports this feature in **WORKGROUP** environment.
+1. Create a virtual hard disk file named **rsvd.vhdx** and **rsvd.vhds** with maximum size of 1 GB.
 
-This configuration is used to test the **[MS-SQOS]** protocol. If **SQOS** is not supported, this section can be ignored.
+2. Copy the file in a share on the SUT computer. For Windows platforms, the share should be **\\\\scaleoutfs\\SMBClustered**.
 
-1.  Create a virtual hard disk file named **sqos.vhdx** with maximum size 1 GB.
+3. Save the share name to the property: **ShareContainingSharedVHD** in the [MSRSVD_ServerTestSuite.deployment.ptfconfig](#7.2) file.
 
-2.	Copy the file in a share on SUT. For Windows platform, the share should be **\\\\scaleoutfs\\SMBClustered**.
+> To learn more about how to create a virtual hard disk (set) file on Windows platforms, see section [5.3.19 Create the virtual hard disk file](#5.3.19) and section [5.3.20 Create the virtual hard disk set file](#5.3.20).
 
-3.  Create a new SQOS policy with MinimumIoRate: 100, MaximumIoRate: 200 and MaximumBandwidth: 1600 KB.
+##### <a name="5.2.4.6"/> 5.2.4.6 Setup to test SQOS
 
-4.	Save the policy id to the property: **SqosPolicyId** in the [MS-SQOS_ServerTestSuite.deployment.ptfconfig](#7.2) file.
+Perform the following steps to create the configuration that is used to test the **MS-SQOS** protocol. Please ignore this section if your implementation does not support **SQOS**.
 
->	For Windows platform,
+![](./image/FileServerUserGuide/image1.png)**Note**
 
->	&emsp;&emsp;About how to create a virtual hard disk file, please refer to [5.3.19. Create the virtual hard disk file](#5.3.19).
+Storage Quality of Service (SQOS) protocol testing is not applicable in the **WORKGROUP** environment on Windows platforms. However, you can still test it if your implementation supports this feature in the **WORKGROUP** environment.
 
->	&emsp;&emsp;About how to create the new policy, please refer to section [5.3.23. Create an SQOS policy](#5.3.23)
+1. Create a virtual hard disk file named **sqos.vhdx** with maximum size of 1 GB.
 
-##### <a name="5.2.4.7"/> 5.2.4.7. Setup to test Authorization (domain environment only)
+2. Copy the file in a share on the SUT computer. For Windows platforms, the share should be **\\\\scaleoutfs\\SMBClustered**.
 
->	![](./image/FileServerUserGuide/image1.png)Note
+3. Create a new SQOS policy with MinimumIoRate: 100, MaximumIoRate: 200 and MaximumBandwidth: 1600 KB.
 
->	&emsp;&emsp;The testing of Authorization is not applicable for **WORKGROUP** environment in Windows platform.
+4. Save the policy **Id** to the property: **SqosPolicyId** in the [MSSQOS_ServerTestSuite.deployment.ptfconfig](#7.2) file. See section [5.3.23 Create an SQOS policy](#5.3.23) for how to create the policy Id.
 
-This configuration is used to test the authentication and authorization protocols. It only needs to be configured once on `Node1`.
+To learn more about how to create a virtual hard disk file on Windows platforms, see section [5.3.19](#5.3.19).
 
-1.  Create a share named **AzShare**.
+To learn more about how to create a new policy, see section [5.3.23 Create an SQOS policy](#5.3.23).
 
-| NTFS Permission      | Share Permission        |
-|----------------------|-------------------------|
-| Allow Everyone       | Allow Domain Admins     |
+##### <a name="5.2.4.7"/> 5.2.4.7  Setup to test Authorization (domain environment only)
 
-2.  Create a share named **AzFolder**.
+Perform the following steps to create the configuration that is used to test the authentication and authorization protocols. Create this configuration once on the Node1 computer only.
 
-| NTFS Permission      | Share Permission        |
-|----------------------|-------------------------|
-| Allow Domain Admins  | Allow Everyone          |
+![](./image/FileServerUserGuide/image1.png)**Note**
 
-3.  Create a share named **AzFile**.
+Authorization testing is not applicable to the **WORKGROUP** environment on Windows platforms.
 
-| NTFS Permission      | Share Permission        |
-|----------------------|-------------------------|
-| Allow Domain Admins  | Allow Everyone          |
+1. Create a share named **AzShare** with the following permissions configuration:
 
-4.  Create a share named **AzCBAC**.
+    | NTFS Permission      | Share Permission        |
+    |----------------------|-------------------------|
+    | Allow Everyone       | Allow Domain Admins     |
 
-| NTFS Permission      | Share Permission        |
-|----------------------|-------------------------|
-| Allow Everyone       | Allow Everyone          |
+2. Create a share named **AzFolder** with the following permissions configuration:
 
-5. 	If **[MS-SRVS]** (Server Service Remote Protocol) is not supported, create 6 shares on the SUT: **AzShare01**...**AzShare06**.	Share permissions should be set according to the following table:
+    | NTFS Permission      | Share Permission        |
+    |----------------------|-------------------------|
+    | Allow Domain Admins  | Allow Everyone          |
 
-| Share Name | Permissions                                                    |
-|------------|----------------------------------------------------------------|
-| AzShare01  | O:SYG:SYD:(A;;0x1fffff;;;\[SID of AzUser01\])(A;;FA;;;BA)      |
-| AzShare02  | O:SYG:SYD:(A;;0x1fffff;;; \[SID of AzGroup01\])(A;;FA;;;BA)    |
-| AzShare03  | O:SYG:SYD:(D;;0x1fffff;;; \[SID of AzUser01\])(A;;FA;;;BA)     |
-| AzShare04  | O:SYG:SYD:(D;;0x1fffff;;; \[SID of AzGroup01\])(A;;FA;;;BA)    |
-| AzShare05  | O:SYG:SYD:(A;;FA;;;BA)                                         |
-| AzShare06  | O:SYG:SYD:(D;;;;; \[SID of AzUser01\])(A;;FA;;;BA)             |
+3. Create a share named **AzFile** with the following permissions configuration:
+
+    | NTFS Permission      | Share Permission        |
+    |----------------------|-------------------------|
+    | Allow Domain Admins  | Allow Everyone          |
+
+4. Create a share named **AzCBAC** with the following permissions configuration:
+
+    | NTFS Permission      | Share Permission        |
+    |----------------------|-------------------------|
+    | Allow Everyone       | Allow Everyone          |
+
+5. If the Server Service Remote Protocol (**MS-SRVS**) is not supported, create shares **AzShare01** through AzShare06 on the SUT computer. Permissions for each share should be set as specified in the following table:
+
+    | Share Name | Permissions                                                 |
+    |------------|-------------------------------------------------------------|
+    | AzShare01  | O:SYG:SYD:(A;;0x1fffff;;; \[SID of AzUser01\])(A;;FA;;;BA)  |
+    | AzShare02  | O:SYG:SYD:(A;;0x1fffff;;; \[SID of AzGroup01\])(A;;FA;;;BA) |
+    | AzShare03  | O:SYG:SYD:(D;;0x1fffff;;; \[SID of AzUser01\])(A;;FA;;;BA)  |
+    | AzShare04  | O:SYG:SYD:(D;;0x1fffff;;; \[SID of AzGroup01\])(A;;FA;;;BA) |
+    | AzShare05  | O:SYG:SYD:(A;;FA;;;BA)                                      |
+    | AzShare06  | O:SYG:SYD:(D;;;;; \[SID of AzUser01\])(A;;FA;;;BA)          |
+
+![](./image/FileServerUserGuide/image1.png)**Note**
 
 The steps to create the above shares are similar to creating share **SMBBasic**.
 
->	For Windows platform,
+For Windows platforms, see the following sections to facilitate creating shares and permissions in the above procedure:
 
->	&emsp;&emsp;About how to create a share, please refer to [5.3.1. Create a share](#5.3.1).
+* [5.3.1 Create a share](#5.3.1)
 
->	&emsp;&emsp;About how to set NTFS permissions on a share, please refer to [5.3.2. Set NTFS Permissions](#5.3.2).
+* [5.3.2 Set NTFS Permissions](#5.3.2)
 
->	&emsp;&emsp;About how to set share permissions, please refer to [5.3.3. Set Share Permissions](#5.3.3).
+* [5.3.3 Set Share Permissions](#5.3.3)
 
-##### <a name="5.2.4.8"/> 5.2.4.8. Setup to test FSA
+##### <a name="5.2.4.8"/> 5.2.4.8 Setup to test FSA
 
-This configuration is used to test the **[MS-FSA]** protocol.
+Perform the following steps to create the configuration that is used to test the **MS-FSA** protocol.
 
-1.  Complete [5.1.2.6. Setup to test FSA](#5.1.2.6) specified in the **WORKGROUP** environment.
+1. Complete [5.1.2.6. Setup to test FSA](#5.1.2.6), as specified for the **WORKGROUP** environment.
 
-2.  Share all the shares with Domain Admin User.
+2. Share all the shares with the Domain Admin User.
 
-### <a name="5.3"/> 5.3. Setup Details for Windows Platform
+### <a name="5.3"/> 5.3 General Setup Details for Windows Platforms
 
-This section describes detailed setup steps on a Windows platform.
+This section describes detailed setup steps for Windows platforms in **WORKGROUP** and **DOMAIN** environments.
 
-#### <a name="5.3.1"/> 5.3.1. Create a share
+#### <a name="5.3.1"/> 5.3.1 Create a share
 
-Take the share named **SMBBasic** as an example:
+To create a share, perform the steps that follow.
 
-1.	Create a new folder at **%SystemDrive%\\SMBBasic**:
+![](./image/FileServerUserGuide/image1.png)**Note**
 
-	-	Open the **File Explorer** and go to **%SystemDrive%**, right click in the blank space and select **New** -&gt; **Folder** to create a new folder.
+The procedure that follows specifically creates an **SMBBasic** share. However, you can use this procedure as a general guideline to create any share, for example, **AzShare**.
 
-		![](./image/FileServerUserGuide/image168.png)
+1. Create new folder **%SystemDrive%\SMBBasic**, as follows:
 
-	-	Type `SMBBasic` for the new folder's name.
+    * Open **File Explorer** and go to **%SystemDrive%**, right-click in the blank space,  and select **New** -&gt; **Folder** to create a new folder.
 
-		![](./image/FileServerUserGuide/image169.png)
+    <a name="fig.3"></a>
 
-2.	Share it with name **SMBBasic** and Read/Write permission level to **Node01\\Administrator** (and **CONTOSO\\Administrator** if **DOMAIN** environment).
+    ![](./image/FileServerUserGuide/image168.png)
 
-	-	Right click the **SMBBasic** folder and select **Properties**.
+    Figure 3. Location for the **SMBBasic** share
 
-		![](./image/FileServerUserGuide/image170.png)
+    * Type `SMBBasic` for the new folder's name.
 
-	-	On **Sharing** tab, click the **Share...** button.
+    <a name="fig.4"></a>
 
-		![](./image/FileServerUserGuide/image171.png)
+    ![](./image/FileServerUserGuide/image169.png)
 
-	-	In the **Choose people to share with** panel, verify if the **Node01\\Administrator** account is there. If not, type `Node01\Administrator` and click **Add**.
+    Figure 4. Creating the **SMBBasic** share
 
-		![](./image/FileServerUserGuide/image172.png)
+2. Share the **SMBBasic** folder with **Read/Write** permissions to the **Node01\Administrator** or **CONTOSO\Administrator** if you are using the **DOMAIN** environment, as follows:
 
-	-	Click the arrow in the **Permission Level** column of the **Node01\\Administrator** account and select **Read/Write**. Then click **Share**.
+    * Right-click the **SMBBasic** folder and select **Properties**.
 
-		![](./image/FileServerUserGuide/image173.png)
+    <a name="fig.5"></a>
 
-	-	In the **Your folder is shared.** panel, click **Done**. Then click **Close** in the **SMBBasic Properties** panel.
+    ![](./image/FileServerUserGuide/image170.png)
 
-		![](./image/FileServerUserGuide/image174.png)
+    Figure 5. Opening the **SMBBasic** share folder properties
 
-#### <a name="5.3.2"/ 5.3.2. Set NTFS Permissions
+    * On the **Sharing** tab, click the **Share...** button.
 
-1.	Right the shared folder and select **Properties**.
+    <a name="fig.6"></a>
 
-	![](./image/FileServerUserGuide/image210.png)
+    ![](./image/FileServerUserGuide/image171.png)
 
-2.	In the **Security** tab, click **Advanced**.
+    Figure 6. Sharing the **SMBBasic** folder
 
-	![](./image/FileServerUserGuide/image211.png)
+    * In the **Choose people to share with** dialog, verify that the **Node01\Administrator** account is present. If not, type `Node01\Administrator` and then click **Add**.
 
-3.	In the **Permissions** tab, click **Add** or **Remove** to edit NTFS Permissions.
+    <a name="fig.7"></a>
 
-	![](./image/FileServerUserGuide/image8.png)
+    ![](./image/FileServerUserGuide/image172.png)
 
-#### <a name="5.3.3"/> 5.3.3. Set Share Permissions
+    Figure 7. Adding permissions to the **SMBBasic** share
 
-1.	Start the console window with Administrator privilege.
->	For more details, please refer to [5.3.24. How to start console with Administrator privilege](#5.3.24).
+    * Click the arrow in the **Permission Level** column of the **Administrator** account, select **Read/Write**, and then click the **Share** button.
 
-2. 	Execute `compmgmt.msc` in the console window to launch **Computer Management**.
+    <a name="fig.8"></a>
 
-3.	Expand **Shared Folders** -&gt; **Shares** on the left, then choose the folder to set Share Permissions.
+    ![](./image/FileServerUserGuide/image173.png)
 
-	![](./image/FileServerUserGuide/image9.png)
+    Figure 8. Adding permission levels to the **SMBBasic** share
 
-#### <a name="5.3.4"/> 5.3.4. Add a share SameWithSMBBasic to an existing share SMBBasic 
+    * In the **Your folder is shared.** dialog, click **Done** and then click **Close** in the **SMBBasic** **Properties** dialog.
 
-1.  Make sure the folder **%SystemDrive%\\SMBBasic** is created and shared with **Read/Write** permission level to **Node01\\Administrator** (and **CONTOSO\\Administrator** if **DOMAIN** environment).
->	For more details, please refer to [5.3.1. Create a share](#5.3.1).
+    <a name="fig.9"></a>
 
-2.	Add another share with name **SameWithSMBBasic** to this **%SystemDrive%\\SMBBasic** folder.
+    ![](./image/FileServerUserGuide/image174.png)
 
-	-	Right click the **SMBBasic** folder and select **Properties**.
+    Figure 9. Confirmation of the **SMBBasic** folder share status
 
-		![](./image/FileServerUserGuide/image170.png)
+#### <a name="5.3.2"/> 5.3.2 Set NTFS Permissions
 
-	- 	On **Sharing** tab, click the **Advanced Sharing...** button.
+To set NTFS permissions on the shared **AzShare** folder that you created by following the steps in section [5.3.1](#5.3.1), perform the steps that follow.
 
-		![](./image/FileServerUserGuide/image171.png)
+1. Right-click the shared folder and select **Properties**.
 
-	-	In the **Advanced Sharing** panel, click the **Add** button.
+  <a name="fig.10"></a>
 
-		![](./image/FileServerUserGuide/image179.png)
+  ![](./image/FileServerUserGuide/image210.png)
 
-	-	In the **New Share** panel, type `SameWithSMBBasic` in the **Share name** textbox. Then click **OK**.
+  Figure 10. Opening the **AzShare** properties to set NTFS permissions
 
-		![](./image/FileServerUserGuide/image180.png)
+2. On the **Security** tab of the **AzShare** **Properties** dialog, click **Advanced**.
 
-#### <a name="5.3.5"/> 5.3.5. Create symbolic links
+  <a name="fig.11"></a>
 
-1.	Logon to the SUT computer. And start the console window with Administrator privilege.
->	For more details, please refer to [5.3.24. How to start console with Administrator privilege](#5.3.24).
+  ![](./image/FileServerUserGuide/image211.png)
 
-2.	If you want to create a directory symbolic link under e.g. share **SMBBasic**, type the following commands in the console windows, and press **Enter**.
-```
-	cd %SystemDrive%\SMBBasic
-	mklink /D Symboliclink %SystemDrive%\FileShare
-```
+  Figure 11. **Security** tab of the **AzShare** **Properties** dialog
 
-3.  If you want to create a file symbolic link under e.g. share **FileShare**, type the following commands in the console windows, and press **Enter**.
-```
-	cd %SystemDrive%\FileShare
-	mklink link.txt ExistingFile.txt
-```
+3. On the **Permissions** tab of the **Advanced Security Settings** for **AzShare** dialog, edit NTFS Permissions by selecting security principal **Administrator** (**Node01\\Administrator**) and clicking the **Edit** button.
 
+  ![](./image/FileServerUserGuide/image1.png)**Note**
 
-#### <a name="5.3.6"/> 5.3.6. Enable Encrypt Data Access on a share named SMBEncrypted
+  If you want to add or remove a security principal, click Add or Remove as required.
 
-1.  Make sure the folder **%SystemDrive%\\SMBEncrypted** is created and shared with **Read/Write** permission level to **Node01\\Administrator** (and **CONTOSO\\Administrator** if **DOMAIN** environment).
->	For more details, please refer to [5.3.1. Create a share](#5.3.1).
+  <a name="fig.12"></a>
 
-2.  Enable the share with **Encrypt data**.
+  ![](./image/FileServerUserGuide/image8.png)
 
-	-	Open **Server Manager**, and then click **File and Storage Services** on the left.
+  Figure 12. Specifying advanced security settings for the **AzShare** share
 
-		![](./image/FileServerUserGuide/image175.png)
+#### <a name="5.3.3"/> 5.3.3 Set Share Permissions
 
-	-	Click **Shares**, and find **SMBEncrypted** share in the listview. Right click the **SMBEncrypted** share and select **Properties**.
+To set permissions on a specified share, perform the steps that follow.
 
-		![](./image/FileServerUserGuide/image176.png)
+1. Start the console window with Administrator privileges.
 
-	-	In the **SMBEncrypted Properties** panel, click **Settings** on the left, and then select the **Encrypt data access** checkbox.
+    For further details, see section [5.3.24 How to start the console with Administrator privilege](#5.3.24).
 
-		![](./image/FileServerUserGuide/image177.png)
+2. Execute the command `compmgmt.msc` in the console window to launch the **Computer Management** console.
 
-	-	Click **OK** to apply the changes and close the panel.
+3. Expand **Shared Folders** -&gt; **Shares** in the left pane of the management console, then select the folder for which you want to set share permissions.
 
-#### <a name="5.3.7"/> 5.3.7. Enable FORCE_LEVELII_OPLOCK on a share named ShareForceLevel2
+4. Right-click the shared folder and select **Properties** to open the shared folder **Properties** dialog.
 
-1.	Make sure the folder **%SystemDrive%\\ShareForceLevel2** is created and shared with **Read/Write** permission level to **Node01\\Administrator** (and **CONTOSO\\Administrator** if **DOMAIN** environment).
->	For more details, please refer to [5.3.1. Create a share](#5.3.1).
+5. Click the **Share Permissions** tab in the **Properties** dialog and set the permissions specified in section [5.2.4.7](#5.2.4.7).
 
-2.	Make sure [**File Server Test Suite**](#3.7) has already been installed on the driver computer.
+  <a name="fig.13"></a>
 
-3.	Logon to the driver computer. Find the `ShareUtil.exe` file under folder `%SystemDrive%\MicrosoftProtocolTests\FileServer\Server-Endpoint\<version#>\Bin` and copy it to the SUT computer.
+  ![](./image/FileServerUserGuide/image9.png)
 
-4.	Logon to the SUT computer. And start the console window with Administrator privilege.
->	For more details, please refer to [5.3.24. How to start console with Administrator privilege](#5.3.24).
+  Figure 13. Setting permissions for a specified share
 
-5.	Type the following commands in the console windows, and press **Enter**.
-```
-	cd <ShareUtil.exe file path on SUT>
-	ShareUtil.exe <computer name of the share> <share name> <flag> true
+#### <a name="5.3.4"/> 5.3.4 Add a share SameWithSMBBasic with the same path of Share SMBBasic
 
-	# Modify the parameters <ShareUtil.exe file path on SUT>, <computer name of the share>, <share name> and <flag> according to your own environment. For example,
+To add the **SameWithSMBBasic** share to the existing **SMBBasic** share, perform the steps that follow.
 
-	# (1) If you want to enable SHI1005_FLAGS_FORCE_LEVELII_OPLOCK flag on share \\Node01\ShareForceLevel2, run:
-	cd c:\
-	ShareUtil.exe Node01 ShareForceLevel2 SHI1005_FLAGS_FORCE_LEVELII_OPLOCK true
+1. Ensure that the folder **%SystemDrive%\SMBBasic** is already created and shared with **Read/Write** permission level to the **Node01\Administrator** (or  **CONTOSO\Administrator** if you are using the **DOMAIN** environment).
 
-	# (2) If you want to enable SHI1005_FLAGS_FORCE_LEVELII_OPLOCK flag on share \\ScaleOutFS\SMBClusteredForceLevel2, run:
-	cd c:\
-	ShareUtil.exe ScaleOutFS SMBClusteredForceLevel2 SHI1005_FLAGS_FORCE_LEVELII_OPLOCK true
-```
+    For further details, see section [5.3.1 Create a share](#5.3.1).
 
-#### <a name="5.3.8"/> 5.3.8. Create a share on a volume supporting integrity
+2. Add another share with the name **SameWithSMBBasic** to the **%SystemDrive%\SMBBasic** folder, as follows.
 
-1.	Start the console window with Administrator privilege.
->	For more details, please refer to [5.3.24. How to start console with Administrator privilege](#5.3.24).
+    * Right-click the **SMBBasic** folder and select **Properties** to display the **SMBBasic** **Properties** dialog.
 
-2. 	Execute `diskmgmt.msc` in the console window to launch **Disk Management**, and create **ReFS** format volume. You need some **Unallocated** space to create a new simple volume.
+    <a name="fig.14"></a>
 
-	-	 If you do not have **Unallocated** space on **Disk 0**, right-click **Disk 0** and select **Shrink volume** to free some spaces first.
+    ![](./image/FileServerUserGuide/image170.png)
 
-	![](./image/FileServerUserGuide/image181.png)
+    Figure 14. **SMBBasic** folder properties selection
 
-	-	In the **Shrink C:** panel, type `5120` in the **Enter the amount of space to shrink in MB:** textbox. Then click **Shrink**.
+    * On the **Sharing** tab of the dialog, click the **Advanced Sharing...** button to display the **Advanced Sharing** dialog.
 
-	![](./image/FileServerUserGuide/image182.png)
+    <a name="fig.15"></a>
 
-3.	In the Disk Management console, right-click Disk 0 and select Shrink volume in the context menu that displays to free some disk space. This action starts a query that determines the available shrink space that is on Disk 0:  
+    ![](./image/FileServerUserGuide/image171.png)
 
-	![](./image/FileServerUserGuide/image212.png)
+    Figure 15. **SMBBasic** Properties dialog
 
-4. 	Right-click the **Unallocated** space on **Disk 0**, and select **New Simple Volume...**.
+    * In the **Advanced Sharing** dialog, click the **Add** button to display the **New Share** dialog.
 
-	![](./image/FileServerUserGuide/image183.png)
+    <a name="fig.16"></a>
 
-5.	Click **Next** until you reach the **Format Partition** page. Select **ReFS** for **File system** in the **Format this volume with the following settings** radio button. And click **Next** then **Finish**.
+    ![](./image/FileServerUserGuide/image179.png)
 
-	![](./image/FileServerUserGuide/image184.png)
+    Figure 16. **SMBBasic** Advanced Sharing dialog
 
-6.	After the new volume is created, click **Start** in the prompt **Format New Volume** panel. Then click **Close**.
+    * In the **New Share** dialog, type `SameWithSMBBasic` in the **Share name** textbox, then click OK.
 
-	![](./image/FileServerUserGuide/image185.png)
+    <a name="fig.17"></a>
 
-7.	Create a share in the new volume with share name **SMBReFSShare** and share it with **Read/Write** permission level to **Node01\\Administrator** (and **CONTOSO\\Administrator** if **DOMAIN** environment).
->	For more details, please refer to [5.3.1. Create a share](#5.3.1).
+    ![](./image/FileServerUserGuide/image180.png)
 
-#### <a name="5.3.9"/> 5.3.9. Setup a Windows-based DC
+    Figure 17. Adding the **SameWithSMBBasic** share in the **New Share** dialog
 
-##### <a name="5.3.9.1"/> 5.3.9.1. Install DNS and Active Directory Domain Services and create a specific domain
+#### <a name="5.3.5"/> 5.3.5 Create symbolic links
 
-1.	In **Server Manager** -&gt; **Dashboard**, click **Manage** on the upper right corner and then click **Add Roles and Features**. 
+To create symbolic links, perform the steps that follow.
 
-	![](./image/FileServerUserGuide/image186.png)
+1. Logon to the SUT computer and start the command console with Administrator privileges.
 
-2.	Click **Next** under the **Select server roles** tab. In the **Roles** treeview, select **Active Directory Domain Services**.
+    For further details, see section [5.3.24 How to start the command console with Administrator privileges](#5.3.24).
 
-	![](./image/FileServerUserGuide/image193.png)
+2. If you are creating a directory symbolic link under the share **SMBBasic**, type the following commands in a command console running as Administrator, and then press **Enter** on the SUT computer keyboard.
 
-3.	Click **Add Features** in the pop-up window to install **AD DS Tools**.
+    ```
+      cd %SystemDrive%\SMBBasic
+      mklink /D Symboliclink %SystemDrive%
+    ```
 
-	![](./image/FileServerUserGuide/image191.png)
+3. If you are creating a directory symbolic link under the folder **SMBBasic\Sub**, type the following commands in a command console running as Administrator, and then press **Enter** on the SUT computer keyboard:
 
-4.	In the **Roles** treeview, select **DNS server**.
+    ```
+      cd %SystemDrive%\SMBBasic\Sub\
+      mklink /D Symboliclink2 %SystemDrive%\SMBBasic
+    ```
 
-	![](./image/FileServerUserGuide/image194.png)
+4. If you are creating a file symbolic link under the share **FileShare**, type the following commands in a command console running as Administrator, and then press **Enter** on the SUT computer keyboard.
 
-5.	Click **Add Features** in the pop-up window to install **DNS Server Tools**.
+    ```
+      cd %SystemDrive%\FileShare
+      mklink link.txt ExistingFile.txt
+    ```
 
-	![](./image/FileServerUserGuide/image192.png)
+#### <a name="5.3.6"/> 5.3.6 Enable Encrypt Data Access on a Share Named SMBEncrypted
 
-6.	Click **Next** until you get to the **Confirmation** page. And click **Install** to start installation. Wait for the installation to complete.
+To enable the **SMBEncrypted** share with **Encrypt data**, perform the steps that follow:
 
-7.	Click **Promote this server to a domain controller** to create a new domain (e.g. `contoso.com`). 
+1. Ensure that the folder **%SystemDrive%\SMBEncrypted** is already created and shared with **Read/Write** permission level to the **Node01\Administrator** ( or **CONTOSO\Administrator** if you are using the DOMAIN environment).
 
-	![](./image/FileServerUserGuide/image195.png)
+    For further details, see section [5.3.1 Create a share](#5.3.1).
 
-8.	Select **Add a new forest**, and type `contoso.com` in the **Root domain name** textbox. Click **Next**.
+2. Open **Server Manager** and then click **File and Storage Services** in the left-hand pane.
 
-	![](./image/FileServerUserGuide/image196.png)
+    <a name="fig.18"></a>
 
-9.	Type `Password01!` in both **Password** and **Confirm password** textboxes. Click **Next**.
+    ![](./image/FileServerUserGuide/image175.png)
 
-	![](./image/FileServerUserGuide/image197.png)
+    Figure 18. Server Manager dashboard
 
-10.	Click **Next** until **Prerequisites Check**, then click **Install**. If your machine did not automatically restart, restart it by yourself.
+3. In **Server Manager**, click **Shares** and locate the **SMBEncrypted** share in the list view of the righthand pane. Right-click the **SMBEncrypted** share and then select **Properties** to display the **SMBEncrypted** **Properties** dialog.
 
-	![](./image/FileServerUserGuide/image198.png)
+    <a name="fig.19"></a>
 
-##### <a name="5.3.9.2"/> 5.3.9.2. Install Routing Service
+    ![](./image/FileServerUserGuide/image176.png)
 
-1.	In **Server Manager** -&gt; **Dashboard**, click **Manage** on the upper right corner and then click **Add Roles and Features**. 
+    Figure 19. Accessing the **SMBEncrypted** share Properties
 
-	![](./image/FileServerUserGuide/image186.png)
+4. In the **SMBEncrypted** **Properties** dialog, click **Settings** in the left-hand pane, and then select the **Encrypt data access** checkbox in the right-hand pane of the dialog.
 
-2.	Click **Next** under the **Select server roles** tab. In the **Roles** treeview, select **Remote Access** and **Web Server (IIS)**.
+    <a name="fig.20"></a>
 
-	![](./image/FileServerUserGuide/image200.png)
+    ![](./image/FileServerUserGuide/image177.png)
 
-3.	Click **Add Features** in the pop-up window to install **IIS Management Console** tools.
+    Figure 20. Setting Encrypted data access in the **SMBEncrypted** **Properties** dialog
 
-	![](./image/FileServerUserGuide/image199.png)
+5. Click **Apply** and then **OK** to apply the changes and close the **SMBEncrypted** **Properties** dialog.
 
-4.	Click **Next** until **Role Services** tab, and check **Routing**. **DirectAccess and VPN (RAS)** will be automatically selected.
+#### <a name="5.3.7"/> 5.3.7 Enable FORCE_LEVELII_OPLOCK on a Share Named ShareForceLevel2
 
-	![](./image/FileServerUserGuide/image202.png)
+To enable an OpLock on a share, perform the steps that follow.
 
-5.	Click **Add Features** in the pop-up window to install all the tools.
+1. Ensure that the folder **%SystemDrive%\ShareForceLevel2** is already created and shared with **Read/Write** permission level to the **Node01\Administrator** ( or **CONTOSO\Administrator** you are using the DOMAIN environment).
 
-	![](./image/FileServerUserGuide/image201.png)
+    For further details, see section [5.3.1 Create a share](#5.3.1).
 
-6.	Click **Next** until the **Confirmation** tab, and click **Install** to submit Confirmation. Then click **Close**.
+2. Logon to the Driver computer and locate the **ShareUtil.exe file** in the following folder: **%SystemDrive%\\MicrosoftProtocolTests\\FileServer\\Server-Endpoint\\&lt;version#&gt;\\Bin\\**
 
-	![](./image/FileServerUserGuide/image18.png)
+    Copy the file to the SUT computer.
 
-##### <a name="5.3.9.3"/> 5.3.9.3. Configure and start Routing service
+3. Logon to the SUT computer and start the console window with Administrator privileges.
 
-1.  In **Server Manager** -&gt; **Dashboard**, click **Tools** on the upper right corner and then click **Routing and Remote Access**.
+    For further details, see section [5.3.24 How to start console with Administrator privilege](#5.3.24).
 
-	![](./image/FileServerUserGuide/image203.png)
+4. Type the following commands in the appropriate console window, and then press **Enter** on the SUT computer keyboard.
 
-2. 	Right-click **DC01**, and select **Configure and Enable Routing and Remote Access**.
+    ```
+      cd <ShareUtil.exe file path on SUT>
+      ShareUtil.exe <computer name of the share> <share name> <flag> true
+    ```
 
-	![](./image/FileServerUserGuide/image204.png)
+    Modify the parameters `<ShareUtil.exe file path on SUT>`, `<computer name of  the share>`, `<share name>` and `<flag>` according to your own environment. For example:
 
-3.	Click **Next** until the **Configuration** page, then select **Custom configuration** in , and click **Next**.
+      (1) If you want to enable **SHI1005_FLAGS_FORCE_LEVELII_OPLOCK** flag on share **\\\\Node01\\ShareForceLevel2**, run the following:
 
-	![](./image/FileServerUserGuide/image205.png)
+      ```
+          cd c:\
+          ShareUtil.exe Node01 ShareForceLevel2 SHI1005_FLAGS_FORCE_LEVELII_OPLOCK true
+      ```
 
-4.	Select **LAN routing** in the **Custom Configuration** page, and click **Next**.
+      (2) If you want to enable **SHI1005_FLAGS_FORCE_LEVELII_OPLOCK** flag on share **\\\\ScaleOutFS\\SMBClusteredForceLevel2**, run the following:
 
-	![](./image/FileServerUserGuide/image206.png)
+      ```
+          cd c:\
+          ShareUtil.exe ScaleOutFS SMBClusteredForceLevel2 SHI1005_FLAGS_FORCE_LEVELII_OPLOCK true
+      ```
 
-5.	Then click **Finish** and **Start service** to start the service.
+#### <a name="5.3.8"/> 5.3.8 Create a Share on a Volume Supporting Integrity
 
-	![](./image/FileServerUserGuide/image207.png)
+To create a share on a volume that supports integrity, perform the steps that follow.
 
-##### <a name="5.3.9.4"/> 5.3.9.4. Create a Domain Non-Admin user account 
+1. Start the command console with Administrator privileges.
 
-1.	Logon to the Domain Controller. And start the console window with Administrator privilege.
->	For more details, please refer to [5.3.24. How to start console with Administrator privilege](#5.3.24).
+    For further details, see section [5.3.24 How to start the command console with Administrator privileges](#5.3.24).
 
-2.	Type the following commands in the console windows, and press **Enter**.
-```
-	dsadd user "CN=nonadmin,CN=Users,DC=contoso,DC=com" -pwd Password01! -desc contoso -disabled no -mustchpwd no -pwdneverexpires yes
-```
+2. Execute the command `diskmgmt.msc` in the command console to launch the **Disk Management** MMC in order to create a Resilient File System (**ReFS**)-formatted volume.
 
-##### <a name="5.3.9.5"/> 5.3.9.5. Enable Guest user account 
+![](./image/FileServerUserGuide/image1.png)**Note**
 
-1.  In **Server Manager** -&gt; **Dashboard**, click **Tools** on the upper right corner and then click **Active Directory Users and Computers**.
+You will need at least **5GB** of **Unallocated** space to create a new simple volume.
 
-2.	Right Click **Guest**, click **Enable Account** in the popup menu.
+3. In the **Disk Management** console, right-click **Disk 0** and select **Shrink volume** in the context menu that displays to free some disk space.
 
-	![](./image/FileServerUserGuide/image23.png)
+    This action starts a query that determines the available shrink space that is on Disk 0:
 
-3.	Right Click **Guest**, click **Reset Password...**, and set the password to **Password01!**.
+    <a name="fig.21"></a>
 
-	![](./image/FileServerUserGuide/image24.png)
+    ![](./image/FileServerUserGuide/image212.png)
 
-##### <a name="5.3.9.6"/> 5.3.9.6. Create a Domain group
+    Figure 21. Volume query for shrink space
 
-1.	Logon to the Domain Controller. And start the console window with Administrator privilege.
->	For more details, please refer to [5.3.24. How to start console with Administrator privilege](#5.3.24).
+4. If you have sufficient **Unallocated** space on **Disk 0**, then do the following in the **Shrink C:** dialog:
 
-2.	Type the following commands in the console windows, and press **Enter**.
-```
-	dsadd group "CN=AzGroup01,CN=Users,DC=contoso,DC=com"
-```
+    * Select the **5120** value in the up-down control to the right of the **Enter the amount of space to shrink in MB:** label.
 
-##### <a name="5.3.9.7"/> 5.3.9.7. Create a Domain account that belongs to a Domain group
+    Click **Shrink** to resize **Disk 0** by the specified amount. If you do not have sufficient **Unallocated** space on **Disk 0**, repeat steps 3 and 4 on another volume.  If you do not have sufficient Unallocated space on any Disk, you will be unable to obtain results for  ReFS-related Test Cases
 
-1.	Logon to the Domain Controller. And start the console window with Administrator privilege.
->	For more details, please refer to [5.3.24. How to start console with Administrator privilege](#5.3.24).
+    <a name="fig.22"></a>
 
-2.	Type the following commands in the console windows, and press **Enter**.
-```
-	dsadd user "CN=AzUser01,CN=Users,DC=contoso,DC=com" -pwd Password01! -desc contoso -memberof "CN=AzGroup01,CN=Users,DC=contoso,DC=com" -disabled no -mustchpwd no -pwdneverexpires yes
-```
+    ![](./image/FileServerUserGuide/image182.png)
 
-##### <a name="5.3.9.8"/> 5.3.9.8. Configure Claimed Based Access Control (CBAC)
+    Figure 22. Shrinking a volume by a specified shrink space value
 
-###### <a name="5.3.9.8.1"/> 5.3.9.8.1. Create User Claim
+5. Right-click the **Unallocated** space on **Disk 0**, and then select **New Simple Volume....** to display the **New Simple Volume Wizard**.
 
-1.  In **Server Manager** -&gt; **Dashboard**, click **Tools** on the upper right corner and then click **Active Directory Administrative Center**.
+    <a name="fig.23"></a>
 
-	![](./image/FileServerUserGuide/image25.png)
+    ![](./image/FileServerUserGuide/image183.png)
 
-2.	In **Active Directory Administrative Center**, select **Dynamic Access Control**, then select **Claim Types**. On the right, click **New**, then **Claim Type**.
+    Figure 23. Creating a new simple volume on the unallocated disk space
 
-	![](./image/FileServerUserGuide/image26.png)
+6. Click **Next** until the **Format Partition** page displays.
 
-3.	Type `department` in the **Filter** to select the department attribute as the base claim, and select the `department` attribute in the listview.
+7. Select the **Format this volume with the following settings** option and then select **ReFS** in the **File system** drop-down.
 
-	![](./image/FileServerUserGuide/image27.png)
+8. Click **Next** and then click **Finish**.
 
-5.	Type `Department` in the **Display Name** textbox for this claim, and then add value `IT` and `Payroll` to **Suggested Values** by clicking **Add...**.
+    <a name="fig.24"></a>
 
-	![](./image/FileServerUserGuide/image28.png)
+    ![](./image/FileServerUserGuide/image184.png)
 
-6.	Repeat step 2-5, and add another claim based on the `countryCode` attribute, and set **Suggested Values** to `156`, `840` and `392`.
+    Figure 24. Specifying the Resilient Format File System (ReFS) setting
 
-	![](./image/FileServerUserGuide/image29.png)
+9. After the new volume is created, click **Start** in the **Format New Volume** dialog. When the process completes, click **Close**.
 
-###### <a name="5.3.9.8.2"/> 5.3.9.8.2. Create Central Access Rules
+    <a name="fig.25"></a>
 
-1.  In **Server Manager** -&gt; **Dashboard**, click **Tools** on the upper right corner and then click **Active Directory Administrative Center**.
+    ![](./image/FileServerUserGuide/image185.png)
 
-	![](./image/FileServerUserGuide/image25.png)
+    Figure 25. Applying ReFS formatting to the new volume
 
-2.	In **Active Directory Administrative Center**, select **Dynamic Access Control**, then select **Central Access Rules**. On the right, click **New**, then **Central Access Rule**.
+10. Create a share on the new volume with the name **SMBReFSShare** and share it with **Read/Write** permission level to the **Node01\Administrator** account (or **CONTOSO\Administrator** if you are using the DOMAIN environment).
 
-	![](./image/FileServerUserGuide/image30.png)
+    For further details, see section [5.3.1 Create a share](#5.3.1).
 
-3.	Type `CountryCodeEquals156Rule` in the **Name** textbox.
+#### <a name="5.3.9"/> 5.3.9 Set up a Windows-based Domain Controller
 
-	![](./image/FileServerUserGuide/image31.png)
+##### <a name="5.3.9.1"/> 5.3.9.1 Install DNS, Active Directory Domain Services, and Create a Specific Domain
 
-4.	In the **Permissions** tab, click **Edit**.
+To set up a Windows Domain Controller (DC), perform the steps that follow.
 
-	![](./image/FileServerUserGuide/image32.png)
+1. Open **Server Manager** from the Start menu.
 
-5.	In the **Advanced Security Settings for Permissions** panel, click **Add**.
+2. In **Server Manager** -&gt; **Dashboard**, click the **Manage** drop-down in the upper-right corner of the management dashboard and then click **Add Roles and Features** in the drop-down list that displays.
 
-	![](./image/FileServerUserGuide/image33.png)
+    <a name="fig.26"></a>
 
-6.	In the **Permission Entry for Permissions** panel, click **Select a principal**
+    ![](./image/FileServerUserGuide/image186.png)
 
-	![](./image/FileServerUserGuide/image34.png)
+    Figure 26. Server Manager Add Roles and Features
 
-7.	Type `Authenticated Users` in the object name textbox, then click **Check Names** and **OK**.
+3. Click **Next** under the **Select server roles** tab.
 
-	![](./image/FileServerUserGuide/image35.png)
+4. In the **Roles** treeview of the **Add Roles and Features Wizard**, select **Active Directory Domain Services**., then click **Next**.
 
-8.	Select **Full Control** in **Basic permissions**, click **Add a condition**, and select `CountryCode` Equals `156` and click **OK**.
+    <a name="fig.27"></a>
 
-	![](./image/FileServerUserGuide/image36.png)
-	
-9.	In the **Create Central Access Rule** page, and click **OK**.
+    ![](./image/FileServerUserGuide/image193.png)
 
-	![](./image/FileServerUserGuide/image37.png)
+    Figure 27. Selecting the Active Directory Domain Services role
 
-10.	Repeat steps 2-9 to create the rest of the 9 rules.
+5. Click **Add Features** in the pop-up dialog that displays to install **AD DS Tools**.
 
-	![](./image/FileServerUserGuide/image38.png)
+    <a name="fig.28"></a>
 
--	Conditions of the 9 rules:
+    ![](./image/FileServerUserGuide/image191.png)
 
-	-	**CountryCodeAnyOf156Or840Rule**: User.CountryCode Any of {156,840}
+    Figure 28. Adding features required by Active Directory domain services
 
-	-	**CountryCodeEquals156AndITDepartmentRule**: (User.CountryCode Equals 156) And (User.Department Equals "IT")
+6. In the **Roles** treeview of the **Add Roles and Features Wizard**, select **DNS server**, then click **Next**.
 
-	-	**CountryCodeEquals156OrITDepartmentRule**: (User.CountryCode Equals 156) Or (User.Department Equals "IT")
+    <a name="fig.29"></a>
 
-	-	**CountryCodeGreaterThan392Rule**: User.CountryCode Greater than 392
+    ![](./image/FileServerUserGuide/image194.png)
 
-	-	**CountryCodeGreaterThanOrEquals392Rule**: User.CountryCode Greater than or equal to 392
+    Figure 29. Selecting the DNS role
 
-	-	**CountryCodeLessThan392Rule**: User.CountryCode Less than 392
+7. Click **Add Features** in the pop-up dialog that displays to install **DNS Server Tools**.
 
-	-	**CountryCodeLessThanOrEquals392Rule**: User.CountryCode Less than or equal to 392
+    <a name="fig.30"></a>
 
-	-	**CountryCodeNotAnyOf156Or840Rule**: User.CountryCode Not any of {156, 840}
+    ![](./image/FileServerUserGuide/image192.png)
 
-	-	**CountryCodeNotEquals156Rule**: User.CountryCode Not equals 156
+    Figure 30. Adding required features for DNS Server
 
-###### <a name="5.3.9.8.3"/> 5.3.9.8.3. Create Central Access Policies
+8. Click **Next** until the **Confirmation** page displays.
 
-1.	Navigate to **Server Manager** -&gt; **Tools** -&gt; **Active Directory Administrative Center** -&gt; **Dynamic Access Control** -&gt; **Create Central Access Policies**.
+9. When ready, click **Install** to start the installation of selected roles and features.
 
-2.	In the right panel, select **New** -&gt; **Central Access Policy**.
+10. When the installation completes, click the **Promote this server to a domain controller** link on the **Results** tab of the **Add Roles and Features Wizard** under **Active Directory Domain Services** to create a new domain (e.g. **contoso.com**).
 
-	![](./image/FileServerUserGuide/image39.png)
+    <a name="fig.31"></a>
 
-3.	In the **Create Central Access Policy** page, type `CountryCodeEquals156Policy` in **Name** textbox, and click **Add** to select rule `CountryCodeEquals156Rule`, then click **OK**.
+    ![](./image/FileServerUserGuide/image195.png)
 
-	![](./image/FileServerUserGuide/image40.png)
+    Figure 31. Promoting the server to a domain controller
 
-	![](./image/FileServerUserGuide/image41.png)
+11. When the **Active Directory Domain Services Configuration Wizard** displays, select **Add a new forest**, type the domain name in the **Root domain name** textbox, for example `contoso.com`, and then click **Next**.
 
-4.	Repeat steps 2-3 and add the rest of the 9 policies.
+    <a name="fig.32"></a>
 
-	![](./image/FileServerUserGuide/image42.png)
+    ![](./image/FileServerUserGuide/image196.png)
 
-###### <a name="5.3.9.8.4"/> 5.3.9.8.4. Create Users
+    Figure 32. Configuring an Active Directory forest for the root domain
 
-1.	Navigate to **Server Manager** -&gt; **Tools** -&gt; **ADSI Edit**.
+12. In the right-hand pane of the **Domain Controller Options** dialog, type `Password01!` in both the **Password** and **Confirm password** textboxes, and then click **Next**.
 
-	![](./image/FileServerUserGuide/image43.png)
+    <a name="fig.33"></a>
 
-2.	In the right panel, right click **ADSI Edit**, and select **Connect to**.
+    ![](./image/FileServerUserGuide/image197.png)
 
-	![](./image/FileServerUserGuide/image44.png)
+    Figure 33. Adding a password for the directory services
 
-3.	Click **OK**.
+13. Repeatedly click **Next** until the **Prerequisites Check** dialog displays, verify that the check succeeded, and then click **Install**. If the check did not succeed, assess the **View Result** pane items and address issues as necessary, then click **Rerun prerequisite checks**.
 
-	![](./image/FileServerUserGuide/image45.png)
+    ![](./image/FileServerUserGuide/image1.png)**Note**
 
-4.	Expand **Default naming context** -&gt; **DC=contoso,DC=com**, right click **CN=Users**, select **New** -&gt; **Object**.
+    If your machine does not reboot automatically after the **promote to DC process** completes, then perform a manual restart.
 
-	![](./image/FileServerUserGuide/image46.png)
+    <a name="fig.34"></a>
 
-5.	Select **user** and click **Next** to create a user object.
+    ![](./image/FileServerUserGuide/image198.png)
 
-	![](./image/FileServerUserGuide/image47.png)
+    Figure 34. Results of Prerequisites Check
 
-6.	Type `ITadmin01` for the **cn** attribute and then **Next**.
+##### <a name="5.3.9.2"/> 5.3.9.2 Install the Routing Service
 
-	![](./image/FileServerUserGuide/image48.png)
+To install the Routing Service on the domain controller, perform the steps that follow:
 
-7.	Type `ITadmin01` for the **sAMAccountName** attribute and then **Next**
+1. Navigate **Server Manager** -&gt; **Dashboard**, click the **Manage** drop-down in the upper-right corner and then click **Add Roles and Features** in the drop-down list that displays.
 
-	![](./image/FileServerUserGuide/image49.png)
+    <a name="fig.35"></a>
 
-8.	Press **Finish**.
+    ![](./image/FileServerUserGuide/image186.png)
 
-	![](./image/FileServerUserGuide/image50.png)
+    Figure 35. Adding roles and features in Server Manager
 
-9.	Right click the newly created user object **CN=ITadmin01**, and select **Properties**.
+2. In the **Roles** treeview of the **Add Roles and Features Wizard**, select the **Remote Access** and **Web Server (IIS)** checkboxes and then click **Next**.
 
-	![](./image/FileServerUserGuide/image51.png)
+    <a name="fig.36"></a>
 
-10.	Select **countryCode** in **Attribute Editor** tab, type `156`, and then click **OK**.
+    ![](./image/FileServerUserGuide/image200.png)
 
-	![](./image/FileServerUserGuide/image52.png)
+    Figure 36. Selecting the Remote Access and Web Server roles
 
-11.	Select **department**  in **Attribute Editor** tab, type `IT`, and then click **OK**.
+3. In the **Add features that are required for Web Server (IIS)?** dialog that displays, click **Add Features** to install the **IIS Management Console** tools.
 
-	![](./image/FileServerUserGuide/image53.png)
+    <a name="fig.37"></a>
 
-12.	Repeat steps 4-11 to add the 4 users and their corresponding attributes as the following:
+    ![](./image/FileServerUserGuide/image199.png)
 
-	-	**ITmember01,** department: IT, countrycode: 392
+    Figure 37. Adding features required for the Web Server role
 
-	-	**Payrollmember01,** department: Payroll, countrycode: 156
+4. Repeatedly click **Next** until the **Role Services** tab is selected and then verify that the **DirectAccess and VPN (RAS)** service and **Routing** service are selected in the **Role services** treeview.
 
-	-	**Payrollmember02,** department: Payroll, countrycode: 840
+    <a name="fig.38"></a>
 
-	-	**Payrollmember03,** department: Payroll, countrycode: 392
+    ![](./image/FileServerUserGuide/image202.png)
 
-###### <a name="5.3.9.8.5"/> 5.3.9.8.5. Apply Central Access Policies
+    Figure 38. Selecting the DirectAccess and VPN (RAS), and Routing services for installation
 
-1.	Open **Run** -&gt; type `gpme.msc`, select **Default Domain Policy** and click **OK**.
+5. In the **Add features that are required for Routing?** dialog that displays, click **Add Features** to install the required tools.
 
-	![](./image/FileServerUserGuide/image54.png)
+    <a name="fig.39"></a>
 
-2.	In the right panel, navigate to **Computer Configuration** -&gt; **Policies** -&gt; **Windows Settings** -&gt; **Security Settings** -&gt; **File System** -&gt; **Central Access Policy**.
+    ![](./image/FileServerUserGuide/image201.png)
 
-	![](./image/FileServerUserGuide/image55.png)
+    Figure 39. Adding the features required for the Routing service
 
-3.	Right click **Central Access Policy** and select **Manage Central Access Policies...**.
+6. Repeatedly click **Next** until the **Confirmation** tab is selected and then click **Install** after you confirm the installation selections.
 
-	![](./image/FileServerUserGuide/image56.png)
+7. When the installation completes, click **Close**.
 
-4.	Select all the 10 rules added in [5.3.9.8.2. Create Central Access Rules](#5.3.9.8.2), click **Add**, and then click **OK**.
+    <a name="fig.40"></a>
 
-	![](./image/FileServerUserGuide/image57.png)
+    ![](./image/FileServerUserGuide/image18.png)
 
-5.	Start Windows PowerShell (x86) from `%SystemRoot%\syswow64\WindowsPowerShell\v1.0\` with Administrator privilege, and update group policies first in `DC01`, and then in `Node01` by executing the following command:
-```
-	gpupdate /force
-```
+    Figure 40. Confirming DirectAccess and VPN (RAS), and Routing services and features to install
 
-#### <a name="5.3.10"/> 5.3.10. Setup Distributed File System (DFS)
+##### <a name="5.3.9.3"/> 5.3.9.3 Configure and start Routing service
 
-##### <a name="5.3.10.1"/> 5.3.10.1. Install Roles and Features for DFS
+To configure and start the Routing Service, perform the following steps.
 
-1.	In **Server Manager** -&gt; **Dashboard**, click **Manage** on the upper right corner and then click **Add Roles and Features**. 
+1. Navigate **Server Manager** -> **Dashboard**, click the **Tools** drop-down in the upper-right corner of the management dashboard, and then click **Routing and Remote Access** in the drop-down list that displays.
 
-	![](./image/FileServerUserGuide/image186.png)
+    <a name="fig.41"></a>
 
-2.	Click **Next** under the **Select server roles** tab. In the **Roles** treeview, expand **File And Storage Services** -&gt; **File and iSCSI Services** and select **DFS Namespaces**.
+    ![](./image/FileServerUserGuide/image203.png)
 
-	![](./image/FileServerUserGuide/image187.png)
+    Figure 41. Server Manager dashboard: selecting Routing and Remote Access
 
-3.	Click **Add Features** in the pop-up window to install **DFS Management Tools**.
+2. In the **Routing and Remote Access** dialog that displays, right-click **DC01**, and then select **Configure and Enable Routing and Remote Access** from the context menu.
 
-	![](./image/FileServerUserGuide/image188.png)
+    <a name="fig.42"></a>
 
-4.	Click **Next** until you get to the **Confirmation** page. And click **Install** to start installation. Wait for the installation to complete and click **Close**.
+    ![](./image/FileServerUserGuide/image204.png)
 
-	![](./image/FileServerUserGuide/image189.png)
+    Figure 42. Opening the Routing and Remote Access Server Setup Wizard
 
-##### <a name="5.3.10.2"/> 5.3.10.2. Create a share named FileShare 
+3. Click **Next** until the **Configuration** screen displays in the **Routing and Remote Access Server Setup Wizard**, select **Custom configuration**, and then click **Next**.
 
-1.	Create a folder with path **%SystemDrive%\\FileShare**.
+    <a name="fig.43"></a>
 
-	-	If there is a `Node02` in the environment, create the folder on `Node02`. And share it with **Read/Write** permission level to **Node02\\Administrator** (and **CONTOSO\\Administrator** if **DOMAIN** environment).
+    ![](./image/FileServerUserGuide/image205.png)
 
-	-	Otherwise, create the folder on `Node01`. And share it with **Read/Write** permission level to **Node01\\Administrator** (and **CONTOSO\\Administrator** if **DOMAIN** environment).
+    Figure 43. Selecting Custom configuration for Routing and Remote Access
 
->	For more details, please refer to [5.3.1. Create a share](#5.3.1).
+4. Select **LAN routing** in the **Custom Configuration** screen of the **Routing and Remote Access Server Setup Wizard** and then click **Next**.
 
-##### <a name="5.3.10.3"/> 5.3.10.3. Create DFS name spaces
+    <a name="fig.44"></a>
 
-###### <a name="5.3.10.3.1"/> 5.3.10.3.1. Create Stand-alone namespace: SMBDfs
+    ![](./image/FileServerUserGuide/image206.png)
 
-1.  In **Server Manager** -&gt; **Dashboard**, click **Tools** on the upper right corner and then click **DFS Management** to launch **DFS Management** on `Node01`.
+    Figure 44. Setting LAN routing for custom configuration
 
-	![](./image/FileServerUserGuide/image61.png)
+5. Click **Finish** to close the Routing and Remote Access Server Setup Wizard.
 
-2.  Right-click **Namespace** and select **New Namespace...**.
+6. In the **Routing and Remote Access** dialog, click the **Start service** button to start the **Routing and Remove Access** service.
 
-	![](./image/FileServerUserGuide/image62.png)
+    <a name="fig.45"></a>
 
-3.  Type `Node01` in the **Server** textbox to specify the server name that will host the namespace. Then click **Next**.
+    ![](./image/FileServerUserGuide/image207.png)
 
-	![](./image/FileServerUserGuide/image63.png)
+    Figure 45. Starting the Routing and Remote Access service
 
-4.  Type `SMBDfs` in the **Name** textbox to specify the name of the namespace. Then click **Edit Settings...** to set access permissions.
+##### <a name="5.3.9.4"/> 5.3.9.4 Create a Domain Non-Admin user account
 
-	![](./image/FileServerUserGuide/image64.png)
+To create a non-administrative user account for the domain, perform the following steps.
 
-5.	In the **Edit Settings** panel, select **Administrators have full access; other users have read-only permissions**, and click **OK**. Then click **Next**.
+1. Logon to the domain controller (DC) computer and start the console window with Administrator privileges.
 
-	![](./image/FileServerUserGuide/image65.png)
+    For further details, see section [5.3.24 How to start console with Administrator privilege](#5.3.24).
 
-6.  Select **Stand-alone namespace** as namespace type and click **Next**.
+2. Type the following commands in the appropriate console window and press **Enter** on the domain controller computer keyboard.
 
-	![](./image/FileServerUserGuide/image66.png)
+    ```
+      dsadd user "CN=nonadmin,CN=Users,DC=contoso,DC=com" -pwd Password01 -desc contoso -disabled no -mustchpwd no -pwdneverexpires yes
+    ```
 
-7.	Click **Create**, then **Close** to complete the wizard.
+##### <a name="5.3.9.5"/> 5.3.9.5 Enable Guest user account
 
-	![](./image/FileServerUserGuide/image67.png)
+To enable the Guest user account in Active Directory, perform the following steps:
 
-###### <a name="5.3.10.3.2"/> 5.3.10.3.2. Create Stand-alone namespace: Standalone
+1. In **Server Manager** -> **Dashboard**, click the **Tools** drop-down in the upper-right corner of the management interface and then click **Active Directory Users and Computers** in the drop-down list that displays.
 
-1.	Repeat steps 1 to 7 in [5.3.10.3.1. Create Stand-alone namespace: SMBDfs](#5.3.10.3.1) to create another Stand-alone namespace with name: `Standalone`.
+2. In **Active Directory Users and Computers**, right click the **Guest** account in the accounts treeview and then click **Enable Account** in the context menu that displays.
 
-###### <a name="5.3.10.3.3"/> 5.3.10.3.3. Create Domain-based namespace: DomainBased (domain environment only)
+    <a name="fig.46"></a>
 
-1.	Repeat steps 1 to 5 in [5.3.10.3.1. Create Stand-alone namespace: SMBDfs](#5.3.10.3.1) to create another Domain-based namespace with name: `DomainBased`.
+    ![](./image/FileServerUserGuide/image23.png)
 
-2.	Select **Domain-based namespace** and click **Next**.
+    Figure 46. Enabling the Guest account
 
-	![](./image/FileServerUserGuide/image68.png)
+3. Right-click the **Guest** account again and then click **Reset Password...**.
 
-3.	Click **Create** to complete the wizard.
+4. In the **Reset Password** dialog, type `Password01!` in the **New password** and **Confirm password** text boxes.
 
-	![](./image/FileServerUserGuide/image69.png)
+    <a name="fig.47"></a>
 
-##### <a name="5.3.10.4"/> 5.3.10.4. Create DFS link for the namespaces
+    ![](./image/FileServerUserGuide/image24.png)
 
-###### <a name="5.3.10.4.1"/>  5.3.10.4.1. Add folder SMBDfsLink to namespace SMBDfs
+    Figure 47. Resetting the Guest account password
 
-1.	In **DFS Management**, right-click the newly created namespace **\\\\Node01\\SMBDfs** and click **New Folder...** to add new folder to this share.
+##### <a name="5.3.9.6"/> 5.3.9.6 Create a Domain group
 
-	![](./image/FileServerUserGuide/image70.png)
+To create a Domain group, perform the following steps.
 
-2.	Type `SMBDfsLink` in **Name** textbox to specify the folder name, and click **Add...** to add the folder target.
+1. Logon to the DC computer and start the console window with Administrator privileges.
 
-	![](./image/FileServerUserGuide/image71.png)
+    For further details, see section [5.3.24 How to start console with Administrator privilege](#5.3.24).
 
-3.	Type  `\\Node02\FileShare` in **Path to folder target** textbox, and click **Browse...** button.
+2. Type the following command in the appropriate console window and then press **Enter** on the DC computer keyboard.
 
-	-	If there is no `Node02` in the environment, set the target to **\\\\Node01\\FileShare**. Whether the `FileShare` is located on `Node01` or `Node02` depend on whether you want to test cluster environment, see [5.3.10.2. Create a share named FileShare](#5.3.10.2)
+    ```
+      dsadd group "CN=AzGroup01,CN=Users,DC=contoso,DC=com"
+    ```
 
-	![](./image/FileServerUserGuide/image72.png)
+##### <a name="5.3.9.7"/> 5.3.9.7 Create a Domain account that belongs to a Domain group
 
-4.	In the **Browse for Shared Folders** panel, select **FileShare** in the **Shared folders** listview. Then click **OK**.
+To create a Domain account that is associated with a Domain group, perform the following steps.
 
-	![](./image/FileServerUserGuide/image73.png)
+1. Logon to the DC computer and start the console window with Administrator privileges.
 
-###### <a name="5.3.10.4.2"/> 5.3.10.4.2. Add two folders to namespace: Standalone
+    For further details, see section [5.3.24 How to start console with Administrator privilege](#5.3.24).
 
-1.	In **DFS Management**, right-click the newly created namespace **\\\\Node01\\Standalone** and click **New Folder...** to add two new folders to this namespace.
+2. Type the following command in the appropriate console window and then press **Enter** on the DC computer keyboard.
 
-	![](./image/FileServerUserGuide/image190.png)
+    ```
+      dsadd user "CN=AzUser01,CN=Users,DC=contoso,DC=com" -pwd Password01! -desc contoso memberof "CN=AzGroup01,CN=Users,DC=contoso,DC=com" -disabled no -mustchpwd no -pwdneverexpires yes
+    ```
 
-2.	Type `DFSLink` in **Name** textbox to specify the folder name, and click **Add...** to add the folder target.
+##### <a name="5.3.9.8"/> 5.3.9.8  Configure Claimed Based Access Control (CBAC)
 
-	![](./image/FileServerUserGuide/image74.png)
+###### <a name="5.3.9.8.1"/> 5.3.9.8.1 Create User Claim
 
-3.	Type `\\Node02\FileShare` in **Path to folder target** textbox, and click **Browse...** button. Then click **OK**.
+To create a user claim, perform the steps that follow.
 
-	-	If there is no `Node02` in the environment, set the target to **\\\\Node01\\FileShare**. Whether the `FileShare` is located on `Node01` or `Node02` depend on whether you want to test cluster environment, see [5.3.10.2. Create a share named FileShare](#5.3.10.2)
+1. In **Server Manager** -> **Dashboard**, click the **Tools** drop-down in the upper-right corner of the management dashboard and then click **Active Directory Administrative Center** in the drop-down list that displays.
 
-	![](./image/FileServerUserGuide/image75.png)
+    <a name="fig.48"></a>
 
-4.	Repeat step 1, then type `Interlink` in **Name** textbox to specify the folder name, and click **Add...** to add the folder target.
+    ![](./image/FileServerUserGuide/image25.png)
 
-	![](./image/FileServerUserGuide/image76.png)
+    Figure 48. Launching the Active Directory Administrative Center
 
-5.	Type  `\\Node01\SMBDfs\SMBDfsLink` in **Path to folder target** textbox, and click **Browse...** button. Then click **OK**. 
+2. In the left pane of the **Active Directory Administrative Center** dashboard, select **Dynamic Access Control**, then select **Claim Types** in the **Dynamic Access Control** treeview. In the **Tasks** pane on the right side of the dashboard, click **New** and then select **Claim Type**.
 
-	![](./image/FileServerUserGuide/image77.png)
+    <a name="fig.49"></a>
 
-6. 	Verify the two folders under the **Standalone** namespace.
+    ![](./image/FileServerUserGuide/image26.png)
 
-	![](./image/FileServerUserGuide/image78.png)
+    Figure 49. Starting a new Claim Type
 
-###### <a name="5.3.10.4.3"/> 5.3.10.4.3. Add two folders to namespace: DomainBased
+3. Type `department` in the **Source Attribute** filter to populate the treeview with source attributes.
 
-1.	In **DFS Management**, right-click the newly created namespace **\\\\contoso.com\\DomainBased** and click **New Folder...** to add two new folders to this namespace.
+4. Select the **department** attribute in the treeview in order to set the department attribute as the base claim.
 
-	![](./image/FileServerUserGuide/image208.png)
+    <a name="fig.50"></a>
 
-2.	Type `DFSLink` in **Name** textbox to specify the folder name, and click **Add...** to add the folder target.
+    ![](./image/FileServerUserGuide/image27.png)
 
-	![](./image/FileServerUserGuide/image79.png)
+    Figure 50. Creating a **department** Claim Type
 
-3.	Type `\\Node02\FileShare` in **Path to folder target** textbox, and click **Browse...** button. Then click **OK**.
+5. Type `Department` in the **Display Name** textbox for this claim, and then add **IT** and **Payroll** as **Suggested Values** for this claim by clicking **Add...**.
 
-	-	If there is no `Node02` in the environment, set the target to **\\\\Node01\\FileShare**. Whether the `FileShare` is located on `Node01` or `Node02` depend on whether you want to test cluster environment, see [5.3.10.2. Create a share named FileShare](#5.3.10.2)
+6. Select **The following values are suggested** radio button, check **Computer** under **Claims of this type can be issued for the following classes**, then click the **Add** button in the lower right section of the user interface to add the **IT** and **Payroll** suggested values for this claim.
 
-	![](./image/FileServerUserGuide/image80.png)
+    <a name="fig.51"></a>
 
-4.	Repeat step 1, then type `Interlink` in **Name** textbox to specify the folder name, and click **Add...** to add the folder target.
+    ![](./image/FileServerUserGuide/image28.png)
 
-	![](./image/FileServerUserGuide/image81.png)
+    Figure 51. Setting Suggested Values for the claim
 
-5.	Type  `\\Node01\SMBDfs\SMBDfsLink` in **Path to folder target** textbox, and click **Browse...** button. Then click **OK**.
+7. Repeat steps 2 through 5 to add another claim based on the **countryCode** attribute, and set the associated Suggested Values to **156**, **840**, and **392**.
 
-	![](./image/FileServerUserGuide/image82.png)
+    <a name="fig.52"></a>
 
-6. Verify the two folders under the **DomainBased** namespace.
+    ![](./image/FileServerUserGuide/image29.png)
 
-	![](./image/FileServerUserGuide/image83.png)
+    Figure 52. Creating another claim based on the countryCode attribute
 
-#### <a name="5.3.11"/> 5.3.11. Setup SAN Storage Server
+###### <a name="5.3.9.8.2"/> 5.3.9.8.2  Create Central Access Rules
 
-1.	This section provides information about how to setup a SAN storage server for use with this test suite.
+To create central access rules, perform the steps that follow.
 
->	![](./image/FileServerUserGuide/image1.png)Note
+1. In **Server Manager** -> **Dashboard**, click the **Tools** drop-down in the upper-right corner of the management dashboard and then click **Active Directory Administrative Center** in the drop-down list that displays.
 
->	&emsp;&emsp;This server may not have to be joined to the domain provided by the DC.
+    <a name="fig.53"></a>
 
-##### <a name="5.3.11.1"/> 5.3.11.1. Install iSCSI Target
+    ![](./image/FileServerUserGuide/image25.png)
 
-1.	From **Server Manager**, click **Add Roles and Features**, and click **Next** with default settings until **Server Roles** page.
+    Figure 53. Server Manager dashboard
 
-	![](./image/FileServerUserGuide/image84.png)
+2. In the **Active Directory Administrative Center** interface, select **Dynamic Access Control**, then select **Central Access Rules**.
 
-2.  Expand **File And Storage Services**, select **File Server** and **iSCSI Target Server** to install.
+3. In the **Tasks** pane on the right side of the **Active Directory Administrative Center** interface, click **New** and then click **Central Access Rule**.
 
-	![](./image/FileServerUserGuide/image85.png)
+    <a name="fig.54"></a>
 
-3. 	Confirm to add required features for iSCSI Target Server by clicking **Add Features**.
+    ![](./image/FileServerUserGuide/image30.png)
 
-	![](./image/FileServerUserGuide/image86.png)
+    Figure 54. Central Access Rule configuration
 
-4.	Click **Next** with default settings until last **Confirmation** tab and click **Install**.
+4. In the **Name** textbox on the **General** tab of the **Create Central Access Rule** dialog, type `CountryCodeEquals156Rule`.
 
-	![](./image/FileServerUserGuide/image87.png)
+    <a name="fig.55"></a>
 
-##### <a name="5.3.11.2"/> 5.3.11.2. Create virtual disks for failover cluster nodes
+    ![](./image/FileServerUserGuide/image31.png)
 
-1.	After installing the [iSCSI Target](#5.3.11.1), navigate to **Server Manager** -&gt; **File and Storage Services** -&gt; **iSCSI Virtual Disks** and click **launch the New Virtual Disk wizard to create a virtual disk**.
+    Figure 55. Creating the **CountryCodeEquals156Rule** access rule
 
-	![](./image/FileServerUserGuide/image88.png)
+5. On the **Permission**s tab of the **Create Central Access Rule** dialog, click **Edit**.
 
-2.	Choose either **Select by volume** or **Type a custom path** for the new virtual disk location.
+    <a name="fig.56"></a>
 
-	![](./image/FileServerUserGuide/image89.png)
+    ![](./image/FileServerUserGuide/image32.png)
 
-3.	Specify the name as `Quorumdisk` and size as `1 GB` for the virtual disk.
+    Figure 56. Navigating to Advanced Security Settings for Permissions
 
-	![](./image/FileServerUserGuide/image90.png)
+6. In the **Advanced Security Settings for Permissions** dialog, click **Add**.
 
-	![](./image/FileServerUserGuide/image91.png)
+    <a name="fig.57"></a>
 
-4. 	Select **New iSCSI target** for failover cluster node access.
+    ![](./image/FileServerUserGuide/image33.png)
 
-	![](./image/FileServerUserGuide/image92.png)
+    Figure 57. Adding a new permission entry
 
-5.	Specify the **Name** of the iSCSI target as `TargetForCluster01`.
+7. In the **Permission Entry for Permissions** dialog, click **Select a principal**.
 
-	![](./image/FileServerUserGuide/image93.png)
+    <a name="fig.58"></a>
 
-6.	Specify the initiators of failover cluster nodes which need to access the virtual disk and target by clicking **Add...**
+    ![](./image/FileServerUserGuide/image34.png)
 
-	![](./image/FileServerUserGuide/image94.png)
+    Figure 58. Adding a principal for the permission entry
 
-7. 	There're multiple ways for you to give the target access to a specific machine.
+8. Type `Authenticated Users` in the object name textbox, click **Check Names**, and then click **OK**.
 
-	-	You could select the IQNs of failover cluster nodes from the list if **Select from the initiator cache on the target server** option is available. 
+    <a name="fig.59"></a>
 
-	-	You could add the values in specific type of the failover cluster nodes if the **Enter a value for the selected type** option is selected and a type is specified. Here, **IP Address** type will be used in this example.
+    ![](./image/FileServerUserGuide/image35.png)
 
-	![](./image/FileServerUserGuide/image95.png)
+    Figure 59. Selecting the Authenticated Users object for permissions configuration
 
-	![](./image/FileServerUserGuide/image96.png)
+9. In the **Permission Entry for Permissions** dialog, select **Full Control** under Basic permissions, click **Add a condition** in the lower pane of the dialog, and then specify the the conditions configuration indicated in the figure below for **CountryCode Equals 156**. Click **OK** when finished.
 
-8.	Click **Next** with default settings and click **Create** in the **Confirmation** tab to complete the wizard.
+    <a name="fig.60"></a>
 
-	![](./image/FileServerUserGuide/image97.png)
+    ![](./image/FileServerUserGuide/image36.png)
 
-9.	After the first virtual disk has been created, right click from the blank space in **iSCSI VIRTUAL DISKS** listview and select **New iSCSI Virtual Disk...** to launch a new wizard.
+    Figure 60. Configuring permissions for the Authenticated Users group
 
-	![](./image/FileServerUserGuide/image98.png)
+10. On the **Permissions** tab of the **Create Central Access Rule** dialog, click **OK**.
 
-10. Repeat steps 2-9 to create more virtual disks as shared storages for the failover cluster use.
+    <a name="fig.61"></a>
 
-	-	Please notice that you must select the **Existing iSCSI target** which was created in the previous step [5.3.11.1. Install iSCSI Target](#5.3.11.1).
+    ![](./image/FileServerUserGuide/image37.png)
 
-	![](./image/FileServerUserGuide/image99.png)
+    Figure 61. Completing permissions configuration for the **CountryCodeEquals156Rule** access rule
 
-	-	The following table gives recommended settings for virtual disks used by this test suite:
+11. Repeat steps 2 through 10 to create the remaining 9 rules, as specified in the figure that follows.
 
-| Disk Name     | Size     | Purpose                                                                        |
-|---------------|----------|--------------------------------------------------------------------------------|
-| Quorumdisk    | 1 GB     | Quorum disk for a two-node cluster                                             |
-| FSDisk01      | 10 GB    | Storage used by file server for general use on failover cluster                |
-| FSDisk02      | 10 GB    | Storage used by file server for scale-out application data on failover cluster |
+    <a name="fig.62"></a>
 
-11.	After iSCSI target is created, you could find iSCSI target name as below when selecting any one of the virtual disks in the listview.
+    ![](./image/FileServerUserGuide/image38.png)
 
-	![](./image/FileServerUserGuide/image100.png)
+    Figure 62. Central Access Rule list
 
-#### <a name="5.3.12"/> 5.3.12. Setup Cluster 
+    The conditions configuration for the remaining 9 rules are as follows:
 
-##### <a name="5.3.12.1"/> 5.3.12.1. Connect to the iSCSI disks provided by the SAN Storage Server from two nodes
+      * **CountryCodeAnyOf156Or840Rule**: **User.CountryCode Any of {156,840}**
 
-1.	From **Server Manager** of each failover cluster node (i.e. **Node01** and **Node02**), click **iSCSI Initiator** and select **Yes** to start **Microsoft® iSCSI service** when prompted for its first use.
+      * **CountryCodeEquals156AndITDepartmentRule**: **(User.CountryCode Equals 156) And (User.Department Equals "IT")**
 
-	![](./image/FileServerUserGuide/image101.png)
+      * **CountryCodeEquals156OrITDepartmentRule**: **(User.CountryCode Equals 156) Or (User.Department Equals "IT")**
 
-	![](./image/FileServerUserGuide/image102.png)
+      * **CountryCodeGreaterThan392Rule**: **User.CountryCode Greater than 392**
 
-2.	From the Discovery tab of the iSCSI Initiator Properties dialog, add the IP address of the SAN storage server to the IP address or DNS name textbox in the Discover Target Portal dialog prompt. When complete, click OK.  
+      * **CountryCodeGreaterThanOrEquals392Rule**: **User.CountryCode Greater than or equal to 392**
 
-	![](./image/FileServerUserGuide/image214.png)
+      * **CountryCodeLessThan392Rule**: **User.CountryCode Less than 392**
 
-	![](./image/FileServerUserGuide/image103.png)
+      * **CountryCodeLessThanOrEquals392Rule**: **User.CountryCode Less than or equal to 392**
 
-3.	Navigate to **Targets** tab, click **Refresh** and then **Connect**.
+      * **CountryCodeNotAnyOf156Or840Rule**: **User.CountryCode Not any of {156, 840}**
 
-	![](./image/FileServerUserGuide/image104.png)
+      * **CountryCodeNotEquals156Rule**: **User.CountryCode Not equals 156**
 
-4.	On either of the failover cluster nodes, open **Run** and type `diskmgmt.msc` to launch disk manager. The three disks can be found if you have followed the recommended disk settings. **Online** and **initiate** them as either **GPT** or **MBR** disk, and then create simple volumes with **NTFS** format by following the next steps. Do not forget to formatting the disks before you go on any further configurations.
+###### <a name="5.3.9.8.3"/> 5.3.9.8.3 Create Central Access Policies
 
-	![](./image/FileServerUserGuide/image105.png)
+1. Navigate to **Server Manager** -> **Tools** -> **Active Directory Administrative Center** -> **Dynamic Access Control** -> **Create Central Access Policies**.
 
-5.	Right click **Disk 1** in the left panel, select **Online**. And then select **Initialize Disk**.
+    <a name="fig.63"></a>
 
-	![](./image/FileServerUserGuide/image106.png)
+    ![](./image/FileServerUserGuide/image217.png)
 
-6.	Select either **MBR** or **GPT**, and click **OK**.
+    Figure 63. Starting to create a new Central Access Policy rule
 
-	![](./image/FileServerUserGuide/image107.png)
+2. In the right-hand pane of the **Create Central Access Policies** dialog shown in the figure that follows, click the **Tasks** drop-down and select **New** -> **Central Access Policy**.
 
-7.	Then right click **Disk 1** in the right panel, select **New Simple Volume...**
+    <a name="fig.64"></a>
 
-	![](./image/FileServerUserGuide/image108.png)
+    ![](./image/FileServerUserGuide/image39.png)
 
-8.	Press **Next**.
+    Figure 64. Starting configuration of a new Central Access Policy rule
 
-	![](./image/FileServerUserGuide/image109.png)
+3. In the **Name** textbox of the **Create Central Access Policy** dialog, type `CountryCodeEquals156Policy` and then click **Add** to enable selection of the CountryCodeEquals156Policy rule in the treeview of the **Add Central Access Rules** dialog.
 
-9.	Press **Next**.
+4. In the **Add Central Access Rules** dialog, highlight the **CountryCodeEquals156Rule** in the right-side tree view, and then click the left-pointing transfer button.
 
-	![](./image/FileServerUserGuide/image110.png)
+5. When complete, click **OK** in the **Add Central Access Rules** dialog.
 
-10.	Press **Next**.
+    <a name="fig.65"></a>
 
-	![](./image/FileServerUserGuide/image111.png)
+    ![](./image/FileServerUserGuide/image40.png)
 
-11.	Press **Next**.
+    Figure 65. Adding the Central Access Policy Rule to the configuration
 
-	![](./image/FileServerUserGuide/image112.png)
+6. Click **OK** in the **Create Central Access Policy** dialog to complete the configuration.
 
-12.	Press **Finish**.
+    <a name="fig.66"></a>
 
-	![](./image/FileServerUserGuide/image113.png)
+    ![](./image/FileServerUserGuide/image41.png)
 
-13. Repeat steps 5-12 to format the other two disks.
+    Figure 66. Completing the Central Access Policy Rules configuration
 
-##### <a name="5.3.12.2"/> 5.3.12.2. Install Roles and Features on each failover cluster node
+7. Repeat steps 2 through 6 to add the remainder of the 9 policies shown in the figure that follows.
 
-1.	Logon to both failover cluster nodes (i.e. `Node01` and `Node02`) using a domain account.
+    <a name="fig.67"></a>
 
-2.	In **Server Roles** -&gt; **File And Storage Services**, select **File Server**, **File Server Resource Manager**, **File Server VSS Agent Service**.
+    ![](./image/FileServerUserGuide/image42.png)
 
-	![](./image/FileServerUserGuide/image114.png)
+    Figure 67. Central Access Policy Rules list
 
-3.	In **Features** tab, select **Failover Clustering**.
+###### <a name="5.3.9.8.4"/> 5.3.9.8.4 Create Users
 
-	![](./image/FileServerUserGuide/image115.png)
+To create user accounts in Active Directory, perform the steps that follow.
 
-4.	Click **Add Features** when prompt to install the **Failover Clustering Tools**.
+1. Navigate to **Server Manager** -> **Tools** -> **ADSI Edit** or type `adsiedit.msc` in the **Run** dialog to open the ADSI Edit management console.
 
-	![](./image/FileServerUserGuide/image116.png)
+    <a name="fig.68"></a>
 
-5.	Click **Install** in the **Confirmation** tab to complete the wizard.
+    ![](./image/FileServerUserGuide/image43.png)
 
-##### <a name="5.3.12.3"/> 5.3.12.3. Create failover cluster in either node
+    Figure 68. Opening the ADSI Edit management console
 
-1.	Logon to either of the failover cluster nodes (i.e. `Node01` and `Node02`) using a domain account which has permission to create computer object to Active Directory.
+2. In the right-hand pane of the ADSI Edit console, right-click **ADSI Edit** and select **Connect to** in the context menu that displays.
 
-2.	Navigate to **Server Manager** -&gt; **Tools** -&gt; **Failover Cluster Manager** to open the management console.
+    <a name="fig.69"></a>
 
-3.	Create cluster using **Create Cluster...** wizard.
->	![](./image/FileServerUserGuide/image1.png)Note
+    ![](./image/FileServerUserGuide/image44.png)
 
->	&emsp;&emsp;Prior to creating the cluster, the shared storage needs to be created and added to the failover cluster nodes. For more information about how to do this, please see [5.3.11. Setup SAN Storage Server](#5.3.11)
-        ![](./image/FileServerUserGuide/image117.png)
+    Figure 69. Opening the Connection Settings dialog
 
-4.	Type the computer name of failover cluster nodes.
+3. While using the defaults in the **Connection Settings** dialog, click **OK**.
 
-	![](./image/FileServerUserGuide/image118.png)
+    <a name="fig.70"></a>
 
-5.	(Optional) Select **Yes** if you want do cluster configuration validation tests. For simplicity, you can select **No** to skip this step.
+    ![](./image/FileServerUserGuide/image45.png)
 
-	![](./image/FileServerUserGuide/image119.png)
+    Figure 70. Connection Settings dialog
 
-6.	Specify the cluster name as `Cluster01` and IP addresses of the cluster if the cluster nodes are using static IP addresses in a subnet  (e.g. `192.168.1.100`, and `192.168.2.100`). You could ignore specifying the IP addresses in the subnet which are used for cluster internal traffic.
+4. In the ADSI Edit console, expand **Default naming context** -> **DC=contoso,DC=com**, right-click **CN=Users**, and then select **New** -> **Object** in the context menus that display.
 
-	![](./image/FileServerUserGuide/image120.png)
+    <a name="fig.71"></a>
 
-	![](./image/FileServerUserGuide/image121.png)
+    ![](./image/FileServerUserGuide/image46.png)
 
-	![](./image/FileServerUserGuide/image122.png)
+    Figure 71. Configuring a new user
 
-7.	Press **Finish**.
+5. In the **Create Object** dialog, select **user** and then click **Next** to create a user object.
 
-##### <a name="5.3.12.4"/> 5.3.12.4. Create file server on failover cluster
+    <a name="fig.72"></a>
 
-1.	In **Failover Cluster Manager** from either failover cluster node (i.e. `Node01` and `Node02`), right click on **Roles**, and select **Configure Role...**
+    ![](./image/FileServerUserGuide/image47.png)
 
-	![](./image/FileServerUserGuide/image123.png)
+    Figure 72. Creating a new user object
 
-	![](./image/FileServerUserGuide/image124.png)
+6. In the **Value** text box of the **Create Object** dialog, type `ITadmin01` for the cn attribute and then click **Next**.
 
-2.	Select **File Server for general use**.
+    <a name="fig.73"></a>
 
-	![](./image/FileServerUserGuide/image125.png)
+    ![](./image/FileServerUserGuide/image48.png)
 
-3.	Specify the access point name as `GeneralFS` and IP addresses of the cluster if the cluster nodes are using static IP addresses in a subnet (e.g. `192.168.1.200`, `192.168.2.200`).
+    Figure 73. Specifying the container name
 
-	![](./image/FileServerUserGuide/image126.png)
+7. In the **Value** text box of the **Create Object** dialog, type `ITadmin01` for the **sAMAccountName** attribute, and then click **Next**.
 
-4.	Select a disk for the file server consumption.
+    <a name="fig.74"></a>
 
-	![](./image/FileServerUserGuide/image127.png)
+    ![](./image/FileServerUserGuide/image49.png)
 
-5.	Click **Next** in following pages, and then **Finish** to complete the wizard.
+    Figure 74. Configuring the sAMAccountName
 
-	![](./image/FileServerUserGuide/image128.png)
+8. When object configuration is complete, click **Finish**.
 
-6.	Repeat steps 1-5 with the following differences:
+    <a name="fig.75"></a>
 
-	-	In step 2, select **Scale-Out File Server for application data** to create file server for scale-out application data.
+    ![](./image/FileServerUserGuide/image50.png)
 
-	![](./image/FileServerUserGuide/image209.png)
+    Figure 75. Completing the Create Object dialog
 
-	-	In step 3, specify the access point name as `ScaleOutFS`.
+9. In the ADSI MMC, right-click the newly created user object **CN=ITadmin01** and then select **Properties** in the context menu that displays.
 
-	![](./image/FileServerUserGuide/image129.png)	
+    <a name="fig.76"></a>
 
-##### <a name="5.3.12.5"/> 5.3.12.5. Add Scale-out Share volume
+    ![](./image/FileServerUserGuide/image51.png)
 
-1.	Choose an existing Cluster Disk with the **Assigned To** property set to **Available Storage**.
+    Figure 76. Opening the CN=ITadmin01 Properties dialog
 
-2.	Right click the Cluster Disk, and select **Add to Cluster Shared Volumes** to create a file share on the file server for scale-out application data.
+10. On the **Attribute Editor** tab of the **CN=ITadmin01** **Properties** dialog, select **countryCode** in the **Attributes** list, click **Edit**, and then type `156` in the **Integer Attribute Editor** dialog. When complete, click **OK**.
 
-	![](./image/FileServerUserGuide/image141.png)
+    <a name="fig.77"></a>
 
-##### <a name="5.3.12.6"/> 5.3.12.6. Create file share for cluster
+    ![](./image/FileServerUserGuide/image52.png)
 
-1.	Select **Roles** from **Failover Cluster Manager**, and choose a File Server item with **Type** property set to **File Server** (e.g. `GeneralFS`).
+    Figure 77. Configuring the **countryCode** value
 
-2.	Right click the File Server item, and select **Add Shared Folder** to create a file share on file server for general use.
+11. On the **Attribute Editor** tab of the **CN=ITadmin01** **Properties** dialog, select **department** in the **Attributes** list, click **Edit**, and then type `IT` in the **String Attribute Editor** dialog. When complete, click **OK**.
 
-	![](./image/FileServerUserGuide/image130.png)
+    <a name="fig.78"></a>
 
-3.	Select **SMB Share – Quick**.
+    ![](./image/FileServerUserGuide/image53.png)
 
-	![](./image/FileServerUserGuide/image131.png)
+    Figure 78. Specifying the **department** value
 
-4.	Select **Select by volume**.
+12. Repeat steps 4 through 11 to configure the additional users and associated attributes indicated in the table that follows.
 
-	![](./image/FileServerUserGuide/image132.png)
+    <a name="table.9"></a>
 
-5.	Specify the share name as `SMBClustered`.
+    **Table 9. Department and countryCode values**
 
-	![](./image/FileServerUserGuide/image133.png)
+    | user                | department | countryCode |
+    |---------------------|------------|-------------|
+    | **ITmember01**      | IT         | 392         |
+    | **Payrollmember01** | Payroll    | 156         |
+    | **Payrollmember02** | Payroll    | 840         |
+    | **Payrollmember03** | Payroll    | 392         |
 
-6.	Check **Enable continuous availability** and **Allow caching of share** in **Other Settings** tab.
+###### <a name="5.3.9.8.5"/> 5.3.9.8.5 Apply Central Access Policies
 
-	![](./image/FileServerUserGuide/image134.png)
+To apply central access policies, perform the steps that follow.
 
-7.	Grant **Full Control** to the account that will be used to access the file share.
+1. From the **Start** menu, open the **Run** dialog and type `gpme.msc`. to start the **Group Policy Management Editor** console.
 
-	![](./image/FileServerUserGuide/image135.png)
+2. In the **Browse for a Group Policy Object** dialog that displays, select **Default Domain Policy** and then click **OK**.
 
-	![](./image/FileServerUserGuide/image136.png)
+    <a name="fig.79"></a>
 
-	![](./image/FileServerUserGuide/image137.png)
+    ![](./image/FileServerUserGuide/image54.png)
 
-	![](./image/FileServerUserGuide/image138.png)
+    Figure 79. Selecting the Default Domain Policy in the Browse for a Group Policy Object dialog
 
-	![](./image/FileServerUserGuide/image139.png)
+3. In the left pane of the **Group Policy Management Editor** console that displays, navigate to **Computer Configuration** -> **Policies** -> **Windows Settings** -> **Security Settings** -> **File System** -> **Central Access Policy**.
 
-	![](./image/FileServerUserGuide/image140.png)
+    <a name="fig.80"></a>
 
-8.	Repeat steps 1-7 for the other File Server item (e.g. `ScaleOutFS`).
+    ![](./image/FileServerUserGuide/image55.png)
 
-	![](./image/FileServerUserGuide/image167.png)
+    Figure 80. Selecting the Central Access Policy node in the Group Policy management console
 
-##### <a name="5.3.12.7"/> 5.3.12.7. Create file share with Oplock Force Level 2 enabled for cluster 
+4. Right-click the **Central Access Policy** node and select **Manage Central Access Policies...** in the context menu that displays.
 
-1.	Repeat all the steps in [5.3.12.6. Create file share for cluster](#5.3.12.6).
+    <a name="fig.81"></a>
 
-	-	In step 5, set the share name to `SMBClusteredForceLevel2`.
+    ![](./image/FileServerUserGuide/image56.png)
 
-2.	Enable **FORCE\_LEVELII\_OPLOCK** on this share. Please refer to [5.3.7. Enable FORCE_LEVELII_OPLOCK on a share named ShareForceLevel2](#5.3.7).
+    Figure 81. Opening the Central Access Policies Configuration dialog
 
-##### <a name="5.3.12.8"/> 5.3.12.8. Create file share with Encrypt data enabled for cluster
+5. In the **Central Access Policies Configuration** dialog, select all 10 rules that you created in section [5.3.9.8.2 Create Central Access Rules](#5.3.9.8.2), click Add, and then click OK.
 
-1. 	Repeat all the steps in [5.3.12.6. Create file share for cluster](#5.3.12.6).
+    <a name="fig.82"></a>
 
-	-	In step 5, set the share name to `SMBClusteredEncrypted`.
+    ![](./image/FileServerUserGuide/image57.png)
 
-	-	In step 6, select the additional option **Encrypt data access** in **Other Settings** tab.
+    Figure 82. Central Access Policy rule selection
 
-#### <a name="5.3.13"/> 5.3.13. Turn off Firewall
+6. Open a command shell with Administrative privileges and update group policies first on **DC01**, and then on **Node01** by executing the following command:
 
-1.	Start the console window with Administrator privilege.
->	For more details, please refer to [5.3.24. How to start console with Administrator privilege](#5.3.24).
+    ```
+      gpupdate /force
+    ```
 
-2.	Type the following commands in the console windows, and press **Enter**.
-```
-	netsh advfirewall set allprofiles state off
-```
+    Optionally, start Windows PowerShell (x86) from **%SystemRoot%\\syswow64\WindowsPowerShell\\v1.0\\** with Administrator privileges and execute the same command.
 
-#### <a name="5.3.14"/> 5.3.14. Create a Local Admin User Account
+#### <a name="5.3.10"/> 5.3.10 Setup Distributed File System (DFS)
 
-1.	Do not need to create a new user. Just use the existing **Administrator**.
+##### <a name="5.3.10.1"/> 5.3.10.1 Install Roles and Features for DFS
 
-2.	If the operating system of the SUT is a Windows client SKU, you need to enable build-in Administrator by running the following command:
-```
-	net.exe user Administrator /active:yes
-```
+To install Roles and Features for DFS, perform the steps that follow.
 
-#### <a name="5.3.15"/> 5.3.15. Create a Local Non-Admin User Account
+1. In **Server Manager** -> **Dashboard**, click **Manage** in the upper-right sector of the management dashboard and then click **Add Roles and Features** in the drop-down list that displays.
 
-1.	Start the console window with Administrator privilege.
->	For more details, please refer to [5.3.24. How to start console with Administrator privilege](#5.3.24).
+    <a name="fig.83"></a>
 
-2.	Type the following commands in the console windows, and press **Enter**.
-```
-	net.exe user nonadmin Password01! /add
-```
+    ![](./image/FileServerUserGuide/image186.png)
 
-#### <a name="5.3.16"/> 5.3.16. Enable the Local Guest Account
+    Figure 83. Server Manager Dashboard: Installing DFS Roles and Features
 
-1.	Start the console window with Administrator privilege.
->	For more details, please refer to [5.3.24. How to start console with Administrator privilege](#5.3.24).
+2. In the **Add Roles and Feature Wizard**, click **Next** repeatedly until the **Select server roles** page displays, while ensuring that the default selections on the **Installation Type** and **Server Selection** pages of the wizard appear valid.
 
-2.	Type the following commands in the console windows, and press **Enter**.lege:
-```
-	net.exe user Guest /active:yes
-```
+3. In the **Roles** treeview of the **Add Roles and Feature Wizard**, expand the **File And Storage Services** node, expand the **File and iSCSI Services** node, and then select the **DFS Namespaces** checkbox to display the **Add features that are required for DFS Namespaces** dialog.
 
-3.	If the operating system of the SUT is a Windows client SKU, you need to grant the **Guest** user "log on" access right as the following:
+    <a name="fig.84"></a>
 
-	-	Open the **Group Policy Management Editor**. To do so, click **Start**, type `gpedit.msc`, and then press **Enter**.
+    ![](./image/FileServerUserGuide/image187.png)
 
-	-	If the **User Account Control** dialog box appears, confirm that the action it displays is what you want, and then click **Continue**.
+    Figure 84. Add Roles and Features Wizard: Selecting the DFS Namespaces checkbox
 
-	-	In the navigation pane, navigate to **Computer Configuration** -&gt; **Windows Settings** -&gt; **Security Settings** -&gt; **Local Policies** -&gt; **User Rights Assignment**.
+4. In the **Add features that are required for DFS Namespaces** dialog that displays in the **Add Roles and Features Wizard**, click **Add Features** to install the **DFS Management Tools**.
 
-	-	In the details pane, double-click **Deny log on locally** or **Deny access to this computer from the network**.
+    <a name="fig.85"></a>
 
-	-	Select the user or group account you want to remove, and then click **Remove**.
+    ![](./image/FileServerUserGuide/image188.png)
 
-	-	Click **OK** to save your changes to the GPO.
+    Figure 85. Adding the features required for DFS Namespaces
 
-	-	Users that are currently logged on must log off and back on to make the changed GPO settings take effect.
+5. Click **Next** repeatedly until the **Confirm instllation selections** page of the wizard displays, while accepting any default selections, and then verify the installation components.
 
-#### <a name="5.3.17"/> 5.3.17. Reset Password to Local Users
+6. When ready, click **Install** to start the installation. When the installation completes, click **Close**.
 
-1.	Start the console window with Administrator privilege.
->	For more details, please refer to [5.3.24. How to start console with Administrator privilege](#5.3.24).
+  <a name="fig.86"></a>
 
-2.	Type the following commands in the console windows, and press **Enter**.
-```
-	net.exe user Administrator Password01!
-```
+  ![](./image/FileServerUserGuide/image189.png)
 
-#### <a name="5.3.18"/> 5.3.18. Create an Asymmetric share
+  Figure 86. Confirming installation selections for DFS Namespaces feature
 
-1.	Start the console window with Administrator privilege.
->	For more details, please refer to [5.3.24. How to start console with Administrator privilege](#5.3.24).
+##### <a name="5.3.10.2"/> 5.3.10.2 Create a share named FileShare
 
-2.	Type the following commands in the console windows on both nodes (i.e. `Node01` and `Node02`):, and press **Enter**.
-```
-	REG ADD HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters /v AsymmetryMode /t REG_DWORD /d 2 /f
-```
+To create a share named FileShare, perform the steps that follow.
 
-#### <a name="5.3.19"/> 5.3.19. Create the virtual hard disk file
+1. Create a folder named **FileShare** in the path **%SystemDrive%\FileShare** on the Node02 computer, that is, if you have a Node02 computer in your **DOMAIN** environment. Otherwise, proceed to step 3 for the Node01 computer in the **WORKGROUP** environment.
 
-There are two ways to create the virtual hard disk file: **PowerShell** and **Manually**. Hyper-V Role is required to be installed for both ways to work.
+2. Share the **FileShare** folder with **Read/Write** permissions to the **CONTOSO\Administrator**. Skip steps 3 and 4.
 
-For example, if we want to create a virtual hard disk named `rsvd.vhdx`.
+3. If you do not have a Node02 computer in your environment, create a folder named **FileShare** in the path **%SystemDrive%\FileShare** on the SUT (Node01) computer in the **WORKGROUP** environment.
 
--	**PowerShell**
+4. Share the **FileShare** folder with **Read/Write** permissions to the **Node01\Administrator** account for the **WORKGROUP** environment (or to the **CONTOSO\Administrator** if in the **DOMAIN** environment).
 
-	-	Start Windows PowerShell (x86) from `%SystemRoot%\syswow64\WindowsPowerShell\v1.0\` with Administrator privilege and execute the following command:
-	```
-		"create vdisk file=%SystemDrive%\rsvd.vhdx maximum=1024 type=expandable" | diskpart.exe
-	```
+    For further details, see section [5.3.1 Create a share](#5.3.1).
 
-	> For more details, please reference <https://technet.microsoft.com/en-us/library/gg252579(v=ws.11).aspx>.
+##### <a name="5.3.10.3"/> 5.3.10.3 Create DFS name spaces
 
--	**Manually**
+###### <a name="5.3.10.3.1"/> 5.3.10.3.1 Create Stand-alone namespace: SMBDfs
 
-	-	Open **Hyper-V manager** in the right panel, click **New** -&gt; **Hard Disk**.
+To create a stand-alone DFS namespace, perform the steps that follow.
 
-	![](./image/FileServerUserGuide/image216.png)
+1. In **Server Manager** -> **Dashboard**, click the **Tools** drop-down in the upper-right sector of the management dashboard, and then click **DFS Management** to start the  **DFS Management** console on the SUT (Node01) computer.
 
-	-	Choose **VHDX** for **Disk Format**.
+    <a name="fig.87"></a>
 
-	![](./image/FileServerUserGuide/image142.png)
+    ![](./image/FileServerUserGuide/image61.png)
 
-	-	Choose **Dynamically expanding** for **Disk Type**.
+    Figure 87. Server Manager Dashboard: Selecting DFS Management in the Tools menu
 
-	![](./image/FileServerUserGuide/image143.png)
+2. In the left pane of the **DFS Management** console, right-click the **Namespaces** node and then select **New Namespace...** in the context menu that displays.
 
-	-	Type the name of the virtual hard disk file in the **Name** field.
+    <a name="fig.88"></a>
 
-	![](./image/FileServerUserGuide/image144.png)
+    ![](./image/FileServerUserGuide/image62.png)
 
-	-	Type `1` for the **Size** field. And click **Finish** to create the virtual disk file.
+    Figure 88. DFS Management console: Creating a new Namespace
 
-	![](./image/FileServerUserGuide/image145.png)
+3. On the **Namespace server** tab of the **New Namespace Wizard**, type `Node01` (or `Node02` if appropriate) in the **Server** textbox to specify the server name where the namespace is to be hosted. When complete, click **Next**.
 
-#### <a name="5.3.20"/> 5.3.20. Create the virtual hard disk set file
+    <a name="fig.89"></a>
 
-There are two ways to create the virtual hard disk set file: **PowerShell** and **Manually**.
+    ![](./image/FileServerUserGuide/image63.png)
 
-For example, if we want to create a virtual hard disk set named `rsvd.vhds`.
+    Figure 89. New Namespace Wizard: Specifying the Server name to host the Namespace
 
--	**PowerShell**
+4. On the **Namespace Name and Settings** tab of the **New Namespace Wizard**, type `SMBDfs` in the **Name** textbox to specify the name of the namespace. When complete, click the **Edit Settings...** button to display the Edit Settings dialog from where you can create access permission settings.
 
-	-	Start Windows PowerShell (x86) from `%SystemRoot%\syswow64\WindowsPowerShell\v1.0\` with Administrator privilege and execute the following command:
-	```
-		New-VHD "$env:SystemDrive\rsvd.vhds" -SizeBytes 1GB -Fixed -LogicalSectorSizeBytes 512
-	```
+    <a name="fig.90"></a>
 
--	**Manually**
+    ![](./image/FileServerUserGuide/image64.png)
 
-	-	Open **Hyper-V manager** in the right panel, click **New** -&gt; **Hard Disk**.
+    Figure 90. New Namespace Wizard: Specifying the Namespace name
 
-	![](./image/FileServerUserGuide/image216.png)
+5. In the **Edit Settings** dialog, under **Shared folder permissions**, select the option **Administrators have full access; other users have read-only permissions**, and click **OK**. When complete, click **Next**.
 
-	-	Choose **VHD Set** for **Disk Format**.
+    <a name="fig.91"></a>
 
-	![](./image/FileServerUserGuide/image146.png)
+    ![](./image/FileServerUserGuide/image65.png)
 
-	![](./image/FileServerUserGuide/image147.png)
-	
-	-	Choose **Fixed size** for **Disk Type**.
+    Figure 91. Edit Settings dialog: Setting Shared folder permissions
 
-	-	Type the name of the virtual hard disk set file in the **Name** field.
+6. On the **Namespace Type** tab of the **New Namespace Wizard**, select the **Stand-alone namespace** type and then click **Next**.
 
-	![](./image/FileServerUserGuide/image148.png)
+    <a name="fig.92"></a>
 
-	-	Type `1` for **Size** field. And click **Finish** to create the virtual disk file.
+    ![](./image/FileServerUserGuide/image66.png)
 
-	![](./image/FileServerUserGuide/image149.png)
+    Figure 92. New Namespace Wizard: Specifying the Namespace Type as Stand-Alone
 
-#### <a name="5.3.21"/> 5.3.21. Modify the Signing configuration
+7. From the **Review Settings and Create Namespace** page of the **New Namespace Wizard**, click **Create**. When processing is finished, click **Close** to complete the wizard.
 
-1.	Start the console window with Administrator privilege.
->	For more details, please refer to [5.3.24. How to start console with Administrator privilege](#5.3.24).
+    <a name="fig.93"></a>
 
-2.	Type the following commands in the console windows, and press **Enter**.
-```
-	# To enable SigningRequired:
-	cmd /C reg ADD "HKLM\System\ControlSet001\Services\LanmanServer\Parameters" /f /v requiresecuritysignature /t REG_DWORD /d 1
+    ![](./image/FileServerUserGuide/image67.png)
 
-	# To disable SigningRequired:
-	cmd /C reg DELETE "HKLM\System\ControlSet001\Services\LanmanServer\Parameters" /f /v requiresecuritysignature
-```
+    Figure 93. New Namespace Wizard: Reviewing Settings and Creating the SMBDfs Namespace
 
-#### <a name="5.3.22"/>  5.3.22. Manually Setup Computer Password
+###### <a name="5.3.10.3.2"/> 5.3.10.3.2 Create the Stand-alone namespace: Standalone
 
-To set the password for the computer's domain account.
+To create a stand-alone namespace named Standalone, perform the indicated step that follows.
 
-1.	Run the following command in a console window:
-```
-	ksetup /SetComputerPassword <password>
-```
+1. Repeat steps 2 through 7 in section [5.3.10.3.1 Create Stand-alone namespace: SMBDfs](#5.3.10.3.1), to create another stand-alone namespace with the name **Standalone**.
 
-2.	Restart the computer.
+###### <a name="5.3.10.3.3"/> 5.3.10.3.3 Create Domain-based namespace: DomainBased (DOMAIN Environment Only)
 
-#### <a name="5.3.23"/> 5.3.23. Create an SQOS policy 
+To create a stand-alone namespace named **DomainBased**, perform the steps that follow.
 
-To create a MultiInstance sqos policy in the scale out file server.
+1. Repeat steps 1 to 5 in section [5.3.10.3.1 Create Stand-alone namespace: SMBDfs](#5.3.10.3.1) to create a Domainbased namespace with the name **DomainBased**.
 
-1.	Start Windows PowerShell (x86) from `%SystemRoot%\syswow64\WindowsPowerShell\v1.0\` with Administrator privilege and execute the following command:
-```
-	# If you are configuring on a platform earlier than Windows Server 2016 TP5, run the following command.
-	$policy = New-StorageQosPolicy -Name sqostest -PolicyType MultiInstance -MinimumIops 100 -MaximumIops 200
-	
-	# If you are configuring on a platform with Windows Server 2016 TP5 or later, run the following command.
-	$policy = New-StorageQosPolicy -Name sqostest -PolicyType Aggregated -MinimumIops 100 -MaximumIops 200 -MaximumIOBandwidth 1600
-```
+2. Thereafter, on the **Namespace Type** tab of the **New Namespace Wizard**, select **Domain-based namespace** and then click **Next**.
 
-2.	Get the policy id by running the following command in the same console as above:
-```
-	$policy.PolicyId
-```
+    <a name="fig.94"></a>
 
-#### <a name="5.3.24"/> 5.3.24. How to start console with Administrator privilege
+    ![](./image/FileServerUserGuide/image68.png)
 
-To start the console window with Administrator privilege.
+    Figure 94. New Namespace Wizard: Specifying the Namespace Type for the **DomainBased** Namespace
 
-1.	Click **Start**, and type `cmd`. Then right click **Command Prompt**, and select **Run as Administrator**.
+3. From the **Review Settings and Create Namespace** page of the **New Namespace Wizard**, click **Create**. When processing is finished, click **Close** to complete the wizard.
 
-	![](./image/FileServerUserGuide/image178.png)
-	
-#### <a name="5.3.25"/> 5.3.25. Enable short name
+    <a name="fig.95"></a>
 
-1.	Start the console window with Administrator privilege.
->	For more details, please refer to [5.3.24. How to start console with Administrator privilege](#5.3.24).
+    ![](./image/FileServerUserGuide/image69.png)
 
-2.	If you want to enable short name on volume e.g. C:, type the following commands in the console windows:
-```
-	fsutil 8dot3name set c:\ 0
-```
+    Figure 95. New Namespace Wizard: Reviewing Settings and Creating the **DomainBased** Namespace
 
-#### <a name="5.3.26"/> 5.3.26. Create a volume shadow copy
+##### <a name="5.3.10.4"/> 5.3.10.4 Create DFS Link for the Namespaces
 
-1.	Start the console window with Administrator privilege.
->	For more details, please refer to [5.3.24. How to start console with Administrator privilege](#5.3.24).
+###### <a name="5.3.10.4.1"/> 5.3.10.4.1 Add Folder SMBDfsLink to Namespace SMBDfs
 
-2.	If you want to create a shadow copy on volume e.g. C:, type the following commands in the console windows:
-```
-	vssadmin.exe Create Shadow /For=c:\ /AutoRetry=2
-```
+To add the folder SMBDfsLink to the SMBSDfs namespace, perform the steps that follow.
 
-#### <a name="5.3.27"/> 5.3.27. Create a volume mount point
+1. In the **DFS Management** console, as described in section [5.3.10.3.1 Create Stand-alone namespace: SMBDfs](#5.3.10.3.1), right-click the newly created namespace **\\\\Node01\\\SMBDfs** and then click **New Folder...** in the context menu that displays to add a new folder to this share.
 
-1.	Start the console window with Administrator privilege.
->	For more details, please refer to [5.3.24. How to start console with Administrator privilege](#5.3.24).
+    <a name="fig.96"></a>
 
-2.  First create a new folder (e.g. name is MountPoint), type the following command in the console windows:
-```
-	mkdir MountPoint
-```
+    ![](./image/FileServerUserGuide/image70.png)
 
-    Then list the mounted volume (e.g. volume C:) name:
-```
-	mountvol c: /l
-```
+    Figure 96. DFS Management console: Creating a New Folder in the SMBDfs Namespace
 
-	Then create the mount point. The output of the above command is the volume name, it will be used in the command below:
-```
-	mountvol MountPoint [volume name copied from the above command]
-```
-	
-## <a name="6"/> 6. Installed Files and Folders
+2. In the **Name** textbox of the **New Folder** dialog, type `SMBDfsLink` to specify the new folder name and then click **Add...** to display the **Add Folder Target** dialog, from where you will add the path to the folder target.
 
-The installation process adds the following folders and files to the driver computer: `%SystemDrive%\MicrosoftProtocolTests\FileServer\Server-Endpoint\<version#>\`
+    <a name="fig.97"></a>
 
->	![](./image/FileServerUserGuide/image1.png)Note
+    ![](./image/FileServerUserGuide/image71.png)
 
->	&emsp;&emsp;This path may vary based on your own configuration.
+    Figure 97. New Folder dialog: Adding an SMBDfsLink Folder to the SMBDfs Namespace
 
-The &lt;*version\#&gt;* placeholder indicates the installed build version number of the test suite.
+3. In the **Path to folder target** textbox of the **Add Folder Target** dialog, type `\\Node02\FileShare` and then click OK.
 
-| File or Folder     | Description                                                               |
-|--------------------|---------------------------------------------------------------------------|
-| Batch              | Command files you can use to run individual test cases or all test cases. |                                                                                                           
-| Bin                | Test suite binaries and configuration files.                              |                                                                                                       
-| License.rtf        | The End User License Agreement.                                           |
+    If the **Node02** computer does not exist in your environment, set the folder target to **\\\\Node01\\FileShare**. Note that the **FileShare** folder will be located on the **Node02** computer, only if you are testing a cluster configuration. For more information, see [Figure 2](#fig.2) in section [4.2 Domain Environment](#4.2) and section [5.3.10.2 Create a share named FileShare](#5.3.10.2).
 
-## <a name="7"/> 7. Configure and Run Test Cases 
+    <a name="fig.98"></a>
 
-This section explains how to configure the test suite and how to run test cases.
+    ![](./image/FileServerUserGuide/image72.png)
 
-There are two ways to configure your test suite: by **Protocol Test Manager** and **Manually**.
+    Figure 98. Add Folder Target dialog: Specifying FileShare as the Folder Target
 
-There are three ways to run your test cases: by **Protocol Test Manager**, **Batch Script** and **Visual Studio**. 
+4. In the **Browse for Shared Folders** dialog, select **FileShare** in the Shared folders listview and then click **OK**.
+
+    <a name="fig.99"></a>
+
+    ![](./image/FileServerUserGuide/image73.png)
+
+    Figure 99. Browse for Shared Folders dialog: Selecting the FileShare shared folder
+
+5. When complete, click **OK** in the **New Folder** dialog.
+
+###### <a name="5.3.10.4.2"/> 5.3.10.4.2 Add Two Folders to Standalone Namespace
+
+To add two folders to the Standalone namespace, perform the steps that follow.
+
+1. In the **DFS Management** console, right-click the newly created namespace **\\\\Node01\\Standalone** and then click **New Folder...** in the context menu that displays.
+
+    <a name="fig.100"></a>
+
+    ![](./image/FileServerUserGuide/image190.png)
+
+    Figure 100. DFS Management console: Creating a New Folder in the Standalone Namespace
+
+2. In the **Name** textbox of the **New Folder** dialog, type `DFSLink` to specify the new folder name, and then click **Add...** to display the **Add Folder Target** dialog, from where you will add the path to the folder target.
+
+    <a name="fig.101"></a>
+
+    ![](./image/FileServerUserGuide/image74.png)
+
+    Figure 101. New Folder dialog: Creating a DFSLink folder in the Standalone Namespace
+
+3. In the **Path to folder target** textbox, type `\\Node02\FileShare` in the **Add Folder Target** dialog. When complete, click **OK** and then click **OK** again in the **New Folder** dialog.
+
+    If the **Node02** computer does not exist in your environment, set the folder target to **\\\\Node01\\FileShare**. Note that the **FileShare** folder will be located on the **Node02** computer, only if you are testing a cluster configuration. For more information, see [Figure 2](#fig.2) in section [4.2 Domain Environment](#4.2) and section [5.3.10.2 Create a share named FileShare](#5.3.10.2).
+
+    <a name="fig.102"></a>
+
+    ![](./image/FileServerUserGuide/image75.png)
+
+    Figure 102. Add Folder Target dialog: Specifying the path to the folder target
+
+4. Repeat step 1 and then in the **Name** textbox of the **New Folder** dialog, type `Interlink` to specify the new folder name. When complete, click **Add...** to display the **Add Folder Target** dialog, from where you will add the path to the next folder target.
+
+    <a name="fig.103"></a>
+
+    ![](./image/FileServerUserGuide/image76.png)
+
+    Figure 103. New Folder dialog: Adding the Interlink folder to the Standalone Namespace
+
+5. In the **Path to folder target** textbox of the **Add Folder Target** dialog, type `\\Node01\SMBDfs\SMBDfsLink`. When complete, click **OK** and then click **OK** again in the **New Folder** dialog.
+
+    <a name="fig.104"></a>
+
+    ![](./image/FileServerUserGuide/image77.png)
+
+    Figure 104. Add Folder Target dialog: Specifying the folder target path for the Interlink folder
+
+6. In the **DFS Management** console, verify the presence of the two newly created folders under the **Standalone** namespace.
+
+    <a name="fig.105"></a>
+
+    ![](./image/FileServerUserGuide/image78.png)
+
+    Figure 105. DFS Management console: Verifying the new Standalone Namespace folders
+
+###### <a name="5.3.10.4.3"/> 5.3.10.4.3 Add Two Folders to the Namespace: DomainBased (DOMAIN Environment Only)
+
+To add two new folders to the **DomainBased** namespace, perform the steps that follow.
+
+1. In the **DFS Management** console, right-click the newly created namespace **\\\\contoso.com\\DomainBased** and then click **New Folder...** in the context menu that displays, in order to display the **New Folder** dialog.
+
+    <a name="fig.106"></a>
+
+    ![](./image/FileServerUserGuide/image208.png)
+
+    Figure 106. DFS Management console: Creating a new folder in the **DomainBased** Namespace
+
+2. In the **Name** textbox of the **New Folder** dialog, type `DFSLink` to specify the new folder name and then click **Add...** to display the **Add Folder Target** dialog, from  where you can specify the path to the folder target.
+
+    <a name="fig.107"></a>
+
+    ![](./image/FileServerUserGuide/image79.png)
+
+    Figure 107. New Folder dialog: Naming the "DFSLink" folder
+
+3. In the **Path to folder target** textbox of the **Add Folder Target** dialog, type `\\Node02\FileShare`. When complete, click **OK**.
+
+    If the **Node02** computer does not exist in your environment, set the target to **\\\\Node01\\FileShare**. Note that the **FileShare** folder will be located on the **Node02** computer, only if you are testing a cluster configuration. For more information, see [Figure 2](#fig.2) in section [4.2 Domain Environment](#4.2) and section [5.3.10.2 Create a share named FileShare](#5.3.10.2).
+
+    <a name="fig.108"></a>
+
+    ![](./image/FileServerUserGuide/image80.png)
+
+    Figure 108. Add Folder Target: Specifying the folder target for the DFSLink folder
+
+4. Repeat step 1 of this procedure.
+
+5. In **Name** textbox of the **New Folder** dialog, type `Interlink` to specify the new folder name and then click **Add...** to display the **Add Folder Target** dialog from where you can specify the path to the folder target.
+
+    <a name="fig.109"></a>
+
+    ![](./image/FileServerUserGuide/image81.png)
+
+    Figure 109. New Folder dialog: Naming the "Interlink" folder
+
+6. In the **Path to folder target** textbox of the **Add Folder Target** dialog, type `\\Node01\SMBDfs\SMBDfsLink` and then click the **Browse...** button. When complete, click OK.
+
+    <a name="fig.110"></a>
+
+    ![](./image/FileServerUserGuide/image82.png)
+
+    Figure 110. Add Folder Target: Specifying the folder target for the Interlink folder
+
+7. In the **DFS Management** console, verify the presence of the two newly created folders under the **DomainBased** namespace.
+
+    <a name="fig.111"></a>
+
+    ![](./image/FileServerUserGuide/image83.png)
+
+    Figure 111. DFS Management console: Verifying the new DFSLink and Interlink folders
+
+#### <a name="5.3.11"/> 5.3.11 Setup SAN Storage Server
+
+This section describes how to set up a storage area network (SAN) storage server for use with this Test Suite.
+
+> ![](./image/FileServerUserGuide/image1.png)**Note**
+>
+> Do not join the SAN Storage Server to the domain provided by the DC.
+
+##### <a name="5.3.11.1"/> 5.3.11.1 Install iSCSI Target
+
+To install the **File Server** and **iSCSI Target Server** roles on the Storage01 computer, perform the steps that follow.
+
+1. From the **Manage** drop-down in **Server Manager**, click the **Add Roles and Features** list item.
+
+    <a name="fig.112"></a>
+
+    ![](./image/FileServerUserGuide/image84.png)
+
+    Figure 112. Server Manager: Launching the Add Roles and Features Wizard
+
+2. In the **Add Roles and Features Wizard**, repeatedly click the **Next** button while accepting all the default settings, until the **Select server roles** page of the wizard is displayed.
+
+3. Expand the **File And Storage Services** node and select the **File Server** and **iSCSI Target Server** checkboxes to install these roles on the destination **Storage01** computer. When complete, click **Next**.
+
+    <a name="fig.113"></a>
+
+    ![](./image/FileServerUserGuide/image85.png)
+
+    Figure 113. Add Roles and Features Wizard:  Adding the File Server and iSCSI Target Server roles
+
+4. Click the **Add Features** button in the **Add features that are required for iSCSI Target Server?** page of the wizard to confirm addition of the required features.
+
+    <a name="fig.114"></a>
+
+    ![](./image/FileServerUserGuide/image86.png)
+
+    Figure 114. Add Roles and Features Wizard: Adding the File Server feature
+
+5. In the **Add Roles and Features Wizard**, repeatedly click **Next** while accepting any default settings, until the **Confirm installation selections** page of the wizard displays. When confirmation is complete, click **Install**.
+
+    <a name="fig.115"></a>
+
+    ![](./image/FileServerUserGuide/image87.png)
+
+    Figure 115. Add Roles and Features Wizard: Confirming roles for installation
+
+##### <a name="5.3.11.2"/> 5.3.11.2 Create Virtual Disks for Failover Cluster Nodes
+
+To create virtual disks for the failover cluster node, perform the steps that follow.
+
+![](./image/FileServerUserGuide/image1.png)**Note**
+
+This procedure should be performed only after installing the iSCSI target via section [5.3.11.1 Install iSCSI Target](#5.3.11.1).
+
+1. Navigate to **Server Manager** -> **File and Storage Services** -> **iSCSI Virtual Disks** and then click **Launch the New Virtual Disk wizard to create a virtual disk**.
+
+    <a name="fig.116"></a>
+
+    ![](./image/FileServerUserGuide/image88.png)
+
+    Figure 116. Server Manager: Launching the New iSCSI Virtual Disk Wizard
+
+2. In the **New iSCSI Virtual Disk Wizard**, select either the **Select by volume** or **Type a custom path** option under **Storage location**: for the location of the new virtual disk. When complete, click **Next**.
+
+    <a name="fig.117"></a>
+
+    ![](./image/FileServerUserGuide/image89.png)
+
+    Figure 117. New iSCSI Virtual Disk Wizard: Choosing the disk storage location
+
+3. On the **Virtual Disk Name** tab of the New iSCSI Virtual Disk Wizard, type the virtual disk name `QuorumDisk` in the **Name** textbox.
+
+    <a name="fig.118"></a>
+
+    ![](./image/FileServerUserGuide/image90.png)
+
+    Figure 118. New iSCSI Virtual Disk Wizard: Specifying the iSCSI virtual disk name
+
+4. On the **Virtual Disk Size** tab of the New iSCSI Virtual Disk Wizard, configure the virtual disk size as 1GB by typing `1` in the **Size** textbox and selecting **GB** in the associated drop-down.
+
+    <a name="fig.119"></a>
+
+    ![](./image/FileServerUserGuide/image91.png)
+
+    Figure 119. New iSCSI Virtual Disk Wizard: Specifying the iSCSI virtual disk size
+
+5. On the **iSCSI Target** tab of the **New iSCSI Virtual Disk Wizard**, select the **New iSCSI target** option for failover cluster node access.
+
+    <a name="fig.120"></a>
+
+    ![](./image/FileServerUserGuide/image92.png)
+
+    Figure 120. New iSCSI Virtual Disk Wizard: Specifying the New iSCSI target
+
+6. On the **Target Name and Access** tab of the wizard, type `TargetForCluster01` in the **Name** textbox as the iSCSI target.
+
+    <a name="fig.121"></a>
+
+    ![](./image/FileServerUserGuide/image93.png)
+
+    Figure 124. New iSCSI Virtual Disk Wizard: Specifying the iSCSI target Name
+
+7. On the **Access Servers** tab of the wizard, click **Add** to display the **Add initiator ID** dialog, from where you can specify the iSCSI initiators of the Failover Cluster node that will access the iSCSI virtual disk and target.
+
+    <a name="fig.122"></a>
+
+    ![](./image/FileServerUserGuide/image94.png)
+
+    Figure 122. New iSCSI Virtual Disk Wizard: displaying the Add Initiator ID dialog
+
+8. There are several ways to provide target access to a specific machine, as follows.
+
+    * If the **Select from the initiator cache on the target server** option is available and the list is populated, select the iSCSI Qualified Names (IQNs) of failover cluster nodes from the list.
+
+    * If the **Enter a value for the selected type** option is selected and a type appears in the **Type** drop-down, specify one or more values for the iSCSI initiators of failover cluster nodes in the **Value** textbox. In this example, an **IP Address** type is used.
+
+    When complete, click **OK** to return to the **Access Servers** tab in the wizard.
+
+    ![](./image/FileServerUserGuide/image1.png)**Note**
+
+    If you wish to add another value, repeat steps 7 and 8.
+
+    <a name="fig.123"></a>
+
+    ![](./image/FileServerUserGuide/image95.png)
+
+    Figure 123. New iSCSI Virtual Disk Wizard: Specifying target access to a specific machine
+
+    <a name="fig.124"></a>
+
+    ![](./image/FileServerUserGuide/image96.png)
+
+    Figure 124. New iSCSI Virtual Disk Wizard: Specifying iSCSI initiators to access iSCSI virtual disk
+
+9. Repeatedly click **Next** while accepting any existing default settings until the **Confirm selections** page of the wizard displays.
+
+10. Verify correctness of the settings specified on the **Confirmation** tab and then click **Create** to complete the wizard.
+
+    <a name="fig.125"></a>
+
+    ![](./image/FileServerUserGuide/image97.png)
+
+    Figure 125. New iSCSI Virtual Disk Wizard: Confirming iSCSI settings
+
+11. After creating the first virtual disk, create one or more additional virtual disks by right-clicking the white space in the **iSCSI VIRTUAL DISKS** listview and selecting **New iSCSI Virtual Disk...** in the context menu that displays; this action launches the **New iSCSI Virtual Disk Wizard** again.
+
+    <a name="fig.126"></a>
+
+    ![](./image/FileServerUserGuide/image98.png)
+
+    Figure 126. New iSCSI Virtual Disk Wizard: Creating a new iSCSI virtual disk
+
+12. Repeat steps 2 through 5 and 7 through 10 to create additional virtual disks as shared storage for the failover cluster to use. As you are performing step 5 in the specified range, ensure that you do the following:
+
+    * From the **iSCSI Target** tab of the **Assign iSCSI target** page of the wizard, select the **Existing iSCSI target** option which specifies the **targetforcluster01** created in section [5.3.11.1 Install iSCSI Target](#5.3.11.1), as shown in the following figure.
+
+    * When complete, click **Next**.
+
+    <a name="fig.127"></a>
+
+    ![](./image/FileServerUserGuide/image99.png)
+
+    Figure 127. New iSCSI Virtual Disk Wizard: Specifying an existing iSCSI target
+
+13. Using the disk name and size properties that are recommended for this **Test Suite**, as specified in the table that follows, create new virtual storage disks **FSDisk01** and **FSDisk02** for the failover cluster.
+
+    <a name="table.10"></a>
+
+    **Table 10. New virtual storage disks**
+
+    | Disk Name     | Size     | Purpose                                                                        |
+    |---------------|----------|--------------------------------------------------------------------------------|
+    | Quorumdisk    | 1 GB     | Quorum disk for a two-node cluster                                             |
+    | FSDisk01      | 10 GB    | Storage used by file server for general use on failover cluster                |
+    | FSDisk02      | 10 GB    | Storage used by file server for scale-out application data on failover cluster |
+
+    ![](./image/FileServerUserGuide/image1.png)**Note**
+
+    After you finish creating the iSCSI virtual disks **FSDisk01** and **FSDisk02** for the failover cluster, you can correlate the iSCSI target names with additional details in Server Manager, as shown in the figure that follows, by selecting any one of the virtual disks in the listview.
+
+    <a name="fig.128"></a>
+
+    ![](./image/FileServerUserGuide/image100.png)
+
+    Figure 128. Server Manager: iSCSI targets for Storage01
+
+#### <a name="5.3.12"/> 5.3.12 Set up a Cluster
+
+##### <a name="5.3.12.1"/> 5.3.12.1 Connect to the iSCSI Disks Provided by the SAN Storage Server From two Nodes
+
+To establish a connection to iSCSI disks from failover cluster nodes, perform the steps that follow.
+
+1. From the **Tools** drop-down of **Server Manager** on each failover cluster node (i.e., **Node01** and **Node02**), click **iSCSI Initiator** and then click **Yes** in the **Microsoft iSCSI** dialog to start the **Microsoft® iSCSI service**.
+
+    <a name="fig.129"></a>
+
+    ![](./image/FileServerUserGuide/image101.png)
+
+    ![](./image/FileServerUserGuide/image102.png)
+
+    Figure 129. Server Manager: iSCSI Initiator and iSCSI Service startup
+
+2. From the **Discovery** tab of the **iSCSI Initiator Properties** dialog, click **Discover Portal...** to display the Discover Target Portal dialog from where you can add the **IP address** of the SAN storage server to the **IP address or DNS name** textbox. When complete, click **OK** to exit the **Discover Target Portal** dialog.
+
+    <a name="fig.130"></a>
+
+    ![](./image/FileServerUserGuide/image214.png)
+
+    Figure 130. iSCSI Initiator Properties dialog : Opening the Discover Portal dialog
+
+    <a name="fig.131"></a>
+
+    ![](./image/FileServerUserGuide/image103.png)
+
+    Figure 131. iSCSI Initiator Properties dialog : Specifying the IP address of the SAN storage server
+
+3. From the **Targets** tab of the **iSCSI Initiator Properties** dialog, click **Refresh**, click **Connect**, and then click **OK** in the **Connect to Target** dialog that displays.
+
+    <a name="fig.132"></a>
+
+    ![](./image/FileServerUserGuide/image104.png)
+
+    Figure 132. iSCSI Initiator Properties dialog: Connecting to the Target
+
+4. On either the Failover Cluster **Node01** or **Node02** computer, open the **Run** dialog from the Windows **Start** menu and type `diskmgmt.msc` to launch the **Disk Management** console shown ahead in [Figure 132](#fig.132).
+
+5. Verify that  **Disk 1**, **Disk 2**, and **Disk 3** that you created earlier all appear in the lower sector of the **Disk Management** console.
+
+    In the steps that follow, you will set these disks to online status and then initiatialize them as either **Master Boot Record (MBR)** or **GUID Partition Table (GPT)** disks. You are then required to create them as simple volumes with **NTFS** formatting.
+
+    <a name="fig.133"></a>
+
+    ![](./image/FileServerUserGuide/image105.png)
+
+    Figure 133. Disk Management console: Disk verification
+
+6. Right-click the **Disk 1** identifier pane and then select **Online** in the context menu that displays.
+
+7. In the next context menu that appears, select the **Initialize Disk** item.
+
+    <a name="fig.134"></a>
+
+    ![](./image/FileServerUserGuide/image106.png)
+
+    Figure 134. Disk Management console: Disk initialization
+
+8. In the **Initialize Disk** dialog, select either **MBR** or **GPT** and then click OK.
+
+    <a name="fig.135"></a>
+
+    ![](./image/FileServerUserGuide/image107.png)
+
+    Figure 135. Disk Management console: Initialize Disk dialog
+
+9. In the **Disk Management** console. rightclick the **Unallocated** space panel and select **New Simple Volume...** in the context menu that displays.
+
+    <a name="fig.136"></a>
+
+    ![](./image/FileServerUserGuide/image108.png)
+
+    Figure 136. Disk Management console: Displaying the New Simple Volume Wizard
+
+10. In the **New Simple Volume Wizard** that displays, click **Next**.
+
+    <a name="fig.137"></a>
+
+    ![](./image/FileServerUserGuide/image109.png)
+
+    Figure 137. Disk Management console: New Simple Volume Wizard
+
+11. Repeatedly click **Next**, while accepting all the default settings, until the **Completing the New Simple Volume Wizard** page displays.
+
+12. Click **Finish** to exit the wizard.
+
+    <a name="fig.138"></a>
+
+    ![](./image/FileServerUserGuide/image113.png)
+
+    Figure 141. New Simple Volume Wizard: Completing the wizard
+
+13. Repeat steps 5 through 11 for **Disk 2** and **Disk 3**.
+
+##### <a name="5.3.12.2"/> 5.3.12.2 Install Roles and Features on Each Failover Cluster Node
+
+To install **Roles** and other **Features** on the Failover Cluster **Node01** and **Node02** computers, perform the steps that follow.
+
+1. Logon to both the **Node01** and **Node02** computers with a domain account and perform the steps that follow on both computers.
+
+2. In **Server Manager**, click **Add Roles and Features** in the right-hand pane to start the **Add Roles and Features Wizard**.
+
+3. On the **Server Roles** tab of the **Add Roles and Features Wizard** under **File And Storage Services**, select the **File Server**, **File Server Resource Manager**, and **File Server VSS Agent Service** check boxes.
+
+    <a name="fig.139"></a>
+
+    ![](./image/FileServerUserGuide/image114.png)
+
+    Figure 139. Add Roles and Features Wizard: Configuring File and Storage services
+
+4. On the **Features** tab of the **Add Roles and Features Wizard**, select the **Failover Clustering** check box. When complete, click **Next**.
+
+    <a name="fig.140"></a>
+
+    ![](./image/FileServerUserGuide/image115.png)
+
+    Figure 140. Add Roles and Features Wizard: Selecting the Failover Clustering check box
+
+5. Click **Add Features** in the **Add features that are required for Failover Clustering** page of the wizard.
+
+    <a name="fig.141"></a>
+
+    ![](./image/FileServerUserGuide/image116.png)
+
+    Figure 141. Add Roles and Features Wizard: Add Features required for Failover Clustering
+
+6. When the **Confirmation** tab of the wizard appears, click **Install** to complete the configuration.
+
+##### <a name="5.3.12.3"/> 5.3.12.3 Create Failover Cluster in Either Node
+
+To create a Failover Cluster on the **Node01** or **Node02** computer, perform the steps that follow.
+
+1. Logon to the Failover Cluster **Node01** computer using a domain account that has permissions to create Active Directory computer objects.
+
+2. In **Server Manager**, click the **Tools** drop-down, and then select the **Failover Cluster Manager** list item to open the **Failover Cluster Manager** console.
+
+3. In **Server Manager**, click **Create Cluster...** to open the **Create Cluster Wizard**, from where you can create a cluster configuration comprising the **Node01** and **Node02** computers.
+
+    ![](./image/FileServerUserGuide/image2.png)**Important**
+
+    Before creating the cluster configuration, ensure that shared storage has been created/added to the failover cluster **Node01** and **Node02** computers. For more information,  see section [5.3.11 Set up the SAN Storage Server](#5.3.11).
+
+    <a name="fig.142"></a>
+
+    ![](./image/FileServerUserGuide/image117.png)
+
+    Figure 142. Server Manager: Launching the Create Cluster Wizard
+
+4. On the **Select Servers** tab of the **Create Cluster Wizard**, type the name of the Failover Cluster `Node01` computer in the **Enter server name** textbox and then click the **Add** button to add the server name to the **Selected servers** list.
+
+    <a name="fig.143"></a>
+
+    ![](./image/FileServerUserGuide/image118.png)
+
+    Figure 143. Create Cluster Wizard: Adding servers to the cluster
+
+5. On the **Validation Warning** tab of the **Create Cluster Wizard**, optionally select **Yes** if you want cluster configuration validation tests to run automatically. Select **No** to skip these tests. When complete, click Next to continue the wizard.
+
+    <a name="fig.144"></a>
+
+    ![](./image/FileServerUserGuide/image119.png)
+
+    Figure 144. Create Cluster Wizard: Setting up for running configuration validation tests
+
+6. On the **Access Point for Administering the Cluster** tab of the **Create Cluster Wizard**, type `Cluster01` in the **Cluster Name** textbox and specify the IP addresses of the cluster if the cluster nodes are using static IP addresses in a subnet (for example, `192.168.1.100` and `192.168.2.100`).  When complete, click **Next**.
+
+    <a name="fig.145"></a>
+
+    ![](./image/FileServerUserGuide/image120.png)
+
+    Figure 145. Create Cluster Wizard : Naming the Cluster access point
+
+7. On the **Confirmation** tab of the **Create Cluster Wizard**, verify the correctness of the cluster configuration settings.  When complete, click **Next** to begin creating your cluster.
+
+    <a name="fig.146"></a>
+
+    ![](./image/FileServerUserGuide/image121.png)
+
+    Figure 146. Create Cluster Wizard: Verifying the cluster settings
+
+8. Click Finish to exit the wizard.
+
+    <a name="fig.147"></a>
+
+    ![](./image/FileServerUserGuide/image122.png)
+
+    Figure 147. Create Cluster Wizard: Completing the Create Cluster Wizard
+
+##### <a name="5.3.12.4"/> 5.3.12.4 Create File Server on Failover Cluster
+
+To create a File Server on the failover cluster, perform the steps that follow.
+
+1. From either the failover cluster **Node01** or **Node02** computer, open **Server Manager**, click the **Tools** drop-down, and then select the **Failover Cluster Manager** list item to open the **Failover Cluster Manager** console.
+
+2. In the left pane of the **Failover Cluster Manager**, right-click **Roles** and then select **Configure Role...** in the context menu that displays.
+
+    <a name="fig.148"></a>
+
+    ![](./image/FileServerUserGuide/image123.png)
+
+    Figure 148. Failover Cluster Manager: Launching the High Availability Wizard to configure the File Server role
+
+3. On the **Select Role** tab of the **High Availability Wizard**, select the File Server role and then click **Next**.
+
+    <a name="fig.149"></a>
+
+    ![](./image/FileServerUserGuide/image124.png)
+
+    Figure 149. High Availability Wizard: Selecting the File Server Role
+
+4. On the **File Server Type** tab of the **High Availability Wizard**, select the **File Server for general use** option and then click **Next**.
+
+    <a name="fig.150"></a>
+
+    ![](./image/FileServerUserGuide/image125.png)
+
+    Figure 150. High Availability Wizard: Specifying the File Server Type
+
+5. In the **Name** textbox on the **Client Access Point** tab of the **High Availability Wizard**, type `GeneralFS` as the access point name and then specify the IP addresses of the cluster role, that is, if the clustered role is using static IP addresses in a subnet (for example, `192.168.1.200` and `192.168.2.200`), and so on. When complete, click Next.
+
+    <a name="fig.151"></a>
+
+    ![](./image/FileServerUserGuide/image126.png)
+
+    Figure 151. High Availability Wizard: Specifying the client access point Name and cluster IP addresses
+
+6. On the **Select Storage** tab of the **High Availability Wizard**, select a storage volume that you want to assign to the cluster. When complete click **Next**.
+
+    <a name="fig.152"></a>
+
+    ![](./image/FileServerUserGuide/image127.png)
+
+    Figure 152. High Availability Wizard: Specifying the storage volume for the clustered Role
+
+7. Click **Next** repeatedly, while accepting the wizard default values, until the **Summary** tab of the **High Availability Wizard** displays and then click **Finish** to complete the wizard.
+
+    <a name="fig.153"></a>
+
+    ![](./image/FileServerUserGuide/image128.png)
+
+    Figure 153. High Availability Wizard: Completing the High Availability Wizard
+
+8. To set up a File Server for the scale-out of application data, repeat the steps of this procedure with the following differences:
+
+    * In step 4, select the **Scale-Out File Server for application data** option to create a File Server for the scale-out of application data.
+
+        Click **Next** when complete.
+
+    <a name="fig.154"></a>
+
+    ![](./image/FileServerUserGuide/image209.png)
+
+    Figure 154. High Availability Wizard: Specifying the Scale-Out File Server option
+
+    * In step 5, type `ScaleOutFS` in the **Name** textbox as the client access point name.
+
+    <a name="fig.155"></a>
+
+    ![](./image/FileServerUserGuide/image129.png)
+
+    Figure 155. High Availability Wizard: Naming the client access point as ScaleOutFS
+
+##### <a name="5.3.12.5"/> 5.3.12.5 Add Scale-out Share Volume
+
+To configure an Add Scale-out share volume, perform the steps that follow.
+
+1. In the **Failover Cluster Manager**, click the **Storage** node in the left-hand pane of the console and then select  an existing **Cluster Disk** with the **Assigned To** property set to **Available Storage**.
+
+2. Right-click the selected **Cluster Disk** and choose **Add to Cluster Shared Volumes** in the context menu that displays to create a file share on the File Server for the scale-out of application data.
+
+    <a name="fig.156"></a>
+
+    ![](./image/FileServerUserGuide/image141.png)
+
+    Figure 156. Failover Cluster Manager console: Adding a Cluster Disk to the Cluster Shared Volumes
+
+##### <a name="5.3.12.6"/> 5.3.12.6 Create a File Share for the Cluster
+
+To  create a file share on the File Server, perform the steps that follow.
+
+1. In the left pane of the **Failover Cluster Manager**, select the **Roles** node in the console tree view and choose a server **Name** whose **Type** property is set to **File Server**, for example,  **GeneralFS** in the figure below.
+
+2. Right-click the server **Name** and then select **Add Shared Folder** in the context menu that displays to create a file share on the File Server for general use.
+
+    <a name="fig.157"></a>
+
+    ![](./image/FileServerUserGuide/image130.png)
+
+    Figure 157. Failover Cluster Manager: Launching the New Share Wizard to create a file share on the File Server
+
+3. On the **Select Profile** tab of the **New Share Wizard**, select **SMB Share – Quick** in the **File share profile** list and then click **Next**.
+
+    <a name="fig.158"></a>
+
+    ![](./image/FileServerUserGuide/image131.png)
+
+    Figure 158. New Share Wizard: Creating an SMB share with SMB Share – Quick
+
+4. On the **Share Location** tab of the **New Share Wizard**, select the **Select by volume** option and then click **Next**.
+
+    <a name="fig.159"></a>
+
+    ![](./image/FileServerUserGuide/image132.png)
+
+    Figure 159. New Share Wizard: Specifying the Select by volume option
+
+5. In the **Share name** textbox on the **Share Name** tab of the **New Share Wizard**, type `SMBClustered` for the share name and then click **Next**.
+
+    <a name="fig.160"></a>
+
+    ![](./image/FileServerUserGuide/image133.png)
+
+    Figure 160. New Share Wizard: Specifying the share name as **SMBClustered**
+
+6. On the **Other Settings** tab of the **New Share Wizard**, select the **Enable continuous availability** and **Allow caching of share** options and then click **Next**.
+
+    <a name="fig.161"></a>
+
+    ![](./image/FileServerUserGuide/image134.png)
+
+    Figure 161. New Share Wizard: Configuring share settings
+
+7. Grant **Full Control** to the account that will be used to access the file share, according to the steps that follow while using the figures that follow as a reference:
+
+    * On the **Permissions** tab of the **New Share Wizard**, click the **Customize Permissions** button to display the **Advanced Security Settings for SMBClustered** dialog.
+
+    * On the **Share** tab of the **Advanced Security Settings for SMBClustered** dialog, click the **Add** button to display the **Permission Entry for SMBClustered** dialog.
+
+    * In the P**ermission Entry for SMBClustered** dialog, click the **Select a principal** link to display the **Select User, Computer, Service Account, or Group** dialog and then type the name of the account for which you want to specify permissions.
+
+        Click **Check Names** if necessary and then click **OK** when complete.
+
+    * On the **Confirmation** tab of the **New Share Wizard**, verify the correctness of the settings you made for the File Server and then click the **Create** button to begin the configuration process.
+
+    * On the **Results** tab of the **New Share Wizard**, ensure that creating the SMB share and setting SMB permissions successfully completed and then **Close** the wizard.
+
+    <a name="fig.162"></a>
+
+    ![](./image/FileServerUserGuide/image135.png)
+
+    Figure 162. New Share Wizard: Customizing permissions
+
+    <a name="fig.163"></a>
+
+    ![](./image/FileServerUserGuide/image136.png)
+
+    Figure 163. New Share Wizard: displaying the Permission Entry for SMBClustered dialog
+
+    <a name="fig.164"></a>
+
+    ![](./image/FileServerUserGuide/image137.png)
+
+    Figure 164. New Share Wizard: Locating the account for which to specify permissions
+
+    <a name="fig.165"></a>
+
+    ![](./image/FileServerUserGuide/image138.png)
+
+    Figure 165. New Share Wizard: Configuring the Permissions levels
+
+    <a name="fig.166"></a>
+
+    ![](./image/FileServerUserGuide/image139.png)
+
+    Figure 166. New Share Wizard: Confirming the wizard settings
+
+    <a name="fig.167"></a>
+
+    ![](./image/FileServerUserGuide/image140.png)
+
+    Figure 167. New Share Wizard: Confirming the wizard results
+
+    <a name="fig.168"></a>
+
+8. Repeat steps 1 through 7 for the other Server named **ScaleOutFS**.
+
+    ![](./image/FileServerUserGuide/image167.png)
+
+    Figure 168. New Share Wizard: Configuring a new share on the Scale-Out File Server
+
+##### <a name="5.3.12.7"/> 5.3.12.7 Create a File Share with Oplock Force Level 2 Enabled for the Cluster
+
+To create a file share with Oplock Force Level 2, perform the steps that follow.
+
+1. Repeat the steps of the procedure in section [5.3.12.6 Create a file share for the cluster](#5.3.12.6), while making the following modification:
+
+    * In step 5, type `SMBClusteredForceLevel2` in the **Share name** textbox on the **Share Name** tab of the **New Share Wizard**.
+
+2. Enable **FORCE_LEVELII_OPLOCK** on this share.
+
+    For further details, see section [5.3.7 Enable FORCE_LEVELII_OPLOCK on a share named ShareForceLevel2](#5.3.7).
+
+##### <a name="5.3.12.8"/> 5.3.12.8 Create a File Share with Encrypt data Enabled for the Cluster
+
+To create a file share with Encrypt data enabled, perform the steps that follow.
+
+1. Repeat the steps of the procedure in section [5.3.12.6 and create a file share for the cluster](#5.3.12.6), while making the following modifications:
+
+    * In step 5, type `SMBClusteredEncrypted` in the **Share name** textbox on the **Share Name** tab of the **New Share Wizard**.
+
+    * In step 6, also include selection of the **Encrypt data access** option on the **Other Settings** tab of the **New Share Wizard**.
+
+#### <a name="5.3.13"/> 5.3.13 Turn off Firewalls
+
+To turn off the Firewall on the local computer, perform the steps that follow.
+
+1. Start the command console window with Administrator privileges.
+
+    For further details, see section [5.3.24 How to start the command console with Administrator privileges](#5.3.24).
+
+2. Type the following command in the console window and then press **Enter** on the keyboard.
+
+    ```
+      netsh advfirewall set allprofiles state off
+    ```
+
+#### <a name="5.3.14"/> 5.3.14 Enable the Administrator Account
+
+To enable the Administrator account, perform the step that follows.
+
+![](./image/FileServerUserGuide/image1.png)**Note**
+
+The Administrator account is enabled by default when Windows Server is the operating system, however, if it is disabled for some reason, you can enable it by using the procedure that follows.
+
+1. If the SUT computer is running the Microsoft® Windows Server 2012 R2 or later operating system, enable a disabled built-in Administrator account by running the following command:
+
+    ```
+      net.exe user Administrator /active:yes
+    ```
+
+#### <a name="5.3.15"/> 5.3.15 Create a Local Non-Admin User Account
+
+To create a local non-Administrator user account, perform the steps that follow.
+
+1. Start the command console window with Administrator privileges.
+
+    For further details, see section [5.3.24 How to start the command console with Administrator privileges](#5.3.24).
+
+2. Type the following command in the command console window and then press **Enter** on the keyboard.
+
+    ```
+      net.exe user nonadmin Password01! /add
+    ```
+
+#### <a name="5.3.16"/> 5.3.16 Enable the Local Guest Account
+
+To enable the local Guest account, perform the steps that follow.
+
+1. Start the command console window with Administrator privileges.
+
+    For further details, see section [5.3.24 How to start the command console with Administrator privileges](#5.3.24).
+
+2. Type the following command in the command console window and then press **Enter** on the keyboard:
+
+    ```
+      net.exe user Guest /active:yes
+    ```
+
+#### <a name="5.3.17"/> 5.3.17 Reset the Password for Local Users
+
+To reset a local account password, perform the steps that follow.
+
+1. Start the command console with Administrator privileges.
+
+    For further details, see section [5.3.24 How to start the command console with Administrator privileges](#5.3.24).
+
+2. Type the following command in the console window while substituting the appropriate user account name, and then press Enter on the keyboard.
+
+    ```
+      net.exe user <userName> Password01!
+    ```
+
+#### <a name="5.3.18"/> 5.3.18 Create an Asymmetric Share
+
+To create an asymmetric share, perform the steps that follow.
+
+1. Start the command console with Administrator privileges.
+
+    For further details, see section [5.3.24 How to start the command console with Administrator privileges](#5.3.24).
+
+2. Type the following command string in the command console window on both the **Node01** and **Node02** computers, and then press **Enter** on the keyboard of each.
+
+    ```
+      REG ADD HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters /v AsymmetryMode /t REG_DWORD /d 2 /f
+    ```
+
+#### <a name="5.3.19"/> 5.3.19 Create a Virtual Hard Disk File
+
+There are two tools you can use to create a virtual hard disk file, as follows:
+
+* Command line
+* New Virtual Hard Disk Wizard
+
+![](./image/FileServerUserGuide/image2.png)**Important**
+
+To use either of these tools, you will need to first install the Hyper-V Role on a server OS computer with the use of **Server Manager**.
+
+* **Commnad line**
+
+    To create a virtual hard disk file named rsvd.vhdx by using a command string, perform the following steps.
+
+    1. Start a command console with Administrator privileges.
+
+    2. Execute the following command from the command console:
+
+        ```
+          "create vdisk file=%SystemDrive%\rsvd.vhdx maximum=1024 type=expandable" | diskpart.exe
+        ```
+
+    3. Copy the rsvd.vhdx file to the **SMBClustered** share.
+
+    > For further details on the create vdisk command, see [Create vDisk](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-R2-and-2012/gg252579(v=ws.11)) on Technet.
+
+* **New Virtual Hard Disk Wizard**
+
+    To create a virtual hard disk file named rsvd.vhdx with the **New Virtual Hard Disk Wizard**, perform the following steps.
+
+    1. Open **Hyper-V Manager** from the **Start** menu.
+
+    2. In the right-hand pane of **Hyper-V Manager**, click **New** -> **Hard Disk** to launch the **New Virtual Hard Disk Wizard**.
+
+        <a name="fig.169"></a>
+
+        ![](./image/FileServerUserGuide/image216.png)
+
+        Figure 169. Hyper-V Manager: New -> Hard Disk
+
+    3. On the **Choose Disk Format** tab of the **New Virtual Hard Disk** Wizard, select the **VHDX** option and then click **Next**.
+
+        <a name="fig.170"></a>
+
+        ![](./image/FileServerUserGuide/image142.png)
+
+        Figure 170. New Virtual Hard Disk Wizard: Specifying the virtual hard disk format
+
+    4. On the **Choose Disk Type** tab of the **New Virtual Hard Disk Wizard**, select the **Dynamically expanding** option for the disk type, and then click **Next**.
+
+        <a name="fig.171"></a>
+
+        ![](./image/FileServerUserGuide/image143.png)
+
+        Figure 171. New Virtual Hard Disk Wizard: Specifying the virtual hard disk type
+
+    5. In the **Name** textbox on the **Specify Name and Location** tab of the **New Virtual Hard Disk Wizard**, type the name of the virtual hard disk file as `rsvd.vhdx`.
+
+        Also, in the **Location** textbox, **Browse-to** or type the following directory specification: `C:\Users\Public\Documents\Hyper-V\Virtual Hard Disks\`
+
+        When complete, click **Next**.
+
+        <a name="fig.172"></a>
+
+        ![](./image/FileServerUserGuide/image144.png)
+
+        Figure 172. New Virtual Hard Disk Wizard: Specifying the virtual hard disk name and location
+
+    6. In the **Size** textbox on the **Configure Disk** tab of the **New Virtual Hard Disk Wizard**,  type `1` and then click **Finish** to create the virtual disk file.
+
+        <a name="fig.173"></a>
+
+        ![](./image/FileServerUserGuide/image145.png)
+
+        Figure 173. New Virtual Hard Disk Wizard: Specifying the new virtual hard disk size
+
+#### <a name="5.3.20"/> 5.3.20 Create a Virtual Hard Disk set File
+
+There are two tools you can use to create a shared virtual hard disk file, as follows:
+
+* PowerShell
+* New Virtual Hard Disk Wizard
+
+![](./image/FileServerUserGuide/image2.png)**Important**
+
+To use either of these tools, you will need to first install the Hyper-V Role on a server computer with the use of **Server Manager**.
+
+* **PowerShell**
+
+    To create a shared virtual hard disk named rsvd.vhds by using PowerShell, perform the following steps.
+
+    1. Start Windows PowerShell (x86) from **%SystemRoot%\\syswow64\\WindowsPowerShell\\v1.0\\** with Administrator privileges.
+
+    2. In the PowerShell command console, execute the following command:
+
+        ```
+          New-VHD "$env:SystemDrive\rsvd.vhds" -SizeBytes 1GB -Fixed -LogicalSectorSizeBytes 512
+        ```
+
+* **New Virtual Hard Disk Wizard**
+
+    To create a shared virtual hard disk named rsvd.vhds, with the New Virtual Hard Disk Wizard, perform the steps that follow.
+
+    1. Open **Hyper-V Manager** from the **Start** menu.
+
+    2. Click **New** -> **Hard Disk** in the right-hand pane of **Hyper-V Manager** to launch the **New Virtual Hard Disk Wizard**.
+
+        <a name="fig.174"></a>
+
+        ![](./image/FileServerUserGuide/image216.png)
+
+        Figure 174. Hyper-V Manager: New -> Hard Disk
+
+    3. On the **Choose Disk Format** tab of the **New Virtual Hard Disk Wizard**, select **VHD Set** for the disk format and then click **Next**.
+
+        <a name="fig.175"></a>
+
+        ![](./image/FileServerUserGuide/image146.png)
+
+        Figure 175. New Virtual Hard Disk Wizard: Specifying the shared virtual hard disk format
+
+    4. On the **Choose Disk Type** tab of the **New Virtual Hard Disk Wizard**, select the **Fixed size** option for the disk type and then click **Next**.
+
+        <a name="fig.176"></a>
+
+        ![](./image/FileServerUserGuide/image147.png)
+
+        Figure 176. New Virtual Hard Disk Wizard: Specifying the shared virtual hard disk type
+
+    5. type the name of the shared virtual hard disk file in the **Name** text box as `rsvd.vhds`. Also, in the **Location** textbox, **Browse**-to or type the following directory specification: `C:\Users\Public\Documents\Hyper-V\Virtual Hard Disks\`
+
+        <a name="fig.177"></a>
+
+        ![](./image/FileServerUserGuide/image148.png)
+
+        Figure 177. New Virtual Hard Disk Wizard: Specifying the shared virtual hard disk name and location
+
+    6. In the **Size** field on the **Configure Disk** tab of the **New Virtual Hard Disk Wizard**, type `1` and then click **Finish** to create the shared virtual disk file.
+
+        <a name="fig.178"></a>
+
+        ![](./image/FileServerUserGuide/image149.png)
+
+        Figure 178. New Virtual Hard Disk Wizard: Specifying the shared virtual hard disk size
+
+#### <a name="5.3.21"/> 5.3.21 Modify the Signing Configuration
+
+To modify the signing configuration, perform the steps that follow.
+
+1. Start the command console with Administrator privileges.
+
+    For further details, see section [5.3.24 How to start the command console with Administrator privileges](#5.3.24).
+
+2. On the SUT computer, type the appropriate command string below in the command console, to either enable or disable the signing requirement, respectively, and then press **Enter** on the computer keyboard.
+
+    **To enable SigningRequired**:
+
+    ```
+      cmd /C reg ADD "HKLM\System\ControlSet001\Services\LanmanServer\Parameters" /f /v requiresecuritysignature /t REG_DWORD /d 1
+    ```
+
+    **To disable SigningRequired**:
+
+    ```
+      cmd /C reg DELETE "HKLM\System\ControlSet001\Services\LanmanServer\Parameters" /f /v requiresecuritysignature
+    ```
+
+#### <a name="5.3.22"/>  5.3.22 Manually Set the Domain Account Computer Password
+
+To set the password for the computer's domain account, perform the steps that follow.
+
+1. Run the following command in a command console enabled with Administrative privileges.
+
+    ```
+      ksetup /SetComputerPassword <password>
+    ```
+
+2. Restart the computer.
+
+#### <a name="5.3.23"/> 5.3.23 Create an SQOS Policy
+
+To create a Multi-instance SQOS policy in the scale out File Server, perform the steps that follow.
+
+1. Start Windows PowerShell (x86) from **%SystemRoot%\\syswow64\\WindowsPowerShell\\v1.0\\** with Administrator privileges and execute one of the following commands, depending on your operating system:
+
+    If you are configuring on a platform earlier than Windows Server 2016 TP5, run the following command:
+
+    ```
+      $policy = New-StorageQosPolicy -Name sqostest -PolicyType MultiInstance -MinimumIops 100 -MaximumIops 200
+    ```
+
+    If you are configuring on a platform with Windows Server 2016 TP5 or later, run the following command:
+
+    ```
+      $policy = New-StorageQosPolicy -Name sqostest -PolicyType Aggregated -MinimumIops 100 -MaximumIops 200 -MaximumIOBandwidth 1600
+    ```
+
+2. Get the policy ID by running the following command in the existing PowerShell command console.
+
+    ```
+      $policy.PolicyId
+    ```
+
+    When complete, set the policy Id to the **SqosPolicyId** property in the MS-SQOS ServerTestSuite.deployment.ptfconfig file. For more information, see section [5.2.4.6 Setup to Test SQOS](#5.2.4.6).
+
+#### <a name="5.3.24"/> 5.3.24 How to Start the Command Console with Administrator Privileges
+
+To start the command console with Administrator privileges, perform the steps that follow.
+
+1. Click the computer Start menu and then type `cmd`.
+
+2. When the **Command Prompt** desktop app appears in the Start menu, right-click it and then select **Run as Administrator** in the context menu that displays
+
+    <a name="fig.179"></a>
+
+    ![](./image/FileServerUserGuide/image178.png)
+
+    Figure 179. Starting the command console with Administrator privileges
+
+#### <a name="5.3.25"/> 5.3.25 Enable Short Name format
+
+To enable the short name format on a volume, perform the steps that follow.
+
+1. Start the command console with Administrator privileges.
+
+    For further details, see section [5.3.24 How to start the command console with Administrator privileges](#5.3.24).
+
+2. Enable the short name format on a volume such as C: by typing the following command in the command console:
+
+    ```
+      fsutil 8dot3name set c: 0
+    ```
+
+#### <a name="5.3.26"/> 5.3.26 Create a Volume Shadow Copy
+
+To create a volume shadow copy, perform the steps that follow.
+
+1. Start the command console with Administrator privileges.
+
+    For further details, see section [5.3.24 How to start the command console with Administrator privileges](#5.3.24).
+
+2. Create a shadow copy on volume such as C: by typing the following command in the command console:
+
+    ```
+      vssadmin.exe Create Shadow /For=c:\ /AutoRetry=2
+    ```
+
+#### <a name="5.3.27"/> 5.3.27 Create a Volume Mount Point
+
+To create a volume mount point, perform the steps that follow.
+
+1. Start the command console with Administrator privileges.
+
+    For further details, see section [5.3.24 How to start the command console with Administrator privileges](#5.3.24).
+
+2. Create a new folder named **MountPoint** by typing and executing the following command in the command console:
+
+    ```
+      mkdir MountPoint
+    ```
+
+3. List the mounted volume name by typing and executing the following command in the command console:
+
+    ```
+      mountvol c: /l
+    ```
+
+4. Create the mount point by typing and executing the following command in the command console. Note that the output of the command in step 3 is the &lt;volume name&gt; used in the command string that follows:
+
+    ```
+      mountvol MountPoint <volume name>
+    ```
+
+## <a name="6"/> 6 Installed Files and Folders
+
+The installation process adds the folders and files to the Driver computer in this location: **%SystemDrive%\\MicrosoftProtocolTests\\FileServer\\Server-Endpoint\\&lt;version#&gt;\\**
+
+![](./image/FileServerUserGuide/image1.png)**Note**
+
+This path may vary based on your setup. Also, the &lt;version#&gt; placeholder indicates the installed build version number of the **Test Suite**. The installed folders and files are described in the Table that follows.
+
+<a name="table.11"></a>
+
+**Table 11. Installed files and folders**
+
+| File or Folder | Description                                                                |
+|----------------|----------------------------------------------------------------------------|
+| Batch          | Command files that you use to run individual test cases or all test cases. |
+| Bin            | Test Suite binaries and configuration files. This folder contains the following sub-folders:<br>&emsp;&emsp;- Common — contains .ps scripts* that are called by specific test cases.<br>&emsp;&emsp;- ServerFailover — contains .ps scripts* that are called by specific test cases.<br>&emsp;&emsp;- Scripts — contains .ps scripts that are used to set up the test environment.                                         |
+| License.rtf    | The End User License Agreement.                                            |
+
+\*PowerShell scripts are located in the **SutProtocolControlAdapter** under the **Common** directory and in the **WindowsSutControlAdapter** folder under the **ServerFailover** directory.
+
+## <a name="7"/> 7 Configure and Run Test Cases
+
+This section explains how to configure the **Test Suite** and how to run test cases.
+
+* **Configuring Tests** − You can configure your **Test Suite** in either of the following ways:
+
+  * Using **Protocol Test Manager**
+
+  * Performing manual configuration
+
+* **Running Tests** − You can run your test cases by using any of the following:
+
+  * **Protocol Test Manager**
+
+  * **Batch Script** and **Visual Studio**
+
+  * **Test Agent**
 
 ### <a name="7.1"/> 7.1 Configure and Run Test Cases Using Protocol Test Manager
 
-**Protocol Test Manager** is a UI tool that helps you configure and run the test cases.
+**Protocol Test Manager** (**PTM**) is a user interface (UI)-based tool that helps you configure and run test cases.
 
-You can follow the steps below to configure your test suite:
+To configure the **Test Suite**, perform that steps that follow.
 
-1.  Double click the **ProtocolTestManager.msi** and install the **Protocol Test Manager**.
+1. If you have not already done so, install the Protocol Test Manager on the Driver (Client01) computer by double-clicking the ProtocolTestManager.msi and following the steps of the **Protocol Test Manager Setup Wizard**. For more information, see section [3.4 Software Requirements](#3.4).
 
-2.  Launch the **Protocol Test Manager** by the shortcut on the desktop.
+2. When complete, launch the Protocol Test Manager application from the desktop shortcut that was created during Protocol Test Manager installation on the Driver (Client01) computer. On the **Select Test Suite** tab of **Protocol Test Manager**, select the **File Server** test suite to begin configuration, and then click **Configure Wizard**.
 
-3.	In the **Select Test Suite** tab, selected the test suite you want to configure, and click **Configure Wizard**.
+    <a name="fig.180"></a>
 
-	![](./image/FileServerUserGuide/image150.png)
+    ![](./image/FileServerUserGuide/image150.png)
 
-4.  In the **Test Suite Introduction** tab, general information about the test suite is provided. Click **Deployment Guide**.
+    Figure 180. Protocol Test Manager: Launching the File Server test suite
 
-	![](./image/FileServerUserGuide/image151.png)
+3. On the **Test Suite Introduction** tab of **Protocol Test Manager**, review the general information about the **File Server Protocol Family Server Test Suite** and then click **Deployment Guide** or **Next**.
 
-5.  In the **Test Environment** page, information about the test environment is provided. Click **Next**.
+    <a name="fig.181"></a>
 
-	![](./image/FileServerUserGuide/image152.png)
+    ![](./image/FileServerUserGuide/image151.png)
 
-6.  In the **Configure Method** tab, select a method for configuration. **Protocol Test Manager** supports three ways of configuration, namely **Auto-Detection**, **Manual Configuration** and **Load Profile**.
+    Figure 181. Protocol Test Manager: Launching the Deployment Guide
 
-	![](./image/FileServerUserGuide/image153.png)
+4. On the **Test Suite Introduction** tab of **Protocol Test Manager** review the diagrammatic information about the **Test Environment**, and then click **Next**.
 
-	-	Configure the test suite by **Auto-Detection**:
+    ![](./image/FileServerUserGuide/image1.png)**Note**
 
-		-   Click **Run Auto-Detection** and navigate to the **Auto-Detection** tab.
+    If you have already setup your test environment according to the instructions provided earlier in this document, you can skip the details that appear when clicking **Domain Environment** or **Workgroup Environment**.
 
-		-   In the **Auto-Detection** tab, fill in the prerequisites for auto-detection or just use the default values loaded from the [ptfconfig files](#7.2). 
+    <a name="fig.182"></a>
 
-		-	Click **Detect**. If your SUT is in **WORKGROUP** environment, set the **Domain Name** field to the same value as **Target SUT**.
+    ![](./image/FileServerUserGuide/image152.png)
 
-		![](./image/FileServerUserGuide/image154.png)
+    Figure 182. Protocol Test Manager: Reviewing the Test Environment
 
-		-   After detection has been finished, click **Next** to check the **Detection Result**.
+5. On the **Configure Method** tab of **Protocol Test Manager**, you will need to select a configuration method option such as one of the following:
 
-		-	In the **Detection Result** tab, a summary with be provided for your SUT. The summary includes information like the **Capabilities** or **IoCtl Codes** that the SUT supports. You can check the results by expanding the treeview.
+    * **Run Auto-Detection**
+    * **Do Manual Configuration**
+    * **Load Profile**
 
-		-	Click **Next**.
+     The bullet points that follow provide additional instructions for each method.
 
-		![](./image/FileServerUserGuide/image155.png)
+    <a name="fig.183"></a>
 
-		-   In the **Filter Test Cases** tab, the test cases are automatically selected by the detection results in the previous step. If detection result shows that your SUT is not supporting some feature, the feature name will become italic. You can also edit the selection on demand.
+    ![](./image/FileServerUserGuide/image153.png)
 
-		![](./image/FileServerUserGuide/image156.png)
+    Figure 183. Protocol Test Manager: Selecting a configuration method
 
-	-	Configure the test suite **Manually**:
-		
-		-   Click **Do Manual Configuration** and navigate directly to the **Filter Test Cases** tab.
-		
-		-   In the **Filter Test Cases** tab, select the test cases that you want to run.
+    * Configure the **Test Suite** by using the **Auto-Detection** option:
 
-		![](./image/FileServerUserGuide/image157.png)
+      * Click **Run Auto-Detection** and navigate to the **Auto-Detection** tab.
 
-	-	Configure the test suite by **Load Profile**:
-		
-		-	The **Profile** should be previously saved by step 11. The **Profile** includes information about previously selected test cases and all the configurations.
-		
-		-   Click **Load Profile**, select an existing profile and navigate directly to the **Filter Test Cases** tab.
+      * On the **Auto-Detection** tab of **Protocol Test Manager**, ensure that the prerequisite information from auto-detection is correct based on the default values loaded from the .ptfconfig files, and make any necessary corrections.
 
-		![](./image/FileServerUserGuide/image158.png)
+      * On the **Auto-Detection** tab click the **Detect** button.
 
-		-	In the **Filter Test Cases** tab, the checked cases are read from the **Profile**. You can also edit the selection on demand.
+        ![](./image/FileServerUserGuide/image1.png)**Note**
 
-		![](./image/FileServerUserGuide/image159.png)
+        If your SUT is in a **WORKGROUP** environment, leave the **Domain Name** field blank when providing prerequisite information.
 
-7.  In the **Configure Test Cases** tab, verify the default property values set according to the detection result. You can still edit the values on demand. Click **Next** when everything looks fine to you.
+        <a name="fig.184"></a>
 
-	![](./image/FileServerUserGuide/image160.png)
+        ![](./image/FileServerUserGuide/image154.png)
 
-8.  In the **Configure Adapter** tab, choose an **SUT control adapter** type. Click **Next**.
+        Figure 184. Protocol Test Manager: Providing information for auto-detection
 
-	![](./image/FileServerUserGuide/image161.png)
+      * After detection has successfully completed, as indicated by the **Finished** flag next to each item in the Auto Detection list, click **Next** to check the **Detection Result**.
 
-9.  In the **Run Selected Test Cases** tab, there are several ways to run test cases:
+      * On the **Detection Result** tab of **Protocol Test Manager**, a summary is provided within  information nodes that may include **Capabilities**, **IoCtl Codes**, **Remote Shared Virtual Disk**, and so on, to indicate what is supported by your SUT configuration. Review this information to ensure it's accuracy.
 
-	-	Click **Run All** to run all test cases.
+        To expose or hide result details, perform clicks on any node to toggle the results.
 
-	-	Select test cases, and click **Run Selected Test** to run the selected test cases.
+      * When your review is complete, click **Next**.
 
-	-	If a test case has been executed, you can select this test case in the treeview, and view the test logs in the **Test logs** window on the right.
+        <a name="fig.185"></a>
 
-	>	![](./image/FileServerUserGuide/image1.png)Note
+        ![](./image/FileServerUserGuide/image155.png)
 
-	>	&emsp;&emsp;You can drag the seperator between the case list and the log to adjust the width of the window.
+        Figure 185. Protocol Test Manager: Reviewing detection results
 
-	![](./image/FileServerUserGuide/image162.png)
+      * In the **Selected Test Cases** pane on the **Filter Test Cases** tab of **Protocol Test Manager**, you will see the test cases automatically displayed from the detection results obtained in the previous step. If the detection results show that your SUT is not supporting a particular feature, that feature name will be rendered in italics under the **Feature** node. Note that you can manually select or unselect tests in the selection list as needed.
 
-	>	![](./image/FileServerUserGuide/image1.png)Note
+        <a name="fig.186"></a>
 
-	>	&emsp;&emsp;You can right-click on test case treeview, and click **Uncheck All** to uncheck all the selected test cases.
+        ![](./image/FileServerUserGuide/image156.png)
 
-	![](./image/FileServerUserGuide/image165.png)
+        Figure 186. Protocol Test Manager: Reviewing test cases
 
-10.	After the test execution completes, click the hyperlink at the upper-right corner to open the **Result** folder of the test suite run.
+    * Configure the **Test Suite** by using the **Do Manual Configuration** option:
 
-	![](./image/FileServerUserGuide/image163.png)
+      ![](./image/FileServerUserGuide/image2.png)**Important**
 
-11. After the test execution completes, click the **Export/Import** menu and select **Save Profile** to save the selected test cases of the previous run and all your configurations.
+      If you choose the **Do Manual Configuration** option, you will need to manually provide information that is normally obtained during **Auto Detect**, such as target share, domain name, user name, password, and so forth. You will need to provide this information in the **Common** and **SMB** groups on the **Configure Test Cases** tab of **PTM**.
 
-	![](./image/FileServerUserGuide/image164.png)
+      To use the **Do Manual Configuration** option, proceed as follows:
 
-12.	Protocol Test Manager has a **command line interface (ptmcli.exe)** which can be used for automation test run.
+      * On the **Configuration Method** tab of the **Protocol Test Manager**, click **Do Manual Configuration** and navigate directly to the **Filter Test Cases** tab.
 
-	-	The **command line interface (ptmcli.exe)** is located in the `bin` folder under the Protocol Test Manager installation path. To use this command line, you need to provide a profile using the `-p` option.
+      * On the **Filter Test Cases** tab of **Protocol Test Manager**, select the test cases that you want to run by setting check boxes in the **Filter** and **Feature** tree lists.
 
-	-	You can use `ptmcli.exe -h` to show more information.
+        <a name="fig.187"></a>
 
-### <a name="7.2"/> 7.2. Configure Test Suite Manually
+        ![](./image/FileServerUserGuide/image157.png)
 
-This test suite is installed with default configuration settings. You can manually change these settings according to your own test environment.
+        Figure 187. Protocol Test Manager: Manually selecting test cases
 
--	You can configure the test suite for various purposes including, for example, to:
+    * Configure the **Test Suite** by using the **Load Profile** option:
 
-	-   Define the settings of the test environment, including computer names and IP addresses.
+      In order to use this option, you will need to have run the **Test Suite** at least once and saved a Profile that contains selected test cases and related configuration information, following test execution. You can save a Profile in step 9 of this procedure and then use it in subsequent reruns of the profiled test environment where you specify use of the **Load Profile** option in the **Protocol Test Manager**.
 
-	-   Define the folders and formats used for output from test runs.
+      When this is the case, proceed to the bullet points that follow to load and use a Profile with the **Load Profile** option.
 
--	To change configuration settings, edit the `\*.deployment.ptfconfig` files including:
+      * On the **Configuration Method** tab of the **Protocol Test Manager**, click **Load Profile**, select an existing profile, and then click the **Open** button.
 
-	-   CommonTestSuite.deployment.ptfconfig
+        Thereafter, navigate directly to the **Filter Test Cases** tab of **Protocol Test Manager**.
 
-	-   ServerFailoverTestSuite.deployment.ptfconfig
+        <a name="fig.188"></a>
 
-	-   MS-DFSC\_ServerTestSuite.deployment.ptfconfig
+        ![](./image/FileServerUserGuide/image158.png)
 
-	-   MS-FSRVP\_ServerTestSuite.deployment.ptfconfig
+        Figure 188. Protocol Test Manager: Locating an existing Profile
 
-	-   MS-SMB2\_ServerTestSuite.deployment.ptfconfig
+      * On the **Filter Test Cases** tab of **Protocol Test Manager**, verify that the checked test cases appear as expected from the **Profile** data that you imported. Note that you can still modify your selections as necessary by selecting or unselecting them.
 
-	-   MS-SMB2Model\_ServerTestSuite.deployment.ptfconfig
+        <a name="fig.189"></a>
 
-	-   MS-RSVD\_ServerTestSuite.deployment.ptfconfig
+        ![](./image/FileServerUserGuide/image159.png)
 
-	-   MS-SQOS\_ServerTestSuite.deployment.ptfconfig
+        Figure 189. Protocol Test Manager: Verifying the presence of Profile test cases
 
-	-   Auth\_ServerTestSuite.deployment.ptfconfig
+6. On the **Configure test case properties** tab of **Protocol Test Manager**, verify the correctness of the default property values that were set for the specified **Groups**, with respect to your detection results. Note that you can edit the values  if necessary.
 
--	You can find the ptfconfig files at `%SystemDrive%\MicrosoftProtocolTests\FileServer\Server-Endpoint\<version#>\Bin` after the test suite is installed. These files will be used when running tests through **batch scripts** or **Protocol Test Manager**.
+    For example, you can verify the properties values for the **Common** group to ensure that they match your environment. To verify the default values for **Common** group items, mouse-hover over any particular property to show a tool tip that contains the default property values, as shown in the figure that follows.
 
-#### <a name="7.2.1"/> 7.2.1. Brief introduction to Configuration Settings
+    ![](./image/FileServerUserGuide/image1.png)**Note**
 
-1.  **Common Settings**
+    If there appears to be a persistent disparity in property values that deviate from what you expect, you might consider running **Auto-Detect** again. If the issue persists, you may need to use the **Do Manual Configuration** option.
 
-	-	Common settings in `CommonTestSuite.deployment.ptfconfig` are shared by all the sub test suites.
+    Note that if you are already using the **Do Manual Configuration** or **Load Profile** option, the properties are always set at the default values, which you can modify manually as needed
 
-2.  **Settings for file server failover test suite**
+    When complete, click **Next**.
 
-	-	Settings in `ServerFailoverTestSuite.deployment.ptfconfig` are for the File server failover test suite.
+    ![](./image/FileServerUserGuide/image1.png)**Tip**
 
-3.  **Settings for DFSC server test suite**
+    You can also mouse-hover over any item in the **Properties** column on the **Configure test case properties** tab of **Protocol Test Manager** to display a tool tip that contains the meaning of the item over which your mouse is hovering, also indicated in the figure that follows.
 
-	-	Settings in `MS-DFSC_ServerTestSuite.deployment.ptfconfig` are for the DFSC server test suite.
+    ![](./image/FileServerUserGuide/image2.png)**Important**
 
-4.  **Settings for FSRVP server test suite**
+    If you want to enable capture of event trace logs (ETL) with Message Analyzer during test case execution, you must set the **Enabled** field of the **NetworkCapture** property to True in the **PTF Group** on the **Configure Test Cases** tab of **PTM**.
 
-	-	Settings in `MS-FSRVP_ServerTestSuite.deployment.ptfconfig` are for the FSRVP server test suite.
+    <a name="fig.190"></a>
 
-5.  **Settings for SMB2 server test suite**
+    ![](./image/FileServerUserGuide/image160.png)
 
-    -	Settings in `MS-SMB2_ServerTestSuite.deployment.ptfconfig` are for the SMB2 server test suite.
+    Figure 190. Protocol Test Manager: Verifying the Common property values
 
-6.  **Settings for SMB2 server model test suite**
+7. On the **Configure Adapter** tab of **Protocol Test Manager**, choose an **SUT control adapter** from the **Type** drop-down or use the typical default setting of **PowerShell**, and then click **Next**.
 
-    -	Settings in `MS-SMB2Model_ServerTestSuite.deployment.ptfconfig` are for the SMB2 server model test suite.
+    <a name="fig.191"></a>
 
-7.  **Settings for RSVD server test suite**
+    ![](./image/FileServerUserGuide/image161.png)
 
-    -	Settings in `MS-RSVD_ServerTestSuite.deployment.ptfconfig` are for the RSVD server test suite.
+    Figure 191. Protocol Test Manager: Configuring the SUT control adapter
 
-8.  **Settings for SQOS server test suite**
+    * On the **Run Selected Test Cases** tab of **Protocol Test Manager**, run test cases in either of the following ways:
 
-    -	Settings in `MS-SQOS_ServerTestSuite.deployment.ptfconfig` are for the SQOS server test suite.
+      * **Run All** – click this link to run all test cases.
 
-9.  **Settings for Auth server test suite**
+      * **Run Selected Test** – click this link to run the selected test cases.
 
-    -	Settings in `Auth_ServerTestSuite.deployment.ptfconfig` are for the Auth test suite.
+      After the test cases complete execution, you can view test case logs to the right of the test case listview, by selecting any test case in the listview.
 
-Please refer to the corresponding `\*.deployment.ptfconfig` files for configuration details.
+      ![](./image/FileServerUserGuide/image1.png)**Note**
 
-### <a name="7.3"/> 7.3. Run Test Cases by Batch Script
+      You can drag the separator between the test case treeview and the log pane to adjust the width of the window for better viewing.
 
-This test suite includes command files that you can use to complete some basic test cases. Each test case verifies the protocol implementation based on a given scenario.
+      ![](./image/FileServerUserGuide/image2.png)**Important**
 
--	You can find and run these test cases in the following directory:
-```
-	%SystemDrive%\MicrosoftProtocolTests\FileServer\Server-Endpoint\<version#>\Batch
-```
+      If you run all the core/preconfigured test cases and your environment does not support certain features, you will see errors in the command console, in the test cases listview, and in the right-hand side log pane of PTM, with respect to methods that failed when attempting to test those features. To avoid this, you can simply run only the test cases that apply to your environment.
 
--	You can run these command files at the command prompt, or by selecting and clicking one or more of the files from the directory.
+      <a name="fig.192"></a>
 
-#### <a name="7.3.1"/> 7.3.1. Run the BVT Test
+      ![](./image/FileServerUserGuide/image162.png)
 
-This test suite includes a set of basic tests called "BVT". Together these test cases perform a basic functionality test to evaluate the implementation on SUT machine. Use the following steps to run all BVT test cases:
+      Figure 192. Protocol Test Manager: Running the test cases
 
--	To run the **BVT** test cases in a **DOMAIN** environment
+      ![](./image/FileServerUserGuide/image1.png)**Note**
 
-	-   From the desktop of the driver computer, double-click the **Run Server-Domain\_BVTTestCases** shortcut. This shortcut is created during the installation process.
+      As shown in the figure that follows, you can also run test cases from the context menu that appears when you right-click the test case listview, for example, with commands such as **Run Selected Tests** and **Run All Tests**. In addition, you can select the **Uncheck All** command to uncheck all selected test cases.
 
-	-	Alternatively, go to `%SystemDrive%\MicrosoftProtocolTests\FileServer\Server-Endpoint\<version#>\Batch`, and double-click the **Domain\_RunBVTTestCases.cmd** file.
+      <a name="fig.193"></a>
 
--	To run the **BVT** test cases in a **WORKGROUP** environment
+      ![](./image/FileServerUserGuide/image165.png)
 
-	-   From the desktop of the driver computer, double-click the **Run Server-Workgroup\_BVTTestCases** shortcut. This shortcut is created during the installation process.
+      Figure 193. Protocol Test Manager: Uncheck All context menu item
 
-	-	Alternatively, go to `%SystemDrive%\MicrosoftProtocolTests\FileServer\Server-Endpoint\<version#>\Batch`, and double-click the **Workgroup\_RunBVTTestCases.cmd** file.
+8. After test execution is complete, click the results hyperlink in the upper-right corner of **Protocol Test Manager** to open the **Result** folder for the **Test Suite** run.
 
-#### <a name="7.3.2"/> 7.3.2. Run All Test Cases
+    <a name="fig.194"></a>
 
-Use the following steps to run all test cases:
+    ![](./image/FileServerUserGuide/image163.png)
 
--	To run all test cases in a **DOMAIN** environment
+    Figure 194. Protocol Test Manager: Displaying the test case results
 
-	-   From the desktop of the driver computer, double-click the **Run Server-Domain\_AllTestCases** shortcut. This shortcut is created during the installation process.
+9. To save a Profile that encapsulates the current test case configuration, click the **Export/Import** drop-down and select **Save Profile** to save the selected test cases of this run and all the related configurations.
 
-	-	Alternatively, go to `%SystemDrive%\MicrosoftProtocolTests\FileServer\Server-Endpoint\<version#>\Batch`, and double-click the **Domain\_RunAllTestCases.cmd** file.
+    You can then use the saved Profile with subsequent re-runs of the current Test Suite configuration where you employ the **Load Profile** option from the **Configuration Method** tab of **Protocol Test Manager**.
 
--	To run all test cases in a **WORKGROUP** environment
+    <a name="fig.195"></a>
 
-	-   From the desktop of the driver computer, double-click the **Run Server-Workgroup\_AllTestCases** shortcut. This shortcut is created during the installation process.
+    ![](./image/FileServerUserGuide/image164.png)
 
-	-	Alternatively, go to `%SystemDrive%\MicrosoftProtocolTests\FileServer\Server-Endpoint\<version#>\Batch`, and double-click the **Workgroup\_RunAllTestCases.cmd** file.
+    Figure 195. Protocol Test Manager: Saving a test cases Profile
 
-#### <a name="7.3.3"/> 7.3.3. Check Test Results
+    ![](./image/FileServerUserGuide/image1.png)**Note**
 
-Test suite generates test result files in different paths based on the way how test case is executed.
+    **Protocol Test Manager** also has a command line interface (**ptmcli.exe**) that you can use to automate the running of test cases with a selected Profile.
+    * You can locate the **ptmcli.exe** tool in the **..\\bin** folder under the **Protocol Test Manager** installation path in the **Program Files** directory. To use this tool, you will need to specify the path to a saved Profile name with the `-p` switch:
 
--	For running test case with **batch scripts**, results will be saved in `%SystemDrive%\MicrosoftProtocolTests\FileServer\Server-Endpoint\<version#>\TestResults`.
+      `ptmcli.exe -p <profileName>`
 
--	For running test case with **Protocol Test Manager**, results will be saved in `%SystemDrive%\MicrosoftProtocolTests\FileServer\Server-Endpoint\<version#>\TestResults`.
+    * To display help for the **ptmcli.exe** tool, specify the `-h` switch at the command line:
 
--	For further information about logging in the **Protocol Test Framework (PTF)**, please see the [PTF User Guide](https://github.com/microsoft/protocoltestframework) in the PTF installation directory.
+      `ptmcli.exe -h`
 
-## <a name="8"/> 8. Debugging Test Cases
+### <a name="7.2"/> 7.2 Configure the Test Suite Manually
 
-You can use the Visual Studio solution (.sln) file included with this test suite to debug the test cases that you create for your own protocol implementations.
+The **File Server Protocol Family Test Suite** is installed with default configuration settings. However, you have the option to modify these settings according to your specific test environment needs. For example, you can configure the **Test Suite** in the following ways:
+
+* Define the settings of the test environment, including computer names, IP addresses, passwords, and so on. For example, you could modify these particular entities from the **CommonTestSuite.deployment.ptfconfig** file in Visual Studio. The directory location for the **.ptfconfig** files is specified later in this section.
+
+You can also change configuration settings by editing the **\\*.deployment.ptfconfig** files, which includes  the files in the following list. A brief description of each file is also included here:
+
+* CommonTestSuite.deployment.ptfconfig – the common settings in the **CommonTestSuite.deployment.ptfconfig** file are shared by all the sub test suites that follow.
+
+* ServerFailoverTestSuite.deployment.ptfconfig − settings in **ServerFailoverTestSuite.deployment.ptfconfig** file are for the File Server failover test suite.
+
+* MS-DFSC_ServerTestSuite.deployment.ptfconfig − settings in the **MSDFSC_ServerTestSuite.deployment.ptfconfig** file are for the Distributed File System (DFSC) server test suite.
+
+* MS-FSRVP_ServerTestSuite.deployment.ptfconfig − settings in the **MSFSRVP_ServerTestSuite.deployment.ptfconfig** file are for the File Server Remote VSS Protocol (FSRVP) server test suite.
+
+* MS-SMB2_ServerTestSuite.deployment.ptfconfig − settings in the **MSSMB2_ServerTestSuite.deployment.ptfconfig** file are for the Server Message Block (SMB2) test suite.
+
+* MS-SMB2Model_ServerTestSuite.deployment.ptfconfig − settings in the **MSSMB2Model_ServerTestSuite.deployment.ptfconfig** file are for the Server Message Block (SMB2) model test suite.
+
+* MS-RSVD_ServerTestSuite.deployment.ptfconfig − settings in the **MSRSVD_ServerTestSuite.deployment.ptfconfig** file are for the Remote Shared Virtual Disk (RSVD) server test suite.
+
+* MS-SQOS_ServerTestSuite.deployment.ptfconfig − settings in the **MSSQOS_ServerTestSuite.deployment.ptfconfig** file are for the Storage Quality of Service (SQOS) server test suite.
+
+* Auth_ServerTestSuite.deployment.ptfconfig − settings in the **Auth_ServerTestSuite.deployment.ptfconfig** file are for the Auth test suite.
+
+![](./image/FileServerUserGuide/image1.png)**Note**
+
+You can locate the .ptfconfig files in the following directory location after the **File Server Protocol Family Test Suite** is installed:  **%SystemDrive%\\MicrosoftProtocolTests\\FileServer\\Server-Endpoint\\&lt;version#&gt;\Bin\\** The data in these XML files is invoked whenever you run test cases with the use of either **batch scripts** or the **Protocol Test Manager**.
+
+![](./image/FileServerUserGuide/image2.png)**Important**
+
+For specific configuration details, refer to a corresponding \*.deployment.ptfconfig file. The configuration files contain &lt;Description&gt; tags that describe the purpose of configurable items.
+
+### <a name="7.3"/> 7.3 Run Test Cases with Batch Scripts
+
+The **File Server Protocol Family Test Suite** includes command (**.cmd**) batch files that you can use to run some basic test cases. Each test case verifies a protocol implementation based on a predefined scenario. You can run the .cmd test case files directly from the following directory:
+
+**%SystemDrive%\\MicrosoftProtocolTests\\FileServer\\Server-Endpoint\\&lt;version#&gt;\\Batch\\**
+
+To run these batch files, either double-click one or more of them directly from the specified directory location or run them from a command prompt.
+
+#### <a name="7.3.1"/> 7.3.1 Run the BVT Tests
+
+This **Test Suite** includes a set of basic tests known as BVT tests. Together these test cases perform basic functionality tests that evaluate an implementation residing on an SUT computer. The BVT test cases are basic tests of specific features that should pass, which therefore makes them high priority tests.  You are advised to run the BVT test cases first and then run other test cases.
+
+To run the BVT test cases in a **WORKGROUP** or **DOMAIN** environment, perform the appropriate steps that follow:
+
+1. To run the **BVT** test cases in a **WORKGROUP** environment:
+
+    * From the desktop of the Driver computer, double-click the **Run FileServer ServerWorkgroup_BVTTestCases** shortcut that was created during the installation process.
+
+    * Alternatively, open the **%SystemDrive%\\MicrosoftProtocolTests\\FileServer\\ServerEndpoint\\&lt;version#&gt;\Batch\\** directory and double-click the **Workgroup_RunBVTTestCases.cmd** file.
+
+2. To run the **BVT** test cases in a **DOMAIN** environment:
+
+    * From the desktop of the Driver computer, double-click the **Run FileServer ServerDomain_BVTTestCases** shortcut that was created during the installation process.
+
+    * Alternatively, open the **%SystemDrive%\\MicrosoftProtocolTests\\FileServer\\ServerEndpoint\\&lt;version#&gt;\Batch\\** directory and double-click the **Domain_RunBVTTestCases.cmd** file.
+
+#### <a name="7.3.2"/> 7.3.2 Run All Test Cases
+
+Perform the steps that follow to run all test cases in either the WORKGROUP or DOMAIN environment, as required:
+
+1. To run all test cases in a **WORKGROUP** environment:
+
+    * From the desktop of the Driver computer, double-click the **Run FileServer ServerWorkgroup_AllTestCases** shortcut that was created during the installation process.
+
+    * Alternatively, open the **%SystemDrive%\\MicrosoftProtocolTests\\FileServer\\ServerEndpoint\\&lt;version#&gt;\\Batch\\** directory and double-click the **Workgroup_RunAllTestCases.cmd** file.
+
+    ![](./image/FileServerUserGuide/image1.png)**Note**
+
+    If you run all core/preconfigured test cases and your environment does not support certain features, you will see errors in the command console and in the PTM with respect to methods that failed when attempting to test those features.
+
+2. To run test cases with the RunTestCasesByCategory.cmd script, do the following:
+
+    * From the desktop of the Driver computer, double-click the **RunTestCasesByCategory** shortcut.
+
+    ![](./image/FileServerUserGuide/image1.png)**Note**
+
+    To run a specific group of test cases that are categorized by feature names, input the name of the appropriate test categories that are listed in the command console that appears when you run the **RunTestCasesByCategory.cmd** script.
+
+3. To run all test cases in a **DOMAIN** environment:
+
+    * From the desktop of the Driver computer, double-click the **Run FileServer ServerDomain_AllTestCases** shortcut that was created during the installation process.
+
+    * Alternatively, open the **%SystemDrive%\\MicrosoftProtocolTests\\FileServer\\ServerEndpoint\\&lt;version#&gt;\\Batch\\** directory and double-click the **Domain_RunAllTestCases.cmd** file.
+
+### <a name="7.4"/> 7.4 Reviewing Test Results
+
+The **File Server Protocol Family Test Suite** generates test result files in different file paths, depending on the manner in which test cases were executed. For example, when running test cases from the following sources, results are saved in the specified locations:
+
+* **Batch scripts (.cmd)** − results are saved in this location: **%SystemDrive%\\MicrosoftProtocolTests\\FileServer\\ServerEndpoint\\&lt;version#&gt;\\Batch\\TestResults\\**
+
+* **Protocol Test Manager** − results are saved in this location: **%SystemDrive%\\MicrosoftProtocolTests\\FileServer\\Server-Endpoint\\&lt;version#&gt;\\TestResults\\**
+
+When your tests are complete, you can review the results in the respective locations as cited above.
+
+**More Information**
+
+For further information about the meaning of logging in the **Protocol Test Framework** (**PTF**), please see the [PTF User Guide](https://github.com/microsoft/protocoltestframework) on **GitHub**.
+
+You can also review test results in the following ways:
+
+* In terms of tests that **Passed**, **Failed**, or were **Inconclusive**.
+
+* Selecting how results are grouped: by test **Category** or by **Outcome**
+
+* Assessment of logged data in the **StandardOutput**, **ErrorStackTrace**, and **ErrorMessage** categories.
+
+![](./image/FileServerUserGuide/image1.png)**Note**
+
+The StandardOutput data can also be displayed separately in HTML format.
+
+## <a name="8"/> 8 Creating a Custom Test Environment
+
+If you want to create a Test Suite to customize a testing environment and test cases to your own specifications, review the following documentation:
+
+[Getting Started Guide for the Protocol Test Framework](https://github.com/Microsoft/ProtocolTestFramework/blob/master/docs/PTFUserGuide.md)
+
+[Spec Explorer](https://docs.microsoft.com/en-us/previous-versions/visualstudio/spec-explorer/ee620411(v=specexplorer.10))
+
+## <a name="9"/> 9 Debugging Test Cases
+
+You can use the Visual Studio solution (.sln) file included with the  **File Server Protocol Family Test Suite** to debug the test cases that you run against your own protocol implementations. The **FileServer.sln** file is located [here](https://github.com/Microsoft/WindowsProtocolTestSuites/blob/staging/TestSuites/FileServer/src/).
+
+![](./image/FileServerUserGuide/image1.png)**Note**
+
+While using Microsoft® Visual Studio® 2017 or later to run test cases, the **Test Suite** may throw an exception with the message: **Cannot get test site**. To resolve this issue, navigate to **Test** -&gt; **Test Settings** -&gt; **Select Test Settings File**, and then select the test settings file ServerLocalTestRun.testrunconfig (under this folder <https://github.com/Microsoft/WindowsProtocolTestSuites/tree/staging/TestSuites/FileServer/src>)
+
+<a name="fig.196"></a>
 
 ![](./image/FileServerUserGuide/image166.png)
 
->	![](./image/FileServerUserGuide/image1.png)Note
+Figure 196. Microsoft Visual Studio: Correcting the exception **Cannot get test site**
 
->	&emsp;&emsp;While using Microsoft® Visual Studio® 2017 or above to run test cases, test suite may throw exception with message of **Cannot get test site**. To solve this issue, navigate to **Test** -#&gt; **Test Settings** -#&gt; **Select Test Settings File**, and select a test settings file that you want to use.
+To debug a test case, perform the steps that follow.
 
-To debug a test case:
+1. On the Driver computer, use Microsoft® Visual Studio® to open the following solution file: [FileServer.sln](https://github.com/Microsoft/WindowsProtocolTestSuites/blob/staging/TestSuites/FileServer/src/).
 
-1.  On the driver computer, use Microsoft® Visual Studio® to open the following solution file: **FileServer.sln**.
+2. In Visual Studio, in the Solution Explorer window, right-click the **Solution** **FileServer**, and then select **Build Solution**.
 
-2.  In Visual Studio, in the Solution Explorer window, right-click the **Solution 'FileServer'**, and select **Build Solution**.
+3. When you build the test project, the tests appear in **Test Explorer**. If Test Explorer is not visible, choose **Test** on the Visual Studio menu, select **Windows**, and then select **Test Explorer**.
 
-3.  When you build the test project, the tests appear in **Test Explorer**. If Test Explorer is not visible, choose **Test** on the Visual Studio menu, choose **Windows**, and then choose **Test Explorer**.
-
-4.  Select your test cases from Test Explorer and run or debug them.
+4. Select your test cases from Test Explorer and run or debug them.

@@ -12,30 +12,36 @@
     * [Traditional Test cases](#_Toc427488652)
     * [MBT Test cases](#_Toc427488653)
 * [Traditional Test Scenarios Design](#_Toc427488654)
-    * [Scenarios for Win8 new added algorithm](#_Toc427488655)
-        * [FsCtl_Get_IntegrityInformation](#_Toc427488656)
-        * [FsCtl_Set_IntegrityInformation](#_Toc427488657)
-        * [FsCtl_Offload_Read](#_Toc427488658)
-        * [FsCtl_Offload_Write](#_Toc427488659)
-        * [FsInfo_Query_FileFsSectorSizeInformation](#_Toc427488660)
-    * [Scenarios for ReFS file system](#_Toc427488661)
-        * [FsInfo_FileFsAttributeInformation](#_Toc427488662)
-        * [FileInfo_IsShortNameSupported](#_Toc427488663)
-        * [FsInfo_IsObjectIdSupported](#_Toc427488664)
+    * [Scenarios for FileInformation](#_Toc427488822)
         * [FileInfo_IsCompressionSupported](#_Toc427488665)
         * [FileInfo_IsEASupported](#_Toc427488666)
         * [FileInfo_IsIntegritySupported](#_Toc427488667)
         * [FileInfo_IsFileLinkInfoSupported](#_Toc427488668)
-        * [FileInfo_IsFileValidDateLengthInfoSupported](#_Toc427488669)
-        * [FsInfo_FileFsSizeInformation_ClusterSize](#_Toc427488670)
-        * [QuotaInfo_IsQuotaInfoSupported](#_Toc427488671)
+        * [FileInfo_IsFileValidDateLengthInfoSupported](#_Toc427488669)    
+        * [FileInfo_IsShortNameSupported](#_Toc427488663)
+        * [FileInfo_FileIdInformationSupported](#FileInfo_FileIdInformationSupported)        
+    * [Scenarios for FileSystemInformation](#_Toc427488823)
+        * [FsInfo_FileFsAttributeInformation](#_Toc427488662)
+        * [FsInfo_IsObjectIdSupported](#_Toc427488664)
+        * [FsInfo_FileFsSizeInformation](#_Toc427488670)    
+        * [FsInfo_Query_FileFsSectorSizeInformation](#_Toc427488660)        
+    * [Scenarios for FsControlRequest](#_Toc427488824)   
+        * [FsCtl_Get_IntegrityInformation](#_Toc427488656)
+        * [FsCtl_Set_IntegrityInformation](#_Toc427488657)
+        * [FsCtl_Offload_Read](#_Toc427488658)
+        * [FsCtl_Offload_Write](#_Toc427488659)    
         * [FsCtl_IsEncryptionSupported](#_Toc427488672)
         * [FsCtl_IsAllocatedRangesSupported](#_Toc427488673)
         * [FsCtl_IsReparsePointSupported](#_Toc427488674)
         * [FsCtl_IsSparseFileSupported](#_Toc427488675)
         * [FsCtl_IsZeroDataSupported](#_Toc427488676)
-        * [FsCtl_IsDuplicateExtentsToFileExSupported](#_Toc437488670)
-    * [Scenarios for Alternate Data Stream](#_Toc427488822)
+        * [FsCtl_IsDuplicateExtentsToFileExSupported](#_Toc437488670)        
+        * [FsCtl_Get_Volume_Data](#FsCtl-Get-Volume-Data)
+        * [FsCtl_Query_File_Regions](#Fsctl-Query-File-Regions)
+        * [FsCtl_Set_Compression](#FsCtl_Set_Compression)
+    * [Scenarios for QuotaInformation](#Scenarios-for-QuotaInformation)       
+        * [QuotaInfo_IsQuotaInfoSupported](#_Toc427488671)
+    * [Scenarios for Alternate Data Stream](#_Toc427488826)
         * [AlternateDataStream_CreateStream](#_Toc427488823)
         * [AlternateDataStream_ListStreams](#_Toc427488824)
         * [AlternateDataStream_DeleteStream](#_Toc427488825)
@@ -44,52 +50,10 @@
         * [AlternateDataStream_LockAndUnlock](#_Toc427488828)
         * [AlternateDataStream_QueryAndSet_FileInformation](#_Toc427488829)
         * [AlternateDataStream_FsControl](#_Toc427488830)
-    * [Other Scenarios](#other-scenarios)
-        * [CreateFile](#createfile)
+    * [Other Scenarios](#Other-scenarios)
+        * [CreateFile](#Other-scenarios-CreateFile)
 * [Traditional Test Case Design](#_Toc427488677)
-    * [Test cases for Win8 new added algorithm](#_Toc427488678)
-        * [FsCtl_Get_IntegrityInformation_File_IsIntegritySupported (BVT)](#_Toc427488679)
-        * [FsCtl_Get_IntegrityInformation_Dir_IsIntegritySupported (BVT)](#_Toc427488680)
-        * [FsCtl_Get_IntegrityInformation_File_InvalidParameter(3TCs)](#_Toc427488681)
-        * [FsCtl_Get_IntegrityInformation_Dir_InvalidParameter(3TCs)](#_Toc427488682)
-        * [FsCtl_Get_IntegrityInformation_File_OutputValue(2TCs)](#_Toc427488683)
-        * [FsCtl_Get_IntegrityInformation_Dir_OutputValue(2TCs)](#_Toc427488684)
-        * [FsCtl_Set_IntegrityInformation_File_IsIntegritySupported (BVT)](#_Toc427488685)
-        * [FsCtl_Set_IntegrityInformation_Dir_IsIntegritySupported (BVT)](#_Toc427488686)
-        * [FsCtl_Set_IntegrityInformation_File_InvalidParameter(2TCs)](#_Toc427488687)
-        * [FsCtl_Set_IntegrityInformation_Dir_InvalidParameter(2TCs)](#_Toc427488688)
-        * [FsCtl_Set_IntegrityInformation_File_WriteProtected](#_Toc427488689)
-        * [FsCtl_Set_IntegrityInformation_Dir_WriteProtected](#_Toc427488690)
-        * [FsCtl_Set_IntegrityInformation_File_ChecksumAlgorithm(2TCs)](#_Toc427488691)
-        * [FsCtl_Set_IntegrityInformation_Dir_ChecksumAlgorithm(2TCs)](#_Toc427488692)
-        * [FsCtl_Offload_Read_File_IsOffloadSupported (BVT)](#_Toc427488693)
-        * [FsCtl_Offload_Write_File_IsOffloadSupported (BVT)](#_Toc427488694)
-        * [FsInfo_Query_FileFsSectorSizeInformation_File_OutputBufferSize(3TCs, 1BVT)](#_Toc427488695)
-        * [FsInfo_Query_FileFsSectorSizeInformation_Dir_OutputBufferSize(3TCs)](#_Toc427488696)
-        * [FsInfo_Query_FileFsSectorSizeInformation_File_OutputValue_Common](#_Toc427488697)
-        * [FsInfo_Query_FileFsSectorSizeInformation_Dir_OutputValue_Common](#_Toc427488698)
-        * [FsInfo_Set_FileFsSectorSizeInformation_File_InvalidInfoClass](#_Toc427488699)
-        * [FsInfo_Set_FileFsSectorSizeInformation_Dir_InvalidInfoClass](#_Toc427488700)
-    * [Test cases for ReFS file system](#_Toc427488701)
-        * [IsShortNameSupported](#_Toc427488702)
-            * [FileInfo_Set_FileShortNameInfo_File_IsShortNameSupported](#_Toc427488703)
-            * [FileInfo_Set_FileShortNameInfo_Dir_IsShortNameSupported](#_Toc427488704)
-        * [IsObjectIdSupported](#_Toc427488705)
-            * [FsInfo_Query_FileFsAttributeInformation_File_IsObjectIdSupported(BVT)](#_Toc427488706)
-            * [FsInfo_Query_FileFsAttributeInformation_Dir_IsObjectIdSupported](#_Toc427488707)
-            * [FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported (BVT)](#_Toc427488708)
-            * [FsInfo_Query_FileFsObjectIdInformation_Dir_IsObjectIdSupported](#_Toc427488709)
-            * [FsInfo_Set_FileFsObjectIdInformation_File_IsObjectIdSupported](#_Toc427488710)
-            * [FsInfo_Set_FileFsObjectIdInformation_Dir_IsObjectIdSupported](#_Toc427488711)
-        * [IsCompressionSupported](#_Toc427488712)
-            * [FsInfo_Query_FileFsAttributeInformation_File_IsCompressionSupported(BVT)](#_Toc427488713)
-            * [FsInfo_Query_FileFsAttributeInformation_Dir_IsCompressionSupported](#_Toc427488714)
-            * [FileInfo_Query_FileCompressionInfo_File_IsCompressionSupported](#_Toc427488715)
-            * [FileInfo_Query_FileCompressionInfo_Dir_IsCompressionSupported](#_Toc427488716)
-            * [FsCtl_Get_Compression_File_IsCompressionSupported](#_Toc427488717)
-            * [FsCtl_Get_Compression_Dir_IsCompressionSupported](#_Toc427488718)
-            * [FsCtl_Set_Compression_File_IsCompressionSupported](#_Toc427488719)
-            * [FsCtl_Set_Compression_Dir_IsCompressionSupported](#_Toc427488720)
+    * [Test cases for FileInformation](#Test-cases-for-FileInformation)
         * [IsEASupported](#_Toc427488721)
             * [FileInfo_Set_FileFullEaInformation_File_IsEASupported](#_Toc427488722)
             * [FileInfo_Set_FileFullEaInformation_Dir_IsEASupported](#_Toc427488723)
@@ -98,39 +62,58 @@
             * [FileInfo_Set_FileEaInformation_File_IsEASupported](#_Toc427488726)
             * [FileInfo_Set_FileEaInformation_Dir_IsEASupported](#_Toc427488727)
             * [FileInfo_Query_FileEaInformation_File_IsEASupported](#_Toc427488728)
-            * [FileInfo_Query_FileEaInformation_Dir_IsEASupported](#_Toc427488729)
-        * [IsIntegritySupported](#_Toc427488730)
-            * [FsInfo_Query_FileFsAttributeInformation_File_IsIntegritySupported(BVT)](#_Toc427488731)
-            * [FsInfo_Query_FileFsAttributeInformation_Dir_IsIntegritySupported](#_Toc427488732)
+            * [FileInfo_Query_FileEaInformation_Dir_IsEASupported](#_Toc427488729)    
+        * [IsFileLinkInfoSupported](#_Toc427488739)
+            * [FileInfo_Set_FileLinkInfo_File_IsFileLinkInfoSupported](#_Toc427488740)
+            * [FileInfo_Set_FileLinkInfo_DIr_IsFileLinkInfoSupported](#_Toc427488741)     
+        * [IsShortNameSupported](#IsShortNameSupported)
+            * [FileInfo_Set_FileShortNameInfo_File_IsShortNameSupported](#_Toc427488703)
+            * [FileInfo_Set_FileShortNameInfo_Dir_IsShortNameSupported](#_Toc427488704)
+        * [IsCompressionSupported](#IsCompressionSupported)
+            * [FileInfo_Query_FileCompressionInfo_File_IsCompressionSupported](#_Toc427488715)
+            * [FileInfo_Query_FileCompressionInfo_Dir_IsCompressionSupported](#_Toc427488716)
+        * [IsFileValidDataLengthInfoSupported](#_Toc427488742)
+            * [FileInfo_Set_FileValidDataLengthInformation_File_IsSupported](#_Toc427488743)
+            * [FileInfo_Set_FileValidDataLengthInformation_Dir_IsSupported](#_Toc427488744)     
+        * [IsIntegritySupported](#_Toc427488730)                   
             * [FileInfo_Query_FileBasicInfo_File_IsIntegritySupported (BVT)](#_Toc427488733)
             * [FileInfo_Query_FileBasicInfo_Dir_IsIntegritySupported](#_Toc427488734)
             * [FileInfo_Query_FileAttributeTagInfo_File_IsIntegritySupported](#_Toc427488735)
             * [FileInfo_Query_FileAttributeTagInfo_Dir_IsIntegritySupported](#_Toc427488736)
             * [FileInfo_Query_FileNetworkOpenInfo_File_IsIntegritySupported](#_Toc427488737)
-            * [FileInfo_Query_FileNetworkOpenInfo_Dir_IsIntegritySupported](#_Toc427488738)
-        * [IsFileLinkInfoSupported](#_Toc427488739)
-            * [FileInfo_Set_FileLinkInfo_File_IsFileLinkInfoSupported](#_Toc427488740)
-            * [FileInfo_Set_FileLinkInfo_DIr_IsFileLinkInfoSupported](#_Toc427488741)
-        * [IsFileValidDataLengthInfoSupported](#_Toc427488742)
-            * [FileInfo_Set_FileValidDataLengthInformation_File_IsSupported](#_Toc427488743)
-            * [FileInfo_Set_FileValidDataLengthInformation_Dir_IsSupported](#_Toc427488744)
-        * [ClusterSize](#_Toc427488745)
+            * [FileInfo_Query_FileNetworkOpenInfo_Dir_IsIntegritySupported](#_Toc427488738)    
+        * [IsFileIdInformationSupported](#IsFileIdInformationSupported)
+            * [FileInfo_Query_FileIdInformation_File](#FileInfo_Query_FileIdInformation_File)
+            * [FileInfo_Query_FileIdInformation_Dir](#FileInfo_Query_FileIdInformation_Dir)
+    * [Test cases for FileSystemInformation](#Test-cases-for-FileSystemInformation)  
+        * [IsObjectIdSupported](#_Toc427488705)
+            * [FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported (BVT)](#_Toc427488708)
+            * [FsInfo_Query_FileFsObjectIdInformation_Dir_IsObjectIdSupported](#_Toc427488709)   
+        * [IsFsSectorSizeInformationSupported](#IsFsSectorSizeInformationSupported)
+            * [FsInfo_Query_FileFsSectorSizeInformation_File_OutputBufferSize(3TCs, 1BVT)](#_Toc427488695)
+            * [FsInfo_Query_FileFsSectorSizeInformation_Dir_OutputBufferSize(3TCs)](#_Toc427488696)
+            * [FsInfo_Query_FileFsSectorSizeInformation_File_OutputValue_Common](#_Toc427488697)
+            * [FsInfo_Query_FileFsSectorSizeInformation_Dir_OutputValue_Common](#_Toc427488698)
+            * [FsInfo_Set_FileFsSectorSizeInformation_File_InvalidInfoClass](#_Toc427488699)
+            * [FsInfo_Set_FileFsSectorSizeInformation_Dir_InvalidInfoClass](#_Toc427488700)        
+        * [IsFsAttributeInformationSupported](#IsFsAttributeInformationSupported)      
+            * [FsInfo_Query_FileFsAttributeInformation_File_IsCompressionSupported(BVT)](#_Toc427488713)
+            * [FsInfo_Query_FileFsAttributeInformation_Dir_IsCompressionSupported](#_Toc427488714)
+            * [FsInfo_Query_FileFsAttributeInformation_File_IsIntegritySupported(BVT)](#_Toc427488731)
+            * [FsInfo_Query_FileFsAttributeInformation_Dir_IsIntegritySupported](#_Toc427488732)     
+            * [FsInfo_Query_FileFsAttributeInformation_File_IsEncryptionSupported(BVT)](#_Toc427488752)
+            * [FsInfo_Query_FileFsAttributeInformation_Dir_IsEncryptionSupported](#_Toc427488753)            
+            * [FsInfo_Query_FileFsAttributeInformation_File_IsObjectIdSupported(BVT)](#_Toc427488706)
+            * [FsInfo_Query_FileFsAttributeInformation_Dir_IsObjectIdSupported](#_Toc427488707)            
+        * [IsFsSizeInformationSupported](#IsFsSizeInformationSupported)
             * [FsInfo_Query_FileFsSizeInformation_File_SectorsPerAllocationUnit (BVT)](#_Toc427488746)
             * [FsInfo_Query_FileFsSizeInformation_Dir_SectorsPerAllocationUnit](#_Toc427488747)
-        * [IsQuotaInfoSupported](#_Toc427488748)
-            * [QuotaInfo_Query_QuotaInformation_IsQuotaInfoSupported](#_Toc427488749)
-            * [QuotaInfo_Set_QuotaInformation_IsQuotaInfoSupported](#_Toc427488750)
-        * [IsEncryptionSupported](#_Toc427488751)
-            * [FsInfo_Query_FileFsAttributeInformation_File_IsEncryptionSupported(BVT)](#_Toc427488752)
-            * [FsInfo_Query_FileFsAttributeInformation_Dir_IsEncryptionSupported](#_Toc427488753)
-            * [FsCtl_Set_Encryption_File_IsEncryptionSupported](#_Toc427488754)
-            * [FsCtl_Set_Encryption_Dir_IsEncryptionSupported](#_Toc427488755)
+    * [Test cases for FsControlRequest](#Test-cases-for-FsControlRequest)
         * [IsAllocatedRangesSupported](#_Toc427488756)
             * [FsCtl_Query_AllocatedRanges_File_IsAllocatedRangesSupported](#_Toc427488757)
             * [FsCtl_Query_AllocatedRanges_Dir_IsAllocatedRangesSupported](#_Toc427488758)
         * [IsReparsePointSupported](#_Toc427488759)
-            * [FsCtl_Set_ReparsePoint_File_IsReparsePointSupported](#_Toc427488760)
-            * [FsCtl_Set_ReparsePoint_Dir_IsReparsePointSupported](#_Toc427488761)
+            * [FsCtl_Get_ReparsePoint_IsReparsePointSupported](#_Toc427488760)
         * [IsSparseFileSupported](#_Toc427488762)
             * [FsCtl_Set_Sparse_File_IsSparseFileSupported](#_Toc427488763)
             * [FsCtl_Set_Sparse_Dir_IsSparseFileSupported](#_Toc427488764)
@@ -142,27 +125,65 @@
             * [FileInfo_Query_FileNormalizedNameInfo_Dir](#_Toc427488833)
         * [IsDuplicateExtentsToFileExSupported](#_Toc437488671)
             * [BVT_FsCtl_DuplicateExtentsToFileEx_IsBasicSupported](#_Toc437488672)
-            * [BVT_FsCtl_DuplicateExtentsToFileEx_IsSourceAtomicSupported](#_Toc437488673)
+            * [BVT_FsCtl_DuplicateExtentsToFileEx_IsSourceAtomicSupported](#_Toc437488673)    
+        * [IsGetIntegrityInformationSupported](#IsIntegrityInformationSupported)
+            * [FsCtl_Get_IntegrityInformation_File_IsIntegritySupported (BVT)](#_Toc427488679)
+            * [FsCtl_Get_IntegrityInformation_Dir_IsIntegritySupported (BVT)](#_Toc427488680)
+            * [FsCtl_Get_IntegrityInformation_File_InvalidParameter(3TCs)](#_Toc427488681)
+            * [FsCtl_Get_IntegrityInformation_Dir_InvalidParameter(3TCs)](#_Toc427488682)
+            * [FsCtl_Get_IntegrityInformation_File_OutputValue(2TCs)](#_Toc427488683)
+            * [FsCtl_Get_IntegrityInformation_Dir_OutputValue(2TCs)](#_Toc427488684)
+        * [IsSetIntegrityInformationSupported](#IsSetIntegrityInformationSupported)   
+            * [FsCtl_Set_IntegrityInformation_File_IsIntegritySupported (BVT)](#_Toc427488685)
+            * [FsCtl_Set_IntegrityInformation_Dir_IsIntegritySupported (BVT)](#_Toc427488686)
+            * [FsCtl_Set_IntegrityInformation_File_InvalidParameter(2TCs)](#_Toc427488687)
+            * [FsCtl_Set_IntegrityInformation_Dir_InvalidParameter(2TCs)](#_Toc427488688)
+            * [FsCtl_Set_IntegrityInformation_File_WriteProtected](#_Toc427488689)
+            * [FsCtl_Set_IntegrityInformation_Dir_WriteProtected](#_Toc427488690)
+            * [FsCtl_Set_IntegrityInformation_File_ChecksumAlgorithm(2TCs)](#_Toc427488691)
+            * [FsCtl_Set_IntegrityInformation_Dir_ChecksumAlgorithm(2TCs)](#_Toc427488692)
+        * [IsOffloadReadSupported](#IsOffloadReadSupported)
+            * [FsCtl_Offload_Read_File_IsOffloadSupported (BVT)](#_Toc427488693)      
+        * [IsOffloadWriteSupported](#IsOffloadWriteSupported)      
+            * [FsCtl_Offload_Write_File_IsOffloadSupported (BVT)](#_Toc427488694)        
+        * [IsSetCompressionSupported](#IsSetCompressionSupported)
+            * [FsCtl_Set_Compression_File_IsCompressionSupported](#_Toc427488719)
+            * [FsCtl_Set_Compression_Dir_IsCompressionSupported](#_Toc427488720)    
+        * [IsGetCompressionSupported](#IsGetCompressionSupported)
+            * [FsCtl_Get_Compression_File_IsCompressionSupported](#_Toc427488717)
+            * [FsCtl_Get_Compression_Dir_IsCompressionSupported](#_Toc427488718)          
+        * [IsGetVolumeDataSupported](#IsGetVolumeDataSupported)
+            * [FsCtl_Get_REFS_Volume_Data_File](#FsCtl_Get_REFS_Volume_Data_File)
+            * [FsCtl_Get_REFS_Volume_Data_Dir](#FsCtl_Get_REFS_Volume_Data_Dir)
+            * [FsCtl_Get_NTFS_Volume_Data_File](#FsCtl_Get_NTFS_Volume_Data_File)
+            * [FsCtl_Get_NTFS_Volume_Data_Dir](#FsCtl_Get_NTFS_Volume_Data_Dir)
+        * [IsQueryFileRegionsSupported](#IsQueryFileRegionsSupported)
+            * [BVT_FsCtl_Query_File_Regions](#BVT_FsCtl_Query_File_Regions)
+            * [BVT_FsCtl_Query_File_Regions_WithInputData](#BVT_FsCtl_Query_File_Regions_WithInputData)
+    * [Test cases for QuotaInformation](#Test-cases-for-QuotaInformation)
+        * [IsQuotaInfoSupported](#_Toc427488748)
+            * [QuotaInfo_Query_QuotaInformation_IsQuotaInfoSupported](#_Toc427488749)
+            * [QuotaInfo_Set_QuotaInformation_IsQuotaInfoSupported](#_Toc427488750)
     * [Test cases for Alternate Data Stream](#_Toc427488768)
-        * [AlternateDataStream_CreateStream](#_Toc427488769)
+        * [IsCreateStreamSupported](#IsCreateStreamSupported)
             * [BVT_AlternateDataStream_CreateStream_File (BVT)](#_Toc427488770)
             * [BVT_AlternateDataStream_CreateStream_Dir (BVT)](#_Toc427488771)
-        * [AlternateDataStream_ListStreams](#_Toc427488772)
+        * [IsListStreamsSupported](#IsListStreamsSupported)
             * [BVT_AlternateDataStream_ListStreams_File (BVT)](#_Toc427488773)
             * [BVT_AlternateDataStream_ListStreams_Dir (BVT)](#_Toc427488774)
-        * [AlternateDataStream_DeleteStream](#_Toc427488775)
+        * [IsDeleteStreamSupported](#IsDeleteStreamSupported)
             * [BVT_AlternateDataStream_DeleteStream_File (BVT)](#_Toc427488776)
             * [BVT_AlternateDataStream_DeleteStream_Dir (BVT)](#_Toc427488777)
-        * [AlternateDataStream_RenameStream](#_Toc427488778)
+        * [IsRenameStreamSupported](#IsRenameStreamSupported)
             * [BVT_AlternateDataStream_RenameStream_File (BVT)](#_Toc427488779)
             * [BVT_AlternateDataStream_RenameStream_Dir (BVT)](#_Toc427488780)
-        * [AlternateDataStream_WriteAndRead](#_Toc427488781)
+        * [IsWriteAndReadSupported](#IsWriteAndReadSupported)
             * [BVT_AlternateDataStream_WriteAndRead_File (BVT)](#_Toc427488782)
             * [BVT_AlternateDataStream_WriteAndRead_Dir (BVT)](#_Toc427488783)
-        * [AlternateDataStream_LockAndUnlock](#_Toc427488784)
+        * [IsLockAndUnlockSupported](#IsLockAndUnlockSupported)
             * [BVT_AlternateDataStream_LockAndUnlock_File (BVT)](#_Toc427488785)
             * [BVT_AlternateDataStream_LockAndUnlock_Dir (BVT)](#_Toc427488786)
-        * [AlternateDataStream_QueryAndSet_FileInformation](#_Toc427488787)
+        * [IsQueryAndSetFileInformationSupported](#IsQueryAndSetFileInformationSupported)
             * [AlternateDataStream_Query_FileAccessInformation_File](#_Toc427488788)
             * [AlternateDataStream_Query_FileAccessInformation_Dir](#_Toc427488789)
             * [AlternateDataStream_Query_FileBasicInformation_File](#_Toc427488790)
@@ -179,7 +200,7 @@
             * [AlternateDataStream_Set_FileShortNameInformation_Dir](#_Toc427488801)
             * [AlternateDataStream_Set_FileValidDataLengthInformation_File](#_Toc427488802)
             * [AlternateDataStream_Set_FileValidDataLengthInformation_Dir](#_Toc427488803)
-        * [AlternateDataStream_FsControl](#_Toc427488804)
+        * [IsFsControlSupported](#IsFsControlSupported)
             * [AlternateDataStream_FsCtl_Get_Compression_File](#_Toc427488805)
             * [AlternateDataStream_FsCtl_Get_Compression_Dir](#_Toc427488806)
             * [AlternateDataStream_FsCtl_Get_IntegrityInformation_File](#_Toc427488807)
@@ -190,8 +211,8 @@
             * [AlternateDataStream_FsCtl_Set_Compression_Dir](#_Toc427488812)
             * [AlternateDataStream_FsCtl_Set_ZeroData_File](#_Toc427488813)
             * [AlternateDataStream_FsCtl_Set_ZeroData_Dir](#_Toc427488814)
-    * [Test cases for Other Scenarios](#test-cases-for-other-scenarios)
-        * [CreateFile](#_Toc427488834)
+    * [Test cases for Other Scenarios](#Test-cases-for-other-scenarios)
+        * [IsCreateFileSupported](#IsCreateFileSupported)
             * [CreateFile_InvalidStreamName](#_Toc427488835)
 * [MBT Test Design](#_Toc427488815)
     * [Model Design](#_Toc427488816)
@@ -258,15 +279,12 @@ There are 126 test cases in total:
 
 |  **Category**|  **Scenarios**|  **Test cases (BVT)**| 
 | -------------| -------------| ------------- |
-| Scenarios for Win8 new added algorithm| 5| 37 (7)| 
-| Scenarios for ReFS file system| 16| 53 (9)| 
+| Scenarios for FileInformation| 7| 26 (5)| 
+| Scenarios for FileSytemInformation| 4| 22 (7)| 
+| Scenarios for FsControlRequest| 13| 44 (14)| 
 | Scenarios for Alternate Data Stream| 19|38 (12)| 
+| Scenarios for QuotaInformation| 1|2(0)|
 | Other Scenarios| 1| 1|
-
-
-
-
-
 
 
 
@@ -296,18 +314,223 @@ There are 344 test cases in total:
 
 ## <a name="_Toc427488654"/>Traditional Test Scenarios Design
 
-### <a name="_Toc427488655"/>Scenarios for Win8 new added algorithm
-Here is a list for Win8 newly added algorithms, the designed scenarios are based on them.
+### <a name="_Toc427488655"/>Scenarios for FileInformation
 
-* [FsCtl] 3.1.5.9.7   FSCTL_GET_INTEGRITY_INFORMATION
 
-* [FsCtl] 3.1.5.9.26   FSCTL_SET_INTEGRITY_INFORMATION
+#### <a name="_Toc427488665"/>FileInfo_IsCompressionSupported
 
-* [FsCtl] 3.1.5.9.15   FSCTL_OFFLOAD_READ
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if compression is supported for different file systems.| 
+| | Test environment: NTFS, ReFS| 
+| | Test object: DataFile, DirectoryFile| 
+| | Test coverage:| 
+| | FileInfoClass: FileCompressionInformation| 
+| | If the object store does not implement this functionality, the operation MUST be failed with **STATUS_** **INVALID_PARAMETER**| 
+| | If supported, The operation returns **STATUS_SUCCESS**.| 
+| Message Sequence| CreateFile | 
+| | SetInfo for FileInfoClass.FileCompressionInformation| 
+| | Verify server return with **STATUS_SUCCESS** for supported file system| 
+| | Or failed the request with **STATUS_NOT_SUPPORTED**| 
 
-* [FsCtl] 3.1.5.9.15   FSCTL_OFFLOAD_WRITE
 
-* [FsInfo] 3.1.5.12.10   FileFsSectorSizeInformation
+
+#### <a name="_Toc427488666"/>FileInfo_IsEASupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if extended attribute is supported for different file systems.| 
+| | Note: Only NTFS implements EAs.| 
+| | Test environment: NTFS, ReFS| 
+| | Test object: DataFile, DirectoryFile| 
+| | Test coverage:| 
+| | Info class: FileFullEaInformation, FileEaInformation| 
+| | If the object store does not support extended attribute, the EA size should be 0. | 
+| | If supported, the EA size should be greater than 0.| 
+| Message Sequence| CreateFile | 
+| | SetInfo for FileInfoClass.FileFullEaInformation or FileEaInformation| 
+| | Verify server return EA size  &#62; 0 for supported file system| 
+| | Or EA size == 0 for unsupported file system.| 
+
+
+
+#### <a name="_Toc427488667"/>FileInfo_IsIntegritySupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if integrity is supported for different file systems.| 
+| | Note: Only ReFS supports integrity.| 
+| | Test environment: NTFS, ReFS| 
+| | Test object: DataFile, DirectoryFile| 
+| | Test coverage:| 
+| | Info class: FileBasicInformation, FileAttributeTagInformation, FileNetworkOpenInformation| 
+| | If the object store support this functionality, FILE_ATTRIBUTE_INTEGRITY_STREAM  is set in OutputBuffer.FileAttributes.| 
+| | If not support, FILE_ATTRIBUTE_INTEGRITY_STREAM  is not set in OutputBuffer.FileAttributes.| 
+| Message Sequence| CreateFile| 
+| | QueryInfo with FileInfoClass = FileAttributeTagInformation/FileBasicInformation/FileNetworkOpenInformation| 
+| | Verify the FILE_ATTRIBUTE_INTEGRITY_STREAM  is set or not in OutputBuffer.FileAttributes.| 
+
+
+#### <a name="_Toc427488668"/>FileInfo_IsFileLinkInfoSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if FileLinkInformation is supported for different file systems.| 
+| | Note: Only NTFS supports FileLinkInformation| 
+| | Test environment: NTFS, ReFS| 
+| | Test object: DataFile, DirectoryFile| 
+| | Test coverage:| 
+| | Info class: FileLinkInformation| 
+| | If the object store does not support this functionality, the operation failed with STATUS_NOT_SUPPORTED| 
+| | If support, returns STATUS_SUCCESS.| 
+| Message Sequence| CreateFile| 
+| | SetInfo with FileInfoClass.FileLinkInformation | 
+| | Verify server responses accordingly.| 
+
+
+#### <a name="_Toc427488669"/>FileInfo_IsFileValidDateLengthInfoSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test the FileValidDataLengthInformation for different file systems.| 
+| | Test environment: NTFS, ReFS, FAT32| 
+| | Test object: DataFile, DirectoryFile| 
+| | Test coverage:| 
+| | Info class: FileValidDataLengthInformation| 
+| | If the object store does not support this functionality, the operation failed with STATUS_INVALID_PARAMETER.| 
+| | If support, returns STATUS_SUCCESS.| 
+| Message Sequence| CreateFile| 
+| | SetInfo with FileInfoClass = FileValidDataLengthInformation | 
+| | Verify server responses accordingly.| 
+
+
+
+#### <a name="_Toc427488663"/>FileInfo_IsShortNameSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if short name supported for different file system.| 
+| | Note: ReFS does not implement short names.| 
+| | Test environment: NTFS, ReFS| 
+| | Test object: DataFile, DirectoryFile| 
+| | Test coverage:| 
+| | FileInfoClass: FileShortNameInformation| 
+| | If not supported, the operation failed with STATUS_INVALID_PARAMETER| 
+| | If supported, The operation returns **STATUS_SUCCESS**. |
+| Message Sequence| CreateFile | 
+| | SetInfo with FileInfoClass.FileShortNameInformation| 
+| | Verify server response with ShortName info for supported file system| 
+| | Or failed the request for unsupported file system.| 
+
+
+#### <a name="FileInfo_FileIdInformationSupported"/>FileInfo_FileIdInformationSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if FileIdInformation supported for different file system.| 
+| | Test environment: NTFS, ReFS| 
+| | Test object: DataFile, DirectoryFile| 
+| | Test coverage:| 
+| | FileInfoClass: FileIdInformation| 
+| | If supported, The operation returns **STATUS_SUCCESS**.| 
+| | And FileId of FileIdInformation is verified by sending FSCTL_READ_FILE_USN_DATA, VolumeSerialNumber of FileIdInformation is verified by sending FSCTL_GET_NTFS_VOLUME_DATA or FSCTL_GET_REFS_VOLUME_DATA. | 
+| Message Sequence| CreateFile | 
+| | QueryInfo with FileInfoClass.FileIdInformation|
+| | Get FileReferenceNumber by sending FSCTL_READ_FILE_USN_DATA to server.| 
+| | Verify FileId when querying FileIdInformation should be the same with FileReferenceNumber when sending FSCTL_READ_FILE_USN_DATA.|
+| | Get VolumeSerialNumber by sending FSCTL_GET_NTFS_VOLUME_DATA or FSCTL_GET_REFS_VOLUME_DATA to server.|
+| | Verify VolumeSerialNumber when querying FileIdInformation should be the same with VolumeSerialNumber when sending FSCTL_GET_NTFS_VOLUME_DATA or FSCTL_GET_REFS_VOLUME_DATA.|
+
+
+
+### <a name="_Toc427488823"/>Scenarios for FileSystemInformation
+
+
+#### <a name="_Toc427488662"/>FsInfo_FileFsAttributeInformation
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To query FileFsAttributeInformation for supported features in the file system.| 
+| | Test environment: NTFS, ReFS| 
+| | Test object: DataFile, DirectoryFile| 
+| | Test coverage for File attributes| 
+| | FILE_SUPPORTS_ENCRYPTION| 
+| | FILE_SUPPORTS_OBJECT_IDS| 
+| | FILE_SUPPORTS_REPARSE_POINTS| 
+| | FILE_SUPPORTS_SPARSE_FILES| 
+| | FILE_FILE_COMPRESSION| 
+| | FILE_SUPPORT_INTEGRITY_STREAMS| 
+| Message Sequence| CreateFile | 
+| | QueryInfo with FsInfoClass.FileFsAttributeInformation| 
+| | Verify the file system attribute is set correctly.| 
+
+
+#### <a name="_Toc427488664"/>FsInfo_IsObjectIdSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if object id is supported for different file systems.| 
+| | Note: ReFS does not support object IDs.| 
+| | Test environment: NTFS, ReFS| 
+| | Test object: DataFile, DirectoryFile| 
+| | Test coverage:| 
+| | FsInfoClass: FileObjectIdInformation| 
+| | If the object store does not implement this functionality, the operation MUST be failed with **STATUS_INVALID_PARAMETER**| 
+| | If supported, the operation returns **STATUS_SUCCESS**.| 
+| Message Sequence| CreateFile | 
+| | SetInfo with FsInfoClass.FileObjectIdInformation| 
+| | Verify server return with **STATUS_SUCCESS** for supported file system| 
+| | Or failed the request with **STATUS_INVALID_PARAMETER**| 
+
+
+
+#### <a name="_Toc427488670"/>FsInfo_FileFsSizeInformation_ClusterSize
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test cluster size for different file system.| 
+| | For ClusterSize:| 
+| |     NTFS uses a default cluster size of 4k | 
+| | ReFS uses a default cluster size of 64k| 
+| | For LogicalBytesPerSector: | 
+| | MUST be greater than or equal to 512 bytes| 
+| | For FileFsSizeInformation:| 
+| | OutputBuffer.SectorsPerAllocationUnit set to Open.File.Volume.ClusterSize / Open.File.Volume.LogicalBytesPerSector| 
+| | So for NTFS, SectorsPerAllocationUnit = 4K/512 bytes = 8| 
+| | For ReFS, SectorsPerAllocationUnit = 64K/512 bytes = 128| 
+| | Test environment: NTFS, ReFS| 
+| | Test object: DataFile, DirectoryFile| 
+| | Test coverage:| 
+| | Info class: FileValidDataLengthInformation| 
+| | For NTFS, SectorsPerAllocationUnit = 4K/512 bytes = 8| 
+| | For ReFS, SectorsPerAllocationUnit = 64K/512 bytes = 128.| 
+| Message Sequence| CreateFile| 
+| | QueryInfo with FsInfoClass. FileFsSizeInformation| 
+| | Verify the outputbuffer. SectorsPerAllocationUnit is correctly set according to default cluster size.| 
+
+
+
+
+#### <a name="_Toc427488660"/>FsInfo_Query_FileFsSectorSizeInformation
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test query file system info with FsInfoClass.FileFsSectorSizeInformation| 
+| | Test environment: NTFS, ReFS| 
+| | Test object: DataFile, DirectoryFile| 
+| | Test coverage:| 
+| | Input parameter test: | 
+| | If OutputBufferSize is smaller than sizeof(FILE_FS_SECTOR_SIZE_INFORMATION), the operation MUST be failed with **STATUS_INFO_LENGTH_MISMATCH** | 
+| | Operation test: | 
+| | Upon successful completion of the operation, returns **STATUS_SUCCESS**.| 
+| | Verify each data element in OutputBuffer for FILE_FS_SECTOR_SIZE_INFORMATION structure.| 
+| Message Sequence| CreateFile | 
+| | QueryInfo with FsInfoClass.FileFsSectorSizeInformation.| 
+| | Verify server responses accordingly to the input parameters.| 
+
+
+
+### <a name="_Toc427488824"/>Scenarios for FsControlRequest
 
 
 #### <a name="_Toc427488656"/>FsCtl_Get_IntegrityInformation
@@ -404,268 +627,7 @@ Here is a list for Win8 newly added algorithms, the designed scenarios are based
 | | **BytesReturned** set to OutputBufferLength| 
 | Message Sequence| CreateFile | 
 | | FSCTL request with  FSCTL_OFFLOAD_Write| 
-| | Verify server response correctly.| 
-
-
-
-
-#### <a name="_Toc427488660"/>FsInfo_Query_FileFsSectorSizeInformation
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test query file system info with FsInfoClass.FileFsSectorSizeInformation| 
-| | Test environment: NTFS, ReFS| 
-| | Test object: DataFile, DirectoryFile| 
-| | Test coverage:| 
-| | Input parameter test: | 
-| | If OutputBufferSize is smaller than sizeof(FILE_FS_SECTOR_SIZE_INFORMATION), the operation MUST be failed with **STATUS_INFO_LENGTH_MISMATCH** | 
-| | Operation test: | 
-| | Upon successful completion of the operation, returns **STATUS_SUCCESS**.| 
-| | Verify each data element in OutputBuffer for FILE_FS_SECTOR_SIZE_INFORMATION structure.| 
-| Message Sequence| CreateFile | 
-| | QueryInfo with FsInfoClass.FileFsSectorSizeInformation.| 
-| | Verify server responses accordingly to the input parameters.| 
-
-
-
-
-
-
-
-
-### <a name="_Toc427488661"/>Scenarios for ReFS file system
-Here is a list for product behavior for NTFS and ReFS file system, the designed scenarios are based on them.
-
-* [**FileInfo_ShortName**] ReFS and exFAT do not implement ShortNames.
-
-* [**FileInfo_ObjectId**] Only NTFS implements object IDs.
-
-* [**FileInfo_Compression**] Only NTFS supports compression.
-
-* [**FileInfo_ExtendedAttributes**] Only NTFS implements EAs.
-
-* [**FileInfo_FileLinkInformation**] Only NTFS supports FileLinkInformation.
-
-* [**FileInfo_FileValidDataLengthInformation**] Both NTFS and ReFS support FileValidDataLengthInformation.
-
-* [**FsInfo_ClusterSize**] The cluster size for ReFS is different from NTFS.
-
-* [**QuotaInfo**]Only NTFS supports quotas.
-
-* [**FSControl_Encryption**] Only NTFS implements encryption.
-
-* [**FsControl_AllocatedRanges**] FSCTL_QUERY_ALLOCATED_RANGES is only implemented by the ReFS and NTFS.
-
-* [**FsControl_ReparsePoint**] FSCTL_SET_REPARSE_POINT is only implemented by the ReFS and NTFS.
-
-* [**FsControl_Sparse**] Only NTFS and UDFS support sparse file.
-
-* [**FsControl_ZeroData**] This is only implemented by the ReFS and NTFS file systems.
-
-
-
-
-#### <a name="_Toc427488662"/>FsInfo_FileFsAttributeInformation
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To query FileFsAttributeInformation for supported features in the file system.| 
-| | Test environment: NTFS, ReFS| 
-| | Test object: DataFile, DirectoryFile| 
-| | Test coverage for File attributes| 
-| | FILE_SUPPORTS_ENCRYPTION| 
-| | FILE_SUPPORTS_OBJECT_IDS| 
-| | FILE_SUPPORTS_REPARSE_POINTS| 
-| | FILE_SUPPORTS_SPARSE_FILES| 
-| | FILE_FILE_COMPRESSION| 
-| | FILE_SUPPORT_INTEGRITY_STREAMS| 
-| Message Sequence| CreateFile | 
-| | QueryInfo with FsInfoClass.FileFsAttributeInformation| 
-| | Verify the file system attribute is set correctly.| 
-
-
-
-
-#### <a name="_Toc427488663"/>FileInfo_IsShortNameSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if short name supported for different file system.| 
-| | Note: ReFS does not implement short names.| 
-| | Test environment: NTFS, ReFS| 
-| | Test object: DataFile, DirectoryFile| 
-| | Test coverage:| 
-| | FileInfoClass: FileShortNameInformation| 
-| | If not supported, the operation failed with STATUS_INVALID_PARAMETER| 
-| | If supported, The operation returns **STATUS_SUCCESS**.| 
-| Message Sequence| CreateFile | 
-| | SetInfo with FileInfoClass.FileShortNameInformation| 
-| | Verify server response with ShortName info for supported file system| 
-| | Or failed the request for unsupported file system.| 
-
-
-
-
-#### <a name="_Toc427488664"/>FsInfo_IsObjectIdSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if object id is supported for different file systems.| 
-| | Note: ReFS does not support object IDs.| 
-| | Test environment: NTFS, ReFS| 
-| | Test object: DataFile, DirectoryFile| 
-| | Test coverage:| 
-| | FsInfoClass: FileObjectIdInformation| 
-| | If the object store does not implement this functionality, the operation MUST be failed with **STATUS_INVALID_PARAMETER**| 
-| | If supported, the operation returns **STATUS_SUCCESS**.| 
-| Message Sequence| CreateFile | 
-| | SetInfo with FsInfoClass.FileObjectIdInformation| 
-| | Verify server return with **STATUS_SUCCESS** for supported file system| 
-| | Or failed the request with **STATUS_INVALID_PARAMETER**| 
-
-
-
-
-#### <a name="_Toc427488665"/>FileInfo_IsCompressionSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if compression is supported for different file systems.| 
-| | Note: ReFS does not support object IDs.| 
-| | Test environment: NTFS, ReFS| 
-| | Test object: DataFile, DirectoryFile| 
-| | Test coverage:| 
-| | FileInfoClass: FileCompressionInformation| 
-| | If the object store does not implement this functionality, the operation MUST be failed with **STATUS_** **INVALID_PARAMETER**| 
-| | If supported, The operation returns **STATUS_SUCCESS**.| 
-| Message Sequence| CreateFile | 
-| | SetInfo for FileInfoClass.FileCompressionInformation| 
-| | Verify server return with **STATUS_SUCCESS** for supported file system| 
-| | Or failed the request with **STATUS_NOT_SUPPORTED**| 
-
-
-
-
-#### <a name="_Toc427488666"/>FileInfo_IsEASupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if extended attribute is supported for different file systems.| 
-| | Note: Only NTFS implements EAs.| 
-| | Test environment: NTFS, ReFS| 
-| | Test object: DataFile, DirectoryFile| 
-| | Test coverage:| 
-| | Info class: FileFullEaInformation, FileEaInformation| 
-| | If the object store does not support extended attribute, the EA size should be 0. | 
-| | If supported, the EA size should be greater than 0.| 
-| Message Sequence| CreateFile | 
-| | SetInfo for FileInfoClass.FileFullEaInformation or FileEaInformation| 
-| | Verify server return EA size  &#62; 0 for supported file system| 
-| | Or EA size == 0 for unsupported file system.| 
-
-
-
-
-#### <a name="_Toc427488667"/>FileInfo_IsIntegritySupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if integrity is supported for different file systems.| 
-| | Note: Only ReFS supports integrity.| 
-| | Test environment: NTFS, ReFS| 
-| | Test object: DataFile, DirectoryFile| 
-| | Test coverage:| 
-| | Info class: FileBasicInformation, FileAttributeTagInformation, FileNetworkOpenInformation| 
-| | If the object store support this functionality, FILE_ATTRIBUTE_INTEGRITY_STREAM  is set in OutputBuffer.FileAttributes.| 
-| | If not support, FILE_ATTRIBUTE_INTEGRITY_STREAM  is not set in OutputBuffer.FileAttributes.| 
-| Message Sequence| CreateFile| 
-| | QueryInfo with FileInfoClass = FileAttributeTagInformation/FileBasicInformation/FileNetworkOpenInformation| 
-| | Verify the FILE_ATTRIBUTE_INTEGRITY_STREAM  is set or not in OutputBuffer.FileAttributes.| 
-
-
-
-
-#### <a name="_Toc427488668"/>FileInfo_IsFileLinkInfoSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if FileLinkInformation is supported for different file systems.| 
-| | Note: Only NTFS supports FileLinkInformation| 
-| | Test environment: NTFS, ReFS| 
-| | Test object: DataFile, DirectoryFile| 
-| | Test coverage:| 
-| | Info class: FileLinkInformation| 
-| | If the object store does not support this functionality, the operation failed with STATUS_NOT_SUPPORTED| 
-| | If support, returns STATUS_SUCCESS.| 
-| Message Sequence| CreateFile| 
-| | SetInfo with FileInfoClass.FileLinkInformation | 
-| | Verify server responses accordingly.| 
-
-
-
-
-#### <a name="_Toc427488669"/>FileInfo_IsFileValidDateLengthInfoSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test the FileValidDataLengthInformation for different file systems.| 
-| | Test environment: NTFS, ReFS, FAT32| 
-| | Test object: DataFile, DirectoryFile| 
-| | Test coverage:| 
-| | Info class: FileValidDataLengthInformation| 
-| | If the object store does not support this functionality, the operation failed with STATUS_INVALID_PARAMETER.| 
-| | If support, returns STATUS_SUCCESS.| 
-| Message Sequence| CreateFile| 
-| | SetInfo with FileInfoClass = FileValidDataLengthInformation | 
-| | Verify server responses accordingly.| 
-
-
-
-
-#### <a name="_Toc427488670"/>FsInfo_FileFsSizeInformation_ClusterSize
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test cluster size for different file system.| 
-| | For ClusterSize:| 
-| |     NTFS uses a default cluster size of 4k | 
-| | ReFS uses a default cluster size of 64k| 
-| | For LogicalBytesPerSector: | 
-| | MUST be greater than or equal to 512 bytes| 
-| | For FileFsSizeInformation:| 
-| | OutputBuffer.SectorsPerAllocationUnit set to Open.File.Volume.ClusterSize / Open.File.Volume.LogicalBytesPerSector| 
-| | So for NTFS, SectorsPerAllocationUnit = 4K/512 bytes = 8| 
-| | For ReFS, SectorsPerAllocationUnit = 64K/512 bytes = 128| 
-| | Test environment: NTFS, ReFS| 
-| | Test object: DataFile, DirectoryFile| 
-| | Test coverage:| 
-| | Info class: FileValidDataLengthInformation| 
-| | For NTFS, SectorsPerAllocationUnit = 4K/512 bytes = 8| 
-| | For ReFS, SectorsPerAllocationUnit = 64K/512 bytes = 128.| 
-| Message Sequence| CreateFile| 
-| | QueryInfo with FsInfoClass. FileFsSizeInformation| 
-| | Verify the outputbuffer. SectorsPerAllocationUnit is correctly set according to default cluster size.| 
-
-
-
-
-#### <a name="_Toc427488671"/> QuotaInfo_IsQuotaInfoSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Scenario|  **QuotaInfo_IsSupported**| 
-| Description| To test if quota info is supported for different file systems.| 
-| | Note: Only NTFS supports quotas.| 
-| | Test environment: NTFS, ReFS| 
-| | Test object: DataFile, DirectoryFile| 
-| | Test coverage:| 
-| | If the object store does not implement this functionality, the operation MUST be failed with STATUS_INVALID_DEVICE_REQUEST | 
-| | If support, returns STATUS_SUCCESS.| 
-| Message Sequence| CreateFile| 
-| | Query Quota Information| 
-| | Verify server responses STATUS_SUCCESS/ STATUS_INVALID_DEVICE_REQUEST accordingly.| 
-
-
+| | Verify server responses correctly.| 
 
 
 #### <a name="_Toc427488672"/> FsCtl_IsEncryptionSupported
@@ -684,9 +646,6 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | | FsCtl request with FSCTL_SET_ENCRYPTION| 
 | | Verify server returns STATUS_SUCCESS for supported file system| 
 | | Or returns STATUS_INVALID_DEVICE_REQUEST for unsupported file system.| 
-
-
-
 
 
 
@@ -709,24 +668,22 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 
 
 
-
 #### <a name="_Toc427488674"/> FsCtl_IsReparsePointSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test if FSCTL_SET_REPARSE_POINT is supported for different file systems.| 
+| Description| To test if FSCTL_GET_REPARSE_POINT is supported for different file systems.| 
 | | Note: This is only implemented by the ReFS and NTFS file systems.| 
 | | Test environment: NTFS, ReFS, FAT32| 
-| | Test object: DataFile, DirectoryFile| 
+| | Test object: DirectoryFile| 
 | | Test coverage:| 
-| | FsCtl: FSCTL_SET_REPARSE_POINT| 
+| | FsCtl: FSCTL_GET_REPARSE_POINT| 
 | | If the object store does not implement this functionality, the operation MUST be failed with STATUS_INVALID_DEVICE_REQUEST | 
 | | If support, returns STATUS_SUCCESS.| 
 | Message Sequence| CreateFile| 
-| | FsCtl request with FSCTL_SET_REPARSE_POINT| 
+| | FsCtl request with FSCTL_GET_REPARSE_POINT| 
 | | Verify server returns STATUS_SUCCESS for supported file system| 
 | | Or returns STATUS_INVALID_DEVICE_REQUEST for unsupported file system.| 
-
 
 
 
@@ -746,7 +703,6 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | | FsCtl request with FSCTL_SET_SPARSE| 
 | | Verify server returns STATUS_SUCCESS for supported file system| 
 | | Or returns STATUS_INVALID_DEVICE_REQUEST for unsupported file system.| 
-
 
 
 
@@ -787,12 +743,68 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | | 2. The file content of the second cluster is the same as the first.| 
 
 
+#### <a name="FsCtl_Get_Volume_Data"/> FsCtl_Get_Volume_Data
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if FSCTL_GET_REFS_VOLUME_DATA/FSCTL_GET_NTFS_VOLUME_DATA is supported.| 
+| | Note: This is only implemented by the **REFS** file system and **NTFS** file system.| 
+| | Test environment: ReFS and NTFS| 
+| | Test object: DataFile, DirectoryFile| 
+| | Test coverage:| 
+| | FsCtl: FSCTL_GET_REFS_VOLUME_DATA and FSCTL_GET_NTFS_VOLUME_DATA| 
+| Message Sequence| Create test file.| 
+| | Query FileIdInformation.|
+| | Query FileFsFullSizeInformation.|
+| | FSCTL request with FSCTL_GET_NTFS_VOLUME_DATA/FSCTL_GET_REFS_VOLUME_DATA.| 
+| | Verify returned STATUS_SUCCESS and Verify returned REFS_VOLUME_DATA_BUFFER or NTFS_VOLUME_DATA_BUFFER:| 
+| | 1. VolumeSerialNumber of VOLUME_DATA_BUFFER should be the same with VolumeSerialNumber of FileIdInformation.| 
+| | 2. TotalClusters of VOLUME_DATA_BUFFER should be the same with TotalAllocationUnits of FileFsFullSizeInformation.| 
+| | 3. BytesPerSector of VOLUME_DATA_BUFFER should be the same with BytesPerSector of FileFsFullSizeInformation.|
+
+
+#### <a name="FsCtl_Query_File_Regions"/> FsCtl_Query_File_Regions
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if FSCTL_QUERY_FILE_REGIONS is supported.| 
+| | Note: This is only implemented by the **REFS** file system and **NTFS** file system.| 
+| | Test environment: ReFS and NTFS| 
+| | Test object: DataFile| 
+| | Test coverage:| 
+| | FsCtl: FSCTL_QUERY_FILE_REGIONS| 
+| Message Sequence| Create test file and fill it up with random data.| 
+| | FSCTL request with FSCTL_QUERY_FILE_REGIONS (containing or not containing input data).| 
+| | Verify returned STATUS_SUCCESS and Verify returned FILE_REGION_OUTPUT:| 
+| | 1. RegionEntryCount of the output data element should be 1.| 
+| | 2. TotalRegionEntryCount of the output data element should be 1.| 
+| | 3. FileOffset of the FILE_REGION_INFO data element should be zero.|
+| | 4. Length of the FILE_REGION_INFO data element should be the size we wrote to the file.|
+| | 5. FILE_REGION_USAGE_VALID_CACHED_DATA should be set for NTFS, or FILE_REGION_USAGE_VALID_NONCACHED_DATA should be set for REFS.|
+
+
+### <a name="Scenarios-for-QuotaInformation"/>Scenarios for QuotaInformation
+
+
+#### <a name="_Toc427488671"/> QuotaInfo_IsQuotaInfoSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Scenario|  **QuotaInfo_IsSupported**| 
+| Description| To test if quota info is supported for different file systems.| 
+| | Note: Only NTFS supports quotas.| 
+| | Test environment: NTFS| 
+| | Test object: DataFile, DirectoryFile| 
+| | Test coverage:| 
+| | If the object store does not implement this functionality, the operation MUST be failed with STATUS_INVALID_DEVICE_REQUEST | 
+| | If support, returns STATUS_SUCCESS.| 
+| Message Sequence| CreateFile| 
+| | Query Quota Information| 
+| | Verify server responses STATUS_SUCCESS/ STATUS_INVALID_DEVICE_REQUEST accordingly.| 
 
 
 
 ### <a name="_Toc427488822"/>Scenarios for Alternate Data Stream
-
-
 
 
 #### <a name="_Toc427488823"/>AlternateDataStream_CreateStream
@@ -807,8 +819,6 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | Create another Alternate Data Stream and write 4096 bytes to the stream|
 | | Verify server return with **STATUS_SUCCESS** for supported file system|  
-
-
 
 
 #### <a name="_Toc427488824"/>AlternateDataStream_ListStreams
@@ -827,8 +837,6 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | | Verify server return with streamname and streamsize|
 
 
-
-
 #### <a name="_Toc427488825"/>AlternateDataStream_DeleteStream
 
 | &#32;| &#32; |
@@ -844,9 +852,6 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | | Verify server return with **STATUS_SUCCESS** for supported file system|
 | | List all the Alternate Data Streams created on this file|
 | | Verify server return with streamname and streamsize|
-
-
-
 
 
 #### <a name="_Toc427488826"/>AlternateDataStream_RenameStream
@@ -868,9 +873,6 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | | Verify server return with streamname and streamsize|
 
 
-
-
-
 #### <a name="_Toc427488827"/>AlternateDataStream_WriteAndRead
 
 | &#32;| &#32; |
@@ -890,8 +892,6 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | | Verify the bytes read and the bytes written on this stream|
 
 
-
-
 #### <a name="_Toc427488828"/>AlternateDataStream_LockAndUnlock
 
 | &#32;| &#32; |
@@ -909,8 +909,6 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | | Verify server return with **STATUS_SUCCESS** for supported file system|
 
 
-
-
 #### <a name="_Toc427488829"/>AlternateDataStream_QueryAndSet_FileInformation
 
 | &#32;| &#32; |
@@ -923,8 +921,6 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | Query or set the file information on this Alternate Data Stream created on this file|
 | | Verify server return with **STATUS_SUCCESS** for supported file system|
-
-
 
 
 #### <a name="_Toc427488830"/>AlternateDataStream_FsControl
@@ -941,9 +937,9 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 | | Verify server return with **STATUS_SUCCESS** for supported file system|
 
 
-### Other Scenarios
+### <a name="Other-Scenarios"/>Other Scenarios
 
-#### CreateFile
+#### <a name="Other-scenarios-CreateFile"/>CreateFile
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -957,516 +953,599 @@ Here is a list for product behavior for NTFS and ReFS file system, the designed 
 
 ## <a name="_Toc427488677"/>Traditional Test Case Design
 
-### <a name="_Toc427488678"/>Test cases for Win8 new added algorithm
+### <a name="Test-cases-for-FileInformation"/>Test cases for FileInformation
 
-#### <a name="_Toc427488679"/>FsCtl_Get_IntegrityInformation_File_IsIntegritySupported (BVT)
+#### <a name="_Toc427488721"/>IsEASupported
+
+##### <a name="_Toc427488722"/>FileInfo_Set_FileFullEaInformation_File_IsEASupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test  if FSCTL request **FSCTL_GET_INTEGRITY_INFORMATION** is supported
-| | Note: Only ReFS supports integrity
-| | Test environment: NTFS, ReFS
+| Description| To test if extended attribute is supported for different file systems.
+| | Note: Only NTFS implements EAs.
+| | Test environment: NTFS
 | | Parameter combination.
 | | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsIntegritySupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsIntegritySupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| | IsEASupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsEASupported == False &nbsp;&#124;&nbsp;STATUS_NOT_SUPPORTED
 | Message Sequence| CreateFile (DataFile)
-| | FSCTL request with FSCTL_GET_INTEGRITY_INFORMATION
-| | If (IsIntegritySupported == True) {
-| | Assert.AreEqual(STATUS_SUCCESS,ActualResult);
+| | SetInfo with FileInfoClass.FileFullEaInformation
+| | If (IsEASupported == True) {
+| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
 | | } Else {
-| | Assert.AreEqual(STATUS_INVALID_DEVICE_REQUEST,ActualResult);
+| | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
 | | }
 
 
 
 
-#### <a name="_Toc427488680"/>FsCtl_Get_IntegrityInformation_Dir_IsIntegritySupported (BVT)
+##### <a name="_Toc427488723"/>FileInfo_Set_FileFullEaInformation_Dir_IsEASupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test  if FSCTL request **FSCTL_GET_INTEGRITY_INFORMATION** is supported
-| | Note: Only ReFS supports integrity
-| | Test environment: NTFS, ReFS
+| Description| To test if extended attribute is supported for different file systems.
+| | Note: Only NTFS implements EAs.
+| | Test environment: NTFS
 | | Parameter combination.
 | | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsIntegritySupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsIntegritySupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| | IsEASupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsEASupported == False &nbsp;&#124;&nbsp;STATUS_NOT_SUPPORTED
 | Message Sequence| CreateFile (DirectoryFile)
-| | FSCTL request with FSCTL_GET_INTEGRITY_INFORMATION
-| | If (IsIntegritySupported == True) {
-| | Assert.AreEqual(STATUS_SUCCESS,ActualResult);
+| | SetInfo with FileInfoClass.FileFullEaInformation
+| | If (IsEASupported == True) {
+| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
 | | } Else {
-| | Assert.AreEqual(STATUS_INVALID_DEVICE_REQUEST,ActualResult);
+| | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
 | | }
 
 
 
 
-#### <a name="_Toc427488681"/>FsCtl_Get_IntegrityInformation_File_InvalidParameter(3TCs)
-Parameter combination: (Expected results: STATUS_INVALID_PARAMETER)
-
+##### <a name="_Toc427488724"/>FileInfo_Query_FileFullEaInformation_File_IsEASupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
-|  | Parameter| 
-| 1| OutputBufferSize   &#60;  sizeof(| 
-| | FSCTL_GET_INTEGRITY_INFORMATION_BUFFER)| 
-| 2| Open.Stream.StreamType != FileStream| 
-| | && Open.Stream.StreamType != DirectoryStream| 
-| 3| Open.File.FileAttributes.FILE_ATTRIBUTE_SYSTEM == TRUE| 
+| Description| To test if extended attribute is supported for different file systems.
+| | Note: Only NTFS implements EAs.
+| | Test environment: NTFS
+| | Parameter combination.
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsEASupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsEASupported == False &nbsp;&#124;&nbsp;STATUS_NOT_SUPPORTED
+| Message Sequence| CreateFile (DataFile)
+| | QueryInfo with FileInfoClass.FileFullEaInformation
+| | If (IsEASupported == True) {
+| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
+| | } Else {
+| | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
+| | }
 
 
-| &#32;| &#32; |
-| -------------| ------------- |
-| Test case|  **FsCtl_Get** **_** **Integrity** **Information_** **File** **_** **OutputBu** **fferSizeLessThanIntegrityBuffer**| 
-| Description| To test parameter check for invalid parameters.| 
-| | Note: Only ReFS supports integrity| 
-| | Test environment: NTFS, ReFS| 
-| Message Sequence| CreateFile (DataFile)| 
-| | FsCtl request FSCTL_GET_INTEGRITY_INFORMATION with| 
-| |  **OutputBufferSize**  **=**  **sizeof(FSCTL_GET_INTEGRITY_INFORMATION_BUFFER)**  **-1**| 
-| | Assert.AreEqual(**STATUS_INVALID_PARAMETER**,ActualResult);| 
-| Test case|  **FsCtl_Get** **_** **Integrity** **Information_** **File_** **OpenStreamTypeIsNull**| 
-| Description| To test parameter check for invalid parameters.| 
-| | Note: Only ReFS supports integrity| 
-| | Test environment: NTFS, ReFS| 
-| Message Sequence| CreateFile (DataFile)| 
-| | FsCtl request with **Open.Stream.StreamType**  **=**  **NULL**| 
-| | Assert.AreEqual(STATUS_INVALID_PARAMETER,ActualResult);| 
-| Test case|  **FsCtl_Get** **_** **Integrity** **Information_** **File_** **SystemFile**| 
-| Description| To test parameter check for invalid parameters.| 
-| | Note: Only ReFS supports integrity| 
-| | Test environment: NTFS, ReFS| 
-| | Input parameter: | 
-| | Open.File.FileAttributes.FILE_ATTRIBUTE_SYSTEM == TRUE | 
-| | Expected Result: | 
-| | STATUS_INVALID_PARAMETER| 
-| Message Sequence| CreateFile (DataFile) with FileAttributes.FILE_ATTRIBUTE_SYSTEM| 
-| | FSCTL request with FSCTL_GET_INTEGRITY_INFORMATION | 
-| | Assert.AreEqual(STATUS_INVALID_PARAMETER,ActualResult);| 
 
 
-#### <a name="_Toc427488682"/>FsCtl_Get_IntegrityInformation_Dir_InvalidParameter(3TCs)
-Parameter combination: (Expected results: STATUS_INVALID_PARAMETER)
-
+##### <a name="_Toc427488725"/>FileInfo_Query_FileFullEaInformation_Dir_IsEASupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
-|  | Parameter| 
-| 1| OutputBufferSize   &#60;  sizeof(| 
-| | FSCTL_GET_INTEGRITY_INFORMATION_BUFFER)| 
-| 2| Open.Stream.StreamType != FileStream| 
-| | && Open.Stream.StreamType != DirectoryStream| 
-| 3| Open.File.FileAttributes.FILE_ATTRIBUTE_SYSTEM == TRUE| 
-
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Test case|  **FsCtl_Get** **_** **Integrity** **Information_** **Dir_** **OutputBu** **fferSizeLessThanIntegrityBuffer**| 
-| Description| To test parameter check for invalid parameters.| 
-| | Note: Only ReFS supports integrity| 
-| | Test environment: NTFS, ReFS| 
-| Message Sequence| CreateFile (Directory)| 
-| | FsCtl request FSCTL_GET_INTEGRITY_INFORMATION with| 
-| |  **OutputBufferSize**  **=**  **sizeof(FSCTL_GET_INTEGRITY_INFORMATION_BUFFER)**  **-1**| 
-| | Assert.AreEqual(**STATUS_INVALID_PARAMETER**,ActualResult);| 
-| Test case|  **FsCtl_Get** **_** **Integrity** **Information_** **Dir_** **OpenStreamTypeIsNull**| 
-| Description| To test parameter check for invalid parameters.| 
-| | Note: Only ReFS supports integrity| 
-| | Test environment: NTFS, ReFS| 
-| Message Sequence| CreateFile (Directory)| 
-| | FsCtl request with **Open.Stream.StreamType**  **=**  **NULL**| 
-| | Assert.AreEqual(STATUS_INVALID_PARAMETER,ActualResult);| 
-| Test case|  **FsCtl_Get** **_** **Integrity** **Information_** **Dir_** **SystemFile**| 
-| Description| To test parameter check for invalid parameters.| 
-| | Note: Only ReFS supports integrity| 
-| | Test environment: NTFS, ReFS| 
-| | Input parameter: | 
-| | Open.File.FileAttributes.FILE_ATTRIBUTE_SYSTEM == TRUE | 
-| | Expected Result: | 
-| | STATUS_INVALID_PARAMETER| 
-| Message Sequence| CreateFile (DirectoryFile) with FileAttributes.FILE_ATTRIBUTE_SYSTEM| 
-| | FSCTL request with FSCTL_GET_INTEGRITY_INFORMATION | 
-| | Assert.AreEqual(STATUS_INVALID_PARAMETER,ActualResult);| 
+| Description| To test if extended attribute is supported for different file systems.
+| | Note: Only NTFS implements EAs.
+| | Test environment: NTFS
+| | Parameter combination.
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsEASupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsEASupported == False &nbsp;&#124;&nbsp;STATUS_NOT_SUPPORTED
+| Message Sequence| CreateFile (DirectoryFile)
+| | QueryInfo with FileInfoClass.FileFullEaInformation
+| | If (IsEASupported == True) {
+| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
+| | } Else {
+| | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
+| | }
 
 
 
 
-#### <a name="_Toc427488683"/>FsCtl_Get_IntegrityInformation_File_OutputValue(2TCs)
+##### <a name="_Toc427488726"/>FileInfo_Set_FileEaInformation_File_IsEASupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Test case|  **FsCtl_Get** **_** **IntegrityInformation_File_OutputValue_** **Common**| 
-| Description| To test the output value for FSCTL_GET_INTEGRITY_INFORMATION.| 
-| | Note: Only ReFS supports integrity| 
-| | Test environment: ReFS| 
-| Message Sequence| CreateFile (DataFile)| 
-| | Send a valid FsControl request with  FSCTL_GET_INTEGRITY_INFORMATION| 
-| | Verify server returns STATUS_SUCCESS| 
-| | Verify the following values are correct| 
-| | OutputBuffer.CheckSumAlgorithm is one of the values for ChecksumAlgorithm| 
-| | OutputBuffer.ClusterShift is the base-2 logarithm of Open.File.Volume.ClusterSize| 
-| | OutputBuffer.Flags is not CHECKSUM_ENFORCEMENT_OFF| 
-| Test case|  **FsCtl_Get** **_** **Integri** **tyInformation_File_OutputValue_ChecksumEnforcement**| 
-| Description| To test the OutputBuffer.Flags for CHECKSUM_ENFORCEMENT_OFF.| 
-| | Note: Only ReFS supports integrity| 
-| | Test environment: ReFS| 
-| Message Sequence| CreateFile (DataFile, StreamType is DataStream)| 
-| | FsControl request with  FSCTL_SET_INTEGRITY_INFORMATION| 
-| |     With Flags set to CHECKSUM_ENFORCEMENT_OFF| 
-| | FsControl request with  FSCTL_GET_INTEGRITY_INFORMATION| 
-| | OutputBuffer.Flags is CHECKSUM_ENFORCEMENT_OFF| 
+| Description| To test if extended attribute is supported for different file systems.
+| | Note: Only NTFS implements EAs.
+| | Test environment: NTFS
+| | Parameter combination.
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsEASupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsEASupported == False &nbsp;&#124;&nbsp;STATUS_NOT_SUPPORTED
+| Message Sequence| CreateFile (DataFile)
+| | SetInfo with FileInfoClass.FileEaInformation
+| | If (IsEASupported == True) {
+| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
+| | } Else {
+| | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
+| | }
 
 
 
 
-#### <a name="_Toc427488684"/>FsCtl_Get_IntegrityInformation_Dir_OutputValue(2TCs)
+#### <a name="_Toc427488727"/>FileInfo_Set_FileEaInformation_Dir_IsEASupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Test case|  **FsCtl_GetIntegr** **ityInformation_Dir_OutputValue_Common**| 
-| Description| To test the output value for FSCTL_GET_INTEGRITY_INFORMATION.| 
-| | Note: Only ReFS supports integrity| 
-| | Test environment: ReFS| 
-| Message Sequence| CreateFile (Directory)| 
-| | Send a valid FsControl request with  FSCTL_GET_INTEGRITY_INFORMATION| 
-| | Verify server returns STATUS_SUCCESS| 
-| | Verify the following values are correct| 
-| | OutputBuffer.CheckSumAlgorithm is one of the values for ChecksumAlgorithm| 
-| | OutputBuffer.ClusterShift is the base-2 logarithm of Open.File.Volume.ClusterSize| 
-| | OutputBuffer.Flags is **not** CHECKSUM_ENFORCEMENT_OFF| 
-| Test case|  **FsCtl_Get** **_** **IntegrityInformation_Dir_OutputValue_** **ChecksumEnforcement**| 
-| Description| To test the OutputBuffer.Flags for directory:| 
-| |     It is not CHECKSUM_ENFORCEMENT_OFF even Open.Stream.ChecksumEnforcementOff is TRUE.| 
-| | Note: Only ReFS supports integrity| 
-| | Test environment: ReFS| 
-| Message Sequence| CreateFile (Directory)| 
-| | FsControl request with  FSCTL_SET_INTEGRITY_INFORMATION| 
-| |     With Flags set to CHECKSUM_ENFORCEMENT_OFF| 
-| | FsControl request with  FSCTL_GET_INTEGRITY_INFORMATION| 
-| | OutputBuffer.Flags is **not** CHECKSUM_ENFORCEMENT_OFF| 
+| Description| To test if extended attribute is supported for different file systems.
+| | Note: Only NTFS implements EAs.
+| | Test environment: NTFS
+| | Parameter combination.
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsEASupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsEASupported == False &nbsp;&#124;&nbsp;STATUS_NOT_SUPPORTED
+| Message Sequence| CreateFile (DirectoryFile)
+| | SetInfo with FileInfoClass.FileEaInformation
+| | If (IsEASupported == True) {
+| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
+| | } Else {
+| | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
+| | }
 
 
 
 
-#### <a name="_Toc427488685"/>FsCtl_Set_IntegrityInformation_File_IsIntegritySupported (BVT)
+##### <a name="_Toc427488728"/>FileInfo_Query_FileEaInformation_File_IsEASupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test  if FSCTL request **FSCTL_** **S** **ET_INTEGRITY_INFORMATION** is supported
-| | Note: Only ReFS supports integrity
+| Description| To test if extended attribute is supported for different file systems.
+| | Note: Only NTFS implements EAs.
+| | Test environment: NTFS
+| | Parameter combination.
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsEASupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsEASupported == False &nbsp;&#124;&nbsp;STATUS_NOT_SUPPORTED
+| Message Sequence| CreateFile (DataFile)
+| | QueryInfo with FileInfoClass.FileEaInformation
+| | If (IsEASupported == True) {
+| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
+| | } Else {
+| | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
+| | }
+
+
+
+
+##### <a name="_Toc427488729"/>FileInfo_Query_FileEaInformation_Dir_IsEASupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if extended attribute is supported for different file systems.
+| | Note: Only NTFS implements EAs.
+| | Test environment: NTFS
+| | Parameter combination.
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsEASupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsEASupported == False &nbsp;&#124;&nbsp;STATUS_NOT_SUPPORTED
+| Message Sequence| CreateFile (DirectoryFile)
+| | QueryInfo with FileInfoClass.FileEaInformation
+| | If (IsEASupported == True) {
+| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
+| | } Else {
+| | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
+| | }
+
+
+
+
+#### <a name="_Toc427488739"/>IsFileLinkInfoSupported
+
+##### <a name="_Toc427488740"/>FileInfo_Set_FileLinkInfo_File_IsFileLinkInfoSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if FileLinkInformation is supported for different file systems.
+| | Note: Only NTFS supports FileLinkInformation
 | | Test environment: NTFS, ReFS
+| | Test object: DataFile, DirectoryFile
+| | Input parameter: FileInfoClass.FileLinkInformation
 | | Parameter combination.
 | | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsIntegritySupported == True &nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsIntegritySupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
-| Message Sequence| CreateFile (DataFile)
-| | FSCTL request with FSCTL_SET_INTEGRITY_INFORMATION
-| | If (IsIntegritySupported == True) {
-| | assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
+| | IsFileLinkInfoSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsFileLinkInfoSupported == False &nbsp;&#124;&nbsp;STATUS_NOT_SUPPORTED
+| Message Sequence| CreateFile
+| | SetInfo with FileInfoClass.FileLinkInformation 
+| | If (IsFileLinkInfoSupported == True) {
+| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
 | | } Else {
-| | assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
+| | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
 | | }
 
 
 
 
-#### <a name="_Toc427488686"/>FsCtl_Set_IntegrityInformation_Dir_IsIntegritySupported (BVT)
+##### <a name="_Toc427488741"/>FileInfo_Set_FileLinkInfo_DIr_IsFileLinkInfoSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test  if FSCTL request **FSCTL_** **S** **ET_INTEGRITY_INFORMATION** is supported
-| | Note: Only ReFS supports integrity
+| Description| To test if FileLinkInformation is supported for different file systems.
+| | Note: Only NTFS supports FileLinkInformation
 | | Test environment: NTFS, ReFS
+| | Test object: DataFile, DirectoryFile
+| | Input parameter: FileInfoClass.FileLinkInformation
 | | Parameter combination.
 | | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsIntegritySupported == True &nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsIntegritySupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
-| Message Sequence| CreateFile (Directory)
-| | FSCTL request with FSCTL_SET_INTEGRITY_INFORMATION
-| | If (IsIntegritySupported == True) {
-| | assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
+| | IsFileLinkInfoSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsFileLinkInfoSupported == False &nbsp;&#124;&nbsp;STATUS_NOT_SUPPORTED
+| Message Sequence| CreateFile
+| | SetInfo with FileInfoClass.FileLinkInformation 
+| | If (IsFileLinkInfoSupported == True) {
+| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
 | | } Else {
-| | assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
+| | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
+| | }
+
+
+#### <a name="_Toc427488702"/>IsShortNameSupported
+
+##### <a name="_Toc427488703"/>FileInfo_Set_FileShortNameInfo_File_IsShortNameSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if short name supported for different file system.
+| | Note: ReFS does not implement short names.
+| | Test environment: NTFS, ReFS
+| | Test object: DataFile, DirectoryFile
+| | Parameter combination.
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsShortNameSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsShortNameSupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| Message Sequence| CreateFile 
+| | SetInfo with FileInfoClass.FileShortNameInformation
+| | If (IsShortNameSupported == True) {
+| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
+| | } Else {
+| | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
 | | }
 
 
 
 
-#### <a name="_Toc427488687"/>FsCtl_Set_IntegrityInformation_File_InvalidParameter(2TCs)
-Parameter combination: (Expected results: STATUS_INVALID_PARAMETER)
-
+##### <a name="_Toc427488704"/>FileInfo_Set_FileShortNameInfo_Dir_IsShortNameSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
-|  | Parameter| 
-| 1| InputBufferSize   &#60;  sizeof(| 
-| | FSCTL_GET_INTEGRITY_INFORMATION_BUFFER)| 
-| 2| InputBuffer.ChecksumAlgorithm which is not one of CHECKSUM_TYPE_NONE, CHECKSUM_TYPE_CRC64, CHECKSUM_TYPE_UNCHANGED| 
-| 3| The operation is attempting to change the checksum state of a non-empty file; the integrity status of files can be changed only when they have not yet been written to.| 
+| Description| To test if short name supported for different file system.
+| | Note: ReFS does not implement short names.
+| | Test environment: NTFS, ReFS
+| | Test object: DataFile, DirectoryFile
+| | Parameter combination.
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsShortNameSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsShortNameSupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| Message Sequence| CreateFile 
+| | SetInfo with FileInfoClass.FileShortNameInformation
+| | If (IsShortNameSupported == True) {
+| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
+| | } Else {
+| | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
+| | }
 
 
 
+#### <a name="_Toc427488712"/>IsCompressionSupported
 
 
-
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Test case|  **Fs** **Ctl** **_Set** **_** **Integrity** **Information_** **File_** **InputBu** **fferSizeLessThanIntegrityBuffer**| 
-| Description| To test parameter check for invalid parameters.| 
-| | Note: Only ReFS supports integrity| 
-| | Test environment: NTFS, ReFS| 
-| Message Sequence| CreateFile (DataFile)| 
-| | FsCtl request FSCTL_GET_INTEGRITY_INFORMATION with| 
-| |  **In** **putBufferSize**  **=**  **sizeof(FSCTL_GET_INTEGRITY_INFORMATION_BUFFER)**  **-1**| 
-| | Assert.AreEqual(**STATUS_INVALID_PARAMETER**,ActualResult);| 
-| Test case|  **FsC** **tl** **_Set** **_** **Integrity** **Information_** **File_** **Undefined** **ChecksumAlgorithm**| 
-| Description| To test parameter check for invalid parameters.| 
-| | Note: Only ReFS supports integrity| 
-| | Test environment: NTFS, ReFS| 
-| Message Sequence| CreateFile (DataFile)| 
-| | FsCtl request FSCTL_GET_INTEGRITY_INFORMATION with| 
-| | InputBuffer.ChecksumAlgorithm = 0x0003| 
-| | Assert.AreEqual(**STATUS_INVALID_PARAMETER**,ActualResult);| 
-| Test case|  **FsCtl_Set_IntegrityInformation_InvalidParameter_NonEmptyFile**| 
-| Description| To test parameter check for invalid parameters.| 
-| | Note: Only ReFS supports integrity| 
-| | Test environment: NTFS, ReFS| 
-| Message Sequence| CreateFile (DataFile)| 
-| | FsCtl request FSCTL_GET_INTEGRITY_INFORMATION with| 
-| | InputBuffer.ChecksumAlgorithm = CHECKSUM_TYPE_CRC64| 
-| | Write 1 KB data into this file to make sure it is not empty.| 
-| | FsCtl request FSCTL_GET_INTEGRITY_INFORMATION with| 
-| | InputBuffer.ChecksumAlgorithm = CHECKSUM_TYPE_NONE| 
-| | Assert.AreEqual(**STATUS_INVALID_PARAMETER**,ActualResult);| 
-
-
-
-
-#### <a name="_Toc427488688"/>FsCtl_Set_IntegrityInformation_Dir_InvalidParameter(2TCs)
-Parameter combination: (Expected results: STATUS_INVALID_PARAMETER)
-
+##### <a name="_Toc427488715"/>FileInfo_Query_FileCompressionInfo_File_IsCompressionSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
-|  | Parameter| 
-| 1| OutputBufferSize   &#60;  sizeof(| 
-| | FSCTL_GET_INTEGRITY_INFORMATION_BUFFER)| 
-| 2| InputBuffer.ChecksumAlgorithm which is not one of CHECKSUM_TYPE_NONE, CHECKSUM_TYPE_CRC64, CHECKSUM_TYPE_UNCHANGED| 
+| Description| To test if compression is supported for different file systems.
+| | Test environment: NTFS, ReFS
+| | Test object: DataFile, DirectoryFile
+| | Parameter combination.
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsCompressionSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsCompressionSupported == False &nbsp;&#124;&nbsp;STATUS_NOT_SUPPORTED
+| Message Sequence| CreateFile 
+| | QueryInfo for FileInfoClass.FileCompressionInformation
+| | If (IsCompressionSupported == True) {
+| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
+| | } Else {
+| | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
+| | }
 
 
 
 
-
-
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Test case|  **FsC** **tl** **_Set** **_Integrity** **Information_** **Dir_InputBu** **fferSizeLessThanIntegrityBuffer**| 
-| Description| To test parameter check for invalid parameters.| 
-| | Note: Only ReFS supports integrity| 
-| | Test environment: NTFS, ReFS| 
-| Message Sequence| CreateFile (Directory)| 
-| | FsCtl request FSCTL_GET_INTEGRITY_INFORMATION with| 
-| |  **OutputBufferSize**  **=**  **sizeof(FSCTL_GET_INTEGRITY_INFORMATION_BUFFER)**  **-1**| 
-| | Assert.AreEqual(**STATUS_INVALID_PARAMETER**,ActualResult);| 
-| Test case|  **FsC** **t** **l_Set** **_Integrity** **Information_** **Dir_** **Undefined** **ChecksumAlgorithm**| 
-| Description| To test parameter check for invalid parameters.| 
-| | Note: Only ReFS supports integrity| 
-| | Test environment: NTFS, ReFS| 
-| Message Sequence| CreateFile (Directory)| 
-| | FsCtl request FSCTL_GET_INTEGRITY_INFORMATION with| 
-| | InputBuffer.ChecksumAlgorithm = 0x0003| 
-| | Assert.AreEqual(**STATUS_INVALID_PARAMETER**,ActualResult);| 
-
-
-
-
-#### <a name="_Toc427488689"/>FsCtl_Set_IntegrityInformation_File_WriteProtected
+##### <a name="_Toc427488716"/>FileInfo_Query_FileCompressionInfo_Dir_IsCompressionSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| Try to set integrity information for a read only volume, it should fail with STATUS_MEDIA_WRITE_PROTECTED.| 
-| | Note: Only ReFS supports integrity| 
+| Description| To test if compression is supported for different file systems.
+| | Test environment: NTFS, ReFS
+| | Test object: DataFile, DirectoryFile
+| | Parameter combination.
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsCompressionSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsCompressionSupported == False &nbsp;&#124;&nbsp;STATUS_NOT_SUPPORTED
+| Message Sequence| CreateFile 
+| | QueryInfo for FileInfoClass.FileCompressionInformation
+| | If (IsCompressionSupported == True) {
+| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
+| | } Else {
+| | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
+| | }
+
+
+
+#### <a name="_Toc427488742"/>IsFileValidDataLengthInfoSupported
+
+##### <a name="_Toc427488743"/>FileInfo_Set_FileValidDataLengthInformation_File_IsSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test the FileValidDataLengthInformation for different file systems.
+| | Test environment: NTFS, ReFS, FAT32
+| | Test object: DataFile, DirectoryFile
+| | Input parameter: FileInfoClass.FileValidDataLengthInformation
+| | Parameter combination.
+| | Parameter&emsp;&emsp;&nbsp;&#124;&nbsp;Expected Result
+| | IsFileValidDataLengthInfoSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsFileValidDataLengthInfoSupported == False &nbsp;&#124;&nbsp;STATUS_NOT_SUPPORTED
+| Message Sequence| CreateFile
+| | SetInfo with FileInfoClass = FileValidDataLengthInformation 
+| | If (IsFileValidDataLengthInfoSupported == True) {
+| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
+| | } Else {
+| | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
+| | }
+
+
+
+
+##### <a name="_Toc427488744"/>FileInfo_Set_FileValidDataLengthInformation_Dir_IsSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test the FileValidDataLengthInformation for different file systems.
+| | Test environment: NTFS, ReFS, FAT32
+| | Test object: DataFile, DirectoryFile
+| | Input parameter: FileInfoClass.FileValidDataLengthInformation
+| | Parameter combination.
+| | Parameter&emsp;&emsp;&nbsp;&#124;&nbsp;Expected Result
+| | IsFileValidDataLengthInfoSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsFileValidDataLengthInfoSupported == False &nbsp;&#124;&nbsp;STATUS_NOT_SUPPORTED
+| Message Sequence| CreateFile
+| | SetInfo with FileInfoClass = FileValidDataLengthInformation 
+| | If (IsFileValidDataLengthInfoSupported == True) {
+| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
+| | } Else {
+| | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
+| | }
+
+
+
+#### <a name="_Toc427488730"/>IsIntegritySupported
+
+##### <a name="_Toc427488733"/>FileInfo_Query_FileBasicInfo_File_IsIntegritySupported (BVT)
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if integrity is supported for different file systems.| 
+| | Note: Only ReFS supports integrity.| 
 | | Test environment: ReFS| 
-| Message Sequence| Connect to a read only volume| 
-| | OpenFile (DataFile)| 
-| | FsCtl request FSCTL_GET_INTEGRITY_INFORMATION| 
-| | Assert.AreEqual(**STATUS_MEDIA_WRITE_PROTECTED**,ActualResult);| 
+| | Input parameter: FileInfoClass. FileBasicInformation| 
+| | Expected Result:| 
+| | If the object store support this functionality, FILE_ATTRIBUTE_INTEGRITY_STREAM  is set in OutputBuffer.FileAttributes.| 
+| | If not support, FILE_ATTRIBUTE_INTEGRITY_STREAM  is not set in OutputBuffer.FileAttributes.| 
+| Message Sequence| CreateFile DataFile with **FileAttribute**.INTEGRITY_STREAM| 
+| | QueryInfo with FileInfoClass = FileBasicInformation| 
+| | If (IsIntegritySupported == True) {| 
+| | Verify OutputBuffer.FileAttributes.FILE_ATTRIBUTE_INTEGRITY_STREAM is set.| 
+| | } Else {| 
+| | Verify OutputBuffer.FileAttributes.FILE_ATTRIBUTE_INTEGRITY_STREAM is not set.| 
+| | }| 
 
 
 
 
-#### <a name="_Toc427488690"/>FsCtl_Set_IntegrityInformation_Dir_WriteProtected
+##### <a name="_Toc427488734"/>FileInfo_Query_FileBasicInfo_Dir_IsIntegritySupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| Try to set integrity information for a read only volume, it should fail with STATUS_MEDIA_WRITE_PROTECTED.| 
-| | Note: Only ReFS supports integrity| 
+| Description| To test if integrity is supported for different file systems.| 
+| | Note: Only ReFS supports integrity.| 
 | | Test environment: ReFS| 
-| Message Sequence| Connect to a read only volume| 
-| | OpenFile (Directory)| 
-| | FsCtl request FSCTL_GET_INTEGRITY_INFORMATION| 
-| | Assert.AreEqual(**STATUS_MEDIA_WRITE_PROTECTED**,ActualResult);| 
+| | Input parameter: FileInfoClass. FileBasicInformation| 
+| | Expected Result:| 
+| | If the object store support this functionality, FILE_ATTRIBUTE_INTEGRITY_STREAM  is set in OutputBuffer.FileAttributes.| 
+| | If not support, FILE_ATTRIBUTE_INTEGRITY_STREAM  is not set in OutputBuffer.FileAttributes.| 
+| Message Sequence| CreateFile DirectoryFile with **FileAttribute**.INTEGRITY_STREAM| 
+| | QueryInfo with FileInfoClass = FileBasicInformation| 
+| | If (IsIntegritySupported == True) {| 
+| | Verify OutputBuffer.FileAttributes.FILE_ATTRIBUTE_INTEGRITY_STREAM is set.| 
+| | } Else {| 
+| | Verify OutputBuffer.FileAttributes.FILE_ATTRIBUTE_INTEGRITY_STREAM is not set.| 
+| | }| 
 
 
 
 
-#### <a name="_Toc427488691"/>FsCtl_Set_IntegrityInformation_File_ChecksumAlgorithm(2TCs)
-Test matrix for InputBuffer.ChecksumAlgorithm
+##### <a name="_Toc427488735"/>FileInfo_Query_FileAttributeTagInfo_File_IsIntegritySupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if integrity is supported for different file systems.| 
+| | Note: Only ReFS supports integrity.| 
+| | Test environment: ReFS| 
+| | Input parameter: FileInfoClass.FileAttributeTagInformation| 
+| | Expected Results:| 
+| | If the object store support this functionality, FILE_ATTRIBUTE_INTEGRITY_STREAM  is set in OutputBuffer.FileAttributes.| 
+| | If not support, FILE_ATTRIBUTE_INTEGRITY_STREAM  is not set in OutputBuffer.FileAttributes.| 
+| Message Sequence| CreateFile DataFile with **FileAttribute**.INTEGRITY_STREAM| 
+| | QueryInfo with FileInfoClass = FileAttributeTagInformation| 
+| | If (IsIntegritySupported == True) {| 
+| | Verify OutputBuffer.FileAttributes.FILE_ATTRIBUTE_INTEGRITY_STREAM is set.| 
+| | } Else {| 
+| | Verify OutputBuffer.FileAttributes.FILE_ATTRIBUTE_INTEGRITY_STREAM is not set.| 
+| | }| 
+
+
+
+
+##### <a name="_Toc427488736"/>FileInfo_Query_FileAttributeTagInfo_Dir_IsIntegritySupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if integrity is supported for different file systems.| 
+| | Note: Only ReFS supports integrity.| 
+| | Test environment: ReFS| 
+| | Input parameter: FileInfoClass.FileAttributeTagInformation| 
+| | Expected Results:| 
+| | If the object store support this functionality, FILE_ATTRIBUTE_INTEGRITY_STREAM  is set in OutputBuffer.FileAttributes.| 
+| | If not support, FILE_ATTRIBUTE_INTEGRITY_STREAM  is not set in OutputBuffer.FileAttributes.| 
+| Message Sequence| CreateFile DirectoryFile with **FileAttribute**.INTEGRITY_STREAM| 
+| | QueryInfo with FileInfoClass = FileAttributeTagInformation| 
+| | If (IsIntegritySupported == True) {| 
+| | Verify OutputBuffer.FileAttributes.FILE_ATTRIBUTE_INTEGRITY_STREAM is set.| 
+| | } Else {| 
+| | Verify OutputBuffer.FileAttributes.FILE_ATTRIBUTE_INTEGRITY_STREAM is not set.| 
+| | }| 
+
+
+
+
+##### <a name="_Toc427488737"/>FileInfo_Query_FileNetworkOpenInfo_File_IsIntegritySupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if integrity is supported for different file systems.| 
+| | Note: Only ReFS supports integrity.| 
+| | Test environment: ReFS| 
+| | Input parameter: FileInfoClass.FileNetworkOpenInformation| 
+| | Expected Results:| 
+| | If the object store support this functionality, FILE_ATTRIBUTE_INTEGRITY_STREAM  is set in OutputBuffer.FileAttributes.| 
+| | If not support, FILE_ATTRIBUTE_INTEGRITY_STREAM  is not set in OutputBuffer.FileAttributes.| 
+| Message Sequence| CreateFile DataFile with **FileAttribute**.INTEGRITY_STREAM| 
+| | QueryInfo with FileInfoClass = FileNetworkOpenInformation| 
+| | If (IsIntegritySupported == True) {| 
+| | Verify OutputBuffer.FileAttributes.FILE_ATTRIBUTE_INTEGRITY_STREAM is set.| 
+| | } Else {| 
+| | Verify OutputBuffer.FileAttributes.FILE_ATTRIBUTE_INTEGRITY_STREAM is not set.| 
+| | }| 
+
+
+
+
+##### <a name="_Toc427488738"/>FileInfo_Query_FileNetworkOpenInfo_Dir_IsIntegritySupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if integrity is supported for different file systems.| 
+| | Note: Only ReFS supports integrity.| 
+| | Test environment: ReFS| 
+| | Input parameter: FileInfoClass.FileNetworkOpenInformation| 
+| | Expected Results:| 
+| | If the object store support this functionality, FILE_ATTRIBUTE_INTEGRITY_STREAM  is set in OutputBuffer.FileAttributes.| 
+| | If not support, FILE_ATTRIBUTE_INTEGRITY_STREAM  is not set in OutputBuffer.FileAttributes.| 
+| Message Sequence| CreateFile DirectoryFile with **FileAttribute**.INTEGRITY_STREAM| 
+| | QueryInfo with FileInfoClass = FileNetworkOpenInformation| 
+| | If (IsIntegritySupported == True) {| 
+| | Verify OutputBuffer.FileAttributes.FILE_ATTRIBUTE_INTEGRITY_STREAM is set.| 
+| | } Else {| 
+| | Verify OutputBuffer.FileAttributes.FILE_ATTRIBUTE_INTEGRITY_STREAM is not set.| 
+| | }| 
+
+
+#### <a name="IsFileIdInformationSupported"/>IsFileIdInformationSupported
+
+##### <a name="FileInfo_Query_FileIdInformation_File">FileInfo_Query_FileIdInformation_File
 
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| ChecksumAlgorithm| ExpectedAlgorithm| 
-| CHECKSUM_TYPE_NONE| CHECKSUM_TYPE_NONE| 
-| CHECKSUM_TYPE_CRC64| CHECKSUM_TYPE_CRC64| 
-| CHECKSUM_TYPE_UNCHANGED| CHECKSUM_TYPE_NONE| 
-| CHECKSUM_TYPE_UNCHANGED| CHECKSUM_TYPE_CRC64| 
+| Description| To test if FileIdInformation supported for different file system.| 
+| | Test environment: NTFS, ReFS| 
+| | Input parameter: FileInfoClass.FileIdInformation| 
+| | Expected Results:| 
+| | If supported, The operation returns **STATUS_SUCCESS**.| 
+| | And FileId of FileIdInformation is verified by sending FSCTL_READ_FILE_USN_DATA, VolumeSerialNumber of FileIdInformation is verified by sending FSCTL_GET_NTFS_VOLUME_DATA or FSCTL_GET_REFS_VOLUME_DATA. | 
+| Message Sequence| CreateFile DataFile| 
+| | QueryInfo with FileInfoClass.FileIdInformation|
+| | Get FileReferenceNumber by sending FSCTL_READ_FILE_USN_DATA to server.| 
+| | Verify FileId when querying FileIdInformation should be the same with FileReferenceNumber when sending FSCTL_READ_FILE_USN_DATA.|
+| | Get VolumeSerialNumber by sending FSCTL_GET_NTFS_VOLUME_DATA or FSCTL_GET_REFS_VOLUME_DATA to server.|
+| | Verify VolumeSerialNumber when querying FileIdInformation should be the same with VolumeSerialNumber when sending FSCTL_GET_NTFS_VOLUME_DATA or FSCTL_GET_REFS_VOLUME_DATA.|
 
 
-
-
-
-
-
-
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Test Case|  **FsCtl_Set_IntegrityInformation_File_ChecksumType** **NoneAnd** **Unchanged**| 
-| Description| To set integrity information with different checksumAlgorithms.| 
-| | Note: Only ReFS supports integrity| 
-| | To cover CHECKSUM_TYPE_NONE and CHECKSUM_TYPE_UNCHANGED| 
-| Message Sequence| CreateFile| 
-| | FSCTL request FSCTL_SET_INTEGRITY_INFORMATION  with InputBuffer.ChecksumAlgorithm set to CHECKSUM_TYPE_NONE| 
-| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
-| | FSCTL request with FSCTL_GET_INTEGRITY_INFORMATION| 
-| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
-| | Assert.AreEqual(CHECKSUM_TYPE_NONE, OutputBuffer.CheckSumAlgorithm).| 
-| | FSCTL request FSCTL_SET_INTEGRITY_INFORMATION  with InputBuffer.ChecksumAlgorithm set to CHECKSUM_TYPE_UNCHANGED| 
-| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
-| | FSCTL request with FSCTL_GET_INTEGRITY_INFORMATION| 
-| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
-| | Assert.AreEqual(CHECKSUM_TYPE_NONE, OutputBuffer.CheckSumAlgorithm).| 
-| Test Case|  **FsCtl_Set_IntegrityInformation_File_ChecksumType** **Crc64And** **Unchanged**| 
-| Description| To set integrity information with different checksumAlgorithms.| 
-| | Note: Only ReFS supports integrity| 
-| | To cover CHECKSUM_TYPE_CRC64 and CHECKSUM_TYPE_UNCHANGED| 
-| Message Sequence| CreateFile| 
-| | FSCTL request FSCTL_SET_INTEGRITY_INFORMATION  with InputBuffer.ChecksumAlgorithm set to CHECKSUM_TYPE_CRC64| 
-| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
-| | FSCTL request with FSCTL_GET_INTEGRITY_INFORMATION| 
-| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
-| | Assert.AreEqual(CHECKSUM_TYPE_CRC64, OutputBuffer.CheckSumAlgorithm).| 
-| | FSCTL request FSCTL_SET_INTEGRITY_INFORMATION  with InputBuffer.ChecksumAlgorithm set to CHECKSUM_TYPE_CRC64| 
-| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
-| | FSCTL request with FSCTL_GET_INTEGRITY_INFORMATION| 
-| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
-| | Assert.AreEqual(CHECKSUM_TYPE_CRC64, OutputBuffer.CheckSumAlgorithm).| 
-
-
-
-
-#### <a name="_Toc427488692"/>FsCtl_Set_IntegrityInformation_Dir_ChecksumAlgorithm(2TCs)
-Test matrix for InputBuffer.ChecksumAlgorithm
+##### <a name="FileInfo_Query_FileIdInformation_Dir">FileInfo_Query_FileIdInformation_Dir
 
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| ChecksumAlgorithm| ExpectedAlgorithm| 
-| CHECKSUM_TYPE_NONE| CHECKSUM_TYPE_NONE| 
-| CHECKSUM_TYPE_CRC64| CHECKSUM_TYPE_CRC64| 
-| CHECKSUM_TYPE_UNCHANGED| CHECKSUM_TYPE_NONE| 
-| CHECKSUM_TYPE_UNCHANGED| CHECKSUM_TYPE_CRC64| 
+| Description| To test if FileIdInformation supported for different file system.| 
+| | Test environment: NTFS, ReFS| 
+| | Input parameter: FileInfoClass.FileIdInformation| 
+| | Expected Results:| 
+| | If supported, The operation returns **STATUS_SUCCESS**.| 
+| | And FileId of FileIdInformation is verified by sending FSCTL_READ_FILE_USN_DATA, VolumeSerialNumber of FileIdInformation is verified by sending FSCTL_GET_NTFS_VOLUME_DATA or FSCTL_GET_REFS_VOLUME_DATA. | 
+| Message Sequence| CreateFile DirectoryFile| 
+| | QueryInfo with FileInfoClass.FileIdInformation|
+| | Get FileReferenceNumber by sending FSCTL_READ_FILE_USN_DATA to server.| 
+| | Verify FileId when querying FileIdInformation should be the same with FileReferenceNumber when sending FSCTL_READ_FILE_USN_DATA.|
+| | Get VolumeSerialNumber by sending FSCTL_GET_NTFS_VOLUME_DATA or FSCTL_GET_REFS_VOLUME_DATA to server.|
+| | Verify VolumeSerialNumber when querying FileIdInformation should be the same with VolumeSerialNumber when sending FSCTL_GET_NTFS_VOLUME_DATA or FSCTL_GET_REFS_VOLUME_DATA.|
+
+
+### <a name="Test-cases-for-FileSystemInformation">Test cases for FileSystemInformation
 
 
 
+#### <a name="_Toc427488705"/>IsObjectIdSupported
 
 
-
-
-
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Test Case|  **FsC** **tl_Set_IntegrityInformation_Dir** **_ChecksumType** **NoneAnd** **Unchanged**| 
-| Description| To set integrity information with different checksumAlgorithms.| 
-| | Note: Only ReFS supports integrity| 
-| | To cover CHECKSUM_TYPE_NONE and CHECKSUM_TYPE_UNCHANGED| 
-| Message Sequence| CreateFile| 
-| | FSCTL request FSCTL_SET_INTEGRITY_INFORMATION  with InputBuffer.ChecksumAlgorithm set to CHECKSUM_TYPE_NONE| 
-| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
-| | FSCTL request with FSCTL_GET_INTEGRITY_INFORMATION| 
-| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
-| | Assert.AreEqual(CHECKSUM_TYPE_NONE, OutputBuffer.CheckSumAlgorithm).| 
-| | FSCTL request FSCTL_SET_INTEGRITY_INFORMATION  with InputBuffer.ChecksumAlgorithm set to CHECKSUM_TYPE_UNCHANGED| 
-| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
-| | FSCTL request with FSCTL_GET_INTEGRITY_INFORMATION| 
-| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
-| | Assert.AreEqual(CHECKSUM_TYPE_NONE, OutputBuffer.CheckSumAlgorithm).| 
-| Test Case|  **FsC** **tl_Set_IntegrityInformation_Dir** **_ChecksumType** **Crc64And** **Unchanged**| 
-| Description| To set integrity information with different checksumAlgorithms.| 
-| | Note: Only ReFS supports integrity| 
-| | To cover CHECKSUM_TYPE_CRC64 and CHECKSUM_TYPE_UNCHANGED| 
-| Message Sequence| CreateFile| 
-| | FSCTL request FSCTL_SET_INTEGRITY_INFORMATION  with InputBuffer.ChecksumAlgorithm set to CHECKSUM_TYPE_CRC64| 
-| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
-| | FSCTL request with FSCTL_GET_INTEGRITY_INFORMATION| 
-| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
-| | Assert.AreEqual(CHECKSUM_TYPE_CRC64, OutputBuffer.CheckSumAlgorithm).| 
-| | FSCTL request FSCTL_SET_INTEGRITY_INFORMATION  with InputBuffer.ChecksumAlgorithm set to CHECKSUM_TYPE_CRC64| 
-| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
-| | FSCTL request with FSCTL_GET_INTEGRITY_INFORMATION| 
-| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
-| | Assert.AreEqual(CHECKSUM_TYPE_CRC64, OutputBuffer.CheckSumAlgorithm).| 
-
-
-
-
-#### <a name="_Toc427488693"/>FsCtl_Offload_Read_File_IsOffloadSupported (BVT)
+##### <a name="_Toc427488708"/>FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported (BVT)
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| Support for this read operation is optional. If the object store does not implement this functionality, the operation MUST be failed with STATUS_INVALID_DEVICE_REQUEST.
-| | Note: Only ReFS supports integrity
-| | Test object: DataFile
+| Description| To test if object id is supported for different file systems.
+| | Note: ReFS does not support object IDs.
+| | Test environment: NTFS
+| | Test object: DataFile, DirectoryFile
 | | Parameter combination.
 | | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsOffloadSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsOffloadSupported == False&nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
-| Message Sequence| CreateFile (DataFile)
-| | FSCTL request with SCTL_OFFLOAD_READ
-| | If (IsOffloadSupported == True) {
-| | Assert.AreEqual(STATUS_SUCCESS,ActualResult);
+| | IsObjectIdSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsObjectIdSupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_PARAMETER
+| Message Sequence| CreateFile 
+| | QueryInfo with FsInfoClass.FileFsObjectIdInformation
+| | If (IsObjectIdSupported == True) {
+| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
 | | } Else {
-| | Assert.AreEqual(STATUS_INVALID_DEVICE_REQUEST,ActualResult);
+| | Assert.AreEqual(**STATUS_INVALID_PARAMETER**,ActualResult);
 | | }
 
 
 
 
-#### <a name="_Toc427488694"/>FsCtl_Offload_Write_File_IsOffloadSupported (BVT)
+##### <a name="_Toc427488709"/>FsInfo_Query_FileFsObjectIdInformation_Dir_IsObjectIdSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| Support for this read operation is optional. If the object store does not implement this functionality, the operation MUST be failed with STATUS_INVALID_DEVICE_REQUEST.
-| | Note: Only ReFS supports integrity
-| | Test object: DataFile
+| Description| To test if object id is supported for different file systems.
+| | Note: ReFS does not support object IDs.
+| | Test environment: NTFS
+| | Test object: DataFile, DirectoryFile
 | | Parameter combination.
 | | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsOffloadSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsOffloadSupported == False&nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
-| Message Sequence| CreateFile (DataFile)
-| | FSCTL request with SCTL_OFFLOAD_WRITE
-| | If (IsOffloadSupported == True) {
-| | Assert.AreEqual(STATUS_SUCCESS,ActualResult);
+| | IsObjectIdSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsObjectIdSupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_PARAMETER
+| Message Sequence| CreateFile 
+| | QueryInfo with FsInfoClass.FileFsObjectIdInformation
+| | If (IsObjectIdSupported == True) {
+| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
 | | } Else {
-| | Assert.AreEqual(STATUS_INVALID_DEVICE_REQUEST,ActualResult);
+| | Assert.AreEqual(**STATUS_INVALID_PARAMETER**,ActualResult);
 | | }
 
+
+
+### <a name="IsFsSectorSizeInformationSupported"/>IsFsSectorSizeInformationSupported
 
 
 
@@ -1486,50 +1565,6 @@ Parameter combination
 
 
 
-
-
-
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Test case|  **FsInfo_Query_FileFsSectorSizeInformation_** **File_** **OutputBufferSizeLessThanSectorSizeInfo**| 
-| Description| To test parameter check for invalid parameters.| 
-| | Test environment: NTFS, ReFS| 
-| | Test object: file, directory| 
-| | Input parameter: | 
-| | OutputBufferSize  = sizeof(| 
-| | FILE_FS_SECTOR_SIZE_INFORMATION) -1| 
-| | Expected Result: STATUS_INFO_LENGTH_MISMATCH| 
-| Message Sequence| CreateFile (DataFile)| 
-| | QueryInfo  with FileSystemInfoClass  = FileFsSectorSizeInformation, | 
-| |  **OutputBufferSize**  **=**  **sizeof(** **FILE_FS_SECTOR_SIZE_INFORMATION** **)**  **-1**| 
-| | Assert.AreEqual(**STATUS_INFO_LENGTH_MISMATCH**,ActualResult);| 
-| Test case|  **FsInfo_Query_FileFsSectorSizeInformation_** **File_** **OutputBufferSizeEqualToSectorSizeInfo** **(BVT)**| 
-| Description| To test parameter check for invalid parameters.| 
-| | Test environment: NTFS, ReFS| 
-| | Input parameter: | 
-| | OutputBufferSize  = sizeof(| 
-| | FILE_FS_SECTOR_SIZE_INFORMATION)| 
-| | Expected Result: STATUS_SUCCESS| 
-| Message Sequence| CreateFile (DataFile)| 
-| | QueryInfo  with FileSystemInfoClass  = FileFsSectorSizeInformation, | 
-| |  **OutputBufferSize**  **=**  **sizeof(** **FILE_FS_SECTOR_SIZE_INFORMATION** **)**| 
-| | Assert.AreEqual(**STATUS_** **SUCCESS**,ActualResult);| 
-| Test case|  **FsInfo_Query_FileFsSectorSizeInformation_** **File_** **OutputBufferSizeGreaterThanSectorSizeInfo**| 
-| Description| To test parameter check for invalid parameters.| 
-| | Test environment: NTFS, ReFS| 
-| | Input parameter: | 
-| | OutputBufferSize  = sizeof(| 
-| | FILE_FS_SECTOR_SIZE_INFORMATION) +1| 
-| | Expected Result: STATUS_SUCCESS| 
-| Message Sequence| CreateFile (DataFile)| 
-| | QueryInfo  with FileSystemInfoClass  = FileFsSectorSizeInformation, | 
-| |  **OutputBufferSize**  **=**  **sizeof(** **FILE_FS_SECTOR_SIZE_INFORMATION** **)** **+** **1**| 
-| | Assert.AreEqual(**STATUS_** **SUCCESS**,ActualResult);| 
-
-
-
-
 #### <a name="_Toc427488696"/> FsInfo_Query_FileFsSectorSizeInformation_Dir_OutputBufferSize(3TCs)
 Parameter combination
 
@@ -1543,49 +1578,6 @@ Parameter combination
 | FILE_FS_SECTOR_SIZE_INFORMATION)| | 
 | OutputBufferSize  = sizeof(| STATUS_SUCCESS| 
 | FILE_FS_SECTOR_SIZE_INFORMATION) +1| | 
-
-
-
-
-
-
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Test case|  **FsInfo_Query_FileFsSectorSizeInformation_** **Dir_** **OutputBufferSizeLessThanSectorSizeInfo**| 
-| Description| To test parameter check for invalid parameters.| 
-| | Test environment: NTFS, ReFS| 
-| | Input parameter: | 
-| | OutputBufferSize  = sizeof(| 
-| | FILE_FS_SECTOR_SIZE_INFORMATION) -1| 
-| | Expected Result: STATUS_INFO_LENGTH_MISMATCH| 
-| Message Sequence| CreateFile (DirectoryFile)| 
-| | QueryInfo  with FileSystemInfoClass  = FileFsSectorSizeInformation, | 
-| |  **OutputBufferSize**  **=**  **sizeof(** **FILE_FS_SECTOR_SIZE_INFORMATION** **)**  **-1**| 
-| | Assert.AreEqual(**STATUS_INFO_LENGTH_MISMATCH**,ActualResult);| 
-| Test case|  **FsInfo_Query_FileFsSectorSizeInformation_** **Dir_** **OutputBufferSizeEqualToSectorSizeInfo**| 
-| Description| To test parameter check for invalid parameters.| 
-| | Test environment: NTFS, ReFS| 
-| | Input parameter: | 
-| | OutputBufferSize  = sizeof(| 
-| | FILE_FS_SECTOR_SIZE_INFORMATION)| 
-| | Expected Result:  STATUS_SUCCESS| 
-| Message Sequence| CreateFile (DirectoryFile)| 
-| | QueryInfo  with FileSystemInfoClass  = FileFsSectorSizeInformation, | 
-| |  **OutputBufferSize**  **=**  **sizeof(** **FILE_FS_SECTOR_SIZE_INFORMATION** **)**| 
-| | Assert.AreEqual(**STATUS_** **SUCCESS**,ActualResult);| 
-| Test case|  **FsInfo_Query_FileFsSectorSizeInformation_** **Dir_** **OutputBufferSizeGreaterThanSectorSizeInfo**| 
-| Description| To test parameter check for invalid parameters.| 
-| | Test environment: NTFS, ReFS| 
-| | Input parameter: | 
-| | OutputBufferSize  = sizeof(| 
-| | FILE_FS_SECTOR_SIZE_INFORMATION) +1| 
-| | Expected Result:  STATUS_SUCCESS| 
-| Message Sequence| CreateFile (DirectoryFile)| 
-| | QueryInfo  with FileSystemInfoClass  = FileFsSectorSizeInformation, | 
-| |  **OutputBufferSize**  **=**  **sizeof(** **FILE_FS_SECTOR_SIZE_INFORMATION** **)** **+** **1**| 
-| | Assert.AreEqual(**STATUS_** **SUCCESS**,ActualResult);| 
-
 
 
 
@@ -1647,188 +1639,7 @@ Parameter combination
 | | Assert.AreEqual(**STATUS_ INVALID_INFO_CLASS**, actualResult);| 
 
 
-
-
-
-
-### <a name="_Toc427488701"/>Test cases for ReFS file system
-
-#### <a name="_Toc427488702"/>IsShortNameSupported
-
-##### <a name="_Toc427488703"/>FileInfo_Set_FileShortNameInfo_File_IsShortNameSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if short name supported for different file system.
-| | Note: ReFS does not implement short names.
-| | Test environment: NTFS, ReFS
-| | Test object: DataFile, DirectoryFile
-| | Parameter combination.
-| | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsShortNameSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsShortNameSupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
-| Message Sequence| CreateFile 
-| | SetInfo with FileInfoClass.FileShortNameInformation
-| | If (IsShortNameSupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
-| | }
-
-
-
-
-##### <a name="_Toc427488704"/>FileInfo_Set_FileShortNameInfo_Dir_IsShortNameSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if short name supported for different file system.
-| | Note: ReFS does not implement short names.
-| | Test environment: NTFS, ReFS
-| | Test object: DataFile, DirectoryFile
-| | Parameter combination.
-| | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsShortNameSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsShortNameSupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
-| Message Sequence| CreateFile 
-| | SetInfo with FileInfoClass.FileShortNameInformation
-| | If (IsShortNameSupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
-| | }
-
-
-
-
-
-#### <a name="_Toc427488705"/>IsObjectIdSupported
-
-##### <a name="_Toc427488706"/>FsInfo_Query_FileFsAttributeInformation_File_IsObjectIdSupported(BVT)
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if compression is supported for different file systems.| 
-| | Test environment: NTFS, ReFS| 
-| Message Sequence| CreateFile | 
-| | QueryInfo for FileInfoClass. FileFsAttributeInformation| 
-| | If (IsCompressionSupported == True) {| 
-| | Verify FileAttribute.FILE_ FILE_SUPPORTS_OBJECT_IDS is set.| 
-| | } Else {| 
-| |     Verify FileAttribute..FILE_ FILE_SUPPORTS_OBJECT_IDS is not set.}| 
-
-
-
-
-##### <a name="_Toc427488707"/>FsInfo_Query_FileFsAttributeInformation_Dir_IsObjectIdSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if compression is supported for different file systems.| 
-| | Test environment: NTFS, ReFS| 
-| Message Sequence| CreateFile | 
-| | QueryInfo for FileInfoClass. FileFsAttributeInformation| 
-| | If (IsCompressionSupported == True) {| 
-| | Verify FileAttribute.FILE_ FILE_SUPPORTS_OBJECT_IDS is set.| 
-| | } Else {| 
-| |     Verify FileAttribute..FILE_ FILE_SUPPORTS_OBJECT_IDS is not set.}| 
-
-
-
-
-##### <a name="_Toc427488708"/>FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported (BVT)
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if object id is supported for different file systems.
-| | Note: ReFS does not support object IDs.
-| | Test environment: NTFS, ReFS
-| | Test object: DataFile, DirectoryFile
-| | Parameter combination.
-| | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsObjectIdSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsObjectIdSupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_PARAMETER
-| Message Sequence| CreateFile 
-| | QueryInfo with FsInfoClass.FileFsObjectIdInformation
-| | If (IsObjectIdSupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_INVALID_PARAMETER**,ActualResult);
-| | }
-
-
-
-
-##### <a name="_Toc427488709"/>FsInfo_Query_FileFsObjectIdInformation_Dir_IsObjectIdSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if object id is supported for different file systems.
-| | Note: ReFS does not support object IDs.
-| | Test environment: NTFS, ReFS
-| | Test object: DataFile, DirectoryFile
-| | Parameter combination.
-| | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsObjectIdSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsObjectIdSupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_PARAMETER
-| Message Sequence| CreateFile 
-| | QueryInfo with FsInfoClass.FileFsObjectIdInformation
-| | If (IsObjectIdSupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_INVALID_PARAMETER**,ActualResult);
-| | }
-
-
-
-
-##### <a name="_Toc427488710"/>FsInfo_Set_FileFsObjectIdInformation_File_IsObjectIdSupported 
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if object id is supported for different file systems.
-| | Note: ReFS does not support object IDs.
-| | Test environment: NTFS, ReFS
-| | Test object: DataFile, DirectoryFile
-| | Parameter combination.
-| | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsObjectIdSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsObjectIdSupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_PARAMETER
-| Message Sequence| CreateFile 
-| | SetInfo with FsInfoClass.FileFsObjectIdInformation
-| | If (IsObjectIdSupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_INVALID_PARAMETER**,ActualResult);
-| | }
-
-
-
-
-##### <a name="_Toc427488711"/>FsInfo_Set_FileFsObjectIdInformation_Dir_IsObjectIdSupported 
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if object id is supported for different file systems.
-| | Note: ReFS does not support object IDs.
-| | Test environment: NTFS, ReFS
-| | Test object: DataFile, DirectoryFile
-| | Parameter combination.
-| | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsObjectIdSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsObjectIdSupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_PARAMETER
-| Message Sequence| CreateFile 
-| | SetInfo with FsInfoClass.FileFsObjectIdInformation
-| | If (IsObjectIdSupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_INVALID_PARAMETER**,ActualResult);
-| | }
-
-
-
-
-#### <a name="_Toc427488712"/>IsCompressionSupported
+### <a name="IsFsAttributeInformationSupported"/>IsFsAttributeInformationSupported
 
 ##### <a name="_Toc427488713"/>FsInfo_Query_FileFsAttributeInformation_File_IsCompressionSupported(BVT)
 
@@ -1861,334 +1672,15 @@ Parameter combination
 | | }| 
 
 
-
-
-##### <a name="_Toc427488715"/>FileInfo_Query_FileCompressionInfo_File_IsCompressionSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if compression is supported for different file systems.
-| | Note: ReFS does not support object IDs.
-| | Test environment: NTFS, ReFS
-| | Test object: DataFile, DirectoryFile
-| | Parameter combination.
-| | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsCompressionSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsCompressionSupported == False &nbsp;&#124;&nbsp;STATUS_NOT_SUPPORTED
-| Message Sequence| CreateFile 
-| | QueryInfo for FileInfoClass.FileCompressionInformation
-| | If (IsCompressionSupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
-| | }
-
-
-
-
-##### <a name="_Toc427488716"/>FileInfo_Query_FileCompressionInfo_Dir_IsCompressionSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if compression is supported for different file systems.
-| | Note: ReFS does not support object IDs.
-| | Test environment: NTFS, ReFS
-| | Test object: DataFile, DirectoryFile
-| | Parameter combination.
-| | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsCompressionSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsCompressionSupported == False &nbsp;&#124;&nbsp;STATUS_NOT_SUPPORTED
-| Message Sequence| CreateFile 
-| | QueryInfo for FileInfoClass.FileCompressionInformation
-| | If (IsCompressionSupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
-| | }
-
-
-
-
-##### <a name="_Toc427488717"/>FsCtl_Get_Compression_File_IsCompressionSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if compression is supported for different file systems.
-| | Note: ReFS does not support object IDs.
-| | Test environment: NTFS, ReFS
-| | Test object: DataFile, DirectoryFile
-| | Parameter combination.
-| | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsCompressionSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsCompressionSupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
-| Message Sequence| CreateFile 
-| | FsCtl request with FSCTL_GET_COMPRESSION
-| | If (IsCompressionSupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
-| | }
-
-
-
-
-##### <a name="_Toc427488718"/>FsCtl_Get_Compression_Dir_IsCompressionSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if compression is supported for different file systems.
-| | Note: ReFS does not support object IDs.
-| | Test environment: NTFS, ReFS
-| | Test object: DataFile, DirectoryFile
-| | Parameter combination.
-| | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsCompressionSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsCompressionSupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
-| Message Sequence| CreateFile 
-| | FsCtl request with FSCTL_GET_COMPRESSION
-| | If (IsCompressionSupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
-| | }
-
-
-
-
-##### <a name="_Toc427488719"/>FsCtl_Set_Compression_File_IsCompressionSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if compression is supported for different file systems.
-| | Note: ReFS does not support object IDs.
-| | Test environment: NTFS, ReFS
-| | Parameter combination.
-| | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsCompressionSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsCompressionSupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
-| Message Sequence| CreateFile (DataFile)
-| | FsCtl request with FSCTL_SET_COMPRESSION
-| | If (IsCompressionSupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
-| | }
-
-
-
-
-##### <a name="_Toc427488720"/>FsCtl_Set_Compression_Dir_IsCompressionSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if compression is supported for different file systems.
-| | Note: ReFS does not support object IDs.
-| | Test environment: NTFS, ReFS
-| | Test object: DataFile, DirectoryFile
-| | Parameter combination.
-| | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsCompressionSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsCompressionSupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
-| Message Sequence| CreateFile  (DirectoryFile)
-| | FsCtl request with FSCTL_SET_COMPRESSION
-| | If (IsCompressionSupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
-| | }
-
-
-
-
-#### <a name="_Toc427488721"/>IsEASupported
-
-##### <a name="_Toc427488722"/>FileInfo_Set_FileFullEaInformation_File_IsEASupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if extended attribute is supported for different file systems.
-| | Note: Only NTFS implements EAs.
-| | Test environment: NTFS, ReFS
-| | Parameter combination.
-| | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsEASupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsEASupported == False &nbsp;&#124;&nbsp;STATUS_NOT_SUPPORTED
-| Message Sequence| CreateFile (DataFile)
-| | SetInfo with FileInfoClass.FileFullEaInformation
-| | If (IsEASupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
-| | }
-
-
-
-
-##### <a name="_Toc427488723"/>FileInfo_Set_FileFullEaInformation_Dir_IsEASupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if extended attribute is supported for different file systems.
-| | Note: Only NTFS implements EAs.
-| | Test environment: NTFS, ReFS
-| | Parameter combination.
-| | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsEASupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsEASupported == False &nbsp;&#124;&nbsp;STATUS_NOT_SUPPORTED
-| Message Sequence| CreateFile (DirectoryFile)
-| | SetInfo with FileInfoClass.FileFullEaInformation
-| | If (IsEASupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
-| | }
-
-
-
-
-##### <a name="_Toc427488724"/>FileInfo_Query_FileFullEaInformation_File_IsEASupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if extended attribute is supported for different file systems.
-| | Note: Only NTFS implements EAs.
-| | Test environment: NTFS, ReFS
-| | Parameter combination.
-| | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsEASupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsEASupported == False &nbsp;&#124;&nbsp;STATUS_NOT_SUPPORTED
-| Message Sequence| CreateFile (DataFile)
-| | QueryInfo with FileInfoClass.FileFullEaInformation
-| | If (IsEASupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
-| | }
-
-
-
-
-##### <a name="_Toc427488725"/>FileInfo_Query_FileFullEaInformation_Dir_IsEASupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if extended attribute is supported for different file systems.
-| | Note: Only NTFS implements EAs.
-| | Test environment: NTFS, ReFS
-| | Parameter combination.
-| | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsEASupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsEASupported == False &nbsp;&#124;&nbsp;STATUS_NOT_SUPPORTED
-| Message Sequence| CreateFile (DirectoryFile)
-| | QueryInfo with FileInfoClass.FileFullEaInformation
-| | If (IsEASupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
-| | }
-
-
-
-
-##### <a name="_Toc427488726"/>FileInfo_Set_FileEaInformation_File_IsEASupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if extended attribute is supported for different file systems.
-| | Note: Only NTFS implements EAs.
-| | Test environment: NTFS, ReFS
-| | Parameter combination.
-| | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsEASupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsEASupported == False &nbsp;&#124;&nbsp;STATUS_NOT_SUPPORTED
-| Message Sequence| CreateFile (DataFile)
-| | SetInfo with FileInfoClass.FileEaInformation
-| | If (IsEASupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
-| | }
-
-
-
-
-#### <a name="_Toc427488727"/>FileInfo_Set_FileEaInformation_Dir_IsEASupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if extended attribute is supported for different file systems.
-| | Note: Only NTFS implements EAs.
-| | Test environment: NTFS, ReFS
-| | Parameter combination.
-| | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsEASupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsEASupported == False &nbsp;&#124;&nbsp;STATUS_NOT_SUPPORTED
-| Message Sequence| CreateFile (DirectoryFile)
-| | SetInfo with FileInfoClass.FileEaInformation
-| | If (IsEASupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
-| | }
-
-
-
-
-##### <a name="_Toc427488728"/>FileInfo_Query_FileEaInformation_File_IsEASupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if extended attribute is supported for different file systems.
-| | Note: Only NTFS implements EAs.
-| | Test environment: NTFS, ReFS
-| | Parameter combination.
-| | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsEASupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsEASupported == False &nbsp;&#124;&nbsp;STATUS_NOT_SUPPORTED
-| Message Sequence| CreateFile (DataFile)
-| | QueryInfo with FileInfoClass.FileEaInformation
-| | If (IsEASupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
-| | }
-
-
-
-
-##### <a name="_Toc427488729"/>FileInfo_Query_FileEaInformation_Dir_IsEASupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if extended attribute is supported for different file systems.
-| | Note: Only NTFS implements EAs.
-| | Test environment: NTFS, ReFS
-| | Parameter combination.
-| | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsEASupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsEASupported == False &nbsp;&#124;&nbsp;STATUS_NOT_SUPPORTED
-| Message Sequence| CreateFile (DirectoryFile)
-| | QueryInfo with FileInfoClass.FileEaInformation
-| | If (IsEASupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
-| | }
-
-
-
-
-#### <a name="_Toc427488730"/>IsIntegritySupported
-
 ##### <a name="_Toc427488731"/>FsInfo_Query_FileFsAttributeInformation_File_IsIntegritySupported(BVT)
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test if compression is supported for different file systems.| 
+| Description| To test if Integrity is supported for different file systems.| 
 | | Test environment: NTFS, ReFS| 
 | Message Sequence| CreateFile | 
 | | QueryInfo for FileInfoClass. FileFsAttributeInformation| 
-| | If (IsCompressionSupported == True) {| 
+| | If (IsIntegritySupported == True) {| 
 | | Verify FileAttribute.FILE_SUPPORT_INTEGRITY_STREAMS is set.| 
 | | } Else {| 
 | |     Verify FileAttribute.FILE_SUPPORT_INTEGRITY_STREAMS is not set.}| 
@@ -2200,249 +1692,78 @@ Parameter combination
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test if compression is supported for different file systems.| 
+| Description| To test if Integrity is supported for different file systems.| 
 | | Test environment: NTFS, ReFS| 
 | Message Sequence| CreateFile | 
 | | QueryInfo for FileInfoClass. FileFsAttributeInformation| 
-| | If (IsCompressionSupported == True) {| 
+| | If (IsIntegritySupported == True) {| 
 | | Verify FileAttribute.FILE_SUPPORT_INTEGRITY_STREAMS is set.| 
 | | } Else {| 
 | |     Verify FileAttribute.FILE_SUPPORT_INTEGRITY_STREAMS is not set.}| 
 
 
-
-
-##### <a name="_Toc427488733"/>FileInfo_Query_FileBasicInfo_File_IsIntegritySupported (BVT)
+##### <a name="_Toc427488752"/>FsInfo_Query_FileFsAttributeInformation_File_IsEncryptionSupported(BVT)
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test if integrity is supported for different file systems.| 
-| | Note: Only ReFS supports integrity.| 
+| Description| To test if Encryption is supported for different file systems.| 
 | | Test environment: NTFS, ReFS| 
-| | Input parameter: FileInfoClass. FileBasicInformation| 
-| | Expected Result:| 
-| | If the object store support this functionality, FILE_ATTRIBUTE_INTEGRITY_STREAM  is set in OutputBuffer.FileAttributes.| 
-| | If not support, FILE_ATTRIBUTE_INTEGRITY_STREAM  is not set in OutputBuffer.FileAttributes.| 
-| Message Sequence| CreateFile DataFile with **FileAttribute**.INTEGRITY_STREAM| 
-| | QueryInfo with FileInfoClass = FileBasicInformation| 
-| | If (IsIntegritySupported == True) {| 
-| | Verify OutputBuffer.FileAttributes.FILE_ATTRIBUTE_INTEGRITY_STREAM is set.| 
+| Message Sequence| CreateFile | 
+| | QueryInfo for FileInfoClass. FileFsAttributeInformation| 
+| | If (IsEncryptionSupported == True) {| 
+| | Verify FileAttribute.FILE_SUPPORTS_ENCRYPTION is set.| 
 | | } Else {| 
-| | Verify OutputBuffer.FileAttributes.FILE_ATTRIBUTE_INTEGRITY_STREAM is not set.| 
-| | }| 
+| |     Verify FileAttribute.FILE_SUPPORTS_ENCRYPTION is not set.}| 
 
 
 
-
-##### <a name="_Toc427488734"/>FileInfo_Query_FileBasicInfo_Dir_IsIntegritySupported
+##### <a name="_Toc427488753"/>FsInfo_Query_FileFsAttributeInformation_Dir_IsEncryptionSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test if integrity is supported for different file systems.| 
-| | Note: Only ReFS supports integrity.| 
+| Description| To test if Encryption is supported for different file systems.| 
 | | Test environment: NTFS, ReFS| 
-| | Input parameter: FileInfoClass. FileBasicInformation| 
-| | Expected Result:| 
-| | If the object store support this functionality, FILE_ATTRIBUTE_INTEGRITY_STREAM  is set in OutputBuffer.FileAttributes.| 
-| | If not support, FILE_ATTRIBUTE_INTEGRITY_STREAM  is not set in OutputBuffer.FileAttributes.| 
-| Message Sequence| CreateFile DirectoryFile with **FileAttribute**.INTEGRITY_STREAM| 
-| | QueryInfo with FileInfoClass = FileBasicInformation| 
-| | If (IsIntegritySupported == True) {| 
-| | Verify OutputBuffer.FileAttributes.FILE_ATTRIBUTE_INTEGRITY_STREAM is set.| 
+| Message Sequence| CreateFile | 
+| | QueryInfo for FileInfoClass. FileFsAttributeInformation| 
+| | If (IsEncryptionSupported == True) {| 
+| | Verify FileAttribute.FILE_SUPPORTS_ENCRYPTION is set.| 
 | | } Else {| 
-| | Verify OutputBuffer.FileAttributes.FILE_ATTRIBUTE_INTEGRITY_STREAM is not set.| 
-| | }| 
+| |     Verify FileAttribute.FILE_SUPPORTS_ENCRYPTION is not set.}| 
 
 
 
-
-##### <a name="_Toc427488735"/>FileInfo_Query_FileAttributeTagInfo_File_IsIntegritySupported
+##### <a name="_Toc427488706"/>FsInfo_Query_FileFsAttributeInformation_File_IsObjectIDsSupported(BVT)
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test if integrity is supported for different file systems.| 
-| | Note: Only ReFS supports integrity.| 
+| Description| To test if ObjectIDs is supported for different file systems.| 
 | | Test environment: NTFS, ReFS| 
-| | Input parameter: FileInfoClass.FileAttributeTagInformation| 
-| | Expected Results:| 
-| | If the object store support this functionality, FILE_ATTRIBUTE_INTEGRITY_STREAM  is set in OutputBuffer.FileAttributes.| 
-| | If not support, FILE_ATTRIBUTE_INTEGRITY_STREAM  is not set in OutputBuffer.FileAttributes.| 
-| Message Sequence| CreateFile DataFile with **FileAttribute**.INTEGRITY_STREAM| 
-| | QueryInfo with FileInfoClass = FileAttributeTagInformation| 
-| | If (IsIntegritySupported == True) {| 
-| | Verify OutputBuffer.FileAttributes.FILE_ATTRIBUTE_INTEGRITY_STREAM is set.| 
+| Message Sequence| CreateFile | 
+| | QueryInfo for FileInfoClass. FileFsAttributeInformation| 
+| | If (IsObjectIDsSupported == True) {| 
+| | Verify FileAttribute.FILE_FILE_SUPPORTS_OBJECT_IDS is set.| 
 | | } Else {| 
-| | Verify OutputBuffer.FileAttributes.FILE_ATTRIBUTE_INTEGRITY_STREAM is not set.| 
-| | }| 
+| |     Verify FileAttribute..FILE_ FILE_SUPPORTS_OBJECT_IDS is not set.}| 
 
 
 
 
-##### <a name="_Toc427488736"/>FileInfo_Query_FileAttributeTagInfo_Dir_IsIntegritySupported
+##### <a name="_Toc427488707"/>FsInfo_Query_FileFsAttributeInformation_Dir_IsObjectIDsSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test if integrity is supported for different file systems.| 
-| | Note: Only ReFS supports integrity.| 
+| Description| To test if ObjectIDs is supported for different file systems.| 
 | | Test environment: NTFS, ReFS| 
-| | Input parameter: FileInfoClass.FileAttributeTagInformation| 
-| | Expected Results:| 
-| | If the object store support this functionality, FILE_ATTRIBUTE_INTEGRITY_STREAM  is set in OutputBuffer.FileAttributes.| 
-| | If not support, FILE_ATTRIBUTE_INTEGRITY_STREAM  is not set in OutputBuffer.FileAttributes.| 
-| Message Sequence| CreateFile DirectoryFile with **FileAttribute**.INTEGRITY_STREAM| 
-| | QueryInfo with FileInfoClass = FileAttributeTagInformation| 
-| | If (IsIntegritySupported == True) {| 
-| | Verify OutputBuffer.FileAttributes.FILE_ATTRIBUTE_INTEGRITY_STREAM is set.| 
+| Message Sequence| CreateFile | 
+| | QueryInfo for FileInfoClass. FileFsAttributeInformation| 
+| | If (IsObjectIDsSupported == True) {| 
+| | Verify FileAttribute.FILE_FILE_SUPPORTS_OBJECT_IDS is set.| 
 | | } Else {| 
-| | Verify OutputBuffer.FileAttributes.FILE_ATTRIBUTE_INTEGRITY_STREAM is not set.| 
-| | }| 
+| |     Verify FileAttribute..FILE_FILE_SUPPORTS_OBJECT_IDS is not set.}| 
 
 
 
-
-##### <a name="_Toc427488737"/>FileInfo_Query_FileNetworkOpenInfo_File_IsIntegritySupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if integrity is supported for different file systems.| 
-| | Note: Only ReFS supports integrity.| 
-| | Test environment: NTFS, ReFS| 
-| | Input parameter: FileInfoClass.FileNetworkOpenInformation| 
-| | Expected Results:| 
-| | If the object store support this functionality, FILE_ATTRIBUTE_INTEGRITY_STREAM  is set in OutputBuffer.FileAttributes.| 
-| | If not support, FILE_ATTRIBUTE_INTEGRITY_STREAM  is not set in OutputBuffer.FileAttributes.| 
-| Message Sequence| CreateFile DataFile with **FileAttribute**.INTEGRITY_STREAM| 
-| | QueryInfo with FileInfoClass = FileNetworkOpenInformation| 
-| | If (IsIntegritySupported == True) {| 
-| | Verify OutputBuffer.FileAttributes.FILE_ATTRIBUTE_INTEGRITY_STREAM is set.| 
-| | } Else {| 
-| | Verify OutputBuffer.FileAttributes.FILE_ATTRIBUTE_INTEGRITY_STREAM is not set.| 
-| | }| 
-
-
-
-
-##### <a name="_Toc427488738"/>FileInfo_Query_FileNetworkOpenInfo_Dir_IsIntegritySupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if integrity is supported for different file systems.| 
-| | Note: Only ReFS supports integrity.| 
-| | Test environment: NTFS, ReFS| 
-| | Input parameter: FileInfoClass.FileNetworkOpenInformation| 
-| | Expected Results:| 
-| | If the object store support this functionality, FILE_ATTRIBUTE_INTEGRITY_STREAM  is set in OutputBuffer.FileAttributes.| 
-| | If not support, FILE_ATTRIBUTE_INTEGRITY_STREAM  is not set in OutputBuffer.FileAttributes.| 
-| Message Sequence| CreateFile DirectoryFile with **FileAttribute**.INTEGRITY_STREAM| 
-| | QueryInfo with FileInfoClass = FileNetworkOpenInformation| 
-| | If (IsIntegritySupported == True) {| 
-| | Verify OutputBuffer.FileAttributes.FILE_ATTRIBUTE_INTEGRITY_STREAM is set.| 
-| | } Else {| 
-| | Verify OutputBuffer.FileAttributes.FILE_ATTRIBUTE_INTEGRITY_STREAM is not set.| 
-| | }| 
-
-
-
-
-#### <a name="_Toc427488739"/>IsFileLinkInfoSupported
-
-##### <a name="_Toc427488740"/>FileInfo_Set_FileLinkInfo_File_IsFileLinkInfoSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if FileLinkInformation is supported for different file systems.
-| | Note: Only NTFS supports FileLinkInformation
-| | Test environment: NTFS, ReFS
-| | Test object: DataFile, DirectoryFile
-| | Input parameter: FileInfoClass.FileLinkInformation
-| | Parameter combination.
-| | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsFileLinkInfoSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsFileLinkInfoSupported == False &nbsp;&#124;&nbsp;STATUS_NOT_SUPPORTED
-| Message Sequence| CreateFile
-| | SetInfo with FileInfoClass.FileLinkInformation 
-| | If (IsFileLinkInfoSupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
-| | }
-
-
-
-
-##### <a name="_Toc427488741"/>FileInfo_Set_FileLinkInfo_DIr_IsFileLinkInfoSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if FileLinkInformation is supported for different file systems.
-| | Note: Only NTFS supports FileLinkInformation
-| | Test environment: NTFS, ReFS
-| | Test object: DataFile, DirectoryFile
-| | Input parameter: FileInfoClass.FileLinkInformation
-| | Parameter combination.
-| | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsFileLinkInfoSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsFileLinkInfoSupported == False &nbsp;&#124;&nbsp;STATUS_NOT_SUPPORTED
-| Message Sequence| CreateFile
-| | SetInfo with FileInfoClass.FileLinkInformation 
-| | If (IsFileLinkInfoSupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
-| | }
-
-
-
-
-#### <a name="_Toc427488742"/>IsFileValidDataLengthInfoSupported
-
-##### <a name="_Toc427488743"/>FileInfo_Set_FileValidDataLengthInformation_File_IsSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test the FileValidDataLengthInformation for different file systems.
-| | Test environment: NTFS, ReFS, FAT32
-| | Test object: DataFile, DirectoryFile
-| | Input parameter: FileInfoClass.FileValidDataLengthInformation
-| | Parameter combination.
-| | Parameter&emsp;&emsp;&nbsp;&#124;&nbsp;Expected Result
-| | IsFileValidDataLengthInfoSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsFileValidDataLengthInfoSupported == False &nbsp;&#124;&nbsp;STATUS_NOT_SUPPORTED
-| Message Sequence| CreateFile
-| | SetInfo with FileInfoClass = FileValidDataLengthInformation 
-| | If (IsFileValidDataLengthInfoSupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
-| | }
-
-
-
-
-##### <a name="_Toc427488744"/>FileInfo_Set_FileValidDataLengthInformation_Dir_IsSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test the FileValidDataLengthInformation for different file systems.
-| | Test environment: NTFS, ReFS, FAT32
-| | Test object: DataFile, DirectoryFile
-| | Input parameter: FileInfoClass.FileValidDataLengthInformation
-| | Parameter combination.
-| | Parameter&emsp;&emsp;&nbsp;&#124;&nbsp;Expected Result
-| | IsFileValidDataLengthInfoSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsFileValidDataLengthInfoSupported == False &nbsp;&#124;&nbsp;STATUS_NOT_SUPPORTED
-| Message Sequence| CreateFile
-| | SetInfo with FileInfoClass = FileValidDataLengthInformation 
-| | If (IsFileValidDataLengthInfoSupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_NOT_SUPPORTED**,ActualResult);
-| | }
-
-
-
-
-#### <a name="_Toc427488745"/>ClusterSize
+#### <a name="IsFsSizeInformationSupported"/>IsFsSizeInformationSupported
 
 ##### <a name="_Toc427488746"/>FsInfo_Query_FileFsSizeInformation_File_SectorsPerAllocationUnit (BVT)
 
@@ -2511,135 +1832,7 @@ Parameter combination
 
 
 
-
-#### <a name="_Toc427488748"/> IsQuotaInfoSupported
-
-##### <a name="_Toc427488749"/>QuotaInfo_Query_QuotaInformation_IsQuotaInfoSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if quota info is supported for different file systems.
-| | Note: Only NTFS supports quotas.
-| | Test environment: NTFS, ReFS
-| | Parameter combination
-| | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsQuotaInfoSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsQuotaInfoSupported == False&nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
-| Message Sequence| Open Quota file
-| | QueryInfo with FileInfoClass.FileQuotaInformation
-| | If (IsQuotaInfoSupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
-| | }
-
-
-
-
-##### <a name="_Toc427488750"/>QuotaInfo_Set_QuotaInformation_IsQuotaInfoSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if quota info is supported for different file systems.
-| | Note: Only NTFS supports quotas.
-| | Test environment: NTFS, ReFS
-| | Parameter combination
-| | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsQuotaInfoSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsQuotaInfoSupported == False&nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
-| Message Sequence| Open Quota file
-| | SetInfo with FileInfoClass.FileQuotaInformation
-| | If (IsQuotaInfoSupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
-| | }
-
-
-
-
-#### <a name="_Toc427488751"/>IsEncryptionSupported
-
-##### <a name="_Toc427488752"/>FsInfo_Query_FileFsAttributeInformation_File_IsEncryptionSupported(BVT)
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if compression is supported for different file systems.| 
-| | Test environment: NTFS, ReFS| 
-| Message Sequence| CreateFile | 
-| | QueryInfo for FileInfoClass. FileFsAttributeInformation| 
-| | If (IsCompressionSupported == True) {| 
-| | Verify FileAttribute.FILE_SUPPORTS_ENCRYPTION is set.| 
-| | } Else {| 
-| |     Verify FileAttribute.FILE_SUPPORTS_ENCRYPTION is not set.}| 
-
-
-
-
-##### <a name="_Toc427488753"/>FsInfo_Query_FileFsAttributeInformation_Dir_IsEncryptionSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if compression is supported for different file systems.| 
-| | Test environment: NTFS, ReFS| 
-| Message Sequence| CreateFile | 
-| | QueryInfo for FileInfoClass. FileFsAttributeInformation| 
-| | If (IsCompressionSupported == True) {| 
-| | Verify FileAttribute.FILE_SUPPORTS_ENCRYPTION is set.| 
-| | } Else {| 
-| |     Verify FileAttribute.FILE_SUPPORTS_ENCRYPTION is not set.}| 
-
-
-
-
-##### <a name="_Toc427488754"/>FsCtl_Set_Encryption_File_IsEncryptionSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if encryption is supported for different file system
-| | Note: This is only implemented by the NTFS file system.
-| | Test environment: NTFS, ReFS
-| | Test object: DataFile, DirectoryFile
-| | FsCtl request: FSCTL_SET_ENCRYPTION
-| | Parameter combination
-| | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsEncryptionSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsEncryptionSupported == False&nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
-| Message Sequence| CreateFile
-| | FsCtl request with FSCTL_SET_ENCRYPTION
-| | If (IsEncryptionSupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
-| | }
-
-
-
-
-##### <a name="_Toc427488755"/>FsCtl_Set_Encryption_Dir_IsEncryptionSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if encryption is supported for different file system
-| | Note: This is only implemented by the NTFS file system.
-| | Test environment: NTFS, ReFS
-| | Test object: DataFile, DirectoryFile
-| | FsCtl request: FSCTL_SET_ENCRYPTION
-| | Parameter combination
-| | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsEncryptionSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsEncryptionSupported == False&nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
-| Message Sequence| CreateFile
-| | FsCtl request with FSCTL_SET_ENCRYPTION
-| | If (IsEncryptionSupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
-| | }
-
-
-
-
+### <a name="Test-cases-for-FsControlRequest"/>Test cases for FsControlRequest
 
 
 #### <a name="_Toc427488756"/> IsAllocatedRangesSupported
@@ -2688,25 +1881,23 @@ Parameter combination
 | | }
 
 
-
-
 #### <a name="_Toc427488759"/> IsReparsePointSupported
 
-##### <a name="_Toc427488760"/>FsCtl_Set_ReparsePoint_File_IsReparsePointSupported
+##### <a name="_Toc427488760"/>FsCtl_Get_ReparsePoint_IsReparsePointSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test if FSCTL_SET_REPARSE_POINT is supported for different file systems.
+| Description| To test if FSCTL_GET_REPARSE_POINT is supported for different file systems.
 | | Note: This is only implemented by the ReFS and NTFS file systems.
 | | Test environment: NTFS, ReFS, FAT32
-| | Test object: DataFile, DirectoryFile
-| | FsCtl Request: FSCTL_SET_REPARSE_POINT
+| | Test object: DirectoryFile
+| | FsCtl Request: FSCTL_GET_REPARSE_POINT
 | | Parameter combination
 | | Parameter&nbsp;&#124;&nbsp;Expected Result
 | | IsReparsePointSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
 | | IsReparsePointSupported == False&nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
 | Message Sequence| CreateFile
-| | FsCtl request with FSCTL_SET_REPARSE_POINT
+| | FsCtl request with FSCTL_GET_REPARSE_POINT
 | | If (IsReparsePointSupported == True) {
 | | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
 | | } Else {
@@ -2714,80 +1905,44 @@ Parameter combination
 | | }
 
 
+#### <a name="IsSparseFileSupported"/>IsSparseFileSupported
 
+##### <a name="FsCtl_Set_Sparse_File_IsSparseFileSupported"/>FsCtl_Set_Sparse_File_IsSparseFileSupported
 
-##### <a name="_Toc427488761"/>FsCtl_Set_ReparsePoint_Dir_IsReparsePointSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test if FSCTL_SET_REPARSE_POINT is supported for different file systems.
-| | Note: This is only implemented by the ReFS and NTFS file systems.
-| | Test environment: NTFS, ReFS, FAT32
-| | Test object: DataFile, DirectoryFile
-| | FsCtl Request: FSCTL_SET_REPARSE_POINT
-| | Parameter combination
-| | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsReparsePointSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsReparsePointSupported == False&nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
-| Message Sequence| CreateFile
-| | FsCtl request with FSCTL_SET_REPARSE_POINT
-| | If (IsReparsePointSupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
-| | }
+| Description| To test if FSCTL_SET_SPARSE is supported for different file systems.| 
+| | Note: This is only implemented by the **NTFS** file system.| 
+| | Test environment: NTFS, ReFS| 
+| | Test object: DataFile| 
+| | Test coverage:| 
+| | FsCtl: FSCTL_SET_SPARSE| 
+| | If the object store does not implement this functionality, the operation MUST be failed with STATUS_INVALID_DEVICE_REQUEST | 
+| | If support, returns STATUS_SUCCESS.| 
+| Message Sequence| CreateFile| 
+| | FsCtl request with FSCTL_SET_SPARSE| 
+| | Verify server returns STATUS_SUCCESS for supported file system| 
+| | Or returns STATUS_INVALID_DEVICE_REQUEST for unsupported file system.| 
 
 
+##### <a name="FsCtl_Set_Sparse_Dir_IsSparseFileSupported"/>FsCtl_Set_Sparse_Dir_IsSparseFileSupported
 
-
-#### <a name="_Toc427488762"/> IsSparseFileSupported
-
-##### <a name="_Toc427488763"/>FsCtl_Set_Sparse_File_IsSparseFileSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test if FSCTL_SET_SPARSE is supported for different file systems.
-| | Note: This is only implemented by the **NTFS** file system..
-| | Test environment: NTFS, ReFS
-| | Test object: DataFile, DirectoryFile
-| | FsCtl Request: FSCTL_SET_SPARSE
-| | Parameter combination
-| | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsSparseFileSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsSparseFileSupported == False&nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
-| Message Sequence| CreateFile
-| | FsCtl request with FSCTL_SET_SPARSE
-| | If (IsSparseFileSupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
-| | }
-
-
-
-
-##### <a name="_Toc427488764"/>FsCtl_Set_Sparse_Dir_IsSparseFileSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if FSCTL_SET_SPARSE is supported for different file systems.
-| | Note: This is only implemented by the **NTFS** file system..
-| | Test environment: NTFS, ReFS
-| | Test object: DataFile, DirectoryFile
-| | FsCtl Request: FSCTL_SET_SPARSE
-| | Parameter combination
-| | Parameter&nbsp;&#124;&nbsp;Expected Result
-| | IsSparseFileSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
-| | IsSparseFileSupported == False&nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
-| Message Sequence| CreateFile
-| | FsCtl request with FSCTL_SET_SPARSE
-| | If (IsSparseFileSupported == True) {
-| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
-| | } Else {
-| | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
-| | }
-
-
+| Description| To test if FSCTL_SET_SPARSE is supported for different file systems.| 
+| | Note: This is only implemented by the **NTFS** file system.| 
+| | Test environment: NTFS, ReFS| 
+| | Test object: DirectoryFile| 
+| | Test coverage:| 
+| | FsCtl: FSCTL_SET_SPARSE| 
+| | If the object store does not implement this functionality, the operation MUST be failed with STATUS_INVALID_DEVICE_REQUEST | 
+| | If support, returns STATUS_SUCCESS.| 
+| Message Sequence| CreateFile| 
+| | FsCtl request with FSCTL_SET_SPARSE| 
+| | Verify server returns STATUS_SUCCESS for supported file system| 
+| | Or returns STATUS_INVALID_DEVICE_REQUEST for unsupported file system.| 
 
 
 #### <a name="_Toc427488765"/> IsZeroDataSupported
@@ -2838,7 +1993,6 @@ Parameter combination
 
 
 
-
 #### <a name="_Toc427488831"/> FileNormalizedNameInformation
 
 ##### <a name="_Toc427488832"/>FileInfo_Query_FileNormalizedNameInfo_File
@@ -2883,7 +2037,6 @@ Parameter combination
 
 
 
-
 #### <a name="_Toc437488671">IsDuplicateExtentsToFileExSupported
 
 ##### <a name="_Toc437488672"/> BVT_FsCtl_DuplicateExtentsToFileEx_IsBasicSupported
@@ -2923,11 +2076,890 @@ Parameter combination
 
 
 
+#### <a name="IsGetIntegrityInformationSupported"/>IsGetIntegrityInformationSupported
+
+
+##### <a name="_Toc427488679"/>FsCtl_Get_IntegrityInformation_File_IsIntegritySupported (BVT)
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test  if FSCTL request **FSCTL_GET_INTEGRITY_INFORMATION** is supported
+| | Note: Only ReFS supports integrity
+| | Test environment: NTFS, ReFS
+| | Parameter combination.
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsIntegritySupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsIntegritySupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| Message Sequence| CreateFile (DataFile)
+| | FSCTL request with FSCTL_GET_INTEGRITY_INFORMATION
+| | If (IsIntegritySupported == True) {
+| | Assert.AreEqual(STATUS_SUCCESS,ActualResult);
+| | } Else {
+| | Assert.AreEqual(STATUS_INVALID_DEVICE_REQUEST,ActualResult);
+| | }
+
+
+
+##### <a name="_Toc427488680"/>FsCtl_Get_IntegrityInformation_Dir_IsIntegritySupported (BVT)
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test  if FSCTL request **FSCTL_GET_INTEGRITY_INFORMATION** is supported
+| | Note: Only ReFS supports integrity
+| | Test environment: NTFS, ReFS
+| | Parameter combination.
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsIntegritySupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsIntegritySupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| Message Sequence| CreateFile (DirectoryFile)
+| | FSCTL request with FSCTL_GET_INTEGRITY_INFORMATION
+| | If (IsIntegritySupported == True) {
+| | Assert.AreEqual(STATUS_SUCCESS,ActualResult);
+| | } Else {
+| | Assert.AreEqual(STATUS_INVALID_DEVICE_REQUEST,ActualResult);
+| | }
+
+
+
+
+##### <a name="_Toc427488681"/>FsCtl_Get_IntegrityInformation_File_InvalidParameter(3TCs)
+Parameter combination: (Expected results: STATUS_INVALID_PARAMETER)
+
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  | Parameter| 
+| 1| OutputBufferSize   &#60;  sizeof(| 
+| | FSCTL_GET_INTEGRITY_INFORMATION_BUFFER)| 
+| 2| Open.Stream.StreamType != FileStream| 
+| | && Open.Stream.StreamType != DirectoryStream| 
+| 3| Open.File.FileAttributes.FILE_ATTRIBUTE_SYSTEM == TRUE| 
+
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test case|  **FsCtl_Get** **_** **Integrity** **Information_** **File** **_** **OutputBu** **fferSizeLessThanIntegrityBuffer**| 
+| Description| To test parameter check for invalid parameters.| 
+| | Note: Only ReFS supports integrity| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (DataFile)| 
+| | FsCtl request FSCTL_GET_INTEGRITY_INFORMATION with| 
+| |  **OutputBufferSize**  **=**  **sizeof(FSCTL_GET_INTEGRITY_INFORMATION_BUFFER)**  **-1**| 
+| | Assert.AreEqual(**STATUS_INVALID_PARAMETER**,ActualResult);| 
+| Test case|  **FsCtl_Get** **_** **Integrity** **Information_** **File_** **OpenStreamTypeIsNull**| 
+| Description| To test parameter check for invalid parameters.| 
+| | Note: Only ReFS supports integrity| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (DataFile)| 
+| | FsCtl request with **Open.Stream.StreamType**  **=**  **NULL**| 
+| | Assert.AreEqual(STATUS_INVALID_PARAMETER,ActualResult);| 
+| Test case|  **FsCtl_Get** **_** **Integrity** **Information_** **File_** **SystemFile**| 
+| Description| To test parameter check for invalid parameters.| 
+| | Note: Only ReFS supports integrity| 
+| | Test environment: NTFS, ReFS| 
+| | Input parameter: | 
+| | Open.File.FileAttributes.FILE_ATTRIBUTE_SYSTEM == TRUE | 
+| | Expected Result: | 
+| | STATUS_INVALID_PARAMETER| 
+| Message Sequence| CreateFile (DataFile) with FileAttributes.FILE_ATTRIBUTE_SYSTEM| 
+| | FSCTL request with FSCTL_GET_INTEGRITY_INFORMATION | 
+| | Assert.AreEqual(STATUS_INVALID_PARAMETER,ActualResult);| 
+
+
+##### <a name="_Toc427488682"/>FsCtl_Get_IntegrityInformation_Dir_InvalidParameter(3TCs)
+Parameter combination: (Expected results: STATUS_INVALID_PARAMETER)
+
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  | Parameter| 
+| 1| OutputBufferSize   &#60;  sizeof(| 
+| | FSCTL_GET_INTEGRITY_INFORMATION_BUFFER)| 
+| 2| Open.Stream.StreamType != FileStream| 
+| | && Open.Stream.StreamType != DirectoryStream| 
+| 3| Open.File.FileAttributes.FILE_ATTRIBUTE_SYSTEM == TRUE| 
+
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test case|  **FsCtl_Get** **_** **Integrity** **Information_** **Dir_** **OutputBu** **fferSizeLessThanIntegrityBuffer**| 
+| Description| To test parameter check for invalid parameters.| 
+| | Note: Only ReFS supports integrity| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Directory)| 
+| | FsCtl request FSCTL_GET_INTEGRITY_INFORMATION with| 
+| |  **OutputBufferSize**  **=**  **sizeof(FSCTL_GET_INTEGRITY_INFORMATION_BUFFER)**  **-1**| 
+| | Assert.AreEqual(**STATUS_INVALID_PARAMETER**,ActualResult);| 
+| Test case|  **FsCtl_Get** **_** **Integrity** **Information_** **Dir_** **OpenStreamTypeIsNull**| 
+| Description| To test parameter check for invalid parameters.| 
+| | Note: Only ReFS supports integrity| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Directory)| 
+| | FsCtl request with **Open.Stream.StreamType**  **=**  **NULL**| 
+| | Assert.AreEqual(STATUS_INVALID_PARAMETER,ActualResult);| 
+| Test case|  **FsCtl_Get** **_** **Integrity** **Information_** **Dir_** **SystemFile**| 
+| Description| To test parameter check for invalid parameters.| 
+| | Note: Only ReFS supports integrity| 
+| | Test environment: NTFS, ReFS| 
+| | Input parameter: | 
+| | Open.File.FileAttributes.FILE_ATTRIBUTE_SYSTEM == TRUE | 
+| | Expected Result: | 
+| | STATUS_INVALID_PARAMETER| 
+| Message Sequence| CreateFile (DirectoryFile) with FileAttributes.FILE_ATTRIBUTE_SYSTEM| 
+| | FSCTL request with FSCTL_GET_INTEGRITY_INFORMATION | 
+| | Assert.AreEqual(STATUS_INVALID_PARAMETER,ActualResult);| 
+
+
+
+
+##### <a name="_Toc427488683"/>FsCtl_Get_IntegrityInformation_File_OutputValue(2TCs)
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test case|  **FsCtl_Get** **_** **IntegrityInformation_File_OutputValue_** **Common**| 
+| Description| To test the output value for FSCTL_GET_INTEGRITY_INFORMATION.| 
+| | Note: Only ReFS supports integrity| 
+| | Test environment: ReFS| 
+| Message Sequence| CreateFile (DataFile)| 
+| | Send a valid FsControl request with  FSCTL_GET_INTEGRITY_INFORMATION| 
+| | Verify server returns STATUS_SUCCESS| 
+| | Verify the following values are correct| 
+| | OutputBuffer.CheckSumAlgorithm is one of the values for ChecksumAlgorithm| 
+| | OutputBuffer.ClusterShift is the base-2 logarithm of Open.File.Volume.ClusterSize| 
+| | OutputBuffer.Flags is not CHECKSUM_ENFORCEMENT_OFF| 
+| Test case|  **FsCtl_Get** **_** **Integri** **tyInformation_File_OutputValue_ChecksumEnforcement**| 
+| Description| To test the OutputBuffer.Flags for CHECKSUM_ENFORCEMENT_OFF.| 
+| | Note: Only ReFS supports integrity| 
+| | Test environment: ReFS| 
+| Message Sequence| CreateFile (DataFile, StreamType is DataStream)| 
+| | FsControl request with  FSCTL_SET_INTEGRITY_INFORMATION| 
+| |     With Flags set to CHECKSUM_ENFORCEMENT_OFF| 
+| | FsControl request with  FSCTL_GET_INTEGRITY_INFORMATION| 
+| | OutputBuffer.Flags is CHECKSUM_ENFORCEMENT_OFF| 
+
+
+
+
+##### <a name="_Toc427488684"/>FsCtl_Get_IntegrityInformation_Dir_OutputValue(2TCs)
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test case|  **FsCtl_GetIntegr** **ityInformation_Dir_OutputValue_Common**| 
+| Description| To test the output value for FSCTL_GET_INTEGRITY_INFORMATION.| 
+| | Note: Only ReFS supports integrity| 
+| | Test environment: ReFS| 
+| Message Sequence| CreateFile (Directory)| 
+| | Send a valid FsControl request with  FSCTL_GET_INTEGRITY_INFORMATION| 
+| | Verify server returns STATUS_SUCCESS| 
+| | Verify the following values are correct| 
+| | OutputBuffer.CheckSumAlgorithm is one of the values for ChecksumAlgorithm| 
+| | OutputBuffer.ClusterShift is the base-2 logarithm of Open.File.Volume.ClusterSize| 
+| | OutputBuffer.Flags is **not** CHECKSUM_ENFORCEMENT_OFF| 
+| Test case|  **FsCtl_Get** **_** **IntegrityInformation_Dir_OutputValue_** **ChecksumEnforcement**| 
+| Description| To test the OutputBuffer.Flags for directory:| 
+| |     It is not CHECKSUM_ENFORCEMENT_OFF even Open.Stream.ChecksumEnforcementOff is TRUE.| 
+| | Note: Only ReFS supports integrity| 
+| | Test environment: ReFS| 
+| Message Sequence| CreateFile (Directory)| 
+| | FsControl request with  FSCTL_SET_INTEGRITY_INFORMATION| 
+| |     With Flags set to CHECKSUM_ENFORCEMENT_OFF| 
+| | FsControl request with  FSCTL_GET_INTEGRITY_INFORMATION| 
+| | OutputBuffer.Flags is **not** CHECKSUM_ENFORCEMENT_OFF| 
+
+
+
+#### <a name="IsSetIntegrityInformationSupported"/>IsSetIntegrityInformationSupported
+
+
+##### <a name="_Toc427488685"/>FsCtl_Set_IntegrityInformation_File_IsIntegritySupported (BVT)
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test  if FSCTL request **FSCTL_** **S** **ET_INTEGRITY_INFORMATION** is supported
+| | Note: Only ReFS supports integrity
+| | Test environment: NTFS, ReFS
+| | Parameter combination.
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsIntegritySupported == True &nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsIntegritySupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| Message Sequence| CreateFile (DataFile)
+| | FSCTL request with FSCTL_SET_INTEGRITY_INFORMATION
+| | If (IsIntegritySupported == True) {
+| | assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
+| | } Else {
+| | assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
+| | }
+
+
+
+
+##### <a name="_Toc427488686"/>FsCtl_Set_IntegrityInformation_Dir_IsIntegritySupported (BVT)
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test  if FSCTL request **FSCTL_** **S** **ET_INTEGRITY_INFORMATION** is supported
+| | Note: Only ReFS supports integrity
+| | Test environment: NTFS, ReFS
+| | Parameter combination.
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsIntegritySupported == True &nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsIntegritySupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| Message Sequence| CreateFile (Directory)
+| | FSCTL request with FSCTL_SET_INTEGRITY_INFORMATION
+| | If (IsIntegritySupported == True) {
+| | assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
+| | } Else {
+| | assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
+| | }
+
+
+
+
+##### <a name="_Toc427488687"/>FsCtl_Set_IntegrityInformation_File_InvalidParameter(2TCs)
+Parameter combination: (Expected results: STATUS_INVALID_PARAMETER)
+
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  | Parameter| 
+| 1| InputBufferSize   &#60;  sizeof(| 
+| | FSCTL_GET_INTEGRITY_INFORMATION_BUFFER)| 
+| 2| InputBuffer.ChecksumAlgorithm which is not one of CHECKSUM_TYPE_NONE, CHECKSUM_TYPE_CRC64, CHECKSUM_TYPE_UNCHANGED| 
+| 3| The operation is attempting to change the checksum state of a non-empty file; the integrity status of files can be changed only when they have not yet been written to.| 
+
+
+
+
+
+
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test case|  **Fs** **Ctl** **_Set** **_** **Integrity** **Information_** **File_** **InputBu** **fferSizeLessThanIntegrityBuffer**| 
+| Description| To test parameter check for invalid parameters.| 
+| | Note: Only ReFS supports integrity| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (DataFile)| 
+| | FsCtl request FSCTL_GET_INTEGRITY_INFORMATION with| 
+| |  **In** **putBufferSize**  **=**  **sizeof(FSCTL_GET_INTEGRITY_INFORMATION_BUFFER)**  **-1**| 
+| | Assert.AreEqual(**STATUS_INVALID_PARAMETER**,ActualResult);| 
+| Test case|  **FsC** **tl** **_Set** **_** **Integrity** **Information_** **File_** **Undefined** **ChecksumAlgorithm**| 
+| Description| To test parameter check for invalid parameters.| 
+| | Note: Only ReFS supports integrity| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (DataFile)| 
+| | FsCtl request FSCTL_GET_INTEGRITY_INFORMATION with| 
+| | InputBuffer.ChecksumAlgorithm = 0x0003| 
+| | Assert.AreEqual(**STATUS_INVALID_PARAMETER**,ActualResult);| 
+| Test case|  **FsCtl_Set_IntegrityInformation_InvalidParameter_NonEmptyFile**| 
+| Description| To test parameter check for invalid parameters.| 
+| | Note: Only ReFS supports integrity| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (DataFile)| 
+| | FsCtl request FSCTL_GET_INTEGRITY_INFORMATION with| 
+| | InputBuffer.ChecksumAlgorithm = CHECKSUM_TYPE_CRC64| 
+| | Write 1 KB data into this file to make sure it is not empty.| 
+| | FsCtl request FSCTL_GET_INTEGRITY_INFORMATION with| 
+| | InputBuffer.ChecksumAlgorithm = CHECKSUM_TYPE_NONE| 
+| | Assert.AreEqual(**STATUS_INVALID_PARAMETER**,ActualResult);| 
+
+
+
+
+##### <a name="_Toc427488688"/>FsCtl_Set_IntegrityInformation_Dir_InvalidParameter(2TCs)
+Parameter combination: (Expected results: STATUS_INVALID_PARAMETER)
+
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  | Parameter| 
+| 1| OutputBufferSize   &#60;  sizeof(| 
+| | FSCTL_GET_INTEGRITY_INFORMATION_BUFFER)| 
+| 2| InputBuffer.ChecksumAlgorithm which is not one of CHECKSUM_TYPE_NONE, CHECKSUM_TYPE_CRC64, CHECKSUM_TYPE_UNCHANGED| 
+
+
+
+
+
+
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test case|  **FsC** **tl** **_Set** **_Integrity** **Information_** **Dir_InputBu** **fferSizeLessThanIntegrityBuffer**| 
+| Description| To test parameter check for invalid parameters.| 
+| | Note: Only ReFS supports integrity| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Directory)| 
+| | FsCtl request FSCTL_GET_INTEGRITY_INFORMATION with| 
+| |  **OutputBufferSize**  **=**  **sizeof(FSCTL_GET_INTEGRITY_INFORMATION_BUFFER)**  **-1**| 
+| | Assert.AreEqual(**STATUS_INVALID_PARAMETER**,ActualResult);| 
+| Test case|  **FsC** **t** **l_Set** **_Integrity** **Information_** **Dir_** **Undefined** **ChecksumAlgorithm**| 
+| Description| To test parameter check for invalid parameters.| 
+| | Note: Only ReFS supports integrity| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Directory)| 
+| | FsCtl request FSCTL_GET_INTEGRITY_INFORMATION with| 
+| | InputBuffer.ChecksumAlgorithm = 0x0003| 
+| | Assert.AreEqual(**STATUS_INVALID_PARAMETER**,ActualResult);| 
+
+
+
+
+##### <a name="_Toc427488689"/>FsCtl_Set_IntegrityInformation_File_WriteProtected
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Try to set integrity information for a read only volume, it should fail with STATUS_MEDIA_WRITE_PROTECTED.| 
+| | Note: Only ReFS supports integrity| 
+| | Test environment: ReFS| 
+| Message Sequence| Connect to a read only volume| 
+| | OpenFile (DataFile)| 
+| | FsCtl request FSCTL_GET_INTEGRITY_INFORMATION| 
+| | Assert.AreEqual(**STATUS_MEDIA_WRITE_PROTECTED**,ActualResult);| 
+
+
+
+
+##### <a name="_Toc427488690"/>FsCtl_Set_IntegrityInformation_Dir_WriteProtected
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Try to set integrity information for a read only volume, it should fail with STATUS_MEDIA_WRITE_PROTECTED.| 
+| | Note: Only ReFS supports integrity| 
+| | Test environment: ReFS| 
+| Message Sequence| Connect to a read only volume| 
+| | OpenFile (Directory)| 
+| | FsCtl request FSCTL_GET_INTEGRITY_INFORMATION| 
+| | Assert.AreEqual(**STATUS_MEDIA_WRITE_PROTECTED**,ActualResult);| 
+
+
+
+
+##### <a name="_Toc427488691"/>FsCtl_Set_IntegrityInformation_File_ChecksumAlgorithm(2TCs)
+Test matrix for InputBuffer.ChecksumAlgorithm
+
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| ChecksumAlgorithm| ExpectedAlgorithm| 
+| CHECKSUM_TYPE_NONE| CHECKSUM_TYPE_NONE| 
+| CHECKSUM_TYPE_CRC64| CHECKSUM_TYPE_CRC64| 
+| CHECKSUM_TYPE_UNCHANGED| CHECKSUM_TYPE_NONE| 
+| CHECKSUM_TYPE_UNCHANGED| CHECKSUM_TYPE_CRC64| 
+
+
+
+
+
+
+
+
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case|  **FsCtl_Set_IntegrityInformation_File_ChecksumType** **NoneAnd** **Unchanged**| 
+| Description| To set integrity information with different checksumAlgorithms.| 
+| | Note: Only ReFS supports integrity| 
+| | To cover CHECKSUM_TYPE_NONE and CHECKSUM_TYPE_UNCHANGED| 
+| Message Sequence| CreateFile| 
+| | FSCTL request FSCTL_SET_INTEGRITY_INFORMATION  with InputBuffer.ChecksumAlgorithm set to CHECKSUM_TYPE_NONE| 
+| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
+| | FSCTL request with FSCTL_GET_INTEGRITY_INFORMATION| 
+| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
+| | Assert.AreEqual(CHECKSUM_TYPE_NONE, OutputBuffer.CheckSumAlgorithm).| 
+| | FSCTL request FSCTL_SET_INTEGRITY_INFORMATION  with InputBuffer.ChecksumAlgorithm set to CHECKSUM_TYPE_UNCHANGED| 
+| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
+| | FSCTL request with FSCTL_GET_INTEGRITY_INFORMATION| 
+| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
+| | Assert.AreEqual(CHECKSUM_TYPE_NONE, OutputBuffer.CheckSumAlgorithm).| 
+| Test Case|  **FsCtl_Set_IntegrityInformation_File_ChecksumType** **Crc64And** **Unchanged**| 
+| Description| To set integrity information with different checksumAlgorithms.| 
+| | Note: Only ReFS supports integrity| 
+| | To cover CHECKSUM_TYPE_CRC64 and CHECKSUM_TYPE_UNCHANGED| 
+| Message Sequence| CreateFile| 
+| | FSCTL request FSCTL_SET_INTEGRITY_INFORMATION  with InputBuffer.ChecksumAlgorithm set to CHECKSUM_TYPE_CRC64| 
+| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
+| | FSCTL request with FSCTL_GET_INTEGRITY_INFORMATION| 
+| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
+| | Assert.AreEqual(CHECKSUM_TYPE_CRC64, OutputBuffer.CheckSumAlgorithm).| 
+| | FSCTL request FSCTL_SET_INTEGRITY_INFORMATION  with InputBuffer.ChecksumAlgorithm set to CHECKSUM_TYPE_CRC64| 
+| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
+| | FSCTL request with FSCTL_GET_INTEGRITY_INFORMATION| 
+| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
+| | Assert.AreEqual(CHECKSUM_TYPE_CRC64, OutputBuffer.CheckSumAlgorithm).| 
+
+
+
+
+##### <a name="_Toc427488692"/>FsCtl_Set_IntegrityInformation_Dir_ChecksumAlgorithm(2TCs)
+Test matrix for InputBuffer.ChecksumAlgorithm
+
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| ChecksumAlgorithm| ExpectedAlgorithm| 
+| CHECKSUM_TYPE_NONE| CHECKSUM_TYPE_NONE| 
+| CHECKSUM_TYPE_CRC64| CHECKSUM_TYPE_CRC64| 
+| CHECKSUM_TYPE_UNCHANGED| CHECKSUM_TYPE_NONE| 
+| CHECKSUM_TYPE_UNCHANGED| CHECKSUM_TYPE_CRC64| 
+
+
+
+
+
+
+
+
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case|  **FsC** **tl_Set_IntegrityInformation_Dir** **_ChecksumType** **NoneAnd** **Unchanged**| 
+| Description| To set integrity information with different checksumAlgorithms.| 
+| | Note: Only ReFS supports integrity| 
+| | To cover CHECKSUM_TYPE_NONE and CHECKSUM_TYPE_UNCHANGED| 
+| Message Sequence| CreateFile| 
+| | FSCTL request FSCTL_SET_INTEGRITY_INFORMATION  with InputBuffer.ChecksumAlgorithm set to CHECKSUM_TYPE_NONE| 
+| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
+| | FSCTL request with FSCTL_GET_INTEGRITY_INFORMATION| 
+| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
+| | Assert.AreEqual(CHECKSUM_TYPE_NONE, OutputBuffer.CheckSumAlgorithm).| 
+| | FSCTL request FSCTL_SET_INTEGRITY_INFORMATION  with InputBuffer.ChecksumAlgorithm set to CHECKSUM_TYPE_UNCHANGED| 
+| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
+| | FSCTL request with FSCTL_GET_INTEGRITY_INFORMATION| 
+| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
+| | Assert.AreEqual(CHECKSUM_TYPE_NONE, OutputBuffer.CheckSumAlgorithm).| 
+| Test Case|  **FsC** **tl_Set_IntegrityInformation_Dir** **_ChecksumType** **Crc64And** **Unchanged**| 
+| Description| To set integrity information with different checksumAlgorithms.| 
+| | Note: Only ReFS supports integrity| 
+| | To cover CHECKSUM_TYPE_CRC64 and CHECKSUM_TYPE_UNCHANGED| 
+| Message Sequence| CreateFile| 
+| | FSCTL request FSCTL_SET_INTEGRITY_INFORMATION  with InputBuffer.ChecksumAlgorithm set to CHECKSUM_TYPE_CRC64| 
+| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
+| | FSCTL request with FSCTL_GET_INTEGRITY_INFORMATION| 
+| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
+| | Assert.AreEqual(CHECKSUM_TYPE_CRC64, OutputBuffer.CheckSumAlgorithm).| 
+| | FSCTL request FSCTL_SET_INTEGRITY_INFORMATION  with InputBuffer.ChecksumAlgorithm set to CHECKSUM_TYPE_CRC64| 
+| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
+| | FSCTL request with FSCTL_GET_INTEGRITY_INFORMATION| 
+| | Assert.AreEqual(STATUS_SUCCESS,actualResult)| 
+| | Assert.AreEqual(CHECKSUM_TYPE_CRC64, OutputBuffer.CheckSumAlgorithm).| 
+
+
+
+#### <a name="IsOffloadReadSupported"/>IsOffloadReadSupported
+
+##### <a name="_Toc427488693"/>FsCtl_Offload_Read_File_IsOffloadSupported (BVT)
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Support for this read operation is optional. If the object store does not implement this functionality, the operation MUST be failed with STATUS_INVALID_DEVICE_REQUEST.
+| | Note: Only ReFS supports integrity
+| | Test object: DataFile
+| | Parameter combination.
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsOffloadSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsOffloadSupported == False&nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| Message Sequence| CreateFile (DataFile)
+| | FSCTL request with SCTL_OFFLOAD_READ
+| | If (IsOffloadSupported == True) {
+| | Assert.AreEqual(STATUS_SUCCESS,ActualResult);
+| | } Else {
+| | Assert.AreEqual(STATUS_INVALID_DEVICE_REQUEST,ActualResult);
+| | }
+
+
+
+#### <a name="IsOffloadWriteSupported"/>IsOffloadWriteSupported
+
+
+##### <a name="_Toc427488694"/>FsCtl_Offload_Write_File_IsOffloadSupported (BVT)
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Support for this read operation is optional. If the object store does not implement this functionality, the operation MUST be failed with STATUS_INVALID_DEVICE_REQUEST.
+| | Note: Only ReFS supports integrity
+| | Test object: DataFile
+| | Parameter combination.
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsOffloadSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsOffloadSupported == False&nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| Message Sequence| CreateFile (DataFile)
+| | FSCTL request with SCTL_OFFLOAD_WRITE
+| | If (IsOffloadSupported == True) {
+| | Assert.AreEqual(STATUS_SUCCESS,ActualResult);
+| | } Else {
+| | Assert.AreEqual(STATUS_INVALID_DEVICE_REQUEST,ActualResult);
+| | }
+
+
+
+
+
+
+
+
+
+
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test case|  **FsInfo_Query_FileFsSectorSizeInformation_** **File_** **OutputBufferSizeLessThanSectorSizeInfo**| 
+| Description| To test parameter check for invalid parameters.| 
+| | Test environment: NTFS, ReFS| 
+| | Test object: file, directory| 
+| | Input parameter: | 
+| | OutputBufferSize  = sizeof(| 
+| | FILE_FS_SECTOR_SIZE_INFORMATION) -1| 
+| | Expected Result: STATUS_INFO_LENGTH_MISMATCH| 
+| Message Sequence| CreateFile (DataFile)| 
+| | QueryInfo  with FileSystemInfoClass  = FileFsSectorSizeInformation, | 
+| |  **OutputBufferSize**  **=**  **sizeof(** **FILE_FS_SECTOR_SIZE_INFORMATION** **)**  **-1**| 
+| | Assert.AreEqual(**STATUS_INFO_LENGTH_MISMATCH**,ActualResult);| 
+| Test case|  **FsInfo_Query_FileFsSectorSizeInformation_** **File_** **OutputBufferSizeEqualToSectorSizeInfo** **(BVT)**| 
+| Description| To test parameter check for invalid parameters.| 
+| | Test environment: NTFS, ReFS| 
+| | Input parameter: | 
+| | OutputBufferSize  = sizeof(| 
+| | FILE_FS_SECTOR_SIZE_INFORMATION)| 
+| | Expected Result: STATUS_SUCCESS| 
+| Message Sequence| CreateFile (DataFile)| 
+| | QueryInfo  with FileSystemInfoClass  = FileFsSectorSizeInformation, | 
+| |  **OutputBufferSize**  **=**  **sizeof(** **FILE_FS_SECTOR_SIZE_INFORMATION** **)**| 
+| | Assert.AreEqual(**STATUS_** **SUCCESS**,ActualResult);| 
+| Test case|  **FsInfo_Query_FileFsSectorSizeInformation_** **File_** **OutputBufferSizeGreaterThanSectorSizeInfo**| 
+| Description| To test parameter check for invalid parameters.| 
+| | Test environment: NTFS, ReFS| 
+| | Input parameter: | 
+| | OutputBufferSize  = sizeof(| 
+| | FILE_FS_SECTOR_SIZE_INFORMATION) +1| 
+| | Expected Result: STATUS_SUCCESS| 
+| Message Sequence| CreateFile (DataFile)| 
+| | QueryInfo  with FileSystemInfoClass  = FileFsSectorSizeInformation, | 
+| |  **OutputBufferSize**  **=**  **sizeof(** **FILE_FS_SECTOR_SIZE_INFORMATION** **)** **+** **1**| 
+| | Assert.AreEqual(**STATUS_** **SUCCESS**,ActualResult);| 
+
+
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test case|  **FsInfo_Query_FileFsSectorSizeInformation_** **Dir_** **OutputBufferSizeLessThanSectorSizeInfo**| 
+| Description| To test parameter check for invalid parameters.| 
+| | Test environment: NTFS, ReFS| 
+| | Input parameter: | 
+| | OutputBufferSize  = sizeof(| 
+| | FILE_FS_SECTOR_SIZE_INFORMATION) -1| 
+| | Expected Result: STATUS_INFO_LENGTH_MISMATCH| 
+| Message Sequence| CreateFile (DirectoryFile)| 
+| | QueryInfo  with FileSystemInfoClass  = FileFsSectorSizeInformation, | 
+| |  **OutputBufferSize**  **=**  **sizeof(** **FILE_FS_SECTOR_SIZE_INFORMATION** **)**  **-1**| 
+| | Assert.AreEqual(**STATUS_INFO_LENGTH_MISMATCH**,ActualResult);| 
+| Test case|  **FsInfo_Query_FileFsSectorSizeInformation_** **Dir_** **OutputBufferSizeEqualToSectorSizeInfo**| 
+| Description| To test parameter check for invalid parameters.| 
+| | Test environment: NTFS, ReFS| 
+| | Input parameter: | 
+| | OutputBufferSize  = sizeof(| 
+| | FILE_FS_SECTOR_SIZE_INFORMATION)| 
+| | Expected Result:  STATUS_SUCCESS| 
+| Message Sequence| CreateFile (DirectoryFile)| 
+| | QueryInfo  with FileSystemInfoClass  = FileFsSectorSizeInformation, | 
+| |  **OutputBufferSize**  **=**  **sizeof(** **FILE_FS_SECTOR_SIZE_INFORMATION** **)**| 
+| | Assert.AreEqual(**STATUS_** **SUCCESS**,ActualResult);| 
+| Test case|  **FsInfo_Query_FileFsSectorSizeInformation_** **Dir_** **OutputBufferSizeGreaterThanSectorSizeInfo**| 
+| Description| To test parameter check for invalid parameters.| 
+| | Test environment: NTFS, ReFS| 
+| | Input parameter: | 
+| | OutputBufferSize  = sizeof(| 
+| | FILE_FS_SECTOR_SIZE_INFORMATION) +1| 
+| | Expected Result:  STATUS_SUCCESS| 
+| Message Sequence| CreateFile (DirectoryFile)| 
+| | QueryInfo  with FileSystemInfoClass  = FileFsSectorSizeInformation, | 
+| |  **OutputBufferSize**  **=**  **sizeof(** **FILE_FS_SECTOR_SIZE_INFORMATION** **)** **+** **1**| 
+| | Assert.AreEqual(**STATUS_** **SUCCESS**,ActualResult);| 
+
+
+
+
+#### <a name="IsSetCompressionSupported"/>IsSetCompressionSupported
+
+
+##### <a name="_Toc427488719"/>FsCtl_Set_Compression_File_IsCompressionSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if compression is supported for different file systems.
+| | Test environment: NTFS, ReFS
+| | Parameter combination.
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsCompressionSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsCompressionSupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| Message Sequence| CreateFile (DataFile)
+| | FsCtl request with FSCTL_SET_COMPRESSION
+| | If (IsCompressionSupported == True) {
+| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
+| | } Else {
+| | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
+| | }
+
+
+
+
+##### <a name="_Toc427488720"/>FsCtl_Set_Compression_Dir_IsCompressionSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if compression is supported for different file systems.
+| | Test environment: NTFS, ReFS
+| | Test object: DataFile, DirectoryFile
+| | Parameter combination.
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsCompressionSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsCompressionSupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| Message Sequence| CreateFile  (DirectoryFile)
+| | FsCtl request with FSCTL_SET_COMPRESSION
+| | If (IsCompressionSupported == True) {
+| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
+| | } Else {
+| | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
+| | }
+
+
+
+#### <a name="IsGetCompressionSupported"/>IsGetCompressionSupported
+
+
+##### <a name="_Toc427488717"/>FsCtl_Get_Compression_File_IsCompressionSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if compression is supported for different file systems.
+| | Test environment: NTFS, ReFS
+| | Test object: DataFile, DirectoryFile
+| | Parameter combination.
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsCompressionSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsCompressionSupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| Message Sequence| CreateFile 
+| | FsCtl request with FSCTL_GET_COMPRESSION
+| | If (IsCompressionSupported == True) {
+| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
+| | } Else {
+| | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
+| | }
+
+
+
+
+##### <a name="_Toc427488718"/>FsCtl_Get_Compression_Dir_IsCompressionSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if compression is supported for different file systems.
+| | Test environment: NTFS, ReFS
+| | Test object: DataFile, DirectoryFile
+| | Parameter combination.
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsCompressionSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsCompressionSupported == False &nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| Message Sequence| CreateFile 
+| | FsCtl request with FSCTL_GET_COMPRESSION
+| | If (IsCompressionSupported == True) {
+| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
+| | } Else {
+| | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
+| | }
+
+
+
+
+#### <a name="IsGetVolumeDataSupported"/>IsGetVolumeDataSupported
+
+##### <a name="FsCtl_Get_REFS_Volume_Data_File"/>FsCtl_Get_REFS_Volume_Data_File
+
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if FSCTL_GET_REFS_VOLUME_DATA is supported.| 
+| | Note: This is only implemented by the **REFS** file system file system.| 
+| | Test environment: ReFS| 
+| | Test object: DataFile| 
+| | Test coverage:| 
+| | FsCtl: FSCTL_GET_REFS_VOLUME_DATA| 
+| Message Sequence| Create test file.| 
+| | Query FileIdInformation.|
+| | Query FileFsFullSizeInformation.|
+| | FSCTL request with FSCTL_GET_REFS_VOLUME_DATA.| 
+| | Verify returned STATUS_SUCCESS and Verify returned REFS_VOLUME_DATA_BUFFER:| 
+| | 1. VolumeSerialNumber of REFS_VOLUME_DATA_BUFFER should be the same with VolumeSerialNumber of FileIdInformation.| 
+| | 2. TotalClusters of REFS_VVOLUME_DATA_BUFFER should be the same with TotalAllocationUnits of FileFsFullSizeInformation.| 
+| | 3. BytesPerSector of REFS_VVOLUME_DATA_BUFFER should be the same with BytesPerSector of FileFsFullSizeInformation.|
+
+
+
+##### <a name="FsCtl_Get_REFS_Volume_Data_Dir"/>FsCtl_Get_REFS_Volume_Data_Dir
+
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if FSCTL_GET_REFS_VOLUME_DATA is supported.| 
+| | Note: This is only implemented by the **REFS** file system file system.| 
+| | Test environment: ReFS| 
+| | Test object: DirectoryFile| 
+| | Test coverage:| 
+| | FsCtl: FSCTL_GET_REFS_VOLUME_DATA| 
+| Message Sequence| Create test file directory.| 
+| | Query FileIdInformation.|
+| | Query FileFsFullSizeInformation.|
+| | FSCTL request with FSCTL_GET_REFS_VOLUME_DATA.| 
+| | Verify returned STATUS_SUCCESS and Verify returned REFS_VOLUME_DATA_BUFFER:| 
+| | 1. VolumeSerialNumber of REFS_VOLUME_DATA_BUFFER should be the same with VolumeSerialNumber of FileIdInformation.| 
+| | 2. TotalClusters of REFS_VVOLUME_DATA_BUFFER should be the same with TotalAllocationUnits of FileFsFullSizeInformation.| 
+| | 3. BytesPerSector of REFS_VVOLUME_DATA_BUFFER should be the same with BytesPerSector of FileFsFullSizeInformation.|
+
+
+
+##### <a name="FsCtl_Get_NTFS_Volume_Data_File"/>FsCtl_Get_NTFS_Volume_Data_File
+
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if FSCTL_GET_NTFS_VOLUME_DATA is supported.| 
+| | Note: This is only implemented by the **NTFS** file system file system.| 
+| | Test environment: NTFS| 
+| | Test object: DataFile| 
+| | Test coverage:| 
+| | FsCtl: FSCTL_GET_NTFS_VOLUME_DATA| 
+| Message Sequence| Create test file.| 
+| | Query FileIdInformation.|
+| | Query FileFsFullSizeInformation.|
+| | FSCTL request with FSCTL_GET_NTFS_VOLUME_DATA.| 
+| | Verify returned STATUS_SUCCESS and Verify returned NTFS_VOLUME_DATA_BUFFER:| 
+| | 1. VolumeSerialNumber of NTFS_VOLUME_DATA_BUFFER should be the same with VolumeSerialNumber of FileIdInformation.| 
+| | 2. TotalClusters of NTFS_VVOLUME_DATA_BUFFER should be the same with TotalAllocationUnits of FileFsFullSizeInformation.| 
+| | 3. BytesPerSector of NTFS_VVOLUME_DATA_BUFFER should be the same with BytesPerSector of FileFsFullSizeInformation.|
+
+
+
+##### <a name="FsCtl_Get_NTFS_Volume_Data_Dir"/>FsCtl_Get_NTFS_Volume_Data_Dir
+
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if FSCTL_GET_NTFS_VOLUME_DATA is supported.| 
+| | Note: This is only implemented by the **NTFS** file system file system.| 
+| | Test environment: NTFS| 
+| | Test object: DirectoryFile| 
+| | Test coverage:| 
+| | FsCtl: FSCTL_GET_NTFS_VOLUME_DATA| 
+| Message Sequence| Create test file directory.| 
+| | Query FileIdInformation.|
+| | Query FileFsFullSizeInformation.|
+| | FSCTL request with FSCTL_GET_NTFS_VOLUME_DATA.| 
+| | Verify returned STATUS_SUCCESS and Verify returned NTFS_VOLUME_DATA_BUFFER:| 
+| | 1. VolumeSerialNumber of NTFS_VOLUME_DATA_BUFFER should be the same with VolumeSerialNumber of FileIdInformation.| 
+| | 2. TotalClusters of NTFS_VVOLUME_DATA_BUFFER should be the same with TotalAllocationUnits of FileFsFullSizeInformation.| 
+| | 3. BytesPerSector of NTFS_VVOLUME_DATA_BUFFER should be the same with BytesPerSector of FileFsFullSizeInformation.|
+
+
+#### <a name="IsQueryFileRegionsSupported"/>IsQueryFileRegionsSupported
+
+##### <a name="BVT_FsCtl_Query_File_Regions"/> BVT_FsCtl_Query_File_Regions
+
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if FSCTL_QUERY_FILE_REGIONS is supported.| 
+| | Note: This is only implemented by the **REFS** file system and **NTFS** file system.| 
+| | Test environment: ReFS and NTFS| 
+| | Test object: DataFile| 
+| | Test coverage:| 
+| | FsCtl: FSCTL_QUERY_FILE_REGIONS| 
+| Message Sequence| Create test file and fill it up with random data.| 
+| | FSCTL request with FSCTL_QUERY_FILE_REGIONS, not containing input data.| 
+| | Verify returned STATUS_SUCCESS and Verify returned FILE_REGION_OUTPUT:| 
+| | 1. RegionEntryCount of the output data element should be 1.| 
+| | 2. TotalRegionEntryCount of the output data element should be 1.| 
+| | 3. FileOffset of the FILE_REGION_INFO data element should be zero.|
+| | 4. Length of the FILE_REGION_INFO data element should be the size we wrote to the file.|
+| | 5. FILE_REGION_USAGE_VALID_CACHED_DATA should be set for NTFS, or FILE_REGION_USAGE_VALID_NONCACHED_DATA should be set for REFS.|
+
+
+##### <a name="BVT_FsCtl_Query_File_Regions_WithInputData"/> BVT_FsCtl_Query_File_Regions_WithInputData
+
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if FSCTL_QUERY_FILE_REGIONS is supported.| 
+| | Note: This is only implemented by the **REFS** file system and **NTFS** file system.| 
+| | Test environment: ReFS and NTFS| 
+| | Test object: DataFile| 
+| | Test coverage:| 
+| | FsCtl: FSCTL_QUERY_FILE_REGIONS| 
+| Message Sequence| Create test file and fill it up with random data.| 
+| | FSCTL request with FSCTL_QUERY_FILE_REGIONS, containing input data.| 
+| | Verify returned STATUS_SUCCESS and Verify returned FILE_REGION_OUTPUT:| 
+| | 1. RegionEntryCount of the output data element should be 1.| 
+| | 2. TotalRegionEntryCount of the output data element should be 1.| 
+| | 3. FileOffset of the FILE_REGION_INFO data element should be zero.|
+| | 4. Length of the FILE_REGION_INFO data element should be the size we wrote to the file.|
+| | 5. FILE_REGION_USAGE_VALID_CACHED_DATA should be set for NTFS, or FILE_REGION_USAGE_VALID_NONCACHED_DATA should be set for REFS.|
+
+
+
+### <a name="Test-cases-for-QuotaInformation"/>Test cases for QuotaInformation
+
+
+#### <a name="_Toc427488748"/> IsQuotaInfoSupported
+
+##### <a name="_Toc427488749"/>QuotaInfo_Query_QuotaInformation_IsQuotaInfoSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if quota info is supported for different file systems.
+| | Note: Only NTFS supports quotas.
+| | Test environment: NTFS
+| | Parameter combination
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsQuotaInfoSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsQuotaInfoSupported == False&nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| Message Sequence| Open Quota file
+| | QueryInfo with FileInfoClass.FileQuotaInformation
+| | If (IsQuotaInfoSupported == True) {
+| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
+| | } Else {
+| | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
+| | }
+
+
+
+
+##### <a name="_Toc427488750"/>QuotaInfo_Set_QuotaInformation_IsQuotaInfoSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if quota info is supported for different file systems.
+| | Note: Only NTFS supports quotas.
+| | Test environment: NTFS
+| | Parameter combination
+| | Parameter&nbsp;&#124;&nbsp;Expected Result
+| | IsQuotaInfoSupported == True&nbsp;&#124;&nbsp;STATUS_SUCCESS
+| | IsQuotaInfoSupported == False&nbsp;&#124;&nbsp;STATUS_INVALID_DEVICE_REQUEST
+| Message Sequence| Open Quota file
+| | SetInfo with FileInfoClass.FileQuotaInformation
+| | If (IsQuotaInfoSupported == True) {
+| | Assert.AreEqual(**STATUS_SUCCESS**,ActualResult);
+| | } Else {
+| | Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**,ActualResult);
+| | }
+
+
 
 
 ### <a name="_Toc427488768"/>Test cases for Alternate Data Stream
 
-#### <a name="_Toc427488770"/>BVT_AlternateDataStream_CreateStream_File (BVT)
+#### <a name="IsCreateStreamSupported"/>IsCreateStreamSupported
+
+
+##### <a name="_Toc427488770"/>BVT_AlternateDataStream_CreateStream_File (BVT)
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2941,7 +2973,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488771"/>BVT_AlternateDataStream_CreateStream_Dir (BVT)
+##### <a name="_Toc427488771"/>BVT_AlternateDataStream_CreateStream_Dir (BVT)
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2953,8 +2985,9 @@ Parameter combination
 | | Verify server return with **STATUS_SUCCESS** for supported file system|  
 
 
+#### <a name="IsListStreamSupported"/>IsListStreamSupported
 
-#### <a name="_Toc427488773"/>BVT_AlternateDataStream_ListStreams_File (BVT)
+##### <a name="_Toc427488773"/>BVT_AlternateDataStream_ListStreams_File (BVT)
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2970,7 +3003,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488774"/>BVT_AlternateDataStream_ListStreams_Dir (BVT)
+##### <a name="_Toc427488774"/>BVT_AlternateDataStream_ListStreams_Dir (BVT)
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2984,9 +3017,9 @@ Parameter combination
 | | Verify server return with streamname and streamsize|
 
 
+#### <a name="IsDeleteStreamSupported"/>IsDeleteStreamSupported
 
-
-#### <a name="_Toc427488776"/>BVT_AlternateDataStream_DeleteStream_File (BVT)
+##### <a name="_Toc427488776"/>BVT_AlternateDataStream_DeleteStream_File (BVT)
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3003,7 +3036,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488777"/>BVT_AlternateDataStream_DeleteStream_Dir (BVT)
+##### <a name="_Toc427488777"/>BVT_AlternateDataStream_DeleteStream_Dir (BVT)
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3018,9 +3051,9 @@ Parameter combination
 | | Verify server return with streamname and streamsize|
 
 
+#### <a name="IsRenameStreamSupported"/>IsRenameStreamSupported
 
-
-#### <a name="_Toc427488779"/>BVT_AlternateDataStream_RenameStream_File (BVT)
+##### <a name="_Toc427488779"/>BVT_AlternateDataStream_RenameStream_File (BVT)
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3039,7 +3072,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488780"/>BVT_AlternateDataStream_RenameStream_Dir (BVT)
+##### <a name="_Toc427488780"/>BVT_AlternateDataStream_RenameStream_Dir (BVT)
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3056,10 +3089,10 @@ Parameter combination
 | | Verify server return with streamname and streamsize|
 
 
+#### <a name="IsWriteAndReadSupported"/>IsWriteAndReadSupported
 
 
-
-#### <a name="_Toc427488782"/>BVT_AlternateDataStream_WriteAndRead_File (BVT)
+##### <a name="_Toc427488782"/>BVT_AlternateDataStream_WriteAndRead_File (BVT)
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3078,7 +3111,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488783"/>BVT_AlternateDataStream_WriteAndRead_Dir (BVT)
+##### <a name="_Toc427488783"/>BVT_AlternateDataStream_WriteAndRead_Dir (BVT)
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3096,8 +3129,10 @@ Parameter combination
 
 
 
+#### <a name="IsLockAndUnlockSupported"/>IsLockAndUnlockSupported
 
-#### <a name="_Toc427488785"/>BVT_AlternateDataStream_LockAndUnlock_File (BVT)
+
+##### <a name="_Toc427488785"/>BVT_AlternateDataStream_LockAndUnlock_File (BVT)
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3114,7 +3149,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488785"/>BVT_AlternateDataStream_LockAndUnlock_File (BVT)
+##### <a name="_Toc427488785"/>BVT_AlternateDataStream_LockAndUnlock_File (BVT)
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3129,9 +3164,9 @@ Parameter combination
 | | Verify server return with **STATUS_SUCCESS** for supported file system|
 
 
+#### <a name="IsQueryAndSetFileInformationSupported"/>IsQueryAndSetFileInformationSupported
 
-
-#### <a name="_Toc427488788"/>AlternateDataStream_Query_FileAccessInformation_File
+##### <a name="_Toc427488788"/>AlternateDataStream_Query_FileAccessInformation_File
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3144,7 +3179,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488789"/>AlternateDataStream_Query_FileAccessInformation_Dir
+##### <a name="_Toc427488789"/>AlternateDataStream_Query_FileAccessInformation_Dir
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3157,7 +3192,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488790"/>AlternateDataStream_Query_FileBasicInformation_File
+##### <a name="_Toc427488790"/>AlternateDataStream_Query_FileBasicInformation_File
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3170,7 +3205,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488791"/>AlternateDataStream_Query_FileBasicInformation_Dir
+##### <a name="_Toc427488791"/>AlternateDataStream_Query_FileBasicInformation_Dir
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3184,7 +3219,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488792"/>AlternateDataStream_Query_FileCompressionInformation_File
+##### <a name="_Toc427488792"/>AlternateDataStream_Query_FileCompressionInformation_File
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3197,7 +3232,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488793"/>AlternateDataStream_Query_FileCompressionInformation_Dir
+##### <a name="_Toc427488793"/>AlternateDataStream_Query_FileCompressionInformation_Dir
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3210,7 +3245,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488794"/>AlternateDataStream_Query_FileNetworkOpenInformation_File
+##### <a name="_Toc427488794"/>AlternateDataStream_Query_FileNetworkOpenInformation_File
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3223,7 +3258,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488795"/>AlternateDataStream_Query_FileNetworkOpenInformation_Dir
+##### <a name="_Toc427488795"/>AlternateDataStream_Query_FileNetworkOpenInformation_Dir
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3237,7 +3272,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488796"/>AlternateDataStream_Query_FileStandardInformation_File
+##### <a name="_Toc427488796"/>AlternateDataStream_Query_FileStandardInformation_File
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3250,7 +3285,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488797"/>AlternateDataStream_Query_FileStandardInformation_Dir
+##### <a name="_Toc427488797"/>AlternateDataStream_Query_FileStandardInformation_Dir
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3263,7 +3298,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488798"/>AlternateDataStream_Set_FileEaInformation_File
+##### <a name="_Toc427488798"/>AlternateDataStream_Set_FileEaInformation_File
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3276,7 +3311,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488799"/>AlternateDataStream_Set_FileEaInformation_Dir
+##### <a name="_Toc427488799"/>AlternateDataStream_Set_FileEaInformation_Dir
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3290,7 +3325,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488798"/>AlternateDataStream_Set_FileShortNameInformation_File
+##### <a name="_Toc427488798"/>AlternateDataStream_Set_FileShortNameInformation_File
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3303,7 +3338,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488799"/>AlternateDataStream_Set_FileShortNameInformation_Dir
+##### <a name="_Toc427488799"/>AlternateDataStream_Set_FileShortNameInformation_Dir
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3317,7 +3352,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488802"/>AlternateDataStream_Set_FileValidDataLengthInformation_File
+##### <a name="_Toc427488802"/>AlternateDataStream_Set_FileValidDataLengthInformation_File
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3330,7 +3365,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488803"/>AlternateDataStream_Set_FileValidDataLengthInformation_Dir
+##### <a name="_Toc427488803"/>AlternateDataStream_Set_FileValidDataLengthInformation_Dir
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3342,8 +3377,9 @@ Parameter combination
 | | Verify server return with **STATUS_SUCCESS** for supported file system|
 
 
+#### <a name="IsFsControlSupported"/>IsFsControlSupported
 
-#### <a name="_Toc427488805"/>AlternateDataStream_FsCtl_Get_Compression_File
+##### <a name="_Toc427488805"/>AlternateDataStream_FsCtl_Get_Compression_File
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3356,7 +3392,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488806"/>AlternateDataStream_FsCtl_Get_Compression_Dir
+##### <a name="_Toc427488806"/>AlternateDataStream_FsCtl_Get_Compression_Dir
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3370,7 +3406,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488807"/>AlternateDataStream_FsCtl_Get_IntegrityInformation_File
+##### <a name="_Toc427488807"/>AlternateDataStream_FsCtl_Get_IntegrityInformation_File
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3383,7 +3419,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488808"/>AlternateDataStream_FsCtl_Get_IntegrityInformation_Dir
+##### <a name="_Toc427488808"/>AlternateDataStream_FsCtl_Get_IntegrityInformation_Dir
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3397,7 +3433,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488809"/>AlternateDataStream_FsCtl_Query_AllocatedRanges_File
+##### <a name="_Toc427488809"/>AlternateDataStream_FsCtl_Query_AllocatedRanges_File
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3410,7 +3446,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488810"/>AlternateDataStream_FsCtl_Query_AllocatedRanges_Dir
+##### <a name="_Toc427488810"/>AlternateDataStream_FsCtl_Query_AllocatedRanges_Dir
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3424,7 +3460,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488811"/>AlternateDataStream_FsCtl_Set_Compression_File
+##### <a name="_Toc427488811"/>AlternateDataStream_FsCtl_Set_Compression_File
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3437,7 +3473,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488812"/>AlternateDataStream_FsCtl_Set_Compression_Dir
+##### <a name="_Toc427488812"/>AlternateDataStream_FsCtl_Set_Compression_Dir
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3451,7 +3487,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488813"/>AlternateDataStream_FsCtl_Set_ZeroData_File
+##### <a name="_Toc427488813"/>AlternateDataStream_FsCtl_Set_ZeroData_File
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3464,7 +3500,7 @@ Parameter combination
 
 
 
-#### <a name="_Toc427488814"/>AlternateDataStream_FsCtl_Set_ZeroData_Dir
+##### <a name="_Toc427488814"/>AlternateDataStream_FsCtl_Set_ZeroData_Dir
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3477,18 +3513,11 @@ Parameter combination
 
 
 
+### <a name="Test-cases-for-other-scenarios"/>Test cases for Other Scenarios
 
-        
+#### <a name="IsCreateFileSupported"/>IsCreateFileSupported
 
-
-
-
-
-
-
-### Test cases for Other Scenarios
-
-#### <a name="_Toc427488835"/> CreateFile_InvalidStreamName
+##### <a name="_Toc427488835"/> CreateFile_InvalidStreamName
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -3505,16 +3534,10 @@ Parameter combination
 
 
 
-
-
-
-
 ## <a name="_Toc427488815"/>MBT Test Design
 
 ### <a name="_Toc427488816"/>Model Design
 Here is a list for Win8 newly added algorithms, the designed scenarios are based on them.
-
-
 
 
 
@@ -3524,7 +3547,6 @@ The MS-FSA test suite implements 2 adapters:
 * Protocol Adapter 
 
 * Transport adapter (SMB_TransportAdapter or SMB2_TransportAdapter).
-
 
 
 

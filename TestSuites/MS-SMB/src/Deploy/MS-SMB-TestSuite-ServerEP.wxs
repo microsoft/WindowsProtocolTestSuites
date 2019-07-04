@@ -31,7 +31,6 @@
     <WixVariable Id="TESTSUITE_NAME" Value="$(var.TESTSUITE_NAME)" Overridable="no" />
     <WixVariable Id="TESTSUITE_ENDPOINT" Value="$(var.TESTSUITE_ENDPOINT)" Overridable="no" />
     <WixVariable Id="TESTSUITE_VERSION" Value="$(env.TESTSUITE_VERSION)" Overridable="no" />
-    <WixVariable Id="QUICK_START_GUIDE" Value="MS-SMB_ServerUserGuide.md" />
 
     <WixVariable Id="PROTOSDK_DROP_DIR" Value="$(env.TestSuiteRoot)\drop\ProtoSDK\Bin" />
     <WixVariable Id="TESTSUITE_BATCH_DIR" Value="..\Batch" />
@@ -51,7 +50,6 @@
 
     <WixVariable Id="SET_MS_TEST_PATH" Value="setMSTestPath.cmd" />
     <WixVariable Id="SET_VS_PATH"      Value="setVsPath.cmd" />
-    <WixVariable Id="SET_VS_2017_PATH" Value="setVs2017Path.cmd" />
     
     <DirectoryRef Id="TESTSUITE_ROOT_DIR">
       <Component Id="LICENSE.rtf" Guid="{C64FDD1E-01ED-4158-B481-5AEDCC83C7CC}">

@@ -1189,59 +1189,36 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             }
         }
 
-        #region certificate API for RDSTLS
-        [DllImport("Crypt32.dll", CharSet = CharSet.Unicode)]
-        private static extern bool CertSerializeCertificateStoreElement(
-                IntPtr pCertContext,
-                uint dwFlags,
-                [MarshalAs(UnmanagedType.LPArray,ArraySubType = UnmanagedType.U1)]
-            byte[] pbElement,
-                ref uint pcbElement
-                );
-
-        private const uint CRYPT_STRING_BASE64 = 0x00000001;
-
-        [DllImport("Crypt32.dll", CharSet = CharSet.Unicode)]
-        private static extern bool CryptBinaryToString(
-            [MarshalAs(UnmanagedType.LPArray,ArraySubType = UnmanagedType.U1)]
-            byte[] pbBinary,
-            uint cbBinary,
-            uint dwFlags,
-            [MarshalAs(UnmanagedType.LPArray,ArraySubType = UnmanagedType.U2)]
-            char[] pszString,
-            ref uint pcchString
-            );
-
         /// <summary>
-        /// Encode the certificate according to the windows implementation.
+        /// Encode the certificate.
         /// </summary>
         /// <param name="certificate">The certificate to be encoded.</param>
         /// <returns></returns>
         public static byte[] EncodeCertificate(X509Certificate2 certificate)
         {
-            uint cbSerialized = 0;
-            bool bRet;
-            bRet = CertSerializeCertificateStoreElement(certificate.Handle, 0, null, ref cbSerialized);
-            byte[] serialized = new byte[cbSerialized];
-            bRet = CertSerializeCertificateStoreElement(certificate.Handle, 0, serialized, ref cbSerialized);
+            var container = new TARGET_CERTIFICATE_CONTAINER();
 
-            uint cbCrypted = 0;
+            container.elements = new CERTIFICATE_META_ELEMENT[1];
 
-            bRet = CryptBinaryToString(serialized, cbSerialized, CRYPT_STRING_BASE64, null, ref cbCrypted);
-            char[] crypted = new char[cbCrypted];
-            bRet = CryptBinaryToString(serialized, cbSerialized, CRYPT_STRING_BASE64, crypted, ref cbCrypted);
+            var element = new CERTIFICATE_META_ELEMENT();
 
-            var result = new byte[crypted.Length * 2];
-            for (int i = 0; i < crypted.Length; i++)
-            {
-                result[2 * i + 0] = (byte)((crypted[i] & 0x00ff) >> 0);
-                result[2 * i + 1] = (byte)((crypted[i] & 0xff00) >> 8);
-            }
+            element.type = (UInt32)CERTIFICATE_META_ELEMENT_TypeEnum.ELEMENT_TYPE_CERTIFICATE;
+
+            element.encoding = (UInt32)CERTIFICATE_META_ELEMENT_EncodingEnum.ENCODING_TYPE_ASN1_DER;
+
+            element.elementSize = (UInt32)certificate.RawData.Length;
+
+            element.elementData = certificate.RawData;
+
+            container.elements[0] = element;
+
+            // Encode using Base64 in Unicode format
+            var encodedString = Convert.ToBase64String(container.Encode());
+
+            var result = EncodeUnicodeStringToBytes(encodedString);
 
             return result;
         }
-
-        #endregion
 
         #region private methods
         /// <summary>

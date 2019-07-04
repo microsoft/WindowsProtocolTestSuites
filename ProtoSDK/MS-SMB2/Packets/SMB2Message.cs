@@ -7,6 +7,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling;
 using Microsoft.Protocols.TestTools.StackSdk.Dtyp;
+using System.Collections.Generic;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 {
@@ -4719,6 +4720,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// The Data field contains a list of compression algorithms.
         /// </summary>
         SMB2_COMPRESSION_CAPABILITIES = 0x0003,
+
+        /// <summary>
+        /// The Data field contains the server name to which the client connects.
+        /// </summary>
+        SMB2_NETNAME_NEGOTIATE_CONTEXT_ID = 0x0005,
     }
 
     /// <summary>
@@ -4874,6 +4880,64 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 dataLength += CompressionAlgorithms.Length * sizeof(CompressionAlgorithm);
             }
             return dataLength;
+        }
+    }
+
+    /// <summary>
+    /// The SMB2_NETNAME_NEGOTIATE_CONTEXT_ID context is specified in an SMB2 NEGOTIATE request to indicate the server name the client connects to.
+    /// The server MUST ignore this context.
+    /// </summary>
+    public struct SMB2_NETNAME_NEGOTIATE_CONTEXT_ID
+    {
+        /// <summary>
+        /// Header.
+        /// </summary>
+        public SMB2_NEGOTIATE_CONTEXT_Header Header;
+
+        /// <summary>
+        /// A null-terminated Unicode string containing the server name and specified by the client application.
+        /// </summary>
+        public char[] NetName;
+
+        /// <summary>
+        /// Unmarshal SMB2_NETNAME_NEGOTIATE_CONTEXT_ID from input byte array.
+        /// </summary>
+        /// <param name="data">Input byte array containing SMB2_NETNAME_NEGOTIATE_CONTEXT_ID.</param>
+        /// <param name="consumedLen">Offset of byte array.</param>
+        /// <returns>SMB2_NETNAME_NEGOTIATE_CONTEXT_ID which is unmarshaled.</returns>
+        internal static SMB2_NETNAME_NEGOTIATE_CONTEXT_ID Unmarshal(byte[] data, ref int consumedLen)
+        {
+            var result = new SMB2_NETNAME_NEGOTIATE_CONTEXT_ID();
+
+            result.Header = TypeMarshal.ToStruct<SMB2_NEGOTIATE_CONTEXT_Header>(data, ref consumedLen);
+
+            if (result.Header.DataLength % sizeof(char) != 0)
+            {
+                throw new InvalidOperationException("DataLength is invalid!");
+            }
+
+            result.NetName = new char[result.Header.DataLength / sizeof(char)];
+            for (int i = 0; i < result.NetName.Length; i++)
+            {
+                result.NetName[i] = TypeMarshal.ToStruct<char>(data, ref consumedLen);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Marshal SMB2_NETNAME_NEGOTIATE_CONTEXT_ID into byte array.
+        /// </summary>
+        /// <returns>Byte array containing marshaled result.</returns>
+        public byte[] Marshal()
+        {
+            var result = new List<byte>();
+
+            result.AddRange(TypeMarshal.ToBytes(Header));
+
+            result.AddRange(NetName.SelectMany(x => TypeMarshal.ToBytes(x)));
+
+            return result.ToArray();
         }
     }
 

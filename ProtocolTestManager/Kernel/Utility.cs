@@ -30,11 +30,13 @@ namespace Microsoft.Protocols.TestManager.Kernel
         private TestEngine testEngine = null;
         private int targetFilterIndex = -1;
         private int mappingFilterIndex = -1;
+        private DateTime sessionStartTime;
 
         public Utility()
         {
             string exePath = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
             installDir = Path.GetFullPath(Path.Combine(exePath, ".."));
+            sessionStartTime = DateTime.Now;
         }
 
         /// <summary>
@@ -859,6 +861,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 TestAssemblies = appConfig.TestSuiteAssembly,
                 TestSetting = appConfig.TestSetting,
                 PipeName = appConfig.PipeName,
+                ResultOutputFolder = String.Format("{0}-{1}", appConfig.TestSuiteName, sessionStartTime.ToString("yyyy-MM-dd-HH-mm-ss")),
             };
             testEngine.InitializeLogger(selectedCases);
         }
@@ -1148,6 +1151,23 @@ namespace Microsoft.Protocols.TestManager.Kernel
             }
         }
 
+        private static string ReadFileWithRetry(string filePath, int timeoutInSecond = 10)
+        {
+            var time = Stopwatch.StartNew();
+            while (time.ElapsedMilliseconds < timeoutInSecond * 1000)
+            {
+                try
+                {
+                    return File.ReadAllText(filePath);
+                }
+                catch (IOException e)
+                {
+                }
+            }
+
+            throw new TimeoutException(String.Format("Failed to read {0} within {1}s.", filePath, timeoutInSecond));
+        }
+
         /// <summary>
         /// Parse the file content to get the case status
         /// Result format in file: "Result":"Result: Passed"
@@ -1156,7 +1176,10 @@ namespace Microsoft.Protocols.TestManager.Kernel
         {
             status = TestCaseStatus.NotRun;
 
-            string content = File.ReadAllText(filePath);
+            // The file may be opened exclusively by vstest.console.exe. Retry opening here
+            // to wait for vstest.console.exe writing logs.
+            string content = ReadFileWithRetry(filePath);
+
             int startIndex = content.IndexOf(AppConfig.ResultKeyword);
             startIndex += AppConfig.ResultKeyword.Length;
             int endIndex = content.IndexOf("\"", startIndex);
