@@ -589,10 +589,11 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 logWriter.AddLog(LogLevel.Information, string.Format("EnumShares failed, reason: {0}", ex.Message));
             }
 
+
             if (shareList == null)
             {
                 // EnumShares may fail because the SUT doesn't support SRVS.
-                // Try to connect the default share "SMBBasic"
+                // Try to connect the share which is input by the user in the "Target Share" field of Auto-Detection page.
                 using (Smb2Client client = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
                 {
                     ulong messageId;
@@ -600,8 +601,9 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     uint treeId;
                     try
                     {
-                        ConnectToShare(defautBasicShare, info, client, out messageId, out sessionId, out treeId);
-                        shareList = new string[] { defautBasicShare };
+                        logWriter.AddLog(LogLevel.Information, string.Format("Try to connect share {0}.", info.BasicShareName));
+                        ConnectToShare(info.BasicShareName, info, client, out messageId, out sessionId, out treeId);
+                        shareList = new string[] { info.BasicShareName };
                     }
                     catch
                     {
