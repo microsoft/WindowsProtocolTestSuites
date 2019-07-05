@@ -29,10 +29,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk
 
         /// <summary>
         /// N (1 bit): If set, indicates that the error code is an NTSTATUS value, except that this bit is set.
+        /// </summary>
         N = 0x1000000,
 
         /// <summary>
         /// X (1 bit):  Reserved.  SHOULD be set to 0.
+        /// </summary>
         X = 0x0800000
 
     }

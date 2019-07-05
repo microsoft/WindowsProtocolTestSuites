@@ -44,7 +44,6 @@
 
     <WixVariable Id="SET_MS_TEST_PATH" Value="setMSTestPath.cmd" />
     <WixVariable Id="SET_VS_PATH"      Value="setVsPath.cmd" />
-    <WixVariable Id="SET_VS_2017_PATH" Value="setVs2017Path.cmd" />
     
     <DirectoryRef Id="TESTSUITE_ROOT_DIR">
       <Component Id="LICENSE.rtf" Guid="{40EE42F0-4761-4DC9-BA1F-89FEF0DA38EB}">
