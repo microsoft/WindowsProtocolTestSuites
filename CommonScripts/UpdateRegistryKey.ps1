@@ -6,35 +6,29 @@
 #############################################################################
 ##
 ## Microsoft Windows PowerShell Sripting
-## File:           ControlRegistryKey.ps1
+## File:           UpdateRegistryKey.ps1
 ## Purpose:        Remove or add key value to Windows registry.
 ## Requirements:   Windows PowerShell 2.0
 ## Supported OS:   Windows Server 2012 or later versions
 ##
 ##############################################################################
 Param(
+    [Parameter(Mandatory=$true)]
     [ValidateSet('Add', 'Remove')]
     [string]$ControlRegistryKey,       # Control Add or Remove registry key.
 
-    [ValidateScript({
-        # Only absolute path is accepted. Because relative path
-        # may cause trouble after rebooting. 
-        if([System.IO.Path]::IsPathRooted($_) -eq $False)
-        {
-            throw "Argument ScriptPath must be absolute path"
-        }
-        return $true
-    })]
-    [string]$ScriptPath,                # Path of the calling script to be executed after rebooting.       
-    
+    [Parameter(Mandatory=$true)]
     [string]$RegKeyName,                # Name of the add/remove registry key.   
+
+    [string]$ScriptPath,                # Absolute path of the calling script to be executed after rebooting.       
     [string]$PhaseIndicator,            # Phase in the calling script after reboot.    
     [string]$ArgumentList,              # Argument list needed in the calling script.
     [bool]$AutoRestart = $false
 )
 $RegKeyPath = "HKLM:\Software\Microsoft\Windows\CurrentVersion\Run"
 
-Start-Transcript -Path "$env:HOMEDRIVE\Logs\ControlRegistryKey.ps1.log" -Append -Force
+[string]$WorkingPath = [System.IO.Path]::GetDirectoryName($MyInvocation.MyCommand.Definition)
+Start-Transcript -Path "$WorkingPath\Logs\UpdateRegistryKey.ps1.log" -Append -Force
 
 Function RemoveRegistryKey {
     Write-Host "Remove regisrty key: $RegKeyPath, Name: $RegKeyName"
