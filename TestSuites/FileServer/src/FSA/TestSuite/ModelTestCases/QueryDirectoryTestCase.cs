@@ -786,26 +786,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.IFSAAdapterInstance.FsaInitial();
             this.Manager.Comment("reaching state \'S29\'");
             this.Manager.Comment("checking step \'return FsaInitial\'");
-            this.Manager.Comment("reaching state \'S54\'");
-            Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus temp49;
-            this.Manager.Comment("executing step \'call CreateFile(NORMAL,DIRECTORY_FILE,INDEX_ALLOCATION,GENERIC_WR" +
-                    "ITE,FILE_SHARE_WRITE,OPEN_IF,StreamIsFound,IsNotSymbolicLink,DirectoryFile,PathN" +
-                    "ameValid)\'");
-            temp49 = this.IFSAAdapterInstance.CreateFile(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAttribute.NORMAL, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamTypeNameToOpen)(0)), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.GENERIC_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ShareAccess.FILE_SHARE_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateDisposition.OPEN_IF, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamFoundType)(0)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.SymbolicLinkType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileType)(1)), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileNameStatus.PathNameValid);
-            this.Manager.Checkpoint("MS-FSA_R405");
-            this.Manager.Checkpoint(@"[In Application Requests an Open of a File , Pseudocode for the operation is as follows:
-                        Phase 6 -- Location of file:] Pseudocode for this search:For i = 1 to n-1:
-                        If Open.GrantedAccess.FILE_TRAVERSE is not set and AccessCheck( SecurityContext, Link.File.SecurityDescriptor, FILE_TRAVERSE ) 
-                        returns FALSE, the operation is not  failed with STATUS_ACCESS_DENIED in Windows.");
-            this.Manager.Checkpoint("MS-FSA_R475");
-            this.Manager.Checkpoint("[In Creation of a New File,Pseudocode for the operation is as follows:]\r\n        " +
-                    "        The object store MUST return:CreateAction set to FILE_CREATED.");
-            this.Manager.Checkpoint("MS-FSA_R474");
-            this.Manager.Checkpoint("[In Creation of a New File,Pseudocode for the operation is as follows:]\r\n        " +
-                    "        The object store MUST return :Status set to STATUS_SUCCESS.");
-            this.Manager.Comment("reaching state \'S74\'");
-            this.Manager.Comment("checking step \'return CreateFile/SUCCESS\'");
-            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus)(0)), temp49, "return of CreateFile, state S74");
             this.Manager.Comment("reaching state \'S94\'");
             Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus temp50;
             this.Manager.Comment("executing step \'call QueryDirectoryInfo(NotValidFilenameComponent,False,False,Fal" +
@@ -840,24 +820,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.Comment("checking step \'return FsaInitial\'");
             this.Manager.Comment("reaching state \'S55\'");
             Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus temp51;
-            this.Manager.Comment("executing step \'call CreateFile(NORMAL,DIRECTORY_FILE,INDEX_ALLOCATION,GENERIC_WR" +
-                    "ITE,FILE_SHARE_WRITE,OPEN_IF,StreamIsFound,IsNotSymbolicLink,DirectoryFile,PathN" +
-                    "ameValid)\'");
-            temp51 = this.IFSAAdapterInstance.CreateFile(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAttribute.NORMAL, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamTypeNameToOpen)(0)), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.GENERIC_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ShareAccess.FILE_SHARE_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateDisposition.OPEN_IF, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamFoundType)(0)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.SymbolicLinkType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileType)(1)), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileNameStatus.PathNameValid);
-            this.Manager.Checkpoint("MS-FSA_R405");
-            this.Manager.Checkpoint(@"[In Application Requests an Open of a File , Pseudocode for the operation is as follows:
-                        Phase 6 -- Location of file:] Pseudocode for this search:For i = 1 to n-1:
-                        If Open.GrantedAccess.FILE_TRAVERSE is not set and AccessCheck( SecurityContext, Link.File.SecurityDescriptor, FILE_TRAVERSE ) 
-                        returns FALSE, the operation is not  failed with STATUS_ACCESS_DENIED in Windows.");
-            this.Manager.Checkpoint("MS-FSA_R475");
-            this.Manager.Checkpoint("[In Creation of a New File,Pseudocode for the operation is as follows:]\r\n        " +
-                    "        The object store MUST return:CreateAction set to FILE_CREATED.");
-            this.Manager.Checkpoint("MS-FSA_R474");
-            this.Manager.Checkpoint("[In Creation of a New File,Pseudocode for the operation is as follows:]\r\n        " +
-                    "        The object store MUST return :Status set to STATUS_SUCCESS.");
-            this.Manager.Comment("reaching state \'S75\'");
-            this.Manager.Comment("checking step \'return CreateFile/SUCCESS\'");
-            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus)(0)), temp51, "return of CreateFile, state S75");
             this.Manager.Comment("reaching state \'S95\'");
             Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus temp52;
             this.Manager.Comment("executing step \'call QueryDirectoryInfo(LengthIsLessThanTheSizeOfAnObjectId,True," +
