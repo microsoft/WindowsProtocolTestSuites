@@ -18,6 +18,8 @@ using System.IO;
 using System.Threading;
 using Microsoft.Protocols.TestManager.Kernel;
 using System.ComponentModel;
+using System.Linq;
+
 namespace Microsoft.Protocols.TestManager.UI
 {
     /// <summary>
@@ -99,6 +101,8 @@ namespace Microsoft.Protocols.TestManager.UI
                 };
                 i.PropertyChanged += (s, arg) =>
                 {
+                    UpdateRunSelectedText(groups);
+
                     if (arg.PropertyName == "Visibility")
                     {
                         var dispatcher = item.Dispatcher;
@@ -159,6 +163,7 @@ namespace Microsoft.Protocols.TestManager.UI
                 };
                 TestOutcome.Items.Add(item);
             }
+            UpdateRunSelectedText(groups);
         }
 
         private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -463,6 +468,41 @@ namespace Microsoft.Protocols.TestManager.UI
                     }
                 }
                 checkbox.IsChecked = !(checkbox.IsChecked == true);
+            }
+        }
+
+        private void UpdateRunSelectedText(List<TestCaseGroup> groups)
+        {
+            int selectedCaseCount = 0;
+            foreach (var g in groups)
+            {
+                selectedCaseCount += g.TestCaseList.Where(c => c.IsChecked).Count();
+            }
+
+            string text = selectedCaseCount == 0 ? "Run Selected Cases" : $"Run Selected Cases ({selectedCaseCount})";
+
+            var dispatcher = RunSelectedLinkText.Dispatcher;
+            if (dispatcher.CheckAccess())
+            {
+                RunSelectedLinkText.Text = text;
+            }
+            else
+            {
+                RunSelectedLinkText.Dispatcher.Invoke(
+                    new Action(() => RunSelectedLinkText.Text = text)
+                );
+            }
+
+            dispatcher = RunSelectedMenuItem.Dispatcher;
+            if (dispatcher.CheckAccess())
+            {
+                RunSelectedMenuItem.Header = text;
+            }
+            else
+            {
+                RunSelectedLinkText.Dispatcher.Invoke(
+                    new Action(() => RunSelectedMenuItem.Header = text)
+                );
             }
         }
     }

@@ -118,7 +118,21 @@ namespace Microsoft.Protocols.TestManager.Kernel
             if (args.Name.Contains("Microsoft.VisualStudio.QualityTools.UnitTestFramework"))
             {
                 string vstestPath = Path.GetDirectoryName(appConfig.VSTestPath);
-                var assembly = Assembly.LoadFrom(Path.Combine(vstestPath, "Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll"));
+                string publicAssembliesPath = Path.Combine(vstestPath, @"..\..\..\PublicAssemblies");
+                var possiblePaths = new string[]
+                {
+                    vstestPath,
+                    publicAssembliesPath
+                };
+                string assemblyPath = possiblePaths
+                                        .Select(path => Path.Combine(path, "Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll"))
+                                        .Where(path => File.Exists(path))
+                                        .FirstOrDefault(path => path != null);
+                if (assemblyPath == null)
+                {
+                    return null;
+                }
+                var assembly = Assembly.LoadFrom(assemblyPath);
                 return assembly;
             }
             return null;
