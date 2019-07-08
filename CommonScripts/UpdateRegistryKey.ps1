@@ -26,13 +26,19 @@ Param(
     [bool]$AutoRestart = $false
 )
 $RegKeyPath = "HKLM:\Software\Microsoft\Windows\CurrentVersion\Run"
+[string]$LogFilePath = [System.IO.Path]::GetDirectoryName($MyInvocation.MyCommand.Definition)
+[string]$logFileName = $MyInvocation.MyCommand.Name
 
-[string]$WorkingPath = [System.IO.Path]::GetDirectoryName($MyInvocation.MyCommand.Definition)
-Start-Transcript -Path "$WorkingPath\Logs\UpdateRegistryKey.ps1.log" -Append -Force
+Start-Transcript -Path "$LogFilePath\$logFileName.log" -Append -Force
 
 Function RemoveRegistryKey {
     Write-Host "Remove regisrty key: $RegKeyPath, Name: $RegKeyName"
-    Remove-ItemProperty -Path $RegKeyPath -Name $RegKeyName
+    try {
+        Remove-ItemProperty -Path $RegKeyPath -Name $RegKeyName -Force -ErrorAction Stop
+    }
+    catch {
+        throw "Unable to remove regisety key. Error happened: $_.Exception.Message"        
+    }
 }
 
 Function AddRegistryKey {
@@ -58,4 +64,5 @@ if ($AutoRestart) {
     shutdown -r -t 10 -f
 }
 
+Write-Host "Update registry key finished."
 Stop-Transcript
