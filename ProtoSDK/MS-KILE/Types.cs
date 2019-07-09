@@ -183,7 +183,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <returns>The byte array of the class.</returns>
         public override byte[] ToBytes()
         {
-            Asn1BerEncodingBuffer asBerBuffer = new Asn1BerEncodingBuffer();
+            var asBerBuffer = new Asn1BerEncodingBuffer();
             asRequest.BerEncode(asBerBuffer, true);
             if (clientContext.TransportType == KileConnectionType.TCP)
             {
@@ -209,7 +209,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             }
 
             // Decode AS Request
-            Asn1DecodingBuffer decodeBuffer = new Asn1DecodingBuffer(buffer);
+            var decodeBuffer = new Asn1DecodingBuffer(buffer);
             asRequest.BerDecode(decodeBuffer);
         }
     }
@@ -327,7 +327,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <returns>The byte array of the class</returns>
         public override byte[] ToBytes()
         {
-            Asn1BerEncodingBuffer asBerBuffer = new Asn1BerEncodingBuffer();
+            var asBerBuffer = new Asn1BerEncodingBuffer();
 
             // Encode ticket enc_part
             ticketEncPart.BerEncode(asBerBuffer, true);
@@ -399,7 +399,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             }
 
             // Decode AS Response
-            Asn1DecodingBuffer decodeBuffer = new Asn1DecodingBuffer(buffer);
+            var decodeBuffer = new Asn1DecodingBuffer(buffer);
             asResponse.BerDecode(decodeBuffer);
 
             // Get the current encryption type, cipher data, session key
@@ -440,7 +440,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             byte[] clearText = KileUtility.Decrypt(encryptType, replyKey, cipherData, keyUsageNumber);
 
             // Decode enc_part
-            Asn1DecodingBuffer decodeBuffer = new Asn1DecodingBuffer(clearText);
+            var decodeBuffer = new Asn1DecodingBuffer(clearText);
             encPart = new EncASRepPart();
             encPart.BerDecode(decodeBuffer);
             clientContext.UpdateContext(this);
@@ -529,7 +529,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <returns>The byte array of the class.</returns>
         public override byte[] ToBytes()
         {
-            Asn1BerEncodingBuffer tgsBerBuffer = new Asn1BerEncodingBuffer();
+            var tgsBerBuffer = new Asn1BerEncodingBuffer();
             tgsRequest.BerEncode(tgsBerBuffer, true);
 
             if (clientContext.TransportType == KileConnectionType.TCP)
@@ -554,7 +554,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             {
                 throw new ArgumentNullException(nameof(buffer));
             }
-            Asn1DecodingBuffer decodeBuffer = new Asn1DecodingBuffer(buffer);
+            var decodeBuffer = new Asn1DecodingBuffer(buffer);
 
             // Decode TGS Request
             tgsRequest.BerDecode(decodeBuffer);
@@ -735,7 +735,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <returns>The byte array of the class</returns>
         public override byte[] ToBytes()
         {
-            Asn1BerEncodingBuffer tgsBerBuffer = new Asn1BerEncodingBuffer();
+            var tgsBerBuffer = new Asn1BerEncodingBuffer();
 
             // Encode ticket enc_part
             ticketEncPart.BerEncode(tgsBerBuffer, true);
@@ -801,7 +801,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             }
 
             // Decode TGS Response
-            Asn1DecodingBuffer decodeBuffer = new Asn1DecodingBuffer(buffer);
+            var decodeBuffer = new Asn1DecodingBuffer(buffer);
             tgsResponse.BerDecode(decodeBuffer);
 
             // Get the current encryption type, cipher data
@@ -892,7 +892,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             kileContext.UpdateContext(this);
             if (authenticator != null)
             {
-                Asn1BerEncodingBuffer asnBuffPlainAuthenticator = new Asn1BerEncodingBuffer();
+                var asnBuffPlainAuthenticator = new Asn1BerEncodingBuffer();
                 authenticator.BerEncode(asnBuffPlainAuthenticator, true);
 
                 apRequest.authenticator = new EncryptedData();
@@ -912,7 +912,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 apRequest.authenticator.cipher = new Asn1OctetString(encAsnEncodedAuth);
             }
 
-            Asn1BerEncodingBuffer apBerBuffer = new Asn1BerEncodingBuffer();
+            var apBerBuffer = new Asn1BerEncodingBuffer();
             apRequest.BerEncode(apBerBuffer, true);
 
             if ((kileContext.ChecksumFlag & ChecksumFlags.GSS_C_DCE_STYLE) == ChecksumFlags.GSS_C_DCE_STYLE)
@@ -989,7 +989,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             }
 
             // Decode AP Request
-            Asn1DecodingBuffer decodeBuffer = new Asn1DecodingBuffer(apBody);
+            var decodeBuffer = new Asn1DecodingBuffer(apBody);
             apRequest.BerDecode(decodeBuffer);
 
             if (apRequest.ticket != null && ticketEncryptKey != null)
@@ -1125,7 +1125,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             }
 
             // Decode AP response
-            Asn1DecodingBuffer decodeBuffer = new Asn1DecodingBuffer(apBody);
+            var decodeBuffer = new Asn1DecodingBuffer(apBody);
             apResponse.BerDecode(decodeBuffer);
 
             // Get the current encryption type, cipher data
@@ -1172,7 +1172,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             // Update server context
             kileContext.UpdateContext(this);
 
-            Asn1BerEncodingBuffer apBerBuffer = new Asn1BerEncodingBuffer();
+            var apBerBuffer = new Asn1BerEncodingBuffer();
 
             if (apEncPart != null)
             {
@@ -1296,7 +1296,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (credEncPart != null)
             {
-                Asn1BerEncodingBuffer encKrbCredBuf = new Asn1BerEncodingBuffer();
+                var encKrbCredBuf = new Asn1BerEncodingBuffer();
                 credEncPart.BerEncode(encKrbCredBuf);
 
                 byte[] encryptedData = encKrbCredBuf.Data;
@@ -1315,7 +1315,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 }
             }
 
-            Asn1BerEncodingBuffer krbCredBuf = new Asn1BerEncodingBuffer();
+            var krbCredBuf = new Asn1BerEncodingBuffer();
             krbCred.BerEncode(krbCredBuf);
             return KileUtility.WrapLength(krbCredBuf.Data, true);
         }
@@ -1387,7 +1387,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
 
             if (privEncPart != null)
             {
-                Asn1BerEncodingBuffer encKrbPrivBuf = new Asn1BerEncodingBuffer();
+                var encKrbPrivBuf = new Asn1BerEncodingBuffer();
                 privEncPart.BerEncode(encKrbPrivBuf);
 
                 byte[] encryptedData = encKrbPrivBuf.Data;
@@ -1406,7 +1406,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 }
             }
 
-            Asn1BerEncodingBuffer krbPrivBuf = new Asn1BerEncodingBuffer();
+            var krbPrivBuf = new Asn1BerEncodingBuffer();
             krbPriv.BerEncode(krbPrivBuf, true);
             return KileUtility.WrapLength(krbPrivBuf.Data, true);
         }
@@ -1480,7 +1480,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             }
 
             // Decode Krb Error
-            Asn1DecodingBuffer decodeBuffer = new Asn1DecodingBuffer(buffer);
+            var decodeBuffer = new Asn1DecodingBuffer(buffer);
             krbError.BerDecode(decodeBuffer);
 
             // Get its error code
@@ -1494,7 +1494,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <param name="buffer">The byte array to be decoded.</param>
         public override byte[] ToBytes()
         {
-            Asn1BerEncodingBuffer errorBerBuffer = new Asn1BerEncodingBuffer();
+            var errorBerBuffer = new Asn1BerEncodingBuffer();
             krbError.BerEncode(errorBerBuffer, true);
 
             if (kileContext.TransportType == KileConnectionType.TCP)
@@ -2619,7 +2619,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 toChecksumText = ArrayUtility.ConcatenateArrays(BitConverter.GetBytes((int)usage), toChecksumText);
             }
 
-            MD5CryptoServiceProvider md5CryptoServiceProvider = new MD5CryptoServiceProvider();
+            var md5CryptoServiceProvider = new MD5CryptoServiceProvider();
             byte[] md5 = md5CryptoServiceProvider.ComputeHash(toChecksumText);
 
             switch (tokenHeader.sng_alg)
@@ -2791,7 +2791,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 toChecksumText = ArrayUtility.ConcatenateArrays(BitConverter.GetBytes((int)usage), toChecksumText);
             }
 
-            MD5CryptoServiceProvider md5CryptoServiceProvider = new MD5CryptoServiceProvider();
+            var md5CryptoServiceProvider = new MD5CryptoServiceProvider();
             byte[] md5 = md5CryptoServiceProvider.ComputeHash(toChecksumText);
 
             switch (sngAlg)
