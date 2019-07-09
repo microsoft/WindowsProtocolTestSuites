@@ -120,15 +120,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (domain == null)
             {
-                throw new ArgumentNullException("domain");
+                throw new ArgumentNullException(nameof(domain));
             }
             if (cName == null)
             {
-                throw new ArgumentNullException("cName");
+                throw new ArgumentNullException(nameof(cName));
             }
             if (password == null)
             {
-                throw new ArgumentNullException("password");
+                throw new ArgumentNullException(nameof(password));
             }
 
             context = new KileClientContext();
@@ -285,7 +285,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (sName == null)
             {
-                throw new ArgumentNullException("sName");
+                throw new ArgumentNullException(nameof(sName));
             }
             PrincipalName sname = new PrincipalName(new KerbInt32((int)PrincipalType.NT_SRV_INST),
                 KileUtility.String2SeqKerbString(sName.Split('/')));
@@ -329,19 +329,19 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (cRealm == null)
             {
-                throw new ArgumentNullException("cRealm");
+                throw new ArgumentNullException(nameof(cRealm));
             }
             if (cName == null)
             {
-                throw new ArgumentNullException("cName");
+                throw new ArgumentNullException(nameof(cName));
             }
             if (sName == null)
             {
-                throw new ArgumentNullException("sName");
+                throw new ArgumentNullException(nameof(sName));
             }
             if (realm == null)
             {
-                throw new ArgumentNullException("realm");
+                throw new ArgumentNullException(nameof(realm));
             }
 
             KileTgsRequest request = new KileTgsRequest(context);
@@ -469,11 +469,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (cRealm == null)
             {
-                throw new ArgumentNullException("cRealm");
+                throw new ArgumentNullException(nameof(cRealm));
             }
             if (cName == null)
             {
-                throw new ArgumentNullException("cName");
+                throw new ArgumentNullException(nameof(cName));
             }
             KileApRequest request = new KileApRequest(context);
             request.Authenticator = CreateAuthenticator(cRealm,
@@ -507,7 +507,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (apResponseToken == null)
             {
-                throw new ArgumentNullException("apResponseToken");
+                throw new ArgumentNullException(nameof(apResponseToken));
             }
 
             KileApResponse response = new KileApResponse(context);
@@ -564,7 +564,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (errorToken == null)
             {
-                throw new ArgumentNullException("errorToken");
+                throw new ArgumentNullException(nameof(errorToken));
             }
 
             byte[] errorBody = KileUtility.VerifyGssApiTokenHeader(errorToken);
@@ -645,7 +645,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (pdu == null)
             {
-                throw new ArgumentNullException("pdu");
+                throw new ArgumentNullException(nameof(pdu));
             }
 
             context.UpdateContext(pdu);
@@ -663,7 +663,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (packetBuffer == null)
             {
-                throw new ArgumentNullException("packetBuffer");
+                throw new ArgumentNullException(nameof(packetBuffer));
             }
 
             kdcTransport.SendBytes(packetBuffer);
