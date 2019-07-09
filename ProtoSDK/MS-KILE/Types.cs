@@ -46,7 +46,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (clientContext == null)
             {
-                throw new ArgumentNullException("clientContext");
+                throw new ArgumentNullException(nameof(clientContext));
             }
 
             this.clientContext = clientContext;
@@ -62,7 +62,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (serverContext == null)
             {
-                throw new ArgumentNullException("serverContext");
+                throw new ArgumentNullException(nameof(serverContext));
             }
 
             this.serverContext = serverContext;
@@ -86,7 +86,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
             }
 
             kileContext = context;
@@ -205,7 +205,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (buffer == null)
             {
-                throw new ArgumentNullException("buffer");
+                throw new ArgumentNullException(nameof(buffer));
             }
 
             // Decode AS Request
@@ -393,9 +393,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <exception cref="System.ArgumentNullException">thrown when input buffer is null</exception>
         public override void FromBytes(byte[] buffer)
         {
-            if (null == buffer)
+            if (buffer == null)
             {
-                throw new ArgumentNullException("buffer");
+                throw new ArgumentNullException(nameof(buffer));
             }
 
             // Decode AS Response
@@ -552,7 +552,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (buffer == null)
             {
-                throw new ArgumentNullException("buffer");
+                throw new ArgumentNullException(nameof(buffer));
             }
             Asn1DecodingBuffer decodeBuffer = new Asn1DecodingBuffer(buffer);
 
@@ -795,9 +795,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <exception cref="System.ArgumentNullException">thrown when input buffer is null</exception>
         public override void FromBytes(byte[] buffer)
         {
-            if (null == buffer)
+            if (buffer == null)
             {
-                throw new ArgumentNullException("buffer");
+                throw new ArgumentNullException(nameof(buffer));
             }
 
             // Decode TGS Response
@@ -954,9 +954,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         [CLSCompliant(false)]
         public void FromBytes(byte[] buffer, EncryptionKey ticketEncryptKey)
         {
-            if (null == buffer)
+            if (buffer == null)
             {
-                throw new ArgumentNullException("buffer");
+                throw new ArgumentNullException(nameof(buffer));
             }
 
             byte[] apBody = buffer;
@@ -968,7 +968,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 byte[] apData = KileUtility.VerifyGssApiTokenHeader(buffer);
 
                 // Check if it has a two-byte tok_id
-                if (null == apData || apData.Length <= sizeof(TOK_ID))
+                if (apData == null || apData.Length <= sizeof(TOK_ID))
                 {
                     throw new FormatException(
                         "Data length is shorter than a valid AP Response data length.");
@@ -1091,9 +1091,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <exception cref="System.FormatException">thrown when encounters decoding error</exception>
         public override void FromBytes(byte[] buffer)
         {
-            if (null == buffer)
+            if (buffer == null)
             {
-                throw new ArgumentNullException("buffer");
+                throw new ArgumentNullException(nameof(buffer));
             }
 
             byte[] apBody = buffer;
@@ -1105,7 +1105,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 byte[] apData = KileUtility.VerifyGssApiTokenHeader(buffer);
 
                 // Check if it has a two-byte tok_id
-                if (null == apData || apData.Length <= sizeof(TOK_ID))
+                if (apData == null || apData.Length <= sizeof(TOK_ID))
                 {
                     throw new FormatException(
                         "Data length is shorter than a valid AP Response data length.");
@@ -1474,9 +1474,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <exception cref="System.ArgumentNullException">thrown when input buffer is null</exception>
         public override void FromBytes(byte[] buffer)
         {
-            if (null == buffer)
+            if (buffer == null)
             {
-                throw new ArgumentNullException("buffer");
+                throw new ArgumentNullException(nameof(buffer));
             }
 
             // Decode Krb Error
