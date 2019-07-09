@@ -117,7 +117,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (domain == null)
             {
-                throw new ArgumentNullException("domain");
+                throw new ArgumentNullException(nameof(domain));
             }
 
             contextList = new Dictionary<KileConnection, KileServerContext>(new KileServerContextComparer());
@@ -165,7 +165,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
 
             if (password == null)
             {
-                throw new ArgumentNullException("password");
+                throw new ArgumentNullException(nameof(password));
             }
             else
             {
@@ -279,7 +279,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
 
             if (ticketEncryptKey == null)
             {
-                throw new ArgumentNullException("ticketEncryptKey");
+                throw new ArgumentNullException(nameof(ticketEncryptKey));
             }
             else
             {
@@ -361,7 +361,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (ticketEncryptKey == null)
             {
-                throw new ArgumentNullException("ticketEncryptKey");
+                throw new ArgumentNullException(nameof(ticketEncryptKey));
             }
             EncryptionKey ticketKey = new EncryptionKey(new KerbInt32((int)EncryptionType.RC4_HMAC), new Asn1OctetString(ticketEncryptKey));
             return CreateTgsResponse(kileConnection, seqOfPaData, encTicketFlags, ticketKey, null);
@@ -598,11 +598,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (kileConnection == null)
             {
-                throw new ArgumentNullException("kileConnection");
+                throw new ArgumentNullException(nameof(kileConnection));
             }
             if (pdu == null)
             {
-                throw new ArgumentNullException("pdu");
+                throw new ArgumentNullException(nameof(pdu));
             }
 
             KileServerContext serverContext = GetServerContextByKileConnection(kileConnection);
@@ -621,11 +621,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (kileConnection == null)
             {
-                throw new ArgumentNullException("kileConnection");
+                throw new ArgumentNullException(nameof(kileConnection));
             }
             if (packetBuffer == null)
             {
-                throw new ArgumentNullException("packetBuffer");
+                throw new ArgumentNullException(nameof(packetBuffer));
             }
 
             transport.SendBytes(kileConnection.TargetEndPoint, packetBuffer);
@@ -657,7 +657,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (kileConnection == null)
             {
-                throw new ArgumentNullException("kileConnection");
+                throw new ArgumentNullException(nameof(kileConnection));
             }
             transport.Disconnect(kileConnection.TargetEndPoint);
             DeleteServerContextByConnection(kileConnection);
@@ -697,7 +697,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (kileConnection == null)
             {
-                throw new ArgumentNullException("kileConnection");
+                throw new ArgumentNullException(nameof(kileConnection));
             }
             return contextList.Remove(kileConnection);
         }
@@ -716,7 +716,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (kileConnection == null)
             {
-                throw new ArgumentNullException("kileConnection");
+                throw new ArgumentNullException(nameof(kileConnection));
             }
             if (!contextList.ContainsKey(kileConnection))
             {
