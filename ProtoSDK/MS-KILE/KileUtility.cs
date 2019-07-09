@@ -809,7 +809,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (securityBuffers == null)
             {
-                throw new ArgumentNullException("securityBuffers");
+                throw new ArgumentNullException(nameof(securityBuffers));
             }
             byte[] message = new byte[0];
 
@@ -817,7 +817,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             {
                 if (securityBuffers[i] == null)
                 {
-                    throw new ArgumentNullException("securityBuffers");
+                    throw new ArgumentNullException(nameof(securityBuffers));
                 }
                 SecurityBufferType securityBufferType = (securityBuffers[i].BufferType & ~SecurityBufferType.AttrMask);
 
