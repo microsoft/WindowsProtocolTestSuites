@@ -85,11 +85,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (domain == null)
             {
-                throw new ArgumentNullException("domain");
+                throw new ArgumentNullException(nameof(domain));
             }
             if (cName == null)
             {
-                throw new ArgumentNullException("cName");
+                throw new ArgumentNullException(nameof(cName));
             }
             string salt;
 
@@ -213,7 +213,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (machineId == null)
             {
-                throw new ArgumentNullException("machineId");
+                throw new ArgumentNullException(nameof(machineId));
             }
 
             KerbAuthDataTokenRestrictions authData = new KerbAuthDataTokenRestrictions();
@@ -252,7 +252,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (pacData == null)
             {
-                throw new ArgumentNullException("pacData");
+                throw new ArgumentNullException(nameof(pacData));
             }
 
             PacAuthData authData = new PacAuthData();
@@ -701,7 +701,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (pkcaData == null)
             {
-                throw new ArgumentNullException("pkcaData");
+                throw new ArgumentNullException(nameof(pkcaData));
             }
 
             PaPkcaData paData = new PaPkcaData();
