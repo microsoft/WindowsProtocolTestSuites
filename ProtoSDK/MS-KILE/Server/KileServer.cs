@@ -174,13 +174,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             KileAsResponse response = new KileAsResponse(serverContext);
 
             // Construct a Ticket
-            Ticket ticket = new Ticket();
+            var ticket = new Ticket();
             ticket.tkt_vno = new Asn1Integer(ConstValue.KERBEROSV5);
             ticket.realm = new Realm(domain);
             ticket.sname = serverContext.SName;
 
             // Set EncTicketPart
-            EncTicketPart encTicketPart = new EncTicketPart();
+            var encTicketPart = new EncTicketPart();
             EncryptionType encryptionType = (EncryptionType)serverContext.EncryptType.Elements[0].Value;
 
             encTicketPart.key = new EncryptionKey(new KerbInt32((int)encryptionType), new Asn1OctetString(GetEncryptionKeyByType(encryptionType)));
@@ -205,9 +205,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             response.Response.ticket = ticket;
 
             // Set EncASRepPart
-            EncASRepPart encASRepPart = new EncASRepPart();
+            var encASRepPart = new EncASRepPart();
             encASRepPart.key = encTicketPart.key;
-            LastReqElement element = new LastReqElement(new KerbInt32(0), KileUtility.CurrentKerberosTime);
+            var element = new LastReqElement(new KerbInt32(0), KileUtility.CurrentKerberosTime);
             encASRepPart.last_req = new LastReq(new LastReqElement[] { element });
             encASRepPart.nonce = serverContext.Nonce;
             encASRepPart.flags = encTicketPart.flags;
@@ -285,16 +285,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             {
                 serverContext.TicketEncryptKey = ticketEncryptKey;
             }
-            KileTgsResponse response = new KileTgsResponse(serverContext);
+            var response = new KileTgsResponse(serverContext);
 
             // Construct a Ticket
-            Ticket ticket = new Ticket();
+            var ticket = new Ticket();
             ticket.tkt_vno = new Asn1Integer(ConstValue.KERBEROSV5);
             ticket.realm = new Realm(domain);
             ticket.sname = serverContext.SName;
 
             // Set EncTicketPart
-            EncTicketPart encTicketPart = new EncTicketPart();
+            var encTicketPart = new EncTicketPart();
             EncryptionType encryptionType = (EncryptionType)serverContext.EncryptType.Elements[0].Value;
             encTicketPart.key = new EncryptionKey(new KerbInt32((int)encryptionType), new Asn1OctetString(GetEncryptionKeyByType(encryptionType)));
             encTicketPart.flags = new TicketFlags(KileUtility.ConvertInt2Flags((int)encTicketFlags));
@@ -318,9 +318,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             response.Response.ticket = ticket;
 
             // Set EncASRepPart
-            EncTGSRepPart encTGSRepPart = new EncTGSRepPart();
+            var encTGSRepPart = new EncTGSRepPart();
             encTGSRepPart.key = encTicketPart.key;
-            LastReqElement element = new LastReqElement(new KerbInt32(0), KileUtility.CurrentKerberosTime);
+            var element = new LastReqElement(new KerbInt32(0), KileUtility.CurrentKerberosTime);
             encTGSRepPart.last_req = new LastReq(new LastReqElement[] { element });
             encTGSRepPart.nonce = serverContext.Nonce;
             encTGSRepPart.flags = encTicketPart.flags;
@@ -363,7 +363,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             {
                 throw new ArgumentNullException(nameof(ticketEncryptKey));
             }
-            EncryptionKey ticketKey = new EncryptionKey(new KerbInt32((int)EncryptionType.RC4_HMAC), new Asn1OctetString(ticketEncryptKey));
+            var ticketKey = new EncryptionKey(new KerbInt32((int)EncryptionType.RC4_HMAC), new Asn1OctetString(ticketEncryptKey));
             return CreateTgsResponse(kileConnection, seqOfPaData, encTicketFlags, ticketKey, null);
         }
 
@@ -388,7 +388,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             KileApResponse apResponse = CreateApResponse(subkey);
 
             // Set a random sequence number
-            Random randomNumber = new Random();
+            var randomNumber = new Random();
             apResponse.ApEncPart.seq_number = new KerbUInt32(randomNumber.Next());
             context.currentLocalSequenceNumber = (ulong)apResponse.ApEncPart.seq_number.Value;
 
@@ -535,7 +535,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         [CLSCompliant(false)]
         public void Start(ushort localPort, KileConnectionType transportType, KileIpType ipType, int transportSize)
         {
-            SocketTransportConfig transportConfig = new SocketTransportConfig();
+            var transportConfig = new SocketTransportConfig();
             transportConfig.Role = Role.Server;
             transportConfig.MaxConnections = ConstValue.MAX_CONNECTIONS;
             transportConfig.BufferSize = transportSize;
