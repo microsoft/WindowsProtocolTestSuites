@@ -248,11 +248,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 throw new ArgumentNullException(nameof(apRep));
             }
 
-            var apReqPdu = new KileApRequest(kileDecoder.serverContext);
+            KileApRequest apReqPdu = new KileApRequest(kileDecoder.serverContext);
             apReqPdu.FromBytes(apReq);
             kileDecoder.clientContext.UpdateContext(apReqPdu);
 
-            var apRepPdu = new KileApResponse(kileDecoder.clientContext);
+            KileApResponse apRepPdu = new KileApResponse(kileDecoder.clientContext);
             apRepPdu.FromBytes(apRep);
             kileDecoder.serverContext.UpdateContext(apRepPdu);
         }
@@ -275,7 +275,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 throw new ArgumentNullException(nameof(apRep));
             }
 
-            var apRepPdu = new KileApResponse(kileDecoder.serverContext);
+            KileApResponse apRepPdu = new KileApResponse(kileDecoder.serverContext);
             apRepPdu.FromBytes(apRep);
             kileDecoder.clientContext.UpdateContext(apRepPdu);
         }
