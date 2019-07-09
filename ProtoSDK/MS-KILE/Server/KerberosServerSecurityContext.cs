@@ -71,7 +71,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (ticketEncryptKey == null)
             {
-                throw new ArgumentNullException("ticketEncryptKey");
+                throw new ArgumentNullException(nameof(ticketEncryptKey));
             }
 
             server = new KileServer("");
@@ -114,7 +114,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (inToken == null)
             {
-                throw new ArgumentNullException("inToken");
+                throw new ArgumentNullException(nameof(inToken));
             }
             if (isInitialToken)
             {
