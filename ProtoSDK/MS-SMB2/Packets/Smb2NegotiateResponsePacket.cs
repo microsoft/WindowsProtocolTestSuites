@@ -39,6 +39,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         public SMB2_ENCRYPTION_CAPABILITIES? NegotiateContext_ENCRYPTION;
 
         /// <summary>
+        /// Indicates which compression algorithms the server supports.
+        /// </summary>
+        public SMB2_COMPRESSION_CAPABILITIES? NegotiateContext_COMPRESSION;
+
+        /// <summary>
         /// Covert to a byte array
         /// </summary>
         /// <returns>The byte array</returns>
@@ -62,6 +67,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 messageData = messageData.Concat(TypeMarshal.ToBytes<SMB2_ENCRYPTION_CAPABILITIES>(NegotiateContext_ENCRYPTION.Value)).ToArray();
             }
 
+            if (NegotiateContext_COMPRESSION != null)
+            {
+                // 8-byte align
+                Smb2Utility.Align8(ref messageData);
+                messageData = messageData.Concat(TypeMarshal.ToBytes<SMB2_COMPRESSION_CAPABILITIES>(NegotiateContext_COMPRESSION.Value)).ToArray();
+            }
+
             return messageData;
         }
 
@@ -83,7 +95,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             this.PayLoad = Smb2Utility.UnmarshalStructure<NEGOTIATE_Response>(tempData);
             consumedLen += Marshal.SizeOf(this.PayLoad);
 
-            if(this.PayLoad.SecurityBufferLength > 0)
+            if (this.PayLoad.SecurityBufferLength > 0)
             {
                 this.Buffer = data.Skip(this.PayLoad.SecurityBufferOffset).Take(this.PayLoad.SecurityBufferLength).ToArray();
                 consumedLen += this.Buffer.Length;
@@ -103,13 +115,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 SMB2_NEGOTIATE_CONTEXT_Type_Values contextType = (SMB2_NEGOTIATE_CONTEXT_Type_Values)BitConverter.ToUInt16(data, consumedLen);
                 if (contextType == SMB2_NEGOTIATE_CONTEXT_Type_Values.SMB2_PREAUTH_INTEGRITY_CAPABILITIES)
                 {
-                    if (this.NegotiateContext_PREAUTH != null)throw new Exception("More than one SMB2_PREAUTH_INTEGRITY_CAPABILITIES are present.");
+                    if (this.NegotiateContext_PREAUTH != null) throw new Exception("More than one SMB2_PREAUTH_INTEGRITY_CAPABILITIES are present.");
                     this.NegotiateContext_PREAUTH = TypeMarshal.ToStruct<SMB2_PREAUTH_INTEGRITY_CAPABILITIES>(data, ref consumedLen);
                 }
                 else if (contextType == SMB2_NEGOTIATE_CONTEXT_Type_Values.SMB2_ENCRYPTION_CAPABILITIES)
                 {
                     if (this.NegotiateContext_ENCRYPTION != null) throw new Exception("More than one SMB2_ENCRYPTION_CAPABILITIES are present.");
                     this.NegotiateContext_ENCRYPTION = TypeMarshal.ToStruct<SMB2_ENCRYPTION_CAPABILITIES>(data, ref consumedLen);
+                }
+                else if (contextType == SMB2_NEGOTIATE_CONTEXT_Type_Values.SMB2_COMPRESSION_CAPABILITIES)
+                {
+                    if (this.NegotiateContext_COMPRESSION != null) throw new Exception("More than one SMB2_COMPRESSION_CAPABILITIES are present.");
+                    this.NegotiateContext_COMPRESSION = TypeMarshal.ToStruct<SMB2_COMPRESSION_CAPABILITIES>(data, ref consumedLen);
                 }
                 else
                 {

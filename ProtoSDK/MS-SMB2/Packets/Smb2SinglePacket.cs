@@ -8,7 +8,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
     /// <summary>
     /// Every SinglePacket must inherit from this packet, it contains an smb2 header, but no payload.
     /// </summary>
-    public abstract class Smb2SinglePacket : Smb2Packet
+    public abstract class Smb2SinglePacket : Smb2CompressiblePacket
     {
         /// <summary>
         /// The header of the packet

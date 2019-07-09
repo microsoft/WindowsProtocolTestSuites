@@ -134,11 +134,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 switch (status)
                 {
                     case TestCaseStatus.Passed:
-                        testcase.IsChecked = false;
                         to = PassedTestCases;
                         break;
                     case TestCaseStatus.Failed:
-                        testcase.IsChecked = true;
                         to = FailedTestCases;
                         break;
                     case TestCaseStatus.Other:

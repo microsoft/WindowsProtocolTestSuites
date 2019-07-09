@@ -27,7 +27,8 @@ Param
 
     [string]$WorkingPath = "C:\temp" 
 )
-
+$newEnvPath=$env:Path+";.\;.\scripts\"
+$env:Path=$newEnvPath
 #------------------------------------------------------------------------------------------
 # Global Variables:
 # ScriptFileFullPath: Full Path of this script file
@@ -101,8 +102,8 @@ Function Write-ConfigLog
 Function Read-ConfigParameters()
 {
     Write-ConfigLog "Getting the parameters from environment config file..." -ForegroundColor Yellow
-    $VMName = .\GetVMNameByComputerName.ps1
-    .\GetVmParameters.ps1 -VMName $VMName -RefParamArray ([ref]$Parameters)
+    $VMName = GetVMNameByComputerName.ps1
+    GetVmParameters.ps1 -VMName $VMName -RefParamArray ([ref]$Parameters)
     $Parameters
 
     Write-ConfigLog "Getting the parameters from Kerberos config file..." -ForegroundColor Yellow
@@ -131,10 +132,10 @@ Function Init-Environment()
 
     # Switch to the script path
     Write-ConfigLog "Switching to $WorkingPath..." -ForegroundColor Yellow
-    Push-Location $WorkingPath
+    #Push-Location $WorkingPath
 
     # Update ParamConfig.xml
-    .\scripts\UpdateConfigFile.ps1
+    UpdateConfigFile.ps1 -WorkingPath $WorkingPath
 
     # Read the config parameters
     Read-ConfigParameters
@@ -157,7 +158,7 @@ Function Complete-Configure
     Stop-Transcript
 
     # remove the schedule task to execute the script next step after restart
-    .\RestartAndRunFinish.ps1
+    RestartAndRunFinish.ps1
 }
 
 
@@ -410,7 +411,7 @@ Function Config-DC02()
 	# Configure Group Policy for Claims
 	#-----------------------------------------------------------------------------------------------
 	Write-Host "Extract GPOBackup files"
-	.\Scripts\Extract-ZipFile.ps1 -ZipFile "$WorkingPath\Scripts\Dc02GPO.zip" -Destination "$WorkingPath\Scripts\Dc02GPO"
+	&"$WorkingPath\Scripts\Extract-ZipFile.ps1" -ZipFile "$WorkingPath\Scripts\Dc02GPO.zip" -Destination "$WorkingPath\Scripts\Dc02GPO"
 
 	Write-Host "Configurating Group Policy"
 	Import-GPO -BackupId FC378AD4-C0A2-40D8-9072-D7D6A7B587E8 -TargetName "Default Domain Policy" -Path "$WorkingPath\Scripts\Dc02GPO" -CreateIfNeeded

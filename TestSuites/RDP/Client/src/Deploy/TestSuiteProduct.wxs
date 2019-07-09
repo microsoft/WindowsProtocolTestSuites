@@ -141,7 +141,6 @@
                 <Directory Id="TESTSUITE_BATCH_DIR" Name="Batch" />
                 <Directory Id="TESTSUITE_COMMON_SCRIPTS_DIR" Name="Batch" />
                 <Directory Id="TESTSUITE_BIN_DIR" Name="Bin" />
-                <Directory Id="TESTSUITE_DOCS_DIR" Name="Docs" />
                 <Directory Id="TESTSUITE_SCRIPTS_DIR" Name="Scripts" />
                 <Directory Id="TESTSUITE_DATA_DIR" Name="Data"/>
                 <!--Directory Id="TESTSUITE_SOURCE_DIR" Name="Source">
@@ -211,11 +210,6 @@
                   Description="Run all test cases in the test suite"
                   Target="[TESTSUITE_BATCH_DIR]!(wix.RUN_TESTS_COMMAND)"
                   WorkingDirectory="TESTSUITE_BATCH_DIR" />
-        <Shortcut Id="ConfigTestSuiteShortcut"
-                  Name="Configure Test Suite"
-                  Description="Configure test suite"
-                  Target="[TESTSUITE_SCRIPTS_DIR]!(wix.CONFIG_TESTSUITE_SCRIPT)"
-                  WorkingDirectory="TESTSUITE_SCRIPTS_DIR" />
         <RegistryValue Id="TestSuiteShortcutsKeyPath"
                        Root="HKCU"
                        Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_ENDPOINT)-!(wix.TESTSUITE_VERSION)-TestSuite"
@@ -378,27 +372,8 @@
 
     <!-- Set command line that might be launched after installaion. -->
     <!-- Set WixShellExecTarget both in UI and custom action, because we need to support both inteactive and non-interactive mode. -->
-    <UI>
-      <Publish Dialog="EndpointDlg" Control="Next"
-                  Property="WixShellExecTarget"
-                  Value="[TESTSUITE_SCRIPTS_DIR]!(wix.CONFIG_TESTSUITE_SCRIPT)">
-        TARGET_ENDPOINT="TESTSUITE"
-      </Publish>
-      <Publish Dialog="EndpointDlg" Control="Next"
-                  Property="WixShellExecTarget"
-                  Value="[TESTSUITE_SCRIPTS_DIR]!(wix.CONFIG_SUT_SCRIPT)">
-        TARGET_ENDPOINT="SUT"
-      </Publish>
-      <Publish Dialog="EndpointDlg" Control="Next"
-                  Property="WixShellExecTarget"
-                  Value="[TESTSUITE_SCRIPTS_DIR]!(wix.CONFIG_DOMAIN_SCRIPT)">
-        TARGET_ENDPOINT="DOMAIN"
-      </Publish>
-    </UI>
+    
 
-    <CustomAction Id="SetTestSuiteConfigCmdLine"
-                  Property="WixShellExecTarget"
-                  Value="[TESTSUITE_SCRIPTS_DIR]!(wix.CONFIG_TESTSUITE_SCRIPT)" />
     <CustomAction Id="SetSutConfigCmdLine"
                   Property="WixShellExecTarget"
                   Value="[TESTSUITE_SCRIPTS_DIR]!(wix.CONFIG_SUT_SCRIPT)" />
@@ -407,9 +382,6 @@
                   Value="[TESTSUITE_SCRIPTS_DIR]!(wix.CONFIG_DOMAIN_SCRIPT)" />
 
     <InstallExecuteSequence>
-      <Custom Action="SetTestSuiteConfigCmdLine" Before="InstallFinalize">
-        TARGET_ENDPOINT="TESTSUITE" AND NOT Installed
-      </Custom>
       <Custom Action="SetSutConfigCmdLine" Before="InstallFinalize">
         TARGET_ENDPOINT="SUT" AND NOT Installed
       </Custom>

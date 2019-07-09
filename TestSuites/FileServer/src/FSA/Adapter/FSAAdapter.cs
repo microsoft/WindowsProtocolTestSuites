@@ -74,7 +74,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         private IpVersion ipVersion;
         private ITestSite site;
         private ITransportAdapter transAdapter;
-        private UInt32 transBufferSize;
+        public UInt32 transBufferSize; // Make it accessible from test cases' code.
         private string rootDirectory;
         private string quotaFile;
         private string reparsePointFile;
@@ -1227,7 +1227,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         #endregion
 
         #region 3.1.5.2   Server Requests a Read
-
         /// <summary>
         /// Implement ReadFile method
         /// </summary>
@@ -1240,7 +1239,25 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             int byteCount,
             out long byteRead)
         {
-            byte[] outBuffer = null;
+            byte[] outBuffer;
+            return ReadFile(byteOffset, byteCount, out byteRead, out outBuffer);
+        }
+
+        /// <summary>
+        /// Implement ReadFile method
+        /// </summary>
+        /// <param name="byteOffset">The absolute byte offset in the stream from which to read data.</param>
+        /// <param name="byteCount">The desired number of bytes to read.</param>
+        /// <param name="byteRead">The number of bytes that were read.</param>
+        /// <param name="buffer">The buffer which contains file content read out.</param>
+        /// <returns>An NTSTATUS code that specifies the result</returns>
+        public MessageStatus ReadFile(
+            long byteOffset,
+            int byteCount,
+            out long byteRead,
+            out byte[] buffer
+            )
+        {
             MessageStatus returnedStatus = MessageStatus.INVALID_PARAMETER;
 
             try
@@ -1249,21 +1266,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     (ulong)byteOffset,
                     (uint)byteCount,
                     true,
-                    out outBuffer);
+                    out buffer);
 
                 if (returnedStatus == MessageStatus.SUCCESS)
                 {
-                    bool isReturned = (outBuffer != null);
+                    bool isReturned = (buffer != null);
                     this.VerifyServerRequestsRead(isReturned);
                 }
             }
             catch (Exception ex)
             {
+                buffer = new byte[0];
                 site.Log.Add(LogEntryKind.Debug, "Read file get exception: " + ex.Message);
             }
 
             //When outBuffer is null, byteRead is 0
-            byteRead = ((outBuffer == null) ? 0 : outBuffer.Length);
+            byteRead = ((buffer == null) ? 0 : buffer.Length);
 
             if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
             {
@@ -1305,8 +1323,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             MessageStatus returnedStatus = this.transAdapter.Write(
                 bufferData,
                 (ulong)byteOffset,
-                true,
-                true,
+                false,
+                false,
                 out outLength);
 
             bytesWritten = (long)outLength;
@@ -1327,6 +1345,29 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     bytesWritten = 0;
                 }
             }
+            return returnedStatus;
+        }
+
+        public MessageStatus WriteFile(
+            long byteOffset,
+            long byteCount,
+            bool isWriteThrough,
+            bool isUnBuffered)
+        {
+            byte[] bufferData = new byte[0];
+            if (byteCount > 0)
+            {
+                bufferData = new byte[byteCount];
+            }
+            RandomNumberGenerator ran = RandomNumberGenerator.Create();
+            ran.GetBytes(bufferData);
+            ulong outLength = 0;
+            MessageStatus returnedStatus = this.transAdapter.Write(
+                bufferData,
+                (ulong)byteOffset,
+                isWriteThrough,
+                isUnBuffered,
+                out outLength);
             return returnedStatus;
         }
         #endregion
@@ -2310,6 +2351,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             return returnedStatus;
         }
 
+        public MessageStatus FsCtlForEasyRequest(FsControlCommand ctlCode, out byte[] outputBuffer)
+        {
+            MessageStatus status = this.transAdapter.IOControl(
+                (uint)ctlCode,
+                transBufferSize,
+                null,
+                out outputBuffer);
+
+            return status;
+        }
+
         #endregion
 
         #region 3.1.5.9.11   FSCTL_GET_REPARSE_POINT
@@ -2756,7 +2808,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
         #endregion
 
-        #region 3.1.5.9.22   FSCTL_READ_FILE_USN_DATA
+        #region 2.1.5.9.24   FSCTL_READ_FILE_USN_DATA
 
         /// <summary>
         /// Implement FsCtlReadFileUSNData method
@@ -2772,7 +2824,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             bool isImplemented = false;
             byte[] outbuffer = new byte[0];
             UInt32 outBufferSize = this.transBufferSize;
-            FsccFsctlReadFileUsnDataRequestPacket fsccPacket = new FsccFsctlReadFileUsnDataRequestPacket();
 
             // According to different condition, set the buffer size value 
             switch (bufferSize)
@@ -2795,9 +2846,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
             // The control code must be set to 0x900eb, according to FSCC 2.3
             MessageStatus returnedStatus = transAdapter.IOControl(
-                0x900eb,
+                (uint)FsControlCommand.FSCTL_READ_FILE_USN_DATA,
                 outBufferSize,
-                fsccPacket.ToBytes(),
+                null,
                 out outbuffer);
 
             if (MessageStatus.SUCCESS == returnedStatus)
@@ -2824,6 +2875,25 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             {
                 returnedStatus = SMB_TDIWorkaround.WorkAroundFsCtlReadFileUSNData(bufferSize, returnedStatus, site);
             }
+            return returnedStatus;
+        }
+
+
+        public MessageStatus FsCtlReadFileUSNData(ushort minMajorVersion, ushort maxMajorVersion, out byte[] outbuffer)
+        {
+            FsccFsctlReadFileUsnDataRequestPacket fsccPacket = new FsccFsctlReadFileUsnDataRequestPacket();
+            READ_FILE_USN_DATA readFileUSNDataRequestPayload = new READ_FILE_USN_DATA();
+            readFileUSNDataRequestPayload.MinMajorVersion = minMajorVersion;
+            readFileUSNDataRequestPayload.MaxMajorVersion = maxMajorVersion;
+
+            fsccPacket.Payload = readFileUSNDataRequestPayload;
+
+            MessageStatus returnedStatus = this.transAdapter.IOControl(
+                (uint)FsControlCommand.FSCTL_READ_FILE_USN_DATA,
+                transBufferSize,
+                fsccPacket.ToBytes(),
+                out outbuffer);
+
             return returnedStatus;
         }
         #endregion
@@ -3479,6 +3549,78 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             return returnedStatus;
         }
 
+        #endregion
+
+        #region FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX
+        /// <summary>
+        /// Implement FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX, which duplicates file extents from the same opened file.
+        /// </summary>
+        /// <param name="sourceFileOffset">Offset of source file.</param>
+        /// <param name="targetFileOffset">Offset of target file.</param>
+        /// <param name="byteCount">The number of bytes of duplicate.</param>
+        /// <param name="flags">Flags for duplicate file.</param>
+        /// <returns></returns>
+        public MessageStatus FsctlDuplicateExtentsToFileEx(
+            long sourceFileOffset,
+            long targetFileOffset,
+            long byteCount,
+            FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX_Request_Flags_Values flags
+            )
+        {
+            if (!(transAdapter is Smb2TransportAdapter))
+            {
+                Site.Assume.Inconclusive("FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX is only supported by SMB2 transport!");
+            }
+
+            var sourceFileId = (transAdapter as Smb2TransportAdapter).FileId;
+
+            var request = new FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX_Request();
+
+            request.StructureSize = 0x30;
+            request.SourceFileId = sourceFileId;
+            request.SourceFileOffset = sourceFileOffset;
+            request.TargetFileOffset = targetFileOffset;
+            request.ByteCount = byteCount;
+            request.Flags = flags;
+            request.Reserved = 0;
+
+            var input = TypeMarshal.ToBytes(request);
+            byte[] output;
+
+            var status = transAdapter.IOControl(
+                (uint)Smb2.CtlCode_Values.FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX,
+                0,
+                input,
+                out output
+                );
+
+            return status;
+        }
+        #endregion
+
+        #region 2.1.5.9.21 FSCTL_QUERY_FILE_REGIONS 
+        public MessageStatus FsctlQueryFileRegionsWithInputData(
+            long fileOffset,
+            long length,
+            FILE_REGION_USAGE desiredUsage,
+            out byte[] output)
+        {
+            byte[] input = null;
+            var request = new FILE_REGION_INPUT();
+            request.FileOffset = fileOffset;
+            request.Length = length;
+            request.DesiredUsage = desiredUsage;
+            input = TypeMarshal.ToBytes(request);
+
+            var status = transAdapter.IOControl(
+                (uint)FsControlCommand.FSCTL_QUERY_FILE_REGIONS,
+                transBufferSize,
+                input,
+                out output
+                );
+
+            return status;
+        }
         #endregion
 
         #endregion

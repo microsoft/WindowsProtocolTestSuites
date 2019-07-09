@@ -1,14 +1,15 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
-using System.Text;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.Asn1;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic;
 using Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib;
 using Microsoft.Protocols.TestTools.StackSdk.Security.KerberosV5.Preauth;
+using Microsoft.Protocols.TestTools.StackSdk.Security.Spng;
+using System;
+using System.Text;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
 {
@@ -25,7 +26,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         /// This argument cannot be null.</param>
         /// <param name="password">The password of the user. This argument cannot be null.</param>
         /// <param name="accountType">The type of the logon account. User or Computer</param>
-        public KerberosFunctionalClient(string domain, string cName, string password, KerberosAccountType accountType, string kdcAddress, int kdcPort, TransportType transportType, KerberosConstValue.OidPkt oidPkt, ITestSite baseTestSite,string salt = null)
+        public KerberosFunctionalClient(string domain, string cName, string password, KerberosAccountType accountType, string kdcAddress, int kdcPort, TransportType transportType, KerberosConstValue.OidPkt oidPkt, ITestSite baseTestSite, string salt = null)
             : base(domain, cName, password, accountType, kdcAddress, kdcPort, transportType, oidPkt, salt)
         {
             testSite = baseTestSite;
@@ -40,7 +41,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                                     cName, domain);
             }
             EncryptionType[] encryptionTypes = new EncryptionType[]
-            { 
+            {
                 EncryptionType.AES256_CTS_HMAC_SHA1_96,
                 EncryptionType.AES128_CTS_HMAC_SHA1_96,
                 EncryptionType.RC4_HMAC,
@@ -85,7 +86,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                                     cName, domain);
             }
             EncryptionType[] encryptionTypes = new EncryptionType[]
-            { 
+            {
                 EncryptionType.AES256_CTS_HMAC_SHA1_96,
                 EncryptionType.AES128_CTS_HMAC_SHA1_96,
                 EncryptionType.RC4_HMAC,
@@ -355,7 +356,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             this.testSite.Assert.IsInstanceOfType(responsePdu, typeof(KerberosKrbError), "Response type mismatch");
 
             KerberosKrbError krbError = responsePdu as KerberosKrbError;
-            this.testSite.Log.Add(LogEntryKind.Debug, 
+            this.testSite.Log.Add(LogEntryKind.Debug,
                 @"[RFC 4120] section 3.1.3: If pre-authentication is required,
                 but was not present in the request, an error message with
                 the code KDC_ERR_PREAUTH_REQUIRED is returned, and a METHOD - DATA
@@ -727,7 +728,24 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         public KerberosApResponse GetApResponseFromToken(byte[] token, KerberosConstValue.GSSToken gssToken = KerberosConstValue.GSSToken.GSSSPNG)
         {
             if (gssToken == KerberosConstValue.GSSToken.GSSSPNG)
-                token = KerberosUtility.DecodeNegotiationToken(token);
+            {
+                var negTokenResp = KerberosUtility.DecodeNegotiationToken<NegTokenResp>(token);
+                this.testSite.Assert.IsNotNull(negTokenResp, "The return SPNEGO token should be NegTokenResp.");
+
+                this.testSite.Assert.AreEqual(NegState.accept_completed, negTokenResp.negState.Value.Value, "If negotiation finishes successfully, negState should be set to accept_completed in NegTokenResp.");
+
+                if (negTokenResp.mechListMIC == null)
+                {
+                    this.testSite.Log.Add(LogEntryKind.Debug, "No mechListMic field is found in NegTokenResp.");
+                }
+                else
+                {
+                    var micToken = KerberosMICToken.Decode(negTokenResp.mechListMIC.ByteArrayValue);
+                    this.testSite.Log.Add(LogEntryKind.Debug, "The mechListMic field is found in NegTokenResp.");
+                }
+
+                token = negTokenResp.responseToken.ByteArrayValue;
+            }
 
             if (token[0] == KerberosConstValue.KERBEROS_TAG)
             {
@@ -757,9 +775,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             return response;
         }
 
-        public KerberosKrbError GetKrbErrorFromToken(byte[] token)
+        public KerberosKrbError GetKrbErrorFromToken(byte[] token, KerberosConstValue.GSSToken gssToken)
         {
-            token = KerberosUtility.DecodeNegotiationToken(token);
+            if (gssToken == KerberosConstValue.GSSToken.GSSSPNG)
+            {
+                token = KerberosUtility.DecodeNegotiationToken(token);
+            }
 
             if (token[0] == KerberosConstValue.KERBEROS_TAG)
             {

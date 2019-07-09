@@ -33,13 +33,15 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
             {
                 if (kvno != 0)
                 {
-                    if (item.Principal == principal && item.Realm == realm && item.KeyType == type && item.Kvno == kvno)
+                    //Make the realm name lower to make sure get a key
+                    if (item.Principal == principal && item.Realm.ToLower() == realm.ToLower() && item.KeyType == type && item.Kvno == kvno)
                         return item.Key;
                 }
                 else
                 {
                     // Ignore the kvno if 0
-                    if (item.Principal == principal && item.Realm == realm && item.KeyType == type)
+                    //Make the realm name lower to make sure get a key
+                    if (item.Principal == principal && item.Realm.ToLower() == realm.ToLower() && item.KeyType == type)
                         return item.Key;
                 }
             }
@@ -50,7 +52,7 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
         {
             foreach (var item in keytabItems)
             {
-                if (item.Principal == principal && item.Realm == realm)
+                if (item.Principal == principal && item.Realm.ToLower() == realm.ToLower())
                     return true;
             }
             return false;
@@ -73,7 +75,7 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
                 KeytabItem item = new KeytabItem()
                 {
                     Principal = principal,
-                    Realm = entry.Realm.ToString(),
+                    Realm = entry.Realm.ToString().ToLower(),
                     Kvno = entry.Kvno,
                     KeyType = (EncryptionType)entry.Key.type,
                     Key = new EncryptionKey(new KerbInt32((long)entry.Key.type), new Asn1OctetString(entry.Key.Data.Data))
@@ -99,7 +101,7 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
             KeytabItem item = new KeytabItem()
             {
                 Principal = principal,
-                Realm = realm,
+                Realm = realm.ToLower(),
                 Kvno = 0, // Set to 0 for self generated keys.
                 KeyType = type,
                 Key = key

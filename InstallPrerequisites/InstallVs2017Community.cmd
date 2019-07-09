@@ -6,7 +6,7 @@
 %1 --update
 
 :: Install vs_community with the following 
-%1 --installPath "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community" ^
+%1 --installPath %2 ^
 --add Microsoft.VisualStudio.Workload.NativeDesktop ^
 --add Microsoft.VisualStudio.Workload.ManagedDesktop ^
 --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 ^

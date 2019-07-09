@@ -33,14 +33,12 @@
 
     <WixVariable Id="TESTSUITE_BATCH_DIR" Value="$(env.TestSuiteRoot)\TestSuites\$(var.TESTSUITE_NAME)\$(var.TESTSUITE_ENDPOINT)\src\Batch" />
     <WixVariable Id="TESTSUITE_BIN_DIR" Value="$(env.TestSuiteRoot)\drop\TestSuites\$(var.TESTSUITE_NAME)\Bin" />
-    <WixVariable Id="DOCS_FILES_DIR" Value="$(env.TestSuiteRoot)\TestSuites\$(var.TESTSUITE_NAME)\$(var.TESTSUITE_ENDPOINT)\Docs" />
     <WixVariable Id="TESTSUITE_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\drop\TestSuites\$(var.TESTSUITE_NAME)\$(var.TESTSUITE_ENDPOINT)\Scripts" />
     <WixVariable Id="TESTSUITE_COMMON_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\common" />
 
     <WixVariable Id="RUN_TESTS_COMMAND" Value="RunAllTestCases.cmd" />
     <WixVariable Id="SET_VS_TEST_PATH" Value="setVsTestPath.cmd" />
     <WixVariable Id="SET_VS_PATH"      Value="setVsPath.cmd" />
-    <WixVariable Id="SET_VS_2017_PATH" Value="setVs2017Path.cmd" />
 
     <DirectoryRef Id="TESTSUITE_ROOT_DIR">
       <Component Id="LICENSE.rtf" Guid="{D02148FA-F1C8-4B4A-8B51-A9F16C6E0710}">

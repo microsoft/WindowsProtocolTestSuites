@@ -146,6 +146,8 @@
     <Compile Include="Client\Smb2ClientGlobalConfig.cs" />
     <Compile Include="Client\Smb2ClientPendingRequest.cs" />
     <Compile Include="Common\PreauthIntegrityContext.cs" />
+    <Compile Include="Common\Smb2Compression.cs" />
+    <Compile Include="Common\Smb2CompressionInfo.cs" />
     <Compile Include="Common\Smb2Crypto.cs" />
     <Compile Include="Common\Smb2CryptoInfo.cs" />
     <Compile Include="DataTypes\Smb2CreateAppInstanceVersion.cs" />
@@ -185,10 +187,13 @@
     <Compile Include="Packets\Smb2CloseRequestPacket.cs" />
     <Compile Include="Packets\Smb2CloseResponsePacket.cs" />
     <Compile Include="Packets\Smb2CompoundPacket.cs" />
+    <Compile Include="Packets\Smb2CompressiblePacket.cs" />
+    <Compile Include="Packets\Smb2CompressedPacket.cs" />
     <Compile Include="Packets\Smb2CreateRequestPacket.cs" />
     <Compile Include="Packets\Smb2CreateResponsePacket.cs" />
     <Compile Include="Packets\Smb2EchoRequestPacket.cs" />
     <Compile Include="Packets\Smb2EchoResponsePacket.cs" />
+    <Compile Include="Packets\Smb2EncryptedPacket.cs" />
     <Compile Include="Packets\Smb2ErrorResponsePacket.cs" />
     <Compile Include="Packets\Smb2FlushRequestPacket.cs" />
     <Compile Include="Packets\Smb2FlushResponsePacket.cs" />
@@ -273,6 +278,10 @@
     <ProjectReference Include="..\MS-NLMP\Nlmp.csproj">
       <Project>{5E53E71E-52D1-4BF0-99C0-608437EC446C}</Project>
       <Name>Nlmp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MS-XCA\Xca.csproj">
+      <Project>{55f86fdf-e929-4aa6-901b-4e0be8b9b633}</Project>
+      <Name>Xca</Name>
     </ProjectReference>
     <ProjectReference Include="..\Sspi\Sspi.csproj">
       <Project>{D0CB354B-2CD3-49C1-8ECA-2F6EBADBCCEE}</Project>

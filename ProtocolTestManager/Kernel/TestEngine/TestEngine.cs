@@ -18,6 +18,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public List<string> TestAssemblies { get; set; }
         public string TestSetting { get; set; }
         public string WorkingDirectory { get; set; }
+        public string ResultOutputFolder { get; set; }
 
         private List<TestCase> testcases;
 
@@ -105,7 +106,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 args.AppendFormat("{0} ", wd.MakeRelativeUri(new Uri(file)).ToString().Replace('/', Path.DirectorySeparatorChar));
             }
             args.AppendFormat("/Settings:\"{0}\" ", TestSetting);
-            args.AppendFormat("/logger:html ");
+            args.AppendFormat("/ResultsDirectory:{0} ", "HtmlTestResults");
+            args.AppendFormat("/logger:html;OutputFolder={0} ", ResultOutputFolder);
             if (caseStack != null)
             {
                 args.Append("/TestCaseFilter:\"");

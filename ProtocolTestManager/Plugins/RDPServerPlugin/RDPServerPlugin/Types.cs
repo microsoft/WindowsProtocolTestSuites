@@ -1,10 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Protocols.TestManager.Detector;
 
 namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 {
@@ -21,8 +18,10 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
     {
         // Parameters for Detecting
         public string SUTName;
-                
+
         // Detect Result
+        public TS_UD_SC_CORE_version_Values Version;
+
         public bool? IsSupportAutoReconnect;
         public bool? IsSupportFastPathInput;
 

@@ -5,7 +5,7 @@
 
 param
 (
-[string]$remoteSignalShare = ${PTFPropCommon.SutShareFoler}
+[string]$remoteSignalShare = $PTFProp_Common_SutShareFoler
 )
 
 $tmp = $remoteSignalShare + "remoteresponse.txt"

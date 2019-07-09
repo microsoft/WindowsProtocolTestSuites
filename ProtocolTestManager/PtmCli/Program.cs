@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Microsoft.Protocols.TestManager.CLI
@@ -17,6 +18,16 @@ namespace Microsoft.Protocols.TestManager.CLI
 
         static void Main(string[] args)
         {
+            bool isNewInstance = false;
+            Mutex mutex = new Mutex(true, "{FE998190-5B44-4816-9A65-295E8A1EBBA1}", out isNewInstance);
+
+            if (!isNewInstance)
+            {
+                Console.WriteLine("Protocol Test Manager or PtmCli is already running.");
+                mutex = null;
+                return;
+            }
+
             try
             {
                 Arguments arg = Arguments.Parse(args);
@@ -52,6 +63,8 @@ namespace Microsoft.Protocols.TestManager.CLI
                 {
                     Console.Write(report);
                 }
+                mutex.ReleaseMutex();
+                mutex = null;
             }
             catch (InvalidArgumentException e)
             {
@@ -59,12 +72,16 @@ namespace Microsoft.Protocols.TestManager.CLI
                 Console.Error.WriteLine(e.Message);
                 Console.Error.WriteLine();
                 PrintHelpText();
+                mutex.ReleaseMutex();
+                mutex = null;
                 Environment.Exit(-1);
             }
             catch (Exception e)
             {
                 Console.Error.WriteLine("ERROR:");
                 Console.Error.WriteLine(e.Message);
+                mutex.ReleaseMutex();
+                mutex = null;
                 Environment.Exit(-1);
             }
         }

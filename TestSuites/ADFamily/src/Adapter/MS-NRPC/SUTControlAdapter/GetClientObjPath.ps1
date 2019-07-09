@@ -3,15 +3,8 @@
 ## Licensed under the MIT license. See LICENSE file in the project root for full license information.
 #############################################################
 
-function GetPtfVariable
-{
-    param($name)
-	$v = Get-Variable -Name ("PTFProp"+$name)
-	return $v.Value
-}
-
-$clientNetBiosName = GetPtfVariable 'Common.ENDPOINT.NetbiosName'
-$domainName = GetPtfVariable 'Common.PrimaryDomain.DNSName'
+$clientNetBiosName = $PTFProp_Common_ENDPOINT_NetbiosName
+$domainName = $PTFProp_Common_PrimaryDomain_DNSName
 
 $nameSplits=$domainName.Split('.')
 $domainNetBiosName=$nameSplits[0]

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Packets;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
@@ -18,14 +19,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
             Decrypt
         }
         /// <summary>
-        /// Sign and encrypt for Single or Compound packet.
+        /// Sign, compress and encrypt for Single or Compound packet.
         /// </summary>
-        public static byte[] SignAndEncrypt(Smb2Packet originalPacket, Dictionary<ulong, Smb2CryptoInfo> cryptoInfoTable, Smb2Role role)
+        public static Smb2Packet SignCompressAndEncrypt(Smb2Packet originalPacket, Dictionary<ulong, Smb2CryptoInfo> cryptoInfoTable, Smb2CompressionInfo compressioninfo, Smb2Role role)
         {
             ulong sessionId;
             bool isCompound = false;
             bool notEncryptNotSign = false;
             bool notEncrypt = false;
+            var compressedPacket = originalPacket;
 
             if (originalPacket is Smb2SinglePacket)
             {
@@ -58,7 +60,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
 
             if (sessionId == 0 || notEncryptNotSign || !cryptoInfoTable.ContainsKey(sessionId))
             {
-                return originalPacket.ToBytes();
+                if (originalPacket is Smb2CompressiblePacket)
+                {
+                    compressedPacket = Smb2Compression.Compress(originalPacket as Smb2CompressiblePacket, compressioninfo, role);
+                }
+                return compressedPacket;
             }
 
             Smb2CryptoInfo cryptoInfo = cryptoInfoTable[sessionId];
@@ -69,10 +75,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
             // For compound packet, the encryption is done for the entire message.
             if (!notEncrypt)
             {
-                byte[] encryptedBinary = Encrypt(sessionId, cryptoInfo, role, originalPacket);
-                if (encryptedBinary != null)
+                if (originalPacket is Smb2CompressiblePacket)
                 {
-                    return encryptedBinary;
+                    compressedPacket = Smb2Compression.Compress(originalPacket as Smb2CompressiblePacket, compressioninfo, role);
+                }
+                var encryptedPacket = Encrypt(sessionId, cryptoInfo, role, compressedPacket, originalPacket);
+                if (encryptedPacket != null)
+                {
+                    return encryptedPacket;
                 }
             }
             #endregion
@@ -102,26 +112,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
                 }
             }
             #endregion
-            return originalPacket.ToBytes();
+            if (originalPacket is Smb2CompressiblePacket)
+            {
+                compressedPacket = Smb2Compression.Compress(originalPacket as Smb2CompressiblePacket, compressioninfo, role);
+            }
+            return compressedPacket;
         }
 
         public static byte[] Decrypt(byte[] bytes, Dictionary<ulong, Smb2CryptoInfo> cryptoInfoTable, Smb2Role role, out Transform_Header transformHeader)
         {
-            // For client: If the size of the message received from the server is not greater than the size of SMB2 TRANSFORM_HEADER, the client MUST discard the message.
-            // For server: If the size of the message received from the client is not greater than the size of the SMB2 TRANSFORM_HEADER, the server MUST disconnect the connection.
-            int minimumLength = Marshal.SizeOf(typeof(Transform_Header));
-            if (bytes.Length < minimumLength)
-            {
-                throw new InvalidOperationException(
-                    String.Format(
-                        "Too less data for encrypted message. Expected length more than {0}, actual {1}.",
-                        minimumLength,
-                        bytes.Length
-                    )
-                );
-            }
+            var encryptedPacket = new Smb2EncryptedPacket();
 
-            transformHeader = Smb2Utility.UnmarshalStructure<Transform_Header>(bytes);
+            int consumedLen;
+            int expectedLen;
+
+            encryptedPacket.FromBytes(bytes, out consumedLen, out expectedLen);
+
+            transformHeader = encryptedPacket.Header;
 
             // For client: If the Flags/EncryptionAlgorithm in the SMB2 TRANSFORM_HEADER is not 0x0001, the client MUST discard the message.
             // For server: If the Flags/EncryptionAlgorithm in the SMB2 TRANSFORM_HEADER is not 0x0001, the server MUST disconnect the connection.
@@ -147,7 +154,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
                 GetCryptoParams(cryptoInfo, CryptoOperationType.Decrypt, out mode, out nonceLength);
                 bcrypt.Mode = mode;
                 bcrypt.Key = role == Smb2Role.Server ? cryptoInfo.ServerInKey : cryptoInfo.ServerOutKey;
-                return bcrypt.Decrypt(bytes.Skip(52).ToArray(), transformHeader.Nonce.ToByteArray().Take(nonceLength).ToArray(), bytes.Skip(20).Take(32).ToArray(), transformHeader.Signature);
+                // Auth data is Transform_Header start from Nonce, excluding ProtocolId and Signature.
+                var authData = Smb2Utility.MarshalStructure(transformHeader).Skip((int)Marshal.OffsetOf<Transform_Header>("Nonce")).ToArray();
+                return bcrypt.Decrypt(encryptedPacket.EncryptdData, transformHeader.Nonce.ToByteArray().Take(nonceLength).ToArray(), authData, transformHeader.Signature);
             }
         }
 
@@ -168,16 +177,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
             }
         }
 
-        private static byte[] Encrypt(ulong sessionId, Smb2CryptoInfo cryptoInfo, Smb2Role role, Smb2Packet originalPacket)
+        private static Smb2EncryptedPacket Encrypt(ulong sessionId, Smb2CryptoInfo cryptoInfo, Smb2Role role, Smb2Packet packet, Smb2Packet packetBeforCompression)
         {
             Packet_Header header;
-            if (originalPacket is Smb2SinglePacket)
+            if (packetBeforCompression is Smb2SinglePacket)
             {
-                header = (originalPacket as Smb2SinglePacket).Header;
+                header = (packetBeforCompression as Smb2SinglePacket).Header;
+            }
+            else if (packetBeforCompression is Smb2CompoundPacket)
+            {
+                header = (packetBeforCompression as Smb2CompoundPacket).Packets[0].Header;
             }
             else
             {
-                header = (originalPacket as Smb2CompoundPacket).Packets[0].Header;
+                throw new InvalidOperationException("Unsupported SMB2 packet type!");
             }
 
             // Encrypt all messages after session setup if global encryption enabled.
@@ -191,7 +204,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
             {
                 using (var bcrypt = new BCryptAlgorithm("AES"))
                 {
-                    byte[] originalBinary = originalPacket.ToBytes();
+                    byte[] originalBinary = packet.ToBytes();
                     Transform_Header transformHeader = new Transform_Header
                     {
                         ProtocolId = Smb2Consts.ProtocolIdInTransformHeader,
@@ -230,7 +243,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
                         16,
                         out tag);
                     transformHeader.Signature = tag;
-                    return Smb2Utility.MarshalStructure(transformHeader).Concat(output).ToArray();
+
+                    var encryptedPacket = new Smb2EncryptedPacket();
+                    encryptedPacket.Header = transformHeader;
+                    encryptedPacket.EncryptdData = output;
+
+                    return encryptedPacket;
                 }
             }
 

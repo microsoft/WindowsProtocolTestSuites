@@ -1226,205 +1226,87 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// </summary>
         NONE = 0,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_BOTH_DIR_INFORMATION = 3,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_ALTERNATENAME_INFORMATION = 21,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_ATTRIBUTETAG_INFORMATION = 35,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_BASIC_INFORMATION = 4,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_RENAME_INFORMATION = 10,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_LINK_INFORMATION = 11,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_DISPOSITION_INFORMATION = 13,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_POSITION_INFORMATION = 14,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_FULLEA_INFORMATION = 15,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_MODE_INFORMATION = 16,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_ALLOCATION_INFORMATION = 19,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_ENDOFFILE_INFORMATION = 20,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_PIPE_INFORMATION = 23,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_PIPELOCAL_INFORMATION = 24,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_PIPEREMOTE_INFORMATION = 25,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_NETWORKOPEN_INFORMATION = 34,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_VALIDDATALENGTH_INFORMATION = 39,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_SHORTNAME_INFORMATION = 40,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_STANDARD_INFORMATION = 5,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_ALL_INFORMATION = 18,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_LINKS_INFORMATION = 46,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_ID_BOTH_DIR_INFORMATION = 37,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_ID_FULL_DIR_INFORMATION = 38,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_ID_GLOBAL_TX_DIR_INFORMATION = 50,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_NAME_INFORMATION = 9,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_NAMES_INFORMATION = 12,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_OBJECTID_INFORMATION = 29,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_REPARSE_POINT_INFORMATION = 33,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_SFIO_RESERVE_INFORMATION = 44,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_STANDARD_LINK_INFORMATION = 54,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_INTERNAL_INFORMATION = 6,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_EA_INFORMATION = 7,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_ACCESS_INFORMATION = 8,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_ALIGNMENT_INFORMATION = 17,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_STREAM_INFORMATION = 22,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_COMPRESSION_INFORMATION = 28,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_QUOTA_INFORMATION = 32,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_DIRECTORY_INFORMATION = 1,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FILE_FULL_DIR_INFORMATIO = 2,
 
-        /// <summary>
-        /// as listed in MS-FSCC 2.4
-        /// </summary>
         FileNormalizedNameInformation = 48,
+
+        FileIdInformation = 59,
 
         /// <summary>
         /// If FileInformationClass is not defined in [MS-FSCC] section 2.4

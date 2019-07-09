@@ -360,7 +360,7 @@ if([double]$serverOsVersion -eq [double]$os2008R2)
 }
 elseif(([double]$serverOsVersion -ge [double]$os2012))
 {
-	.\Add-Printer.ps1 "SMBPrinter" "Brother Color Type3 Class Driver"
+	.\Add-Printer.ps1 "SMBPrinter" "Brother Mono Universal Printer (PCL)"
 }
 else
 {

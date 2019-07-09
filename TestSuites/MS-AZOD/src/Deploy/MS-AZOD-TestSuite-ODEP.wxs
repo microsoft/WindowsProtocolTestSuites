@@ -43,9 +43,7 @@
 
     <WixVariable Id="SET_VS_TEST_PATH" Value="setVsTestPath.cmd" />
     <WixVariable Id="SET_VS_PATH"      Value="setVsPath.cmd" />
-    <WixVariable Id="SET_VS_2017_PATH" Value="setVs2017Path.cmd" />
     
-    <WixVariable Id="QUICK_START_GUIDE" Value="MS-AZOD_ODUserGuide.docx" />
     <!-- Required PTF version should be the same as required Protocol Stack SDK version. -->    
     <WixVariable Id="PROTOCOL_TEST_FRAMEWORK_VERSION" Value="1.0.2220.0" />
     <WixVariable Id="MMA_VERSION" Value="4.0.6396.0" />

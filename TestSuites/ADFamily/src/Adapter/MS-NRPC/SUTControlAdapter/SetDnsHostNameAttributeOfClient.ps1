@@ -6,13 +6,6 @@
 $PSScriptRoot = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
 Push-Location $PSScriptRoot
 
-function GetPtfVariable
-{
-    param($name)
-	$v = Get-Variable -Name ("PTFProp"+$name)
-	return $v.Value
-}
-
 $objectPath = .\GetClientObjPath.ps1
 $attribute = "dNSHostName"
 
@@ -29,11 +22,11 @@ if ($attribute -eq $null -or $attribute -eq "")
 #----------------------------------------------------------------------------
 # Get Infomation
 #----------------------------------------------------------------------------
-$primaryDCName = GetPtfVariable "Common.WritableDC1.NetbiosName" 
-$primaryDomainNetBiosName = GetPtfVariable "MS_NRPC.SUT.PrimaryDomainNetBiosName"
-$normalDomainUserAccount = GetPtfVariable "Common.DomainAdministratorName"
+$primaryDCName = $PTFProp_Common_WritableDC1_NetbiosName
+$primaryDomainNetBiosName = $PTFProp_MS_NRPC_SUT_PrimaryDomainNetBiosName
+$normalDomainUserAccount = $PTFProp_Common_DomainAdministratorName
 $userName = "$primaryDomainNetBiosName\$normalDomainUserAccount"
-$password = GetPtfVariable "Common.DomainUserPassword"
+$password = $PTFProp_Common_DomainUserPassword
 
 $objectInstance = New-Object System.DirectoryServices.DirectoryEntry("LDAP://$primaryDCName/$objectPath",$userName,$password)
 if ($objectInstance -eq $null)

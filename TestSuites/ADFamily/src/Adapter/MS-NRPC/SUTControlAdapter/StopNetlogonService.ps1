@@ -3,17 +3,10 @@
 ## Licensed under the MIT license. See LICENSE file in the project root for full license information.
 #############################################################
 
-function GetPtfVariable
-{
-    param($name)
-	$v = Get-Variable -Name ("PTFProp"+$name)
-	return $v.Value
-}
-
 New-Item -Force -ItemType directory -Path c:\temp\
 $strFileName="c:\temp\changednetlogonservicestatus.txt"
 "DONE" >> $strFileName
-$computerName = GetPtfVariable "Common.WritableDC1.NetbiosName"
+$computerName = $PTFProp_Common_WritableDC1_NetbiosName
 
 	##get service object
 	$serviceObj = get-service -computername $computerName Netlogon
@@ -22,7 +15,9 @@ $computerName = GetPtfVariable "Common.WritableDC1.NetbiosName"
 	Sleep 10
 	$serviceObj = get-service -computername $computerName Netlogon
 	if($serviceObj.Status -ne "Stopped")
-	    throw "service cannot start"
+	{
+		throw "service cannot start"
+	}
 	Sleep 10
 	$serviceObj.Close()
 

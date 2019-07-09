@@ -144,6 +144,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.TestSuite
         InvalidMaxOutputResponse,
 
         /// <summary>
+        /// The Dialects field in VALIDATE_NEGOTIATE_INFO request contains SMB 3.1.1 dialect
+        /// </summary>
+        InvalidSMB311Dialect,
+
+        /// <summary>
         /// All fields in VALIDATE_NEGOTIATE_INFO request are valid and the request is expected to SUCCESS
         /// </summary>
         None
