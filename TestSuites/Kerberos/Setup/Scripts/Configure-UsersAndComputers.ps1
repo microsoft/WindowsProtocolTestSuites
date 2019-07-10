@@ -10,6 +10,7 @@
 $ldifOpFileName = ".\ldifopfile.ldif"
 $queryOutFileName = ".\outputdata.ldf"
 $os2012R2 = "6.3"
+$dataFile = ".\ParamConfig.xml"
 
 #------------------------------------------------------------------------------------------
 # Function: CreateAndExecuteLDIF
@@ -27,10 +28,11 @@ Function CreateAndExecuteLDIF()
         [string]
         $Server
     )
-
+    
     $Content | Out-File -FilePath $ldifOpFileName -Force
 
-    cmd /c ldifde -s $Server -i -f $ldifOpFileName
+    cmd /c ldifde -s $Server -i -f $ldifOpFileName 
+   
 }
 
 Function CreateAndExecuteLDIFWithSASL()
@@ -268,68 +270,82 @@ userAccountControl: {1}
 }
 
 Function ConfigUsersAndComputers_DC01([string]$server, [xml]$KrbParams)
-{
-    $osVersion = Invoke-Command -ComputerName $server -ScriptBlock {"" + [System.Environment]::OSVersion.Version.Major + "." + [System.Environment]::OSVersion.Version.Minor}
-    Write-ConfigLog "SUT OS version is $osVersion" -ForegroundColor Yellow
+{ 
+    try
+    {
+        $osVersion = Invoke-Command -ComputerName $server -ScriptBlock {"" + [System.Environment]::OSVersion.Version.Major + "." + [System.Environment]::OSVersion.Version.Minor} -ErrorAction Stop
+        Write-Host "SUT OS version is $osVersion" -ForegroundColor Yellow
+    }
+    catch [System.Exception]
+    {
+        Write-Host "Failed to get OS version on server: " + $server + " with error message: " $_.Exception.Message -ForegroundColor Red
+        exit 1
+    }   
     
 	$domain = $KrbParams.Parameters.LocalRealm.RealmName
 	
-    Write-ConfigLog "Adding AD users accounts..."
+    Write-Host "Adding AD users accounts..."
 	
     $user = $KrbParams.Parameters.LocalRealm.User01.Username
     $password = $KrbParams.Parameters.LocalRealm.User01.Password
 
     try
     {
-		DeleteUser -server $server -domain $domain -userName $user
+		DeleteUser -server $server -domain $domain -userName $user 
     }
     catch
     {
-        Write-ConfigLog "Can't remove $user, does not exist!" -ForegroundColor Red
+       Write-Host "Can't remove $user, does not exist!" -ForegroundColor Red
+       exit 1
     }
-    Write-ConfigLog "Creating new user account $user"
+
+    Write-Host "Creating new user account $user"
 	
 	$principalName = $user + '@' + $domain
 	$userAttr = "displayName: {0}
-userPrincipalName: {1}
-homeDirectory: {2}
-homeDrive: {3}
-profilePath: {4}
-scriptPath: {5}
-msDS-SupportedEncryptionTypes: {6}" -f $user, $principalName, "c:\home\", "c:", "c:\profiles\", "c:\scripts\", 31
-	AddUser -server $server -domain $domain -userName $user -attributes $userAttr
-	ChangePassword -server $server -domain $domain -userName $user -password $password
-    UpdateAccountControl -server $server -domain $domain -userName $user -userAccountControl 66048
-
-    $group = $KrbParams.Parameters.LocalRealm.User01.Group
+    userPrincipalName: {1}
+    homeDirectory: {2}
+    homeDrive: {3}
+    profilePath: {4}
+    scriptPath: {5}
+    msDS-SupportedEncryptionTypes: {6}" -f $user, $principalName, "c:\home\", "c:", "c:\profiles\", "c:\scripts\", 31
+	
+    
     try
     {
-		DeleteADGroup -server $server -domain $domain -groupName $group
-    }
-    catch
-    {
-        Write-ConfigLog "Can't remove $group, does not exist!" -ForegroundColor Red
-    }
-	NewADGroup -server $server -domain $domain -groupName $group -groupType "Global"
+        AddUser -server $server -domain $domain -userName $user -attributes $userAttr
+	    ChangePassword -server $server -domain $domain -userName $user -password $password 
+        UpdateAccountControl -server $server -domain $domain -userName $user -userAccountControl 66048 
+
+        $group = $KrbParams.Parameters.LocalRealm.User01.Group
 	
-    $member = "CN=$user,CN=Users,DC=" + $domain.Replace(".", ",DC=")
-	AddGroupMember -server $server -domain $domain -groupName $group -member $member
+        NewADGroup -server $server -domain $domain -groupName $group -groupType "Global"
+        $member = "CN=$user,CN=Users,DC=" + $domain.Replace(".", ",DC=")
+	    AddGroupMember -server $server -domain $domain -groupName $group -member $member
+    }
+    catch [System.Exception]
+    {
+        Write-Host "Can't add group memeber to $server"+ " with error message: " $_.Exception.Message -ForegroundColor Red
+        exit 1
+    }
     
     $user = $KrbParams.Parameters.LocalRealm.User02.Username
     $password = $KrbParams.Parameters.LocalRealm.User02.Password
     try
     {
-		DeleteUser -server $server -domain $domain -userName $user
+		DeleteUser -server $server -domain $domain -userName $user 
     }
-    catch
+    catch [System.Exception]
     {
-        Write-ConfigLog "Can't remove $user, does not exist!" -ForegroundColor Red
+        Write-Host "Can't remove $user"+ " with error message: " $_.Exception.Message -ForegroundColor Red
+        exit 1
     }
-    Write-ConfigLog "Creating new user account $user"
+    
+    Write-Host "Creating new user account $user"
 	$principalName = $user + '@' + $domain
 	$userAttr = "displayName: {0}
-department: {1}
-msDS-SupportedEncryptionTypes: {2}" -f $user, "HR", 131103
+    department: {1}
+    msDS-SupportedEncryptionTypes: {2}" -f $user, "HR", 131103
 	AddUser -server $server -domain $domain -userName $user -attributes $userAttr
 	ChangePassword -server $server -domain $domain -userName $user -password $password
     UpdateAccountControl -server $server -domain $domain -userName $user -userAccountControl 66048
@@ -338,13 +354,15 @@ msDS-SupportedEncryptionTypes: {2}" -f $user, "HR", 131103
     $password = $KrbParams.Parameters.LocalRealm.User03.Password
     try
     {
-		DeleteUser -server $server -domain $domain -userName $user
+		DeleteUser -server $server -domain $domain -userName $user 
     }
-    catch
+    catch [System.Exception]
     {
-        Write-ConfigLog "Can't remove $user, does not exist!" -ForegroundColor Red
+        Write-Host "Can't remove $user"+ " with error message: " $_.Exception.Message -ForegroundColor Red
+        exit 1
     }
-    Write-ConfigLog "Creating new user account $user"
+
+    Write-Host "Creating new user account $user"
 
 	$principalName = $user + '@' + $domain
 	$userAttr = "displayName: {0}" -f $user
@@ -356,13 +374,15 @@ msDS-SupportedEncryptionTypes: {2}" -f $user, "HR", 131103
     $password = $KrbParams.Parameters.LocalRealm.User04.Password
     try
     {
-		DeleteUser -server $server -domain $domain -userName $user
+		DeleteUser -server $server -domain $domain -userName $user -ErrorAction Stop
     }
     catch
     {
-        Write-ConfigLog "Can't remove $user, does not exist!" -ForegroundColor Red
+       Write-Host "Can't remove $user, does not exist!" -ForegroundColor Red
+       exit 1
     }
-    Write-ConfigLog "Creating new user account $user"
+
+    Write-Host "Creating new user account $user"
 	$principalName = $user + '@' + $domain
 	$userAttr = "displayName: {0}
 servicePrincipalName: {1}" -f $user, "abc/$user"
@@ -374,13 +394,15 @@ servicePrincipalName: {1}" -f $user, "abc/$user"
     $password = $KrbParams.Parameters.LocalRealm.User05.Password
     try
     {
-		DeleteUser -server $server -domain $domain -userName $user
+		DeleteUser -server $server -domain $domain -userName $user 
     }
     catch
     {
-        Write-ConfigLog "Can't remove $user, does not exist!" -ForegroundColor Red
+       Write-Host "Can't remove $user, does not exist!" -ForegroundColor Red
+       exit 1
     }
-    Write-ConfigLog "Creating new user account $user"
+
+    Write-Host "Creating new user account $user"
     $principalName = $user + '@' + $domain
 	$userAttr = "displayName: {0}" -f $user
 	AddUser -server $server -domain $domain -userName $user -attributes $userAttr
@@ -391,13 +413,15 @@ servicePrincipalName: {1}" -f $user, "abc/$user"
     $password = $KrbParams.Parameters.LocalRealm.User06.Password
     try
     {
-        DeleteUser -server $server -domain $domain -userName $user
+        DeleteUser -server $server -domain $domain -userName $user 
     }
     catch
     {
-        Write-ConfigLog "Can't remove $user, does not exist!" -ForegroundColor Red
+       Write-Host "Can't remove $user, does not exist!" -ForegroundColor Red
+       exit 1
     }
-    Write-ConfigLog "Creating new user account $user"
+
+    Write-Host "Creating new user account $user"
     $principalName = $user + '@' + $domain
 	$userAttr = "displayName: {0}
 userPrincipalName: {1}" -f $user, $principalName
@@ -410,13 +434,15 @@ userPrincipalName: {1}" -f $user, $principalName
     $principalName = $user + '@' + $domain
     try
     {
-        DeleteUser -server $server -domain $domain -userName $user
+        DeleteUser -server $server -domain $domain -userName $user 
     }
     catch
     {
-        Write-ConfigLog "Can't remove $user, does not exist!" -ForegroundColor Red
+       Write-Host "Can't remove $user, does not exist!" -ForegroundColor Red
+       exit 1
     }
-    Write-ConfigLog "Creating new user account $user"
+
+    Write-Host "Creating new user account $user"
     $userAttr = "displayName: {0}
 userPrincipalName: {1}" -f $user, $principalName
 	AddUser -server $server -domain $domain -userName $user -attributes $userAttr
@@ -424,15 +450,18 @@ userPrincipalName: {1}" -f $user, $principalName
     $user = $KrbParams.Parameters.LocalRealm.User08.Username
     $password = $KrbParams.Parameters.LocalRealm.User08.Password
 	$principalName = $user + '@' + $domain
+
     try
     {
-        DeleteUser -server $server -domain $domain -userName $user
+        DeleteUser -server $server -domain $domain -userName $user 
     }
     catch
     {
-        Write-ConfigLog "Can't remove $user, does not exist!" -ForegroundColor Red
+       Write-Host "Can't remove $user, does not exist!" -ForegroundColor Red
+       exit 1
     }
-    Write-ConfigLog "Creating new user account $user"
+    
+    Write-Host "Creating new user account $user"
     $userAttr = "displayName: {0}
 userPrincipalName: {1}
 accountExpires: {2}" -f $user, $principalName, 129382848000000000
@@ -443,18 +472,29 @@ accountExpires: {2}" -f $user, $principalName, 129382848000000000
     $user = $KrbParams.Parameters.LocalRealm.User09.Username
     $password = $KrbParams.Parameters.LocalRealm.User09.Password
     $principalName = $user + '@' + $domain
-	Invoke-Command -ComputerName $server -ScriptBlock {"Get-ADDefaultDomainPasswordPolicy | Set-ADDefaultDomainPasswordPolicy -ComplexityEnabled $false -MinPasswordLength 6 -MaxPasswordAge 30.0 -LockoutThreshold 1 -LockoutObservationWindow 1.0 -LockoutDuration 365.0
-	gpupdate /force"}
-	
-    Write-ConfigLog "Creating new user account $user"
     try
     {
-        DeleteUser -server $server -domain $domain -userName $user
+	    Invoke-Command -ComputerName $server -ScriptBlock {"Get-ADDefaultDomainPasswordPolicy | Set-ADDefaultDomainPasswordPolicy -ComplexityEnabled $false -MinPasswordLength 6 -MaxPasswordAge 30.0 -LockoutThreshold 1 -LockoutObservationWindow 1.0 -LockoutDuration 365.0
+	    gpupdate /force"}  -ErrorAction Stop
+	}
+    catch [System.Exception]
+    {
+        Write-Host "Failed to Set-ADDefaultDomainPasswordPolicy on server: " + $server + " with error message: " $_.Exception.Message -ForegroundColor Red
+        exit 1
+    }
+
+    Write-Host "Creating new user account $user"
+
+    try
+    {
+        DeleteUser -server $server -domain $domain -userName $user 
     }
     catch
     {
-        Write-ConfigLog "Can't remove $user, does not exist!" -ForegroundColor Red
+        Write-Host "Can't remove $user, does not exist!" -ForegroundColor Red
+        exit 1
     }
+
     $userAttr = "displayName: {0}
 userPrincipalName: {1}" -f $user, $principalName
 	AddUser -server $server -domain $domain -userName $user -attributes $userAttr
@@ -465,27 +505,39 @@ userPrincipalName: {1}" -f $user, $principalName
     $wrongPwd = ConvertTo-SecureString $wrongPassword -AsPlainText -Force
     try
     {
-        ChangePassword -server $server -domain $domain -userName $user -password $wrongPassword
+        ChangePassword -server $server -domain $domain -userName $user -password $wrongPassword 
     }
     catch
     {
-        Write-ConfigLog "Successfully Locked the $user account" -ForegroundColor green
+       Write-Host "Failed to change password of the $user account" -ForegroundColor green
+       exit 1
     }
-    Invoke-Command -ComputerName $server -ScriptBlock {"Get-ADDefaultDomainPasswordPolicy | Set-ADDefaultDomainPasswordPolicy -ComplexityEnabled $true -MinPasswordLength 7 -MaxPasswordAge 42.0 -LockoutThreshold 0
-	gpupdate /force"}
+
+    try
+    {
+        Invoke-Command -ComputerName $server -ScriptBlock {"Get-ADDefaultDomainPasswordPolicy | Set-ADDefaultDomainPasswordPolicy -ComplexityEnabled $true -MinPasswordLength 7 -MaxPasswordAge 42.0 -LockoutThreshold 0
+	    gpupdate /force"} -ErrorAction Stop
+    }
+    catch [System.Exception]
+    {
+        Write-Host "Failed to Set-ADDefaultDomainPasswordPolicy on server: " + $server + " with error message: " $_.Exception.Message -ForegroundColor Red
+        exit 1
+    }
 
     $user = $KrbParams.Parameters.LocalRealm.User10.Username
     $password = $KrbParams.Parameters.LocalRealm.User10.Password
 	$principalName = $user + '@' + $domain
     try
     {
-        DeleteUser -server $server -domain $domain -userName $user
+        DeleteUser -server $server -domain $domain -userName $user 
     }
     catch
     {
-        Write-ConfigLog "Can't remove $user, does not exist!" -ForegroundColor Red
+       Write-Host "Can't remove $user, does not exist!" -ForegroundColor Red
+       exit 1
     }
-    Write-ConfigLog "Creating new user account $user"
+
+    Write-Host "Creating new user account $user"
     $userAttr = "displayName: {0}
 userPrincipalName: {1}
 description: {2}
@@ -499,13 +551,14 @@ logonHours:: {3}" -f $user, $principalName, "This user is set to be always out o
 	$principalName = $user + '@' + $domain
     try
     {
-        DeleteUser -server $server -domain $domain -userName $user
+        DeleteUser -server $server -domain $domain -userName $user 
     }
     catch
     {
-        Write-ConfigLog "Can't remove $user, does not exist!" -ForegroundColor Red
+       Write-Host "Can't remove $user, does not exist!" -ForegroundColor Red
+       exit 1
     }
-    Write-ConfigLog "Creating new user account $user"
+    Write-Host "Creating new user account $user"
 	$userAttr = "displayName: {0}
 userPrincipalName: {1}" -f $user, $principalName
 	AddUser -server $server -domain $domain -userName $user -attributes $userAttr
@@ -521,9 +574,11 @@ userPrincipalName: {1}" -f $user, $principalName
     }
     catch
     {
-        Write-ConfigLog "Can't remove $user, does not exist!" -ForegroundColor Red
+       Write-Host "Can't remove $user, does not exist!" -ForegroundColor Red
+       exit 1
     }
-    Write-ConfigLog "Creating new user account $user"
+
+    Write-Host "Creating new user account $user"
 	$userAttr = "displayName: {0}
 userPrincipalName: {1}" -f $user, $principalName
 	AddUser -server $server -domain $domain -userName $user -attributes $userAttr
@@ -539,9 +594,10 @@ userPrincipalName: {1}" -f $user, $principalName
     }
     catch
     {
-        Write-ConfigLog "Can't remove $user, does not exist!" -ForegroundColor Red
+       Write-Host "Can't remove $user, does not exist!" -ForegroundColor Red
+       exit 1
     }
-    Write-ConfigLog "Creating new user account $user"
+    Write-Host "Creating new user account $user"
 	$userAttr = "displayName: {0}
 userPrincipalName: {1}
 msDS-SupportedEncryptionTypes: {2}" -f $user, $principalName, 31
@@ -552,11 +608,12 @@ msDS-SupportedEncryptionTypes: {2}" -f $user, $principalName, 31
     $group = $KrbParams.Parameters.LocalRealm.User13.Group
     try
     {
-		DeleteADGroup -server $server -domain $domain -groupName $group
+		DeleteADGroup -server $server -domain $domain -groupName $group 
     }
     catch
     {
-        Write-ConfigLog "Can't remove $group, does not exist!" -ForegroundColor Red
+       Write-Host "Can't remove $group, does not exist!" -ForegroundColor Red
+       exit 1
     }
 	NewADGroup -server $server -domain $domain -groupName $group -groupType "Global"
 	
@@ -569,13 +626,15 @@ msDS-SupportedEncryptionTypes: {2}" -f $user, $principalName, 31
 	$principalName = $user + '@' + $domain
     try
     {
-		DeleteUser -server $server -domain $domain -userName $user
+		DeleteUser -server $server -domain $domain -userName $user 
     }
     catch
     {
-        Write-ConfigLog "Can't remove $user, does not exist!" -ForegroundColor Red
+       Write-Host "Can't remove $user, does not exist!" -ForegroundColor Red
+       exit 1
     }
-    Write-ConfigLog "Creating new user account $user"
+
+    Write-Host "Creating new user account $user"
 	$userAttr = "displayName: {0}
 userPrincipalName: {1}
 msDS-SupportedEncryptionTypes: {2}" -f $user, $principalName, 3
@@ -596,9 +655,10 @@ msDS-SupportedEncryptionTypes: {2}" -f $user, $principalName, 3
         }
         catch
         {
-            Write-ConfigLog "Can't remove $user, does not exist!" -ForegroundColor Red
+           Write-Host "Can't remove $user, does not exist!" -ForegroundColor Red
+           exit 1
         }
-        Write-ConfigLog "Creating new user account $user"
+        Write-Host "Creating new user account $user"
 		
 		$userAttr = "displayName: {0}
 msDS-SupportedEncryptionTypes: 3" -f $user
@@ -621,9 +681,10 @@ msDS-SupportedEncryptionTypes: 3" -f $user
         }
         catch
         {
-            Write-ConfigLog "Can't remove $user, does not exist!" -ForegroundColor Red
+           Write-Host "Can't remove $user, does not exist!" -ForegroundColor Red
+           exit 1
         }
-        Write-ConfigLog "Creating new user account $user"
+        Write-Host "Creating new user account $user"
 		$userAttr = "displayName: {0}
 msDS-SupportedEncryptionTypes: 3
 Department: {2}" -f $user, $etype, $department
@@ -647,9 +708,11 @@ Department: {2}" -f $user, $etype, $department
         }
         catch
         {
-            Write-ConfigLog "Can't remove $user, does not exist!" -ForegroundColor Red
+           Write-Host "Can't remove $user, does not exist!" -ForegroundColor Red
+           exit 1
         }
-        Write-ConfigLog "Creating new user account $user"
+
+        Write-Host "Creating new user account $user"
 		$userAttr = "displayName: {0}
 msDS-SupportedEncryptionTypes: 3" -f $user
 		AddUser -server $server -domain $domain -userName $user -attributes $userAttr
@@ -668,9 +731,11 @@ msDS-SupportedEncryptionTypes: 3" -f $user
         }
         catch
         {
-            Write-ConfigLog "Can't remove $user, does not exist!" -ForegroundColor Red
+           Write-Host "Can't remove $user, does not exist!" -ForegroundColor Red
+           exit 1
         }
-        Write-ConfigLog "Creating new user account $user"
+
+        Write-Host "Creating new user account $user"
 		$userAttr = "displayName: {0}
 msDS-SupportedEncryptionTypes: 31" -f $user
 		AddUser -server $server -domain $domain -userName $user -attributes $userAttr
@@ -688,9 +753,10 @@ msDS-SupportedEncryptionTypes: 31" -f $user
         }
         catch
         {
-            Write-ConfigLog "Can't remove $user, does not exist!" -ForegroundColor Red
+           Write-Host "Can't remove $user, does not exist!" -ForegroundColor Red
+           exit 1
         }
-        Write-ConfigLog "Creating new user account $user"
+        Write-Host "Creating new user account $user"
 		$userAttr = "displayName: {0}
 msDS-SupportedEncryptionTypes: 31
 Department: {2}" -f $user, $etype, $department
@@ -708,23 +774,24 @@ Department: {2}" -f $user, $etype, $department
 	$principalName = $user + '@' + $domain
     try
     {
-		DeleteUser -server $server -domain $domain -userName $user
+		DeleteUser -server $server -domain $domain -userName $user 
     }
     catch
     {
-        Write-ConfigLog "Can't remove $user, does not exist!" -ForegroundColor Red
+       Write-Host "Can't remove $user, does not exist!" -ForegroundColor Red
+       exit 1
     }
-    Write-ConfigLog "Creating new user account $user"
+
+    Write-Host "Creating new user account $user"
 	$userAttr = "displayName: {0}
 userPrincipalName: {1}" -f $user, $principalName
 	AddUser -server $server -domain $domain -userName $user -attributes $userAttr
 	ChangePassword -server $server -domain $domain -userName $user -password $password
-    UpdateAccountControl -server $server -domain $domain -userName $user -userAccountControl 66048 
-
+    UpdateAccountControl -server $server -domain $domain -userName $user -userAccountControl 66048
     #-----------------------------------------------------------------------------------------------
     # Add AD Computer Accounts on DC01 for Kerberos test suite
     #-----------------------------------------------------------------------------------------------
-    Write-ConfigLog "Adding AD computer accounts..."
+   Write-Host "Adding AD computer accounts..."
 
     $userNetBiosName = $KrbParams.Parameters.LocalRealm.AuthNotRequired.NetBiosName
     $userFQDN = $KrbParams.Parameters.LocalRealm.AuthNotRequired.FQDN
@@ -736,15 +803,17 @@ userPrincipalName: {1}" -f $user, $principalName
     }
     catch
     {
-        Write-ConfigLog "Can't remove $user, does not exist!" -ForegroundColor Red
+       Write-Host "Can't remove $user, does not exist!" -ForegroundColor Red
+       exit 1
     }
-    Write-ConfigLog "Creating new computer account $user"
+
+    Write-Host "Creating new computer account $user"
     $attrs = "servicePrincipalName: http/$userFQDN
 servicePrincipalName: cifs/$userFQDN"
 	NewADComputer -server $server -domain $domain -computerName $user -attributes $attrs
 	ChangeComputerPassword -server $server -domain $domain -computerName $user -password $password
 
-	Write-ConfigLog "Configure $user to Pre-AuthenticationNotRequired"
+	Write-Host "Configure $user to Pre-AuthenticationNotRequired"
     $serverName = $KrbParams.Parameters.LocalRealm.KDC.FQDN
     $objectDN = "DC=" + $Domain.Replace(".", ",DC=")
     $userName = $KrbParams.Parameters.LocalRealm.Administrator.Username
@@ -757,13 +826,15 @@ servicePrincipalName: cifs/$userFQDN"
     $password = $KrbParams.Parameters.LocalRealm.LocalResource01.Password
     try
     {
-		DeleteADComputer -server $server -domain $domain -computerName $user
+		DeleteADComputer -server $server -domain $domain -computerName $user 
     }
     catch
     {
-        Write-ConfigLog "Can't remove $user, does not exist!" -ForegroundColor Red
+       Write-Host "Can't remove $user, does not exist!" -ForegroundColor Red
+       exit 1
     }
-    Write-ConfigLog "Creating new computer account $user"
+
+    Write-Host "Creating new computer account $user"
 	$attrs = "servicePrincipalName: host/$userFQDN"
 	NewADComputer -server $server -domain $domain -computerName $user -attributes $attrs
 	ChangeComputerPassword -server $server -domain $domain -computerName $user -password $password
@@ -774,13 +845,15 @@ servicePrincipalName: cifs/$userFQDN"
     $password = $KrbParams.Parameters.LocalRealm.LocalResource02.Password
     try
     {
-		DeleteADComputer -server $server -domain $domain -computerName $user
+		DeleteADComputer -server $server -domain $domain -computerName $user 
     }
     catch
     {
-        Write-ConfigLog "Can't remove $user, does not exist!" -ForegroundColor Red
+       Write-Host "Can't remove $user, does not exist!" -ForegroundColor Red
+       exit 1
     }
-    Write-ConfigLog "Creating new computer account $user"
+
+    Write-Host "Creating new computer account $user"
 	$attrs = "servicePrincipalName: host/$userFQDN
 msDS-SupportedEncryptionTypes: 524288"
 	NewADComputer -server $server -domain $domain -computerName $user -attributes $attrs
@@ -788,7 +861,7 @@ msDS-SupportedEncryptionTypes: 524288"
 
     $user = $KrbParams.Parameters.LocalRealm.ClientComputer.NetBiosName
     $password = $KrbParams.Parameters.LocalRealm.ClientComputer.Password
-    Write-ConfigLog "Set $user as trusted for delegation"
+    Write-Host "Set $user as trusted for delegation"
 
     if([double]$osVersion -ge [double]$os2012R2)
     {    
@@ -797,7 +870,7 @@ msDS-SupportedEncryptionTypes: 524288"
         $user = $KrbParams.Parameters.LocalRealm.FileShare.NetBiosName
         $password = $KrbParams.Parameters.LocalRealm.FileShare.Password
         $PWD = ConvertTo-SecureString $password -AsPlainText -Force
-        Write-ConfigLog "Set $user as trusted for delegation"
+       Write-Host "Set $user as trusted for delegation"
         Set-ADAccountControl -Identity $user -TrustedForDelegation $true
         Set-ADComputer -Identity $user -AuthenticationPolicy ComputerRestrictedPolicy
     }
@@ -809,17 +882,19 @@ msDS-SupportedEncryptionTypes: 524288"
     #-----------------------------------------------------------------------------------------------
     # Define Local Resource Groups
     #-----------------------------------------------------------------------------------------------
-    Write-ConfigLog "Defining local resource groups..."
+   Write-Host "Defining local resource groups..."
 
     $group = $KrbParams.Parameters.LocalRealm.ResourceGroup01.GroupName
     try
     {
-		DeleteADGroup -server $server -domain $domain -groupName $group
+		DeleteADGroup -server $server -domain $domain -groupName $group 
     }
     catch
     {
-        Write-ConfigLog "Can't remove $group, does not exist!" -ForegroundColor Red
+       Write-Host "Can't remove $group, does not exist!" -ForegroundColor Red
+       exit 1
     }
+
 	NewADGroup -server $server -domain $domain -groupName $group -groupType "DomainLocal"
 	
     $user = $KrbParams.Parameters.LocalRealm.LocalResource01.Name
@@ -837,11 +912,12 @@ msDS-SupportedEncryptionTypes: 524288"
     $group = $KrbParams.Parameters.LocalRealm.ResourceGroup02.GroupName
     try
     {
-		DeleteADGroup -server $server -domain $domain -groupName $group
+		DeleteADGroup -server $server -domain $domain -groupName $group 
     }
     catch
     {
-        Write-ConfigLog "Can't remove $group, does not exist!" -ForegroundColor Red
+       Write-Host "Can't remove $group, does not exist!" -ForegroundColor Red
+       exit 1
     }
 	
 	NewADGroup -server $server -domain $domain -groupName $group -groupType "DomainLocal"
@@ -868,13 +944,15 @@ Function ConfigUsersAndComputers_DC02([string]$server, [xml]$KrbParams)
 
     try
     {
-		DeleteUser -server $server -domain $domain -userName $user
+		DeleteUser -server $server -domain $domain -userName $user 
     }
     catch
     {
-        Write-ConfigLog "Can't remove $user, does not exist!" -ForegroundColor Red
+       Write-Host "Can't remove $user, does not exist!" -ForegroundColor Red
+       exit 1
     }
-    Write-ConfigLog "Creating new user account $user"
+
+    Write-Host "Creating new user account $user"
 	$principalName = $user + '@' + $domain
 	$userAttr = "displayName: {0}
 userPrincipalName: {1}
@@ -890,12 +968,14 @@ msDS-SupportedEncryptionTypes: {6}" -f $user, $principalName, "c:\home\", "c:", 
     $group = $KrbParams.Parameters.TrustRealm.User01.Group
     try
     {
-		DeleteADGroup -server $server -domain $domain -groupName $group
+		DeleteADGroup -server $server -domain $domain -groupName $group 
     }
     catch
     {
-        Write-ConfigLog "Can't remove $group, does not exist!" -ForegroundColor Red
+       Write-Host "Can't remove $group, does not exist!" -ForegroundColor Red
+       exit 1
     }
+
 	NewADGroup -server $server -domain $domain -groupName $group -groupType "Global"
 	
     $member = "member: cn=$user,cn=users,DC=" + $domain.Replace(".", ",DC=")
@@ -904,15 +984,18 @@ msDS-SupportedEncryptionTypes: {6}" -f $user, $principalName, "c:\home\", "c:", 
     $user = $KrbParams.Parameters.TrustRealm.User02.Username
     $password = $KrbParams.Parameters.TrustRealm.User02.Password
     $pwd = ConvertTo-SecureString $password -AsPlainText -Force
+
     try
     {
-		DeleteUser -server $server -domain $domain -userName $user
+		DeleteUser -server $server -domain $domain -userName $user 
     }
     catch
     {
-        Write-ConfigLog "Can't remove $user, does not exist!" -ForegroundColor Red
+       Write-Host "Can't remove $user, does not exist!" -ForegroundColor Red
+       exit 1
     }
-    Write-ConfigLog "Creating new user account $user"
+
+    Write-Host "Creating new user account $user"
 	$principalName = $user + '@' + $Domain
 $userAttr = "displayName: {0}
 description: {1}
@@ -921,3 +1004,82 @@ userPrincipalName: {2}" -f $user, "MS-KILE", $principalName
 	AddUser -server $server -domain $domain -userName $user -attributes $userAttr
     UpdateAccountControl -server $server -domain $domain -userName $user -userAccountControl 66048
 }
+
+Function CheckAndInstallADFSFeature
+{
+    # Windows 10 1809 build
+    $1809Build = "17763"
+    # Windows 10 1903 build
+    $1903Build = "18362"
+    # Get running Windows build
+    $WindowsBuild = (Get-WmiObject -Class Win32_OperatingSystem).BuildNumber
+    # Getting executing directory - considering including the source files for RSAT to be installed from local source
+    #$runningDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
+     try {
+        if (($WindowsBuild -eq $1809Build) -OR ($WindowsBuild -ge $1903Build)) {
+            Write-Host -Verbose "Running correct Windows 10 build number for installing RSAT with Features on Demand. Build number is: $WindowsBuild"
+   
+            Write-Host -Verbose "Script is installing all available RSAT features"
+            $Install = Get-WindowsCapability -Online | Where-Object {$_.Name -like "Rsat*" -AND $_.State -eq "NotPresent"}
+            if ($Install -ne $null) {
+                foreach ($Item in $Install) {
+                    $RsatItem = $Item.Name
+
+                    Write-Host -Verbose "Adding $RsatItem to Windows"
+                    try 
+                    {
+                        Add-WindowsCapability -Online -Name $RsatItem -ErrorAction Stop
+                    }
+                    catch [System.Exception]
+                    {
+                        Write-Host "Failed to add $RsatItem to Windows: " + $_.Exception.Message -ForegroundColor Red
+                        exit 1
+                    }
+                }
+            }
+            else {
+                Write-Host -Verbose "All RSAT features seems to be installed already"
+            }    
+        }
+        else
+        {
+            Write-Warning -Message "The script can only install RSAT feature for Windows 10 build 17763 and 18362."
+            Write-Warning -Message "For other OS version, please install or enable RSAT feature manually before you run this script, otherwise you will get some failures."
+        }
+    }
+    catch [System.Exception]
+    {
+        Write-Host "Failed to check and install ADFS feature:" + $_.Exception.Message -ForegroundColor Red
+       
+        exit 1
+    }
+}
+
+# Check for administrative rights
+
+if (-NOT([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
+    Write-Warning -Message "The script requires administrative previleges."
+    break
+}   
+
+# Start to config DC01 remotely
+if(Test-Path -Path $dataFile)
+{
+    [xml]$Script:Params = Get-Content -Path $dataFile 
+	[xml]$configFile = Get-Content -Path $dataFile
+	$LocalRealmKDCFQDN = $configFile.Parameters.LocalRealm.KDC.FQDN
+        
+    CheckAndInstallADFSFeature
+
+    ConfigUsersAndComputers_DC01 -server $LocalRealmKDCFQDN -KrbParams $Script:KrbParams 
+
+    Write-Host "Config users and computers on DC01 is finished."
+
+    exit 0
+}
+else
+{
+    Write-Error "$dataFile is not found."
+    exit 1
+}    
+
