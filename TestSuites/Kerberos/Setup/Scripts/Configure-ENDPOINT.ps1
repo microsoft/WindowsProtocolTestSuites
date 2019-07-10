@@ -27,7 +27,7 @@ Param
 
     [string]$WorkingPath = "C:\temp" 
 )
-$newEnvPath=$env:Path+";.\;"
+$newEnvPath=$env:Path+";.\;.\scripts\"
 $env:Path=$newEnvPath
 
 #------------------------------------------------------------------------------------------
