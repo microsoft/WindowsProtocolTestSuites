@@ -86,10 +86,8 @@ Function CheckAndInstallNetFx3{
         return $true;
     }
     else{
-        Write-Host ".NET Framework 3.5 is unenabled. Enabling this feature now."
+        Write-Host ".NET Framework 3.5 is not enabled. Enabling this feature now."
         try{
-
-            DISM.EXE /Online /Add-Capability /CapabilityName:NetFx3~~~~
             Add-WindowsCapability –Online -Name NetFx3~~~~
             Write-Host ".NET Framework 3.5 is already enabled."
             return $true
