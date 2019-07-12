@@ -183,7 +183,7 @@ namespace Microsoft.Protocols.TestManager.Detector
         public List<DetectingItem> GetDetectionSteps()
         {
             List<DetectingItem> DetectingItems = new List<DetectingItem>();
-            DetectingItems.Add(new DetectingItem("Detect Target SUT Connection", DetectingStatus.Pending, LogStyle.Default));
+            DetectingItems.Add(new DetectingItem("Ping Target SUT", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Fetch Local Network Info", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Fetch Smb2 Info", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Check the Credential", DetectingStatus.Pending, LogStyle.Default));
@@ -212,7 +212,7 @@ namespace Microsoft.Protocols.TestManager.Detector
                 detectionInfo.securityPackageType);
 
             // Terminate the whole detection if any exception happens in the following processes
-            if (!DetectSUTConnection(detector))
+            if (!PingSUT(detector))
                 return false;
 
             if (!DetectLocalNetworkInfo(detector))
@@ -829,13 +829,13 @@ namespace Microsoft.Protocols.TestManager.Detector
 
         #region Helper functions for Detecting SUT Info
 
-        private bool DetectSUTConnection(FSDetector detector)
+        private bool PingSUT(FSDetector detector)
         {
-            logWriter.AddLog(LogLevel.Information, "===== Detect Target SUT Connection=====");
+            logWriter.AddLog(LogLevel.Information, "===== Ping Target SUT =====");
 
             try
             {
-                detectionInfo.networkInfo = detector.DetectSUTConnection();
+                detectionInfo.networkInfo = detector.PingTargetSUT();
             }
             catch (Exception ex)
             {
