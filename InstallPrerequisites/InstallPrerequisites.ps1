@@ -11,6 +11,7 @@
     The Category is used to specify which set of tools need to be downloaded and installed, based on different test suite names, such as "FileServer", Categories are defined in PrerequisitesConfig.xml
     and you can update this configure file to achieve your requirement.
     Currently we support the following Categories:
+    * BuildTestSuites (choose this category if you want to build the test suites from source code. To build the test suites of ADFamily/MS-AZOD/MS-ADOD, you need to choose the specific test suite name and run InstallPrerequisites.ps1 again.)
     * FileServer
     * Kerberos
     * SMB
@@ -25,6 +26,7 @@
     The ConfigPath is used to specify prerequisites configure file path, default value is ".\PrerequisitesConfig.xml".
 
 .EXAMPLE
+    When you want to run the File Server test suite, type the command below:
     C:\PS>.\InstallPrerequisites.ps1 -Category 'FileServer' -ConfigPath ".\PrerequisitesConfig.xml"
     The PS script will get all tools defined under FileServer node in PrerequisitesConfig.xml, then download and install these tools.
 #>
@@ -37,29 +39,13 @@ Param
     [String]$ConfigPath
 )
 
+# ==========================
+# Global Variable 
+# ==========================
 
-if(-not $ConfigPath)
-{
-	Write-Host "Use the default value '.\PrerequisitesConfig.xml' as ConfigPath is not set"
-	$ConfigPath = ".\PrerequisitesConfig.xml"
-}
+# The path where the Visual Studio will be installed
+$VSInstallationPath = "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community"
 
-$psVer = [int](Get-Host).Version.ToString().Substring(0,1)
-
-if($psVer -lt 4)
-{
-    Write-Host "Powershell 4 or later is required for Github downloading." -ForegroundColor Red
-    Write-Host "Please install WMF 4.0 from https://www.microsoft.com/en-us/download/details.aspx?id=40855 before running this script."
-    exit
-}
-
-[double] $OsVer = [System.Environment]::OSVersion.Version.Build
-
-if($OsVer -lt "7601")
-{
-    Write-Host "Windows 7 SP1 and later is required for running this script." -ForegroundColor Red
-    exit
-}
 
 # Check if application is installed on current machine.
 Function CheckIfAppInstalled
@@ -106,6 +92,32 @@ Function CheckIfAppInstalled
 		}
 		return $false;
     }
+}
+
+# Check if the specified Visual Studio Extension is installed.
+Function CheckIfVSExtensionInstalled
+{
+    Param(
+        [string]$AppName, # App name
+        [string]$DllName  # The Dll name of the extension. It can be found in the .vsix file if you change it to .zip and unzip it.
+    )
+
+    # The DllName should not be empty, otherwise we cannot check if the extension is installed or not.
+    if ($DllName -eq $null -or $DllName -eq "")
+    {
+        Write-Host "DllName of $AppName in PrerequisitesConfig.xml should not be empty if the tool is a VS extension." -ForegroundColor Yellow
+        return $false # Install the extension anyway
+    }
+
+    # Search the dll name in the extension folder of VS installation path.
+    # If the dll name can be found, then the extension is installed.  
+    $DllPath = Get-ChildItem -Path $VSInstallationPath\Common7\IDE\Extensions -Filter $DllName -Recurse
+    if(-not $DllPath)
+    {
+        return $false
+    }
+
+    return $true
 }
 
 # Mount ISO and return application path searched from ISO
@@ -171,7 +183,7 @@ Function GetDownloadTools{
     Write-Host "Get information of all the Prerequisite tools from Configure file"
     foreach($item in $toolXML.Dependency.tools.tool)
     {
-        $tool = '' | select Name,FileName,AppName,Version,URL,Arguments,InstallFileName,NeedRestart,BackwardCompatible
+        $tool = '' | select Name,FileName,AppName,DllName,Version,URL,Arguments,InstallFileName,NeedRestart,BackwardCompatible
 
         $tool.Name = $item.name;
         $tool.FileName = $item.FileName;
@@ -179,6 +191,8 @@ Function GetDownloadTools{
         $tool.Version = $item.version;
         $tool.URL = $item.url;
         $tool.InstallFileName = $item.InstallFileName;
+        $tool.DllName = $item.DllName
+        
         $tool.NeedRestart = $false
 		$tool.BackwardCompatible = $true
 		
@@ -261,29 +275,24 @@ Function DownloadAndInstallApplication
     $content = "Installing " + $AppItem.Name + ". Please wait..."
     Write-Host $content
 
+    $FLAGS  = $AppItem.Arguments
+    $ExitCode = 0
     if ($item.Name.ToLower().Equals("vs2017community"))
-    {        
-        cmd.exe /C "InstallVs2017Community.cmd $OutputPath"
+    {   
+        # Wait untill VS installation is finished, then install the other tools.     
+        $ExitCode = (Start-Process -FilePath InstallVs2017Community.cmd -ArgumentList "$OutputPath `"$($VSInstallationPath)`"" -Wait -PassThru).ExitCode  
     }    
+    elseif ($item.Name.ToLower().Contains("extension") -and $item.Name.ToLower().Contains("vs"))
+    {
+        # Install VS extension
+        $ExitCode = (Start-Process -FILEPATH "$VSInstallationPath\Common7\IDE\vsixinstaller.exe" -ArgumentList "$OutputPath $FLAGS" -Wait -PassThru).ExitCode
+    }
     else
     {
-        $FLAGS  = $AppItem.Arguments
         $ExitCode = (Start-Process -FILEPATH "$env:systemroot\system32\msiexec.exe" -ArgumentList "/i $OutputPath $FLAGS /passive" -Wait -PassThru).ExitCode
         if ($ExitCode -NE 0)
         {
             $ExitCode = (Start-Process -FILEPATH $OutputPath $FLAGS -Wait -PassThru).ExitCode
-        }
-        
-        if ($ExitCode -EQ 0)
-        {
-            $content = "Application " + $AppItem.Name +" is successfully installed on current machine"
-            Write-Host $content -ForegroundColor Green
-        }
-        else
-        {
-            $failedList += $AppItem.Name
-            $content = "Installing " + $AppItem.Name +" failed, Error Code:" + $ExitCode
-            Write-Host "ERROR $ExitCode"; 
         }
 
         # If the file is ISO, unmount it.
@@ -292,6 +301,45 @@ Function DownloadAndInstallApplication
             UnmountDisk -AppPath $OutputPath
         }
     }
+
+    if ($ExitCode -EQ 0)
+    {
+        $content = $AppItem.Name +" is successfully installed on current machine"
+        Write-Host $content -ForegroundColor Green
+    }
+    else
+    {
+        $failedList += $AppItem.Name
+        $content = "Install " + $AppItem.Name +" failed, Error Code:" + $ExitCode
+        Write-Host "ERROR $ExitCode"; 
+    }    
+}
+
+# ================================
+# Script starts here
+# ================================
+
+if(-not $ConfigPath)
+{
+	Write-Host "Use the default value '.\PrerequisitesConfig.xml' as ConfigPath is not set"
+	$ConfigPath = ".\PrerequisitesConfig.xml"
+}
+
+$psVer = [int](Get-Host).Version.ToString().Substring(0,1)
+
+if($psVer -lt 4)
+{
+    Write-Host "Powershell 4 or later is required for Github downloading." -ForegroundColor Red
+    Write-Host "Please install WMF 4.0 from https://www.microsoft.com/en-us/download/details.aspx?id=40855 before running this script."
+    exit
+}
+
+[double] $OsVer = [System.Environment]::OSVersion.Version.Build
+
+if($OsVer -lt "7601")
+{
+    Write-Host "Windows 7 SP1 and later is required for running this script." -ForegroundColor Red
+    exit
 }
 
 $AllProtocols = [System.Net.SecurityProtocolType]'Ssl3,Tls,Tls11,Tls12'
@@ -307,7 +355,15 @@ $IsNeedRestart = $false;
 foreach($item in $downloadList)
 {
     $isInstalled = $false;
-    $isInstalled = CheckIfAppInstalled -AppName $item.AppName -Version $item.version -Compatible $item.BackwardCompatible
+    if ($item.Name.ToLower().Contains("vs") -and $item.Name.ToLower().Contains("extension"))
+    {
+        $isInstalled = CheckIfVSExtensionInstalled -AppName $item.AppName -DllName $item.DllName
+    }
+    else
+    {
+        $isInstalled = CheckIfAppInstalled -AppName $item.AppName -Version $item.version -Compatible $item.BackwardCompatible
+    }
+
     if(-not $isInstalled)
     {
         $content = "Application: " +$item.AppName + " is not installed"

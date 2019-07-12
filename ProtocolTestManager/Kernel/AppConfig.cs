@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using Microsoft.Win32;
+using Microsoft.VisualStudio.Setup.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -262,55 +262,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             config.TestSetting = doc.DocumentElement.SelectSingleNode("TestSetting").InnerText.Trim();
 
             //Config Test Engine
-            RegistryKey HKLM = Registry.LocalMachine;
-            RegistryKey[] vsRegPathList;
-            if (Environment.Is64BitProcess)
-            {
-                // 32-bit and 64-bit
-                vsRegPathList = new RegistryKey[]
-                {
-                    HKLM.OpenSubKey(StringResource.Vs2017RegPath32),
-                    HKLM.OpenSubKey(StringResource.Vs2017RegPath64)
-                };
-            }
-            else
-            {
-                // 32-bit only
-                vsRegPathList = new RegistryKey[]
-                {
-                    HKLM.OpenSubKey(StringResource.Vs2017RegPath32),
-                };
-            }
-            foreach (var vsRegPath in vsRegPathList)
-            {
-                if (vsRegPath != null)
-                {
-                    var vs2017Path = vsRegPath.GetValue("15.0");
-                    if (vs2017Path != null)
-                    {
-                        string registryKeyName = vs2017Path.ToString();
-                        if (String.IsNullOrEmpty(registryKeyName))
-                        {
-                            // no match entry
-                            continue;
-                        }
-                        string vspath;
-                        if (File.Exists(vspath = Path.Combine(registryKeyName, StringResource.VSTestLocation)))
-                        {
-                            config.VSTestPath = vspath;
-                        }
-                        else
-                        {
-                            throw new Exception(StringResource.VSTestNotInstalled);
-                        }
-                    }
-                }
-            }
-
-            if (config.VSTestPath == null)
-            {
-                throw new Exception(StringResource.VSTestNotInstalled);
-            }
+            config.VSTestPath = LocateVSTestEngine();
 
             config.VSTestArguments = "";
             foreach (string singleDllpath in config.TestSuiteAssembly)
@@ -400,6 +352,53 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 }
             }
             return config;
+        }
+
+        private static string LocateVSTestEngine()
+        {
+            bool foundVSTest = false;
+
+            var query = new SetupConfiguration();
+
+            var enumInstances = query.EnumAllInstances();
+
+            while (true)
+            {
+                int count;
+                var instances = new ISetupInstance[1];
+                enumInstances.Next(1, instances, out count);
+                if (count == 0)
+                {
+                    break;
+                }
+                string vspath = instances[0].GetInstallationPath();
+                if (!String.IsNullOrEmpty(vspath))
+                {
+                    string vstest = Path.Combine(vspath, StringResource.VSTestLocation);
+                    if (File.Exists(vstest))
+                    {
+                        // Found test engine.
+                        foundVSTest = true;
+
+                        string htmltestlogger = Path.Combine(vspath, StringResource.HtmlTestLoggerLocation);
+                        if (File.Exists(htmltestlogger))
+                        {
+                            // Found html test logger.
+                            return vstest;
+                        }
+                    }
+                }
+            }
+
+            if (foundVSTest == false)
+            {
+                // vstest Not found.
+                throw new Exception(StringResource.VSTestNotInstalled);
+            }
+            else
+            {
+                throw new Exception(StringResource.HtmlTestLoggerNotInstalled);
+            }
         }
 
         private void InitFolders(string testSuiteDir, string installDir)

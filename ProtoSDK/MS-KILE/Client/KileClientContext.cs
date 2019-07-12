@@ -184,8 +184,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                                 if (paData.padata_type != null
                                     && paData.padata_type.Value == (long)PaDataType.PA_ETYPE_INFO2)
                                 {
-                                    Asn1DecodingBuffer buffer = new Asn1DecodingBuffer(paData.padata_value.ByteArrayValue);
-                                    ETYPE_INFO2 eTypeInfo2 = new ETYPE_INFO2();
+                                    var buffer = new Asn1DecodingBuffer(paData.padata_value.ByteArrayValue);
+                                    var eTypeInfo2 = new ETYPE_INFO2();
                                     eTypeInfo2.BerDecode(buffer);
                                     if (eTypeInfo2.Elements != null && eTypeInfo2.Elements.Length > 0)
                                     {

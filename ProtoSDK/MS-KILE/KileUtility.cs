@@ -172,7 +172,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <returns>The completed token.</returns>
         internal static byte[] AddGssApiTokenHeader(byte[] tokenBody)
         {
-            List<byte> gssDataList = new List<byte>();
+            var gssDataList = new List<byte>();
             gssDataList.Add(ConstValue.KERBEROS_TAG);
 
             // kerberos oid (1.2.840.113554.1.2.2)
@@ -192,7 +192,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 // 8 bits per octet, most significant digit first. [rfc 2743]
                 int temp = length;
                 int index = 1;
-                List<byte> lengthList = new List<byte>();
+                var lengthList = new List<byte>();
                 lengthList.Add((byte)(temp & 0xFF));
                 while ((temp >>= 8) != 0)
                 {
@@ -324,7 +324,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 return null;
             }
 
-            List<KerberosString> kerberosStringList = new List<KerberosString>();
+            var kerberosStringList = new List<KerberosString>();
             foreach (string source in sourceString)
             {
                 if (source != null)
@@ -333,7 +333,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 }
             }
 
-            Asn1SequenceOf<KerberosString> seqString = new Asn1SequenceOf<KerberosString>(kerberosStringList.ToArray());
+            var seqString = new Asn1SequenceOf<KerberosString>(kerberosStringList.ToArray());
             return seqString;
         }
 
@@ -385,8 +385,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <returns>The bytes generated.</returns>
         internal static byte[] GenerateRandomBytes(uint size)
         {
-            byte[] randomBytes = new byte[size];
-            Random random = new Random(DateTime.Now.Millisecond);
+            var randomBytes = new byte[size];
+            var random = new Random(DateTime.Now.Millisecond);
             random.NextBytes(randomBytes);
             return randomBytes;
         }
@@ -409,8 +409,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                       (int)KeyUsageNumber.AS_REP_TicketAndTGS_REP_Ticket);
 
             // Decode the ticket.
-            Asn1DecodingBuffer decodeBuffer = new Asn1DecodingBuffer(clearText);
-            EncTicketPart encTicketPart = new EncTicketPart();
+            var decodeBuffer = new Asn1DecodingBuffer(clearText);
+            var encTicketPart = new EncTicketPart();
             encTicketPart.BerDecode(decodeBuffer);
 
             return encTicketPart.authorization_data;
@@ -434,13 +434,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                       (int)KeyUsageNumber.AS_REP_TicketAndTGS_REP_Ticket);
 
             // Decode the ticket.
-            Asn1DecodingBuffer decodeBuffer = new Asn1DecodingBuffer(clearText);
-            EncTicketPart encTicketPart = new EncTicketPart();
+            var decodeBuffer = new Asn1DecodingBuffer(clearText);
+            var encTicketPart = new EncTicketPart();
             encTicketPart.BerDecode(decodeBuffer);
 
             // Set with new authorization data
             encTicketPart.authorization_data = authorizationData;
-            Asn1BerEncodingBuffer ticketBerBuffer = new Asn1BerEncodingBuffer();
+            var ticketBerBuffer = new Asn1BerEncodingBuffer();
             encTicketPart.BerEncode(ticketBerBuffer, true);
 
             byte[] cipherData = KileUtility.Encrypt(
@@ -627,8 +627,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <returns>The computed result.</returns>
         internal static byte[] RC4(byte[] key, byte[] data)
         {
-            RC4CryptoServiceProvider rc4Enc = new RC4CryptoServiceProvider();
-            byte[] result = new byte[data.Length];
+            var rc4Enc = new RC4CryptoServiceProvider();
+            var result = new byte[data.Length];
             ICryptoTransform rc4Encrypt = rc4Enc.CreateEncryptor(key, null);
             rc4Encrypt.TransformBlock(data, 0, data.Length, result, 0);
             return result;
@@ -683,14 +683,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             // checksum is calculated over the combined data, and the first 8 bytes
             // of the result are stored in the SGN_CKSUM field.
 
-            byte[] reversedKey = new byte[key.Length];
+            var reversedKey = new byte[key.Length];
             Array.Copy(key, reversedKey, reversedKey.Length);
             Array.Reverse(reversedKey);
             byte[] preData = DesCbcEncrypt(reversedKey, new byte[ConstValue.DES_BLOCK_SIZE], new byte[16]);
 
             byte[] result = ArrayUtility.ConcatenateArrays(preData, data);
 
-            MD5CryptoServiceProvider md5CryptoServiceProvider = new MD5CryptoServiceProvider();
+            var md5CryptoServiceProvider = new MD5CryptoServiceProvider();
             byte[] md5 = md5CryptoServiceProvider.ComputeHash(result);
             return md5;
         }
@@ -706,7 +706,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security.Cryptography", "CA5351:DESCannotBeUsed")]       
         internal static byte[] DesCbcMac(byte[] key, byte[] iv, byte[] data)
         {
-            DESCryptoServiceProvider desEncrypt = new DESCryptoServiceProvider();
+            var desEncrypt = new DESCryptoServiceProvider();
             desEncrypt.IV = iv;
             desEncrypt.Key = key;
             desEncrypt.Mode = CipherMode.CBC;
@@ -728,7 +728,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security.Cryptography", "CA5351:DESCannotBeUsed")]               
         internal static byte[] DesCbcEncrypt(byte[] key, byte[] iv, byte[] data)
         {
-            DESCryptoServiceProvider desEncrypt = new DESCryptoServiceProvider();
+            var desEncrypt = new DESCryptoServiceProvider();
             desEncrypt.IV = iv;
             desEncrypt.Key = key;
             desEncrypt.Mode = CipherMode.CBC;
@@ -749,7 +749,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security.Cryptography", "CA5351:DESCannotBeUsed")]               
         internal static byte[] DesCbcDecrypt(byte[] key, byte[] iv, byte[] data)
         {
-            DESCryptoServiceProvider desDecrypt = new DESCryptoServiceProvider();
+            var desDecrypt = new DESCryptoServiceProvider();
             desDecrypt.IV = iv;
             desDecrypt.Key = key;
             desDecrypt.Mode = CipherMode.CBC;
@@ -809,15 +809,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (securityBuffers == null)
             {
-                throw new ArgumentNullException("securityBuffers");
+                throw new ArgumentNullException(nameof(securityBuffers));
             }
-            byte[] message = new byte[0];
+            var message = new byte[0];
 
             for (int i = 0; i < securityBuffers.Length; i++)
             {
                 if (securityBuffers[i] == null)
                 {
-                    throw new ArgumentNullException("securityBuffers");
+                    throw new ArgumentNullException(nameof(securityBuffers));
                 }
                 SecurityBufferType securityBufferType = (securityBuffers[i].BufferType & ~SecurityBufferType.AttrMask);
 
