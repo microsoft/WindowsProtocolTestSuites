@@ -32,7 +32,7 @@ jobs:
 
   steps:
   - script: 'git clone --single-branch --progress -b $(test.helperBranch) %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
-    displayName: 'Fetch externel repo'
+    displayName: 'Fetch external repo'
     env:
       EXTREPO_URL: $(extRepo.url)
       EXTREPO_DIR: $(extRepo.dir)
