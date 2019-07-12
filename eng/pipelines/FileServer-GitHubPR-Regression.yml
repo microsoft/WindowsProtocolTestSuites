@@ -3,9 +3,6 @@ pr:
     exclude:
       - '*'
 
-pool:
-  name: Azure Agents
-
 variables:
   - group: Azure Account
   - group: External Repo Variables
@@ -15,39 +12,47 @@ variables:
   - name: test.helperBranch
     value: $(extRepo.branchName)
 
-steps:
-- script: 'git clone --single-branch --progress -b $(test.helperBranch) %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
-  displayName: 'Fetch external repo'
-  env:
-    EXTREPO_URL: $(extRepo.url)
-    EXTREPO_DIR: $(extRepo.dir)
+jobs:
+- job:
+  displayName: Run Azure regression
+  pool: 
+    name: Azure Agents
+  workspace:
+    clean: all
 
-- task: PowerShell@2
-  displayName: 'Download build from share'
-  inputs:
-    targetType: filePath
-    filePath: '$(extRepo.dir)/AzureScripts/Download-TestsuiteFromShare.ps1'
-    arguments: '-BuildShareFolder $(test.buildShareFolder) -TestSuiteName $(test.testSuiteName) -RegressionType Azure'
+  steps:
+  - script: 'git clone --single-branch --progress -b $(test.helperBranch) %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
+    displayName: 'Fetch external repo'
+    env:
+      EXTREPO_URL: $(extRepo.url)
+      EXTREPO_DIR: $(extRepo.dir)
 
-- task: PowerShell@2
-  displayName: 'Run regression'
-  inputs:
-    targetType: filePath
-    filePath: '$(extRepo.dir)/RunRegression/AzureScripts/Run-TestSuiteRegression.ps1'
-    arguments: '-TestSuiteName $(test.testSuiteName) -EnvironmentName $(test.environmentName)'
-  env:
-    AZURE_STORAGEACCOUNTKEY: $(azure.storageAccountKey)
+  - task: PowerShell@2
+    displayName: 'Download build from share'
+    inputs:
+      targetType: filePath
+      filePath: '$(extRepo.dir)/AzureScripts/Download-TestsuiteFromShare.ps1'
+      arguments: '-BuildShareFolder $(test.buildShareFolder) -TestSuiteName $(test.testSuiteName) -RegressionType Azure'
 
-- task: PublishTestResults@2
-  displayName: 'Publish trx files'
-  inputs:
-    testResultsFormat: VSTest
-    testResultsFiles: '$(extRepo.dir)/RunRegression/TestResults/*.trx'
-    failTaskOnFailedTests: true
-  condition: always()
+  - task: PowerShell@2
+    displayName: 'Run regression'
+    inputs:
+      targetType: filePath
+      filePath: '$(extRepo.dir)/RunRegression/AzureScripts/Run-TestSuiteRegression.ps1'
+      arguments: '-TestSuiteName $(test.testSuiteName) -EnvironmentName $(test.environmentName)'
+    env:
+      AZURE_STORAGEACCOUNTKEY: $(azure.storageAccountKey)
 
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish report'
-  inputs:
-    PathtoPublish: '$(extRepo.dir)/RunRegression/TestResults'
-  condition: always()
+  - task: PublishTestResults@2
+    displayName: 'Publish trx files'
+    inputs:
+      testResultsFormat: VSTest
+      testResultsFiles: '$(extRepo.dir)/RunRegression/TestResults/*.trx'
+      failTaskOnFailedTests: true
+    condition: always()
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish report'
+    inputs:
+      PathtoPublish: '$(extRepo.dir)/RunRegression/TestResults'
+    condition: always()
