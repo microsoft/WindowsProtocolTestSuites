@@ -94,8 +94,7 @@ Function CheckAndInstallNetFx3{
         }
         catch
         {
-            Write-Host "Failed to install .Net Framework 3.5."  -ForegroundColor Red
-            Write-Host "Please install .NET 3.5 manually after the script finished."  -ForegroundColor Yellow
+            Write-Host "Failed to enable .Net Framework 3.5."  -ForegroundColor Red
             return $false
         }
     }
@@ -445,8 +444,7 @@ foreach($item in $downloadList)
             $netfx3Status= CheckAndInstallNetFx3
             if(!$netfx3Status)
             {
-                Write-Host ".NET 3.5 cannot be installed successfully. The Wix installation will be skipped."  -ForegroundColor Red
-                Write-Host "Please install .NET 3.5 and Wix manually."  -ForegroundColor Red
+                Write-Host "The Wix installation will be skipped because of .NET 3.5 is not enabled successfully."  -ForegroundColor Red
                 continue
             }
         }
