@@ -113,53 +113,35 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             logWriter.AddLineToLog(LogLevel.Information);
         }
 
-        public NetworkInfo DetectSUTConnection()
+        public NetworkInfo PingTargetSUT()
         {
             NetworkInfo networkInfo = new NetworkInfo();
-            IPAddress address;
-            //Detect SUT IP address by SUT name
-            //If SUT name is an ip address, skip to resolve, use the ip address directly
-            try
+            IPAddress[] addList = Dns.GetHostAddresses(sutName);
+
+            if (null == addList)
             {
-
-                if (IPAddress.TryParse(sutName, out address))
-                {
-                    networkInfo.SUTIpList.Add(address);
-                }
-                else //DNS resolve the SUT IP address by SUT name
-                {
-                    IPAddress[] addList = Dns.GetHostAddresses(sutName);
-
-                    if (null == addList)
-                    {
-                        logWriter.AddLog(LogLevel.Error, string.Format("The SUT name {0} is incorrect.", SUTName));
-                    }
-
-                    networkInfo.SUTIpList = new List<IPAddress>();
-                    logWriter.AddLog(LogLevel.Information, "IP addresses returned from Dns.GetHostAddresses:");
-                    foreach (var item in addList)
-                    {
-                        logWriter.AddLog(LogLevel.Information, item.ToString());
-                        if (item.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                        {
-                            networkInfo.SUTIpList.Add(item);
-                        }
-                    }
-
-                    if (networkInfo.SUTIpList.Count == 0)
-                    {
-                        logWriter.AddLog(LogLevel.Error, string.Format("No available IP address resolved for target SUT {0}.", SUTName));
-                    }
-                }
-                DetermineSUTIPAddress(networkInfo.SUTIpList.ToArray());
-
-                return networkInfo;
+                logWriter.AddLog(LogLevel.Error, string.Format("The SUT name {0} is incorrect.", SUTName));
             }
-            catch
+
+            networkInfo.SUTIpList = new List<IPAddress>();
+            logWriter.AddLog(LogLevel.Information, "IP addresses returned from Dns.GetHostAddresses:");
+            foreach (var item in addList)
             {
-                logWriter.AddLog(LogLevel.Error, string.Format("Detect Target SUT connection failed with SUT name: {0}.", SUTName));
-                return null;
+                logWriter.AddLog(LogLevel.Information, item.ToString());
+                if (item.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                {
+                    networkInfo.SUTIpList.Add(item);
+                }
             }
+
+            if (networkInfo.SUTIpList.Count == 0)
+            {
+                logWriter.AddLog(LogLevel.Error, string.Format("No available IP address on target SUT {0}.", SUTName));
+            }
+
+            DetermineSUTIPAddress(networkInfo.SUTIpList.ToArray());
+
+            return networkInfo;
         }
 
         private void DetermineSUTIPAddress(IPAddress[] ips)
