@@ -51,14 +51,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         [CLSCompliant(false)]
         public KileApResponse CreateApResponse(EncryptionKey subkey)
         {
-            KileApResponse response = new KileApResponse(Context);
+            var response = new KileApResponse(Context);
 
             // Set AP_REP
             response.Response.msg_type = new Asn1Integer((int)MsgType.KRB_AP_RESP);
             response.Response.pvno = new Asn1Integer(ConstValue.KERBEROSV5);
 
             // Set EncAPRepPart
-            EncAPRepPart apEncPart = new EncAPRepPart();
+            var apEncPart = new EncAPRepPart();
             apEncPart.ctime = Context.Time;
             apEncPart.cusec = Context.Cusec;
             apEncPart.subkey = subkey;
@@ -85,11 +85,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (domain == null)
             {
-                throw new ArgumentNullException("domain");
+                throw new ArgumentNullException(nameof(domain));
             }
             if (cName == null)
             {
-                throw new ArgumentNullException("cName");
+                throw new ArgumentNullException(nameof(cName));
             }
             string salt;
 
@@ -135,7 +135,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 return null;
             }
 
-            List<AuthorizationDataElement> authList = new List<AuthorizationDataElement>();
+            var authList = new List<AuthorizationDataElement>();
             for (int i = 0; i < authData.Length; ++i)
             {
                 if (authData[i] == null)
@@ -147,7 +147,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 {
                     case AuthorizationData_elementType.AD_AUTH_DATA_AP_OPTIONS:
                         AdAuthDataApOptions auth = (AdAuthDataApOptions)authData[i];
-                        AuthorizationDataElement[] element = new AuthorizationDataElement[1];
+                        var element = new AuthorizationDataElement[1];
                         element[0] = new AuthorizationDataElement(new KerbInt32((int)auth.AdType),
                             new Asn1OctetString("0x" + auth.Options.ToString("x")));
 
@@ -168,7 +168,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                         entry.restriction = machineId;
                             //new LSAP_TOKEN_INFO_INTEGRITY(new KerbUInt32(kerbAuth.Flags),
                             //                              new KerbUInt32(kerbAuth.TokenIL), machineId);
-                        Asn1BerEncodingBuffer entryBuffer = new Asn1BerEncodingBuffer();
+                        var entryBuffer = new Asn1BerEncodingBuffer();
                         entry.BerEncode(entryBuffer, true);
                         authList.Add(new AuthorizationDataElement(new KerbInt32((int)kerbAuth.AdType), new Asn1OctetString(entryBuffer.Data)));
                         break;
@@ -185,7 +185,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 }
             }
 
-            AuthorizationData authorizationData = new AuthorizationData();
+            var authorizationData = new AuthorizationData();
             if (authList.Count > 0)
             {
                 authorizationData.Elements = authList.ToArray();
@@ -213,10 +213,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (machineId == null)
             {
-                throw new ArgumentNullException("machineId");
+                throw new ArgumentNullException(nameof(machineId));
             }
 
-            KerbAuthDataTokenRestrictions authData = new KerbAuthDataTokenRestrictions();
+            var authData = new KerbAuthDataTokenRestrictions();
             authData.AdType = AuthorizationData_elementType.KERB_AUTH_DATA_TOKEN_RESTRICTIONS;
             authData.RestrictionType = restrictionType;
             authData.Flags = flags;
@@ -234,7 +234,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         [CLSCompliant(false)]
         public AdAuthDataApOptions ConstructAdAuthDataApOptions(uint options)
         {
-            AdAuthDataApOptions authData = new AdAuthDataApOptions();
+            var authData = new AdAuthDataApOptions();
             authData.AdType = AuthorizationData_elementType.AD_AUTH_DATA_AP_OPTIONS;
             authData.Options = options;
             return authData;
@@ -252,10 +252,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (pacData == null)
             {
-                throw new ArgumentNullException("pacData");
+                throw new ArgumentNullException(nameof(pacData));
             }
 
-            PacAuthData authData = new PacAuthData();
+            var authData = new PacAuthData();
             authData.AdType = AuthorizationData_elementType.AD_IF_RELEVANT;
             authData.Data = pacData;
             return authData;
@@ -282,7 +282,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 return null;
             }
 
-            List<PA_DATA> paList = new List<PA_DATA>();
+            var paList = new List<PA_DATA>();
 
             for (int i = 0; i < paData.Length; ++i)
             {
@@ -299,8 +299,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                         if (paTimeStamp.TimeStamp != null)
                         {
                             // create a timestamp
-                            PA_ENC_TS_ENC paEncTsEnc = new PA_ENC_TS_ENC(new KerberosTime(paTimeStamp.TimeStamp), new Microseconds(paTimeStamp.Usec));
-                            Asn1BerEncodingBuffer currTimeStampBuffer = new Asn1BerEncodingBuffer();
+                            var paEncTsEnc = new PA_ENC_TS_ENC(new KerberosTime(paTimeStamp.TimeStamp), new Microseconds(paTimeStamp.Usec));
+                            var currTimeStampBuffer = new Asn1BerEncodingBuffer();
                             paEncTsEnc.BerEncode(currTimeStampBuffer);
 
                             // encrypt the timestamp
@@ -313,7 +313,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                             // create an encrypted timestamp
                             PA_ENC_TIMESTAMP paEncTimeStamp =
                                 new PA_ENC_TIMESTAMP(new KerbInt32((int)paTimeStamp.Type), null, new Asn1OctetString(encTimeStamp));
-                            Asn1BerEncodingBuffer paEncTimestampBuffer = new Asn1BerEncodingBuffer();
+                            var paEncTimestampBuffer = new Asn1BerEncodingBuffer();
                             paEncTimeStamp.BerEncode(paEncTimestampBuffer, true);
 
                             paList.Add(new PA_DATA(new KerbInt32((int)paTimeStamp.PaType), new Asn1OctetString(paEncTimestampBuffer.Data)));
@@ -328,7 +328,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                         PaEtypeInfo paInfo = (PaEtypeInfo)paData[i];
                         if (paInfo.TypeList != null && paInfo.TypeList.Count > 0)
                         {
-                            ETYPE_INFO_ENTRY[] etypeInfo = new ETYPE_INFO_ENTRY[paInfo.TypeList.Count];
+                            var etypeInfo = new ETYPE_INFO_ENTRY[paInfo.TypeList.Count];
 
                             for (int j = 0; j < paInfo.TypeList.Count; ++j)
                             {
@@ -336,11 +336,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                                                                     new Asn1OctetString(salt));
                             }
 
-                            ETYPE_INFO etype = new ETYPE_INFO(etypeInfo);
+                            var etype = new ETYPE_INFO(etypeInfo);
                             
-                            //Asn1DerEncodeBuffer etypeBuffer = new Asn1DerEncodeBuffer();
+                            //var etypeBuffer = new Asn1DerEncodeBuffer();
                             //etype.Encode(etypeBuffer);
-                            Asn1BerEncodingBuffer etypeBuffer = new Asn1BerEncodingBuffer();
+                            var etypeBuffer = new Asn1BerEncodingBuffer();
                             etype.BerEncode(etypeBuffer);
 
                             paList.Add(new PA_DATA(new KerbInt32((int)paInfo.PaType), new Asn1OctetString(etypeBuffer.Data)));
@@ -352,7 +352,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
 
                         if (paInfo2.TypeList != null && paInfo2.TypeList.Count > 0)
                         {
-                            ETYPE_INFO2_ENTRY[] etypeInfo = new ETYPE_INFO2_ENTRY[paInfo2.TypeList.Count];
+                            var etypeInfo = new ETYPE_INFO2_ENTRY[paInfo2.TypeList.Count];
 
                             for (int j = 0; j < paInfo2.TypeList.Count; ++j)
                             {
@@ -360,10 +360,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                                     new KerberosString((paInfo2.Salt == null) ? salt : paInfo2.Salt), null);
                             }
 
-                            ETYPE_INFO2 etype = new ETYPE_INFO2(etypeInfo);
-                            //Asn1DerEncodeBuffer etypeBuffer = new Asn1DerEncodeBuffer();
+                            var etype = new ETYPE_INFO2(etypeInfo);
+                            //var etypeBuffer = new Asn1DerEncodeBuffer();
                             //etype.Encode(etypeBuffer);
-                            Asn1BerEncodingBuffer etypeBuffer = new Asn1BerEncodingBuffer();
+                            var etypeBuffer = new Asn1BerEncodingBuffer();
                             etype.BerEncode(etypeBuffer);
 
                             paList.Add(new PA_DATA(new KerbInt32((int)paInfo2.PaType), new Asn1OctetString(etypeBuffer.Data)));
@@ -372,8 +372,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
 
                     case PaDataType.PA_PAC_REQUEST:
                         PaPacRequest paPac = (PaPacRequest)paData[i];
-                        KERB_PA_PAC_REQUEST paPacRequest = new KERB_PA_PAC_REQUEST(new Asn1Boolean(paPac.IncludePac));
-                        Asn1BerEncodingBuffer paPacBuffer = new Asn1BerEncodingBuffer();
+                        var paPacRequest = new KERB_PA_PAC_REQUEST(new Asn1Boolean(paPac.IncludePac));
+                        var paPacBuffer = new Asn1BerEncodingBuffer();
                         paPacRequest.BerEncode(paPacBuffer);
                         paList.Add(new PA_DATA(new KerbInt32((int)paPac.PaType), new Asn1OctetString(paPacBuffer.Data)));
                         break;
@@ -389,8 +389,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                                     KileUtility.String2SeqKerbString(paReferral.PrincipalName));
                             }
 
-                            PA_SVR_REFERRAL_DATA svrData = new PA_SVR_REFERRAL_DATA(principalName, new Realm(paReferral.Realm));
-                            Asn1BerEncodingBuffer svrBuffer = new Asn1BerEncodingBuffer();
+                            var svrData = new PA_SVR_REFERRAL_DATA(principalName, new Realm(paReferral.Realm));
+                            var svrBuffer = new Asn1BerEncodingBuffer();
                             svrData.BerEncode(svrBuffer);
                             paList.Add(new PA_DATA(new KerbInt32((int)paReferral.PaType), new Asn1OctetString(svrBuffer.Data)));
                         }
@@ -413,7 +413,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 }
             }
 
-            Asn1SequenceOf<PA_DATA> seqOfPaData = new Asn1SequenceOf<PA_DATA>();
+            var seqOfPaData = new Asn1SequenceOf<PA_DATA>();
             if (paList.Count > 0)
             {
                 seqOfPaData.Elements = paList.ToArray();
@@ -438,7 +438,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 return null;
             }
 
-            List<PaData> paList = new List<PaData>();
+            var paList = new List<PaData>();
 
             for (int i = 0; i < seqOfPaData.Elements.Length; i++)
             {
@@ -458,7 +458,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
 
                         // Decode PA_ENC_TIMESTAMP
                         decodeBuffer = new Asn1DecodingBuffer(paData.padata_value.ByteArrayValue);
-                        PA_ENC_TIMESTAMP paEncTimeStamp = new PA_ENC_TIMESTAMP();
+                        var paEncTimeStamp = new PA_ENC_TIMESTAMP();
                         paEncTimeStamp.BerDecode(decodeBuffer);
 
                         // Decrypt PA_ENC_TIMESTAMP
@@ -473,11 +473,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
 
                         // Decode PA_ENC_TS_ENC
                         decodeBuffer = new Asn1DecodingBuffer(encTimeStamp);
-                        PA_ENC_TS_ENC paEncTsEnc = new PA_ENC_TS_ENC();
+                        var paEncTsEnc = new PA_ENC_TS_ENC();
                         paEncTsEnc.BerDecode(decodeBuffer);
 
                         // Generate PaEncTimeStamp
-                        PaEncTimeStamp paTimeStamp = new PaEncTimeStamp();
+                        var paTimeStamp = new PaEncTimeStamp();
                         paTimeStamp.PaType = PaDataType.PA_ENC_TIMESTAMP;
                         paTimeStamp.Type = (EncryptionType)paEncTimeStamp.etype.Value;
                         paTimeStamp.TimeStamp = paEncTsEnc.patimestamp.Value;
@@ -495,11 +495,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
 
                         // Decode ETYPE_INFO
                         decodeBuffer = new Asn1DecodingBuffer(paData.padata_value.ByteArrayValue);
-                        ETYPE_INFO etypeInfo = new ETYPE_INFO();
+                        var etypeInfo = new ETYPE_INFO();
                         etypeInfo.BerDecode(decodeBuffer);
 
                         // Generate PaEtypeInfo
-                        PaEtypeInfo paEtypeInfo = new PaEtypeInfo();
+                        var paEtypeInfo = new PaEtypeInfo();
                         paEtypeInfo.PaType = PaDataType.PA_ETYPE_INFO;
                         paEtypeInfo.TypeList = new Collection<EncryptionType>();
 
@@ -526,11 +526,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
 
                         // Decode ETYPE_INFO2
                         decodeBuffer = new Asn1DecodingBuffer(paData.padata_value.ByteArrayValue);
-                        ETYPE_INFO2 etypeInfo2 = new ETYPE_INFO2();
+                        var etypeInfo2 = new ETYPE_INFO2();
                         etypeInfo2.BerDecode(decodeBuffer);
 
                         // Generate PaEtypeInfo2
-                        PaEtypeInfo2 paEtypeInfo2 = new PaEtypeInfo2();
+                        var paEtypeInfo2 = new PaEtypeInfo2();
                         paEtypeInfo2.PaType = PaDataType.PA_ETYPE_INFO2;
                         paEtypeInfo2.TypeList = new Collection<EncryptionType>();
 
@@ -557,11 +557,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
 
                         // Decode KERB_PA_PAC_REQUEST
                         decodeBuffer = new Asn1DecodingBuffer(paData.padata_value.ByteArrayValue);
-                        KERB_PA_PAC_REQUEST paPacRequest = new KERB_PA_PAC_REQUEST();
+                        var paPacRequest = new KERB_PA_PAC_REQUEST();
                         paPacRequest.BerDecode(decodeBuffer);
 
                         // Generate PaPacRequest
-                        PaPacRequest paPac = new PaPacRequest();
+                        var paPac = new PaPacRequest();
                         paPac.PaType = PaDataType.PA_PAC_REQUEST;
 
                         if (paPacRequest.include_pac != null)
@@ -576,11 +576,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
 
                         // Decode PA_SVR_REFERRAL_DATA
                         decodeBuffer = new Asn1DecodingBuffer(paData.padata_value.ByteArrayValue);
-                        PA_SVR_REFERRAL_DATA svrData = new PA_SVR_REFERRAL_DATA();
+                        var svrData = new PA_SVR_REFERRAL_DATA();
                         svrData.BerDecode(decodeBuffer);
 
                         // Generate PaSvrReferralInfo
-                        PaSvrReferralInfo paReferral = new PaSvrReferralInfo();
+                        var paReferral = new PaSvrReferralInfo();
                         paReferral.PaType = PaDataType.PA_SVR_REFERRAL_INFO;
                         paReferral.Realm = svrData.referred_realm.Value;
 
@@ -608,7 +608,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                     case PaDataType.PA_PK_AS_REQ_OLD:
 
                         // Generate PaPkcaData
-                        PaPkcaData pkcaData = new PaPkcaData();
+                        var pkcaData = new PaPkcaData();
                         pkcaData.PaType = (PaDataType)paData.padata_type.Value;
                         pkcaData.Data = paData.padata_value.ByteArrayValue; //paData.padata_valueValue;
 
@@ -632,7 +632,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <returns>PaEncTimeStamp</returns>
         public PaEncTimeStamp ConstructPaEncTimeStamp(EncryptionType encryptionType)
         {
-            PaEncTimeStamp paData = new PaEncTimeStamp();
+            var paData = new PaEncTimeStamp();
             paData.PaType = PaDataType.PA_ENC_TIMESTAMP;
             paData.Type = encryptionType;
             paData.TimeStamp = KileUtility.CurrentKerberosTime.Value;
@@ -701,10 +701,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (pkcaData == null)
             {
-                throw new ArgumentNullException("pkcaData");
+                throw new ArgumentNullException(nameof(pkcaData));
             }
 
-            PaPkcaData paData = new PaPkcaData();
+            var paData = new PaPkcaData();
             paData.PaType = paType;
             paData.Data = pkcaData;
             return paData;
@@ -718,7 +718,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <returns>PaPacRequest</returns>
         public PaPacRequest ConstructPaPacRequest(bool includePac)
         {
-            PaPacRequest paData = new PaPacRequest();
+            var paData = new PaPacRequest();
             paData.PaType = PaDataType.PA_PAC_REQUEST;
             paData.IncludePac = includePac;
             return paData;
@@ -737,7 +737,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             string principalName,
             string realm)
         {
-            PaSvrReferralInfo paData = new PaSvrReferralInfo();
+            var paData = new PaSvrReferralInfo();
             paData.PaType = PaDataType.PA_SVR_REFERRAL_INFO;
             paData.PrincipalName = principalName;
             paData.PrincipalType = principalType;
@@ -862,7 +862,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             {
                 case EncryptionType.AES128_CTS_HMAC_SHA1_96:
                 case EncryptionType.AES256_CTS_HMAC_SHA1_96:
-                    Token4121 token4121Pdu = new Token4121(context);
+                    var token4121Pdu = new Token4121(context);
                     token4121Pdu.FromSecurityBuffers(securityBuffers);
                     pdu = token4121Pdu;
                     break;
@@ -871,7 +871,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 case EncryptionType.DES_CBC_MD5:
                 case EncryptionType.RC4_HMAC:
                 case EncryptionType.RC4_HMAC_EXP:
-                    Token1964_4757 token1964or4757Pdu = new Token1964_4757(context);
+                    var token1964or4757Pdu = new Token1964_4757(context);
                     token1964or4757Pdu.FromSecurityBuffers(securityBuffers);
                     pdu = token1964or4757Pdu;
                     break;
@@ -957,7 +957,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             {
                 case EncryptionType.AES128_CTS_HMAC_SHA1_96:
                 case EncryptionType.AES256_CTS_HMAC_SHA1_96:
-                    Token4121 micPdu4121 = new Token4121(context);
+                    var micPdu4121 = new Token4121(context);
                     micPdu4121.Data = message;
                     try
                     {
@@ -974,7 +974,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 case EncryptionType.DES_CBC_MD5:
                 case EncryptionType.RC4_HMAC:
                 case EncryptionType.RC4_HMAC_EXP:
-                    Token1964_4757 micPdu1964_4757 = new Token1964_4757(context);
+                    var micPdu1964_4757 = new Token1964_4757(context);
                     micPdu1964_4757.Data = message;
                     try
                     {
@@ -1012,7 +1012,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             {
                 case EncryptionType.AES128_CTS_HMAC_SHA1_96:
                 case EncryptionType.AES256_CTS_HMAC_SHA1_96:
-                    Token4121 micPdu4121 = new Token4121(context);
+                    var micPdu4121 = new Token4121(context);
                     try
                     {
                         micPdu4121.FromSecurityBuffers(securityBuffers);
@@ -1028,7 +1028,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 case EncryptionType.DES_CBC_MD5:
                 case EncryptionType.RC4_HMAC:
                 case EncryptionType.RC4_HMAC_EXP:
-                    Token1964_4757 micPdu1964_4757 = new Token1964_4757(context);
+                    var micPdu1964_4757 = new Token1964_4757(context);
                     try
                     {
                         micPdu1964_4757.FromSecurityBuffers(securityBuffers);
@@ -1062,8 +1062,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <returns>The created Gss_Wrap token.</returns>
         private Token4121 GssWrap4121(bool isEncrypted, byte[] message, bool isInitiator)
         {
-            Token4121 token = new Token4121(Context);
-            TokenHeader4121 tokenHeader = new TokenHeader4121();
+            var token = new Token4121(Context);
+            var tokenHeader = new TokenHeader4121();
             tokenHeader.tok_id = TOK_ID.Wrap4121;
             tokenHeader.flags = isEncrypted ? WrapFlag.Sealed : WrapFlag.None;
             if (!isInitiator)
@@ -1099,8 +1099,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <returns>The created Gss_Wrap token.</returns>
         private Token1964_4757 GssWrap1964(bool isEncrypted, SGN_ALG signAlgorithm, byte[] message)
         {
-            Token1964_4757 token = new Token1964_4757(Context);
-            TokenHeader1964_4757 tokenHeader = new TokenHeader1964_4757();
+            var token = new Token1964_4757(Context);
+            var tokenHeader = new TokenHeader1964_4757();
             tokenHeader.tok_id = TOK_ID.Wrap1964_4757;
             tokenHeader.sng_alg = signAlgorithm;
             tokenHeader.seal_alg = isEncrypted ? SEAL_ALG.DES : SEAL_ALG.NONE;
@@ -1122,8 +1122,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <returns>The created Gss_Wrap token.</returns>
         private Token1964_4757 GssWrap4757(bool isEncrypted, SGN_ALG signAlgorithm, byte[] message)
         {
-            Token1964_4757 token = new Token1964_4757(Context);
-            TokenHeader1964_4757 tokenHeader = new TokenHeader1964_4757();
+            var token = new Token1964_4757(Context);
+            var tokenHeader = new TokenHeader1964_4757();
             tokenHeader.tok_id = TOK_ID.Wrap1964_4757;
             tokenHeader.sng_alg = signAlgorithm;
             tokenHeader.seal_alg = isEncrypted ? SEAL_ALG.RC4 : SEAL_ALG.NONE;
@@ -1144,8 +1144,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <returns>The created Gss_GetMic token.</returns>
         private Token4121 GssGetMic4121(byte[] message, bool isInitiator)
         {
-            Token4121 token = new Token4121(Context);
-            TokenHeader4121 tokenHeader = new TokenHeader4121();
+            var token = new Token4121(Context);
+            var tokenHeader = new TokenHeader4121();
             tokenHeader.tok_id = TOK_ID.Mic4121;
             tokenHeader.flags = WrapFlag.None;
             if (!isInitiator)
@@ -1178,8 +1178,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <returns>The created Gss_GetMic token.</returns>
         private Token1964_4757 GssGetMic1964_4757(SGN_ALG signAlgorithm, byte[] message)
         {
-            Token1964_4757 token = new Token1964_4757(Context);
-            TokenHeader1964_4757 tokenHeader = new TokenHeader1964_4757();
+            var token = new Token1964_4757(Context);
+            var tokenHeader = new TokenHeader1964_4757();
             tokenHeader.tok_id = TOK_ID.Mic1964_4757;
             tokenHeader.sng_alg = signAlgorithm;
             tokenHeader.seal_alg = SEAL_ALG.NONE;

@@ -88,7 +88,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to load the test suite configure file config.xml:
+        ///   Looks up a localized string similar to Failed to load the test suite:
         ///{0}.
         /// </summary>
         internal static string ConfigLoadError {
@@ -157,6 +157,24 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         internal static string FailedTag {
             get {
                 return ResourceManager.GetString("FailedTag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Common7\IDE\Extensions\TestPlatform\Extensions\Microsoft.Protocols.TestTools.Html.TestLogger.dll.
+        /// </summary>
+        internal static string HtmlTestLoggerLocation {
+            get {
+                return ResourceManager.GetString("HtmlTestLoggerLocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot find html test logger, try to reinstall Protocol Test Framework..
+        /// </summary>
+        internal static string HtmlTestLoggerNotInstalled {
+            get {
+                return ResourceManager.GetString("HtmlTestLoggerNotInstalled", resourceCulture);
             }
         }
         
@@ -326,24 +344,6 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         internal static string VSTestNotInstalled {
             get {
                 return ResourceManager.GetString("VSTestNotInstalled", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to \SOFTWARE\Microsoft\VisualStudio\\SxS\VS7.
-        /// </summary>
-        internal static string Vs2017RegPath32 {
-            get {
-                return ResourceManager.GetString("Vs2017RegPath32", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to \SOFTWARE\WOW6432Node\Microsoft\VisualStudio\SxS\VS7.
-        /// </summary>
-        internal static string Vs2017RegPath64 {
-            get {
-                return ResourceManager.GetString("Vs2017RegPath64", resourceCulture);
             }
         }
         

@@ -151,7 +151,7 @@
     <value>config.xml</value>
   </data>
   <data name="ConfigLoadError" xml:space="preserve">
-    <value>Failed to load the test suite configure file config.xml:
+    <value>Failed to load the test suite:
 {0}</value>
   </data>
   <data name="LoadAdapterError" xml:space="preserve">
@@ -216,10 +216,11 @@ The test suite is {2} {3}.</value>
   <data name="PassedTag" xml:space="preserve">
     <value>[TestPassed]</value>
   </data>
-  <data name="Vs2017RegPath32" xml:space="preserve">
-    <value>SOFTWARE\Microsoft\VisualStudio\\SxS\VS7</value>
+  <data name="HtmlTestLoggerLocation" xml:space="preserve">
+    <value>Common7\IDE\Extensions\TestPlatform\Extensions\Microsoft.Protocols.TestTools.Html.TestLogger.dll</value>
+    <comment>Relative path to the VS installation folder</comment>
   </data>
-  <data name="Vs2017RegPath64" xml:space="preserve">
-    <value>SOFTWARE\WOW6432Node\Microsoft\VisualStudio\SxS\VS7</value>
+  <data name="HtmlTestLoggerNotInstalled" xml:space="preserve">
+    <value>Cannot find html test logger, try to reinstall Protocol Test Framework.</value>
   </data>
 </root>

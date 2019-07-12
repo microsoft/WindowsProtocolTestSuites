@@ -264,11 +264,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
             //Config Test Engine
             config.VSTestPath = LocateVSTestEngine();
 
-            if (config.VSTestPath == null)
-            {
-                throw new Exception(StringResource.VSTestNotInstalled);
-            }
-
             config.VSTestArguments = "";
             foreach (string singleDllpath in config.TestSuiteAssembly)
             {
@@ -361,6 +356,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
         private static string LocateVSTestEngine()
         {
+            bool foundVSTest = false;
+
             var query = new SetupConfiguration();
 
             var enumInstances = query.EnumAllInstances();
@@ -381,13 +378,27 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     if (File.Exists(vstest))
                     {
                         // Found test engine.
-                        return vstest;
+                        foundVSTest = true;
+
+                        string htmltestlogger = Path.Combine(vspath, StringResource.HtmlTestLoggerLocation);
+                        if (File.Exists(htmltestlogger))
+                        {
+                            // Found html test logger.
+                            return vstest;
+                        }
                     }
                 }
             }
 
-            // Not found.
-            return null;
+            if (foundVSTest == false)
+            {
+                // vstest Not found.
+                throw new Exception(StringResource.VSTestNotInstalled);
+            }
+            else
+            {
+                throw new Exception(StringResource.HtmlTestLoggerNotInstalled);
+            }
         }
 
         private void InitFolders(string testSuiteDir, string installDir)
