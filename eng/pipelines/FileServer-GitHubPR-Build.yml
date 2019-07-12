@@ -31,7 +31,7 @@ jobs:
     clean: all
 
   steps:
-  - script: 'git clone --single-branch --progress -b $(extRepo.branchName) %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
+  - script: 'git clone --single-branch --progress -b $(test.helperBranch) %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
     displayName: 'Fetch externel repo'
     env:
       EXTREPO_URL: $(extRepo.url)
