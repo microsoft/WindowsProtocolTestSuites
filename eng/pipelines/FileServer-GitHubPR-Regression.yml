@@ -9,8 +9,11 @@ variables:
   - group: Azure Account
   - group: External Repo Variables
   - name: test.buildShareFolder
+    value: ''
   - name: test.environmentName
+    value: ''
   - name: test.testSuiteName
+    value: ''
   - name: test.helperBranch
     value: $(extRepo.branchName)
 
