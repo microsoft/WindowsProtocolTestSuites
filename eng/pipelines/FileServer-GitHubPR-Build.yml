@@ -44,7 +44,7 @@ jobs:
     inputs:
       targetType: filePath
       filePath: '$(extRepo.dir)/AzureScripts/Run-AzRegressionWithCSV.ps1'
-      arguments: '-TestSuiteName "FileServer" -EnvType "GitHub" -HelperBranch "$(test.helperBranch)" -NeedBuild -AccessToken "$(tokens.pipelineTriggerToken)" -BuildTag "$(test.buildTag)" -PipelineId $(test.downstreamPipelineId) -SubscriptionId "$(azure.subscriptionId)" -ResourceGroup "$(azure.resourceGroup)" -ApplicationId "$(azure.applicationId)" -ThumbPrint "$(azure.thumbPrint)" -TenantId "$(azure.tenantId)" -StorageAccount "$(azure.storageAccount)" -StorageShareName "$(azure.storageShareName)" -LocalRegressionShare "$(build.sharePath)" -FileShareResourceGroup "$(azure.fileShareResourceGroup)" -IsTriggeredFromGitHub $true'
+      arguments: '-TestSuiteName "FileServer" -EnvType "GitHub" -HelperBranch "$(test.helperBranch)" -NeedBuild -AccessToken "$(tokens.pipelineTriggerToken)" -BuildTag "$(test.buildTag)" -PipelineId $(test.downstreamPipelineId) -ApiUrl "$(build.apiUrl)" -SubscriptionId "$(azure.subscriptionId)" -ResourceGroup "$(azure.resourceGroup)" -ApplicationId "$(azure.applicationId)" -ThumbPrint "$(azure.thumbPrint)" -TenantId "$(azure.tenantId)" -StorageAccount "$(azure.storageAccount)" -StorageShareName "$(azure.storageShareName)" -LocalRegressionShare "$(build.sharePath)" -FileShareResourceGroup "$(azure.fileShareResourceGroup)" -IsTriggeredFromGitHub $true'
     env:
       BUILD_BUILDID: $(Build.BuildId)
       SMTP_SENDERPASSWORD: $(smtp.senderPassword)
