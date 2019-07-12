@@ -4,10 +4,10 @@ pr:
       - staging
   paths:
     include:
-      - TestSuite/FileServer/*
+      - TestSuites/FileServer/*
       - ProtoSDK/*
     exclude:
-      - TestSuite/FileServer/docs/*
+      - TestSuites/FileServer/docs/*
 
 pool:
   name: Azure Agents
@@ -16,7 +16,7 @@ variables:
   - group: Access Tokens
   - group: Azure Account
   - group: Build Variables
-  - group: Externel Repo Variables
+  - group: External Repo Variables
   - group: SMTP Account
   - name: test.buildTag
     value: FileServer-GitHubPR-Build-$(Build.BuildNumber)
