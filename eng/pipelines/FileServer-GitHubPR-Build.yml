@@ -9,9 +9,6 @@ pr:
     exclude:
       - TestSuites/FileServer/docs/*
 
-pool:
-  name: Azure Agents
-
 variables:
   - group: Access Tokens
   - group: Azure Account
@@ -25,37 +22,45 @@ variables:
   - name: test.helperBranch
     value: $(extRepo.branchName)
 
-steps:
-- script: 'git clone --single-branch --progress -b $(extRepo.branchName) %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
-  displayName: 'Fetch externel repo'
-  env:
-    EXTREPO_URL: $(extRepo.url)
-    EXTREPO_DIR: $(extRepo.dir)
+jobs:
+- job:
+  displayName: Run regression
+  pool: 
+    name: Azure Agents
+  workspace:
+    clean: all
 
-- task: PowerShell@2
-  displayName: 'Run regression script'
-  inputs:
-    targetType: filePath
-    filePath: '$(extRepo.dir)/AzureScripts/Run-AzRegressionWithCSV.ps1'
-    arguments: '-TestSuiteName FileServer -EnvType GitHub -HelperBranch $(test.helperBranch) -NeedBuild -AccessToken $(tokens.pipelineTriggerToken) -BuildTag $(test.buildTag) -PipelineId $(test.downstreamPipelineId) -SubscriptionId $(azure.subscriptionId) -ResourceGroup $(azure.resourceGroup) -ApplicationId $(azure.applicationId) -ThumbPrint $(azure.thumbPrint) -TenantId $(azure.tenantId) -StorageAccount $(azure.storageAccount) -StorageShareName $(azure.storageShareName) -LocalRegressionShare $(build.sharePath) -FileShareResourceGroup $(azure.fileShareResourceGroup) -IsTriggeredFromGitHub $true'
-  env:
-    BUILD_BUILDID: $(Build.BuildId)
-    SMTP_SENDERPASSWORD: $(smtp.senderPassword)
-    SMTP_SMTPHOST: $(smtp.smtpHost)
-    SMTP_SMTPPORT: $(smtp.smtpPort)
-    SMTP_SENDERUSER: $(smtp.senderUser)
-    SMTP_SENDTO: $(smtp.sendTo)
+  steps:
+  - script: 'git clone --single-branch --progress -b $(extRepo.branchName) %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
+    displayName: 'Fetch externel repo'
+    env:
+      EXTREPO_URL: $(extRepo.url)
+      EXTREPO_DIR: $(extRepo.dir)
 
-- task: PublishTestResults@2
-  displayName: 'Publish trx files'
-  inputs:
-    testResultsFormat: VSTest
-    testResultsFiles: '$(Build.Repository.LocalPath)/TestResults/*/*trx'
-    failTaskOnFailedTests: true
-  condition: always()
+  - task: PowerShell@2
+    displayName: 'Run regression script'
+    inputs:
+      targetType: filePath
+      filePath: '$(extRepo.dir)/AzureScripts/Run-AzRegressionWithCSV.ps1'
+      arguments: '-TestSuiteName FileServer -EnvType GitHub -HelperBranch $(test.helperBranch) -NeedBuild -AccessToken $(tokens.pipelineTriggerToken) -BuildTag $(test.buildTag) -PipelineId $(test.downstreamPipelineId) -SubscriptionId $(azure.subscriptionId) -ResourceGroup $(azure.resourceGroup) -ApplicationId $(azure.applicationId) -ThumbPrint $(azure.thumbPrint) -TenantId $(azure.tenantId) -StorageAccount $(azure.storageAccount) -StorageShareName $(azure.storageShareName) -LocalRegressionShare $(build.sharePath) -FileShareResourceGroup $(azure.fileShareResourceGroup) -IsTriggeredFromGitHub $true'
+    env:
+      BUILD_BUILDID: $(Build.BuildId)
+      SMTP_SENDERPASSWORD: $(smtp.senderPassword)
+      SMTP_SMTPHOST: $(smtp.smtpHost)
+      SMTP_SMTPPORT: $(smtp.smtpPort)
+      SMTP_SENDERUSER: $(smtp.senderUser)
+      SMTP_SENDTO: $(smtp.sendTo)
 
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish report'
-  inputs:
-    PathtoPublish: '$(Build.Repository.LocalPath)/TestResults'
-  condition: always()
+  - task: PublishTestResults@2
+    displayName: 'Publish trx files'
+    inputs:
+      testResultsFormat: VSTest
+      testResultsFiles: '$(Build.Repository.LocalPath)/TestResults/*/*trx'
+      failTaskOnFailedTests: true
+    condition: always()
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish report'
+    inputs:
+      PathtoPublish: '$(Build.Repository.LocalPath)/TestResults'
+    condition: always()
