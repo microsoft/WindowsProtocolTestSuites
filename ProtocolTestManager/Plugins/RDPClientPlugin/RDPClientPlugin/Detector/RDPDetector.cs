@@ -69,7 +69,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         #endregion Constructor
 
         #region Methods
-
+      
         /// <summary>
         /// Establish a RDP connection to detect RDP feature
         /// </summary>
