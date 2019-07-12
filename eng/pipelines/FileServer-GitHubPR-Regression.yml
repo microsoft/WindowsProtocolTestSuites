@@ -32,14 +32,14 @@ jobs:
     inputs:
       targetType: filePath
       filePath: '$(extRepo.dir)/AzureScripts/Download-TestsuiteFromShare.ps1'
-      arguments: '-BuildShareFolder $(test.buildShareFolder) -TestSuiteName $(test.testSuiteName) -RegressionType Azure'
+      arguments: '-BuildShareFolder "$(test.buildShareFolder)" -TestSuiteName "$(test.testSuiteName)" -RegressionType "Azure"'
 
   - task: PowerShell@2
     displayName: 'Run regression'
     inputs:
       targetType: filePath
       filePath: '$(extRepo.dir)/RunRegression/AzureScripts/Run-TestSuiteRegression.ps1'
-      arguments: '-TestSuiteName $(test.testSuiteName) -EnvironmentName $(test.environmentName)'
+      arguments: '-TestSuiteName "$(test.testSuiteName)" -EnvironmentName "$(test.environmentName)"'
     env:
       AZURE_STORAGEACCOUNTKEY: $(azure.storageAccountKey)
 
