@@ -216,7 +216,7 @@ This section provides information about how to set up a SUT for use with this te
 
 ### Set Up a Driver Computer
   This section provides information about how to set up a Driver Computer for use with this test suite.
-  * Log on to the SUT as administrator
+  * Log on to the Driver Computer as administrator
   * Rename the computer as Driver01  
   * Join the domain BLAH.ORG
   * After reboot, the domain join will finished
@@ -237,7 +237,7 @@ Run commands in PowerShell with administrator privilege:
 
   _Ktpass.exe  /princ service2/SUT01@BLAH.ORG /mapuser service1user /pass Password01! /out keytab.tab /ptype KRB5_NT_PRINCIPAL Crypto ALL /rawsalt {service2}_
 
-  _gpudate /force_
+  _gpupdate /force_
 
 ### Config Driver Computer and Run Test Cases
   ![important.png](./image/MS-SFU_ServerUserGuide/important.png)
