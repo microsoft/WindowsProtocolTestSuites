@@ -235,7 +235,7 @@
       <Description>The changed width of screen resolution.</Description>
     </Property>
     <!-- The changed height of screen resolution-->
-    <Property name="changedDekstopHeight" value="864">
+    <Property name="changedDesktopHeight" value="864">
       <Description>The changed height of screen resolution.</Description>
     </Property>
     <!-- The original number of screens-->
