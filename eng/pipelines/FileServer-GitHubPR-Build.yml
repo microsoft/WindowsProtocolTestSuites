@@ -31,6 +31,7 @@ jobs:
     name: Azure Agents
   workspace:
     clean: all
+  timeoutInMinutes: 0
 
   steps:
   - script: 'git clone --single-branch --progress -b $(test.helperBranch) %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
@@ -38,6 +39,7 @@ jobs:
     env:
       EXTREPO_URL: $(extRepo.url)
       EXTREPO_DIR: $(extRepo.dir)
+    timeoutInMinutes: 0
 
   - task: PowerShell@2
     displayName: 'Run regression script'
@@ -52,6 +54,7 @@ jobs:
       SMTP_SMTPPORT: $(smtp.smtpPort)
       SMTP_SENDERUSER: $(smtp.senderUser)
       SMTP_SENDTO: $(smtp.sendTo)
+    timeoutInMinutes: 0
 
   - task: PublishTestResults@2
     displayName: 'Publish trx files'
@@ -59,10 +62,12 @@ jobs:
       testResultsFormat: VSTest
       testResultsFiles: '$(Build.Repository.LocalPath)/TestResults/*/*trx'
       failTaskOnFailedTests: true
+    timeoutInMinutes: 0
     condition: always()
 
   - task: PublishBuildArtifacts@1
     displayName: 'Publish report'
     inputs:
       PathtoPublish: '$(Build.Repository.LocalPath)/TestResults'
+    timeoutInMinutes: 0
     condition: always()
