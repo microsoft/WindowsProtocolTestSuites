@@ -90,11 +90,7 @@
 
     <!-- Visual Studio dependency check-->
     <PropertyRef Id="VS2017_ROOT_FOLDER" />
-    <PropertyRef Id="VS2019_ROOT_FOLDER" />
     <Property Id="VSTEST">
-      <DirectorySearch Id="Vs2019VsTestSearch" Path="[VS2019_ROOT_FOLDER]\Common7\IDE\CommonExtensions\Microsoft\TestWindow\">
-        <FileSearch Name="vstest.console.exe" />
-      </DirectorySearch>
       <DirectorySearch Id="Vs2017VsTestSearch" Path="[VS2017_ROOT_FOLDER]\Common7\IDE\CommonExtensions\Microsoft\TestWindow\">
         <FileSearch Name="vstest.console.exe" />
       </DirectorySearch>
