@@ -118,7 +118,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         {
             List<DetectingItem> DetectingItems = new List<DetectingItem>();
             DetectingItems.Add(new DetectingItem("Detect Client HostName", DetectingStatus.Pending, LogStyle.Default));
-            DetectingItems.Add(new DetectingItem("Ping Target SUT", DetectingStatus.Pending, LogStyle.Default));
+            DetectingItems.Add(new DetectingItem("Detect Target SUT Connection", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Establish RDP Connection with SUT", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Check Specified features Support", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Check Specified Protocols Support", DetectingStatus.Pending, LogStyle.Default));
@@ -150,7 +150,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
                 DetectorUtil.WriteLog("Finished!", false, LogStyle.StepPassed);
 
-                if (!PingSUT())
+                if (!DetectSUTConnection())
                 {
                     return false;
                 }
@@ -261,58 +261,44 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
         #region Private Methods
 
-        private bool PingSUT()
+        private bool DetectSUTConnection()
         {
-            DetectorUtil.WriteLog("Ping Target SUT...");
+            DetectorUtil.WriteLog("===== Detect Target SUT Connection=====", true, LogStyle.Default);
 
-            Ping pingSender = new Ping();
-            PingOptions options = new PingOptions();
-
-            // Use the default TtL value which is 128,
-            // but change the fragmentation behavior.
-            options.DontFragment = true;
-
-            // Create a buffer of 32 bytes of data to be transmitted.
-            string data = "0123456789ABCDEF0123456789ABCDEF";
-            byte[] buffer = Encoding.ASCII.GetBytes(data);
-            IPAddress address;
-            if (!IPAddress.TryParse(config.ServerName, out address))
-            {
-                address = Dns.GetHostEntry(config.ServerName).AddressList.First();
-            }
-            int timeout = 5000;
-            bool result = false;
-            List<PingReply> replies = new List<PingReply>();
             try
             {
-                for (int i = 0; i < 4; i++)
+                IPAddress address;
+                //Detect SUT IP address by SUT name
+                //If SUT name is an ip address, skip to resolve, use the ip address directly
+                if (IPAddress.TryParse(detectionInfo.SUTName, out address))
                 {
-                    replies.Add(pingSender.Send(address, timeout, buffer, options));
+                    DetectorUtil.WriteLog( "Finished", true, LogStyle.StepPassed);                    
+                    return true;
                 }
+                else //DNS resolve the SUT IP address by SUT name
+                {
+                    IPAddress[] addList = Dns.GetHostAddresses(detectionInfo.SUTName);
 
+                    if (null == addList)
+                    {
+                        DetectorUtil.WriteLog( string.Format("The SUT name {0} cannot be resolved.", detectionInfo.SUTName), true, LogStyle.Error);
+                        DetectorUtil.WriteLog("Failed", true, LogStyle.StepFailed);
+                        return false;
+                    }
+                    else
+                    {
+                        DetectorUtil.WriteLog(string.Format("The SUT name {0} can be resolved as :", addList.ToString()),true, LogStyle.Default);
+                        DetectorUtil.WriteLog("Finished", true, LogStyle.StepPassed);                       
+                        return true;
+                    }
+                }
             }
             catch (Exception ex)
-            {
-                DetectorUtil.WriteLog(String.Format("PingSUT() threw exception: {0}", ex));
-
+            {                
+                DetectorUtil.WriteLog(ex.Message, true, LogStyle.StepFailed);
+                DetectorUtil.WriteLog("Failed", true, LogStyle.StepFailed);
                 return false;
             }
-            foreach (var reply in replies)
-            {
-                result |= (reply.Status == IPStatus.Success);
-            }
-            if (result)
-            {
-                DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
-                return true;
-            }
-            else
-            {
-                DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
-                DetectorUtil.WriteLog("Target SUT has no response.");
-                return false;
-            }
-
         }
 
         private CaseSelectRule CreateRule(string ruleCategoryName, bool? isSupported)
