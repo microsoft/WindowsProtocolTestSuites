@@ -120,7 +120,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "{0}. Create an Alternate Data Stream with name: " + dataStreamName1 + " on this file.", ++testStep);
             status = this.fsaAdapter.CreateFile(
                         fileName + ":" + dataStreamName1 + ":$DATA",
-                        FileAttribute.NORMAL | FileAttribute.INTEGRITY_STREAM, // Set Integrity field
+                        FileAttribute.NORMAL,
                         CreateOptions.NON_DIRECTORY_FILE,
                         FileAccess.GENERIC_ALL,
                         ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE | ShareAccess.FILE_SHARE_DELETE,
