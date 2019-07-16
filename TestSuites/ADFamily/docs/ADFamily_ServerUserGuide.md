@@ -239,8 +239,9 @@ This section is about how to set up a Windows-based the test environment.
 #### <a name="_Toc426644925"/>Set up the Primary Domain Controller (PDC)
 
 * Log on to the PDC computer as local administrator;
+* Download the ADFamily-TestSuite-ServerEP.msi from release page https://github.com/microsoft/WindowsProtocolTestSuites/releases. If there's no internet access from the PDC computer, download and copy the msi into the PDC computer.
 
-* Install the ADFamily_ServerTestSuite.msi, and choose **“Install and configure Windows System Under Test (SUT)”** in the “Select the endpoint you are installing on” page;
+* Install the ADFamily-TestSuite-ServerEP.msi, and choose **“Install and configure Windows System Under Test (SUT)”** in the “Select the endpoint you are installing on” page;
 
 * Go to C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\ &#60; version &#35;  &#62; \Scripts, and open the Protocol.xml file;
 
@@ -390,7 +391,9 @@ This section provides information about how to setup a Windows-based SDC for use
 
 * Log on to the SDC computer as local administrator;
 
-* Install the ADFamily_ServerTestSuite.msi, and choose **“Install and configure Windows System Under Test (SUT)”** in the “Select the endpoint you are installing on” page;
+* Download the ADFamily-TestSuite-ServerEP.msi from release page https://github.com/microsoft/WindowsProtocolTestSuites/releases. If there's no internet access from the SDC computer, download and copy the msi into the SDC computer.
+
+* Install the ADFamily-TestSuite-ServerEP.msi,  choose **“Install and configure Windows System Under Test (SUT)”** in the “Select the endpoint you are installing on” page;
 
 * Go to C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\ &#60; version &#35;  &#62; \Scripts, and open the Protocol.xml file;
 
@@ -459,7 +462,9 @@ This section provides information about how to setup a Windows-based RODC for us
 
 * Log on to the RODC computer as local administrator;
 
-* Install the ADFamily_ServerTestSuite.msi, and choose **“Install and configure Windows System Under Test (SUT)”** in the “Select the endpoint you are installing on” page;
+* Download the ADFamily-TestSuite-ServerEP.msi from release page https://github.com/microsoft/WindowsProtocolTestSuites/releases. If there's no internet access from the RODC computer, download and copy the msi into the RODC computer.
+
+* Install the ADFamily-TestSuite-ServerEP.msi, and choose **“Install and configure Windows System Under Test (SUT)”** in the “Select the endpoint you are installing on” page;
 
 * Go to C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\ &#60; version &#35;  &#62; \Scripts, and open the Protocol.xml file;
 
@@ -527,8 +532,9 @@ For Windows platform, refer to section [7.2.8](#_Toc426644940).
 This section provides information about how to setup a Windows-based CDC for use with this test suite.
 
 * Log on to the CDC computer as local administrator;
+* Download the ADFamily-TestSuite-ServerEP.msi from release page https://github.com/microsoft/WindowsProtocolTestSuites/releases. If there's no internet access from the CDC computer, download and copy the msi into the CDC computer.
 
-* Install the ADFamily_ServerTestSuite.msi, and choose **“Install and configure Windows System Under Test (SUT)”** in the “Select the endpoint you are installing on” page;
+* Install the ADFamily-TestSuite-ServerEP.msi, and choose **“Install and configure Windows System Under Test (SUT)”** in the “Select the endpoint you are installing on” page;
 
 * Go to C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\ &#60; version &#35;  &#62; \Scripts, and open the Protocol.xml file;
 
@@ -598,7 +604,9 @@ This section provides information about how to setup a Windows-based TDC for use
 
 * Log on to the TDC computer as local administrator;
 
-* Install the ADFamily_ServerTestSuite.msi, and choose **“Install and configure Windows System Under Test (SUT)”** in the “Select the endpoint you are installing on” page;
+* Download the ADFamily-TestSuite-ServerEP.msi from release page https://github.com/microsoft/WindowsProtocolTestSuites/releases. If there's no internet access from the TDC computer, download and copy the msi into the TDC computer.
+
+* Install the ADFamily-TestSuite-ServerEP.msi, and choose **“Install and configure Windows System Under Test (SUT)”** in the “Select the endpoint you are installing on” page;
 
 * Go to C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\ &#60; version &#35;  &#62; \Scripts, and open the Protocol.xml file;
 
@@ -669,7 +677,9 @@ This section provides information about how to setup a Windows-based DM for use 
 
 * Log on to the DM computer as local administrator;
 
-* Install the ADFamily_ServerTestSuite.msi, and choose **“Install and configure Windows System Under Test (SUT)”** in the “Select the endpoint you are installing on” page;
+* Download the ADFamily-TestSuite-ServerEP.msi from release page https://github.com/microsoft/WindowsProtocolTestSuites/releases. If there's no internet access from the DM computer, download and copy the msi into the DM computer.
+
+* Install the ADFamily-TestSuite-ServerEP.msi, and choose **“Install and configure Windows System Under Test (SUT)”** in the “Select the endpoint you are installing on” page;
 
 * Go to C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\ &#60; version &#35;  &#62; \Scripts, and open the Protocol.xml file;
 
@@ -726,7 +736,9 @@ This section provides information about how to setup a Windows-based Driver for 
 
 * Log on to the Driver computer as local administrator;
 
-* Install the ADFamily_ServerTestSuite.msi, and choose **“Install Test Suite on Driver Computer”** in the “Select the endpoint you are installing on” page;
+* Download the ADFamily-TestSuite-ServerEP.msi from release page https://github.com/microsoft/WindowsProtocolTestSuites/releases. If there's no internet access from the Driver computer, download and copy the msi into the Driver computer.
+
+* Install the ADFamily-TestSuite-ServerEP.msi, and choose **“Install Test Suite on Driver Computer”** in the “Select the endpoint you are installing on” page;
 
 * Go to C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\ &#60; version &#35;  &#62; \Scripts, and open the Protocol.xml file;
 
