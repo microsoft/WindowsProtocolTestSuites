@@ -5,10 +5,10 @@
 # and the client should use Direct Approach with TLS as the security protocol.
 
 # Check SUT started the PS Remoting
-$isSutPSRemotingStarted = .\Check-PSRemoting.ps1 $PtfPropSUTName
+$isSutPSRemotingStarted = .\Check-PSRemoting.ps1 $PtfProp_SUTName
 if(-not $isSutPSRemotingStarted) {return -1}
 
 # Run task to start RDP connection (Direct Tls) remotely
-$returnValue = .\Run-TaskWithPSRemoting.ps1 $PtfPropSUTName $PtfPropMaximizeRDPClientWindow_Task $PtfPropSUTUserName $PtfPropSUTUserPassword
+$returnValue = .\Run-TaskWithPSRemoting.ps1 $PtfProp_SUTName $PtfProp_MaximizeRDPClientWindow_Task $PtfProp_SUTUserName $PtfProp_SUTUserPassword
 return $returnValue
 

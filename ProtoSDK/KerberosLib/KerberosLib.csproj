@@ -135,6 +135,7 @@
     <Compile Include="Asn1Code\Spng\ContextFlags.cs" />
     <Compile Include="Asn1Code\Spng\InitialNegToken.cs" />
     <Compile Include="Asn1Code\Spng\InitialNegToken2.cs" />
+    <Compile Include="Asn1Code\Spng\KerberosMICToken.cs" />
     <Compile Include="Asn1Code\Spng\MechSpecInfo.cs" />
     <Compile Include="Asn1Code\Spng\MechType.cs" />
     <Compile Include="Asn1Code\Spng\MechTypeList.cs" />
@@ -189,6 +190,10 @@
     <ProjectReference Include="..\CryptoLib\CryptoLib.csproj">
       <Project>{BF6AFAF0-7592-467F-AD5C-18429D854057}</Project>
       <Name>CryptoLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Messages\Messages.csproj">
+      <Project>{75544419-3F4E-4308-A676-165F45C1462E}</Project>
+      <Name>Messages</Name>
     </ProjectReference>
     <ProjectReference Include="..\MS-PAC\Pac.csproj">
       <Project>{AEFAF10D-D1BF-44C4-BD9F-5CFF2AFA432F}</Project>

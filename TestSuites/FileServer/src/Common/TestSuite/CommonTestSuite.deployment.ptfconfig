@@ -63,7 +63,7 @@
           Computer name of system under test (SUT)
           If SUT does not have a computer name, set the value to SUT's IP address
         </Description>
-      </Property>
+      </Property>      
 
       <Property name="SutIPAddress" value="192.168.1.11" >
         <Description>
@@ -240,7 +240,7 @@
           If the server does not have a computer name, set it with IP address
           If it is not applicable, leave it blank
         </Description>
-      </Property>
+      </Property>      
 
       <Property name="ClientNic1IPAddress" value="192.168.1.111">
         <Description>
@@ -257,7 +257,7 @@
 
       <Property name="Platform" value="WindowsServer2016">
         <Choice>
-          NonWindows,WindowsServer2008,WindowsServer2008R2,WindowsServer2012,WindowsServer2012R2,WindowsServer2016,WindowsServerV1709,WindowsServerV1803,WindowsServer2019
+          NonWindows,WindowsServer2008,WindowsServer2008R2,WindowsServer2012,WindowsServer2012R2,WindowsServer2016,WindowsServerV1709,WindowsServerV1803,WindowsServer2019, WindowsServerV1903
         </Choice>
         <Description>
           Platform type of the SUT
@@ -312,6 +312,15 @@
       <Property name="MaxResiliencyTimeout" value="300000">
         <Description>
           Max Resiliencency Timeout in milliseconds
+        </Description>
+      </Property>
+
+      <Property name="SupportedCompressionAlgorithms" value="LZ77;LZ77Huffman;LZNT1">
+        <Description>
+          List all supported compression algorithms in order of preference from most to least.
+          Possible values: NONE, LZNT1, LZ77, LZ77Huffman.
+          Multiple values should be separated by semicolons.
+          If it is not applicable, leave it as blank or "NONE".
         </Description>
       </Property>
     </Group>

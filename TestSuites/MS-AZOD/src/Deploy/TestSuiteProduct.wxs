@@ -6,14 +6,14 @@
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Fragment>
-	
-	  <!-- Properties for "Add or Remove Program Entries" -->
+
+    <!-- Properties for "Add or Remove Program Entries" -->
     <SetProperty Id="PTF_BUILDVERSION" Value="$(env.PTF_VERSION)" Before="AppSearch" />
     <SetProperty Id="ARPCOMMENTS" Value="[ProductName] v[ProductVersion]" Before="AppSearch" />
     <Property Id="ARPCONTACT">Microsoft Winterop Engineering Team</Property>
     <!--Disables the Modify button in MaintenanceTypeDlg-->
     <Property Id="ARPNOMODIFY" Value="1" />
-	
+
     <!-- Search for saved TARGET_ENDPOINT, and assign to the actual property if uninstall/repair. -->
     <Property Id="SAVED_TARGET_ENDPOINT">
       <RegistrySearch Id="LoadTargetEndpoint"
@@ -22,10 +22,10 @@
                       Name="TargetEndpoint"
                       Type="raw" />
     </Property>
-	<SetProperty Id="TARGET_ENDPOINT" After="AppSearch" Value="[SAVED_TARGET_ENDPOINT]">
+    <SetProperty Id="TARGET_ENDPOINT" After="AppSearch" Value="[SAVED_TARGET_ENDPOINT]">
       Installed
     </SetProperty>
-	<Component Id="SaveTargetEndpoint" Guid="*" Directory="TESTSUITE_ROOT_DIR">
+    <Component Id="SaveTargetEndpoint" Guid="*" Directory="TESTSUITE_ROOT_DIR">
       <RegistryValue Id="SaveTargetEndpoint"
                      Root="HKLM"
                      Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_ENDPOINT)-!(wix.TESTSUITE_VERSION)"
@@ -53,7 +53,7 @@
       <!-- Optional Warning Dialog. -->
       <Publish Dialog="DependencyCheckWarningDlg" Control="Back" Event="NewDialog" Value="EndpointDlg">1</Publish>
       <Publish Dialog="DependencyCheckWarningDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
-	  
+
       <Publish Dialog="LicenseAgreementDlg" Control="Next" Event="NewDialog" Value="TestSuitePrivacyStatementDlg"><![CDATA[VersionMsi >= "5.00"]]></Publish>
       <Publish Dialog="TestSuitePrivacyStatementDlg" Control="Next" Event="NewDialog" Value="EndpointDlg">1</Publish>
       <Publish Dialog="TestSuitePrivacyStatementDlg" Control="Back" Event="NewDialog" Value="LicenseAgreementDlg" Order="2">Not Installed</Publish>
@@ -63,50 +63,40 @@
       <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="EndpointDlg">1</Publish>
       <Publish Dialog="MaintenanceTypeDlg" Control="ChangeButton" Event="NewDialog" Value="EndpointDlg">1</Publish>
     </UI>
-	
-	<!-- Dependency List -->
-	<SetProperty Id="VS2017_VSTA2017_Higher" After="AppSearch" Value=" • Microsoft Visual Studio, version 2017 or higher.&#xA;">
-        <![CDATA[$(var.VS17H)]]>
-    </SetProperty>
-	<SetProperty Id="PTF_BuildVersion" After="AppSearch" Value=" • Microsoft Protocol Test Framework [PTF_BUILDVERSION].&#xA;">
-        <![CDATA[$(var.PTF)]]>
-    </SetProperty>
-	
-  <!-- Visual Studio 2017 dependency check-->  
-    <Property Id="VS2017SEARCH">
-      <RegistrySearch Id="Vs2017Search64"
-                      Root="HKLM"
-                      Key="SOFTWARE\Wow6432Node\Microsoft\VisualStudio\SxS\VS7"
-                      Name="15.0"
-                      Type="raw"
-                      Win64="yes" />
-      <RegistrySearch Id="Vs2017Search"
-                      Root="HKLM"
-                      Key="SOFTWARE\Microsoft\VisualStudio\SxS\VS7"
-                      Name="15.0"
-                      Type="raw" />
-    </Property>
 
-    <Property Id="VSTEST2017">
-      <DirectorySearch Id="Vs2017VsTestSearch" Path="[VS2017SEARCH]\Common7\IDE\CommonExtensions\Microsoft\TestWindow" Depth="1">
-        <FileSearch Name="vstest.console.exe"
-                    Languages="0" />
+    <!-- Dependency List -->
+    <SetProperty Id="VS2017_VSTA2017_Higher" After="AppSearch" Value=" • Microsoft Visual Studio, version 2017 or higher.&#xA;">
+      <![CDATA[$(var.VS17H)]]>
+    </SetProperty>
+    <SetProperty Id="PTF_BuildVersion" After="AppSearch" Value=" • Microsoft Protocol Test Framework [PTF_BUILDVERSION].&#xA;">
+      <![CDATA[$(var.PTF)]]>
+    </SetProperty>
+
+    <!-- Visual Studio dependency check-->
+    <PropertyRef Id="VS2017_ROOT_FOLDER" />
+    <PropertyRef Id="VS2019_ROOT_FOLDER" />
+    <Property Id="VSTEST">
+      <DirectorySearch Id="Vs2019VsTestSearch" Path="[VS2019_ROOT_FOLDER]\Common7\IDE\CommonExtensions\Microsoft\TestWindow\">
+        <FileSearch Name="vstest.console.exe" />
+      </DirectorySearch>
+      <DirectorySearch Id="Vs2017VsTestSearch" Path="[VS2017_ROOT_FOLDER]\Common7\IDE\CommonExtensions\Microsoft\TestWindow\">
+        <FileSearch Name="vstest.console.exe" />
       </DirectorySearch>
     </Property>
 
     <!-- Check if VS17 or higher version-->
     <InstallUISequence>
       <Custom Action="SET_VSTEST_AGENT_OR_VS_NOT_INSTALLED_WARNING_TEXT_2017ORHigher" After="AppSearch">
-        <![CDATA[$(var.VS17H) AND NOT (VSTEST2017)]]>
+        <![CDATA[$(var.VS17H) AND NOT (VSTEST)]]>
       </Custom>
     </InstallUISequence>
 
     <CustomAction Id="SET_VSTEST_AGENT_OR_VS_NOT_INSTALLED_WARNING_TEXT_2017ORHigher"
                   Property="VSTEST_AGENT_NOT_INSTALLED_WARNING_TEXT"
                   Value=" • Microsoft Visual Studio, version 2017 or higher.&#xA;" />
-	
-	<!-- SET PTF Version Warning Message-->
-	  <Property Id="PTFVERSION">
+
+    <!-- SET PTF Version Warning Message-->
+    <Property Id="PTFVERSION">
       <RegistrySearch Id="PTFVersion64Search" Root="HKLM" Win64="yes" Key="SOFTWARE\Wow6432Node\Microsoft\ProtocolTestFramework" Name="PTFVersion" Type="raw">
       </RegistrySearch>
       <RegistrySearch Id="PTFVersionSearch" Root="HKLM" Key="SOFTWARE\Microsoft\ProtocolTestFramework" Name="PTFVersion" Type="raw">
@@ -115,17 +105,17 @@
     <CustomAction Id="SET_PTF_NOT_INSTALLED_WARNING_TEXT"
                   Property="PTF_NOT_INSTALLED_WARNING_TEXT"
                   Value =" • Microsoft Protocol Test Framework [PTF_BUILDVERSION].&#xA;" />
-    
+
     <InstallUISequence>
       <Custom Action="SET_PTF_NOT_INSTALLED_WARNING_TEXT" After="AppSearch">
         <![CDATA[$(var.PTF) AND NOT (PTFVERSION AND PTFVERSION << PTF_BUILDVERSION)]]>
       </Custom>
     </InstallUISequence>
-	
+
     <SetProperty Id="VSInstalled" After="AppSearch" Value="1">
-        <![CDATA[VSTEST2017]]>
+      <![CDATA[VSTEST]]>
     </SetProperty>
-	
+
     <!-- Directory structure -->
     <SetDirectory Id="WindowsVolumeDir" Value="[WindowsVolume]" />
 
@@ -134,17 +124,17 @@
       <Directory Id="WindowsVolumeDir">
         <Directory Id="ProtocolTestDir" Name="MicrosoftProtocolTests">
           <Directory Id="TestSuiteNameDir" Name="!(wix.TESTSUITE_NAME)">
-			<Directory Id="SERVERENDPOINT_TESTSUITE_DIR" Name="OD-Endpoint">
-				<!-- Protocol Code Directory -->
-				<Directory Id="TESTSUITE_ROOT_DIR" Name="!(wix.TESTSUITE_VERSION)">
-					<Directory Id="TESTSUITE_BATCH_DIR" Name="Batch" />
-          <Directory Id="TESTSUITE_COMMON_SCRIPTS_DIR" Name="Batch" />
-					<Directory Id="TESTSUITE_BIN_DIR" Name="Bin" >
-					  <Directory Id="PROTOCOLSDK_BIN_DIR" Name="." />
-					</Directory>
-					<Directory Id="TESTSUITE_SCRIPTS_DIR" Name="Scripts" />
-				</Directory>
-			</Directory>
+            <Directory Id="SERVERENDPOINT_TESTSUITE_DIR" Name="OD-Endpoint">
+              <!-- Protocol Code Directory -->
+              <Directory Id="TESTSUITE_ROOT_DIR" Name="!(wix.TESTSUITE_VERSION)">
+                <Directory Id="TESTSUITE_BATCH_DIR" Name="Batch" />
+                <Directory Id="TESTSUITE_COMMON_SCRIPTS_DIR" Name="Batch" />
+                <Directory Id="TESTSUITE_BIN_DIR" Name="Bin" >
+                  <Directory Id="PROTOCOLSDK_BIN_DIR" Name="." />
+                </Directory>
+                <Directory Id="TESTSUITE_SCRIPTS_DIR" Name="Scripts" />
+              </Directory>
+            </Directory>
           </Directory>
         </Directory>
       </Directory>
@@ -171,15 +161,15 @@
                   Description="Open end user license agreement"
                   Target="[TESTSUITE_ROOT_DIR]LICENSE.rtf"
                   WorkingDirectory="TESTSUITE_ROOT_DIR"/>
-				  
+
         <Shortcut Id="UninstallProductShortcut"
                   Name="Uninstall"
                   Description="Uninstall the test suite"
                   Target="[System64Folder]msiexec.exe"
                   Arguments="/x [ProductCode]"/>
 
-		<RemoveFolder Id="TestSuiteProgramsMenuFolder" On="uninstall" />
-				  
+        <RemoveFolder Id="TestSuiteProgramsMenuFolder" On="uninstall" />
+
         <RegistryValue Id="GeneralShortcutsKeyPath"
                        Root="HKCU"
                        Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_VERSION)"
@@ -196,23 +186,23 @@
                   Target="[WindowsFolder]explorer.exe"
                   Arguments="."
                   WorkingDirectory="TESTSUITE_ROOT_DIR"/>
-				  
-		<Shortcut Id="RunTestCasesShortcut"
-                  Name="Run Test Cases"
-                  Description="Run all test cases in the test suite"
-                  Target="[TESTSUITE_BATCH_DIR]!(wix.RUN_TESTS_COMMAND)"
-                  WorkingDirectory="TESTSUITE_BATCH_DIR" />
-				  
-		<RegistryValue Id="TestSuiteShortcutsKeyPath"
-                       Root="HKCU"
-                       Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_VERSION)"
-                       Name="TestSuite"
-                       Type="integer"
-                       Value="1"
-                       KeyPath="yes" />
+
+        <Shortcut Id="RunTestCasesShortcut"
+                      Name="Run Test Cases"
+                      Description="Run all test cases in the test suite"
+                      Target="[TESTSUITE_BATCH_DIR]!(wix.RUN_TESTS_COMMAND)"
+                      WorkingDirectory="TESTSUITE_BATCH_DIR" />
+
+        <RegistryValue Id="TestSuiteShortcutsKeyPath"
+                           Root="HKCU"
+                           Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_VERSION)"
+                           Name="TestSuite"
+                           Type="integer"
+                           Value="1"
+                           KeyPath="yes" />
       </Component>
-	  
-	  <Component Id="SutShortcuts" Guid="*">
+
+      <Component Id="SutShortcuts" Guid="*">
         <Shortcut Id="OpenSutDirShortcut"
                   Name="Open Test Suite Directory"
                   Description="Open root directory of the test suite"
@@ -227,25 +217,25 @@
                        Value="1"
                        KeyPath="yes" />
       </Component>
-	  
-	  <Component Id="DomainShortcuts" Guid="*">
+
+      <Component Id="DomainShortcuts" Guid="*">
         <Shortcut Id="OpenDomainDirShortcut"
                   Name="Open Test Suite Directory"
                   Description="Open root directory of the test suite"
                   Target="[WindowsFolder]explorer.exe"
                   Arguments="."
                   WorkingDirectory="TESTSUITE_ROOT_DIR"/>
-		<RegistryValue Id="DomainShortcutsKeyPath"
-                       Root="HKCU"
-                       Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_VERSION)"
-                       Name="Domain"
-                       Type="integer"
-                       Value="1"
-                       KeyPath="yes" />
-      </Component>		  
+        <RegistryValue Id="DomainShortcutsKeyPath"
+                           Root="HKCU"
+                           Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_VERSION)"
+                           Name="Domain"
+                           Type="integer"
+                           Value="1"
+                           KeyPath="yes" />
+      </Component>
     </DirectoryRef>
-	
-	<!-- Desktop shortcuts -->
+
+    <!-- Desktop shortcuts -->
     <DirectoryRef Id="DesktopFolder">
       <Component Id="DesktopShortcuts" Guid="*">
         <Shortcut Id="OpenTestSuiteDirShortcut_Desktop"
@@ -263,11 +253,6 @@
                   Name="Run !(wix.TESTSUITE_NAME) BVT Test Cases"
                   Description="Run BVT test cases in the test suite"
                   Target="[TESTSUITE_BATCH_DIR]!(wix.RUN_BVT_COMMAND)"
-                  WorkingDirectory="TESTSUITE_BATCH_DIR" />
-        <Shortcut Id="HashGenerationAndVerificationTool_Desktop"
-                  Name="Hash Generation and Verification Tool"
-                  Description="Hash Generation and Verification Tool"
-                  Target="[TESTSUITE_BATCH_DIR]MS-PCCRC_TestTool.exe"
                   WorkingDirectory="TESTSUITE_BATCH_DIR" />
         <RegistryValue Id="TestSuiteShortcutsKeyPath_Desktop"
                         Root="HKCU"
@@ -316,7 +301,7 @@
         <ComponentRef Id="TestSuiteShortcuts" />
         <ComponentRef Id="DesktopShortcuts" />
         <ComponentGroupRef Id="TESTSUITE_MISC_FILES"/>
-				<ComponentGroupRef Id="TESTSUITE_PTFCONFIG_FILES"/>
+        <ComponentGroupRef Id="TESTSUITE_PTFCONFIG_FILES"/>
         <ComponentGroupRef Id="BATCH_FILES" />
         <ComponentGroupRef Id="BIN_FILES" />
         <ComponentGroupRef Id="Scripts_FILES"/>
@@ -326,7 +311,7 @@
       <Feature Id="SutFeature" Level="1">
         <!-- If TARGET_ENDPOINT doesn't equal "SUT", donot install on SUT. -->
         <Condition Level="0"><![CDATA[TARGET_ENDPOINT<>"SUT" AND CLIENTUILEVEL<>0]]></Condition>
-		<ComponentGroupRef Id="Scripts_FILES"/>
+        <ComponentGroupRef Id="Scripts_FILES"/>
         <ComponentRef Id="SutShortcuts" />
 
       </Feature>
@@ -334,17 +319,17 @@
       <Feature Id="DomainFeature" Level="1">
         <!-- If TARGET_ENDPOINT doesn't equal "DOMAIN", donot install on domain. -->
         <Condition Level="0"><![CDATA[TARGET_ENDPOINT<>"DOMAIN" AND CLIENTUILEVEL<>0]]></Condition>
-		<ComponentGroupRef Id="Scripts_FILES"/>
+        <ComponentGroupRef Id="Scripts_FILES"/>
         <ComponentRef Id="DomainShortcuts" />
 
       </Feature>
 
     </FeatureRef>
-	
+
     <UI>
-        <Publish Dialog="EndpointDlg" Control="Next" Event="Remove" Value="ALL">1</Publish>
-        <Publish Dialog="EndpointDlg" Control="Next" Event="AddLocal" Value="TestSuiteFeature">TARGET_ENDPOINT="TESTSUITE"</Publish>
-        <Publish Dialog="EndpointDlg" Control="Next" Event="AddLocal" Value="SutFeature">TARGET_ENDPOINT="SUT"</Publish>
+      <Publish Dialog="EndpointDlg" Control="Next" Event="Remove" Value="ALL">1</Publish>
+      <Publish Dialog="EndpointDlg" Control="Next" Event="AddLocal" Value="TestSuiteFeature">TARGET_ENDPOINT="TESTSUITE"</Publish>
+      <Publish Dialog="EndpointDlg" Control="Next" Event="AddLocal" Value="SutFeature">TARGET_ENDPOINT="SUT"</Publish>
     </UI>
 
     <CustomAction Id="ConfigNowAction"

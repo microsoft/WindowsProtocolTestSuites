@@ -68,6 +68,8 @@
 		* [ QueryDir\_Reopen\_OnDir](#3.1.53)
 		* [ QueryDir\_Reopen\_OnFile](#3.1.54)
 		* [ Query\_Quota\_Info](#3.1.55)
+		* [ BVT\_SMB2Basic\_Query\_FileAllInformation](#3.1.56)
+        * [ Compression](#3.1.57)
 	* [SMB2 Feature Test](#3.2)
 		* [ AppInstanceId](#3.2.1)
 		* [ AppInstanceVersion](#3.2.2)
@@ -90,6 +92,7 @@
 		* [ CopyOfflaod](#3.2.19)
 		* [ OperateOneFileFromTwoNodes](#3.2.20)
 		* [ MixedOplockLease](#3.2.21)
+		* [ Compression](#3.2.22)
 	* [SMB2 Feature Combination](#3.3)
 		* [ MultipleChannelWithReplay](#3.3.1)
 		* [ MultipleChannelWithEncryption](#3.3.2)
@@ -136,9 +139,9 @@
 		* [ Root\_and\_Link\_referral\_to\_DFSServer](#3.7.6)
 		* [ Path\_Normalization\_to\_DFSServer](#3.7.7)
 
-##<a name="1">  Test Environment
+## <a name="1">  Test Environment
 
-###<a name="1.1"> Windows Test Environment
+### <a name="1.1"> Windows Test Environment
 
 Below environment topology is used to demonstrate how Windows uses MS-SMB2 protocol to access files which are hosted in remote shares. To simplify the environment, all objects are created under Hyper-V manager and use VMs instead of physical machines.
 
@@ -153,7 +156,7 @@ Below environment topology is used to demonstrate how Windows uses MS-SMB2 proto
 
 ![](./image/FileServerTestDesignSpecification/env.png)
 
-###<a name="1.2">Partner Test Environment
+### <a name="1.2">Partner Test Environment
 ------------------------
 
 There are 2 options for partner to reuse above test environment:
@@ -172,13 +175,13 @@ There are 2 parts to modify if only replace storage:
 
 ![](./image/FileServerTestDesignSpecification/network.png)
 
-##<a name="2"> Test Scope
+## <a name="2"> Test Scope
 
-###<a name="2.1">Test Target
+### <a name="2.1">Test Target
 
 This test suite will test the server endpoint of MS-FSRVP, MS-SMB2, MS-SWN, MS-RSVD, MS-DFSC, and test suite acts as client role.
 
-###<a name="2.2">Test Protocols
+### <a name="2.2">Test Protocols
 
 This test suite includes test cases of following File Sharing protocols:
 
@@ -194,26 +197,26 @@ This test suite includes test cases of following File Sharing protocols:
 
 6.  MS-HVRS
 
-###<a name="2.3">Restrictions
+### <a name="2.3">Restrictions
 
 1.  Named pipes and printer files are not tested.
 
 2.  ServerStatistics is not tested.
 
-###<a name="2.4"> Dependencies
+### <a name="2.4"> Dependencies
 
-####<a name="2.4.1"> Transport
+#### <a name="2.4.1"> Transport
 
 MS-FSRVP scenario VSSOperateShadowCopySet in test suite utilizes MS-RPCE SDK which uses SMB and SMB2 as transport. When test FSRVP server (i.e. test suite act as synthetic client), the underlying MS-RPCE SDK code on synthetic client side will first select SMB2 as transport to communicate with server, if the server side doesn’t implement/support SMB2 as transport, the client side will use SMB as transport to communicate with server.
 
-##<a name="3">Test Suite Design
+## <a name="3">Test Suite Design
 
 Test scenarios are categorized as below table and will be described in following sections.
 
 | Category                 | Test Cases | Comments                                                                                                          |
 |--------------------------|------------|-------------------------------------------------------------------------------------------------------------------|
-| SMB2 BVT                 | 78         | SMB2 common scenarios.                                                                                            |
-| SMB2 Feature Test        | 2591       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
+| SMB2 BVT                 | 87         | SMB2 common scenarios.                                                                                            |
+| SMB2 Feature Test        | 2608       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
 | SMB2 Feature Combination | 12         | Extended test with more complex message sequence for new features in SMB 3.0 dialect and later.                   |
 | FSRVP Test               | 14         | Test for MS-FSRVP                                                                                                 |
 | Server Failover Test     | 48         | Test server failover for MS-SMB2, MS-SWN and MS-FSRVP                                                             |
@@ -221,13 +224,13 @@ Test scenarios are categorized as below table and will be described in following
 | DFSC Test                | 43         | Test for MS-DFSC                                                                                                  |
 | HVRS Test                | 8          | Test for MS-HVRS                                                                                                  |
 
-###<a name="3.1">SMB2 BVT
+### <a name="3.1">SMB2 BVT
 
 This is used to test SMB2 common user scenarios.
 
-####<a name="3.1.1"> SMB2Basic\_ChangeNotify\_NoFileListDirectoryInGrantedAccess
+#### <a name="3.1.1"> SMB2Basic\_ChangeNotify\_NoFileListDirectoryInGrantedAccess
 
-#####<a name="3.1.1.1"> Scenario
+##### <a name="3.1.1.1"> Scenario
 
 |||
 |---|---|
@@ -237,7 +240,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 3.  Tear down the client by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
 
-#####<a name="3.1.1.2"> Test Case
+##### <a name="3.1.1.2"> Test Case
 
 |||
 |---|---|
@@ -256,9 +259,9 @@ This is used to test SMB2 common user scenarios.
 |                          | LOGOFF |
 | **Cleanup**              ||
 
-####<a name="3.1.2"> SMB2Basic\_CancelRegisteredChangeNotify
+#### <a name="3.1.2"> SMB2Basic\_CancelRegisteredChangeNotify
 
-#####<a name="3.1.2.1"> Scenario
+##### <a name="3.1.2.1"> Scenario
 
 | **Description**               | Verify that CANCEL request cancels CHANGE\_NOTIFY request when there’s no CHANGE\_NOTIFY response from server                       |
 |-------------------------------|-------------------------------------------------------------------------------------------------------------------------------------|
@@ -268,7 +271,7 @@ This is used to test SMB2 common user scenarios.
 |                               |4.  Tear down the client by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF                               |
 | **Cluster Involved Scenario** | **NO**                                                                                                                              |
 
-#####<a name="3.1.2.2"> Test Case
+##### <a name="3.1.2.2"> Test Case
 
 |                          |                                                                                                                                              |
 |--------------------------|----------------------------------------------------------------------------------------------------------------------------------------------|
@@ -287,9 +290,9 @@ This is used to test SMB2 common user scenarios.
 |                          | LOGOFF                                                                                                                                       |
 | **Cleanup**              |                                                                                                                                              |
 
-####<a name="3.1.3"> SMB2Basic\_QueryAndSet\_FileInfo
+#### <a name="3.1.3"> SMB2Basic\_QueryAndSet\_FileInfo
 
-#####<a name="3.1.3.1"> Scenario
+##### <a name="3.1.3.1"> Scenario
 
 | **Description**               | Query and set the info for a file                                                                             |
 |-------------------------------|---------------------------------------------------------------------------------------------------------------|
@@ -303,7 +306,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 8.  Tear down the client by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF"       |
 | **Cluster Involved Scenario** | NO                                                                                                            |
 
-#####<a name="3.1.3.2"> Test Case
+##### <a name="3.1.3.2"> Test Case
 
 |                          |                                                                                                                            |
 |--------------------------|----------------------------------------------------------------------------------------------------------------------------|
@@ -323,9 +326,9 @@ This is used to test SMB2 common user scenarios.
 |                          |LOGOFF                                                                                                                      |
 | **Cleanup**              |                                                                                                                            |
 
-####<a name="3.1.4"> SMB2Basic\_LockAndUnLock
+#### <a name="3.1.4"> SMB2Basic\_LockAndUnLock
 
-#####<a name="3.1.4.1"> Scenario
+##### <a name="3.1.4.1"> Scenario
 
 | **Description**               | This test case is designed to test whether server can handle WRITE of locking content correctly. |
 |-------------------------------|--------------------------------------------------------------------------------------------------|
@@ -355,7 +358,7 @@ This is used to test SMB2 common user scenarios.
 |                               | LOGOFF                                                                                           |
 | **Cluster Involved Scenario** | **NO**                                                                                           |
 
-#####<a name="3.1.4.2"> Test Case
+##### <a name="3.1.4.2"> Test Case
 
 |                          |                                                                                       |
 |--------------------------|---------------------------------------------------------------------------------------|
@@ -388,9 +391,9 @@ This is used to test SMB2 common user scenarios.
 |                          | LOGOFF                                                                                |
 | **Cleanup**              |                                                                                       |
 
-####<a name="3.1.5"> MultiCredit
+#### <a name="3.1.5"> MultiCredit
 
-#####<a name="3.1.5.1"> Scenario
+##### <a name="3.1.5.1"> Scenario
 
 | **Description**               | Send request which consume more than 1 credit              |
 |-------------------------------|------------------------------------------------------------|
@@ -404,7 +407,7 @@ This is used to test SMB2 common user scenarios.
 |                               | LOGOFF                                                     |
 | **Cluster Involved Scenario** | NO                                                         |
 
-#####<a name="3.1.5.2"> Test Case
+##### <a name="3.1.5.2"> Test Case
 
 |                          |                                                                                                               |
 |--------------------------|---------------------------------------------------------------------------------------------------------------|
@@ -422,9 +425,9 @@ This is used to test SMB2 common user scenarios.
 |                          | LOGOFF                                                                                                        |
 | **Cleanup**              |                                                                                                               |
 
-####<a name="3.1.6"> Negotiation
+#### <a name="3.1.6"> Negotiation
 
-#####<a name="3.1.6.1"> Scenario
+##### <a name="3.1.6.1"> Scenario
 
 |                               |                                                                   |
 |-------------------------------|-------------------------------------------------------------------|
@@ -433,7 +436,7 @@ This is used to test SMB2 common user scenarios.
 |                               | NEGOTIATE                                                         |
 | **Cluster Involved Scenario** | NO                                                                |
 
-#####<a name="3.1.6.2"> Test Case
+##### <a name="3.1.6.2"> Test Case
 
 |                          |                                                                                                    |
 |--------------------------|----------------------------------------------------------------------------------------------------|
@@ -547,9 +550,21 @@ This is used to test SMB2 common user scenarios.
 | **Cleanup**              |                                                                                                                                                                                           |
 
 
-####<a name="3.1.7"> MultipleChannel
+|                          |                                                                                                                                                       |
+|--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Test ID**              | BVT_Negotiate_SMB311_CompressionEnabled |
+| **Description**          | This test case is designed to test whether server can handle NEGOTIATE with supported compression algorithms in SMB2_COMPRESSION_CAPABILITIES context. |
+| **Prerequisites**        | The server implements dialect 3.11 and compression feature. |
+| **Test Execution Steps** | 1.  Client send Negotiate request with dialect SMB 3.11, SMB2_PREAUTH_INTEGRITY_CAPABILITIES context and SMB2_COMPRESSION_CAPABILITIES context with all supported compression algorithms. |
+|                          | 2.  Server returns SMB2 NEGOTIATE response with the expected SMB2_COMPRESSION_CAPABILITIES, if it supports the compression feature, as below: |
+|                          |     a.  If server is Windows, CompressionAlgorithms is set to the first common algorithm supported by the client and server. |
+|                          |     b.  If server is non-Windows, CompressionAlgorithms is set to all the algorithms in the CompressionAlgorithms field of Negotiate request, in the order they are received. |
+| **Cleanup**              |                                                                                                                                                                                           |
 
-#####<a name="3.1.7.1"> Scenario
+
+#### <a name="3.1.7"> MultipleChannel
+
+##### <a name="3.1.7.1"> Scenario
 
 |                               |                                                |
 |-------------------------------|------------------------------------------------|
@@ -572,7 +587,7 @@ This is used to test SMB2 common user scenarios.
 | **Cluster Involved Scenario** | **NO**                                         |
 
 
-#####<a name="3.1.7.2"> Test Case
+##### <a name="3.1.7.2"> Test Case
 
 |                          |                                                                                                                                     |
 |--------------------------|-------------------------------------------------------------------------------------------------------------------------------------|
@@ -595,9 +610,9 @@ This is used to test SMB2 common user scenarios.
 | **Cleanup**              |                                                                                                                                     |
 
 
-####<a name="3.1.8"> CopyOffLoad
+#### <a name="3.1.8"> CopyOffLoad
 
-#####<a name="3.1.8.1"> Scenario
+##### <a name="3.1.8.1"> Scenario
 
 |                               |                                                           |
 |-------------------------------|-----------------------------------------------------------|
@@ -615,7 +630,7 @@ This is used to test SMB2 common user scenarios.
 | **Cluster Involved Scenario** | NO                                                        |
 
 
-#####<a name="3.1.8.2"> Test Case
+##### <a name="3.1.8.2"> Test Case
 
 |                          |                                                                                                                               |
 |--------------------------|-------------------------------------------------------------------------------------------------------------------------------|
@@ -653,9 +668,9 @@ This is used to test SMB2 common user scenarios.
 | **Cleanup**              |                                                                                                                               |
 
 
-####<a name="3.1.9"> FileLevelTrim
+#### <a name="3.1.9"> FileLevelTrim
 
-#####<a name="3.1.9.1"> Scenario
+##### <a name="3.1.9.1"> Scenario
 
 | **Description**               | Trim a range of a file, then read that range again |
 |-------------------------------|----------------------------------------------------|
@@ -674,7 +689,7 @@ This is used to test SMB2 common user scenarios.
 | **Cluster Involved Scenario** | NO                                                 |
 
 
-#####<a name="3.1.9.2"> Test Case
+##### <a name="3.1.9.2"> Test Case
 
 |                          |                                                                                     |
 |--------------------------|-------------------------------------------------------------------------------------|
@@ -696,9 +711,9 @@ This is used to test SMB2 common user scenarios.
 | **Cleanup**              |                                                                                     |
 
 
-####<a name="3.1.10"> IntegrityInfo
+#### <a name="3.1.10"> IntegrityInfo
 
-#####<a name="3.1.10.1"> Scenario
+##### <a name="3.1.10.1"> Scenario
 
 | **Description**               | Underlying ReFS format is required              |
 |-------------------------------|-------------------------------------------------|
@@ -715,7 +730,7 @@ This is used to test SMB2 common user scenarios.
 | **Cluster Involved Scenario** | NO                                              |
 
 
-#####<a name="3.1.10.2"> Test Case
+##### <a name="3.1.10.2"> Test Case
 
 |                          |                                                                                                                                                                                                      |
 |--------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -730,11 +745,11 @@ This is used to test SMB2 common user scenarios.
 | **Cleanup**              |                                                                                                                                                                                                      |
 
 
-####<a name="3.1.11">DirectoryLeasing
+#### <a name="3.1.11">DirectoryLeasing
 
-#####<a name="3.1.11.1"> Basic
+##### <a name="3.1.11.1"> Basic
 
-######<a name="3.1.11.1.1"> Scenario
+###### <a name="3.1.11.1.1"> Scenario
 
 |                               |                                                           |
 |-------------------------------|-----------------------------------------------------------|
@@ -750,7 +765,7 @@ This is used to test SMB2 common user scenarios.
 | **Cluster Involved Scenario** | NO                                                        |
 
 
-######<a name="3.1.11.1.2"> Test Case
+###### <a name="3.1.11.1.2"> Test Case
 
 |                          |                                                                                                                                                                                                      |
 |--------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -778,9 +793,9 @@ This is used to test SMB2 common user scenarios.
 | **Cleanup**              |                                                                                                                                                                                                      |
 
 
-#####<a name="3.1.11.2"> DirectoryLeasing\_LeaseBreakOnMultiClients
+##### <a name="3.1.11.2"> DirectoryLeasing\_LeaseBreakOnMultiClients
 
-######<a name="3.1.11.2.1"> Scenario
+###### <a name="3.1.11.2.1"> Scenario
 
 | **Description**               | This tests lease break notification when multiple clients request caching lease                                                     |
 |-------------------------------|-------------------------------------------------------------------------------------------------------------------------------------|
@@ -808,7 +823,7 @@ This is used to test SMB2 common user scenarios.
 | **Cluster Involved Scenario** | **NO**                                                                                                                              |
 
 
-######<a name="3.1.11.2.2"> Test Case
+###### <a name="3.1.11.2.2"> Test Case
 
 |                          |                                                                                                                                     |
 |--------------------------|-------------------------------------------------------------------------------------------------------------------------------------|
@@ -839,9 +854,9 @@ This is used to test SMB2 common user scenarios.
 | **Cleanup**              |                                                                                                                                     |
 
 
-####<a name="3.1.12">Encryption
+#### <a name="3.1.12">Encryption
 
-#####<a name="3.1.12.1"> Scenario
+##### <a name="3.1.12.1"> Scenario
 
 |                               |                                                       |
 |-------------------------------|-------------------------------------------------------|
@@ -858,7 +873,7 @@ This is used to test SMB2 common user scenarios.
 | **Cluster Involved Scenario** | NO                                                    |
 
 
-#####<a name="3.1.12.2"> Test Case
+##### <a name="3.1.12.2"> Test Case
 
 |                          |                                                                                                      |
 |--------------------------|------------------------------------------------------------------------------------------------------|
@@ -945,9 +960,9 @@ This is used to test SMB2 common user scenarios.
 |                          | 3.  Client sends encrypted TREE\_CONNECT, Create, Write, Read, Close, TREE\_DISCONNECT and Logoff request, and gets successful  responses.                                   |
 | **Cleanup**              |                                                                                                                                                                              |
 
-####<a name="3.1.13"> AppInstanceId
+#### <a name="3.1.13"> AppInstanceId
 
-#####<a name="3.1.13.1"> Scenario
+##### <a name="3.1.13.1"> Scenario
 
 |                               |                                          |
 |-------------------------------|------------------------------------------|
@@ -969,7 +984,7 @@ This is used to test SMB2 common user scenarios.
 |                               | LOGOFF                                   |
 | **Cluster Involved Scenario** | **NO**                                   |
 
-#####<a name="3.1.13.2"> Test Case
+##### <a name="3.1.13.2"> Test Case
 
 |||
 |---|---|
@@ -990,9 +1005,9 @@ This is used to test SMB2 common user scenarios.
 ||8. Tear down the second client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF; DISCONNECT|
 |**Cleanup**||
 
-####<a name="3.1.14"> AppInstanceVersion
+#### <a name="3.1.14"> AppInstanceVersion
 
-#####<a name="3.1.14.1"> Scenario
+##### <a name="3.1.14.1"> Scenario
 
 |||
 |---|---|
@@ -1012,7 +1027,7 @@ This is used to test SMB2 common user scenarios.
 |**Cluster Involved Scenario**|**NO**|
 
 
-#####<a name="3.1.14.2"> Test Case
+##### <a name="3.1.14.2"> Test Case
 
 |||
 |---|---|
@@ -1072,9 +1087,9 @@ This is used to test SMB2 common user scenarios.
 |**Cleanup**||
 
 
-####<a name="3.1.15">DurableHandle
+#### <a name="3.1.15">DurableHandle
 
-#####<a name="3.1.15.1"> Scenario
+##### <a name="3.1.15.1"> Scenario
 
 |||
 |---|---|
@@ -1095,7 +1110,7 @@ This is used to test SMB2 common user scenarios.
 |**Cluster Involved Scenario**|**NO**|
 
 
-#####<a name="3.1.15.2"> Test Case
+##### <a name="3.1.15.2"> Test Case
 |||
 |---|---|
 |**Test ID**|BVT_DurableHandleV1_Reconnect_WithBatchOplock|
@@ -1276,9 +1291,9 @@ This is used to test SMB2 common user scenarios.
 |**Cleanup**||
 
 
-####<a name="3.1.16"> Oplock
+#### <a name="3.1.16"> Oplock
 
-#####<a name="3.1.16.1"> Scenario
+##### <a name="3.1.16.1"> Scenario
 
 |||
 |---|---|
@@ -1300,7 +1315,7 @@ This is used to test SMB2 common user scenarios.
 |**Cluster Involved Scenario**|**NO**|
 
 
-#####<a name="3.1.16.2"> Test Case
+##### <a name="3.1.16.2"> Test Case
 
 |||
 |---|---|
@@ -1338,9 +1353,9 @@ This is used to test SMB2 common user scenarios.
 |**Cleanup**||
 
 
-####<a name="3.1.17">FileLeasing
+#### <a name="3.1.17">FileLeasing
 
-#####<a name="3.1.17.1"> Scenario
+##### <a name="3.1.17.1"> Scenario
 
 |||
 |---|---|
@@ -1362,7 +1377,7 @@ This is used to test SMB2 common user scenarios.
 |**Cluster Involved Scenario**|**NO**|
 
 
-#####<a name="3.1.17.2"> Test Case
+##### <a name="3.1.17.2"> Test Case
 
 |||
 |---|---|
@@ -1470,9 +1485,9 @@ This is used to test SMB2 common user scenarios.
 |**Cleanup**||
 
 
-####<a name="3.1.18">Replay
+#### <a name="3.1.18">Replay
 
-#####<a name="3.1.18.1"> Test Case
+##### <a name="3.1.18.1"> Test Case
 
 |||
 |---|---|
@@ -1513,9 +1528,9 @@ This is used to test SMB2 common user scenarios.
 |**Cleanup**||
 
 
-####<a name="3.1.19"> ResilientHandle
+#### <a name="3.1.19"> ResilientHandle
 
-#####<a name="3.1.19.1"> Test Case
+##### <a name="3.1.19.1"> Test Case
 
 |||
 |---|---|
@@ -1546,9 +1561,9 @@ This is used to test SMB2 common user scenarios.
 |**Cleanup**||
 
 
-####<a name="3.1.20">Signing
+#### <a name="3.1.20">Signing
 
-#####<a name="3.1.20.1"> Test Case
+##### <a name="3.1.20.1"> Test Case
 
 |||
 |---|---|
@@ -1583,9 +1598,9 @@ This is used to test SMB2 common user scenarios.
 | **Cleanup**              |                                                                                                              |
 
 
-####<a name="3.1.21"> TreeMgmt
+#### <a name="3.1.21"> TreeMgmt
 
-#####<a name="3.1.21.1"> Test Case
+##### <a name="3.1.21.1"> Test Case
 
 |||
 |---|---|
@@ -1615,9 +1630,21 @@ This is used to test SMB2 common user scenarios.
 |**Cleanup**||
 
 
-####<a name="3.1.22">SessionMgmt
+|||
+|---|---|
+|**Test ID**|TreeMgmt_SMB311_TREE_CONNECT_EXTENSION_PRESENT|
+|**Description**|Once a client has successfully connected to a infrastructure share it must set the SMB2_SHAREFLAG_EXTENSION_PRESENT flag and use SMB2 TREE_CONNECT Request Extension for tree connect requests.|
+||This test case is designed to test server can handle a TreeConnect request with flag SMB2_SHAREFLAG_EXTENSION_PRESENT successfully.|
+|**Prerequisites**|The server implements dialect 3.11 and the server supports infrastructure share (for windows)|
+|**Test Execution Steps**|Start a client by sending the following requests: NEGOTIATE (dialect 3.11); SESSION_SETUP (with domain credential).|
+||Client sends TREE_CONNECT request with flag SMB2_SHAREFLAG_EXTENSION_PRESENT and SMB2_REMOTED_IDENTITY_TREE_CONNECT context (with local administrator account passed in the context) and expects STATUS_SUCCESS.|
+||Client sends CREATE request and expects STATUS_SUCCESS.|
+||Tear down the client.|
+|**Cleanup**||
 
-#####<a name="3.1.22.1"> Test Case
+#### <a name="3.1.22">SessionMgmt
+
+##### <a name="3.1.22.1"> Test Case
 
 |||
 |---|---|
@@ -1659,9 +1686,9 @@ This is used to test SMB2 common user scenarios.
 |**Cleanup**||
 
 
-####<a name="3.1.23">CreateClose
+#### <a name="3.1.23">CreateClose
 
-#####<a name="3.1.23.1"> Test Case
+##### <a name="3.1.23.1"> Test Case
 
 |||
 |---|---|
@@ -1731,9 +1758,9 @@ This is used to test SMB2 common user scenarios.
 ||LOGOFF|
 
 
-####<a name="3.1.25"> ValidateNegotiateInfo
+#### <a name="3.1.25"> ValidateNegotiateInfo
 
-#####<a name="3.1.25.1"> Scenario
+##### <a name="3.1.25.1"> Scenario
 
 |||
 |---|---|
@@ -1748,7 +1775,7 @@ This is used to test SMB2 common user scenarios.
 |**Cluster Involved Scenario**|**NO**|
 
 
-#####<a name="3.1.25.2"> Test Case
+##### <a name="3.1.25.2"> Test Case
 
 |||
 |---|---|
@@ -1764,9 +1791,9 @@ This is used to test SMB2 common user scenarios.
 ||LOGOFF|
 |**Cleanup**||
 
-####<a name="3.1.26"> EnumerateSnapShots
+#### <a name="3.1.26"> EnumerateSnapShots
 
-#####<a name="3.1.26.1"> Scenario
+##### <a name="3.1.26.1"> Scenario
 
 |||
 |---|---|
@@ -1781,7 +1808,7 @@ This is used to test SMB2 common user scenarios.
 |**Cluster Involved Scenario**|**NO**|
 
 
-#####<a name="3.1.26.2"> Test Case
+##### <a name="3.1.26.2"> Test Case
 
 |||
 |---|---|
@@ -1798,9 +1825,9 @@ This is used to test SMB2 common user scenarios.
 |**Cleanup**||
 
 
-####<a name="3.1.27"> SMB2Basic\_ChangeNotify\_ChangeFileName
+#### <a name="3.1.27"> SMB2Basic\_ChangeNotify\_ChangeFileName
 
-#####<a name="3.1.27.1"> Scenario
+##### <a name="3.1.27.1"> Scenario
 
 |||
 |---|---|
@@ -1815,7 +1842,7 @@ This is used to test SMB2 common user scenarios.
 | **Cluster Involved Scenario** | **NO** |
 
 
-#####<a name="3.1.27.2"> Test Case
+##### <a name="3.1.27.2"> Test Case
 
 |||
 |---|---|
@@ -1847,9 +1874,9 @@ This is used to test SMB2 common user scenarios.
 | **Cleanup**              ||
 
 
-####<a name="3.1.28"> SMB2Basic\_ChangeNotify\_ChangeDirName
+#### <a name="3.1.28"> SMB2Basic\_ChangeNotify\_ChangeDirName
 
-#####<a name="3.1.28.1"> Scenario
+##### <a name="3.1.28.1"> Scenario
 
 |||
 |---|---|
@@ -1863,7 +1890,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 7.  Tear down the client1 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
 
-#####<a name="3.1.28.2"> Test Case
+##### <a name="3.1.28.2"> Test Case
 
 |||
 |---|---|
@@ -1895,9 +1922,9 @@ This is used to test SMB2 common user scenarios.
 | **Cleanup**              ||
 
 
-####<a name="3.1.29"> SMB2Basic\_ChangeNotify\_ChangeAttributes
+#### <a name="3.1.29"> SMB2Basic\_ChangeNotify\_ChangeAttributes
 
-#####<a name="3.1.29.1"> Scenario
+##### <a name="3.1.29.1"> Scenario
 
 |||
 |---|---|
@@ -1911,7 +1938,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 7.  Tear down the client1 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
 
-#####<a name="3.1.29.2"> Test Case
+##### <a name="3.1.29.2"> Test Case
 
 |||
 |---|---|
@@ -1943,9 +1970,9 @@ This is used to test SMB2 common user scenarios.
 | **Cleanup**              ||
 
 
-####<a name="3.1.30"> SMB2Basic\_ChangeNotify\_ChangeSize
+#### <a name="3.1.30"> SMB2Basic\_ChangeNotify\_ChangeSize
 
-#####<a name="3.1.30.1"> Scenario
+##### <a name="3.1.30.1"> Scenario
 
 |||
 |---|---|
@@ -1959,7 +1986,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 7.  Tear down the client1 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
 
-#####<a name="3.1.30.2"> Test Case
+##### <a name="3.1.30.2"> Test Case
 
 |||
 |---|---|
@@ -1992,9 +2019,9 @@ This is used to test SMB2 common user scenarios.
 | **Cleanup**              ||
 
 
-####<a name="3.1.31"> SMB2Basic\_ChangeNotify\_ChangeLastAccess
+#### <a name="3.1.31"> SMB2Basic\_ChangeNotify\_ChangeLastAccess
 
-#####<a name="3.1.31.1"> Scenario
+##### <a name="3.1.31.1"> Scenario
 
 |||
 |---|---|
@@ -2008,7 +2035,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 7.  Tear down the client1 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
 
-#####<a name="3.1.31.2"> Test Case
+##### <a name="3.1.31.2"> Test Case
 
 |||
 |---|---|
@@ -2040,9 +2067,9 @@ This is used to test SMB2 common user scenarios.
 | **Cleanup**              ||
 
 
-####<a name="3.1.32"> SMB2Basic\_ChangeNotify\_ChangeLastWrite
+#### <a name="3.1.32"> SMB2Basic\_ChangeNotify\_ChangeLastWrite
 
-#####<a name="3.1.32.1"> Scenario
+##### <a name="3.1.32.1"> Scenario
 
 |||
 |---|---|
@@ -2056,7 +2083,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 7.  Tear down the client1 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
 
-#####<a name="3.1.32.2"> Test Case
+##### <a name="3.1.32.2"> Test Case
 
 |||
 |---|---|
@@ -2088,9 +2115,9 @@ This is used to test SMB2 common user scenarios.
 | **Cleanup**              ||
 
 
-####<a name="3.1.33"> SMB2Basic\_ChangeNotify\_ChangeCreation
+#### <a name="3.1.33"> SMB2Basic\_ChangeNotify\_ChangeCreation
 
-#####<a name="3.1.33.1"> Scenario
+##### <a name="3.1.33.1"> Scenario
 
 |||
 |---|---|
@@ -2104,7 +2131,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 7.  Tear down the client1 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
 
-#####<a name="3.1.33.2"> Test Case
+##### <a name="3.1.33.2"> Test Case
 
 |||
 |---|---|
@@ -2136,9 +2163,9 @@ This is used to test SMB2 common user scenarios.
 | **Cleanup**              ||
 
 
-####<a name="3.1.34"> SMB2Basic\_ChangeNotify\_ChangeEa
+#### <a name="3.1.34"> SMB2Basic\_ChangeNotify\_ChangeEa
 
-#####<a name="3.1.34.1"> Scenario
+##### <a name="3.1.34.1"> Scenario
 
 |||
 |---|---|
@@ -2150,7 +2177,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 5.  Tear down the client by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
 
-#####<a name="3.1.34.2"> Test Case
+##### <a name="3.1.34.2"> Test Case
 
 |||
 |---|---|
@@ -2173,9 +2200,9 @@ This is used to test SMB2 common user scenarios.
 | **Cleanup**              ||
 
 
-####<a name="3.1.35"> SMB2Basic\_ChangeNotify\_ChangeSecurity
+#### <a name="3.1.35"> SMB2Basic\_ChangeNotify\_ChangeSecurity
 
-#####<a name="3.1.35.1"> Scenario
+##### <a name="3.1.35.1"> Scenario
 
 |||
 |---|---|
@@ -2187,7 +2214,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 5.  Tear down the client by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
 
-#####<a name="3.1.35.2"> Test Case
+##### <a name="3.1.35.2"> Test Case
 
 |||
 |---|---|
@@ -2210,9 +2237,9 @@ This is used to test SMB2 common user scenarios.
 | **Cleanup**              ||
 
 
-####<a name="3.1.36"> SMB2Basic\_ChangeNotify\_ChangeStreamName
+#### <a name="3.1.36"> SMB2Basic\_ChangeNotify\_ChangeStreamName
 
-#####<a name="3.1.36.1"> Scenario
+##### <a name="3.1.36.1"> Scenario
 
 |||
 |---|---|
@@ -2226,7 +2253,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 7.  Tear down the client1 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
 
-#####<a name="3.1.36.2"> Test Case
+##### <a name="3.1.36.2"> Test Case
 
 |||
 |---|---|
@@ -2258,9 +2285,9 @@ This is used to test SMB2 common user scenarios.
 | **Cleanup**              ||
 
 
-####<a name="3.1.37"> SMB2Basic\_ChangeNotify\_ChangeStreamSize
+#### <a name="3.1.37"> SMB2Basic\_ChangeNotify\_ChangeStreamSize
 
-#####<a name="3.1.37.1"> Scenario
+##### <a name="3.1.37.1"> Scenario
 
 |||
 |---|---|
@@ -2275,7 +2302,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 8. Tear down the client1 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
 
-#####<a name="3.1.37.2"> Test Case
+##### <a name="3.1.37.2"> Test Case
 
 |||
 |---|---|
@@ -2310,9 +2337,9 @@ This is used to test SMB2 common user scenarios.
 | **Cleanup**              ||
 
 
-####<a name="3.1.38"> SMB2Basic\_ChangeNotify\_ChangeStreamWrite
+#### <a name="3.1.38"> SMB2Basic\_ChangeNotify\_ChangeStreamWrite
 
-#####<a name="3.1.38.1"> Scenario
+##### <a name="3.1.38.1"> Scenario
 
 |||
 |---|---|
@@ -2327,7 +2354,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 8. Tear down the client1 by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
 
-#####<a name="3.1.38.2"> Test Case
+##### <a name="3.1.38.2"> Test Case
 
 |||
 |---|---|
@@ -2361,9 +2388,9 @@ This is used to test SMB2 common user scenarios.
 |                          | LOGOFF |
 | **Cleanup**              ||
 
-####<a name="3.1.39"> SMB2Basic\_ChangeNotify\_ServerReceiveSmb2Close
+#### <a name="3.1.39"> SMB2Basic\_ChangeNotify\_ServerReceiveSmb2Close
 
-#####<a name="3.1.39.1"> Scenario
+##### <a name="3.1.39.1"> Scenario
 
 |||
 |---|---|
@@ -2374,7 +2401,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 4.  Tear down the client1 by sending the following requests: 1. TREE\_DISCONNECT; 2. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
 
-#####<a name="3.1.39.2"> Test Case
+##### <a name="3.1.39.2"> Test Case
 
 |||
 |---|---|
@@ -2394,9 +2421,9 @@ This is used to test SMB2 common user scenarios.
 | **Cleanup**              ||
 
 
-####<a name="3.1.40"> SMB2Basic\_ChangeNotify\_NonDirectoryFile
+#### <a name="3.1.40"> SMB2Basic\_ChangeNotify\_NonDirectoryFile
 
-#####<a name="3.1.40.1"> Scenario
+##### <a name="3.1.40.1"> Scenario
 
 |||
 |---|---|
@@ -2406,7 +2433,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 3.  Tear down the client by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
 
-#####<a name="3.1.40.2"> Test Case
+##### <a name="3.1.40.2"> Test Case
 
 |||
 |---|---|
@@ -2426,9 +2453,9 @@ This is used to test SMB2 common user scenarios.
 | **Cleanup**              ||
 
 
-####<a name="3.1.41"> SMB2Basic\_ChangeNotify\_MaxTransactSizeCheck\_Smb2002
+#### <a name="3.1.41"> SMB2Basic\_ChangeNotify\_MaxTransactSizeCheck\_Smb2002
 
-#####<a name="3.1.41.1"> Scenario
+##### <a name="3.1.41.1"> Scenario
 
 |||
 |---|---|
@@ -2438,7 +2465,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 3.  Tear down the client by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
 
-#####<a name="3.1.41.2"> Test Case
+##### <a name="3.1.41.2"> Test Case
 
 |||
 |---|---|
@@ -2458,9 +2485,9 @@ This is used to test SMB2 common user scenarios.
 | **Cleanup**              ||
 
 
-####<a name="3.1.42"> SMB2Basic\_ChangeNotify\_MaxTransactSizeCheck\_Smb21
+#### <a name="3.1.42"> SMB2Basic\_ChangeNotify\_MaxTransactSizeCheck\_Smb21
 
-#####<a name="3.1.42.1"> Scenario
+##### <a name="3.1.42.1"> Scenario
 
 |||
 |---|---|
@@ -2470,7 +2497,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 3.  Tear down the client by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
 
-#####<a name="3.1.42.2"> Test Case
+##### <a name="3.1.42.2"> Test Case
 
 |||
 |---|---|
@@ -2490,9 +2517,9 @@ This is used to test SMB2 common user scenarios.
 | **Cleanup**              ||
 
 
-####<a name="3.1.43"> SMB2Basic\_ChangeNotify\_MaxTransactSizeCheck\_Smb30
+#### <a name="3.1.43"> SMB2Basic\_ChangeNotify\_MaxTransactSizeCheck\_Smb30
 
-#####<a name="3.1.43.1"> Scenario
+##### <a name="3.1.43.1"> Scenario
 
 |||
 |---|---|
@@ -2502,7 +2529,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 3.  Tear down the client by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
 
-#####<a name="3.1.43.2"> Test Case
+##### <a name="3.1.43.2"> Test Case
 
 |||
 |---|---|
@@ -2522,9 +2549,9 @@ This is used to test SMB2 common user scenarios.
 | **Cleanup**              ||
 
 
-####<a name="3.1.44"> SMB2Basic\_ChangeNotify\_MaxTransactSizeCheck\_Smb302
+#### <a name="3.1.44"> SMB2Basic\_ChangeNotify\_MaxTransactSizeCheck\_Smb302
 
-#####<a name="3.1.44.1"> Scenario
+##### <a name="3.1.44.1"> Scenario
 
 |||
 |---|---|
@@ -2534,7 +2561,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 3.  Tear down the client by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
 
-#####<a name="3.1.44.2"> Test Case
+##### <a name="3.1.44.2"> Test Case
 
 |||
 |---|---|
@@ -2554,9 +2581,9 @@ This is used to test SMB2 common user scenarios.
 | **Cleanup**              ||
 
 
-####<a name="3.1.45"> SMB2Basic\_ChangeNotify\_MaxTransactSizeCheck\_Smb311
+#### <a name="3.1.45"> SMB2Basic\_ChangeNotify\_MaxTransactSizeCheck\_Smb311
 
-#####<a name="3.1.45.1"> Scenario
+##### <a name="3.1.45.1"> Scenario
 
 |||
 |---|---|
@@ -2566,7 +2593,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 3.  Tear down the client by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
 
-#####<a name="3.1.45.2"> Test Case
+##### <a name="3.1.45.2"> Test Case
 
 |||
 |---|---|
@@ -2585,9 +2612,9 @@ This is used to test SMB2 common user scenarios.
 |                          | LOGOFF |
 | **Cleanup**              ||
 
-####<a name="3.1.46"> HVRS\OffloadReadWrite
+#### <a name="3.1.46"> HVRS\OffloadReadWrite
 
-#####<a name="3.1.46.1"> Scenario
+##### <a name="3.1.46.1"> Scenario
 
 |||
 |---|---|
@@ -2600,7 +2627,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 6.  Tear down the client by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
 
-#####<a name="3.1.46.2"> Test Case
+##### <a name="3.1.46.2"> Test Case
 
 |||
 |---|---|
@@ -2622,9 +2649,9 @@ This is used to test SMB2 common user scenarios.
 |                          | LOGOFF |
 | **Cleanup**              ||
 
-####<a name="3.1.47"> HVRS\SetZeroData
+#### <a name="3.1.47"> HVRS\SetZeroData
 
-#####<a name="3.1.47.1"> Scenario
+##### <a name="3.1.47.1"> Scenario
 
 |||
 |---|---|
@@ -2633,7 +2660,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 2.  Client sends IOCTL request with FSCTL_SET_ZERO_DATA. |
 | **Cluster Involved Scenario** | **NO** |
 
-#####<a name="3.1.47.2"> Test Case
+##### <a name="3.1.47.2"> Test Case
 
 |||
 |---|---|
@@ -2650,9 +2677,9 @@ This is used to test SMB2 common user scenarios.
 |                          | IOCtl with FSCTL_SET_ZERO_DATA |
 | **Cleanup**              ||
 
-####<a name="3.1.48"> HVRS\FileLevelTrim
+#### <a name="3.1.48"> HVRS\FileLevelTrim
 
-#####<a name="3.1.48.1"> Scenario
+##### <a name="3.1.48.1"> Scenario
 
 |||
 |---|---|
@@ -2662,7 +2689,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 3.  Tear down the client by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
 | **Cluster Involved Scenario** | **NO** |
 
-#####<a name="3.1.48.2"> Test Case
+##### <a name="3.1.48.2"> Test Case
 
 |||
 |---|---|
@@ -2702,9 +2729,9 @@ This is used to test SMB2 common user scenarios.
 |                          | LOGOFF |
 | **Cleanup**              ||
 
-####<a name="3.1.49"> HVRS\DuplicateExtentsToFile
+#### <a name="3.1.49"> HVRS\DuplicateExtentsToFile
 
-#####<a name="3.1.49.1"> Scenario
+##### <a name="3.1.49.1"> Scenario
 
 |||
 |---|---|
@@ -2713,7 +2740,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 2.  Client sends FSCTL_DUPLICATE_EXTENTS_TO_FILE. |
 | **Cluster Involved Scenario** | **No** |
 
-#####<a name="3.1.49.2"> Test Case
+##### <a name="3.1.49.2"> Test Case
 
 |||
 |---|---|
@@ -2730,9 +2757,9 @@ This is used to test SMB2 common user scenarios.
 |                          | IOCtl with FSCTL_DUPLICATE_EXTENTS_TO_FILE|
 | **Cleanup**              ||
 
-####<a name="3.1.50"> HVRS\SMBDialect
+#### <a name="3.1.50"> HVRS\SMBDialect
 
-#####<a name="3.1.50.1"> Scenario
+##### <a name="3.1.50.1"> Scenario
 
 |||
 |---|---|
@@ -2740,7 +2767,7 @@ This is used to test SMB2 common user scenarios.
 | **Message Sequence**          | 1.  NEGOTIATE. |
 | **Cluster Involved Scenario** | **NO** |
 
-#####<a name="3.1.50.2"> Test Case
+##### <a name="3.1.50.2"> Test Case
 
 |||
 |---|---|
@@ -2751,9 +2778,9 @@ This is used to test SMB2 common user scenarios.
 |                          | NEGOTIATE |
 | **Cleanup**              ||
 
-####<a name="3.1.51"> HVRS\PersistentHandles
+#### <a name="3.1.51"> HVRS\PersistentHandles
 
-#####<a name="3.1.51.1"> Scenario
+##### <a name="3.1.51.1"> Scenario
 
 |||
 |---|---|
@@ -2761,7 +2788,7 @@ This is used to test SMB2 common user scenarios.
 | **Message Sequence**          | 1.  NEGOTIATE. |
 | **Cluster Involved Scenario** | **NO** |
 
-#####<a name="3.1.51.2"> Test Case
+##### <a name="3.1.51.2"> Test Case
 
 |||
 |---|---|
@@ -2772,9 +2799,9 @@ This is used to test SMB2 common user scenarios.
 |                          | NEGOTIATE |
 | **Cleanup**              ||
 
-####<a name="3.1.52"> HVRS\Resiliency
+#### <a name="3.1.52"> HVRS\Resiliency
 
-#####<a name="3.1.52.1"> Scenario
+##### <a name="3.1.52.1"> Scenario
 
 |||
 |---|---|
@@ -2783,7 +2810,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 2.  Client sends FSCTL_LMR_REQUEST_RESILIENCY. |
 | **Cluster Involved Scenario** | **NO** |
 
-#####<a name="3.1.52.2"> Test Case
+##### <a name="3.1.52.2"> Test Case
 
 |||
 |---|---|
@@ -2801,9 +2828,9 @@ This is used to test SMB2 common user scenarios.
 |                          | LOGOFF |
 | **Cleanup**              ||
 
-####<a name="3.1.53"> QueryDir\_Reopen\_OnDir
+#### <a name="3.1.53"> QueryDir\_Reopen\_OnDir
 
-#####<a name="3.1.53.1"> Scenario
+##### <a name="3.1.53.1"> Scenario
 
 |||
 |---|---|
@@ -2813,7 +2840,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
 | **Cluster Involved Scenario** | **NO** |
 
-#####<a name="3.1.53.2"> Test Case
+##### <a name="3.1.53.2"> Test Case
 
 |||
 |---|---|
@@ -2831,9 +2858,9 @@ This is used to test SMB2 common user scenarios.
 |                          | LOGOFF |
 | **Cleanup**              ||
 
-####<a name="3.1.54"> QueryDir\_Reopen\_OnFile
+#### <a name="3.1.54"> QueryDir\_Reopen\_OnFile
 
-#####<a name="3.1.54.1"> Scenario
+##### <a name="3.1.54.1"> Scenario
 
 |||
 |---|---|
@@ -2843,7 +2870,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
 | **Cluster Involved Scenario** | **NO** |
 
-#####<a name="3.1.54.2"> Test Case
+##### <a name="3.1.54.2"> Test Case
 
 |||
 |---|---|
@@ -2861,9 +2888,9 @@ This is used to test SMB2 common user scenarios.
 |                          | LOGOFF |
 | **Cleanup**              ||
 
-####<a name="3.1.55"> Query\_Quota\_Info
+#### <a name="3.1.55"> Query\_Quota\_Info
 
-#####<a name="3.1.55.1"> Scenario
+##### <a name="3.1.55.1"> Scenario
 
 |||
 |---|---|
@@ -2873,7 +2900,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 3.  Tear down the client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF. |
 | **Cluster Involved Scenario** | **NO** |
 
-#####<a name="3.1.55.2"> Test Case
+##### <a name="3.1.55.2"> Test Case
 
 |||
 |---|---|
@@ -2891,17 +2918,136 @@ This is used to test SMB2 common user scenarios.
 |                          | LOGOFF |
 | **Cleanup**              ||
 
-###<a name="3.2">SMB2 Feature Test
+#### <a name="3.1.56"> BVT\_SMB2Basic\_Query\_FileAllInformation
+
+##### <a name="3.1.56.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Verify whether server can handle QUERY requests to a file for FileAllInformation correctly. |
+| **Message Sequence**          | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                               | 2.  Client queries FileAllInformation by sending QUERY\_INFO request. |
+|                               | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cluster Involved Scenario** | **NO** |
+
+##### <a name="3.1.56.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT\_SMB2Basic\_Query\_FileAllInformation |
+| **Description** | Verify whether server can handle QUERY requests to a file for FileAllInformation correctly. |
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT|
+|                          | CREATE (File)|
+|                          | QUERY\_INFO(SMB2\_0\_INFO\_FILE) |
+|                          | CLOSE |
+|                          | TREE\_DISCONNECT |
+|                          | LOGOFF |
+| **Cleanup**              ||
+
+
+#### <a name="3.1.57"> Compression
+
+##### <a name="3.1.57.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Verify whether server can decompress WRITE request and compress read response correctly. |
+| **Message Sequence**          | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                               | 2.  Client write copmressible data to server by sending compressed WRITE request. |
+|                               | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified. | 
+|                               | 4.  Verifies the READ reponse is compressed correctly and data read out are equal to the written one. | 
+|                               | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cluster Involved Scenario** | **NO** |
+
+##### <a name="3.1.57.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT_SMB2Compression_LZNT1 |
+| **Description** | This test case is designed to test whether server can decompress WRITE request and compress read response correctly using LZNT1. |
+| **Prerequisites** | The server implements dialect 3.11 and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to LZNT1; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client write copmressible data to server by sending WRITE request compressed with LZNT1. |
+|                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified. | 
+|                          | 4.  Verifies the READ reponse is compressed with LZNT1 and data read out are equal to the written one. | 
+|                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+| **Test ID** | BVT_SMB2Compression_LZ77 |
+| **Description** | This test case is designed to test whether server can decompress WRITE request and compress read response correctly using LZ77. |
+| **Prerequisites** | The server implements dialect 3.11 and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to LZ77; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client write copmressible data to server by sending WRITE request compressed with LZ77. |
+|                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified. | 
+|                          | 4.  Verifies the READ reponse is compressed with LZ77 and data read out are equal to the written one. | 
+|                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+| **Test ID** | BVT_SMB2Compression_LZ77Huffman |
+| **Description** | This test case is designed to test whether server can decompress WRITE request and compress read response correctly using LZ77 Huffman. |
+| **Prerequisites** | The server implements dialect 3.11 and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to LZ77 Huffman; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client write copmressible data to server by sending WRITE request compressed with LZ77 Huffman. |
+|                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified. | 
+|                          | 4.  Verifies the READ reponse is compressed with LZ77 Huffman and data read out are equal to the written one. | 
+|                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+| **Test ID** | BVT_SMB2Compression_LZNT1_Encrypted |
+| **Description** | This test case is designed to test whether server can decompress WRITE request and compress read response correctly using LZNT1 when encryption is enabled. |
+| **Prerequisites** | The server implements dialect 3.11, encryption and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with global encryption enabled and compression algorithms set to LZNT1; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client write copmressible data to server by sending WRITE request compressed with LZNT1. |
+|                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified. | 
+|                          | 4.  Verifies the READ reponse is compressed with LZNT1 and data read out are equal to the written one. | 
+|                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+| **Test ID** | BVT_SMB2Compression_LZ77_Encrypted |
+| **Description** | This test case is designed to test whether server can decompress WRITE request and compress read response correctly using LZ77 when encryption is enabled. |
+| **Prerequisites** | The server implements dialect 3.11, encryption and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with global encryption enabled and compression algorithms set to LZ77; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client write copmressible data to server by sending WRITE request compressed with LZ77. |
+|                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified. | 
+|                          | 4.  Verifies the READ reponse is compressed with LZ77 and data read out are equal to the written one. | 
+|                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+| **Test ID** | BVT_SMB2Compression_LZ77Huffman_Encrypted |
+| **Description** | This test case is designed to test whether server can decompress WRITE request and compress read response correctly using LZ77 Huffman when encryption is enabled. |
+| **Prerequisites** | The server implements dialect 3.11, encryption and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with global encryption enabled and compression algorithms set to LZ77 Huffman; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client write copmressible data to server by sending WRITE request compressed with LZ77 Huffman. |
+|                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified. | 
+|                          | 4.  Verifies the READ reponse is compressed with LZ77 Huffman and data read out are equal to the written one. | 
+|                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+### <a name="3.2">SMB2 Feature Test
 
 Test scenarios are prioritized and designed based on customer interests and SMB3 new features.
 
-####<a name="3.2.1">AppInstanceId
+#### <a name="3.2.1">AppInstanceId
 
 Allow an application to failover on a new client and open a file that was previously opened using an application instance identifier.
 
-#####<a name="3.2.1.1"> Model
+##### <a name="3.2.1.1"> Model
 
-######<a name="3.2.1.1.1"> Coverage
+###### <a name="3.2.1.1.1"> Coverage
 
 **AppInstanceId** Model covers all statements of the following sections:
 
@@ -2909,11 +3055,11 @@ Allow an application to failover on a new client and open a file that was previo
 
 -   2.2.13.2.13 SMB2\_CREATE\_APP\_INSTANCE\_ID
 
-######<a name="3.2.1.1.2"> Assumptions/Restrictions
+###### <a name="3.2.1.1.2"> Assumptions/Restrictions
 
 N/A
 
-######<a name="3.2.1.1.3"> Scenario Design 
+###### <a name="3.2.1.1.3"> Scenario Design 
 
 |||
 |---|---|
@@ -2926,7 +3072,7 @@ N/A
 ||OpenResponse;|
 
 
-#####<a name="3.2.1.2"> Traditional Case
+##### <a name="3.2.1.2"> Traditional Case
 
 Scenario see [Scenario](#3.1.13.1)
 
@@ -2993,13 +3139,13 @@ Scenario see [Scenario](#3.1.13.1)
 |**Cleanup**||
 
 
-####<a name="3.2.2">AppInstanceVersion
+#### <a name="3.2.2">AppInstanceVersion
 
-#####<a name="3.2.2.1"> Scenario
+##### <a name="3.2.2.1"> Scenario
 
 See section [Scenario](#3.1.14.1).
 
-#####<a name="3.2.2.2"> Test Case
+##### <a name="3.2.2.2"> Test Case
 
 |||
 |---|---|
@@ -3042,15 +3188,15 @@ See section [Scenario](#3.1.14.1).
 ||Tear down the two clients by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF; DISCONNECT|
 |**Cleanup**||
 
-####<a name="3.2.3"> CreateClose
+#### <a name="3.2.3"> CreateClose
 
 Client uses create operation to request either creation or access to a file, and uses close to close a file that was opened previously with a successful create.
 
 The feature has 34 model-based test cases and several traditional test cases.
 
-#####<a name="3.2.3.1">  Model
+##### <a name="3.2.3.1">  Model
 
-######<a name="3.2.3.1.1"> Coverage
+###### <a name="3.2.3.1.1"> Coverage
 
 **CreateClose** Model covers all statements (except which are mentioned in “Assumptions/Restrictions”) of the following sections:
 
@@ -3066,14 +3212,14 @@ The feature has 34 model-based test cases and several traditional test cases.
 
 -   2.2.16 SMB2 CLOSE Response
 
-######<a name="3.2.3.1.2"> Assumptions/Restrictions
+###### <a name="3.2.3.1.2"> Assumptions/Restrictions
 
 
 -   This model doesn’t test all the flag combination of fields FileAttributes/ShareAccess/CreateDisposition/CreateOptions of CREATE Request. It picks the ones mentioned in “section 3.3.5.9 Receiving an SMB2 CREATE Request”.
 
 -   This model doesn’t test create contexts. The create contexts are tested in individual Feature Tests.
 
-######<a name="3.2.3.1.3"> Scenario Design
+###### <a name="3.2.3.1.3"> Scenario Design
 
 |||
 |---|---|
@@ -3089,7 +3235,7 @@ The feature has 34 model-based test cases and several traditional test cases.
 ||)*;|
 
 
-#####<a name="3.2.3.2"> Traditional Case
+##### <a name="3.2.3.2"> Traditional Case
 
 |||
 |---|---|
@@ -3161,15 +3307,15 @@ The feature has 34 model-based test cases and several traditional test cases.
 ||LOGOFF|
 
 
-####<a name="3.2.4">CreditMgmt
+#### <a name="3.2.4">CreditMgmt
 
 **CreditMgmt** model verify that server handles the request correctly when client sends READ (for response payload verification)/WRITE (for request payload verification) requests with different MessageId, CreditCharge, CreditRequest and payload length.
 
 This feature contains 49 model-based test cases.
 
-#####<a name="3.2.4.1"> Model
+##### <a name="3.2.4.1"> Model
 
-######<a name="3.2.4.1.1"> Coverage
+###### <a name="3.2.4.1.1"> Coverage
 
 **CreditMgmt** model covers the statements in following sections with exceptions mentioned in Assumptions/Restrictions section
 
@@ -3183,13 +3329,13 @@ This feature contains 49 model-based test cases.
 
 -   3.3.5.2.5 Verifying the Credit Charge and the Payload Size
 
-######<a name="3.2.4.1.2"> Assumptions/Restrictions
+###### <a name="3.2.4.1.2"> Assumptions/Restrictions
 
 -   The model assumes the situation that the underlying connection supports multi-credit request (i.e. no NetBIOS transport used)
 
 -   The model does not cover credit verification for async/compounded/cancel requests
 
-######<a name="3.2.4.1.3"> Scenario Design
+###### <a name="3.2.4.1.3"> Scenario Design
 
 |||
 |---|---|
@@ -3203,15 +3349,15 @@ This feature contains 49 model-based test cases.
 ||);|
 
 
-####<a name="3.2.5">DirectoryLeasing
+#### <a name="3.2.5">DirectoryLeasing
 
-#####<a name="3.2.5.1"> Basic
+##### <a name="3.2.5.1"> Basic
 
-######<a name="3.2.5.1.1"> Scenario
+###### <a name="3.2.5.1.1"> Scenario
 
 See [Scenario](#3.1.11.1.1)
 
-######<a name="3.2.5.1.2"> Test Case
+###### <a name="3.2.5.1.2"> Test Case
 
 |||
 |---|---|
@@ -3417,7 +3563,7 @@ See [Scenario](#3.1.11.1.1)
 |**Cleanup**||
 
 
-#####<a name="3.2.5.2"> DirectoryLeasing\_BreakByAccurateOperation
+##### <a name="3.2.5.2"> DirectoryLeasing\_BreakByAccurateOperation
 
 | RequestLeaseStateFromClient1 | BreakOperationByClient2 |
 |------------------------------|-------------------------|
@@ -3428,7 +3574,7 @@ See [Scenario](#3.1.11.1.1)
 | RH                           | ParentDeleted           |
 | RH                           | ParentRenamed           |
 
-######<a name="3.2.5.2.1"> Scenario
+###### <a name="3.2.5.2.1"> Scenario
 
 |||
 |---|---|
@@ -3454,7 +3600,7 @@ See [Scenario](#3.1.11.1.1)
 |**Cluster Involved Scenario**|**NO**|
 
 
-######<a name="3.2.5.2.2"> Test Case
+###### <a name="3.2.5.2.2"> Test Case
 
 |||
 |---|---|
@@ -3677,9 +3823,9 @@ See [Scenario](#3.1.11.1.1)
 |**Cleanup**||
 
 
-#####<a name="3.2.5.3"> DirectoryLeasing\_WriteCachingCleared
+##### <a name="3.2.5.3"> DirectoryLeasing\_WriteCachingCleared
 
-######<a name="3.2.5.3.1"> Scenario
+###### <a name="3.2.5.3.1"> Scenario
 
 |||
 |---|---|
@@ -3698,7 +3844,7 @@ See [Scenario](#3.1.11.1.1)
 |**Cluster Involved Scenario**|**NO**|
 
 
-######<a name="3.2.5.3.2"> Test Case
+###### <a name="3.2.5.3.2"> Test Case
 
 |||
 |---|---|
@@ -3738,15 +3884,15 @@ See [Scenario](#3.1.11.1.1)
 |**Cleanup**||
 
 
-####<a name="3.2.6">Encryption
+#### <a name="3.2.6">Encryption
 
-#####<a name="3.2.6.1"> Model
+##### <a name="3.2.6.1"> Model
 
 **Encryption** Model is to test whether the server can handle encryption functionality correctly according to client request and server configuration.
 
 The feature has 90 Model-Based test cases and 5 traditional test case.
 
-######<a name="3.2.6.1.1"> Coverage
+###### <a name="3.2.6.1.1"> Coverage
 
 **Encryption** Model covers all statements (except which are mentioned in “Assumptions/Restrictions”) of the following sections:
 
@@ -3758,13 +3904,13 @@ The feature has 90 Model-Based test cases and 5 traditional test case.
 
 3.2.5.5 Receiving an SMB2 TREE\_CONNECT Response
 
-######<a name="3.2.6.1.2"> Assumptions/Restrictions
+###### <a name="3.2.6.1.2"> Assumptions/Restrictions
 
 This model doesn’t test the specific algorithm mentioned in section 2.2.41, which will be covered with traditional test cases.
 
 This model doesn’t test TRANSFORM\_HEADER message type, which will be covered with traditional test cases
 
-######<a name="3.2.6.1.3"> Scenario Design
+###### <a name="3.2.6.1.3"> Scenario Design
 
 This model has one scenario:
 
@@ -3787,17 +3933,17 @@ This model has one scenario:
 ||);|
 
 
-#####<a name="3.2.6.2"> Traditional case
+##### <a name="3.2.6.2"> Traditional case
 
 For traditional encryption BVT test cases, refer to section [Encryption](#3.1.12).
 
-#####<a name="3.2.6.3"> For other traditional encryption test cases, refer to section [FileServerFailover_Encryption](#3.4.6).
+##### <a name="3.2.6.3"> For other traditional encryption test cases, refer to section [FileServerFailover_Encryption](#3.4.6).
 
-####<a name="3.2.7"> Handle
+#### <a name="3.2.7"> Handle
 
-#####<a name="3.2.7.1"> Model
+##### <a name="3.2.7.1"> Model
 
-######<a name="3.2.7.1.1"> Coverage
+###### <a name="3.2.7.1.1"> Coverage
 
 **Handle** Model covers all statements (except which are mentioned in “Assumptions/Restrictions”) of the following sections:
 
@@ -3813,7 +3959,7 @@ For traditional encryption BVT test cases, refer to section [Encryption](#3.1.12
 
 -   3.3.5.9.12 Handling the SMB2\_CREATE\_DURABLE\_HANDLE\_RECONNECT\_V2 Create Context
 
-######<a name="3.2.7.1.2"> Assumptions/Restrictions
+###### <a name="3.2.7.1.2"> Assumptions/Restrictions
 
 -   All lease state used in this model is SMB2\_LEASE\_HANDLE\_CACHING | SMB2\_LEASE\_READ\_CACHING
 
@@ -3823,7 +3969,7 @@ For traditional encryption BVT test cases, refer to section [Encryption](#3.1.12
 
 -   The model does not cover the scenario that the dialect negotiated in ReconnectOpenRequest is different from PrepareOpen.
 
-######<a name="3.2.7.1.3"> Scenario Design
+###### <a name="3.2.7.1.3"> Scenario Design
 
 This model has 10 scenarios:
 
@@ -4083,7 +4229,7 @@ This model has 10 scenarios:
 ||OpenResponse;|
 
 
-#####<a name="3.2.7.2"> Traditional case
+##### <a name="3.2.7.2"> Traditional case
 
 The traditional test case is used to cover the below statement in section 3.3.5.9.7:
 
@@ -4232,7 +4378,7 @@ If the server disconnect the connection, the reconnect will be successful.
 |**Cleanup**||
 
 
-####<a name="3.2.8">Leasing
+#### <a name="3.2.8">Leasing
 
 **Leasing** means the client can cache specified data in local. There are three different capabilities within a lease: READ, WRITE and HANDLE.
 
@@ -4246,9 +4392,9 @@ The feature has 379 Model-Based test cases and 2 traditional test case.
 
 For traditional BVT test cases, please refer to section [DirectoryLeasing](#3.1.11) and [FileLeasing](#3.1.17)
 
-#####<a name="3.2.8.1"> Model
+##### <a name="3.2.8.1"> Model
 
-######<a name="3.2.8.1.1"> Coverage
+###### <a name="3.2.8.1.1"> Coverage
 
 This model covers all statements (except which are mentioned in “Assumptions/Restrictions”) of the following sections:
 
@@ -4274,13 +4420,13 @@ This model covers all statements (except which are mentioned in “Assumptions/R
 
 -   3.3.5.22.2 Processing a Lease Acknowledgment
 
-######<a name="3.2.8.1.2"> Assumptions/Restrictions
+###### <a name="3.2.8.1.2"> Assumptions/Restrictions
 
 1.  This model only covers the lease on a file and does not cover the lease on a directory.
 
 2.  This model does not cover the statements in section “3.3.6.1 Oplock Break Acknowledgment Timer Event”.
 
-######<a name="3.2.8.1.3"> Scenario Design
+###### <a name="3.2.8.1.3"> Scenario Design
 
 This model has 4 scenarios.
 
@@ -4830,7 +4976,7 @@ This model has 4 scenarios.
 ||)?;|
 
 
-####<a name="3.2.9">Negotiate
+#### <a name="3.2.9">Negotiate
 
 **Negotiate** means the client can exchange the capabilities with the server.
 
@@ -4838,9 +4984,9 @@ The feature has 94 Model-Based test cases and 7 traditional test case.
 
 For traditional test cases, please refer to section [Negotiation](#3.1.6)
 
-#####<a name="3.2.9.1"> Model
+##### <a name="3.2.9.1"> Model
 
-######<a name="3.2.9.1.1"> Coverage
+###### <a name="3.2.9.1.1"> Coverage
 
 This Model covers all statements (except which are mentioned in “Assumptions/Restrictions”) of the following sections:
 
@@ -4860,13 +5006,13 @@ This Model covers all statements (except which are mentioned in “Assumptions/R
 
 -   3.3.5.4 Receiving an SMB2 NEGOTIATE Request
 
-######<a name="3.2.9.1.2"> Assumptions/Restrictions
+###### <a name="3.2.9.1.2"> Assumptions/Restrictions
 
 1.  This model does not test all flags combination of fields in section 2.2.3 and 2.2.4.
 
 2.  This model focuses on different dialects and different sequences.
 
-######<a name="3.2.9.1.3"> Scenario Design
+###### <a name="3.2.9.1.3"> Scenario Design
 
 This model has 1 scenario.
 
@@ -4881,7 +5027,7 @@ This model has 1 scenario.
 ||)+;|
 
 
-#####<a name="3.2.9.2"> Traditional Case
+##### <a name="3.2.9.2"> Traditional Case
 
 Scenario see section [Scenario](#3.1.6.1).
 
@@ -4925,15 +5071,55 @@ Scenario see section [Scenario](#3.1.6.1).
 |**Cleanup**||
 
 
-####<a name="3.2.10">Oplock
+|||
+|---|---|
+|**Test ID**|Negotiate_SMB311_Compression_CompressionAlgorithmNotSupported|
+|**Description**|This test case is designed to test whether server can handle NEGOTIATE with unsupported compression algorithms in SMB2_COMPRESSION_CAPABILITIES context.|
+|**Prerequisites**|The server implements dialect 3.11 and compression feature.|
+|**Test Execution Steps**|Client Send Negotiate request with dialect SMB 3.11, SMB2_COMPRESSION_CAPABILITIES context and set CompressionAlgorithms to a unsupported value: 0x0004.|
+||Verify that server returns a Negotiate response, setting SMB2_COMPRESSION_CAPABILITIES negotiate response context with CompressionAlgorithmCount set to 1 and CompressionAlgorithms set to "NONE".|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|Negotiate_SMB311_Compression_InvalidSmbDialect|
+|**Description**|This test case is designed to test whether server ignores SMB2_COMPRESSION_CAPABILITIES context when negotiate with SMB dialect less than 3.1.1.|
+|**Prerequisites**|The server implements dialect 3.11 and compression feature.|
+|**Test Execution Steps**|Client Send Negotiate request with dialects less than SMB 3.11, SMB2_COMPRESSION_CAPABILITIES context and set CompressionAlgorithms to all supported compression algorithms.|
+||Verify that server returns a Negotiate response without SMB2_COMPRESSION_CAPABILITIES.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|Negotiate_SMB311_Compression_CompressionContextInvalidDataLength|
+|**Description**|This test case is designed to test whether server handle SMB2_COMPRESSION_CAPABILITIES context with invalid DataLength field when negotiate.|
+|**Prerequisites**|The server implements dialect 3.11 and compression feature.|
+|**Test Execution Steps**|Client Send Negotiate request with dialect SMB 3.11, SMB2_COMPRESSION_CAPABILITIES context and set DataLength to 4 which is less than the size of SMB2_COMPRESSION_CAPABILITIES.|
+||Verify that server returns a Negotiate response with Status set to STATUS_INVALID_PARAMETER.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|Negotiate_SMB311_Compression_CompressionAlgorithmEmpty|
+|**Description**|This test case is designed to test whether server handle SMB2_COMPRESSION_CAPABILITIES context with invalid CompressionAlgorithmCount field when negotiate.|
+|**Prerequisites**|The server implements dialect 3.11 and compression feature.|
+|**Test Execution Steps**|Client Send Negotiate request with dialect SMB 3.11, SMB2_COMPRESSION_CAPABILITIES context and set CompressionAlgorithmCount field to zero.|
+||Verify that server returns a Negotiate response with Status set to STATUS_INVALID_PARAMETER.|
+|**Cleanup**||
+
+
+#### <a name="3.2.10">Oplock
 
 **Oplock** model verifies that server handles Oplock request and acknowledgement correctly when client requests different Oplock levels on various types of shares with a follow-up request break previous Oplock.
 
 The feature contains 336 model-based test cases in 4 scenarios.
 
-#####<a name="3.2.10.1"> Model
+##### <a name="3.2.10.1"> Model
 
-######<a name="3.2.10.1.1"> Coverage
+###### <a name="3.2.10.1.1"> Coverage
 
 **Oplock** model covers the statements in following sections with exceptions mentioned in Assumptions/Restrictions section
 
@@ -4943,11 +5129,11 @@ The feature contains 336 model-based test cases in 4 scenarios.
 
 -   3.3.5.22.1 Processing an Oplock Acknowledgment
 
-######<a name="3.2.10.1.2"> Assumption/Restriction
+###### <a name="3.2.10.1.2"> Assumption/Restriction
 
 -   The model does not cover Oplock requested on a directory which is not supported.
 
-######<a name="3.2.10.1.3"> Scenario Design
+###### <a name="3.2.10.1.3"> Scenario Design
 
 |||
 |---|---|
@@ -4997,7 +5183,7 @@ The feature contains 336 model-based test cases in 4 scenarios.
 ||OplockBreakResponse;|
 
 
-####<a name="3.2.11">Replay
+#### <a name="3.2.11">Replay
 
 **Replay** means the client can resend the request to the server and receive the same response.
 
@@ -5005,9 +5191,9 @@ The feature has 555 Model-Based test cases and 2 traditional test case.
 
 For traditional test cases, please refer to section [Replay](#3.1.18)
 
-#####<a name="3.2.11.1"> Model
+##### <a name="3.2.11.1"> Model
 
-######<a name="3.2.11.1.1"> Coverage
+###### <a name="3.2.11.1.1"> Coverage
 
 This model covers part of statements of the following sections which are related with replay:
 
@@ -5059,7 +5245,7 @@ This model covers all statements (except which are mentioned in “Assumptions/R
 
 -   3.3.5.9.10 Handling the SMB2\_CREATE\_DURABLE\_HANDLE\_REQUEST\_V2 Create Context
 
-######<a name="3.2.11.1.2"> Assumptions/Restrictions
+###### <a name="3.2.11.1.2"> Assumptions/Restrictions
 
 1.  This model focuses on the flag SMB2\_FLAGS\_REPLAY\_OPERATION and ChannelSequence in the SMB2 header.
 
@@ -5071,7 +5257,7 @@ This model covers all statements (except which are mentioned in “Assumptions/R
 
 5.  This model selects NETWORK\_RESILIENCY\_REQUEST Request to test IOCtl operation.
 
-######<a name="3.2.11.1.3"> Scenario Design
+###### <a name="3.2.11.1.3"> Scenario Design
 
 This model has 6 scenarios.
 
@@ -5178,17 +5364,17 @@ This model has 6 scenarios.
 ||        FileOperationResponse;|
 
 
-####<a name="3.2.12">ResilientHandle
+#### <a name="3.2.12">ResilientHandle
 
 **ResilientHandle** provides the capability to preserve the open even if there is intermittent losses in the network connectivity.
 
-#####<a name="3.2.12.1"> Model
+##### <a name="3.2.12.1"> Model
 
-######<a name="3.2.12.1.1"> Coverage
+###### <a name="3.2.12.1.1"> Coverage
 
 **ResilientHandle** Model covers all statements (except which are mentioned in “Assumptions/Restrictions”) of section 3.3.5.15.9 in \[MS-SMB2\]. And also ResilientHandle Model covers the statements related to Resilient Handle when Log Off or Loss Connection.
 
-######<a name="3.2.12.1.2"> Assumptions/Restrictions
+###### <a name="3.2.12.1.2"> Assumptions/Restrictions
 
 -   This model does not cover the logic related to Lock/Unlock, which will be cover in Lock/Unlock Model.
 
@@ -5202,7 +5388,7 @@ This model has 6 scenarios.
 
 -   Do not cover common logic related to Receiving IoCtl Request, which will be in scope of IoCtrl Model.
 
-######<a name="3.2.12.1.3"> Scenario Design
+###### <a name="3.2.12.1.3"> Scenario Design
 
 |||
 |---|---|
@@ -5232,15 +5418,15 @@ This model has 6 scenarios.
 ||ReEstablishResilientOpenResponse;|
 
 
-#####<a name="3.2.12.2"> Traditional Case
+##### <a name="3.2.12.2"> Traditional Case
 
 The traditional case is used to cover the below statement in section 3.3.5.9:
 
 The server MUST verify the request size. If the size of the SMB2 CREATE Request (excluding the SMB2 header) is less than specified in the StructureSize field, then the request MUST be failed with STATUS\_ INVALID\_PARAMETER.
 
-######<a name="3.2.12.2.1"> Resilient Handle with Persistent Handle
+###### <a name="3.2.12.2.1"> Resilient Handle with Persistent Handle
 
-#######<a name="3.2.12.2.1.1"> Scenario
+####### <a name="3.2.12.2.1.1"> Scenario
 
 |||
 |---|---|
@@ -5256,7 +5442,7 @@ The server MUST verify the request size. If the size of the SMB2 CREATE Request 
 |**Cluster Involved Scenario**|**NO**|
 
 
-#######<a name="3.2.12.2.1.2"> Test Case
+####### <a name="3.2.12.2.1.2"> Test Case
 
 |||
 |---|---|
@@ -5276,9 +5462,9 @@ The server MUST verify the request size. If the size of the SMB2 CREATE Request 
 ||Verify the Create Response with Status STATUS_FILE_NOT_AVAILABLE |
 
 
-######<a name="3.2.12.2.2"> Resilient Open Scavenger Timer
+###### <a name="3.2.12.2.2"> Resilient Open Scavenger Timer
 
-#######<a name="3.2.12.2.2.1"> Scenario
+####### <a name="3.2.12.2.2.1"> Scenario
 
 |||
 |---|---|
@@ -5291,7 +5477,7 @@ The server MUST verify the request size. If the size of the SMB2 CREATE Request 
 |**Cluster Involved Scenario**|**NO**|
 
 
-#######<a name="3.2.12.2.2.2"> Test Case 
+####### <a name="3.2.12.2.2.2"> Test Case 
 
 |||
 |---|---|
@@ -5325,7 +5511,7 @@ The server MUST verify the request size. If the size of the SMB2 CREATE Request 
 ||Verify the returned status is STATUS_SUCCESS.|
 
 
-####<a name="3.2.13">SessionMgmt
+#### <a name="3.2.13">SessionMgmt
 
 **SessionMgmt** includes setup a session and logoff.
 
@@ -5333,9 +5519,9 @@ The feature has 251 Model-Based test cases and 3 traditional test cases.
 
 For traditional test cases, please refer to section [SessionMgmt](#3.1.22)
 
-#####<a name="3.2.13.1"> Model
+##### <a name="3.2.13.1"> Model
 
-######<a name="3.2.13.1.1"> Coverage
+###### <a name="3.2.13.1.1"> Coverage
 
 **SessionMgmt** model covers all statements of the following sections:
 
@@ -5351,11 +5537,11 @@ For traditional test cases, please refer to section [SessionMgmt](#3.1.22)
 
 -   3.3.5.6 Receiving an SMB2 LOGOFF Request
 
-######<a name="3.2.13.1.2">  Assumptions/Restrictions
+###### <a name="3.2.13.1.2">  Assumptions/Restrictions
 
 NA
 
-######<a name="3.2.13.1.3"> Scenario Design
+###### <a name="3.2.13.1.3"> Scenario Design
 
 This model has five scenarios:
 
@@ -5447,7 +5633,7 @@ This model has five scenarios:
 ||)|
 
 
-#####<a name="3.2.13.2"> Traditional Case
+##### <a name="3.2.13.2"> Traditional Case
 
 Scenario see [SessionMgmt](#3.1.22)
 
@@ -5468,9 +5654,9 @@ Scenario see [SessionMgmt](#3.1.22)
 |**Cluster Involved Scenario**|NO|
 
 
-####<a name="3.2.14"> MultipleChannel
+#### <a name="3.2.14"> MultipleChannel
 
-#####<a name="3.2.14.1"> Traditional Case
+##### <a name="3.2.14.1"> Traditional Case
 
 Scenario see [Scenario](#3.1.7.1)
 
@@ -5574,7 +5760,26 @@ Scenario see [Scenario](#3.1.7.1)
 |**Cluster Involved Scenario**|NO|
 
 
-####<a name="3.2.15">Signing
+|||
+|---|---|
+|**Test ID**|MultipleChannel_SecondChannelSessionSetupFailAtFirstTime|
+|**Description**|This case is to test whether server calculates PreauthIntegrityHashValue correctly if it returns failure for the first session setup.|
+|**Message Sequence**|**SETUP_CONNECTION from client NIC_1 to SUT NIC_1**|
+||NEGOTIATE|
+||SESSION_SETUP|
+||TREE_CONNECT|
+||CREATE|
+||WRITE|
+||**SETUP_CONNECTION from client NIC_2 to SUT NIC_2**|
+||NEGOTIATE|
+||SESSION_SETUP binding to the previous one but with an invalid token|
+||SESSION_SETUP binding to the previous one and succeed|
+||READ|
+||**Verify WRITE and READ data should be identical**|
+|**Cluster Involved Scenario**|NO|
+
+
+#### <a name="3.2.15">Signing
 
 **Signing** Model is designed to test the server can handle signing according to client request and server configuration.
 
@@ -5582,9 +5787,9 @@ The feature has 95 Model-Based test cases, 1 traditional test case
 
 For traditional test case, please refer to section [Signing](#3.1.20)
 
-#####<a name="3.2.15.1"> Model
+##### <a name="3.2.15.1"> Model
 
-######<a name="3.2.15.1.1"> Coverage
+###### <a name="3.2.15.1.1"> Coverage
 
 **Signing** Model covers all statements (except which are mentioned in "Assumptions/Restrictions") of the following sections:
 
@@ -5602,11 +5807,11 @@ For traditional test case, please refer to section [Signing](#3.1.20)
 
 -   3.2.5.3.2 Handling a Reauthentication
 
-######<a name="3.2.15.1.2"> Assumptions/Restrictions
+###### <a name="3.2.15.1.2"> Assumptions/Restrictions
 
 This model doesn’t test the algorithm of calculating the signature, for which will be covered with traditional test cases.
 
-######<a name="3.2.15.1.3"> Scenario Design
+###### <a name="3.2.15.1.3"> Scenario Design
 
 This model has one scenario:
 
@@ -5629,13 +5834,13 @@ This model has one scenario:
 ||);|
 
 
-####<a name="3.2.16">TreeMgmt
+#### <a name="3.2.16">TreeMgmt
 
 **TreeMgmt** test the server behavior of receiving TreeConnect and TreeDisconnect.
 
-#####<a name="3.2.16.1"> Model
+##### <a name="3.2.16.1"> Model
 
-######<a name="3.2.16.1.1"> Coverage
+###### <a name="3.2.16.1.1"> Coverage
 
 **TreeMgmt** Model covers all statements (except which are mentioned in “Assumptions/Restrictions”) of the following sections:
 
@@ -5651,7 +5856,7 @@ This model has one scenario:
 
 -   2.2.12 SMB2 TREE\_DISCONNECT Response
 
-######<a name="3.2.16.1.2"> Assumptions/Restrictions
+###### <a name="3.2.16.1.2"> Assumptions/Restrictions
 
 -   This model only contains single session with single tree connect.
 
@@ -5681,7 +5886,7 @@ This model has one scenario:
 
 -   Does not cover detail test of Share Path (example, server name is NetBIOS, FQDN or IP address) in TreeConnect request, which is in the scope of MS-SRVS.
 
-######<a name="3.2.16.1.3"> Scenario Design
+###### <a name="3.2.16.1.3"> Scenario Design
 
 |||
 |---|---|
@@ -5694,7 +5899,7 @@ This model has one scenario:
 ||(TreeDisconnectRequest; TreeDisconnectResponse;)+;|
 
 
-#####<a name="3.2.16.2"> Traditional Case
+##### <a name="3.2.16.2"> Traditional Case
 
 |||
 |---|---|
@@ -5707,13 +5912,13 @@ This model has one scenario:
 ||Tear down the client.|
 |**Cleanup**||
 
-####<a name="3.2.17">ValidateNegotiateInfo
+#### <a name="3.2.17">ValidateNegotiateInfo
 
 Client uses an SMB2 IOCTL Request FSCTL\_VALIDATE\_NEGOTIATE\_INFO to request validation of a previous SMB2 NEGOTIATE.
 
-#####<a name="3.2.17.1"> Model
+##### <a name="3.2.17.1"> Model
 
-######<a name="3.2.17.1.1"> Coverage
+###### <a name="3.2.17.1.1"> Coverage
 
 **ValidateNegotiateInfo** Model covers all statements of the following sections:
 
@@ -5723,11 +5928,11 @@ Client uses an SMB2 IOCTL Request FSCTL\_VALIDATE\_NEGOTIATE\_INFO to request va
 
 -   2.2.32.6 VALIDATE\_NEGOTIATE\_INFO Response
 
-######<a name="3.2.17.1.2"> Assumptions/Restrictions
+###### <a name="3.2.17.1.2"> Assumptions/Restrictions
 
 -   This model doesn’t cover all the parameters’ combination of Negotiate request.
 
-######<a name="3.2.17.1.3"> Scenario Design
+###### <a name="3.2.17.1.3"> Scenario Design
 
 |||
 |---|---|
@@ -5739,7 +5944,7 @@ Client uses an SMB2 IOCTL Request FSCTL\_VALIDATE\_NEGOTIATE\_INFO to request va
 ||(ValidateNegotiateInfoResponse | TerminateConnection);      |
 
 
-#####<a name="3.2.17.2"> Traditional Case
+##### <a name="3.2.17.2"> Traditional Case
 
 Scenario see section [Scenario](#3.1.25.1)
 
@@ -5847,15 +6052,15 @@ Scenario see section [Scenario](#3.1.25.1)
 |**Cleanup**||
 
 
-####<a name="3.2.18"> FileLevelTrim
+#### <a name="3.2.18"> FileLevelTrim
 
 This feature is to call IOCTL request with FSCTL\_FILE\_LEVEL\_TRIM to trim unused space of a file.
 
-#####<a name="3.2.18.1"> Model
+##### <a name="3.2.18.1"> Model
 
 Will not cover this feature in model.
 
-#####<a name="3.2.18.2"> Traditional Case
+##### <a name="3.2.18.2"> Traditional Case
 
 Scenario see [Scenario](#3.1.9.1)
 
@@ -5878,15 +6083,15 @@ Scenario see [Scenario](#3.1.9.1)
 |**Cleanup**||
 
 
-####<a name="3.2.19"> CopyOfflaod
+#### <a name="3.2.19"> CopyOfflaod
 
 This feature is call IOCTL request with FSCTL\_OFFLOAD\_READ and FSCTL\_OFFLOAD\_WRITE to copy file content.
 
-#####<a name="3.2.19.1"> Model
+##### <a name="3.2.19.1"> Model
 
 Will not cover this feature in model.
 
-#####<a name="3.2.19.2"> Traditional Case
+##### <a name="3.2.19.2"> Traditional Case
 
 Scenario see section [Scenario](#3.1.8.1)
 
@@ -5924,11 +6129,11 @@ Scenario see section [Scenario](#3.1.8.1)
 |**Cleanup**||
 
 
-####<a name="3.2.20">OperateOneFileFromTwoNodes
+#### <a name="3.2.20">OperateOneFileFromTwoNodes
 
-#####<a name="3.2.20.1"> Model
+##### <a name="3.2.20.1"> Model
 
-######<a name="3.2.20.1.1"> Coverage
+###### <a name="3.2.20.1.1"> Coverage
 
 This model is designed to test the conflicting scenario:
 
@@ -5948,11 +6153,11 @@ This model covers part of the below sections:
 
 -   2.2.15 SMB2 CLOSE Request
 
-######<a name="3.2.20.1.2"> Assumptions/Restrictions
+###### <a name="3.2.20.1.2"> Assumptions/Restrictions
 
 N/A
 
-######<a name="3.2.20.1.3"> Scenario Design
+###### <a name="3.2.20.1.3"> Scenario Design
 
 |||
 |---|---|
@@ -5966,11 +6171,11 @@ N/A
 ||        ConflictResponse;|
 
 
-####<a name="3.2.21"> MixedOplockLease
+#### <a name="3.2.21"> MixedOplockLease
 
-#####<a name="3.2.21.1"> Model
+##### <a name="3.2.21.1"> Model
 
-######<a name="3.2.21.1.1"> Coverage
+###### <a name="3.2.21.1.1"> Coverage
 
 This model is designed to test the below scenario:
 
@@ -5984,11 +6189,11 @@ This model covers part of the below sections:
 
 -   3.3.4.6 Object Store Indicates an Oplock Break
 
-######<a name="3.2.21.1.2"> Assumptions/Restrictions
+###### <a name="3.2.21.1.2"> Assumptions/Restrictions
 
 N/A
 
-######<a name="3.2.21.1.3"> Scenario Design
+###### <a name="3.2.21.1.3"> Scenario Design
 
 |||
 |---|---|
@@ -6016,17 +6221,96 @@ N/A
 ||        Verification;|
 
 
-#####<a name="3.2.21.2"> Traditional Case
+##### <a name="3.2.21.2"> Traditional Case
 
 No traditional cases for this feature.
 
-###<a name="3.3">SMB2 Feature Combination
+#### <a name="3.2.22"> Compression
+
+**Compression** tests the server behavior of sending and receiving compressed SMB2 messages.
+
+##### <a name="3.2.22.1"> Model
+
+Will not cover this feature in model.
+
+##### <a name="3.2.22.2"> Traditional Case
+
+Scenario see [Scenario](#3.1.57).
+
+|||
+|---|---|
+|**Test ID**| SMB2Compression_CompressedWriteRequest|
+|**Description**| This test case is designed to test whether server can handle compressed WRITE request correctly using supported compression algorithms. |
+| **Prerequisites** | The server implements dialect 3.11 and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to all supported ones; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client iterates through all comression algorithm supported by SUT as below: 
+|                          |         a.  Client write copmressible data to server by sending WRITE request compressed with the given compression algorithm. |
+|                          |         b.  Client read the data just written by sending READ request without SMB2_READFLAG_REQUEST_COMPRESSED specified. | 
+|                          |         c.  Verifies the READ reponse is compressed with supported algorithm and data read out are equal to the written one. | 
+|                          | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+|**Test ID**| SMB2Compression_CompressibleReadResponse |
+|**Description**| This test case is designed to test whether server can compress read request correctly if SMB2_READFLAG_REQUEST_COMPRESSED is specified in request and response is compressible. |
+| **Prerequisites** | The server implements dialect 3.11 and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to all supported ones; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client write copmressible data to server by sending uncompressed WRITE request. |
+|                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified. | 
+|                          | 4.  Verifies the READ reponse is compressed with supported algorithm and data read out are equal to the written one. | 
+|                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+|**Test ID**| SMB2Compression_IncompressibleReadResponse |
+|**Description**| This test case is designed to test whether server will not compress read request if SMB2_READFLAG_REQUEST_COMPRESSED is specified in request and response is incompressible. |
+| **Prerequisites** | The server implements dialect 3.11 and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to all supported ones; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client write incopmressible data to server by sending uncompressed WRITE request. |
+|                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified. | 
+|                          | 4.  Verifies the READ reponse is not compressed with supported algorithm is the reponse is not shrinkable by compression and data read out are equal to the written one. | 
+|                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+|**Test ID**| SMB2Compression_InvalidCompressedPacketLength |
+|**Description**| This test case is designed to test whether server will disconnect the connection if it received a compressed message with invalid length. |
+| **Prerequisites** | The server implements dialect 3.11 and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to all supported ones; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client send a compressed message with invalid length, which is less than the size of SMB2 COMPRESSION_TRANSFORM_HEADER. |
+|                          | 3.  Verifies the SMB2 connection is closed by SUT. | 
+| **Cleanup**              ||
+
+|||
+|---|---|
+|**Test ID**| SMB2Compression_InvalidDecompressedProtocolId |
+|**Description**| This test case is designed to test whether server will disconnect the connection if the ProtocolId in the decompressed message is invalid. |
+| **Prerequisites** | The server implements dialect 3.11 and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to all supported ones; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client send a compressed message with the ProtocolId in the decompressed message is invalid, which is of value 0xFFFFFFFF. |
+|                          | 3.  Verifies the SMB2 connection is closed by SUT. | 
+| **Cleanup**              ||
+
+|||
+|---|---|
+|**Test ID**| SMB2Compression_InvalidCompressionAlgorithm |
+|**Description**| This test case is designed to test whether server will disconnect the connection if the CompressionAlgorithm in the compressed message is invalid. |
+| **Prerequisites** | The server implements dialect 3.11 and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to all supported ones; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client send a compressed message with invalid CompressionAlgorithm with value 0x0004, which should be unsupported by SUT. |
+|                          | 3.  Verifies the SMB2 connection is closed by SUT. | 
+| **Cleanup**              ||
+
+### <a name="3.3">SMB2 Feature Combination
 
 Following scenarios extend “SMB2 Feature Test” by adding more complex message sequence in test.
 
-####<a name="3.3.1"> MultipleChannelWithReplay
+#### <a name="3.3.1"> MultipleChannelWithReplay
 
-#####<a name="3.3.1.1"> Scenario
+##### <a name="3.3.1.1"> Scenario
 
 |||
 |---|---|
@@ -6049,7 +6333,7 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 |**Cluster Involved Scenario**|**NO**|
 
 
-#####<a name="3.3.1.2"> Test Case
+##### <a name="3.3.1.2"> Test Case
 
 |||
 |---|---|
@@ -6085,9 +6369,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 |**Cleanup**||
 
 
-####<a name="3.3.2"> MultipleChannelWithEncryption
+#### <a name="3.3.2"> MultipleChannelWithEncryption
 
-#####<a name="3.3.2.1"> Scenario
+##### <a name="3.3.2.1"> Scenario
 
 |||
 |---|---|
@@ -6110,7 +6394,7 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 |**Cluster Involved Scenario**|**NO**|
 
 
-#####<a name="3.3.2.2"> Test Case
+##### <a name="3.3.2.2"> Test Case
 
 |||
 |---|---|
@@ -6181,9 +6465,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 |**Cleanup**||
 
 
-####<a name="3.3.3"> MultipleChannelWithLease
+#### <a name="3.3.3"> MultipleChannelWithLease
 
-#####<a name="3.3.3.1"> Scenario
+##### <a name="3.3.3.1"> Scenario
 
 |||
 |---|---|
@@ -6213,7 +6497,7 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 |**Cluster Involved Scenario**|**NO**|
 
 
-#####<a name="3.3.3.2"> Test Case
+##### <a name="3.3.3.2"> Test Case
 
 |||
 |---|---|
@@ -6245,9 +6529,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 |**Cleanup**||
 
 
-####<a name="3.3.4"> MultipleChannelWithLock
+#### <a name="3.3.4"> MultipleChannelWithLock
 
-#####<a name="3.3.4.1"> Scenario
+##### <a name="3.3.4.1"> Scenario
 
 |||
 |---|---|
@@ -6286,7 +6570,7 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 |**Cluster Involved Scenario**|**NO**|
 
 
-#####<a name="3.3.4.2"> Test Case
+##### <a name="3.3.4.2"> Test Case
 
 |||
 |---|---|
@@ -6366,9 +6650,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 |**Cleanup**||
 
 
-####<a name="3.3.5"> AppInstanceWithEncryption
+#### <a name="3.3.5"> AppInstanceWithEncryption
 
-#####<a name="3.3.5.1"> Scenario
+##### <a name="3.3.5.1"> Scenario
 
 |||
 |---|---|
@@ -6392,7 +6676,7 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 |**Cluster Involved Scenario**|**NO**|
 
 
-#####<a name="3.3.5.2"> Test Case
+##### <a name="3.3.5.2"> Test Case
 
 |||
 |---|---|
@@ -6469,9 +6753,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 ||LOGOFF|
 |**Cleanup**||
 
-####<a name="3.3.6"> AppInstanceWithLease
+#### <a name="3.3.6"> AppInstanceWithLease
 
-#####<a name="3.3.6.1"> Scenario
+##### <a name="3.3.6.1"> Scenario
 
 |||
 |---|---|
@@ -6505,7 +6789,7 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 |**Cluster Involved Scenario**|**NO**|
 
 
-#####<a name="3.3.6.2"> Test Case
+##### <a name="3.3.6.2"> Test Case
 
 |||
 |---|---|
@@ -6573,9 +6857,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 |**Cleanup**||
 
 
-####<a name="3.3.7"> AppInstanceWithLock
+#### <a name="3.3.7"> AppInstanceWithLock
 
-#####<a name="3.3.7.1"> Scenario
+##### <a name="3.3.7.1"> Scenario
 
 |||
 |---|---|
@@ -6607,7 +6891,7 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 |**Cluster Involved Scenario**|**NO**|
 
 
-#####<a name="3.3.7.2"> Test Case
+##### <a name="3.3.7.2"> Test Case
 
 |||
 |---|---|
@@ -6686,7 +6970,7 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 ||LOGOFF|
 
 
-###<a name="3.4">Server Failover Test
+### <a name="3.4">Server Failover Test
 
 |                                         |                |                               |                                 |
 |-----------------------------------------|----------------|-------------------------------|---------------------------------|
@@ -6701,16 +6985,16 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 | **FileServerFailover\_Lock**            | 1              | **Yes**                       | **Critical**                    |
 | **FileServerFailover\_DurableHandleV2** | 1              | **Yes**                       | **Critical**                    |
 
-####<a name="3.4.1"> SWNGetInterfaceList
+#### <a name="3.4.1"> SWNGetInterfaceList
 
-#####<a name="3.4.1.1"> Scenario
+##### <a name="3.4.1.1"> Scenario
 
 | **Description**               | Get SWN interface list.  |
 |-------------------------------|--------------------------|
 | **Call Sequence**             | WitnessrGetInterfaceList |
 | **Cluster Involved Scenario** | **YES**                  |
 
-#####<a name="3.4.1.2"> Test Case
+##### <a name="3.4.1.2"> Test Case
 
 |||
 |---|---|
@@ -6756,9 +7040,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 |**Cleanup**||
 
 
-####<a name="3.4.2"> SWNRegistration
+#### <a name="3.4.2"> SWNRegistration
 
-#####<a name="3.4.2.1"> Scenario
+##### <a name="3.4.2.1"> Scenario
 
 |||
 |---|---|
@@ -6768,7 +7052,7 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 |**Cluster Involved Scenario**|**YES**|
 
 
-#####<a name="3.4.2.2"> Test Case
+##### <a name="3.4.2.2"> Test Case
 
 |||
 |---|---|
@@ -6983,9 +7267,9 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 ||                            9.  Unbind                                                                         |
 | **Cleanup**              |                                                                                   |
 
-####<a name="3.4.3"> SWNAsyncNotification
+#### <a name="3.4.3"> SWNAsyncNotification
 
-#####<a name="3.4.3.1"> Scenario
+##### <a name="3.4.3.1"> Scenario
 
 |||
 |---|---|
@@ -6996,7 +7280,7 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 |**Cluster Involved Scenario**|**YES**|
 
 
-#####<a name="3.4.3.2"> Test Case
+##### <a name="3.4.3.2"> Test Case
 
 |||
 |---|---|
@@ -7168,11 +7452,11 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 | **Cleanup**              |                                                                                                                         |
 
 
-####<a name="3.4.4">AsmmetricShare
+#### <a name="3.4.4">AsmmetricShare
 
 In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduced in TREE\_CONNECT.Response.Capabilities. This flag indicates the share is an asymmetric share and the client needs to register SWN witness notification to the server. If the server finds that the client didn’t connect the optimum node, the owner node of the asymmetric share, the server will send an IP\_CHANGE\_NOTIFICATION to the client, and the client should reconnect to the optimum node.
 
-#####<a name="3.4.4.1"> Scenario
+##### <a name="3.4.4.1"> Scenario
 
 |||
 |---|---|
@@ -7182,7 +7466,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cluster Involved Scenario**|**YES**|
 
 
-#####<a name="3.4.4.2"> Test Case
+##### <a name="3.4.4.2"> Test Case
 
 |||
 |---|---|
@@ -7292,9 +7576,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cleanup**||
 
 
-####<a name="3.4.5"> FileServerFailover
+#### <a name="3.4.5"> FileServerFailover
 
-#####<a name="3.4.5.1"> Scenario
+##### <a name="3.4.5.1"> Scenario
 
 |||
 |---|---|
@@ -7316,7 +7600,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cluster Involved Scenario**|YES|
 
 
-#####<a name="3.4.5.2"> Test Case
+##### <a name="3.4.5.2"> Test Case
 
 |||
 |---|---|
@@ -7464,9 +7748,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cleanup**||
 
 
-####<a name="3.4.6">FileServerFailover\_Encryption
+#### <a name="3.4.6">FileServerFailover\_Encryption
 
-#####<a name="3.4.6.1"> Scenario
+##### <a name="3.4.6.1"> Scenario
 
 |||
 |---|---|
@@ -7490,7 +7774,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cluster Involved Scenario**|**YES**|
 
 
-#####<a name="3.4.6.2"> Test Case
+##### <a name="3.4.6.2"> Test Case
 
 |||
 |---|---|
@@ -7566,9 +7850,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cleanup**||
 
 
-####<a name="3.4.7"> FileServerFailover\_Lease
+#### <a name="3.4.7"> FileServerFailover\_Lease
 
-#####<a name="3.4.7.1"> Scenario
+##### <a name="3.4.7.1"> Scenario
 
 |||
 |---|---|
@@ -7602,7 +7886,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cluster Involved Scenario**|**YES**|
 
 
-#####<a name="3.4.7.2"> Test Case
+##### <a name="3.4.7.2"> Test Case
 
 |||
 |---|---|
@@ -7672,9 +7956,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cleanup**||
 
 
-####<a name="3.4.8"> FileServerFailover\_Lock
+#### <a name="3.4.8"> FileServerFailover\_Lock
 
-#####<a name="3.4.8.1"> Scenario
+##### <a name="3.4.8.1"> Scenario
 
 
 |||
@@ -7716,7 +8000,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cluster Involved Scenario**|**YES**|
 
 
-#####<a name="3.4.8.2"> Test Case
+##### <a name="3.4.8.2"> Test Case
 
 |||
 |---|---|
@@ -7758,9 +8042,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cleanup**||
 
 
-####<a name="3.4.9"> FileServerFailover\_DurableHandleV2
+#### <a name="3.4.9"> FileServerFailover\_DurableHandleV2
 
-#####<a name="3.4.9.1"> Scenario
+##### <a name="3.4.9.1"> Scenario
 
 |||
 |---|---|
@@ -7780,7 +8064,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cluster Involved Scenario**|**YES**|
 
 
-#####<a name="3.4.9.2"> Test Case
+##### <a name="3.4.9.2"> Test Case
 
 |||
 |---|---|
@@ -7808,9 +8092,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 ||Server sends LOGOFF response|
 |**Cleanup**||
 
-####<a name="3.4.10"> FileServerFailover\_SMB311\_Redirect\_To\_Owner\_SOFS
+#### <a name="3.4.10"> FileServerFailover\_SMB311\_Redirect\_To\_Owner\_SOFS
 
-#####<a name="3.4.10.1"> Scenario
+##### <a name="3.4.10.1"> Scenario
 
 |||
 |---|---|
@@ -7821,7 +8105,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cluster Involved Scenario**|**YES**|
 
 
-#####<a name="3.4.10.2"> Test Case
+##### <a name="3.4.10.2"> Test Case
 
 |||
 |---|---|
@@ -7836,7 +8120,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cleanup**||
 
 
-###<a name="3.5">FSRVP Test
+### <a name="3.5">FSRVP Test
 
 |                             |                |                         |                                 |
 |-----------------------------|----------------|-------------------------|---------------------------------|
@@ -7845,9 +8129,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 | **VSSSetContext**           | 5              | **Yes**                 | **Critical**                    |
 | **VSSAbortShadowCopySet**   | 3              | **Yes**                 | **Critical**                    |
 
-####<a name="3.5.1"> VSSOperateShadowCopySet
+#### <a name="3.5.1"> VSSOperateShadowCopySet
 
-#####<a name="3.5.1.1"> Scenario
+##### <a name="3.5.1.1"> Scenario
 
 |||
 |---|---|
@@ -7867,7 +8151,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cluster Involved Scenario**|YES|
 
 
-#####<a name="3.5.1.2"> Test Case
+##### <a name="3.5.1.2"> Test Case
 
 |||
 |---|---|
@@ -7991,9 +8275,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cleanup**|AbortShadowCopySet|
 ||DeleteShareMapping|
 
-####<a name="3.5.2"> VSSSetContext
+#### <a name="3.5.2"> VSSSetContext
 
-#####<a name="3.5.2.1"> Scenario
+##### <a name="3.5.2.1"> Scenario
 
 |||
 |---|---|
@@ -8013,7 +8297,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cluster Involved Scenario**|NO|
 
 
-#####<a name="3.5.2.2"> Test Case
+##### <a name="3.5.2.2"> Test Case
 
 |||
 |---|---|
@@ -8116,9 +8400,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 ||DeleteShareMapping|
 
 
-####<a name="3.5.3"> VSSAbortShadowCopySet
+#### <a name="3.5.3"> VSSAbortShadowCopySet
 
-#####<a name="3.5.3.1"> Scenario
+##### <a name="3.5.3.1"> Scenario
 
 |||
 |---|---|
@@ -8138,7 +8422,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cluster Involved Scenario**|NO|
 
 
-#####<a name="3.5.3.2"> Test Case
+##### <a name="3.5.3.2"> Test Case
 
 |||
 |---|---|
@@ -8191,7 +8475,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 ||DeleteShareMapping|
 
 
-###<a name="3.6">RSVD Test
+### <a name="3.6">RSVD Test
 
 |||
 |---|---|
@@ -8208,9 +8492,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**ChangeTracking**|1|
 |**Resize**|1|
 
-####<a name="3.6.1"> OpenCloseSharedVHD
+#### <a name="3.6.1"> OpenCloseSharedVHD
 
-#####<a name="3.6.1.1"> Scenario
+##### <a name="3.6.1.1"> Scenario
 
 |||
 |---|---|
@@ -8220,7 +8504,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cluster Involved Scenario**|YES|
 
 
-#####<a name="3.6.1.2"> Test Case
+##### <a name="3.6.1.2"> Test Case
 
 |||
 |---|---|
@@ -8251,9 +8535,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cleanup**|N/A|
 
 
-####<a name="3.6.2"> TunnelOperationToSharedVHD
+#### <a name="3.6.2"> TunnelOperationToSharedVHD
 
-#####<a name="3.6.2.1"> Scenario
+##### <a name="3.6.2.1"> Scenario
 
 |||
 |---|---|
@@ -8264,7 +8548,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cluster Involved Scenario**|YES|
 
 
-#####<a name="3.6.2.2"> Test Case
+##### <a name="3.6.2.2"> Test Case
 
 |||
 |---|---|
@@ -8333,9 +8617,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cleanup**|N/A|
 
 
-####<a name="3.6.3">ReadWriteSharedVHD
+#### <a name="3.6.3">ReadWriteSharedVHD
 
-#####<a name="3.6.3.1"> Scenario
+##### <a name="3.6.3.1"> Scenario
 
 |||
 |---|---|
@@ -8347,7 +8631,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cluster Involved Scenario**|YES|
 
 
-#####<a name="3.6.3.2"> Test Case
+##### <a name="3.6.3.2"> Test Case
 
 |||
 |---|---|
@@ -8371,9 +8655,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cleanup**|N/A|
 
 
-####<a name="3.6.4"> QuerySharedVirtualDiskSupport
+#### <a name="3.6.4"> QuerySharedVirtualDiskSupport
 
-#####<a name="3.6.4.1"> Scenario
+##### <a name="3.6.4.1"> Scenario
 
 |||
 |---|---|
@@ -8384,7 +8668,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cluster Involved Scenario**|YES|
 
 
-#####<a name="3.6.4.2"> Test Case
+##### <a name="3.6.4.2"> Test Case
 
 |||
 |---|---|
@@ -8397,9 +8681,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cleanup**|N/A|
 
 
-####<a name="3.6.5">TwoClientsAccessSameSharedVHD
+#### <a name="3.6.5">TwoClientsAccessSameSharedVHD
 
-#####<a name="3.6.5.1"> Scenario
+##### <a name="3.6.5.1"> Scenario
 
 |||
 |---|---|
@@ -8410,7 +8694,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cluster Involved Scenario**|YES|
 
 
-#####<a name="3.6.5.2"> Test Case
+##### <a name="3.6.5.2"> Test Case
 
 |||
 |---|---|
@@ -8439,9 +8723,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 ||The second client closes the file.|
 |**Cleanup**|N/A|
 
-####<a name="3.6.7"> QueryVHDSetFileInfo 
+#### <a name="3.6.7"> QueryVHDSetFileInfo 
 
-#####<a name="3.6.7.1"> Scenario
+##### <a name="3.6.7.1"> Scenario
 
 |||
 |---|---|
@@ -8451,7 +8735,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 ||CloseSharedVirtualDisk|
 |**Cluster Involved Scenario**|YES|
 
-#####<a name="3.6.7.2"> Test Case
+##### <a name="3.6.7.2"> Test Case
 
 |||
 |---|---|
@@ -8475,9 +8759,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cleanup**|N/A|
 
 
-####<a name="3.6.8"> ConvertVHDtoVHDSet 
+#### <a name="3.6.8"> ConvertVHDtoVHDSet 
 
-#####<a name="3.6.8.1"> Scenario
+##### <a name="3.6.8.1"> Scenario
 
 |||
 |---|---|
@@ -8488,7 +8772,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cluster Involved Scenario**|YES|
 
 
-#####<a name="3.6.8.2"> Test Case
+##### <a name="3.6.8.2"> Test Case
 
 |||
 |---|---|
@@ -8501,9 +8785,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cleanup**|N/A|
 
 
-####<a name="3.6.9"> Checkpoint 
+#### <a name="3.6.9"> Checkpoint 
 
-#####<a name="3.6.9.1"> Scenario
+##### <a name="3.6.9.1"> Scenario
 
 |||
 |---|---|
@@ -8516,7 +8800,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cluster Involved Scenario**|YES|
 
 
-#####<a name="3.6.9.2"> Test Case
+##### <a name="3.6.9.2"> Test Case
 
 |||
 |---|---|
@@ -8575,9 +8859,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 ||Client closes the file.|
 |**Cleanup**|N/A|
 
-####<a name="3.6.10"> ExtractAndOptimizeVHDSet 
+#### <a name="3.6.10"> ExtractAndOptimizeVHDSet 
 
-#####<a name="3.6.10.1"> Scenario
+##### <a name="3.6.10.1"> Scenario
 
 |||
 |---|---|
@@ -8588,7 +8872,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 |**Cluster Involved Scenario**|YES|
 
 
-#####<a name="3.6.10.2"> Test Case
+##### <a name="3.6.10.2"> Test Case
 
 |||
 |---|---|
@@ -8610,9 +8894,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 ||Client closes the file.|
 |**Cleanup**|N/A|
 
-####<a name="3.6.11"> Resize
+#### <a name="3.6.11"> Resize
 
-#####<a name="3.6.11.1"> Scenario
+##### <a name="3.6.11.1"> Scenario
 
 |||
 |---|---|
@@ -8624,7 +8908,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 ||CloseSharedVirtualDisk|
 |**Cluster Involved Scenario**|YES|
 
-#####<a name="3.6.11.2"> Test Case
+##### <a name="3.6.11.2"> Test Case
 
 |||
 |---|---|
@@ -8638,9 +8922,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 ||Client closes the file.|
 |**Cleanup**|N/A|
 
-####<a name="3.6.12"> SCSI Persistent Reservation
+#### <a name="3.6.12"> SCSI Persistent Reservation
 
-#####<a name="3.6.12.1"> Scenario
+##### <a name="3.6.12.1"> Scenario
 
 |||
 |---|---|
@@ -8650,7 +8934,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 ||CloseSharedVirtualDisk|
 |**Cluster Involved Scenario**|YES|
 
-#####<a name="3.6.12.2"> Test Case
+##### <a name="3.6.12.2"> Test Case
 
 |||
 |---|---|
@@ -8709,9 +8993,9 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 ||The second client closes the file.|
 |**Cleanup**|N/A|
 
-####<a name="3.6.13"> ChangeTracking 
+#### <a name="3.6.13"> ChangeTracking 
 
-#####<a name="3.6.13.1"> Scenario
+##### <a name="3.6.13.1"> Scenario
 
 |||
 |---|---|
@@ -8723,7 +9007,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 ||CloseSharedVirtualDisk|
 |**Cluster Involved Scenario**|YES|
 
-#####<a name="3.6.13.2"> Test Case
+##### <a name="3.6.13.2"> Test Case
 
 |||
 |---|---|
@@ -8738,7 +9022,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 ||Client closes the file.|
 |**Cleanup**|N/A|
 
-###<a name="3.7"> DFSC Test
+### <a name="3.7"> DFSC Test
 
 |                                              |                |
 |----------------------------------------------|----------------|
@@ -8773,9 +9057,9 @@ The test cases are designed with below assumptions, and these terms will be used
 
 -   DFS referral target caches.
 
-####<a name="3.7.1"> Domain\_referral\_to\_DC
+#### <a name="3.7.1"> Domain\_referral\_to\_DC
 
-#####<a name="3.7.1.1"> Scenario
+##### <a name="3.7.1.1"> Scenario
 
 |||
 |---|---|
@@ -8787,7 +9071,7 @@ The test cases are designed with below assumptions, and these terms will be used
 |**Cluster Involved Scenario**|NO|
 
 
-#####<a name="3.7.1.2"> Test Case
+##### <a name="3.7.1.2"> Test Case
 
 |||
 |---|---|
@@ -8851,9 +9135,9 @@ The test cases are designed with below assumptions, and these terms will be used
 |**Cleanup**|N/A|
 
 
-####<a name="3.7.2"> DC\_referral\_to\_DC
+#### <a name="3.7.2"> DC\_referral\_to\_DC
 
-#####<a name="3.7.2.1"> Scenario
+##### <a name="3.7.2.1"> Scenario
 
 |||
 |---|---|
@@ -8865,7 +9149,7 @@ The test cases are designed with below assumptions, and these terms will be used
 |**Cluster Involved Scenario**|NO|
 
 
-#####<a name="3.7.2.2"> Test Case
+##### <a name="3.7.2.2"> Test Case
 
 |||
 |---|---|
@@ -8944,9 +9228,9 @@ The test cases are designed with below assumptions, and these terms will be used
 |**Cleanup**|N/A|
 
 
-####<a name="3.7.3"> Sysvol\_referral\_to\_DC
+#### <a name="3.7.3"> Sysvol\_referral\_to\_DC
 
-#####<a name="3.7.3.1"> Scenario
+##### <a name="3.7.3.1"> Scenario
 
 |||
 |---|---|
@@ -8958,7 +9242,7 @@ The test cases are designed with below assumptions, and these terms will be used
 |**Cluster Involved Scenario**|NO|
 
 
-#####<a name="3.7.3.2"> Test Case
+##### <a name="3.7.3.2"> Test Case
 
 |||
 |---|---|
@@ -9044,9 +9328,9 @@ The test cases are designed with below assumptions, and these terms will be used
 |**Cleanup**|N/A|
 
 
-####<a name="3.7.4"> Root\_referral\_to\_DC
+#### <a name="3.7.4"> Root\_referral\_to\_DC
 
-#####<a name="3.7.4.1"> Scenario
+##### <a name="3.7.4.1"> Scenario
 
 |||
 |---|---|
@@ -9058,7 +9342,7 @@ The test cases are designed with below assumptions, and these terms will be used
 |**Cluster Involved Scenario**|NO|
 
 
-#####<a name="3.7.4.2"> Test Case
+##### <a name="3.7.4.2"> Test Case
 
 |||
 |---|---|
@@ -9124,9 +9408,9 @@ The test cases are designed with below assumptions, and these terms will be used
 |**Cleanup**|N/A|
 
 
-####<a name="3.7.5"> Link\_referral\_to\_DC
+#### <a name="3.7.5"> Link\_referral\_to\_DC
 
-#####<a name="3.7.5.1"> Scenario
+##### <a name="3.7.5.1"> Scenario
 
 |||
 |---|---|
@@ -9138,7 +9422,7 @@ The test cases are designed with below assumptions, and these terms will be used
 |**Cluster Involved Scenario**|NO|
 
 
-#####<a name="3.7.5.2"> Test Case
+##### <a name="3.7.5.2"> Test Case
 
 |||
 |---|---|
@@ -9228,9 +9512,9 @@ The test cases are designed with below assumptions, and these terms will be used
 |**Cleanup**|N/A|
 
 
-####<a name="3.7.6"> Root\_and\_Link\_referral\_to\_DFSServer
+#### <a name="3.7.6"> Root\_and\_Link\_referral\_to\_DFSServer
 
-#####<a name="3.7.6.1"> Scenario
+##### <a name="3.7.6.1"> Scenario
 
 |||
 |---|---|
@@ -9242,7 +9526,7 @@ The test cases are designed with below assumptions, and these terms will be used
 |**Cluster Involved Scenario**|NO|
 
 
-#####<a name="3.7.6.2"> Test Case
+##### <a name="3.7.6.2"> Test Case
 
 |||
 |---|---|
@@ -9384,9 +9668,9 @@ The test cases are designed with below assumptions, and these terms will be used
 |**Cleanup**|N/A|
 
 
-####<a name="3.7.7"> Path\_Normalization\_to\_DFSServer
+#### <a name="3.7.7"> Path\_Normalization\_to\_DFSServer
 
-#####<a name="3.7.7.1"> Scenario
+##### <a name="3.7.7.1"> Scenario
 
 |||
 |---|---|
@@ -9398,7 +9682,7 @@ The test cases are designed with below assumptions, and these terms will be used
 |**Cluster Involved Scenario**|NO|
 
 
-#####<a name="3.7.7.2"> Test Case
+##### <a name="3.7.7.2"> Test Case
 
 |||
 |---|---|

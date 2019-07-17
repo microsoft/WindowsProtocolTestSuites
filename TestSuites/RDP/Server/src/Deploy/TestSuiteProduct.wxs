@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?define VS17H=1 ?><!-- If need check Visual Studio 2017 Or Higher version" -->
-<?define PTF=1 ?><!-- If need check Protocol Test Framework version" -->
+<?define VS17H=1 ?>
+<!-- If need check Visual Studio 2017 Or Higher version" -->
+<?define PTF=1 ?>
+<!-- If need check Protocol Test Framework version" -->
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Fragment>
-    
+
     <!-- Properties for "Add or Remove Program Entries" -->
     <SetProperty Id="PTF_BUILDVERSION" Value="$(env.PTF_VERSION)" Before="AppSearch" />
     <SetProperty Id="ARPCOMMENTS" Value="[ProductName] v[ProductVersion]" Before="AppSearch" />
@@ -32,25 +34,25 @@
                      Type="string"
                      Value="[TARGET_ENDPOINT]" />
     </Component>
-    
-	
+
+
     <!-- Show LICENSE in a dialog. -->
     <WixVariable Id="WixUILicenseRtf" Value="LICENSE.rtf" />
 
-	
+
     <!-- UI -->
     <UIRef Id="WixUI_FeatureTree" />
     <UIRef Id="WixUI_ErrorProgressText" />
 
 
-	<UI>
+    <UI>
       <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="TestSuitePrivacyStatementDlg"><![CDATA[VersionMsi >= "5.00"]]></Publish>
       <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="TestSuitePrivacyStatementLowMsiVersionDlg"><![CDATA[VersionMsi < "5.00"]]></Publish>
 
       <!-- Optional Warning Dialog. -->
       <Publish Dialog="DependencyCheckWarningDlg" Control="Back" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
       <Publish Dialog="DependencyCheckWarningDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
-	  
+
       <Publish Dialog="LicenseAgreementDlg" Control="Next" Event="NewDialog" Value="TestSuitePrivacyStatementDlg"><![CDATA[VersionMsi >= "5.00"]]></Publish>
       <Publish Dialog="TestSuitePrivacyStatementDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
       <Publish Dialog="TestSuitePrivacyStatementDlg" Control="Back" Event="NewDialog" Value="LicenseAgreementDlg" Order="2">Not Installed</Publish>
@@ -62,64 +64,54 @@
 
     <!-- Dependency List -->
     <SetProperty Id="VS2017_VSTA2017_Higher" After="AppSearch" Value=" • Microsoft Visual Studio, version 2017 or higher.&#xA;">
-        <![CDATA[$(var.VS17H)]]>
+      <![CDATA[$(var.VS17H)]]>
     </SetProperty>
     <SetProperty Id="PTF_BuildVersion" After="AppSearch" Value=" • Microsoft Protocol Test Framework [PTF_BUILDVERSION].&#xA;">
-        <![CDATA[$(var.PTF)]]>
+      <![CDATA[$(var.PTF)]]>
     </SetProperty>
 
-    <!-- Visual Studio 2017 dependency check-->
-    <Property Id="VS2017SEARCH">
-      <RegistrySearch Id="Vs2017Search64"
-                      Root="HKLM"
-                      Key="SOFTWARE\Wow6432Node\Microsoft\VisualStudio\SxS\VS7"
-                      Name="15.0"
-                      Type="raw"
-                      Win64="yes" />
-      <RegistrySearch Id="Vs2017Search"
-                      Root="HKLM"
-                      Key="SOFTWARE\Microsoft\VisualStudio\SxS\VS7"
-                      Name="15.0"
-                      Type="raw" />
-    </Property>
-
-    <Property Id="VSTEST2017">
-      <DirectorySearch Id="Vs2017VsTestSearch" Path="[VS2017SEARCH]\Common7\IDE\CommonExtensions\Microsoft\TestWindow" Depth="1">
-        <FileSearch Name="vstest.console.exe"
-                    Languages="0" />
+    <!-- Visual Studio dependency check-->
+    <PropertyRef Id="VS2017_ROOT_FOLDER" />
+    <PropertyRef Id="VS2019_ROOT_FOLDER" />
+    <Property Id="VSTEST">
+      <DirectorySearch Id="Vs2019VsTestSearch" Path="[VS2019_ROOT_FOLDER]\Common7\IDE\CommonExtensions\Microsoft\TestWindow\">
+        <FileSearch Name="vstest.console.exe" />
+      </DirectorySearch>
+      <DirectorySearch Id="Vs2017VsTestSearch" Path="[VS2017_ROOT_FOLDER]\Common7\IDE\CommonExtensions\Microsoft\TestWindow\">
+        <FileSearch Name="vstest.console.exe" />
       </DirectorySearch>
     </Property>
 
     <!-- Check if VS17 or higher version-->
     <InstallUISequence>
       <Custom Action="SET_VSTEST_AGENT_OR_VS_NOT_INSTALLED_WARNING_TEXT_2017ORHigher" After="AppSearch">
-        <![CDATA[$(var.VS17H) AND NOT (VSTEST2017)]]>
+        <![CDATA[$(var.VS17H) AND NOT (VSTEST)]]>
       </Custom>
     </InstallUISequence>
 
     <CustomAction Id="SET_VSTEST_AGENT_OR_VS_NOT_INSTALLED_WARNING_TEXT_2017ORHigher"
                   Property="VSTEST_AGENT_NOT_INSTALLED_WARNING_TEXT"
                   Value=" • Microsoft Visual Studio, version 2017 or higher.&#xA;" />
-				  
-	<!-- SET PTF Version Warning Message-->
-	  <Property Id="PTFVERSION">
+
+    <!-- SET PTF Version Warning Message-->
+    <Property Id="PTFVERSION">
       <RegistrySearch Id="PTFVersion64Search" Root="HKLM" Win64="yes" Key="SOFTWARE\Wow6432Node\Microsoft\ProtocolTestFramework" Name="PTFVersion" Type="raw">
       </RegistrySearch>
-	  <RegistrySearch Id="PTFVersionSearch" Root="HKLM" Key="SOFTWARE\Microsoft\ProtocolTestFramework" Name="PTFVersion" Type="raw">
+      <RegistrySearch Id="PTFVersionSearch" Root="HKLM" Key="SOFTWARE\Microsoft\ProtocolTestFramework" Name="PTFVersion" Type="raw">
       </RegistrySearch>
     </Property>
     <CustomAction Id="SET_PTF_NOT_INSTALLED_WARNING_TEXT"
                   Property="PTF_NOT_INSTALLED_WARNING_TEXT"
                   Value =" • Microsoft Protocol Test Framework [PTF_BUILDVERSION].&#xA;" />
-    
+
     <InstallUISequence>
       <Custom Action="SET_PTF_NOT_INSTALLED_WARNING_TEXT" After="AppSearch">
         <![CDATA[$(var.PTF) AND NOT (PTFVERSION AND PTFVERSION << PTF_BUILDVERSION)]]>
       </Custom>
     </InstallUISequence>
-	
+
     <SetProperty Id="VSInstalled" After="AppSearch" Value="1">
-        <![CDATA[VSTEST2017]]>
+      <![CDATA[VSTEST]]>
     </SetProperty>
 
     <!-- Directory structure -->
@@ -130,11 +122,10 @@
       <Directory Id="WindowsVolumeDir">
         <Directory Id="ProtocolTestDir" Name="MicrosoftProtocolTests">
           <Directory Id="TestSuiteNameDir" Name="!(wix.TESTSUITE_NAME)">
-            <Directory Id="TestSuiteEndpointDir" Name="!(wix.TESTSUITE_ENDPOINT)-Endpoint">              
+            <Directory Id="TestSuiteEndpointDir" Name="!(wix.TESTSUITE_ENDPOINT)-Endpoint">
               <Directory Id="TESTSUITE_ROOT_DIR" Name="!(wix.TESTSUITE_VERSION)">
                 <Directory Id="TESTSUITE_BATCH_DIR" Name="Batch" />
                 <Directory Id="TESTSUITE_BIN_DIR" Name="Bin" />
-                <Directory Id="DOCS_FILES_DIR" Name="Docs" />
                 <Directory Id="TESTSUITE_COMMON_SCRIPTS_DIR" Name="Batch" />
                 <Directory Id="TESTSUITE_SCRIPTS_DIR" Name="Scripts" />
               </Directory>
@@ -154,25 +145,25 @@
 
     </Directory>
 
-	
+
     <!-- Shortcuts -->
     <DirectoryRef Id="TestSuiteProgramsMenuFolder">
 
       <!-- EULA and Uninstall shortcuts -->
       <Component Id="GeneralShortcuts" Guid="*">
-	  
+
         <Shortcut Id="EulaShortcut"
                   Name="LICENSE"
                   Description="Open end user license agreement"
                   Target="[TESTSUITE_ROOT_DIR]LICENSE.rtf"
                   WorkingDirectory="TESTSUITE_ROOT_DIR"/>
-				  
+
         <Shortcut Id="UninstallProductShortcut"
                   Name="Uninstall"
                   Description="Uninstall the test suite"
                   Target="[System64Folder]msiexec.exe"
                   Arguments="/x [ProductCode]"/>
-				  
+
         <RegistryValue Id="GeneralShortcutsKeyPath"
                        Root="HKCU"
                        Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_ENDPOINT)-!(wix.TESTSUITE_VERSION)"
@@ -257,12 +248,11 @@
       <ComponentRef Id="DesktopShortcuts" />
       <ComponentGroupRef Id="BATCH_FILES" />
       <ComponentGroupRef Id="COMMON_BATCH_FILES" />
-      <ComponentGroupRef Id="DOCS_FILES" />
       <ComponentGroupRef Id="TESTSUITE_SCRIPTS_FILES" />
       <ComponentGroupRef Id="TESTSUITE_MISC_FILES"/>
       <ComponentGroupRef Id="TESTSUITE_PTFCONFIG_FILES"/>
 
     </FeatureRef>
-	</Fragment>
-	
+  </Fragment>
+
 </Wix>

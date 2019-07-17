@@ -6,6 +6,7 @@
   <Adapters>
     <Adapter  displayname="Basic RDP SUT Control Adapter" name="IRdpSutControlAdapter">
       <Adapter type="powershell" name="IRdpSutControlAdapter" scriptdir=".\"/>
+      <Adapter type="shell" name="IRdpSutControlAdapter" scriptdir=".\"/>
       <Adapter type="interactive" name="IRdpSutControlAdapter"/>
       <Adapter type="managed" name="IRdpSutControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.Rdp.ProtocolBasedRdpSUTControlAdapter"/>
     </Adapter>

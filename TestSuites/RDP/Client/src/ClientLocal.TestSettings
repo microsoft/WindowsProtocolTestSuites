@@ -3,6 +3,7 @@
   <Description>These are default test settings for a local test run.</Description>
   <Deployment>
     <DeploymentItem filename="Adapter\SUTControlAdapter\TriggerClientDisconnectAll.ps1" />
+    <DeploymentItem filename="Adapter\ShellSUTControlAdapter\TriggerClientDisconnectAll.sh" />
     <DeploymentItem filename="TestSuite\RDPEGFX\H264TestData\BaseImage\OriginalPic_8.png" />
     <DeploymentItem filename="TestSuite\Rdprfx.bmp" />
     <DeploymentItem filename="Adapter\SUTControlAdapter\Check-PSRemoting.ps1" />
@@ -17,6 +18,7 @@
     <DeploymentItem filename="TestSuite\RDPEDISP\RdpedispEnhancedAdapterImages\MonitorAdd.png" />
     <DeploymentItem filename="TestSuite\RDPEGFX\H264TestData\BaseImage\OriginalPic_Large_4.png" />
     <DeploymentItem filename="Adapter\SUTControlAdapter\RDPConnectWithNegotiationApproachFullScreen.ps1" />
+    <DeploymentItem filename="Adapter\ShellSUTControlAdapter\RDPConnectWithNegotiationApproachFullScreen.sh" />
     <DeploymentItem filename="TestSuite\RDPEGFX\H264TestData\RDPEGFX_H264Codec_PositiveTest_AVC420_MainProfile.xml" />
     <DeploymentItem filename="TestSuite\RDPEGFX\H264TestData\BaseImage\OriginalPic_Large_2.png" />
     <DeploymentItem filename="TestSuite\RDPEGFX\H264TestData\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Chroma420Together_MainProfile_LargeSize.xml" />
@@ -24,6 +26,7 @@
     <DeploymentItem filename="TestSuite\RdpegfxClearCodecTestImage.bmp" />
     <DeploymentItem filename="TestSuite\RDPEGFX\H264TestData\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_MainProfile_CABACEnabled.xml" />
     <DeploymentItem filename="Adapter\SUTControlAdapter\TriggerClientDisconnect.ps1" />
+    <DeploymentItem filename="Adapter\ShellSUTControlAdapter\TriggerClientDisconnect.sh" />
     <DeploymentItem filename="TestSuite\RdprfxVideoMode.bmp" />
     <DeploymentItem filename="TestSuite\RDPEDISP\RdpedispEnhancedAdapterImages\MonitorRemove.png" />
     <DeploymentItem filename="TestSuite\RDPEGFX\H264TestData\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_MainProfile.xml" />
@@ -31,6 +34,7 @@
     <DeploymentItem filename="TestSuite\RDPEGFX\H264TestData\RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_MainProfile_ISliceOnly.xml" />
     <DeploymentItem filename="TestSuite\RdpevorTestData.xml" />
     <DeploymentItem filename="Adapter\SUTControlAdapter\RDPConnectWithDirectCredSSPFullScreen.ps1" />
+    <DeploymentItem filename="Adapter\ShellSUTControlAdapter\RDPConnectWithDirectCredSSPFullScreen.sh" />
     <DeploymentItem filename="TestSuite\RDPEGFX\H264TestData\BaseImage\OriginalPic_Large_5.png" />
     <DeploymentItem filename="TestSuite\RDPEGFX\H264TestData\BaseImage\OriginalPic_7.png" />
     <DeploymentItem filename="TestSuite\RDPEGFX\H264TestData\BaseImage\OriginalPic_6.png" />
@@ -55,6 +59,7 @@
     <DeploymentItem filename="TestSuite\RDPEGFX\H264TestData\BaseImage\OriginalPic_1.png" />
     <DeploymentItem filename="Adapter\RdpeiSUTControlAdapter\TriggerMultiTouchEventOnClient.ps1" />
     <DeploymentItem filename="Adapter\SUTControlAdapter\RDPConnectWithDirectCredSSP.ps1" />
+    <DeploymentItem filename="Adapter\ShellSUTControlAdapter\RDPConnectWithDirectCredSSP.sh" />
     <DeploymentItem filename="TestSuite\RDPEGFX\H264TestData\BaseImage\OriginalPic_4.png" />
     <DeploymentItem filename="TestSuite\RdpedispTestImage.bmp" />
     <DeploymentItem filename="TestSuite\RDPEGFX\H264TestData\BaseImage\OriginalPic_5.png" />
@@ -65,6 +70,7 @@
     <DeploymentItem filename="TestSuite\RDPEDISP\RdpedispEnhancedAdapterImages\OrientationChange1.png" />
     <DeploymentItem filename="Adapter\SUTControlAdapter\Run-TaskWithPSRemoting.ps1" />
     <DeploymentItem filename="Adapter\SUTControlAdapter\RDPConnectWithNegotiationApproach.ps1" />
+    <DeploymentItem filename="Adapter\ShellSUTControlAdapter\RDPConnectWithNegotiationApproach.sh" />
   </Deployment>
   <Execution>
     <TestTypeSpecific>

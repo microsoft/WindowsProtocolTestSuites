@@ -3,7 +3,7 @@
 ## Licensed under the MIT license. See LICENSE file in the project root for full license information.
 #############################################################################
 
-$rootPath = Split-Path $MyInvocation.MyCommand.Definition –parent
+$rootPath = Split-Path $MyInvocation.MyCommand.Definition -parent
 
 #----------------------------------------------------------------------------
 # Start loging using start-transcript cmdlet

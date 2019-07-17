@@ -40,11 +40,9 @@
     <!-- The script should exist in drop\TestSuite\OD\MS-ADOD\Batch directory. -->
     <WixVariable Id="RUN_TESTS_COMMAND" Value="RunAllTestCases.cmd" />
     <WixVariable Id="RUN_BVT_COMMAND"   Value="RunBVTTestCases.cmd" />
-    <WixVariable Id="QUICK_START_GUIDE" Value="MS-ADOD_ODUserGuide.docx" />
 
     <WixVariable Id="SET_VS_TEST_PATH" Value="setVsTestPath.cmd" />
     <WixVariable Id="SET_VS_PATH"      Value="setVsPath.cmd" />
-    <WixVariable Id="SET_VS_2017_PATH" Value="setVs2017Path.cmd" />
 
     <DirectoryRef Id="TESTSUITE_ROOT_DIR">
       <Component Id="LICENSE.rtf" Guid="{40EE42F0-4761-4DC9-BA1F-89FEF0DA38EB}">

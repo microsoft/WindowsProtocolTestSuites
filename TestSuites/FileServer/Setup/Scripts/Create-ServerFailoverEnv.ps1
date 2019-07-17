@@ -110,6 +110,7 @@ $clusterName = $config.lab.ha.cluster.name
 $clusterNodes = @()
 $clusterIps = @()
 $generalFsIps = @()
+$infraFsName = $config.lab.ha.infrastructurefs.name
 
 $clusterNodeList = $config.lab.servers.vm | Where-Object {$_.isclusternode -eq "true"}
 foreach ($clusterNode in $clusterNodeList)
@@ -441,6 +442,37 @@ if($retryTime -le 0)
     .\Write-Error.ps1 "Failed to add shared folders to ScaleoutFS role."
     Write-ConfigFailureSignal
     exit ExitCode
+}
+
+#----------------------------------------------------------------------------
+# Create infrastructure share before adding cluster shared volume
+#----------------------------------------------------------------------------
+$build = [environment]::OSVersion.Version.Build
+if ($build -ge 17609)
+{
+    $InfrastructureGroup = Get-ClusterGroup | where {$_.Name -eq $infraFsName}
+    if($InfrastructureGroup -eq $null)
+    {
+        .\Write-Info.ps1 "Create InfraFS role"
+        Add-ClusterScaleOutFileServerRole -Infrastructure -Name $infraFsName
+        .\Write-Info.ps1 "Add infrastructure share"
+        $clusterAvailableResources = Get-ClusterResource | where {$_.OwnerGroup -eq "Available Storage" -and $_.ResourceType -eq "Physical Disk" -and $_.Name -ne "SMBGeneralDisk"}
+        if ($clusterAvailableResources.Count -lt 1)
+        {
+            .\Write-Error.ps1 "No available storage for infrastructure share."
+            Write-ConfigFailureSignal
+            exit ExitCode
+        }
+        $infraShare = $clusterAvailableResources | Select-Object -First 1
+        $infraShare | Add-ClusterSharedVolume
+        .\Write-Info.ps1 "Check the availability of infrastructure share. \\$infraFsName\Volume1 should be available."
+        if (!(Test-Path "\\$infraFsName\Volume1"))
+        {
+            .\Write-Error.ps1 "Failed to add infrastructure share."
+            Write-ConfigFailureSignal
+            exit ExitCode
+        }
+    }
 }
 
 #----------------------------------------------------------------------------

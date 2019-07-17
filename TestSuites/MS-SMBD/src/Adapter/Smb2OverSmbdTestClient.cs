@@ -610,30 +610,21 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
             Channel_Values channel = Channel_Values.CHANNEL_RDMA_V1
             )
         {
-            var request = new Smb2WriteRequestPacket();
-
-            request.Header.CreditCharge = creditCharge;
-            request.Header.Command = Smb2Command.WRITE;
-            request.Header.CreditRequestResponse = creditRequest;
-            request.Header.Flags = Packet_Header_Flags_Values.FLAGS_SIGNED;
-            request.Header.MessageId = messageId;
-            request.Header.TreeId = TreeId;
-            request.Header.SessionId = sessionId;
-
-            request.PayLoad.Length = 0;
-            request.PayLoad.Offset = offset;
-            request.PayLoad.FileId = FileId;
-            request.PayLoad.Channel = channel;
-            request.PayLoad.RemainingBytes = length; // not described in TD. Get from capture package
-            request.PayLoad.WriteChannelInfoOffset = request.BufferOffset;
-            request.PayLoad.WriteChannelInfoLength = (ushort)writeChannelInfo.Length;
-            request.PayLoad.DataOffset = 0;
-            request.PayLoad.Flags = WRITE_Request_Flags_Values.None;
-
-            request.Buffer = writeChannelInfo;
-
-            SendPacket(request);
-
+            WriteRequest(
+                creditCharge,
+                creditRequest,
+                Packet_Header_Flags_Values.FLAGS_SIGNED,
+                messageId,
+                sessionId,
+                TreeId,
+                offset,
+                FileId,
+                channel,
+                WRITE_Request_Flags_Values.None,
+                writeChannelInfo,
+                new byte[length]
+                );
+            
             return WriteResponse(messageId, out this.packetHeader, out responsePayload);
         }
 
@@ -688,7 +679,9 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
 
             request.Buffer = content;
 
-            return Smb2Crypto.SignAndEncrypt((Smb2SinglePacket)request, cryptoInfoTable, Smb2Role.Client);
+            var processedPacket = Smb2Crypto.SignCompressAndEncrypt((Smb2SinglePacket)request, cryptoInfoTable, CompressionInfo, Smb2Role.Client);
+
+            return processedPacket.ToBytes();
         }
 
 
@@ -782,7 +775,9 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
 
             messageId += request.Header.CreditCharge;
 
-            return Smb2Crypto.SignAndEncrypt((Smb2SinglePacket)request, cryptoInfoTable, Smb2Role.Client);
+            var processedPacket = Smb2Crypto.SignCompressAndEncrypt((Smb2SinglePacket)request, cryptoInfoTable, CompressionInfo, Smb2Role.Client);
+
+            return processedPacket.ToBytes();
         }
 
         public uint Smb2CloseFile()

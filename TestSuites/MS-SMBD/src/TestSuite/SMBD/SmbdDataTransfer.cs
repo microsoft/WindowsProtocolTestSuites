@@ -1738,13 +1738,6 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
             BaseTestSite.Assert.IsFalse(smbdAdapter.ClientConnection.Endpoint.IsConnected, "Connection should be terminated.");
         }
 
-        public void LogSmbdEndpointEvent(string log)
-        {
-            BaseTestSite.Log.Add(
-                LogEntryKind.Debug,
-                log);
-        }
-
         /// <summary>
         /// Modify DataOffset in SMBDirect Data Transfer message
         /// </summary>

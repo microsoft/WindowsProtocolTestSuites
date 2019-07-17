@@ -50,6 +50,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         public const string Credit = "Credit";
         public const string Signing = "Signing";
         public const string Encryption = "Encryption";
+        public const string Compression = "Compression";
 
         public const string OplockOnShareWithoutForceLevel2OrSOFS = "OplockOnShareWithoutForceLevel2OrSOFS";
         public const string OplockOnShareWithoutForceLevel2WithSOFS = "OplockOnShareWithoutForceLevel2WithSOFS";

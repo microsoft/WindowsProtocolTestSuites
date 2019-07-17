@@ -916,7 +916,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             TS_UD_CS_CORE coreData = new TS_UD_CS_CORE();
             coreData.header.type = (TS_UD_HEADER_type_Values)ParseUInt16(data, ref currentIndex, false);
             coreData.header.length = ParseUInt16(data, ref currentIndex, false);
-            coreData.version = (version_Values)ParseUInt32(data, ref currentIndex, false);
+            coreData.version = (TS_UD_CS_CORE_version_Values)ParseUInt32(data, ref currentIndex, false);
             coreData.desktopWidth = ParseUInt16(data, ref currentIndex, false);
             coreData.desktopHeight = ParseUInt16(data, ref currentIndex, false);
             coreData.colorDepth = (colorDepth_Values)ParseUInt16(data, ref currentIndex, false);

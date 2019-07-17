@@ -216,6 +216,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             }
         }
 
+        internal FILEID FileId
+        {
+            get
+            {
+                return fileId;
+            }
+        }
+
         #endregion
 
         #region adapter Initializeation and CleanUp
@@ -628,13 +636,24 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// <param name="buffer">Bytes to be written in the file</param>
         /// <param name="offset">The offset of the file from where client wants to start writing</param>
         /// <param name="isWriteThrough">If true, the write should be treated in a write-through fashion.</param>
-        /// <param name="isNonCached">If true, the write should be sent directly to the disk instead of the cache.</param>
+        /// <param name="isUnBuffered">If true, File buffering is not performed.</param>
         /// <param name="bytesWritten">The number of the bytes written</param>
         /// <returns>NTStatus code</returns>
-        public MessageStatus Write(byte[] buffer, UInt64 offset, bool isWriteThrough, bool isNonCached, out UInt64 bytesWritten)
+        public MessageStatus Write(byte[] buffer, UInt64 offset, bool isWriteThrough, bool isUnBuffered, out UInt64 bytesWritten)
         {
             WRITE_Response writeResponse;
             int creditCharge = 1 + ((buffer.Length - 1) / 65535);
+
+            WRITE_Request_Flags_Values writeFlag = WRITE_Request_Flags_Values.None;
+            if (isWriteThrough)
+            {
+                writeFlag |= WRITE_Request_Flags_Values.SMB2_WRITEFLAG_WRITE_THROUGH;
+            }
+
+            if (isUnBuffered)
+            {
+                writeFlag |= WRITE_Request_Flags_Values.SMB2_WRITEFLAG_WRITE_UNBUFFERED;
+            }
 
             uint status = this.smb2Client.Write(
                 (ushort)creditCharge,
@@ -646,7 +665,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 offset,
                 this.fileId,
                 Channel_Values.CHANNEL_NONE,
-                WRITE_Request_Flags_Values.None,
+                writeFlag,
                 new byte[0],
                 buffer,
                 out packetHeader,

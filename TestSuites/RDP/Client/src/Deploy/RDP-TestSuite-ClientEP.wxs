@@ -39,7 +39,6 @@
     <WixVariable Id="TESTSUITE_COMMON_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\common" />
     <!-- The scripts are supposed to be cmd scripts, no parameter. -->
     <!-- The scripts exist in drop\TestSuites\RDP\Client\scripts directory. -->
-    <WixVariable Id="CONFIG_TESTSUITE_SCRIPT" Value="Config-TestSuite.cmd" />
     <WixVariable Id="CONFIG_SUT_SCRIPT" Value="Config-SUT.cmd" />
     <WixVariable Id="CONFIG_DOMAIN_SCRIPT" Value="Config-Domain.cmd" />
     <!-- The script should exist in drop\TestSuites\RDP\Client\batch directory. -->
@@ -47,7 +46,6 @@
 
     <WixVariable Id="SET_VS_TEST_PATH" Value="setVsTestPath.cmd" />
     <WixVariable Id="SET_VS_PATH"      Value="setVsPath.cmd" />
-    <WixVariable Id="SET_VS_2017_PATH" Value="setVs2017Path.cmd" />
     <!--WixVariable Id="RUN_BVT_COMMAND" Value="RunBVTTestCases.cmd" />
     <WixVariable Id="RUN_RDPBCGR_BVT_COMMAND" Value="Rdpbcgr_RunBVTTestCases.cmd" />
     <WixVariable Id="RUN_RDPBCGR_TESTS_COMMAND" Value="Rdpbcgr_RunAllTestCases.cmd" />

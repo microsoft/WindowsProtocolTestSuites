@@ -23,7 +23,7 @@ if(!(Test-Path "$workingDir"))
 if(!(Test-Path "$protocolConfigFile"))
 {
     $protocolConfigFile = "$workingDir\Protocol.xml"
-    if(!(Test-Path "$protocolConfigFile")) 
+    if(!(Test-Path "$protocolConfigFile"))
     {
         Write-Error.ps1 "No protocol.xml found."
         exit ExitCode
@@ -40,7 +40,7 @@ Start-Transcript -Path "$logFile" -Append -Force
 # Define common functions
 #----------------------------------------------------------------------------
 function ExitCode()
-{ 
+{
     return $MyInvocation.ScriptLineNumber
 }
 
@@ -102,7 +102,7 @@ for($i=0;$i -lt 60;$i++)
         break
     }
     catch
-    {			
+    {
         Write-Info.ps1 "Get exception: $_"
         Start-Sleep 10
     }
@@ -130,7 +130,7 @@ while($service.Status -ne "Running" -and $retryTimes -lt 5)
     Write-Info.ps1 "msiscsi service is not runing, try to start it..."
     Start-Service -InputObj $service -ErrorAction Continue
     Sleep 10
-    $retryTimes++ 
+    $retryTimes++
     $service = Get-Service -Name msiscsi
 }
 

@@ -7,6 +7,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling;
 using Microsoft.Protocols.TestTools.StackSdk.Dtyp;
+using System.Collections.Generic;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 {
@@ -136,6 +137,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// via a Share Redirect error context response as specified in section 2.2.2.2.2.
         /// </summary>
         SMB2_SHAREFLAG_REDIRECT_TO_OWNER = 0x0002,
+
+        /// <summary>
+        /// When set, indicates that a tree connect request extension,
+        /// as specified in section 2.2.9.1, is present,
+        /// starting at the Buffer field of this tree connect request.
+        /// </summary>
+        SMB2_SHAREFLAG_EXTENSION_PRESENT = 0x0004,
     }
 
     /// <summary>
@@ -222,6 +230,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// If set, the server supports the encryption of remote file access messages on this share. 
         /// </summary>
         SHAREFLAG_ENCRYPT_DATA = 0x00008000,
+
+        /// <summary>
+        /// If set, the share supports identity remoting.
+        /// The client can request remoted identity access for the share via the SMB2_REMOTED_IDENTITY_TREE_CONNECT context
+        /// as specified in section 2.2.9.2.1.
+        /// </summary>
+        SHAREFLAG_IDENTITY_REMOTING = 0x00040000,
     }
 
     /// <summary>
@@ -2664,6 +2679,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         ///  The server or underlying object store SHOULD NOT cache the read data at intermediate layers.
         /// </summary>
         SMB2_READFLAG_READ_UNBUFFERED = 0x01,
+
+        /// <summary>
+        /// The server is requested to compress the read response when responding to the request. 
+        /// This flag is not valid for the SMB 2.0.2, 2.1, 3.0 and 3.0.2 dialects.
+        /// </summary>
+        SMB2_READFLAG_REQUEST_COMPRESSED = 0x02,
     }
 
     /// <summary>
@@ -2767,6 +2788,38 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         HashAlgorithm_NONE = 0,
         SHA_512 = 1,
         HashAlgorithm_Invalid = 0xFFFF
+    }
+
+    /// <summary>
+    /// The SMB2 COMPRESSION_TRANSFORM_HEADER is used by the client or server when sending compressed messages.
+    /// This optional header is only valid for the SMB 3.1.1 dialect.
+    /// </summary>
+    public struct Compression_Transform_Header
+    {
+        /// <summary>
+        /// The protocol identifier. The value MUST be (in network order) 0xFC, 'S', 'M', and 'B'.
+        /// </summary>
+        public uint ProtocolId;
+
+        /// <summary>
+        /// The size, in bytes, of the uncompressed data segment.
+        /// </summary>
+        public uint OriginalCompressedSegmentSize;
+
+        /// <summary>
+        /// This field MUST contain one of the algorithms used to compress the SMB2 message except "NONE".
+        /// </summary>
+        public CompressionAlgorithm CompressionAlgorithm;
+
+        /// <summary>
+        /// This field MUST NOT be used and MUST be reserved. The sender MUST set this to 0, and the receiver MUST ignore it.
+        /// </summary>
+        public ushort Reserved;
+
+        /// <summary>
+        /// The offset, in bytes, from the end of this structure to the start of compressed data segment.
+        /// </summary>
+        public uint Offset;
     }
 
     /// <summary>
@@ -4661,8 +4714,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// <summary>
         /// The Data field contains a list of encryption algorithms, as specified in section 2.2.3.1.2.
         /// </summary>
-        SMB2_ENCRYPTION_CAPABILITIES = 0x0002
+        SMB2_ENCRYPTION_CAPABILITIES = 0x0002,
 
+        /// <summary>
+        /// The Data field contains a list of compression algorithms.
+        /// </summary>
+        SMB2_COMPRESSION_CAPABILITIES = 0x0003,
+
+        /// <summary>
+        /// The Data field contains the server name to which the client connects.
+        /// </summary>
+        SMB2_NETNAME_NEGOTIATE_CONTEXT_ID = 0x0005,
     }
 
     /// <summary>
@@ -4745,6 +4807,137 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             int dataLength = sizeof(ushort); // CipherCount
             if (Ciphers != null) dataLength += Ciphers.Length * sizeof(EncryptionAlgorithm);
             return dataLength;
+        }
+    }
+
+    public enum CompressionAlgorithm : short
+    {
+        /// <summary>
+        /// No compression
+        /// </summary>
+        NONE = 0x0000,
+
+        /// <summary>
+        /// LZNT1 compression algorithm
+        /// </summary>
+        LZNT1 = 0x0001,
+
+        /// <summary>
+        /// LZ77 compression algorithm
+        /// </summary>
+        LZ77 = 0x0002,
+
+        /// <summary>
+        /// LZ77+Huffman compression algorithm
+        /// </summary>
+        LZ77Huffman = 0x0003,
+
+        /// <summary>
+        /// Not a real compression algorithm value, SHOULD be unsupported
+        /// </summary>
+        Unsupported = 0x0004,
+    }
+
+    /// <summary>
+    /// The SMB2_COMPRESSION_CAPABILITIES context is specified in an SMB2 NEGOTIATE request by the client
+    /// to indicate which compression algorithms the client supports.
+    /// </summary>
+    public struct SMB2_COMPRESSION_CAPABILITIES
+    {
+        /// <summary>
+        /// Header.
+        /// </summary>
+        public SMB2_NEGOTIATE_CONTEXT_Header Header;
+
+        /// <summary>
+        /// The number of elements in CompressionAlgorithms array.
+        /// </summary>
+        public ushort CompressionAlgorithmCount;
+
+        /// <summary>
+        /// The sender MUST set this to 0, and the receiver MUST ignore it on receipt.
+        /// </summary>
+        public ushort Padding;
+
+        /// <summary>
+        /// This field MUST NOT be used and MUST be reserved.
+        /// The sender MUST set this to 0, and the receiver MUST ignore it on receipt.
+        /// </summary>
+        public uint Reserved;
+
+        /// <summary>
+        /// An array of 16-bit integer IDs specifying the supported compression algorithms.
+        /// These IDs MUST be in order of preference from most to least.
+        /// </summary>
+        [Size("CompressionAlgorithmCount")]
+        public CompressionAlgorithm[] CompressionAlgorithms;
+
+        public int GetDataLength()
+        {
+            int dataLength = Marshal.SizeOf(CompressionAlgorithmCount) + Marshal.SizeOf(Padding) + Marshal.SizeOf(Reserved);
+            if (CompressionAlgorithms != null)
+            {
+                dataLength += CompressionAlgorithms.Length * sizeof(CompressionAlgorithm);
+            }
+            return dataLength;
+        }
+    }
+
+    /// <summary>
+    /// The SMB2_NETNAME_NEGOTIATE_CONTEXT_ID context is specified in an SMB2 NEGOTIATE request to indicate the server name the client connects to.
+    /// The server MUST ignore this context.
+    /// </summary>
+    public struct SMB2_NETNAME_NEGOTIATE_CONTEXT_ID
+    {
+        /// <summary>
+        /// Header.
+        /// </summary>
+        public SMB2_NEGOTIATE_CONTEXT_Header Header;
+
+        /// <summary>
+        /// A null-terminated Unicode string containing the server name and specified by the client application.
+        /// </summary>
+        public char[] NetName;
+
+        /// <summary>
+        /// Unmarshal SMB2_NETNAME_NEGOTIATE_CONTEXT_ID from input byte array.
+        /// </summary>
+        /// <param name="data">Input byte array containing SMB2_NETNAME_NEGOTIATE_CONTEXT_ID.</param>
+        /// <param name="consumedLen">Offset of byte array.</param>
+        /// <returns>SMB2_NETNAME_NEGOTIATE_CONTEXT_ID which is unmarshaled.</returns>
+        internal static SMB2_NETNAME_NEGOTIATE_CONTEXT_ID Unmarshal(byte[] data, ref int consumedLen)
+        {
+            var result = new SMB2_NETNAME_NEGOTIATE_CONTEXT_ID();
+
+            result.Header = TypeMarshal.ToStruct<SMB2_NEGOTIATE_CONTEXT_Header>(data, ref consumedLen);
+
+            if (result.Header.DataLength % sizeof(char) != 0)
+            {
+                throw new InvalidOperationException("DataLength is invalid!");
+            }
+
+            result.NetName = new char[result.Header.DataLength / sizeof(char)];
+            for (int i = 0; i < result.NetName.Length; i++)
+            {
+                result.NetName[i] = TypeMarshal.ToStruct<char>(data, ref consumedLen);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Marshal SMB2_NETNAME_NEGOTIATE_CONTEXT_ID into byte array.
+        /// </summary>
+        /// <returns>Byte array containing marshaled result.</returns>
+        public byte[] Marshal()
+        {
+            var result = new List<byte>();
+
+            result.AddRange(TypeMarshal.ToBytes(Header));
+
+            result.AddRange(NetName.SelectMany(x => TypeMarshal.ToBytes(x)));
+
+            return result.ToArray();
         }
     }
 
@@ -4978,6 +5171,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         FSCTL_SET_ZERO_DATA = 0x000980c8,
 
         FSCTL_DUPLICATE_EXTENTS_TO_FILE = 0x00098344,
+
+        FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX = 0x000983E8,
 
         /// <summary>
         /// Control code for STORAGE_QOS_CONTROL_REQUEST
@@ -7420,6 +7615,448 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
     }
 
     /// <summary>
+    /// If the Flags field of the SMB2 TREE_CONNECT request has the
+    /// SMB2_TREE_CONNECT_FLAG_EXTENSION_PRESENT bit set,
+    /// the following structure MUST be added at the beginning of the Buffer field.
+    /// </summary>
+    public struct TREE_CONNECT_Request_Extension
+    {
+        /// <summary>
+        /// The offset from the start of the SMB2 TREE_CONNECT request of an array of tree connect contexts.
+        /// </summary>
+        [StaticSize(4)]
+        public uint TreeConnectContextOffset;
+
+        /// <summary>
+        /// The count of elements in the tree connect context array.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort TreeConnectContextCount;
+
+        /// <summary>
+        /// MUST be set to zero.
+        /// </summary>
+        [StaticSize(10)]
+        public byte[] Reserved;
+
+        /// <summary>
+        /// This field is a variable-length buffer that contains the full share path name
+        /// as specified in section 2.2.9.
+        /// </summary>
+        public byte[] PathName;
+
+        /// <summary>
+        /// A variable length array of SMB2_TREE_CONNECT_CONTEXT structures
+        /// as described in section 2.2.9.2.
+        /// </summary>
+        [Size("TreeConnectContextCount")]
+        public Tree_Connect_Context[] TreeConnectContexts;
+    }
+
+    /// <summary>
+    /// The SMB2_TREE_CONNECT_CONTEXT structure is used by the SMB2 TREE_CONNECT request and
+    /// the SMB2 TREE_CONNECT response to encode additional properties.
+    /// </summary>
+    public struct Tree_Connect_Context
+    {
+        /// <summary>
+        /// Specifies the type of context in the Data field.
+        /// </summary>
+        [StaticSize(2)]
+        public Context_Type ContextType;
+
+        /// <summary>
+        /// The length, in bytes, of the Data field
+        /// </summary>
+        [StaticSize(2)]
+        public ushort DataLength;
+
+        /// <summary>
+        /// This field MUST NOT be used and MUST be reserved.
+        /// This value MUST be set to 0 by the client, and MUST be ignored by the server.
+        /// </summary>
+        [StaticSize(4)]
+        public uint Reserved;
+
+        /// <summary>
+        /// A variable-length field that contains the tree connect context specified by the ContextType field.
+        /// </summary>
+        public REMOTED_IDENTITY_TREE_CONNECT_Context data;
+    }
+
+    /// <summary>
+    /// Specifies the type of context in the Data field. This field MUST be one of the following values.
+    /// </summary>
+    public enum Context_Type : ushort
+    {
+        /// <summary>
+        /// This value is reserved.
+        /// </summary>
+        RESERVED_TREE_CONNECT_CONTEXT_ID = 0x0000,
+
+        /// <summary>
+        /// The Data field contains remoted identity tree connect context data
+        /// as specified in section 2.2.9.2.1.
+        /// </summary>
+        REMOTED_IDENTITY_TREE_CONNECT_CONTEXT_ID = 0x0001,
+    }
+
+    /// <summary>
+    /// The SMB2_REMOTED_IDENTITY_TREE_CONNECT context is specified in SMB2_TREE_CONNECT_CONTEXT structure
+    /// when the ContextType is set to SMB2_REMOTED_IDENTITY_TREE_CONNECT_CONTEXT_ID.
+    /// The format of the data in the Data field of this SMB2_TREE_CONNECT_CONTEXT is as follows.
+    /// </summary>
+    public struct REMOTED_IDENTITY_TREE_CONNECT_Context
+    {
+        /// <summary>
+        /// A 16-bit integer specifying the type of ticket requested.
+        /// The value in this field MUST be set to 0x0001.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort TicketType;
+
+        /// <summary>
+        /// A 16-bit integer specifying the total size of this structure.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort TicketSize;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes,
+        /// from the beginning of this structure to the user information in the TicketInfo buffer.
+        /// The user information is stored in SID_ATTR_DATA format as specified in section 2.2.9.2.1.2.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort User;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes,
+        /// from the beginning of this structure to the null-terminated Unicode string
+        /// containing the username in the TicketInfo field.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort UserName;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes,
+        /// from the beginning of this structure to the null-terminated Unicode string
+        /// containing the domain name in the TicketInfo field.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort Domain;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes,
+        /// from the beginning of this structure to the information
+        /// about the groups in the TicketInfo buffer.
+        /// The information is stored in SID_ARRAY_DATA format as specified in section 2.2.9.2.1.3.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort Groups;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes,
+        /// from the beginning of this structure to the information
+        /// about the restricted groups in the TicketInfo field.
+        /// The information is stored in SID_ARRAY_DATA format as specified in section 2.2.9.2.1.3.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort RestrictedGroups;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes,
+        /// from the beginning of this structure to the information
+        /// about the privileges in the TicketInfo field.
+        /// The information is stored in PRIVILEGE_ARRAY_DATA format as specified in section 2.2.9.2.1.6.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort Privileges;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes,
+        /// from the beginning of this structure to the information
+        /// about the primary group in the TicketInfo field.
+        /// The information is stored in SID_ARRAY_DATA format as specified in section 2.2.9.2.1.3.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort PrimaryGroup;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes,
+        /// from the beginning of this structure to the information
+        /// about the owner in the TicketInfo field.
+        /// The information is stored in BLOB_DATA format as specified in section 2.2.9.2.1.1,
+        /// where BlobData contains the SID, as specified in [MS-DTYP] section 2.4.2.2,
+        /// representing the owner, and BlobSize contains the size of SID.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort Owner;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes,
+        /// from the beginning of this structure to the information about the DACL,
+        /// as specified in [MS-DTYP] section 2.5.2, in the TicketInfo field.
+        /// Information about the DACL is stored in BLOB_DATA format
+        /// as specified in section 2.2.9.2.1.1, where BlobSize contains the size of the ACL structure,
+        /// as specified in [MS-DTYP] section 2.4.5, and BlobData contains the DACL data.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort DefaultDacl;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes,
+        /// from the beginning of this structure to the information
+        /// about the device groups in the TicketInfo field.
+        /// The information is stored in SID_ARRAY_DATA format as specified in section 2.2.9.2.1.3.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort DeviceGroups;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes,
+        /// from the beginning of this structure to the user claims data in the TicketInfo field.
+        /// Information about user claims is stored in BLOB_DATA format
+        /// as specified in section 2.2.9.2.1.1,
+        /// where BlobData contains an array of CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1 structures,
+        /// as specified in [MS-DTYP] section 2.4.10.1, representing the claims issued to the user,
+        /// and BlobSize contains the size of the user claims data.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort UserClaims;
+
+        /// <summary>
+        /// A 16-bit integer specifying the offset, in bytes,
+        /// from the beginning of this structure to the device claims data in the TicketInfo field.
+        /// Information about device claims is stored in BLOB_DATA format
+        /// as specified in section 2.2.9.2.1.1,
+        /// where BlobData contains an array of CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1 structures,
+        /// as specified in [MS-DTYP] section 2.4.10.1,
+        /// representing the claims issued to the account of the device which the user is connected from,
+        /// and BlobSize contains the size of the device claims data.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort DeviceClaims;
+
+        /// <summary>
+        /// A variable-length buffer containing the remoted identity tree connect context data,
+        /// including the information about all the previously defined fields in this structure.
+        /// </summary>
+        public Ticket_Info TicketInfo;
+    }
+
+    public struct Ticket_Info
+    {
+        /// <summary>
+        /// The user information is stored in SID_ATTR_DATA format as specified in section 2.2.9.2.1.2.
+        /// </summary>
+        public SID_ATTR_DATA User;
+
+        /// <summary>
+        /// Null-terminated Unicode string containing the username.
+        /// </summary>
+        public byte[] UserName;
+
+        /// <summary>
+        /// Null-terminated Unicode string containing the domain name.
+        /// </summary>
+        public byte[] Domain;
+
+        /// <summary>
+        /// The information is stored in SID_ARRAY_DATA format as specified in section 2.2.9.2.1.3.
+        /// </summary>
+        public SID_ARRAY_DATA Groups;
+
+        /// <summary>
+        /// The information is stored in SID_ARRAY_DATA format as specified in section 2.2.9.2.1.3.
+        /// </summary>
+        public SID_ARRAY_DATA RestrictedGroups;
+
+        /// <summary>
+        /// The information is stored in PRIVILEGE_ARRAY_DATA format as specified in section 2.2.9.2.1.6.
+        /// </summary>
+        public PRIVILEGE_ARRAY_DATA Privileges;
+
+        /// <summary>
+        /// The information is stored in SID_ARRAY_DATA format as specified in section 2.2.9.2.1.3.
+        /// </summary>
+        public SID_ARRAY_DATA PrimaryGroup;
+
+        /// <summary>
+        /// The information is stored in BLOB_DATA format as specified in section 2.2.9.2.1.1,
+        /// where BlobData contains the SID, as specified in [MS-DTYP] section 2.4.2.2, representing the owner,
+        /// and BlobSize contains the size of SID.
+        /// </summary>
+        public BLOB_DATA Owner;
+
+        /// <summary>
+        /// Information about the DACL is stored in BLOB_DATA format as specified in section 2.2.9.2.1.1,
+        /// where BlobSize contains the size of the ACL structure, as specified in [MS-DTYP] section 2.4.5,
+        /// and BlobData contains the DACL data.
+        /// </summary>
+        public BLOB_DATA DefaultDacl;
+
+        /// <summary>
+        /// The information is stored in SID_ARRAY_DATA format as specified in section 2.2.9.2.1.3.
+        /// </summary>
+        public SID_ARRAY_DATA DeviceGroups;
+
+        /// <summary>
+        /// Information about user claims is stored in BLOB_DATA format as specified in section 2.2.9.2.1.1,
+        /// where BlobData contains an array of CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1 structures,
+        /// as specified in [MS-DTYP] section 2.4.10.1, representing the claims issued to the user,
+        /// and BlobSize contains the size of the user claims data.
+        /// </summary>
+        public BLOB_DATA UserClaims;
+
+        /// <summary>
+        /// Information about device claims is stored in BLOB_DATA format as specified in section 2.2.9.2.1.1,
+        /// where BlobData contains an array of CLAIM_SECURITY_ATTRIBUTE_RELATIVE_V1 structures,
+        /// as specified in [MS-DTYP] section 2.4.10.1, representing the claims issued to the account of the device which the user is connected from,
+        /// and BlobSize contains the size of the device claims data.
+        /// </summary>
+        public BLOB_DATA DeviceClaims;
+    }
+
+    public struct BLOB_DATA
+    {
+        /// <summary>
+        /// Size of the data, in bytes, in BlobData.
+        /// </summary>
+        public ushort BlobSize;
+
+        /// <summary>
+        /// Blob data
+        /// </summary>
+        [Size("BlobSize")]
+        public byte[] BlobData;
+    }
+
+    public struct SID_ATTR_DATA
+    {
+        /// <summary>
+        /// SID, as specified in [MS-DTYP] section 2.4.2.2,
+        /// information in BLOB_DATA format as specified in section 2.2.9.2.1.1.
+        /// BlobSize MUST be set to the size of SID and BlobData MUST be set to the SID value.
+        /// </summary>
+        public BLOB_DATA SidData;
+
+        /// <summary>
+        /// Specified attributes of the SID.
+        /// </summary>
+        public SID_ATTR Attr;
+    }
+
+    /// <summary>
+    /// Specified attributes of the SID, containing the following values.
+    /// </summary>
+    public enum SID_ATTR : uint
+    {
+        /// <summary>
+        /// The SID is enabled for access checks.
+        /// A SID without this attribute is ignored during an access check
+        /// unless the SE_GROUP_USE_FOR_DENY_ONLY attribute is set.
+        /// </summary>
+        SE_GROUP_ENABLED = 0x00000004,
+
+        /// <summary>
+        /// The SID is enabled by default.
+        /// </summary>
+        SE_GROUP_ENABLED_BY_DEFAULT = 0x00000002,
+
+        /// <summary>
+        /// The SID is a mandatory integrity SID.
+        /// </summary>
+        SE_GROUP_INTEGRITY = 0x00000020,
+
+        /// <summary>
+        /// The SID is enabled for mandatory integrity checks.
+        /// </summary>
+        SE_GROUP_INTEGRITY_ENABLED = 0x00000040,
+
+        /// <summary>
+        /// The SID is a logon SID that identifies the logon session associated with an access token.
+        /// </summary>
+        SE_GROUP_LOGON_ID = 0xc0000000,
+
+        /// <summary>
+        /// The SID cannot have the SE_GROUP_ENABLED attribute cleared.
+        /// </summary>
+        SE_GROUP_MANDATORY = 0x00000001,
+
+        /// <summary>
+        /// The SID identifies a group account for which the user of the token is the owner of the group,
+        /// or the SID can be assigned as the owner of the token or objects.
+        /// </summary>
+        SE_GROUP_OWNER = 0x00000008,
+
+        /// <summary>
+        /// The SID identifies a domain-local group.
+        /// </summary>
+        SE_GROUP_RESOURCE = 0x20000000,
+
+        /// <summary>
+        /// The SID is a deny-only SID in a restricted token.
+        /// If this attribute is set, SE_GROUP_ENABLED is not set, and the SID cannot be reenabled.
+        /// </summary>
+        SE_GROUP_USE_FOR_DENY_ONLY = 0x00000010,
+    }
+
+    public struct SID_ARRAY_DATA
+    {
+        /// <summary>
+        /// Number of SID_ATTR_DATA elements in SidAttrList array.
+        /// </summary>
+        public ushort SidAttrCount;
+
+        /// <summary>
+        /// An array with SidAttrCount number of SID_ATTR_DATA elements as specified in section 2.2.9.2.1.2.
+        /// </summary>
+        [Size("SidAttrCount")]
+        public SID_ATTR_DATA[] SidAttrList;
+    }
+
+    public struct LUID_ATTR_DATA
+    {
+        /// <summary>
+        /// LUID is a locally unique identifier, as specified in [MS-DTYP] section 2.3.7.
+        /// </summary>
+        public _LUID Luid;
+
+        /// <summary>
+        /// LUID attributes as specified in [MS-LSAD] section 2.2.5.4.
+        /// </summary>
+        public uint Attr;
+    }
+
+    public struct PRIVILEGE_DATA
+    {
+        /// <summary>
+        /// BlobSize MUST be set to the size of LUID_ATTR_DATA structure
+        /// </summary>
+        public ushort BlobSize;
+
+        /// <summary>
+        /// BlobData MUST be set to the LUID_ATTR_DATA specified in section 2.2.9.2.1.4
+        /// </summary>
+        [Size("BlobSize")]
+        public byte[] BlobData;
+    }
+
+    public struct PRIVILEGE_ARRAY_DATA
+    {
+        /// <summary>
+        /// Number of PRIVILEGE_DATA elements in PrivilegeList array.
+        /// </summary>
+        public ushort PrivilegeCount;
+
+        /// <summary>
+        /// An array with PrivilegeCount number of PRIVILEGE_DATA elements as specified in section 2.2.9.2.1.5.
+        /// </summary>
+        [Size("PrivilegeCount")]
+        public PRIVILEGE_DATA[] PrivilegeList;
+    }
+
+    /// <summary>
     ///  The FILETIME structure is a 64-bit value that represents
     ///  the number of 100-nanosecond intervals that have elapsed
     ///  since January 1, 1601, in Coordinated Universal Time
@@ -8315,173 +8952,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// </summary>
         [StaticSize(8)]
         public long Length;
-    }
-
-    /// <summary>
-    ///  The FSCTL_READ_FILE_USN_DATA reply message returns the
-    ///  results of the FSCTL_READ_FILE_USN_DATA request as
-    ///  a USN_RECORD. The USN_RECORD element is as follows.
-    /// </summary>
-    public partial struct FSCTL_READ_FILE_USN_DATA_Reply
-    {
-
-        /// <summary>
-        ///  A 32-bit unsigned integer that contains the total length
-        ///  of the update sequence number (USN) record in bytes.
-        /// </summary>
-        [StaticSize(4)]
-        public uint RecordLength;
-
-        /// <summary>
-        ///  A 16-bit unsigned integer that contains the major version
-        ///  of the change journal software for this record. For
-        ///  example, if the change journal software is version
-        ///  2.0, the major version number is 2.The major version
-        ///  number is 2 for file systems.
-        /// </summary>
-        [StaticSize(2)]
-        public ushort MajorVersion;
-
-        /// <summary>
-        ///  A 16-bit unsigned integer that contains the minor version
-        ///  of the change journal software for this record. For
-        ///  example, if the change journal software is version
-        ///  2.0, the minor version number is 0 (zero).The minor
-        ///  version number is 0 for file systems created on , ,
-        ///  , and .
-        /// </summary>
-        [StaticSize(2)]
-        public ushort MinorVersion;
-
-        /// <summary>
-        ///  A 64-bit unsigned integer, opaque to the client, containing
-        ///  the number (assigned by the file system when the file
-        ///  is created) of the file or directory for which this
-        ///  record notes changes. The FileReferenceNumber is an
-        ///  arbitrarily assigned value (unique within the volume
-        ///  on which the file is stored) that associates a journal
-        ///  record with a file. This value SHOULD always be unique
-        ///  within the volume on which the file is stored over
-        ///  the life of the volume. computes the file reference
-        ///  number as follows: 48 bits are the index of the file's
-        ///  primary record in the master file table (MFT), and
-        ///  the other 16 bits are a sequence number. Therefore,
-        ///  it is possible that a different file can have the same
-        ///  FileReferenceNumber as a file on that volume had in
-        ///  the past; however, this is an unlikely scenario.
-        /// </summary>
-        [StaticSize(8)]
-        public ulong FileReferenceNumber;
-
-        /// <summary>
-        ///   A 64-bit unsigned integer, opaque to the client, containing
-        ///  the ordinal number of the directory on which the file
-        ///  or directory that is associated with this record is
-        ///  located. This is an arbitrarily assigned value (unique
-        ///  within the volume on which the file is stored) that
-        ///  associates a journal record with a parent directory.
-        /// </summary>
-        [StaticSize(8)]
-        public ulong ParentFileReferenceNumber;
-
-        /// <summary>
-        ///  A 64-bit signed integer, opaque to the client, containing
-        ///  the USN (update sequence number) of the record. This
-        ///  value is unique within the volume on which the file
-        ///  is stored. This value MUST be greater than or equal
-        ///  to 0. For more information, see [MSDN-CJ].
-        /// </summary>
-        [StaticSize(8)]
-        public long Usn;
-
-        /// <summary>
-        ///  A structure containing the absolute system time in UTC
-        ///  expressed as the number of 100-nanosecond intervals
-        ///  since January 1, 1601 (UTC), in the format of a FILETIME
-        ///  structure.
-        /// </summary>
-        [StaticSize(8)]
-        public _FILETIME TimeStamp;
-
-        /// <summary>
-        ///  A 32-bit unsigned integer that contains flags that indicate
-        ///  reasons for changes that have accumulated in this file
-        ///  or directory journal record since the file or directory
-        ///  was opened. When a file or directory is closed, a final
-        ///  USN record is generated with the USN_REASON_CLOSE flag
-        ///  set in this field. The next change, occurring after
-        ///  the next open operation or deletion, starts a new record
-        ///  with a new set of reason flags. A rename or move operation
-        ///  generates two USN records: one that records the old
-        ///  parent directory for the item and one that records
-        ///  the new parent in the ParentFileReferenceNumber member.
-        ///  Possible values for the reason code are as follows
-        ///  (all unused bits are reserved for future use by Microsoft
-        ///  and SHOULD NOT be used by others).
-        /// </summary>
-        [StaticSize(4)]
-        public Reason_Values Reason;
-
-        /// <summary>
-        ///  A 32-bit unsigned integer that provides additional information
-        ///  on the source of the change. When a thread writes a
-        ///  new USN record, the source information flags in the
-        ///  prior record continue to be present only if the thread
-        ///  also sets those flags. Therefore, the source information
-        ///  structure allows applications to filter out USN records
-        ///  that are set only by a known source, for example, an
-        ///  antivirus filter. This flag MUST contain one of the
-        ///  following values.
-        /// </summary>
-        [StaticSize(4)]
-        public SourceInfo_Values SourceInfo;
-
-        /// <summary>
-        ///  A 32-bit unsigned integer that contains a unique security
-        ///  identifier (SID) assigned to the file or directory
-        ///  associated with this record.
-        /// </summary>
-        [StaticSize(4)]
-        public uint SecurityId;
-
-        /// <summary>
-        ///  A 32-bit unsigned integer that contains attributes for
-        ///  the file or directory associated with this record.
-        ///  Attributes of streams associated with the file or directory
-        ///  are excluded. Valid file attributes are specified in
-        ///  section.
-        /// </summary>
-        [StaticSize(4)]
-        public File_Attributes FileAttributes;
-
-        /// <summary>
-        ///  A 16-bit unsigned integer that contains the length of
-        ///  the file or directory associated with this record in
-        ///  bytes. The FileName member contains this name. Use
-        ///  this member to determine file name length rather than
-        ///  depending on a trailing NULL to delimit the file name
-        ///  in FileName.
-        /// </summary>
-        [StaticSize(2)]
-        public ushort FileNameLength;
-
-        /// <summary>
-        ///  A 16-bit unsigned integer that contains the offset in
-        ///  bytes of the FileName member from the beginning of
-        ///  the structure.
-        /// </summary>
-        [StaticSize(2)]
-        public ushort FileNameOffset;
-
-        /// <summary>
-        ///  A variable-length field of UNICODE characters containing
-        ///  the name of the file or directory associated with this
-        ///  record in Unicode format. When working with this field,
-        ///  do not assume that the file name will contain a trailing
-        ///  Unicode NULL character.
-        /// </summary>
-        [Size("(FileNameOffset == 0) ? FileNameLength : (FileNameOffset - 60 + FileNameLength)")] //60 is the length is fields before this one
-        public byte[] FileName;
     }
 
     /// <summary>
@@ -10804,96 +11274,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
     }
 
     /// <summary>
-    ///  This information class is used to query compression
-    ///  information for a file. The FILE_COMPRESSION_INFORMATION
-    ///  data element is as follows.
-    /// </summary>
-    public partial struct FileCompressionInformation
-    {
-
-        /// <summary>
-        ///A 64-bit signed integer that contains the size
-        ///  in bytes of the compressed file. This value MUST be
-        ///  greater than or equal to 0.
-        /// </summary>
-        [StaticSize(8)]
-        public long CompressedFileSize;
-
-        /// <summary>
-        ///A 16-bit unsigned integer that contains the compression
-        ///  format. The actual compression operation associated
-        ///  with each of these compression format values is implementation-dependent.
-        ///  An implementation can associate any local compression
-        ///  algorithm with the values described below because the
-        ///  compressed data does not travel across the wire in
-        ///  the context of FSCTL, FileInformation class, or FileSystemInformation
-        ///  class requests or replies. For more information,
-        ///  see [UASDC]. COMPRESSION_FORMAT_DEFAULT is therefore
-        ///  equivalent to COMPRESSION_FORMAT_LZNT1.
-        /// </summary>
-        [StaticSize(2)]
-        public CompressionFormat_Values CompressionFormat;
-
-        /// <summary>
-        ///An 8-bit unsigned integer that contains the compression
-        ///  unit shift, which is the number of bits by which to
-        ///  left-shift a 1 bit to arrive at the compression unit
-        ///  size. The compression unit size is the number of bytes
-        ///  in a compression unit, that is, the number of bytes
-        ///  to be compressed. This value is implementation-defined. NTFS
-        ///  uses a value of 16 calculated as (4 + ClusterShift)
-        ///  for the CompressionUnitShift by default. The ultimate
-        ///  size of data to be compressed depends on the cluster
-        ///  size set for the file system at initialization. NTFS
-        ///  defaults to a 4-kilobyte cluster size, resulting in
-        ///  a ClusterShift value of 12, but NTFS file systems can
-        ///  be initialized with a different cluster size, so the
-        ///  value may vary. The default compression unit size based
-        ///  on this calculation is 64 kilobytes.
-        /// </summary>
-        public byte CompressionUnitShift;
-
-        /// <summary>
-        ///An 8-bit unsigned integer that contains the compression
-        ///  chunk size in bytes in log 2 format. The chunk size
-        ///  is the number of bytes that the operating system's
-        ///  implementation of the Lempel-Ziv compression algorithm
-        ///  tries to compress at one time. This value is implementation-defined. NTFS
-        ///  uses a value of 12 for the ChunkShift so that compression
-        ///  chunks are 4 kilobytes in size.
-        /// </summary>
-        public byte ChunkShift;
-
-        /// <summary>
-        ///An 8-bit unsigned integer that specifies, in
-        ///  log 2 format, the amount of space that must be saved
-        ///  by compression to successfully compress a compression
-        ///  unit. If that amount of space is not saved by compression,
-        ///  the data in that compression unit is stored uncompressed.
-        ///  Each successfully compressed compression unit MUST
-        ///  occupy at least one cluster that is less in bytes than
-        ///  an uncompressed compression unit. Therefore, the cluster
-        ///  shift is the number of bits by which to left shift
-        ///  a 1 bit to arrive at the size of a cluster. This value
-        ///  is implementation defined. The value of this field depends
-        ///  on the cluster size set for the file system at initialization.
-        ///  NTFS uses a value of 12 by default because the default
-        ///  NTFS cluster size is 4-kilobyte bytes. If an NTFS file
-        ///  system is initialized with a different cluster size,
-        ///  the value of ClusterShift would be log 2 of the cluster
-        ///  size for that file system.
-        /// </summary>
-        public byte ClusterShift;
-
-        /// <summary>
-        ///A 24-bit reserved value. This field SHOULD be
-        ///  set to 0, and MUST be ignored.
-        /// </summary>
-        [StaticSize(3)]
-        public byte[] Reserved;
-    }
-
-    /// <summary>
     /// CompressionFormat_Values
     /// </summary>
     public enum CompressionFormat_Values : ushort
@@ -10915,129 +11295,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         ///  compression algorithm.
         /// </summary>
         COMPRESSION_FORMAT_LZNT1 = 0x0002,
-    }
-
-    /// <summary>
-    ///  This information class is used to query detailed information
-    ///  for the files in a directory.The FILE_DIRECTORY_INFORMATION
-    ///  data element is as follows.
-    /// </summary>
-    public partial struct FileDirectoryInformation
-    {
-
-        /// <summary>
-        ///A 32-bit unsigned integer that contains the byte
-        ///  offset from the beginning of this entry, at which the
-        ///  next FILE_DIRECTORY_INFORMATION entry is located, if
-        ///  multiple entries are present in a buffer. This member
-        ///  MUST be zero if no other entries follow this one. An
-        ///  implementation MUST use this value to determine the
-        ///  location of the next entry (if multiple entries are
-        ///  present in a buffer), and MUST NOT assume that the
-        ///  value of NextEntryOffset is the same as the size of
-        ///  the current entry.
-        /// </summary>
-        [StaticSize(4)]
-        public uint NextEntryOffset;
-
-        /// <summary>
-        ///A 32-bit unsigned integer that contains the byte
-        ///  offset of the file within the parent directory. For
-        ///  file systems in which the position of a file within
-        ///  the parent directory is not fixed and can be changed
-        ///  at any time to maintain sort order, this field SHOULD
-        ///  be set to 0 and MUST be ignored. When using NTFS, the
-        ///  position of a file within the parent directory is not
-        ///  fixed and can be changed at any time. Set
-        ///  this value to 0 for files on NTFS file systems.
-        /// </summary>
-        [StaticSize(4)]
-        public uint FileIndex;
-
-        /// <summary>
-        ///A 64-bit signed integer that contains the time
-        ///  when the file was created. All dates and times are
-        ///  in absolute system-time format, which is represented
-        ///  as a FILETIME structure. This value MUST be greater
-        ///  than or equal to 0.
-        /// </summary>
-        [StaticSize(8)]
-        public long CreationTime;
-
-        /// <summary>
-        ///A 64-bit signed integer that contains the last
-        ///  time the file was accessed in the format of a FILETIME
-        ///  structure. This value MUST be greater than or equal
-        ///  to 0.
-        /// </summary>
-        [StaticSize(8)]
-        public long LastAccessTime;
-
-        /// <summary>
-        ///A 64-bit signed integer that contains the last
-        ///  time information was written to the file in the format
-        ///  of a FILETIME structure. This value MUST be greater
-        ///  than or equal to 0.
-        /// </summary>
-        [StaticSize(8)]
-        public long LastWriteTime;
-
-        /// <summary>
-        ///A 64-bit signed integer that contains the last
-        ///  time the file was changed in the format of a FILETIME
-        ///  structure. This value MUST be greater than or equal
-        ///  to 0.
-        /// </summary>
-        [StaticSize(8)]
-        public long ChangeTime;
-
-        /// <summary>
-        ///A 64-bit signed integer that contains the absolute
-        ///  new end-of-file position as a byte offset from the
-        ///  start of the file. EndOfFile specifies the offset to
-        ///  the byte immediately following the last valid byte
-        ///  in the file. Because this value is zero-based, it actually
-        ///  refers to the first free byte in the file. That is,
-        ///  it is the offset from the beginning of the file at
-        ///  which new bytes appended to the file will be written.
-        ///  The value of this field MUST be greater than or equal
-        ///  to 0.
-        /// </summary>
-        [StaticSize(8)]
-        public long EndOfFile;
-
-        /// <summary>
-        ///A 64-bit signed integer that contains the file
-        ///  allocation size, in bytes. Usually, this value is a
-        ///  multiple of the sector or cluster size of the underlying
-        ///  physical device. The value of this field MUST be greater
-        ///  than or equal to 0.
-        /// </summary>
-        [StaticSize(8)]
-        public long AllocationSize;
-
-        /// <summary>
-        ///A 32-bit unsigned integer that contains the file
-        ///  attributes. Valid attributes are as specified in section
-        ///  .
-        /// </summary>
-        [StaticSize(4)]
-        public File_Attributes FileAttributes;
-
-        /// <summary>
-        ///A 32-bit unsigned integer that contains the length
-        ///  in bytes of the FileName field.
-        /// </summary>
-        [StaticSize(4)]
-        public uint FileNameLength;
-
-        /// <summary>
-        ///A sequence of Unicode characters containing the
-        ///  file name. This field might not be NULL-terminated,
-        ///  and MUST be handled as a sequence of FileNameLength
-        ///  bytes.
-        /// </summary>
-        public byte FileName;
     }
 
     /// <summary>
@@ -11235,83 +11492,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
     }
 
     /// <summary>
-    ///  This information class is used to query or set quota
-    ///  and content indexing control information for a file
-    ///  system volume. The message contains a FILE_FS_CONTROL_INFORMATION
-    ///  data element. Setting quota information requires the
-    ///  caller to have permission to open a volume handle or
-    ///  handle to the quota index file for write access. The
-    ///  FILE_FS_CONTROL_INFORMATION data element is as follows.
-    /// </summary>
-    public partial struct FileFsControlInformation
-    {
-
-        /// <summary>
-        ///  A 64-bit signed integer that contains the minimum amount
-        ///  of free disk space in bytes that is required for the
-        ///  operating system's content-indexing service to begin
-        ///  document filtering. This value SHOULD be set to 0,
-        ///  and MUST be ignored. Sets this value to 0.
-        /// </summary>
-        [StaticSize(8)]
-        public long FreeSpaceStartFiltering;
-
-        /// <summary>
-        ///  A 64-bit signed integer that contains the minimum amount
-        ///  of free disk space in bytes that is required for the
-        ///  indexing service to continue to filter documents and
-        ///  merge word lists. This value SHOULD be set to 0, and
-        ///  MUST be ignored. sets this value to 0.
-        /// </summary>
-        [StaticSize(8)]
-        public long FreeSpaceThreshold;
-
-        /// <summary>
-        ///  A 64-bit signed integer that contains the minimum amount
-        ///  of free disk space in bytes that is required for the
-        ///  content-indexing service to continue filtering. This
-        ///  value SHOULD be set to 0, and MUST be ignored. sets
-        ///  this value to 0.
-        /// </summary>
-        [StaticSize(8)]
-        public long FreeSpaceStopFiltering;
-
-        /// <summary>
-        ///  A 64-bit signed integer that contains the default per-user
-        ///  disk quota warning threshold in bytes for the volume.
-        ///  This field MUST be set to a 64-bit integer value greater
-        ///  than or equal to 0 to set a default quota warning threshold
-        ///  per user for this volume, or to (-1) to specify that
-        ///  no default quota warning threshold per user is set.
-        /// </summary>
-        [StaticSize(8)]
-        public long DefaultQuotaThreshold;
-
-        /// <summary>
-        ///  A 64-bit signed integer that contains the default per-user
-        ///  disk quota limit in bytes for the volume. This field
-        ///  MUST be set to a 64-bit integer value greater than
-        ///  or equal to 0 to set a default disk quota limit per
-        ///  user for this volume, or to (-1) to specify that no
-        ///  default quota limit per user is set.
-        /// </summary>
-        [StaticSize(8)]
-        public long DefaultQuotaLimit;
-
-        /// <summary>
-        ///  A 32-bit unsigned integer that contains a bitmask of
-        ///  flags that control quota enforcement and logging of
-        ///  user-related quota events on the volume. The following
-        ///  bit flags are valid in any combination. Bits not defined
-        ///  below SHOULD be set to 0, and MUST be ignored. sets
-        ///  flags not defined below to zero.Logging makes an entry
-        ///  in the application event log.
-        /// </summary>
-        [StaticSize(4)]
-        public FileSystemControlFlags_Values FileSystemControlFlags;
-    }
-
-    /// <summary>
     /// FileSystemControlFlags_Values
     /// </summary>
     [Flags()]
@@ -11377,336 +11557,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         ///  for the volume.
         /// </summary>
         FILE_VC_QUOTAS_REBUILDING = 0x00000200,
-    }
-
-    /// <summary>
-    ///  This information class is used to query if a given driver
-    ///  is in the I/O path for a file system volume. The message
-    ///  contains a FILE_FS_DRIVER_PATH_INFORMATION data element.
-    /// The FILE_FS_DRIVER_PATH_INFORMATION data element
-    ///  is as follows.
-    /// </summary>
-    public partial struct FileFsDriverPathInformation
-    {
-
-        /// <summary>
-        ///  An unsigned character (Boolean) value that is TRUE if
-        ///  the driver is in the I/O path for the file system volume;
-        ///  and otherwise, FALSE.
-        /// </summary>
-        public byte DriverInPath;
-
-        /// <summary>
-        ///  Reserved for alignment.
-        /// </summary>
-        [StaticSize(3)]
-        public byte[] Reserved;
-
-        /// <summary>
-        ///  A 32-bit unsigned integer that contains the length of
-        ///  the DriverName string.
-        /// </summary>
-        [StaticSize(4)]
-        public uint DriverNameLength;
-
-        /// <summary>
-        ///  A variable-length Unicode field containing the name
-        ///  of the driver for which to query. This sequence of
-        ///  Unicode characters MUST NOT be NULL-terminated.
-        /// </summary>
-        [Size("DriverNameLength")]
-        public byte[] DriverName;
-    }
-
-    /// <summary>
-    ///  This information class is used to query sector size
-    ///  information for a file system volume. The message contains
-    ///  a FILE_FS_FULL_SIZE_INFORMATION data element.The
-    ///  FILE_FS_FULL_SIZE_INFORMATION data element is as follows.
-    /// </summary>
-    public partial struct FileFsFullSizeInformation
-    {
-
-        /// <summary>
-        ///A 64-bit signed integer that contains the total
-        ///  number of allocation units on the volume that are available
-        ///  to the user associated with the calling thread. The
-        ///  value of this field MUST be greater than or equal to
-        ///  0.In , , , and , if per-user quotas are in use, this
-        ///  value may be less than the total number of allocation
-        ///  units on the disk. Non-Microsoft quota management software
-        ///  might display the same behavior as these versions of
-        ///   if that software was implemented as a file system
-        ///  filter driver, and the driver implementer opted to
-        ///  set the FileFsFullSizeInformation in the same manner
-        ///  as .
-        /// </summary>
-        [StaticSize(8)]
-        public long TotalAllocationUnits;
-
-        /// <summary>
-        ///A 64-bit signed integer that contains the total
-        ///  number of free allocation units on the volume that
-        ///  are available to the user associated with the calling
-        ///  thread. The value of this field MUST be greater than
-        ///  or equal to 0.In , , , and , if per-user quotas are
-        ///  in use, this value may be less than the total number
-        ///  of free allocation units on the disk.
-        /// </summary>
-        [StaticSize(8)]
-        public long CallerAvailableAllocationUnits;
-
-        /// <summary>
-        ///A 64-bit signed integer that contains the total
-        ///  number of free allocation units on the volume. The
-        ///  value of this field MUST be greater than or equal to
-        ///  0.
-        /// </summary>
-        [StaticSize(8)]
-        public long ActualAvailableAllocationUnits;
-
-        /// <summary>
-        ///A 32-bit unsigned integer that contains the number
-        ///  of sectors in each allocation unit.
-        /// </summary>
-        [StaticSize(4)]
-        public uint SectorsPerAllocationUnit;
-
-        /// <summary>
-        ///A 32-bit unsigned integer that contains the number
-        ///  of bytes in each sector.
-        /// </summary>
-        [StaticSize(4)]
-        public uint BytesPerSector;
-    }
-
-    /// <summary>
-    ///  This information class is used to set the label for
-    ///  a file system volume. The message contains a FILE_FS_LABEL_INFORMATION
-    ///  data element. The FILE_FS_LABEL_INFORMATION data
-    ///  element is as follows.
-    /// </summary>
-    public partial struct FileFsLabelInformation
-    {
-
-        /// <summary>
-        ///  A 32-bit unsigned integer that contains the length in
-        ///  bytes, including the trailing NULL, if present, of
-        ///  the name for the volume.
-        /// </summary>
-        [StaticSize(4)]
-        public uint VolumeLabelLength;
-
-        /// <summary>
-        ///  A variable-length Unicode field containing the name
-        ///  of the volume. The content of this field can be a NULL-terminated
-        ///  string, or it can be a string padded with the space
-        ///  character to be VolumeLabelLength bytes long.
-        /// </summary>
-        [Size("VolumeLabelLength")]
-        public byte[] VolumeLabel;
-    }
-
-    /// <summary>
-    ///  This information class is used to query or set the object
-    ///  ID for a file system volume. The message contains a
-    ///  FILE_FS_OBJECTID_INFORMATION data element.The
-    ///  FILE_FS_OBJECTID_INFORMATION data element is as follows.
-    /// </summary>
-    public partial struct FileFsObjectIdInformation
-    {
-
-        /// <summary>
-        ///  A 16-byte GUID that identifies the file system volume
-        ///  on the disk. This value is not required to be unique
-        ///  on the system.
-        /// </summary>
-        [StaticSize(16)]
-        public System.Guid ObjectId;
-
-        /// <summary>
-        ///  A 48-byte value containing extended information on the
-        ///  file system volume. If no extended information has
-        ///  been written for this file system volume, the server
-        ///  MUST return 48 bytes of 0x00 in this field. does not
-        ///  write information into the ExtendedInfo field for file
-        ///  systems.
-        /// </summary>
-        [StaticSize(48)]
-        public byte[] ExtendedInfo;
-    }
-
-    /// <summary>
-    ///  This information class is used to query sector size
-    ///  information for a file system volume. The message contains
-    ///  a FILE_FS_SIZE_INFORMATION data element. The FILE_FS_SIZE_INFORMATION
-    ///  data element is as follows.
-    /// </summary>
-    public partial struct FileFsSizeInformation
-    {
-
-        /// <summary>
-        ///  A 64-bit signed integer that contains the total number
-        ///  of allocation units on the volume that are available
-        ///  to the user associated with the calling thread. This
-        ///  value MUST be greater than or equal to 0.In , , , and
-        ///  , if per-user quotas are in use, this value may be
-        ///  less than the total number of allocation units on the
-        ///  disk. Non-Microsoft quota management software might
-        ///  display the same behavior as  if that software was
-        ///  implemented as a file system filter driver, and the
-        ///  driver implementer opted to set the FileFsSizeInformation
-        ///  in the same manner as .
-        /// </summary>
-        [StaticSize(8)]
-        public long TotalAllocationUnits;
-
-        /// <summary>
-        ///A 64-bit signed integer that contains the total
-        ///  number of free allocation units on the volume that
-        ///  are available to the user associated with the calling
-        ///  thread. This value MUST be greater than or equal to
-        ///  0.In , , , and , if per-user quotas are in use, this
-        ///  value may be less than the total number of free allocation
-        ///  units on the disk.
-        /// </summary>
-        [StaticSize(8)]
-        public long ActualAvailableAllocationUnits;
-
-        /// <summary>
-        ///A 32-bit unsigned integer that contains the number
-        ///  of sectors in each allocation unit.
-        /// </summary>
-        [StaticSize(4)]
-        public uint SectorsPerAllocationUnit;
-
-        /// <summary>
-        ///A 32-bit unsigned integer that contains the number
-        ///  of bytes in each sector.
-        /// </summary>
-        [StaticSize(4)]
-        public uint BytesPerSector;
-    }
-
-    /// <summary>
-    ///  This information class is used to query information
-    ///  on a volume on which a file system is mounted. The
-    ///  message contains a FILE_FS_VOLUME_INFORMATION data
-    ///  element. The FILE_FS_VOLUME_INFORMATION data element
-    ///  is as follows.
-    /// </summary>
-    public partial struct FileFsVolumeInformation
-    {
-
-        /// <summary>
-        ///  A 64-bit signed integer that contains the time when
-        ///  the volume was created in the format of a FILETIME
-        ///  structure. The value of this field MUST be greater
-        ///  than or equal to 0.
-        /// </summary>
-        [StaticSize(8)]
-        public long VolumeCreationTime;
-
-        /// <summary>
-        ///  A 32-bit unsigned integer that contains the serial number
-        ///  of the volume. The serial number is an opaque value
-        ///  generated by the file system at format time, and is
-        ///  not necessarily related to any hardware serial number
-        ///  for the device on which the file system is located.
-        ///  No specific format or content of this field is required
-        ///  for protocol interoperation. This value is not required
-        ///  to be unique.
-        /// </summary>
-        [StaticSize(4)]
-        public uint VolumeSerialNumber;
-
-        /// <summary>
-        ///  A 32-bit unsigned integer that contains the length in
-        ///  bytes, including the trailing NULL, if present, of
-        ///  the name of the volume.
-        /// </summary>
-        [StaticSize(4)]
-        public uint VolumeLabelLength;
-
-        /// <summary>
-        ///A 1-byte Boolean (unsigned char) that is TRUE
-        ///  (0x01) if the file system supports object-oriented
-        ///  file system objects; otherwise, FALSE (0x00).This value
-        ///  is TRUE for NTFS and FALSE for other file systems implemented
-        ///  by .
-        /// </summary>
-        public SupportsObjects_Values SupportsObjects;
-
-        /// <summary>
-        ///  MUST be ignored by the receiver.
-        /// </summary>
-        public byte Reserved;
-
-        /// <summary>
-        ///   A variable-length Unicode field containing the name
-        ///  of the volume. The content of this field can be a NULL-terminated
-        ///  string or can be a string padded with the space character
-        ///  to be VolumeLabelLength bytes long.
-        /// </summary>
-        public byte VolumeLabel;
-    }
-
-    /// <summary>
-    /// SupportsObjects_Values
-    /// </summary>
-    public enum SupportsObjects_Values : byte
-    {
-
-        /// <summary>
-        ///  TRUE
-        /// </summary>
-        V1 = 01,
-
-        /// <summary>
-        ///  FALSE
-        /// </summary>
-        V2 = 00,
-    }
-
-    /// <summary>
-    ///  This information class is used to query device information
-    ///  associated with a file system volume. The message contains
-    ///  a FILE_FS_DEVICE_INFORMATION data element.   The FILE_FS_DEVICE_INFORMATION
-    ///  data element is as follows.
-    /// </summary>
-    public partial struct FILE_FS_DEVICE_INFORMATION
-    {
-
-        /// <summary>
-        ///  This identifies the type of given volume. It MUST be
-        ///  one of the following:
-        /// </summary>
-        [StaticSize(4)]
-        public DeviceType_Values DeviceType;
-
-        /// <summary>
-        ///  A bit field which identifies various characteristics
-        ///  about a given volume. The following are valid bit values.
-        /// </summary>
-        [StaticSize(4)]
-        public Characteristics_Values Characteristics;
-    }
-
-    /// <summary>
-    /// DeviceType_Values
-    /// </summary>
-    public enum DeviceType_Values : uint
-    {
-
-        /// <summary>
-        ///  Volume resides on a CD ROM.
-        /// </summary>
-        FILE_DEVICE_CD_ROM = 0x00000002,
-
-        /// <summary>
-        ///  Volume resides on a disk.
-        /// </summary>
-        FILE_DEVICE_DISK = 0x00000007,
     }
 
     /// <summary>
@@ -11808,14 +11658,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         ///  A FILE_BASIC_INFORMATION structure specified in section
         ///  .
         /// </summary>
-        [StaticSize(36)]
+        [StaticSize(40)]
         public FileBasicInformation BasicInformation;
 
         /// <summary>
         ///  A FILE_STANDARD_INFORMATION structure specified in section
         ///  .
         /// </summary>
-        [StaticSize(22)]
+        [StaticSize(24)]
         public FileStandardInformation StandardInformation;
 
         /// <summary>

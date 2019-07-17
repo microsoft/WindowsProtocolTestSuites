@@ -6,7 +6,7 @@
 ###########################################################################################
 ##
 ## Microsoft Windows Powershell Scripting
-## File:           Configure-ENDPOINT.ps1
+## File:           Config-ENDPOINT.ps1
 ## Purpose:        Configure Endpoint Server (Test Driver) in Local Domain for Active Directory Family Test Suite.
 ## Requirements:   Windows Powershell 2.0
 ## Supported OS:   Windows Server 2008 R2, Windows Server 2012, Windows Server 2012 R2,
@@ -29,7 +29,10 @@ Param
     $EnableDebugging,
     
     [int]
-    $Step = 1
+    $Step = 1,
+
+    [String]
+    $ConfigFile = "c:\temp\Protocol.xml"
 )
 
 #------------------------------------------------------------------------------------------
@@ -47,7 +50,19 @@ $ScriptPath              = Split-Path $ScriptFileFullPath
 $SignalFileFullPath      = "$ScriptPath\post.finished.signal"
 $LogFileFullPath         = "$ScriptFileFullPath.log"
 $Parameters              = @{}
+$IsAzure                 = $false
 
+try {
+    [xml]$content = Get-Content $ConfigFile -ErrorAction Stop
+    $currentCore = $content.lab.core
+    if(![string]::IsNullOrEmpty($currentCore.regressiontype) -and ($currentCore.regressiontype -eq "Azure")){
+        $IsAzure = $true;
+        $SignalFileFullPath = "C:\PostScript.Completed.signal"
+    }
+}
+catch {
+    
+}
 #------------------------------------------------------------------------------------------
 # Function: Display-Help
 # Display the help messages.
@@ -102,8 +117,13 @@ Function Write-ConfigLog
 Function Read-ConfigParameters()
 {
     Write-ConfigLog "Getting the parameters from config file..." -ForegroundColor Yellow
+    if($IsAzure)
+    {
+        .\GetVmParametersByComputerName.ps1 -RefParamArray ([ref]$Parameters)
+    } else {
     $VMName = .\GetVMNameByComputerName.ps1
-    .\GetVmParameters.ps1 -VMName $VMName -RefParamArray ([ref]$Parameters)
+        .\GetVmParameters.ps1 -VMName $VMName -RefParamArray ([ref]$Parameters)
+    }
     $Parameters
 }
 
@@ -192,11 +212,12 @@ Function Config-Phase1()
     # Set execution policy as unrestricted
     Write-ConfigLog "Setting execution policy..." -ForegroundColor Yellow
     .\Set-ExecutionPolicy-Unrestricted.ps1
-
-    # Set network configurations
-    Write-ConfigLog "Setting network configurations..." -ForegroundColor Yellow
-    .\Set-NetworkConfiguration.ps1 -IPAddress $Parameters["ip"] -SubnetMask $Parameters["subnet"] -Gateway $Parameters["gateway"] -DNS ($Parameters["dns"].Split(';'))
-
+    if(-not $IsAzure)
+    {
+        # Set network configurations
+        Write-ConfigLog "Setting network configurations..." -ForegroundColor Yellow
+        .\Set-NetworkConfiguration.ps1 -IPAddress $Parameters["ip"] -SubnetMask $Parameters["subnet"] -Gateway $Parameters["gateway"] -DNS ($Parameters["dns"].Split(';'))
+    }
     # Set autologon
     Write-ConfigLog "Setting autologon..." -ForegroundColor Yellow
     .\Set-AutoLogon.ps1 -Domain $Parameters["domain"] -Username $Parameters["username"] -Password $Parameters["password"]
@@ -318,11 +339,18 @@ Function Config-Phase4()
     Write-ConfigLog "Finding PtfConfig files in both \bin and source\server\testcode\testsuite folders..." -ForegroundColor Yellow
     $PtfFiles = .\Find-PtfConfigFiles.ps1 -FileName "AD_ServerTestSuite.deployment.ptfconfig"
 
+    ##########################################################################
+    # Modify PtfConfig file according to information retrieved from <Common> #
+    ##########################################################################
+    Write-ConfigLog "Updating Common..." -ForegroundColor Yellow
+    .\Modify-PtfConfigFiles.ps1 -Files $PtfFiles -ProperyName "DomainAdministratorName" -ProperyValue $Parameters["username"]
+    .\Modify-PtfConfigFiles.ps1 -Files $PtfFiles -ProperyName "DomainUserPassword" -ProperyValue $Parameters["password"]
+
     #######################################################################
     # Modify PtfConfig file according to information retrieved from <PDC> #
     #######################################################################
     Write-ConfigLog "Modifying PtfConfig file according to information retrieved from <PDC>..." -ForegroundColor Yellow    
-    $PdcShare =  "\\" + $Parameters["primarydc"] + "\" + ($env:SystemDrive).Replace(":", "$")
+    $PdcShare =  "\\" + $Parameters["primarydcip"] + "\" + ($env:SystemDrive).Replace(":", "$")
 
     # (a) Update LDS ports
     Write-ConfigLog "Updating LDS ports..." -ForegroundColor Yellow
@@ -363,7 +391,7 @@ Function Config-Phase4()
     # Modify PtfConfig file according to information retrieved from <SDC> #
     #######################################################################
     Write-ConfigLog "Modifying PtfConfig file according to information retrieved from <SDC>..." -ForegroundColor Yellow
-    $SdcShare =  "\\" + $Parameters["secondarydc"] + "\" + ($env:SystemDrive).Replace(":", "$")
+    $SdcShare =  "\\" + $Parameters["secondarydcip"] + "\" + ($env:SystemDrive).Replace(":", "$")
 
     # (a) Update netbios name, ip address and operating system version
     Write-ConfigLog "Updating netbios name, ip address and operating system version..." -ForegroundColor Yellow
@@ -376,7 +404,7 @@ Function Config-Phase4()
     # Modify PtfConfig file according to information retrieved from <RODC> #
     ########################################################################
     Write-ConfigLog "Modifying PtfConfig file according to information retrieved from <RODC>..." -ForegroundColor Yellow
-    $RodcShare =  "\\" + $Parameters["readonlydc"] + "\" + ($env:SystemDrive).Replace(":", "$")
+    $RodcShare =  "\\" + $Parameters["readonlydcip"] + "\" + ($env:SystemDrive).Replace(":", "$")
 
     # (a) Update netbios name, ip address and operating system version
     Write-ConfigLog "Updating netbios name, ip address and operating system version..." -ForegroundColor Yellow
@@ -389,7 +417,7 @@ Function Config-Phase4()
     # Modify PtfConfig file according to information retrieved from <CDC> #
     #######################################################################
     Write-ConfigLog "Modifying PtfConfig file according to information retrieved from <CDC>..." -ForegroundColor Yellow
-    $CdcShare =  "\\" + $Parameters["childdc"] + "\" + ($env:SystemDrive).Replace(":", "$")
+    $CdcShare =  "\\" + $Parameters["childdcip"] + "\" + ($env:SystemDrive).Replace(":", "$")
 
     # (a) Update child domain netbios name and dns name
     Write-ConfigLog "Updating child domain netbios name and dns name..." -ForegroundColor Yellow
@@ -409,7 +437,7 @@ Function Config-Phase4()
     # Modify PtfConfig file according to information retrieved from <TDC> #
     #######################################################################
     Write-ConfigLog "Modifying PtfConfig file according to information retrieved from <TDC>..." -ForegroundColor Yellow
-    $TdcShare =  "\\" + $Parameters["trustdc"] + "\" + ($env:SystemDrive).Replace(":", "$")
+    $TdcShare =  "\\" + $Parameters["trustdcip"] + "\" + ($env:SystemDrive).Replace(":", "$")
 
     # (a) Update trusted domain netbios name and dns name
     Write-ConfigLog "Updating trusted domain netbios name and dns name..." -ForegroundColor Yellow
@@ -434,6 +462,7 @@ Function Config-Phase4()
     Write-ConfigLog "Updating netbios name, ip address..." -ForegroundColor Yellow
     .\Modify-PtfConfigFiles.ps1 -Files $PtfFiles -ProperyName "DM.NetbiosName" -ProperyValue $Parameters["dm"].ToString().Split('.')[0].ToUpper()
     .\Modify-PtfConfigFiles.ps1 -Files $PtfFiles -ProperyName "DM.IPAddress" -ProperyValue $Parameters["dmip"]
+    .\Modify-PtfConfigFiles.ps1 -Files $PtfFiles -ProperyName "DMAdminName" -ProperyValue $Parameters["username"]
 
     ############################################################################
     # Modify PtfConfig file according to information retrieved from <ENDPOINT> #

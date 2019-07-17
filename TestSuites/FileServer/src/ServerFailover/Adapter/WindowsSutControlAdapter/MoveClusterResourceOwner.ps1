@@ -5,10 +5,10 @@
 
 [string]$resName
 [string]$nodeName
-[string]$clusterName = ${PtfPropCluster.ClusterName}
-[string]$domain = ${PtfPropCommon.DomainName}
-[string]$userName = ${PtfPropCommon.AdminUserName}
-[string]$password = ${PtfPropCommon.PasswordForAllUsers}
+[string]$clusterName = $PtfProp_Cluster_ClusterName
+[string]$domain = $PtfProp_Common_DomainName
+[string]$userName = $PtfProp_Common_AdminUserName
+[string]$password = $PtfProp_Common_PasswordForAllUsers
 
 $SecurePassword = New-Object System.Security.SecureString
 if($domain -eq $null -or $domain.trim() -eq "")
