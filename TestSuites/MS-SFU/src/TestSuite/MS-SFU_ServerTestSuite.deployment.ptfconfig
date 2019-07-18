@@ -12,13 +12,13 @@
     <!-- Port number of SUT -->
     <Property name="RemoteMachinePort" value="88" />
     <!-- Realm of service1 and service2 -->
-    <Property name="Realm1" value="BLAH.ORG" />
+    <Property name="Realm1" value="BLAH.COM" />
     <!-- User to be delegated -->
     <Property name="DelegatedUserName" value="user" />
     <!-- Type of DelegatedUser -->
     <Property name="DelegatedUserType" value="NT_ENTERPRISE" />
     <!-- FQDN of service1 -->
-    <Property name="Service1FQDN" value="service1/SUT01@BLAH.ORG" />
+    <Property name="Service1FQDN" value="service1/SUT01@BLAH.COM" />
     <!-- User of service1 -->
     <Property name="Service1UserName" value="service1user" />
     <!-- Password for user of service1 -->
@@ -26,7 +26,7 @@
     <!-- Salt of service1 -->
     <Property name="Service1Salt" value="service1" />
     <!-- FQDN of service2 -->
-    <Property name="Service2FQDN" value="service2/SUT01@BLAH.ORG" />
+    <Property name="Service2FQDN" value="service2/SUT01@BLAH.COM" />
     <!-- User of service2 -->
     <Property name="Service2UserName" value="service2user" />
     <!-- Password of service2 -->
