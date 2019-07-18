@@ -37,7 +37,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
         
         public delegate void CPMSetBindingsInResponseDelegate1(uint errorCode);
         
-        public delegate void GetServerPlatformDelegate1(Microsoft.Protocols.TestSuites.WspTS.SkuOsVersion platform, bool @return);
+        public delegate void GetServerPlatformDelegate1(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.SkuOsVersion platform, bool @return);
         
         public delegate void CPMGetRowsOutDelegate1(uint errorCode);
         
@@ -69,81 +69,81 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
         #endregion
         
         #region Event Metadata
-        static System.Reflection.MethodBase CPMConnectInRequestInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMConnectInRequest");
+        static System.Reflection.MethodBase CPMConnectInRequestInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMConnectInRequest");
         
-        static System.Reflection.EventInfo CPMConnectOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMConnectOutResponse");
+        static System.Reflection.EventInfo CPMConnectOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMConnectOutResponse");
         
-        static System.Reflection.MethodBase CPMCreateQueryInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMCreateQueryIn", typeof(bool));
+        static System.Reflection.MethodBase CPMCreateQueryInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMCreateQueryIn", typeof(bool));
         
-        static System.Reflection.EventInfo CPMCreateQueryOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMCreateQueryOutResponse");
+        static System.Reflection.EventInfo CPMCreateQueryOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMCreateQueryOutResponse");
         
-        static System.Reflection.MethodBase CPMSetBindingsInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMSetBindingsIn", typeof(bool), typeof(bool));
+        static System.Reflection.MethodBase CPMSetBindingsInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMSetBindingsIn", typeof(bool), typeof(bool));
         
-        static System.Reflection.EventInfo CPMSetBindingsInResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMSetBindingsInResponse");
+        static System.Reflection.EventInfo CPMSetBindingsInResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMSetBindingsInResponse");
         
-        static System.Reflection.MethodBase GetServerPlatformInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "GetServerPlatform", typeof(Microsoft.Protocols.TestSuites.WspTS.SkuOsVersion).MakeByRefType());
+        static System.Reflection.MethodBase GetServerPlatformInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "GetServerPlatform", typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.SkuOsVersion).MakeByRefType());
         
-        static System.Reflection.MethodBase CPMGetRowsInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMGetRowsIn", typeof(bool));
+        static System.Reflection.MethodBase CPMGetRowsInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMGetRowsIn", typeof(bool));
         
-        static System.Reflection.EventInfo CPMGetRowsOutInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMGetRowsOut");
+        static System.Reflection.EventInfo CPMGetRowsOutInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMGetRowsOut");
         
-        static System.Reflection.MethodBase CPMFreeCursorInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMFreeCursorIn", typeof(bool));
+        static System.Reflection.MethodBase CPMFreeCursorInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMFreeCursorIn", typeof(bool));
         
-        static System.Reflection.EventInfo CPMFreeCursorOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMFreeCursorOutResponse");
+        static System.Reflection.EventInfo CPMFreeCursorOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMFreeCursorOutResponse");
         
-        static System.Reflection.MethodBase CPMDisconnectInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMDisconnect");
+        static System.Reflection.MethodBase CPMDisconnectInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMDisconnect");
         
-        static System.Reflection.MethodBase CPMGetQueryStatusInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMGetQueryStatusIn", typeof(bool));
+        static System.Reflection.MethodBase CPMGetQueryStatusInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMGetQueryStatusIn", typeof(bool));
         
-        static System.Reflection.MethodBase CPMGetQueryStatusExInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMGetQueryStatusExIn", typeof(bool));
+        static System.Reflection.MethodBase CPMGetQueryStatusExInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMGetQueryStatusExIn", typeof(bool));
         
-        static System.Reflection.MethodBase CPMRatioFinishedInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMRatioFinishedIn", typeof(bool));
+        static System.Reflection.MethodBase CPMRatioFinishedInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMRatioFinishedIn", typeof(bool));
         
-        static System.Reflection.MethodBase CPMFetchValueInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMFetchValueIn", typeof(bool));
+        static System.Reflection.MethodBase CPMFetchValueInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMFetchValueIn", typeof(bool));
         
-        static System.Reflection.MethodBase CPMCiStateInOutInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMCiStateInOut");
+        static System.Reflection.MethodBase CPMCiStateInOutInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMCiStateInOut");
         
-        static System.Reflection.MethodBase CPMForceMergeInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMForceMergeIn", typeof(bool));
+        static System.Reflection.MethodBase CPMForceMergeInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMForceMergeIn", typeof(bool));
         
-        static System.Reflection.MethodBase CPMGetNotifyInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMGetNotify", typeof(bool));
+        static System.Reflection.MethodBase CPMGetNotifyInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMGetNotify", typeof(bool));
         
-        static System.Reflection.MethodBase CPMFindIndicesInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMFindIndicesIn", typeof(bool));
+        static System.Reflection.MethodBase CPMFindIndicesInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMFindIndicesIn", typeof(bool));
         
-        static System.Reflection.MethodBase CPMGetRowsetNotifyInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMGetRowsetNotifyIn", typeof(int), typeof(bool));
+        static System.Reflection.MethodBase CPMGetRowsetNotifyInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMGetRowsetNotifyIn", typeof(int), typeof(bool));
         
-        static System.Reflection.MethodBase CPMSetScopePrioritizationInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMSetScopePrioritizationIn", typeof(uint));
+        static System.Reflection.MethodBase CPMSetScopePrioritizationInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMSetScopePrioritizationIn", typeof(uint));
         
-        static System.Reflection.MethodBase CPMGetScopeStatisticsInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMGetScopeStatisticsIn");
+        static System.Reflection.MethodBase CPMGetScopeStatisticsInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMGetScopeStatisticsIn");
         
-        static System.Reflection.MethodBase CPMUpdateDocumentsInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMUpdateDocumentsIn", typeof(uint), typeof(uint));
+        static System.Reflection.MethodBase CPMUpdateDocumentsInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMUpdateDocumentsIn", typeof(uint), typeof(uint));
         
-        static System.Reflection.EventInfo CPMGetQueryStatusOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMGetQueryStatusOutResponse");
+        static System.Reflection.EventInfo CPMGetQueryStatusOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMGetQueryStatusOutResponse");
         
-        static System.Reflection.EventInfo CPMGetQueryStatusExOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMGetQueryStatusExOutResponse");
+        static System.Reflection.EventInfo CPMGetQueryStatusExOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMGetQueryStatusExOutResponse");
         
-        static System.Reflection.EventInfo CPMRatioFinishedOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMRatioFinishedOutResponse");
+        static System.Reflection.EventInfo CPMRatioFinishedOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMRatioFinishedOutResponse");
         
-        static System.Reflection.EventInfo CPMFetchValueOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMFetchValueOutResponse");
+        static System.Reflection.EventInfo CPMFetchValueOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMFetchValueOutResponse");
         
-        static System.Reflection.EventInfo CPMCiStateInOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMCiStateInOutResponse");
+        static System.Reflection.EventInfo CPMCiStateInOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMCiStateInOutResponse");
         
-        static System.Reflection.EventInfo CPMForceMergeInResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMForceMergeInResponse");
+        static System.Reflection.EventInfo CPMForceMergeInResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMForceMergeInResponse");
         
-        static System.Reflection.EventInfo CPMSendNotifyOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMSendNotifyOutResponse");
+        static System.Reflection.EventInfo CPMSendNotifyOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMSendNotifyOutResponse");
         
-        static System.Reflection.EventInfo CPMFindIndicesOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMFindIndicesOutResponse");
+        static System.Reflection.EventInfo CPMFindIndicesOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMFindIndicesOutResponse");
         
-        static System.Reflection.EventInfo CPMGetRowsetNotifyOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMGetRowsetNotifyOutResponse");
+        static System.Reflection.EventInfo CPMGetRowsetNotifyOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMGetRowsetNotifyOutResponse");
         
-        static System.Reflection.EventInfo CPMGetScopeStatisticsOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMGetScopeStatisticsOutResponse");
+        static System.Reflection.EventInfo CPMGetScopeStatisticsOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMGetScopeStatisticsOutResponse");
         
-        static System.Reflection.EventInfo CPMSetScopePrioritizationOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMSetScopePrioritizationOutResponse");
+        static System.Reflection.EventInfo CPMSetScopePrioritizationOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMSetScopePrioritizationOutResponse");
         
-        static System.Reflection.EventInfo CPMUpdateDocumentsOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter), "CPMUpdateDocumentsOutResponse");
+        static System.Reflection.EventInfo CPMUpdateDocumentsOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMUpdateDocumentsOutResponse");
         #endregion
         
         #region Adapter Instances
-        private Microsoft.Protocols.TestSuites.WspTS.IWspAdapter IWspAdapterInstance;
+        private Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter IWspAdapterInstance;
         #endregion
         
         #region Class Initialization and Cleanup
@@ -161,7 +161,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
         #region Test Initialization and Cleanup
         protected override void TestInitialize() {
             this.InitializeTestManager();
-            this.IWspAdapterInstance = ((Microsoft.Protocols.TestSuites.WspTS.IWspAdapter)(this.Manager.GetAdapter(typeof(Microsoft.Protocols.TestSuites.WspTS.IWspAdapter))));
+            this.IWspAdapterInstance = ((Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter)(this.Manager.GetAdapter(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter))));
             this.Manager.Subscribe(CPMConnectOutResponseInfo, this.IWspAdapterInstance);
             this.Manager.Subscribe(CPMCreateQueryOutResponseInfo, this.IWspAdapterInstance);
             this.Manager.Subscribe(CPMSetBindingsInResponseInfo, this.IWspAdapterInstance);
@@ -215,7 +215,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
             this.Manager.Comment("reaching state \'S8\'");
             this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(TestCaseGetRowsOut_E_FailErrorWithInvalidBinding.CPMSetBindingsInResponseInfo, null, new CPMSetBindingsInResponseDelegate1(this.TestCaseGetRowsOut_E_FailErrorWithInvalidBindingS0CPMSetBindingsInResponseChecker)));
             this.Manager.Comment("reaching state \'S9\'");
-            Microsoft.Protocols.TestSuites.WspTS.SkuOsVersion temp0;
+            Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.SkuOsVersion temp0;
             bool temp1;
             this.Manager.Comment("executing step \'call GetServerPlatform(out _)\'");
             temp1 = this.IWspAdapterInstance.GetServerPlatform(out temp0);
@@ -346,9 +346,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
             this.Manager.Checkpoint("MS-WSP_R747");
         }
         
-        private void TestCaseGetRowsOut_E_FailErrorWithInvalidBindingS0GetServerPlatformChecker(Microsoft.Protocols.TestSuites.WspTS.SkuOsVersion platform, bool @return) {
+        private void TestCaseGetRowsOut_E_FailErrorWithInvalidBindingS0GetServerPlatformChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.SkuOsVersion platform, bool @return) {
             this.Manager.Comment("checking step \'return GetServerPlatform/[out Win2K8R2]:True\'");
-            this.Manager.Assert((platform == Microsoft.Protocols.TestSuites.WspTS.SkuOsVersion.Win2K8R2), String.Format("expected \'Microsoft.Protocols.TestSuites.WspTS.SkuOsVersion.Win2K8R2\', actual \'{0" +
+            this.Manager.Assert((platform == Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.SkuOsVersion.Win2K8R2), String.Format("expected \'Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.SkuOsVersion.Win2K8R2\', actual \'{0" +
                         "}\' (platform of GetServerPlatform, state S10)", platform));
             this.Manager.Assert((@return == true), String.Format("expected \'true\', actual \'{0}\' (return of GetServerPlatform, state S10)", @return));
         }
@@ -367,9 +367,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
             this.Manager.Checkpoint("MS-WSP_R793");
         }
         
-        private void TestCaseGetRowsOut_E_FailErrorWithInvalidBindingS0GetServerPlatformChecker1(Microsoft.Protocols.TestSuites.WspTS.SkuOsVersion platform, bool @return) {
+        private void TestCaseGetRowsOut_E_FailErrorWithInvalidBindingS0GetServerPlatformChecker1(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.SkuOsVersion platform, bool @return) {
             this.Manager.Comment("checking step \'return GetServerPlatform/[out Win2K8]:True\'");
-            this.Manager.Assert((platform == Microsoft.Protocols.TestSuites.WspTS.SkuOsVersion.Win2K8), String.Format("expected \'Microsoft.Protocols.TestSuites.WspTS.SkuOsVersion.Win2K8\', actual \'{0}\'" +
+            this.Manager.Assert((platform == Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.SkuOsVersion.Win2K8), String.Format("expected \'Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.SkuOsVersion.Win2K8\', actual \'{0}\'" +
                         " (platform of GetServerPlatform, state S10)", platform));
             this.Manager.Assert((@return == true), String.Format("expected \'true\', actual \'{0}\' (return of GetServerPlatform, state S10)", @return));
         }
@@ -389,9 +389,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
             this.Manager.Checkpoint("MS-WSP_R793");
         }
         
-        private void TestCaseGetRowsOut_E_FailErrorWithInvalidBindingS0GetServerPlatformChecker2(Microsoft.Protocols.TestSuites.WspTS.SkuOsVersion platform, bool @return) {
+        private void TestCaseGetRowsOut_E_FailErrorWithInvalidBindingS0GetServerPlatformChecker2(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.SkuOsVersion platform, bool @return) {
             this.Manager.Comment("checking step \'return GetServerPlatform/[out Win2K3]:True\'");
-            this.Manager.Assert((platform == Microsoft.Protocols.TestSuites.WspTS.SkuOsVersion.Win2K3), String.Format("expected \'Microsoft.Protocols.TestSuites.WspTS.SkuOsVersion.Win2K3\', actual \'{0}\'" +
+            this.Manager.Assert((platform == Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.SkuOsVersion.Win2K3), String.Format("expected \'Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.SkuOsVersion.Win2K3\', actual \'{0}\'" +
                         " (platform of GetServerPlatform, state S10)", platform));
             this.Manager.Assert((@return == true), String.Format("expected \'true\', actual \'{0}\' (return of GetServerPlatform, state S10)", @return));
         }
@@ -411,9 +411,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
             this.Manager.Checkpoint("MS-WSP_R793");
         }
         
-        private void TestCaseGetRowsOut_E_FailErrorWithInvalidBindingS0GetServerPlatformChecker3(Microsoft.Protocols.TestSuites.WspTS.SkuOsVersion platform, bool @return) {
+        private void TestCaseGetRowsOut_E_FailErrorWithInvalidBindingS0GetServerPlatformChecker3(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.SkuOsVersion platform, bool @return) {
             this.Manager.Comment("checking step \'return GetServerPlatform/[out NonWindows]:True\'");
-            this.Manager.Assert((platform == Microsoft.Protocols.TestSuites.WspTS.SkuOsVersion.NonWindows), String.Format("expected \'Microsoft.Protocols.TestSuites.WspTS.SkuOsVersion.NonWindows\', actual \'" +
+            this.Manager.Assert((platform == Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.SkuOsVersion.NonWindows), String.Format("expected \'Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.SkuOsVersion.NonWindows\', actual \'" +
                         "{0}\' (platform of GetServerPlatform, state S10)", platform));
             this.Manager.Assert((@return == true), String.Format("expected \'true\', actual \'{0}\' (return of GetServerPlatform, state S10)", @return));
         }

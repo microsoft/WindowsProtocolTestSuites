@@ -6,7 +6,7 @@
 
   
   <Adapters>
-    <Adapter xsi:type="managed" name="IWspAdapter" adaptertype="Microsoft.Protocols.TestSuites.WspTS.WspAdapter"/>
+    <Adapter xsi:type="managed" name="IWspAdapter" adaptertype="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.WspAdapter"/>
     <Adapter xsi:type="powershell" name="IWSPSUTAdapter" scriptdir="."/>
   </Adapters>
   <TestLog defaultprofile="Verbose">

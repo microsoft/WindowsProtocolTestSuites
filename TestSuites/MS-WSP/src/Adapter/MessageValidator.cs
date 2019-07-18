@@ -1,29 +1,11 @@
-﻿/*****************************************************************************/
-/*                                                                           */
-/* File Name      :  MessageValidator.cs                                     */
-/* Description    :  Validates Syntax specific requirements of MS-WSP        */
-/* Class          :  MessageValidator                                        */
-/* Dependencies   :  WspAdapter uses MessageValidator to validate            */
-/*                   requirements                                            */
-/*                                                                           */
-/* Author         :  v-shgoel, v-kichak                                      */
-/* Create Date    :  09/06/2008                                              */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
-/* Change History :                                                          */
-/*---------------------------------------------------------------------------*/
-/* Date             Author     BugID    Description                          */
-/*---------------------------------------------------------------------------*/
-/*---------------------------------------------------------------------------*/
-/*****************************************************************************/
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
+using System.Text;
 
-namespace Microsoft.Protocols.TestSuites.WspTS
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using Microsoft.Protocols.TestTools;
 
     /// <summary>
     /// MessageValidator class validates syntax of MS-WSP response messages
@@ -65,36 +47,36 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             // For any arbitary value of padding fields 
             //of CDbPropSet structure the server response is success
             site.CaptureRequirementIfAreEqual<uint>((uint)WspErrorCode.SUCCESS,
-                messageStatus,264,
+                messageStatus, 264,
                 "For any arbitrary value of '_padding' field of the" +
                 "  CDbPropSet structure, server is returning success.");
             // For  arbitary value in padding fields between CDbProp 
             // structure the server response is success.Hence validated
             site.CaptureRequirementIfAreEqual<uint>((uint)WspErrorCode.SUCCESS,
-                messageStatus,269,
+                messageStatus, 269,
                 "For any arbitrary value of padding bytes in the array" +
                 " containing CDbProp structures,server response is success.");
             // For arbitary value in padding fields of '_paddingcbdBlob2' 
             // the server response is success.Hence validated
             site.CaptureRequirementIfAreEqual<uint>((uint)WspErrorCode.SUCCESS,
-                messageStatus,413, "For any arbitrary value of the" +
+                messageStatus, 413, "For any arbitrary value of the" +
                 " '_paddingcbdBlob2' bytes, server response is success.");
             // For arbitary value in padding fields of '_padding' 
             // the server response is success.Hence validated
             site.CaptureRequirementIfAreEqual<uint>((uint)WspErrorCode.SUCCESS,
-                messageStatus,416,
+                messageStatus, 416,
                 "For any arbitrary value  '_padding' field of the" +
                 "  CPMConnectIn message, server response is success.");
             // For arbitary value in padding fields of '_paddingcPropSets' 
             // the server response is success.Hence validated
             site.CaptureRequirementIfAreEqual<uint>((uint)WspErrorCode.SUCCESS,
-                messageStatus,422,
+                messageStatus, 422,
                 "For any value of '_paddingcPropSets' field of" +
                 " the  CPMConnectIn message, server response is success.");
             // For arbitary value in padding fields of 'PaddingExtPropset' 
             // the server response is success.Hence validated
             site.CaptureRequirementIfAreEqual<uint>((uint)WspErrorCode.SUCCESS,
-                messageStatus,430,
+                messageStatus, 430,
                 "For any arbitrary value of 'PaddingExtPropset' field" +
                 " of the  CPMConnectIn message, server response is success.");
 
@@ -131,7 +113,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             {
                 uint clientVersion
                         = Convert.ToUInt32
-                        (site.Properties["ClientVersion"]);  
+                        (site.Properties["ClientVersion"]);
 
                 //Updated by:v-zhil
                 //Delta testing
@@ -162,7 +144,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                             "and the server indicated that it was a 32-bit system (_serverVersion less than 0x00010000 in CPMConnectOut). " +
                             "Offsets are 32-bit integers.");
                 }
-            }            
+            }
 
             if (site.Properties["IsServerWindows"].ToUpper() == "TRUE")
             {
@@ -171,7 +153,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 if (Convert.ToUInt32(site.Properties.Get("ServerOffset"))
                     == Constant.OFFSET_32)
                 {
-                    
+
                     uint actualValue
                         = Convert.ToUInt32
                         (site.Properties["ServerVersion"]);
@@ -182,7 +164,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                         "indicates 32-bit support.");
                     uint clientVersion
                         = Convert.ToUInt32
-                        (site.Properties["ClientVersion"]);                    
+                        (site.Properties["ClientVersion"]);
 
                     //Windows Behavior
                     // For 32-bit Windows Systems in 
@@ -194,7 +176,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                             "<10>OS is either 32-bit Windows XP, 32-bit " +
                             "Windows Server 2003, 32-bit Windows Vista " +
                             "with Windows Desktop Search 4, 32-bit Windows" +
-                            " Server 2003 with Windows Desktop Search 4.");                       
+                            " Server 2003 with Windows Desktop Search 4.");
 
                     }
                     // For 32-bit Windows Systems in 
@@ -337,7 +319,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     }
                     else
                     {
-                        site.Log.Add(LogEntryKind.Comment, string.Format("this requirement{0} should be covered after TDQ 42332 is fixed.",1013));
+                        site.Log.Add(LogEntryKind.Comment, string.Format("this requirement{0} should be covered after TDQ 42332 is fixed.", 1013));
                     }
 
                     /*
@@ -499,13 +481,13 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             //Updated by:v-zhil
             //For Delta tesing
             site.CaptureRequirementIfAreEqual<bool>(true, eStateValid, 380,
-                "The 4 bytes 'eState' field  of the CPMCiStateInOut message MUST be zero " + 
-                "or one or more  constants defined in the following table:  " + 
-                "0x00000000,CI_STATE_SHADOW_MERGE(0x00000001),  CI_STATE_MASTER_MERGE(0x00000002),  " + 
-                "CI_STATE_CONTENT_SCAN_REQUIRED(0x00000004),  CI_STATE_ANNEALING_MERGE(0x00000008),  " + 
-                "CI_STATE_SCANNING(0x00000010),  CI_STATE_LOW_MEMORY(0x00000080), CI_STATE_HIGH_IO(0x00000100),  " + 
-                "CI_STATE_MASTER_MERGE_PAUSED(0x00000200), CI_STATE_READ_ONLY(0x00000400), " + 
-                "CI_STATE_BATTERY_POWER(0x00000800),  CI_STATE_USER_ACTIVE(0x00001000),  " + 
+                "The 4 bytes 'eState' field  of the CPMCiStateInOut message MUST be zero " +
+                "or one or more  constants defined in the following table:  " +
+                "0x00000000,CI_STATE_SHADOW_MERGE(0x00000001),  CI_STATE_MASTER_MERGE(0x00000002),  " +
+                "CI_STATE_CONTENT_SCAN_REQUIRED(0x00000004),  CI_STATE_ANNEALING_MERGE(0x00000008),  " +
+                "CI_STATE_SCANNING(0x00000010),  CI_STATE_LOW_MEMORY(0x00000080), CI_STATE_HIGH_IO(0x00000100),  " +
+                "CI_STATE_MASTER_MERGE_PAUSED(0x00000200), CI_STATE_READ_ONLY(0x00000400), " +
+                "CI_STATE_BATTERY_POWER(0x00000800),  CI_STATE_USER_ACTIVE(0x00001000),  " +
                 "CI_STATE_LOW_DISK(0x00010000), CI_STATE_HIGH_CPU(0x00020000).");
 
             //--------------------    cFilteredDocuments  
@@ -540,8 +522,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 "number of pending high-level indexing operations.");
             //Updated by:v-zhil
             //For delta testing
-            site.CaptureRequirementIfIsTrue(0 == BitConverter.ToUInt32(tempByteArray,0), 384,
-                "<6> Section 2.2.3.1: This value [cPendingScans] is usually zero, " + 
+            site.CaptureRequirementIfIsTrue(0 == BitConverter.ToUInt32(tempByteArray, 0), 384,
+                "<6> Section 2.2.3.1: This value [cPendingScans] is usually zero, " +
                 "except immediately after indexing has been started or after a notification queue overflows.");
             //-------------------        dwIndexSize    
             uint indexSize
@@ -1008,7 +990,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 " structure, server response is success.");
 
 
-            
+
             // The Response message contains only the message
             //Header with Success Status
             //(Status is validated in ValidateHeader method)
@@ -1066,7 +1048,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             //For any value of padding in CTableColumn field, server
             //response is success 
             site.CaptureRequirementIfAreEqual<uint>((uint)WspErrorCode.SUCCESS,
-                messageStatus,514, "For any arbitrary" +
+                messageStatus, 514, "For any arbitrary" +
             " value of Padding bytes in the array of " +
             "CTableColumn structures, server response is success.");
 
@@ -1125,7 +1107,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             //Delta testing            
             string isR549Implementated = site.Properties.Get("R549Implementated");
             //Windows XP,Windows Vista is client SKU, not in our test scope
-            if (site.Properties.Get("ServerOSVersion").ToUpper() == "WIN7" || site.Properties.Get("ServerOSVersion").ToUpper() == "W2K8" 
+            if (site.Properties.Get("ServerOSVersion").ToUpper() == "WIN7" || site.Properties.Get("ServerOSVersion").ToUpper() == "W2K8"
                 || site.Properties.Get("ServerOSVersion").ToUpper() == "W2K3")
             {
                 //this requirements was added to TD as the fix of TDI 36589, this is a Win7 product bug(514865),
@@ -1148,8 +1130,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 bool actualValue = ulDenominator > 0;
                 //MS-WSP_R549
                 site.CaptureRequirementIfAreEqual<Boolean>(expectedValue, actualValue, 549,
-                    string.Format(@"The 4 bytes '_ulDenominator' field of the CPMRatioFinishedOut message SHOULD be greater than zero.<17>" ,"this requirement is {0} implemented", Boolean.Parse(isR549Implementated) ? "" : "not"));
-                
+                    string.Format(@"The 4 bytes '_ulDenominator' field of the CPMRatioFinishedOut message SHOULD be greater than zero.<17>", "this requirement is {0} implemented", Boolean.Parse(isR549Implementated) ? "" : "not"));
+
             }
             //-----------------------       _cRows     ----
             uint cRows
@@ -1273,12 +1255,12 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// <param name="bytes">byte array</param>
         /// <param name="sendNotifyOutCheckSum">checksum
         /// of CPMSendNotify message</param>
-        public void ValidateSendNotifyOut(Byte[] bytes, 
+        public void ValidateSendNotifyOut(Byte[] bytes,
             uint sendNotifyOutCheckSum)
         {
             int startingIndex = 0;
-             ValidateHeader(bytes, MessageType.CPMGetNotify, 
-            sendNotifyOutCheckSum, ref startingIndex);
+            ValidateHeader(bytes, MessageType.CPMGetNotify,
+           sendNotifyOutCheckSum, ref startingIndex);
             //----------------------    _watchNotify --
             uint watchNotify = Helper.GetUInt(bytes, ref startingIndex);
             //site.CaptureRequirementIfIsTrue(((watchNotify == 0x00000001)
@@ -1289,15 +1271,15 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             //    "DBWATCHNOTIFY_ROWSCHANGED(0x00000001), 
             //DBWATCHNOTIFY_QUERYDONE(0x00000002), 
             //DBWATCHNOTIFY_QUERYREEXECUTED(0x00000003).");
-            
+
             // If the Server Sends WatchNotify field.Requirement 753 
             // is validated
-            site.CaptureRequirement(753, "When the server receives a"+
-                "CPMGetNotify message from a client, if there were no changes"+
-                "in the query result set since the last CPMSendNotifyOut "+
-                "message for this client, or if the query is not currently"+
-                "monitored for changes in the results set, the server MUST"+
-                "respond with a CPMGetNotify message and start to monitor"+
+            site.CaptureRequirement(753, "When the server receives a" +
+                "CPMGetNotify message from a client, if there were no changes" +
+                "in the query result set since the last CPMSendNotifyOut " +
+                "message for this client, or if the query is not currently" +
+                "monitored for changes in the results set, the server MUST" +
+                "respond with a CPMGetNotify message and start to monitor" +
                 "the query for changes in the results set.");
         }
 
@@ -1307,25 +1289,25 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// <param name="compareBmkResponse">CompareBmkOut BLOB</param>
         /// <param name="compareBmkCheckSum">checksum of CompareBmkIn 
         /// message</param>
-        public void ValidateCompareBmkOut(Byte[] compareBmkResponse, 
+        public void ValidateCompareBmkOut(Byte[] compareBmkResponse,
             uint compareBmkCheckSum)
         {
             int startingIndex = 0;
-            ValidateHeader(compareBmkResponse, MessageType.CPMCompareBmkOut, 
+            ValidateHeader(compareBmkResponse, MessageType.CPMCompareBmkOut,
                 compareBmkCheckSum, ref startingIndex);
             //---------------------      dwComparison    ----------------------
-            uint dwComparison = Helper.GetUInt(compareBmkResponse, 
+            uint dwComparison = Helper.GetUInt(compareBmkResponse,
                 ref startingIndex);
-            bool validDWComparison = (dwComparison == 0x00000000) 
-                || (dwComparison == 0x00000000) 
-                || (dwComparison == 0x00000000) 
-                || (dwComparison == 0x00000000) 
+            bool validDWComparison = (dwComparison == 0x00000000)
+                || (dwComparison == 0x00000000)
+                || (dwComparison == 0x00000000)
+                || (dwComparison == 0x00000000)
                 || (dwComparison == 0x00000000);
-            site.CaptureRequirementIfIsTrue(validDWComparison, 581, 
-                "The 4 bytes 'dwComparison' field of the CPMCompareBmkOut"+
+            site.CaptureRequirementIfIsTrue(validDWComparison, 581,
+                "The 4 bytes 'dwComparison' field of the CPMCompareBmkOut" +
                 "message MUST be one of the following values:" +
-                "DBCOMPARE_LT(0x00000000), DBCOMPARE_EQ(0x00000001), "+
-                "DBCOMPARE_GT(0x00000002), DBCOMPARE_NE(0x00000003), "+
+                "DBCOMPARE_LT(0x00000000), DBCOMPARE_EQ(0x00000001), " +
+                "DBCOMPARE_GT(0x00000002), DBCOMPARE_NE(0x00000003), " +
                 "DBCOMPARE_NOTCOMPARABLE(0x00000004).");
 
         }
@@ -1336,7 +1318,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// <param name="freeCursorResponse">FreeCursorOut BLOB</param>
         /// <param name="freeCursorCheckSum">checksum of FreeCursorIn 
         /// message</param>
-        public void ValidateFreeCursorOut(Byte[] freeCursorResponse, 
+        public void ValidateFreeCursorOut(Byte[] freeCursorResponse,
             uint freeCursorCheckSum)
         {
             int startingIndex = 0;
@@ -1346,16 +1328,16 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             // If the Server Responds to the CPMFreeCursorIn message
             // and ValidateHeader method returns successfully.
             // Requirement 797 is validated.
-            site.CaptureRequirement(797, 
-                "When the server receives a CPMFreeCursorIn message request"+
-                "from the client, the server MUST respond with a "+
+            site.CaptureRequirement(797,
+                "When the server receives a CPMFreeCursorIn message request" +
+                "from the client, the server MUST respond with a " +
                 "CPMFreeCursorOut message.");
             //--------------------    _cCursorsRemaining    -------------------
-            uint cursorsRemaining 
+            uint cursorsRemaining
                 = Helper.GetUInt(freeCursorResponse, ref startingIndex);
             //If GetUInt returns successfully, requirement 590 is validated
-            site.CaptureRequirement(590, 
-                "The 4 bytes '_cCursorsRemaining' field of the "+
+            site.CaptureRequirement(590,
+                "The 4 bytes '_cCursorsRemaining' field of the " +
                 "CPMFreeCursorOut message" +
                 "is the number of cursors still in use for the query.");
         }
@@ -1370,8 +1352,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// <param name="reserved"> reserved field</param>
         /// <param name="rowsOutResponse">Rowsout response blob obtained</param>
         /// <param name="workId">out parameter workId </param>
-        public void ValidateGetRowsOut(Byte[] rowsOutResponse, 
-            uint rowsInCheckSum, uint reserved, uint clientBase, 
+        public void ValidateGetRowsOut(Byte[] rowsOutResponse,
+            uint rowsInCheckSum, uint reserved, uint clientBase,
             TableColumn[] columns, uint offsetUsed, out uint workId)
         {
             int startingIndex = 0;
@@ -1379,31 +1361,31 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             int rowSize = 0;
             int WORK_ID_PROPERTY = 5; // by default it is 5
             uint lastOffsetValue = 0; // Offset of first Row field
-            ValidateHeader(rowsOutResponse, MessageType.CPMGetRowsIn, 
+            ValidateHeader(rowsOutResponse, MessageType.CPMGetRowsIn,
                 rowsInCheckSum, ref startingIndex);
             //---------------------    _cRowsReturned   -----------------------
-            uint rowsReturned 
+            uint rowsReturned
                 = Helper.GetUInt(rowsOutResponse, ref startingIndex);
             // If GetUInt returns success the requirement 530 is validated
-            site.CaptureRequirement(530, 
-                "The 4 bytes '_cRowsReturned' field of the CPMGetRowsOut"+
+            site.CaptureRequirement(530,
+                "The 4 bytes '_cRowsReturned' field of the CPMGetRowsOut" +
                 "message is the number of rows returned in Rows.");
             //If rowsReturned field is obtained from the Server.
             // requirement 719 is validated.
-            site.CaptureRequirement(719, 
-                "When the server receives a CPMGetRowsIn message request"+
-                "from a client, the server MUST store the actual number of"+
+            site.CaptureRequirement(719,
+                "When the server receives a CPMGetRowsIn message request" +
+                "from a client, the server MUST store the actual number of" +
                 "rows fetched in _cRowsReturned.");
             //---------------------         eType   --
-            RowSeekType eType 
-                = (RowSeekType)Helper.GetUInt(rowsOutResponse, 
+            RowSeekType eType
+                = (RowSeekType)Helper.GetUInt(rowsOutResponse,
                 ref startingIndex);
             bool isValidEType = GetValidEType(eType);
-            site.CaptureRequirementIfIsTrue(isValidEType, 531, 
-                "The 4 bytes 'eType' field of the CPMGetRowsOut message"+
-                "MUST contain one of the following values: "+
-                "eRowsSeekNone(0x00000000),  eRowSeekNext(0x00000001),"+
-                "eRowSeekAt(0x00000002),  eRowSeekAtRatio(0x00000003),"+
+            site.CaptureRequirementIfIsTrue(isValidEType, 531,
+                "The 4 bytes 'eType' field of the CPMGetRowsOut message" +
+                "MUST contain one of the following values: " +
+                "eRowsSeekNone(0x00000000),  eRowSeekNext(0x00000001)," +
+                "eRowSeekAt(0x00000002),  eRowSeekAtRatio(0x00000003)," +
                 "eRowSeekByBookmark(0x00000004).");
             //---------------------        _chapt   --
             uint chapt = Helper.GetUInt(rowsOutResponse, ref startingIndex);
@@ -1413,7 +1395,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 switch (eType) // Validation for each RowSeekType
                 {
                     case RowSeekType.eRowSeekNext:
-                        byte[] rowSeekNext = Helper.GetData(rowsOutResponse, 
+                        byte[] rowSeekNext = Helper.GetData(rowsOutResponse,
                             ref startingIndex, Constant.SIZE_OF_UINT);
                         RowsSeekNext(rowSeekNext);
                         break;
@@ -1424,24 +1406,24 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                         RowsSeekAt(rowSeekAt);
                         break;
                     case RowSeekType.eRowSeekAtRatio:
-                        byte[] rowSeekAtRatio = Helper.GetData(rowsOutResponse, 
+                        byte[] rowSeekAtRatio = Helper.GetData(rowsOutResponse,
                                                 ref startingIndex,
                                                 3 * Constant.SIZE_OF_UINT);
                         RowSeekAtRatio(rowSeekAtRatio);
                         break;
                     case RowSeekType.eRowSeekByBookmark:
-                        uint numberOfBookMarks 
-                            = Helper.GetUIntWithOutAdvancing(rowsOutResponse, 
-                            startingIndex);
-                        uint numberOfHResults 
+                        uint numberOfBookMarks
                             = Helper.GetUIntWithOutAdvancing(rowsOutResponse,
-                            (int)(startingIndex + 
+                            startingIndex);
+                        uint numberOfHResults
+                            = Helper.GetUIntWithOutAdvancing(rowsOutResponse,
+                            (int)(startingIndex +
                             numberOfBookMarks * Constant.SIZE_OF_UINT));
-                        uint totalBytes 
+                        uint totalBytes
                             = (numberOfBookMarks + numberOfHResults + 2)
                             * Constant.SIZE_OF_UINT;
-                        byte[] rowSeekByBookMark 
-                            = Helper.GetData(rowsOutResponse, 
+                        byte[] rowSeekByBookMark
+                            = Helper.GetData(rowsOutResponse,
                             ref startingIndex, (int)totalBytes);
                         RowSeekByBookmark(rowSeekByBookMark);
                         break;
@@ -1459,15 +1441,15 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             }
 
             // cbReserved value from GetRowsIn Message
-            uint cbReserved = reserved; 
-            uint paddingBytes 
+            uint cbReserved = reserved;
+            uint paddingBytes
                 = cbReserved - ((uint)startingIndex % cbReserved);
-            uint paddingRows 
-                = GetPaddingBytes(paddingBytes, rowsOutResponse, 
+            uint paddingRows
+                = GetPaddingBytes(paddingBytes, rowsOutResponse,
                 ref startingIndex);
             object offset2; // Could be 64 bit or 32 bit
-            site.CaptureRequirementIfIsTrue(paddingRows >=0 && paddingBytes <= (reserved - 1), 534, 
-                "The  'paddingRows' field of the CPMGetRowsOut"+
+            site.CaptureRequirementIfIsTrue(paddingRows >= 0 && paddingBytes <= (reserved - 1), 534,
+                "The  'paddingRows' field of the CPMGetRowsOut" +
                 "message MUST be of  length 0 to _cbReserved-1 bytes. ");
 
             for (int i = 0; i < rowsReturned; i++)
@@ -1480,9 +1462,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 // This is an iteration of obtained Rows from the Server.
                 // If the 'row' field is populated.
                 // requirement 721 is validated.
-                site.CaptureRequirement(721, 
-                    "When the server receives a CPMGetRowsIn message request"+
-                    "from a client, the server MUST Store fetched rows in "+
+                site.CaptureRequirement(721,
+                    "When the server receives a CPMGetRowsIn message request" +
+                    "from a client, the server MUST Store fetched rows in " +
                     "the Rows field.");
                 for (int j = 0; j < 4; j++)
                 {
@@ -1494,63 +1476,63 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     if (columns[j].StatusOffset > 0)
                     {
                         columnStatus = row[(int)(columns[j].StatusOffset)];
-                        bool IsValidStatus = columnStatus == 0x00 
-                            || columnStatus == 0x01 
+                        bool IsValidStatus = columnStatus == 0x00
+                            || columnStatus == 0x01
                             || columnStatus == 0x02;
-                        site.CaptureRequirementIfIsTrue(IsValidStatus, 722, 
-                            "When the server receives a CPMGetRowsIn message"+
-                            "request from a client, if StatusUsed is set to "+
-                            "0x01 in the CTableColumn of the CPMSetBindingIn "+
-                            "message for the column, the server MUST set the"+
+                        site.CaptureRequirementIfIsTrue(IsValidStatus, 722,
+                            "When the server receives a CPMGetRowsIn message" +
+                            "request from a client, if StatusUsed is set to " +
+                            "0x01 in the CTableColumn of the CPMSetBindingIn " +
+                            "message for the column, the server MUST set the" +
                             "status byte to either 0x00 or 0x01 or 0x02.");
 
                     }
-                    site.CaptureRequirementIfIsTrue(isValidType, 319, 
-                        "The 2 bytes 'vType' field of the CRowVariant "+
-                        "structure  MUST be one of the following values:"+
-                        "VT_EMPTY(0x0000), VT_NULL(0x0001), VT_I1(0x0010),"+
-                        "VT_UI1(0x0011), VT_I2(0x0002), VT_UI2(0x0012),"+
-                        "VT_BOOL( 0x000B), VT_I4(0x0003), VT_UI4(0x0013),"+
-                        "VT_R4(0x0004), VT_INT(0x0016), VT_UINT( 0x0017),"+
-                        "VT_ERROR(0x000A), VT_I8(0x0014), VT_UI8(0x0015),"+
-                        "VT_R8(0x0005), VT_CY(0x0006), VT_DATE(0x0007),"+
-                        "VT_FILETIME(0x0040), VT_DECIMAL(0x000E) , "+
-                        "VT_CLSID(0x0048), VT_BLOB(0x0041), "+
-                        "VT_BLOB_OBJECT (0x0046), VT_BSTR(0x0008),"+
-                        "VT_LPSTR(0x001E), VT_LPWSTR(0x001F), "+
+                    site.CaptureRequirementIfIsTrue(isValidType, 319,
+                        "The 2 bytes 'vType' field of the CRowVariant " +
+                        "structure  MUST be one of the following values:" +
+                        "VT_EMPTY(0x0000), VT_NULL(0x0001), VT_I1(0x0010)," +
+                        "VT_UI1(0x0011), VT_I2(0x0002), VT_UI2(0x0012)," +
+                        "VT_BOOL( 0x000B), VT_I4(0x0003), VT_UI4(0x0013)," +
+                        "VT_R4(0x0004), VT_INT(0x0016), VT_UINT( 0x0017)," +
+                        "VT_ERROR(0x000A), VT_I8(0x0014), VT_UI8(0x0015)," +
+                        "VT_R8(0x0005), VT_CY(0x0006), VT_DATE(0x0007)," +
+                        "VT_FILETIME(0x0040), VT_DECIMAL(0x000E) , " +
+                        "VT_CLSID(0x0048), VT_BLOB(0x0041), " +
+                        "VT_BLOB_OBJECT (0x0046), VT_BSTR(0x0008)," +
+                        "VT_LPSTR(0x001E), VT_LPWSTR(0x001F), " +
                         "VT_COMPRESSED_LPWSTR(0x0023), VT_VARIANT(0x000C)");
 
-                    site.CaptureRequirementIfIsTrue(isValidType, 540, 
+                    site.CaptureRequirementIfIsTrue(isValidType, 540,
                         "vType in the Row Data MUST contain the data type.");
 
                     // VT_VARIANT type correspondings 
-                    if (StorageType.VT_VARIANT == type) 
+                    if (StorageType.VT_VARIANT == type)
                     // to a CRowVariant Structure
                     {
                         ushort actualType = GetUShort(row, ref rowIndex);
                         ushort reserved1 = GetUShort(row, ref rowIndex);
                         // If TableColumn is obtained Requirement 322
                         // is validated.
-                        site.CaptureRequirement(322, 
-                            "For any arbitrary value of 'reserved1' field of"+
-                            "the CRowVariant structure, server "+
+                        site.CaptureRequirement(322,
+                            "For any arbitrary value of 'reserved1' field of" +
+                            "the CRowVariant structure, server " +
                             "returns success.");
 
                         uint reserved2 = Helper.GetUInt(row, ref rowIndex);
                         // If TableColumn is obtained Requirement 325
                         // is validated.
-                        site.CaptureRequirement(325, 
-                            "For any arbitrary value of 'reserved2' field of"+
-                            "the CRowVariant structure, "+
+                        site.CaptureRequirement(325,
+                            "For any arbitrary value of 'reserved2' field of" +
+                            "the CRowVariant structure, " +
                             "server returns success.");
                         // If TableColumn is obtained as specified by
                         // RowsIn message tableColumn offset
                         // Requirement 539 is validated.
-                        site.CaptureRequirement(539, 
-                            "The fixed sized area (at the beginning of "+
-                            "the row buffer) in the row data MUST contain"+
-                            "a CRowVariant for each column, stored at the "+
-                            "offset specified in the most recent "+
+                        site.CaptureRequirement(539,
+                            "The fixed sized area (at the beginning of " +
+                            "the row buffer) in the row data MUST contain" +
+                            "a CRowVariant for each column, stored at the " +
+                            "offset specified in the most recent " +
                             "CPMSetBindingsIn message.");
 
 
@@ -1559,22 +1541,22 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                             // Value is present at the offset
                             if (offsetUsed == Constant.OFFSET_64)
                             {
-                                offset2 
+                                offset2
                                     = (ulong)BitConverter.ToUInt64
                                     (row, rowIndex);
                                 rowIndex += 2 * Constant.SIZE_OF_UINT;
                                 //If 64 bit offset field is obtained.
                                 // Requirement 327 is validated
-                                site.CaptureRequirement(327, 
-                                    " 'Offset' field of the CRowVariant "+
-                                    "structure  MUST be 64-byte value "+
-                                    "(8 bytes long) if 64-bit offsets are"+
+                                site.CaptureRequirement(327,
+                                    " 'Offset' field of the CRowVariant " +
+                                    "structure  MUST be 64-byte value " +
+                                    "(8 bytes long) if 64-bit offsets are" +
                                     "being used.");
                                 //If 64 bit offset field is obtained.
                                 // Requirement 542 is validated
-                                site.CaptureRequirement(542, 
-                                    "If 64-bit offsets are being used, the "+
-                                    "Offset field in CRowVariant MUST "+
+                                site.CaptureRequirement(542,
+                                    "If 64-bit offsets are being used, the " +
+                                    "Offset field in CRowVariant MUST " +
                                     "contain a 64-bit value.");
                             }
                             else
@@ -1582,45 +1564,45 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                                 offset2 = Helper.GetUInt(row, ref rowIndex);
                                 //If 32 bit offset field is obtained.
                                 // Requirement 327 is validated
-                                site.CaptureRequirement(326, 
-                                    " 'Offset' field of the CRowVariant "+
-                                    "structure  MUST be a 32-bit value "+
-                                    "(4 bytes long) if 32-bit offsets are "+
+                                site.CaptureRequirement(326,
+                                    " 'Offset' field of the CRowVariant " +
+                                    "structure  MUST be a 32-bit value " +
+                                    "(4 bytes long) if 32-bit offsets are " +
                                     "being used. ");
                                 //If 32 bit offset field is obtained.
                                 // Requirement 541 is validated
-                                site.CaptureRequirement(541, 
-                                    "If 32-bit offsets are being used,"+
-                                    "the Offset field of CRowVariant "+
-                                    "structure in the row data MUST contain"+
+                                site.CaptureRequirement(541,
+                                    "If 32-bit offsets are being used," +
+                                    "the Offset field of CRowVariant " +
+                                    "structure in the row data MUST contain" +
                                     "a 32-bit value.");
                             }
                             uint offSetValue = (uint)offset2;
                             // If GetUInt returns success then the requirement 
                             // 326 is validated
-                            offSetValue 
+                            offSetValue
                                 -= clientBase; // Deducting clientBase
-                            uint datalength 
+                            uint datalength
                                 = BitConverter.ToUInt32(row,
                                 columns[j].LengthOffset);
                             // Deducting size of VT_VARIANT
-                            int actualLength 
+                            int actualLength
                                 = (int)(datalength - 16);
-                            byte[] variableData 
+                            byte[] variableData
                                 = ReadVariableDataFromBuffer(rowsOutResponse,
                                 offSetValue, actualLength);
                             // If VariableData is obtained as specified.
                             //Requirement 11 validated
-                            site.CaptureRequirement(11, 
-                                " 'vValue' field of CBaseStorageVariant"+
-                                "structure i.e. the value for the match"+
-                                "operation MUST have syntax as indicated"+
+                            site.CaptureRequirement(11,
+                                " 'vValue' field of CBaseStorageVariant" +
+                                "structure i.e. the value for the match" +
+                                "operation MUST have syntax as indicated" +
                             "in the vType field.");
                             // If VariableData is obtained from the offset 
                             //specified, Req 537 is validated
-                            site.CaptureRequirement(537, 
-                                "Fixed-sized columns in the Rows Data MUST"+
-                                "be stored at the offsets specified by the"+
+                            site.CaptureRequirement(537,
+                                "Fixed-sized columns in the Rows Data MUST" +
+                                "be stored at the offsets specified by the" +
                                 "most recent CPMSetBindingsIn message.");
 
                             lastOffsetValue = offSetValue;
@@ -1637,19 +1619,19 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                         else
                         {
                             //Read as the value not the offset
-                            StorageType baseStorageType 
+                            StorageType baseStorageType
                                 = (StorageType)actualType;
-                            byte[] getFixedSize 
-                                = ReadFixedLengthData(row, 
+                            byte[] getFixedSize
+                                = ReadFixedLengthData(row,
                                 ref rowIndex, baseStorageType);
                         }
                     }
                     else
                     {
-                        byte[] data 
+                        byte[] data
                             = ReadFixedLengthData(row, ref rowIndex, type);
-                         WORK_ID_PROPERTY 
-                            = Convert.ToInt32(site.Properties["WorkId"]);
+                        WORK_ID_PROPERTY
+                           = Convert.ToInt32(site.Properties["WorkId"]);
                         // This is Work Id
                         string workIdGuid
                             = site.Properties["WorkIdPropertyGuid"];
@@ -1674,16 +1656,16 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 }
                 //If all the rows are obtained as specified
                 // in for loop above, Req 536 is validated
-                site.CaptureRequirement(536, 
-                    " Rows Data in the 'Rows' field of the CPMGetRowsOut"+
+                site.CaptureRequirement(536,
+                    " Rows Data in the 'Rows' field of the CPMGetRowsOut" +
                     "message  MUST be stored in forward order.");
             }
             long totalResultSetSize = rowsReturned * rowSize;
             long buffer = Convert.ToInt64(site.Properties["BufferSize"]);
-            site.CaptureRequirementIfIsTrue(totalResultSetSize < buffer, 712, 
-                "When the server receives a CPMGetRowsIn message request from"+
-                "a client, the server MUST fetch as many rows as fit in a "+
-                "buffer, the size of which is indicated by _cbReadBuffer,"+
+            site.CaptureRequirementIfIsTrue(totalResultSetSize < buffer, 712,
+                "When the server receives a CPMGetRowsIn message request from" +
+                "a client, the server MUST fetch as many rows as fit in a " +
+                "buffer, the size of which is indicated by _cbReadBuffer," +
                 "but not more than indicated by _cRowsToTransfer.");
 
         }
@@ -1790,10 +1772,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 }
                 else
                 {
-                    site.Log.Add(LogEntryKind.Comment, string.Format("this requirement {0} should be covered after TDQ 41693 is fixed.",1028));
+                    site.Log.Add(LogEntryKind.Comment, string.Format("this requirement {0} should be covered after TDQ 41693 is fixed.", 1028));
                 }
             }
-           
+
 
             bool eventTypeVerification = true;
             switch (eventType)
@@ -1823,7 +1805,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             }
             else
             {
-                site.Log.Add(LogEntryKind.Comment, string.Format("this requirement {0} {1} should be covered after TDI 42066 is fixed.",1115,1029));
+                site.Log.Add(LogEntryKind.Comment, string.Format("this requirement {0} {1} should be covered after TDI 42066 is fixed.", 1115, 1029));
             }
 
             byte[] rowsetItemState = Helper.GetData(bytes, ref startingIndex, 1);
@@ -1926,7 +1908,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     }
                     else
                     {
-                        site.Log.Add(LogEntryKind.Comment, string.Format("this requirement {0} should be covered after TDI 42066 is fixed.",1119));
+                        site.Log.Add(LogEntryKind.Comment, string.Format("this requirement {0} should be covered after TDI 42066 is fixed.", 1119));
                     }
 
                     //if eventType is PROPAGATE_ADD, the document identifier specified by wid, should be the new rowset,
@@ -1939,7 +1921,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     site.CaptureRequirementIfIsTrue(wid > 0, 1120,
                         "[When the server receives a CPMGetRowsetNotifyIn message request from a client, " +
                         "the eventType is set to ROPAGATE_ADD]wid MUST be set to the document identifier for the newly added document.");
-                    
+
                 }
             }
 
@@ -2034,7 +2016,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 }
                 else
                 {
-                    site.Log.Add(LogEntryKind.Comment, string.Format("this requirement {0} should be covered after TDI 42067 is fixed.",1045));
+                    site.Log.Add(LogEntryKind.Comment, string.Format("this requirement {0} should be covered after TDI 42067 is fixed.", 1045));
                 }
             }
             else
@@ -2118,7 +2100,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     }
                     else
                     {
-                        site.Log.Add(LogEntryKind.Comment, string.Format("this requirement {0} should be covered after TDI 42066 is fixed.",1123));
+                        site.Log.Add(LogEntryKind.Comment, string.Format("this requirement {0} should be covered after TDI 42066 is fixed.", 1123));
                     }
                     string isR1127Implementated = site.Properties.Get("R1127Implementated");
                     if (site.Properties["IsServerWindows"].ToUpper() == "TRUE")
@@ -2152,14 +2134,14 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
                         //MS-WSP_R1127
                         site.CaptureRequirementIfAreEqual<Boolean>(expectedValue, actualValue, 1127,
-                            string.Format(@"[When the server receives a CPMGetRowsetNotifyIn message request from a client, " + 
+                            string.Format(@"[When the server receives a CPMGetRowsetNotifyIn message request from a client, " +
                             "the eventType is set to PROPAGATE_DELETE]moreEvents SHOULD be set to indicate " +
                             "if there is another event of any non_PROPAGATE_NONE type immediately available.", "this requirement is {0} implemented", Boolean.Parse(isR1127Implementated) ? "" : "not"));
 
                     }
 
 
-                }                
+                }
 
                 //rowsetItemState must be ROWSETEVENT_ITEMSTATE_NOTINROWSET, ROWSETEVENT_ITEMSTATE_INROWSET or ROWSETEVENT_ITEMSTATE_UNKNOWN
                 site.CaptureRequirementIfIsTrue(rowsetItemStateChecked, 1125, "[When the server receives a CPMGetRowsetNotifyIn message request from a client, the eventType is set to PROPAGATE_DELETE]" +
@@ -2173,7 +2155,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             if (eventType == (int)EventType.PROPAGATE_MODIFY)
             {
                 if (Constant.DBPROP_ENABLEROWSETEVENTS)
-                {                    
+                {
                     //when server responses with eventType is PROPAGATE_MODIFY(3), 
                     //it indicates that an item was re-indexed that may be of interest to the query originating the rowset.
                     site.CaptureRequirementIfAreEqual<uint>((uint)EventTypeValue.PROPAGATE_MODIFY, eventTypes, 1033,
@@ -2190,7 +2172,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     }
                     else
                     {
-                        site.Log.Add(LogEntryKind.Comment, string.Format("this requirement {0} should be covered after TDI 42066 is fixed.",1128));
+                        site.Log.Add(LogEntryKind.Comment, string.Format("this requirement {0} should be covered after TDI 42066 is fixed.", 1128));
                     }
                     string isR1134Implementated = site.Properties.Get("R1134Implementated");
                     if (site.Properties["IsServerWindows"].ToUpper() == "TRUE")
@@ -2222,11 +2204,11 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
                         //MS-WSP_R1134
                         site.CaptureRequirementIfAreEqual<Boolean>(expectedValue, actualValue, 1134,
-                            string.Format(@"[When the server receives a CPMGetRowsetNotifyIn message request from a client, " + 
+                            string.Format(@"[When the server receives a CPMGetRowsetNotifyIn message request from a client, " +
                             "the eventType is set to PROPAGATE_MODIFY]moreEvents SHOULD be set to indicate " +
                             "if there is another event of any non PROPAGATE_NONE type immediately available.", "this requirement is {0} implemented", Boolean.Parse(isR1134Implementated) ? "" : "not"));
                     }
-                                   
+
 
                     //MS-WSP_R1129
                     site.CaptureRequirementIfIsTrue(wid > 0, 1129,
@@ -2255,10 +2237,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     site.CaptureRequirementIfIsTrue(changedItemStateChecked, 1133,
                             "[When the server receives a CPMGetRowsetNotifyIn message request from a client, " +
                             "the eventType is set to PROPAGATE_MODIFY]changedItemState must be set to indicate that this is unknown.");
-                    
+
                 }
             }
-            
+
             if (eventType == (int)EventType.PROPAGATE_ROWSET)
             {
                 if (Constant.DBPROP_ENABLEROWSETEVENTS == true)
@@ -2273,7 +2255,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     }
                     else
                     {
-                        site.Log.Add(LogEntryKind.Comment, string.Format("this requirement {0} should be covered after TDI 42066 is fixed.",1135));
+                        site.Log.Add(LogEntryKind.Comment, string.Format("this requirement {0} should be covered after TDI 42066 is fixed.", 1135));
                     }
                     bool isTDI42128Fixed = bool.Parse(site.Properties.Get("TDI42128Fixed"));
                     if (isTDI42128Fixed)
@@ -2285,7 +2267,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     }
                     else
                     {
-                        site.Log.Add(LogEntryKind.Comment, string.Format("this requirement {0} should be covered after TDI 42128 is fixed.",1136));
+                        site.Log.Add(LogEntryKind.Comment, string.Format("this requirement {0} should be covered after TDI 42128 is fixed.", 1136));
                     }
 
                     string isR1137Implementated = site.Properties.Get("R1137Implementated");
@@ -2322,14 +2304,14 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     if (null != isR1137Implementated)
                     {
                         bool expectedValue = Boolean.Parse(isR1137Implementated);
-                        bool actualValue = Convert.ToInt32(rowsetEvent[0]) == (int)RowsetEvent.ROWSETEVENT_TYPE_DATAEXPIRED 
-                            || Convert.ToInt32(rowsetEvent[0]) == (int)RowsetEvent.ROWSETEVENT_TYPE_FOREGROUNDLOST 
+                        bool actualValue = Convert.ToInt32(rowsetEvent[0]) == (int)RowsetEvent.ROWSETEVENT_TYPE_DATAEXPIRED
+                            || Convert.ToInt32(rowsetEvent[0]) == (int)RowsetEvent.ROWSETEVENT_TYPE_FOREGROUNDLOST
                             || Convert.ToInt32(rowsetEvent[0]) == (int)RowsetEvent.ROWSETEVENT_TYPE_SCOPESTATISTICS;
 
                         //MS-WSP_R1137
                         site.CaptureRequirementIfAreEqual<Boolean>(expectedValue, actualValue,
                             1137,
-                            string.Format(@"[When the server receives a CPMGetRowsetNotifyIn message request from a client, the eventType is set to PROPAGATE_ROWSET]" + 
+                            string.Format(@"[When the server receives a CPMGetRowsetNotifyIn message request from a client, the eventType is set to PROPAGATE_ROWSET]" +
                             "rowsetEvent SHOULD be set to a value indicating the type of rowset event.", "this requirement is {0} implemented", Boolean.Parse(isR1137Implementated) ? "" : "not"));
 
                     }
@@ -2349,7 +2331,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             int startingIndex = 0;
 
             ValidateHeader(bytes, MessageType.CPMSetScopePrioritizationIn, checkSum, ref startingIndex);
-            
+
             //MS-WSP_R1049
             //message header's length equals 16,so it must be 16 if the message not include a body
             site.CaptureRequirementIfAreEqual<int>(16, bytes.Length, 1049,
@@ -2378,7 +2360,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// <param name="checkSum">Checksum of the message</param>
         /// <param name="msgStatus">return value for GetScopeStatisticsOut</param>
         public void ValidateGetScopeStatisticsOut(byte[] GetScopeStatisticsOut,
-            uint checkSum,uint msgStatus)
+            uint checkSum, uint msgStatus)
         {
             string isR1157Implementated = site.Properties.Get("R1157Implementated");
             if (site.Properties["IsServerWindows"].ToUpper() == "TRUE")
@@ -2406,7 +2388,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     }
                     else
                     {
-                        site.Log.Add(LogEntryKind.Comment, string.Format("this requirement {0} should be covered after TDQ 42428 is fixed.",201157));
+                        site.Log.Add(LogEntryKind.Comment, string.Format("this requirement {0} should be covered after TDQ 42428 is fixed.", 201157));
                     }
                 }
 
@@ -2440,7 +2422,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 = Helper.GetUInt(GetScopeStatisticsOut, ref startingIndex);
             tempByteArray
                 = BitConverter.GetBytes(dwIndexedItems);
-            site.CaptureRequirementIfAreEqual<int>(4,tempByteArray.Length, 10050, "[CPMGetScopeStatisticsOut]dwOutstandingAdds (4 bytes):" +
+            site.CaptureRequirementIfAreEqual<int>(4, tempByteArray.Length, 10050, "[CPMGetScopeStatisticsOut]dwOutstandingAdds (4 bytes):" +
                  "A 32-bit unsigned integer containing the number of items" +
                  "that have yet to be indexed that may be relevant to the originating query.");
 
@@ -2456,14 +2438,14 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             tempByteArray
                 = BitConverter.GetBytes(dwOutstandingAdds);
 
-            site.CaptureRequirementIfAreEqual<int>(4,tempByteArray.Length, 10051, "[CPMGetScopeStatisticsOut]dwOutstandingAdds (4 bytes):" +
+            site.CaptureRequirementIfAreEqual<int>(4, tempByteArray.Length, 10051, "[CPMGetScopeStatisticsOut]dwOutstandingAdds (4 bytes):" +
                 " AccessViolationException 32-BitConverter unsigned integer " +
                 "containing the number of items that have yet ToString be indexed" +
                 "that may be relevant to the originating query.");
 
             site.CaptureRequirementIfAreEqual<int>(4, tempByteArray.Length, 1155,
-                "[When the server receives a CPMGetScopeStatisticsIn message request from a client, " + 
-                "The CPMGetScopeStatisticsOut message MUST be populated with the appropriate statistics]" + 
+                "[When the server receives a CPMGetScopeStatisticsIn message request from a client, " +
+                "The CPMGetScopeStatisticsOut message MUST be populated with the appropriate statistics]" +
                 "dwOutstandingAdds indicates the number of non-indexed items ready for indexing that are relevant for the associated query.");
 
             //Get the 4 bytes data for the dwOutstandingAdds
@@ -2472,12 +2454,12 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             tempByteArray
                 = BitConverter.GetBytes(dwOutstandingModifies);
 
-            site.CaptureRequirementIfAreEqual<int>(4,tempByteArray.Length, 10052,
+            site.CaptureRequirementIfAreEqual<int>(4, tempByteArray.Length, 10052,
                 "[CPMGetScopeStatisticsOut]dwOustandingModifies (4 bytes):" +
                 " A 32-bit unsigned integer containing the number of items" +
                 " that need to be re-indexed that are relevant to the originating query.");
 
-            site.CaptureRequirementIfAreEqual<int>(4,tempByteArray.Length, 1156,
+            site.CaptureRequirementIfAreEqual<int>(4, tempByteArray.Length, 1156,
                 "[When the server receives a CPMGetScopeStatisticsIn message request from a client," +
                 " The CPMGetScopeStatisticsOut message MUST be populated with the appropriate statistics.]" +
                 "dwOutstandingModifies indicates the number of indexed items that need to be" +
@@ -2492,18 +2474,18 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// <param name="cbChunk">cbchunk obtained </param>
         /// <param name="cbSoFar">cbsofar parameter obtained</param>
         /// <param name="checkSum">Checksum of the message</param>
-        public void ValidateFetchValueOut(Byte[] bytes, 
+        public void ValidateFetchValueOut(Byte[] bytes,
             uint checkSum, uint cbSoFar, uint cbChunk)
         {
 
             int startingIndex = 0;
-            ValidateHeader(bytes, MessageType.CPMFetchValueOut, 
-                checkSum, ref startingIndex);  
+            ValidateHeader(bytes, MessageType.CPMFetchValueOut,
+                checkSum, ref startingIndex);
             //For any arbitrary value of the 'paddingPropSet' field,
             //server is returning success.
-            site.CaptureRequirement(741, 
-                "When the server receives a CPMFetchValueIn message request"+
-                "from a client, the server MUST respond to the client with"+
+            site.CaptureRequirement(741,
+                "When the server receives a CPMFetchValueIn message request" +
+                "from a client, the server MUST respond to the client with" +
                 "the CPMFetchValueOut message.");
 
             site.CaptureRequirement(67, "For any arbitrary value of the" +
@@ -2516,48 +2498,48 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             // For any arbitrary value _padding field, server response 
             //is success.
-            site.CaptureRequirement(562, "For any value of '_padding' field"+
-                "of the CPMFetchValueIn message, server response is "+
+            site.CaptureRequirement(562, "For any value of '_padding' field" +
+                "of the CPMFetchValueIn message, server response is " +
                 "successful.");
 
             //---------------------    _cbValue    ----
             uint cbValue = Helper.GetUInt(bytes, ref startingIndex);
             // If GetUInt returns successfully Requirement 563 is validated
-            site.CaptureRequirement(563, "The 4 bytes '_cbValue' field of the"+
-                "CPMFetchValueOut message is the total size, in "+
+            site.CaptureRequirement(563, "The 4 bytes '_cbValue' field of the" +
+                "CPMFetchValueOut message is the total size, in " +
                 "bytes in vValue.");
 
             //---------------------    _fMoreExists ---
             uint moreExists = Helper.GetUInt(bytes, ref startingIndex);
             // As Boolean as value 0 or 1
-            site.CaptureRequirementIfIsTrue(moreExists == 1 || moreExists == 0, 564, 
-                "The 4 bytes '_fMoreExists' field of the CPMFetchValueOut"+
+            site.CaptureRequirementIfIsTrue(moreExists == 1 || moreExists == 0, 564,
+                "The 4 bytes '_fMoreExists' field of the CPMFetchValueOut" +
                 "message is a Boolean value.");
-            site.CaptureRequirementIfIsTrue(((moreExists == 0x00000000) 
-                                || (moreExists == 0x00000001)), 565, 
-                "The 4 bytes '_fMoreExists' field of the CPMFetchValueOut"+
-                "message  is one of the following: (0x00000000) "+
+            site.CaptureRequirementIfIsTrue(((moreExists == 0x00000000)
+                                || (moreExists == 0x00000001)), 565,
+                "The 4 bytes '_fMoreExists' field of the CPMFetchValueOut" +
+                "message  is one of the following: (0x00000000) " +
                 "or (0x00000001).");
 
             //--------------------     _fValueExists --
             uint valueExists = Helper.GetUInt(bytes, ref startingIndex);
-            site.CaptureRequirementIfIsTrue(((valueExists == 0x00000000) 
-                || (valueExists == 0x00000001)), 944, 
-                "The 4 bytes '_fValeExists' field of the CPMFetchValueOut"+
-                "message  is one of the following: (0x00000000) "+
+            site.CaptureRequirementIfIsTrue(((valueExists == 0x00000000)
+                || (valueExists == 0x00000001)), 944,
+                "The 4 bytes '_fValeExists' field of the CPMFetchValueOut" +
+                "message  is one of the following: (0x00000000) " +
                 "or (0x00000001).");
 
             //If GetUInt returns successfully Requirement xxx is validated
-            site.CaptureRequirement(943, "The 4 bytes '_fValueExists' field"+
+            site.CaptureRequirement(943, "The 4 bytes '_fValueExists' field" +
                 "of the CPMFetchValueOut message is a Boolean value. ");
 
             if (valueExists > 0)
             {
                 //--------------------         vType     --
-                site.CaptureRequirementIfAreEqual<uint>(1, valueExists, 733, 
-                    "When the server receives a CPMFetchValueIn message "+
-                    "request from a client, the server MUST  if the property"+
-                    "ID value is available, the server MUST set "+
+                site.CaptureRequirementIfAreEqual<uint>(1, valueExists, 733,
+                    "When the server receives a CPMFetchValueIn message " +
+                    "request from a client, the server MUST  if the property" +
+                    "ID value is available, the server MUST set " +
                     "_fValueExists to 0x00000001.");
                 uint vType = Helper.GetUInt(bytes, ref startingIndex);
                 // last 2 bits of 4 Bytes vType are vData1 and vData2
@@ -2566,12 +2548,12 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 if ((StorageType)vType != StorageType.VT_DECIMAL)
                 {
                     site.CaptureRequirementIfAreEqual<byte>(0, vData1, 9,
-                        "The value of 1 byte field 'vData1' of "+
-                        "CBaseStorageVariant structure MUST be set to 0X00"+
+                        "The value of 1 byte field 'vData1' of " +
+                        "CBaseStorageVariant structure MUST be set to 0X00" +
                         "when vType is not VT_DECIMAL.");
                     site.CaptureRequirementIfAreEqual<byte>(0, vData2, 10,
-                        "The value of 1 byte field 'vData2'  of "+
-                        "CBaseStorageVariant structure MUST be set to 0x00"+
+                        "The value of 1 byte field 'vData2'  of " +
+                        "CBaseStorageVariant structure MUST be set to 0x00" +
                         "when vType is not VT_DECIMAL.");
                 }
                 bool isValidVType = GetValidVType(vType);
@@ -2601,25 +2583,25 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 //    "0x00000001, the server MUST set vType to the property"+
                 //    "type of the property value.");
 
-                site.CaptureRequirementIfIsTrue(isValidVType, 6, 
+                site.CaptureRequirementIfIsTrue(isValidVType, 6,
                     "The 2 byte field 'VType' field of" +
-                    "CBaseStorageVariant structure MUST have one of"+ 
+                    "CBaseStorageVariant structure MUST have one of" +
                     "these values:VT_EMPTY(0x0000), VT_NULL(0x0001)" +
-                    ", VT_I1(0x0010), VT_UI1(0x0011), VT_I2(0x0002), "+
+                    ", VT_I1(0x0010), VT_UI1(0x0011), VT_I2(0x0002), " +
                     "VT_UI2(0x0012), VT_BOOL( 0x000B)," +
-                    "VT_I4(0x0003), VT_UI4(0x0013), VT_R4(0x0004),"+
+                    "VT_I4(0x0003), VT_UI4(0x0013), VT_R4(0x0004)," +
                     "VT_INT(0x0016), VT_UINT( 0x0017)," +
-                    "VT_ERROR(0x000A), VT_I8(0x0014), VT_UI8(0x0015),"+
+                    "VT_ERROR(0x000A), VT_I8(0x0014), VT_UI8(0x0015)," +
                     "VT_R8(0x0005), VT_CY(0x0006), " +
-                    "VT_DATE(0x0007), VT_FILETIME(0x0040), VT_DECIMAL(0x000E)"+
+                    "VT_DATE(0x0007), VT_FILETIME(0x0040), VT_DECIMAL(0x000E)" +
                     ", VT_CLSID(0x0048), VT_BLOB(0x0041)" +
-                    ", VT_BLOB_OBJECT (0x0046), VT_BSTR(0x0008), "+
+                    ", VT_BLOB_OBJECT (0x0046), VT_BSTR(0x0008), " +
                     "VT_LPSTR(0x001E), VT_LPWSTR(0x001F)," +
-                    " VT_COMPRESSED_LPWSTR(0x0023), VT_VARIANT(0x000C)"+
+                    " VT_COMPRESSED_LPWSTR(0x0023), VT_VARIANT(0x000C)" +
                     "or these Ored with VT_VECTOR(0x1000)" +
                     "and VT_ARRAY(0x2000).");
 
-                int obtainedLength = GetStorageWidth(bytes, 
+                int obtainedLength = GetStorageWidth(bytes,
                     (uint)startingIndex, vType);
                 if (IsVariableLengthType((ushort)vType))
                 {
@@ -2630,110 +2612,110 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 if (obtainedLength > bytes.Length - startingIndex)
                 {
                     site.CaptureRequirementIfIsTrue(moreExists == 1, 739,
-                        "When the server receives a CPMFetchValueIn message"+
-                        "request from a client,  if _fValueExists is equal to"+
-                        "0x00000001 and if the length of the serialized "+
-                        "property is greater than _cbSoFar added to _cbValue,"+
+                        "When the server receives a CPMFetchValueIn message" +
+                        "request from a client,  if _fValueExists is equal to" +
+                        "0x00000001 and if the length of the serialized " +
+                        "property is greater than _cbSoFar added to _cbValue," +
                         "the server MUST set _fMoreExists to 0x00000001.");
                     lengthToRead = bytes.Length - startingIndex;
                 }
                 else
                 {
                     site.CaptureRequirementIfIsTrue(moreExists == 0, 740,
-                        "When the server receives a CPMFetchValueIn message"+
-                        "request from a client,  if _fValueExists is equal"+
-                        "to 0x00000001 and if the length of the serialized"+
-                        "property is not greater than _cbSoFar added to "+
-                        "_cbValue, the server MUST set _fMoreExists to "+
+                        "When the server receives a CPMFetchValueIn message" +
+                        "request from a client,  if _fValueExists is equal" +
+                        "to 0x00000001 and if the length of the serialized" +
+                        "property is not greater than _cbSoFar added to " +
+                        "_cbValue, the server MUST set _fMoreExists to " +
                         "0x00000000.");
                     // Removing VType and Length field
-                    lengthToRead 
-                        = (int)cbValue - 2 * Constant.SIZE_OF_UINT; 
+                    lengthToRead
+                        = (int)cbValue - 2 * Constant.SIZE_OF_UINT;
                 }
                 byte[] variableData = ReadVariableDataFromBuffer(bytes,
                     (uint)startingIndex, lengthToRead);
                 // If ReadVariableDataFromBuffer is able to read 
                 // data of length cbValue
                 // then requirement 737 and 735 are validated
-                site.CaptureRequirement(737, 
-                    "When the server receives a CPMFetchValueIn message"+
-                    "request from a client, if _fValueExists is equal to"+
-                    "0x00000001, the server MUST set _cbValue to the "+
+                site.CaptureRequirement(737,
+                    "When the server receives a CPMFetchValueIn message" +
+                    "request from a client, if _fValueExists is equal to" +
+                    "0x00000001, the server MUST set _cbValue to the " +
                     "number of bytes copied.");
                 // If ReadVariableDataFromBuffer is able to read 
                 // data of length cbValue
                 // then requirement 735 is validated
-                site.CaptureRequirement(735, 
-                    "When the server receives a CPMFetchValueIn message"+
-                    "request from a client, if _fValueExists is equal to"+
-                    "0x00000001, the server MUST serialize the property"+
-                    "value to a SERIALIZEDPROPERTYVALUE structure and copy,"+
-                    "starting from the _cbSoFar offset, at most _cbChunk "+
-                    "bytes (but not past the end of the serialized "+
+                site.CaptureRequirement(735,
+                    "When the server receives a CPMFetchValueIn message" +
+                    "request from a client, if _fValueExists is equal to" +
+                    "0x00000001, the server MUST serialize the property" +
+                    "value to a SERIALIZEDPROPERTYVALUE structure and copy," +
+                    "starting from the _cbSoFar offset, at most _cbChunk " +
+                    "bytes (but not past the end of the serialized " +
                     "property) to the vValue field.");
 
-                
-                if ((StorageType)vType == StorageType.VT_LPSTR 
+
+                if ((StorageType)vType == StorageType.VT_LPSTR
                     || (StorageType)vType == StorageType.VT_LPWSTR)
                 {
-                    string unicodeString 
+                    string unicodeString
                         = Encoding.Unicode.GetString(variableData);
                     // If the VariableData is encoded as Unicode string
                     // Requirement 35
-                    site.CaptureRequirement(35, 
-                        "If vType is set to VT_LPSTR, then 'cLen' field"+
-                        "of CBaseStorageVariant structure indicates the"+
-                        "size of the string in ANSI characters and string"+
+                    site.CaptureRequirement(35,
+                        "If vType is set to VT_LPSTR, then 'cLen' field" +
+                        "of CBaseStorageVariant structure indicates the" +
+                        "size of the string in ANSI characters and string" +
                         "is a null-terminated ANSI string.");
                     // Validation step is same as Requirement captured above
-                    site.CaptureRequirement(37, 
-                        "The 4 bytes 'cLen' field of the CBaseStorageVariant"+
-                        "structure specifies the size of the string field"+
+                    site.CaptureRequirement(37,
+                        "The 4 bytes 'cLen' field of the CBaseStorageVariant" +
+                        "structure specifies the size of the string field" +
                         "including the terminating null.");
                 }
-                int constantFields 
+                int constantFields
                     = Constant.SIZE_OF_HEADER + 3 * Constant.SIZE_OF_UINT;
                 uint variableLength = (uint)(cbChunk - constantFields);
 
                 if (moreExists == 0)
                 {
-                    bool IsNullTerminated 
-                        = (variableData[variableData.Length - 1] == 0) 
+                    bool IsNullTerminated
+                        = (variableData[variableData.Length - 1] == 0)
                         && (variableData[variableData.Length - 2] == 0);
                     site.CaptureRequirementIfIsTrue(IsNullTerminated, 38,
-                        "The variable sized 'string' field of the "+
-                        "CBaseStorageVariant structure  is the "+
+                        "The variable sized 'string' field of the " +
+                        "CBaseStorageVariant structure  is the " +
                         "Null-terminated string.");
                     site.CaptureRequirementIfIsTrue(cbValue < cbChunk, 568,
-                        "If _fMoreExists is set to 0x00000000, the length of"+
-                        "the 'vValue' field of the CPMFetchValueOut message,"+
-                        "MUST be less than the value of _cbChunk in "+
+                        "If _fMoreExists is set to 0x00000000, the length of" +
+                        "the 'vValue' field of the CPMFetchValueOut message," +
+                        "MUST be less than the value of _cbChunk in " +
                         "CPMFetchValueIn.");
 
                 }
                 else
                 {
-                    site.CaptureRequirementIfAreEqual<uint>(cbValue, 
-                        variableLength, 567, "If _fMoreExists is set to"+
-                        "0x00000001, the length of the 'vValue' field of "+
-                        "the CPMFetchValueOut message, indicated by the "+
-                        "_cbValue field, MUST be equal to the value of "+
+                    site.CaptureRequirementIfAreEqual<uint>(cbValue,
+                        variableLength, 567, "If _fMoreExists is set to" +
+                        "0x00000001, the length of the 'vValue' field of " +
+                        "the CPMFetchValueOut message, indicated by the " +
+                        "_cbValue field, MUST be equal to the value of " +
                         "_cbChunk in CPMFetchValueIn.");
                 }
                 if (obtainedLength == 0)
                 {
                     site.CaptureRequirementIfIsTrue(variableData.Length == 0,
-                        39,"The variable sized 'string' field of the "+
-                        "CBaseStorageVariant structure  MUST be absent"+
+                        39, "The variable sized 'string' field of the " +
+                        "CBaseStorageVariant structure  MUST be absent" +
                         "if 'cLen' equals 0x00000000.");
                 }
             }
             else
             {
                 site.CaptureRequirementIfAreEqual<uint>(0, valueExists, 732,
-                    "When the server receives a CPMFetchValueIn message"+
-                    "request from a client, if the property ID value is"+
-                    "not available, the server MUST set _fValueExists"+
+                    "When the server receives a CPMFetchValueIn message" +
+                    "request from a client, if the property ID value is" +
+                    "not available, the server MUST set _fValueExists" +
                     "to 0x00000000.");
             }
         }
@@ -2767,8 +2749,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                         // If length is greater than zero for the above mentioned type
                         // this requirement is validated because the Client may obtain
                         // total length data in more than one Fetch Operation
-                        site.CaptureRequirement(33, 
-                            " 'blobData' field of CBaseStorageVariant "+
+                        site.CaptureRequirement(33,
+                            " 'blobData' field of CBaseStorageVariant " +
                             "structure MUST be of length 'cbSize' in bytes.");
 
                         break;
@@ -2811,26 +2793,26 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             //---------------------        _bmkOffset    ----------------------------
             uint bmkOffset = Helper.GetUInt(bytes, ref startingIndex);
             // If GetUInt returns successfully Requirement 289 is validated
-            site.CaptureRequirement(289, 
-                "The 4 bytes '_bmkOffset' field of the  CRowSeekAt structure"+
-                "represents the handle of the bookmark indicating the "+
-                "starting position from which to skip the number of rows"+
+            site.CaptureRequirement(289,
+                "The 4 bytes '_bmkOffset' field of the  CRowSeekAt structure" +
+                "represents the handle of the bookmark indicating the " +
+                "starting position from which to skip the number of rows" +
                 "specified in _cskip, before beginning retrieval.");
 
             //----------------------        _cskip     
             uint skip = Helper.GetUInt(bytes, ref startingIndex);
             // If GetUInt returns successfully Requirement 290 is validated
-            site.CaptureRequirement(290, 
-                "The 4 bytes '_cskip' field of the  CRowSeekAt structure"+
+            site.CaptureRequirement(290,
+                "The 4 bytes '_cskip' field of the  CRowSeekAt structure" +
                 "specifies the number of rows to skip in the rowset.");
 
             //-----------------------       _hRegion     -----------------------------
             uint region = Helper.GetUInt(bytes, ref startingIndex);
-            site.CaptureRequirementIfIsTrue((0x00000000 == region), 1212, 
+            site.CaptureRequirementIfIsTrue((0x00000000 == region), 1212,
                 "[CRowSeekAt]This field [_hRegion] MUST be set to 0x00000000.");
             // If GetUInt returns successfully Requirement 293 is validated
-            site.CaptureRequirement(293, 
-                "For  0x00000000 value of '_hRegion' field of the  "+
+            site.CaptureRequirement(293,
+                "For  0x00000000 value of '_hRegion' field of the  " +
                 "CRowSeekAt structure, server response is success.");
         }
 
@@ -2845,27 +2827,27 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             //----------------------     _ulNumerator    ----------------------
             uint numerator = Helper.GetUInt(bytes, ref startingIndex);
             // If GetUInt returns successfully Requirement 294 is validated
-            site.CaptureRequirement(294, 
-                "The 4 bytes '_ulNumerator' field of the CRowSeekAtRatio"+
-                "structure specifies the numerator of the ratio of rows"+
+            site.CaptureRequirement(294,
+                "The 4 bytes '_ulNumerator' field of the CRowSeekAtRatio" +
+                "structure specifies the numerator of the ratio of rows" +
                 "in the chapter at which to begin retrieval.");
             //----------------------     _ulDenominator   ---------------------
             uint denominator = Helper.GetUInt(bytes, ref startingIndex);
             // If GetUInt returns successfully Requirement 295 is validated
-            site.CaptureRequirement(295, 
-                "The 4 bytes '_ulDenominator' field of the CRowSeekAtRatio"+
-                "structure specifies the denominator of the ratio of rows"+
+            site.CaptureRequirement(295,
+                "The 4 bytes '_ulDenominator' field of the CRowSeekAtRatio" +
+                "structure specifies the denominator of the ratio of rows" +
                 "in the chapter at which to begin retrieval.");
             site.CaptureRequirementIfIsTrue((0x00000000 < denominator), 1215,
                 "[CRowSeekAtRatio]_ulDenominator:MUST be greater than zero.");
-            
+
             //----------------------        _hRegion      ---------------------
             uint region = Helper.GetUInt(bytes, ref startingIndex);
-            site.CaptureRequirementIfIsTrue((0x00000000 == region), 1216, 
+            site.CaptureRequirementIfIsTrue((0x00000000 == region), 1216,
                 "[CRowSeekAtRatio]This field [_hRegion] MUST be set to 0x00000000.");
             // If GetUInt returns successfully Requirement 299 is validated
-            site.CaptureRequirement(299, "For  0x00000000 value of "+
-                "'_hRegion' field of the  CRowSeekAt structure, "+
+            site.CaptureRequirement(299, "For  0x00000000 value of " +
+                "'_hRegion' field of the  CRowSeekAt structure, " +
                 "server response is success.");
         }
 
@@ -2879,9 +2861,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             uint bookmarks = Helper.GetUInt(bytes, ref startingIndex);
             // If GetUInt returns successfully Requirement 300 is validated
-            site.CaptureRequirement(300, 
-                "The 4 bytes '_cBookmarks' field of the CRowSeekByBookmark"+
-                "structure specifies the number of elements in _aBookmarks"+
+            site.CaptureRequirement(300,
+                "The 4 bytes '_cBookmarks' field of the CRowSeekByBookmark" +
+                "structure specifies the number of elements in _aBookmarks" +
                 "array of the same structure.");
         }
 
@@ -2893,27 +2875,27 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// <param name="requestMessageChecksum">checksum of 
         /// request message</param>
         /// <param name="index">index of the BLOB</param>
-        public void ValidateHeader(byte[] responseBytes, 
-            MessageType requestType, uint requestMessageChecksum, 
+        public void ValidateHeader(byte[] responseBytes,
+            MessageType requestType, uint requestMessageChecksum,
             ref int index)
         {
 
             uint messageType = Helper.GetUInt(responseBytes, ref index);
             //type and messageType are Equal
-            uint logicalOrredValue 
+            uint logicalOrredValue
                 = Constant.GetAllPossibleMessageTypeValue();
             //Updated by:v-zhil
             //Delta testing
-            bool isValidMessage 
+            bool isValidMessage
                 = (messageType & logicalOrredValue) == messageType;
             site.CaptureRequirementIfIsTrue(isValidMessage, 363,
                 "The value of the 4 bytes 'msg' field of the message header is one of the following: " +
-                "0x000000C8, 0x000000C9, 0x000000CA, 0x000000CB, 0x000000CC, 0x000000CD, 0x000000CE," + 
-                "0x000000CF, 0x000000D0, 0x000000D1, 0x000000D2, 0x000000D7,  0x000000D9, 0x000000E1, " + 
+                "0x000000C8, 0x000000C9, 0x000000CA, 0x000000CB, 0x000000CC, 0x000000CD, 0x000000CE," +
+                "0x000000CF, 0x000000D0, 0x000000D1, 0x000000D2, 0x000000D7,  0x000000D9, 0x000000E1, " +
                 "0x000000E4, 0x000000E6, 0x000000E7, 0x000000E8, 0x000000E9, 0x000000EC,0x000000F1,0x000000F2,0x000000F3,0x000000F4.");
-            
-            site.CaptureRequirementIfIsTrue(isValidMessage,621, 
-                "When a message arrives, the server MUST check the"+
+
+            site.CaptureRequirementIfIsTrue(isValidMessage, 621,
+                "When a message arrives, the server MUST check the" +
                 "_msg field value to see if it is a known type.");
             LogIfValidMessage(requestType, messageType);
 
@@ -2923,11 +2905,11 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             if (site.Properties["IsServerWindows"].ToUpper() == "TRUE")
             {
                 bool isValidNTStatus = IsValidNTStatus(status);
-                site.CaptureRequirementIfIsTrue(isValidNTStatus, 1, 
-                    "This protocol also uses NTSTATUS values taken from"+
+                site.CaptureRequirementIfIsTrue(isValidNTStatus, 1,
+                    "This protocol also uses NTSTATUS values taken from" +
                     "the NTSTATUS number space.");
-                site.CaptureRequirementIfIsTrue(isValidNTStatus, 2, 
-                    "<1>Windows only uses the values specified"+
+                site.CaptureRequirementIfIsTrue(isValidNTStatus, 2,
+                    "<1>Windows only uses the values specified" +
                     "in [MS-ERREF].");
             }
             #endregion
@@ -2936,8 +2918,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             //Delta testing
             // If 32 bit Status field is read as Response Status,
             // Requirement 593 is validated
-            site.CaptureRequirementIfIsTrue(IsValidNTStatus(status),593,
-                "Otherwise [WSP return failed], WSP messages return a 32-bit error code " + 
+            site.CaptureRequirementIfIsTrue(IsValidNTStatus(status), 593,
+                "Otherwise [WSP return failed], WSP messages return a 32-bit error code " +
                 "that can either be an HRESULT or an NTSTATUS value (see section 1.8).");
 
             // status should be 0x000000000;
@@ -2947,35 +2929,35 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             //", indicating the status of the requested operation.");
 
             uint checkSum = Helper.GetUInt(responseBytes, ref index);
-           
-            bool checkSumZero = (messageType == 0x000000C9) 
-                || (messageType == 0x000000CB) ||(messageType == 0x000000CD) 
-                || (messageType == 0x000000CE) ||(messageType == 0x000000CF) 
-                || (messageType == 0x000000D1) ||(messageType == 0x000000D2) 
-                || (messageType == 0x000000D7) ||(messageType == 0x000000D9) 
-                || (messageType == 0x000000E1) ||(messageType == 0x000000E6) 
-                || (messageType == 0x000000E7) ||(messageType == 0x000000E8) 
-                || (messageType == 0x000000E9) ||(messageType == 0x000000EC) 
-                || (messageType == 0x000000F1) ||(messageType == 0x000000F2)
-                || (messageType == 0x000000F3) ||(messageType == 0x000000F4);
+
+            bool checkSumZero = (messageType == 0x000000C9)
+                || (messageType == 0x000000CB) || (messageType == 0x000000CD)
+                || (messageType == 0x000000CE) || (messageType == 0x000000CF)
+                || (messageType == 0x000000D1) || (messageType == 0x000000D2)
+                || (messageType == 0x000000D7) || (messageType == 0x000000D9)
+                || (messageType == 0x000000E1) || (messageType == 0x000000E6)
+                || (messageType == 0x000000E7) || (messageType == 0x000000E8)
+                || (messageType == 0x000000E9) || (messageType == 0x000000EC)
+                || (messageType == 0x000000F1) || (messageType == 0x000000F2)
+                || (messageType == 0x000000F3) || (messageType == 0x000000F4);
 
 
             if (checkSumZero)
             {
                 site.CaptureRequirementIfAreEqual<uint>(0, checkSum, 367,
-                    "For all the messages except CPMConnectIn, "+
+                    "For all the messages except CPMConnectIn, " +
                     "CPMCreateQueryIn, CPMSetBindingsIn," +
-                    "CPMGetRowsIn and CPMFetchValueIn, '_ulChecksum'"+
+                    "CPMGetRowsIn and CPMFetchValueIn, '_ulChecksum'" +
                     "field of the message header MUST" +
                     "be set to 0x00000000.");
-                
+
             }
             else
             {
-                site.CaptureRequirementIfAreNotEqual<uint>(0, checkSum, 623, 
-                    "The server MUST validate the _ulChecksum field value if"+
-                    "the message type is one of the following messages: "+
-                    "CPMConnectIn, CPMCreateQueryIn, CPMSetBindingsIn,"+
+                site.CaptureRequirementIfAreNotEqual<uint>(0, checkSum, 623,
+                    "The server MUST validate the _ulChecksum field value if" +
+                    "the message type is one of the following messages: " +
+                    "CPMConnectIn, CPMCreateQueryIn, CPMSetBindingsIn," +
                     "CPMGetRowsIn, CPMFetchValueIn.");
 
                 #region Windows Behaviour Validation
@@ -2984,7 +2966,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     uint clientVersionValue = Convert.ToUInt32(site.Properties["ClientVersion"]);
                     if (clientVersionValue >= 0x00000102)
                     {
-                        site.CaptureRequirementIfAreNotEqual<uint>(0,checkSum, 405,
+                        site.CaptureRequirementIfAreNotEqual<uint>(0, checkSum, 405,
                     "If the 4 bytes '_iClientVersion' field  of the " +
                     "CPMConnectIn message is set to 0x00000102 or greater," +
                     "the server MUST validate the _ulChecksum field value" +
@@ -3115,17 +3097,17 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         private bool GetValidVType(uint vType)
         {
             bool result = false;
-            bool IsValidVector 
+            bool IsValidVector
                 = (vType != (uint)(0x1000 | (int)StorageType.VT_DECIMAL)
                 && vType != (uint)(0x1000 | (int)StorageType.VT_INT)
                 && vType != (uint)(0x1000 | (int)StorageType.VT_UINT)
                 && vType != (uint)(0x1000 | (int)StorageType.VT_BLOB));
             site.CaptureRequirementIfIsTrue(IsValidVector, 7,
-                "VT_VECTOR type modifier MUST NOT be combined(binary ORed)"+
-                "with the following types: VT_INT, VT_UINT,"+ 
+                "VT_VECTOR type modifier MUST NOT be combined(binary ORed)" +
+                "with the following types: VT_INT, VT_UINT," +
                 "VT_DECIMAL, VT_BLOB.");
 
-            bool isValidArray 
+            bool isValidArray
                 = 0x2000 != (uint)(0x2000 | (int)StorageType.VT_I8)
                 && 0x2000 != (uint)(0x2000 | (int)StorageType.VT_UI8)
                 && 0x2000 != (uint)(0x2000 | (int)StorageType.VT_FILETIME)
@@ -3134,8 +3116,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 && 0x2000 != (uint)(0x2000 | (int)StorageType.VT_LPSTR)
                 && 0x2000 != (uint)(0x2000 | (int)StorageType.VT_LPWSTR);
             site.CaptureRequirementIfIsTrue(isValidArray, 8,
-                "VT_ARRAY type modifier MUST NOT be combined(binary ORed)"+
-                "with the following types: VT_I8, VT_UI8, VT_FILETIME,"+
+                "VT_ARRAY type modifier MUST NOT be combined(binary ORed)" +
+                "with the following types: VT_I8, VT_UI8, VT_FILETIME," +
                 "VT_CLSID, VT_BLOB,  VT_LPSTR, and VT_LPWSTR.");
             vType = vType & 0x2000; // If VT_SAFEARRAY
             vType = vType & 0x1000; // If VT_VECTOR
@@ -3389,7 +3371,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// <param name="offset2"></param>
         /// <param name="actualLength"></param>
         /// <returns></returns>
-        private byte[] ReadVariableDataFromBuffer(byte[] rowsInResponse, 
+        private byte[] ReadVariableDataFromBuffer(byte[] rowsInResponse,
             uint offset2, int actualLength)
         {
             byte[] value = new byte[actualLength];
@@ -3438,10 +3420,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             // 0x40000000 to 0x7FFFFFFF represents INFORMATION Status
             // 0x80000000 to 0xBFFFFFFF represents WARNING Status
             // 0xC0000000 to 0xFFFFFFFF represents ERROR Status
-            if ((status >= 0x00000000 && status <= 0x3FFFFFFF) || 
-                (status >= 0x40000000 && status <= 0x7FFFFFFF) || 
-                (status >= 0x80000000 && status <= 0xBFFFFFFF) || 
-                (status >= 0xC0000000 && status <= 0xFFFFFFFF))   
+            if ((status >= 0x00000000 && status <= 0x3FFFFFFF) ||
+                (status >= 0x40000000 && status <= 0x7FFFFFFF) ||
+                (status >= 0x80000000 && status <= 0xBFFFFFFF) ||
+                (status >= 0xC0000000 && status <= 0xFFFFFFFF))
             {
                 isValidStatus = true;
             }
@@ -3454,50 +3436,50 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// </summary>
         /// <param name="requestType">Input Request Type</param>
         /// <param name="messageType">Output Response value</param>
-        private void LogIfValidMessage(MessageType requestType, 
+        private void LogIfValidMessage(MessageType requestType,
             uint messageType)
         {
             switch (requestType)
             {
                 case MessageType.CPMConnectIn:
-                    site.CaptureRequirementIfAreEqual<uint>(0x000000C8, 
+                    site.CaptureRequirementIfAreEqual<uint>(0x000000C8,
                         messageType, 904,
-                        "The value of 4 bytes 'msg' field for CPMConnectOut"+
+                        "The value of 4 bytes 'msg' field for CPMConnectOut" +
                         "message is 0x000000C8.");
                     break;
                 case MessageType.CPMCreateQueryIn:
-                    site.CaptureRequirementIfAreEqual<uint>(0x000000CA, 
+                    site.CaptureRequirementIfAreEqual<uint>(0x000000CA,
                         messageType, 907,
-                        "The value of 4 bytes 'msg' field for "+
+                        "The value of 4 bytes 'msg' field for " +
                         "CPMCreateQueryOut message is 0x000000CA.");
                     //If as a Response to CPMCreateQueryIn message
                     // CPMCreateQueryOut message is obtained, following
                     // requirement is validated.
                     site.CaptureRequirement(671,
-                        "When the server receives a CPMCreateQueryIn "+
-                        "message request from a client, the server MUST"+
-                        "respond to the client with a "+
+                        "When the server receives a CPMCreateQueryIn " +
+                        "message request from a client, the server MUST" +
+                        "respond to the client with a " +
                         "CPMCreateQueryOut message.");
                     break;
 
                 case MessageType.CPMFreeCursorIn:
                     site.CaptureRequirementIfAreEqual<uint>(0x000000CB,
                         messageType, 909,
-                        "The value of 4 bytes 'msg' field for "+
+                        "The value of 4 bytes 'msg' field for " +
                         "CPMFreeCursorOut message is 0x000000CB.");
                     break;
 
                 case MessageType.CPMGetRowsIn:
                     site.CaptureRequirementIfAreEqual<uint>(0x000000CC,
                         messageType, 911,
-                        "The value of 4 bytes 'msg' field for CPMGetRowsOut"+
+                        "The value of 4 bytes 'msg' field for CPMGetRowsOut" +
                         "message is 0x000000CC.");
                     //If as a Response to CPMGetRowsIn message
                     // CPMGetRowsOut message is obtained, following
                     // requirement is validated.
-                    site.CaptureRequirement(709, 
-                        "When the server receives a CPMGetRowsIn message"+
-                        "request from a client, the server MUST prepare "+
+                    site.CaptureRequirement(709,
+                        "When the server receives a CPMGetRowsIn message" +
+                        "request from a client, the server MUST prepare " +
                         "a CPMGetRowsOut message.");
 
                     break;
@@ -3505,14 +3487,14 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 case MessageType.CPMRatioFinishedIn:
                     site.CaptureRequirementIfAreEqual<uint>(0x000000CD,
                         messageType, 913,
-                        "The value of 4 bytes 'msg' field for "+
+                        "The value of 4 bytes 'msg' field for " +
                         "CPMRatioFinishedOut message is 0x000000CD.");
                     //If as a Response to CPMRatioFinishedIn message
                     // CPMRatioFinishedOut message is obtained, following
                     // requirement is validated.
-                    site.CaptureRequirement(697, 
-                        "When the server receives a CPMRatioFinishedIn"+
-                        "message request from a client, the server MUST"+
+                    site.CaptureRequirement(697,
+                        "When the server receives a CPMRatioFinishedIn" +
+                        "message request from a client, the server MUST" +
                         "prepare a CPMRatioFinishedOut message.");
                     break;
 
@@ -3533,61 +3515,61 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     break;
 
                 case MessageType.CPMSetBindingsIn:
-                    site.CaptureRequirementIfAreEqual<uint>(0x000000D0, 
+                    site.CaptureRequirementIfAreEqual<uint>(0x000000D0,
                         messageType, 919,
-                        "The value of 4 bytes 'msg' field for the response"+
+                        "The value of 4 bytes 'msg' field for the response" +
                         "of CPMSetBindingsIn message is 0x000000D0.");
                     break;
                 case MessageType.CPMGetNotify:
-                    site.CaptureRequirementIfAreEqual<uint>(0x000000D2, 
+                    site.CaptureRequirementIfAreEqual<uint>(0x000000D2,
                         messageType, 921,
-                        "The value of 4 bytes 'msg' field for "+
+                        "The value of 4 bytes 'msg' field for " +
                         "CPMSendNotifyOut message is 0x000000D2.");
                     break;
 
                 case MessageType.CPMGetQueryStatusIn:
                     site.CaptureRequirementIfAreEqual<uint>(0x000000D7,
                         messageType, 923,
-                        "The value of 4 bytes 'msg' field for "+
+                        "The value of 4 bytes 'msg' field for " +
                         "CPMGetQueryStatusOut message is 0x000000D7.");
                     //If as a Response to CPMGetQueryStatusIn message
                     // CPMGetQueryStatusOut message is obtained, following
                     // requirement is validated.
-                    site.CaptureRequirement(676, 
-                        "When the server receives a CPMGetQueryStatusIn"+
-                        "message request from a client, the server MUST"+
+                    site.CaptureRequirement(676,
+                        "When the server receives a CPMGetQueryStatusIn" +
+                        "message request from a client, the server MUST" +
                         "prepare a CPMGetQueryStatusOut message.");
                     break;
 
                 case MessageType.CPMCiStateInOut:
-                    site.CaptureRequirementIfAreEqual<uint>(0x000000D9, 
+                    site.CaptureRequirementIfAreEqual<uint>(0x000000D9,
                         messageType, 925,
-                        "The value of 4 bytes 'msg' field for the response"+
+                        "The value of 4 bytes 'msg' field for the response" +
                         "of CPMCiStateInOut message is 0x000000D9.");
                     break;
                 case MessageType.CPMForceMergeIn:
-                    site.CaptureRequirementIfAreEqual<uint>(0x000000E1, 
+                    site.CaptureRequirementIfAreEqual<uint>(0x000000E1,
                         messageType, 927,
-                        "The value of 4 bytes 'msg' field for the response"+
+                        "The value of 4 bytes 'msg' field for the response" +
                         "of CPMForceMergeIn message is 0x000000E1.");
                     //If as a Response to CPMForceMergeIn message, a message
                     // header is obtained following requirement is validated.
                     site.CaptureRequirement(646,
-                        "When the server receives a CPMForceMergeIn message"+
-                        "request, the server MUST respond to the client with "+
-                        "a message header for the CPMForceMergeIn, and set"+
+                        "When the server receives a CPMForceMergeIn message" +
+                        "request, the server MUST respond to the client with " +
+                        "a message header for the CPMForceMergeIn, and set" +
                         "the _status field to the results of the request.");
                     break;
                 case MessageType.CPMFetchValueIn:
-                    site.CaptureRequirementIfAreEqual<uint>(0x000000E4, 
+                    site.CaptureRequirementIfAreEqual<uint>(0x000000E4,
                         messageType, 929,
-                        "The value of 4 bytes 'msg' field for CPMFetchValueOut"+
+                        "The value of 4 bytes 'msg' field for CPMFetchValueOut" +
                         "message is 0x000000E4.");
                     //If as a Response to CPMFetchValueIn message
                     // CPMFetchValueOut message is obtained, following
                     // requirement is validated.
-                    site.CaptureRequirement(729, "When the server receives a"+
-                        "CPMFetchValueIn message request from a client, the "+
+                    site.CaptureRequirement(729, "When the server receives a" +
+                        "CPMFetchValueIn message request from a client, the " +
                         "server MUST  prepare a CPMFetchValueOut message.");
                     break;
 
@@ -3599,16 +3581,16 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     //of CPMUpdateDocumentsIn message is 0x000000E6.");
                     break;
                 case MessageType.CPMGetQueryStatusExIn:
-                    site.CaptureRequirementIfAreEqual<uint>(0x000000E7, 
+                    site.CaptureRequirementIfAreEqual<uint>(0x000000E7,
                         messageType, 933,
-                        "The value of 4 bytes 'msg' field for "+
+                        "The value of 4 bytes 'msg' field for " +
                         "CPMGetQueryStatusExOut message is 0x000000E7.");
                     //If as a Response to CPMGetQueryStatusExIn message
                     // CPMGetQueryStatusExOut message is obtained, following
                     // requirement is validated.
-                    site.CaptureRequirement(684, "When the server receives a"+
-                        "CPMGetQueryStatusExIn message request from a client,"+
-                        "the server MUST Prepare a "+
+                    site.CaptureRequirement(684, "When the server receives a" +
+                        "CPMGetQueryStatusExIn message request from a client," +
+                        "the server MUST Prepare a " +
                         "CPMGetQueryStatusExOut message.");
                     break;
 

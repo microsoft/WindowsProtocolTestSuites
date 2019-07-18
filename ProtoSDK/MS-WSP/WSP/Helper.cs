@@ -1,27 +1,11 @@
-﻿
-/******************************************************************************/
-/*                                                                            */
-/* File Name      :  Helper.cs                                                */
-/* Description    :  Provides utility methods for message generation          */
-/*                   and validation                                           */
-/* Dependencies   :  WspAdapter uses this RequestSender                       */
-/*                   to send/receive MS-WSP specific messages                 */
-/* Author         :  v-shgoel                                                 */
-/* Create Date    :  09/06/2008                                               */
-/*----------------------------------------------------------------------------*/
-/* Change History :                                                           */
-/*----------------------------------------------------------------------------*/
-/* Date             Author     BugID    Description                           */
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-/******************************************************************************/
-namespace Microsoft.Protocols.TestSuites.WspTS
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using System;
+using System.Text;
+
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using Microsoft.Protocols.TestTools;
-    using Microsoft.Modeling;
 
     /// <summary>
     /// Helper class provides utility methods which are used through 
@@ -135,18 +119,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             string description)
         {
             //Requirements.Capture(MakeReqId(requirementId, description));
-        }
-
-        /// <summary>
-        /// Builds a requirement identifier.
-        /// </summary>
-        /// <param name="requirementId">Requirement Id</param>
-        /// <param name="description">Requirement Description</param>
-        private static string MakeReqId(int requirementId,
-            string description)
-        {
-            return Microsoft.Protocols.TestTools.RequirementId.Make
-                ("MS-WSP", requirementId, description);
         }
 
         # endregion

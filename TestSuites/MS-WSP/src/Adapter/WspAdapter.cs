@@ -1,33 +1,11 @@
-/******************************************************************************
-/*****************************************************************************/
-/* File Name      :  WspAdapter.cs                                           */
-/* Description    :  Adapter for MS-WSP TestSuite.                           */
-/*                   a) Prepares request message and sends to Server under   */
-/*                      Test                                                 */
-/*                   b) Receives response from the Server                    */
-/*                   c) Validates Syntax specific requirements               */
-/*                   d) Returns response to Test Suite for further validation*/
-/* Class          :  WspAdapter                                              */
-/* Dependencies   :                                                          */
-/* Author         :  v-abdand, v-kichak, v-shgoel                            */
-/* Create Date    :  09/06/2008                                              */
-/*---------------------------------------------------------------------------*/
-/* Change History :                                                          */
-/*---------------------------------------------------------------------------*/
-/* Date             Author     BugID    Description                          */
-/*---------------------------------------------------------------------------*/
-/*---------------------------------------------------------------------------*/
-/*****************************************************************************/
+// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using System;
 using System.Collections.Generic;
-using System.Text;
-
-using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestSuites.WspTS;
 using System.Runtime.InteropServices;
-using Microsoft.Win32.SafeHandles;
 
-namespace Microsoft.Protocols.TestSuites.WspTS
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 {
     /// <summary>
     /// WspAdapter class implements the methods of the IWspAdapter interface.
@@ -116,7 +94,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// WorkId of the current row
         /// </summary>
         uint lastDocumentWorkId = 0;
-        
+
         #endregion
 
         #region Initialize & Cleanup
@@ -142,9 +120,93 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 (wspTestSite.Properties.Get("CLIENT_USERNAME"));
             pipePath
                 = string.Format(@"\\{0}\\pipe\MSFTEWDS", serverMachineName);
+
             defaultSender = new RequestSender(pipePath);
-            builder = new MessageBuilder(wspTestSite);
+
+            var parameter = InitializeParameter();
+            builder = new MessageBuilder(parameter);
+
             isClientConnected = false;
+        }
+
+        private MessageBuilderParamter InitializeParameter()
+        {
+            char[] delimiter = new char[] { ',' };
+
+            var paramter = new MessageBuilderParamter();
+
+            paramter.EmptyGuid = new Guid(wspTestSite.Properties.Get("EmptyGuid"));
+
+            paramter.PropertySet_One_Guid = new Guid(wspTestSite.Properties.Get("PropertySet_One_Guid"));
+
+            paramter.PropertySet_One_DBProperties = wspTestSite.Properties.Get("PropertySet_One_DBProperties").Split(delimiter);
+
+            paramter.PropertySet_Two_Guid = new Guid(wspTestSite.Properties.Get("PropertySet_Two_Guid"));
+
+            paramter.PropertySet_Two_DBProperties = wspTestSite.Properties.Get("PropertySet_Two_DBProperties").Split(delimiter);
+
+            paramter.Array_PropertySet_One_Guid = new Guid(wspTestSite.Properties.Get("Array_PropertySet_One_Guid"));
+
+            paramter.Array_PropertySet_One_DBProperties = wspTestSite.Properties.Get("Array_PropertySet_One_DBProperties").Split(delimiter);
+
+            paramter.Array_PropertySet_Two_Guid = new Guid(wspTestSite.Properties.Get("Array_PropertySet_Two_Guid"));
+
+            paramter.Array_PropertySet_Two_DBProperties = wspTestSite.Properties.Get("Array_PropertySet_Two_DBProperties").Split(delimiter);
+
+            paramter.Array_PropertySet_Three_Guid = new Guid(wspTestSite.Properties.Get("Array_PropertySet_Three_Guid"));
+
+            paramter.Array_PropertySet_Three_DBProperties = wspTestSite.Properties.Get("Array_PropertySet_Three_DBProperties").Split(delimiter);
+
+            paramter.Array_PropertySet_Four_Guid = new Guid(wspTestSite.Properties.Get("Array_PropertySet_Four_Guid"));
+
+            paramter.Array_PropertySet_Four_DBProperties = wspTestSite.Properties.Get("Array_PropertySet_Four_DBProperties").Split(delimiter);
+
+            paramter.EachRowSize = Int32.Parse(wspTestSite.Properties.Get("EachRowSize"));
+
+            paramter.PropertyRestrictionGuid = new Guid(wspTestSite.Properties.Get("PropertyRestrictionGuid"));
+
+            paramter.PropertyRestrictionProperty = Int32.Parse(wspTestSite.Properties.Get("PropertyRestrictionProperty"));
+
+            paramter.ContentRestrictionGuid = new Guid(wspTestSite.Properties.Get("ContentRestrictionGuid"));
+
+            paramter.ContentRestrictionProperty = Int32.Parse(wspTestSite.Properties.Get("ContentRestrictionProperty"));
+
+            paramter.EType = UInt32.Parse(wspTestSite.Properties.Get("EType"));
+
+            paramter.BufferSize = UInt32.Parse(wspTestSite.Properties.Get("BufferSize"));
+
+            paramter.LCID_VALUE = UInt32.Parse(wspTestSite.Properties.Get("LCID_VALUE"));
+
+            paramter.ClientBase = UInt32.Parse(wspTestSite.Properties.Get("ClientBase"));
+
+            paramter.RowsToTransfer = UInt32.Parse(wspTestSite.Properties.Get("RowsToTransfer"));
+
+            paramter.NumberOfColumnsToQuery = Int32.Parse(wspTestSite.Properties.Get("NumberOfColumnsToQuery"));
+
+            paramter.ColumnParameters = new MessageBuilderColumnParameter[paramter.NumberOfColumnsToQuery];
+
+            for (int i = 0; i < paramter.NumberOfColumnsToQuery; i++)
+            {
+                paramter.ColumnParameters[i] = new MessageBuilderColumnParameter();
+
+                paramter.ColumnParameters[i].Guid = new Guid(wspTestSite.Properties.Get($"columnGuid_{i}"));
+
+                paramter.ColumnParameters[i].PropertyId = UInt32.Parse(wspTestSite.Properties.Get($"columnPropertyId_{i}"));
+
+                paramter.ColumnParameters[i].ValueOffset = UInt16.Parse(wspTestSite.Properties.Get($"columnValueOffset_{i}"));
+
+                paramter.ColumnParameters[i].StatusOffset = UInt16.Parse(wspTestSite.Properties.Get($"columnStatusOffset_{i}"));
+
+                paramter.ColumnParameters[i].LengthOffset = UInt16.Parse(wspTestSite.Properties.Get($"columnLengthOffset_{i}"));
+
+                paramter.ColumnParameters[i].StorageType = (StorageType)Enum.Parse(typeof(StorageType), wspTestSite.Properties.Get($"columnStorageType_{i}"));
+            }
+
+            paramter.PropertyGuidToFetch = new Guid(wspTestSite.Properties.Get("PropertyGuidToFetch"));
+
+            paramter.PropertyIdToFetch = Int32.Parse(wspTestSite.Properties.Get("PropertyIdToFetch"));
+
+            return paramter;
         }
 
         /// <summary>
@@ -167,7 +229,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
         #region IWspAdapter Members
 
-        # region CPMConnectIn and CPMConnectOut
+        #region CPMConnectIn and CPMConnectOut
 
         /// <summary>
         /// CPMConnectInRequest() is used to send a request to establish
@@ -276,9 +338,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public event CPMConnectOutResponseHandler CPMConnectOutResponse;
 
 
-        # endregion
+        #endregion
 
-        # region CPMCreateQueryIn and CPMCreateQueryOut
+        #region CPMCreateQueryIn and CPMCreateQueryOut
         /// <summary>
         /// CPMCreateQueryIn() emulates WSP CPMCreateQueryIn message and 
         /// associates a query with the client if successful
@@ -361,12 +423,12 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// <summary>
         /// This event is used to get the response for CPMCreateQueryIn request.
         /// </summary>
-        public event CPMCreateQueryOutResponseHandler            
+        public event CPMCreateQueryOutResponseHandler
             CPMCreateQueryOutResponse;
 
-        # endregion
+        #endregion
 
-        # region CPMGetQueryStatusIn and CPMGetQueryStatusOut
+        #region CPMGetQueryStatusIn and CPMGetQueryStatusOut
 
         /// <summary>
         /// CPMGetQueryStatusIn() requests the status of the query.
@@ -387,7 +449,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             {
                 // Generating a PseudoRandom Number
                 Random r = new Random();
-                cursorAssociated 
+                cursorAssociated
                     = uint.MaxValue - (uint)r.Next(MAX_RANGE, MIN_RANGE);
             }
             byte[] statusInMessage
@@ -455,9 +517,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public event CPMGetQueryStatusOutResponseHandler
             CPMGetQueryStatusOutResponse;
 
-        # endregion
+        #endregion
 
-        # region CPMGetQueryStatusExIn and CPMGetQueryStatusExOut
+        #region CPMGetQueryStatusExIn and CPMGetQueryStatusExOut
 
         /// <summary>
         /// CPMGetQueryStatusExIn()requests for the status of the query and the
@@ -514,11 +576,11 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 if (msgStatus != 0)
                 {
                     wspTestSite.CaptureRequirementIfAreEqual<int>(bytesRead,
-    Constant.SIZE_OF_HEADER, 619,
-    "Whenever an error occurs during processing of a " +
-    "message sent by a client, the server MUST respond " +
-    "with the message header (only) of the message sent " +
-    "by the client, keeping the _msg field intact.");
+        Constant.SIZE_OF_HEADER, 619,
+        "Whenever an error occurs during processing of a " +
+        "message sent by a client, the server MUST respond " +
+        "with the message header (only) of the message sent " +
+        "by the client, keeping the _msg field intact.");
                     //If 4 byte Non Zero field is read as status
                     // The requirement 620 gets validated
                     wspTestSite.CaptureRequirement(620,
@@ -555,9 +617,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public event CPMGetQueryStatusExOutResponseHandler
             CPMGetQueryStatusExOutResponse;
 
-        # endregion
+        #endregion
 
-        # region CPMRatioFinishedIn and CPMRatioFinishedOut
+        #region CPMRatioFinishedIn and CPMRatioFinishedOut
 
         /// <summary>
         /// CPMRatioFinishedIn() requests for the completion percentage of the 
@@ -657,9 +719,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public event CPMRatioFinishedOutResponseHandler
             CPMRatioFinishedOutResponse;
 
-        # endregion
+        #endregion
 
-        # region CPMSetBindingsIn and CPMSetBindingsInResponse
+        #region CPMSetBindingsIn and CPMSetBindingsInResponse
 
         /// <summary>
         /// CPMSetBindingsIn() requests the bindings of columns to a rowset.
@@ -698,7 +760,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             uint checkSum = 0;
             RequestSender sender
                 = GetRequestSender(isClientConnected); //Get the Sender
-            // RequestSender sender = new RequestSender(); //Get the Sender
+                                                       // RequestSender sender = new RequestSender(); //Get the Sender
             bytesRead = sender.SendMessage(setBindingsInMessage,
                 out setbindingsInResponseMessage);
             if (sender == defaultSender)
@@ -730,11 +792,11 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 if (msgStatus != 0)
                 {
                     wspTestSite.CaptureRequirementIfAreEqual<int>(bytesRead,
-       Constant.SIZE_OF_HEADER, 619,
-       "Whenever an error occurs during processing of a " +
-       "message sent by a client, the server MUST respond " +
-       "with the message header (only) of the message sent " +
-       "by the client, keeping the _msg field intact.");
+        Constant.SIZE_OF_HEADER, 619,
+        "Whenever an error occurs during processing of a " +
+        "message sent by a client, the server MUST respond " +
+        "with the message header (only) of the message sent " +
+        "by the client, keeping the _msg field intact.");
                     //If 4 byte Non Zero field is read as status
                     // The requirement 620 gets validated
                     wspTestSite.CaptureRequirement(620,
@@ -771,9 +833,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public event CPMSetBindingsInResponseHandler
             CPMSetBindingsInResponse;
 
-        # endregion
+        #endregion
 
-        # region CPMGetRowsIn and CPMGetRowsOut
+        #region CPMGetRowsIn and CPMGetRowsOut
 
         /// <summary>
         /// CPMGetRowsIn() message requests rows from a query.
@@ -803,7 +865,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             uint checkSum = 0;
             RequestSender sender
                 = GetRequestSender(isClientConnected); //Get the Sender
-            // RequestSender sender = new RequestSender(); //Get the Sender
+                                                       // RequestSender sender = new RequestSender(); //Get the Sender
             sender.SendMessage(getRowsInMessage, out getRowsOutMessage);
             if (sender == defaultSender)
             {
@@ -829,29 +891,29 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     = Helper.GetUInt(getRowsOutMessage, ref startingIndex);
                 uint msgStatus
                     = Helper.GetUInt(getRowsOutMessage, ref startingIndex);
-            //if (msgStatus != 0)
-            //{
-            //    wspTestSite.CaptureRequirementIfAreEqual<int>(bytesRead,
-            //        Constant.SIZE_OF_HEADER, 619,
-            //        "Whenever an error occurs during processing of a"+
-            //        "message sent by a client, the server MUST respond "+
-            //        "with the message header (only) of the message sent "+
-            //        "by the client, keeping the _msg field intact.");
-            //    wspTestSite.CaptureRequirement(620, "Whenever an error "+
-            //        "occurs during processing of a message sent by a "+
-            //        "client, the server MUST set the _status field to "+
-            //        "the error code value.");
-            //}
-            //if ((msgId == (uint)MessageType.CPMGetRowsIn) 
-            //    && (msgStatus == 0x00000000))
-            //{
+                //if (msgStatus != 0)
+                //{
+                //    wspTestSite.CaptureRequirementIfAreEqual<int>(bytesRead,
+                //        Constant.SIZE_OF_HEADER, 619,
+                //        "Whenever an error occurs during processing of a"+
+                //        "message sent by a client, the server MUST respond "+
+                //        "with the message header (only) of the message sent "+
+                //        "by the client, keeping the _msg field intact.");
+                //    wspTestSite.CaptureRequirement(620, "Whenever an error "+
+                //        "occurs during processing of a message sent by a "+
+                //        "client, the server MUST set the _status field to "+
+                //        "the error code value.");
+                //}
+                //if ((msgId == (uint)MessageType.CPMGetRowsIn) 
+                //    && (msgStatus == 0x00000000))
+                //{
                 uint offsetUsed = GetOffsetUsed();
                 validator.ValidateGetRowsOut(getRowsOutMessage,
                     checkSum, rowsInReserve, rowsInClientBase, tableColumns,
                     offsetUsed, out lastDocumentWorkId);
                 //}
                 CPMGetRowsOut(msgStatus);
-                 // Fire Response Event
+                // Fire Response Event
             }
         }
         /// <summary>
@@ -859,9 +921,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// </summary>
         public event CPMGetRowsOutResponseHandler CPMGetRowsOut;
 
-        # endregion
+        #endregion
 
-        # region CPMFetchValueIn and CPMFetchValueOut
+        #region CPMFetchValueIn and CPMFetchValueOut
 
         /// <summary>
         /// CPMFetchValueIn() requests for the property value that 
@@ -908,9 +970,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public event CPMFetchValueOutResponseHandler
             CPMFetchValueOutResponse;
 
-        # endregion
+        #endregion
 
-        # region CPMCiStateInOut and CPMCiStateInOutResponse
+        #region CPMCiStateInOut and CPMCiStateInOutResponse
 
         /// <summary>
         /// CPMCiStateInOut() requests the information about the 
@@ -925,7 +987,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             uint checkSum = 0;
             RequestSender sender
                 = GetRequestSender(isClientConnected); //Get the Sender
-            // RequestSender sender = new RequestSender(); //Get the Sender
+                                                       // RequestSender sender = new RequestSender(); //Get the Sender
             bytesRead = sender.SendMessage(ciStateInOutMessage,
                 out ciStateInOutResponseMessage);
             if (sender == defaultSender)
@@ -956,11 +1018,11 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 if (msgStatus != 0)
                 {
                     wspTestSite.CaptureRequirementIfAreEqual<int>(bytesRead,
-    Constant.SIZE_OF_HEADER, 619,
-    "Whenever an error occurs during processing of a " +
-    "message sent by a client, the server MUST respond " +
-    "with the message header (only) of the message sent " +
-    "by the client, keeping the _msg field intact.");
+        Constant.SIZE_OF_HEADER, 619,
+        "Whenever an error occurs during processing of a " +
+        "message sent by a client, the server MUST respond " +
+        "with the message header (only) of the message sent " +
+        "by the client, keeping the _msg field intact.");
                     //If 4 byte Non Zero field is read as status
                     // The requirement 620 gets validated
                     wspTestSite.CaptureRequirement(620,
@@ -983,9 +1045,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public event CPMCiStateInOutResponseHandler
             CPMCiStateInOutResponse;
 
-        # endregion
+        #endregion
 
-        # region CPMForceMergeIn and CPMForceMergeInResponse
+        #region CPMForceMergeIn and CPMForceMergeInResponse
 
         /// <summary>
         /// CPMForceMergeIn() request is sent to perform any 
@@ -1068,9 +1130,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// </summary>
         public event CPMForceMergeInResponseHandler CPMForceMergeInResponse;
 
-        # endregion
+        #endregion
 
-        # region CPMGetNotifyIn and CPMSendNotifyOut
+        #region CPMGetNotifyIn and CPMSendNotifyOut
 
         /// <summary>
         /// CPMGetNotifyIn() requests that the client wants to be notified
@@ -1153,9 +1215,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// </summary>
         public event CPMSendNotifyOutResponseHandler CPMSendNotifyOutResponse;
 
-        # endregion
+        #endregion
 
-        # region CPMFreeCursorIn and CPMFreeCursorOut
+        #region CPMFreeCursorIn and CPMFreeCursorOut
 
         /// <summary>
         /// CPMFreeCursorIn() requests to release a cursor.
@@ -1174,8 +1236,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 cursorAssociated = uint.MaxValue - 10;
             }
             uint errorCode = 0xFFFFFFFF; // Get it from Server
-            //string machineName = GetMachineName(machineNameValue);
-            //uint cursor = GetCursor(clientMachineName);
+                                         //string machineName = GetMachineName(machineNameValue);
+                                         //uint cursor = GetCursor(clientMachineName);
             byte[] freeCursorOut;
             byte[] freeCursor = builder.GetFreeCursorIn(cursorAssociated);
             RequestSender sender = GetRequestSender(isClientConnected);
@@ -1218,9 +1280,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public event CPMFreeCursorOutResponseHandler
             CPMFreeCursorOutResponse;
 
-        # endregion
+        #endregion
 
-        # region CPMDisconnect
+        #region CPMDisconnect
 
         /// <summary>
         /// CPMDisconnect() request is sent to end the connection 
@@ -1266,7 +1328,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             }
         }
 
-        # endregion
+        #endregion
 
         #region CPMFindIndicesIn and CPMFindIndicesOut
 
@@ -1276,8 +1338,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// <param name="isCursorValid"></param>
         public void CPMFindIndicesIn(bool isCursorValid)
         {
-            uint cWids=1;
-            uint cDepthPrev=0;
+            uint cWids = 1;
+            uint cDepthPrev = 0;
             byte[] findIndicesOut = null;
             byte[] value = null;
             byte[] findIndicesIn
@@ -1301,7 +1363,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     errorCode = 0;
                     //if return code is DB_S_ENDOFROWSET, it is not equal 0, but it still shows successfully.
                     Site.CaptureRequirement(1201,
-                        "[Windows Search Protocol (WSP) messages indicate success two ways,second way]An HRESULT success value, " + 
+                        "[Windows Search Protocol (WSP) messages indicate success two ways,second way]An HRESULT success value, " +
                         "[such as DB_S_ENDOFROWSET]in whichAn HRESULT [An HRESULT ] the thirty-first bit is not set.");
                 }
             }
@@ -1335,10 +1397,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             int sutStatus;
             switch (eventType)
             {
-                case (int)EventType.PROPAGATE_ADD:             
+                case (int)EventType.PROPAGATE_ADD:
                     fileName = wspTestSite.Properties["NewFile1"];
                     //Create a file on remote server
-                    sutStatus = sutAdapter.CreateFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["CLIENT_USERNAME"], wspTestSite.Properties["Password"], fileName);                    
+                    sutStatus = sutAdapter.CreateFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["CLIENT_USERNAME"], wspTestSite.Properties["Password"], fileName);
                     if (sutStatus != 0)
                     {
                         wspTestSite.Log.Add(LogEntryKind.Comment, "File created failed on server");
@@ -1354,7 +1416,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                         {
                             wspTestSite.Log.Add(LogEntryKind.Comment, "File created failed on server");
                             return;
-                        }                        
+                        }
                     }
                     break;
                 case (int)EventType.PROPAGATE_DELETE:
@@ -1402,7 +1464,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 case (int)EventType.PROPAGATE_NONE:
                 default:
                     break;
-            }            
+            }
 
             byte[] getRowsetNotifyOutMessage = null;
             RequestSender sender = GetRequestSender(isClientConnected);
@@ -1412,7 +1474,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             byte[] value = null;
             value = new byte[bytesRead];
             Array.Copy(getRowsetNotifyOutMessage, 0, value, 0, bytesRead);
-            
+
             uint checkSum = GetCheckSumField(getRowsetNotifyInMessage);
 
             int startingIndex = 0;
@@ -1421,7 +1483,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             if (errorCode == 0)
             {
-                validator.ValidateGetRowsetNotifyOut(value, checkSum,eventType,additionalRowsetEvent);
+                validator.ValidateGetRowsetNotifyOut(value, checkSum, eventType, additionalRowsetEvent);
             }
             CPMGetRowsetNotifyOutResponse(errorCode);
 
@@ -1530,7 +1592,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             }
 
         }
-      
+
         /// <summary>
         /// Verify the error code if it is the HResult success value
         /// </summary>
@@ -1599,7 +1661,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 uint msgStatus = Helper.GetUInt(statusOutMessage,
                     ref startingIndex);
 
-                
+
                 if ((msgId == (uint)MessageType.CPMGetScopeStatisticsOut)
                     && (msgStatus == 0x00000000))
                 {
@@ -1609,7 +1671,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     wspTestSite.CaptureRequirement(1153,
                         "[When the server receives a CPMGetScopeStatisticsIn message request from a client, " +
                         "the server MUST]The CPMGetScopeStatisticsOut message MUST be populated with the appropriate statistics.");
-                }                
+                }
 
                 CPMGetScopeStatisticsOutResponse(msgStatus);
             }
@@ -1619,10 +1681,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// </summary>
         public event CPMGetScopeStatisticsOutResponseHandler CPMGetScopeStatisticsOutResponse;
 
-        #endregion 
+        #endregion
 
         #region CPMSetScopePrioritizationIn and CPMSetScopePrioritizationOut
-        
+
         /// <summary>
         /// CPMSetScopePrioritizationIn() request that server prioritize indexing of items that may be relevant to the originating query
         /// at a rate specified in the message
@@ -1632,7 +1694,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         {
             byte[] setScopePrioritizationOutMessage = null;
             RequestSender sender = GetRequestSender(isClientConnected);
-            uint eventFrequency=0;
+            uint eventFrequency = 0;
             if (priority == (uint)Priority.PRIORITY_LEVEL_DEFAULT)
             {
                 eventFrequency = 0;
@@ -1725,9 +1787,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public event CPMUpdateDocumentsOutResponseHandler
             CPMUpdateDocumentsOutResponse;
         #endregion
-        # endregion
+        #endregion
 
-        
+
 
         #region Helper Methods
 
@@ -1823,7 +1885,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         {
             if (isclientConnected)
             {
-                return connectedClients[clientMachineName];                
+                return connectedClients[clientMachineName];
             }
             else
             {

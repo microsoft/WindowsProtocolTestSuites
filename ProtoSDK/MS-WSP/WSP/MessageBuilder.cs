@@ -1,26 +1,83 @@
-﻿/******************************************************************************/
-/*                                                                            */
-/* File Name      :  MessageBuilder.cs                                        */
-/* Description    :  Builds MS-WSP request messages                           */
-/* Class          :  MessageBuilder                                           */
-/*   Dependencies :  WspAdapter uses this MessageBuilder                      */
-/*                   to prepare MS-WSP request messages                       */
-/* Author         :  v-lavg, v-kichak, v-abdand, v-shgoel                     */
-/* Create Date    :  09/06/2008                                               */
-/*----------------------------------------------------------------------------*/
-/* Change History :                                                           */
-/*----------------------------------------------------------------------------*/
-/* Date             Author     BugID    Description                           */
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-/******************************************************************************/
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Protocols.TestTools;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-namespace Microsoft.Protocols.TestSuites.WspTS
+using System;
+using System.Text;
+
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 {
+    public class MessageBuilderColumnParameter
+    {
+        public Guid Guid;
+
+        public uint PropertyId;
+
+        public ushort ValueOffset;
+
+        public ushort StatusOffset;
+
+        public ushort LengthOffset;
+
+        public StorageType StorageType;
+    }
+
+    public class MessageBuilderParamter
+    {
+        public Guid EmptyGuid;
+
+        public Guid PropertySet_One_Guid;
+
+        public string[] PropertySet_One_DBProperties;
+
+        public Guid PropertySet_Two_Guid;
+
+        public string[] PropertySet_Two_DBProperties;
+
+        public Guid Array_PropertySet_One_Guid;
+
+        public string[] Array_PropertySet_One_DBProperties;
+
+        public Guid Array_PropertySet_Two_Guid;
+
+        public string[] Array_PropertySet_Two_DBProperties;
+
+        public Guid Array_PropertySet_Three_Guid;
+
+        public string[] Array_PropertySet_Three_DBProperties;
+
+        public Guid Array_PropertySet_Four_Guid;
+
+        public string[] Array_PropertySet_Four_DBProperties;
+
+        public int EachRowSize;
+
+        public Guid PropertyRestrictionGuid;
+
+        public int PropertyRestrictionProperty;
+
+        public Guid ContentRestrictionGuid;
+
+        public int ContentRestrictionProperty;
+
+        public uint EType;
+
+        public uint BufferSize;
+
+        public uint LCID_VALUE;
+
+        public uint ClientBase;
+
+        public uint RowsToTransfer;
+
+        public int NumberOfColumnsToQuery;
+
+        public MessageBuilderColumnParameter[] ColumnParameters;
+
+        public Guid PropertyGuidToFetch;
+
+        public int PropertyIdToFetch;
+    }
+
     /// <summary>
     /// Message Builder class provides methods to 
     /// build MS-WSP request messages
@@ -52,10 +109,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// Represent a query string
         /// </summary>
         string queryString = string.Empty;
-        /// <summary>
-        /// Current Test site
-        /// </summary>
-        ITestSite site = null;
+
         /// <summary>
         /// Specifies the property type is ID
         /// </summary>
@@ -125,6 +179,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// </summary>
         public static uint chapter;
 
+
+        private MessageBuilderParamter parameter;
+
         #endregion
 
         /// <summary>
@@ -132,9 +189,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// </summary>
         /// <param name="testSite">Site from where it needs 
         /// to read configurable data</param>
-        public MessageBuilder(ITestSite testSite)
+        public MessageBuilder(MessageBuilderParamter parameter)
         {
-            site = testSite;
+            this.parameter = parameter;
         }
 
         #region MS-WSP Request Messages
@@ -153,7 +210,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// <param name="languageLocale">Language Locale</param>
         /// <returns>Connect In message BLOB</returns>
         public byte[] GetConnectInMessage(uint clientVersion, int isRemote,
-            string userName, string machineName, string serverMachineName, 
+            string userName, string machineName, string serverMachineName,
             string catalogName, string languageLocale)
         {
             uint version = (uint)clientVersion; // Client Version
@@ -162,20 +219,20 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             // Assign  propSet1.Length + propSet2.Length later
 
             byte[] paddingFor4 = new byte[] { 0, 0, 0, 0 }; // 4 Bytes 
-            uint cbBlob2 = Constant.SIZE_OF_UINT; 
+            uint cbBlob2 = Constant.SIZE_OF_UINT;
             //cbBlob2 = 4 bytes + size of all external Properties Set
             int firstPaddingCount = 0;
             int secondPaddingCount = 0;
-            byte[] propSet1 = null; 
+            byte[] propSet1 = null;
             // PropertySet1 as per CPMConnectIn message definition
-            byte[] propSet2 = null; 
+            byte[] propSet2 = null;
             // PropertySet2 as per CPMConnectIn message definition
-            byte[] paddingFor12 = new byte[] 
+            byte[] paddingFor12 = new byte[]
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; // Padding 12 Bytes 
             //calculate aPropSet Length (array of propertySet)
             int lengthSoFar = 4 * Constant.SIZE_OF_UINT +
-                Constant.SIZE_OF_UINT + 
-                paddingFor12.Length + 2 * (userName.Length 
+                Constant.SIZE_OF_UINT +
+                paddingFor12.Length + 2 * (userName.Length
                 + machineName.Length);
             byte[] firstPadding = null; // padding
             if (lengthSoFar % OFFSET_8 != 0)
@@ -189,16 +246,16 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             }
             uint cPropSets = 2; // Number of PropertySets
 
-            int totalLength = lengthSoFar + firstPaddingCount 
+            int totalLength = lengthSoFar + firstPaddingCount
                 + Constant.SIZE_OF_UINT;
             // To Assign later +propSet1.Length + propSet2.Length;
-            int messageOffSet = totalLength + HEADER_LENGTH 
+            int messageOffSet = totalLength + HEADER_LENGTH
                 /* of message Header */;
             //-------Starting PropertySet1------------
             // PropertySet1 specifying CatalogName
             propSet1 = GetPropertySet1(ref messageOffSet, catalogName);
             // PropertySet1 specifying MachineName
-            propSet2 = GetPropertySet2(ref messageOffSet, serverMachineName); 
+            propSet2 = GetPropertySet2(ref messageOffSet, serverMachineName);
             cbBlob1 += (uint)propSet1.Length + (uint)propSet2.Length;
             byte[] secondPadding = null;
             totalLength = messageOffSet;
@@ -213,37 +270,37 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             }
             messageOffSet += secondPaddingCount;
             //size of exPropSet, value to be assigned later
-            messageOffSet += Constant.SIZE_OF_UINT; 
+            messageOffSet += Constant.SIZE_OF_UINT;
             // Adding 4 external PropertySets 
             byte[] aPropertySet1 = GetAPropertySet1(ref messageOffSet,
                 languageLocale); //Language locale
-            byte[] aPropertySet2 = 
+            byte[] aPropertySet2 =
                 GetAPropertySet2(ref messageOffSet); // FLAGs
             byte[] aPropertySet3 =
                 GetAPropertySet3(ref messageOffSet,
                 serverMachineName); // server
-            byte[] aPropertySet4 
+            byte[] aPropertySet4
                 = GetAPropertySet4(ref messageOffSet, catalogName); // Catalog
 
-            cbBlob2 += (uint)(aPropertySet1.Length + aPropertySet2.Length 
+            cbBlob2 += (uint)(aPropertySet1.Length + aPropertySet2.Length
                 + aPropertySet3.Length + aPropertySet4.Length);
             int connectInMessageLength = messageOffSet - 16;
             byte[] mainBlob = new byte[connectInMessageLength];
             int index = 0;
             //================ Converting values into Bytes ===============
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(version));
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(isClientRemote));
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(cbBlob1));
             Helper.CopyBytes(mainBlob, ref index, paddingFor4);
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(cbBlob2));
             Helper.CopyBytes(mainBlob, ref index, paddingFor12);
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 Encoding.Unicode.GetBytes(machineName));
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 Encoding.Unicode.GetBytes(userName));
             if (firstPadding != null)
             {
@@ -258,14 +315,14 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 Helper.CopyBytes(mainBlob, ref index, secondPadding);
             }
             uint cExtPropSet = EXTERNAL_PROPSET_COUNT;
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(cExtPropSet));
             Helper.CopyBytes(mainBlob, ref index, aPropertySet1);
             Helper.CopyBytes(mainBlob, ref index, aPropertySet2);
             Helper.CopyBytes(mainBlob, ref index, aPropertySet3);
             Helper.CopyBytes(mainBlob, ref index, aPropertySet4);
             //=====================================================================
-            return AddMessageHeader(MessageType.CPMConnectIn, mainBlob); 
+            return AddMessageHeader(MessageType.CPMConnectIn, mainBlob);
             //Adding Message Header
         }
 
@@ -279,7 +336,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public byte[] GetCPMQueryStatusIn(uint cursor)
         {
             // this message has just one field _cursor
-            byte[] bytes = BitConverter.GetBytes(cursor); 
+            byte[] bytes = BitConverter.GetBytes(cursor);
             // Add Message Header
             return AddMessageHeader(MessageType.CPMGetQueryStatusIn, bytes);
         }
@@ -295,9 +352,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             int index = 0;
             byte[] bytes = new byte[Constant.SIZE_OF_UINT/*Cursor Handle */
                 + Constant.SIZE_OF_UINT/* BookMark Handle */];
-            Helper.CopyBytes(bytes, ref index, 
+            Helper.CopyBytes(bytes, ref index,
                 BitConverter.GetBytes(cursor));
-            Helper.CopyBytes(bytes, ref index, 
+            Helper.CopyBytes(bytes, ref index,
                 BitConverter.GetBytes(bookMarkHandle));
             return AddMessageHeader(MessageType.CPMGetQueryStatusExIn, bytes);
         }
@@ -314,35 +371,35 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             uint emptyValue = 0;
             uint cbStruct = (uint)stateInOutMessageLength;
             int index = 0;
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(cbStruct));
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(emptyValue));
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(emptyValue));
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(emptyValue));
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(emptyValue));
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(emptyValue));
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(emptyValue));
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(emptyValue));
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(emptyValue));
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(emptyValue));
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(emptyValue));
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(emptyValue));
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(emptyValue));
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(emptyValue));
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(emptyValue));
             //============================================
             return AddMessageHeader(MessageType.CPMCiStateInOut, mainBlob);
@@ -357,22 +414,22 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// to perform the update.</param>
         /// <param name="rootPath">Name of the path to be updated</param>
         /// <returns>CPMUpdateDocumentsIn BLOB</returns>
-        public byte[] GetCPMUpdateDocumentsIn(uint flag, 
+        public byte[] GetCPMUpdateDocumentsIn(uint flag,
             uint flagRootPath, string rootPath)
         {
-            int documentsInMessageLength = 2 * Constant.SIZE_OF_UINT 
+            int documentsInMessageLength = 2 * Constant.SIZE_OF_UINT
                 + 2 * rootPath.Length/* unicode character */;
             byte[] mainBlob = new byte[documentsInMessageLength];
             //================ Converting values into Bytes ============
             int index = 0;
-            
+
             Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(flag));
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(flagRootPath));
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 Encoding.Unicode.GetBytes(rootPath));
-            return AddMessageHeader(MessageType.CPMUpdateDocumentsIn, 
+            return AddMessageHeader(MessageType.CPMUpdateDocumentsIn,
                 mainBlob);
         }
 
@@ -386,7 +443,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             byte[] mainBlob = new byte[Constant.SIZE_OF_UINT];
             //================ Converting value into Bytes ==============
             int index = 0;
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(partId));
             return AddMessageHeader(MessageType.CPMForceMergeIn, mainBlob);
         }
@@ -404,9 +461,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             byte[] mainBlob = new byte[ratioFinishedInMessageLength];
             //================ Converting value into Bytes ==================
             int index = 0;
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(cursor));
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(quick));
             return AddMessageHeader(MessageType.CPMRatioFinishedIn, mainBlob);
         }
@@ -417,21 +474,18 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// <param name="workID">Document ID</param>
         /// <param name="cbSoFar">Number of bytes 
         /// previously transferred</param>
-       /// <param name="cbChunk">Maximum number of bytes that the sender 
+        /// <param name="cbChunk">Maximum number of bytes that the sender 
         /// can accept in a CPMFetchValueOut message</param>
         /// <returns>CPMFetchValueIn BLOB</returns>
-        public byte[] GetCPMFetchValueIn(uint workID, 
+        public byte[] GetCPMFetchValueIn(uint workID,
             uint cbSoFar, uint cbChunk)
         {
             byte[] padding = null;
             int messageOffset = 0;
             messageOffset += 4 * Constant.SIZE_OF_UINT;
             TableColumn[] col = GetTableColumnFromConfig();
-            string guid = site.Properties["PropertyGuidToFetch"];
-            int propertyId = Convert.ToInt32(
-                site.Properties["PropertyIdToFetch"]);
-            byte[] propSpec = GetFullPropSec(new Guid(guid),
-                PROPERTY_ID, propertyId, ref messageOffset);
+            byte[] propSpec = GetFullPropSec(parameter.PropertyGuidToFetch,
+                PROPERTY_ID, parameter.PropertyIdToFetch, ref messageOffset);
             if (messageOffset % OFFSET_4 != 0)
             {
                 padding = new byte[OFFSET_4 - messageOffset % OFFSET_4];
@@ -447,11 +501,11 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             int index = 0;
             Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(workID));
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(cbSoFar));
             Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(cbPropSpec));
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(cbChunk));
             Helper.CopyBytes(mainBlob, ref index, propSpec);
             if (padding != null)
@@ -474,20 +528,20 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// <param name="bmkSecond">Handle to the 
         /// second bookmark to compare</param>
         /// <returns>CPMCompareBmkIn BLOB</returns>
-        public byte[] GetCPMCompareBmkIn(uint cursor, 
+        public byte[] GetCPMCompareBmkIn(uint cursor,
             uint chapt, uint bmkFirst, uint bmkSecond)
         {
             int compareBmkInMessageLength = 4 * Constant.SIZE_OF_UINT;
             byte[] mainBlob = new byte[compareBmkInMessageLength];
             //================ Converting values into Bytes ====================
             int index = 0;
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(cursor));
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(chapt));
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(bmkFirst));
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(bmkSecond));
             return AddMessageHeader
                 (MessageType.CPMCompareBmkIn, mainBlob);
@@ -541,7 +595,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             byte[] mainBlob = new byte[Constant.SIZE_OF_UINT];
             //================ Converting values into Bytes ==============
             int index = 0;
-            Helper.CopyBytes(mainBlob, ref index, 
+            Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(cursor));
             return AddMessageHeader
                 (MessageType.CPMFreeCursorIn, mainBlob);
@@ -606,14 +660,14 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// <param name="cWids"></param>
         /// <param name="cDepthPrev"></param>
         /// <returns>CPMFindIndices BLOB</returns>
-        public byte[] GetCPMFindIndices(uint cWids,uint cDepthPrev)
+        public byte[] GetCPMFindIndices(uint cWids, uint cDepthPrev)
         {
             int index = 0;
             int messageOffset = 4 * Constant.SIZE_OF_UINT;
             byte[] pwids = new byte[cWids];
 
             byte[] prgiRowPrev = new byte[cDepthPrev];
-            
+
             byte[] mainBlob = new byte[messageOffset];
             Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(cWids));
@@ -632,7 +686,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public byte[] GetCPMGetRowsetNotify()
         {
             byte[] mainBlob = new byte[Constant.SIZE_OF_UINT];
-            
+
             return AddMessageHeader
                 (MessageType.CPMGetRowsetNotifyIn, mainBlob);
         }
@@ -646,7 +700,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public byte[] GetCPMSetScopePrioritization(uint priority, uint eventFrequency)
         {
             byte[] mainBlob = new byte[2 * Constant.SIZE_OF_UINT];
-                       
+
             int index = 0;
             Helper.CopyBytes(mainBlob, ref index,
                 BitConverter.GetBytes(priority));
@@ -694,11 +748,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         private byte[] GetPropertySet1
             (ref int messageOffset, string catalogName)
         {
-            string guidString = site.Properties["PropertySet_One_Guid"];
-            string properties = 
-                site.Properties["PropertySet_One_DBProperties"];
-            string[] dbProperties = properties.Split(delimiter);
-            Guid guid = new Guid(guidString);
             byte[] padding = null;
             int index = 0;
             int structSize = messageOffset;
@@ -709,11 +758,11 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 messageOffset += padding.Length;
             }
             uint cProperties = 4;
-            messageOffset 
+            messageOffset
                 += Constant.SIZE_OF_UINT; //Increament for Number of AProps
 
             byte[] propertySet = new byte[messageOffset - structSize];
-            Helper.CopyBytes(propertySet, ref index, guid.ToByteArray());
+            Helper.CopyBytes(propertySet, ref index, parameter.PropertySet_One_Guid.ToByteArray());
             if (padding != null)
             {
                 Helper.CopyBytes(propertySet, ref index, padding);
@@ -723,28 +772,28 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             // --Get First PropSet with Guid Value DBPROPSET_FSCIFRMWRK_EXT -
 
-            foreach (string property in dbProperties)
+            foreach (string property in parameter.PropertySet_One_DBProperties)
             {
                 switch (property)
                 {
                     case "2":
                         // Creating CDBProp with PropId 2 
                         // for GUID type FSCIFRMWRK
-                        byte[] value_FSCIFRMWRK_2 
+                        byte[] value_FSCIFRMWRK_2
                             = GetBaseStorageVariant
                             (StorageType.VT_LPWSTR, false, catalogName);
                         AppendDBProp
-                            (ref propertySet, 
+                            (ref propertySet,
                             2, value_FSCIFRMWRK_2, ref messageOffset);
                         break;
                     case "3":
                         // Creating CDBProp with PropId 3 
                         //for GUID type FCCIFRMWRK
-                        byte[] value_FCCIFRMWRK_3 = 
+                        byte[] value_FCCIFRMWRK_3 =
                             GetVector
                             (StorageType.VT_LPWSTR, new string[] { "/\0" });
                         AppendDBProp
-                            (ref propertySet, 
+                            (ref propertySet,
                             3, value_FCCIFRMWRK_3, ref messageOffset);
                         break;
                     case "4":
@@ -752,22 +801,22 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                         // for GUID type FSCIFRMWRK
                         int x = 1; // This is fix
                         // Array of integers
-                        object[] array = new object[] { x }; 
+                        object[] array = new object[] { x };
                         byte[] value_FSCIFRMWRK_4
                             = GetVector(StorageType.VT_I4, array);
                         AppendDBProp
-                            (ref propertySet, 
-                            4, value_FSCIFRMWRK_4, ref messageOffset); 
-                            break;
+                            (ref propertySet,
+                            4, value_FSCIFRMWRK_4, ref messageOffset);
+                        break;
 
                     case "7":
                         // Creating CDBProp with PropId 7 
                         //for GUID type FSCIFRMWRK
-                        byte[] value_FSCIFRMWRK_7 
+                        byte[] value_FSCIFRMWRK_7
                             = GetBaseStorageVariant
                             (StorageType.VT_I4, false, 0);
                         AppendDBProp
-                            (ref propertySet, 
+                            (ref propertySet,
                             7, value_FSCIFRMWRK_7, ref messageOffset);
                         break;
                     default:
@@ -787,13 +836,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         private byte[] GetPropertySet2
             (ref int messageOffset, string machineName)
         {
-            string guidString 
-                = site.Properties["PropertySet_Two_Guid"];
-            string properties 
-                = site.Properties["PropertySet_Two_DBProperties"];
-            string[] dbProperties = properties.Split(delimiter);
-
-            Guid guid = new Guid(guidString);
             byte[] padding = null;
             int index = 0;
             int structSize = messageOffset;
@@ -807,25 +849,25 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             messageOffset += Constant.SIZE_OF_UINT;
 
             byte[] propertySet = new byte[messageOffset - structSize];
-            Helper.CopyBytes(propertySet, ref index, guid.ToByteArray());
+            Helper.CopyBytes(propertySet, ref index, parameter.PropertySet_Two_Guid.ToByteArray());
             if (padding != null)
             {
                 Helper.CopyBytes(propertySet, ref index, padding);
             }
             Helper.CopyBytes
                 (propertySet, ref index, BitConverter.GetBytes(cProperties));
-            foreach (string property in dbProperties)
+            foreach (string property in parameter.PropertySet_Two_DBProperties)
             {
                 switch (property)
                 {
                     case "2":
                         // Creating CDBProp with PropId 2 
                         //for GUID type CIFRMWRKCORE
-                        byte[] value_CIFRMWRKCORE_2 
+                        byte[] value_CIFRMWRKCORE_2
                             = GetBaseStorageVariant
                             (StorageType.VT_BSTR, false, machineName);
                         AppendDBProp
-                            (ref propertySet, 
+                            (ref propertySet,
                             2, value_CIFRMWRKCORE_2, ref messageOffset);
                         break;
                     default:
@@ -844,12 +886,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         private byte[] GetAPropertySet1
             (ref int messageOffset, string languageLocale)
         {
-            string guidString 
-                = site.Properties["Array_PropertySet_One_Guid"];
-            string properties
-                = site.Properties["Array_PropertySet_One_DBProperties"];
-            string[] dbProperties = properties.Split(delimiter);
-            Guid guid = new Guid(guidString);
             byte[] padding = null;
             int index = 0;
             int structSize = messageOffset;
@@ -863,7 +899,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             messageOffset += Constant.SIZE_OF_UINT;
 
             byte[] propertySet = new byte[messageOffset - structSize];
-            Helper.CopyBytes(propertySet, ref index, guid.ToByteArray());
+            Helper.CopyBytes(propertySet, ref index, parameter.Array_PropertySet_One_Guid.ToByteArray());
             if (padding != null)
             {
                 Helper.CopyBytes(propertySet, ref index, padding);
@@ -871,7 +907,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Helper.CopyBytes
                 (propertySet, ref index, BitConverter.GetBytes(cProperties));
             // Compile aPropertySet1 with Guid Value DBPROPSET_MSIDXS_ROWSETEXT
-            foreach (string property in dbProperties)
+            foreach (string property in parameter.Array_PropertySet_One_DBProperties)
             {
                 switch (property)
                 {
@@ -882,35 +918,35 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                             = GetBaseStorageVariant
                             (StorageType.VT_I4, false, 0);
                         AppendDBProp
-                            (ref propertySet, 
+                            (ref propertySet,
                             2, value_ROWSETEXT_2, ref messageOffset);
                         break;
                     case "3":
                         // Creating CDBProp with PropId 3 
-                    //for GUID type ROWSETEXT
-                        byte[] value_ROWSETEXT_3 
+                        //for GUID type ROWSETEXT
+                        byte[] value_ROWSETEXT_3
                             = GetBaseStorageVariant
                             (StorageType.VT_BSTR, false, languageLocale);
                         AppendDBProp
-                            (ref propertySet, 
+                            (ref propertySet,
                             3, value_ROWSETEXT_3, ref messageOffset);
                         break;
                     case "4":
 
                         // Creating CDBProp with PropId 4 
-                    //for GUID type ROWSETEXT
+                        //for GUID type ROWSETEXT
                         byte[] value_ROWSETEXT_4
                             = GetBaseStorageVariant
                             (StorageType.VT_BSTR, false, Helper.AddNull(""));
                         AppendDBProp
-                            (ref propertySet, 
+                            (ref propertySet,
                             4, value_ROWSETEXT_4, ref messageOffset);
                         break;
 
                     case "5":
                         // Creating CDBProp with PropId 5 
-                    //for GUID type ROWSETEXT
-                        byte[] value_ROWSETEXT_5 
+                        //for GUID type ROWSETEXT
+                        byte[] value_ROWSETEXT_5
                             = GetBaseStorageVariant
                             (StorageType.VT_BSTR, false, Helper.AddNull(""));
                         AppendDBProp(ref propertySet,
@@ -921,11 +957,11 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
                         // Creating CDBProp with PropId 6 
                         // for GUID type ROWSETEXT
-                        byte[] value_ROWSETEXT_6 
+                        byte[] value_ROWSETEXT_6
                             = GetBaseStorageVariant
                             (StorageType.VT_I4, false, 0);
                         AppendDBProp
-                            (ref propertySet, 
+                            (ref propertySet,
                             6, value_ROWSETEXT_6, ref messageOffset);
                         break;
 
@@ -933,11 +969,11 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
                         // Creating CDBProp with PropId 7 
                         //for GUID type ROWSETEXT
-                        byte[] value_ROWSETEXT_7 
+                        byte[] value_ROWSETEXT_7
                             = GetBaseStorageVariant
                             (StorageType.VT_I4, false, 0);
                         AppendDBProp
-                            (ref propertySet, 
+                            (ref propertySet,
                             7, value_ROWSETEXT_7, ref messageOffset);
                         break;
                     default:
@@ -953,12 +989,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// <returns>PropertySet BLOB</returns>
         private byte[] GetAPropertySet2(ref int messageOffset)
         {
-            string guidString 
-                = site.Properties["Array_PropertySet_Two_Guid"];
-            string properties 
-                = site.Properties["Array_PropertySet_Two_DBProperties"];
-            string[] dbProperties = properties.Split(delimiter);
-            Guid guid = new Guid(guidString);
             byte[] padding = null;
             int index = 0;
             int structSize = messageOffset;
@@ -969,11 +999,11 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 messageOffset += padding.Length;
             }
             uint cProperties = 10;
-            messageOffset += Constant.SIZE_OF_UINT; 
+            messageOffset += Constant.SIZE_OF_UINT;
             //Increament for CProperties
 
             byte[] propertySet = new byte[messageOffset - structSize];
-            Helper.CopyBytes(propertySet, ref index, guid.ToByteArray());
+            Helper.CopyBytes(propertySet, ref index, parameter.Array_PropertySet_Two_Guid.ToByteArray());
             if (padding != null) // Add padding if required
             {
                 Helper.CopyBytes(propertySet, ref index, padding);
@@ -982,35 +1012,35 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 (propertySet, ref index, BitConverter.GetBytes(cProperties));
 
             //---- Compile aPropertySet2 with Guid Value DBPROPSET_QUERYEXT
-            foreach (string property in dbProperties)
+            foreach (string property in parameter.Array_PropertySet_Two_DBProperties)
             {
                 switch (property)
                 {
                     case "2":
                         // Creating CDBProp with PropId 2
                         // for GUID type QUERYEXT
-                        byte[] value_QUERYEXT_2 
+                        byte[] value_QUERYEXT_2
                             = GetBaseStorageVariant
                             (StorageType.VT_BOOL, false, false);
                         AppendDBProp
-                            (ref propertySet, 
+                            (ref propertySet,
                             2, value_QUERYEXT_2, ref messageOffset);
                         break;
                     case "3":
                         // Creating CDBProp with PropId 3 
                         // for GUID type QUERYEXT
-                        byte[] value_QUERYEXT_3 
+                        byte[] value_QUERYEXT_3
                             = GetBaseStorageVariant
                             (StorageType.VT_BOOL, false, false);
                         AppendDBProp
-                            (ref propertySet, 
+                            (ref propertySet,
                             3, value_QUERYEXT_3, ref messageOffset);
                         break;
                     case "4":
 
                         // Creating CDBProp with PropId 4 
-                       //for GUID type QUERYEXT
-                        byte[] value_QUERYEXT_4 
+                        //for GUID type QUERYEXT
+                        byte[] value_QUERYEXT_4
                             = GetBaseStorageVariant
                             (StorageType.VT_BOOL, false, false);
                         AppendDBProp
@@ -1019,8 +1049,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                         break;
                     case "5":
                         // Creating CDBProp with PropId 5 
-                       //for GUID type QUERYEXT
-                        byte[] value_QUERYEXT_5 
+                        //for GUID type QUERYEXT
+                        byte[] value_QUERYEXT_5
                             = GetBaseStorageVariant
                             (StorageType.VT_BOOL, false, false);
                         AppendDBProp
@@ -1029,18 +1059,18 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                         break;
                     case "6":
                         // Creating CDBProp with PropId 6
-                       //for GUID type QUERYEXT
-                        byte[] value_QUERYEXT_6 = 
+                        //for GUID type QUERYEXT
+                        byte[] value_QUERYEXT_6 =
                             GetBaseStorageVariant
                             (StorageType.VT_BSTR, false, Helper.AddNull(""));
                         AppendDBProp
-                            (ref propertySet, 
+                            (ref propertySet,
                             6, value_QUERYEXT_6, ref messageOffset);
                         break;
                     case "8":
                         // Creating CDBProp with PropId 8 
-                       //for GUID type QUERYEXT
-                        byte[] value_QUERYEXT_8 
+                        //for GUID type QUERYEXT
+                        byte[] value_QUERYEXT_8
                             = GetBaseStorageVariant
                             (StorageType.VT_BOOL, false, false);
                         AppendDBProp
@@ -1050,8 +1080,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     case "10":
 
                         // Creating CDBProp with PropId 10 
-                    //for GUID type QUERYEXT
-                        byte[] value_QUERYEXT_10 
+                        //for GUID type QUERYEXT
+                        byte[] value_QUERYEXT_10
                             = GetBaseStorageVariant
                             (StorageType.VT_BOOL, false, false);
                         AppendDBProp
@@ -1060,8 +1090,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     case "12":
 
                         // Creating CDBProp with PropId 12 
-                    //for GUID type QUERYEXT
-                        byte[] value_QUERYEXT_12 
+                        //for GUID type QUERYEXT
+                        byte[] value_QUERYEXT_12
                             = GetBaseStorageVariant
                             (StorageType.VT_BOOL, false, false);
                         AppendDBProp
@@ -1070,8 +1100,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                         break;
                     case "13":
                         // Creating CDBProp with PropId 13 
-                    //for GUID type QUERYEXT
-                        byte[] value_QUERYEXT_13 
+                        //for GUID type QUERYEXT
+                        byte[] value_QUERYEXT_13
                             = GetBaseStorageVariant
                             (StorageType.VT_BOOL, false, false);
                         AppendDBProp(ref propertySet,
@@ -1081,12 +1111,12 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     case "14":
 
                         // Creating CDBProp with PropId 14 
-                    //for GUID type QUERYEXT
+                        //for GUID type QUERYEXT
                         byte[] value_QUERYEXT_14
                             = GetBaseStorageVariant
                             (StorageType.VT_BOOL, false, false);
                         AppendDBProp
-                            (ref propertySet, 
+                            (ref propertySet,
                             14, value_QUERYEXT_14, ref messageOffset);
                         break;
                     default:
@@ -1104,13 +1134,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         private byte[] GetAPropertySet3
             (ref int messageOffset, string serverName)
         {
-
-            string guidString 
-                = site.Properties["Array_PropertySet_Three_Guid"];
-            string properties 
-                = site.Properties["Array_PropertySet_Three_DBProperties"];
-            string[] dbProperties = properties.Split(delimiter);
-            Guid guid = new Guid(guidString);
             byte[] padding = null;
             int index = 0;
             int structSize = messageOffset;
@@ -1125,20 +1148,20 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             byte[] propertySet = new byte[messageOffset - structSize];
             Helper.CopyBytes
-                (propertySet, ref index, guid.ToByteArray());
+                (propertySet, ref index, parameter.Array_PropertySet_Three_Guid.ToByteArray());
             if (padding != null)
             {
                 Helper.CopyBytes(propertySet, ref index, padding);
             }
             Helper.CopyBytes
                 (propertySet, ref index, BitConverter.GetBytes(cProperties));
-            foreach (string property in dbProperties)
+            foreach (string property in parameter.Array_PropertySet_Three_DBProperties)
             {
                 switch (property)
                 {
                     case "2":
                         // Creating CDBProp with PropId 2
-                    // for GUID type FSCIFRMWRK_EXT
+                        // for GUID type FSCIFRMWRK_EXT
                         byte[] value_FSCIFRMWRK_EXT_2
                             = GetBaseStorageVariant(
                             StorageType.VT_BSTR, false, serverName);
@@ -1162,12 +1185,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         private byte[] GetAPropertySet4
             (ref int messageOffset, string catalogName)
         {
-            string guidString 
-                = site.Properties["Array_PropertySet_Four_Guid"];
-            string properties 
-                = site.Properties["Array_PropertySet_Four_DBProperties"];
-            string[] dbProperties = properties.Split(delimiter);
-            Guid guid = new Guid(guidString);
             byte[] padding = null;
             int index = 0;
             int structSize = messageOffset;
@@ -1182,7 +1199,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             //increament for CProperties
 
             byte[] propertySet = new byte[messageOffset - structSize];
-            Helper.CopyBytes(propertySet, ref index, guid.ToByteArray());
+            Helper.CopyBytes(propertySet, ref index, parameter.Array_PropertySet_Four_Guid.ToByteArray());
             if (padding != null)
             {
                 Helper.CopyBytes(propertySet, ref index, padding);
@@ -1190,14 +1207,14 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Helper.CopyBytes
                 (propertySet, ref index, BitConverter.GetBytes(cProperties));
             //Compile aPropertySet4 with Guid Value DBPROPSET_CIFRMWRKCORE_EXT
-            foreach (string property in dbProperties)
+            foreach (string property in parameter.Array_PropertySet_Four_DBProperties)
             {
                 switch (property)
                 {
                     case "2":
                         // Creating CDBProp with PropId 2 
-                    //for GUID type CIFRMWRKCORE_EXT
-                        byte[] value_CIFRMWRKCORE_EXT_2 
+                        //for GUID type CIFRMWRKCORE_EXT
+                        byte[] value_CIFRMWRKCORE_EXT_2
                             = GetBaseStorageVariant
                             (StorageType.VT_BSTR, false, catalogName);
                         AppendDBProp
@@ -1206,13 +1223,13 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                         break;
                     case "3":
                         // Creating CDBProp with PropId 3 
-                    //for GUID type CIFRMWRKCORE_EXT
-                        byte[] value_CIFRMWRKCORE_EXT_3 
+                        //for GUID type CIFRMWRKCORE_EXT
+                        byte[] value_CIFRMWRKCORE_EXT_3
                             = GetBaseStorageVariant
                             (StorageType.VT_BSTR, false, Helper.AddNull("\\"));
                         RemoveTypeFromBaseVariant
                             (ref value_CIFRMWRKCORE_EXT_3);
-                        byte[] safeArrayForStr 
+                        byte[] safeArrayForStr
                             = GetSafeArray
                             (StorageType.VT_BSTR, value_CIFRMWRKCORE_EXT_3, 0);
                         AppendDBProp
@@ -1222,8 +1239,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
                     case "4":
                         // Creating CDBProp with PropId 4
-                    // for GUID type CIFRMWRKCORE_EXT
-                        Byte[] intValue 
+                        // for GUID type CIFRMWRKCORE_EXT
+                        Byte[] intValue
                             = GetBaseStorageVariant(
                             StorageType.VT_I4, false, 0);
                         RemoveTypeFromBaseVariant(ref intValue);
@@ -1249,7 +1266,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// <param name="columnValue">BLOB of the Value field</param>
         /// <param name="messageOffSet">messageOffSet</param>
         private void AppendDBProp
-            (ref byte[] propertySet, uint id, 
+            (ref byte[] propertySet, uint id,
             byte[] columnValue, ref int messageOffSet)
         {
             uint dbPropId = id;
@@ -1306,8 +1323,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         {
             ColumnId col = new ColumnId();
             col.eKind = Ekind.DBKIND_GUID_PROPID;
-            string emptyGuid = site.Properties["EmptyGuid"];
-            col.guid = new Guid(emptyGuid);
+            col.guid = parameter.EmptyGuid;
             col.UlId = 0;
 
             uint kind;
@@ -1322,7 +1338,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             if ((messageOffset) % OFFSET_8 != 0)
             {
                 // Padding field
-                guidAllign = new byte[OFFSET_8 - (messageOffset) % OFFSET_8]; 
+                guidAllign = new byte[OFFSET_8 - (messageOffset) % OFFSET_8];
                 guidAllignLength = guidAllign.Length;
                 messageOffset += guidAllign.Length;
             }
@@ -1347,7 +1363,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     Helper.CopyBytes
                         (mainBlob, ref index, BitConverter.GetBytes(ulId));
                     Helper.CopyBytes
-                        (mainBlob, ref index, 
+                        (mainBlob, ref index,
                         Encoding.Unicode.GetBytes(col.propertyName));
 
                     break;
@@ -1364,7 +1380,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                         Helper.CopyBytes(mainBlob, ref index, guidAllign);
                     }
                     Helper.CopyBytes(mainBlob, ref index, guidArray);
-                    Helper.CopyBytes(mainBlob, ref index, 
+                    Helper.CopyBytes(mainBlob, ref index,
                         BitConverter.GetBytes(col.UlId));
                     break;
                 default:
@@ -1437,7 +1453,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     skip = 0x00000000;
                     returnBlob = new byte[Constant.SIZE_OF_UINT];
                     Helper.CopyBytes
-                        (returnBlob, ref index, 
+                        (returnBlob, ref index,
                         BitConverter.GetBytes(skip));
                     break;
                 case 0x00000002:
@@ -1446,13 +1462,13 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     region = 0;
                     returnBlob = new byte[3 * Constant.SIZE_OF_UINT];
                     Helper.CopyBytes
-                        (returnBlob, ref index, 
+                        (returnBlob, ref index,
                         BitConverter.GetBytes(bmkOffset));
                     Helper.CopyBytes
-                        (returnBlob, ref index, 
+                        (returnBlob, ref index,
                         BitConverter.GetBytes(skip));
                     Helper.CopyBytes
-                        (returnBlob, ref index, 
+                        (returnBlob, ref index,
                         BitConverter.GetBytes(region));
                     break;
                 case 0x00000003:
@@ -1461,13 +1477,13 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     region = 0;
                     returnBlob = new byte[3 * Constant.SIZE_OF_UINT];
                     Helper.CopyBytes
-                        (returnBlob, ref index, 
+                        (returnBlob, ref index,
                         BitConverter.GetBytes(numerator));
                     Helper.CopyBytes
-                        (returnBlob, ref index, 
+                        (returnBlob, ref index,
                         BitConverter.GetBytes(denominator));
                     Helper.CopyBytes
-                        (returnBlob, ref index, 
+                        (returnBlob, ref index,
                         BitConverter.GetBytes(region));
                     break;
                 default:
@@ -1507,7 +1523,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             byte[] mainBlob = new byte[messageOffset - startIndex];
 
             Helper.CopyBytes(mainBlob, ref index, new byte[] { count });
-            Helper.CopyBytes(mainBlob, ref index, new byte[] 
+            Helper.CopyBytes(mainBlob, ref index, new byte[]
             { isRestrictionPresent });
             Helper.CopyBytes(mainBlob, ref index, padding);
             Helper.CopyBytes(mainBlob, ref index, totalRestriction);
@@ -1539,7 +1555,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             uint firstNodeType = PROPERTY_RESTRICTION_NODE_ID; // Property 5
             uint firstNodeWeight = NODE_WEIGHTAGE;// weightage
             // node + firstNodeType + firstNodeWeight
-            messageOffset += 3 * Constant.SIZE_OF_UINT; 
+            messageOffset += 3 * Constant.SIZE_OF_UINT;
             byte[] propertyRestriction
                 = GetPropertyRestriction(ref messageOffset, searchScope);
 
@@ -1550,7 +1566,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             uint secondNodeWeight = NODE_WEIGHTAGE;// weightage
             messageOffset += 2 * Constant.SIZE_OF_UINT;
             //Get Content Restriction
-            byte[] contentRestriction 
+            byte[] contentRestriction
                 = GetContentRestriction(ref messageOffset, queryString);
 
             byte[] blob = new byte[messageOffset - startIndex];
@@ -1592,15 +1608,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             uint relop = RELATION_OPERATION; // Relation operation = 4 
             messageOffset += Constant.SIZE_OF_UINT;
             // Get FullPropSec for Prop Id 20
-            string guidString = site.Properties["PropertyRestrictionGuid"];
-            Guid propertyGuid = new Guid(guidString);
-            int propSpec 
-                = Convert.ToInt32
-                (site.Properties["PropertyRestrictionProperty"]);
             byte[] fullPropSec
                 = GetFullPropSec
-                (propertyGuid, PROPERTY_ID, propSpec, ref messageOffset);
-            byte[] propValue 
+                (parameter.PropertyRestrictionGuid, PROPERTY_ID, parameter.PropertyRestrictionProperty, ref messageOffset);
+            byte[] propValue
                 = GetBaseStorageVariant
                 (StorageType.VT_LPWSTR, false, searchScope);
             messageOffset += propValue.Length;
@@ -1727,15 +1738,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             int index = 0;
             byte[] padding1 = null;
             byte[] padding2 = null;
-            string guidString
-                = site.Properties["ContentRestrictionGuid"];
-            int propertySpec 
-                = Convert.ToInt32
-                (site.Properties["ContentRestrictionProperty"]);
-            Guid contentGuid = new Guid(guidString);
-            byte[] fullPropSec 
+            byte[] fullPropSec
                 = GetFullPropSec
-                (contentGuid, PROPERTY_ID, propertySpec, ref messageOffset);
+                (parameter.ContentRestrictionGuid, PROPERTY_ID, parameter.ContentRestrictionProperty, ref messageOffset);
 
             if (messageOffset % OFFSET_4 != 0)
             {
@@ -1747,7 +1752,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 messageOffset += padding1.Length;
             }
             // Length of the Query string
-            uint cc = (uint)queryString.Length; 
+            uint cc = (uint)queryString.Length;
             byte[] phrase = Encoding.Unicode.GetBytes(queryString);
             messageOffset += Constant.SIZE_OF_UINT + phrase.Length;
 
@@ -1802,7 +1807,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             {
                 storageTypeWithCode = null;
             }
-            byte[] shrunkedBytes 
+            byte[] shrunkedBytes
                 = new byte[storageTypeWithCode.Length - 4];
             for (int i = 0; i < shrunkedBytes.Length; i++)
             {
@@ -1828,17 +1833,17 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             switch (type)
             {
                 case StorageType.VT_I4:
-                    bytes 
+                    bytes
                         = new byte
-                            [Constant.SIZE_OF_UINT 
-                            + inputvalues.Length * 
+                            [Constant.SIZE_OF_UINT
+                            + inputvalues.Length *
                             (2 * Constant.SIZE_OF_UINT)];
                     Helper.CopyBytes
                         (bytes, ref index, BitConverter.GetBytes(vType));
                     Helper.CopyBytes
                         (bytes, ref index, new byte[] { 0, 0 });
                     Helper.CopyBytes
-                        (bytes, ref index, 
+                        (bytes, ref index,
                         BitConverter.GetBytes(inputvalues.Length));
                     for (int i = 0; i < length; i++)
                     {
@@ -1902,10 +1907,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             ushort fFeatures = features;
             uint cbElements = 4;
             byte[] rGsaBound = GetBound(1, 0);//For now it's 1
-            returnBLOB 
-                = new byte[2 * Constant.SIZE_OF_USHORT 
-                    + 2 * Constant.SIZE_OF_USHORT 
-                    + Constant.SIZE_OF_UINT 
+            returnBLOB
+                = new byte[2 * Constant.SIZE_OF_USHORT
+                    + 2 * Constant.SIZE_OF_USHORT
+                    + Constant.SIZE_OF_UINT
                     + rGsaBound.Length + arrayValue.Length];
             Helper.CopyBytes
                 (returnBLOB, ref index, BitConverter.GetBytes(typeValue));
@@ -1962,7 +1967,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             {
                 switch (type)
                 {
-                     case StorageType.VT_BOOL:
+                    case StorageType.VT_BOOL:
                         bool tempBool = (bool)inputValue;
                         value = new byte[] { 0x00, 0x00 };
                         if (tempBool)
@@ -1986,10 +1991,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                         uint bStrLength = (uint)(2 * bStr.Length);
                         value = new byte[Constant.SIZE_OF_UINT + bStrLength];
                         Helper.CopyBytes
-                            (value, ref bStrIndex, 
+                            (value, ref bStrIndex,
                             BitConverter.GetBytes(bStrLength));
                         Helper.CopyBytes
-                            (value, ref bStrIndex, 
+                            (value, ref bStrIndex,
                             Encoding.Unicode.GetBytes(bStr));
 
                         //==================================================
@@ -1999,11 +2004,11 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                         //=====  Building Unicode String Type ==============
                         string str = (string)inputValue;
                         uint unicodeStringLength = (uint)str.Length;
-                        value 
-                            = new byte[Constant.SIZE_OF_UINT 
+                        value
+                            = new byte[Constant.SIZE_OF_UINT
                                 + 2 * unicodeStringLength];
                         Helper.CopyBytes
-                            (value, ref strIndex, 
+                            (value, ref strIndex,
                             BitConverter.GetBytes(unicodeStringLength));
                         Helper.CopyBytes
                             (value, ref strIndex,
@@ -2015,7 +2020,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     default:
                         break;
                 }
-                byte[] storageVariantBytes 
+                byte[] storageVariantBytes
                     = new byte[sizeof(ushort) +
                         2 * sizeof(byte) + value.Length];
                 int index = 0;
@@ -2050,7 +2055,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         {
             int index = 0;
             uint cursor = queryCursor;
-            uint rows = Convert.ToUInt32(site.Properties["EachRowSize"]);
+            uint rows = (uint)parameter.EachRowSize;
             uint bindingDesc = 0;
             // SIZE of ColumnCount and Columns combined to be assigned later.
             uint dummy = 0; // Dummy value
@@ -2063,8 +2068,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             if (!isValidBinding)
             {
                 // decreasing the number of bytes to fail the Bindings
-                rows -= (uint)r.Next((int)rows-10, (int)rows);
-                
+                rows -= (uint)r.Next((int)rows - 10, (int)rows);
+
             }
             byte[][] paddingColumn = new byte[columns.Length][];
             byte[][] tableColumn = new byte[columns.Length][];
@@ -2099,7 +2104,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 (blob, ref index, BitConverter.GetBytes(rows));
 
             // update the bindingDesc value before inserting in the BLOB
-            bindingDesc 
+            bindingDesc
                 = (uint)(messageOffset - 4 * Constant.SIZE_OF_UINT);
             if (!isValidBinding)
             {
@@ -2111,7 +2116,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 (blob, ref index, BitConverter.GetBytes(dummy));
             //Add Column count
             Helper.CopyBytes
-                (blob, ref index, BitConverter.GetBytes(columnCount)); 
+                (blob, ref index, BitConverter.GetBytes(columnCount));
             if (tableColumn.Length > 0)
             {
                 Helper.CopyBytes(blob, ref index, tableColumn[0]);
@@ -2133,30 +2138,17 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// <returns>array of Table Column</returns>
         private TableColumn[] GetTableColumnFromConfig()
         {
-            int numberofTableColumns 
-                = Convert.ToInt32(site.Properties["NumberOfColumnsToQuery"]);
+            int numberofTableColumns = parameter.NumberOfColumnsToQuery;
             TableColumn[] columns = new TableColumn[numberofTableColumns];
             for (int i = 0; i < numberofTableColumns; i++)
             {
                 columns[i] = new TableColumn();
-                string guidString 
-                    = site.Properties["columnGuid_" + i.ToString()];
-                columns[i].Guid = new Guid(guidString);
-                columns[i].PropertyId
-                    = Convert.ToUInt32
-                    (site.Properties["columnPropertyId_" + i.ToString()]);
-                columns[i].ValueOffset 
-                    = Convert.ToUInt16
-                    (site.Properties["columnValueOffset_" + i.ToString()]);
-                columns[i].StatusOffset
-                    = Convert.ToUInt16
-                    (site.Properties["columnStatusOffset_" + i.ToString()]);
-                columns[i].LengthOffset 
-                    = Convert.ToUInt16
-                    (site.Properties["columnLengthOffset_" + i.ToString()]);
-                columns[i].Type 
-                    = (StorageType)Convert.ToUInt16
-                    (site.Properties["columnStorageType_" + i.ToString()]);
+                columns[i].Guid = parameter.ColumnParameters[i].Guid;
+                columns[i].PropertyId = parameter.ColumnParameters[i].PropertyId;
+                columns[i].ValueOffset = parameter.ColumnParameters[i].ValueOffset;
+                columns[i].StatusOffset = parameter.ColumnParameters[i].StatusOffset;
+                columns[i].LengthOffset = parameter.ColumnParameters[i].LengthOffset;
+                columns[i].Type = parameter.ColumnParameters[i].StorageType;
             }
             return columns;
         }
@@ -2183,12 +2175,12 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             messageOffset += (1 + indexes.Length) * Constant.SIZE_OF_UINT;
             uint count = (uint)indexes.Length;
 
-            byte[] indexesBytes 
+            byte[] indexesBytes
                 = new byte[indexes.Length * Constant.SIZE_OF_UINT];
             for (int i = 0; i < indexes.Length; i++)
             {
                 Helper.CopyBytes
-                    (indexesBytes, ref innerIndex, 
+                    (indexesBytes, ref innerIndex,
                     BitConverter.GetBytes(indexes[i]));
             }
 
@@ -2218,14 +2210,13 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             for (int i = 0; i < propSecs.Length; i++)
             {
-                propSecs[i] 
-                    = GetFullPropSec(tableColumns[i].Guid, 
-                    PROPERTY_ID, 
+                propSecs[i]
+                    = GetFullPropSec(tableColumns[i].Guid,
+                    PROPERTY_ID,
                     (int)tableColumns[i].PropertyId,
                     ref messageOffset);
             }
             uint columnGroupArray = 0x00000000;
-            uint lcid = Convert.ToUInt32(site.Properties["LCID_VALUE"]);
 
             messageOffset += 2 * Constant.SIZE_OF_UINT;
             // Copy the content in a BLOB
@@ -2238,7 +2229,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Helper.CopyBytes
                 (blob, ref index, BitConverter.GetBytes(columnGroupArray));
             Helper.CopyBytes
-                (blob, ref index, BitConverter.GetBytes(lcid));
+                (blob, ref index, BitConverter.GetBytes(parameter.LCID_VALUE));
             return blob;
         }
 
@@ -2250,28 +2241,24 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// <param name="clientBase">_clientBase of the message</param>
         /// <returns>CPMGetRowsOut message BLOB</returns>
         public byte[] GetCPMRowsInMessage
-            (uint cursor, out uint reserved, out uint clientBase )
+            (uint cursor, out uint reserved, out uint clientBase)
         {
             int index = 0;
-            uint rowsToTransfer 
-                = Convert.ToUInt32(site.Properties["RowsToTransfer"]);
-            uint rowsWidth 
-                = Convert.ToUInt32(site.Properties["EachRowSize"]);
+
             uint sizeOfSeek = 0; // To be assigned with the size of seek.
             reserved = 0; // To be assigned later.
-            uint readBuffer 
-                = Convert.ToUInt32(site.Properties["BufferSize"]);
+
+
             // In RowsOut Message the columnoffset with be clientBase + X
-            clientBase 
-                = Convert.ToUInt32(site.Properties["ClientBase"]); 
+            clientBase = parameter.ClientBase;
             uint backwardFetch = 0;
-            uint eType = Convert.ToUInt32(site.Properties["EType"]);
+
             uint chapter = 0;
             int messageOffset = 10 * Constant.SIZE_OF_UINT;
 
             //Assing variable values
-            byte[] seekDescription = GetSeekDescriptiion(eType);
-            sizeOfSeek 
+            byte[] seekDescription = GetSeekDescriptiion(parameter.EType);
+            sizeOfSeek
                 = (uint)(2 * Constant.SIZE_OF_UINT + seekDescription.Length);
             reserved = (uint)(28 + seekDescription.Length);
 
@@ -2280,21 +2267,21 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Helper.CopyBytes
                 (mainBlob, ref index, BitConverter.GetBytes(cursor));
             Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(rowsToTransfer));
+                (mainBlob, ref index, BitConverter.GetBytes(parameter.RowsToTransfer));
             Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(rowsWidth));
+                (mainBlob, ref index, BitConverter.GetBytes(parameter.EachRowSize));
             Helper.CopyBytes
                 (mainBlob, ref index, BitConverter.GetBytes(sizeOfSeek));
             Helper.CopyBytes
                 (mainBlob, ref index, BitConverter.GetBytes(reserved));
             Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(readBuffer));
+                (mainBlob, ref index, BitConverter.GetBytes(parameter.BufferSize));
             Helper.CopyBytes
                 (mainBlob, ref index, BitConverter.GetBytes(clientBase));
             Helper.CopyBytes
                 (mainBlob, ref index, BitConverter.GetBytes(backwardFetch));
             Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(eType));
+                (mainBlob, ref index, BitConverter.GetBytes(parameter.EType));
             Helper.CopyBytes
                 (mainBlob, ref index, BitConverter.GetBytes(chapter));
             Helper.CopyBytes
@@ -2317,9 +2304,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             byte[] padding2 = null;
             byte[] padding3 = null;
             int index = 0;
-            byte[] propSpec 
+            byte[] propSpec
                 = GetFullPropSec
-                (column.Guid, PROPERTY_ID, 
+                (column.Guid, PROPERTY_ID,
                 (int)column.PropertyId, ref messageOffset);
 
             uint vType = (uint)column.Type; // VT_VARIANT
@@ -2352,7 +2339,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 statusOffset = column.StatusOffset;
             }
 
-            messageOffset 
+            messageOffset
                 += Constant.SIZE_OF_UINT + 3 * Constant.SIZE_OF_BYTE;
             if (valueUsed == FIELD_USED)
             {
@@ -2376,7 +2363,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     padding2[0] = 0x00;
                     messageOffset += padding2.Length;
                 }
-                messageOffset += Constant.SIZE_OF_USHORT; 
+                messageOffset += Constant.SIZE_OF_USHORT;
                 // size of status offset
             }
 
@@ -2389,7 +2376,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     padding3[0] = 0x00;
                     messageOffset += padding3.Length;
                 }
-                messageOffset += Constant.SIZE_OF_USHORT; 
+                messageOffset += Constant.SIZE_OF_USHORT;
                 //size of length offset
             }
             byte[] blob = new byte[messageOffset - startingIndex];
@@ -2444,10 +2431,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             //-----------
             int messageOffset = 0;
-            uint size = 0; 
+            uint size = 0;
             // to be assigned after fixating on the total size of the message.
             int index = 0;
-            messageOffset += Constant.SIZE_OF_UINT; 
+            messageOffset += Constant.SIZE_OF_UINT;
             // Size of Size :)
             searchScope = path;
             queryString = queryText;
@@ -2459,7 +2446,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             byte[] columnSet = null;
             if (IsColumnSetPresent != 0)
             {
-                paddingColumnSetPresent 
+                paddingColumnSetPresent
                     = new byte[OFFSET_4 - messageOffset % 4];
                 for (int i = 0; i < paddingColumnSetPresent.Length; i++)
                 {
@@ -2474,7 +2461,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             if (IsRestrictionPresent != 0)
             {
 
-                restrictionArray 
+                restrictionArray
                     = GetRestrictionArray
                     (ref messageOffset, queryString, searchScope);
             }
@@ -2525,7 +2512,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Helper.CopyBytes
                 (messageBlob, ref index, new byte[] { IsSortPresent });
             Helper.CopyBytes
-                (messageBlob, ref index, 
+                (messageBlob, ref index,
                 new byte[] { IsCategorizationSetPresent });
 
             if (externalPadding != null)
@@ -2714,7 +2701,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 {
                     Array.Resize
                         (ref messageBlob,
-                        messageBlob.Length 
+                        messageBlob.Length
                         + (4 - messageBlob.Length % OFFSET_4));
                 }
 
@@ -2729,19 +2716,19 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             }
             index = 0;
             //Total message size
-            messagewithHeader 
+            messagewithHeader
                 = new byte[4 * Constant.SIZE_OF_UINT + messageBlob.Length];
             Helper.CopyBytes
-                (messagewithHeader, ref index, 
+                (messagewithHeader, ref index,
                 BitConverter.GetBytes(messageValue));
             Helper.CopyBytes
                 (messagewithHeader, ref index,
                 BitConverter.GetBytes(messageStatus));
             Helper.CopyBytes
-                (messagewithHeader, ref index, 
+                (messagewithHeader, ref index,
                 BitConverter.GetBytes(checksum));
             Helper.CopyBytes
-                (messagewithHeader, ref index, 
+                (messagewithHeader, ref index,
                 BitConverter.GetBytes(reserveField));
             Helper.CopyBytes(messagewithHeader, ref index, messageBlob);
 

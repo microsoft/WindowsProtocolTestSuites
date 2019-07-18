@@ -1,34 +1,9 @@
-﻿/******************************************************************************/
-/*                                                                            */
-/* File Name      :  DataTypes.cs                                             */
-/* Description    :  Specifies datatypes and Enums used in implementation     */
-/*                   of MS-WSP                                                */
-/* Enums          :  UlGenerateMethod, UlKind, StorageType, DbPropId,         */
-/*                   DBPropId_CIFRMWRKCORE_EXT                                */
-/*                   Ekind,GuidPropSet, MessageType, UlType,                  */
-/*                   RowSeekType, AggregateType                               */
-/*                   EState,Flag, Relop                                       */
-/* Classes        :  Constant, ColumnId                                       */
-/* Dependencies   :  WspAdapter uses this data types to frame                 */
-/*                   MS-WSP specific messages                                 */
-/* Author         :  v-lavg, v-kichak, v-abdand, v-shgoel                     */
-/* Create Date    :  09/06/2008                                               */
-/*----------------------------------------------------------------------------*/
-/* Change History :                                                           */
-/*----------------------------------------------------------------------------*/
-/* Date             Author     BugID    Description                           */
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-/******************************************************************************/
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Microsoft.Protocols.TestSuites.WspTS
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 {
-
-
     #region MS-WSP Enumerators
 
     /// <summary>
@@ -114,7 +89,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
     /// <summary>
     /// Property class
     /// </summary>
-    internal class Properties
+    public class Properties
     {
         // OS sku version
         protected static SkuOsVersion _skuOsVersion;

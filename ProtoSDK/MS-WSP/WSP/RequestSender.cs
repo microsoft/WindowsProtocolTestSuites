@@ -1,34 +1,11 @@
-﻿/*****************************************************************************/
-/*                                                                           */
-/* File Name      :  RequestSender.cs                                        */
-/* Description    :  This class performs following tasks                     */
-/*                   a) Opens a PIPE on Server for communication             */
-/*                   b) Sends message to Server and receives response for it.*/
-/* Class          :  RequestSender                                           */
-/* Dependencies   :  WspAdapter uses this RequestSender to                   */
-/*                     send/receive MS-WSP specific messages                 */
-/* Author         :  v-lavg                                                  */
-/* Create Date    :  09/06/2008                                              */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
-/* Change History :                                                          */
-/*---------------------------------------------------------------------------*/
-/* Date             Author     BugID    Description                          */
-/*---------------------------------------------------------------------------*/
-/*---------------------------------------------------------------------------*/
-/*****************************************************************************/
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Modeling;
-using System.Runtime.Remoting;
-using Microsoft.Protocols.TestTools;
-using System.Runtime.InteropServices;
-using Microsoft.Win32.SafeHandles;
-using System.Security.AccessControl;
-using System.Security.Principal;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-namespace Microsoft.Protocols.TestSuites.WspTS
+using Microsoft.Win32.SafeHandles;
+using System;
+using System.Runtime.InteropServices;
+
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 {
     /// <summary>
     /// RequeseSender class sends  MS-WSP messages to the protocol server
@@ -44,7 +21,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// Handle of the pipe
         /// </summary>
         public SafeFileHandle handle;
-        
+
         #region Constants
 
         /// <summary>
@@ -74,7 +51,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
         #region Win32 API declaration
 
-         /// <summary>
+        /// <summary>
         /// Win32 API call to CreateFile
         /// </summary>
         [DllImport("kernel32.dll", SetLastError = true)]
@@ -114,16 +91,16 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             this.pipeName = path;
             // Open the PIPE
             handle = CreateFile
-                (pipeName, GENERIC_READ | GENERIC_WRITE, 
+                (pipeName, GENERIC_READ | GENERIC_WRITE,
                 0, IntPtr.Zero, OPEN_EXISTING,
                      FILE_FLAG_OVERLAPPED,
                      IntPtr.Zero);
             if (handle.IsInvalid)
                 throw new
                     InvalidProgramException("Could not create the Handle");
-            
+
         }
-        
+
         /// <summary>
         /// Sends the Message to the named PIPE 
         /// and obtains the response on a buffer
@@ -136,11 +113,11 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             int bufferRead = -1;
             readBuffer = null;
             // If handle is valid Send the message through the Pipe
-            if (!handle.IsInvalid) 
+            if (!handle.IsInvalid)
             {
                 readBuffer = new byte[BUFFER_SIZE];
                 TransactNamedPipe
-                    (handle, 
+                    (handle,
                     messageBLOB,
                     (uint)messageBLOB.Length,
                     readBuffer, BUFFER_SIZE, out bufferRead, IntPtr.Zero);

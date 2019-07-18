@@ -8,7 +8,7 @@
     <ProjectGuid>{88ACDF6A-978C-4B03-96DD-3F6BF1E4A9C9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Microsoft.Protocols.TestSuites.WspTS</RootNamespace>
+    <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter</RootNamespace>
     <AssemblyName>MS-WSP_ServerAdapter</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <TargetFrameworkProfile />
@@ -51,14 +51,16 @@
     <Compile Include="..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="DataTypes.cs" />
-    <Compile Include="Helper.cs" />
     <Compile Include="IWspAdapter.cs" />
     <Compile Include="IWSPSUTAdapter.cs" />
-    <Compile Include="MessageBuilder.cs" />
     <Compile Include="MessageValidator.cs" />
-    <Compile Include="RequestSender.cs" />
     <Compile Include="WspAdapter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-WSP\WSP\WSP.csproj">
+      <Project>{32326174-6220-4e78-8c0e-bf803162133e}</Project>
+      <Name>WSP</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">

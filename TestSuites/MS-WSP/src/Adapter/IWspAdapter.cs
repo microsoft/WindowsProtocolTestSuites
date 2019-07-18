@@ -1,25 +1,8 @@
-/******************************************************************************/
-/*                                                                            */
-/* File Name      :  IWspAdapter.cs                                           */
-/* Description    :  Interface definition for MS-WSP                          */
-/* Interface      :  IWspAdapter                                              */
-/*                                                                            */
-/* Author         :  v-shgoel                                                 */
-/* Create Date    :  09/06/2008                                               */
-/*----------------------------------------------------------------------------*/
-/* Change History :                                                           */
-/*----------------------------------------------------------------------------*/
-/* Date             Author     BugID    Description                           */
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-/******************************************************************************/
-using System;
-using System.Collections.Generic;
-using System.Text;
+// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Protocols.TestTools;
 
-namespace Microsoft.Protocols.TestSuites.WspTS
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 {
     /// <summary>
     /// IWspAdapter interface describes the methods
