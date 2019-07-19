@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="TESTSUITE_COMMON_SCRIPTS_DIR">
+            <Component Id="cmp69B8870C3FB9A1D97A38D75E62CA08E1" Guid="{0FD7B752-A06E-4B6B-BEE7-E54405193C8B}">
+                <File Id="fil14B7992D7A9AB986631B635F15810A47" KeyPath="yes" Source="!(wix.TESTSUITE_COMMON_SCRIPTS_DIR)\checkMMA.cmd" />
+            </Component>
+            <Component Id="cmpCD445738F31060DF38B9CDADD6E0F3BA" Guid="{23E1D6A4-7BF9-4D6E-9756-1DCFFB868295}">
+                <File Id="filF70E9BB72D57B76BEC1E74700477D17B" KeyPath="yes" Source="!(wix.TESTSUITE_COMMON_SCRIPTS_DIR)\checkSpecExplorer.cmd" />
+            </Component>
+            <Component Id="cmp2A5D0483EAA4C53D7C40CCDFDC73AD21" Guid="{78B1236B-4599-45C0-896F-87DFAC9A5A21}">
+                <File Id="filD4B03B313179237B56FDA3700F0813B9" KeyPath="yes" Source="!(wix.TESTSUITE_COMMON_SCRIPTS_DIR)\checkWix.cmd" />
+            </Component>
+            <Component Id="cmp7B238616C56646A0F9546616E965B919" Guid="{3B61FC16-A7D2-4FCB-BFF0-A8279C3959E9}">
+                <File Id="fil72188DE67D45A53FA4924AC4E59516F1" KeyPath="yes" Source="!(wix.TESTSUITE_COMMON_SCRIPTS_DIR)\setBuildTool.cmd" />
+            </Component>
+            <Component Id="cmp627FF0D998CF77365FC3932EA0118E8E" Guid="{A2DCA56B-644E-4690-BC5A-7F719AF336CC}">
+                <File Id="fil3FCF45AC35BF1CCAE622BC35C7908EB6" KeyPath="yes" Source="!(wix.TESTSUITE_COMMON_SCRIPTS_DIR)\setMSTestPath.cmd" />
+            </Component>
+            <Component Id="cmp5269BAE4BDDC53742F5DFA484942FFE8" Guid="{77030A23-DA15-4044-A69C-48BE77FFCE3E}">
+                <File Id="fil073538DF550758965AB03C54F02B7DF7" KeyPath="yes" Source="!(wix.TESTSUITE_COMMON_SCRIPTS_DIR)\setPtfVer.cmd" />
+            </Component>
+            <Component Id="cmp7053F11E12D1D14D785BA6981AEA189C" Guid="{0196D46D-CDE0-4235-B0DE-5F93721407DE}">
+                <File Id="filFE878492F09201EA537F46CA49DB7805" KeyPath="yes" Source="!(wix.TESTSUITE_COMMON_SCRIPTS_DIR)\setTestSuiteVer.cmd" />
+            </Component>
+            <Component Id="cmp722A0B3E0D1F7DE6513253791A8011B2" Guid="{310B7D9B-931B-43AC-8C99-E1BF03D52C36}">
+                <File Id="filEBA689AC36F260318971B30F5B33AA81" KeyPath="yes" Source="!(wix.TESTSUITE_COMMON_SCRIPTS_DIR)\setVs2017Path.cmd" />
+            </Component>
+            <Component Id="cmp7E33326DFB8E7F0E9AF4A2C582451505" Guid="{9212583B-0904-4ACF-A7B0-854009459E66}">
+                <File Id="fil31B5C24CAE95FC990E41BA1D88878110" KeyPath="yes" Source="!(wix.TESTSUITE_COMMON_SCRIPTS_DIR)\setVsPath.cmd" />
+            </Component>
+            <Component Id="cmp7010196E2A1AD764426B15C3E9C807E0" Guid="{5470D803-D9AC-4696-8828-886552570751}">
+                <File Id="fil90096FBCBF1A01C7A887696E0BAD925D" KeyPath="yes" Source="!(wix.TESTSUITE_COMMON_SCRIPTS_DIR)\setVsTestPath.cmd" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="COMMON_BATCH_FILES">
+            <ComponentRef Id="cmp69B8870C3FB9A1D97A38D75E62CA08E1" />
+            <ComponentRef Id="cmpCD445738F31060DF38B9CDADD6E0F3BA" />
+            <ComponentRef Id="cmp2A5D0483EAA4C53D7C40CCDFDC73AD21" />
+            <ComponentRef Id="cmp7B238616C56646A0F9546616E965B919" />
+            <ComponentRef Id="cmp627FF0D998CF77365FC3932EA0118E8E" />
+            <ComponentRef Id="cmp5269BAE4BDDC53742F5DFA484942FFE8" />
+            <ComponentRef Id="cmp7053F11E12D1D14D785BA6981AEA189C" />
+            <ComponentRef Id="cmp722A0B3E0D1F7DE6513253791A8011B2" />
+            <ComponentRef Id="cmp7E33326DFB8E7F0E9AF4A2C582451505" />
+            <ComponentRef Id="cmp7010196E2A1AD764426B15C3E9C807E0" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>

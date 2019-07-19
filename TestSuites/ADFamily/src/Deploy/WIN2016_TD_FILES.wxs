@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="WIN2016_TD_DIR">
+            <Directory Id="dirCF5715C967677F300DC6CD9B5BF9E1DF" Name="DS">
+                <Component Id="cmp124916CA4BEEA2FE9ACD2522ADC332FA" Guid="{015F0968-EB5B-4923-8737-F1E2B07114AE}">
+                    <File Id="fil71E699635B1ECE6B38DE6EAD0C8E6D93" KeyPath="yes" Source="!(wix.WIN2016_TD_DIR)\DS\[MS-ADA1].zip" />
+                </Component>
+                <Component Id="cmp800A412BE473ABA395733EE92266060D" Guid="{06A48859-C203-4DB7-928F-2E817CC1FADD}">
+                    <File Id="fil12C31A6EAFF53992656BFA2DD5017496" KeyPath="yes" Source="!(wix.WIN2016_TD_DIR)\DS\[MS-ADA2].zip" />
+                </Component>
+                <Component Id="cmp9ADF3F522642F4663FBE55B51AF80E83" Guid="{A6DC81F6-30CF-456F-A44B-FF0C48DD4005}">
+                    <File Id="fil208CAEF0DDA3DA3731C372CA0337FA2D" KeyPath="yes" Source="!(wix.WIN2016_TD_DIR)\DS\[MS-ADA3].zip" />
+                </Component>
+                <Component Id="cmpD0B070574868F01093A00D96EA3C1577" Guid="{DBAB72D3-FF8C-4515-B4EE-23EC03BC59F1}">
+                    <File Id="filB84EC76A01057291273288A2F562601B" KeyPath="yes" Source="!(wix.WIN2016_TD_DIR)\DS\[MS-ADSC].zip" />
+                </Component>
+            </Directory>
+            <Directory Id="dir69226131EE0A4377466DDC7A1A41B3D4" Name="LDS">
+                <Component Id="cmpE82D9923DB3E4833296B75AE665722FD" Guid="{22CFD6C2-3750-4A59-ABC7-2881F82A783C}">
+                    <File Id="fil39AE59283DAF0E74D95D4BBBBA086FAF" KeyPath="yes" Source="!(wix.WIN2016_TD_DIR)\LDS\[MS-ADLS].zip" />
+                </Component>
+            </Directory>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="WIN2016_TD_FILES">
+            <ComponentRef Id="cmp124916CA4BEEA2FE9ACD2522ADC332FA" />
+            <ComponentRef Id="cmp800A412BE473ABA395733EE92266060D" />
+            <ComponentRef Id="cmp9ADF3F522642F4663FBE55B51AF80E83" />
+            <ComponentRef Id="cmpD0B070574868F01093A00D96EA3C1577" />
+            <ComponentRef Id="cmpE82D9923DB3E4833296B75AE665722FD" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>
