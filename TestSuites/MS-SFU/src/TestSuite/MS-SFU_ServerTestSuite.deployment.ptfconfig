@@ -6,7 +6,7 @@
 
   <Properties>
     <!-- Host name of SUT -->
-    <Property name="SutHostName" value="SUT01" />
+    <Property name="SutHostName" value="DC01" />
     <!-- Transport type of SUT -->
     <Property name="Transport" value="TCP" />
     <!-- Port number of SUT -->
@@ -14,7 +14,7 @@
     <!-- Realm of service1 and service2 -->
     <Property name="Realm1" value="BLAH.COM" />
     <!-- User to be delegated -->
-    <Property name="DelegatedUserName" value="user" />
+    <Property name="DelegatedUserName" value="testuser" />
     <!-- Type of DelegatedUser -->
     <Property name="DelegatedUserType" value="NT_ENTERPRISE" />
     <!-- FQDN of service1 -->
@@ -30,7 +30,7 @@
     <!-- User of service2 -->
     <Property name="Service2UserName" value="service2user" />
     <!-- Password of service2 -->
-    <Property name="Service2Password" value="Password01@" />
+    <Property name="Service2Password" value="Password01!" />
     <!-- Salt of service2 -->
     <Property name="Service2Salt" value="service2" />
   </Properties>
