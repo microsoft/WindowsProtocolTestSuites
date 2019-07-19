@@ -829,11 +829,13 @@ Function Config-DC01()
 	Write-Host "Update Group Policy"
 	$domainName = (Get-WmiObject win32_computersystem).Domain
 	$domain = Get-ADDomain $domainName
-	Get-ChildItem -Path "$WorkingPath\Scripts\Dc01GPO" -File -Recurse | ForEach-Object {
-		$content =($_|Get-Content)
-		if ($content | Select-String -Pattern 'contoso') {
-			$content = $content -replace 'contoso',$domain.name   
-			[IO.File]::WriteAllText($_.FullName, ($content -join “`r`n”))
+	if($domain.name -ne "contoso") {
+		Get-ChildItem -Path "$WorkingPath\Scripts\Dc01GPO" -File -Recurse | ForEach-Object {
+			$content =($_|Get-Content)
+			if ($content | Select-String -Pattern 'contoso') {
+				$content = $content -replace 'contoso',$domain.name   
+				[IO.File]::WriteAllText($_.FullName, ($content -join “`r`n”))
+			}
 		}
 	}
 

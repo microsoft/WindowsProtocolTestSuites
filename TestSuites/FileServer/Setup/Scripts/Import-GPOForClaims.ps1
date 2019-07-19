@@ -50,19 +50,21 @@ $gpoGuid = $gpoFolder.Name.Replace("{","").Replace("}","")
 .\Write-Info.ps1 "Update Group Policy"
 $domainName = (Get-WmiObject win32_computersystem).Domain
 $domain = Get-ADDomain $domainName
-Get-ChildItem -Path $gpoBackupFolder -File -Recurse | ForEach-Object {
-    $content =($_|Get-Content)
-    if ($content | Select-String -Pattern 'contoso') {
-        $content = $content -creplace 'contoso',$domain.name   
-        [IO.File]::WriteAllText($_.FullName, ($content -join “`r`n”))
+if($domain.name -ne "contoso") {
+    Get-ChildItem -Path $gpoBackupFolder -File -Recurse | ForEach-Object {
+        $content =($_|Get-Content)
+        if ($content | Select-String -Pattern 'contoso') {
+            $content = $content -creplace 'contoso',$domain.name   
+            [IO.File]::WriteAllText($_.FullName, ($content -join “`r`n”))
+        }
     }
 }
 
 .\Write-Info.ps1 "Configurating Group Policy"
-#Import-GPO -BackupId $gpoGuid -TargetName "Default Domain Policy" -Path $gpoBackupFolder -CreateIfNeeded
+Import-GPO -BackupId $gpoGuid -TargetName "Default Domain Policy" -Path $gpoBackupFolder -CreateIfNeeded
 
 .\Write-Info.ps1 "Publish the group policy updates to all computers by command: gpupdate /force"
-#CMD /C gpupdate /force 2>&1 | .\Write-Info.ps1
+CMD /C gpupdate /force 2>&1 | .\Write-Info.ps1
 
 #----------------------------------------------------------------------------
 # Ending
