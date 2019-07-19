@@ -51,7 +51,7 @@ $gpoGuid = $gpoFolder.Name.Replace("{","").Replace("}","")
 $domainName = (Get-WmiObject win32_computersystem).Domain
 $domain = Get-ADDomain $domainName
 if($domain.name -ne "contoso") {
-    Get-ChildItem -Path $gpoBackupFolder -exclude *.pol -File -Recurse | ForEach-Object {
+    Get-ChildItem -Path $gpoBackupFolder -File -Recurse | ForEach-Object {
         $content =($_|Get-Content)
         if ($content | Select-String -Pattern 'contoso') {
             $content = $content -replace 'contoso',$domain.name   

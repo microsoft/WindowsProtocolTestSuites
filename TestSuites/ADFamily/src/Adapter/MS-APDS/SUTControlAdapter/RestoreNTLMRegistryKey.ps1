@@ -3,8 +3,8 @@
 ## Licensed under the MIT license. See LICENSE file in the project root for full license information.
 #############################################################################
 
-$PDCName = $PTFProp_Common_WritableDC1_IPAddress
-$TDCName = $PTFProp_Common_TDC_IPAddress
+$PDCName = $PTFProp_Common_WritableDC1_NetbiosName
+$TDCName = $PTFProp_Common_TDC_NetbiosName
 
 try
 {

@@ -304,14 +304,6 @@ Function Config-Phase3()
     # Get OS Version
     Write-ConfigLog "Getting Operating System Version..." -ForegroundColor Yellow
     $OsVersion = .\Get-OsVersion.ps1 -log
-
-    # update host
-    $Parameters["primarydcip"]+ " " +$Parameters["primarydc"] | Out-File -FilePath "$env:windir\System32\drivers\etc\hosts" -Append -encoding ascii
-    $Parameters["secondarydcip"]+ " " + $Parameters["secondarydc"] | Out-File -FilePath "$env:windir\System32\drivers\etc\hosts" -Append -encoding ascii
-    $Parameters["readonlydcip"]+ " " + $Parameters["readonlydc"] | Out-File -FilePath "$env:windir\System32\drivers\etc\hosts" -Append -encoding ascii
-    $Parameters["childdcip"]+ " " + $Parameters["childdc"] | Out-File -FilePath "$env:windir\System32\drivers\etc\hosts" -Append -encoding ascii
-    $Parameters["trustdcip"]+ " " + $Parameters["trustdc"] | Out-File -FilePath "$env:windir\System32\drivers\etc\hosts" -Append -encoding ascii
-    $Parameters["dmip"]+ " " + $Parameters["dm"] | Out-File -FilePath "$env:windir\System32\drivers\etc\hosts" -Append -encoding ascii
 }
 
 #------------------------------------------------------------------------------------------
