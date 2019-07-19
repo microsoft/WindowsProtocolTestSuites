@@ -54,8 +54,8 @@ if($domain.name -ne "contoso") {
     Get-ChildItem -Path $gpoBackupFolder -File -Recurse | ForEach-Object {
         $content =($_|Get-Content)
         if ($content | Select-String -Pattern 'contoso') {
-            $content = $content -creplace 'contoso',$domain.name   
-            [IO.File]::WriteAllText($_.FullName, ($content -join “`r`n”))
+            $content = $content -replace 'contoso',$domain.name   
+            [IO.File]::WriteAllText($_.FullName, ($content -join "`r`n"))
         }
     }
 }

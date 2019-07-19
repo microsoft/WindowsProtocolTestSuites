@@ -830,15 +830,14 @@ Function Config-DC01()
 	$domainName = (Get-WmiObject win32_computersystem).Domain
 	$domain = Get-ADDomain $domainName
 	if($domain.name -ne "contoso") {
-		Get-ChildItem -Path "$WorkingPath\Scripts\Dc01GPO" -File -Recurse | ForEach-Object {
+		Get-ChildItem -Path "$WorkingPath\Scripts\Dc01GPO" -exclude *.pol -File -Recurse | ForEach-Object {
 			$content =($_|Get-Content)
 			if ($content | Select-String -Pattern 'contoso') {
 				$content = $content -replace 'contoso',$domain.name   
-				[IO.File]::WriteAllText($_.FullName, ($content -join “`r`n”))
+				[IO.File]::WriteAllText($_.FullName, ($content -join "`r`n"))
 			}
 		}
 	}
-
 	Write-Host "Configurating Group Policy"
 	Import-GPO -BackupId 3830DC6A-0AB3-42DF-ADF4-DDCCBC65D86F -TargetName "Default Domain Policy" -Path "$WorkingPath\Scripts\Dc01GPO" -CreateIfNeeded
     	
