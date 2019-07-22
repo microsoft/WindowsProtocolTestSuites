@@ -166,7 +166,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         public List<DetectingItem> GetDetectionSteps()
         {
             List<DetectingItem> DetectingItems = new List<DetectingItem>();
-            DetectingItems.Add(new DetectingItem("Detect Target SUT Connection", DetectingStatus.Pending, LogStyle.Default));
+            DetectingItems.Add(new DetectingItem("Detect Target SUT IP Address", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Establish RDP Connection with SUT", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Check Specified features Support", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Check Specified Protocols Support", DetectingStatus.Pending, LogStyle.Default));
@@ -181,7 +181,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         {
             try
             {
-                if (!DetectSUTConnection())
+                if (!DetectSUTIPAddress())
                 {
                     return false;
                 }
@@ -357,9 +357,9 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 
         #region Private Methods
 
-        private bool DetectSUTConnection()
+        private bool DetectSUTIPAddress()
         {
-            DetectorUtil.WriteLog("===== Detect Target SUT Connection=====", true, LogStyle.Default);
+            DetectorUtil.WriteLog("===== Detect Target SUT IP Address=====", true, LogStyle.Default);
 
             try
             {
