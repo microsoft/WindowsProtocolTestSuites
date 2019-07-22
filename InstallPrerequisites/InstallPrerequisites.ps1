@@ -46,6 +46,59 @@ Param
 # The path where the Visual Studio will be installed
 $VSInstallationPath = "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community"
 
+Function CheckInternetConnection{
+  
+    Try
+    {
+        $status = Test-Connection -ComputerName "www.microsoft.com" -count 5 -Quiet
+        return ($status -ne $false) -and ($status -ne $null)
+    }
+    Catch
+    {
+        return $false
+    }
+}
+
+Function CheckCategory{
+
+    Write-Host "Reading Prerequisites Configure file..."
+    [xml]$toolXML = Get-Content -Path $ConfigPath 
+
+    # Check if Category exists.
+    $CategoryItem = $toolXML.Dependency.$Category.tool;
+    if(-not ($CategoryItem))
+    {
+        $error = "Category $Category is not acceptable.";
+        Write-Host $error  -ForegroundColor Red
+        exit
+    }
+}
+
+# Check if NetFx3 is enabled on current machine.
+# .NetFramework 3.5 is required by Wix 3.14  
+Function CheckAndInstallNetFx3{
+    Write-Host "Checking .NET Framework 3.5"
+
+    $result = get-childitem -path "HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP" | Where-Object -FilterScript {$_.name -match "v3.5"}   
+
+    if($result -ne $null){
+        Write-Host ".NET Framework 3.5 is already enabled."
+        return $true;
+    }
+    else{
+        Write-Host ".NET Framework 3.5 is not enabled. Enabling this feature now."
+        try{
+            Add-WindowsCapability –Online -Name NetFx3~~~~
+            Write-Host ".NET Framework 3.5 is already enabled."
+            return $true
+        }
+        catch
+        {
+            Write-Host "Failed to enable .Net Framework 3.5."  -ForegroundColor Red
+            return $false
+        }
+    }
+}
 
 # Check if application is installed on current machine.
 Function CheckIfAppInstalled
@@ -139,7 +192,7 @@ Function MountISOAndGetAppPath
     {
         $content = $AppName + "cannot be found in ISO"
         Write-Host $content -ForegroundColor Red
-        retun "";
+        return "";
     }
     else
     {
@@ -166,17 +219,8 @@ Function GetDownloadTools{
         [string]$DpConfigPath,
         [string]$ToolCategory
     )
-
-    Write-Host "Reading Prerequisites Configure file..."
-    [xml]$toolXML = Get-Content -Path $DpConfigPath #".\PrerequisitesConfig.xml"
-
-    # Check if Category exists.
-    $CategoryItem = $toolXML.Dependency.$ToolCategory.tool;
-    if(-not ($CategoryItem))
-    {
-        $error = "Category $ToolCategory does not exist";
-        throw $error
-    }
+       
+    [xml]$toolXML = Get-Content -Path $DpConfigPath   
 
     $tools = New-Object System.Collections.ArrayList;
 
@@ -253,7 +297,7 @@ Function DownloadAndInstallApplication
         }
         catch
         {          
-            Write-host "Download $item.Name failed with exception: $_.Exception.Message"   
+            Write-host "Download $item.Name failed with exception: $_.Exception.Message"   -ForegroundColor Red
             Return                    
         }                              
     }       
@@ -267,8 +311,7 @@ Function DownloadAndInstallApplication
         Write-Host "Mounting ISO image";
         $OutputPath = MountISOAndGetAppPath -AppName $AppItem.InstallFileName -ISOPath $OutputPath
         Write-Host $OutputPath        
-    }
-    
+    }    
             
     # start to Install file
     
@@ -286,7 +329,7 @@ Function DownloadAndInstallApplication
     {
         # Install VS extension
         $ExitCode = (Start-Process -FILEPATH "$VSInstallationPath\Common7\IDE\vsixinstaller.exe" -ArgumentList "$OutputPath $FLAGS" -Wait -PassThru).ExitCode
-    }
+    }    
     else
     {
         $ExitCode = (Start-Process -FILEPATH "$env:systemroot\system32\msiexec.exe" -ArgumentList "/i $OutputPath $FLAGS /passive" -Wait -PassThru).ExitCode
@@ -319,20 +362,37 @@ Function DownloadAndInstallApplication
 # Script starts here
 # ================================
 
+#Check the internet connection before run the scripts
+$internetConnection = CheckInternetConnection
+
+if($internetConnection -eq $false)
+{
+    Write-Host "The script requires the computer connected to internet." -ForegroundColor Red
+    Write-Host "Your comuter is not connected to internet."  -ForegroundColor Yellow
+    Write-Host "Please check your network connection before executing the script."  -ForegroundColor Yellow
+    exit
+}
+
+#Check input parameter
 if(-not $ConfigPath)
 {
-	Write-Host "Use the default value '.\PrerequisitesConfig.xml' as ConfigPath is not set"
+	Write-Host "Use the default value '.\PrerequisitesConfig.xml' as ConfigPath is not set."
 	$ConfigPath = ".\PrerequisitesConfig.xml"
 }
 
+CheckCategory
+
+#Check PS version
 $psVer = [int](Get-Host).Version.ToString().Substring(0,1)
 
 if($psVer -lt 4)
 {
-    Write-Host "Powershell 4 or later is required for Github downloading." -ForegroundColor Red
-    Write-Host "Please install WMF 4.0 from https://www.microsoft.com/en-us/download/details.aspx?id=40855 before running this script."
+    Write-Host "Powershell 4 or later is required for Github downloading." -ForegroundColor Red 
+    Write-Host "Please install WMF 4.0 from https://www.microsoft.com/en-us/download/details.aspx?id=40855 before running this script."  -ForegroundColor Yellow
     exit
 }
+
+#Check OS version
 
 [double] $OsVer = [System.Environment]::OSVersion.Version.Build
 
@@ -342,16 +402,18 @@ if($OsVer -lt "7601")
     exit
 }
 
+
 $AllProtocols = [System.Net.SecurityProtocolType]'Ssl3,Tls,Tls11,Tls12'
 [System.Net.ServicePointManager]::SecurityProtocol = $AllProtocols
 
-# Start get all needed tools from configure file.
+# Download all required tools from configure file.
 $downloadList = GetDownloadTools -DpConfigPath $ConfigPath -ToolCategory $Category
 $tempFolder = CreateTemporaryFolder
 $failedList = @();
 $IsNeedRestart = $false;
 
 
+#Download and install all required tools
 foreach($item in $downloadList)
 {
     $isInstalled = $false;
@@ -376,6 +438,16 @@ foreach($item in $downloadList)
         $content = "Downloading file " + $item.Name + ". Please wait..."
         Write-Host $content
         $outputPath = $tempFolder + "\" + $item.FileName
+
+        if($item.Name.Tolower().contains("wix314"))
+        {
+            $netfx3Status= CheckAndInstallNetFx3
+            if(!$netfx3Status)
+            {
+                Write-Host "The Wix installation will be skipped because of .NET 3.5 is not enabled successfully."  -ForegroundColor Red
+                continue
+            }
+        }
 
         try
         {

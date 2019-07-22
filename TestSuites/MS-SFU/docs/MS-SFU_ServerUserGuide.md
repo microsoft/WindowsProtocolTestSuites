@@ -183,8 +183,8 @@ To check the connection from the driver computer
 
 * In the **Run** dialog box, type **cmd** and then click **OK**.
 
-* At the command prompt, type **ping** followed by the hostname or IP address of the SUT, and then press **Enter**. The following example checks the connection to a SUT named "SUT01":
- &#62;  ping SUT01
+* At the command prompt, type **ping** followed by the hostname or IP address of the SUT, and then press **Enter**. The following example checks the connection to a SUT named "DC01":
+ &#62;  ping DC01
 
 * Repeat these steps until you confirm connectivity between all computers in the test environment.
 
@@ -192,7 +192,7 @@ Do not proceed with the configuration of the test suite until connectivity is co
 
 ## Computer Setup
 
-### Set Up a Windows Based Domain Controller
+### Set Up a Windows Based Domain Controller (SUT)
 This section provides information about how to set up a DC for use with this test suite.
 
 To set up a Windows-based DC
@@ -206,10 +206,10 @@ To set up a Windows-based DC
 * Create domain user "service1user" with password "Password01!".
   Create domain user "service2user" with password "Password01!"
 
-### Set Up a Windows Based System Under Test (SUT)
-This section provides information about how to set up a SUT for use with this test suite.
+### Set Up a Windows Based System Under Test (Application Server)
+This section provides information about how to set up an application server for use with this test suite.
 * Log on to the SUT as administrator
-* Rename the computer as SUT01  
+* Rename the computer as AP01  
 * Join the domain BLAH.COM
 * After reboot, the domain join will finished
 * Start Windows PowerShell by right-clicking on the **Windows PowerShell** icon, and then click **Run as Administrator**, or from a Windows PowerShell command window, type: Start-process powershell -verb runAs
@@ -220,26 +220,31 @@ This section provides information about how to set up a SUT for use with this te
   * Rename the computer as Driver01  
   * Join the domain BLAH.COM
   * After reboot, the domain join will finished
-  * Start Windows PowerShell by right-clicking on the **Windows PowerShell** icon, and then click **Run as Administrator**, or from a Windows PowerShell command window, type: Start-process powershell -verb runAs
+
 
 ## Config Computers
 
-### Config a Windows Based System Under Test (SUT)
-
-  * Create service1. This service is for both S4U2Self and S4U2Proxy scenarios.
-  * Create service2. This service is for the S4U2Proxy scenario only.
-
 ### Config Domain controller
 
-Log into the Domain Controller DC01 using domain administrator credentials and run PowerShell with administrator privilege:
+Log into the Domain Controller DC01 using domain administrator credentials DC01
 
-  _setspn -u -s service1/SUT01@BLAH.COM service1user_
+Create standard domain users on DC01 with user name "testuser" and password "Password01!"
 
-  _Ktpass.exe  /princ service1/SUT01@BLAH.COM /mapuser BLAH\service1user /pass Password01! /out keytab.tab /ptype KRB5_NT_PRINCIPAL Crypto ALL
+Create standard domain users on DC01 with user name "service1user" and password "Password01!". This user is for both S4U2Self and S4U2Proxy scenarios.
 
-  _setspn -u -s service2/SUT01@BLAH.COM service1user_
+Create standard domain users on DC01 with user name "service2user" and password "Password01!". This user is for the S4U2Proxy scenario only.
 
-  _Ktpass.exe  /princ service2/SUT01@BLAH.COM /mapuser BLAH\service2user /pass Password01! /out keytab.tab /ptype KRB5_NT_PRINCIPAL Crypto ALL_
+Run PowerShell with administrator privilege:
+
+  _setspn -u -s service1/AP01@BLAH.COM service1user_
+
+  _Ktpass.exe  /princ service1/AP01@BLAH.COM /mapuser BLAH\service1user /pass Password01! /out keytab.tab /ptype KRB5_NT_PRINCIPAL Crypto ALL /rawsalt service1_
+
+  _setspn -u -s service2/AP01@BLAH.COM service2user_
+
+  _Ktpass.exe  /princ service2/AP01@BLAH.COM /mapuser BLAH\service2user /pass Password01! /out keytab.tab /ptype KRB5_NT_PRINCIPAL Crypto ALL /rawsalt service2_
+
+  _Set-ADUser service2user -PrincipalsAllowedToDelegateToAccount (Get-ADUser service1user)_
 
   _gpupdate /force_
 
@@ -280,7 +285,7 @@ The following table describes the required properties for all the test cases.
 |  **Property**|  **Description**|
 | -------------| ------------- |
 |  **SutHostName**| Indicates the SUT computer name.|
-| | Default value is **SUT01**.|
+| | Default value is **DC01**.|
 |  **RemoteMachinePort**| The remote machine port for test suite transport.|
 | | Default value: **88**|
 |  **Transport**| The transport of test suite. |
@@ -288,11 +293,11 @@ The following table describes the required properties for all the test cases.
 |  **Realm1**| The domain name used for test environment.|
 | | The default value used in this test suite: **BLAH.COM**|
 |  **DelegatedUserName**| The user to be delegated.|
-| | Default value: **user**|
+| | Default value: **testuser**|
 |  **DelegatedUserType**| The delegated user type.|BLAH.COM
 | | Default value: **NT_ENTERPRISE**|
 |  **Service1FQDN**| The FQDN of service1. |
-| | Default value:**Service1\/SUT01@BLAH.COM**|
+| | Default value:**Service1\/AP01@BLAH.COM**|
 |  **Service1Salt**| The salt for service 1.|
 | | Default value: **service1**|
 |  **Service1Username**| The user service 1 to delegate for.|
@@ -300,7 +305,7 @@ The following table describes the required properties for all the test cases.
 |  **Service1Password**| The password for service1username.|
 | | Default value: **Password01!**|
 |  **Service2FQDN**| The FQDN of service2.|
-| | Default value: **service2\/SUT01@BLAH.COM**|
+| | Default value: **service2\/AP01@BLAH.COM**|
 |  **Service2UserName**| The user name for service 2 to delegate for.|
 | | Default value: **service2user**|
 |  **Service2Password**| The password for service2username.|
@@ -315,8 +320,6 @@ On the driver computer, use Microsoft® Visual Studio® to open the MS-SFU_Serve
 * In the **Solution Explorer** window, right-click the **Solution** **MS-SFU**, and select **Build Solution**.
 
 * Open the **Test Explorer** window in Visual Studio, select the names of the test cases that you want to debug.
-
-
 
 ## Troubleshooting
 
