@@ -18,9 +18,9 @@ variables:
   - group: External Repo Variables
   - group: SMTP Account
   - name: test.buildTag
-    value: FileServer-GitHubPR-Build-$(Build.BuildNumber)
+    value: FileServer-GitHubPR-Regression-$(Build.BuildNumber)
   - name: test.downstreamPipelineName
-    value: FileServer-GitHubPR-Regression
+    value: FileServer-GitHubPR-Regression_PerENV
   - name: test.helperBranch
     value: $(extRepo.branchName)
 
@@ -52,7 +52,7 @@ jobs:
       SMTP_SENDERPASSWORD: $(smtp.senderPassword)
       SMTP_SMTPHOST: $(smtp.smtpHost)
       SMTP_SMTPPORT: $(smtp.smtpPort)
-      SMTP_SENDERUSER: $(smtp.senderUser)
+      SMTP_SENDERUSERNAME: $(smtp.senderUsername)
       SMTP_SENDTO: $(smtp.sendTo)
     timeoutInMinutes: 0
 
