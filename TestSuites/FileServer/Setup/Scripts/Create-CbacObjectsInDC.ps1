@@ -285,7 +285,8 @@ CreateResourceProperty -DisplayName "Department" -ValueType "MS-DS-SinglevaluedC
 CreateResourceProperty -DisplayName "CountryCode" -ValueType "MS-DS-SinglevaluedChoice" -Values "156","840","392"
 
 .\Write-Info.ps1 "Create ADCentralAccessRule"
-CreateADCentralAccessRule -Name "PET-AccessRule" -RuleItem '(XA;;FA;;;AU;(@USER.ad://ext/Company == "'$domain.name'"))'
+$PETRule = '(XA;;FA;;;AU;(@USER.ad://ext/Company == "'+$domain.name+'"))'
+CreateADCentralAccessRule -Name "PET-AccessRule" -RuleItem $PETRule 
 CreateADCentralAccessRule -Name "CountryCodeEquals156Rule" -RuleItem '(XA;;FA;;;AU;(@USER.ad://ext/CountryCode == 156))'
 CreateADCentralAccessRule -Name "CountryCodeNotEquals156Rule" -RuleItem '(XA;;FA;;;AU;(@USER.ad://ext/CountryCode != 156))'
 CreateADCentralAccessRule -Name "CountryCodeLessThan392Rule" -RuleItem '(XA;;FA;;;AU;(@USER.ad://ext/CountryCode < 392))'
