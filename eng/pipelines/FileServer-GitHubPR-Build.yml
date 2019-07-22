@@ -52,7 +52,7 @@ jobs:
       SMTP_SENDERPASSWORD: $(smtp.senderPassword)
       SMTP_SMTPHOST: $(smtp.smtpHost)
       SMTP_SMTPPORT: $(smtp.smtpPort)
-      SMTP_SENDERUSER: $(smtp.senderUser)
+      SMTP_SENDERUSERNAME: $(smtp.senderUsername)
       SMTP_SENDTO: $(smtp.sendTo)
     timeoutInMinutes: 0
 
