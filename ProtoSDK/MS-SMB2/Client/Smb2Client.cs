@@ -1775,6 +1775,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         {
             var request = new Smb2WriteRequestPacket();
 
+            // SMB2 header
             request.Header.CreditCharge = creditCharge;
             request.Header.Command = Smb2Command.WRITE;
             request.Header.CreditRequestResponse = creditRequest;
@@ -1784,17 +1785,37 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             request.Header.SessionId = sessionId;
             request.Header.Status = channelSequence;
 
-            request.PayLoad.Length = (uint)content.Length;
-            request.PayLoad.Offset = offset;
-            request.PayLoad.FileId = fileId;
+            // SMB2 WRITE request
             request.PayLoad.Channel = channel;
-            request.PayLoad.WriteChannelInfoOffset = request.BufferOffset;
-            request.PayLoad.WriteChannelInfoLength = (ushort)writeChannelInfo.Length;
-            request.PayLoad.DataOffset = (ushort)(request.BufferOffset + writeChannelInfo.Length);
+
+            if (channel == Channel_Values.CHANNEL_NONE)
+            {
+                // Non-RDMA
+                request.PayLoad.WriteChannelInfoOffset = 0;
+                request.PayLoad.WriteChannelInfoLength = 0;
+                request.PayLoad.RemainingBytes = 0;
+                request.PayLoad.DataOffset = request.BufferOffset;
+                request.PayLoad.Length = (uint)content.Length;
+                request.Buffer = content.ToArray();
+            }
+            else
+            {
+                // RDMA
+                request.PayLoad.WriteChannelInfoOffset = request.BufferOffset;
+                request.PayLoad.WriteChannelInfoLength = (ushort)writeChannelInfo.Length;
+                request.PayLoad.RemainingBytes = (uint)content.Length;
+                request.PayLoad.DataOffset = 0;
+                request.PayLoad.Length = 0;
+                request.Buffer = writeChannelInfo.ToArray();
+            }
+
+            request.PayLoad.Offset = offset;
+
+            request.PayLoad.FileId = fileId;
+
             request.PayLoad.Flags = writeFlags;
 
-            request.Buffer = writeChannelInfo.Concat(content).ToArray();
-
+            // SMB2 compression
             request.EligibleForCompression = compressWrite;
 
             SendPacket(request);
