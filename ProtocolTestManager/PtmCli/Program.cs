@@ -166,8 +166,24 @@ namespace Microsoft.Protocols.TestManager.CLI
         /// <param name="testCases">The list of test cases to run</param>
         public void RunTestSuite(List<TestCase> testCases)
         {
-            util.InitializeTestEngine();
-            util.SyncRunByCases(testCases);
+            using (ProgressBar progress = new ProgressBar())
+            {
+                util.InitializeTestEngine();
+
+                int total = testCases.Count;
+                int executed = 0;
+
+                Logger logger = util.GetLogger();
+                logger.GroupByOutcome.UpdateTestCaseList = (group, runningcase) =>
+                {
+                    executed++;
+                    progress.Update((double)executed / total, $"Executing {runningcase.Name}");
+                };
+
+                progress.Update(0, "Loading test suite");
+                util.SyncRunByCases(testCases);
+            }
+            Console.WriteLine("Finish running test cases.");
         }
 
         /// <summary>
