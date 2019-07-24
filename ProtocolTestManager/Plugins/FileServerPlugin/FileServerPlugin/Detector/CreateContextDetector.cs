@@ -51,7 +51,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     fileName,
                     AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
                     ShareAccess_Values.NONE,
-                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
                     CreateDisposition_Values.FILE_OPEN_IF,
                     File_Attributes.NONE,
                     ImpersonationLevel_Values.Impersonation,
@@ -102,7 +102,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                         fileName,
                         AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
                         ShareAccess_Values.NONE,
-                        CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                        CreateOptions_Values.FILE_NON_DIRECTORY_FILE| CreateOptions_Values.FILE_DELETE_ON_CLOSE,
                         CreateDisposition_Values.FILE_OPEN_IF,
                         File_Attributes.NONE,
                         ImpersonationLevel_Values.Impersonation,
@@ -201,7 +201,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     fileName,
                     AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
                     ShareAccess_Values.NONE,
-                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
                     CreateDisposition_Values.FILE_OPEN_IF,
                     File_Attributes.NONE,
                     ImpersonationLevel_Values.Impersonation,
@@ -228,6 +228,28 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
                 #endregion
 
+                #region Close
+
+                CLOSE_Response closeResponse;
+                client.Close(
+                    1,
+                    1,
+                    info.smb2Info.IsRequireMessageSigning ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                    messageId++,
+                    sessionId,
+                    treeId,
+                    fileId,
+                    Flags_Values.NONE,
+                    out header,
+                    out closeResponse);
+
+                if (header.Status != Smb2Status.STATUS_SUCCESS)
+                {
+                    LogFailedStatus("CLOSE", header.Status);
+                }
+
+                #endregion
+
                 if (serverCreateContexts != null)
                 {
                     foreach (Smb2CreateContextResponse ctx in serverCreateContexts)
@@ -239,6 +261,8 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                         }
                     }
                 }
+
+
 
                 logWriter.AddLog(LogLevel.Information,
                     "The returned Create response doesn't contain handle v1 context. So Create context HandleV1 with Batch oplock is not supported");
@@ -275,7 +299,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     fileName,
                     AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
                     ShareAccess_Values.NONE,
-                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
                     CreateDisposition_Values.FILE_OPEN_IF,
                     File_Attributes.NONE,
                     ImpersonationLevel_Values.Impersonation,
@@ -299,6 +323,28 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 {
                     LogFailedStatus("Create with lease v1", header.Status);
                     return DetectResult.UnSupported;
+                }
+
+                #endregion
+
+                #region Close
+
+                CLOSE_Response closeResponse;
+                client.Close(
+                    1,
+                    1,
+                    info.smb2Info.IsRequireMessageSigning ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                    messageId++,
+                    sessionId,
+                    treeId,
+                    fileId,
+                    Flags_Values.NONE,
+                    out header,
+                    out closeResponse);
+
+                if (header.Status != Smb2Status.STATUS_SUCCESS)
+                {
+                    LogFailedStatus("CLOSE", header.Status);
                 }
 
                 #endregion
@@ -349,7 +395,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     fileName,
                     AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
                     ShareAccess_Values.NONE,
-                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
                     CreateDisposition_Values.FILE_OPEN_IF,
                     File_Attributes.NONE,
                     ImpersonationLevel_Values.Impersonation,
@@ -373,6 +419,28 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 {
                     LogFailedStatus("Create with lease v2", header.Status);
                     return DetectResult.UnSupported;
+                }
+
+                #endregion
+
+                #region Close
+
+                CLOSE_Response closeResponse;
+                client.Close(
+                    1,
+                    1,
+                    info.smb2Info.IsRequireMessageSigning ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                    messageId++,
+                    sessionId,
+                    treeId,
+                    fileId,
+                    Flags_Values.NONE,
+                    out header,
+                    out closeResponse);
+
+                if (header.Status != Smb2Status.STATUS_SUCCESS)
+                {
+                    LogFailedStatus("CLOSE", header.Status);
                 }
 
                 #endregion
@@ -424,7 +492,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     fileName,
                     AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
                     ShareAccess_Values.NONE,
-                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
                     CreateDisposition_Values.FILE_OPEN_IF,
                     File_Attributes.NONE,
                     ImpersonationLevel_Values.Impersonation,
@@ -452,6 +520,28 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 {
                     LogFailedStatus("Create durable handle v1 with lease v1", header.Status);
                     return DetectResult.UnSupported;
+                }
+
+                #endregion
+
+                #region Close
+
+                CLOSE_Response closeResponse;
+                client.Close(
+                    1,
+                    1,
+                    info.smb2Info.IsRequireMessageSigning ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                    messageId++,
+                    sessionId,
+                    treeId,
+                    fileId,
+                    Flags_Values.NONE,
+                    out header,
+                    out closeResponse);
+
+                if (header.Status != Smb2Status.STATUS_SUCCESS)
+                {
+                    LogFailedStatus("CLOSE", header.Status);
                 }
 
                 #endregion
@@ -502,7 +592,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     fileName,
                     AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
                     ShareAccess_Values.NONE,
-                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
                     CreateDisposition_Values.FILE_OPEN_IF,
                     File_Attributes.NONE,
                     ImpersonationLevel_Values.Impersonation,
@@ -526,6 +616,28 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     LogFailedStatus("Create durable handle v2 with Batch oplock", header.Status);
                     return DetectResult.UnSupported;
                 }
+
+                #region Close
+
+                CLOSE_Response closeResponse;
+                client.Close(
+                    1,
+                    1,
+                    info.smb2Info.IsRequireMessageSigning ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                    messageId++,
+                    sessionId,
+                    treeId,
+                    fileId,
+                    Flags_Values.NONE,
+                    out header,
+                    out closeResponse);
+
+                if (header.Status != Smb2Status.STATUS_SUCCESS)
+                {
+                    LogFailedStatus("CLOSE", header.Status);
+                }
+
+                #endregion
 
                 if (serverCreateContexts != null)
                 {
@@ -573,7 +685,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     fileName,
                     AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
                     ShareAccess_Values.NONE,
-                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
                     CreateDisposition_Values.FILE_OPEN_IF,
                     File_Attributes.NONE,
                     ImpersonationLevel_Values.Impersonation,
@@ -603,6 +715,28 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     LogFailedStatus("Create with lease v1", header.Status);
                     return DetectResult.UnSupported;
                 }
+
+                #region Close
+
+                CLOSE_Response closeResponse;
+                client.Close(
+                    1,
+                    1,
+                    info.smb2Info.IsRequireMessageSigning ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                    messageId++,
+                    sessionId,
+                    treeId,
+                    fileId,
+                    Flags_Values.NONE,
+                    out header,
+                    out closeResponse);
+
+                if (header.Status != Smb2Status.STATUS_SUCCESS)
+                {
+                    LogFailedStatus("CLOSE", header.Status);
+                }
+
+                #endregion
 
                 if (serverCreateContexts != null)
                 {
@@ -650,7 +784,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     fileName,
                     AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
                     ShareAccess_Values.NONE,
-                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
                     CreateDisposition_Values.FILE_OPEN_IF,
                     File_Attributes.NONE,
                     ImpersonationLevel_Values.Impersonation,
@@ -680,6 +814,28 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     LogFailedStatus("Create with lease v2", header.Status);
                     return DetectResult.UnSupported;
                 }
+
+                #region Close
+
+                CLOSE_Response closeResponse;
+                client.Close(
+                    1,
+                    1,
+                    info.smb2Info.IsRequireMessageSigning ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                    messageId++,
+                    sessionId,
+                    treeId,
+                    fileId,
+                    Flags_Values.NONE,
+                    out header,
+                    out closeResponse);
+
+                if (header.Status != Smb2Status.STATUS_SUCCESS)
+                {
+                    LogFailedStatus("CLOSE", header.Status);
+                }
+
+                #endregion
 
                 if (serverCreateContexts != null)
                 {
