@@ -138,10 +138,6 @@ Function Phase2
 
 Function Finish
 {
-    if(-not $IsAzure)
-    {
-        Set-ItemProperty -Path HKLM:\Software\Microsoft\Windows\CurrentVersion\Run -Name Install -Value "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -command `"c:\temp\controller.ps1 -phase 4`"";
-    }
 	# Write signal file
     Write-Host "Write signal file: config.finished.signal to system drive."
     cmd /C ECHO CONFIG FINISHED>$ScriptsSignalFile
@@ -151,6 +147,12 @@ Function Finish
     Write-Host "EXECUTE [Kerberos-DC01-postscript.ps1] FINISHED (NOT VERIFIED)." -ForegroundColor Green
 	
     .\RestartAndRunFinish.ps1
+
+    if(-not $IsAzure)
+    {
+        Set-ItemProperty -Path HKLM:\Software\Microsoft\Windows\CurrentVersion\Run -Name Install -Value "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -command `"c:\temp\controller.ps1 -phase 4`"";
+    }
+    Restart-Computer -Force
 }
 
 # Main Script Starts
