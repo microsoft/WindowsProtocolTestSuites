@@ -70,7 +70,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]        
         [Description(@"This test case verifies that SUT drops the connection when the result field of the MCS Connect Response PDU is not set to rt-successful (non 0).")]
-        public void S1_ConnectionTest_BasicSettingExchange_NegativeTest_MCSConnectResonseFailure()
+        public void S1_ConnectionTest_BasicSettingExchange_NegativeTest_MCSConnectResponseFailure()
         {
             #region Test Steps
             //1. Trigger SUT to initiate a RDP connection and complete the Connection Initiation phase.
