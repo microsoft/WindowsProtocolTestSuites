@@ -35,12 +35,6 @@ catch
     throw "Failed to read config file"
 }
 
-$currentCore = $Content.lab.core
-foreach($paramNode in $currentCore.ChildNodes)
-{
-    $ResultArray[$paramNode.Name] = $paramNode.InnerText
-}
-
 foreach ($VM in $AllVMs)
 {
     $ParamArray = @{}
@@ -63,6 +57,14 @@ foreach ($VM in $AllVMs)
 if ($ResultArray -eq $null)
 {
     throw "Failed to find the domain controller in the config file"
+}
+
+if(![string]::IsNullOrEmpty($currentCore.regressiontype) -and ($currentCore.regressiontype -eq "Azure")){
+    $currentCore = $Content.lab.core
+    foreach($paramNode in $currentCore.ChildNodes)
+    {
+        $ResultArray[$paramNode.Name] = $paramNode.InnerText
+    }
 }
 
 $RefParamArray.Value = $ResultArray
