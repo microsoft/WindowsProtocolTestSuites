@@ -141,6 +141,10 @@ Function Main
 	Write-ConfigLog "Write signal file`: post.finished.signal to hard drive."
 	cmd /C ECHO CONFIG FINISHED > $ScriptsSignalFile
 
+    if(-not $IsAzure)
+    {
+        Set-ItemProperty -Path HKLM:\Software\Microsoft\Windows\CurrentVersion\Run -Name Install -Value "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -command `"c:\temp\controller.ps1 -phase 4`"";
+    }
 	Sleep 5
 	Restart-Computer -Force
 }
