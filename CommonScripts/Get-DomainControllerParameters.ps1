@@ -35,6 +35,12 @@ catch
     throw "Failed to read config file"
 }
 
+$currentCore = $Content.lab.core
+foreach($paramNode in $currentCore.ChildNodes)
+{
+    $ResultArray[$paramNode.Name] = $paramNode.InnerText
+}
+
 foreach ($VM in $AllVMs)
 {
     $ParamArray = @{}
@@ -58,12 +64,5 @@ if ($ResultArray -eq $null)
 {
     throw "Failed to find the domain controller in the config file"
 }
-
-$currentCore = $Content.lab.core
-foreach($paramNode in $currentCore.ChildNodes)
-{
-    $ResultArray[$paramNode.Name] = $paramNode.InnerText
-}
-
 
 $RefParamArray.Value = $ResultArray
