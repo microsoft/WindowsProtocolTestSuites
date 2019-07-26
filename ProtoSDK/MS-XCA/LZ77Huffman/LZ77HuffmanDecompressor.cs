@@ -18,7 +18,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress
         /// <returns>Decompressed Data.</returns>
         public byte[] Decompress(byte[] data)
         {
-            var header = new HuffmanHeader(data.Take(256).ToArray());
+            var header = new HuffmanHeader(data);
 
             var result = new List<byte>();
 
@@ -235,7 +235,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress
                         int EntryCount = 1 << (15 - BitLength);
                         for (int i = 0; i < EntryCount; i++)
                         {
-                            if (CurrentTableEntry > 1 << 15)
+                            if (CurrentTableEntry >= 1 << 15)
                             {
                                 throw new XcaException("[Data error]: Too many symbols!");
                             }
