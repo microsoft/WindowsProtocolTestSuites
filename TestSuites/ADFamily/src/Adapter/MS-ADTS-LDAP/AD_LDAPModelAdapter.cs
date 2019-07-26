@@ -9573,7 +9573,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     attrsMod,
                     null);
                 adLdapClient.ModifyObject(
-                    string.Format("CN="+ DomainAdministratorName + ",CN=Users,{0}", rootDomainNC),
+                    string.Format("CN={0},CN=Users,{1}", DomainAdministratorName, rootDomainNC),
                     attrsMod,
                     null);
 
