@@ -414,13 +414,13 @@ Function Config-DC02()
 	&"$WorkingPath\Scripts\Extract-ZipFile.ps1" -ZipFile "$WorkingPath\Scripts\Dc02GPO.zip" -Destination "$WorkingPath\Scripts\Dc02GPO"
 
 	Write-Host "Update Group Policy"
-	$domainName = (Get-WmiObject win32_computersystem).Domain
-	$domain = Get-ADDomain $domainName
-	if($domain.name -ne "contoso") {
+	$currDomainName = (Get-WmiObject win32_computersystem).Domain
+	$currDomain = Get-ADDomain $currDomainName
+	if($currDomain.name -ne "contoso") {
 		Get-ChildItem -Path "$WorkingPath\Scripts\Dc02GPO" -exclude *.pol -File -Recurse | ForEach-Object {
 			$content =($_|Get-Content)
 			if ($content | Select-String -Pattern 'contoso') {
-				$content = $content -replace 'contoso',$domain.name   
+				$content = $content -replace 'contoso',$currDomain.name   
 				[IO.File]::WriteAllText($_.FullName, ($content -join "`r`n"))
 			}
 		}
