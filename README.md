@@ -115,6 +115,8 @@ cd WindowsProtocolTestSuites\ProtocolTestManager
 build.cmd
 ```
 
+After the build succeeds, the MSI file of Protocol Test Manager should be generated in the folder *WindowsProtocolTestSuite\drop\ProtocolTestManager\installer\.*
+
 ### Build a test suite
 
 ```
@@ -130,7 +132,8 @@ Take SMB test suite as an example, `MS-SMB-TestSuite-ServerEP.msi` should be gen
 You can download and install the latest msi of test suites, Protocol Test Manager and Protocol Test Framework to upgrade them to the latest version. Or uninstall the old version and then install the new one.
 
 ## Run
-After the build succeeds, you could set up the test environment and install/configure/run the test suite according to its **User Guide**.
+
+After the build succeeds, you could set up the test environment, install Protocol Test Manager and install/configure/run the test suite according to its **User Guide**.
 Each test suite has its own **User Guide** in the `WindowsProtocolTestSuites\TestSuites\\[TestSuiteName]\docs` folder.
 There are two more documents in the same folder:
 
