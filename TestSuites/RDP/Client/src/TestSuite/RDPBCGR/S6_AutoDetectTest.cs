@@ -111,7 +111,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             //Expect SUT to send a Client Auto-Detect Response PDU
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to send a Client Auto-Detect Response PDU");
-            this.rdpbcgrAdapter.WaitForClientPacket<Client_Auto_Detect_Response_PDU>(waitTime);
+            this.rdpbcgrAdapter.WaitForPacket<Client_Auto_Detect_Response_PDU>(waitTime);
 
             //Check the recieved Client Auto-Detect Response PDU
             this.TestSite.Log.Add(LogEntryKind.Comment, "Checking the received Client Auto-Detect Response PDU, expect reponseType is RDP_RTT_RESPONSE, and sequenceNumber is {0}", sequenceNumber);
@@ -234,7 +234,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             //Expect SUT to send a Client Auto-Detect Response PDU
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to send a Client Auto-Detect Response PDU");
-            this.rdpbcgrAdapter.WaitForClientPacket<Client_Auto_Detect_Response_PDU>(waitTime);
+            this.rdpbcgrAdapter.WaitForPacket<Client_Auto_Detect_Response_PDU>(waitTime);
 
             //Check the recieved Client Auto-Detect Response PDU
             this.TestSite.Log.Add(LogEntryKind.Comment, "Checking the received Client Auto-Detect Response PDU, expect reponseType is RDP_BW_RESULTS_DURING_CONNECT, and sequenceNumber is {0}", sequenceNumber);
@@ -306,7 +306,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             //Expect SUT to send a Client Auto-Detect Response PDU
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to send a Client Auto-Detect Response PDU");
-            this.rdpbcgrAdapter.WaitForClientPacket<Client_Auto_Detect_Response_PDU>(waitTime);
+            this.rdpbcgrAdapter.WaitForPacket<Client_Auto_Detect_Response_PDU>(waitTime);
 
             //Check the recieved Client Auto-Detect Response PDU
             this.TestSite.Log.Add(LogEntryKind.Comment, "Checking the received Client Auto-Detect Response PDU, expect reponseType is RDP_RTT_RESPONSE, and sequenceNumber is {0}", sequenceNumber);
@@ -384,7 +384,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             //Expect SUT to send a Client Auto-Detect Response PDU
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to send a Client Auto-Detect Response PDU");
-            this.rdpbcgrAdapter.WaitForClientPacket<Client_Auto_Detect_Response_PDU>(waitTime);
+            this.rdpbcgrAdapter.WaitForPacket<Client_Auto_Detect_Response_PDU>(waitTime);
 
             //Check the recieved Client Auto-Detect Response PDU
             this.TestSite.Log.Add(LogEntryKind.Comment, "Checking the received Client Auto-Detect Response PDU, expect reponseType is RDP_BW_RESULTS_AFTER_CONNECT, and sequenceNumber is {0}", sequenceNumber);
@@ -667,7 +667,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             //Expect SUT to send a Client Auto-Detect Response PDU
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to send a Client Auto-Detect Response PDU");
-            this.rdpbcgrAdapter.WaitForClientPacket<Client_Auto_Detect_Response_PDU>(waitTime);
+            this.rdpbcgrAdapter.WaitForPacket<Client_Auto_Detect_Response_PDU>(waitTime);
             
             //Check the recieved Client Auto-Detect Response PDU
             this.TestSite.Log.Add(LogEntryKind.Comment, "Checking the received Client Auto-Detect Response PDU, expect reponseType is RDP_NETCHAR_SYNC, and sequenceNumber is {0}", sequenceNumber);
