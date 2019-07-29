@@ -102,9 +102,10 @@ Function UpdateConfigFile
         [string]$TrustDomainName                 = $TrustDCVM.domain
         [string]$TrustDomainUser                 = $TrustDCVM.username
         [string]$TrustDomainUserPassword         = $TrustDCVM.password
-        if($null -eq $TrustDCVM.password)
+        if($null -eq $TrustDCVM.username)
         {
-            [string]$TrustDomainUserPassword                = $currentCore.password
+            [string]$TrustDomainUser             = $currentCore.username
+            [string]$TrustDomainUserPassword     = $currentCore.password
         }
     
         $TrustAP01TVM = $protocolXmlConfigContent.SelectSingleNode("//vm[translate(role,'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')= `"ap02`"]")   
@@ -231,11 +232,8 @@ Function UpdateConfigFile
 
         Write-Host "Configure LocalRealm.Administrator"
         $node = $configContent.parameters.LocalRealm.Administrator
-        if($currentCore)
-        {
-            $node.Username = $currentCore.username
-            $node.Password = $currentCore.password
-        }
+        $node.Username = $LocalDomainUser
+        $node.Password = $LocalDomainUserPassword
 
         ## Trust Realm
         Write-Host "Configure parameters.TrustRealm"
@@ -269,11 +267,9 @@ Function UpdateConfigFile
 
         Write-Host "Configure parameters.TrustRealm.Administrator"
         $node = $configContent.parameters.TrustRealm.Administrator
-        if($currentCore)
-        {
-            $node.Username = $currentCore.username
-            $node.Password = $currentCore.password
-        }
+        $node.Username = $TrustDomainUser
+        $node.Password = $TrustDomainUserPassword
+
         Write-Host "Configure parameters.TrustRealm.LdapServer"
         $node = $configContent.parameters.TrustRealm.LdapServer
         $node.FQDN = "$TrustDCComputerName.$TrustDomainName"
