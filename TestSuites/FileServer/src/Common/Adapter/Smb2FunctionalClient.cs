@@ -596,7 +596,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                     netNameContext.Header.ContextType = SMB2_NEGOTIATE_CONTEXT_Type_Values.SMB2_NETNAME_NEGOTIATE_CONTEXT_ID;
                     netNameContext.Header.Reserved = 0;
                     netNameContext.NetName = testConfig.SutComputerName.ToArray();
-                    netNameContext.Header.DataLength = (ushort)(netNameContext.GetDataLength());
+                    netNameContext.Header.DataLength = netNameContext.GetDataLength();
                 }               
             }
 
@@ -663,8 +663,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             }
             // Guid should be zero when dialect is 2.0 and should not be zero when dialect is not 2.0
             if (null == clientGuid)
-                clientGuid = (dialects.Length == 1 && dialects[0] == DialectRevision.Smb2002) ? Guid.Empty : Guid.NewGuid();           
-           
+                clientGuid = (dialects.Length == 1 && dialects[0] == DialectRevision.Smb2002) ? Guid.Empty : Guid.NewGuid();
+
+            if (addNetNameContextId)
+            {
+                netNameContext = new SMB2_NETNAME_NEGOTIATE_CONTEXT_ID();
+                netNameContext.Header.ContextType = SMB2_NEGOTIATE_CONTEXT_Type_Values.SMB2_NETNAME_NEGOTIATE_CONTEXT_ID;
+                netNameContext.Header.Reserved = 0;
+                netNameContext.NetName = testConfig.SutComputerName.ToArray();
+                netNameContext.Header.DataLength = netNameContext.GetDataLength();
+            }
+
             uint status = client.Negotiate(              
                creditCharge,
                generateCreditRequest(sequenceWindow, creditGoal, creditCharge),

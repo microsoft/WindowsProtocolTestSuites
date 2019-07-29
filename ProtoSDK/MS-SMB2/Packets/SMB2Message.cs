@@ -4944,9 +4944,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// Get the data length
         /// </summary>
         /// <returns>The data length of this context.</returns>
-        public int GetDataLength()
+        public ushort GetDataLength()
         {            
-            return NetName.Length;
+            return (ushort)NetName.Length;
         }
     }
 

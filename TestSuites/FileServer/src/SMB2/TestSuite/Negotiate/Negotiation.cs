@@ -682,7 +682,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 preauthHashAlgs: preauthHashAlgs,
                 encryptionAlgs: encryptionAlgs,
                 compressionAlgorithms: compressionAlgorithms,
-                addNetNameContextId : false,
+                addNetNameContextId : addNetNameContextId,
                 checker: checker);
         }
 
