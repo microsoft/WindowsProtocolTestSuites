@@ -226,7 +226,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             //Step 3: Print some output values
             fileFsSectorSizeInfo = TypeMarshal.ToStruct<FILE_FS_SECTOR_SIZE_INFORMATION>(OutputBuffer);
             uint systemPageSize = (this.fsaAdapter.SystemPageSizeInKB * 1024);
-            
+
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. Print some output values");
             BaseTestSite.Log.Add(LogEntryKind.Debug, "SystemPageSize: " + systemPageSize);
             BaseTestSite.Log.Add(LogEntryKind.Debug, "LogicalBytesPerSector: " + fileFsSectorSizeInfo.LogicalBytesPerSector);
@@ -268,18 +268,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             BaseTestSite.Log.Add(LogEntryKind.Comment, "4.4. Verify FileSystemEffectivePhysicalBytesPerSectorForAtomicity.");
             BaseTestSite.Log.Add(LogEntryKind.Comment, "PhysicalBytesPerSectorForAtomicity: " + fileFsSectorSizeInfo.PhysicalBytesPerSectorForAtomicity);
 
-            if (fileFsSectorSizeInfo.PhysicalBytesPerSectorForAtomicity == fileFsSectorSizeInfo.FileSystemEffectivePhysicalBytesPerSectorForAtomicity)
-            {
-                BaseTestSite.Log.Add(LogEntryKind.Comment, "If OutputBuffer.PhysicalBytesPerSectorForAtomicity is less than or equal to Open.Volume.SystemPageSize:");
-                BaseTestSite.Log.Add(LogEntryKind.Comment, "Set OutputBuffer.FileSystemEffectivePhysicalBytesPerSectorForAtomicity to OutputBuffer.PhysicalBytesPerSectorForAtomicity.");
-                this.fsaAdapter.AssertAreEqual(this.Manager, fileFsSectorSizeInfo.PhysicalBytesPerSectorForAtomicity, fileFsSectorSizeInfo.FileSystemEffectivePhysicalBytesPerSectorForAtomicity, "");
-            }
-            else
+            if (fileFsSectorSizeInfo.PhysicalBytesPerSectorForAtomicity != fileFsSectorSizeInfo.FileSystemEffectivePhysicalBytesPerSectorForAtomicity)
             {
                 BaseTestSite.Log.Add(LogEntryKind.Comment, $"PhysicalBytesPerSectorForAtomicity: {fileFsSectorSizeInfo.PhysicalBytesPerSectorForAtomicity}");
                 BaseTestSite.Log.Add(LogEntryKind.Comment, $"FileSystemEffectivePhysicalBytesPerSectorForAtomicity: {fileFsSectorSizeInfo.FileSystemEffectivePhysicalBytesPerSectorForAtomicity}");
                 BaseTestSite.Log.Add(LogEntryKind.Comment, "The file system configuration for this volume is uncommon.");
+
+                return;
             }
+
+            BaseTestSite.Log.Add(LogEntryKind.Comment, "If OutputBuffer.PhysicalBytesPerSectorForAtomicity is less than or equal to Open.Volume.SystemPageSize:");
+            BaseTestSite.Log.Add(LogEntryKind.Comment, "Set OutputBuffer.FileSystemEffectivePhysicalBytesPerSectorForAtomicity to OutputBuffer.PhysicalBytesPerSectorForAtomicity.");
+            this.fsaAdapter.AssertAreEqual(this.Manager, fileFsSectorSizeInfo.PhysicalBytesPerSectorForAtomicity, fileFsSectorSizeInfo.FileSystemEffectivePhysicalBytesPerSectorForAtomicity, "");
         }
         #endregion
     }
