@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
+using System.ServiceModel;
 using System.Text;
 using System.Threading;
 
@@ -1035,7 +1036,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             PreauthIntegrityHashID[] preauthHashAlgs = null,
             EncryptionAlgorithm[] encryptionAlgs = null,
             CompressionAlgorithm[] compressionAlgorithms = null,
-            bool addDefaultEncryption = false)
+            SMB2_NETNAME_NEGOTIATE_CONTEXT_ID netNameContext = null,
+            bool addDefaultEncryption = false          
+        )
         {
             var request = new Smb2NegotiateRequestPacket();
 
@@ -1093,6 +1096,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 compresssionCapbilities.Header.DataLength = (ushort)(compresssionCapbilities.GetDataLength());
                 request.NegotiateContext_COMPRESSION = compresssionCapbilities;
 
+                request.PayLoad.NegotiateContextCount++;
+            }
+
+            if(dialect >= DialectRevision.Smb311 && netNameContext != null)
+            {              
+                request.NegotiateContext_NETNAME = netNameContext;
                 request.PayLoad.NegotiateContextCount++;
             }
 

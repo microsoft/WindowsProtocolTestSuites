@@ -62,7 +62,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// <summary>
         /// Contains the server name specified by client.
         /// </summary>
-        public SMB2_NETNAME_NEGOTIATE_CONTEXT_ID? NegotiateContext_NETNAME;
+        public SMB2_NETNAME_NEGOTIATE_CONTEXT_ID NegotiateContext_NETNAME;
 
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             if (NegotiateContext_NETNAME != null)
             {
                 Smb2Utility.Align8(ref messageData);
-                messageData = messageData.Concat(NegotiateContext_NETNAME.Value.Marshal()).ToArray();
+                messageData.CopyTo(NegotiateContext_NETNAME.NetName, messageData.Length-1);
             }
 
             return messageData;

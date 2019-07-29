@@ -476,7 +476,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             ResponseChecker<NEGOTIATE_Response> checker = null,
             bool ifHandleRejectUnencryptedAccessSeparately = false,
             bool ifAddGLOBAL_CAP_ENCRYPTION = true,
-            bool addDefaultEncryption = false)
+            bool addDefaultEncryption = false,
+            bool addNetNameConetxtID = false
+            )
         {
             if (isSmb1NegotiateEnabled)
             {
@@ -556,7 +558,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                     checker: checker,
                     ifHandleRejectUnencryptedAccessSeparately: ifHandleRejectUnencryptedAccessSeparately,
                     ifAddGLOBAL_CAP_ENCRYPTION: ifAddGLOBAL_CAP_ENCRYPTION,
-                    addDefaultEncryption: addDefaultEncryption);
+                    addDefaultEncryption: addDefaultEncryption,
+                    addNetNameConetxtID: addNetNameConetxtID
+                    );
         }
 
         public uint Negotiate(
@@ -568,10 +572,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             ResponseChecker<NEGOTIATE_Response> checker = null,
             bool ifHandleRejectUnencryptedAccessSeparately = false,
             bool ifAddGLOBAL_CAP_ENCRYPTION = true,
-            bool addDefaultEncryption = false)
+            bool addDefaultEncryption = false,
+            bool addNetNameConetxtID = false
+           )
         {
             PreauthIntegrityHashID[] preauthHashAlgs = null;
             EncryptionAlgorithm[] encryptionAlgs = null;
+            SMB2_NETNAME_NEGOTIATE_CONTEXT_ID netNameContext = new SMB2_NETNAME_NEGOTIATE_CONTEXT_ID();
 
             // For back compatibility, if dialects contains SMB 3.11, preauthentication integrity context should be present.
             if (Array.IndexOf(dialects, DialectRevision.Smb311) >= 0)
@@ -584,6 +591,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                         EncryptionAlgorithm.ENCRYPTION_AES128_CCM
                     }
                     : null;
+                if(addNetNameConetxtID)
+                {
+                    netNameContext.Header.ContextType = SMB2_NEGOTIATE_CONTEXT_Type_Values.SMB2_NETNAME_NEGOTIATE_CONTEXT_ID;
+                    netNameContext.Header.Reserved = 0;
+                    netNameContext.NetName = testConfig.SutComputerName.ToArray();
+                    netNameContext.Header.DataLength = (ushort)(netNameContext.GetDataLength());
+                }               
             }
 
             return NegotiateWithContexts
@@ -595,11 +609,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 clientGuid,
                 preauthHashAlgs,
                 encryptionAlgs,
-                null,
+                null,               
                 checker,
                 ifHandleRejectUnencryptedAccessSeparately,
                 ifAddGLOBAL_CAP_ENCRYPTION,
-                addDefaultEncryption
+                addDefaultEncryption,
+                addNetNameConetxtID
             );
         }
 
@@ -611,14 +626,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             Guid? clientGuid = null,
             PreauthIntegrityHashID[] preauthHashAlgs = null,
             EncryptionAlgorithm[] encryptionAlgs = null,
-            CompressionAlgorithm[] compressionAlgorithms = null,
-            ResponseChecker<NEGOTIATE_Response> checker = null,
+            CompressionAlgorithm[] compressionAlgorithms = null,            
+            ResponseChecker<NEGOTIATE_Response> checker = null,            
             bool ifHandleRejectUnencryptedAccessSeparately = false,
             bool ifAddGLOBAL_CAP_ENCRYPTION = true,
-            bool addDefaultEncryption = false)
+            bool addDefaultEncryption = false,
+            bool addNetNameContextId = false
+            )
         {
             Packet_Header header;
             NEGOTIATE_Response negotiateResponse;
+            SMB2_NETNAME_NEGOTIATE_CONTEXT_ID netNameContext = null;
 
             ulong messageId = generateMessageId(sequenceWindow);
             ushort creditCharge = generateCreditCharge(1);
@@ -645,25 +663,28 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             }
             // Guid should be zero when dialect is 2.0 and should not be zero when dialect is not 2.0
             if (null == clientGuid)
-                clientGuid = (dialects.Length == 1 && dialects[0] == DialectRevision.Smb2002) ? Guid.Empty : Guid.NewGuid();
+                clientGuid = (dialects.Length == 1 && dialects[0] == DialectRevision.Smb2002) ? Guid.Empty : Guid.NewGuid();           
+           
+            uint status = client.Negotiate(              
+               creditCharge,
+               generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
+               headerFlag,
+               messageId,
+               dialects,
+               securityMode,
+               capabilityValue.Value,
+               clientGuid.Value,
+               out selectedDialect,
+               out serverGssToken,
+               out header,
+               out negotiateResponse,
+               preauthHashAlgs: preauthHashAlgs,
+               encryptionAlgs: encryptionAlgs,
+               compressionAlgorithms: compressionAlgorithms,
+               addDefaultEncryption: addDefaultEncryption,
+               netNameContext: netNameContext
+               );           
 
-            uint status = client.Negotiate(
-                creditCharge,
-                generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
-                headerFlag,
-                messageId,
-                dialects,
-                securityMode,
-                capabilityValue.Value,
-                clientGuid.Value,
-                out selectedDialect,
-                out serverGssToken,
-                out header,
-                out negotiateResponse,
-                preauthHashAlgs: preauthHashAlgs,
-                encryptionAlgs: encryptionAlgs,
-                compressionAlgorithms: compressionAlgorithms,
-                addDefaultEncryption: addDefaultEncryption);
             if (!ifHandleRejectUnencryptedAccessSeparately)
             {
                 if (testConfig.IsGlobalEncryptDataEnabled && selectedDialect < DialectRevision.Smb30 && testConfig.IsGlobalRejectUnencryptedAccessEnabled)

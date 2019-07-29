@@ -600,6 +600,28 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                     BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_INVALID_PARAMETER, header.Status, "[MS-SMB2] section 3.3.5.4: The server MUST fail the negotiate request with STATUS_INVALID_PARAMETER, if CompressionAlgorithmCount is equal to zero.");
                 });
         }
+
+        [TestMethod]
+       
+        public void Negotiate_SMB311_ContextID_NetName()
+        {
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Send NEGOTIATE request with SMB2_NETNAME_NEGOTIATE_CONTEXT_ID context.");           
+
+            NegotiateWithNegotiateContexts(
+                DialectRevision.Smb311,
+                new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 },
+                compressionAlgorithms: null,
+                addNetNameContextId: true,                
+                checker: (Packet_Header header, NEGOTIATE_Response response) =>
+                {
+                    BaseTestSite.Assert.AreEqual(
+                        Smb2Status.STATUS_SUCCESS,
+                        header.Status,
+                        "[MS-SMB2] section 2.2.4.1.4: The SMB2_NETNAME_NEGOTIATE_CONTEXT_ID request does not have an associated SMB2 NEGOTIATE_CONTEXT response. "                        
+                        );
+                }
+            );           
+        }
         #endregion
 
         #region private methods
@@ -640,6 +662,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             PreauthIntegrityHashID[] preauthHashAlgs,
             EncryptionAlgorithm[] encryptionAlgs = null,
             CompressionAlgorithm[] compressionAlgorithms = null,
+            bool addNetNameContextId = false,
             ResponseChecker<NEGOTIATE_Response> checker = null)
         {
             // ensure clientMaxDialectSupported higher than 3.11
@@ -659,6 +682,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 preauthHashAlgs: preauthHashAlgs,
                 encryptionAlgs: encryptionAlgs,
                 compressionAlgorithms: compressionAlgorithms,
+                addNetNameContextId : false,
                 checker: checker);
         }
 
