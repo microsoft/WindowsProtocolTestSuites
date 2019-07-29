@@ -94,6 +94,12 @@ function CreateShareFolderForFSA()
 	
 	Write-Info.ps1 "mklink $sharefolderPath\link.txt $sharefolderPath\ExistingFile.txt"
     cmd /C "mklink $sharefolderPath\link.txt $sharefolderPath\ExistingFile.txt" 2>&1 | Write-Info.ps1
+
+    if (-not (Test-Path "$sharefolderPath\link.txt")) {
+        Write-Info.ps1 "Create SymbolicLink failed." -ForegroundColor Red
+        Write-Info.ps1 "Create placeholder: $sharefolderPath\link.txt"
+        New-Item -ItemType File -Path "$sharefolderPath\link.txt" -Force
+    }
     
     #-----------------------------------------------------
     # Create MountPoint

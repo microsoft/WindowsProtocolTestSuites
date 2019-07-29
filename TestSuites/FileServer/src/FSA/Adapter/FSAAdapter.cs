@@ -83,6 +83,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         private StreamType gStreamType;
         private List<string> activeTDIs;
 
+        // Used to generate random filenames.
+        [ThreadStatic]
+        private static Random randomRange = new Random((int)DateTime.Now.Ticks);
+
         // Used to clean up the generated test files.
         protected ISutProtocolControlAdapter sutProtocolController;
         protected List<string> testFiles = new List<string>();
@@ -5352,7 +5356,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             int randomNumber = 0;
             char fileNameLetter = ' ';
             string ramdomFileName = null;
-            Random randomRange = new Random((int)System.DateTime.Now.Ticks);
 
             for (int i = 0; i < fileNameLength; i++)
             {

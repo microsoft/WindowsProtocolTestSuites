@@ -268,17 +268,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             BaseTestSite.Log.Add(LogEntryKind.Comment, "4.4. Verify FileSystemEffectivePhysicalBytesPerSectorForAtomicity.");
             BaseTestSite.Log.Add(LogEntryKind.Comment, "PhysicalBytesPerSectorForAtomicity: " + fileFsSectorSizeInfo.PhysicalBytesPerSectorForAtomicity);
 
-            if (fileFsSectorSizeInfo.PhysicalBytesPerSectorForAtomicity > systemPageSize)
-            {
-                BaseTestSite.Log.Add(LogEntryKind.Comment, "If OutputBuffer.PhysicalBytesPerSectorForAtomicity is greater than Open.Volume.SystemPageSize:");
-                BaseTestSite.Log.Add(LogEntryKind.Comment, "Set OutputBuffer.FileSystemEffectivePhysicalBytesPerSectorForAtomicity to Open.Volume.SystemPageSize.");
-                this.fsaAdapter.AssertAreEqual(this.Manager, systemPageSize, fileFsSectorSizeInfo.FileSystemEffectivePhysicalBytesPerSectorForAtomicity,"");
-            }
-            else
+            if (fileFsSectorSizeInfo.PhysicalBytesPerSectorForAtomicity == fileFsSectorSizeInfo.FileSystemEffectivePhysicalBytesPerSectorForAtomicity)
             {
                 BaseTestSite.Log.Add(LogEntryKind.Comment, "If OutputBuffer.PhysicalBytesPerSectorForAtomicity is less than or equal to Open.Volume.SystemPageSize:");
                 BaseTestSite.Log.Add(LogEntryKind.Comment, "Set OutputBuffer.FileSystemEffectivePhysicalBytesPerSectorForAtomicity to OutputBuffer.PhysicalBytesPerSectorForAtomicity.");
-                this.fsaAdapter.AssertAreEqual(this.Manager, fileFsSectorSizeInfo.PhysicalBytesPerSectorForAtomicity, fileFsSectorSizeInfo.FileSystemEffectivePhysicalBytesPerSectorForAtomicity,"");
+                this.fsaAdapter.AssertAreEqual(this.Manager, fileFsSectorSizeInfo.PhysicalBytesPerSectorForAtomicity, fileFsSectorSizeInfo.FileSystemEffectivePhysicalBytesPerSectorForAtomicity, "");
+            }
+            else
+            {
+                BaseTestSite.Log.Add(LogEntryKind.Comment, $"PhysicalBytesPerSectorForAtomicity: {fileFsSectorSizeInfo.PhysicalBytesPerSectorForAtomicity}");
+                BaseTestSite.Log.Add(LogEntryKind.Comment, $"FileSystemEffectivePhysicalBytesPerSectorForAtomicity: {fileFsSectorSizeInfo.FileSystemEffectivePhysicalBytesPerSectorForAtomicity}");
+                BaseTestSite.Log.Add(LogEntryKind.Comment, "The file system configuration for this volume is uncommon.");
             }
         }
         #endregion
