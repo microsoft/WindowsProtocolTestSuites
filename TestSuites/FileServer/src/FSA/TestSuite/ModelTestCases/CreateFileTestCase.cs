@@ -1057,6 +1057,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.CreateFile)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.NonSmb)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Positive)]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.NonFat32)]
         public void CreateFileTestCaseS42() {
             this.Manager.BeginTest("CreateFileTestCaseS42");
             this.Manager.Comment("reaching state \'S42\'");
