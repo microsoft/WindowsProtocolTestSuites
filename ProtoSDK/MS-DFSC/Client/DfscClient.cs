@@ -182,7 +182,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Dfsc
                 fileName = fileName.Substring(1);
             }
 
-            fileName += "\0";
+            fileName += '\0';
 
             //Build REQ_DFS_REFERRAL_EX structure
             REQ_GET_DFS_REFERRAL_EX DFSRequestEX = new REQ_GET_DFS_REFERRAL_EX();
