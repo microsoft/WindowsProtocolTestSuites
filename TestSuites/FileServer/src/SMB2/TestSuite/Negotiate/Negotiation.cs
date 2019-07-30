@@ -607,20 +607,50 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Send NEGOTIATE request with SMB2_NETNAME_NEGOTIATE_CONTEXT_ID context.");           
 
+            //NegotiateWithNegotiateContexts(
+            //    DialectRevision.Smb311,
+            //    new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 },
+            //    compressionAlgorithms: null,
+            //    addNetNameContextId: true,                
+            //    checker: (Packet_Header header, NEGOTIATE_Response response) =>
+            //    {
+            //        BaseTestSite.Assert.AreEqual(
+            //            Smb2Status.STATUS_SUCCESS,
+            //            header.Status,
+            //            "[MS-SMB2] section 2.2.4.1.4: The SMB2_NETNAME_NEGOTIATE_CONTEXT_ID request does not have an associated SMB2 NEGOTIATE_CONTEXT response. "                        
+            //            );
+            //    }
+            //);
+
+            DialectRevision clientMaxDialectSupported = DialectRevision.Smb311;
+            PreauthIntegrityHashID[] preauthHashAlgs = new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 };
+            EncryptionAlgorithm[] encryptionAlgs = new EncryptionAlgorithm[] {
+                EncryptionAlgorithm.ENCRYPTION_AES128_GCM,
+                EncryptionAlgorithm.ENCRYPTION_AES128_CCM };
+
+            BaseTestSite.Log.Add(
+               LogEntryKind.TestStep,
+               "Send Negotiate request with dialect SMB 3.11, SMB2_PREAUTH_INTEGRITY_CAPABILITIES context and " +
+               "SMB2_ENCRYPTION_CAPABILITIES context.");
             NegotiateWithNegotiateContexts(
-                DialectRevision.Smb311,
-                new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 },
-                compressionAlgorithms: null,
-                addNetNameContextId: true,                
+                clientMaxDialectSupported,
+                preauthHashAlgs,
+                encryptionAlgs,
+                addNetNameContextId: true,
                 checker: (Packet_Header header, NEGOTIATE_Response response) =>
-                {
-                    BaseTestSite.Assert.AreEqual(
-                        Smb2Status.STATUS_SUCCESS,
-                        header.Status,
-                        "[MS-SMB2] section 2.2.4.1.4: The SMB2_NETNAME_NEGOTIATE_CONTEXT_ID request does not have an associated SMB2 NEGOTIATE_CONTEXT response. "                        
-                        );
-                }
-            );           
+                      {
+                          BaseTestSite.Assert.AreEqual(
+                             Smb2Status.STATUS_SUCCESS,
+                             header.Status,
+                             "[MS-SMB2] section 2.2.4.1.4: The SMB2_NETNAME_NEGOTIATE_CONTEXT_ID request does not have an associated SMB2 NEGOTIATE_CONTEXT response. "
+                             );
+                      }
+                );
+          
+            //checker: (Packet_Header header, NEGOTIATE_Response response) =>
+        //        {
+        //            CheckNegotiateResponse(header, response, clientMaxDialectSupported, encryptionAlgs);
+        //        });
         }
         #endregion
 

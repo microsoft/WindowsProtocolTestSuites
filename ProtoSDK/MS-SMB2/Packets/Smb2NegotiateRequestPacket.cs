@@ -100,7 +100,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             if (NegotiateContext_NETNAME != null)
             {
                 Smb2Utility.Align8(ref messageData);
-                messageData.CopyTo(NegotiateContext_NETNAME.NetName, messageData.Length-1);
+                messageData = messageData.Concat(NegotiateContext_NETNAME.Marshal()).ToArray();
             }
 
             return messageData;

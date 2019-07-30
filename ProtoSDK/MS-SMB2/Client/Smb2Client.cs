@@ -1097,9 +1097,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 request.NegotiateContext_COMPRESSION = compresssionCapbilities;
 
                 request.PayLoad.NegotiateContextCount++;
-            }
+            }          
 
-            if(dialect >= DialectRevision.Smb311 && netNameContext != null)
+            if(Array.IndexOf(dialects, DialectRevision.Smb311) >= 0 && netNameContext != null)
             {              
                 request.NegotiateContext_NETNAME = netNameContext;
                 request.PayLoad.NegotiateContextCount++;
