@@ -85,8 +85,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
         // Used to generate random filenames.
         [ThreadStatic]
-        private static Random randomRange = new Random((int)DateTime.Now.Ticks);
-
+        private static Random randomRange;
+        
         // Used to clean up the generated test files.
         protected ISutProtocolControlAdapter sutProtocolController;
         protected List<string> testFiles = new List<string>();
@@ -243,6 +243,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             {
                 string fullName = (string)Site.TestProperties["CurrentTestCaseName"];
                 return fullName.Split('.').LastOrDefault();
+            }
+        }
+
+        private static Random RandomRange
+        {
+            get
+            {
+                if (randomRange == null)
+                {
+                    randomRange = new Random();
+                }
+
+                return randomRange;
             }
         }
         #endregion
@@ -5360,7 +5373,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             for (int i = 0; i < fileNameLength; i++)
             {
                 //Create a random fileNameLetter from 'a' to 'z'by range 1 to 52
-                randomNumber = randomRange.Next(1, 52);
+                randomNumber = RandomRange.Next(1, 52);
                 fileNameLetter = (char)(97 + randomNumber % 26);
                 ramdomFileName = ramdomFileName + fileNameLetter.ToString(); ;
             }
