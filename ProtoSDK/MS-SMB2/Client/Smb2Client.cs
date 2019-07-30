@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
+using System.ServiceModel;
 using System.Text;
 using System.Threading;
 
@@ -1035,7 +1036,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             PreauthIntegrityHashID[] preauthHashAlgs = null,
             EncryptionAlgorithm[] encryptionAlgs = null,
             CompressionAlgorithm[] compressionAlgorithms = null,
-            bool addDefaultEncryption = false)
+            SMB2_NETNAME_NEGOTIATE_CONTEXT_ID netNameContext = null,
+            bool addDefaultEncryption = false          
+        )
         {
             var request = new Smb2NegotiateRequestPacket();
 
@@ -1093,6 +1096,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 compresssionCapbilities.Header.DataLength = (ushort)(compresssionCapbilities.GetDataLength());
                 request.NegotiateContext_COMPRESSION = compresssionCapbilities;
 
+                request.PayLoad.NegotiateContextCount++;
+            }          
+
+            if(Array.IndexOf(dialects, DialectRevision.Smb311) >= 0 && netNameContext != null)
+            {              
+                request.NegotiateContext_NETNAME = netNameContext;
                 request.PayLoad.NegotiateContextCount++;
             }
 
@@ -1775,7 +1784,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         {
             var request = new Smb2WriteRequestPacket();
 
-            // SMB2 header
             request.Header.CreditCharge = creditCharge;
             request.Header.Command = Smb2Command.WRITE;
             request.Header.CreditRequestResponse = creditRequest;
@@ -1785,37 +1793,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             request.Header.SessionId = sessionId;
             request.Header.Status = channelSequence;
 
-            // SMB2 WRITE request
-            request.PayLoad.Channel = channel;
-
-            if (channel == Channel_Values.CHANNEL_NONE)
-            {
-                // Non-RDMA
-                request.PayLoad.WriteChannelInfoOffset = 0;
-                request.PayLoad.WriteChannelInfoLength = 0;
-                request.PayLoad.RemainingBytes = 0;
-                request.PayLoad.DataOffset = request.BufferOffset;
-                request.PayLoad.Length = (uint)content.Length;
-                request.Buffer = content.ToArray();
-            }
-            else
-            {
-                // RDMA
-                request.PayLoad.WriteChannelInfoOffset = request.BufferOffset;
-                request.PayLoad.WriteChannelInfoLength = (ushort)writeChannelInfo.Length;
-                request.PayLoad.RemainingBytes = (uint)content.Length;
-                request.PayLoad.DataOffset = 0;
-                request.PayLoad.Length = 0;
-                request.Buffer = writeChannelInfo.ToArray();
-            }
-
+            request.PayLoad.Length = (uint)content.Length;
             request.PayLoad.Offset = offset;
-
             request.PayLoad.FileId = fileId;
-
+            request.PayLoad.Channel = channel;
+            request.PayLoad.WriteChannelInfoOffset = request.BufferOffset;
+            request.PayLoad.WriteChannelInfoLength = (ushort)writeChannelInfo.Length;
+            request.PayLoad.DataOffset = (ushort)(request.BufferOffset + writeChannelInfo.Length);
             request.PayLoad.Flags = writeFlags;
 
-            // SMB2 compression
+            request.Buffer = writeChannelInfo.Concat(content).ToArray();
+
             request.EligibleForCompression = compressWrite;
 
             SendPacket(request);
