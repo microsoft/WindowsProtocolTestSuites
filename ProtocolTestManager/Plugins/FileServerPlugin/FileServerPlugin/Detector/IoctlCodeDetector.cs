@@ -49,7 +49,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     Guid.NewGuid().ToString(),
                     AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
                     ShareAccess_Values.FILE_SHARE_READ | ShareAccess_Values.FILE_SHARE_WRITE | ShareAccess_Values.FILE_SHARE_DELETE,
-                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
                     CreateDisposition_Values.FILE_OPEN_IF,
                     File_Attributes.NONE,
                     ImpersonationLevel_Values.Impersonation,
@@ -182,7 +182,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                         Guid.NewGuid().ToString(),
                         AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
                         ShareAccess_Values.FILE_SHARE_READ | ShareAccess_Values.FILE_SHARE_WRITE | ShareAccess_Values.FILE_SHARE_DELETE,
-                        CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                        CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
                         CreateDisposition_Values.FILE_OPEN_IF,
                         File_Attributes.NONE,
                         ImpersonationLevel_Values.Impersonation,
@@ -297,6 +297,24 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                         LogFailedStatus("FSCTL_OFFLOAD_WRITE", header.Status);
                     }
 
+                    CLOSE_Response closeResponseDes;
+                    client.Close(
+                        1,
+                        1,
+                        info.smb2Info.IsRequireMessageSigning ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                        messageId++,
+                        sessionId,
+                        treeId,
+                        fileIdDes,
+                        Flags_Values.NONE,
+                        out header,
+                        out closeResponseDes);
+
+                    if (header.Status != Smb2Status.STATUS_SUCCESS)
+                    {
+                        LogFailedStatus("CLOSE", header.Status);
+                    }
+
                     #endregion
                 }
 
@@ -319,6 +337,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 {
                     LogFailedStatus("CLOSE", header.Status);
                 }
+
 
                 #endregion
 
@@ -374,7 +393,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     Guid.NewGuid().ToString(),
                     AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
                     ShareAccess_Values.FILE_SHARE_READ | ShareAccess_Values.FILE_SHARE_WRITE | ShareAccess_Values.FILE_SHARE_DELETE,
-                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
                     CreateDisposition_Values.FILE_OPEN_IF,
                     File_Attributes.NONE,
                     ImpersonationLevel_Values.Impersonation,
@@ -457,7 +476,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     Guid.NewGuid().ToString(),
                     AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
                     ShareAccess_Values.FILE_SHARE_READ | ShareAccess_Values.FILE_SHARE_WRITE | ShareAccess_Values.FILE_SHARE_DELETE,
-                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
                     CreateDisposition_Values.FILE_OPEN_IF,
                     File_Attributes.NONE,
                     ImpersonationLevel_Values.Impersonation,
@@ -849,7 +868,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     Guid.NewGuid().ToString(),
                     AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
                     ShareAccess_Values.FILE_SHARE_READ | ShareAccess_Values.FILE_SHARE_WRITE | ShareAccess_Values.FILE_SHARE_DELETE,
-                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
                     CreateDisposition_Values.FILE_OPEN_IF,
                     File_Attributes.NONE,
                     ImpersonationLevel_Values.Impersonation,
@@ -1001,7 +1020,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     Guid.NewGuid().ToString(),
                     AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
                     ShareAccess_Values.FILE_SHARE_READ | ShareAccess_Values.FILE_SHARE_WRITE | ShareAccess_Values.FILE_SHARE_DELETE,
-                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
                     CreateDisposition_Values.FILE_OPEN_IF,
                     File_Attributes.NONE,
                     ImpersonationLevel_Values.Impersonation,
@@ -1225,7 +1244,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     Guid.NewGuid().ToString(),
                     AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
                     ShareAccess_Values.FILE_SHARE_READ | ShareAccess_Values.FILE_SHARE_WRITE | ShareAccess_Values.FILE_SHARE_DELETE,
-                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
                     CreateDisposition_Values.FILE_OPEN_IF,
                     File_Attributes.NONE,
                     ImpersonationLevel_Values.Impersonation,

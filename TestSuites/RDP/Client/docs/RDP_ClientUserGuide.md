@@ -893,7 +893,7 @@ The following table describes the properties which are only required for test ca
 | | Default value: **768**|
 |  **changedDesktopWidth**| The changed width of screen resolution|
 | | Default value: **1152**|
-|  **changedDekstopHeight**| The changed height of screen resolution|
+|  **changedDesktopHeight**| The changed height of screen resolution|
 | | Default value: **864**|
 |  **originalMonitorNumber**| The original number of screens|
 | | Default value: **1**|

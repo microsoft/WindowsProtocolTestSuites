@@ -96,27 +96,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (clientCredential.DomainName == null)
             {
-                throw new ArgumentNullException("DomainName");
+                throw new ArgumentNullException(nameof(clientCredential.DomainName));
             }
             if (clientCredential.AccountName == null)
             {
-                throw new ArgumentNullException("AccountName");
+                throw new ArgumentNullException(nameof(clientCredential.AccountName));
             }
             if (clientCredential.Password == null)
             {
-                throw new ArgumentNullException("Password");
+                throw new ArgumentNullException(nameof(clientCredential.Password));
             }
             if (kdcIpAddress == null)
             {
-                throw new ArgumentNullException("kdcIpAddress");
+                throw new ArgumentNullException(nameof(kdcIpAddress));
             }
             if (logonName == null)
             {
-                throw new ArgumentNullException("logonName");
+                throw new ArgumentNullException(nameof(logonName));
             }
             if (serviceName == null)
             {
-                throw new ArgumentNullException("serviceName");
+                throw new ArgumentNullException(nameof(serviceName));
             }
 
             client = new KileClient(clientCredential.DomainName, clientCredential.AccountName, clientCredential.Password,

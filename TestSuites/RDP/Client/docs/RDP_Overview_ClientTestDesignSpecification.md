@@ -1,6 +1,6 @@
-#RDP Client Test Design Specification
+# RDP Client Test Design Specification
 
-##Contents
+## Contents
 
 * [Test Environment](#1)
 * [Test Method](#2)
@@ -19,7 +19,7 @@
 		* [MS-RDPEDISP Scenarios](#2.2.9)
 * [References](#3)
 
-##<a name="1"/>Test Environment
+## <a name="1"/>Test Environment
 The RDP test environment includes two endpoints: a RDP server and a RDP client. The RDP server hosts the test suite and the RDP client hosts the RDP client to be tested.
 
 For most of the test cases, the RDP server and RDP client can be a physical or a virtual machine. However, to run the MS-RDPEUSB test cases, the RDP client machine should be a physical machine because this test case requires that a specific USB device be connected to the RDP client. 
@@ -35,14 +35,15 @@ For most of the test cases, the RDP server and RDP client can be a physical or a
 
 ![image1.png](./image/RDP_Overview_ClientTestDesignSpecification/image1.png)
 
-##<a name="2"/>Test Method
+## <a name="2"/>Test Method
 
-###<a name="2.1"/>Test Scope
+### <a name="2.1"/>Test Scope
 
-####<a name="2.1.1"/>Test Target
+#### <a name="2.1.1"/>Test Target
 The test target is the RDP client endpoint (RDP client), which is performing the client role.
 
-####<a name="2.1.2"/>Protocols Included in the Test Suite
+#### <a name="2.1.2"/>Protocols Included in the Test Suite
+
 The RDP test suite includes test cases for the following protocols: 
 
 * MS-RDPBCGR
@@ -63,9 +64,10 @@ The RDP test suite includes test cases for the following protocols:
 
 * MS-RDPEDISP
 
-###<a name="2.2"/> Test Scenarios
+### <a name="2.2"/> Test Scenarios
 
-####<a name="2.2.1"/>MS-RDPBCGR Scenarios
+#### <a name="2.2.1"/>MS-RDPBCGR Scenarios
+
 There are seven scenarios defined in the MS-RDPBCGR client test suite for verifying client behavior:
 
 |  **Scenario**|  **Description**|  **Test Cases**|  **BVTs**| 
@@ -83,7 +85,8 @@ There are seven scenarios defined in the MS-RDPBCGR client test suite for verify
 
 For more details about MS-RDPBCGR scenario design, please refer to sections 2.2 and 2.3 of **MS-RDPBCGR_ClientTestDesignSpecification.md**.
 
-####<a name="2.2.2"/>MS-RDPEUSB Scenarios
+#### <a name="2.2.2"/>MS-RDPEUSB Scenarios
+
 There are three scenarios defined in the MS-RDPEUSB client test suite for verifying client behavior:
 
 |  **Scenario**|  **Description**|  **Test Cases**|  **BVTs**| 
@@ -94,7 +97,8 @@ There are three scenarios defined in the MS-RDPEUSB client test suite for verify
 
 For more details about MS-RDPEUSB scenario design, please refer to sections 2.2 and 2.3 of **MS-RDPEUSB_ClientTestDesignSpecification.md**.
 
-####<a name="2.2.3"/>MS-RDPRFX Scenarios
+#### <a name="2.2.3"/>MS-RDPRFX Scenarios
+
 There are four scenarios defined in the MS-RDPRFX client test suite for verifying client behavior:
 
 |  **Scenario**|  **Description**|  **Test Cases**|  **BVTs**| 
@@ -106,7 +110,8 @@ There are four scenarios defined in the MS-RDPRFX client test suite for verifyin
 
 For more details about MS-RDPRFX scenario design, please refer to sections 2.2 and 2.3 of **MS-RDPRFX_ClientTestDesignSpecification.md**.
 
-####<a name="2.2.4"/>MS-RDPEVOR Scenarios
+#### <a name="2.2.4"/>MS-RDPEVOR Scenarios
+
 MS-RDPEVOR has one scenario:
 
 |  **Scenario**|  **Description**|  **Test Cases**|  **BVTs**| 
@@ -115,7 +120,8 @@ MS-RDPEVOR has one scenario:
 
 For more details about MS-RDPEVOR scenario design, please refer to sections 2.2 and 2.3 of **MS-RDPEVOR_ClientTestDesignSpecification.md**.
 
-####<a name="2.2.5"/>MS-RDPEUDP Scenarios
+#### <a name="2.2.5"/>MS-RDPEUDP Scenarios
+
 MS-RDPEUDP has two scenarios:
 
 |  **Scenario**|  **Description**|  **Test Cases**|  **BVTs**| 
@@ -125,7 +131,8 @@ MS-RDPEUDP has two scenarios:
 
 For more details about MS-RDPEUDP scenarios design, please refer to sections 2.2 and 2.3 of **MS-RDPEUDP_ClientTestDesignSpecification.md**.
 
-####<a name="2.2.6"/>MS-RDPEMT Scenarios
+#### <a name="2.2.6"/>MS-RDPEMT Scenarios
+
 MS-RDPEMT has two scenarios:
 
 |  **Scenario**|  **Description**|  **Test Cases**|  **BVTs**| 
@@ -135,7 +142,8 @@ MS-RDPEMT has two scenarios:
 
 For more details about MS-RDPEMT scenarios design, please refer to sections 2.2 and 2.3 of **MS-RDPEMT_ClientTestDesignSpecification.md**.
 
-####<a name="2.2.7"/>MS-RDPEI Scenarios
+#### <a name="2.2.7"/>MS-RDPEI Scenarios
+
 MS-RDPEI has two scenarios:
 
 |  **Scenario**|  **Description**|  **Test Cases**|  **BVTs**| 
@@ -145,7 +153,8 @@ MS-RDPEI has two scenarios:
 
 For more details about MS-RDPEMT scenarios design, please refer to sections 2.2 and 2.3 of **MS-RDPEI_ClientTestDesignSpecification.md**.
 
-####<a name="2.2.8"/>MS-RDPEGFX Scenarios
+#### <a name="2.2.8"/>MS-RDPEGFX Scenarios
+
 MS-RDPEGFX has below scenarios:
 
 |  **Scenario**| **Description**|  **Test Cases**|  **BVTs**| 
@@ -164,7 +173,8 @@ MS-RDPEGFX has below scenarios:
 
 For more details about MS-RDPEGFX scenarios design, please refer to sections 2.2 and 2.3 of **MS-RDPEGFX_ClientTestDesignSpecification.md**.
 
-####<a name="2.2.9"/>MS-RDPEDISP Scenarios
+#### <a name="2.2.9"/>MS-RDPEDISP Scenarios
+
 There are four scenarios defined in the MS-RDPEDISP client test suite for verifying client behavior:
 
 |  **Scenario**|  **Description**|  **Test Cases**|  **BVTs**| 
@@ -176,7 +186,8 @@ There are four scenarios defined in the MS-RDPEDISP client test suite for verify
 
 For more details about MS-RDPEDISP scenario design, please refer to sections 2.2 and 2.3 of **MS-RDPEDISP_ClientTestDesignSpecification.md**.
 
-##<a name="3"/>References
+## <a name="3"/>References
+
 Refer to the following documents for additional information about the RDP test suite:
 
 * **Technical Documents:**
@@ -220,4 +231,5 @@ Refer to the following documents for additional information about the RDP test s
 * MS-RDPEDISP_ClientTestDesignSpecification.md
 
 * **User Guide:** 
+
 * RDP_ClientUserGuide.md
