@@ -283,6 +283,7 @@ Function Config-Driver
 		$TrustRealmKDCNetBiosName = $configFile.Parameters.TrustRealm.KDC.NetBiosName
 		$TrustRealmKDCPassword = $configFile.Parameters.TrustRealm.KDC.Password
 		$TrustRealmKDCIPv4Address = $configFile.Parameters.TrustRealm.KDC.IPv4Address
+		$TrustRealmKDCDefaultServiceName = $configFile.Parameters.TrustRealm.KDC.DefaultServiceName
 		
 		$TrustRealmWebServerFQDN = $configFile.Parameters.TrustRealm.WebServer.FQDN
 		$TrustRealmWebServerNetBiosName = $configFile.Parameters.TrustRealm.WebServer.NetBiosName
@@ -825,6 +826,10 @@ Function Config-Driver
 	if($TrustRealmKDCIPv4Address -ne $null -and $TrustRealmKDCIPv4Address -ne "")
 	{
 		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.KDC01.IPv4Address" $TrustRealmKDCIPv4Address
+	}
+	if($TrustRealmKDCDefaultServiceName -ne $null -and $TrustRealmKDCDefaultServiceName -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.KDC01.DefaultServiceName" $TrustRealmKDCDefaultServiceName
 	}
 	if($TrustRealmWebServerFQDN -ne $null -and $TrustRealmWebServerFQDN -ne "")
 	{
