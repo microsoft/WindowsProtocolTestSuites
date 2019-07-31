@@ -59,8 +59,8 @@ if ($ResultArray -eq $null)
     throw "Failed to find the domain controller in the config file"
 }
 
+$currentCore = $Content.lab.core
 if(![string]::IsNullOrEmpty($currentCore.regressiontype) -and ($currentCore.regressiontype -eq "Azure")){
-    $currentCore = $Content.lab.core
     foreach($paramNode in $currentCore.ChildNodes)
     {
         $ResultArray[$paramNode.Name] = $paramNode.InnerText
