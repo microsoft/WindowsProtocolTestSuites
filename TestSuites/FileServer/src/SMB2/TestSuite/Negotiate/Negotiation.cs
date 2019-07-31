@@ -630,7 +630,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                           BaseTestSite.Assert.AreEqual(
                              Smb2Status.STATUS_SUCCESS,
                              header.Status,
-                             "[MS-SMB2] section 2.2.4.1.4: The SMB2_NETNAME_NEGOTIATE_CONTEXT_ID request does not have an associated SMB2 NEGOTIATE_CONTEXT response. "
+                             "[MS-SMB2] section 2.2.3.1.3: The SMB2_NETNAME_NEGOTIATE_CONTEXT_ID context is specified in an SMB2 NEGOTIATE request to indicate the server name the client connects to. The server MUST ignore this context. "
                              );
                       }
                 );          
