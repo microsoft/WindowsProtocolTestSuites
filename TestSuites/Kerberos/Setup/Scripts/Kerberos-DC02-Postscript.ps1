@@ -13,10 +13,23 @@ Param
 	$WorkingPath      	 = "C:\Temp",
     [int]$Step 			 = 1
 )
+$ConfigFile = "c:\temp\Protocol.xml"
 $Parameters              = @{}
 $CurrentScriptPath 		 = $MyInvocation.MyCommand.Definition
 $ScriptsSignalFile = "$WorkingPath\post.finished.signal" # Config signal file
+$IsAzure                 = $false
 
+try {
+    [xml]$content = Get-Content $ConfigFile -ErrorAction Stop
+    $currentCore = $content.lab.core
+    if(![string]::IsNullOrEmpty($currentCore.regressiontype) -and ($currentCore.regressiontype -eq "Azure")){
+        $IsAzure = $true;
+        $ScriptsSignalFile = "C:\PostScript.Completed.signal"
+    }
+}
+catch {
+    
+}
 #-----------------------------------------------------------------------------
 # Function: Prepare
 # Usage   : Start executing the script; Push directory to working directory
@@ -57,8 +70,13 @@ Function Write-ConfigLog
 Function Read-ConfigParameters()
 {
     Write-ConfigLog "Getting the parameters from environment config file..." -ForegroundColor Yellow
-    $VMName = .\GetVMNameByComputerName.ps1
-    .\GetVmParameters.ps1 -VMName $VMName -RefParamArray ([ref]$Parameters)
+    if($IsAzure)
+    {
+        .\GetVmParametersByComputerName.ps1 -RefParamArray ([ref]$Parameters)
+    } else {
+        $VMName = .\GetVMNameByComputerName.ps1
+        .\GetVmParameters.ps1 -VMName $VMName -RefParamArray ([ref]$Parameters)
+    }
     $Parameters
 }
 
@@ -86,9 +104,10 @@ Function Phase1
     Write-ConfigLog "Setting execution policy..." -ForegroundColor Yellow
     .\Set-ExecutionPolicy-Unrestricted.ps1
 
-    # Set network configurations
-    Write-ConfigLog "Setting network configurations..." -ForegroundColor Yellow
-    .\Set-NetworkConfiguration.ps1 -IPAddress $Parameters["ip"] -SubnetMask $Parameters["subnet"] -Gateway $Parameters["gateway"] -DNS ($Parameters["dns"].Split(';'))
+    if(-not $IsAzure)
+    {
+        Remove-ItemProperty -Path HKLM:\Software\Microsoft\Windows\CurrentVersion\Run -Name Install;
+    }
 
     # Promote Domain Controller
     Write-ConfigLog "Promoting this computer to a primary domain controller..." -ForegroundColor Yellow
@@ -119,7 +138,7 @@ Function Phase2
 
     # Set domain administrator password
     Write-ConfigLog "Setting domain administrator password" -ForegroundColor Yellow
-    .\Change-DomainUserPassword.ps1 -DomainName $Parameters["domain"] -Username "Administrator" -NewPassword $Parameters["password"]
+    .\Change-DomainUserPassword.ps1 -DomainName $Parameters["domain"] -Username $Parameters["username"] -NewPassword $Parameters["password"]
 
     # Set autologon
     Write-ConfigLog "Setting autologon..." -ForegroundColor Yellow
@@ -136,6 +155,12 @@ Function Finish
     Write-Host "post Config finished."
     Write-Host "EXECUTE [Kerberos-DC02-postscript.ps1] FINISHED (NOT VERIFIED)." -ForegroundColor Green
     .\RestartAndRunFinish.ps1
+
+    if(-not $IsAzure)
+    {
+        Set-ItemProperty -Path HKLM:\Software\Microsoft\Windows\CurrentVersion\Run -Name Install -Value "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -command `"c:\temp\controller.ps1 -phase 4`"";
+    }
+    Restart-Computer -Force
 }
 
 # Main Script Starts
@@ -147,12 +172,9 @@ Function Main
 
     switch ($Step)
     {
-        1 { Remove-ItemProperty -Path HKLM:\Software\Microsoft\Windows\CurrentVersion\Run -Name Install; Phase1; RestartAndResume; }
-        2 { Phase2; Set-ItemProperty -Path HKLM:\Software\Microsoft\Windows\CurrentVersion\Run -Name Install -Value "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -command `"c:\temp\controller.ps1 -phase 4`""; Finish; }
+        1 { Phase1; RestartAndResume; }
+        2 { Phase2; Finish; }
     }
-
-    Sleep 5
-    Restart-Computer
 }
 
 Main

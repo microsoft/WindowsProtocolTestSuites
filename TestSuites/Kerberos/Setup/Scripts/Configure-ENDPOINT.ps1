@@ -43,7 +43,6 @@ $ScriptFileFullPath      = $MyInvocation.MyCommand.Definition
 $ScriptName              = [System.IO.Path]::GetFileName($ScriptFileFullPath)
 $SignalFileFullPath      = "$WorkingPath\Configure-ENDPOINT.finished.signal"
 $LogFileFullPath         = "$ScriptFileFullPath.log"
-$Parameters              = @{}
 $DataFile                = "$WorkingPath\Scripts\ParamConfig.xml"
 [xml]$KrbParams          = $null
 
@@ -101,11 +100,6 @@ Function Write-ConfigLog
 #------------------------------------------------------------------------------------------
 Function Read-ConfigParameters()
 {
-    Write-ConfigLog "Getting the parameters from environment config file..." -ForegroundColor Yellow
-    $VMName = GetVMNameByComputerName.ps1
-    GetVmParameters.ps1 -VMName $VMName -RefParamArray ([ref]$Parameters)
-    $Parameters
-	
 	if(Test-Path -Path $DataFile)
     {
         [xml]$Script:KrbParams = Get-Content -Path $DataFile
@@ -193,9 +187,12 @@ Function Config-Driver
 		$LocalRealmKDCPassword = $configFile.Parameters.LocalRealm.KDC.Password
 		$LocalRealmKDCIPv4Address = $configFile.Parameters.LocalRealm.KDC.IPv4Address
 	
+		$LocalRealmClientFQDN = $configFile.Parameters.LocalRealm.ClientComputer.FQDN
 		$LocalRealmClientNetBiosName = $configFile.Parameters.LocalRealm.ClientComputer.NetBiosName
 		$LocalRealmClientPassword = $configFile.Parameters.LocalRealm.ClientComputer.Password
 		$LocalRealmClientIPv4Address = $configFile.Parameters.LocalRealm.ClientComputer.IPv4Address
+		$LocalRealmClientDefaultServiceName = $configFile.Parameters.LocalRealm.ClientComputer.DefaultServiceName
+		$LocalRealmClientServiceSalt = $configFile.Parameters.LocalRealm.ClientComputer.ServiceSalt
 		
 		$LocalRealmAuthNotRequiredFQDN = $configFile.Parameters.LocalRealm.AuthNotRequired.FQDN
 		$LocalRealmAuthNotRequiredNetBiosName = $configFile.Parameters.LocalRealm.AuthNotRequired.NetBiosName
@@ -215,6 +212,7 @@ Function Config-Driver
 		$LocalRealmLocalResource02DefaultServiceName = $configFile.Parameters.LocalRealm.LocalResource02.DefaultServiceName
 		$LocalRealmLocalResource02ServiceSalt = $configFile.Parameters.LocalRealm.LocalResource02.ServiceSalt
 
+		$LocalRealmWebServerFQDN = $configFile.Parameters.LocalRealm.WebServer.FQDN
 		$LocalRealmWebServerNetBiosName = $configFile.Parameters.LocalRealm.WebServer.NetBiosName
 		$LocalRealmWebServerPassword = $configFile.Parameters.LocalRealm.WebServer.Password
 		$LocalRealmWebServerIPv4Address = $configFile.Parameters.LocalRealm.WebServer.IPv4Address
@@ -222,17 +220,29 @@ Function Config-Driver
 		$LocalRealmWebServerUser = $configFile.Parameters.LocalRealm.WebServer.user
 		$LocalRealmWebServerRights = $configFile.Parameters.LocalRealm.WebServer.Rights
 		$LocalRealmWebServerPermission = $configFile.Parameters.LocalRealm.WebServer.Permission
+		$LocalRealmWebServerDefaultServiceName = $configFile.Parameters.LocalRealm.WebServer.DefaultServiceName
+		$LocalRealmWebServerServiceSalt = $configFile.Parameters.LocalRealm.WebServer.ServiceSalt
+		$LocalRealmWebServerHttpServiceName = $configFile.Parameters.LocalRealm.WebServer.HttpServiceName
+		$LocalRealmWebServerHttpUri = $configFile.Parameters.LocalRealm.WebServer.HttpUri
 		
+		$LocalRealmFileShareFQDN = $configFile.Parameters.LocalRealm.FileShare.FQDN
 		$LocalRealmFileShareNetBiosName = $configFile.Parameters.LocalRealm.FileShare.NetBiosName
 		$LocalRealmFileSharePassword = $configFile.Parameters.LocalRealm.FileShare.Password
 		$LocalRealmFileShareIPv4Address = $configFile.Parameters.LocalRealm.FileShare.IPv4Address
 		$LocalRealmFileShareFsrmProperty = $configFile.Parameters.LocalRealm.FileShare.FsrmProperty
 		$LocalRealmFileSharePolicy = $configFile.Parameters.LocalRealm.FileShare.Policy
 		$LocalRealmFileShareValue = $configFile.Parameters.LocalRealm.FileShare.Value
+		$LocalRealmFileShareDefaultServiceName = $configFile.Parameters.LocalRealm.FileShare.DefaultServiceName
+		$LocalRealmFileShareServiceSalt = $configFile.Parameters.LocalRealm.FileShare.ServiceSalt
+		$LocalRealmFileShareSmb2ServiceName = $configFile.Parameters.LocalRealm.FileShare.Smb2ServiceName
 		
+		$LocalRealmLdapServerFQDN = $configFile.Parameters.LocalRealm.LdapServer.FQDN
 		$LocalRealmLdapServerNetBiosName = $configFile.Parameters.LocalRealm.LdapServer.NetBiosName
 		$LocalRealmLdapServerPassword = $configFile.Parameters.LocalRealm.LdapServer.Password
 		$LocalRealmLdapServerIPv4Address = $configFile.Parameters.LocalRealm.LdapServer.IPv4Address
+		$LocalRealmLdapServerDefaultServiceName = $configFile.Parameters.LocalRealm.LdapServer.DefaultServiceName
+		$LocalRealmLdapServerServiceSalt = $configFile.Parameters.LocalRealm.LdapServer.ServiceSalt
+		$LocalRealmLdapServerLdapServiceName = $configFile.Parameters.LocalRealm.LdapServer.LdapServiceName
 	
 		$LocalRealmResourceGroup01Name = $configFile.Parameters.LocalRealm.ResourceGroup01.GroupName
 		$LocalRealmResourceGroup02Name = $configFile.Parameters.LocalRealm.ResourceGroup02.GroupName
@@ -269,10 +279,13 @@ Function Config-Driver
 		$LocalRealmUser13Group = $configFile.Parameters.LocalRealm.User13.Group	
 
 		$TrustRealmName = $configFile.Parameters.TrustRealm.RealmName
+		$TrustRealmKDCFQDN = $configFile.Parameters.TrustRealm.KDC.FQDN
 		$TrustRealmKDCNetBiosName = $configFile.Parameters.TrustRealm.KDC.NetBiosName
 		$TrustRealmKDCPassword = $configFile.Parameters.TrustRealm.KDC.Password
 		$TrustRealmKDCIPv4Address = $configFile.Parameters.TrustRealm.KDC.IPv4Address
+		$TrustRealmKDCDefaultServiceName = $configFile.Parameters.TrustRealm.KDC.DefaultServiceName
 		
+		$TrustRealmWebServerFQDN = $configFile.Parameters.TrustRealm.WebServer.FQDN
 		$TrustRealmWebServerNetBiosName = $configFile.Parameters.TrustRealm.WebServer.NetBiosName
 		$TrustRealmWebServerPassword = $configFile.Parameters.TrustRealm.WebServer.Password
 		$TrustRealmWebServerIPv4Address = $configFile.Parameters.TrustRealm.WebServer.IPv4Address
@@ -280,17 +293,29 @@ Function Config-Driver
 		$TrustRealmWebServerUser = $configFile.Parameters.TrustRealm.WebServer.user
 		$TrustRealmWebServerRights = $configFile.Parameters.TrustRealm.WebServer.Rights
 		$TrustRealmWebServerPermission = $configFile.Parameters.TrustRealm.WebServer.Permission
+		$TrustRealmWebServerDefaultServiceName = $configFile.Parameters.TrustRealm.WebServer.DefaultServiceName
+		$TrustRealmWebServerServiceSalt = $configFile.Parameters.TrustRealm.WebServer.ServiceSalt
+		$TrustRealmWebServerHttpServiceName = $configFile.Parameters.TrustRealm.WebServer.HttpServiceName
+		$TrustRealmWebServerHttpUri = $configFile.Parameters.TrustRealm.WebServer.HttpUri
 		
+		$TrustRealmFileShareFQDN = $configFile.Parameters.TrustRealm.FileShare.FQDN
 		$TrustRealmFileShareNetBiosName = $configFile.Parameters.TrustRealm.FileShare.NetBiosName
 		$TrustRealmFileSharePassword = $configFile.Parameters.TrustRealm.FileShare.Password
 		$TrustRealmFileShareIPv4Address = $configFile.Parameters.TrustRealm.FileShare.IPv4Address
 		$TrustRealmFileShareFsrmProperty = $configFile.Parameters.TrustRealm.FileShare.FsrmProperty
 		$TrustRealmFileSharePolicy = $configFile.Parameters.TrustRealm.FileShare.Policy
 		$TrustRealmFileShareValue = $configFile.Parameters.TrustRealm.FileShare.Value
+		$TrustRealmFileShareDefaultServiceName = $configFile.Parameters.TrustRealm.FileShare.DefaultServiceName
+		$TrustRealmFileShareServiceSalt = $configFile.Parameters.TrustRealm.FileShare.ServiceSalt
+		$TrustRealmFileShareSmb2ServiceName = $configFile.Parameters.TrustRealm.FileShare.Smb2ServiceName
 
+		$TrustRealmLdapServerFQDN = $configFile.Parameters.TrustRealm.LdapServer.FQDN
 		$TrustRealmLdapServerNetBiosName = $configFile.Parameters.TrustRealm.LdapServer.NetBiosName
 		$TrustRealmLdapServerPassword = $configFile.Parameters.TrustRealm.LdapServer.Password
 		$TrustRealmLdapServerIPv4Address = $configFile.Parameters.TrustRealm.LdapServer.IPv4Address
+		$TrustRealmLdapServerDefaultServiceName = $configFile.Parameters.TrustRealm.LdapServer.DefaultServiceName
+		$TrustRealmLdapServerServiceSalt = $configFile.Parameters.TrustRealm.LdapServer.ServiceSalt
+		$TrustRealmLdapServerLdapServiceName = $configFile.Parameters.TrustRealm.LdapServer.LdapServiceName
 
 		$TrustRealmAdministratorUsername = $configFile.Parameters.TrustRealm.Administrator.Username
 		$TrustRealmAdministratorPassword = $configFile.Parameters.TrustRealm.Administrator.Password
@@ -337,6 +362,7 @@ Function Config-Driver
 	Write-ConfigLog "`$LocalRealmKDCFQDN = $LocalRealmKDCFQDN"
 	Write-ConfigLog "`$LocalRealmKDCNetBiosName = $LocalRealmKDCNetBiosName"
 	Write-ConfigLog "`$LocalRealmKDCPassword = $LocalRealmKDCPassword"
+	Write-ConfigLog "`$LocalRealmClientFQDN = $LocalRealmClientFQDN"
 	Write-ConfigLog "`$LocalRealmClientNetBiosName = $LocalRealmClientNetBiosName"
 	Write-ConfigLog "`$LocalRealmClientPassword = $LocalRealmClientPassword"
 	Write-ConfigLog "`$LocalRealmAuthNotRequiredFQDN = $LocalRealmAuthNotRequiredFQDN"
@@ -354,17 +380,20 @@ Function Config-Driver
 	Write-ConfigLog "`$LocalRealmLocalResource02Password = $LocalRealmLocalResource02Password"
 	Write-ConfigLog "`$LocalRealmLocalResource02DefaultServiceName = $LocalRealmLocalResource02DefaultServiceName"
 	Write-ConfigLog "`$LocalRealmLocalResource02ServiceSalt = $LocalRealmLocalResource02ServiceSalt"
+	Write-ConfigLog "`$LocalRealmWebServerFQDN =  $LocalRealmWebServerFQDN"
 	Write-ConfigLog "`$LocalRealmWebServerNetBiosName = $LocalRealmWebServerNetBiosName"
 	Write-ConfigLog "`$LocalRealmWebServerPassword = $LocalRealmWebServerPassword"
 	Write-ConfigLog "`$LocalRealmWebServerwwwroot = $LocalRealmWebServerwwwroot"
 	Write-ConfigLog "`$LocalRealmWebServerUser = $LocalRealmWebServeruser"
 	Write-ConfigLog "`$LocalRealmWebServerRights = $LocalRealmWebServerRights"
 	Write-ConfigLog "`$LocalRealmWebServerPermission = $LocalRealmWebServerPermission"
+	Write-ConfigLog "`$LocalRealmFileShareFQDN = $LocalRealmFileShareFQDN"
 	Write-ConfigLog "`$LocalRealmFileShareNetBiosName = $LocalRealmFileShareNetBiosName"
 	Write-ConfigLog "`$LocalRealmFileSharePassword = $LocalRealmFileSharePassword"
 	Write-ConfigLog "`$LocalRealmFileShareFsrmProperty = $LocalRealmFileShareFsrmProperty"
 	Write-ConfigLog "`$LocalRealmFileSharePolicy = $LocalRealmFileSharePolicy"
 	Write-ConfigLog "`$LocalRealmFileShareValue = $LocalRealmFileShareValue"
+	Write-ConfigLog "`$LocalRealmLdapServerFQDN = $LocalRealmLdapServerFQDN"
 	Write-ConfigLog "`$LocalRealmLdapServerNetBiosName = $LocalRealmLdapServerNetBiosName"
 	Write-ConfigLog "`$LocalRealmLdapServerPassword = $LocalRealmLdapServerPassword"
 	Write-ConfigLog "`$LocalRealmResourceGroup01Name = $LocalRealmResourceGroup01Name"
@@ -476,6 +505,10 @@ Function Config-Driver
 	{
 		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.KDC01.Password" $LocalRealmKDCPassword
 	}
+	if($LocalRealmClientFQDN -ne $null -and $LocalRealmClientFQDN -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.ClientComputer.FQDN" $LocalRealmClientFQDN 
+	}
 	if($LocalRealmClientNetBiosName -ne $null -and $LocalRealmClientNetBiosName -ne "")
 	{
 		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.ClientComputer.NetBiosName" $LocalRealmClientNetBiosName 
@@ -487,6 +520,14 @@ Function Config-Driver
 	if($LocalRealmClientIPv4Address -ne $null -and $LocalRealmClientIPv4Address -ne "")
 	{
 		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.ClientComputer.IPv4Address" $LocalRealmClientIPv4Address
+	}
+	if($LocalRealmClientDefaultServiceName -ne $null -and $LocalRealmClientDefaultServiceName -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.ClientComputer.DefaultServiceName" $LocalRealmClientDefaultServiceName
+	}
+	if($LocalRealmClientServiceSalt -ne $null -and $LocalRealmClientServiceSalt -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.ClientComputer.ServiceSalt" $LocalRealmClientServiceSalt
 	}
 	if($LocalRealmAuthNotRequiredFQDN -ne $null -and $LocalRealmAuthNotRequiredFQDN -ne "")
 	{
@@ -548,6 +589,10 @@ Function Config-Driver
 	{
 		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LocalResource02.ServiceSalt" $LocalRealmLocalResource02ServiceSalt
 	}
+	if($LocalRealmWebServerFQDN -ne $null -and $LocalRealmWebServerFQDN -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.WebServer01.FQDN" $LocalRealmWebServerFQDN
+	}
 	if($LocalRealmWebServerNetBiosName -ne $null -and $LocalRealmWebServerNetBiosName -ne "")
 	{
 		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.WebServer01.NetBiosName" $LocalRealmWebServerNetBiosName
@@ -559,6 +604,26 @@ Function Config-Driver
 	if($LocalRealmWebServerIPv4Address -ne $null -and $LocalRealmWebServerIPv4Address -ne "")
 	{
 		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.WebServer01.IPv4Address" $LocalRealmWebServerIPv4Address
+	}
+	if($LocalRealmWebServerDefaultServiceName -ne $null -and $LocalRealmWebServerDefaultServiceName -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.WebServer01.DefaultServiceName" $LocalRealmWebServerDefaultServiceName
+	}
+	if($LocalRealmWebServerServiceSalt-ne $null -and $LocalRealmWebServerServiceSalt -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.WebServer01.ServiceSalt" $LocalRealmWebServerServiceSalt
+	}
+	if($LocalRealmWebServerHttpServiceName -ne $null -and $LocalRealmWebServerHttpServiceName -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.WebServer01.HttpServiceName" $LocalRealmWebServerHttpServiceName
+	}
+	if($LocalRealmWebServerHttpUri -ne $null -and $LocalRealmWebServerHttpUri -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.WebServer01.HttpUri" $LocalRealmWebServerHttpUri
+	}
+	if($LocalRealmFileShareFQDN -ne $null -and $LocalRealmFileShareFQDN -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.FileServer01.FQDN" $LocalRealmFileShareFQDN
 	}
 	if($LocalRealmFileShareNetBiosName -ne $null -and $LocalRealmFileShareNetBiosName -ne "")
 	{
@@ -572,6 +637,18 @@ Function Config-Driver
 	{
 		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.FileServer01.IPv4Address" $LocalRealmFileShareIPv4Address
 	}
+	if($LocalRealmFileShareDefaultServiceName -ne $null -and $LocalRealmFileShareDefaultServiceName -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.FileServer01.DefaultServiceName" $LocalRealmFileShareDefaultServiceName
+	}
+	if($LocalRealmFileShareServiceSalt -ne $null -and $LocalRealmFileShareServiceSalt -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.FileServer01.ServiceSalt" $LocalRealmFileShareServiceSalt
+	}
+	if($LocalRealmFileShareSmb2ServiceName -ne $null -and $LocalRealmFileShareSmb2ServiceName -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.FileServer01.Smb2ServiceName" $LocalRealmFileShareSmb2ServiceName
+	}
 
 	$OS2012 = "6.2"
 	$SUTOSVersion = Invoke-Command -ComputerName "$LocalRealmKDCFQDN" -ScriptBlock {"" + [System.Environment]::OSVersion.Version.Major + "." + [System.Environment]::OSVersion.Version.Minor}
@@ -582,6 +659,10 @@ Function Config-Driver
 		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.FileServer01.Smb2Dialect" "Smb30"
 	}
 
+	if($LocalRealmLdapServerFQDN -ne $null -and $LocalRealmLdapServerFQDN -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LdapServer01.FQDN" $LocalRealmLdapServerFQDN
+	}
 	if($LocalRealmLdapServerNetBiosName -ne $null -and $LocalRealmLdapServerNetBiosName -ne "")
 	{
 		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LdapServer01.NetBiosName" $LocalRealmLdapServerNetBiosName
@@ -593,6 +674,18 @@ Function Config-Driver
 	if($LocalRealmLdapServerIPv4Address -ne $null -and $LocalRealmLdapServerIPv4Address -ne "")
 	{
 		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LdapServer01.IPv4Address" $LocalRealmLdapServerIPv4Address
+	} 
+	if($LocalRealmLdapServerDefaultServiceName -ne $null -and $LocalRealmLdapServerDefaultServiceName -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LdapServer01.DefaultServiceName" $LocalRealmLdapServerDefaultServiceName
+	} 
+	if($LocalRealmLdapServerServiceSalt -ne $null -and $LocalRealmLdapServerServiceSalt -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LdapServer01.ServiceSalt" $LocalRealmLdapServerServiceSalt
+	} 
+	if($LocalRealmLdapServerLdapServiceName -ne $null -and $LocalRealmLdapServerLdapServiceName -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "LocalRealm.LdapServer01.LdapServiceName" $LocalRealmLdapServerLdapServiceName
 	} 
 	if($LocalRealmResourceGroup01Name -ne $null -and $LocalRealmResourceGroup01Name -ne "")
 	{
@@ -718,6 +811,10 @@ Function Config-Driver
 	{
 		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.RealmName" $TrustRealmName
 	}
+	if($TrustRealmKDCFQDN -ne $null -and $TrustRealmKDCFQDN -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.KDC01.FQDN" $TrustRealmKDCFQDN
+	}
 	if($TrustRealmKDCNetBiosName -ne $null -and $TrustRealmKDCNetBiosName -ne "")
 	{
 		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.KDC01.NetBiosName" $TrustRealmKDCNetBiosName
@@ -729,6 +826,14 @@ Function Config-Driver
 	if($TrustRealmKDCIPv4Address -ne $null -and $TrustRealmKDCIPv4Address -ne "")
 	{
 		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.KDC01.IPv4Address" $TrustRealmKDCIPv4Address
+	}
+	if($TrustRealmKDCDefaultServiceName -ne $null -and $TrustRealmKDCDefaultServiceName -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.KDC01.DefaultServiceName" $TrustRealmKDCDefaultServiceName
+	}
+	if($TrustRealmWebServerFQDN -ne $null -and $TrustRealmWebServerFQDN -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.WebServer01.FQDN" $TrustRealmWebServerFQDN
 	}
 	if($TrustRealmWebServerNetBiosName -ne $null -and $TrustRealmWebServerNetBiosName -ne "")
 	{
@@ -742,6 +847,26 @@ Function Config-Driver
 	{
 		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.WebServer01.IPv4Address" $TrustRealmWebServerIPv4Address
 	}
+	if($TrustRealmWebServerDefaultServiceName -ne $null -and $TrustRealmWebServerDefaultServiceName -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.WebServer01.DefaultServiceName" $TrustRealmWebServerDefaultServiceName
+	}
+	if($TrustRealmWebServerServiceSalt -ne $null -and $TrustRealmWebServerServiceSalt -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.WebServer01.ServiceSalt" $TrustRealmWebServerServiceSalt
+	}
+	if($TrustRealmWebServerHttpServiceName -ne $null -and $TrustRealmWebServerHttpServiceName -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.WebServer01.HttpServiceName" $TrustRealmWebServerHttpServiceName
+	}
+	if($TrustRealmWebServerHttpUri -ne $null -and $TrustRealmWebServerHttpUri -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.WebServer01.HttpUri" $TrustRealmWebServerHttpUri
+	}
+	if($TrustRealmFileShareFQDN -ne $null -and $TrustRealmFileShareFQDN -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.FileServer01.FQDN" $TrustRealmFileShareFQDN
+	}
 	if($TrustRealmFileShareNetBiosName -ne $null -and $TrustRealmFileShareNetBiosName -ne "")
 	{
 		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.FileServer01.NetBiosName" $TrustRealmFileShareNetBiosName
@@ -754,6 +879,22 @@ Function Config-Driver
 	{
 		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.FileServer01.IPv4Address" $TrustRealmFileShareIPv4Address
 	}
+	if($TrustRealmFileShareDefaultServiceName -ne $null -and $TrustRealmFileShareDefaultServiceName -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.FileServer01.DefaultServiceName" $TrustRealmFileShareDefaultServiceName
+	}
+	if($TrustRealmFileShareServiceSalt -ne $null -and $TrustRealmFileShareServiceSalt -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.FileServer01.ServiceSalt" $TrustRealmFileShareServiceSalt
+	}
+	if($TrustRealmFileShareSmb2ServiceName -ne $null -and $TrustRealmFileShareSmb2ServiceName -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.FileServer01.Smb2ServiceName" $TrustRealmFileShareSmb2ServiceName
+	}
+	if($TrustRealmLdapServerFQDN -ne $null -and $TrustRealmLdapServerFQDN -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.LdapServer01.FQDN" $TrustRealmLdapServerFQDN
+	}
 	if($TrustRealmLdapServerNetBiosName -ne $null -and $TrustRealmLdapServerNetBiosName -ne "")
 	{
 		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.LdapServer01.NetBiosName" $TrustRealmLdapServerNetBiosName
@@ -765,6 +906,18 @@ Function Config-Driver
 	if($TrustRealmLdapServerIPv4Address -ne $null -and $TrustRealmLdapServerIPv4Address -ne "")
 	{
 		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.LdapServer01.IPv4Address" $TrustRealmLdapServerIPv4Address
+	}
+	if($TrustRealmLdapServerDefaultServiceName -ne $null -and $TrustRealmLdapServerDefaultServiceName -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.LdapServer01.DefaultServiceName" $TrustRealmLdapServerDefaultServiceName
+	}
+	if($TrustRealmLdapServerServiceSalt -ne $null -and $TrustRealmLdapServerServiceSalt -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.LdapServer01.ServiceSalt" $TrustRealmLdapServerServiceSalt
+	}
+	if($TrustRealmLdapServerLdapServiceName -ne $null -and $TrustRealmLdapServerLdapServiceName -ne "")
+	{
+		Modify-ConfigFileNodeWithGroup.ps1 $DepPtfConfig "TrustedRealm.LdapServer01.LdapServiceName" $TrustRealmLdapServerLdapServiceName
 	}
 	if($TrustRealmAdministratorUsername -ne $null -and $TrustRealmAdministratorUsername -ne "")
 	{

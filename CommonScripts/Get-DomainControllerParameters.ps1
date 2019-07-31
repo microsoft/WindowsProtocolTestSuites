@@ -23,6 +23,7 @@ Param
 
     [string]$ConfigFile = "protocol.xml"
 )
+$ResultArray = @{}
 
 try
 {
@@ -33,8 +34,6 @@ catch
 {
     throw "Failed to read config file"
 }
-
-$ResultArray = @{}
 
 foreach ($VM in $AllVMs)
 {
@@ -58,6 +57,14 @@ foreach ($VM in $AllVMs)
 if ($ResultArray -eq $null)
 {
     throw "Failed to find the domain controller in the config file"
+}
+
+$currentCore = $Content.lab.core
+if(![string]::IsNullOrEmpty($currentCore.regressiontype) -and ($currentCore.regressiontype -eq "Azure")){
+    foreach($paramNode in $currentCore.ChildNodes)
+    {
+        $ResultArray[$paramNode.Name] = $paramNode.InnerText
+    }
 }
 
 $RefParamArray.Value = $ResultArray
