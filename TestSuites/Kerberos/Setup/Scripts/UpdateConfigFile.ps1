@@ -245,7 +245,7 @@ Function UpdateConfigFile
         $node.FQDN = "$TrustDCComputerName.$TrustDomainName"
         $node.NetBiosName = $TrustDCComputerName + '$'
         $node.IPv4Address = $TrustDCIP
-        $node.DefaultServiceName = "krbtgt/$TrustDomainName"
+        $node.DefaultServiceName = "krbtgt/" + $TrustDomainName.ToUpper()
 
         Write-Host "Configure parameters.TrustRealm.FileShare"
         $node = $configContent.parameters.TrustRealm.FileShare
