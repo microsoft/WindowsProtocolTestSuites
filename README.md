@@ -32,18 +32,18 @@ Windows Protocol Test Suites contain 4 components:
 The Test Suites are developed and must be installed on a Windows platform.
 You should install the software listed below based on your testing purpose, including their own dependencies.
 
-1. [Visual Studio 2017](https://visualstudio.microsoft.com/downloads/) installed with these individual components from the installer:
+1. [Visual Studio](https://visualstudio.microsoft.com/downloads/) 2017 or higher ([Visual Studio 2017 Community](https://aka.ms/vs/15/release/vs_community.exe) recommended), installed with these individual components from the installer:
  
-    |Section|Individual Component|Run Windows Protocol Test Suites|Build Windows Protocol Test Suites from source code|
-    |---|---|---|---|
-    |.NET|.NET Framework 4.7.1 SDK||Required|
-    |.NET|.NET Framework 4.7.1 targeting pack|Required|Required|
-    |Compilers, build tools, and runtime|C# and Visual Basic Roslyn compilers||Required|
-    |Compilers, build tools, and runtime|VC++ 2017 version 15.8 v14.15 latest v141 tools||Required<sup>1</sup>|
-    |Compilers, build tools, and runtime|Visual C++ 2017 Redistributable Update|Required<sup>1</sup>|Required<sup>1</sup>|
-    |Debugging and testing|Testing tools core features|Required|Required|
-    |Developent Activities|Visual Studio C++ core features||Required<sup>1</sup>|
-    |SDKs, libraries, and frameworks|Windows 10 SDK (10.0.16299.0) for Desktop C++ [x86 and x64]||Required<sup>1</sup>|
+    |Section|Individual Component in Visual Studio 2017|Individual Component in Visual Studio 2019|Run Windows Protocol Test Suites|Build Windows Protocol Test Suites from source code|
+    |---|---|---|---|---|
+    |.NET|.NET Framework 4.7.1 SDK|.NET Framework 4.7.1 SDK||Required|
+    |.NET|.NET Framework 4.7.1 targeting pack|.NET Framework 4.7.1 targeting pack|Required|Required|
+    |Compilers, build tools, and runtime|C# and Visual Basic Roslyn compilers|C# and Visual Basic Roslyn compilers||Required|
+    |Compilers, build tools, and runtime|VC++ 2017 version 15.9 v14.16 latest v141 tools|MSVC v141 - VS 2017 C++ x64/x86 build tools (v14.16)||Required<sup>1</sup>|
+    |Compilers, build tools, and runtime|Visual C++ 2017 Redistributable Update|C++ 2019 Redistributable Update|Required<sup>1</sup>|Required<sup>1</sup>|
+    |Debugging and testing|Testing tools core features||Required<sup>2</sup>|Required<sup>2</sup>|
+    |Developent Activities|Visual Studio C++ core features|C++ core features||Required<sup>1</sup>|
+    |SDKs, libraries, and frameworks|Windows 10 SDK (10.0.16299.0) for Desktop C++ [x86 and x64]|Windows 10 SDK (10.0.16299.0)||Required<sup>1</sup>|
 1. [Spec Explorer 2010 v3.5.3146.0](https://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/)<br />
    It is only required if you want to build or run the test suites that contain Model-Based Test cases. If you want to regenerate Model-Based Test cases, you must install Visual Studio 2012.
 1. [Protocol Test Framework build 1.0 (build 1.0.6500.0)](https://github.com/Microsoft/ProtocolTestFramework/releases/tag/1.0.6500.0)<br />
@@ -52,18 +52,23 @@ You should install the software listed below based on your testing purpose, incl
    1. _Turn Windows features on or off_
    1. Enable _.NET Framework 3.5 (includes .NET 2.0 and 3.0)<br />
    This is necessary for WiX Toolset.
-1. [WiX Toolset v3.11](https://github.com/wixtoolset/wix3/releases/tag/wix3111rtm)<br />
-1. [WiX Toolset Visual Studio 2017 Extension](https://marketplace.visualstudio.com/items?itemName=RobMensching.WixToolsetVisualStudio2017Extension)<br />
+1. [WiX Toolset v3.14](https://wixtoolset.org/releases/v3-14-0-2927/)<br />
+1. [WiX Toolset Visual Studio 2017 Extension](https://marketplace.visualstudio.com/items?itemName=WixToolset.WixToolsetVisualStudio2017Extension) or [Wix Toolset Visual Studio 2019 Extension](https://marketplace.visualstudio.com/items?itemName=WixToolset.WixToolsetVisualStudio2019Extension)<br />
    WiX Toolset components required if you want to build test suites or Protocol Test Manager from source code.
+1. [NuGet CLI](https://www.nuget.org/downloads)<br />
+   It is required if you want to build Protocol Test Manager. Please download `nuget.exe` into a suitable folder and add that folder to `Path` environment variable 
 1. [Microsoft Message Analyzer](https://www.microsoft.com/en-us/download/details.aspx?id=44226)<br />
-   It is required if your want to build or run ADFamily, ADOD and AZOD test suites.
+   It is required if you want to build or run ADFamily, ADOD and AZOD test suites.
 1. [Open XML SDK](https://www.microsoft.com/en-us/download/details.aspx?id=30425)<br />
-   It is required if your want to build or run ADFamily test suite.
+   It is required if you want to build or run ADFamily test suite.
 1. [Network Direct DDK](https://www.microsoft.com/en-us/download/details.aspx?id=26645)<br />
-   From  `NetworkDirect_DDK.zip` extract `ndspi.h` and `ndstatus.h` into project path `ProtoSDK\RDMA\include`. This is to build SMBD test suite.
+   From `NetworkDirect_DDK.zip` extract `ndspi.h` and `ndstatus.h` into project path `ProtoSDK\RDMA\include`. This is to build SMBD test suite.
 
+<small>Note:</small>
 
-<sup>1</sup>: <small>These individual components are required by ADFamily, MS-SMBD or Protocol Test Manager which have C++ code.</small>
+<small>1: This individual component is required by ADFamily, MS-SMBD or Protocol Test Manager which have C++ code.</small>
+
+<small>2: This individual component is installed in Visual Studio 2019 by default.</small>
 
 You can use the script in `InstallPrerequisites` folder to automatically download and install these software.
 
