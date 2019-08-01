@@ -83,6 +83,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         private StreamType gStreamType;
         private List<string> activeTDIs;
 
+        // Used to generate random file names.
+        [ThreadStatic]
+        private static Random randomRange;
+
         // Used to clean up the generated test files.
         protected ISutProtocolControlAdapter sutProtocolController;
         protected List<string> testFiles = new List<string>();
@@ -239,6 +243,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             {
                 string fullName = (string)Site.TestProperties["CurrentTestCaseName"];
                 return fullName.Split('.').LastOrDefault();
+            }
+        }
+
+        private static Random RandomRange
+        {
+            get
+            {
+                if (randomRange == null)
+                {
+                    randomRange = new Random();
+                }
+
+                return randomRange;
             }
         }
         #endregion
@@ -500,6 +517,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             else if (symbolicLinkType == SymbolicLinkType.IsSymbolicLink)
             {
                 randomFile = testConfig.GetProperty("SymbolicLinkFile");
+
+                if (this.FileSystem == FileSystem.FAT32)
+                {
+                    site.Assume.Inconclusive("Symbolic Link is not supported by FAT32 system.");
+                }
             }
 
             //Retrieve the existing the folder
@@ -5352,12 +5374,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             int randomNumber = 0;
             char fileNameLetter = ' ';
             string ramdomFileName = null;
-            Random randomRange = new Random((int)System.DateTime.Now.Ticks);
 
             for (int i = 0; i < fileNameLength; i++)
             {
                 //Create a random fileNameLetter from 'a' to 'z'by range 1 to 52
-                randomNumber = randomRange.Next(1, 52);
+                randomNumber = RandomRange.Next(1, 52);
                 fileNameLetter = (char)(97 + randomNumber % 26);
                 ramdomFileName = ramdomFileName + fileNameLetter.ToString(); ;
             }

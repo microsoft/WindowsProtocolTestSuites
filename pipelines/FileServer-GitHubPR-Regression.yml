@@ -21,8 +21,6 @@ variables:
     value: FileServer-GitHubPR-Regression-$(Build.BuildNumber)
   - name: test.downstreamPipelineName
     value: FileServer-GitHubPR-Regression_PerENV
-  - name: test.helperBranch
-    value: $(extRepo.branchName)
 
 jobs:
 - job:
@@ -60,7 +58,7 @@ jobs:
     displayName: 'Publish trx files'
     inputs:
       testResultsFormat: VSTest
-      testResultsFiles: '$(Build.Repository.LocalPath)/TestResults/*/*trx'
+      testResultsFiles: '$(Build.Repository.LocalPath)/TestResults/*/*.trx'
       failTaskOnFailedTests: true
     timeoutInMinutes: 0
     condition: always()
