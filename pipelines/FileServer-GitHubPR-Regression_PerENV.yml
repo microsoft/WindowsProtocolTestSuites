@@ -40,8 +40,6 @@ jobs:
       targetType: filePath
       filePath: '$(extRepo.dir)/RunRegression/AzureScripts/Run-TestSuiteRegression.ps1'
       arguments: '-TestSuiteName "$(test.testSuiteName)" -EnvironmentName "$(test.environmentName)"'
-    env:
-      AZURE_STORAGEACCOUNTKEY: $(azure.storageAccountKey)
     timeoutInMinutes: 0
 
   - task: PublishTestResults@2
