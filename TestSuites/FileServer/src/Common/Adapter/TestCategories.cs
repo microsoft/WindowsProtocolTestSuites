@@ -115,9 +115,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         public const string FlushCachedData = "FlushCachedData";
         public const string AlternateDataStream = "AlternateDataStream";
 
-        // For some features not supported by FAT32 file sytem
-        public const string NonFat32 = "NonFat32";
-
         /// <summary>
         /// Indicate this test case is positive
         /// </summary>

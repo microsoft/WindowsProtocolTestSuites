@@ -517,6 +517,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             else if (symbolicLinkType == SymbolicLinkType.IsSymbolicLink)
             {
                 randomFile = testConfig.GetProperty("SymbolicLinkFile");
+
+                if(this.FileSystem == FileSystem.FAT32)
+                {
+                    site.Assume.Inconclusive("Symbolic Link is not supported by FAT32 file system.");
+                }
             }
 
             //Retrieve the existing the folder
