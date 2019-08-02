@@ -8,7 +8,7 @@ using System.Threading;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
 using System.Security.Cryptography.X509Certificates;
-using Microsoft.Protocols.TestTools.ExtendedLogging;
+// using Microsoft.Protocols.TestTools.ExtendedLogging;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
@@ -139,7 +139,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
 
                 // ETW Provider Dump Message
                 string messageName = "RDPEMT:SentPDU";
-                ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer2, "RDPEMT Sent PDU", data);
+                // ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer2, "RDPEMT Sent PDU", data);
             }
         }
 
@@ -219,7 +219,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
 
                     // ETW Provider Dump Message
                     string messageName = "RDPEMT:ReceivedPDU";
-                    ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer2, "RDPEMT Received PDU", decryptedData);
+                    // ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer2, "RDPEMT Received PDU", decryptedData);
 
                     if (Received != null)
                     {
