@@ -12,7 +12,7 @@ using System.Threading;
 
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.Transport;
-using Microsoft.Protocols.TestTools.ExtendedLogging;
+// using Microsoft.Protocols.TestTools.ExtendedLogging;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 {
@@ -294,7 +294,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 }
                 if (receivedBufferIndex + headerLength + length == receivedBuffer.Count)
                 {
-                    ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_LayerTLS, "TLS Received Data", receivedBuffer.ToArray());
+                    // ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_LayerTLS, "TLS Received Data", receivedBuffer.ToArray());
                     receivedBuffer.Clear();
                     receivedBufferIndex = 0;
                 }
@@ -334,7 +334,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 }
                 if (sentBufferIndex + headerLength + length == sentBuffer.Count)
                 {
-                    ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_LayerTLS, "TLS Sent Data", sentBuffer.ToArray());
+                    // ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_LayerTLS, "TLS Sent Data", sentBuffer.ToArray());
                     sentBuffer.Clear();
                     sentBufferIndex = 0;
                 }
