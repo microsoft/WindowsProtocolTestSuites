@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
-using Microsoft.Protocols.TestTools.ExtendedLogging;
+// using Microsoft.Protocols.TestTools.ExtendedLogging;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 {
@@ -858,7 +858,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
                     // ETW Provider Dump message
                     string messageName = "DecompressedData";
-                    ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, "Decompressed data", rawSvrData);
+                    // ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, "Decompressed data", rawSvrData);
                 }
                 else
                 {
@@ -911,7 +911,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
                         // ETW Provider Dump message
                         string messageName = "DecompressedData";
-                        ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, "Decompressed data", rawPartData);
+                        // ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, "Decompressed data", rawPartData);
                     }
                     else
                     {

@@ -257,7 +257,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         /// <summary>
         /// An byte buffer to store the temp result from the bit buffer.
         /// </summary>
-        private ArrayList compressDataList;
+        private List<byte> compressDataList;
 
         /// <summary>
         /// Histoty byte buffer to store the MaxP length 
@@ -294,7 +294,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         public CompressFactory() 
         {
             bitBuffer = new List<bool>();
-            compressDataList = new ArrayList();
+            compressDataList = new List<byte>();
             MaxP = Config.HitoryLen;
             MaxL = Config.MaxLen;
             historyBuffer = new byte[MaxP];
@@ -308,7 +308,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         public CompressFactory(int historyLen, int maxLen)
         {
             bitBuffer = new List<bool>();
-            compressDataList = new ArrayList();
+            compressDataList = new List<byte>();
             MaxP = historyLen;
             MaxL = maxLen;
             historyBuffer = new byte[MaxP];
@@ -392,7 +392,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             compressData = new byte[compressDataList.Count];
             for (int i = 0; i < compressDataList.Count; ++i)
             {
-                compressData[i] = (byte)compressDataList[i];
+                compressData[i] = compressDataList[i];
                 compressData[i] = littleToBig(compressData[i]);
             }
                 
