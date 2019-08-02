@@ -407,6 +407,18 @@ Function Config-DC02()
 	Write-Host "Extract GPOBackup files"
 	&"$WorkingPath\Scripts\Extract-ZipFile.ps1" -ZipFile "$WorkingPath\Scripts\Dc02GPO.zip" -Destination "$WorkingPath\Scripts\Dc02GPO"
 
+	Write-Host "Update Group Policy"
+	$currDomainName = (Get-WmiObject win32_computersystem).Domain
+	$currDomain = Get-ADDomain $currDomainName
+	if($currDomain.name -ne "contoso") {
+		Get-ChildItem -Path "$WorkingPath\Scripts\Dc02GPO" -exclude *.pol -File -Recurse | ForEach-Object {
+			$content =($_|Get-Content)
+			if ($content | Select-String -Pattern 'contoso') {
+				$content = $content -replace 'contoso',$currDomain.name   
+				[IO.File]::WriteAllText($_.FullName, ($content -join "`r`n"))
+			}
+		}
+	}
 	Write-Host "Configurating Group Policy"
 	Import-GPO -BackupId FC378AD4-C0A2-40D8-9072-D7D6A7B587E8 -TargetName "Default Domain Policy" -Path "$WorkingPath\Scripts\Dc02GPO" -CreateIfNeeded
     	
