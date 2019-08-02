@@ -467,7 +467,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat
 
                 this.count = LsatUtilities.TestsuiteMaxUserCount;
 
-                LsatUtilities.InitializeAccountNames();
+                LsatUtilities.InitializeAccountNames(DomainAdministratorName);
 
                 returnValue = LsatClientStack.LsarLookupNames3(
                     this.policyHandle.Value,

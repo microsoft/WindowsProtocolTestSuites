@@ -274,7 +274,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
         {
             get
             {
-                return "administrator@" + PrimaryDomainDnsName;
+                return DomainAdministratorName + "@" + PrimaryDomainDnsName;
             }
         }
 
@@ -359,7 +359,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             {
                 if (_primaryGroupRid > 0) return _primaryGroupRid;
                 var result = Utilities.GetAttributeFromEntry(
-                    string.Format("CN=Administrator,CN=Users,{0}", primaryDomainDN),
+                    string.Format("CN={0},CN=Users,{1}", DomainAdministratorName, primaryDomainDN),
                     "primaryGroupID",
                     PDCNetbiosName,
                     ADDSPortNum,
