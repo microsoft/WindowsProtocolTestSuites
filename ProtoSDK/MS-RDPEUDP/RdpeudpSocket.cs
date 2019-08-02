@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
-using Microsoft.Protocols.TestTools.ExtendedLogging;
+// using Microsoft.Protocols.TestTools.ExtendedLogging;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
 {
@@ -138,7 +138,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         private int sourceNumNotAcked = 0;
         private DateTime ReceiveTimeForFirstNotACKSource;
 
-        public const DumpLevel DumpLevel_LayerTLS = (DumpLevel)10;
+        // public const DumpLevel DumpLevel_LayerTLS = (DumpLevel)10;
 
         #endregion Private variables
 
@@ -402,7 +402,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
 
             // ETW Provider Dump Message
             string messageName = "RDPEUDP:SentPDU";
-            ExtendedLogger.DumpMessage(messageName, DumpLevel_LayerTLS, typeof(RdpeudpPacket).Name, data);
+            // ExtendedLogger.DumpMessage(messageName, DumpLevel_LayerTLS, typeof(RdpeudpPacket).Name, data);
         }
 
         public RdpeudpPacket ExpectPacket(TimeSpan timeout)
@@ -707,7 +707,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
 
             // ETW Provider Dump Message
             string messageName = "RDPEUDP:ReceivedPDU";
-            ExtendedLogger.DumpMessage(messageName, DumpLevel_LayerTLS, eudpPacket.GetType().Name, packetBytes);
+            // ExtendedLogger.DumpMessage(messageName, DumpLevel_LayerTLS, eudpPacket.GetType().Name, packetBytes);
 
             ReceivePacket(eudpPacket);
         }
