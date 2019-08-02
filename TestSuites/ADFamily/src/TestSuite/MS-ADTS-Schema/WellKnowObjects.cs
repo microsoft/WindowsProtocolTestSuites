@@ -934,7 +934,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             childOfChild = child.Children.Find("CN=Guests");
             PropertyValueCollection memeberAttrGuests = childOfChild.Properties["member"];
             child = domainEntry.Children.Find("CN=users");
-            DirectoryEntry userChild = child.Children.Find("CN=Administrator");
+            DirectoryEntry userChild = child.Children.Find($"CN={adAdapter.DomainAdministratorName}");
             string dnOfAdmin = userChild.Properties["distinguishedName"].Value.ToString();
             userChild = child.Children.Find("CN=Domain Admins");
             string dnOfDomainAdmin = userChild.Properties["distinguishedName"].Value.ToString();
