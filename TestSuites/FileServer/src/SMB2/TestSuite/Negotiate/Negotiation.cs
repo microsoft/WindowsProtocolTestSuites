@@ -600,6 +600,41 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                     BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_INVALID_PARAMETER, header.Status, "[MS-SMB2] section 3.3.5.4: The server MUST fail the negotiate request with STATUS_INVALID_PARAMETER, if CompressionAlgorithmCount is equal to zero.");
                 });
         }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Negotiate)]       
+        [Description("This test case is designed to test whether server can ignore SMB2_NETNAME_NEGOTIATE_CONTEXT_ID context when negotiate.")]
+        public void Negotiate_SMB311_ContextID_NetName()
+        {
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Send NEGOTIATE request with SMB2_NETNAME_NEGOTIATE_CONTEXT_ID context."); 
+
+            DialectRevision clientMaxDialectSupported = DialectRevision.Smb311;
+            PreauthIntegrityHashID[] preauthHashAlgs = new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 };
+            EncryptionAlgorithm[] encryptionAlgs = new EncryptionAlgorithm[] {
+                EncryptionAlgorithm.ENCRYPTION_AES128_GCM,
+                EncryptionAlgorithm.ENCRYPTION_AES128_CCM };
+
+            BaseTestSite.Log.Add(
+               LogEntryKind.TestStep,
+               "Send Negotiate request with dialect SMB 3.11, SMB2_PREAUTH_INTEGRITY_CAPABILITIES context and " +
+               "SMB2_ENCRYPTION_CAPABILITIES context and SMB2_NETNAME_NEGOTIATE_CONTEXT_ID context.");
+
+            NegotiateWithNegotiateContexts(
+                clientMaxDialectSupported,
+                preauthHashAlgs,
+                encryptionAlgs,
+                addNetNameContextId: true,
+                checker: (Packet_Header header, NEGOTIATE_Response response) =>
+                      {
+                          BaseTestSite.Assert.AreEqual(
+                             Smb2Status.STATUS_SUCCESS,
+                             header.Status,
+                             "[MS-SMB2] section 2.2.3.1.3: The SMB2_NETNAME_NEGOTIATE_CONTEXT_ID context is specified in an SMB2 NEGOTIATE request to indicate the server name the client connects to. The server MUST ignore this context. "
+                             );
+                      }
+                );          
+        }
         #endregion
 
         #region private methods
@@ -640,6 +675,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             PreauthIntegrityHashID[] preauthHashAlgs,
             EncryptionAlgorithm[] encryptionAlgs = null,
             CompressionAlgorithm[] compressionAlgorithms = null,
+            bool addNetNameContextId = false,
             ResponseChecker<NEGOTIATE_Response> checker = null)
         {
             // ensure clientMaxDialectSupported higher than 3.11
@@ -659,6 +695,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 preauthHashAlgs: preauthHashAlgs,
                 encryptionAlgs: encryptionAlgs,
                 compressionAlgorithms: compressionAlgorithms,
+                addNetNameContextId : addNetNameContextId,
                 checker: checker);
         }
 

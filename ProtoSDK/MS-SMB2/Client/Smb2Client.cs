@@ -1019,23 +1019,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
         #region Negotiate
         public uint Negotiate(
-            ushort creditCharge,
-            ushort creditRequest,
-            Packet_Header_Flags_Values flags,
-            ulong messageId,
-            DialectRevision[] dialects,
-            SecurityMode_Values securityMode,
-            Capabilities_Values capabilities,
-            Guid clientGuid,
-            out DialectRevision selectedDialect,
-            out byte[] gssToken,
-            out Packet_Header responseHeader,
-            out NEGOTIATE_Response responsePayload,
-            ushort channelSequence = 0,
-            PreauthIntegrityHashID[] preauthHashAlgs = null,
-            EncryptionAlgorithm[] encryptionAlgs = null,
-            CompressionAlgorithm[] compressionAlgorithms = null,
-            bool addDefaultEncryption = false)
+             ushort creditCharge,
+             ushort creditRequest,
+             Packet_Header_Flags_Values flags,
+             ulong messageId,
+             DialectRevision[] dialects,
+             SecurityMode_Values securityMode,
+             Capabilities_Values capabilities,
+             Guid clientGuid,
+             out DialectRevision selectedDialect,
+             out byte[] gssToken,
+             out Packet_Header responseHeader,
+             out NEGOTIATE_Response responsePayload,
+             ushort channelSequence = 0,
+             PreauthIntegrityHashID[] preauthHashAlgs = null,
+             EncryptionAlgorithm[] encryptionAlgs = null,
+             CompressionAlgorithm[] compressionAlgorithms = null,
+             SMB2_NETNAME_NEGOTIATE_CONTEXT_ID netNameContext = null,
+             bool addDefaultEncryption = false
+         )
         {
             var request = new Smb2NegotiateRequestPacket();
 
@@ -1093,6 +1095,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 compresssionCapbilities.Header.DataLength = (ushort)(compresssionCapbilities.GetDataLength());
                 request.NegotiateContext_COMPRESSION = compresssionCapbilities;
 
+                request.PayLoad.NegotiateContextCount++;
+            }
+
+            if (netNameContext != null)
+            {
+                request.NegotiateContext_NETNAME = netNameContext;
                 request.PayLoad.NegotiateContextCount++;
             }
 
