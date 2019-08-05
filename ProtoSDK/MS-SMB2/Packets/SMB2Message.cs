@@ -4887,7 +4887,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
     /// The SMB2_NETNAME_NEGOTIATE_CONTEXT_ID context is specified in an SMB2 NEGOTIATE request to indicate the server name the client connects to.
     /// The server MUST ignore this context.
     /// </summary>
-    public struct SMB2_NETNAME_NEGOTIATE_CONTEXT_ID
+    public class SMB2_NETNAME_NEGOTIATE_CONTEXT_ID
     {
         /// <summary>
         /// Header.
@@ -4938,6 +4938,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             result.AddRange(NetName.SelectMany(x => TypeMarshal.ToBytes(x)));
 
             return result.ToArray();
+        }
+
+        /// <summary>
+        /// Get the data length
+        /// </summary>
+        /// <returns>The data length of this context.</returns>
+        public ushort GetDataLength()
+        {            
+            return (ushort)NetName.Length;
         }
     }
 

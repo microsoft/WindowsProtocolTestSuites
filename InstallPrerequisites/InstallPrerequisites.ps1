@@ -389,7 +389,7 @@ if(-not $ConfigPath)
 CheckCategory
 
 #Check PS version
-$psVer = [int](Get-Host).Version.ToString().Substring(0,1)
+$psVer = [int] $PSVersionTable.PSVersion.Major
 
 if($psVer -lt 4)
 {
