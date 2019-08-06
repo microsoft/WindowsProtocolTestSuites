@@ -84,8 +84,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         private List<string> activeTDIs;
 
         // Used to generate random file names.
-        [ThreadStatic]
-        private static Random randomRange;
+        private static Random randomRange = new Random();
 
         // Used to clean up the generated test files.
         protected ISutProtocolControlAdapter sutProtocolController;
@@ -243,19 +242,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             {
                 string fullName = (string)Site.TestProperties["CurrentTestCaseName"];
                 return fullName.Split('.').LastOrDefault();
-            }
-        }
-
-        private static Random RandomRange
-        {
-            get
-            {
-                if (randomRange == null)
-                {
-                    randomRange = new Random();
-                }
-
-                return randomRange;
             }
         }
         #endregion
@@ -5378,7 +5364,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             for (int i = 0; i < fileNameLength; i++)
             {
                 //Create a random fileNameLetter from 'a' to 'z'by range 1 to 52
-                randomNumber = RandomRange.Next(1, 52);
+                lock (randomRange)
+                {
+                    randomNumber = randomRange.Next(1, 52);
+                }
                 fileNameLetter = (char)(97 + randomNumber % 26);
                 ramdomFileName = ramdomFileName + fileNameLetter.ToString(); ;
             }
