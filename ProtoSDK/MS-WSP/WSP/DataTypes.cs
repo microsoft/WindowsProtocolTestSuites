@@ -987,7 +987,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// Nointerface
         /// </summary>
-        E_NOINTERFACE = 0x80004002
+        E_NOINTERFACE = 0x80004002,
+
+        /// <summary>
+        /// Specifies Invalid Parameter
+        /// </summary>
+        ERROR_INVALID_PARAMETER = 0x80070057
     }
 
     /// <summary>
@@ -1099,6 +1104,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// CPMGetScopeStatisticsIn message of WSP protocol
         /// </summary>
         CPMGetScopeStatisticsIn = 24
+    }
+
+    /// <summary>
+    /// A 32-bit unsigned integer indicating the order in which to fetch the rows that MUST be set to one of the following values.
+    /// Used in CPMGetRowsIn
+    /// </summary>
+    public enum FetchType: uint
+    {
+        ForwardOrder = 0x00000000,
+        ReverseOrder = 0x00000001
     }
 
     #endregion

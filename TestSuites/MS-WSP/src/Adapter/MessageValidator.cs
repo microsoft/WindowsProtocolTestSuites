@@ -1448,7 +1448,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 = GetPaddingBytes(paddingBytes, rowsOutResponse,
                 ref startingIndex);
             object offset2; // Could be 64 bit or 32 bit
-            site.CaptureRequirementIfIsTrue(paddingRows >= 0 && paddingBytes <= (reserved - 1), 534,
+            site.CaptureRequirementIfIsTrue(paddingRows >= 0 && paddingRows <= (reserved - 1), 534,
                 "The  'paddingRows' field of the CPMGetRowsOut" +
                 "message MUST be of  length 0 to _cbReserved-1 bytes. ");
 

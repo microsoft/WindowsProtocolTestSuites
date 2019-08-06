@@ -49,7 +49,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
         public string[] Array_PropertySet_Four_DBProperties;
 
-        public int EachRowSize;
+        public uint EachRowSize;
 
         public Guid PropertyRestrictionGuid;
 
@@ -180,7 +180,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         public static uint chapter;
 
 
-        private MessageBuilderParamter parameter;
+        public MessageBuilderParamter parameter;
 
         #endregion
 
@@ -1438,7 +1438,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         /// <param name="eType">eType</param>
         /// <returns>returns byte[] form of SeekDescription variable</returns>
-        private byte[] GetSeekDescriptiion(uint eType)
+        private byte[] GetSeekDescription(uint eType)
         {
             byte[] returnBlob = null;
             uint skip = 0;
@@ -1449,14 +1449,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             int index = 0;
             switch (eType)
             {
-                case 0x00000001:
+                case (uint)RowSeekType.eRowSeekNext:
                     skip = 0x00000000;
                     returnBlob = new byte[Constant.SIZE_OF_UINT];
                     Helper.CopyBytes
                         (returnBlob, ref index,
                         BitConverter.GetBytes(skip));
                     break;
-                case 0x00000002:
+                case (uint)RowSeekType.eRowSeekAt:
                     bmkOffset = 2;
                     skip = 2;
                     region = 0;
@@ -1471,7 +1471,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                         (returnBlob, ref index,
                         BitConverter.GetBytes(region));
                     break;
-                case 0x00000003:
+                case (uint)RowSeekType.eRowSeekAtRatio:
                     numerator = 1;
                     denominator = 2; // Must be greater than ZER0
                     region = 0;
@@ -2073,11 +2073,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             }
             byte[][] paddingColumn = new byte[columns.Length][];
             byte[][] tableColumn = new byte[columns.Length][];
-            if (tableColumn.Length > 0)
-            {
-                tableColumn[0]
-                    = GetTableColumn(columns[0], ref messageOffset);
-            }
+
             for (int i = 0; i < columns.Length; i++)
             {
                 tableColumn[i]
@@ -2233,15 +2229,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             return blob;
         }
 
-        /// <summary>
-        /// Gets the CPMGetRowsIn request
-        /// </summary>
-        /// <param name="cursor">cursor associated with the query</param>
-        /// <param name="reserved">_reserved field of the message</param>
-        /// <param name="clientBase">_clientBase of the message</param>
-        /// <returns>CPMGetRowsOut message BLOB</returns>
-        public byte[] GetCPMRowsInMessage
-            (uint cursor, out uint reserved, out uint clientBase)
+        public byte[] GetCPMRowsInMessage(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType, out uint reserved)
         {
             int index = 0;
 
@@ -2250,42 +2238,44 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
 
             // In RowsOut Message the columnoffset with be clientBase + X
-            clientBase = parameter.ClientBase;
-            uint backwardFetch = 0;
 
-            uint chapter = 0;
             int messageOffset = 10 * Constant.SIZE_OF_UINT;
 
             //Assing variable values
-            byte[] seekDescription = GetSeekDescriptiion(parameter.EType);
+            byte[] seekDescription = GetSeekDescription(eType);
+            int seekDescriptionLength = seekDescription == null ? 0 : seekDescription.Length;
             sizeOfSeek
-                = (uint)(2 * Constant.SIZE_OF_UINT + seekDescription.Length);
-            reserved = (uint)(28 + seekDescription.Length);
+                = (uint)(2 * Constant.SIZE_OF_UINT + seekDescriptionLength);
+            reserved = (uint)(28 + seekDescriptionLength);
 
-            messageOffset += seekDescription.Length;
+            messageOffset += seekDescriptionLength;
             byte[] mainBlob = new byte[messageOffset];
             Helper.CopyBytes
                 (mainBlob, ref index, BitConverter.GetBytes(cursor));
             Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(parameter.RowsToTransfer));
+                (mainBlob, ref index, BitConverter.GetBytes(rowsToTransfer));
             Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(parameter.EachRowSize));
+                (mainBlob, ref index, BitConverter.GetBytes(rowWidth));
             Helper.CopyBytes
                 (mainBlob, ref index, BitConverter.GetBytes(sizeOfSeek));
             Helper.CopyBytes
                 (mainBlob, ref index, BitConverter.GetBytes(reserved));
             Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(parameter.BufferSize));
+                (mainBlob, ref index, BitConverter.GetBytes(cbReadBuffer));
             Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(clientBase));
+                (mainBlob, ref index, BitConverter.GetBytes(0));
             Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(backwardFetch));
+                (mainBlob, ref index, BitConverter.GetBytes(fBwdFetch));
             Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(parameter.EType));
+                (mainBlob, ref index, BitConverter.GetBytes(eType));
             Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(chapter));
-            Helper.CopyBytes
-                (mainBlob, ref index, seekDescription);
+                (mainBlob, ref index, BitConverter.GetBytes(0)); // chapt
+
+            if (seekDescription != null)
+            {
+                Helper.CopyBytes
+                    (mainBlob, ref index, seekDescription);
+            }
             return AddMessageHeader(MessageType.CPMGetRowsIn, mainBlob);
         }
 
@@ -2780,7 +2770,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                     size = 12;
                     break;
                 case StorageType.VT_VARIANT:
-                    size = 16;
+                    size = 24;
                     break;
                 default:
                     break;

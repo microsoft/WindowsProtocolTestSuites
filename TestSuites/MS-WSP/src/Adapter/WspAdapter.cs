@@ -14,6 +14,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
     {
         #region Fields
 
+        public const uint rowWidth = 100;
         //Platform version
         private SkuOsVersion _platform;
 
@@ -65,7 +66,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// Name of the connected Client
         /// </summary>
-        string clientMachineName = null;
+        public string clientMachineName = null;
         /// <summary>
         /// Catalog Name to Query
         /// </summary>
@@ -161,7 +162,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             paramter.Array_PropertySet_Four_DBProperties = wspTestSite.Properties.Get("Array_PropertySet_Four_DBProperties").Split(delimiter);
 
-            paramter.EachRowSize = Int32.Parse(wspTestSite.Properties.Get("EachRowSize"));
+            paramter.EachRowSize = rowWidth;
 
             paramter.PropertyRestrictionGuid = new Guid(wspTestSite.Properties.Get("PropertyRestrictionGuid"));
 
@@ -241,6 +242,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             int startingIndex = 0;
             uint clientVersion = 0;
             RequestSender sender = null;
+            var cV = wspTestSite.Properties["ClientVersion"];
             clientVersion = (uint)Convert.ToUInt32
                 (wspTestSite.Properties["ClientVersion"]);
             string locale = Helper.AddNull
@@ -852,20 +854,30 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             else
             {
                 Random r = new Random();
-                //cursorAssociated = GetCursor(clientMachineName);
                 cursorAssociated = (uint)r.Next(50, 60);
             }
 
+            CPMGetRowsIn(cursorAssociated, builder.parameter.RowsToTransfer, builder.parameter.EachRowSize, builder.parameter.BufferSize, 0, builder.parameter.EType);
+        }
 
-            //uint cursorAssociated = GetCursor(clientMachineName);
+        /// <summary>
+        /// CPMGetRowsIn() message requests rows from a query.
+        /// </summary>
+        /// <param name="cursor">Representing the handle from the CPMCreateQueryOut message identifying the query for which to retrieve rows. </param>
+        /// <param name="rowsToTransfer">Indicating the maximum number of rows that the client will receive in response to this message</param>
+        /// <param name="rowWidth">Indicating the length of a row, in bytes</param>
+        /// <param name="cbReadBuffer">This field MUST be set to the maximum of the value of _cbRowWidth or 1000 times the value of _cRowsToTransfer, rounded up to the nearest 512 byte multiple. The value MUST NOT exceed 0x00004000</param>
+        /// <param name="fBwdFetch">Indicating the order in which to fetch the rows</param>
+        /// <param name="eType">Type of SeekDescription</param>
+        public void CPMGetRowsIn(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType)
+        {
             byte[] getRowsInMessage
-                = builder.GetCPMRowsInMessage(cursorAssociated,
-                out rowsInReserve, out rowsInClientBase);
+                = builder.GetCPMRowsInMessage(cursor, rowsToTransfer, rowWidth, cbReadBuffer, fBwdFetch, eType, out rowsInReserve);
             byte[] getRowsOutMessage;
             uint checkSum = 0;
             RequestSender sender
                 = GetRequestSender(isClientConnected); //Get the Sender
-                                                       // RequestSender sender = new RequestSender(); //Get the Sender
+                                                       
             sender.SendMessage(getRowsInMessage, out getRowsOutMessage);
             if (sender == defaultSender)
             {
@@ -891,31 +903,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     = Helper.GetUInt(getRowsOutMessage, ref startingIndex);
                 uint msgStatus
                     = Helper.GetUInt(getRowsOutMessage, ref startingIndex);
-                //if (msgStatus != 0)
-                //{
-                //    wspTestSite.CaptureRequirementIfAreEqual<int>(bytesRead,
-                //        Constant.SIZE_OF_HEADER, 619,
-                //        "Whenever an error occurs during processing of a"+
-                //        "message sent by a client, the server MUST respond "+
-                //        "with the message header (only) of the message sent "+
-                //        "by the client, keeping the _msg field intact.");
-                //    wspTestSite.CaptureRequirement(620, "Whenever an error "+
-                //        "occurs during processing of a message sent by a "+
-                //        "client, the server MUST set the _status field to "+
-                //        "the error code value.");
-                //}
-                //if ((msgId == (uint)MessageType.CPMGetRowsIn) 
-                //    && (msgStatus == 0x00000000))
-                //{
+
                 uint offsetUsed = GetOffsetUsed();
                 validator.ValidateGetRowsOut(getRowsOutMessage,
                     checkSum, rowsInReserve, rowsInClientBase, tableColumns,
                     offsetUsed, out lastDocumentWorkId);
-                //}
-                CPMGetRowsOut(msgStatus);
+
                 // Fire Response Event
+                CPMGetRowsOut(msgStatus);
+                
             }
         }
+
         /// <summary>
         /// This event is used to get the response from CPMGetRowsIn request.
         /// </summary>
@@ -1865,7 +1864,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         /// <param name="machineName">client machine name</param>
         /// <returns>cursor associated with the query</returns>
-        private uint GetCursor(string machineName)
+        public uint GetCursor(string machineName)
         {
             uint cursor = 0;
             if (cursorMap.ContainsKey(machineName))
