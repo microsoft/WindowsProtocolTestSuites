@@ -89,7 +89,7 @@
     <Property name="R549Implementated" value="true" />
 
     <!-- It specifies the Search Scope. (Path of the Network folder to be searched)-->
-    <Property name="QueryPath" value="file://SUT/Test" />
+    <Property name="QueryPath" value="file://SUT/Test/" />
     <!-- It specifies the Search Query.Text to be present in name of Searched File -->
     <Property name="QueryText" value="test" />
 
@@ -125,17 +125,40 @@
     <Property name="Array_PropertySet_Four_Guid" value="A9BD1526-6A80-11D0-8C9D-0020AF1D740E" />
     <Property name="Array_PropertySet_Four_DBProperties" value="3,4,2" />
     <!--*******************************************-->
-    <!--   Column to Query-->
-    <Property name="NumberOfColumnsToQuery" value="3" />
 
-    <Property name="columnGuid_0" value="B725F130-47EF-101A-A5F1-02608C9EEBAC" />
-    <Property name="columnPropertyId_0" value="11" />
+    <!--   Column when CreateQuery-->
+    <Property name="NumberOfCreateQueryColumns" value="3" />
+
+    <!-- This is the base-name of the System.ItemNameDisplay. -->
+    <Property name="CreateQuery_columnGuid_0" value="6B8DA074-3B5C-43BC-886F-0A2CDCE00B6F" />
+    <Property name="CreateQuery_columnPropertyId_0" value="100" />
+
+    <!-- The contents of the item. This property is for query restrictions only; it cannot be retrieved in a query result. The WSS friendly name is 'contents'. -->
+    <Property name="CreateQuery_columnGuid_1" value="B725F130-47EF-101A-A5F1-02608C9EEBAC" />
+    <Property name="CreateQuery_columnPropertyId_1" value="22" />
+
+    <!-- Used to narrow the scope of a query to the specified directory and subdirectories. -->
+    <Property name="CreateQuery_columnGuid_2" value="B725F130-47EF-101A-A5F1-02608C9EEBAC" />
+    <Property name="CreateQuery_columnPropertyId_2" value="19" />    
+    
+    <!--   Column when SetBindings-->
+    <Property name="NumberOfSetBindingsColumns" value="1" />
+
+    <Property name="columnGuid_0" value="6B8DA074-3B5C-43BC-886F-0A2CDCE00B6F" />
+    <Property name="columnPropertyId_0" value="100" />
     <Property name="columnValueOffset_0" value="8" />
     <Property name="columnStatusOffset_0" value="2" />
     <Property name="columnLengthOffset_0" value="4" />
     <Property name="columnStorageType_0" value="12" />
     
-    
+    <!--<Property name="columnGuid_0" value="B725F130-47EF-101A-A5F1-02608C9EEBAC" />
+    <Property name="columnPropertyId_0" value="11" />
+    <Property name="columnValueOffset_0" value="8" />
+    <Property name="columnStatusOffset_0" value="2" />
+    <Property name="columnLengthOffset_0" value="4" />
+    <Property name="columnStorageType_0" value="12" />-->
+
+
     <!--<Property name="columnGuid_0" value="6B8DA074-3B5C-43BC-886F-0A2CDCE00B6F" />
     <Property name="columnPropertyId_0" value="100" />
     <Property name="columnValueOffset_0" value="8" />
@@ -144,14 +167,14 @@
     <Property name="columnStorageType_0" value="12" />-->
     <!-- VT_VARIANT-->
     <Property name="columnGuid_1" value="B725F130-47EF-101A-A5F1-02608C9EEBAC" />
-    <Property name="columnPropertyId_1" value="12" />
+    <Property name="columnPropertyId_1" value="22" />
     <Property name="columnValueOffset_1" value="32" />
     <Property name="columnStatusOffset_1" value="3" />
     <Property name="columnLengthOffset_1" value="56" />
     <Property name="columnStorageType_1" value="12" />
     <!-- VT_VARIANT-->
     <Property name="columnGuid_2" value="B725F130-47EF-101A-A5F1-02608C9EEBAC" />
-    <Property name="columnPropertyId_2" value="15" />
+    <Property name="columnPropertyId_2" value="19" />
     <Property name="columnValueOffset_2" value="64" />
     <Property name="columnStatusOffset_2" value="60" />
     <Property name="columnLengthOffset_2" value="88" />

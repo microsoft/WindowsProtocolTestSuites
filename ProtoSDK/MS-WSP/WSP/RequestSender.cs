@@ -45,7 +45,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// Constant Parameter indicating the Buffer Size of NamedPipe.
         /// </summary>
-        public const int BUFFER_SIZE = 4096;
+        public const int BUFFER_SIZE = 0x4000;
 
         #endregion
 

@@ -21,7 +21,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         public StorageType StorageType;
     }
 
-    public class MessageBuilderParamter
+    public class CreateQueryColumnParameter
+    {
+        public Guid Guid;
+        public uint PropertyId;
+    }
+
+    public class MessageBuilderParameter
     {
         public Guid EmptyGuid;
 
@@ -69,9 +75,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
         public uint RowsToTransfer;
 
-        public int NumberOfColumnsToQuery;
+        public int NumberOfSetBindingsColumns;
+
+        public int NumberOfCreateQueryColumns;
 
         public MessageBuilderColumnParameter[] ColumnParameters;
+
+        public CreateQueryColumnParameter[] CreateQueryColumnParameters;
+
 
         public Guid PropertyGuidToFetch;
 
@@ -85,6 +96,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     public class MessageBuilder
     {
         #region Fields
+
         /// <summary>
         /// Specifies a field is Used
         /// </summary>
@@ -179,8 +191,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public static uint chapter;
 
+        public static uint rowWidth = 40;
 
-        public MessageBuilderParamter parameter;
+
+        public MessageBuilderParameter parameter;
 
         #endregion
 
@@ -189,7 +203,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         /// <param name="testSite">Site from where it needs 
         /// to read configurable data</param>
-        public MessageBuilder(MessageBuilderParamter parameter)
+        public MessageBuilder(MessageBuilderParameter parameter)
         {
             this.parameter = parameter;
         }
@@ -2058,7 +2072,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             uint rows = (uint)parameter.EachRowSize;
             uint bindingDesc = 0;
             // SIZE of ColumnCount and Columns combined to be assigned later.
-            uint dummy = 0; // Dummy value
+            uint dummy = 0;// Dummy value
             uint columnCount = 0;
             int messageOffset = 5 * Constant.SIZE_OF_UINT;
             int bookMark = messageOffset;
@@ -2134,7 +2148,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <returns>array of Table Column</returns>
         private TableColumn[] GetTableColumnFromConfig()
         {
-            int numberofTableColumns = parameter.NumberOfColumnsToQuery;
+            int numberofTableColumns = parameter.NumberOfSetBindingsColumns;
             TableColumn[] columns = new TableColumn[numberofTableColumns];
             for (int i = 0; i < numberofTableColumns; i++)
             {
@@ -2166,7 +2180,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             int index = 0;
             int innerIndex = 0;
             // Index of Properties to be queried
-            uint[] indexes = new uint[] { 0, 1, 2 };
+            uint[] indexes = new uint[] { 0};
             // Links to the 'pidMapper' field
             messageOffset += (1 + indexes.Length) * Constant.SIZE_OF_UINT;
             uint count = (uint)indexes.Length;
@@ -2198,18 +2212,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         {
             int startIndex = messageOffset;
             int index = 0;
-            uint count = 0;
+            uint count = (uint)parameter.NumberOfCreateQueryColumns;
             messageOffset += Constant.SIZE_OF_UINT;
-            TableColumn[] tableColumns = GetTableColumnFromConfig();
-            count = (uint)tableColumns.Length;
-            byte[][] propSecs = new byte[tableColumns.Length][];
+            byte[][] propSecs = new byte[count][];
 
             for (int i = 0; i < propSecs.Length; i++)
             {
                 propSecs[i]
-                    = GetFullPropSec(tableColumns[i].Guid,
+                    = GetFullPropSec(parameter.CreateQueryColumnParameters[i].Guid,
                     PROPERTY_ID,
-                    (int)tableColumns[i].PropertyId,
+                    (int)parameter.CreateQueryColumnParameters[i].PropertyId,
                     ref messageOffset);
             }
             uint columnGroupArray = 0x00000000;

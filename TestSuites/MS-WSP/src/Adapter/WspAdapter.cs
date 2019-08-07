@@ -14,7 +14,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
     {
         #region Fields
 
-        public const uint rowWidth = 100;
         //Platform version
         private SkuOsVersion _platform;
 
@@ -130,84 +129,95 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             isClientConnected = false;
         }
 
-        private MessageBuilderParamter InitializeParameter()
+        private MessageBuilderParameter InitializeParameter()
         {
             char[] delimiter = new char[] { ',' };
 
-            var paramter = new MessageBuilderParamter();
+            var parameter = new MessageBuilderParameter();
 
-            paramter.EmptyGuid = new Guid(wspTestSite.Properties.Get("EmptyGuid"));
+            parameter.EmptyGuid = new Guid(wspTestSite.Properties.Get("EmptyGuid"));
 
-            paramter.PropertySet_One_Guid = new Guid(wspTestSite.Properties.Get("PropertySet_One_Guid"));
+            parameter.PropertySet_One_Guid = new Guid(wspTestSite.Properties.Get("PropertySet_One_Guid"));
 
-            paramter.PropertySet_One_DBProperties = wspTestSite.Properties.Get("PropertySet_One_DBProperties").Split(delimiter);
+            parameter.PropertySet_One_DBProperties = wspTestSite.Properties.Get("PropertySet_One_DBProperties").Split(delimiter);
 
-            paramter.PropertySet_Two_Guid = new Guid(wspTestSite.Properties.Get("PropertySet_Two_Guid"));
+            parameter.PropertySet_Two_Guid = new Guid(wspTestSite.Properties.Get("PropertySet_Two_Guid"));
 
-            paramter.PropertySet_Two_DBProperties = wspTestSite.Properties.Get("PropertySet_Two_DBProperties").Split(delimiter);
+            parameter.PropertySet_Two_DBProperties = wspTestSite.Properties.Get("PropertySet_Two_DBProperties").Split(delimiter);
 
-            paramter.Array_PropertySet_One_Guid = new Guid(wspTestSite.Properties.Get("Array_PropertySet_One_Guid"));
+            parameter.Array_PropertySet_One_Guid = new Guid(wspTestSite.Properties.Get("Array_PropertySet_One_Guid"));
 
-            paramter.Array_PropertySet_One_DBProperties = wspTestSite.Properties.Get("Array_PropertySet_One_DBProperties").Split(delimiter);
+            parameter.Array_PropertySet_One_DBProperties = wspTestSite.Properties.Get("Array_PropertySet_One_DBProperties").Split(delimiter);
 
-            paramter.Array_PropertySet_Two_Guid = new Guid(wspTestSite.Properties.Get("Array_PropertySet_Two_Guid"));
+            parameter.Array_PropertySet_Two_Guid = new Guid(wspTestSite.Properties.Get("Array_PropertySet_Two_Guid"));
 
-            paramter.Array_PropertySet_Two_DBProperties = wspTestSite.Properties.Get("Array_PropertySet_Two_DBProperties").Split(delimiter);
+            parameter.Array_PropertySet_Two_DBProperties = wspTestSite.Properties.Get("Array_PropertySet_Two_DBProperties").Split(delimiter);
 
-            paramter.Array_PropertySet_Three_Guid = new Guid(wspTestSite.Properties.Get("Array_PropertySet_Three_Guid"));
+            parameter.Array_PropertySet_Three_Guid = new Guid(wspTestSite.Properties.Get("Array_PropertySet_Three_Guid"));
 
-            paramter.Array_PropertySet_Three_DBProperties = wspTestSite.Properties.Get("Array_PropertySet_Three_DBProperties").Split(delimiter);
+            parameter.Array_PropertySet_Three_DBProperties = wspTestSite.Properties.Get("Array_PropertySet_Three_DBProperties").Split(delimiter);
 
-            paramter.Array_PropertySet_Four_Guid = new Guid(wspTestSite.Properties.Get("Array_PropertySet_Four_Guid"));
+            parameter.Array_PropertySet_Four_Guid = new Guid(wspTestSite.Properties.Get("Array_PropertySet_Four_Guid"));
 
-            paramter.Array_PropertySet_Four_DBProperties = wspTestSite.Properties.Get("Array_PropertySet_Four_DBProperties").Split(delimiter);
+            parameter.Array_PropertySet_Four_DBProperties = wspTestSite.Properties.Get("Array_PropertySet_Four_DBProperties").Split(delimiter);
 
-            paramter.EachRowSize = rowWidth;
+            parameter.EachRowSize = MessageBuilder.rowWidth;
 
-            paramter.PropertyRestrictionGuid = new Guid(wspTestSite.Properties.Get("PropertyRestrictionGuid"));
+            parameter.PropertyRestrictionGuid = new Guid(wspTestSite.Properties.Get("PropertyRestrictionGuid"));
 
-            paramter.PropertyRestrictionProperty = Int32.Parse(wspTestSite.Properties.Get("PropertyRestrictionProperty"));
+            parameter.PropertyRestrictionProperty = Int32.Parse(wspTestSite.Properties.Get("PropertyRestrictionProperty"));
 
-            paramter.ContentRestrictionGuid = new Guid(wspTestSite.Properties.Get("ContentRestrictionGuid"));
+            parameter.ContentRestrictionGuid = new Guid(wspTestSite.Properties.Get("ContentRestrictionGuid"));
 
-            paramter.ContentRestrictionProperty = Int32.Parse(wspTestSite.Properties.Get("ContentRestrictionProperty"));
+            parameter.ContentRestrictionProperty = Int32.Parse(wspTestSite.Properties.Get("ContentRestrictionProperty"));
 
-            paramter.EType = UInt32.Parse(wspTestSite.Properties.Get("EType"));
+            parameter.EType = UInt32.Parse(wspTestSite.Properties.Get("EType"));
 
-            paramter.BufferSize = UInt32.Parse(wspTestSite.Properties.Get("BufferSize"));
+            parameter.BufferSize = UInt32.Parse(wspTestSite.Properties.Get("BufferSize"));
 
-            paramter.LCID_VALUE = UInt32.Parse(wspTestSite.Properties.Get("LCID_VALUE"));
+            parameter.LCID_VALUE = UInt32.Parse(wspTestSite.Properties.Get("LCID_VALUE"));
 
-            paramter.ClientBase = UInt32.Parse(wspTestSite.Properties.Get("ClientBase"));
+            parameter.ClientBase = UInt32.Parse(wspTestSite.Properties.Get("ClientBase"));
 
-            paramter.RowsToTransfer = UInt32.Parse(wspTestSite.Properties.Get("RowsToTransfer"));
+            parameter.RowsToTransfer = UInt32.Parse(wspTestSite.Properties.Get("RowsToTransfer"));
 
-            paramter.NumberOfColumnsToQuery = Int32.Parse(wspTestSite.Properties.Get("NumberOfColumnsToQuery"));
+            parameter.NumberOfSetBindingsColumns = Int32.Parse(wspTestSite.Properties.Get("NumberOfSetBindingsColumns"));
+            parameter.NumberOfCreateQueryColumns = Int32.Parse(wspTestSite.Properties.Get("NumberOfCreateQueryColumns"));
 
-            paramter.ColumnParameters = new MessageBuilderColumnParameter[paramter.NumberOfColumnsToQuery];
+            parameter.ColumnParameters = new MessageBuilderColumnParameter[parameter.NumberOfSetBindingsColumns];
+            parameter.CreateQueryColumnParameters = new CreateQueryColumnParameter[parameter.NumberOfCreateQueryColumns];
 
-            for (int i = 0; i < paramter.NumberOfColumnsToQuery; i++)
+            for (int i = 0; i < parameter.NumberOfSetBindingsColumns; i++)
             {
-                paramter.ColumnParameters[i] = new MessageBuilderColumnParameter();
+                parameter.ColumnParameters[i] = new MessageBuilderColumnParameter();
 
-                paramter.ColumnParameters[i].Guid = new Guid(wspTestSite.Properties.Get($"columnGuid_{i}"));
+                parameter.ColumnParameters[i].Guid = new Guid(wspTestSite.Properties.Get($"columnGuid_{i}"));
 
-                paramter.ColumnParameters[i].PropertyId = UInt32.Parse(wspTestSite.Properties.Get($"columnPropertyId_{i}"));
+                parameter.ColumnParameters[i].PropertyId = UInt32.Parse(wspTestSite.Properties.Get($"columnPropertyId_{i}"));
 
-                paramter.ColumnParameters[i].ValueOffset = UInt16.Parse(wspTestSite.Properties.Get($"columnValueOffset_{i}"));
+                parameter.ColumnParameters[i].ValueOffset = UInt16.Parse(wspTestSite.Properties.Get($"columnValueOffset_{i}"));
 
-                paramter.ColumnParameters[i].StatusOffset = UInt16.Parse(wspTestSite.Properties.Get($"columnStatusOffset_{i}"));
+                parameter.ColumnParameters[i].StatusOffset = UInt16.Parse(wspTestSite.Properties.Get($"columnStatusOffset_{i}"));
 
-                paramter.ColumnParameters[i].LengthOffset = UInt16.Parse(wspTestSite.Properties.Get($"columnLengthOffset_{i}"));
+                parameter.ColumnParameters[i].LengthOffset = UInt16.Parse(wspTestSite.Properties.Get($"columnLengthOffset_{i}"));
 
-                paramter.ColumnParameters[i].StorageType = (StorageType)Enum.Parse(typeof(StorageType), wspTestSite.Properties.Get($"columnStorageType_{i}"));
+                parameter.ColumnParameters[i].StorageType = (StorageType)Enum.Parse(typeof(StorageType), wspTestSite.Properties.Get($"columnStorageType_{i}"));
             }
 
-            paramter.PropertyGuidToFetch = new Guid(wspTestSite.Properties.Get("PropertyGuidToFetch"));
+            for (int i = 0; i < parameter.NumberOfCreateQueryColumns; i++)
+            {
+                parameter.CreateQueryColumnParameters[i] = new CreateQueryColumnParameter();
+                parameter.CreateQueryColumnParameters[i].Guid = new Guid(wspTestSite.Properties.Get($"CreateQuery_columnGuid_{i}"));
+                parameter.CreateQueryColumnParameters[i].PropertyId = UInt32.Parse(wspTestSite.Properties.Get($"CreateQuery_columnPropertyId_{i}"));
 
-            paramter.PropertyIdToFetch = Int32.Parse(wspTestSite.Properties.Get("PropertyIdToFetch"));
+            }
 
-            return paramter;
+
+            parameter.PropertyGuidToFetch = new Guid(wspTestSite.Properties.Get("PropertyGuidToFetch"));
+
+            parameter.PropertyIdToFetch = Int32.Parse(wspTestSite.Properties.Get("PropertyIdToFetch"));
+
+            return parameter;
         }
 
         /// <summary>
@@ -877,7 +887,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             uint checkSum = 0;
             RequestSender sender
                 = GetRequestSender(isClientConnected); //Get the Sender
-                                                       
+
             sender.SendMessage(getRowsInMessage, out getRowsOutMessage);
             if (sender == defaultSender)
             {
@@ -911,7 +921,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
                 // Fire Response Event
                 CPMGetRowsOut(msgStatus);
-                
+
             }
         }
 

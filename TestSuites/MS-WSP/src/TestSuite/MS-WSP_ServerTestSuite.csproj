@@ -87,7 +87,9 @@
     <Compile Include="TraditionalCases\CPMGetRows.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="MS-WSP_ServerTestSuite.deployment.ptfconfig" />
+    <None Include="MS-WSP_ServerTestSuite.deployment.ptfconfig">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="MS-WSP_ServerTestSuite.ptfconfig" />
   </ItemGroup>
   <ItemGroup />

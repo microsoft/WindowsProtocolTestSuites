@@ -17,8 +17,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
     public partial class CPMGetRowsTestCases : TestClassBase
     {
         private WspAdapter wspAdapter;
-        private const uint validRowsToTransfer = 20;
-        private const uint validReadBuffer = 4096;
+        private const uint validRowsToTransfer = 40;
+        private const uint validReadBuffer = 0x4000;
 
         private const uint invalidReadBuffer = 0x00004001; // The value MUST NOT exceed 0x00004000.
         private const uint invalidRowsWidth = 0;
@@ -77,13 +77,13 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMConnectInRequest();
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
-            wspAdapter.CPMCreateQueryIn(true);
+            wspAdapter.CPMCreateQueryIn(false);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
             wspAdapter.CPMSetBindingsIn(true, true);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn and expects success.");
-            wspAdapter.CPMGetRowsIn(wspAdapter.GetCursor(wspAdapter.clientMachineName), validRowsToTransfer, WspAdapter.rowWidth, validReadBuffer, (uint)FetchType.ForwardOrder, (uint)RowSeekType.eRowSeekNext);
+            wspAdapter.CPMGetRowsIn(wspAdapter.GetCursor(wspAdapter.clientMachineName), validRowsToTransfer, MessageBuilder.rowWidth, validReadBuffer, (uint)FetchType.ForwardOrder, (uint)RowSeekType.eRowSeekNext);
         }
 
         [TestMethod]
@@ -103,7 +103,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn with invalid cursor and expects ERROR_INVALID_PARAMETER .");
             argumentType = ArgumentType.InvalidCursor;
-            wspAdapter.CPMGetRowsIn(invalidCursor, validRowsToTransfer, WspAdapter.rowWidth, validReadBuffer, (uint)FetchType.ForwardOrder, (uint)RowSeekType.eRowSeekNext);
+            wspAdapter.CPMGetRowsIn(invalidCursor, validRowsToTransfer, MessageBuilder.rowWidth, validReadBuffer, (uint)FetchType.ForwardOrder, (uint)RowSeekType.eRowSeekNext);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn with invalid cursor and expects ERROR_INVALID_PARAMETER .");
             argumentType = ArgumentType.InvalidRowWidth;
@@ -111,7 +111,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn with invalid ReadBuffer and expects STATUS_INVALID_PARAMETER .");
             argumentType = ArgumentType.InvalidReadBuffer;
-            wspAdapter.CPMGetRowsIn(wspAdapter.GetCursor(wspAdapter.clientMachineName), validRowsToTransfer, WspAdapter.rowWidth, invalidReadBuffer, (uint)FetchType.ForwardOrder, (uint)RowSeekType.eRowSeekNext);
+            wspAdapter.CPMGetRowsIn(wspAdapter.GetCursor(wspAdapter.clientMachineName), validRowsToTransfer, MessageBuilder.rowWidth, invalidReadBuffer, (uint)FetchType.ForwardOrder, (uint)RowSeekType.eRowSeekNext);
         }
 
         #endregion
@@ -143,7 +143,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     Site.Assert.AreEqual((uint)WspErrorCode.ERROR_INVALID_PARAMETER, errorCode, "CPMGetRowsOut should return ERROR_INVALID_PARAMETER if Cursor of CPMGetRowsIn is invalid.");
                     break;
                 case ArgumentType.InvalidRowWidth:
-                    Site.Assert.AreEqual((uint)WspErrorCode.ERROR_INVALID_PARAMETER, errorCode, "CPMGetRowsOut should return ERROR_INVALID_PARAMETER if RowWidth of CPMGetRowsIn is invalid.");
+                    Site.Assert.AreEqual((uint)WspErrorCode.STATUS_INVALID_PARAMETER, errorCode, "CPMGetRowsOut should return STATUS_INVALID_PARAMETER if RowWidth of CPMGetRowsIn is invalid.");
                     break;
                 case ArgumentType.InvalidReadBuffer:
                     Site.Assert.AreEqual((uint)WspErrorCode.STATUS_INVALID_PARAMETER, errorCode, "CPMGetRowsOut should return STATUS_INVALID_PARAMETER if ReadBuffer of CPMGetRowsIn is invalid.");
