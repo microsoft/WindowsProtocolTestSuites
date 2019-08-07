@@ -41,30 +41,54 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="DataTypes.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="MessageBuilder.cs" />
+    <Compile Include="Structures\CBaseStorageVariant.cs" />
+    <Compile Include="Structures\CDbColId.cs" />
+    <Compile Include="Messages\CPMConnectIn.cs" />
     <Compile Include="RequestSender.cs" />
+    <Compile Include="Messages\CPMCiStateInOut.cs" />
+    <Compile Include="Structures\CDbProp.cs" />
+    <Compile Include="Structures\CDbPropSet.cs" />
+    <Compile Include="Structures\DECIMAL.cs" />
+    <Compile Include="Structures\SAFEARRAYBOUND.cs" />
+    <Compile Include="Structures\VT_BLOB.cs" />
+    <Compile Include="Structures\VT_BLOB_OBJECT.cs" />
+    <Compile Include="Structures\VT_BSTR.cs" />
+    <Compile Include="Structures\VT_COMPRESSED_LPWSTR.cs" />
+    <Compile Include="Structures\VT_LPSTR.cs" />
+    <Compile Include="Structures\VT_LPWSTR.cs" />
+    <Compile Include="Structures\VT_VECTOR.cs" />
+    <Compile Include="WSPBuffer.cs" />
+    <Compile Include="WSPObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Common\Common.csproj">
+    <ProjectReference Include="..\Common\Common.csproj">
       <Project>{fe653643-6342-4300-871e-683c7ba31494}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MS-SMB2\Smb2.csproj">
+    <ProjectReference Include="..\Messages\Messages.csproj">
+      <Project>{75544419-3F4E-4308-A676-165F45C1462E}</Project>
+      <Name>Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MS-SMB2\Smb2.csproj">
       <Project>{C7F08825-D3C9-4DDD-9BA3-06733B1ABE36}</Project>
       <Name>Smb2</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Sspi\Sspi.csproj">
+    <ProjectReference Include="..\Sspi\Sspi.csproj">
       <Project>{d0cb354b-2cd3-49c1-8eca-2f6ebadbccee}</Project>
       <Name>Sspi</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Structures\SAFEARRAY.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">

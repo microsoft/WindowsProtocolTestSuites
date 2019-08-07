@@ -112,12 +112,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             validator = new MessageValidator(wspTestSite);
             serverMachineName
                 = wspTestSite.Properties.Get("SERVER_MACHINE_NAME");
-            clientMachineName = Helper.AddNull
-                (wspTestSite.Properties.Get("CLIENT_MACHINE_NAME"));
-            catalogName
-                = Helper.AddNull(wspTestSite.Properties.Get("CatalogName"));
-            userName = Helper.AddNull
-                (wspTestSite.Properties.Get("CLIENT_USERNAME"));
+            clientMachineName = wspTestSite.Properties.Get("CLIENT_MACHINE_NAME");
+            catalogName = wspTestSite.Properties.Get("CatalogName");
+            userName = wspTestSite.Properties.Get("CLIENT_USERNAME");
             pipePath
                 = string.Format(@"\\{0}\\pipe\MSFTEWDS", serverMachineName);
 
@@ -243,13 +240,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             RequestSender sender = null;
             clientVersion = (uint)Convert.ToUInt32
                 (wspTestSite.Properties["ClientVersion"]);
-            string locale = Helper.AddNull
-                (wspTestSite.Properties.Get("LanguageLocale"));
+            string locale = wspTestSite.Properties.Get("LanguageLocale");
 
-            string serverNameWithNull = Helper.AddNull(serverMachineName);
+            string serverName = serverMachineName;
             byte[] connectInMessage = builder.GetConnectInMessage
                 (clientVersion, 1, userName, clientMachineName,
-                serverNameWithNull, catalogName, locale);
+                serverName, catalogName, locale);
             uint checkSum = GetCheckSumField(connectInMessage);
             //Send the connectIn message to Server.
             Byte[] connectOutMessage;

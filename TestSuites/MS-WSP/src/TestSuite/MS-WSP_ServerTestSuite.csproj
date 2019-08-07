@@ -45,7 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-WSP\WSP\WSP.csproj">
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-WSP\WSP.csproj">
       <Project>{32326174-6220-4e78-8c0e-bf803162133e}</Project>
       <Name>WSP</Name>
     </ProjectReference>
