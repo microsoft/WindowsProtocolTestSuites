@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Linq;
 using System.Text;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
@@ -227,115 +228,33 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             string userName, string machineName, string serverMachineName,
             string catalogName, string languageLocale)
         {
-            uint version = (uint)clientVersion; // Client Version
-            uint isClientRemote = (uint)isRemote;
-            uint cbBlob1 = (uint)(Constant.SIZE_OF_UINT);
-            // Assign  propSet1.Length + propSet2.Length later
+            var message = new CPMConnectIn();
 
-            byte[] paddingFor4 = new byte[] { 0, 0, 0, 0 }; // 4 Bytes 
-            uint cbBlob2 = Constant.SIZE_OF_UINT;
-            //cbBlob2 = 4 bytes + size of all external Properties Set
-            int firstPaddingCount = 0;
-            int secondPaddingCount = 0;
-            byte[] propSet1 = null;
-            // PropertySet1 as per CPMConnectIn message definition
-            byte[] propSet2 = null;
-            // PropertySet2 as per CPMConnectIn message definition
-            byte[] paddingFor12 = new byte[]
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; // Padding 12 Bytes 
-            //calculate aPropSet Length (array of propertySet)
-            int lengthSoFar = 4 * Constant.SIZE_OF_UINT +
-                Constant.SIZE_OF_UINT +
-                paddingFor12.Length + 2 * (userName.Length
-                + machineName.Length);
-            byte[] firstPadding = null; // padding
-            if (lengthSoFar % OFFSET_8 != 0)
-            {
-                firstPadding = new byte[OFFSET_8 - (lengthSoFar % OFFSET_8)];
-                for (int i = 0; i < firstPadding.Length; i++)
-                {
-                    firstPadding[i] = 0;
-                    firstPaddingCount++;
-                }
-            }
-            uint cPropSets = 2; // Number of PropertySets
+            message._iClientVersion = clientVersion;
 
-            int totalLength = lengthSoFar + firstPaddingCount
-                + Constant.SIZE_OF_UINT;
-            // To Assign later +propSet1.Length + propSet2.Length;
-            int messageOffSet = totalLength + HEADER_LENGTH
-                /* of message Header */;
-            //-------Starting PropertySet1------------
-            // PropertySet1 specifying CatalogName
-            propSet1 = GetPropertySet1(ref messageOffSet, catalogName);
+            message._fClientIsRemote = (UInt32)isRemote;
+
+            message.MachineName = machineName;
+
+            message.UserName = userName;
+
+            message.cPropSets = 2;
+
+            message.PropertySet1 = GetPropertySet1(catalogName);
             // PropertySet1 specifying MachineName
-            propSet2 = GetPropertySet2(ref messageOffSet, serverMachineName);
-            cbBlob1 += (uint)propSet1.Length + (uint)propSet2.Length;
-            byte[] secondPadding = null;
-            totalLength = messageOffSet;
-            if (totalLength % OFFSET_8 != 0)
-            {
-                secondPadding = new byte[OFFSET_8 - (totalLength % OFFSET_8)];
-                for (int i = 0; i < secondPadding.Length; i++)
-                {
-                    secondPadding[i] = 0;
-                    secondPaddingCount++;
-                }
-            }
-            messageOffSet += secondPaddingCount;
-            //size of exPropSet, value to be assigned later
-            messageOffSet += Constant.SIZE_OF_UINT;
-            // Adding 4 external PropertySets 
-            byte[] aPropertySet1 = GetAPropertySet1(ref messageOffSet,
-                languageLocale); //Language locale
-            byte[] aPropertySet2 =
-                GetAPropertySet2(ref messageOffSet); // FLAGs
-            byte[] aPropertySet3 =
-                GetAPropertySet3(ref messageOffSet,
-                serverMachineName); // server
-            byte[] aPropertySet4
-                = GetAPropertySet4(ref messageOffSet, catalogName); // Catalog
+            message.PropertySet2 = GetPropertySet2(serverMachineName);
 
-            cbBlob2 += (uint)(aPropertySet1.Length + aPropertySet2.Length
-                + aPropertySet3.Length + aPropertySet4.Length);
-            int connectInMessageLength = messageOffSet - 16;
-            byte[] mainBlob = new byte[connectInMessageLength];
-            int index = 0;
-            //================ Converting values into Bytes ===============
-            Helper.CopyBytes(mainBlob, ref index,
-                BitConverter.GetBytes(version));
-            Helper.CopyBytes(mainBlob, ref index,
-                BitConverter.GetBytes(isClientRemote));
-            Helper.CopyBytes(mainBlob, ref index,
-                BitConverter.GetBytes(cbBlob1));
-            Helper.CopyBytes(mainBlob, ref index, paddingFor4);
-            Helper.CopyBytes(mainBlob, ref index,
-                BitConverter.GetBytes(cbBlob2));
-            Helper.CopyBytes(mainBlob, ref index, paddingFor12);
-            Helper.CopyBytes(mainBlob, ref index,
-                Encoding.Unicode.GetBytes(machineName));
-            Helper.CopyBytes(mainBlob, ref index,
-                Encoding.Unicode.GetBytes(userName));
-            if (firstPadding != null)
-            {
-                Helper.CopyBytes(mainBlob, ref index, firstPadding);
-            }
-            Helper.CopyBytes(mainBlob, ref index,
-                BitConverter.GetBytes(cPropSets));
-            Helper.CopyBytes(mainBlob, ref index, propSet1);
-            Helper.CopyBytes(mainBlob, ref index, propSet2);
-            if (secondPadding != null)
-            {
-                Helper.CopyBytes(mainBlob, ref index, secondPadding);
-            }
-            uint cExtPropSet = EXTERNAL_PROPSET_COUNT;
-            Helper.CopyBytes(mainBlob, ref index,
-                BitConverter.GetBytes(cExtPropSet));
-            Helper.CopyBytes(mainBlob, ref index, aPropertySet1);
-            Helper.CopyBytes(mainBlob, ref index, aPropertySet2);
-            Helper.CopyBytes(mainBlob, ref index, aPropertySet3);
-            Helper.CopyBytes(mainBlob, ref index, aPropertySet4);
-            //=====================================================================
+            message.cExtPropSet = 4;
+
+            message.aPropertySets = new CDbPropSet[4];
+
+            message.aPropertySets[0] = GetAPropertySet1(languageLocale); //Language locale
+            message.aPropertySets[1] = GetAPropertySet2(); // FLAGs
+            message.aPropertySets[2] = GetAPropertySet3(serverMachineName); // server
+            message.aPropertySets[3] = GetAPropertySet4(catalogName); // Catalog
+
+            var mainBlob = ToBytes(message);
+
             return AddMessageHeader(MessageType.CPMConnectIn, mainBlob);
             //Adding Message Header
         }
@@ -379,43 +298,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <returns>CPMCiStateInOut BLOB</returns>
         public byte[] GetCPMCiStateInOut()
         {
-            int stateInOutMessageLength = 15 * Constant.SIZE_OF_UINT;
-            byte[] mainBlob = new byte[stateInOutMessageLength];
-            //================ Converting values into Bytes =============
-            uint emptyValue = 0;
-            uint cbStruct = (uint)stateInOutMessageLength;
-            int index = 0;
-            Helper.CopyBytes(mainBlob, ref index,
-                BitConverter.GetBytes(cbStruct));
-            Helper.CopyBytes(mainBlob, ref index,
-                BitConverter.GetBytes(emptyValue));
-            Helper.CopyBytes(mainBlob, ref index,
-                BitConverter.GetBytes(emptyValue));
-            Helper.CopyBytes(mainBlob, ref index,
-                BitConverter.GetBytes(emptyValue));
-            Helper.CopyBytes(mainBlob, ref index,
-                BitConverter.GetBytes(emptyValue));
-            Helper.CopyBytes(mainBlob, ref index,
-                BitConverter.GetBytes(emptyValue));
-            Helper.CopyBytes(mainBlob, ref index,
-                BitConverter.GetBytes(emptyValue));
-            Helper.CopyBytes(mainBlob, ref index,
-                BitConverter.GetBytes(emptyValue));
-            Helper.CopyBytes(mainBlob, ref index,
-                BitConverter.GetBytes(emptyValue));
-            Helper.CopyBytes(mainBlob, ref index,
-                BitConverter.GetBytes(emptyValue));
-            Helper.CopyBytes(mainBlob, ref index,
-                BitConverter.GetBytes(emptyValue));
-            Helper.CopyBytes(mainBlob, ref index,
-                BitConverter.GetBytes(emptyValue));
-            Helper.CopyBytes(mainBlob, ref index,
-                BitConverter.GetBytes(emptyValue));
-            Helper.CopyBytes(mainBlob, ref index,
-                BitConverter.GetBytes(emptyValue));
-            Helper.CopyBytes(mainBlob, ref index,
-                BitConverter.GetBytes(emptyValue));
-            //============================================
+            var message = new CPMCiStateInOut();
+
+            message.cbStruct = 0x0000003C;
+
+            var mainBlob = ToBytes(message);
+
             return AddMessageHeader(MessageType.CPMCiStateInOut, mainBlob);
         }
 
@@ -759,30 +647,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// the starting of the message</param>
         /// <param name="catalogName">Name of the catalog</param>
         /// <returns>PropertySet BLOB</returns>
-        private byte[] GetPropertySet1
-            (ref int messageOffset, string catalogName)
+        private CDbPropSet GetPropertySet1(string catalogName)
         {
-            byte[] padding = null;
-            int index = 0;
-            int structSize = messageOffset;
-            messageOffset += 16; // Increament for GUID
-            if (messageOffset % OFFSET_4 != 0) // Padding (if required)
-            {
-                padding = new byte[OFFSET_4 - (messageOffset % OFFSET_4)];
-                messageOffset += padding.Length;
-            }
-            uint cProperties = 4;
-            messageOffset
-                += Constant.SIZE_OF_UINT; //Increament for Number of AProps
+            var propSet = new CDbPropSet();
 
-            byte[] propertySet = new byte[messageOffset - structSize];
-            Helper.CopyBytes(propertySet, ref index, parameter.PropertySet_One_Guid.ToByteArray());
-            if (padding != null)
-            {
-                Helper.CopyBytes(propertySet, ref index, padding);
-            }
-            Helper.CopyBytes
-                (propertySet, ref index, BitConverter.GetBytes(cProperties));
+            uint cProperties = 4;
+
+            propSet.guidPropertySet = parameter.PropertySet_One_Guid;
+
+            propSet.cProperties = cProperties;
+
+            propSet.aProps = new CDbProp[0];
 
             // --Get First PropSet with Guid Value DBPROPSET_FSCIFRMWRK_EXT -
 
@@ -793,51 +668,34 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                     case "2":
                         // Creating CDBProp with PropId 2 
                         // for GUID type FSCIFRMWRK
-                        byte[] value_FSCIFRMWRK_2
-                            = GetBaseStorageVariant
-                            (StorageType.VT_LPWSTR, false, catalogName);
-                        AppendDBProp
-                            (ref propertySet,
-                            2, value_FSCIFRMWRK_2, ref messageOffset);
+                        var value_FSCIFRMWRK_2 = GetBaseStorageVariant(vType_Values.VT_LPWSTR, false, new VT_LPWSTR(catalogName));
+                        AppendDBProp(ref propSet, 2, value_FSCIFRMWRK_2);
                         break;
                     case "3":
                         // Creating CDBProp with PropId 3 
                         //for GUID type FCCIFRMWRK
-                        byte[] value_FCCIFRMWRK_3 =
-                            GetVector
-                            (StorageType.VT_LPWSTR, new string[] { "/\0" });
-                        AppendDBProp
-                            (ref propertySet,
-                            3, value_FCCIFRMWRK_3, ref messageOffset);
+                        var value_FCCIFRMWRK_3 = GetVector(vType_Values.VT_LPWSTR, new VT_LPWSTR[] { new VT_LPWSTR(null) });
+                        AppendDBProp(ref propSet, 3, value_FCCIFRMWRK_3);
                         break;
                     case "4":
                         // Creating CDBProp with PropId 4 
                         // for GUID type FSCIFRMWRK
-                        int x = 1; // This is fix
-                        // Array of integers
-                        object[] array = new object[] { x };
-                        byte[] value_FSCIFRMWRK_4
-                            = GetVector(StorageType.VT_I4, array);
-                        AppendDBProp
-                            (ref propertySet,
-                            4, value_FSCIFRMWRK_4, ref messageOffset);
+                        var value_FSCIFRMWRK_4 = GetVector(vType_Values.VT_I4, new Int32[] { 1 });
+                        AppendDBProp(ref propSet, 4, value_FSCIFRMWRK_4);
                         break;
 
                     case "7":
                         // Creating CDBProp with PropId 7 
                         //for GUID type FSCIFRMWRK
-                        byte[] value_FSCIFRMWRK_7
-                            = GetBaseStorageVariant
-                            (StorageType.VT_I4, false, 0);
-                        AppendDBProp
-                            (ref propertySet,
-                            7, value_FSCIFRMWRK_7, ref messageOffset);
+                        var value_FSCIFRMWRK_7 = GetBaseStorageVariant(vType_Values.VT_I4, false, (Int32)0);
+                        AppendDBProp(ref propSet, 7, value_FSCIFRMWRK_7);
                         break;
                     default:
                         break;
                 }
             }
-            return propertySet;
+
+            return propSet;
         }
         /// <summary>
         /// Gets the first PropertySet2 ConnectIn message
@@ -847,29 +705,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <param name="machineName">Name of the 
         /// connecting client</param>
         /// <returns>PropertySet BLOB</returns>
-        private byte[] GetPropertySet2
-            (ref int messageOffset, string machineName)
+        private CDbPropSet GetPropertySet2(string machineName)
         {
-            byte[] padding = null;
-            int index = 0;
-            int structSize = messageOffset;
-            messageOffset += 16;
-            if (messageOffset % OFFSET_4 != 0)
-            {
-                padding = new byte[OFFSET_4 - (messageOffset % OFFSET_4)];
-                messageOffset += padding.Length;
-            }
-            uint cProperties = 1;
-            messageOffset += Constant.SIZE_OF_UINT;
+            var propSet = new CDbPropSet();
 
-            byte[] propertySet = new byte[messageOffset - structSize];
-            Helper.CopyBytes(propertySet, ref index, parameter.PropertySet_Two_Guid.ToByteArray());
-            if (padding != null)
-            {
-                Helper.CopyBytes(propertySet, ref index, padding);
-            }
-            Helper.CopyBytes
-                (propertySet, ref index, BitConverter.GetBytes(cProperties));
+            uint cProperties = 1;
+
+            propSet.guidPropertySet = parameter.PropertySet_Two_Guid;
+
+            propSet.cProperties = cProperties;
+
+            propSet.aProps = new CDbProp[0];
+
             foreach (string property in parameter.PropertySet_Two_DBProperties)
             {
                 switch (property)
@@ -877,18 +724,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                     case "2":
                         // Creating CDBProp with PropId 2 
                         //for GUID type CIFRMWRKCORE
-                        byte[] value_CIFRMWRKCORE_2
-                            = GetBaseStorageVariant
-                            (StorageType.VT_BSTR, false, machineName);
-                        AppendDBProp
-                            (ref propertySet,
-                            2, value_CIFRMWRKCORE_2, ref messageOffset);
+                        var value_CIFRMWRKCORE_2 = GetBaseStorageVariant(vType_Values.VT_BSTR, false, new VT_BSTR(machineName));
+                        AppendDBProp(ref propSet, 2, value_CIFRMWRKCORE_2);
                         break;
                     default:
                         break;
                 }
             }
-            return propertySet;
+
+            return propSet;
         }
         /// <summary>
         /// PropertySet1 for extPropSets array
@@ -897,29 +741,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <param name="languageLocale">language locale 
         /// of the client</param>
         /// <returns>PropertySet BLOB</returns>
-        private byte[] GetAPropertySet1
-            (ref int messageOffset, string languageLocale)
+        private CDbPropSet GetAPropertySet1(string languageLocale)
         {
-            byte[] padding = null;
-            int index = 0;
-            int structSize = messageOffset;
-            messageOffset += 16;
-            if (messageOffset % OFFSET_4 != 0)
-            {
-                padding = new byte[OFFSET_4 - (messageOffset % OFFSET_4)];
-                messageOffset += padding.Length;
-            }
-            uint cProperties = 6;
-            messageOffset += Constant.SIZE_OF_UINT;
+            var propSet = new CDbPropSet();
 
-            byte[] propertySet = new byte[messageOffset - structSize];
-            Helper.CopyBytes(propertySet, ref index, parameter.Array_PropertySet_One_Guid.ToByteArray());
-            if (padding != null)
-            {
-                Helper.CopyBytes(propertySet, ref index, padding);
-            }
-            Helper.CopyBytes
-                (propertySet, ref index, BitConverter.GetBytes(cProperties));
+            uint cProperties = 6;
+
+            var guid = parameter.Array_PropertySet_One_Guid;
+
+            propSet.cProperties = cProperties;
+
+            propSet.guidPropertySet = guid;
+
+            propSet.aProps = new CDbProp[0];
+
             // Compile aPropertySet1 with Guid Value DBPROPSET_MSIDXS_ROWSETEXT
             foreach (string property in parameter.Array_PropertySet_One_DBProperties)
             {
@@ -928,102 +763,66 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                     case "2":
                         // Creating CDBProp with PropId 2 
                         //for GUID type ROWSETEXT
-                        byte[] value_ROWSETEXT_2
-                            = GetBaseStorageVariant
-                            (StorageType.VT_I4, false, 0);
-                        AppendDBProp
-                            (ref propertySet,
-                            2, value_ROWSETEXT_2, ref messageOffset);
+                        var value_ROWSETEXT_2 = GetBaseStorageVariant(vType_Values.VT_I4, false, (Int32)0);
+                        AppendDBProp(ref propSet, 2, value_ROWSETEXT_2);
                         break;
                     case "3":
                         // Creating CDBProp with PropId 3 
                         //for GUID type ROWSETEXT
-                        byte[] value_ROWSETEXT_3
-                            = GetBaseStorageVariant
-                            (StorageType.VT_BSTR, false, languageLocale);
-                        AppendDBProp
-                            (ref propertySet,
-                            3, value_ROWSETEXT_3, ref messageOffset);
+                        var value_ROWSETEXT_3 = GetBaseStorageVariant(vType_Values.VT_BSTR, false, new VT_BSTR(languageLocale));
+                        AppendDBProp(ref propSet, 3, value_ROWSETEXT_3);
                         break;
                     case "4":
 
                         // Creating CDBProp with PropId 4 
                         //for GUID type ROWSETEXT
-                        byte[] value_ROWSETEXT_4
-                            = GetBaseStorageVariant
-                            (StorageType.VT_BSTR, false, Helper.AddNull(""));
-                        AppendDBProp
-                            (ref propertySet,
-                            4, value_ROWSETEXT_4, ref messageOffset);
+                        var value_ROWSETEXT_4 = GetBaseStorageVariant(vType_Values.VT_BSTR, false, new VT_BSTR(""));
+                        AppendDBProp(ref propSet, 4, value_ROWSETEXT_4);
                         break;
 
                     case "5":
                         // Creating CDBProp with PropId 5 
                         //for GUID type ROWSETEXT
-                        byte[] value_ROWSETEXT_5
-                            = GetBaseStorageVariant
-                            (StorageType.VT_BSTR, false, Helper.AddNull(""));
-                        AppendDBProp(ref propertySet,
-                            5, value_ROWSETEXT_5, ref messageOffset);
+                        var value_ROWSETEXT_5 = GetBaseStorageVariant(vType_Values.VT_BSTR, false, new VT_BSTR(""));
+                        AppendDBProp(ref propSet, 5, value_ROWSETEXT_5);
                         break;
 
                     case "6":
 
                         // Creating CDBProp with PropId 6 
                         // for GUID type ROWSETEXT
-                        byte[] value_ROWSETEXT_6
-                            = GetBaseStorageVariant
-                            (StorageType.VT_I4, false, 0);
-                        AppendDBProp
-                            (ref propertySet,
-                            6, value_ROWSETEXT_6, ref messageOffset);
+                        var value_ROWSETEXT_6 = GetBaseStorageVariant(vType_Values.VT_I4, false, (Int32)0);
+                        AppendDBProp(ref propSet, 6, value_ROWSETEXT_6);
                         break;
 
                     case "7":
 
                         // Creating CDBProp with PropId 7 
                         //for GUID type ROWSETEXT
-                        byte[] value_ROWSETEXT_7
-                            = GetBaseStorageVariant
-                            (StorageType.VT_I4, false, 0);
-                        AppendDBProp
-                            (ref propertySet,
-                            7, value_ROWSETEXT_7, ref messageOffset);
+                        var value_ROWSETEXT_7 = GetBaseStorageVariant(vType_Values.VT_I4, false, (Int32)0);
+                        AppendDBProp(ref propSet, 7, value_ROWSETEXT_7);
                         break;
                     default:
                         break;
                 }
             }
-            return propertySet;
+            return propSet;
         }
         /// <summary>
         /// PropertySet2 for extPropSets array
         /// </summary>
         /// <param name="messageOffset">messageOffset</param>
         /// <returns>PropertySet BLOB</returns>
-        private byte[] GetAPropertySet2(ref int messageOffset)
+        private CDbPropSet GetAPropertySet2()
         {
-            byte[] padding = null;
-            int index = 0;
-            int structSize = messageOffset;
-            messageOffset += 16; //Increament for GUID
-            if (messageOffset % OFFSET_4 != 0)
-            {
-                padding = new byte[OFFSET_4 - (messageOffset % OFFSET_4)];
-                messageOffset += padding.Length;
-            }
-            uint cProperties = 10;
-            messageOffset += Constant.SIZE_OF_UINT;
-            //Increament for CProperties
+            var propSet = new CDbPropSet();
 
-            byte[] propertySet = new byte[messageOffset - structSize];
-            Helper.CopyBytes(propertySet, ref index, parameter.Array_PropertySet_Two_Guid.ToByteArray());
-            if (padding != null) // Add padding if required
-            {
-                Helper.CopyBytes(propertySet, ref index, padding);
-            }
-            Helper.CopyBytes
-                (propertySet, ref index, BitConverter.GetBytes(cProperties));
+            uint cProperties = 10;
+            var guid = parameter.Array_PropertySet_Two_Guid;
+
+            propSet.cProperties = cProperties;
+            propSet.guidPropertySet = guid;
+            propSet.aProps = new CDbProp[0];
 
             //---- Compile aPropertySet2 with Guid Value DBPROPSET_QUERYEXT
             foreach (string property in parameter.Array_PropertySet_Two_DBProperties)
@@ -1033,111 +832,73 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                     case "2":
                         // Creating CDBProp with PropId 2
                         // for GUID type QUERYEXT
-                        byte[] value_QUERYEXT_2
-                            = GetBaseStorageVariant
-                            (StorageType.VT_BOOL, false, false);
-                        AppendDBProp
-                            (ref propertySet,
-                            2, value_QUERYEXT_2, ref messageOffset);
+                        var value_QUERYEXT_2 = GetBaseStorageVariant(vType_Values.VT_BOOL, false, (UInt16)0x0000);
+                        AppendDBProp(ref propSet, 2, value_QUERYEXT_2);
                         break;
                     case "3":
                         // Creating CDBProp with PropId 3 
                         // for GUID type QUERYEXT
-                        byte[] value_QUERYEXT_3
-                            = GetBaseStorageVariant
-                            (StorageType.VT_BOOL, false, false);
-                        AppendDBProp
-                            (ref propertySet,
-                            3, value_QUERYEXT_3, ref messageOffset);
+                        var value_QUERYEXT_3 = GetBaseStorageVariant(vType_Values.VT_BOOL, false, (UInt16)0x0000);
+                        AppendDBProp(ref propSet, 3, value_QUERYEXT_3);
                         break;
                     case "4":
 
                         // Creating CDBProp with PropId 4 
                         //for GUID type QUERYEXT
-                        byte[] value_QUERYEXT_4
-                            = GetBaseStorageVariant
-                            (StorageType.VT_BOOL, false, false);
-                        AppendDBProp
-                            (ref propertySet,
-                            4, value_QUERYEXT_4, ref messageOffset);
+                        var value_QUERYEXT_4 = GetBaseStorageVariant(vType_Values.VT_BOOL, false, (UInt16)0x0000);
+                        AppendDBProp(ref propSet, 4, value_QUERYEXT_4);
                         break;
                     case "5":
                         // Creating CDBProp with PropId 5 
                         //for GUID type QUERYEXT
-                        byte[] value_QUERYEXT_5
-                            = GetBaseStorageVariant
-                            (StorageType.VT_BOOL, false, false);
-                        AppendDBProp
-                            (ref propertySet,
-                            5, value_QUERYEXT_5, ref messageOffset);
+                        var value_QUERYEXT_5 = GetBaseStorageVariant(vType_Values.VT_BOOL, false, (UInt16)0x0000);
+                        AppendDBProp(ref propSet, 5, value_QUERYEXT_5);
                         break;
                     case "6":
                         // Creating CDBProp with PropId 6
                         //for GUID type QUERYEXT
-                        byte[] value_QUERYEXT_6 =
-                            GetBaseStorageVariant
-                            (StorageType.VT_BSTR, false, Helper.AddNull(""));
-                        AppendDBProp
-                            (ref propertySet,
-                            6, value_QUERYEXT_6, ref messageOffset);
+                        var value_QUERYEXT_6 = GetBaseStorageVariant(vType_Values.VT_BSTR, false, new VT_BSTR(""));
+                        AppendDBProp(ref propSet, 6, value_QUERYEXT_6);
                         break;
                     case "8":
                         // Creating CDBProp with PropId 8 
                         //for GUID type QUERYEXT
-                        byte[] value_QUERYEXT_8
-                            = GetBaseStorageVariant
-                            (StorageType.VT_BOOL, false, false);
-                        AppendDBProp
-                            (ref propertySet,
-                            8, value_QUERYEXT_8, ref messageOffset);
+                        var value_QUERYEXT_8 = GetBaseStorageVariant(vType_Values.VT_BOOL, false, (UInt16)0x0000);
+                        AppendDBProp(ref propSet, 8, value_QUERYEXT_8);
                         break;
                     case "10":
 
                         // Creating CDBProp with PropId 10 
                         //for GUID type QUERYEXT
-                        byte[] value_QUERYEXT_10
-                            = GetBaseStorageVariant
-                            (StorageType.VT_BOOL, false, false);
-                        AppendDBProp
-                            (ref propertySet, 10, value_QUERYEXT_10, ref messageOffset);
+                        var value_QUERYEXT_10 = GetBaseStorageVariant(vType_Values.VT_BOOL, false, (UInt16)0x0000);
+                        AppendDBProp(ref propSet, 10, value_QUERYEXT_10);
                         break;
                     case "12":
 
                         // Creating CDBProp with PropId 12 
                         //for GUID type QUERYEXT
-                        byte[] value_QUERYEXT_12
-                            = GetBaseStorageVariant
-                            (StorageType.VT_BOOL, false, false);
-                        AppendDBProp
-                            (ref propertySet,
-                            12, value_QUERYEXT_12, ref messageOffset);
+                        var value_QUERYEXT_12 = GetBaseStorageVariant(vType_Values.VT_BOOL, false, (UInt16)0x0000);
+                        AppendDBProp(ref propSet, 12, value_QUERYEXT_12);
                         break;
                     case "13":
                         // Creating CDBProp with PropId 13 
                         //for GUID type QUERYEXT
-                        byte[] value_QUERYEXT_13
-                            = GetBaseStorageVariant
-                            (StorageType.VT_BOOL, false, false);
-                        AppendDBProp(ref propertySet,
-                            13, value_QUERYEXT_13, ref messageOffset);
+                        var value_QUERYEXT_13 = GetBaseStorageVariant(vType_Values.VT_BOOL, false, (UInt16)0x0000);
+                        AppendDBProp(ref propSet, 13, value_QUERYEXT_13);
                         break;
 
                     case "14":
 
                         // Creating CDBProp with PropId 14 
                         //for GUID type QUERYEXT
-                        byte[] value_QUERYEXT_14
-                            = GetBaseStorageVariant
-                            (StorageType.VT_BOOL, false, false);
-                        AppendDBProp
-                            (ref propertySet,
-                            14, value_QUERYEXT_14, ref messageOffset);
+                        var value_QUERYEXT_14 = GetBaseStorageVariant(vType_Values.VT_BOOL, false, (UInt16)0x0000);
+                        AppendDBProp(ref propSet, 14, value_QUERYEXT_14);
                         break;
                     default:
                         break;
                 }
             }
-            return propertySet;
+            return propSet;
         }
         /// <summary>
         /// Gets PropertySet3 of external PropertySets array
@@ -1145,30 +906,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <param name="messageOffset">message Offset</param>
         /// <param name="serverName">Name of the Server to connect</param>
         /// <returns>BLOB</returns>
-        private byte[] GetAPropertySet3
-            (ref int messageOffset, string serverName)
+        private CDbPropSet GetAPropertySet3(string serverName)
         {
-            byte[] padding = null;
-            int index = 0;
-            int structSize = messageOffset;
-            messageOffset += 16;
-            if (messageOffset % OFFSET_4 != 0)
-            {
-                padding = new byte[OFFSET_4 - (messageOffset % OFFSET_4)];
-                messageOffset += padding.Length;
-            }
-            uint cProperties = 1;
-            messageOffset += Constant.SIZE_OF_UINT;
+            var propSet = new CDbPropSet();
 
-            byte[] propertySet = new byte[messageOffset - structSize];
-            Helper.CopyBytes
-                (propertySet, ref index, parameter.Array_PropertySet_Three_Guid.ToByteArray());
-            if (padding != null)
-            {
-                Helper.CopyBytes(propertySet, ref index, padding);
-            }
-            Helper.CopyBytes
-                (propertySet, ref index, BitConverter.GetBytes(cProperties));
+            uint cProperties = 1;
+            var guid = parameter.Array_PropertySet_Three_Guid;
+
+            propSet.cProperties = cProperties;
+            propSet.guidPropertySet = guid;
+            propSet.aProps = new CDbProp[0];
+
+
             foreach (string property in parameter.Array_PropertySet_Three_DBProperties)
             {
                 switch (property)
@@ -1176,19 +925,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                     case "2":
                         // Creating CDBProp with PropId 2
                         // for GUID type FSCIFRMWRK_EXT
-                        byte[] value_FSCIFRMWRK_EXT_2
-                            = GetBaseStorageVariant(
-                            StorageType.VT_BSTR, false, serverName);
-                        AppendDBProp
-                            (ref propertySet,
-                            2, value_FSCIFRMWRK_EXT_2, ref messageOffset);
+                        var value_FSCIFRMWRK_EXT_2 = GetBaseStorageVariant(vType_Values.VT_BSTR, false, new VT_BSTR(serverName));
+                        AppendDBProp(ref propSet, 2, value_FSCIFRMWRK_EXT_2);
                         break;
                     default:
                         break;
                 }
             }
 
-            return propertySet;
+            return propSet;
         }
         /// <summary>
         /// Gets PropertySet4 of external PropertySets array
@@ -1196,30 +941,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <param name="messageOffset">message Offset</param>
         /// <param name="catalogName">Name of the Catalog to connect</param>
         /// <returns>BLOB</returns>
-        private byte[] GetAPropertySet4
-            (ref int messageOffset, string catalogName)
+        private CDbPropSet GetAPropertySet4(string catalogName)
         {
-            byte[] padding = null;
-            int index = 0;
-            int structSize = messageOffset;
-            messageOffset += 16; // increament for GUID
-            if (messageOffset % OFFSET_4 != 0) // padding if required
-            {
-                padding = new byte[OFFSET_4 - (messageOffset % OFFSET_4)];
-                messageOffset += padding.Length;
-            }
-            uint cProperties = 3;
-            messageOffset += Constant.SIZE_OF_UINT;
-            //increament for CProperties
+            var propSet = new CDbPropSet();
 
-            byte[] propertySet = new byte[messageOffset - structSize];
-            Helper.CopyBytes(propertySet, ref index, parameter.Array_PropertySet_Four_Guid.ToByteArray());
-            if (padding != null)
-            {
-                Helper.CopyBytes(propertySet, ref index, padding);
-            }
-            Helper.CopyBytes
-                (propertySet, ref index, BitConverter.GetBytes(cProperties));
+            uint cProperties = 3;
+
+
+
+            var guid = parameter.Array_PropertySet_Four_Guid;
+
+            propSet.cProperties = cProperties;
+            propSet.guidPropertySet = guid;
+            propSet.aProps = new CDbProp[0];
+
+
             //Compile aPropertySet4 with Guid Value DBPROPSET_CIFRMWRKCORE_EXT
             foreach (string property in parameter.Array_PropertySet_Four_DBProperties)
             {
@@ -1228,48 +964,28 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                     case "2":
                         // Creating CDBProp with PropId 2 
                         //for GUID type CIFRMWRKCORE_EXT
-                        byte[] value_CIFRMWRKCORE_EXT_2
-                            = GetBaseStorageVariant
-                            (StorageType.VT_BSTR, false, catalogName);
-                        AppendDBProp
-                            (ref propertySet, 2, value_CIFRMWRKCORE_EXT_2,
-                            ref messageOffset);
+                        var value_CIFRMWRKCORE_EXT_2 = GetBaseStorageVariant(vType_Values.VT_BSTR, false, new VT_BSTR(catalogName));
+                        AppendDBProp(ref propSet, 2, value_CIFRMWRKCORE_EXT_2);
                         break;
                     case "3":
                         // Creating CDBProp with PropId 3 
                         //for GUID type CIFRMWRKCORE_EXT
-                        byte[] value_CIFRMWRKCORE_EXT_3
-                            = GetBaseStorageVariant
-                            (StorageType.VT_BSTR, false, Helper.AddNull("\\"));
-                        RemoveTypeFromBaseVariant
-                            (ref value_CIFRMWRKCORE_EXT_3);
-                        byte[] safeArrayForStr
-                            = GetSafeArray
-                            (StorageType.VT_BSTR, value_CIFRMWRKCORE_EXT_3, 0);
-                        AppendDBProp
-                            (ref propertySet,
-                            3, safeArrayForStr, ref messageOffset);
+                        var safeArrayForStr = GetSafeArray<VT_BSTR>(vType_Values.VT_BSTR, new VT_BSTR[] { new VT_BSTR("") }, 0);
+                        AppendDBProp(ref propSet, 3, safeArrayForStr);
                         break;
 
                     case "4":
                         // Creating CDBProp with PropId 4
-                        // for GUID type CIFRMWRKCORE_EXT
-                        Byte[] intValue
-                            = GetBaseStorageVariant(
-                            StorageType.VT_I4, false, 0);
-                        RemoveTypeFromBaseVariant(ref intValue);
-                        Byte[] safeArrayForInt
-                            = GetSafeArray(StorageType.VT_I4, intValue, 0);
-                        AppendDBProp
-                            (ref propertySet,
-                            4, safeArrayForInt, ref messageOffset);
+                        // for GUID type 
+                        var safeArrayForInt = GetSafeArray<Int32>(vType_Values.VT_I4, new Int32[] { 0 }, 0);
+                        AppendDBProp(ref propSet, 4, safeArrayForInt);
                         break;
                     default:
                         break;
                 }
             }
 
-            return propertySet;
+            return propSet;
         }
 
         /// <summary>
@@ -1279,53 +995,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <param name="id">DbPropId</param>
         /// <param name="columnValue">BLOB of the Value field</param>
         /// <param name="messageOffSet">messageOffSet</param>
-        private void AppendDBProp
-            (ref byte[] propertySet, uint id,
-            byte[] columnValue, ref int messageOffSet)
+        private void AppendDBProp(ref CDbPropSet propertySet, uint id, CBaseStorageVariant value)
         {
             uint dbPropId = id;
             uint dbPropOption = 0;
             uint dbPropStatus = 0;
-            int index = 0;
-            int paddingLength = 0;
-            int startingIndex = messageOffSet;
-            byte[] padding = null;
-            if (messageOffSet % OFFSET_4 != 0)
-            {
-                padding = new byte[OFFSET_4 - (messageOffSet % OFFSET_4)];
-                paddingLength = padding.Length;
-                messageOffSet += padding.Length;
-            }
-            messageOffSet += 3 * Constant.SIZE_OF_UINT;
-            // This should take care of guidAllign Padding
-            byte[] columnId = GetColumnId(ref messageOffSet);
-            messageOffSet += columnValue.Length;
 
-            //
-            byte[] mainBlob = new byte[messageOffSet - startingIndex];
+            var prop = new CDbProp();
 
-            //Copy column
-            //Copy columnValue
-            if (padding != null)
-            {
-                Helper.CopyBytes(mainBlob, ref index, padding);
-            }
-            Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(dbPropId));
-            Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(dbPropOption));
-            Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(dbPropStatus));
-            Helper.CopyBytes
-                (mainBlob, ref index, columnId);
-            Helper.CopyBytes
-                (mainBlob, ref index, columnValue);
+            prop.DBPROPID = dbPropId;
 
-            int initialLength = propertySet.Length;
-            Array.Resize<byte>
-                (ref propertySet, propertySet.Length + mainBlob.Length);
-            Helper.CopyBytes(propertySet, ref initialLength, mainBlob);
-            //return mainBlob;
+            prop.DBPROPOPTIONS = dbPropOption;
+
+            prop.DBPROPSTATUS = dbPropStatus;
+
+            prop.colid = GetColumnId();
+
+            prop.vValue = value;
+
+            propertySet.aProps = propertySet.aProps.Append(prop).ToArray();
         }
 
         /// <summary>
@@ -1333,74 +1021,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         /// <param name="messageOffset">messageOffset</param>
         /// <returns>BLOB ColumnID</returns>
-        private byte[] GetColumnId(ref int messageOffset)
+        private CDbColId GetColumnId()
         {
-            ColumnId col = new ColumnId();
-            col.eKind = Ekind.DBKIND_GUID_PROPID;
-            col.guid = parameter.EmptyGuid;
-            col.UlId = 0;
-
-            uint kind;
-            uint ulId;
-            int index = 0;
-            byte[] mainBlob;
-            byte[] guidArray;
-            int guidAllignLength = 0;
-            byte[] guidAllign = null;
-            int startingIndex = messageOffset;
-            messageOffset += 4; // EKIND
-            if ((messageOffset) % OFFSET_8 != 0)
-            {
-                // Padding field
-                guidAllign = new byte[OFFSET_8 - (messageOffset) % OFFSET_8];
-                guidAllignLength = guidAllign.Length;
-                messageOffset += guidAllign.Length;
-            }
-            switch (col.eKind) // ColumnValue depends on the type of EKind
-            {
-                case Ekind.DBKIND_GUID_NAME:
-                    guidArray = col.guid.ToByteArray();
-                    messageOffset += guidArray.Length;
-                    messageOffset += Constant.SIZE_OF_UINT; // UL_ID
-                    messageOffset += 2 * col.propertyName.Length;
-                    mainBlob = new byte[messageOffset - startingIndex];
-                    kind = (uint)col.eKind;
-                    ulId = (uint)col.propertyName.Length;
-                    Helper.CopyBytes
-                        (mainBlob, ref index, BitConverter.GetBytes(kind));
-                    if (guidAllign != null)
-                    {
-                        Helper.CopyBytes(mainBlob, ref index, guidAllign);
-                    }
-                    Helper.CopyBytes
-                        (mainBlob, ref index, guidArray);
-                    Helper.CopyBytes
-                        (mainBlob, ref index, BitConverter.GetBytes(ulId));
-                    Helper.CopyBytes
-                        (mainBlob, ref index,
-                        Encoding.Unicode.GetBytes(col.propertyName));
-
-                    break;
-                case Ekind.DBKIND_GUID_PROPID:
-                    guidArray = col.guid.ToByteArray();
-                    messageOffset += guidArray.Length;
-                    messageOffset += Constant.SIZE_OF_UINT; // UL_ID
-                    mainBlob = new byte[messageOffset - startingIndex];
-                    kind = (uint)col.eKind;
-                    Helper.CopyBytes(mainBlob, ref index,
-                        BitConverter.GetBytes(kind));
-                    if (guidAllign != null)
-                    {
-                        Helper.CopyBytes(mainBlob, ref index, guidAllign);
-                    }
-                    Helper.CopyBytes(mainBlob, ref index, guidArray);
-                    Helper.CopyBytes(mainBlob, ref index,
-                        BitConverter.GetBytes(col.UlId));
-                    break;
-                default:
-                    throw new InvalidOperationException("Invalid eKind for ColumnId Property");
-            }
-            return mainBlob;
+            var result = new CDbColId(parameter.EmptyGuid, 0);
+            return result;
         }
         #endregion
 
@@ -1607,6 +1231,98 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         }
 
         /// <summary>
+        /// Gets CBaseStorgeVariant structure of a given type/value
+        /// </summary>
+        /// <param name="type">Type of the storage value</param>
+        /// <param name="isArray">true if it is an array of items</param>
+        /// <param name="inputValue">input value, if isArray
+        /// is true, pass values as array of objects</param>
+        /// <returns>CBaseStorageVariant BLOB</returns>
+        private byte[] GetBaseStorageVariant
+            (StorageType type, bool isArray, object inputValue)
+        {
+            ushort vType = (ushort)type;
+            byte vData1 = 0;
+            byte vData2 = 0;
+            byte[] value = new byte[1];
+            if (!isArray)
+            {
+                switch (type)
+                {
+                    case StorageType.VT_BOOL:
+                        bool tempBool = (bool)inputValue;
+                        value = new byte[] { 0x00, 0x00 };
+                        if (tempBool)
+                        {
+                            value = new byte[] { 0xFF, 0xFF };
+                        }
+                        break;
+                    case StorageType.VT_I4:
+                        int tempI4 = (int)inputValue;
+                        value = BitConverter.GetBytes(tempI4);
+                        break;
+                    case StorageType.VT_UI4:
+                        int tempVal = (int)inputValue;
+                        value = BitConverter.GetBytes((uint)tempVal);
+                        break;
+                    //VT_BSTR and VT_LPWSTR is same
+                    case StorageType.VT_BSTR:
+                        int bStrIndex = 0;
+                        //=====  Building Unicode String Type ==============
+                        string bStr = (string)inputValue;
+                        uint bStrLength = (uint)(2 * bStr.Length);
+                        value = new byte[Constant.SIZE_OF_UINT + bStrLength];
+                        Helper.CopyBytes
+                            (value, ref bStrIndex,
+                            BitConverter.GetBytes(bStrLength));
+                        Helper.CopyBytes
+                            (value, ref bStrIndex,
+                            Encoding.Unicode.GetBytes(bStr));
+
+                        //==================================================
+                        break;
+                    case StorageType.VT_LPWSTR:
+                        int strIndex = 0;
+                        //=====  Building Unicode String Type ==============
+                        string str = (string)inputValue;
+                        uint unicodeStringLength = (uint)str.Length;
+                        value
+                            = new byte[Constant.SIZE_OF_UINT
+                                + 2 * unicodeStringLength];
+                        Helper.CopyBytes
+                            (value, ref strIndex,
+                            BitConverter.GetBytes(unicodeStringLength));
+                        Helper.CopyBytes
+                            (value, ref strIndex,
+                            Encoding.Unicode.GetBytes(str));
+                        //==================================================
+                        break;
+                    case StorageType.VT_COMPRESSED_LPWSTR:
+                        break;
+                    default:
+                        break;
+                }
+                byte[] storageVariantBytes
+                    = new byte[sizeof(ushort) +
+                        2 * sizeof(byte) + value.Length];
+                int index = 0;
+                Helper.CopyBytes
+                    (storageVariantBytes, ref index,
+                    BitConverter.GetBytes(vType));
+                Helper.CopyBytes
+                    (storageVariantBytes, ref index,
+                    new byte[] { vData1 });
+                Helper.CopyBytes
+                    (storageVariantBytes, ref index,
+                    new byte[] { vData2 });
+                Helper.CopyBytes
+                    (storageVariantBytes, ref index, value);
+                return storageVariantBytes;
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Gets CPropertyRestriction specific to the query path
         /// </summary>
         /// <param name="messageOffset">offset from 
@@ -1626,8 +1342,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 = GetFullPropSec
                 (parameter.PropertyRestrictionGuid, PROPERTY_ID, parameter.PropertyRestrictionProperty, ref messageOffset);
             byte[] propValue
-                = GetBaseStorageVariant
-                (StorageType.VT_LPWSTR, false, searchScope);
+            = GetBaseStorageVariant
+            (StorageType.VT_LPWSTR, false, searchScope);
             messageOffset += propValue.Length;
             if (messageOffset % OFFSET_4 != 0)
             {
@@ -1807,98 +1523,42 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
         #region Helper methods for Base Storage Type
         /// <summary>
-        /// This methods remove the storage code
-        /// from a BaseStorageVariant structure.
-        /// This is useful when creating Array 
-        /// of BaseStorageVariant types
-        /// </summary>
-        /// <param name="storageTypeWithCode">Base
-        /// Storage Variant type</param>
-        private void RemoveTypeFromBaseVariant
-            (ref byte[] storageTypeWithCode)
-        {
-            if (storageTypeWithCode.Length < 4)
-            {
-                storageTypeWithCode = null;
-            }
-            byte[] shrunkedBytes
-                = new byte[storageTypeWithCode.Length - 4];
-            for (int i = 0; i < shrunkedBytes.Length; i++)
-            {
-                shrunkedBytes[i] = storageTypeWithCode[i + 4];
-            }
-            storageTypeWithCode = shrunkedBytes;
-        }
-
-        /// <summary>
         /// Gets a Vector form of a Base Storage Type
         /// </summary>
         /// <param name="type">StorageType (Vector Item type)</param>
         /// <param name="inputvalues">StorageType
         /// (Vector Item values)</param>
         /// <returns>Vector Base Storage Type BLOB</returns>
-        private byte[] GetVector(StorageType type, object[] inputvalues)
+        private CBaseStorageVariant GetVector<T>(vType_Values type, T[] inputvalues) where T : struct
         {
-            ushort vType = (ushort)((ushort)type | (ushort)VECTOR_TYPE);
-            byte[] bytes = null;
-            int index = 0;
-            int length = inputvalues.Length;
-            int size = 0;
+            var result = new CBaseStorageVariant();
+            result.vType = type | vType_Values.VT_VECTOR;
+            result.vData1 = 0;
+            result.vData2 = 0;
             switch (type)
             {
-                case StorageType.VT_I4:
-                    bytes
-                        = new byte
-                            [Constant.SIZE_OF_UINT
-                            + inputvalues.Length *
-                            (2 * Constant.SIZE_OF_UINT)];
-                    Helper.CopyBytes
-                        (bytes, ref index, BitConverter.GetBytes(vType));
-                    Helper.CopyBytes
-                        (bytes, ref index, new byte[] { 0, 0 });
-                    Helper.CopyBytes
-                        (bytes, ref index,
-                        BitConverter.GetBytes(inputvalues.Length));
-                    for (int i = 0; i < length; i++)
+                case vType_Values.VT_I4:
                     {
-                        int x = (int)inputvalues[i];
-                        Helper.CopyBytes
-                            (bytes, ref index, BitConverter.GetBytes(x));
+                        var vector = new VT_VECTOR<Int32>();
+                        vector.vVectorElements = (UInt32)inputvalues.Length;
+                        vector.vVectorData = inputvalues.Cast<Int32>().ToArray();
+                        result.vValue = vector;
                     }
                     break;
-                case StorageType.VT_LPWSTR:
-                    string[] strArray = (string[])inputvalues;
-                    for (int i = 0; i < strArray.Length; i++)
+                case vType_Values.VT_LPWSTR:
                     {
-                        size += Constant.SIZE_OF_UINT;
-                        size += 2 * strArray[i].Length;
-                    }
-                    size += Constant.SIZE_OF_USHORT; // VECTOR TYPE
-                    size += Constant.SIZE_OF_BYTE; // DATA1
-                    size += Constant.SIZE_OF_BYTE; //DATA2
-                    size += Constant.SIZE_OF_UINT; // VECTOR LENGTH
-                    bytes = new byte[size];
-                    Helper.CopyBytes
-                        (bytes, ref index, BitConverter.GetBytes(vType));
-                    Helper.CopyBytes(bytes, ref index, new byte[] { 0, 0 });
-                    Helper.CopyBytes
-                        (bytes, ref index, BitConverter.GetBytes(length));
-                    for (int i = 0; i < strArray.Length; i++)
-                    {
-                        Helper.CopyBytes
-                            (bytes, ref index,
-                            BitConverter.GetBytes(strArray[i].Length));
-                        Helper.CopyBytes
-                            (bytes, ref index,
-                            Encoding.Unicode.GetBytes(strArray[i]));
+                        var vector = new VT_VECTOR<VT_LPWSTR>();
+                        vector.vVectorElements = (UInt32)inputvalues.Length;
+                        vector.vVectorData = inputvalues.Cast<VT_LPWSTR>().ToArray();
+                        result.vValue = vector;
                     }
                     break;
 
                 default:
                     break;
             }
-            return bytes;
 
+            return result;
         }
 
         /// <summary>
@@ -1908,40 +1568,37 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <param name="arrayValue">Value of item(s)</param>
         /// <param name="features">Safe Array Features</param>
         /// <returns>Safe Array Storage Type</returns>
-        private byte[] GetSafeArray
-            (StorageType type, byte[] arrayValue, ushort features)
+        private CBaseStorageVariant GetSafeArray<T>(vType_Values type, T[] arrayValue, ushort features) where T : struct
         {
-            int index = 0;
-            ushort typeValue = (ushort)type;
-            typeValue = (ushort)(typeValue | SAFE_ARRAY_TYPE);
-            byte[] returnBLOB = null;
-            byte data1 = 0;
-            byte data2 = 0;
-            ushort cDims = 1;
-            ushort fFeatures = features;
-            uint cbElements = 4;
-            byte[] rGsaBound = GetBound(1, 0);//For now it's 1
-            returnBLOB
-                = new byte[2 * Constant.SIZE_OF_USHORT
-                    + 2 * Constant.SIZE_OF_USHORT
-                    + Constant.SIZE_OF_UINT
-                    + rGsaBound.Length + arrayValue.Length];
-            Helper.CopyBytes
-                (returnBLOB, ref index, BitConverter.GetBytes(typeValue));
-            Helper.CopyBytes
-                (returnBLOB, ref index, new byte[] { data1 });
-            Helper.CopyBytes
-                (returnBLOB, ref index, new byte[] { data2 });
-            Helper.CopyBytes
-                (returnBLOB, ref index, BitConverter.GetBytes(cDims));
-            Helper.CopyBytes
-                (returnBLOB, ref index, BitConverter.GetBytes(features));
-            Helper.CopyBytes
-                (returnBLOB, ref index, BitConverter.GetBytes(cbElements));
-            Helper.CopyBytes
-                (returnBLOB, ref index, rGsaBound);
-            Helper.CopyBytes(returnBLOB, ref index, arrayValue);
-            return returnBLOB;
+            var result = new CBaseStorageVariant();
+            result.vType = type | vType_Values.VT_ARRAY;
+            result.vData1 = 0;
+            result.vData2 = 0;
+
+            var array = new SAFEARRAY<T>();
+            array.cDims = 1;
+            array.fFeatures = features;
+
+            var tempBuffer = new WSPBuffer();
+            if (arrayValue[0] is IWSPObject)
+            {
+
+                (arrayValue[0] as IWSPObject).ToBytes(tempBuffer);
+
+            }
+            else
+            {
+                tempBuffer.Add(arrayValue[0]);
+            }
+
+            array.cbElements = (UInt32)tempBuffer.Offset;
+
+            array.Rgsabound = new SAFEARRAYBOUND[] { new SAFEARRAYBOUND() { cElements = (UInt32)arrayValue.Length, lLbound = 0 } };
+            array.vData = arrayValue;
+
+            result.vValue = array;
+
+            return result;
         }
 
         /// <summary>
@@ -1970,88 +1627,28 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <param name="inputValue">input value, if isArray
         /// is true, pass values as array of objects</param>
         /// <returns>CBaseStorageVariant BLOB</returns>
-        private byte[] GetBaseStorageVariant
-            (StorageType type, bool isArray, object inputValue)
+        private CBaseStorageVariant GetBaseStorageVariant(vType_Values type, bool isArray, object inputValue)
         {
+            var result = new CBaseStorageVariant();
             ushort vType = (ushort)type;
             byte vData1 = 0;
             byte vData2 = 0;
-            byte[] value = new byte[1];
             if (!isArray)
             {
-                switch (type)
-                {
-                    case StorageType.VT_BOOL:
-                        bool tempBool = (bool)inputValue;
-                        value = new byte[] { 0x00, 0x00 };
-                        if (tempBool)
-                        {
-                            value = new byte[] { 0xFF, 0xFF };
-                        }
-                        break;
-                    case StorageType.VT_I4:
-                        int tempI4 = (int)inputValue;
-                        value = BitConverter.GetBytes(tempI4);
-                        break;
-                    case StorageType.VT_UI4:
-                        int tempVal = (int)inputValue;
-                        value = BitConverter.GetBytes((uint)tempVal);
-                        break;
-                    //VT_BSTR and VT_LPWSTR is same
-                    case StorageType.VT_BSTR:
-                        int bStrIndex = 0;
-                        //=====  Building Unicode String Type ==============
-                        string bStr = (string)inputValue;
-                        uint bStrLength = (uint)(2 * bStr.Length);
-                        value = new byte[Constant.SIZE_OF_UINT + bStrLength];
-                        Helper.CopyBytes
-                            (value, ref bStrIndex,
-                            BitConverter.GetBytes(bStrLength));
-                        Helper.CopyBytes
-                            (value, ref bStrIndex,
-                            Encoding.Unicode.GetBytes(bStr));
+                result.vType = (vType_Values)vType;
 
-                        //==================================================
-                        break;
-                    case StorageType.VT_LPWSTR:
-                        int strIndex = 0;
-                        //=====  Building Unicode String Type ==============
-                        string str = (string)inputValue;
-                        uint unicodeStringLength = (uint)str.Length;
-                        value
-                            = new byte[Constant.SIZE_OF_UINT
-                                + 2 * unicodeStringLength];
-                        Helper.CopyBytes
-                            (value, ref strIndex,
-                            BitConverter.GetBytes(unicodeStringLength));
-                        Helper.CopyBytes
-                            (value, ref strIndex,
-                            Encoding.Unicode.GetBytes(str));
-                        //==================================================
-                        break;
-                    case StorageType.VT_COMPRESSED_LPWSTR:
-                        break;
-                    default:
-                        break;
-                }
-                byte[] storageVariantBytes
-                    = new byte[sizeof(ushort) +
-                        2 * sizeof(byte) + value.Length];
-                int index = 0;
-                Helper.CopyBytes
-                    (storageVariantBytes, ref index,
-                    BitConverter.GetBytes(vType));
-                Helper.CopyBytes
-                    (storageVariantBytes, ref index,
-                    new byte[] { vData1 });
-                Helper.CopyBytes
-                    (storageVariantBytes, ref index,
-                    new byte[] { vData2 });
-                Helper.CopyBytes
-                    (storageVariantBytes, ref index, value);
-                return storageVariantBytes;
+                result.vData1 = vData1;
+
+                result.vData2 = vData2;
+
+                result.vValue = inputValue;
+
+                return result;
             }
-            return null;
+            else
+            {
+                throw new InvalidOperationException("Array is not supported yet!");
+            }
         }
         #endregion
 
@@ -2788,6 +2385,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                     break;
             }
             return size;
+        }
+
+        private byte[] ToBytes(IWSPObject obj)
+        {
+            var buffer = new WSPBuffer();
+
+            obj.ToBytes(buffer);
+
+            return buffer.GetBytes();
         }
         #endregion
     }

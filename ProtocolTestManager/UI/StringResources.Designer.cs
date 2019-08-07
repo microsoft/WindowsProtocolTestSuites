@@ -19,7 +19,7 @@ namespace Microsoft.Protocols.TestManager.UI {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class StringResources {
@@ -189,6 +189,24 @@ namespace Microsoft.Protocols.TestManager.UI {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to   You can get the latest released test suites from .
+        /// </summary>
+        internal static string GetLatestRelease {
+            get {
+                return ResourceManager.GetString("GetLatestRelease", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to   To configure and run Windows Protocol Test Suites, you should install at least one test suite..
+        /// </summary>
+        internal static string InstallAtLeastOneTestSuite {
+            get {
+                return ResourceManager.GetString("InstallAtLeastOneTestSuite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid value.
         /// </summary>
         internal static string InvalidValue {
@@ -230,6 +248,24 @@ namespace Microsoft.Protocols.TestManager.UI {
         internal static string PlaylistFilter {
             get {
                 return ResourceManager.GetString("PlaylistFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/microsoft/WindowsProtocolTestSuites/releases/latest.
+        /// </summary>
+        internal static string ReleaseLink {
+            get {
+                return ResourceManager.GetString("ReleaseLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to   Restart Protocol Test Manager after you install the test suite..
+        /// </summary>
+        internal static string RestartPTM {
+            get {
+                return ResourceManager.GetString("RestartPTM", resourceCulture);
             }
         }
         
@@ -366,6 +402,15 @@ namespace Microsoft.Protocols.TestManager.UI {
         internal static string TextFilter {
             get {
                 return ResourceManager.GetString("TextFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to this link..
+        /// </summary>
+        internal static string ThisLink {
+            get {
+                return ResourceManager.GetString("ThisLink", resourceCulture);
             }
         }
         

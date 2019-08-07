@@ -7,6 +7,7 @@ pr:
 
 variables:
   - group: Azure Account
+  - group: Build Variables
   - group: External Repo Variables
 
 jobs:
@@ -31,7 +32,7 @@ jobs:
     inputs:
       targetType: filePath
       filePath: '$(extRepo.dir)/AzureScripts/Download-TestsuiteFromShare.ps1'
-      arguments: '-BuildShareFolder "$(test.buildShareFolder)" -TestSuiteName "$(test.testSuiteName)" -RegressionType "Azure"'
+      arguments: '-BuildShareFolder "$(test.buildShareFolder)" -TestSuiteName "$(test.testSuiteName)" -RegressionType "Azure" -ApplicationId "$(azure.applicationId)" -ThumbPrint "$(azure.thumbPrint)" -TenantId "$(azure.tenantId)" -StorageAccount "$(azure.storageAccount)" -StorageShareName "$(azure.storageShareName)" -FileShareResourceGroup "$(azure.fileShareResourceGroup)" -RootSharePath "$(build.sharePath)"'
     timeoutInMinutes: 0
 
   - task: PowerShell@2
@@ -39,9 +40,7 @@ jobs:
     inputs:
       targetType: filePath
       filePath: '$(extRepo.dir)/RunRegression/AzureScripts/Run-TestSuiteRegression.ps1'
-      arguments: '-TestSuiteName "$(test.testSuiteName)" -EnvironmentName "$(test.environmentName)"'
-    env:
-      AZURE_STORAGEACCOUNTKEY: $(azure.storageAccountKey)
+      arguments: '-TestSuiteName "$(test.testSuiteName)" -EnvironmentName "$(test.environmentName)" -SubscriptionId "$(azure.subscriptionId)" -ResourceGroup "$(test.resourceGroup)" -ApplicationId "$(azure.applicationId)" -ThumbPrint "$(azure.ThumbPrint)" -TenantId "$(azure.tenantId)" -FileShareGroup "$(azure.fileShareResourceGroup)" -StorageAccount "$(azure.storageAccount)" -StorageShareName "$(azure.storageShareName)"'
     timeoutInMinutes: 0
 
   - task: PublishTestResults@2

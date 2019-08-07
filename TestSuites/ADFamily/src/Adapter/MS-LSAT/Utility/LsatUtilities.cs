@@ -178,11 +178,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat
         #region Static filed
 
         /// <summary>
-        /// Set of Names which are present in the domain
-        /// </summary>
-        public static string[] DomainUserAccount = { "Administrator", "Administrator", "Administrator", "Administrator" };
-
-        /// <summary>
         /// Set of Names which are not present in the domain
         /// </summary>
         public static string[] NonExistingAccount = { @"moskjkshr@hdhh.com", "kujssarkhh", @"hdhsgjgs\bcD", @"kkx.com\hjshshs" };
@@ -324,7 +319,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat
         /// Method to read the Domain User Account Names from ptfconfig file
         /// and convert them into RPC_UNICODE_STRING format.
         /// </summary>
-        public static void InitializeAccountNames()
+        public static void InitializeAccountNames(string domainAdministratorName)
         {
             int counter = 0;
             accountNames = new string[TestsuiteMaxUserCount];
@@ -333,7 +328,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat
 
             for (counter = 0; counter < TestsuiteMaxUserCount; counter++)
             {
-                accountNames[counter] = DomainUserAccount[counter];
+                accountNames[counter] = domainAdministratorName;
                 nameString[counter] = accountNames[counter];
                 char[] nameArray = new char[nameString[counter].Length];
                 nameArray = nameString[counter].ToCharArray();
