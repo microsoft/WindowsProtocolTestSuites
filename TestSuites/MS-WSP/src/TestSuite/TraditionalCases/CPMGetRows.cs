@@ -88,8 +88,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
         [TestMethod]
         [TestCategory("CPMGetRows")]
-        [Description("This test case is designed to verify the server response if invalid arguments are sent in CPMGetRowsIn.")]
-        public void CPMGetRows_InvalidArgument()
+        [Description("This test case is designed to verify the server response if invalid Cursor is sent in CPMGetRowsIn.")]
+        public void CPMGetRows_InvalidCursor()
         {
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
@@ -104,10 +104,42 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn with invalid cursor and expects ERROR_INVALID_PARAMETER .");
             argumentType = ArgumentType.InvalidCursor;
             wspAdapter.CPMGetRowsIn(invalidCursor, validRowsToTransfer, MessageBuilder.rowWidth, validReadBuffer, (uint)FetchType.ForwardOrder, (uint)RowSeekType.eRowSeekNext);
+        }
 
-            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn with invalid cursor and expects ERROR_INVALID_PARAMETER .");
+        [TestMethod]
+        [TestCategory("CPMGetRows")]
+        [Description("This test case is designed to verify the server response if invalid RowWidth is sent in CPMGetRowsIn.")]
+        public void CPMGetRows_InvalidRowWidth()
+        {
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
+            wspAdapter.CPMConnectInRequest();
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
+            wspAdapter.CPMCreateQueryIn(true);
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
+            wspAdapter.CPMSetBindingsIn(true, true);
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn with invalid RowWidth and expects ERROR_INVALID_PARAMETER .");
             argumentType = ArgumentType.InvalidRowWidth;
             wspAdapter.CPMGetRowsIn(wspAdapter.GetCursor(wspAdapter.clientMachineName), validRowsToTransfer, invalidRowsWidth, validReadBuffer, (uint)FetchType.ForwardOrder, (uint)RowSeekType.eRowSeekNext);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMGetRows")]
+        [Description("This test case is designed to verify the server response if invalid ReadBuffer is sent in CPMGetRowsIn.")]
+        public void CPMGetRows_InvalidReadBuffer()
+        {
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
+            wspAdapter.CPMConnectInRequest();
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
+            wspAdapter.CPMCreateQueryIn(true);
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
+            wspAdapter.CPMSetBindingsIn(true, true);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn with invalid ReadBuffer and expects STATUS_INVALID_PARAMETER .");
             argumentType = ArgumentType.InvalidReadBuffer;
