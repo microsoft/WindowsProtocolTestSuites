@@ -37,9 +37,17 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Apds
         /// </summary>
         private string resourceDCName;
         /// <summary>
+        /// The full name of resource IPAddress.
+        /// </summary>
+        private string resourceIPAddress;
+        /// <summary>
         /// The full name of account DC.
         /// </summary>
         private string accountDCName;
+        /// <summary>
+        /// The full name of account IPAddress.
+        /// </summary>
+        private string accountIPAddress;
         /// <summary>
         /// Default value of resource DC blocker registry key.
         /// </summary>
@@ -114,7 +122,9 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Apds
             isServerWindows = currentOS != OSVersion.NONWINDOWS;
 
             resourceDCName = apdsServerAdapter.PDCNetbiosName + "." + apdsServerAdapter.PrimaryDomainDnsName;
+            resourceIPAddress = apdsServerAdapter.PDCIPAddress;
             accountDCName = apdsServerAdapter.TDCNetbiosName + "." + apdsServerAdapter.TrustDomainDnsName;
+            accountIPAddress = apdsServerAdapter.TDCIPAddress;
             // The value for registry key to block DC.
             blockDCkey = 7;
             // The value for registry key to set exception server for block DC.
@@ -127,9 +137,9 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Apds
             // Get default registry key for DC blocker.
             if (currentOS >= OSVersion.WINSVR2008R2)
             {
-                defaultResourceDCKey = serverControlAdapter.GetDCBlockValue(resourceDCName);
-                defaultAccountDCKey = serverControlAdapter.GetDCBlockValue(accountDCName);
-                defaultResourceDCException = serverControlAdapter.GetDCException(resourceDCName);
+                defaultResourceDCKey = serverControlAdapter.GetDCBlockValue(resourceIPAddress);
+                defaultAccountDCKey = serverControlAdapter.GetDCBlockValue(accountIPAddress);
+                defaultResourceDCException = serverControlAdapter.GetDCException(resourceIPAddress);
             }
         }
 
