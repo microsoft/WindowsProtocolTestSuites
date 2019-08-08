@@ -424,6 +424,15 @@ namespace Microsoft.Protocols.TestManager.UI {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to set test report format..
+        /// </summary>
+        internal static string UnknownReportFormat {
+            get {
+                return ResourceManager.GetString("UnknownReportFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to devenv.exe.
         /// </summary>
         internal static string VSFileName {
