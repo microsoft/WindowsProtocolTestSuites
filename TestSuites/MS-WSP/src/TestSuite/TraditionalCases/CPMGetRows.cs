@@ -69,6 +69,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
         [TestMethod]
         [TestCategory("BVT")]
+        [TestCategory("CPMGetRows")]
         [Description("This test case is designed to test the basic functionality of CPMGetRows.")]
         public void BVT_CPMGetRows()
         {
