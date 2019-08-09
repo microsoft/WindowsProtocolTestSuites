@@ -2,9 +2,9 @@
 <TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
   <Properties>
     <!-- IP/ Machine Name for the Beacon Logging-->
-    <Property name="ServerComputerName" value="192.168.0.1" />    
+    <Property name="ServerComputerName" value="169.254.9.88" />    
     <!-- Name of the Server Machine Under test-->
-    <Property name="SERVER_MACHINE_NAME" value="SUT01" />
+    <Property name="SERVER_MACHINE_NAME" value="SUT" />
     <!-- Name of the Domain Under test-->
     <Property name="DomainName" value="contoso.com" />
     <!-- Password of user Under test-->
@@ -16,7 +16,7 @@
     <!-- Name of the Client User name initiating the MS-WSP request messages-->
     <Property name="CLIENT_USERNAME" value="Administrator" />
     <!-- Name of the Client Machine name initiating the MS-WSP request messages-->
-    <Property name="CLIENT_MACHINE_NAME" value="ENDPOINT01" />
+    <Property name="CLIENT_MACHINE_NAME" value="DRIVER" />
     <!-- Name of the Catalog to be searched-->
     <Property name="CatalogName" value="Windows\SYSTEMINDEX" />
     <!-- Name of the Language Locale of all query string and query text-->
@@ -52,7 +52,7 @@
     <!--
     Please specify the version number (uint) of  32 bit client
                  For Windows XP 32 it must be 265 (with Windows Desktop Search Installed)
-                 Vista 32 it must be 258          (without Windows Desktop Search)  
+                 Vista 32 and Windows 2008, it must be 258          (without Windows Desktop Search)  
                  Windows 7 32 it must be 1792     (without Windows Desktop Search)  
     Please specify the version number (uint) of  64 bit client                 
                  For Windows XP 64 it must be 65801 (with Windows Desktop Search Installed)
@@ -89,7 +89,7 @@
     <Property name="R549Implementated" value="true" />
 
     <!-- It specifies the Search Scope. (Path of the Network folder to be searched)-->
-    <Property name="QueryPath" value="file://SUT01/Test/Data/Test/" />
+    <Property name="QueryPath" value="file://SUT/Test/Data/Test/" />
     <!-- It specifies the Search Query.Text to be present in name of Searched File -->
     <Property name="QueryText" value="a*" />
        

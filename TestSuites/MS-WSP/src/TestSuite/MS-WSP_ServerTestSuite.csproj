@@ -58,6 +58,7 @@
     <Compile Include="..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="CPMConnect.cs" />
     <Compile Include="TestCaseAdmin_StatusInvalidParameter.cs" />
     <Compile Include="TestCaseConnectOut_StatusInvalidParameter.cs" />
     <Compile Include="TestCaseFetchValue_StatusInvalidParameterError.cs" />
@@ -86,7 +87,9 @@
     <Compile Include="TestCaseUpdateDocumentsIn_StatusInvalid.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="MS-WSP_ServerTestSuite.deployment.ptfconfig" />
+    <None Include="MS-WSP_ServerTestSuite.deployment.ptfconfig">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="MS-WSP_ServerTestSuite.ptfconfig" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />

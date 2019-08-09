@@ -987,7 +987,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// Nointerface
         /// </summary>
-        E_NOINTERFACE = 0x80004002
+        E_NOINTERFACE = 0x80004002,
+
+        /// <summary>
+        /// Specifies invalid parameter
+        /// </summary>
+        STATUS_INVALID_PARAMETER_MIX = 0xc0000030,
+
+        /// <summary>
+        /// Specifies out of memory
+        /// </summary>
+        E_OUTOFMEMORY = 0x8007000e,
+
+        /// <summary>
+        /// Another invalid parameter error code
+        /// </summary>
+        STATUS_INVALID_PARAMETER2= 0xD000000D,
+
+        /// <summary>
+        /// Catalog name not found
+        /// </summary>
+        MSS_E_CATALOGNOTFOUND = 0x80042103
     }
 
     /// <summary>

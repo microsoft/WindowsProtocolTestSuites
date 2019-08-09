@@ -69,7 +69,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// Catalog Name to Query
         /// </summary>
-        string catalogName = null;
+        public string catalogName = null;
         /// <summary>
         /// Name of the connected username
         /// </summary>
@@ -94,6 +94,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// WorkId of the current row
         /// </summary>
         uint lastDocumentWorkId = 0;
+        /// <summary>
+        /// Language locale
+        /// </summary>
+        string locale = null;
+        /// <summary>
+        /// Client version
+        /// </summary>
+        public uint clientVersion = 0;
 
         #endregion
 
@@ -120,6 +128,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 (wspTestSite.Properties.Get("CLIENT_USERNAME"));
             pipePath
                 = string.Format(@"\\{0}\\pipe\MSFTEWDS", serverMachineName);
+            locale = Helper.AddNull
+                (wspTestSite.Properties.Get("LanguageLocale"));
+
+            clientVersion = (uint)Convert.ToUInt32
+                (wspTestSite.Properties["ClientVersion"]);
 
             defaultSender = new RequestSender(pipePath);
 
@@ -239,13 +252,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         public void CPMConnectInRequest()
         {
             int startingIndex = 0;
-            uint clientVersion = 0;
             RequestSender sender = null;
-            clientVersion = (uint)Convert.ToUInt32
-                (wspTestSite.Properties["ClientVersion"]);
-            string locale = Helper.AddNull
-                (wspTestSite.Properties.Get("LanguageLocale"));
-
             string serverNameWithNull = Helper.AddNull(serverMachineName);
             byte[] connectInMessage = builder.GetConnectInMessage
                 (clientVersion, 1, userName, clientMachineName,
@@ -288,6 +295,99 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                      "message sent by a client, the server MUST respond " +
                      "with the message header (only) of the message sent " +
                      "by the client, keeping the _msg field intact.");
+                    //If 4 byte Non Zero field is read as status
+                    // The requirement 620 gets validated
+                    wspTestSite.CaptureRequirement(620,
+                        "Whenever an error occurs during processing of a " +
+                        "message sent by a client, the server MUST set the " +
+                        "_status field to the error code value.");
+                }
+                if ((msgId == (uint)MessageType.CPMConnectOut)
+                    && (msgStatus == 0x00000000))
+                {
+                    validator.ValidateConnectOutResponse
+                        (connectOutMessage, checkSum, msgStatus);
+                    isClientConnected = true;
+                }
+
+                //Updated by v-aliche
+                //Delta Testing
+                startingIndexconnect = 0;
+                validator.ValidateHeader
+                    (connectOutMessage,
+                    MessageType.CPMConnectOut,
+                    checkSum, ref startingIndexconnect);
+                uint obtainedServerVersion
+                 = Helper.GetUInt(connectOutMessage, ref startingIndexconnect);
+                //if serverVersion equals 0x00000102, ir means Windows server 2008 with OS 32-bit
+                //if serverVersion equals 0x00010102, ir means Windows server 2008 with OS 64-bit
+                if (obtainedServerVersion == 0x00000102 || obtainedServerVersion == 0x00010102)
+                {
+                    byte[] dWordIn = new byte[4];
+                    byte[] dWordOut = new byte[4];
+                    Helper.CopyBytes(connectInMessage, ref startingIndexconnect, dWordIn);
+                    Helper.CopyBytes(connectOutMessage, ref startingIndexconnect, dWordOut);
+                    bool isEqual = dWordIn.ToString() == dWordOut.ToString();
+
+                    Site.CaptureRequirementIfIsTrue(isEqual, 1055, "When the server receives a CPMConnectIn request from a client," +
+                        "Otherwise[the server not support reporting versioning information]" +
+                        "server MUST copy 4 DWORDs at the offset starting after _serverVersion" +
+                        "from the CPMConnectIn message to indicate that versioning is not supported.");
+                }
+
+                CPMConnectOutResponse(msgStatus);
+            }
+        }
+
+        public void CPMConnectInRequest(uint clientVersion, int isClientRemote, string catalogName)
+        {
+            int startingIndex = 0;
+            RequestSender sender = null;
+
+            string serverNameWithNull = Helper.AddNull(serverMachineName);
+            byte[] connectInMessage = builder.GetConnectInMessage
+                (clientVersion, isClientRemote, userName, clientMachineName,
+                serverNameWithNull, catalogName, locale);
+            uint checkSum = GetCheckSumField(connectInMessage);
+            
+
+            //Send the connectIn message to Server.
+            Byte[] connectOutMessage;
+
+            if (!connectedClients.ContainsKey(clientMachineName))
+            {
+                sender = new RequestSender(pipePath);
+                connectedClients.Add(clientMachineName, sender);
+            }
+            else
+            {
+                sender = connectedClients[clientMachineName];
+            }
+            // Send CPMConnectIn Message
+            //Write the message in the Pipe and Get the response 
+            //in the outputBuffer
+            bytesRead
+                = sender.SendMessage(connectInMessage, out connectOutMessage);
+            // RequestSender objects uses path '\\pipe\\MSFTEWDS'
+            // for the protocol transport
+            wspTestSite.CaptureRequirement(3, @"All messages MUST be " +
+                 "transported using a named pipe: \\pipe\\MSFTEWDS");
+
+            // Get the errorCode & invoke event
+            if (CPMConnectOutResponse != null)
+            {
+                uint msgId
+                    = Helper.GetUInt(connectOutMessage, ref startingIndex);
+                uint msgStatus
+                    = Helper.GetUInt(connectOutMessage, ref startingIndex);
+                if (msgStatus != 0)
+                {
+                    //wspTestSite.CaptureRequirementIfAreEqual<int>(bytesRead,
+                    // Constant.SIZE_OF_HEADER, 619,
+                    // "Whenever an error occurs during processing of a " +
+                    // "message sent by a client, the server MUST respond " +
+                    // "with the message header (only) of the message sent " +
+                    // "by the client, keeping the _msg field intact.");
                     //If 4 byte Non Zero field is read as status
                     // The requirement 620 gets validated
                     wspTestSite.CaptureRequirement(620,
