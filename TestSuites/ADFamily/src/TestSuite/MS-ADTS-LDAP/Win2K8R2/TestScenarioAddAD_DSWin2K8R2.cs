@@ -1941,7 +1941,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                         this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
-                                                    "distinguishedName: OU=Administrator,CN=Users,DC=adts88",
+                                                    "distinguishedName: OU="+Utilities.DomainAdmin+",CN=Users,DC=adts88",
                                                     this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                 "Head",
                                                                 "Tail"}, new object[] {
@@ -9088,7 +9088,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                         this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
-                                                    "distinguishedName: OU=Administrator,CN=Users,DC=adts88",
+                                                    "distinguishedName: OU="+Utilities.DomainAdmin+",CN=Users,DC=adts88",
                                                     this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                 "Head",
                                                                 "Tail"}, new object[] {
