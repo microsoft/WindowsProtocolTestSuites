@@ -1449,7 +1449,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                         this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
-                                                    "distinguishedName: CN="+Utilities.DomainAdmin+",CN=Users,DC=adts88",
+                                                    $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88",
                                                     this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                 "Head",
                                                                 "Tail"}, new object[] {
@@ -1551,7 +1551,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                             this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
-                                        "cn: "+Utilities.DomainAdmin,
+                                        $"cn: {Utilities.DomainAdmin}",
                                         this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
@@ -1563,7 +1563,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                                                 this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                             "Head",
                                                                             "Tail"}, new object[] {
-                                                                            "distinguishedName: CN="+Utilities.DomainAdmin+",CN=Users,DC=adts88",
+                                                                            $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88",
                                                                             this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                                         "Head",
                                                                                         "Tail"}, new object[] {
@@ -1941,7 +1941,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                         this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
-                                                    "distinguishedName: OU="+Utilities.DomainAdmin+",CN=Users,DC=adts88",
+                                                    $"distinguishedName: OU={Utilities.DomainAdmin},CN=Users,DC=adts88",
                                                     this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                 "Head",
                                                                 "Tail"}, new object[] {
@@ -7240,7 +7240,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                         this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
-                                                    "distinguishedName: CN="+Utilities.DomainAdmin+",CN=Users,DC=adts88",
+                                                    $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88",
                                                     this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                 "Head",
                                                                 "Tail"}, new object[] {
@@ -9088,7 +9088,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                         this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
-                                                    "distinguishedName: OU="+Utilities.DomainAdmin+",CN=Users,DC=adts88",
+                                                    $"distinguishedName: OU={Utilities.DomainAdmin},CN=Users,DC=adts88",
                                                     this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                 "Head",
                                                                 "Tail"}, new object[] {
@@ -9190,7 +9190,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                             this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
-                                        "cn: "+ Utilities.DomainAdmin,
+                                        $"cn: {Utilities.DomainAdmin}",
                                         this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
@@ -9198,11 +9198,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                                     this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                 "Head",
                                                                 "Tail"}, new object[] {
-                                                                "sAMAccountName: "+Utilities.DomainAdmin,
+                                                                $"sAMAccountName: {Utilities.DomainAdmin}",
                                                                 this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                             "Head",
                                                                             "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=" + Utilities.DomainAdmin + ",CN=Users,DC=adts88",
+                                                                            $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88",
                                                                             this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                                         "Head",
                                                                                         "Tail"}, new object[] {
