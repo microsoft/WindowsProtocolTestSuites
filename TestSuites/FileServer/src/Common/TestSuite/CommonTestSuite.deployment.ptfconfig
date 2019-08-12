@@ -58,14 +58,14 @@
         </Description>
       </Property>
 
-      <Property name="SutComputerName" value="fs-srv">
+      <Property name="SutComputerName" value="node01">
         <Description>
           Computer name of system under test (SUT)
           If SUT does not have a computer name, set the value to SUT's IP address
         </Description>
       </Property>      
 
-      <Property name="SutIPAddress" value="10.16.0.2" >
+      <Property name="SutIPAddress" value="192.168.1.11" >
         <Description>
           IP address or Host Name of SUT to establish connections
         </Description>
