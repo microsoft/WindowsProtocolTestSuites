@@ -23,7 +23,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             if (cLen != 0)
             {
-                buffer.Add(_string);
+                buffer.AddUnicodeString(_string);
             }
         }
     }

@@ -103,9 +103,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             buffer.AddRange(new byte[12]);
 
-            buffer.Add(MachineName);
+            buffer.AddUnicodeString(MachineName);
 
-            buffer.Add(UserName);
+            buffer.AddUnicodeString(UserName);
 
             buffer.Align(8);
 

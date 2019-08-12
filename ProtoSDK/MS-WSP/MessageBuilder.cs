@@ -60,11 +60,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
         public Guid PropertyRestrictionGuid;
 
-        public int PropertyRestrictionProperty;
+        public UInt32 PropertyRestrictionProperty;
 
         public Guid ContentRestrictionGuid;
 
-        public int ContentRestrictionProperty;
+        public UInt32 ContentRestrictionProperty;
 
         public uint EType;
 
@@ -668,7 +668,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                     case "2":
                         // Creating CDBProp with PropId 2 
                         // for GUID type FSCIFRMWRK
-                        var value_FSCIFRMWRK_2 = GetBaseStorageVariant(vType_Values.VT_LPWSTR, false, new VT_LPWSTR(catalogName));
+                        var value_FSCIFRMWRK_2 = GetBaseStorageVariant(vType_Values.VT_LPWSTR, new VT_LPWSTR(catalogName));
                         AppendDBProp(ref propSet, 2, value_FSCIFRMWRK_2);
                         break;
                     case "3":
@@ -687,7 +687,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                     case "7":
                         // Creating CDBProp with PropId 7 
                         //for GUID type FSCIFRMWRK
-                        var value_FSCIFRMWRK_7 = GetBaseStorageVariant(vType_Values.VT_I4, false, (Int32)0);
+                        var value_FSCIFRMWRK_7 = GetBaseStorageVariant(vType_Values.VT_I4, (Int32)0);
                         AppendDBProp(ref propSet, 7, value_FSCIFRMWRK_7);
                         break;
                     default:
@@ -724,7 +724,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                     case "2":
                         // Creating CDBProp with PropId 2 
                         //for GUID type CIFRMWRKCORE
-                        var value_CIFRMWRKCORE_2 = GetBaseStorageVariant(vType_Values.VT_BSTR, false, new VT_BSTR(machineName));
+                        var value_CIFRMWRKCORE_2 = GetBaseStorageVariant(vType_Values.VT_BSTR, new VT_BSTR(machineName));
                         AppendDBProp(ref propSet, 2, value_CIFRMWRKCORE_2);
                         break;
                     default:
@@ -763,27 +763,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                     case "2":
                         // Creating CDBProp with PropId 2 
                         //for GUID type ROWSETEXT
-                        var value_ROWSETEXT_2 = GetBaseStorageVariant(vType_Values.VT_I4, false, (Int32)0);
+                        var value_ROWSETEXT_2 = GetBaseStorageVariant(vType_Values.VT_I4, (Int32)0);
                         AppendDBProp(ref propSet, 2, value_ROWSETEXT_2);
                         break;
                     case "3":
                         // Creating CDBProp with PropId 3 
                         //for GUID type ROWSETEXT
-                        var value_ROWSETEXT_3 = GetBaseStorageVariant(vType_Values.VT_BSTR, false, new VT_BSTR(languageLocale));
+                        var value_ROWSETEXT_3 = GetBaseStorageVariant(vType_Values.VT_BSTR, new VT_BSTR(languageLocale));
                         AppendDBProp(ref propSet, 3, value_ROWSETEXT_3);
                         break;
                     case "4":
 
                         // Creating CDBProp with PropId 4 
                         //for GUID type ROWSETEXT
-                        var value_ROWSETEXT_4 = GetBaseStorageVariant(vType_Values.VT_BSTR, false, new VT_BSTR(""));
+                        var value_ROWSETEXT_4 = GetBaseStorageVariant(vType_Values.VT_BSTR, new VT_BSTR(""));
                         AppendDBProp(ref propSet, 4, value_ROWSETEXT_4);
                         break;
 
                     case "5":
                         // Creating CDBProp with PropId 5 
                         //for GUID type ROWSETEXT
-                        var value_ROWSETEXT_5 = GetBaseStorageVariant(vType_Values.VT_BSTR, false, new VT_BSTR(""));
+                        var value_ROWSETEXT_5 = GetBaseStorageVariant(vType_Values.VT_BSTR, new VT_BSTR(""));
                         AppendDBProp(ref propSet, 5, value_ROWSETEXT_5);
                         break;
 
@@ -791,7 +791,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
                         // Creating CDBProp with PropId 6 
                         // for GUID type ROWSETEXT
-                        var value_ROWSETEXT_6 = GetBaseStorageVariant(vType_Values.VT_I4, false, (Int32)0);
+                        var value_ROWSETEXT_6 = GetBaseStorageVariant(vType_Values.VT_I4, (Int32)0);
                         AppendDBProp(ref propSet, 6, value_ROWSETEXT_6);
                         break;
 
@@ -799,7 +799,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
                         // Creating CDBProp with PropId 7 
                         //for GUID type ROWSETEXT
-                        var value_ROWSETEXT_7 = GetBaseStorageVariant(vType_Values.VT_I4, false, (Int32)0);
+                        var value_ROWSETEXT_7 = GetBaseStorageVariant(vType_Values.VT_I4, (Int32)0);
                         AppendDBProp(ref propSet, 7, value_ROWSETEXT_7);
                         break;
                     default:
@@ -832,58 +832,58 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                     case "2":
                         // Creating CDBProp with PropId 2
                         // for GUID type QUERYEXT
-                        var value_QUERYEXT_2 = GetBaseStorageVariant(vType_Values.VT_BOOL, false, (UInt16)0x0000);
+                        var value_QUERYEXT_2 = GetBaseStorageVariant(vType_Values.VT_BOOL, (UInt16)0x0000);
                         AppendDBProp(ref propSet, 2, value_QUERYEXT_2);
                         break;
                     case "3":
                         // Creating CDBProp with PropId 3 
                         // for GUID type QUERYEXT
-                        var value_QUERYEXT_3 = GetBaseStorageVariant(vType_Values.VT_BOOL, false, (UInt16)0x0000);
+                        var value_QUERYEXT_3 = GetBaseStorageVariant(vType_Values.VT_BOOL, (UInt16)0x0000);
                         AppendDBProp(ref propSet, 3, value_QUERYEXT_3);
                         break;
                     case "4":
 
                         // Creating CDBProp with PropId 4 
                         //for GUID type QUERYEXT
-                        var value_QUERYEXT_4 = GetBaseStorageVariant(vType_Values.VT_BOOL, false, (UInt16)0x0000);
+                        var value_QUERYEXT_4 = GetBaseStorageVariant(vType_Values.VT_BOOL, (UInt16)0x0000);
                         AppendDBProp(ref propSet, 4, value_QUERYEXT_4);
                         break;
                     case "5":
                         // Creating CDBProp with PropId 5 
                         //for GUID type QUERYEXT
-                        var value_QUERYEXT_5 = GetBaseStorageVariant(vType_Values.VT_BOOL, false, (UInt16)0x0000);
+                        var value_QUERYEXT_5 = GetBaseStorageVariant(vType_Values.VT_BOOL, (UInt16)0x0000);
                         AppendDBProp(ref propSet, 5, value_QUERYEXT_5);
                         break;
                     case "6":
                         // Creating CDBProp with PropId 6
                         //for GUID type QUERYEXT
-                        var value_QUERYEXT_6 = GetBaseStorageVariant(vType_Values.VT_BSTR, false, new VT_BSTR(""));
+                        var value_QUERYEXT_6 = GetBaseStorageVariant(vType_Values.VT_BSTR, new VT_BSTR(""));
                         AppendDBProp(ref propSet, 6, value_QUERYEXT_6);
                         break;
                     case "8":
                         // Creating CDBProp with PropId 8 
                         //for GUID type QUERYEXT
-                        var value_QUERYEXT_8 = GetBaseStorageVariant(vType_Values.VT_BOOL, false, (UInt16)0x0000);
+                        var value_QUERYEXT_8 = GetBaseStorageVariant(vType_Values.VT_BOOL, (UInt16)0x0000);
                         AppendDBProp(ref propSet, 8, value_QUERYEXT_8);
                         break;
                     case "10":
 
                         // Creating CDBProp with PropId 10 
                         //for GUID type QUERYEXT
-                        var value_QUERYEXT_10 = GetBaseStorageVariant(vType_Values.VT_BOOL, false, (UInt16)0x0000);
+                        var value_QUERYEXT_10 = GetBaseStorageVariant(vType_Values.VT_BOOL, (UInt16)0x0000);
                         AppendDBProp(ref propSet, 10, value_QUERYEXT_10);
                         break;
                     case "12":
 
                         // Creating CDBProp with PropId 12 
                         //for GUID type QUERYEXT
-                        var value_QUERYEXT_12 = GetBaseStorageVariant(vType_Values.VT_BOOL, false, (UInt16)0x0000);
+                        var value_QUERYEXT_12 = GetBaseStorageVariant(vType_Values.VT_BOOL, (UInt16)0x0000);
                         AppendDBProp(ref propSet, 12, value_QUERYEXT_12);
                         break;
                     case "13":
                         // Creating CDBProp with PropId 13 
                         //for GUID type QUERYEXT
-                        var value_QUERYEXT_13 = GetBaseStorageVariant(vType_Values.VT_BOOL, false, (UInt16)0x0000);
+                        var value_QUERYEXT_13 = GetBaseStorageVariant(vType_Values.VT_BOOL, (UInt16)0x0000);
                         AppendDBProp(ref propSet, 13, value_QUERYEXT_13);
                         break;
 
@@ -891,7 +891,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
                         // Creating CDBProp with PropId 14 
                         //for GUID type QUERYEXT
-                        var value_QUERYEXT_14 = GetBaseStorageVariant(vType_Values.VT_BOOL, false, (UInt16)0x0000);
+                        var value_QUERYEXT_14 = GetBaseStorageVariant(vType_Values.VT_BOOL, (UInt16)0x0000);
                         AppendDBProp(ref propSet, 14, value_QUERYEXT_14);
                         break;
                     default:
@@ -925,7 +925,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                     case "2":
                         // Creating CDBProp with PropId 2
                         // for GUID type FSCIFRMWRK_EXT
-                        var value_FSCIFRMWRK_EXT_2 = GetBaseStorageVariant(vType_Values.VT_BSTR, false, new VT_BSTR(serverName));
+                        var value_FSCIFRMWRK_EXT_2 = GetBaseStorageVariant(vType_Values.VT_BSTR, new VT_BSTR(serverName));
                         AppendDBProp(ref propSet, 2, value_FSCIFRMWRK_EXT_2);
                         break;
                     default:
@@ -964,7 +964,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                     case "2":
                         // Creating CDBProp with PropId 2 
                         //for GUID type CIFRMWRKCORE_EXT
-                        var value_CIFRMWRKCORE_EXT_2 = GetBaseStorageVariant(vType_Values.VT_BSTR, false, new VT_BSTR(catalogName));
+                        var value_CIFRMWRKCORE_EXT_2 = GetBaseStorageVariant(vType_Values.VT_BSTR, new VT_BSTR(catalogName));
                         AppendDBProp(ref propSet, 2, value_CIFRMWRKCORE_EXT_2);
                         break;
                     case "3":
@@ -1029,6 +1029,42 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         #endregion
 
         #region Structures of CPMgetRowsIn message
+
+        /// <summary>
+        /// Gets FullPropertySpec for a given GUID, eKIND and propSec Id
+        /// </summary>
+        /// <param name="guid">PropSpec GUID</param>
+        /// <param name="kind">EKind</param>
+        /// <param name="propSec">PropSec Id</param>
+        /// <param name="messageOffset">offset from the 
+        /// beginning of the message</param>
+        /// <returns>full property spec structure BLOB</returns>
+        private CFullPropSpec GetFullPropSec(Guid guid, ulKind_Values kind, object prop)
+        {
+            var result = new CFullPropSpec();
+
+            result._guidPropSet = guid;
+
+            result.ulKind = kind;
+
+            switch (kind)
+            {
+                case ulKind_Values.PRSPEC_LPWSTR:
+                    {
+                        result.PrSpec = (UInt32)((string)prop).Length;
+                        result.Property_name = (string)prop;
+                    }
+                    break;
+
+                case ulKind_Values.PRSPEC_PROPID:
+                    {
+                        result.PrSpec = (UInt32)prop;
+                    }
+                    break;
+            }
+
+            return result;
+        }
 
         /// <summary>
         /// Gets FullPropertySpec for a given GUID, eKIND and propSec Id
@@ -1133,40 +1169,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// Gets CRestrictionArray structure
         /// </summary>
-        /// <param name="messageOffset">Offset from the 
-        /// beginning of the message</param>
         /// <param name="queryString">Search Query String</param>
         /// <param name="searchScope">Search Query Scope</param>
         /// <returns>CRestrictionArray structure BLOB</returns>
-        private byte[] GetRestrictionArray
-            (ref int messageOffset, string queryString, string searchScope)
+        private CRestrictionArray GetRestrictionArray(string queryString, string searchScope)
         {
-            int startIndex = messageOffset;
-            int index = 0;
-            byte[] padding = null;
-            byte count = 1; //to be assigned later
-            byte isRestrictionPresent = 0x01; // means Restriction is present
-            messageOffset += 2 * Constant.SIZE_OF_BYTE;
-            if (messageOffset % OFFSET_4 != 0)
-            {
-                padding = new byte[OFFSET_4 - messageOffset % OFFSET_4];
-                for (int i = 0; i < padding.Length; i++)
-                {
-                    padding[i] = 0;
-                }
-                messageOffset += padding.Length;
-            }
-            byte[] totalRestriction = GetQueryPathRestriction
-                (ref messageOffset, queryString, searchScope);
-            byte[] mainBlob = new byte[messageOffset - startIndex];
+            var result = new CRestrictionArray();
 
-            Helper.CopyBytes(mainBlob, ref index, new byte[] { count });
-            Helper.CopyBytes(mainBlob, ref index, new byte[]
-            { isRestrictionPresent });
-            Helper.CopyBytes(mainBlob, ref index, padding);
-            Helper.CopyBytes(mainBlob, ref index, totalRestriction);
-            return mainBlob;
+            result.count = 0x01;
 
+            result.isPresent = 0x01;
+
+            result.Restriction = GetQueryPathRestriction(queryString, searchScope);
+
+            return result;
         }
 
         /// <summary>
@@ -1178,148 +1194,28 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <param name="queryString"></param>
         /// <param name="searchScope"></param>
         /// <returns>CPropertyRestrictionNode structure BLOB</returns>
-        private byte[] GetQueryPathRestriction
-            (ref int messageOffset, string queryString, string searchScope)
+        private CRestriction GetQueryPathRestriction(string queryString, string searchScope)
         {
-            int startIndex = messageOffset;
-            int index = 0;
-            uint restrictionType = LOGICAL_AND; // AND type. == 1
-            uint weight = NODE_WEIGHTAGE;// Weightage of restriction. 1000
-            messageOffset += 2 * Constant.SIZE_OF_UINT;
-            //------ Logic for first Node of Restriction -----
-            //------ This refers to the query path ----------
-            uint node = 0x00000002; // two nodes are AND-ed together
-            //------ Get first node ----
-            uint firstNodeType = PROPERTY_RESTRICTION_NODE_ID; // Property 5
-            uint firstNodeWeight = NODE_WEIGHTAGE;// weightage
-            // node + firstNodeType + firstNodeWeight
-            messageOffset += 3 * Constant.SIZE_OF_UINT;
-            byte[] propertyRestriction
-                = GetPropertyRestriction(ref messageOffset, searchScope);
+            var result = new CRestriction();
 
-            //------ Logic for second Node of Restriction -----
-            //------ This refers to the search string path ----
+            result._ulType = CRestriction_ulType_Values.RTAnd;
 
-            uint secondNodeType = CONTENT_RESTRICTION_NODE_ID; // Content 4
-            uint secondNodeWeight = NODE_WEIGHTAGE;// weightage
-            messageOffset += 2 * Constant.SIZE_OF_UINT;
-            //Get Content Restriction
-            byte[] contentRestriction
-                = GetContentRestriction(ref messageOffset, queryString);
+            result.Weight = NODE_WEIGHTAGE;
 
-            byte[] blob = new byte[messageOffset - startIndex];
-            Helper.CopyBytes
-                (blob, ref index, BitConverter.GetBytes(restrictionType));
-            Helper.CopyBytes
-                (blob, ref index, BitConverter.GetBytes(weight));
-            Helper.CopyBytes
-                (blob, ref index, BitConverter.GetBytes(node));
-            Helper.CopyBytes
-                (blob, ref index, BitConverter.GetBytes(firstNodeType));
-            Helper.CopyBytes
-                (blob, ref index, BitConverter.GetBytes(firstNodeWeight));
-            Helper.CopyBytes
-                (blob, ref index, propertyRestriction);
-            Helper.CopyBytes
-                (blob, ref index, BitConverter.GetBytes(secondNodeType));
-            Helper.CopyBytes
-                (blob, ref index, BitConverter.GetBytes(secondNodeWeight));
-            Helper.CopyBytes
-                (blob, ref index, contentRestriction);
-            return blob;
+            var node = new CNodeRestriction();
 
-        }
+            node._cNode = 2;
 
-        /// <summary>
-        /// Gets CBaseStorgeVariant structure of a given type/value
-        /// </summary>
-        /// <param name="type">Type of the storage value</param>
-        /// <param name="isArray">true if it is an array of items</param>
-        /// <param name="inputValue">input value, if isArray
-        /// is true, pass values as array of objects</param>
-        /// <returns>CBaseStorageVariant BLOB</returns>
-        private byte[] GetBaseStorageVariant
-            (StorageType type, bool isArray, object inputValue)
-        {
-            ushort vType = (ushort)type;
-            byte vData1 = 0;
-            byte vData2 = 0;
-            byte[] value = new byte[1];
-            if (!isArray)
-            {
-                switch (type)
-                {
-                    case StorageType.VT_BOOL:
-                        bool tempBool = (bool)inputValue;
-                        value = new byte[] { 0x00, 0x00 };
-                        if (tempBool)
-                        {
-                            value = new byte[] { 0xFF, 0xFF };
-                        }
-                        break;
-                    case StorageType.VT_I4:
-                        int tempI4 = (int)inputValue;
-                        value = BitConverter.GetBytes(tempI4);
-                        break;
-                    case StorageType.VT_UI4:
-                        int tempVal = (int)inputValue;
-                        value = BitConverter.GetBytes((uint)tempVal);
-                        break;
-                    //VT_BSTR and VT_LPWSTR is same
-                    case StorageType.VT_BSTR:
-                        int bStrIndex = 0;
-                        //=====  Building Unicode String Type ==============
-                        string bStr = (string)inputValue;
-                        uint bStrLength = (uint)(2 * bStr.Length);
-                        value = new byte[Constant.SIZE_OF_UINT + bStrLength];
-                        Helper.CopyBytes
-                            (value, ref bStrIndex,
-                            BitConverter.GetBytes(bStrLength));
-                        Helper.CopyBytes
-                            (value, ref bStrIndex,
-                            Encoding.Unicode.GetBytes(bStr));
+            node._paNode = new CRestriction[2];
 
-                        //==================================================
-                        break;
-                    case StorageType.VT_LPWSTR:
-                        int strIndex = 0;
-                        //=====  Building Unicode String Type ==============
-                        string str = (string)inputValue;
-                        uint unicodeStringLength = (uint)str.Length;
-                        value
-                            = new byte[Constant.SIZE_OF_UINT
-                                + 2 * unicodeStringLength];
-                        Helper.CopyBytes
-                            (value, ref strIndex,
-                            BitConverter.GetBytes(unicodeStringLength));
-                        Helper.CopyBytes
-                            (value, ref strIndex,
-                            Encoding.Unicode.GetBytes(str));
-                        //==================================================
-                        break;
-                    case StorageType.VT_COMPRESSED_LPWSTR:
-                        break;
-                    default:
-                        break;
-                }
-                byte[] storageVariantBytes
-                    = new byte[sizeof(ushort) +
-                        2 * sizeof(byte) + value.Length];
-                int index = 0;
-                Helper.CopyBytes
-                    (storageVariantBytes, ref index,
-                    BitConverter.GetBytes(vType));
-                Helper.CopyBytes
-                    (storageVariantBytes, ref index,
-                    new byte[] { vData1 });
-                Helper.CopyBytes
-                    (storageVariantBytes, ref index,
-                    new byte[] { vData2 });
-                Helper.CopyBytes
-                    (storageVariantBytes, ref index, value);
-                return storageVariantBytes;
-            }
-            return null;
+            node._paNode[0] = GetPropertyRestriction(searchScope);
+
+            node._paNode[1] = GetContentRestriction(queryString);
+
+            result.Restriction = node;
+
+            return result;
+
         }
 
         /// <summary>
@@ -1329,48 +1225,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// the beginning of the message</param>
         /// <param name="searchScope">Scope of the current search</param>
         /// <returns></returns>
-        private byte[] GetPropertyRestriction
-            (ref int messageOffset, string searchScope)
+        private CRestriction GetPropertyRestriction(string searchScope)
         {
-            int startingIndex = messageOffset;
-            int index = 0;
-            byte[] lcidPadding = null; // padding for LCID field
-            uint relop = RELATION_OPERATION; // Relation operation = 4 
-            messageOffset += Constant.SIZE_OF_UINT;
-            // Get FullPropSec for Prop Id 20
-            byte[] fullPropSec
-                = GetFullPropSec
-                (parameter.PropertyRestrictionGuid, PROPERTY_ID, parameter.PropertyRestrictionProperty, ref messageOffset);
-            byte[] propValue
-            = GetBaseStorageVariant
-            (StorageType.VT_LPWSTR, false, searchScope);
-            messageOffset += propValue.Length;
-            if (messageOffset % OFFSET_4 != 0)
-            {
-                lcidPadding = new byte[OFFSET_4 - messageOffset % OFFSET_4];
-                for (int i = 0; i < lcidPadding.Length; i++)
-                {
-                    lcidPadding[i] = 0;
-                }
-                messageOffset += lcidPadding.Length;
-            }
-            uint lcid = 0x0000409;
-            messageOffset += Constant.SIZE_OF_UINT;
+            var result = new CRestriction();
 
-            byte[] mainBlob = new byte[messageOffset - startingIndex];
-            Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(relop));
-            Helper.CopyBytes
-                (mainBlob, ref index, fullPropSec);
-            Helper.CopyBytes
-                (mainBlob, ref index, propValue);
-            if (lcidPadding != null)
-            {
-                Helper.CopyBytes(mainBlob, ref index, lcidPadding);
-            }
-            Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(lcid));
-            return mainBlob;
+            result._ulType = CRestriction_ulType_Values.RTProperty;
+
+            result.Weight = NODE_WEIGHTAGE;
+
+            var node = new CPropertyRestriction();
+
+            node._relop = _relop_Values.PREQ;
+
+            node._Property = GetFullPropSec(parameter.PropertyRestrictionGuid, ulKind_Values.PRSPEC_PROPID, parameter.PropertyRestrictionProperty);
+
+            node._prval = GetBaseStorageVariant(vType_Values.VT_LPWSTR, new VT_LPWSTR(searchScope));
+
+            node._lcid = 0x0000409;
+
+            result.Restriction = node;
+
+            return result;
         }
 
         /// <summary>
@@ -1379,79 +1254,34 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <param name="ENABLEROWSETEVENTS"></param>
         /// <param name="messageOffset"></param>
         /// <returns></returns>
-        private byte[] GetRowSetProperties(bool ENABLEROWSETEVENTS, ref int messageOffset)
+        private CRowsetProperties GetRowSetProperties(bool ENABLEROWSETEVENTS)
         {
-            int startIndex = messageOffset;
-            int index = 0;
-            uint booleanOptions;
+            var result = new CRowsetProperties();
+
+            _uBooleanOptions_Values booleanOptions;
+
             if (ENABLEROWSETEVENTS)
             {
-                booleanOptions = 0x00800000;
+                result._uBooleanOptions = _uBooleanOptions_Values.eScrollable | _uBooleanOptions_Values.eEnableRowsetEvents;
                 Constant.DBPROP_ENABLEROWSETEVENTS = true;
             }
             else
             {
-                booleanOptions = FIELD_USED;
+                result._uBooleanOptions = _uBooleanOptions_Values.eScrollable;
                 Constant.DBPROP_ENABLEROWSETEVENTS = false;
             }
-            uint maxOpenRows = 0x00000000;
-            uint memoryUsage = 0x00000000;
-            uint maxResults = 0x00000000;
-            uint cmdTimeOut = COMMAND_TIME_OUT;
-            //CRowsetProperties contain 5 field(contain head), and all are 4 bytes,
-            //so the messageSize should be 5 * Constant.SIZE_OF_UINT
-            int messageSize = 5;
-            messageOffset += messageSize * Constant.SIZE_OF_UINT;
-            // Copy all the fields in a BLOB
-            byte[] mainBlob = new byte[messageOffset - startIndex];
-            Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(booleanOptions));
-            Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(maxOpenRows));
-            Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(memoryUsage));
-            Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(maxResults));
-            Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(cmdTimeOut));
-            return mainBlob;
+
+            result._ulMaxOpenRows = 0x00000000;
+
+            result._ulMemoryUsage = 0x00000000;
+
+            result._cMaxResults = 0x00000000;
+
+            result._cCmdTimeout = COMMAND_TIME_OUT;
+
+            return result;
         }
 
-        /// <summary>
-        /// Get RowSet Properties structure
-        /// </summary>
-        /// <param name="messageOffset">Offset from the
-        /// beginning of the message</param>
-        /// <returns>RowSet structure BLOB</returns>
-        private byte[] GetRowSetProperties(ref int messageOffset)
-        {
-            int startIndex = messageOffset;
-            int index = 0;
-
-            //Updated by:v-zhil
-            //For Delta Testing
-            //uint booleanOptions = FIELD_USED;
-            uint booleanOptions = 0x00800000;
-            uint maxOpenRows = 0x00000000;
-            uint memoryUsage = 0x00000000;
-            uint maxResults = 0x00000000;
-            uint cmdTimeOut = COMMAND_TIME_OUT;
-
-            messageOffset += 5 * Constant.SIZE_OF_UINT;
-            // Copy all the fields in a BLOB
-            byte[] mainBlob = new byte[messageOffset - startIndex];
-            Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(booleanOptions));
-            Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(maxOpenRows));
-            Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(memoryUsage));
-            Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(maxResults));
-            Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(cmdTimeOut));
-            return mainBlob;
-        }
 
         /// <summary>
         /// Gets the ContentRestrictionNode structure specific 
@@ -1461,62 +1291,29 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// begining of the message</param>
         /// <param name="queryString">Query String of the search</param>
         /// <returns>ContentRestriction structure Node</returns>
-        private byte[] GetContentRestriction
-            (ref int messageOffset, string queryString)
+        private CRestriction GetContentRestriction(string queryString)
         {
-            int startingIndex = messageOffset;
-            int index = 0;
-            byte[] padding1 = null;
-            byte[] padding2 = null;
-            byte[] fullPropSec
-                = GetFullPropSec
-                (parameter.ContentRestrictionGuid, PROPERTY_ID, parameter.ContentRestrictionProperty, ref messageOffset);
+            var result = new CRestriction();
 
-            if (messageOffset % OFFSET_4 != 0)
-            {
-                padding1 = new byte[OFFSET_4 - messageOffset % OFFSET_4];
-                for (int i = 0; i < padding1.Length; i++)
-                {
-                    padding1[i] = 0;
-                }
-                messageOffset += padding1.Length;
-            }
-            // Length of the Query string
-            uint cc = (uint)queryString.Length;
-            byte[] phrase = Encoding.Unicode.GetBytes(queryString);
-            messageOffset += Constant.SIZE_OF_UINT + phrase.Length;
+            result._ulType = CRestriction_ulType_Values.RTContent;
 
-            // Second Padding
-            if (messageOffset % OFFSET_4 != 0)
-            {
-                padding2 = new byte[OFFSET_4 - messageOffset % OFFSET_4];
-                for (int i = 0; i < padding2.Length; i++)
-                {
-                    padding2[i] = 0;
-                }
-                messageOffset += padding2.Length;
-            }
-            uint lcid = 0x409; //en-US
-            uint generatedMethod = 0x00000000;// means exact match
-            messageOffset += 2 * Constant.SIZE_OF_UINT;
-            byte[] mainBlob = new byte[messageOffset - startingIndex];
-            Helper.CopyBytes(mainBlob, ref index, fullPropSec);
-            if (padding1 != null)
-            {
-                Helper.CopyBytes(mainBlob, ref index, padding1);
-            }
-            Helper.CopyBytes(mainBlob, ref index, BitConverter.GetBytes(cc));
-            Helper.CopyBytes(mainBlob, ref index, phrase);
+            result.Weight = NODE_WEIGHTAGE;
 
-            if (padding2 != null)
-            {
-                Helper.CopyBytes(mainBlob, ref index, padding2);
-            }
-            Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(lcid));
-            Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(generatedMethod));
-            return mainBlob;
+            var node = new CContentRestriction();
+
+            node._Property = GetFullPropSec(parameter.ContentRestrictionGuid, ulKind_Values.PRSPEC_PROPID, parameter.ContentRestrictionProperty);
+
+            node.Cc = (UInt32)queryString.Length;
+
+            node._pwcsPhrase = queryString;
+
+            node.Lcid = 0x409;
+
+            node._ulGenerateMethod = _ulGenerateMethod_Values.GENERATE_METHOD_EXACT;
+
+            result.Restriction = node;
+
+            return result;
 
         }
         #endregion
@@ -1627,28 +1424,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <param name="inputValue">input value, if isArray
         /// is true, pass values as array of objects</param>
         /// <returns>CBaseStorageVariant BLOB</returns>
-        private CBaseStorageVariant GetBaseStorageVariant(vType_Values type, bool isArray, object inputValue)
+        private CBaseStorageVariant GetBaseStorageVariant(vType_Values type, object inputValue)
         {
             var result = new CBaseStorageVariant();
             ushort vType = (ushort)type;
             byte vData1 = 0;
             byte vData2 = 0;
-            if (!isArray)
-            {
-                result.vType = (vType_Values)vType;
 
-                result.vData1 = vData1;
+            result.vType = (vType_Values)vType;
 
-                result.vData2 = vData2;
+            result.vData1 = vData1;
 
-                result.vValue = inputValue;
+            result.vData2 = vData2;
 
-                return result;
-            }
-            else
-            {
-                throw new InvalidOperationException("Array is not supported yet!");
-            }
+            result.vValue = inputValue;
+
+            return result;
         }
         #endregion
 
@@ -1771,71 +1562,41 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <param name="messageOffset">offset from the
         /// beginning of the message</param>
         /// <returns>ColumnSet structure BLOB</returns>
-        private byte[] GetColumnSet(ref int messageOffset)
+        private CColumnSet GetColumnSet()
         {
-            int startIndex = messageOffset;
-            int index = 0;
-            int innerIndex = 0;
+            var result = new CColumnSet();
+
             // Index of Properties to be queried
             uint[] indexes = new uint[] { 0};
             // Links to the 'pidMapper' field
-            messageOffset += (1 + indexes.Length) * Constant.SIZE_OF_UINT;
-            uint count = (uint)indexes.Length;
 
-            byte[] indexesBytes
-                = new byte[indexes.Length * Constant.SIZE_OF_UINT];
-            for (int i = 0; i < indexes.Length; i++)
-            {
-                Helper.CopyBytes
-                    (indexesBytes, ref innerIndex,
-                    BitConverter.GetBytes(indexes[i]));
-            }
+            result.count = (UInt32)indexes.Length;
 
-            byte[] mainBlob = new byte[messageOffset - startIndex];
-            Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(count));
-            Helper.CopyBytes
-                (mainBlob, ref index, indexesBytes);
+            result.indexes = indexes;
 
-            return mainBlob;
+            return result;
         }
+
         /// <summary>
         /// Gets the PIDMapper Structure
         /// </summary>
         /// <param name="messageOffset">Offset from 
         /// the beginning of the message</param>
         /// <returns>Pid Mapper structure BLOB</returns>
-        private byte[] GetPidMapper(ref int messageOffset)
+        private CPidMapper GetPidMapper()
         {
-            int startIndex = messageOffset;
-            int index = 0;
-            uint count = (uint)parameter.NumberOfCreateQueryColumns;
-            messageOffset += Constant.SIZE_OF_UINT;
-            byte[][] propSecs = new byte[count][];
+            var result = new CPidMapper();
 
-            for (int i = 0; i < propSecs.Length; i++)
-            {
-                propSecs[i]
-                    = GetFullPropSec(parameter.CreateQueryColumnParameters[i].Guid,
-                    PROPERTY_ID,
-                    (int)parameter.CreateQueryColumnParameters[i].PropertyId,
-                    ref messageOffset);
-            }
-            uint columnGroupArray = 0x00000000;
+            result.count = (uint)parameter.NumberOfCreateQueryColumns;
 
-            messageOffset += 2 * Constant.SIZE_OF_UINT;
-            // Copy the content in a BLOB
-            byte[] blob = new byte[messageOffset - startIndex];
-            Helper.CopyBytes(blob, ref index, BitConverter.GetBytes(count));
-            for (int i = 0; i < propSecs.Length; i++)
+            result.aPropSpec = new CFullPropSpec[result.count];
+
+            for (int i = 0; i < parameter.CreateQueryColumnParameters.Length; i++)
             {
-                Helper.CopyBytes(blob, ref index, propSecs[i]);
+                result.aPropSpec[i] = GetFullPropSec(parameter.CreateQueryColumnParameters[i].Guid, ulKind_Values.PRSPEC_PROPID, parameter.CreateQueryColumnParameters[i].PropertyId);
             }
-            Helper.CopyBytes
-                (blob, ref index, BitConverter.GetBytes(columnGroupArray));
-            Helper.CopyBytes
-                (blob, ref index, BitConverter.GetBytes(parameter.LCID_VALUE));
-            return blob;
+
+            return result;
         }
 
         public byte[] GetCPMRowsInMessage(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType, out uint reserved)
@@ -2021,231 +1782,44 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// unicode string representing the query string</param>
         /// <param name="numberOfCategorization">Number of 
         /// Categorization Set</param>
-        public byte[] GetCPMCreateQueryIn
-            (string path, string queryText, out uint numberOfCategorization)
-        {
-
-            byte[] externalPadding = null;
-            byte[] externalPadding1 = null;
-
-            //-----------
-            int messageOffset = 0;
-            uint size = 0;
-            // to be assigned after fixating on the total size of the message.
-            int index = 0;
-            messageOffset += Constant.SIZE_OF_UINT;
-            // Size of Size :)
-            searchScope = path;
-            queryString = queryText;
-            byte IsColumnSetPresent = 0x01;
-            messageOffset += Constant.SIZE_OF_BYTE;
-            byte[] paddingColumnSetPresent = null;
-            // To be assigned as per ColumnSet Presence.
-            byte[] restrictionArray = null;
-            byte[] columnSet = null;
-            if (IsColumnSetPresent != 0)
-            {
-                paddingColumnSetPresent
-                    = new byte[OFFSET_4 - messageOffset % 4];
-                for (int i = 0; i < paddingColumnSetPresent.Length; i++)
-                {
-                    paddingColumnSetPresent[i] = 0;
-                }
-                messageOffset += paddingColumnSetPresent.Length;
-                columnSet = GetColumnSet(ref messageOffset);
-            }
-
-            byte IsRestrictionPresent = 0x01;
-            messageOffset += Constant.SIZE_OF_BYTE;
-            if (IsRestrictionPresent != 0)
-            {
-
-                restrictionArray
-                    = GetRestrictionArray
-                    (ref messageOffset, queryString, searchScope);
-            }
-
-            byte IsSortPresent = 0x00;
-            byte IsCategorizationSetPresent = 0x00;
-            numberOfCategorization = 0;
-            messageOffset += 2 * Constant.SIZE_OF_BYTE;
-
-            if (messageOffset % 4 != 0)
-            {
-                externalPadding = new byte[OFFSET_4 - messageOffset % 4];
-                messageOffset += externalPadding.Length;
-            }
-            //------------
-
-            byte[] rowSetProperties = GetRowSetProperties(ref messageOffset);
-
-            if (messageOffset % 4 != 0)
-            {
-                externalPadding1 = new byte[OFFSET_4 - messageOffset % 4];
-                messageOffset += externalPadding1.Length;
-            }
-            //-------------
-            byte[] pidMapper = GetPidMapper(ref messageOffset);
-
-            byte[] messageBlob = new byte[messageOffset];
-            size = (uint)messageOffset;
-            Helper.CopyBytes
-                (messageBlob, ref index, BitConverter.GetBytes(size));
-            Helper.CopyBytes
-                (messageBlob, ref index, new byte[] { IsColumnSetPresent });
-
-            if (IsColumnSetPresent != 0)
-            {
-                Helper.CopyBytes
-                    (messageBlob, ref index, paddingColumnSetPresent);
-                Helper.CopyBytes
-                    (messageBlob, ref index, columnSet);
-            }
-            Helper.CopyBytes
-                (messageBlob, ref index, new byte[] { IsRestrictionPresent });
-            if (IsRestrictionPresent != 0)
-            {
-
-                Helper.CopyBytes(messageBlob, ref index, restrictionArray);
-            }
-            Helper.CopyBytes
-                (messageBlob, ref index, new byte[] { IsSortPresent });
-            Helper.CopyBytes
-                (messageBlob, ref index,
-                new byte[] { IsCategorizationSetPresent });
-
-            if (externalPadding != null)
-                Helper.CopyBytes
-                    (messageBlob, ref index, externalPadding);
-
-            Helper.CopyBytes(messageBlob, ref index, rowSetProperties);
-
-            if (externalPadding1 != null)
-                Helper.CopyBytes(messageBlob, ref index, externalPadding1);
-            //--------
-            Helper.CopyBytes(messageBlob, ref index, pidMapper);
-            return AddMessageHeader(MessageType.CPMCreateQueryIn, messageBlob);
-        }
-
-        /// <summary>
-        /// Gets the CreateQueryIn message
-        /// </summary>
-        /// <param name="path">A null terminated unicode
-        /// string representing the scope of search</param>
-        /// <param name="queryText">A NON null terminated 
-        /// unicode string representing the query string</param>
-        /// <param name="numberOfCategorization">Number of 
-        /// Categorization Set</param>
         /// <param name="ENABLEROWSETEVENTS">flag for ENABLEROWSETEVENTS</param>
         public byte[] GetCPMCreateQueryIn
             (string path, string queryText, out uint numberOfCategorization, bool ENABLEROWSETEVENTS)
         {
-
-            byte[] externalPadding = null;
-            byte[] externalPadding1 = null;
-
-            //-----------
-            int messageOffset = 0;
-            uint size = 0;
-            // to be assigned after fixating on the total size of the message.
-            int index = 0;
-            messageOffset += Constant.SIZE_OF_UINT;
-            // Size of Size :)
-            searchScope = path;
-            queryString = queryText;
-            byte IsColumnSetPresent = 0x01;
-            messageOffset += Constant.SIZE_OF_BYTE;
-            byte[] paddingColumnSetPresent = null;
-            // To be assigned as per ColumnSet Presence.
-            byte[] restrictionArray = null;
-            byte[] columnSet = null;
-            if (IsColumnSetPresent != 0)
-            {
-                //The length of this field MUST be such that the following field begins at an offset 
-                //that is a multiple of 4 bytes from the beginning of the message that contains this structure.
-                int messageSize = 4;
-                paddingColumnSetPresent
-                    = new byte[OFFSET_4 - messageOffset % messageSize];
-                for (int i = 0; i < paddingColumnSetPresent.Length; i++)
-                {
-                    paddingColumnSetPresent[i] = 0;
-                }
-                messageOffset += paddingColumnSetPresent.Length;
-                columnSet = GetColumnSet(ref messageOffset);
-            }
-
-            byte IsRestrictionPresent = 0x01;
-            messageOffset += Constant.SIZE_OF_BYTE;
-            if (IsRestrictionPresent != 0)
-            {
-
-                restrictionArray
-                    = GetRestrictionArray
-                    (ref messageOffset, queryString, searchScope);
-            }
-
-            byte IsSortPresent = 0x00;
-            byte IsCategorizationSetPresent = 0x00;
             numberOfCategorization = 0;
-            messageOffset += 2 * Constant.SIZE_OF_BYTE;
 
-            //The length of this field MUST be such that the following field begins at an offset that is a multiple of 4 bytes 
-            //from the beginning of the message that contains this structure.
-            int length = 4;
-            if (messageOffset % length != 0)
+            searchScope = path;
+
+            queryString = queryText;
+
+            var message = new CPMCreateQueryIn();
+
+            message.CColumnSetPresent = 0x01;
+
+            message.ColumnSet = GetColumnSet();
+
+            message.CRestrictionPresent = 0x01;
+
+            message.RestrictionArray = GetRestrictionArray(queryString, searchScope);
+
+            message.CSortSetPresent = 0x00;
+
+            message.CCategorizationSetPresent = 0x00;
+
+            message.RowSetProperties = GetRowSetProperties(ENABLEROWSETEVENTS);
+
+            message.PidMapper = GetPidMapper();
+
+            message.GroupArray = new CColumnGroupArray()
             {
-                externalPadding = new byte[OFFSET_4 - messageOffset % length];
-                messageOffset += externalPadding.Length;
-            }
-            //------------
+                count = 0,
+                aGroupArray = new CColumnGroup[0]
+            };
 
-            byte[] rowSetProperties = GetRowSetProperties(ENABLEROWSETEVENTS, ref messageOffset);
+            message.Lcid = parameter.LCID_VALUE;
 
-            if (messageOffset % length != 0)
-            {
-                externalPadding1 = new byte[OFFSET_4 - messageOffset % length];
-                messageOffset += externalPadding1.Length;
-            }
-            //-------------
-            byte[] pidMapper = GetPidMapper(ref messageOffset);
+            var messageBlob = ToBytes(message);
 
-            byte[] messageBlob = new byte[messageOffset];
-            size = (uint)messageOffset;
-            Helper.CopyBytes
-                (messageBlob, ref index, BitConverter.GetBytes(size));
-            Helper.CopyBytes
-                (messageBlob, ref index, new byte[] { IsColumnSetPresent });
-
-            if (IsColumnSetPresent != 0)
-            {
-                Helper.CopyBytes
-                    (messageBlob, ref index, paddingColumnSetPresent);
-                Helper.CopyBytes
-                    (messageBlob, ref index, columnSet);
-            }
-            Helper.CopyBytes
-                (messageBlob, ref index, new byte[] { IsRestrictionPresent });
-            if (IsRestrictionPresent != 0)
-            {
-
-                Helper.CopyBytes(messageBlob, ref index, restrictionArray);
-            }
-            Helper.CopyBytes
-                (messageBlob, ref index, new byte[] { IsSortPresent });
-            Helper.CopyBytes
-                (messageBlob, ref index,
-                new byte[] { IsCategorizationSetPresent });
-
-            if (externalPadding != null)
-                Helper.CopyBytes
-                    (messageBlob, ref index, externalPadding);
-
-            Helper.CopyBytes(messageBlob, ref index, rowSetProperties);
-
-            if (externalPadding1 != null)
-                Helper.CopyBytes(messageBlob, ref index, externalPadding1);
-            //--------
-            Helper.CopyBytes(messageBlob, ref index, pidMapper);
             return AddMessageHeader(MessageType.CPMCreateQueryIn, messageBlob);
         }
         #endregion

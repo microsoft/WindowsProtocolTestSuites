@@ -32,19 +32,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             if (String.IsNullOrEmpty(_string))
             {
                 cLen = 0;
+
                 buffer.Add(cLen);
             }
             else
             {
-                var tempBuffer = new WSPBuffer();
-
-                tempBuffer.Add(_string);
-
-                cLen = (UInt32)tempBuffer.Offset;
+                cLen = (UInt32)_string.Length;
 
                 buffer.Add(cLen);
 
-                buffer.AddRange(tempBuffer.GetBytes());
+                buffer.AddUnicodeString(_string);
             }
         }
     }

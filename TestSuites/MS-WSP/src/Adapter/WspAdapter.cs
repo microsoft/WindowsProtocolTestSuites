@@ -162,11 +162,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             parameter.PropertyRestrictionGuid = new Guid(wspTestSite.Properties.Get("PropertyRestrictionGuid"));
 
-            parameter.PropertyRestrictionProperty = Int32.Parse(wspTestSite.Properties.Get("PropertyRestrictionProperty"));
+            parameter.PropertyRestrictionProperty = UInt32.Parse(wspTestSite.Properties.Get("PropertyRestrictionProperty"));
 
             parameter.ContentRestrictionGuid = new Guid(wspTestSite.Properties.Get("ContentRestrictionGuid"));
 
-            parameter.ContentRestrictionProperty = Int32.Parse(wspTestSite.Properties.Get("ContentRestrictionProperty"));
+            parameter.ContentRestrictionProperty = UInt32.Parse(wspTestSite.Properties.Get("ContentRestrictionProperty"));
 
             parameter.EType = UInt32.Parse(wspTestSite.Properties.Get("EType"));
 

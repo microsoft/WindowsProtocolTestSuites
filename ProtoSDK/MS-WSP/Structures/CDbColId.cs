@@ -74,7 +74,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             if (eKind == eKind_Values.DBKIND_GUID_NAME)
             {
-                buffer.Add(vString);
+                buffer.AddUnicodeString(vString);
             }
         }
     }

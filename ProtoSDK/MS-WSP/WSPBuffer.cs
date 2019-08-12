@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 {
@@ -46,9 +47,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// Marshall a string to buffer.
         /// </summary>
         /// <param name="s">The string to be added.</param>
-        public void Add(string s)
+        /// <param name="isNullTerminated">Whether to append the null character.</param>
+        public void AddUnicodeString(string s, bool isNullTerminated = true)
         {
-            AddRange(TypeMarshal.ToBytes(new StringHelper { s = s }));
+            var stringBytes = TypeMarshal.ToBytes(new StringHelper { s = s });
+
+            if (!isNullTerminated)
+            {
+                stringBytes = stringBytes.Take(stringBytes.Length - 2).ToArray();
+            }
+
+            AddRange(stringBytes);
         }
 
         /// <summary>

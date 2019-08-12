@@ -26,7 +26,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         {
             var buffer = new WSPBuffer();
 
-            buffer.Add(val);
+            buffer.AddUnicodeString(val);
 
             cbSize = (UInt32)buffer.Offset;
 
