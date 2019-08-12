@@ -65,7 +65,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// Name of the connected Client
         /// </summary>
-        string clientMachineName = null;
+        public string clientMachineName = null;
         /// <summary>
         /// Catalog Name to Query
         /// </summary>
@@ -126,84 +126,95 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             isClientConnected = false;
         }
 
-        private MessageBuilderParamter InitializeParameter()
+        private MessageBuilderParameter InitializeParameter()
         {
             char[] delimiter = new char[] { ',' };
 
-            var paramter = new MessageBuilderParamter();
+            var parameter = new MessageBuilderParameter();
 
-            paramter.EmptyGuid = new Guid(wspTestSite.Properties.Get("EmptyGuid"));
+            parameter.EmptyGuid = new Guid(wspTestSite.Properties.Get("EmptyGuid"));
 
-            paramter.PropertySet_One_Guid = new Guid(wspTestSite.Properties.Get("PropertySet_One_Guid"));
+            parameter.PropertySet_One_Guid = new Guid(wspTestSite.Properties.Get("PropertySet_One_Guid"));
 
-            paramter.PropertySet_One_DBProperties = wspTestSite.Properties.Get("PropertySet_One_DBProperties").Split(delimiter);
+            parameter.PropertySet_One_DBProperties = wspTestSite.Properties.Get("PropertySet_One_DBProperties").Split(delimiter);
 
-            paramter.PropertySet_Two_Guid = new Guid(wspTestSite.Properties.Get("PropertySet_Two_Guid"));
+            parameter.PropertySet_Two_Guid = new Guid(wspTestSite.Properties.Get("PropertySet_Two_Guid"));
 
-            paramter.PropertySet_Two_DBProperties = wspTestSite.Properties.Get("PropertySet_Two_DBProperties").Split(delimiter);
+            parameter.PropertySet_Two_DBProperties = wspTestSite.Properties.Get("PropertySet_Two_DBProperties").Split(delimiter);
 
-            paramter.Array_PropertySet_One_Guid = new Guid(wspTestSite.Properties.Get("Array_PropertySet_One_Guid"));
+            parameter.Array_PropertySet_One_Guid = new Guid(wspTestSite.Properties.Get("Array_PropertySet_One_Guid"));
 
-            paramter.Array_PropertySet_One_DBProperties = wspTestSite.Properties.Get("Array_PropertySet_One_DBProperties").Split(delimiter);
+            parameter.Array_PropertySet_One_DBProperties = wspTestSite.Properties.Get("Array_PropertySet_One_DBProperties").Split(delimiter);
 
-            paramter.Array_PropertySet_Two_Guid = new Guid(wspTestSite.Properties.Get("Array_PropertySet_Two_Guid"));
+            parameter.Array_PropertySet_Two_Guid = new Guid(wspTestSite.Properties.Get("Array_PropertySet_Two_Guid"));
 
-            paramter.Array_PropertySet_Two_DBProperties = wspTestSite.Properties.Get("Array_PropertySet_Two_DBProperties").Split(delimiter);
+            parameter.Array_PropertySet_Two_DBProperties = wspTestSite.Properties.Get("Array_PropertySet_Two_DBProperties").Split(delimiter);
 
-            paramter.Array_PropertySet_Three_Guid = new Guid(wspTestSite.Properties.Get("Array_PropertySet_Three_Guid"));
+            parameter.Array_PropertySet_Three_Guid = new Guid(wspTestSite.Properties.Get("Array_PropertySet_Three_Guid"));
 
-            paramter.Array_PropertySet_Three_DBProperties = wspTestSite.Properties.Get("Array_PropertySet_Three_DBProperties").Split(delimiter);
+            parameter.Array_PropertySet_Three_DBProperties = wspTestSite.Properties.Get("Array_PropertySet_Three_DBProperties").Split(delimiter);
 
-            paramter.Array_PropertySet_Four_Guid = new Guid(wspTestSite.Properties.Get("Array_PropertySet_Four_Guid"));
+            parameter.Array_PropertySet_Four_Guid = new Guid(wspTestSite.Properties.Get("Array_PropertySet_Four_Guid"));
 
-            paramter.Array_PropertySet_Four_DBProperties = wspTestSite.Properties.Get("Array_PropertySet_Four_DBProperties").Split(delimiter);
+            parameter.Array_PropertySet_Four_DBProperties = wspTestSite.Properties.Get("Array_PropertySet_Four_DBProperties").Split(delimiter);
 
-            paramter.EachRowSize = Int32.Parse(wspTestSite.Properties.Get("EachRowSize"));
+            parameter.EachRowSize = MessageBuilder.rowWidth;
 
-            paramter.PropertyRestrictionGuid = new Guid(wspTestSite.Properties.Get("PropertyRestrictionGuid"));
+            parameter.PropertyRestrictionGuid = new Guid(wspTestSite.Properties.Get("PropertyRestrictionGuid"));
 
-            paramter.PropertyRestrictionProperty = Int32.Parse(wspTestSite.Properties.Get("PropertyRestrictionProperty"));
+            parameter.PropertyRestrictionProperty = Int32.Parse(wspTestSite.Properties.Get("PropertyRestrictionProperty"));
 
-            paramter.ContentRestrictionGuid = new Guid(wspTestSite.Properties.Get("ContentRestrictionGuid"));
+            parameter.ContentRestrictionGuid = new Guid(wspTestSite.Properties.Get("ContentRestrictionGuid"));
 
-            paramter.ContentRestrictionProperty = Int32.Parse(wspTestSite.Properties.Get("ContentRestrictionProperty"));
+            parameter.ContentRestrictionProperty = Int32.Parse(wspTestSite.Properties.Get("ContentRestrictionProperty"));
 
-            paramter.EType = UInt32.Parse(wspTestSite.Properties.Get("EType"));
+            parameter.EType = UInt32.Parse(wspTestSite.Properties.Get("EType"));
 
-            paramter.BufferSize = UInt32.Parse(wspTestSite.Properties.Get("BufferSize"));
+            parameter.BufferSize = UInt32.Parse(wspTestSite.Properties.Get("BufferSize"));
 
-            paramter.LCID_VALUE = UInt32.Parse(wspTestSite.Properties.Get("LCID_VALUE"));
+            parameter.LCID_VALUE = UInt32.Parse(wspTestSite.Properties.Get("LCID_VALUE"));
 
-            paramter.ClientBase = UInt32.Parse(wspTestSite.Properties.Get("ClientBase"));
+            parameter.ClientBase = UInt32.Parse(wspTestSite.Properties.Get("ClientBase"));
 
-            paramter.RowsToTransfer = UInt32.Parse(wspTestSite.Properties.Get("RowsToTransfer"));
+            parameter.RowsToTransfer = UInt32.Parse(wspTestSite.Properties.Get("RowsToTransfer"));
 
-            paramter.NumberOfColumnsToQuery = Int32.Parse(wspTestSite.Properties.Get("NumberOfColumnsToQuery"));
+            parameter.NumberOfSetBindingsColumns = Int32.Parse(wspTestSite.Properties.Get("NumberOfSetBindingsColumns"));
+            parameter.NumberOfCreateQueryColumns = Int32.Parse(wspTestSite.Properties.Get("NumberOfCreateQueryColumns"));
 
-            paramter.ColumnParameters = new MessageBuilderColumnParameter[paramter.NumberOfColumnsToQuery];
+            parameter.ColumnParameters = new MessageBuilderColumnParameter[parameter.NumberOfSetBindingsColumns];
+            parameter.CreateQueryColumnParameters = new CreateQueryColumnParameter[parameter.NumberOfCreateQueryColumns];
 
-            for (int i = 0; i < paramter.NumberOfColumnsToQuery; i++)
+            for (int i = 0; i < parameter.NumberOfSetBindingsColumns; i++)
             {
-                paramter.ColumnParameters[i] = new MessageBuilderColumnParameter();
+                parameter.ColumnParameters[i] = new MessageBuilderColumnParameter();
 
-                paramter.ColumnParameters[i].Guid = new Guid(wspTestSite.Properties.Get($"columnGuid_{i}"));
+                parameter.ColumnParameters[i].Guid = new Guid(wspTestSite.Properties.Get($"columnGuid_{i}"));
 
-                paramter.ColumnParameters[i].PropertyId = UInt32.Parse(wspTestSite.Properties.Get($"columnPropertyId_{i}"));
+                parameter.ColumnParameters[i].PropertyId = UInt32.Parse(wspTestSite.Properties.Get($"columnPropertyId_{i}"));
 
-                paramter.ColumnParameters[i].ValueOffset = UInt16.Parse(wspTestSite.Properties.Get($"columnValueOffset_{i}"));
+                parameter.ColumnParameters[i].ValueOffset = UInt16.Parse(wspTestSite.Properties.Get($"columnValueOffset_{i}"));
 
-                paramter.ColumnParameters[i].StatusOffset = UInt16.Parse(wspTestSite.Properties.Get($"columnStatusOffset_{i}"));
+                parameter.ColumnParameters[i].StatusOffset = UInt16.Parse(wspTestSite.Properties.Get($"columnStatusOffset_{i}"));
 
-                paramter.ColumnParameters[i].LengthOffset = UInt16.Parse(wspTestSite.Properties.Get($"columnLengthOffset_{i}"));
+                parameter.ColumnParameters[i].LengthOffset = UInt16.Parse(wspTestSite.Properties.Get($"columnLengthOffset_{i}"));
 
-                paramter.ColumnParameters[i].StorageType = (StorageType)Enum.Parse(typeof(StorageType), wspTestSite.Properties.Get($"columnStorageType_{i}"));
+                parameter.ColumnParameters[i].StorageType = (StorageType)Enum.Parse(typeof(StorageType), wspTestSite.Properties.Get($"columnStorageType_{i}"));
             }
 
-            paramter.PropertyGuidToFetch = new Guid(wspTestSite.Properties.Get("PropertyGuidToFetch"));
+            for (int i = 0; i < parameter.NumberOfCreateQueryColumns; i++)
+            {
+                parameter.CreateQueryColumnParameters[i] = new CreateQueryColumnParameter();
+                parameter.CreateQueryColumnParameters[i].Guid = new Guid(wspTestSite.Properties.Get($"CreateQuery_columnGuid_{i}"));
+                parameter.CreateQueryColumnParameters[i].PropertyId = UInt32.Parse(wspTestSite.Properties.Get($"CreateQuery_columnPropertyId_{i}"));
 
-            paramter.PropertyIdToFetch = Int32.Parse(wspTestSite.Properties.Get("PropertyIdToFetch"));
+            }
 
-            return paramter;
+
+            parameter.PropertyGuidToFetch = new Guid(wspTestSite.Properties.Get("PropertyGuidToFetch"));
+
+            parameter.PropertyIdToFetch = Int32.Parse(wspTestSite.Properties.Get("PropertyIdToFetch"));
+
+            return parameter;
         }
 
         /// <summary>
@@ -238,6 +249,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             int startingIndex = 0;
             uint clientVersion = 0;
             RequestSender sender = null;
+            var cV = wspTestSite.Properties["ClientVersion"];
             clientVersion = (uint)Convert.ToUInt32
                 (wspTestSite.Properties["ClientVersion"]);
             string locale = wspTestSite.Properties.Get("LanguageLocale");
@@ -848,20 +860,30 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             else
             {
                 Random r = new Random();
-                //cursorAssociated = GetCursor(clientMachineName);
                 cursorAssociated = (uint)r.Next(50, 60);
             }
 
+            CPMGetRowsIn(cursorAssociated, builder.parameter.RowsToTransfer, builder.parameter.EachRowSize, builder.parameter.BufferSize, 0, builder.parameter.EType);
+        }
 
-            //uint cursorAssociated = GetCursor(clientMachineName);
+        /// <summary>
+        /// CPMGetRowsIn() message requests rows from a query.
+        /// </summary>
+        /// <param name="cursor">Representing the handle from the CPMCreateQueryOut message identifying the query for which to retrieve rows. </param>
+        /// <param name="rowsToTransfer">Indicating the maximum number of rows that the client will receive in response to this message</param>
+        /// <param name="rowWidth">Indicating the length of a row, in bytes</param>
+        /// <param name="cbReadBuffer">This field MUST be set to the maximum of the value of _cbRowWidth or 1000 times the value of _cRowsToTransfer, rounded up to the nearest 512 byte multiple. The value MUST NOT exceed 0x00004000</param>
+        /// <param name="fBwdFetch">Indicating the order in which to fetch the rows</param>
+        /// <param name="eType">Type of SeekDescription</param>
+        public void CPMGetRowsIn(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType)
+        {
             byte[] getRowsInMessage
-                = builder.GetCPMRowsInMessage(cursorAssociated,
-                out rowsInReserve, out rowsInClientBase);
+                = builder.GetCPMRowsInMessage(cursor, rowsToTransfer, rowWidth, cbReadBuffer, fBwdFetch, eType, out rowsInReserve);
             byte[] getRowsOutMessage;
             uint checkSum = 0;
             RequestSender sender
                 = GetRequestSender(isClientConnected); //Get the Sender
-                                                       // RequestSender sender = new RequestSender(); //Get the Sender
+
             sender.SendMessage(getRowsInMessage, out getRowsOutMessage);
             if (sender == defaultSender)
             {
@@ -887,31 +909,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     = Helper.GetUInt(getRowsOutMessage, ref startingIndex);
                 uint msgStatus
                     = Helper.GetUInt(getRowsOutMessage, ref startingIndex);
-                //if (msgStatus != 0)
-                //{
-                //    wspTestSite.CaptureRequirementIfAreEqual<int>(bytesRead,
-                //        Constant.SIZE_OF_HEADER, 619,
-                //        "Whenever an error occurs during processing of a"+
-                //        "message sent by a client, the server MUST respond "+
-                //        "with the message header (only) of the message sent "+
-                //        "by the client, keeping the _msg field intact.");
-                //    wspTestSite.CaptureRequirement(620, "Whenever an error "+
-                //        "occurs during processing of a message sent by a "+
-                //        "client, the server MUST set the _status field to "+
-                //        "the error code value.");
-                //}
-                //if ((msgId == (uint)MessageType.CPMGetRowsIn) 
-                //    && (msgStatus == 0x00000000))
-                //{
+
                 uint offsetUsed = GetOffsetUsed();
                 validator.ValidateGetRowsOut(getRowsOutMessage,
                     checkSum, rowsInReserve, rowsInClientBase, tableColumns,
                     offsetUsed, out lastDocumentWorkId);
-                //}
-                CPMGetRowsOut(msgStatus);
+
                 // Fire Response Event
+                CPMGetRowsOut(msgStatus);
+
             }
         }
+
         /// <summary>
         /// This event is used to get the response from CPMGetRowsIn request.
         /// </summary>
@@ -1861,7 +1870,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         /// <param name="machineName">client machine name</param>
         /// <returns>cursor associated with the query</returns>
-        private uint GetCursor(string machineName)
+        public uint GetCursor(string machineName)
         {
             uint cursor = 0;
             if (cursorMap.ContainsKey(machineName))

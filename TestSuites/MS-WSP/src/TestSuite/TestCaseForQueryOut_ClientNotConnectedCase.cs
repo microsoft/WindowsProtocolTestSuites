@@ -188,7 +188,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
         #endregion
         
         #region Test Starting in S0
-        //[Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("MS-WSP_R656, MS-WSP_R662, MS-WSP_R663")]
         public virtual void TestCaseForQueryOut_ClientNotConnectedCaseS0() {
             this.Manager.BeginTest("TestCaseForQueryOut_ClientNotConnectedCaseS0");
