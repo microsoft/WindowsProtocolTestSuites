@@ -236,7 +236,12 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             DrsrTestChecker.Check();
             EnvironmentConfig.Machine dcServer = EnvironmentConfig.Machine.WritableDC1;
             DsServer dcMachine = (DsServer)EnvironmentConfig.MachineStore[dcServer];
-            string ncDN = DRSTestData.DRSGetReplInfo_ExistUser + "," + LdapUtility.ConvertUshortArrayToString(((AddsDomain)dcMachine.Domain).DomainNC.StringName);
+
+            DsUser admin = dcMachine.Domain.Admin;
+            string existUser = string.Format(DRSTestData.DRSGetReplInfo_ExistUser, admin.Username);
+            BaseTestSite.Log.Add(LogEntryKind.Comment, "DRSTestData.DRSGetReplInfo_ExistUser: {0}", existUser);
+
+            string ncDN = existUser + "," + LdapUtility.ConvertUshortArrayToString(((AddsDomain)dcMachine.Domain).DomainNC.StringName);
             LDAP_PROPERTY_META_DATA[] ncDNattributes = LdapUtility.GetMetaData(dcMachine, ncDN);
 
 
@@ -615,7 +620,12 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             DrsrTestChecker.Check();
             EnvironmentConfig.Machine dcServer = EnvironmentConfig.Machine.WritableDC1;
             DsServer dcMachine = (DsServer)EnvironmentConfig.MachineStore[dcServer];
-            string ncDN = DRSTestData.DRSGetReplInfo_ExistUser + "," + LdapUtility.ConvertUshortArrayToString(((AddsDomain)dcMachine.Domain).DomainNC.StringName);
+
+            DsUser admin = dcMachine.Domain.Admin;
+            string existUser = string.Format(DRSTestData.DRSGetReplInfo_ExistUser, admin.Username);
+            BaseTestSite.Log.Add(LogEntryKind.Comment, "DRSTestData.DRSGetReplInfo_ExistUser: {0}", existUser);
+
+            string ncDN = existUser + "," + LdapUtility.ConvertUshortArrayToString(((AddsDomain)dcMachine.Domain).DomainNC.StringName);
             LDAP_PROPERTY_META_DATA[] ncDNattributes = LdapUtility.GetMetaData(dcMachine, ncDN);
 
 
