@@ -93,7 +93,9 @@
     <Content Include="MS-FSA_ServerTestSuite.deployment.ptfconfig">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="MS-FSA_ServerTestSuite.ptfconfig" />
+    <Content Include="MS-FSA_ServerTestSuite.ptfconfig">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
@@ -183,6 +185,7 @@
     <Compile Include="TraditionalTestCases\FsControlRequest\FSCTL_GET_REPARSE_POINT.cs" />
     <Compile Include="TraditionalTestCases\FsControlRequest\FSCTL_SET_SPARSE.cs" />
     <Compile Include="TraditionalTestCases\FsControlRequest\FSCTL_SET_ZERO_DATA.cs" />
+    <Compile Include="TraditionalTestCases\QueryDirectory\QueryDirectoryTestCases.cs" />
     <Compile Include="TraditionalTestCases\QuotaInformation\QuotaInfoTestCases.cs" />
     <Compile Include="TraditionalTestCases\QuotaInformation\QuotaInfo_Query_QuotaInformation.cs" />
     <Compile Include="TraditionalTestCases\QuotaInformation\QuotaInfo_Set_QuotaInformation.cs" />

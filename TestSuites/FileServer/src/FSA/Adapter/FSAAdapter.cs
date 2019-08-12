@@ -926,6 +926,35 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             }
             return returnedStatus;
         }
+
+        public MessageStatus QueryDirectoryInfo(
+            string searchPattern,
+            FileInfoClass fileInfoClass,
+            bool returnSingleEntry,
+            bool restartScan,
+            bool isDirectoryNotRight,
+            bool isOutPutBufferNotEnough           
+            )
+        {
+            
+            byte[] outBuffer = null;
+        
+            uint fileIndex = 0;
+            uint maxOutputSize = (uint)(isOutPutBufferNotEnough ? 1 : this.transBufferSize);         
+
+            MessageStatus returnedStatus = this.transAdapter.QueryDirectory(
+            (byte)fileInfoClass,
+            maxOutputSize,
+            //restartScan,
+            false,
+            returnSingleEntry,
+            fileIndex,
+            searchPattern,
+            out outBuffer);
+
+            return returnedStatus;
+        }
+
         #endregion
 
         #region 3.1.5.1.2   Open of an Existing File

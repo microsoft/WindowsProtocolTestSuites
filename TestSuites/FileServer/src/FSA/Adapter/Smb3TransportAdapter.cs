@@ -731,6 +731,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             )
         {
             QUERY_DIRECTORY_Response responsePayload;
+            QUERY_DIRECTORY_Request_Flags_Values restartScanFlag = 
+                restartScan ? QUERY_DIRECTORY_Request_Flags_Values.RESTART_SCANS : QUERY_DIRECTORY_Request_Flags_Values.NONE;
 
             uint status = this.smb2Client.QueryDirectory(
                 1,
@@ -740,7 +742,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 this.sessionId,
                 this.treeId,
                 (FileInformationClass_Values)fileInformationClass,
-                QUERY_DIRECTORY_Request_Flags_Values.RESTART_SCANS,
+                restartScanFlag,
                 fileIndex,
                 this.fileId,
                 fileNamePattern,
