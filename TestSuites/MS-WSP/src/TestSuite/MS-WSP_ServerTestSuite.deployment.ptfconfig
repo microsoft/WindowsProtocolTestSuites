@@ -2,7 +2,7 @@
 <TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
   <Properties>
     <!-- IP/ Machine Name for the Beacon Logging-->
-    <Property name="ServerComputerName" value="169.254.9.88" />
+    <Property name="ServerComputerName" value="sut" />
     <!-- Name of the Server Machine Under test-->
     <Property name="SERVER_MACHINE_NAME" value="sut" />
     <!-- Name of the Domain Under test-->
