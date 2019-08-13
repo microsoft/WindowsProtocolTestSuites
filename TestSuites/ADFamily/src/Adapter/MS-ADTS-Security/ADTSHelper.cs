@@ -839,7 +839,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         private static LdapConnection ConnectionBind(LdapConnection connection)
         {
             //Specifies Server name
-            string adServer = TestClassBase.BaseTestSite.Properties["Common.WritableDC1.NetbiosName"];
+            string adServer = TestClassBase.BaseTestSite.Properties["Common.WritableDC1.NetbiosName"] + "." + TestClassBase.BaseTestSite.Properties["Common.PrimaryDomain.DNSName"];
             //Specifies current user
             string currentUser = TestClassBase.BaseTestSite.Properties["Common.ClientUserName"];
             //Specifies user password

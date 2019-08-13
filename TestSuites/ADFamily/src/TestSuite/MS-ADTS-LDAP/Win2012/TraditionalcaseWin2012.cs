@@ -979,7 +979,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             #region make an add request
             Asn1BerEncodingBuffer buffer = new Asn1BerEncodingBuffer();
             AdtsSearchRequestPacket search = ldapClient.CreateSearchRequest(
-                "cn=administrator,cn=users," + AD_LDAPModelAdapter.Instance(Site).rootDomainNC,
+                $"cn={Utilities.DomainAdmin},cn=users,{AD_LDAPModelAdapter.Instance(Site).rootDomainNC}",
                 0, 0, System.DirectoryServices.Protocols.SearchScope.Base, System.DirectoryServices.Protocols.DereferenceAlias.Never,
                 setFilter, false,
                 new string[] { "*" });
