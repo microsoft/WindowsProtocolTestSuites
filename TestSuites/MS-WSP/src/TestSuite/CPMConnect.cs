@@ -20,7 +20,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         private const uint InvalidClientVersion = 0;
         private const string InvalidCatalogNameFormat = "InvalidCatalogNameFormat";
         private string EmptyCatalogName = string.Empty;
-        private const string NotExistedCatalogName = "Windows\\SYSTEM\0";
+        private const string NotExistedCatalogName = "Windows\\AYSTEMINDEX";
 
         private enum ArgumentType
         {
@@ -85,7 +85,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [TestMethod]
         [TestCategory("CPMConnect")]
         [Description("This test case is designed to verify the server response if invalid isClientRemote is sent in CPMConnectIn.")]
-        public void CPMGetRows_InvalidIsClientRemote()
+        public void CPMConnect_InvalidIsClientRemote()
         {            
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn with invalid isClientRemote and expects STATUS_INVALID_PARAMETER.");           
 
@@ -96,7 +96,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [TestMethod]
         [TestCategory("CPMConnect")]
         [Description("This test case is designed to verify the server response if invalid client version is sent in CPMConnectIn.")]
-        public void CPMGetRows_InvalidClientVersion()
+        public void CPMConnect_InvalidClientVersion()
         {
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn with invalid client version and expects STATUS_INVALID_PARAMETER_MIX.");
 
@@ -107,7 +107,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [TestMethod]
         [TestCategory("CPMConnect")]
         [Description("This test case is designed to verify the server response if empty catalog name is sent in CPMConnectIn.")]
-        public void CPMGetRows_EmptyCatalogName()
+        public void CPMConnect_EmptyCatalogName()
         {
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn with empty catalog name and expects NOT SUCCEED.");
 
@@ -119,7 +119,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [TestMethod]
         [TestCategory("CPMConnect")]
         [Description("This test case is designed to verify the server response if invalid catalog name format is sent in CPMConnectIn.")]
-        public void CPMGetRows_InvalidCatalogNameFormat()
+        public void CPMConnect_InvalidCatalogNameFormat()
         {
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn with invalid catalog name format and expects NOT SUCCEED.");
 
@@ -131,12 +131,13 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [TestMethod]
         [TestCategory("CPMConnect")]
         [Description("This test case is designed to verify the server response if not existed catalog name is sent in CPMConnectIn.")]
-        public void CPMGetRows_NotExistedCatalogName()
+        public void CPMConnect_NotExistedCatalogName()
         {
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn with not existed catalog name and expects NOT SUCCEED.");
 
             argumentType = ArgumentType.NotExistedCatalogName;
-            wspAdapter.CPMConnectInRequest(wspAdapter.clientVersion, (int)ClientType.RemoteClient, NotExistedCatalogName);
+            wspAdapter.CPMConnectInRequest((uint)Convert.ToUInt32
+                (BaseTestSite.Properties["ClientVersion"]), (int)ClientType.RemoteClient, NotExistedCatalogName);
             //MSS_E_CATALOGNOTFOUND
         }
         #endregion
@@ -149,19 +150,19 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     Site.Assert.AreEqual((uint)0, errorCode, "CPMConnectIn should succeed.");
                     break;
                 case ArgumentType.InvalidIsClientRemote:
-                    Site.Assert.AreEqual((uint)WspErrorCode.STATUS_INVALID_PARAMETER, errorCode, "CPMGetRowsOut should return STATUS_INVALID_PARAMETER if isClientRemote of CPMGetRowsIn is invalid.");
+                    Site.Assert.AreEqual((uint)WspErrorCode.STATUS_INVALID_PARAMETER, errorCode, "CPMConnect should return STATUS_INVALID_PARAMETER if isClientRemote of CPMGetRowsIn is invalid.");
                     break;
                 case ArgumentType.InvalidClientVersion:
-                    Site.Assert.AreEqual((uint)WspErrorCode.STATUS_INVALID_PARAMETER_MIX, errorCode, "CPMGetRowsOut should return STATUS_INVALID_PARAMETER_MIX if client version of CPMGetRowsIn is invalid.");
+                    Site.Assert.AreEqual((uint)WspErrorCode.STATUS_INVALID_PARAMETER_MIX, errorCode, "CPMConnect should return STATUS_INVALID_PARAMETER_MIX if client version of CPMGetRowsIn is invalid.");
                     break;
                 case ArgumentType.EmptyCatalogName:
-                    Site.Assert.AreNotEqual((uint)WspErrorCode.SUCCESS, errorCode, "CPMGetRowsOut should not return succeed if catalog name of CPMGetRowsIn is empty.");
+                    Site.Assert.AreNotEqual((uint)WspErrorCode.SUCCESS, errorCode, "CPMConnect should not return succeed if catalog name of CPMGetRowsIn is empty.");
                     break;
                 case ArgumentType.InvalidCatalogNameFormat:
-                    Site.Assert.AreNotEqual((uint)WspErrorCode.SUCCESS, errorCode, "CPMGetRowsOut should not return succeed if catalog name format of CPMGetRowsIn is invalid.");
+                    Site.Assert.AreNotEqual((uint)WspErrorCode.SUCCESS, errorCode, "CPMConnect should not return succeed if catalog name format of CPMGetRowsIn is invalid.");
                     break;
                 case ArgumentType.NotExistedCatalogName:
-                    Site.Assert.AreEqual((uint)WspErrorCode.MSS_E_CATALOGNOTFOUND, errorCode, "CPMGetRowsOut should return MSS_E_CATALOGNOTFOUND if catalog name of CPMGetRowsIn not existed.");
+                    Site.Assert.AreEqual((uint)WspErrorCode.MSS_E_CATALOGNOTFOUND, errorCode, "CPMConnect should return MSS_E_CATALOGNOTFOUND if catalog name of CPMGetRowsIn not existed.");
                     break;
             }
         }

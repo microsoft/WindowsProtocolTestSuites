@@ -1358,7 +1358,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         {
             int startingIndex = 0;
             workId = 0xfffffff0;
-            int rowSize = 0;
+            uint rowSize = 0;
             int WORK_ID_PROPERTY = 5; // by default it is 5
             uint lastOffsetValue = 0; // Offset of first Row field
             ValidateHeader(rowsOutResponse, MessageType.CPMGetRowsIn,
@@ -1448,17 +1448,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 = GetPaddingBytes(paddingBytes, rowsOutResponse,
                 ref startingIndex);
             object offset2; // Could be 64 bit or 32 bit
-            site.CaptureRequirementIfIsTrue(paddingRows >= 0 && paddingBytes <= (reserved - 1), 534,
+            site.CaptureRequirementIfIsTrue(paddingRows >= 0 && paddingRows <= (reserved - 1), 534,
                 "The  'paddingRows' field of the CPMGetRowsOut" +
                 "message MUST be of  length 0 to _cbReserved-1 bytes. ");
 
             for (int i = 0; i < rowsReturned; i++)
             {
-                rowSize = Convert.ToInt32(site.Properties["EachRowSize"]);
+                rowSize = MessageBuilder.rowWidth;
                 byte[] row = new byte[rowSize];
                 int rowIndex = 0;
                 Array.Copy(rowsOutResponse, startingIndex, row, 0, rowSize);
-                startingIndex += 80;
+                startingIndex += (int)rowSize;
                 // This is an iteration of obtained Rows from the Server.
                 // If the 'row' field is populated.
                 // requirement 721 is validated.
@@ -1466,7 +1466,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     "When the server receives a CPMGetRowsIn message request" +
                     "from a client, the server MUST Store fetched rows in " +
                     "the Rows field.");
-                for (int j = 0; j < 4; j++)
+                for (int j = 0; j < Int32.Parse(site.Properties.Get("NumberOfSetBindingsColumns")); j++)
                 {
                     rowIndex = columns[j].ValueOffset;
                     StorageType type = columns[j].Type;
@@ -1577,20 +1577,30 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                                     "structure in the row data MUST contain" +
                                     "a 32-bit value.");
                             }
-                            uint offSetValue = (uint)offset2;
                             // If GetUInt returns success then the requirement 
                             // 326 is validated
-                            offSetValue
-                                -= clientBase; // Deducting clientBase
+
                             uint datalength
                                 = BitConverter.ToUInt32(row,
                                 columns[j].LengthOffset);
                             // Deducting size of VT_VARIANT
                             int actualLength
-                                = (int)(datalength - 16);
-                            byte[] variableData
-                                = ReadVariableDataFromBuffer(rowsOutResponse,
-                                offSetValue, actualLength);
+                                = (int)(datalength - 24);
+                            byte[] variableData = null;
+
+                            if (offsetUsed == Constant.OFFSET_64)
+                            {
+                                variableData = ReadVariableDataFromBuffer2(rowsOutResponse,
+                                (ulong)offset2 - (ulong)clientBase, actualLength);
+
+                                var mystring = Encoding.Unicode.GetString(variableData);
+                            }
+                            else
+                            {
+                                variableData = ReadVariableDataFromBuffer(rowsOutResponse,
+                                (uint)offset2 - clientBase, actualLength);
+                            }
+                                
                             // If VariableData is obtained as specified.
                             //Requirement 11 validated
                             site.CaptureRequirement(11,
@@ -1605,16 +1615,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                                 "be stored at the offsets specified by the" +
                                 "most recent CPMSetBindingsIn message.");
 
-                            lastOffsetValue = offSetValue;
-                            if (i > 0)
-                            {
-                                site.CaptureRequirementIfIsTrue
-                                    (lastOffsetValue > offsetUsed, 538,
-                                    "The variable data  in the Row Data is stored" +
-                                    "near the end of the buffer in " +
-                                    "descending order.");
-                            }
-                            lastOffsetValue = offsetUsed;
                         }
                         else
                         {
@@ -1624,6 +1624,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                             byte[] getFixedSize
                                 = ReadFixedLengthData(row,
                                 ref rowIndex, baseStorageType);
+                            var mystring = Encoding.Unicode.GetString(getFixedSize);
                         }
                     }
                     else
@@ -3376,6 +3377,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         {
             byte[] value = new byte[actualLength];
             Array.Copy(rowsInResponse, offset2, value, 0, actualLength);
+            return value;
+        }
+
+        private byte[] ReadVariableDataFromBuffer2(byte[] rowsInResponse,
+            ulong offset2, int actualLength)
+        {
+            byte[] value = new byte[actualLength];
+            Array.Copy(rowsInResponse, (long)offset2, value, 0, actualLength);
             return value;
         }
 

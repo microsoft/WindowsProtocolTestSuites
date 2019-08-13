@@ -990,6 +990,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         E_NOINTERFACE = 0x80004002,
 
         /// <summary>
+        /// Specifies Invalid Parameter
+        /// </summary>
+        ERROR_INVALID_PARAMETER = 0x80070057,
+
+        /// <summary>
         /// Specifies invalid parameter
         /// </summary>
         STATUS_INVALID_PARAMETER_MIX = 0xc0000030,
@@ -998,11 +1003,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// Specifies out of memory
         /// </summary>
         E_OUTOFMEMORY = 0x8007000e,
-
-        /// <summary>
-        /// Another invalid parameter error code
-        /// </summary>
-        STATUS_INVALID_PARAMETER2= 0xD000000D,
 
         /// <summary>
         /// Catalog name not found
@@ -1119,6 +1119,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// CPMGetScopeStatisticsIn message of WSP protocol
         /// </summary>
         CPMGetScopeStatisticsIn = 24
+    }
+
+    /// <summary>
+    /// A 32-bit unsigned integer indicating the order in which to fetch the rows that MUST be set to one of the following values.
+    /// Used in CPMGetRowsIn
+    /// </summary>
+    public enum FetchType : uint
+    {
+        ForwardOrder = 0x00000000,
+        ReverseOrder = 0x00000001
     }
 
     #endregion
