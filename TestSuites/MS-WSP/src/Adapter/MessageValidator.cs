@@ -2923,22 +2923,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 "Otherwise [WSP return failed], WSP messages return a 32-bit error code " +
                 "that can either be an HRESULT or an NTSTATUS value (see section 1.8).");
 
-
+            // Keep reading the checkSum and reserved here even we don't verify them (since TD says that server will verify the checkSum instead of client),
+            // or else the cases will fail due to the pointer does not move 
             uint checkSum = Helper.GetUInt(responseBytes, ref index);
-
-            bool checkSumZero = (messageType == 0x000000C9)
-                || (messageType == 0x000000CB) || (messageType == 0x000000CD)
-                || (messageType == 0x000000CE) || (messageType == 0x000000CF)
-                || (messageType == 0x000000D1) || (messageType == 0x000000D2)
-                || (messageType == 0x000000D7) || (messageType == 0x000000D9)
-                || (messageType == 0x000000E1) || (messageType == 0x000000E6)
-                || (messageType == 0x000000E7) || (messageType == 0x000000E8)
-                || (messageType == 0x000000E9) || (messageType == 0x000000EC)
-                || (messageType == 0x000000F1) || (messageType == 0x000000F2)
-                || (messageType == 0x000000F3) || (messageType == 0x000000F4);
-
-
             uint reserved = Helper.GetUInt(responseBytes, ref index);
+
             /* XXX: TDI?
             //Updated by:v-zhil
             //Delta testing

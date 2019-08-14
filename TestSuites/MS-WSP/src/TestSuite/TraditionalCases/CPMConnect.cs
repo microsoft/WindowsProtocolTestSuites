@@ -147,22 +147,22 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             switch (argumentType)
             {
                 case ArgumentType.AllValid:
-                    Site.Assert.AreEqual((uint)0, errorCode, "CPMConnectIn should succeed.");
+                    Site.Assert.AreEqual((uint)0, errorCode, "Server should return succeed for COMConnectIn.");
                     break;
                 case ArgumentType.InvalidIsClientRemote:
-                    Site.Assert.AreEqual((uint)WspErrorCode.STATUS_INVALID_PARAMETER, errorCode, "CPMConnect should return STATUS_INVALID_PARAMETER if isClientRemote of CPMGetRowsIn is invalid.");
+                    Site.Assert.AreEqual((uint)WspErrorCode.STATUS_INVALID_PARAMETER, errorCode, "Server should return STATUS_INVALID_PARAMETER if isClientRemote of CPMConnectIn is invalid.");
                     break;
                 case ArgumentType.InvalidClientVersion:
-                    Site.Assert.AreEqual((uint)WspErrorCode.STATUS_INVALID_PARAMETER_MIX, errorCode, "CPMConnect should return STATUS_INVALID_PARAMETER_MIX if client version of CPMGetRowsIn is invalid.");
+                    Site.Assert.AreEqual((uint)WspErrorCode.STATUS_INVALID_PARAMETER_MIX, errorCode, "Server should return STATUS_INVALID_PARAMETER_MIX if client version of CPMConnectIn is invalid.");
                     break;
                 case ArgumentType.EmptyCatalogName:
-                    Site.Assert.AreNotEqual((uint)WspErrorCode.SUCCESS, errorCode, "CPMConnect should not return succeed if catalog name of CPMGetRowsIn is empty.");
+                    Site.Assert.AreNotEqual((uint)WspErrorCode.SUCCESS, errorCode, "Server should not return succeed if catalog name of CPMConnectIn is empty.");
                     break;
                 case ArgumentType.InvalidCatalogNameFormat:
-                    Site.Assert.AreNotEqual((uint)WspErrorCode.SUCCESS, errorCode, "CPMConnect should not return succeed if catalog name format of CPMGetRowsIn is invalid.");
+                    Site.Assert.AreNotEqual((uint)WspErrorCode.SUCCESS, errorCode, "Server should not return succeed if catalog name format of CPMConnectIn is invalid.");
                     break;
                 case ArgumentType.NotExistedCatalogName:
-                    Site.Assert.AreEqual((uint)WspErrorCode.MSS_E_CATALOGNOTFOUND, errorCode, "CPMConnect should return MSS_E_CATALOGNOTFOUND if catalog name of CPMGetRowsIn not existed.");
+                    Site.Assert.AreEqual((uint)WspErrorCode.MSS_E_CATALOGNOTFOUND, errorCode, "Server should return MSS_E_CATALOGNOTFOUND if catalog name of CPMConnectIn is not existed.");
                     break;
             }
         }
