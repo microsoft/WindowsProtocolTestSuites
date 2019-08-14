@@ -11,7 +11,7 @@
 	The Category is used to specify which set of tools need to be downloaded and installed, based on different test suite names, such as "FileServer", Categories are defined in PrerequisitesConfig.xml
 	and you can update this configure file to achieve your requirement.
 	Currently we support the following Categories:
-	* BuildTestSuites (choose this category if you want to build the test suites from source code. To build the test suites of ADFamily/MS-AZOD/MS-ADOD, you need to choose the specific test suite name and run InstallPrerequisites.ps1 again.)
+	* BuildTestSuites (choose this category if you want to build the test suites/PTM from source code. To build the test suites of ADFamily/MS-AZOD/MS-ADOD, you need to choose the specific test suite name and run InstallPrerequisites.ps1 again.)
 	* FileServer
 	* Kerberos
 	* SMB
@@ -27,7 +27,7 @@
 
 .EXAMPLE
 	When you want to run the File Server test suite, type the command below:
-	C:\PS>.\InstallPrerequisites.ps1 -Category 'FileServer' -ConfigPath ".\PrerequisitesConfig.xml"
+	C:\PS>.\InstallPrerequisites.ps1 -Category FileServer -ConfigPath ".\PrerequisitesConfig.xml"
 	The PS script will get all tools defined under FileServer node in PrerequisitesConfig.xml, then download and install these tools.
 #>
 
@@ -39,12 +39,6 @@ Param
 	[String]$ConfigPath
 )
 
-# ==========================
-# Global Variable 
-# ==========================
-
-# The path where the Visual Studio will be installed
-$VSInstallationPath = "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community"
 
 Function CheckInternetConnection{
   
@@ -118,6 +112,7 @@ Function CheckIfAppInstalled
 Function CheckIfVSExtensionInstalled
 {
 	Param(
+		$VSInstallationPath,
 		[string]$AppName, # App name
 		[string]$DllName  # The Dll name of the extension. It can be found in the .vsix file if you change it to .zip and unzip it.
 	)
@@ -329,6 +324,7 @@ Function DownloadAndInstallApplication
 Function DownloadAndInstallVsExtension
 {
 	param(
+		$VSInstallationPath,
 		$AppItem,
 		[string]$OutputPath
 	)
@@ -360,6 +356,49 @@ Function DownloadAndInstallVsExtension
 		$failedList += $AppItem.Name
 		$content = "Install " + $AppItem.Name +" failed, Error Code:" + $ExitCode
 		Write-Host "ERROR $ExitCode"; 
+	}
+}
+
+# Get the installation path of Visual Studio or Test Agent
+Function GetVSInstallationPath
+{
+	if ([IntPtr]::Size -eq 4)  # 32-bit
+	{
+		$VSWherePath = "${env:ProgramFiles}\Microsoft Visual Studio\Installer\vswhere.exe"
+	}
+	else # 64-bit
+	{
+		$VSWherePath = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+	}
+
+	$VSWherePathExisted = Test-Path -Path $VSWherePath
+
+	if ($VSWherePathExisted -eq $false)
+	{
+		Write-Host "$VSWherePath is not found."	-ForegroundColor Yellow
+		return $null
+	}
+
+	$VSInstallationPath = cmd /c "`"$VSWherePath`" -latest -format value -property installationPath"
+
+	if ($VSInstallationPath)
+	{
+		Write-Host "Installation path of Visual Studio is $VSInstallationPath."
+		return $VSInstallationPath
+	}
+	else
+	{
+		$TestAgentInstallationPath = cmd /c "`"$VSWherePath`" -latest -products Microsoft.VisualStudio.Product.TestAgent -format value -property installationPath"
+		if ($TestAgentInstallationPath)
+		{
+			Write-Host "Installation path of Test Agent is $TestAgentInstallationPath." 
+			return $TestAgentInstallationPath			
+		}
+		else
+		{
+			Write-Host "Did not find installation path of Visual Studio or test agent."	-ForegroundColor Yellow
+			return $null				
+		}
 	}
 }
 
@@ -427,7 +466,6 @@ foreach($item in $downloadList)
 		"Custom" {
 			$isInstalled = & "$currentPath\$($item.Command)" -Action Check
 			if($isInstalled) {
-				Write-Host "$($item.Name) has already been installed." -ForegroundColor Green
 				continue
 			}
 
@@ -475,7 +513,7 @@ foreach($item in $downloadList)
 					$IsInstalled = $false;
 					$ErrorMessage = $_.Exception.Message
 					Write-Host $ErrorMessage -ForegroundColor Red
-					Break;
+					Break
 				}
 
 				if($item.NeedRestart)
@@ -493,11 +531,19 @@ foreach($item in $downloadList)
 				{
 					$content = $item.AppName + " is already installed"
 				}
-				Write-Host $content -ForegroundColor Green
+				Write-Host $content
 			}
 		}
 		"VsExtension" {
-			$isInstalled = CheckIfVSExtensionInstalled -AppName $item.AppName -DllName $item.DllName
+			# Get VS installation path
+			$VSInstallationPath = GetVSInstallationPath
+			if (-not $VSInstallationPath)
+			{
+				Write-Host "VS Extension cannot be installed" -ForegroundColor red
+				break
+			}
+
+			$isInstalled = CheckIfVSExtensionInstalled -VSInstallationPath $VSInstallationPath -AppName $item.AppName -DllName $item.DllName
 
 			if(-not $isInstalled)
 			{
@@ -512,20 +558,20 @@ foreach($item in $downloadList)
 
 				try
 				{
-					DownloadAndInstallVsExtension -AppItem $item -OutputPath $outputPath
+					DownloadAndInstallVsExtension -VSInstallationPath $VSInstallationPath -AppItem $item -OutputPath $outputPath
 				}
 				catch
 				{
 					$failedList += $item.Name
-					$IsInstalled = $false;
+					$IsInstalled = $false
 					$ErrorMessage = $_.Exception.Message
 					Write-Host $ErrorMessage -ForegroundColor Red
-					Break;
+					Break
 				}
 
 				if($item.NeedRestart)
 				{
-					$IsNeedRestart = $true;
+					$IsNeedRestart = $true
 				}
 			}
 		}

@@ -14,6 +14,7 @@ Function Check-NuGet {
 	foreach($pathItem in $pathList) {
 		$ret = Test-Path -PathType Leaf -Path "$pathItem\nuget.exe"
 		if($ret) {
+			Write-Host "NuGet has already been installed."	
 			return $true
 		}
 	}

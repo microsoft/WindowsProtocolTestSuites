@@ -9,29 +9,47 @@ param (
 	[string]$DownloadedArtifact	# Path to the downloaded Visual Studio 2017 Community installer
 )
 
-Function Check-VS2017Community {
+Function Check-VS2017OrLater {
 
-	Write-Host "Checking whether Visual Studio 2017 Community is installed or not..."
-
-	if ([IntPtr]::Size -eq 4) {
-		$regpath = 'HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*'
-	}
-	else {
-		$regpath = @(
-			'HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*'
-			'HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*'
-		)
-	}
+	Write-Host "Checking whether Visual Studio/Test Agent (2017 or later) is installed or not..."
 	
-	$app = Get-ItemProperty $regpath | .{process{if($_.DisplayName -and $_.UninstallString) { $_ } }} | Where-Object {$_.DisplayName -match "Visual Studio Community 2017"} | Select DisplayName, DisplayVersion -First 1
-	
-	if($app)
+	if ([IntPtr]::Size -eq 4)  # 32-bit
 	{
+		$VSWherePath = "${env:ProgramFiles}\Microsoft Visual Studio\Installer\vswhere.exe"
+	}
+	else # 64-bit
+	{
+		$VSWherePath = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+	}
+
+	$VSWherePathExisted = Test-Path -Path $VSWherePath
+
+	if ($VSWherePathExisted -eq $false)
+	{
+		Write-Host "Visual Studio 2017 or later is not installed in your computer."	-ForegroundColor Yellow
+		return $false
+	}
+
+	$VSDisplayName = cmd /c "`"$VSWherePath`" -latest -format value -property displayname"
+
+	if ($VSDisplayName)
+	{
+		Write-Host "$VSDisplayName is already installed." 
 		return $true
 	}
 	else
 	{
-		return $false
+		$TestAgentDisplayName = cmd /c "`"$VSWherePath`" -latest -products Microsoft.VisualStudio.Product.TestAgent -format value -property displayname"
+		if ($TestAgentDisplayName)
+		{
+			Write-Host "$TestAgentDisplayName is already installed."
+			return $true			
+		}
+		else
+		{
+			Write-Host "Visual Studio/Test Agent (2017 or later) is not installed in your computer." -ForegroundColor Yellow
+			return $false				
+		}
 	}
 }
 
@@ -58,7 +76,7 @@ Function Install-VS2017Community {
 
 switch($Action) {
 	"Check" {
-		$isInstalled = Check-VS2017Community
+		$isInstalled = Check-VS2017OrLater
 		return $isInstalled
 	}
 
