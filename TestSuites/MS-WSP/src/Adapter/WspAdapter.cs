@@ -69,7 +69,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// Catalog Name to Query
         /// </summary>
-        string catalogName = null;
+        public string catalogName = null;
         /// <summary>
         /// Name of the connected username
         /// </summary>
@@ -94,6 +94,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// WorkId of the current row
         /// </summary>
         uint lastDocumentWorkId = 0;
+        /// <summary>
+        /// Language locale
+        /// </summary>
+        string locale = null;
+        /// <summary>
+        /// Client version
+        /// </summary>
+        public uint clientVersion = 0;
 
         #endregion
 
@@ -117,6 +125,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             userName = wspTestSite.Properties.Get("CLIENT_USERNAME");
             pipePath
                 = string.Format(@"\\{0}\\pipe\MSFTEWDS", serverMachineName);
+            clientVersion = (uint)Convert.ToUInt32
+                (wspTestSite.Properties["ClientVersion"]);
 
             defaultSender = new RequestSender(pipePath);
 
@@ -245,20 +255,30 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// or WSP catalog administration.
         /// </summary>
         public void CPMConnectInRequest()
+        {            
+            int remoteCLient = 1;
+            CPMConnectInRequest(clientVersion, remoteCLient, catalogName);
+        }
+
+        /// <summary>
+        /// Used to send a request to establish a connection with the server
+        /// and start WSP query processing or WSP catalog administration
+        /// </summary>
+        /// <param name="clientVersion">Indicate whether the server is to validate the checksum</param>
+        /// <param name="isClientRemote">Indicate if the client is running on a different machine than the server</param>
+        /// <param name="catalogName">The name of the catalog</param>
+        public void CPMConnectInRequest(uint clientVersion, int isClientRemote, string catalogName)
         {
             int startingIndex = 0;
-            uint clientVersion = 0;
             RequestSender sender = null;
-            var cV = wspTestSite.Properties["ClientVersion"];
-            clientVersion = (uint)Convert.ToUInt32
-                (wspTestSite.Properties["ClientVersion"]);
             string locale = wspTestSite.Properties.Get("LanguageLocale");
 
-            string serverName = serverMachineName;
             byte[] connectInMessage = builder.GetConnectInMessage
-                (clientVersion, 1, userName, clientMachineName,
-                serverName, catalogName, locale);
+                (clientVersion, isClientRemote, userName, clientMachineName,
+                serverMachineName, catalogName, locale);
             uint checkSum = GetCheckSumField(connectInMessage);
+
+
             //Send the connectIn message to Server.
             Byte[] connectOutMessage;
 
@@ -290,14 +310,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     = Helper.GetUInt(connectOutMessage, ref startingIndex);
                 if (msgStatus != 0)
                 {
-                    wspTestSite.CaptureRequirementIfAreEqual<int>(bytesRead,
-                     Constant.SIZE_OF_HEADER, 619,
-                     "Whenever an error occurs during processing of a " +
-                     "message sent by a client, the server MUST respond " +
-                     "with the message header (only) of the message sent " +
-                     "by the client, keeping the _msg field intact.");
-                    //If 4 byte Non Zero field is read as status
-                    // The requirement 620 gets validated
                     wspTestSite.CaptureRequirement(620,
                         "Whenever an error occurs during processing of a " +
                         "message sent by a client, the server MUST set the " +

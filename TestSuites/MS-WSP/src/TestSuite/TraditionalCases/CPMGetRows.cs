@@ -170,16 +170,16 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             switch (argumentType)
             {
                 case ArgumentType.AllValid:
-                    Site.Assert.AreEqual((uint)0, errorCode, "CPMGetRowsIn should succeed.");
+                    Site.Assert.AreEqual((uint)0, errorCode, "Server should return succeed for CPMGetRowsIn.");
                     break;
                 case ArgumentType.InvalidCursor:
-                    Site.Assert.AreEqual((uint)WspErrorCode.ERROR_INVALID_PARAMETER, errorCode, "CPMGetRowsOut should return ERROR_INVALID_PARAMETER if Cursor of CPMGetRowsIn is invalid.");
+                    Site.Assert.AreEqual((uint)WspErrorCode.ERROR_INVALID_PARAMETER, errorCode, "Server should return ERROR_INVALID_PARAMETER if Cursor of CPMGetRowsIn is invalid.");
                     break;
                 case ArgumentType.InvalidRowWidth:
-                    Site.Assert.AreEqual((uint)WspErrorCode.STATUS_INVALID_PARAMETER, errorCode, "CPMGetRowsOut should return STATUS_INVALID_PARAMETER if RowWidth of CPMGetRowsIn is invalid.");
+                    Site.Assert.AreEqual((uint)WspErrorCode.STATUS_INVALID_PARAMETER, errorCode, "Server should return STATUS_INVALID_PARAMETER if RowWidth of CPMGetRowsIn is invalid.");
                     break;
                 case ArgumentType.InvalidReadBuffer:
-                    Site.Assert.AreEqual((uint)WspErrorCode.STATUS_INVALID_PARAMETER, errorCode, "CPMGetRowsOut should return STATUS_INVALID_PARAMETER if ReadBuffer of CPMGetRowsIn is invalid.");
+                    Site.Assert.AreEqual((uint)WspErrorCode.STATUS_INVALID_PARAMETER, errorCode, "Server should return STATUS_INVALID_PARAMETER if ReadBuffer of CPMGetRowsIn is invalid.");
                     break;
 
             }

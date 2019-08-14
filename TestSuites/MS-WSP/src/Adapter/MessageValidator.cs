@@ -2923,63 +2923,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 "Otherwise [WSP return failed], WSP messages return a 32-bit error code " +
                 "that can either be an HRESULT or an NTSTATUS value (see section 1.8).");
 
-            // status should be 0x000000000;
-            //==========    TDI RAISED 19612      ============================
-            //site.CaptureRequirementIfAreEqual<uint>(0x00000000, status, 364,
-            //"The 4 byte '_status' field of the message header is an HRESULT"+
-            //", indicating the status of the requested operation.");
-
+            // Keep reading the checkSum and reserved here even we don't verify them (since TD says that server will verify the checkSum instead of client),
+            // or else the cases will fail due to the pointer does not move 
             uint checkSum = Helper.GetUInt(responseBytes, ref index);
-
-            bool checkSumZero = (messageType == 0x000000C9)
-                || (messageType == 0x000000CB) || (messageType == 0x000000CD)
-                || (messageType == 0x000000CE) || (messageType == 0x000000CF)
-                || (messageType == 0x000000D1) || (messageType == 0x000000D2)
-                || (messageType == 0x000000D7) || (messageType == 0x000000D9)
-                || (messageType == 0x000000E1) || (messageType == 0x000000E6)
-                || (messageType == 0x000000E7) || (messageType == 0x000000E8)
-                || (messageType == 0x000000E9) || (messageType == 0x000000EC)
-                || (messageType == 0x000000F1) || (messageType == 0x000000F2)
-                || (messageType == 0x000000F3) || (messageType == 0x000000F4);
-
-
-            if (checkSumZero)
-            {
-                site.CaptureRequirementIfAreEqual<uint>(0, checkSum, 367,
-                    "For all the messages except CPMConnectIn, " +
-                    "CPMCreateQueryIn, CPMSetBindingsIn," +
-                    "CPMGetRowsIn and CPMFetchValueIn, '_ulChecksum'" +
-                    "field of the message header MUST" +
-                    "be set to 0x00000000.");
-
-            }
-            else
-            {
-                site.CaptureRequirementIfAreNotEqual<uint>(0, checkSum, 623,
-                    "The server MUST validate the _ulChecksum field value if" +
-                    "the message type is one of the following messages: " +
-                    "CPMConnectIn, CPMCreateQueryIn, CPMSetBindingsIn," +
-                    "CPMGetRowsIn, CPMFetchValueIn.");
-
-                #region Windows Behaviour Validation
-                if (site.Properties["IsServerWindows"].ToUpper() == "TRUE")
-                {
-                    uint clientVersionValue = Convert.ToUInt32(site.Properties["ClientVersion"]);
-                    if (clientVersionValue >= 0x00000102)
-                    {
-                        site.CaptureRequirementIfAreNotEqual<uint>(0, checkSum, 405,
-                    "If the 4 bytes '_iClientVersion' field  of the " +
-                    "CPMConnectIn message is set to 0x00000102 or greater," +
-                    "the server MUST validate the _ulChecksum field value" +
-                    "for the following messages: CPMConnectIn, CPMGetRowsIn," +
-                    "CPMSetBindingsIn,CPMCreateQueryIn,CPMFetchValueIn.");
-                    }
-                }
-                #endregion
-
-            }
-
             uint reserved = Helper.GetUInt(responseBytes, ref index);
+
             /* XXX: TDI?
             //Updated by:v-zhil
             //Delta testing

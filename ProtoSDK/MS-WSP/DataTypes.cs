@@ -992,7 +992,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// Specifies Invalid Parameter
         /// </summary>
-        ERROR_INVALID_PARAMETER = 0x80070057
+        ERROR_INVALID_PARAMETER = 0x80070057,
+
+        /// <summary>
+        /// Specifies invalid parameter
+        /// </summary>
+        STATUS_INVALID_PARAMETER_MIX = 0xc0000030,
+
+        /// <summary>
+        /// Specifies out of memory
+        /// </summary>
+        E_OUTOFMEMORY = 0x8007000e,
+
+        /// <summary>
+        /// Catalog name not found
+        /// </summary>
+        MSS_E_CATALOGNOTFOUND = 0x80042103
     }
 
     /// <summary>
@@ -1110,7 +1125,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// A 32-bit unsigned integer indicating the order in which to fetch the rows that MUST be set to one of the following values.
     /// Used in CPMGetRowsIn
     /// </summary>
-    public enum FetchType: uint
+    public enum FetchType : uint
     {
         ForwardOrder = 0x00000000,
         ReverseOrder = 0x00000001

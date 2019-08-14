@@ -139,8 +139,8 @@
 
     <!-- Used to narrow the scope of a query to the specified directory and subdirectories. -->
     <Property name="CreateQuery_columnGuid_2" value="B725F130-47EF-101A-A5F1-02608C9EEBAC" />
-    <Property name="CreateQuery_columnPropertyId_2" value="19" />    
-    
+    <Property name="CreateQuery_columnPropertyId_2" value="19" />
+
     <!--   Column when SetBindings-->
     <Property name="NumberOfSetBindingsColumns" value="1" />
 
@@ -150,7 +150,7 @@
     <Property name="columnStatusOffset_0" value="2" />
     <Property name="columnLengthOffset_0" value="4" />
     <Property name="columnStorageType_0" value="12" />
-    
+
     <!--<Property name="columnGuid_0" value="B725F130-47EF-101A-A5F1-02608C9EEBAC" />
     <Property name="columnPropertyId_0" value="11" />
     <Property name="columnValueOffset_0" value="8" />
