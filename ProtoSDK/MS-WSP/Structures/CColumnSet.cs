@@ -8,7 +8,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CColumnSet structure specifies the column numbers to be returned. This structure is always used in reference to a specific CPidMapper structure.
     /// </summary>
-    public struct CColumnSet : IWSPObject
+    public struct CColumnSet : IWspStructure
     {
         /// <summary>
         /// A 32-bit unsigned integer specifying the number of elements in the indexes array.
@@ -21,7 +21,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public UInt32[] indexes;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(count);
 

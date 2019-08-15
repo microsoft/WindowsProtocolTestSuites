@@ -1,12 +1,11 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling;
 using System;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 {
-    public struct VT_BSTR : IWSPObject
+    public struct VT_BSTR : IWspStructure
     {
         #region Fields
         /// <summary>
@@ -17,26 +16,32 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// MUST be of length cbSize in bytes.
         /// </summary>
-        [Size("cbSize")]
         public byte[] blobData;
         #endregion
 
         #region Constructors
         public VT_BSTR(string val)
         {
-            var buffer = new WSPBuffer();
+            var buffer = new WspBuffer();
 
             buffer.AddUnicodeString(val);
 
-            cbSize = (UInt32)buffer.Offset;
+            cbSize = (UInt32)buffer.WriteOffset;
 
             blobData = buffer.GetBytes();
         }
         #endregion
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
         {
-            buffer.Add(this);
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
+        {
+            buffer.Add(cbSize);
+
+            buffer.AddRange(blobData);
         }
     }
 }

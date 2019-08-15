@@ -38,7 +38,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// Vector restrictions represent queries using the full text vector space model of ranking (see [SALTON] for details).
     /// In addition to the OR operation, they also compute a rank based on the ranking algorithm.
     /// </summary>
-    public struct CVectorRestriction : IWSPObject
+    public struct CVectorRestriction : IWspStructure
     {
         /// <summary>
         /// A CNodeRestriction command tree upon which a ranked OR operation is to be performed.
@@ -50,7 +50,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public _ulRankMethod_Values _ulRankMethod;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             _pres.ToBytes(buffer);
 

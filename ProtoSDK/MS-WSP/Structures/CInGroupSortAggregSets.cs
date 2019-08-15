@@ -8,7 +8,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CInGroupSortAggregSets structure contains information on how the group is sorted with regard to the parent's group ranges.
     /// </summary>
-    public struct CInGroupSortAggregSets : IWSPObject
+    public struct CInGroupSortAggregSets : IWspStructure
     {
         /// <summary>
         /// A 32-bit unsigned integer specifying the number of entries in SortSets.
@@ -25,7 +25,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public CSortSet[] SortSets;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(cCount, 4);
 

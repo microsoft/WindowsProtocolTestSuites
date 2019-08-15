@@ -111,7 +111,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CRestriction structure contains a restriction node in a query command tree.
     /// </summary>
-    public struct CRestriction : IWSPObject
+    public struct CRestriction : IWspStructure
     {
         /// <summary>
         /// A 32-bit unsigned integer indicating the restriction type used for the command tree node. The type determines what is found in the Restriction field of the structure.
@@ -132,7 +132,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public object Restriction;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(_ulType);
 

@@ -34,7 +34,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CSort structure identifies a column, direction, and locale to sort by.
     /// </summary>
-    public struct CSort : IWSPObject
+    public struct CSort : IWspStructure
     {
         /// <summary>
         /// A 32-bit unsigned integer. This is the index in CPidMapper for the property to sort by.
@@ -58,7 +58,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public UInt32 locale;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(this);
         }

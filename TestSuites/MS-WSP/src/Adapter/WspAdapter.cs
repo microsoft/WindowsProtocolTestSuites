@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
@@ -26,6 +27,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// ITestSite to access the configurable data and requirement logging 
         /// </summary>
         public ITestSite wspTestSite = null;
+
+        /// <summary>
+        /// Sends WSP-Messages to the Server for negative scenarios
+        /// (To validate messages with out sending the pre-requisite
+        /// ConnectIn message)
+        /// </summary>
+        public WspClient defaultClient = null;
         /// <summary>
         /// Sends WSP-Messages to the Server for negative scenarios
         /// (To validate messages with out sending the pre-requisite
@@ -43,7 +51,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// Maps list of connected clients
         /// </summary>
-        Dictionary<string, RequestSender> connectedClients = null;
+        Dictionary<string, WspClient> connectedClients = null;
         /// <summary>
         /// Maps a cursor corresponding to a client
         /// </summary>
@@ -115,7 +123,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             base.Initialize(testSite);
             wspTestSite = testSite;
             wspTestSite = TestClassBase.BaseTestSite;
-            connectedClients = new Dictionary<string, RequestSender>();
+            connectedClients = new Dictionary<string, WspClient>();
             wspTestSite.DefaultProtocolDocShortName = "MS-WSP";
             validator = new MessageValidator(wspTestSite);
             serverMachineName
@@ -129,6 +137,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 (wspTestSite.Properties["ClientVersion"]);
 
             defaultSender = new RequestSender(pipePath);
+
+            defaultClient = new WspClient();
+
+            defaultClient.sender = defaultSender;
 
             var parameter = InitializeParameter();
             builder = new MessageBuilder(parameter);
@@ -233,9 +245,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         public override void Reset()
         {
             //defaultSender.handle.Close();
-            foreach (RequestSender sender in connectedClients.Values)
+            foreach (var client in connectedClients.Values)
             {
-                sender.handle.Close();
+                client.sender.handle.Close();
             }
             connectedClients.Clear();
             cursorMap.Clear();
@@ -255,7 +267,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// or WSP catalog administration.
         /// </summary>
         public void CPMConnectInRequest()
-        {            
+        {
             int remoteCLient = 1;
             CPMConnectInRequest(clientVersion, remoteCLient, catalogName);
         }
@@ -269,33 +281,31 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="catalogName">The name of the catalog</param>
         public void CPMConnectInRequest(uint clientVersion, int isClientRemote, string catalogName)
         {
-            int startingIndex = 0;
-            RequestSender sender = null;
+            WspClient client;
+
             string locale = wspTestSite.Properties.Get("LanguageLocale");
 
-            byte[] connectInMessage = builder.GetConnectInMessage
-                (clientVersion, isClientRemote, userName, clientMachineName,
-                serverMachineName, catalogName, locale);
-            uint checkSum = GetCheckSumField(connectInMessage);
-
+            string serverName = serverMachineName;
+            var connectInMessage = builder.GetConnectInMessage(clientVersion, isClientRemote, userName, clientMachineName, serverName, catalogName, locale);
 
             //Send the connectIn message to Server.
-            Byte[] connectOutMessage;
-
             if (!connectedClients.ContainsKey(clientMachineName))
             {
-                sender = new RequestSender(pipePath);
-                connectedClients.Add(clientMachineName, sender);
+                client = new WspClient();
+                client.sender = new RequestSender(pipePath);
+                connectedClients.Add(clientMachineName, client);
             }
             else
             {
-                sender = connectedClients[clientMachineName];
+                client = connectedClients[clientMachineName];
             }
             // Send CPMConnectIn Message
             //Write the message in the Pipe and Get the response 
             //in the outputBuffer
-            bytesRead
-                = sender.SendMessage(connectInMessage, out connectOutMessage);
+
+            var connectInMessageBytes = Helper.ToBytes(connectInMessage);
+            uint checkSum = GetCheckSumField(connectInMessageBytes);
+            client.SendCPMConnectIn(connectInMessage._iClientVersion, connectInMessage._fClientIsRemote, connectInMessage.MachineName, connectInMessage.UserName, connectInMessage.PropertySet1, connectInMessage.PropertySet2, connectInMessage.aPropertySets);
             // RequestSender objects uses path '\\pipe\\MSFTEWDS'
             // for the protocol transport
             wspTestSite.CaptureRequirement(3, @"All messages MUST be " +
@@ -304,10 +314,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             // Get the errorCode & invoke event
             if (CPMConnectOutResponse != null)
             {
-                uint msgId
-                    = Helper.GetUInt(connectOutMessage, ref startingIndex);
-                uint msgStatus
-                    = Helper.GetUInt(connectOutMessage, ref startingIndex);
+                CPMConnectOut connectOutMessage;
+
+                client.ExpectMessage(out connectOutMessage);
+
+                uint msgId = (UInt32)connectOutMessage.Header._msg;
+                uint msgStatus = connectOutMessage.Header._status;
                 if (msgStatus != 0)
                 {
                     wspTestSite.CaptureRequirement(620,
@@ -318,8 +330,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 if ((msgId == (uint)MessageType.CPMConnectOut)
                     && (msgStatus == 0x00000000))
                 {
-                    validator.ValidateConnectOutResponse
-                        (connectOutMessage, checkSum, msgStatus);
+                    validator.ValidateConnectOutResponse(connectOutMessage);
                     isClientConnected = true;
                 }
 
@@ -327,19 +338,19 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 //Delta Testing
                 startingIndexconnect = 0;
                 validator.ValidateHeader
-                    (connectOutMessage,
+                    (connectInMessageBytes,
                     MessageType.CPMConnectOut,
                     checkSum, ref startingIndexconnect);
                 uint obtainedServerVersion
-                 = Helper.GetUInt(connectOutMessage, ref startingIndexconnect);
+                 = Helper.GetUInt(connectInMessageBytes, ref startingIndexconnect);
                 //if serverVersion equals 0x00000102, ir means Windows server 2008 with OS 32-bit
                 //if serverVersion equals 0x00010102, ir means Windows server 2008 with OS 64-bit
                 if (obtainedServerVersion == 0x00000102 || obtainedServerVersion == 0x00010102)
                 {
                     byte[] dWordIn = new byte[4];
                     byte[] dWordOut = new byte[4];
-                    Helper.CopyBytes(connectInMessage, ref startingIndexconnect, dWordIn);
-                    Helper.CopyBytes(connectOutMessage, ref startingIndexconnect, dWordOut);
+                    Helper.CopyBytes(connectInMessageBytes, ref startingIndexconnect, dWordIn);
+                    Helper.CopyBytes(connectInMessageBytes, ref startingIndexconnect, dWordOut);
                     bool isEqual = dWordIn.ToString() == dWordOut.ToString();
 
                     Site.CaptureRequirementIfIsTrue(isEqual, 1055, "When the server receives a CPMConnectIn request from a client," +
@@ -368,26 +379,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         public void CPMCreateQueryIn(bool ENABLEROWSETEVENTS)
         {
             uint[] cursor = null;// to be obtained from the server
-            int startingIndex = 0;
             uint numberOfCategorization = 0;
-            string queryScope
-                = Helper.AddNull(wspTestSite.Properties.Get("QueryPath"));
-            string queryText
-                = Helper.AddNull(wspTestSite.Properties.Get("QueryText"));
+            string queryScope = wspTestSite.Properties.Get("QueryPath");
+            string queryText = wspTestSite.Properties.Get("QueryText");
 
             // Get hold of appropriate Sender (Pipe with/without connection)
-            RequestSender sender = GetRequestSender(isClientConnected);
-            byte[] queryInMessage
-                = builder.GetCPMCreateQueryIn(queryScope,
-                queryText, out numberOfCategorization, ENABLEROWSETEVENTS);
+            var client = GetClient(isClientConnected);
+            var queryInMessage = builder.GetCPMCreateQueryIn(queryScope, queryText, out numberOfCategorization, ENABLEROWSETEVENTS);
             //get checkSum field (It has to be same in the response)
-            uint checkSum = GetCheckSumField(queryInMessage);
-            byte[] queryOutMessage = null;
-            bytesRead
-                = sender.SendMessage(queryInMessage, out queryOutMessage);
+            var queryInMessageBytes = Helper.ToBytes(queryInMessage);
+            uint checkSum = GetCheckSumField(queryInMessageBytes);
+            client.SendCPMCreateQueryIn(queryInMessage.ColumnSet, queryInMessage.RestrictionArray, queryInMessage.SortSet, queryInMessage.CCategorizationSet, queryInMessage.RowSetProperties, queryInMessage.PidMapper, queryInMessage.GroupArray, queryInMessage.Lcid);
             // If the Pipe is not the one with CPMConnectionIn request 
             //already sent
-            if (sender == defaultSender)
+            if (client == defaultClient)
             {
                 // This means that disconnect message has been sent
                 // through the pipe which does not have a connect In
@@ -406,22 +411,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             // If there is any object listening to this event
             if (CPMCreateQueryOutResponse != null)
             {
-                startingIndex = 0; //starting index of the buffer
-                uint msgId
-                    = Helper.GetUInt(queryOutMessage,
-                    ref startingIndex); // MS-WSP Message Type
-                uint msgStatus
-                    = Helper.GetUInt(queryOutMessage,
-                    ref startingIndex); // Message Status
+                CPMCreateQueryOut queryOutMessage;
+
+                client.ExpectMessage(out queryOutMessage);
+
+                uint msgId = (UInt32)queryOutMessage.Header._msg;
+                uint msgStatus = queryOutMessage.Header._status;
                 if (msgStatus != 0) // Error Condition
                 {
-                    wspTestSite.CaptureRequirementIfAreEqual<int>(bytesRead,
-                    Constant.SIZE_OF_HEADER, 619,
-                    "Whenever an error occurs during processing of a " +
-                    "message sent by a client, the server MUST respond " +
-                    "with the message header (only) of the message sent " +
-                    "by the client, keeping the _msg field intact.");
-                    // If a non -zero 4 byte field is read as status
                     // Req 620 is validated.
                     wspTestSite.CaptureRequirement(620,
                         "Whenever an error occurs during processing of a " +
@@ -431,9 +428,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 if ((msgId == (uint)MessageType.CPMCreateQueryOut)
                     && (msgStatus == 0x00000000))
                 {
-                    validator.ValidateCreateQueryOutResponse(queryOutMessage,
-                        checkSum, out cursor, msgStatus,
-                        numberOfCategorization);
+                    queryOutMessage.Request = queryInMessage;
+
+                    validator.ValidateCreateQueryOutResponse(queryOutMessage, numberOfCategorization, out cursor);
                     cursorMap.Add(clientMachineName, cursor[0]);
                 }
                 CPMCreateQueryOutResponse(msgStatus);
@@ -1312,7 +1309,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             byte[] disconnectMessage = builder.GetDisconnectMessage();
             if (connectedClients.ContainsKey(clientMachineName))
             {
-                sender = connectedClients[clientMachineName];
+                sender = connectedClients[clientMachineName].sender;
             }
             else
             {
@@ -1893,6 +1890,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         }
 
         /// <summary>
+        /// Returns a WspClient object to send message to Server 
+        /// </summary>
+        /// <param name="isclientConnected">true if the client is already Connected through CPMConnectIn request</param>
+        /// <returns>WspClient</returns>
+        private WspClient GetClient(bool isclientConnected)
+        {
+            if (isclientConnected)
+            {
+                return connectedClients[clientMachineName];
+            }
+            else
+            {
+                return defaultClient;
+            }
+        }
+
+        /// <summary>
         /// Returns a RequestSender object to send message to Server 
         /// </summary>
         /// <param name="isclientConnected">true if the client is already
@@ -1902,7 +1916,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         {
             if (isclientConnected)
             {
-                return connectedClients[clientMachineName];
+                return connectedClients[clientMachineName].sender;
             }
             else
             {

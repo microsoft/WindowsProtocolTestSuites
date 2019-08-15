@@ -7,7 +7,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CRestrictionArray structure contains an array of restriction nodes.
     /// </summary>
-    public struct CRestrictionArray : IWSPObject
+    public struct CRestrictionArray : IWspStructure
     {
         /// <summary>
         /// An 8-bit unsigned integer specifying the number of CRestriction records contained in the Restriction field.
@@ -28,7 +28,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public CRestriction Restriction;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(count);
 

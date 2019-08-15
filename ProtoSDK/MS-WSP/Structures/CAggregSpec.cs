@@ -71,7 +71,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CAggregSpec structure contains information about an individual aggregate.
     /// </summary>
-    public struct CAggregSpec : IWSPObject
+    public struct CAggregSpec : IWspStructure
     {
         /// <summary>
         /// An 8-bit unsigned integer specifying the type of aggregation used.
@@ -103,7 +103,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public UInt32 idRepresentative;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(type);
 

@@ -8,7 +8,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// DECIMAL is used to represent an exact numeric value with a fixed precision and fixed scale.
     /// </summary>
-    public struct DECIMAL : IWSPObject
+    public struct DECIMAL : IWspStructure
     {
         /// <summary>
         /// The highest 32 bits of the 96-bit integer.
@@ -27,7 +27,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public UInt64 Mid32;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(this);
         }

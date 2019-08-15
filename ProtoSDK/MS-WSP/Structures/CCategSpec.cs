@@ -26,7 +26,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CCategSpec structure contains information about which grouping to perform over query results.
     /// </summary>
-    public struct CCategSpec : IWSPObject
+    public struct CCategSpec : IWspStructure
     {
         /// <summary>
         /// Indicating the type of grouping to perform.
@@ -43,7 +43,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public CRangeCategSpec CRangeCategSpec;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(_ulCategType);
 

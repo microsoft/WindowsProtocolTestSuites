@@ -10,7 +10,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// Aggregate is a database concept for a field calculated using the information retrieved from the query.
     /// The different aggregates that are supported by GSS are defined in the CAggregSpec's type field (specified in section 2.2.1.25).
     /// </summary>
-    public struct CAggregSet : IWSPObject
+    public struct CAggregSet : IWspStructure
     {
         /// <summary>
         /// A 32-bit unsigned integer specifying the number of entries in AggregSpecs.
@@ -22,7 +22,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public CAggregSpec[] AggregSpecs;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(cCount);
 

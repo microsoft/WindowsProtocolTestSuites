@@ -8,7 +8,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CColumnGroupArray structure contains a set of property groups with weights for each property.
     /// </summary>
-    public struct CColumnGroupArray : IWSPObject
+    public struct CColumnGroupArray : IWspStructure
     {
         /// <summary>
         /// A 32-bit unsigned integer containing the number of elements in the aGroupArray array.
@@ -20,7 +20,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public CColumnGroup[] aGroupArray;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(count);
 

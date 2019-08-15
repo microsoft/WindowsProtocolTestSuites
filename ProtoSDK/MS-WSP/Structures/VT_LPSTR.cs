@@ -5,7 +5,7 @@ using System;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 {
-    public struct VT_LPSTR : IWSPObject
+    public struct VT_LPSTR : IWspStructure
     {
         /// <summary>
         /// A 32-bit unsigned integer, indicating the size of the string field including the terminating null. 
@@ -17,7 +17,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public string _string;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(cLen);
 

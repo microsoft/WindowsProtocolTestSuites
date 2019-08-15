@@ -5,7 +5,7 @@ using System;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 {
-    public struct SAFEARRAY<T> : IWSPObject where T : struct
+    public struct SAFEARRAY<T> : IWspStructure where T : struct
     {
         /// <summary>
         /// Unsigned 16-bit integer, indicating the number of dimensions of the multidimensional array.
@@ -30,7 +30,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
         public T[] vData;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(cDims);
 
@@ -45,10 +50,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             foreach (var data in vData)
             {
-                if (data is IWSPObject)
+                if (data is IWspStructure)
                 {
                     buffer.Align(4);
-                    (data as IWSPObject).ToBytes(buffer);
+                    (data as IWspStructure).ToBytes(buffer);
                 }
                 else
                 {

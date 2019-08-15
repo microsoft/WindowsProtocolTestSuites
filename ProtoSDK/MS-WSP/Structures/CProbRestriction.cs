@@ -8,7 +8,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// A CProbRestriction structure contains parameters for probabilistic ranking.
     /// </summary>
-    public struct CProbRestriction : IWSPObject
+    public struct CProbRestriction : IWspStructure
     {
         /// <summary>
         /// A CFullPropSpec structure, indicating which property to use for probabilistic ranking or the columns' group full property specification (which corresponds to _groupPid field in the CColumnGroup structure).
@@ -48,7 +48,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public UInt32 _ProbQueryPid;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             _Property.ToBytes(buffer);
 

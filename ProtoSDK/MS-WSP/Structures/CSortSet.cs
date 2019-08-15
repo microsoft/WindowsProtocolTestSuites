@@ -8,7 +8,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CSortSet structure contains the sort order of the query.
     /// </summary>
-    public struct CSortSet : IWSPObject
+    public struct CSortSet : IWspStructure
     {
         /// <summary>
         /// A 32-bit unsigned integer specifying the number of elements in sortArray.
@@ -20,7 +20,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public CSort[] sortArray;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(count);
 

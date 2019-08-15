@@ -8,7 +8,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CSortAggregSet structure contains information about group sorting.
     /// </summary>
-    public struct CSortAggregSet : IWSPObject
+    public struct CSortAggregSet : IWspStructure
     {
         /// <summary>
         /// A 32-bit unsigned integer specifying the number of entries in SortKeys.
@@ -20,7 +20,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public CAggregSortKey[] SortKeys;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(cCount);
 

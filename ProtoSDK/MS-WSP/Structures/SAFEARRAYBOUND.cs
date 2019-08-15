@@ -8,7 +8,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The SAFEARRAYBOUND structure represents the bounds of one dimension of a SAFEARRAY or SAFEARRAY2.
     /// </summary>
-    public struct SAFEARRAYBOUND : IWSPObject
+    public struct SAFEARRAYBOUND : IWspStructure
     {
         /// <summary>
         /// A 32-bit unsigned integer, specifying the number of elements in the dimension.
@@ -20,7 +20,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public UInt32 lLbound;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(this);
         }

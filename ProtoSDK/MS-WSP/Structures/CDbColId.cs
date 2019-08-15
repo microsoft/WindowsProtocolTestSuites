@@ -21,7 +21,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CDbColId structure contains a column identifier.
     /// </summary>
-    public struct CDbColId : IWSPObject
+    public struct CDbColId : IWspStructure
     {
         #region Fields
         /// <summary>
@@ -64,7 +64,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         }
         #endregion
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(eKind);
 

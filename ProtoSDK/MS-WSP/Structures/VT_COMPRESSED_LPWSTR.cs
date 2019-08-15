@@ -8,7 +8,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The VT_COMPRESSED_LPWSTR structure contains a compressed version of a null-terminated, 16-bit Unicode string.
     /// </summary>
-    public struct VT_COMPRESSED_LPWSTR : IWSPObject
+    public struct VT_COMPRESSED_LPWSTR : IWspStructure
     {
         /// <summary>
         /// A 32-bit unsigned integer, indicating the number of characters in the compressed Unicode string, excluding the terminating null character.
@@ -22,9 +22,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public byte[] bytes;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
         {
-            buffer.Add(this);
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
+        {
+            buffer.Add(ccLen);
+
+            buffer.AddRange(bytes);
         }
     }
 }
