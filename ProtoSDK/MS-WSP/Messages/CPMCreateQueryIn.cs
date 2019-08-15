@@ -9,7 +9,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CPMCreateQueryIn message creates a new query.
     /// </summary>
-    public struct CPMCreateQueryIn : IWSPObject
+    public struct CPMCreateQueryIn : IWspInMessage
     {
         /// <summary>
         /// A 32-bit unsigned integer indicating the number of bytes from the beginning of this field to the end of the message.
@@ -17,47 +17,24 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         public UInt32 Size;
 
         /// <summary>
-        /// A byte field indicating if the ColumnSet field is present. If the value is set to 0x00, then no information will be returned from the query.
-        /// </summary>
-        public byte CColumnSetPresent;
-
-        /// <summary>
         /// A CColumnSet structure containing the property offsets for properties in CPidMapper that are returned as a column. If no properties are in the column set, then no information will be returned from the query.
         /// </summary>
-        public CColumnSet ColumnSet;
-
-        /// <summary>
-        /// A byte field indicating whether the RestrictionArray field is present.
-        /// If set to any nonzero value, the RestrictionArray field MUST be present. If set to 0x00, RestrictionArray MUST be absent.
-        /// </summary>
-        public byte CRestrictionPresent;
+        public CColumnSet? ColumnSet;
 
         /// <summary>
         /// A CRestrictionArray structure containing the command tree of the query.
         /// </summary>
-        public CRestrictionArray RestrictionArray;
-
-        /// <summary>
-        /// A byte field indicating whether the SortSet field is present.
-        /// Note If set to any nonzero value, the SortSet field MUST be present.If set to 0x00, SortSet MUST be absent.
-        /// </summary>
-        public byte CSortSetPresent;
+        public CRestrictionArray? RestrictionArray;
 
         /// <summary>
         /// A CInGroupSortAggregSets structure indicating the sort order of the query.
         /// </summary>
-        public CInGroupSortAggregSets SortSet;
-
-        /// <summary>
-        /// A byte field indicating whether the CCategorizationSet field is present.
-        /// Note If set to any nonzero value, the CCategorizationSet field MUST be present.If set to 0x00, CCategorizationSet MUST be absent.
-        /// </summary>
-        public byte CCategorizationSetPresent;
+        public CInGroupSortAggregSets? SortSet;
 
         /// <summary>
         /// A CCategorizationSet structure that contains the groups for the query.
         /// </summary>
-        public CCategorizationSet CCategorizationSet;
+        public CCategorizationSet? CCategorizationSet;
 
         /// <summary>
         /// A CRowsetProperties structure providing configuration information for the query.
@@ -79,46 +56,111 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public UInt32 Lcid;
 
-        public void ToBytes(WSPBuffer buffer)
+        public WspMessageHeader Header { get; set; }
+
+        public void FromBytes(WspBuffer buffer)
         {
-            var tempBuffer = new WSPBuffer();
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
+        {
+            var bodyBytes = GetBodyBytes();
+
+            UInt32 checksum = Helper.CalculateCheckSum(WspMessageHeader_msg_Values.CPMCreateQueryIn, bodyBytes);
+
+            var header = Header;
+
+            header._ulChecksum = checksum;
+
+            Header = header;
+
+            Header.ToBytes(buffer);
+
+            buffer.AddRange(bodyBytes);
+        }
+
+        public byte[] GetBodyBytes()
+        {
+            var buffer = new WspBuffer();
+
+            var tempBuffer = new WspBuffer();
 
             tempBuffer.Add(Size);
 
-            int tempOffset = tempBuffer.Offset;
+            int tempOffset = tempBuffer.WriteOffset;
 
-            tempBuffer.Add(CColumnSetPresent);
-
-            if (CColumnSetPresent == 0x01)
+            byte CColumnSetPresent;
+            if (ColumnSet.HasValue)
             {
+                CColumnSetPresent = 0x01;
+
+                tempBuffer.Add(CColumnSetPresent);
+
                 tempBuffer.Align(4);
 
-                ColumnSet.ToBytes(tempBuffer);
+                ColumnSet.Value.ToBytes(tempBuffer);
+            }
+            else
+            {
+                CColumnSetPresent = 0x00;
+
+                tempBuffer.Add(CColumnSetPresent);
             }
 
-            tempBuffer.Add(CRestrictionPresent);
+            byte CRestrictionPresent;
 
-            if (CRestrictionPresent != 0x00)
+            if (RestrictionArray.HasValue)
             {
-                RestrictionArray.ToBytes(tempBuffer);
+                CRestrictionPresent = 0x01;
+
+                tempBuffer.Add(CRestrictionPresent);
+
+                RestrictionArray.Value.ToBytes(tempBuffer);
+            }
+            else
+            {
+                CRestrictionPresent = 0x00;
+
+                tempBuffer.Add(CRestrictionPresent);
             }
 
-            tempBuffer.Add(CSortSetPresent);
+            byte CSortSetPresent;
 
-            if (CSortSetPresent != 0x00)
+            if (SortSet.HasValue)
             {
+                CSortSetPresent = 0x01;
+
+                tempBuffer.Add(CSortSetPresent);
+
                 tempBuffer.Align(4);
 
-                SortSet.ToBytes(tempBuffer);
+                SortSet.Value.ToBytes(tempBuffer);
+            }
+            else
+            {
+                CSortSetPresent = 0x00;
+
+                tempBuffer.Add(CSortSetPresent);
             }
 
-            tempBuffer.Add(CCategorizationSetPresent);
+            byte CCategorizationSetPresent;
 
-            if (CCategorizationSetPresent != 0x00)
+            if (CCategorizationSet.HasValue)
             {
+                CCategorizationSetPresent = 0x01;
+
+                tempBuffer.Add(CCategorizationSetPresent);
+
                 tempBuffer.Align(4);
 
-                CCategorizationSet.ToBytes(tempBuffer);
+                CCategorizationSet.Value.ToBytes(tempBuffer);
+            }
+            else
+            {
+                CCategorizationSetPresent = 0x00;
+
+                tempBuffer.Add(CCategorizationSetPresent);
             }
 
             tempBuffer.Align(4);
@@ -131,13 +173,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             tempBuffer.Add(Lcid);
 
-            Size = (UInt32)tempBuffer.Offset;
+            Size = (UInt32)tempBuffer.WriteOffset;
 
             buffer.Add(Size);
 
             var bytesAfterSize = tempBuffer.GetBytes().Skip(tempOffset).ToArray();
 
             buffer.AddRange(bytesAfterSize);
+
+            return buffer.GetBytes();
         }
     }
 }

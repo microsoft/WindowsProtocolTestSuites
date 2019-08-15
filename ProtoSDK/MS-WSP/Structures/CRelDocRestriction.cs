@@ -7,7 +7,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// A CRelDocRestriction structure contains a relevant document ID.
     /// </summary>
-    public struct CRelDocRestriction : IWSPObject
+    public struct CRelDocRestriction : IWspStructure
     {
         /// <summary>
         /// A CBaseStorageVariant structure that specifies a relevant document for a relevance feedback query.
@@ -15,7 +15,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public CBaseStorageVariant _vDocument;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             _vDocument.ToBytes(buffer);
         }

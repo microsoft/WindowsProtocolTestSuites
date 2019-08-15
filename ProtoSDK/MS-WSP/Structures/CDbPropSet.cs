@@ -8,7 +8,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CDbPropSet structure contains a set of properties.
     /// </summary>
-    public struct CDbPropSet : IWSPObject
+    public struct CDbPropSet : IWspStructure
     {
         /// <summary>
         /// A GUID identifying the property set.
@@ -28,7 +28,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public CDbProp[] aProps;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(guidPropertySet);
 

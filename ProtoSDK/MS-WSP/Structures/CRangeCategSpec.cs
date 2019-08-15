@@ -8,7 +8,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CRangeCategSpec structure contains information about ranges for grouping into range-specified buckets.
     /// </summary>
-    public struct CRangeCategSpec : IWSPObject
+    public struct CRangeCategSpec : IWspStructure
     {
         /// <summary>
         /// A 32-bit unsigned integer. Reserved. This field can be set to any arbitrary value when sent.
@@ -29,7 +29,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public RANGEBOUNDARY[] aRangeBegin;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(_lcid);
 

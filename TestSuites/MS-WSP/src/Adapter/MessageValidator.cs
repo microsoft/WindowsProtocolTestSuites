@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Linq;
 using System.Text;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
@@ -34,15 +35,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// ConnectIn request</param>
         /// <param name="messageStatus">Status of the connect
         /// out message that comes from the server.</param>
-        public void ValidateConnectOutResponse
-            (byte[] connectOutResponse,
-            uint connectInCheckSum, uint messageStatus)
+        public void ValidateConnectOutResponse(CPMConnectOut response)
         {
-            int startingIndex = 0;
-            ValidateHeader
-                (connectOutResponse,
-                MessageType.CPMConnectOut,
-                connectInCheckSum, ref startingIndex);
+            ValidateHeader(response.Header, WspMessageHeader_msg_Values.CPMConnectOut);
+
+            UInt32 messageStatus = response.Header._status;
 
             // For any arbitary value of padding fields 
             //of CDbPropSet structure the server response is success
@@ -101,8 +98,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 " CPMConnectIn message, server response is success.");
 
             //-----------------------------  Server Version   
-            uint obtainedServerVersion
-                = Helper.GetUInt(connectOutResponse, ref startingIndex);
+            uint obtainedServerVersion = response._serverVersion;
             uint actualServerVersion
                 = Convert.ToUInt32(site.Properties["WindowsServerVersion"]);
 
@@ -255,7 +251,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             //serverVersion is 0x00000102 when OS is either 32-bit Windows Server 2008, or 32-bit Windows Vista.
             if (obtainedServerVersion == 0x00000102 || obtainedServerVersion == 0x00010102)
             {
-                uint reservered = Helper.GetUInt(connectOutResponse, ref startingIndex);
+                var reservered = response._reserved;
             }
             else
             {
@@ -263,14 +259,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 if (obtainedServerVersion == 0x00000700 || obtainedServerVersion == 0x00010700)
                 {
                     // Verify reservered
-                    uint reservered = Helper.GetUInt(connectOutResponse, ref startingIndex);
-                    byte[] tempByteArray = BitConverter.GetBytes(reservered);
-                    site.CaptureRequirementIfAreEqual<int>(4, tempByteArray.Length, 1006,
+                    var reservered = response._reserved;
+                    site.CaptureRequirementIfAreEqual<int>(4, reservered.Length, 1006,
                         "[CPMConnectOut]If server supports version reporting then this field" +
                         "[_reserved]  the size MUST be 4 bytes.");
 
                     // Verify WINDOWS_MAJOR_VERSION
-                    uint dwWinVerMajor = Helper.GetUInt(connectOutResponse, ref startingIndex);
+                    uint dwWinVerMajor = response.dwWinVerMajor.Value;
                     /* XXX: skip windows version check
                     site.CaptureRequirementIfAreEqual<uint>((uint)dwWinNLSVersion.WINDOWS_MAJOR_VERSION_6, dwWinVerMajor, 1060,
                         "[On Windows-based servers," +
@@ -283,7 +278,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     */
 
                     // Verify WINDOWS_MINOR_VERSION
-                    uint dwWinVerMinor = Helper.GetUInt(connectOutResponse, ref startingIndex);
+                    uint dwWinVerMinor = response.dwWinVerMinor.Value;
 
                     /*
                     site.CaptureRequirementIfIsTrue(dwWinVerMinor
@@ -298,8 +293,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     */
 
                     // Verify NLS_VERSION
-                    uint dwNLSVerMajor = Helper.GetUInt(connectOutResponse, ref startingIndex);
-                    uint dwNLSVerMinor = Helper.GetUInt(connectOutResponse, ref startingIndex);
+                    uint dwNLSVerMajor = response.dwNLSVerMajor.Value;
+                    uint dwNLSVerMinor = response.dwNLSVerMinor.Value;
 
                     bool isTDI42332Fixed = Boolean.Parse(site.Properties.Get("TDI42332Fixed"));
                     if (isTDI42332Fixed)
@@ -581,18 +576,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// the response message</param>
         /// <param name="numberOfCatSet">Number of 
         /// CategorizationSet present</param>
-        public void ValidateCreateQueryOutResponse
-            (Byte[] queryOutResponse,
-            uint queryInCheckSum,
-            out uint[] cursor,
-            uint messageStatus, uint numberOfCatSet)
+        public void ValidateCreateQueryOutResponse(CPMCreateQueryOut response, UInt32 numberOfCatSet, out uint[] cursor)
         {
-            int startingIndex = 0;
+            ValidateHeader(response.Header, WspMessageHeader_msg_Values.CPMCreateQueryOut);
 
-            ValidateHeader
-                (queryOutResponse,
-                MessageType.CPMCreateQueryOut,
-                queryInCheckSum, ref startingIndex);
+            UInt32 messageStatus = response.Header._status;
 
             // For arbitary value in padding field of 'paddingPropSet' 
             // the server response is success.Hence validated
@@ -722,8 +710,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 "server response is success.");
 
             //----------------------------   _fTrueSequential  
-            uint trueSequential
-                = Helper.GetUInt(queryOutResponse, ref startingIndex);
+            uint trueSequential = response._fTrueSequential;
             site.CaptureRequirementIfIsTrue
                 (((0x00000000 == trueSequential)
                 || (0x00000001 == trueSequential)), 476,
@@ -732,8 +719,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 "of the following values: (0x00000000) or  (0x00000001).");
 
             //----------------------------   _fWorkIdUnique    
-            uint workIdUnique
-                = Helper.GetUInt(queryOutResponse, ref startingIndex);
+            uint workIdUnique = response._fWorkIdUnique;
             site.CaptureRequirementIfIsTrue
                 (((0x00000000 == workIdUnique)
                 || (0x000000001 == workIdUnique)), 477,
@@ -741,17 +727,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 "CPMCreateQueryOut message MUST be set to one " +
                 "of the following values: (0x00000000) or (0x00000001).");
 
+
             //Code has to be written to pass the length of the array.
             //It can be written once createqueryIn is done.
             //Current implementation do not have categorizationSet
             //So, it cannot be calculated at this point of time.
-            cursor = new uint[numberOfCatSet + 1];
-            for (int i = 0; i < numberOfCatSet + 1; i++)
-            {
-                //----------------------------      aCursors       
-                cursor[i]
-                    = Helper.GetUInt(queryOutResponse, ref startingIndex);
-            }
+            cursor = response.aCursors;
             //If numberOfCatSet + 1 Cursors are read from the response.
             // The following requirement gets validated
             site.CaptureRequirement(478, "The 4 bytes 'aCursors '" +
@@ -1325,6 +1306,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             ValidateHeader(freeCursorResponse, MessageType.CPMFreeCursorIn,
                 freeCursorCheckSum, ref startingIndex);
+
+            var header = new WspMessageHeader();
+            Helper.FromBytes(ref header, freeCursorResponse);
+
+            if (header._status != 0)
+            {
+                // failed message
+                return;
+            }
+
             // If the Server Responds to the CPMFreeCursorIn message
             // and ValidateHeader method returns successfully.
             // Requirement 797 is validated.
@@ -1363,6 +1354,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             uint lastOffsetValue = 0; // Offset of first Row field
             ValidateHeader(rowsOutResponse, MessageType.CPMGetRowsIn,
                 rowsInCheckSum, ref startingIndex);
+
+            var header = new WspMessageHeader();
+            Helper.FromBytes(ref header, rowsOutResponse);
+
+            if (header._status != 0)
+            {
+                // failed message
+                return;
+            }
+
             //---------------------    _cRowsReturned   -----------------------
             uint rowsReturned
                 = Helper.GetUInt(rowsOutResponse, ref startingIndex);
@@ -1600,7 +1601,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                                 variableData = ReadVariableDataFromBuffer(rowsOutResponse,
                                 (uint)offset2 - clientBase, actualLength);
                             }
-                                
+
                             // If VariableData is obtained as specified.
                             //Requirement 11 validated
                             site.CaptureRequirement(11,
@@ -2880,8 +2881,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             MessageType requestType, uint requestMessageChecksum,
             ref int index)
         {
+            var buffer = new WspBuffer(responseBytes);
 
-            uint messageType = Helper.GetUInt(responseBytes, ref index);
+            var header = new WspMessageHeader();
+
+            header.FromBytes(buffer);
+
+            index = buffer.ReadOffset;
+
+            uint messageType = (UInt32)header._msg;
             //type and messageType are Equal
             uint logicalOrredValue
                 = Constant.GetAllPossibleMessageTypeValue();
@@ -2900,7 +2908,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 "_msg field value to see if it is a known type.");
             LogIfValidMessage(requestType, messageType);
 
-            uint status = Helper.GetUInt(responseBytes, ref index);
+            uint status = header._status;
 
             #region Windows Behaviour Validation
             if (site.Properties["IsServerWindows"].ToUpper() == "TRUE")
@@ -2923,11 +2931,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 "Otherwise [WSP return failed], WSP messages return a 32-bit error code " +
                 "that can either be an HRESULT or an NTSTATUS value (see section 1.8).");
 
-            // Keep reading the checkSum and reserved here even we don't verify them (since TD says that server will verify the checkSum instead of client),
-            // or else the cases will fail due to the pointer does not move 
-            uint checkSum = Helper.GetUInt(responseBytes, ref index);
-            uint reserved = Helper.GetUInt(responseBytes, ref index);
+            // status should be 0x000000000;
+            //==========    TDI RAISED 19612      ============================
+            //site.CaptureRequirementIfAreEqual<uint>(0x00000000, status, 364,
+            //"The 4 byte '_status' field of the message header is an HRESULT"+
+            //", indicating the status of the requested operation.");
 
+
+
+
+
+
+
+            // Keep reading the checkSum and reserved here even we don't verify them (since TD says that server will verify the checkSum instead of client).
+            uint checkSum = header._ulChecksum;
+
+
+            uint reserved = header._ulReserved2;
             /* XXX: TDI?
             //Updated by:v-zhil
             //Delta testing
@@ -2942,6 +2962,85 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             }
             */
         }
+
+        /// <summary>
+        /// Validates MS-WSP Message Header
+        /// </summary>
+        /// <param name="responseBytes">response message BLOB</param>
+        /// <param name="requestType">type of WSP message</param>
+        /// <param name="requestMessageChecksum">checksum of 
+        /// request message</param>
+        /// <param name="index">index of the BLOB</param>
+        public void ValidateHeader(WspMessageHeader header, WspMessageHeader_msg_Values requestType)
+        {
+            uint messageType = (UInt32)header._msg;
+            //type and messageType are Equal
+            uint logicalOrredValue
+                = Constant.GetAllPossibleMessageTypeValue();
+            //Updated by:v-zhil
+            //Delta testing
+            bool isValidMessage
+                = (messageType & logicalOrredValue) == messageType;
+            site.CaptureRequirementIfIsTrue(isValidMessage, 363,
+                "The value of the 4 bytes 'msg' field of the message header is one of the following: " +
+                "0x000000C8, 0x000000C9, 0x000000CA, 0x000000CB, 0x000000CC, 0x000000CD, 0x000000CE," +
+                "0x000000CF, 0x000000D0, 0x000000D1, 0x000000D2, 0x000000D7,  0x000000D9, 0x000000E1, " +
+                "0x000000E4, 0x000000E6, 0x000000E7, 0x000000E8, 0x000000E9, 0x000000EC,0x000000F1,0x000000F2,0x000000F3,0x000000F4.");
+
+            site.CaptureRequirementIfIsTrue(isValidMessage, 621,
+                "When a message arrives, the server MUST check the" +
+                "_msg field value to see if it is a known type.");
+            LogIfValidMessage((MessageType)(UInt32)requestType, messageType);
+
+            uint status = header._status;
+
+            #region Windows Behaviour Validation
+            if (site.Properties["IsServerWindows"].ToUpper() == "TRUE")
+            {
+                bool isValidNTStatus = IsValidNTStatus(status);
+                site.CaptureRequirementIfIsTrue(isValidNTStatus, 1,
+                    "This protocol also uses NTSTATUS values taken from" +
+                    "the NTSTATUS number space.");
+                site.CaptureRequirementIfIsTrue(isValidNTStatus, 2,
+                    "<1>Windows only uses the values specified" +
+                    "in [MS-ERREF].");
+            }
+            #endregion
+
+            //Updated by:v-zhil
+            //Delta testing
+            // If 32 bit Status field is read as Response Status,
+            // Requirement 593 is validated
+            site.CaptureRequirementIfIsTrue(IsValidNTStatus(status), 593,
+                "Otherwise [WSP return failed], WSP messages return a 32-bit error code " +
+                "that can either be an HRESULT or an NTSTATUS value (see section 1.8).");
+
+            // status should be 0x000000000;
+            //==========    TDI RAISED 19612      ============================
+            //site.CaptureRequirementIfAreEqual<uint>(0x00000000, status, 364,
+            //"The 4 byte '_status' field of the message header is an HRESULT"+
+            //", indicating the status of the requested operation.");
+
+            // Keep reading the checkSum and reserved here even we don't verify them (since TD says that server will verify the checkSum instead of client).
+            uint checkSum = header._ulChecksum;
+
+
+            uint reserved = header._ulReserved2;
+            /* XXX: TDI?
+            //Updated by:v-zhil
+            //Delta testing
+            //For all the messages except CPMConnectIn.
+            bool checkgetrowin =(messageType == 0x000000CC);
+            if (!checkgetrowin)
+            {
+                //MS-WSP_R370
+                site.CaptureRequirementIfAreEqual<uint>(0, reserved, 370,
+                    "[Message Headers]This field MUST be set to 0x00000000 " +
+                    "except for the CPMGetRowsIn message.");
+            }
+            */
+        }
+
         /// <summary>
         /// Validates the eState field of  CPMCiStateInOut message
         /// </summary>

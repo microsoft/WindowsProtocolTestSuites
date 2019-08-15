@@ -8,7 +8,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The SProperty structure contains information about single property weight.
     /// </summary>
-    public struct SProperty : IWSPObject
+    public struct SProperty : IWspStructure
     {
         /// <summary>
         /// A 32-bit unsigned integer specifying a property identifier.
@@ -20,7 +20,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public UInt32 _weight;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(this);
         }

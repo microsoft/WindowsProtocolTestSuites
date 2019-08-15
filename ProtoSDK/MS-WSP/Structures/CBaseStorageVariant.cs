@@ -111,7 +111,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
         /// <summary>
         /// A 16-byte binary value containing a GUID.
-        /// </summary>        VT_CLSID = 0x0048,
+        /// </summary>
+        VT_CLSID = 0x0048,
 
         /// <summary>
         /// A 4-byte unsigned integer count of bytes in the blob, followed by that many bytes of data.
@@ -166,7 +167,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CBaseStorageVariant structure contains the value on which to perform a match operation for a property specified in the CPropertyRestriction structure.
     /// </summary>
-    public struct CBaseStorageVariant : IWSPObject
+    public struct CBaseStorageVariant : IWspStructure
     {
         #region Fields
         /// <summary>
@@ -192,7 +193,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         public object vValue;
         #endregion
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(vType);
 
@@ -364,7 +370,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             }
             else
             {
-                (vValue as IWSPObject).ToBytes(buffer);
+                (vValue as IWspStructure).ToBytes(buffer);
             }
         }
     }

@@ -8,7 +8,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CNodeRestriction structure contains an array of command tree restriction nodes for constraining the results of a query.
     /// </summary>
-    public struct CNodeRestriction : IWSPObject
+    public struct CNodeRestriction : IWspStructure
     {
         /// <summary>
         /// A 32-bit unsigned integer specifying the number of CRestriction structures contained in the _paNode field.
@@ -22,7 +22,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public CRestriction[] _paNode;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(_cNode);
 

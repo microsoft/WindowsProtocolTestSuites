@@ -25,7 +25,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// There is no conversion between property IDs and property names. Property names are case insensitive.
     /// (The CFullPropSpec structure corresponds to the FULLPROPSPEC structure described in [MSDN-FULLPROPSPEC].)
     /// </summary>
-    public struct CFullPropSpec : IWSPObject
+    public struct CFullPropSpec : IWspStructure
     {
         /// <summary>
         /// The GUID of the property set to which the property belongs.
@@ -48,7 +48,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public string Property_name;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(_guidPropSet, 8);
 

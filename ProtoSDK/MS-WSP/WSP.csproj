@@ -44,10 +44,13 @@
     <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Client\WspClient.cs" />
     <Compile Include="DataTypes.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="MessageBuilder.cs" />
+    <Compile Include="Messages\CPMConnectOut.cs" />
     <Compile Include="Messages\CPMCreateQueryIn.cs" />
+    <Compile Include="Messages\CPMCreateQueryOut.cs" />
     <Compile Include="Structures\CAggregSet.cs" />
     <Compile Include="Structures\CAggregSortKey.cs" />
     <Compile Include="Structures\CAggregSpec.cs" />
@@ -97,8 +100,9 @@
     <Compile Include="Structures\VT_LPSTR.cs" />
     <Compile Include="Structures\VT_LPWSTR.cs" />
     <Compile Include="Structures\VT_VECTOR.cs" />
-    <Compile Include="WSPBuffer.cs" />
-    <Compile Include="WSPObject.cs" />
+    <Compile Include="WspBuffer.cs" />
+    <Compile Include="WspMessageHeader.cs" />
+    <Compile Include="WspObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

@@ -223,8 +223,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <param name="catalogName">Name of the Catalog 
         /// under operation</param>
         /// <param name="languageLocale">Language Locale</param>
-        /// <returns>Connect In message BLOB</returns>
-        public byte[] GetConnectInMessage(uint clientVersion, int isRemote,
+        /// <returns>CPMConnectIn message</returns>
+        public CPMConnectIn GetConnectInMessage(uint clientVersion, int isRemote,
             string userName, string machineName, string serverMachineName,
             string catalogName, string languageLocale)
         {
@@ -253,10 +253,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             message.aPropertySets[2] = GetAPropertySet3(serverMachineName); // server
             message.aPropertySets[3] = GetAPropertySet4(catalogName); // Catalog
 
-            var mainBlob = ToBytes(message);
+            message.Header = new WspMessageHeader
+            {
+                _msg = WspMessageHeader_msg_Values.CPMConnectIn,
+            };
 
-            return AddMessageHeader(MessageType.CPMConnectIn, mainBlob);
-            //Adding Message Header
+            return message;
         }
 
 
@@ -1376,11 +1378,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             array.cDims = 1;
             array.fFeatures = features;
 
-            var tempBuffer = new WSPBuffer();
-            if (arrayValue[0] is IWSPObject)
+            var tempBuffer = new WspBuffer();
+            if (arrayValue[0] is IWspStructure)
             {
 
-                (arrayValue[0] as IWSPObject).ToBytes(tempBuffer);
+                (arrayValue[0] as IWspStructure).ToBytes(tempBuffer);
 
             }
             else
@@ -1388,7 +1390,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 tempBuffer.Add(arrayValue[0]);
             }
 
-            array.cbElements = (UInt32)tempBuffer.Offset;
+            array.cbElements = (UInt32)tempBuffer.WriteOffset;
 
             array.Rgsabound = new SAFEARRAYBOUND[] { new SAFEARRAYBOUND() { cElements = (UInt32)arrayValue.Length, lLbound = 0 } };
             array.vData = arrayValue;
@@ -1567,7 +1569,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             var result = new CColumnSet();
 
             // Index of Properties to be queried
-            uint[] indexes = new uint[] { 0};
+            uint[] indexes = new uint[] { 0 };
             // Links to the 'pidMapper' field
 
             result.count = (UInt32)indexes.Length;
@@ -1783,8 +1785,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <param name="numberOfCategorization">Number of 
         /// Categorization Set</param>
         /// <param name="ENABLEROWSETEVENTS">flag for ENABLEROWSETEVENTS</param>
-        public byte[] GetCPMCreateQueryIn
-            (string path, string queryText, out uint numberOfCategorization, bool ENABLEROWSETEVENTS)
+        public CPMCreateQueryIn GetCPMCreateQueryIn(string path, string queryText, out uint numberOfCategorization, bool ENABLEROWSETEVENTS)
         {
             numberOfCategorization = 0;
 
@@ -1794,17 +1795,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             var message = new CPMCreateQueryIn();
 
-            message.CColumnSetPresent = 0x01;
-
             message.ColumnSet = GetColumnSet();
-
-            message.CRestrictionPresent = 0x01;
 
             message.RestrictionArray = GetRestrictionArray(queryString, searchScope);
 
-            message.CSortSetPresent = 0x00;
+            message.SortSet = null;
 
-            message.CCategorizationSetPresent = 0x00;
+            message.CCategorizationSet = null;
 
             message.RowSetProperties = GetRowSetProperties(ENABLEROWSETEVENTS);
 
@@ -1818,9 +1815,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             message.Lcid = parameter.LCID_VALUE;
 
-            var messageBlob = ToBytes(message);
+            message.Header = new WspMessageHeader
+            {
+                _msg = WspMessageHeader_msg_Values.CPMCreateQueryIn,
+            };
 
-            return AddMessageHeader(MessageType.CPMCreateQueryIn, messageBlob);
+            return message;
         }
         #endregion
 
@@ -1961,9 +1961,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             return size;
         }
 
-        private byte[] ToBytes(IWSPObject obj)
+        private byte[] ToBytes(IWspInMessage obj)
         {
-            var buffer = new WSPBuffer();
+            var buffer = new WspBuffer();
 
             obj.ToBytes(buffer);
 

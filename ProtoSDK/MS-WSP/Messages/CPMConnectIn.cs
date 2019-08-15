@@ -8,7 +8,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CPMConnectIn message begins a session between the client and server.
     /// </summary>
-    public struct CPMConnectIn : IWSPObject
+    public struct CPMConnectIn : IWspInMessage
     {
         /// <summary>
         /// A 32-bit integer indicating whether the server is to validate the checksum value specified in the _ulChecksum field of the message headers for messages sent by the client.
@@ -70,13 +70,39 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public CDbPropSet[] aPropertySets;
 
-        public void ToBytes(WSPBuffer buffer)
+        public WspMessageHeader Header { get; set; }
+
+        public void FromBytes(WspBuffer buffer)
         {
-            buffer.Add(_iClientVersion);
+            throw new NotImplementedException();
+        }
 
-            buffer.Add(_fClientIsRemote);
+        public void ToBytes(WspBuffer buffer)
+        {
+            var bodyBytes = GetBodyBytes();
 
-            var bufferForBlob1 = new WSPBuffer();
+            UInt32 checksum = Helper.CalculateCheckSum(WspMessageHeader_msg_Values.CPMConnectIn, bodyBytes);
+
+            var header = Header;
+
+            header._ulChecksum = checksum;
+
+            Header = header;
+
+            Header.ToBytes(buffer);
+
+            buffer.AddRange(bodyBytes);
+        }
+
+        private byte[] GetBodyBytes()
+        {
+            var tempBuffer = new WspBuffer();
+
+            tempBuffer.Add(_iClientVersion);
+
+            tempBuffer.Add(_fClientIsRemote);
+
+            var bufferForBlob1 = new WspBuffer();
 
             bufferForBlob1.Add(cPropSets);
 
@@ -84,11 +110,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             PropertySet2.ToBytes(bufferForBlob1);
 
-            _cbBlob1 = (UInt32)bufferForBlob1.Offset;
+            _cbBlob1 = (UInt32)bufferForBlob1.WriteOffset;
 
-            buffer.Add(_cbBlob1);
+            tempBuffer.Add(_cbBlob1);
 
-            var bufferForBlob2 = new WSPBuffer();
+            var bufferForBlob2 = new WspBuffer();
 
             bufferForBlob2.Add(cExtPropSet, 8);
 
@@ -97,23 +123,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 propertySet.ToBytes(bufferForBlob2);
             }
 
-            _cbBlob2 = (UInt32)bufferForBlob2.Offset;
+            _cbBlob2 = (UInt32)bufferForBlob2.WriteOffset;
 
-            buffer.Add(_cbBlob2, 8);
+            tempBuffer.Add(_cbBlob2, 8);
 
-            buffer.AddRange(new byte[12]);
+            tempBuffer.AddRange(new byte[12]);
 
-            buffer.AddUnicodeString(MachineName);
+            tempBuffer.AddUnicodeString(MachineName);
 
-            buffer.AddUnicodeString(UserName);
+            tempBuffer.AddUnicodeString(UserName);
 
-            buffer.Align(8);
+            tempBuffer.Align(8);
 
-            buffer.AddRange(bufferForBlob1.GetBytes());
+            tempBuffer.AddRange(bufferForBlob1.GetBytes());
 
-            buffer.Align(8);
+            tempBuffer.Align(8);
 
-            buffer.AddRange(bufferForBlob2.GetBytes());
+            tempBuffer.AddRange(bufferForBlob2.GetBytes());
+
+            return tempBuffer.GetBytes();
         }
     }
 }

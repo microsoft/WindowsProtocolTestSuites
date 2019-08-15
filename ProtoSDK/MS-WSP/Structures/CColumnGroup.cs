@@ -8,7 +8,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CColumnGroup structure contains information about a property's weight in a single group.
     /// </summary>
-    public struct CColumnGroup : IWSPObject
+    public struct CColumnGroup : IWspStructure
     {
         /// <summary>
         /// A 32-bit unsigned integer containing the number of elements in the Props array.
@@ -26,7 +26,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public SProperty[] Props;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(count);
 

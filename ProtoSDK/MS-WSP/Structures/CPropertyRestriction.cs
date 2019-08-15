@@ -68,7 +68,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// For each row, the value returned by the specific property in the row is compared against the constant to determine if it has the relationship specified by the _relop field.
     /// For the comparison to be true, the datatypes of the values MUST match.
     /// </summary>
-    public struct CPropertyRestriction : IWSPObject
+    public struct CPropertyRestriction : IWspStructure
     {
         /// <summary>
         /// A 32-bit unsigned integer specifying the relation to perform on the property.
@@ -90,7 +90,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public UInt32 _lcid;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(_relop);
 

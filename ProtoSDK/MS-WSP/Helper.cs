@@ -41,7 +41,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// new bytes are to be appended</param>
         /// <param name="index">starting index (from where to append)</param>
         /// <param name="bytesTobeAppended">source bytes</param>
-        public static void CopyBytes(byte[] mainBlob, 
+        public static void CopyBytes(byte[] mainBlob,
             ref int index, byte[] bytesTobeAppended)
         {
             if (mainBlob.Length - index >= bytesTobeAppended.Length)
@@ -57,20 +57,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 throw new IndexOutOfRangeException(
                     "Source buffer is not suffcient for the copy Operation");
             }
-        }     
-
-
-
-        /// <summary>
-        /// Appends Unicode NULL '\0' on a given string
-        /// </summary>
-        /// <param name="value">string value to append Null to</param>
-        /// <returns>Null terminated Unicode string</returns>
-        public static string AddNull(string value)
-        {
-            StringBuilder builder = new StringBuilder(value);
-            builder.Append('\0');
-            return builder.ToString();
         }
 
         /// <summary>
@@ -104,7 +90,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <param name="condition">Condition to be verified</param>
         /// <param name="requirementId">Requirement Id</param>
         /// <param name="description">Requirement Description or text</param>
-        public static void Requires(bool condition, 
+        public static void Requires(bool condition,
             int requirementId, string description)
         {
             //Contracts.Requires(condition, 
@@ -129,7 +115,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <param name="bytes">BLOB to read 4 bytes from</param>
         /// <param name="startingIndex">offset in the BLOB</param>
         /// <returns>4 byte unsigned integer</returns>
-        public static uint GetUIntWithOutAdvancing(byte[] bytes, 
+        public static uint GetUIntWithOutAdvancing(byte[] bytes,
             int startingIndex)
         {
             byte[] tempArray = new byte[Constant.SIZE_OF_UINT];
@@ -192,5 +178,47 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             }
             return size;
         }
+
+        public static byte[] ToBytes(IWspObject message)
+        {
+            var buffer = new WspBuffer();
+
+            message.ToBytes(buffer);
+
+            return buffer.GetBytes();
+        }
+
+        public static void FromBytes<T>(ref T t, byte[] bytes) where T : struct, IWspObject
+        {
+            var buffer = new WspBuffer(bytes);
+
+            t.FromBytes(buffer);
+        }
+
+        public static UInt32 CalculateCheckSum(WspMessageHeader_msg_Values msg, byte[] messageBlob)
+        {
+            UInt32 checksum = 0;
+
+            if (messageBlob.Length % 4 != 0)
+            {
+                Array.Resize
+                    (ref messageBlob,
+                    messageBlob.Length
+                    + (4 - messageBlob.Length % 4));
+            }
+
+            int index = 0;
+
+            while (index != messageBlob.Length)
+            {
+                checksum += Helper.GetUInt(messageBlob, ref index);
+            }
+
+            checksum = checksum ^ 0x59533959;
+            checksum -= (UInt32)msg;
+
+            return checksum;
+        }
     }
 }
+

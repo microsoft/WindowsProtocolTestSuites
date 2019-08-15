@@ -11,7 +11,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// The GSS is free to match on the string in a variety of ways.
     /// It can drop words, add alternate forms, or make no changes.
     /// </summary>
-    public struct CNatLanguageRestriction : IWSPObject
+    public struct CNatLanguageRestriction : IWspStructure
     {
         /// <summary>
         /// A CFullPropSpec structure. This field indicates the property on which to perform the match operation.
@@ -34,7 +34,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public UInt32 Lcid;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             _Property.ToBytes(buffer);
 

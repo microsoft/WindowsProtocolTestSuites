@@ -26,7 +26,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The RANGEBOUNDARY structure contains a single range.
     /// </summary>
-    public struct RANGEBOUNDARY : IWSPObject
+    public struct RANGEBOUNDARY : IWspStructure
     {
         /// <summary>
         /// A 32-bit unsigned integer that indicates which type of boundary is represented by this structure.
@@ -59,7 +59,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public string Label;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(ulType);
 

@@ -3,6 +3,7 @@
 
 using Microsoft.Win32.SafeHandles;
 using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
@@ -121,6 +122,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                     messageBLOB,
                     (uint)messageBLOB.Length,
                     readBuffer, BUFFER_SIZE, out bufferRead, IntPtr.Zero);
+
+                readBuffer = readBuffer.Take(bufferRead).ToArray();
             }
             return bufferRead;
         }

@@ -5,7 +5,7 @@ using System;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 {
-    public struct VT_LPWSTR : IWSPObject
+    public struct VT_LPWSTR : IWspStructure
     {
         #region Fields
         /// <summary>
@@ -27,7 +27,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         }
         #endregion
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             if (String.IsNullOrEmpty(_string))
             {
@@ -37,7 +42,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             }
             else
             {
-                cLen = (UInt32)_string.Length;
+                cLen = (UInt32)(_string.Length + 1);
 
                 buffer.Add(cLen);
 

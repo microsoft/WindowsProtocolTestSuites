@@ -21,7 +21,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CAggregSortKey structure contains information about sort order over single column.
     /// </summary>
-    public struct CAggregSortKey : IWSPObject
+    public struct CAggregSortKey : IWspStructure
     {
         /// <summary>
         /// A 32-bit unsigned integer specifying sort order.
@@ -33,7 +33,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public CAggregSpec ColumnSpec;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(order);
 

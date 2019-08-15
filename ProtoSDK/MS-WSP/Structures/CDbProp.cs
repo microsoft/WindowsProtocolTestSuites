@@ -8,7 +8,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CDbProp structure contains a database property. These properties control how queries are interpreted by the GSS.
     /// </summary>
-    public struct CDbProp : IWSPObject
+    public struct CDbProp : IWspStructure
     {
         /// <summary>
         /// A 32-bit unsigned integer indicating the property ID.This field uniquely identifies each property in a particular query, but has no other interpretation.
@@ -35,7 +35,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public CBaseStorageVariant vValue;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(DBPROPID);
 

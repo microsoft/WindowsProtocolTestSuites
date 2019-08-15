@@ -68,7 +68,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CRowsetProperties structure contains configuration information for a query.
     /// </summary>
-    public struct CRowsetProperties : IWSPObject
+    public struct CRowsetProperties : IWspStructure
     {
         /// <summary>
         /// _uBooleanOptions
@@ -98,7 +98,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public UInt32 _cCmdTimeout;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(this);
         }

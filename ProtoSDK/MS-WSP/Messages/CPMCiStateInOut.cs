@@ -87,7 +87,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CPMCiStateInOut message contains information about the state of the GSS.
     /// </summary>
-    public struct CPMCiStateInOut : IWSPObject
+    public struct CPMCiStateInOut : IWspInMessage, IWspOutMessage
     {
         /// <summary>
         /// A 32-bit unsigned integer indicating the size, in bytes, of this message (excluding the common header). MUST be set to 0x0000003C.
@@ -165,7 +165,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public UInt32 dwPropCacheSize;
 
-        public void ToBytes(WSPBuffer buffer)
+        public WspMessageHeader Header { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public IWspInMessage Request { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(this);
         }

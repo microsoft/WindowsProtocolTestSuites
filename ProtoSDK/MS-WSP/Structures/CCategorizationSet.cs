@@ -8,7 +8,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CCategorizationSet structure contains information on how the grouping is done at each level in a hierarchical result set.
     /// </summary>
-    public struct CCategorizationSet : IWSPObject
+    public struct CCategorizationSet : IWspStructure
     {
         /// <summary>
         /// A 32-bit unsigned integer containing the number of elements in the categories array.
@@ -20,7 +20,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public CCategorizationSpec[] categories;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(count);
 

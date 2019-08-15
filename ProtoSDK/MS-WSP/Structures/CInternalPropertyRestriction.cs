@@ -8,7 +8,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CInternalPropertyRestriction structure contains a property value to match with an operation.
     /// </summary>
-    public struct CInternalPropertyRestriction : IWSPObject
+    public struct CInternalPropertyRestriction : IWspStructure
     {
         /// <summary>
         /// A 32-bit integer specifying the relation to perform on the property.
@@ -42,7 +42,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public CRestriction nextRestriction;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(_relop);
 

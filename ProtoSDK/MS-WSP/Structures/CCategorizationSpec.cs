@@ -8,7 +8,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CCategorizationSpec structure specifies how grouping is done at one level in a hierarchical query.
     /// </summary>
-    public struct CCategorizationSpec : IWSPObject
+    public struct CCategorizationSpec : IWspStructure
     {
         /// <summary>
         /// A CColumnSet structure indicating the columns to return at that level in a hierarchical result set.
@@ -41,7 +41,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public UInt32 _cMaxResults;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             _csColumns.ToBytes(buffer);
 

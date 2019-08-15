@@ -30,7 +30,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CContentRestriction structure contains a word or phrase to match in the inverted index for a specific property. 
     /// </summary>
-    public struct CContentRestriction : IWSPObject
+    public struct CContentRestriction : IWspStructure
     {
         /// <summary>
         /// A CFullPropSpec structure. This field indicates the property on which to perform a match operation.
@@ -58,7 +58,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public _ulGenerateMethod_Values _ulGenerateMethod;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             _Property.ToBytes(buffer);
 

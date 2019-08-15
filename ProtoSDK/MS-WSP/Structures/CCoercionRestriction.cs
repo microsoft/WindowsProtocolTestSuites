@@ -12,7 +12,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CCoercionRestriction structure contains the modifier and rank coercion operation.
     /// </summary>
-    public struct CCoercionRestriction : IWSPObject
+    public struct CCoercionRestriction : IWspStructure
     {
         /// <summary>
         /// An IEEE 32-bit floating point number [IEEE754] representing the coercion value upon which the rank coercion operation happens.
@@ -26,7 +26,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public CRestriction _childRes;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(_flValue);
 

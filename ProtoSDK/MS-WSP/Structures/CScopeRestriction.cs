@@ -8,7 +8,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CScopeRestriction structure restricts the files to be returned to those with a path that matches the restriction.
     /// </summary>
-    public struct CScopeRestriction : IWSPObject
+    public struct CScopeRestriction : IWspStructure
     {
         /// <summary>
         /// A 32-bit unsigned integer containing the number of Unicode characters in the _lowerPath field.
@@ -40,7 +40,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public UInt32 _fVirtual;
 
-        public void ToBytes(WSPBuffer buffer)
+        public void FromBytes(WspBuffer buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(CcLowerPath);
 
