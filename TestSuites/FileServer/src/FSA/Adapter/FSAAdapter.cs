@@ -3572,7 +3572,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             long sourceFileOffset,
             long targetFileOffset,
             long byteCount,
-            FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX_Request_Flags_Values flags
+            Smb2.FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX_Request_Flags_Values flags
             )
         {
             if (!(transAdapter is Smb2TransportAdapter))
@@ -3582,7 +3582,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
             var sourceFileId = (transAdapter as Smb2TransportAdapter).FileId;
 
-            var request = new FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX_Request();
+            var request = new Smb2.FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX_Request();
 
             request.StructureSize = 0x30;
             request.SourceFileId = sourceFileId;

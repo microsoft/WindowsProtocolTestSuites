@@ -491,4 +491,78 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
     {
 
     }
+
+    /// <summary>
+    /// A 32-bit unsigned integer that contains zero or more of the following flag values. 
+    /// Flag values not specified SHOULD be set to 0 and MUST be ignored.
+    /// </summary>
+    [Flags]
+    public enum FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX_Request_Flags_Values : UInt32
+    {
+        /// <summary>
+        /// None.
+        /// </summary>
+        NONE = 0x00000000,
+
+        /// <summary>
+        /// Indicates that duplication is atomic from source point of view.
+        /// </summary>
+        DUPLICATE_EXTENTS_DATA_EX_SOURCE_ATOMIC = 0x00000001
+    }
+
+    /// <summary>
+    /// FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX Request
+    /// </summary>
+    public struct FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX_Request
+    {
+        /// <summary>
+        /// A 64-bit unsigned integer value that specifies the size of the structure, in bytes. 
+        /// This field MUST be set to 0x30.
+        /// </summary>
+        public ulong StructureSize;
+
+        /// <summary>
+        /// An SMB2_FILEID structure, that is an identifier of the open to the source file.
+        /// </summary>
+        public FILEID SourceFileId;
+
+        /// <summary>
+        /// A 64-bit signed integer that contains the file offset, in bytes, 
+        /// of the start of a range of bytes in a source file from which the data is to be copied. 
+        /// The value of this field MUST be greater than or equal to 0x0000000000000000 and MUST be aligned to a logical cluster boundary.
+        /// </summary>
+        public long SourceFileOffset;
+
+        /// <summary>
+        /// A 64-bit signed integer that contains the file offset, in bytes, 
+        /// of the start of a range of bytes in a target file to which the data is to be copied. 
+        /// The value of this field MUST be greater than or equal to 0x0000000000000000 and MUST be aligned to a logical cluster boundary.
+        /// </summary>
+        public long TargetFileOffset;
+
+        /// <summary>
+        /// A 64-bit signed integer that contains the number of bytes to copy from source to target. 
+        /// The value of this field MUST be greater than or equal to 0x0000000000000000 and MUST be aligned to a logical cluster boundary.
+        /// </summary>
+        public long ByteCount;
+
+        /// <summary>
+        /// A 32-bit unsigned integer that contains zero or more of the following flag values. 
+        /// Flag values not specified SHOULD be set to 0 and MUST be ignored.
+        /// </summary>
+        public FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX_Request_Flags_Values Flags;
+
+        /// <summary>
+        /// This field SHOULD be set to zero and MUST be ignored.
+        /// </summary>
+        public UInt32 Reserved;
+    }
+
+    /// <summary>
+    /// FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX Reply
+    /// </summary>
+    public struct FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX_Response
+    {
+
+    }
 }
