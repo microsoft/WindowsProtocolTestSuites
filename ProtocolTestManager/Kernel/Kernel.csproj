@@ -135,5 +135,6 @@
     <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\ProtocolTestManager\Bin\" />
     <Copy SourceFiles="$(TargetDir)$(DocumentationFile)" DestinationFolder="$(TestSuiteRoot)\drop\ProtocolTestManager\Bin\" />
     <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\ProtocolTestManager\Bin\" />
+    <Copy SourceFiles="$(TargetDir)Newtonsoft.Json.dll" DestinationFolder="$(TestSuiteRoot)\drop\ProtocolTestManager\Bin\" />
   </Target>
 </Project>
