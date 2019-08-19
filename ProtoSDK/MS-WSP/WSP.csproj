@@ -51,6 +51,7 @@
     <Compile Include="Messages\CPMConnectOut.cs" />
     <Compile Include="Messages\CPMCreateQueryIn.cs" />
     <Compile Include="Messages\CPMCreateQueryOut.cs" />
+    <Compile Include="Messages\CPMGetRowsOut.cs" />
     <Compile Include="Structures\CAggregSet.cs" />
     <Compile Include="Structures\CAggregSortKey.cs" />
     <Compile Include="Structures\CAggregSpec.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="Structures\CSort.cs" />
     <Compile Include="Structures\CSortAggregSet.cs" />
     <Compile Include="Structures\CSortSet.cs" />
+    <Compile Include="Structures\CTableVariant.cs" />
     <Compile Include="Structures\CVectorRestriction.cs" />
     <Compile Include="Structures\DECIMAL.cs" />
     <Compile Include="Structures\RANGEBOUNDARY.cs" />
