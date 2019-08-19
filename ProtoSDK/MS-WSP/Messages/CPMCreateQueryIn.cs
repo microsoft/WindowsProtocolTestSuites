@@ -97,7 +97,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
                 tempBuffer.Add(CColumnSetPresent);
 
-                tempBuffer.Align(4);
+                tempBuffer.AlignWrite(4);
 
                 ColumnSet.Value.ToBytes(tempBuffer);
             }
@@ -133,7 +133,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
                 tempBuffer.Add(CSortSetPresent);
 
-                tempBuffer.Align(4);
+                tempBuffer.AlignWrite(4);
 
                 SortSet.Value.ToBytes(tempBuffer);
             }
@@ -152,7 +152,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
                 tempBuffer.Add(CCategorizationSetPresent);
 
-                tempBuffer.Align(4);
+                tempBuffer.AlignWrite(4);
 
                 CCategorizationSet.Value.ToBytes(tempBuffer);
             }
@@ -163,7 +163,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 tempBuffer.Add(CCategorizationSetPresent);
             }
 
-            tempBuffer.Align(4);
+            tempBuffer.AlignWrite(4);
 
             RowSetProperties.ToBytes(tempBuffer);
 

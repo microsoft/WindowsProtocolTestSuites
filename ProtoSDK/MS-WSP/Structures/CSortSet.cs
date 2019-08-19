@@ -31,7 +31,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             foreach (var sort in sortArray)
             {
-                buffer.Align(4);
+                buffer.AlignWrite(4);
 
                 sort.ToBytes(buffer);
             }

@@ -101,7 +101,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             _Property.ToBytes(buffer);
 
-            buffer.Align(4);
+            buffer.AlignWrite(4);
 
             _prval.ToBytes(buffer);
 

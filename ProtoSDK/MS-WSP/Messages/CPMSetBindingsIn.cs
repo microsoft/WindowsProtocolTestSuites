@@ -80,7 +80,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             foreach (var column in aColumns)
             {
-                tempBuffer.Align(4);
+                tempBuffer.AlignWrite(4);
 
                 column.ToBytes(tempBuffer);
             }
