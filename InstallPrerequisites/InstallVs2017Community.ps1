@@ -11,7 +11,7 @@ param (
 
 Function Check-VS2017OrLater {
 
-	Write-Host "Checking whether Visual Studio/Test Agent (2017 or later) is installed or not..."
+	Write-Host "Checking whether Visual Studio 2017 or later is installed or not..."
 	
 	if ([IntPtr]::Size -eq 4)  # 32-bit
 	{
@@ -39,17 +39,8 @@ Function Check-VS2017OrLater {
 	}
 	else
 	{
-		$TestAgentDisplayName = cmd /c "`"$VSWherePath`" -latest -products Microsoft.VisualStudio.Product.TestAgent -format value -property displayname"
-		if ($TestAgentDisplayName)
-		{
-			Write-Host "$TestAgentDisplayName is already installed."
-			return $true			
-		}
-		else
-		{
-			Write-Host "Visual Studio/Test Agent (2017 or later) is not installed in your computer." -ForegroundColor Yellow
-			return $false				
-		}
+		Write-Host "Visual Studio 2017 or later is not installed in your computer." -ForegroundColor Yellow
+		return $false				
 	}
 }
 

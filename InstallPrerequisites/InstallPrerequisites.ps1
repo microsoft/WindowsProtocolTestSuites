@@ -39,7 +39,6 @@ Param
 	[String]$ConfigPath
 )
 
-
 Function CheckInternetConnection{
   
 	Try
@@ -112,7 +111,7 @@ Function CheckIfAppInstalled
 Function CheckIfVSExtensionInstalled
 {
 	Param(
-		$VSInstallationPath,
+		$VSInstallationPaths,
 		[string]$AppName, # App name
 		[string]$DllName  # The Dll name of the extension. It can be found in the .vsix file if you change it to .zip and unzip it.
 	)
@@ -126,10 +125,22 @@ Function CheckIfVSExtensionInstalled
 
 	# Search the dll name in the extension folder of VS installation path.
 	# If the dll name can be found, then the extension is installed.  
-	$DllPath = Get-ChildItem -Path $VSInstallationPath\Common7\IDE\Extensions -Filter $DllName -Recurse
-	if(-not $DllPath)
+
+	foreach ($path in $VSInstallationPaths)
 	{
-		return $false
+		if (($AppName -match "2017" -and $path -match "2017") -or ($AppName -match "2019" -and $path -match "2019"))
+		{
+			$DllPath = Get-ChildItem -Path $path\Common7\IDE\Extensions -Filter $DllName -Recurse
+			if(-not $DllPath)
+			{
+				Write-Host "$AppName is not installed in $path" -ForegroundColor Yellow
+				return $false
+			}
+			else 
+			{
+				Write-Host "$AppName is already installed in $path"	
+			}
+		}
 	}
 
 	return $true
@@ -324,7 +335,7 @@ Function DownloadAndInstallApplication
 Function DownloadAndInstallVsExtension
 {
 	param(
-		$VSInstallationPath,
+		$VSInstallationPaths,
 		$AppItem,
 		[string]$OutputPath
 	)
@@ -339,7 +350,22 @@ Function DownloadAndInstallVsExtension
 	$FLAGS  = $AppItem.Arguments
 	$ExitCode = 0
 
-	$ExitCode = $ExitCode = (Start-Process -FILEPATH "$VSInstallationPath\Common7\IDE\vsixinstaller.exe" -ArgumentList "$OutputPath $FLAGS" -Wait -PassThru).ExitCode
+	if ($AppItem -match "2017")
+	{
+		$path = ($VSInstallationPaths | Where-Object{$_ -match "2017"})[0]
+	}
+	elseif ($AppItem -match "2019") 
+	{
+		$path = ($VSInstallationPaths | Where-Object{$_ -match "2019"})[0]		
+	}
+	else
+	{
+		$failedList += $AppItem.Name
+		$content = "Install " + $AppItem.Name +" failed, we only support install Visual Studio 2017 or 2019 extensions now."
+		Write-Host "ERROR $content"; 
+	}
+
+	$ExitCode = $ExitCode = (Start-Process -FILEPATH "$path\Common7\IDE\vsixinstaller.exe" -ArgumentList "$OutputPath $FLAGS" -Wait -PassThru).ExitCode
 
 	if ($ExitCode -NE 0)
 	{
@@ -355,12 +381,12 @@ Function DownloadAndInstallVsExtension
 	{
 		$failedList += $AppItem.Name
 		$content = "Install " + $AppItem.Name +" failed, Error Code:" + $ExitCode
-		Write-Host "ERROR $ExitCode"; 
+		Write-Host "ERROR $content"; 
 	}
 }
 
-# Get the installation path of Visual Studio or Test Agent
-Function GetVSInstallationPath
+# Get the installation path of Visual Studio
+Function GetVSInstallationPaths
 {
 	if ([IntPtr]::Size -eq 4)  # 32-bit
 	{
@@ -379,26 +405,16 @@ Function GetVSInstallationPath
 		return $null
 	}
 
-	$VSInstallationPath = cmd /c "`"$VSWherePath`" -latest -format value -property installationPath"
-
-	if ($VSInstallationPath)
+	$VSInstallationPaths = cmd /c "`"$VSWherePath`" -format value -property installationPath"
+	if ($VSInstallationPaths)
 	{
-		Write-Host "Installation path of Visual Studio is $VSInstallationPath."
-		return $VSInstallationPath
+		Write-Host "Installation path of Visual Studio is $VSInstallationPaths." 
+		return $VSInstallationPaths			
 	}
 	else
 	{
-		$TestAgentInstallationPath = cmd /c "`"$VSWherePath`" -latest -products Microsoft.VisualStudio.Product.TestAgent -format value -property installationPath"
-		if ($TestAgentInstallationPath)
-		{
-			Write-Host "Installation path of Test Agent is $TestAgentInstallationPath." 
-			return $TestAgentInstallationPath			
-		}
-		else
-		{
-			Write-Host "Did not find installation path of Visual Studio or test agent."	-ForegroundColor Yellow
-			return $null				
-		}
+		Write-Host "Did not find installation path of Visual Studio." -ForegroundColor Yellow
+		return $null				
 	}
 }
 
@@ -486,8 +502,11 @@ foreach($item in $downloadList)
 			if($result) {
 				Write-Host "$($item.Name) is installed successfully." -ForegroundColor Green
 			}
-			else {
+			else 
+			{
+				$failedList += $item.Name
 				Write-Host "Failed to install $($item.Name)!" -ForegroundColor Red
+				break
 			}
 		}
 		"Installer" {
@@ -536,14 +555,19 @@ foreach($item in $downloadList)
 		}
 		"VsExtension" {
 			# Get VS installation path
-			$VSInstallationPath = GetVSInstallationPath
-			if (-not $VSInstallationPath)
+			if (-not $VSInstallationPaths)
+			{
+				$VSInstallationPaths = GetVSInstallationPaths
+			}
+
+			if (-not $VSInstallationPaths)
 			{
 				Write-Host "VS Extension cannot be installed" -ForegroundColor red
+				$failedList += $item.Name
 				break
 			}
 
-			$isInstalled = CheckIfVSExtensionInstalled -VSInstallationPath $VSInstallationPath -AppName $item.AppName -DllName $item.DllName
+			$isInstalled = CheckIfVSExtensionInstalled -VSInstallationPaths $VSInstallationPaths -AppName $item.AppName -DllName $item.DllName
 
 			if(-not $isInstalled)
 			{
@@ -558,7 +582,7 @@ foreach($item in $downloadList)
 
 				try
 				{
-					DownloadAndInstallVsExtension -VSInstallationPath $VSInstallationPath -AppItem $item -OutputPath $outputPath
+					DownloadAndInstallVsExtension -VSInstallationPaths $VSInstallationPaths -AppItem $item -OutputPath $outputPath
 				}
 				catch
 				{

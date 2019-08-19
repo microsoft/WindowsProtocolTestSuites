@@ -29,6 +29,7 @@ Function Install-NuGet {
 		}
 		Copy-Item -Path $DownloadedArtifact -Destination "$($Env:LOCALAPPDATA)\NuGet\"
 		[Environment]::SetEnvironmentVariable("Path", "$($Env:Path)$($Env:LOCALAPPDATA)\NuGet;", "User")
+		$Env:Path += ";$($Env:LOCALAPPDATA)\NuGet\;"
 		return $true
 	}
 	catch {
