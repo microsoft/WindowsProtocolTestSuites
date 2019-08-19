@@ -51,7 +51,10 @@
     <Compile Include="Messages\CPMConnectOut.cs" />
     <Compile Include="Messages\CPMCreateQueryIn.cs" />
     <Compile Include="Messages\CPMCreateQueryOut.cs" />
+    <Compile Include="Messages\CPMGetRowsIn.cs" />
     <Compile Include="Messages\CPMGetRowsOut.cs" />
+    <Compile Include="Messages\CPMSetBindingsIn.cs" />
+    <Compile Include="Messages\CPMSetBindingsOut.cs" />
     <Compile Include="Structures\CAggregSet.cs" />
     <Compile Include="Structures\CAggregSortKey.cs" />
     <Compile Include="Structures\CAggregSpec.cs" />
@@ -84,12 +87,17 @@
     <Compile Include="Structures\CRestriction.cs" />
     <Compile Include="Structures\CRestrictionArray.cs" />
     <Compile Include="Structures\CReuseWhere.cs" />
+    <Compile Include="Structures\CRowSeekAt.cs" />
+    <Compile Include="Structures\CRowSeekAtRatio.cs" />
+    <Compile Include="Structures\CRowSeekByBookmark.cs" />
+    <Compile Include="Structures\CRowSeekNext.cs" />
     <Compile Include="Structures\CRowsetProperties.cs" />
     <Compile Include="Structures\CScopeRestriction.cs" />
     <Compile Include="Structures\CSort.cs" />
     <Compile Include="Structures\CSortAggregSet.cs" />
     <Compile Include="Structures\CSortSet.cs" />
     <Compile Include="Structures\CTableVariant.cs" />
+    <Compile Include="Structures\CTableColumn.cs" />
     <Compile Include="Structures\CVectorRestriction.cs" />
     <Compile Include="Structures\DECIMAL.cs" />
     <Compile Include="Structures\RANGEBOUNDARY.cs" />
@@ -103,6 +111,7 @@
     <Compile Include="Structures\VT_LPWSTR.cs" />
     <Compile Include="Structures\VT_VECTOR.cs" />
     <Compile Include="WspBuffer.cs" />
+    <Compile Include="WspConsts.cs" />
     <Compile Include="WspMessageHeader.cs" />
     <Compile Include="WspObject.cs" />
   </ItemGroup>

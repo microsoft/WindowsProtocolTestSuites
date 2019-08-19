@@ -22,21 +22,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         public StorageType StorageType;
     }
 
-    public class CreateQueryColumnParameter
-    {
-        public Guid Guid;
-        public uint PropertyId;
-    }
-
     public class MessageBuilderParameter
     {
-        public Guid EmptyGuid;
-
-        public Guid PropertySet_One_Guid;
-
         public string[] PropertySet_One_DBProperties;
-
-        public Guid PropertySet_Two_Guid;
 
         public string[] PropertySet_Two_DBProperties;
 
@@ -58,14 +46,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
         public uint EachRowSize;
 
-        public Guid PropertyRestrictionGuid;
-
-        public UInt32 PropertyRestrictionProperty;
-
-        public Guid ContentRestrictionGuid;
-
-        public UInt32 ContentRestrictionProperty;
-
         public uint EType;
 
         public uint BufferSize;
@@ -78,16 +58,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
         public int NumberOfSetBindingsColumns;
 
-        public int NumberOfCreateQueryColumns;
-
         public MessageBuilderColumnParameter[] ColumnParameters;
-
-        public CreateQueryColumnParameter[] CreateQueryColumnParameters;
-
-
-        public Guid PropertyGuidToFetch;
-
-        public int PropertyIdToFetch;
     }
 
     /// <summary>
@@ -298,15 +269,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// Gets the CPMCiStateInOut Message BLOB
         /// </summary>
         /// <returns>CPMCiStateInOut BLOB</returns>
-        public byte[] GetCPMCiStateInOut()
+        public CPMCiStateInOut GetCPMCiStateInOut()
         {
-            var message = new CPMCiStateInOut();
+            var message = new CPMCiStateInOut()
+            {
+                Header = new WspMessageHeader()
+                {
+                    _msg = WspMessageHeader_msg_Values.CPMCiStateInOut,
+                },
 
-            message.cbStruct = 0x0000003C;
+                State = new CPMCiState
+                {
+                    cbStruct = 0x0000003C,
+                },
+            };
 
-            var mainBlob = ToBytes(message);
-
-            return AddMessageHeader(MessageType.CPMCiStateInOut, mainBlob);
+            return message;
         }
 
         /// <summary>
@@ -388,8 +366,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             int messageOffset = 0;
             messageOffset += 4 * Constant.SIZE_OF_UINT;
             TableColumn[] col = GetTableColumnFromConfig();
-            byte[] propSpec = GetFullPropSec(parameter.PropertyGuidToFetch,
-                PROPERTY_ID, parameter.PropertyIdToFetch, ref messageOffset);
+            byte[] propSpec = GetFullPropSec(WspConsts.System_ItemName._guidPropSet,
+                PROPERTY_ID, (int)WspConsts.System_ItemName.PrSpec, ref messageOffset);
             if (messageOffset % OFFSET_4 != 0)
             {
                 padding = new byte[OFFSET_4 - messageOffset % OFFSET_4];
@@ -655,7 +633,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             uint cProperties = 4;
 
-            propSet.guidPropertySet = parameter.PropertySet_One_Guid;
+            propSet.guidPropertySet = WspConsts.DBPROPSET_FSCIFRMWRK_EXT;
 
             propSet.cProperties = cProperties;
 
@@ -713,7 +691,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             uint cProperties = 1;
 
-            propSet.guidPropertySet = parameter.PropertySet_Two_Guid;
+            propSet.guidPropertySet = WspConsts.DBPROPSET_CIFRMWRKCORE_EXT;
 
             propSet.cProperties = cProperties;
 
@@ -1025,49 +1003,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <returns>BLOB ColumnID</returns>
         private CDbColId GetColumnId()
         {
-            var result = new CDbColId(parameter.EmptyGuid, 0);
+            var result = new CDbColId(WspConsts.EmptyGuid, 0);
             return result;
         }
         #endregion
 
         #region Structures of CPMgetRowsIn message
-
-        /// <summary>
-        /// Gets FullPropertySpec for a given GUID, eKIND and propSec Id
-        /// </summary>
-        /// <param name="guid">PropSpec GUID</param>
-        /// <param name="kind">EKind</param>
-        /// <param name="propSec">PropSec Id</param>
-        /// <param name="messageOffset">offset from the 
-        /// beginning of the message</param>
-        /// <returns>full property spec structure BLOB</returns>
-        private CFullPropSpec GetFullPropSec(Guid guid, ulKind_Values kind, object prop)
-        {
-            var result = new CFullPropSpec();
-
-            result._guidPropSet = guid;
-
-            result.ulKind = kind;
-
-            switch (kind)
-            {
-                case ulKind_Values.PRSPEC_LPWSTR:
-                    {
-                        result.PrSpec = (UInt32)((string)prop).Length;
-                        result.Property_name = (string)prop;
-                    }
-                    break;
-
-                case ulKind_Values.PRSPEC_PROPID:
-                    {
-                        result.PrSpec = (UInt32)prop;
-                    }
-                    break;
-            }
-
-            return result;
-        }
-
         /// <summary>
         /// Gets FullPropertySpec for a given GUID, eKIND and propSec Id
         /// </summary>
@@ -1110,62 +1051,52 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             return mainBlob;
         }
         /// <summary>
-        /// Gets the Seek Desciption type for the RowsIn message
+        /// Gets the Seek Description type for the RowsIn message
         /// </summary>
         /// <param name="eType">eType</param>
-        /// <returns>returns byte[] form of SeekDescription variable</returns>
-        private byte[] GetSeekDescription(uint eType)
+        /// <returns>returns object form of SeekDescription variable</returns>
+        private object GetSeekDescription(eType_Values eType)
         {
-            byte[] returnBlob = null;
-            uint skip = 0;
-            uint bmkOffset = 0;
-            uint region = 0;
-            uint numerator = 0;
-            uint denominator = 5;
-            int index = 0;
+            object result = null;
+
             switch (eType)
             {
-                case (uint)RowSeekType.eRowSeekNext:
-                    skip = 0x00000000;
-                    returnBlob = new byte[Constant.SIZE_OF_UINT];
-                    Helper.CopyBytes
-                        (returnBlob, ref index,
-                        BitConverter.GetBytes(skip));
+                case eType_Values.eRowSeekNext:
+                    {
+                        result = new CRowSeekNext()
+                        {
+                            _cskip = 0x00000000,
+                        };
+                    }
                     break;
-                case (uint)RowSeekType.eRowSeekAt:
-                    bmkOffset = 2;
-                    skip = 2;
-                    region = 0;
-                    returnBlob = new byte[3 * Constant.SIZE_OF_UINT];
-                    Helper.CopyBytes
-                        (returnBlob, ref index,
-                        BitConverter.GetBytes(bmkOffset));
-                    Helper.CopyBytes
-                        (returnBlob, ref index,
-                        BitConverter.GetBytes(skip));
-                    Helper.CopyBytes
-                        (returnBlob, ref index,
-                        BitConverter.GetBytes(region));
+
+                case eType_Values.eRowSeekAt:
+                    {
+                        result = new CRowSeekAt()
+                        {
+                            _bmkOffset = 2,
+                            _cskip = 2,
+                            _hRegion = 0,
+                        };
+                    }
                     break;
-                case (uint)RowSeekType.eRowSeekAtRatio:
-                    numerator = 1;
-                    denominator = 2; // Must be greater than ZER0
-                    region = 0;
-                    returnBlob = new byte[3 * Constant.SIZE_OF_UINT];
-                    Helper.CopyBytes
-                        (returnBlob, ref index,
-                        BitConverter.GetBytes(numerator));
-                    Helper.CopyBytes
-                        (returnBlob, ref index,
-                        BitConverter.GetBytes(denominator));
-                    Helper.CopyBytes
-                        (returnBlob, ref index,
-                        BitConverter.GetBytes(region));
+
+                case eType_Values.eRowSeekAtRatio:
+                    {
+                        result = new CRowSeekAtRatio()
+                        {
+                            _ulNumerator = 1,
+                            _ulDenominator = 2,
+                            _hRegion = 0,
+                        };
+                    }
                     break;
+
                 default:
-                    break;
+                    throw new InvalidOperationException("Unsupported eType!");
             }
-            return returnBlob;
+
+            return result;
         }
 
         /// <summary>
@@ -1239,11 +1170,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             node._relop = _relop_Values.PREQ;
 
-            node._Property = GetFullPropSec(parameter.PropertyRestrictionGuid, ulKind_Values.PRSPEC_PROPID, parameter.PropertyRestrictionProperty);
+            node._Property = WspConsts.System_Search_Scope;
 
             node._prval = GetBaseStorageVariant(vType_Values.VT_LPWSTR, new VT_LPWSTR(searchScope));
 
-            node._lcid = 0x0000409;
+            node._lcid = parameter.LCID_VALUE;
 
             result.Restriction = node;
 
@@ -1259,8 +1190,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         private CRowsetProperties GetRowSetProperties(bool ENABLEROWSETEVENTS)
         {
             var result = new CRowsetProperties();
-
-            _uBooleanOptions_Values booleanOptions;
 
             if (ENABLEROWSETEVENTS)
             {
@@ -1303,13 +1232,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             var node = new CContentRestriction();
 
-            node._Property = GetFullPropSec(parameter.ContentRestrictionGuid, ulKind_Values.PRSPEC_PROPID, parameter.ContentRestrictionProperty);
+            node._Property = WspConsts.QueryAll;
 
             node.Cc = (UInt32)queryString.Length;
 
             node._pwcsPhrase = queryString;
 
-            node.Lcid = 0x409;
+            node.Lcid = parameter.LCID_VALUE;
 
             node._ulGenerateMethod = _ulGenerateMethod_Values.GENERATE_METHOD_EXACT;
 
@@ -1453,83 +1382,43 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <param name="queryCursor">Query associated Cursor</param>
         /// <param name="columns">Array of TableColumns to be Queried</param>
         /// <param name="isValidBinding">True if the binding is valid</param>
-        /// <returns></returns>
-        public byte[] GetCPMSetBindingsIn
-            (uint queryCursor, out TableColumn[] columns, bool isValidBinding)
+        /// <returns>CPMSetBindingsIn message.</returns>
+        public CPMSetBindingsIn GetCPMSetBindingsIn(uint queryCursor, out TableColumn[] columns, bool isValidBinding)
         {
-            int index = 0;
             uint cursor = queryCursor;
             uint rows = (uint)parameter.EachRowSize;
-            uint bindingDesc = 0;
             // SIZE of ColumnCount and Columns combined to be assigned later.
             uint dummy = 0;// Dummy value
-            uint columnCount = 0;
-            int messageOffset = 5 * Constant.SIZE_OF_UINT;
-            int bookMark = messageOffset;
             Random r = new Random();
             columns = GetTableColumnFromConfig();
-            TableColumn[] newTableCol = new TableColumn[1];
+
             if (!isValidBinding)
             {
                 // decreasing the number of bytes to fail the Bindings
                 rows -= (uint)r.Next((int)rows - 10, (int)rows);
-
             }
-            byte[][] paddingColumn = new byte[columns.Length][];
-            byte[][] tableColumn = new byte[columns.Length][];
 
-            for (int i = 0; i < columns.Length; i++)
+            uint columnCount = (uint)columns.Length;
+
+            var message = new CPMSetBindingsIn()
             {
-                tableColumn[i]
-                    = GetTableColumn(columns[i], ref messageOffset);
-                if (messageOffset % OFFSET_4 != 0)
+                Header = new WspMessageHeader
                 {
-                    paddingColumn[i]
-                        = new byte[OFFSET_4 - messageOffset % 4];
-                    for (int j = 0; j < paddingColumn[i].Length; j++)
-                    {
-                        paddingColumn[i][j] = 0;
-                    }
-                    messageOffset += paddingColumn[i].Length;
-                }
-            }
-            columnCount = (uint)tableColumn.Length;
-            //==========  Build the message BLOB ===========
-            byte[] blob = new byte[messageOffset];
-            //Add Cursor
-            Helper.CopyBytes
-                (blob, ref index, BitConverter.GetBytes(cursor));
-            // Add Rows fields
-            Helper.CopyBytes
-                (blob, ref index, BitConverter.GetBytes(rows));
+                    _msg = WspMessageHeader_msg_Values.CPMSetBindingsIn,
+                },
 
-            // update the bindingDesc value before inserting in the BLOB
-            bindingDesc
-                = (uint)(messageOffset - 4 * Constant.SIZE_OF_UINT);
-            if (!isValidBinding)
-            {
-                bindingDesc -= 50;
-            }
-            Helper.CopyBytes
-                (blob, ref index, BitConverter.GetBytes(bindingDesc));
-            Helper.CopyBytes
-                (blob, ref index, BitConverter.GetBytes(dummy));
-            //Add Column count
-            Helper.CopyBytes
-                (blob, ref index, BitConverter.GetBytes(columnCount));
-            if (tableColumn.Length > 0)
-            {
-                Helper.CopyBytes(blob, ref index, tableColumn[0]);
-            }
-            for (int i = 1; i < tableColumn.Length; i++)
-            {
-                if (paddingColumn[i - 1] != null)
-                    Helper.CopyBytes(blob, ref index, paddingColumn[i - 1]);
-                Helper.CopyBytes(blob, ref index, tableColumn[i]);
-            }
+                _hCursor = cursor,
 
-            // Add message Header with MessageType CPMSetBindingsIn
-            return AddMessageHeader(MessageType.CPMSetBindingsIn, blob);
+                _cbRow = rows,
+
+                _dummy = dummy,
+
+                cColumns = columnCount,
+
+                aColumns = columns.Select(column => GetTableColumn(column)).ToArray(),
+            };
+
+            return message;
         }
 
         /// <summary>
@@ -1589,190 +1478,78 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         {
             var result = new CPidMapper();
 
-            result.count = (uint)parameter.NumberOfCreateQueryColumns;
-
-            result.aPropSpec = new CFullPropSpec[result.count];
-
-            for (int i = 0; i < parameter.CreateQueryColumnParameters.Length; i++)
+            result.aPropSpec = new CFullPropSpec[]
             {
-                result.aPropSpec[i] = GetFullPropSec(parameter.CreateQueryColumnParameters[i].Guid, ulKind_Values.PRSPEC_PROPID, parameter.CreateQueryColumnParameters[i].PropertyId);
-            }
+                WspConsts.System_ItemName,
+                WspConsts.System_Search_Scope,
+                WspConsts.System_Search_Contents,
+            };
+
+            result.count = (UInt32)result.aPropSpec.Length;
 
             return result;
         }
 
-        public byte[] GetCPMRowsInMessage(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType, out uint reserved)
+        public CPMGetRowsIn GetCPMRowsInMessage(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType, out uint reserved)
         {
-            int index = 0;
+            reserved = 256;
 
-            uint sizeOfSeek = 0; // To be assigned with the size of seek.
-            reserved = 0; // To be assigned later.
-
-
-            // In RowsOut Message the columnoffset with be clientBase + X
-
-            int messageOffset = 10 * Constant.SIZE_OF_UINT;
-
-            //Assing variable values
-            byte[] seekDescription = GetSeekDescription(eType);
-            int seekDescriptionLength = seekDescription == null ? 0 : seekDescription.Length;
-            sizeOfSeek
-                = (uint)(2 * Constant.SIZE_OF_UINT + seekDescriptionLength);
-            reserved = (uint)(28 + seekDescriptionLength);
-
-            messageOffset += seekDescriptionLength;
-            byte[] mainBlob = new byte[messageOffset];
-            Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(cursor));
-            Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(rowsToTransfer));
-            Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(rowWidth));
-            Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(sizeOfSeek));
-            Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(reserved));
-            Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(cbReadBuffer));
-            Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(0));
-            Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(fBwdFetch));
-            Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(eType));
-            Helper.CopyBytes
-                (mainBlob, ref index, BitConverter.GetBytes(0)); // chapt
-
-            if (seekDescription != null)
+            var message = new CPMGetRowsIn()
             {
-                Helper.CopyBytes
-                    (mainBlob, ref index, seekDescription);
-            }
-            return AddMessageHeader(MessageType.CPMGetRowsIn, mainBlob);
+                Header = new WspMessageHeader()
+                {
+                    _msg = WspMessageHeader_msg_Values.CPMGetRowsIn,
+                },
+
+                _hCursor = cursor,
+
+                _cRowsToTransfer = rowsToTransfer,
+
+                _cbRowWidth = rowWidth,
+
+                _cbReserved = reserved,
+
+                _cbReadBuffer = cbReadBuffer,
+
+                _ulClientBase = 0,
+
+                _fBwdFetch = fBwdFetch,
+
+                eType = (eType_Values)eType,
+
+                _chapt = chapter,
+
+                SeekDescription = GetSeekDescription((eType_Values)eType),
+            };
+
+            return message;
         }
 
         /// <summary>
         /// Gets TableColumn structure from given values
         /// </summary>
         /// <param name="column">TableColumn information</param>
-        /// <param name="messageOffset">Offset from
-        /// the begining of the message</param>
-        /// <returns></returns>
-        private byte[] GetTableColumn
-            (TableColumn column, ref int messageOffset)
+        /// <returns>CTableColumn structure.</returns>
+        private CTableColumn GetTableColumn(TableColumn column)
         {
-            int startingIndex = messageOffset;
-            byte[] padding = null;
-            byte[] padding2 = null;
-            byte[] padding3 = null;
-            int index = 0;
-            byte[] propSpec
-                = GetFullPropSec
-                (column.Guid, PROPERTY_ID,
-                (int)column.PropertyId, ref messageOffset);
+            var result = new CTableColumn()
+            {
+                PropSpec = new CFullPropSpec(column.Guid, column.PropertyId),
 
-            uint vType = (uint)column.Type; // VT_VARIANT
-            byte aggregateStored = FIELD_USED;
-            byte aggregateType = (byte)AggregateType.DBAGGTTYPE_BYNONE;
-            byte valueUsed = FIELD_NOT_USED;
-            byte lengthUsed = FIELD_NOT_USED;
-            byte statusUsed = FIELD_NOT_USED; // Using status
+                vType = (vType_Values)column.Type,
 
-            ushort valueOffset = 0;//Optional field
-            ushort valueSize = 0; //Optional field
-            ushort statusOffset = 0;//optional field
-            ushort lengthOffset = 0;//optional field
+                AggregateType = CAggregSpec_type_Values.DBAGGTTYPE_BYNONE,
 
-            if (column.ValueOffset > 0)
-            {
-                valueUsed = FIELD_USED;
-                valueSize = GetSize(column.Type);
-                valueOffset = column.ValueOffset;
-            }
+                ValueOffset = column.ValueOffset,
 
-            if (column.LengthOffset > 0)
-            {
-                lengthUsed = FIELD_USED;
-                lengthOffset = column.LengthOffset;
-            }
-            if (column.StatusOffset > 0)
-            {
-                statusUsed = FIELD_USED;
-                statusOffset = column.StatusOffset;
-            }
+                ValueSize = GetSize(column.Type),
 
-            messageOffset
-                += Constant.SIZE_OF_UINT + 3 * Constant.SIZE_OF_BYTE;
-            if (valueUsed == FIELD_USED)
-            {
-                if (messageOffset % 2 != 0)
-                {
-                    padding = new byte[1];
-                    padding[0] = 0x00;
-                    messageOffset += Constant.SIZE_OF_BYTE;
-                }
+                StatusOffset = column.StatusOffset,
 
-                messageOffset += 2 * Constant.SIZE_OF_USHORT;
-                // value offset and size
-            }
+                LengthOffset = column.LengthOffset,
+            };
 
-            messageOffset += Constant.SIZE_OF_BYTE;
-            if (statusUsed == FIELD_USED)
-            {
-                if (messageOffset % 2 != 0)
-                {
-                    padding2 = new byte[1];
-                    padding2[0] = 0x00;
-                    messageOffset += padding2.Length;
-                }
-                messageOffset += Constant.SIZE_OF_USHORT;
-                // size of status offset
-            }
-
-            messageOffset += Constant.SIZE_OF_BYTE;
-            if (lengthUsed == FIELD_USED)
-            {
-                if (messageOffset % 2 != 0)
-                {
-                    padding3 = new byte[1];
-                    padding3[0] = 0x00;
-                    messageOffset += padding3.Length;
-                }
-                messageOffset += Constant.SIZE_OF_USHORT;
-                //size of length offset
-            }
-            byte[] blob = new byte[messageOffset - startingIndex];
-            Helper.CopyBytes(blob, ref index, propSpec);
-            Helper.CopyBytes(blob, ref index, BitConverter.GetBytes(vType));
-            Helper.CopyBytes(blob, ref index, new byte[] { aggregateStored });
-            Helper.CopyBytes(blob, ref index, new byte[] { aggregateType });
-            Helper.CopyBytes(blob, ref index, new byte[] { valueUsed });
-            if (padding != null)
-                Helper.CopyBytes(blob, ref index, padding);
-            if (valueUsed >= FIELD_USED)
-            {
-                Helper.CopyBytes
-                    (blob, ref index, BitConverter.GetBytes(valueOffset));
-                Helper.CopyBytes
-                    (blob, ref index, BitConverter.GetBytes(valueSize));
-            }
-            Helper.CopyBytes(blob, ref index, new byte[] { statusUsed });
-            if (padding2 != null)
-                Helper.CopyBytes(blob, ref index, padding2);
-            if (statusUsed >= FIELD_USED)
-            {
-                Helper.CopyBytes
-                    (blob, ref index, BitConverter.GetBytes(statusOffset));
-            }
-            Helper.CopyBytes(blob, ref index, new byte[] { lengthUsed });
-            if (padding3 != null)
-                Helper.CopyBytes(blob, ref index, padding3);
-            if (lengthUsed >= FIELD_USED)
-            {
-                Helper.CopyBytes
-                    (blob, ref index, BitConverter.GetBytes(lengthOffset));
-            }
-            return blob;
+            return result;
         }
 
         /// <summary>

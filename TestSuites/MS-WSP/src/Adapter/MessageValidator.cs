@@ -30,16 +30,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// Validate CPMConnectOut message
         /// </summary>
-        /// <param name="connectOutResponse">ConnectOut Blob</param>
-        /// <param name="connectInCheckSum">Checksum of 
-        /// ConnectIn request</param>
-        /// <param name="messageStatus">Status of the connect
-        /// out message that comes from the server.</param>
-        public void ValidateConnectOutResponse(CPMConnectOut response)
+        /// <param name="connectOutResponse">ConnectOut</param>
+        public void ValidateConnectOutResponse(CPMConnectOut connectOutResponse)
         {
-            ValidateHeader(response.Header, WspMessageHeader_msg_Values.CPMConnectOut);
+            ValidateHeader(connectOutResponse.Header, WspMessageHeader_msg_Values.CPMConnectOut);
 
-            UInt32 messageStatus = response.Header._status;
+            UInt32 messageStatus = connectOutResponse.Header._status;
 
             // For any arbitary value of padding fields 
             //of CDbPropSet structure the server response is success
@@ -98,7 +94,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 " CPMConnectIn message, server response is success.");
 
             //-----------------------------  Server Version   
-            uint obtainedServerVersion = response._serverVersion;
+            uint obtainedServerVersion = connectOutResponse._serverVersion;
             uint actualServerVersion
                 = Convert.ToUInt32(site.Properties["WindowsServerVersion"]);
 
@@ -251,7 +247,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             //serverVersion is 0x00000102 when OS is either 32-bit Windows Server 2008, or 32-bit Windows Vista.
             if (obtainedServerVersion == 0x00000102 || obtainedServerVersion == 0x00010102)
             {
-                var reservered = response._reserved;
+                var reservered = connectOutResponse._reserved;
             }
             else
             {
@@ -259,13 +255,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 if (obtainedServerVersion == 0x00000700 || obtainedServerVersion == 0x00010700)
                 {
                     // Verify reservered
-                    var reservered = response._reserved;
+                    var reservered = connectOutResponse._reserved;
                     site.CaptureRequirementIfAreEqual<int>(4, reservered.Length, 1006,
                         "[CPMConnectOut]If server supports version reporting then this field" +
                         "[_reserved]  the size MUST be 4 bytes.");
 
                     // Verify WINDOWS_MAJOR_VERSION
-                    uint dwWinVerMajor = response.dwWinVerMajor.Value;
+                    uint dwWinVerMajor = connectOutResponse.dwWinVerMajor.Value;
                     /* XXX: skip windows version check
                     site.CaptureRequirementIfAreEqual<uint>((uint)dwWinNLSVersion.WINDOWS_MAJOR_VERSION_6, dwWinVerMajor, 1060,
                         "[On Windows-based servers," +
@@ -278,7 +274,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     */
 
                     // Verify WINDOWS_MINOR_VERSION
-                    uint dwWinVerMinor = response.dwWinVerMinor.Value;
+                    uint dwWinVerMinor = connectOutResponse.dwWinVerMinor.Value;
 
                     /*
                     site.CaptureRequirementIfIsTrue(dwWinVerMinor
@@ -293,8 +289,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     */
 
                     // Verify NLS_VERSION
-                    uint dwNLSVerMajor = response.dwNLSVerMajor.Value;
-                    uint dwNLSVerMinor = response.dwNLSVerMinor.Value;
+                    uint dwNLSVerMajor = connectOutResponse.dwNLSVerMajor.Value;
+                    uint dwNLSVerMinor = connectOutResponse.dwNLSVerMinor.Value;
 
                     bool isTDI42332Fixed = Boolean.Parse(site.Properties.Get("TDI42332Fixed"));
                     if (isTDI42332Fixed)
@@ -377,86 +373,58 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// Validates CPMCiStateInOut response from the server.
         /// </summary>
-        /// <param name="stateInOutResponse">CPMCiStateInOut
-        /// response BLOB</param>
-        /// <param name="stateInOutCheckSum">Checksum</param>
-        public void ValidateCiStateInOut
-            (Byte[] stateInOutResponse, uint stateInOutCheckSum)
+        /// <param name="stateInOutResponse">CPMCiStateInOut response.</param>
+        public void ValidateCiStateInOut(CPMCiStateInOut stateInOutResponse)
         {
-            int startingIndex = 0;
-            byte[] tempByteArray;
-            ValidateHeader
-                (stateInOutResponse,
-                MessageType.CPMCiStateInOut,
-                stateInOutCheckSum, ref startingIndex);
+            ValidateHeader(stateInOutResponse.Header, WspMessageHeader_msg_Values.CPMCiStateInOut);
 
             //--------------------       cbStruct    -------------------
-            uint cbStruct = Helper.GetUInt
-                (stateInOutResponse, ref startingIndex);
+            uint cbStruct = stateInOutResponse.State.cbStruct;
             site.CaptureRequirementIfAreEqual<uint>(60, cbStruct, 372,
                 "For 0x00000000 value of the" +
                 " '_ulReserved2' field of the message header," +
                 "server response is success.");
 
             //--------------------      cWordList     ---------------
-            uint wordList = Helper.GetUInt
-                (stateInOutResponse, ref startingIndex);
-            tempByteArray = BitConverter.GetBytes(wordList);
-            site.CaptureRequirementIfIsTrue((4 == tempByteArray.Length), 373,
+            uint wordList = stateInOutResponse.State.cWordList;
+            site.CaptureRequirement(373,
                 "The 4 bytes 'cWordList' field  of" +
                 " the CPMCiStateInOut message specifies " +
                 "the number of in-memory indexes " +
                 "created for recently indexed documents.");
 
             //--------------------    cPersistentIndex   ----------------
-            uint persistentIndex
-                = Helper.GetUInt(stateInOutResponse, ref startingIndex);
-            tempByteArray = BitConverter.GetBytes(persistentIndex);
-            site.CaptureRequirementIfIsTrue
-                (4 == tempByteArray.Length, 374,
+            uint persistentIndex = stateInOutResponse.State.cPersistentIndex;
+            site.CaptureRequirement(374,
                 "The 4 bytes 'cPersistentIndex' field " +
                 " of the CPMCiStateInOut message specifies" +
                 "the number of persisted indexes.");
 
             //----------------------      cQueries   ----------------------
-            uint queries
-                = Helper.GetUInt(stateInOutResponse, ref startingIndex);
-            tempByteArray
-                = BitConverter.GetBytes(queries);
-            site.CaptureRequirementIfIsTrue(4 == tempByteArray.Length, 375,
+            uint queries = stateInOutResponse.State.cQueries;
+            site.CaptureRequirement(375,
                 "The 4 bytes 'cQueries' field  of the " +
                 "CPMCiStateInOut message specifies the " +
                 "number of actively running queries.");
 
             //----------------------     cDocuments   ----------------
-            uint documents
-                = Helper.GetUInt(stateInOutResponse, ref startingIndex);
-            tempByteArray
-                = BitConverter.GetBytes(documents);
-            site.CaptureRequirementIfIsTrue(4 == tempByteArray.Length, 376,
+            uint documents = stateInOutResponse.State.cDocuments;
+            site.CaptureRequirement(376,
                 "The 4 bytes 'cDocuments' field  of " +
                 "the CPMCiStateInOut message specifies the" +
                 "total number of documents waiting to be indexed.");
 
             //---------------------      cFreshTest   --------------
-            uint freshTest
-                = Helper.GetUInt(stateInOutResponse, ref startingIndex);
-            tempByteArray
-                = BitConverter.GetBytes(freshTest);
-            site.CaptureRequirementIfIsTrue
-                (4 == tempByteArray.Length, 377,
+            uint freshTest = stateInOutResponse.State.cFreshTest;
+            site.CaptureRequirement(377,
                 "The 4 bytes 'cFreshTest' field  of " +
                 "the CPMCiStateInOut message specifies the" +
                 "number of unique documents with information " +
                 "in indexes that are not fully optimized for performance.");
 
             //---------------------    dwMergeProgress  ----------------
-            uint mergeProcess
-                = Helper.GetUInt(stateInOutResponse, ref startingIndex);
-            tempByteArray
-                = BitConverter.GetBytes(mergeProcess);
-            site.CaptureRequirementIfIsTrue
-                (4 == tempByteArray.Length, 378,
+            uint mergeProcess = stateInOutResponse.State.dwMergeProgress;
+            site.CaptureRequirement(378,
                 "The 4 bytes 'dwMergeProgress' field  " +
                 "of the CPMCiStateInOut message specifies the" +
                 "completion percentage of current full " +
@@ -469,8 +437,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 "than or equal to 100.");
 
             //--------------------         eState    --------------------
-            uint eState
-                = Helper.GetUInt(stateInOutResponse, ref startingIndex);
+            var eState = stateInOutResponse.State.eState;
             bool eStateValid = GetEStatevalid(eState);
 
             //Updated by:v-zhil
@@ -486,65 +453,48 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 "CI_STATE_LOW_DISK(0x00010000), CI_STATE_HIGH_CPU(0x00020000).");
 
             //--------------------    cFilteredDocuments  
-            uint filteredDocuments
-                = Helper.GetUInt(stateInOutResponse, ref startingIndex);
-            tempByteArray
-                = BitConverter.GetBytes(filteredDocuments);
-            site.CaptureRequirementIfIsTrue
-                (4 == tempByteArray.Length, 381,
+            uint filteredDocuments = stateInOutResponse.State.cFilteredDocuments;
+            site.CaptureRequirement(381,
                 "The 4 bytes 'cFilteredDocuments' field" +
                 "  of the CPMCiStateInOut message specifies the" +
                 "number of documents indexed " +
                 "since content indexing was begun.");
 
             //-------------------      cTotalDocuments    
-            uint totalDocuments
-                = Helper.GetUInt(stateInOutResponse, ref startingIndex);
-            tempByteArray
-                = BitConverter.GetBytes(totalDocuments);
-            site.CaptureRequirementIfIsTrue(4 == tempByteArray.Length, 382,
+            uint totalDocuments = stateInOutResponse.State.cTotalDocuments;
+            site.CaptureRequirement(382,
                 "The 4 bytes 'cTotalDocuments' field  " +
                 "of the CPMCiStateInOut message specifies the " +
                 "total number of documents in the system.");
 
             //-------------------      cPendingScans     
-            uint pendingScans
-                = Helper.GetUInt(stateInOutResponse, ref startingIndex);
-            tempByteArray = BitConverter.GetBytes(pendingScans);
-            site.CaptureRequirementIfIsTrue(4 == tempByteArray.Length, 383,
+            uint pendingScans = stateInOutResponse.State.cPendingScans;
+            site.CaptureRequirement(383,
                 "The 4 bytes 'cPendingScans' field  of the CPMCiStateInOut" +
                 " message specifies the" +
                 "number of pending high-level indexing operations.");
             //Updated by:v-zhil
             //For delta testing
-            site.CaptureRequirementIfIsTrue(0 == BitConverter.ToUInt32(tempByteArray, 0), 384,
+            site.CaptureRequirementIfIsTrue(0 == pendingScans, 384,
                 "<6> Section 2.2.3.1: This value [cPendingScans] is usually zero, " +
                 "except immediately after indexing has been started or after a notification queue overflows.");
             //-------------------        dwIndexSize    
-            uint indexSize
-                = Helper.GetUInt(stateInOutResponse, ref startingIndex);
-            tempByteArray = BitConverter.GetBytes(indexSize);
-            site.CaptureRequirementIfIsTrue(4 == tempByteArray.Length, 385,
+            uint indexSize = stateInOutResponse.State.dwIndexSize;
+            site.CaptureRequirement(385,
                 "The 4 bytes 'dwIndexSize' field  of the CPMCiStateInOut " +
                 "message specifies the size," +
                 "in megabytes, of the index (excluding the property cache).");
 
             //-------------------       cUniqueKeys    
-            uint uniqueKeys
-                = Helper.GetUInt(stateInOutResponse, ref startingIndex);
-            tempByteArray = BitConverter.GetBytes(uniqueKeys);
-            site.CaptureRequirementIfIsTrue(4 == tempByteArray.Length, 386,
+            uint uniqueKeys = stateInOutResponse.State.cUniqueKeys;
+            site.CaptureRequirement(386,
                 "The 4 bytes 'cUniqueKeys' field  of the " +
                 "CPMCiStateInOut message specifies the" +
                 "approximate number of unique keys in the catalog.");
 
             //--------------------     cSecQDocuments   
-            uint secQDocuments
-                = Helper.GetUInt(stateInOutResponse, ref startingIndex);
-            tempByteArray
-                = BitConverter.GetBytes(secQDocuments);
-            site.CaptureRequirementIfIsTrue
-                (4 == tempByteArray.Length, 387,
+            uint secQDocuments = stateInOutResponse.State.cSecQDocuments;
+            site.CaptureRequirement(387,
                 "The 4 bytes 'cSecQDocuments' field  of " +
                 "the CPMCiStateInOut message specifies the" +
                 "number of documents that the Windows Search" +
@@ -552,12 +502,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 "because of a failure during the initial indexing attempt.");
 
             //--------------------      dwPropCacheSize  
-            uint propCacheSize
-                = Helper.GetUInt(stateInOutResponse, ref startingIndex);
-            tempByteArray
-                = BitConverter.GetBytes(propCacheSize);
-            site.CaptureRequirementIfIsTrue
-                (4 == tempByteArray.Length, 388,
+            uint propCacheSize = stateInOutResponse.State.dwPropCacheSize;
+            site.CaptureRequirement(388,
                 "The 4 bytes 'dwPropCacheSize' field  of the " +
                 "CPMCiStateInOut message specifies the size," +
                 "in megabytes, of the property cache.");
@@ -566,21 +512,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// Validates the CPMCreateQueryOut Message response
         /// </summary>
-        /// <param name="queryOutResponse">CreateQueryOut
-        /// BLOB</param>
-        /// <param name="queryInCheckSum">Checksum of 
-        /// QueryIn message</param>
-        /// <param name="cursor">cursor handle that
-        /// comes from the server</param>
-        /// <param name="messageStatus">status of 
-        /// the response message</param>
-        /// <param name="numberOfCatSet">Number of 
-        /// CategorizationSet present</param>
-        public void ValidateCreateQueryOutResponse(CPMCreateQueryOut response, UInt32 numberOfCatSet, out uint[] cursor)
+        /// <param name="queryOutResponse">CreateQueryOut</param>
+        /// <param name="numberOfCatSet">Number of CategorizationSet present</param>
+        /// <param name="cursor">cursor handle that comes from the server</param>
+        public void ValidateCreateQueryOutResponse(CPMCreateQueryOut queryOutResponse, UInt32 numberOfCatSet, out uint[] cursor)
         {
-            ValidateHeader(response.Header, WspMessageHeader_msg_Values.CPMCreateQueryOut);
+            ValidateHeader(queryOutResponse.Header, WspMessageHeader_msg_Values.CPMCreateQueryOut);
 
-            UInt32 messageStatus = response.Header._status;
+            UInt32 messageStatus = queryOutResponse.Header._status;
 
             // For arbitary value in padding field of 'paddingPropSet' 
             // the server response is success.Hence validated
@@ -710,7 +649,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 "server response is success.");
 
             //----------------------------   _fTrueSequential  
-            uint trueSequential = response._fTrueSequential;
+            uint trueSequential = queryOutResponse._fTrueSequential;
             site.CaptureRequirementIfIsTrue
                 (((0x00000000 == trueSequential)
                 || (0x00000001 == trueSequential)), 476,
@@ -719,7 +658,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 "of the following values: (0x00000000) or  (0x00000001).");
 
             //----------------------------   _fWorkIdUnique    
-            uint workIdUnique = response._fWorkIdUnique;
+            uint workIdUnique = queryOutResponse._fWorkIdUnique;
             site.CaptureRequirementIfIsTrue
                 (((0x00000000 == workIdUnique)
                 || (0x000000001 == workIdUnique)), 477,
@@ -732,7 +671,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             //It can be written once createqueryIn is done.
             //Current implementation do not have categorizationSet
             //So, it cannot be calculated at this point of time.
-            cursor = response.aCursors;
+            cursor = queryOutResponse.aCursors;
             //If numberOfCatSet + 1 Cursors are read from the response.
             // The following requirement gets validated
             site.CaptureRequirement(478, "The 4 bytes 'aCursors '" +
@@ -938,19 +877,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// Validates SetBingingsInResponse message
         /// </summary>
-        /// <param name="setBindingsResponse">setBindingsIn 
-        /// response BLOB</param>
-        /// <param name="bindingsInCheckSum">checksum</param>
-        /// <param name="messageStatus">Message Status sent by server</param>
-        /// <param name="bytesRead">Number of bytes read as response</param>
-        public void ValidateSetBindingsInResponse
-            (Byte[] setBindingsResponse,
-            uint bindingsInCheckSum, uint messageStatus, uint bytesRead)
+        /// <param name="response">CPMSetBindingsOut</param>
+        public void ValidateSetBindingsInResponse(CPMSetBindingsOut response)
         {
-            int startingIndex = 0;
-            ValidateHeader(setBindingsResponse,
-                MessageType.CPMSetBindingsIn,
-                bindingsInCheckSum, ref startingIndex);
+            ValidateHeader(response.Header, WspMessageHeader_msg_Values.CPMSetBindingsIn);
+
+            UInt32 messageStatus = response.Header._status;
+
             // For any arbitrary value of Padding bytes  
             //in the array of CFullPropSpec structures, 
             //server response is success.
@@ -2966,11 +2899,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// Validates MS-WSP Message Header
         /// </summary>
-        /// <param name="responseBytes">response message BLOB</param>
+        /// <param name="header">response header</param>
         /// <param name="requestType">type of WSP message</param>
-        /// <param name="requestMessageChecksum">checksum of 
-        /// request message</param>
-        /// <param name="index">index of the BLOB</param>
         public void ValidateHeader(WspMessageHeader header, WspMessageHeader_msg_Values requestType)
         {
             uint messageType = (UInt32)header._msg;
@@ -3046,35 +2976,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         /// <param name="eState">eState</param>
         /// <returns>bool value</returns>
-        private bool GetEStatevalid(uint eState)
+        private bool GetEStatevalid(eState_Values eState)
         {
-            bool result = false;
-            switch (eState)
+            UInt32 mask = Enum.GetValues(typeof(eState_Values)).Cast<UInt32>().Aggregate((UInt32)0, (x, y) => x | y);
+            if ((((UInt32)eState) & (~mask)) != 0)
             {
-                //Updated by:v-zhil
-                //For Delta tesing
-                case 0x00000000:
-                case 0x00000001:
-                case 0x00000002:
-                case 0x00000004:
-                case 0x00000008:
-                case 0x00000010:
-                case 0x00000080:
-                case 0x00000100:
-                case 0x00000200:
-                case 0x00000400:
-                case 0x00000800:
-                case 0x00001000:
-                case 0x00010000:
-                case 0x00020000:
-                    result = true;
-                    break;
-                default:
-                    result = false;
-                    break;
-
+                return false;
             }
-            return result;
+            return true;
         }
 
         /// <summary>

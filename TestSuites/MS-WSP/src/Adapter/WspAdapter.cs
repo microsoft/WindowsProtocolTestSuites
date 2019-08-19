@@ -154,13 +154,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             var parameter = new MessageBuilderParameter();
 
-            parameter.EmptyGuid = new Guid(wspTestSite.Properties.Get("EmptyGuid"));
-
-            parameter.PropertySet_One_Guid = new Guid(wspTestSite.Properties.Get("PropertySet_One_Guid"));
-
             parameter.PropertySet_One_DBProperties = wspTestSite.Properties.Get("PropertySet_One_DBProperties").Split(delimiter);
-
-            parameter.PropertySet_Two_Guid = new Guid(wspTestSite.Properties.Get("PropertySet_Two_Guid"));
 
             parameter.PropertySet_Two_DBProperties = wspTestSite.Properties.Get("PropertySet_Two_DBProperties").Split(delimiter);
 
@@ -182,14 +176,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             parameter.EachRowSize = MessageBuilder.rowWidth;
 
-            parameter.PropertyRestrictionGuid = new Guid(wspTestSite.Properties.Get("PropertyRestrictionGuid"));
-
-            parameter.PropertyRestrictionProperty = UInt32.Parse(wspTestSite.Properties.Get("PropertyRestrictionProperty"));
-
-            parameter.ContentRestrictionGuid = new Guid(wspTestSite.Properties.Get("ContentRestrictionGuid"));
-
-            parameter.ContentRestrictionProperty = UInt32.Parse(wspTestSite.Properties.Get("ContentRestrictionProperty"));
-
             parameter.EType = UInt32.Parse(wspTestSite.Properties.Get("EType"));
 
             parameter.BufferSize = UInt32.Parse(wspTestSite.Properties.Get("BufferSize"));
@@ -201,10 +187,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             parameter.RowsToTransfer = UInt32.Parse(wspTestSite.Properties.Get("RowsToTransfer"));
 
             parameter.NumberOfSetBindingsColumns = Int32.Parse(wspTestSite.Properties.Get("NumberOfSetBindingsColumns"));
-            parameter.NumberOfCreateQueryColumns = Int32.Parse(wspTestSite.Properties.Get("NumberOfCreateQueryColumns"));
 
             parameter.ColumnParameters = new MessageBuilderColumnParameter[parameter.NumberOfSetBindingsColumns];
-            parameter.CreateQueryColumnParameters = new CreateQueryColumnParameter[parameter.NumberOfCreateQueryColumns];
 
             for (int i = 0; i < parameter.NumberOfSetBindingsColumns; i++)
             {
@@ -222,19 +206,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
                 parameter.ColumnParameters[i].StorageType = (StorageType)Enum.Parse(typeof(StorageType), wspTestSite.Properties.Get($"columnStorageType_{i}"));
             }
-
-            for (int i = 0; i < parameter.NumberOfCreateQueryColumns; i++)
-            {
-                parameter.CreateQueryColumnParameters[i] = new CreateQueryColumnParameter();
-                parameter.CreateQueryColumnParameters[i].Guid = new Guid(wspTestSite.Properties.Get($"CreateQuery_columnGuid_{i}"));
-                parameter.CreateQueryColumnParameters[i].PropertyId = UInt32.Parse(wspTestSite.Properties.Get($"CreateQuery_columnPropertyId_{i}"));
-
-            }
-
-
-            parameter.PropertyGuidToFetch = new Guid(wspTestSite.Properties.Get("PropertyGuidToFetch"));
-
-            parameter.PropertyIdToFetch = Int32.Parse(wspTestSite.Properties.Get("PropertyIdToFetch"));
 
             return parameter;
         }
@@ -770,16 +741,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
 
             //uint cursorAssociated = GetCursor(clientMachineName);
-            byte[] setBindingsInMessage
-                = builder.GetCPMSetBindingsIn(cursorAssociated,
-                out tableColumns, isValidBinding);
-            byte[] setbindingsInResponseMessage;
-            uint checkSum = 0;
+            var setBindingsInMessage = builder.GetCPMSetBindingsIn(cursorAssociated, out tableColumns, isValidBinding);
+            byte[] setbindingsInResponseMessageBytes;
             RequestSender sender
                 = GetRequestSender(isClientConnected); //Get the Sender
                                                        // RequestSender sender = new RequestSender(); //Get the Sender
-            bytesRead = sender.SendMessage(setBindingsInMessage,
-                out setbindingsInResponseMessage);
+            var setBindingsInMessageBytes = Helper.ToBytes(setBindingsInMessage);
+            bytesRead = sender.SendMessage(setBindingsInMessageBytes, out setbindingsInResponseMessageBytes);
             if (sender == defaultSender)
             {
                 // This means that disconnect message has been sent
@@ -797,15 +765,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             // for the protocol transport
             wspTestSite.CaptureRequirement(3, @"All messages MUST be " +
                          "transported using a named pipe: \\pipe\\MSFTEWDS");
-            if (setbindingsInResponseMessage != null)
+            if (setbindingsInResponseMessageBytes != null)
             {
-                int startingIndex = 0;
-                uint msgId
-                    = Helper.GetUInt(setbindingsInResponseMessage,
-                    ref startingIndex);
-                uint msgStatus
-                    = Helper.GetUInt(setbindingsInResponseMessage,
-                    ref startingIndex);
+                var response = new CPMSetBindingsOut();
+                response.Request = setBindingsInMessage;
+                Helper.FromBytes(ref response, setbindingsInResponseMessageBytes);
+
+                uint msgId = (UInt32)response.Header._msg;
+                uint msgStatus = response.Header._status;
                 if (msgStatus != 0)
                 {
                     wspTestSite.CaptureRequirementIfAreEqual<int>(bytesRead,
@@ -836,9 +803,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 if ((msgId == (uint)MessageType.CPMSetBindingsIn)
                     && (msgStatus == 0x00000000))
                 {
-                    validator.ValidateSetBindingsInResponse
-                        (setbindingsInResponseMessage, checkSum,
-                        msgStatus, (uint)bytesRead);
+                    validator.ValidateSetBindingsInResponse(response);
                 }
                 CPMSetBindingsInResponse(msgStatus); // Fire Response Event
             }
@@ -886,14 +851,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="eType">Type of SeekDescription</param>
         public void CPMGetRowsIn(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType)
         {
-            byte[] getRowsInMessage
-                = builder.GetCPMRowsInMessage(cursor, rowsToTransfer, rowWidth, cbReadBuffer, fBwdFetch, eType, out rowsInReserve);
+            var getRowsInMessage = builder.GetCPMRowsInMessage(cursor, rowsToTransfer, rowWidth, cbReadBuffer, fBwdFetch, eType, out rowsInReserve);
             byte[] getRowsOutMessage;
             uint checkSum = 0;
             RequestSender sender
                 = GetRequestSender(isClientConnected); //Get the Sender
 
-            sender.SendMessage(getRowsInMessage, out getRowsOutMessage);
+            var getRowsInMessageBytes = Helper.ToBytes(getRowsInMessage);
+
+            sender.SendMessage(getRowsInMessageBytes, out getRowsOutMessage);
             if (sender == defaultSender)
             {
                 // This means that disconnect message has been sent
@@ -994,16 +960,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         public void CPMCiStateInOut()
         {
-
-            //uint cursorAssociated = GetCursor(clientMachineName);
-            byte[] ciStateInOutMessage = builder.GetCPMCiStateInOut();
-            byte[] ciStateInOutResponseMessage;
-            uint checkSum = 0;
+            var ciStateInOutMessage = builder.GetCPMCiStateInOut();
+            var ciStateInOutMessageBytes = Helper.ToBytes(ciStateInOutMessage);
+            byte[] ciStateInOutResponseMessageBytes;
             RequestSender sender
                 = GetRequestSender(isClientConnected); //Get the Sender
-                                                       // RequestSender sender = new RequestSender(); //Get the Sender
-            bytesRead = sender.SendMessage(ciStateInOutMessage,
-                out ciStateInOutResponseMessage);
+            bytesRead = sender.SendMessage(ciStateInOutMessageBytes, out ciStateInOutResponseMessageBytes);
             if (sender == defaultSender)
             {
                 // This means that disconnect message has been sent
@@ -1022,21 +984,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             wspTestSite.CaptureRequirement(3, @"All messages MUST be " +
                   "transported using a named pipe: \\pipe\\MSFTEWDS");
 
-            if (ciStateInOutResponseMessage != null)
+            if (ciStateInOutResponseMessageBytes != null)
             {
-                int startingIndex = 0;
-                uint msgId = Helper.GetUInt(ciStateInOutResponseMessage,
-                    ref startingIndex);
-                uint msgStatus = Helper.GetUInt(ciStateInOutResponseMessage,
-                    ref startingIndex);
+                var header = new WspMessageHeader();
+                Helper.FromBytes(ref header, ciStateInOutResponseMessageBytes);
+
+                uint msgId = (UInt32)header._msg;
+                uint msgStatus = header._status;
                 if (msgStatus != 0)
                 {
                     wspTestSite.CaptureRequirementIfAreEqual<int>(bytesRead,
-        Constant.SIZE_OF_HEADER, 619,
-        "Whenever an error occurs during processing of a " +
-        "message sent by a client, the server MUST respond " +
-        "with the message header (only) of the message sent " +
-        "by the client, keeping the _msg field intact.");
+                        Constant.SIZE_OF_HEADER, 619,
+                        "Whenever an error occurs during processing of a " +
+                        "message sent by a client, the server MUST respond " +
+                        "with the message header (only) of the message sent " +
+                        "by the client, keeping the _msg field intact.");
                     //If 4 byte Non Zero field is read as status
                     // The requirement 620 gets validated
                     wspTestSite.CaptureRequirement(620,
@@ -1046,8 +1008,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 }
                 if (msgStatus == 0)
                 {
-                    validator.ValidateCiStateInOut(ciStateInOutResponseMessage,
-                        checkSum);
+                    var response = new CPMCiStateInOut();
+                    Helper.FromBytes(ref response, ciStateInOutResponseMessageBytes);
+
+                    validator.ValidateCiStateInOut(response);
                 }
                 CPMCiStateInOutResponse(msgStatus); // Fire Response Event
             }
