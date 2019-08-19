@@ -83,11 +83,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         CI_STATE_HIGH_CPU = 0x00020000,
     }
 
-
-    /// <summary>
-    /// The CPMCiStateInOut message contains information about the state of the GSS.
-    /// </summary>
-    public struct CPMCiStateInOut : IWspInMessage, IWspOutMessage
+    public struct CPMCiState
     {
         /// <summary>
         /// A 32-bit unsigned integer indicating the size, in bytes, of this message (excluding the common header). MUST be set to 0x0000003C.
@@ -164,19 +160,36 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// A 32-bit unsigned integer indicating the size, in megabytes, of the property cache.
         /// </summary>
         public UInt32 dwPropCacheSize;
+    }
 
-        public WspMessageHeader Header { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public IWspInMessage Request { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    /// <summary>
+    /// The CPMCiStateInOut message contains information about the state of the GSS.
+    /// </summary>
+    public struct CPMCiStateInOut : IWspInMessage, IWspOutMessage
+    {
+        public CPMCiState State;
+
+        public WspMessageHeader Header { get; set; }
+
+        public IWspInMessage Request { get; set; }
 
         public void FromBytes(WspBuffer buffer)
         {
-            throw new NotImplementedException();
+            var header = new WspMessageHeader();
+
+            header.FromBytes(buffer);
+
+            Header = header;
+
+            buffer.ToStruct<CPMCiState>();
         }
 
         public void ToBytes(WspBuffer buffer)
         {
-            buffer.Add(this);
+            Header.ToBytes(buffer);
+
+            buffer.Add(State);
         }
     }
 }

@@ -20,7 +20,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
         /// <summary>
         /// A Boolean value indicating whether the document identifiers pointed by the cursors are unique throughout query results. MUST be set to one of the following values.
-        /// 0x00000000	The cursors are unique only throughout the rowset.        /// 0x00000001	The cursors are unique across multiple query results.
+        /// 0x00000000	The cursors are unique only throughout the rowset.
+        /// 0x00000001	The cursors are unique across multiple query results.
         /// </summary>
         public UInt32 _fWorkIdUnique;
 
