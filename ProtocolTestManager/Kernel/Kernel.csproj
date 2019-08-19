@@ -58,6 +58,9 @@
       <HintPath>..\packages\Microsoft.VisualStudio.Setup.Configuration.Interop.1.16.30\lib\net35\Microsoft.VisualStudio.Setup.Configuration.Interop.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Management" />
@@ -100,6 +103,7 @@
     <Compile Include="TestEngine\Logger.cs" />
     <Compile Include="TestEngine\PipeSinkServer.cs" />
     <Compile Include="TestEngine\TestEngine.cs" />
+    <Compile Include="TestReport\JsonReport.cs" />
     <Compile Include="TestReport\PlainReport.cs" />
     <Compile Include="TestReport\TestReport.cs" />
     <Compile Include="TestReport\XUnitReport.cs" />

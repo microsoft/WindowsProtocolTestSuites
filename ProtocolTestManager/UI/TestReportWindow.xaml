@@ -19,6 +19,7 @@
         <GroupBox Header="Format" Grid.Row="1">
             <StackPanel Name="ReportFormatGroup">
                 <RadioButton Margin="4,4,4,0" Name="Plain" IsChecked="True">Plain</RadioButton>
+                <RadioButton Margin="4,4,4,0" Name="Json">Json</RadioButton>
                 <RadioButton Margin="4" Name="XUnit" >xUnit</RadioButton>
             </StackPanel>
         </GroupBox>

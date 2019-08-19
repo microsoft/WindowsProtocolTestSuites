@@ -31,7 +31,7 @@ namespace Microsoft.Protocols.TestManager.CLI
         [Option('f', "format",
             Required = false,
             Default = ReportFormat.Plain,
-            HelpText = "Specifies the report format.\nValid values are: plain, xunit.")]
+            HelpText = "Specifies the report format.\nValid values are: plain, json, xunit.")]
         public ReportFormat ReportFormat { get; set; }
 
         [Option("outcome",
@@ -49,6 +49,7 @@ namespace Microsoft.Protocols.TestManager.CLI
     public enum ReportFormat
     {
         Plain,
+        Json,
         XUnit,
     }
 
