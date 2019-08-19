@@ -100,19 +100,13 @@
     HINT: SIZE around 40 is sufficient for retrieve values in fragments
     -->
     <Property name="CbChunk" value="38" />
-    <!-- Property to Fetch from the Server-->
-    <Property name="PropertyGuidToFetch" value="6B8DA074-3B5C-43BC-886F-0A2CDCE00B6F" />
-    <Property name="PropertyIdToFetch" value="100" />
     <!-- Properties that are unlikely to change-->
     <Property name="TestName" value="MS-WSP Test" />
     <Property name="FeatureName" value="Sample" />
     <!-- Configurable properties related to CPMConnectIn message -->
     <!-- 32 for 32-bit systems and 64 for 64-bit systems-->
-    <Property name="EmptyGuid" value="{00000000-0000-0000-0000-000000000000}" />
     <!-- ConnectIn and Connect Out-->
-    <Property name="PropertySet_One_Guid" value="A9BD1526-6A80-11D0-8C9D-0020AF1D740E" />
     <Property name="PropertySet_One_DBProperties" value="2,7,4,3" />
-    <Property name="PropertySet_Two_Guid" value="AFAFACA5-B5D1-11D0-8C62-00C04FC2DB8D" />
     <Property name="PropertySet_Two_DBProperties" value="2" />
     <!-- Array of Property Sets-->
     <!--*******************************************-->
@@ -125,21 +119,6 @@
     <Property name="Array_PropertySet_Four_Guid" value="A9BD1526-6A80-11D0-8C9D-0020AF1D740E" />
     <Property name="Array_PropertySet_Four_DBProperties" value="3,4,2" />
     <!--*******************************************-->
-
-    <!--   Column when CreateQuery-->
-    <Property name="NumberOfCreateQueryColumns" value="3" />
-
-    <!-- This is the base-name of the System.ItemNameDisplay. -->
-    <Property name="CreateQuery_columnGuid_0" value="6B8DA074-3B5C-43BC-886F-0A2CDCE00B6F" />
-    <Property name="CreateQuery_columnPropertyId_0" value="100" />
-
-    <!-- The contents of the item. This property is for query restrictions only; it cannot be retrieved in a query result. The WSS friendly name is 'contents'. -->
-    <Property name="CreateQuery_columnGuid_1" value="B725F130-47EF-101A-A5F1-02608C9EEBAC" />
-    <Property name="CreateQuery_columnPropertyId_1" value="22" />
-
-    <!-- Used to narrow the scope of a query to the specified directory and subdirectories. -->
-    <Property name="CreateQuery_columnGuid_2" value="B725F130-47EF-101A-A5F1-02608C9EEBAC" />
-    <Property name="CreateQuery_columnPropertyId_2" value="19" />
 
     <!--   Column when SetBindings-->
     <Property name="NumberOfSetBindingsColumns" value="1" />
@@ -197,10 +176,6 @@
     <Property name="BufferSize" value="4096" />
     <Property name="RowsToTransfer" value="20" />
     <Property name="EType" value="1" />
-    <Property name="ContentRestrictionGuid" value="49691C90-7E17-101A-A91C-08002B2ECDA9" />
-    <Property name="ContentRestrictionProperty" value="6" />
-    <Property name="PropertyRestrictionGuid" value="B725F130-47EF-101A-A5F1-02608C9EEBAC" />
-    <Property name="PropertyRestrictionProperty" value="22" />
   </Properties>
   <!-- The default profile name.-->
   <TestLog defaultprofile="Verbose">
