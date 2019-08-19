@@ -41,7 +41,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             foreach (var prop in aProps)
             {
-                buffer.Align(4);
+                buffer.AlignWrite(4);
 
                 prop.ToBytes(buffer);
             }

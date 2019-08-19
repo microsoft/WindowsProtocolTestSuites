@@ -17,6 +17,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         }
         #endregion
 
+        #region Properties
+        /// <summary>
+        /// Indicating whether the client version is 32bit/64-bit (false/true).
+        /// </summary>
+        public bool Is64bitClientVersion { get; private set; }
+
+        /// <summary>
+        /// Indicating whether the server version is 32bit/64-bit (false/true).
+        /// </summary>
+        public bool Is64bitServerVersion { get; private set; }
+        #endregion
+
         #region Methods
         /// <summary>
         /// Send CPMConnectIn.
@@ -38,6 +50,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             CDbPropSet[] aPropertySet
             )
         {
+            if ((clientVersion & WspConsts.Is64bitVersion) != 0)
+            {
+                Is64bitClientVersion = true;
+            }
+            else
+            {
+                Is64bitClientVersion = false;
+            }
+
             var request = new CPMConnectIn()
             {
                 Header = new WspMessageHeader
@@ -137,11 +158,42 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 return header._status;
             }
 
-            Helper.FromBytes(ref response, lastResponseBytes);
+            var buffer = new WspBuffer(lastResponseBytes);
+
+            response.FromBytes(buffer);
+
+            // Update the state of client according to response.
+            UpdateContext(response);
+
+            // Check the response size against unmarshalled size.
+            if (buffer.ReadOffset != buffer.WriteOffset)
+            {
+                throw new InvalidOperationException("Unexpected response size from server!");
+            }
 
             return 0;
         }
         #endregion
+
+        private void UpdateContext(IWspOutMessage response)
+        {
+            switch (response.Header._msg)
+            {
+                case WspMessageHeader_msg_Values.CPMConnectOut:
+                    {
+                        var connectOutMessage = (CPMConnectOut)response;
+                        if ((connectOutMessage._serverVersion & WspConsts.Is64bitVersion) != 0)
+                        {
+                            Is64bitServerVersion = true;
+                        }
+                        else
+                        {
+                            Is64bitServerVersion = false;
+                        }
+                    }
+                    break;
+            }
+        }
 
 
         public void Dispose()

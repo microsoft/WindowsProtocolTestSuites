@@ -41,7 +41,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             if (isPresent == 0x01)
             {
-                buffer.Align(4);
+                buffer.AlignWrite(4);
 
                 Restriction.ToBytes(buffer);
             }

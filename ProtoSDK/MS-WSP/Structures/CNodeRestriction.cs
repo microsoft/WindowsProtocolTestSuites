@@ -33,7 +33,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             foreach (var node in _paNode)
             {
-                buffer.Align(4);
+                buffer.AlignWrite(4);
                 node.ToBytes(buffer);
             }
         }

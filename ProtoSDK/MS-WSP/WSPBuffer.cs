@@ -81,6 +81,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
         private DynamicByteArray buffer;
 
+        #region Properties
         /// <summary>
         /// The current write buffer into buffer.
         /// </summary>
@@ -96,6 +97,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 return buffer.Size;
             }
         }
+        #endregion
 
         #region Constructors
         /// <summary>
@@ -145,10 +147,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         }
 
         /// <summary>
-        /// Marshal a generic object to buffer.
+        /// Marshal a generic struct to buffer.
         /// </summary>
-        /// <typeparam name="T">The object to be added.</typeparam>
-        /// <param name="t"></param>
+        /// <typeparam name="T">The struct to be added.</typeparam>
+        /// <param name="t">A generic struct support marshalling.</param>
         public void Add<T>(T t) where T : struct
         {
             AddRange(TypeMarshal.ToBytes(t));
@@ -162,18 +164,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <param name="alignment">The alignment to be used.</param>
         public void Add<T>(T t, int alignment) where T : struct
         {
-            Align(alignment);
+            AlignWrite(alignment);
 
             AddRange(TypeMarshal.ToBytes(t));
         }
 
         /// <summary>
-        /// Align the buffer to next aligned position.
+        /// Align the buffer to next aligned position for write.
         /// </summary>
         /// <param name="alignment">The alignment to be used.</param>
-        public void Align(int alignment)
+        public void AlignWrite(int alignment)
         {
-            while (buffer.Size % alignment != 0)
+            while (WriteOffset % alignment != 0)
             {
                 buffer.AddByte(0);
             }
@@ -188,12 +190,29 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             return buffer.Buffer.Take(buffer.Size).ToArray();
         }
 
+        /// <summary>
+        /// Unmarshall a generic struct from buffer.
+        /// </summary>
+        /// <typeparam name="T">A generic struct support unmarshalling.</typeparam>
+        /// <returns>The struct unmarshalled from buffer.</returns>
         public T ToStruct<T>() where T : struct
         {
             int offset = ReadOffset;
             var result = TypeMarshal.ToStruct<T>(buffer.Buffer, ref offset);
             ReadOffset = offset;
             return result;
+        }
+
+        /// <summary>
+        /// Align the buffer to next aligned position for read.
+        /// </summary>
+        /// <param name="alignment">The alignment to be used.</param>
+        public void AlignRead(int alignment)
+        {
+            while (ReadOffset % alignment != 0)
+            {
+                ReadOffset++;
+            }
         }
     }
 }

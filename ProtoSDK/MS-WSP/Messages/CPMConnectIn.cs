@@ -133,11 +133,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             tempBuffer.AddUnicodeString(UserName);
 
-            tempBuffer.Align(8);
+            tempBuffer.AlignWrite(8);
 
             tempBuffer.AddRange(bufferForBlob1.GetBytes());
 
-            tempBuffer.Align(8);
+            tempBuffer.AlignWrite(8);
 
             tempBuffer.AddRange(bufferForBlob2.GetBytes());
 

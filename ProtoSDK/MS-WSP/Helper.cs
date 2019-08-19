@@ -214,7 +214,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 checksum += Helper.GetUInt(messageBlob, ref index);
             }
 
-            checksum = checksum ^ 0x59533959;
+            checksum = checksum ^ WspConsts.ChecksumMagicNumber;
             checksum -= (UInt32)msg;
 
             return checksum;

@@ -52,7 +52,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             {
                 if (data is IWspStructure)
                 {
-                    buffer.Align(4);
+                    buffer.AlignWrite(4);
                     (data as IWspStructure).ToBytes(buffer);
                 }
                 else

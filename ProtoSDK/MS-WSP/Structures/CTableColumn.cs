@@ -82,7 +82,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
                 buffer.Add(ValueUsed);
 
-                buffer.Align(2);
+                buffer.AlignWrite(2);
 
                 buffer.Add(ValueOffset.Value);
 
@@ -107,7 +107,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
                 buffer.Add(StatusUsed);
 
-                buffer.Align(2);
+                buffer.AlignWrite(2);
 
                 buffer.Add(StatusOffset.Value);
             }
@@ -126,7 +126,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
                 buffer.Add(LengthUsed);
 
-                buffer.Align(2);
+                buffer.AlignWrite(2);
 
                 buffer.Add(LengthOffset.Value);
             }
