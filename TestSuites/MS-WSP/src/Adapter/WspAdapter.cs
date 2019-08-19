@@ -821,17 +821,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         "message sent by a client, the server MUST set the " +
                         "_status field to the error code value.");
 
-                    if (wspTestSite.Properties.Get("ServerOSVersion").ToUpper() == "WIN7")
-                    {
-                        if (!isCursorValid && isValidBinding)
-                        {
-                            //MS-WSP_R745
-                            wspTestSite.CaptureRequirementIfAreEqual<uint>((uint)WspErrorCode.E_FAIL, msgStatus, 745,
-                                "When the server receives a CPMSetBindingsIn message request from a client, " +
-                                "the server MUST report an E_FAIL (0x80004005) error if the cursor handle passed is not there in the list of the client's cursor handles.");
-                        }
-                    }
-
                 }
                 if ((msgId == (uint)MessageType.CPMSetBindingsIn)
                     && (msgStatus == 0x00000000))

@@ -20,7 +20,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
         public enum ArgumentType
         {
-            AllValid
+            AllValid,
+            InvalidRowSize,
+            InvalidCursor
         }
         private ArgumentType argumentType;
 
@@ -78,25 +80,41 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMGetRowsIn(true);
         }
 
-        //[TestMethod]
-        //[TestCategory("CPMSetBindings")]
-        //[Description("This test case is designed to verify the server response if invalid Cursor is sent in CPMGetRowsIn.")]
-        //public void CPMGetRows_InvalidCursor()
-        //{
+        [TestMethod]
+        [TestCategory("CPMSetBindings")]
+        [Description("This test case is designed to verify the server response if invalid row size is sent in CPMSetBindingsIn.")]
+        public void CPMSetBindings_InvalidRowSize()
+        {
 
-        //    Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-        //    wspAdapter.CPMConnectInRequest();
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
+            wspAdapter.CPMConnectInRequest();
 
-        //    Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
-        //    wspAdapter.CPMCreateQueryIn(true);
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
+            wspAdapter.CPMCreateQueryIn(true);
 
-        //    Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
-        //    wspAdapter.CPMSetBindingsIn(true, true);
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn with invalid row size and expects NOT SUCCEED.");
+            argumentType = ArgumentType.InvalidRowSize;
+            wspAdapter.CPMSetBindingsIn(false, true);
+            //E_ABORT
+        }
 
-        //    Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn with invalid cursor and expects ERROR_INVALID_PARAMETER .");
-        //    argumentType = ArgumentType.InvalidCursor;
-        //    wspAdapter.CPMGetRowsIn(invalidCursor, validRowsToTransfer, MessageBuilder.rowWidth, validReadBuffer, (uint)FetchType.ForwardOrder, (uint)RowSeekType.eRowSeekNext);
-        //}
+        [TestMethod]
+        [TestCategory("CPMSetBindings")]
+        [Description("This test case is designed to verify the server response if invalid cursor is sent in CPMSetBindingsIn.")]
+        public void CPMSetBindings_InvalidCursor()
+        {
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
+            wspAdapter.CPMConnectInRequest();
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
+            wspAdapter.CPMCreateQueryIn(true);
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn with invalid cursor and expects NOT SUCCEED.");
+            argumentType = ArgumentType.InvalidCursor;
+            wspAdapter.CPMSetBindingsIn(true, false);
+            //ERROR_INVALID_STATUS
+        }
 
         #endregion
 
@@ -122,9 +140,12 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 case ArgumentType.AllValid:
                     Site.Assert.AreEqual((uint)0, errorCode, "Server should return succeed for CPMSetBindingsIn.");
                     break;
-                //case ArgumentType.InvalidCursor:
-                //    Site.Assert.AreEqual((uint)WspErrorCode.ERROR_INVALID_PARAMETER, errorCode, "Server should return ERROR_INVALID_PARAMETER if Cursor of CPMGetRowsIn is invalid.");
-                //    break;
+                case ArgumentType.InvalidRowSize:
+                    Site.Assert.AreNotEqual((uint)0, errorCode, "Server should not return succeed if row size of CPMSetBindingsIn is invalid.");
+                    break;
+                case ArgumentType.InvalidCursor:
+                    Site.Assert.AreEqual((uint)WspErrorCode.ERROR_INVALID_PARAMETER, errorCode, "Server should return ERROR_INVALID_PARAMETER if the cursor of CPMSetBindingsIn is invalid.");
+                    break;
             }
         }
     }
