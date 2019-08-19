@@ -45,16 +45,14 @@ namespace Microsoft.Protocols.TestManager.UI
                 return;
             }
 
-            TestReport report;
-            if (PlainReport.IsChecked == true)
+            var selectedRadioButton = ReportFormatGroup.Children.OfType<RadioButton>().FirstOrDefault(rb => rb.IsChecked == true);
+            if (selectedRadioButton == null)
             {
-                report = new PlainReport(caselist);
+                MessageBox.Show(StringResources.NoReportFormatSelected);
+                return;
             }
-            else if (XUnitReport.IsChecked == true)
-            {
-                report = new XUnitReport(caselist);
-            }
-            else
+            TestReport report = TestReport.GetInstance(selectedRadioButton.Name, caselist);
+            if (report == null)
             {
                 MessageBox.Show(StringResources.UnknownReportFormat);
                 return;

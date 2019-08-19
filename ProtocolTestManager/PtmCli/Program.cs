@@ -195,16 +195,8 @@ namespace Microsoft.Protocols.TestManager.CLI
 
             var testcases = util.SelectTestCases(pass, fail, inconclusive, false);
 
-            TestReport report;
-            if (format == ReportFormat.Plain)
-            {
-                report = new PlainReport(testcases);
-            }
-            else if (format == ReportFormat.XUnit)
-            {
-                report = new XUnitReport(testcases);
-            }
-            else
+            TestReport report = TestReport.GetInstance(format.ToString(), testcases);
+            if (report == null)
             {
                 throw new Exception(String.Format(StringResources.UnknownReportFormat, format.ToString()));
             }
