@@ -48,6 +48,24 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public string Property_name;
 
+        #region Constructors
+        /// <summary>
+        /// Construct an integer property.
+        /// </summary>
+        /// <param name="guid">GUID of property.</param>
+        /// <param name="propertyID">Identifier of property.</param>
+        public CFullPropSpec(Guid guid, UInt32 propertyID)
+        {
+            _guidPropSet = guid;
+
+            ulKind = ulKind_Values.PRSPEC_PROPID;
+
+            PrSpec = propertyID;
+
+            Property_name = null;
+        }
+        #endregion
+
         public void FromBytes(WspBuffer buffer)
         {
             throw new NotImplementedException();

@@ -22,21 +22,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         public StorageType StorageType;
     }
 
-    public class CreateQueryColumnParameter
-    {
-        public Guid Guid;
-        public uint PropertyId;
-    }
-
     public class MessageBuilderParameter
     {
-        public Guid EmptyGuid;
-
-        public Guid PropertySet_One_Guid;
-
         public string[] PropertySet_One_DBProperties;
-
-        public Guid PropertySet_Two_Guid;
 
         public string[] PropertySet_Two_DBProperties;
 
@@ -58,14 +46,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
         public uint EachRowSize;
 
-        public Guid PropertyRestrictionGuid;
-
-        public UInt32 PropertyRestrictionProperty;
-
-        public Guid ContentRestrictionGuid;
-
-        public UInt32 ContentRestrictionProperty;
-
         public uint EType;
 
         public uint BufferSize;
@@ -78,16 +58,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
         public int NumberOfSetBindingsColumns;
 
-        public int NumberOfCreateQueryColumns;
-
         public MessageBuilderColumnParameter[] ColumnParameters;
-
-        public CreateQueryColumnParameter[] CreateQueryColumnParameters;
-
-
-        public Guid PropertyGuidToFetch;
-
-        public int PropertyIdToFetch;
     }
 
     /// <summary>
@@ -388,8 +359,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             int messageOffset = 0;
             messageOffset += 4 * Constant.SIZE_OF_UINT;
             TableColumn[] col = GetTableColumnFromConfig();
-            byte[] propSpec = GetFullPropSec(parameter.PropertyGuidToFetch,
-                PROPERTY_ID, parameter.PropertyIdToFetch, ref messageOffset);
+            byte[] propSpec = GetFullPropSec(WspConsts.System_ItemName._guidPropSet,
+                PROPERTY_ID, (int)WspConsts.System_ItemName.PrSpec, ref messageOffset);
             if (messageOffset % OFFSET_4 != 0)
             {
                 padding = new byte[OFFSET_4 - messageOffset % OFFSET_4];
@@ -655,7 +626,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             uint cProperties = 4;
 
-            propSet.guidPropertySet = parameter.PropertySet_One_Guid;
+            propSet.guidPropertySet = WspConsts.DBPROPSET_FSCIFRMWRK_EXT;
 
             propSet.cProperties = cProperties;
 
@@ -713,7 +684,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             uint cProperties = 1;
 
-            propSet.guidPropertySet = parameter.PropertySet_Two_Guid;
+            propSet.guidPropertySet = WspConsts.DBPROPSET_CIFRMWRKCORE_EXT;
 
             propSet.cProperties = cProperties;
 
@@ -1025,49 +996,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <returns>BLOB ColumnID</returns>
         private CDbColId GetColumnId()
         {
-            var result = new CDbColId(parameter.EmptyGuid, 0);
+            var result = new CDbColId(WspConsts.EmptyGuid, 0);
             return result;
         }
         #endregion
 
         #region Structures of CPMgetRowsIn message
-
-        /// <summary>
-        /// Gets FullPropertySpec for a given GUID, eKIND and propSec Id
-        /// </summary>
-        /// <param name="guid">PropSpec GUID</param>
-        /// <param name="kind">EKind</param>
-        /// <param name="propSec">PropSec Id</param>
-        /// <param name="messageOffset">offset from the 
-        /// beginning of the message</param>
-        /// <returns>full property spec structure BLOB</returns>
-        private CFullPropSpec GetFullPropSec(Guid guid, ulKind_Values kind, object prop)
-        {
-            var result = new CFullPropSpec();
-
-            result._guidPropSet = guid;
-
-            result.ulKind = kind;
-
-            switch (kind)
-            {
-                case ulKind_Values.PRSPEC_LPWSTR:
-                    {
-                        result.PrSpec = (UInt32)((string)prop).Length;
-                        result.Property_name = (string)prop;
-                    }
-                    break;
-
-                case ulKind_Values.PRSPEC_PROPID:
-                    {
-                        result.PrSpec = (UInt32)prop;
-                    }
-                    break;
-            }
-
-            return result;
-        }
-
         /// <summary>
         /// Gets FullPropertySpec for a given GUID, eKIND and propSec Id
         /// </summary>
@@ -1239,11 +1173,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             node._relop = _relop_Values.PREQ;
 
-            node._Property = GetFullPropSec(parameter.PropertyRestrictionGuid, ulKind_Values.PRSPEC_PROPID, parameter.PropertyRestrictionProperty);
+            node._Property = WspConsts.System_Search_Scope;
 
             node._prval = GetBaseStorageVariant(vType_Values.VT_LPWSTR, new VT_LPWSTR(searchScope));
 
-            node._lcid = 0x0000409;
+            node._lcid = parameter.LCID_VALUE;
 
             result.Restriction = node;
 
@@ -1303,13 +1237,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             var node = new CContentRestriction();
 
-            node._Property = GetFullPropSec(parameter.ContentRestrictionGuid, ulKind_Values.PRSPEC_PROPID, parameter.ContentRestrictionProperty);
+            node._Property = WspConsts.QueryAll;
 
             node.Cc = (UInt32)queryString.Length;
 
             node._pwcsPhrase = queryString;
 
-            node.Lcid = 0x409;
+            node.Lcid = parameter.LCID_VALUE;
 
             node._ulGenerateMethod = _ulGenerateMethod_Values.GENERATE_METHOD_EXACT;
 
@@ -1589,14 +1523,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         {
             var result = new CPidMapper();
 
-            result.count = (uint)parameter.NumberOfCreateQueryColumns;
-
-            result.aPropSpec = new CFullPropSpec[result.count];
-
-            for (int i = 0; i < parameter.CreateQueryColumnParameters.Length; i++)
+            result.aPropSpec = new CFullPropSpec[]
             {
-                result.aPropSpec[i] = GetFullPropSec(parameter.CreateQueryColumnParameters[i].Guid, ulKind_Values.PRSPEC_PROPID, parameter.CreateQueryColumnParameters[i].PropertyId);
-            }
+                WspConsts.System_ItemName,
+                WspConsts.System_Search_Scope,
+                WspConsts.System_Search_Contents,
+            };
+
+            result.count = (UInt32)result.aPropSpec.Length;
 
             return result;
         }

@@ -154,13 +154,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             var parameter = new MessageBuilderParameter();
 
-            parameter.EmptyGuid = new Guid(wspTestSite.Properties.Get("EmptyGuid"));
-
-            parameter.PropertySet_One_Guid = new Guid(wspTestSite.Properties.Get("PropertySet_One_Guid"));
-
             parameter.PropertySet_One_DBProperties = wspTestSite.Properties.Get("PropertySet_One_DBProperties").Split(delimiter);
-
-            parameter.PropertySet_Two_Guid = new Guid(wspTestSite.Properties.Get("PropertySet_Two_Guid"));
 
             parameter.PropertySet_Two_DBProperties = wspTestSite.Properties.Get("PropertySet_Two_DBProperties").Split(delimiter);
 
@@ -182,14 +176,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             parameter.EachRowSize = MessageBuilder.rowWidth;
 
-            parameter.PropertyRestrictionGuid = new Guid(wspTestSite.Properties.Get("PropertyRestrictionGuid"));
-
-            parameter.PropertyRestrictionProperty = UInt32.Parse(wspTestSite.Properties.Get("PropertyRestrictionProperty"));
-
-            parameter.ContentRestrictionGuid = new Guid(wspTestSite.Properties.Get("ContentRestrictionGuid"));
-
-            parameter.ContentRestrictionProperty = UInt32.Parse(wspTestSite.Properties.Get("ContentRestrictionProperty"));
-
             parameter.EType = UInt32.Parse(wspTestSite.Properties.Get("EType"));
 
             parameter.BufferSize = UInt32.Parse(wspTestSite.Properties.Get("BufferSize"));
@@ -201,10 +187,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             parameter.RowsToTransfer = UInt32.Parse(wspTestSite.Properties.Get("RowsToTransfer"));
 
             parameter.NumberOfSetBindingsColumns = Int32.Parse(wspTestSite.Properties.Get("NumberOfSetBindingsColumns"));
-            parameter.NumberOfCreateQueryColumns = Int32.Parse(wspTestSite.Properties.Get("NumberOfCreateQueryColumns"));
 
             parameter.ColumnParameters = new MessageBuilderColumnParameter[parameter.NumberOfSetBindingsColumns];
-            parameter.CreateQueryColumnParameters = new CreateQueryColumnParameter[parameter.NumberOfCreateQueryColumns];
 
             for (int i = 0; i < parameter.NumberOfSetBindingsColumns; i++)
             {
@@ -222,19 +206,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
                 parameter.ColumnParameters[i].StorageType = (StorageType)Enum.Parse(typeof(StorageType), wspTestSite.Properties.Get($"columnStorageType_{i}"));
             }
-
-            for (int i = 0; i < parameter.NumberOfCreateQueryColumns; i++)
-            {
-                parameter.CreateQueryColumnParameters[i] = new CreateQueryColumnParameter();
-                parameter.CreateQueryColumnParameters[i].Guid = new Guid(wspTestSite.Properties.Get($"CreateQuery_columnGuid_{i}"));
-                parameter.CreateQueryColumnParameters[i].PropertyId = UInt32.Parse(wspTestSite.Properties.Get($"CreateQuery_columnPropertyId_{i}"));
-
-            }
-
-
-            parameter.PropertyGuidToFetch = new Guid(wspTestSite.Properties.Get("PropertyGuidToFetch"));
-
-            parameter.PropertyIdToFetch = Int32.Parse(wspTestSite.Properties.Get("PropertyIdToFetch"));
 
             return parameter;
         }

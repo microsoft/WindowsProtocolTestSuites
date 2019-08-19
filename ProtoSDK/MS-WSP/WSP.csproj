@@ -101,6 +101,7 @@
     <Compile Include="Structures\VT_LPWSTR.cs" />
     <Compile Include="Structures\VT_VECTOR.cs" />
     <Compile Include="WspBuffer.cs" />
+    <Compile Include="WspConsts.cs" />
     <Compile Include="WspMessageHeader.cs" />
     <Compile Include="WspObject.cs" />
   </ItemGroup>
