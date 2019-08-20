@@ -86,6 +86,7 @@
     <Compile Include="TestCaseSetScopePrioritization_StatusInvalidParameter.cs" />
     <Compile Include="TestCaseUpdateDocumentsIn_StatusInvalid.cs" />
     <Compile Include="TraditionalCases\CPMGetRows.cs" />
+    <Compile Include="TraditionalCases\CPMSetBindings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MS-WSP_ServerTestSuite.deployment.ptfconfig">
