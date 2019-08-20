@@ -74,15 +74,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [TestMethod()]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
-        [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.QueryDirectory)]
         [TestCategory(TestCategories.NonSmb)]
-        [Description("Create file with ::$INDEX_ALLOCATION as suffix and query directory info.")]
-        public void Fs_CreateFIle_QueryDirectory_Suffix_INDEX_ALLOCATION()
+        [Description("Create directory with ::$INDEX_ALLOCATION as suffix and query directory info.")]
+        public void Fs_CreateDiretory_QueryDirectory_Suffix_INDEX_ALLOCATION()
         {
             // Create a new directory with name as suffix
             string fileName = this.fsaAdapter.ComposeRandomFileName(8);
 
-            fileName = fileName + @"::$INDEX_ALLOCATION";
+            fileName = $"{fileName}::$INDEX_ALLOCATION";
 
             MessageStatus status = CreateDirectory(fileName);
 
@@ -100,32 +100,32 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [TestMethod()]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
-        [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.QueryDirectory)]
         [TestCategory(TestCategories.NonSmb)]
-        [Description("Create file with :$I30:$INDEX_ALLOCATION as suffix and query directory info.")]
-        public void Fs_CreateFIle_QueryDirectory_Suffix_I30_INDEX_ALLOCATION()
+        [Description("Create directory with :$I30:$INDEX_ALLOCATION as suffix and query directory info.")]
+        public void Fs_CreateDirectory_QueryDirectory_Suffix_I30_INDEX_ALLOCATION()
         {
             // Create a new directory with name as suffix
             string fileName = this.fsaAdapter.ComposeRandomFileName(8);
 
-            fileName = fileName + @":$I30:$INDEX_ALLOCATION";
+            fileName = $"{fileName}:$I30:$INDEX_ALLOCATION";
 
             MessageStatus status = CreateDirectory(fileName);
 
             this.fsaAdapter.AssertAreEqual(this.Manager, true,
               (status == MessageStatus.SUCCESS),
-              "Create directory with name " + fileName + " is expected to succeed.");
+              $"Create directory with name {fileName} is expected to succeed.");
 
             status = QueryDirectory(this.fsaAdapter.UncSharePath);
 
             this.fsaAdapter.AssertAreEqual(this.Manager, true,
             (status == MessageStatus.SUCCESS),
-            "Query directory with file name " + fileName + " is expected to succeed.");
+            $"Query directory with name {fileName} is expected to succeed.");
         }    
 
         public MessageStatus CreateFile(string fileName)
         {
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Create a file with type: CreateOptions.NON_DIRECTORY_FILE and FileAttribute.NORMAL and name: " + fileName);
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create a file with type: CreateOptions.NON_DIRECTORY_FILE and FileAttribute.NORMAL and name: {fileName}");
 
             MessageStatus status = MessageStatus.SUCCESS;
           
@@ -137,14 +137,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
                         (ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE| ShareAccess.FILE_SHARE_DELETE),
                         CreateDisposition.OPEN_IF);
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Create file and return with status " + status.ToString());
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create file and return with status {status.ToString()}");
 
             return status;
         }
 
         public MessageStatus CreateDirectory(string fileName)
         {
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Create a directory with type: CreateOptions.DIRECTORY_FILE and name: " + fileName);
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create a directory with type: CreateOptions.DIRECTORY_FILE and name: {fileName}");
 
             MessageStatus status = MessageStatus.SUCCESS;
 
@@ -156,7 +156,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
                         (ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE),
                         CreateDisposition.OPEN_IF);
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Create directory and return with status " + status.ToString());
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create directory and return with status {status.ToString()}");
 
             return status;
         }
@@ -164,8 +164,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
 
         public MessageStatus QueryDirectory(string path, string searchPattern = "*", FileInfoClass fileinfoClass = FileInfoClass.FILE_ID_BOTH_DIR_INFORMATION)
         {            
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Query a directory information: " + path);
-
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Query a directory information: {path}");
+            this.fsaAdapter.ShareName = path;
             MessageStatus status = this.fsaAdapter.QueryDirectoryInfo(
               searchPattern,
               FileInfoClass.FILE_ID_BOTH_DIR_INFORMATION,
@@ -174,7 +174,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
               false,
               false);
             
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, string.Format("Query directory with search pattern {0} and return with status {1}. ", searchPattern, status.ToString()));
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Query directory with search pattern {searchPattern} and return with status {status.ToString()}. ");
 
             return status;
         }

@@ -211,6 +211,10 @@
             * [AlternateDataStream_FsCtl_Set_Compression_Dir](#_Toc427488812)
             * [AlternateDataStream_FsCtl_Set_ZeroData_File](#_Toc427488813)
             * [AlternateDataStream_FsCtl_Set_ZeroData_Dir](#_Toc427488814)
+    * [Test cases for Create and Query Directory](#Test-cases-for-create-and-query-directory)
+        * [QueryDirectory](#QueryDirectory)
+            * [Fs_CreateDirectory_QueryDirectory_Suffix_I30_INDEX_ALLOCATION](#_Toc427488836)
+            * [Fs_CreateDiretory_QueryDirectory_Suffix_INDEX_ALLOCATION](#_Toc427488837)
     * [Test cases for Other Scenarios](#Test-cases-for-other-scenarios)
         * [IsCreateFileSupported](#IsCreateFileSupported)
             * [CreateFile_InvalidStreamName](#_Toc427488835)
@@ -3511,6 +3515,29 @@ Test matrix for InputBuffer.ChecksumAlgorithm
 | | Request a FsControl on this Alternate Data Stream created on this file|
 | | Verify server return with **STATUS_SUCCESS** for supported file system|
 
+### <a name="Test-cases-for-other-scenarios"/>Test cases for Create and Query Directory Scenarios
+
+#### <a name="QueryDirectory"/>QueryDirectory
+
+##### <a name="_Toc427488836"/> Fs_CreateDirectory_QueryDirectory_Suffix_I30_INDEX_ALLOCATION
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if Create and Query directory with suffix :$I30:$INDEX_ALLOCATION is supported.| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Directory) with suffix :$I30:$INDEX_ALLOCATION| 
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+| | Query server directory with created directory name|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+##### <a name="_Toc427488837"/> Fs_CreateDirectory_QueryDirectory_Suffix_INDEX_ALLOCATION
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if Create and Query directory with suffix ::$INDEX_ALLOCATION is supported.| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Directory) with suffix ::$INDEX_ALLOCATION| 
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+| | Query server directory with created directory name|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
 
 
 ### <a name="Test-cases-for-other-scenarios"/>Test cases for Other Scenarios

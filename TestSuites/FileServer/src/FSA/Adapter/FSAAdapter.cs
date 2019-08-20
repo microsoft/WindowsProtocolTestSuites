@@ -951,14 +951,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             uint maxOutputSize = (uint)(isOutPutBufferNotEnough ? 1 : this.transBufferSize);         
 
             MessageStatus returnedStatus = this.transAdapter.QueryDirectory(
-            (byte)fileInfoClass,
-            maxOutputSize,
-            //restartScan,
-            false,
-            returnSingleEntry,
-            fileIndex,
-            searchPattern,
-            out outBuffer);
+                (byte)fileInfoClass,
+                maxOutputSize,
+                restartScan,               
+                returnSingleEntry,
+                fileIndex,
+                searchPattern,
+                out outBuffer
+                );
 
             return returnedStatus;
         }
