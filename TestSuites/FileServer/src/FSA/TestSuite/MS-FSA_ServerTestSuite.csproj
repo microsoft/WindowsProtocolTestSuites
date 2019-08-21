@@ -93,9 +93,7 @@
     <Content Include="MS-FSA_ServerTestSuite.deployment.ptfconfig">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="MS-FSA_ServerTestSuite.ptfconfig">
-      <SubType>Designer</SubType>
-    </Content>
+    <Content Include="MS-FSA_ServerTestSuite.ptfconfig"/>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">

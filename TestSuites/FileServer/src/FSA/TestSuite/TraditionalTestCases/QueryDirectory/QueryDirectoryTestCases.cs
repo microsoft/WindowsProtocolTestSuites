@@ -11,6 +11,7 @@ using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using System.Linq;
 using System;
 using System.Collections.Generic;
+using Smb2 = Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTestCases.QueryDirectory
 {
@@ -52,8 +53,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             this.fsaAdapter = new FSAAdapter();
             this.fsaAdapter.Initialize(BaseTestSite);
             this.fsaAdapter.LogTestCaseDescription(BaseTestSite);
-            //Need to connect to RootDirectory for query or set quota info.
-            this.fsaAdapter.ShareName = this.fsaAdapter.RootDirectory;
+
             BaseTestSite.Log.Add(LogEntryKind.Comment, "Test environment:");
             BaseTestSite.Log.Add(LogEntryKind.Comment, "\t 1. File System: " + this.fsaAdapter.FileSystem.ToString());
             BaseTestSite.Log.Add(LogEntryKind.Comment, "\t 2. Transport: " + this.fsaAdapter.Transport.ToString());
@@ -69,117 +69,368 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         }
         #endregion
 
-
         #region Test cases        
         [TestMethod()]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
-        [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.QueryDirectory)]
         [TestCategory(TestCategories.NonSmb)]
-        [Description("Create file with ::$INDEX_ALLOCATION as suffix and query directory info.")]
-        public void Fs_CreateFIle_QueryDirectory_Suffix_INDEX_ALLOCATION()
+        [Description("Create directory with $INDEX_ALLOCATION as stream type and query directory info.")]
+        public void Fs_CreateDiretory_QueryDirectory_Suffix_INDEX_ALLOCATION()
         {
-            // Create a new directory with name as suffix
-            string fileName = this.fsaAdapter.ComposeRandomFileName(8);
+            // Create a new directory with $INDEX_ALLOCATION as stream type
+            string dirName = this.fsaAdapter.ComposeRandomFileName(8);
 
-            fileName = fileName + @"::$INDEX_ALLOCATION";
+            dirName = $"{dirName}::$INDEX_ALLOCATION";
 
-            MessageStatus status = CreateDirectory(fileName);
+            MessageStatus status = CreateDirectory(dirName);
 
-            this.fsaAdapter.AssertAreEqual(this.Manager, true,
-              (status == MessageStatus.SUCCESS),
-              "Create directory with name " + fileName + " is expected to succeed.");
+            this.fsaAdapter.AssertAreEqual(this.Manager,
+                MessageStatus.SUCCESS,
+                status,
+                $"Create directory with name {dirName} is expected to succeed.");
 
-           status = QueryDirectory(this.fsaAdapter.UncSharePath);
+            status = QueryDirectory($"{this.fsaAdapter.UncSharePath}\\{dirName}");
 
-            this.fsaAdapter.AssertAreEqual(this.Manager, true,
-            (status == MessageStatus.SUCCESS),
-            "Query directory with file name " + fileName + " is expected to succeed.");
+            this.fsaAdapter.AssertAreEqual(this.Manager,
+                MessageStatus.SUCCESS,
+                status,
+                $"Query directory with file name { this.fsaAdapter.UncSharePath}\\{ dirName} is expected to succeed.");
         }
 
         [TestMethod()]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
-        [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.QueryDirectory)]
         [TestCategory(TestCategories.NonSmb)]
-        [Description("Create file with :$I30:$INDEX_ALLOCATION as suffix and query directory info.")]
-        public void Fs_CreateFIle_QueryDirectory_Suffix_I30_INDEX_ALLOCATION()
+        [Description("Create directory with :$I30:$INDEX_ALLOCATION as stream type and stream name, then query the directory info.")]
+        public void Fs_CreateDirectory_QueryDirectory_Suffix_I30_INDEX_ALLOCATION()
         {
             // Create a new directory with name as suffix
-            string fileName = this.fsaAdapter.ComposeRandomFileName(8);
+            string dirName = this.fsaAdapter.ComposeRandomFileName(8);
 
-            fileName = fileName + @":$I30:$INDEX_ALLOCATION";
+            dirName = $"{dirName}:$I30:$INDEX_ALLOCATION";
 
-            MessageStatus status = CreateDirectory(fileName);
+            MessageStatus status = CreateDirectory(dirName);
 
-            this.fsaAdapter.AssertAreEqual(this.Manager, true,
-              (status == MessageStatus.SUCCESS),
-              "Create directory with name " + fileName + " is expected to succeed.");
+            this.fsaAdapter.AssertAreEqual(this.Manager,
+                MessageStatus.SUCCESS,
+                status,
+                $"Create directory with name {dirName} is expected to succeed.");
 
-            status = QueryDirectory(this.fsaAdapter.UncSharePath);
+            status = QueryDirectory($"{this.fsaAdapter.UncSharePath}\\{dirName}");
 
-            this.fsaAdapter.AssertAreEqual(this.Manager, true,
-            (status == MessageStatus.SUCCESS),
-            "Query directory with file name " + fileName + " is expected to succeed.");
-        }    
+            this.fsaAdapter.AssertAreEqual(this.Manager,
+                MessageStatus.SUCCESS,
+                status,
+                $"Query directory with file name { this.fsaAdapter.UncSharePath}\\{ dirName} is expected to succeed.");
+        }
 
+        [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.QueryFileInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [Description("Create file with ::$DATA as suffix and then query file access info.")]
+        public void Fs_CreateFiles_Suffix_DATA()
+        {
+            // Create a new file
+            String fileName = this.fsaAdapter.ComposeRandomFileName(8);
+            fileName = $"{fileName}.txt::$DATA";
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create a file {fileName}");
+
+            Smb2.FILEID fileId;
+            uint treeId = 0;
+            ulong sessionId = 0;
+            MessageStatus status = this.fsaAdapter.CreateFile(
+                fileName,
+                (FileAttribute)0,
+                CreateOptions.NON_DIRECTORY_FILE,
+                (FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE),
+                (ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE | ShareAccess.FILE_SHARE_DELETE),
+                CreateDisposition.OPEN_IF,
+                out fileId,
+                out treeId,
+                out sessionId);
+
+            this.fsaAdapter.AssertAreEqual(this.Manager,
+                MessageStatus.SUCCESS,
+                status,
+                $"Create file with name {fileName} is expected to succeed.");
+
+            long byteCount;
+            byte[] outputBuffer;
+            FILE_ACCESS_INFORMATION fileAccessInfo = new FILE_ACCESS_INFORMATION();
+            uint outputBufferSize = (uint)TypeMarshal.ToBytes<FILE_ACCESS_INFORMATION>(fileAccessInfo).Length;
+
+            status = this.fsaAdapter.QueryFileInformation(
+                FileInfoClass.FILE_ACCESS_INFORMATION,
+                outputBufferSize,
+                out byteCount,
+                out outputBuffer);
+
+            this.fsaAdapter.AssertAreEqual(this.Manager,
+             MessageStatus.SUCCESS,
+             status,
+             $"Query access information of file {fileName} is expected to succeed.");
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.QueryDirectory)]
+        [TestCategory(TestCategories.NonSmb)]
+        [Description("Create a lot of files and then query the directoy info one by one with flag SMB2_RETURN_SINGLE_ENTRY.")]
+        public void Fs_CreateFiles_QueryDirectory_With_Single_Entry_Flag()
+        {
+            // Create a new directory
+            string dirName = this.fsaAdapter.ComposeRandomFileName(8);
+
+            Smb2.FILEID dirFileId;
+            uint dirTreeId = 0;
+            ulong dirSessionId = 0;
+            MessageStatus status = this.fsaAdapter.CreateFile(
+                       dirName,
+                       FileAttribute.DIRECTORY,
+                       CreateOptions.DIRECTORY_FILE,
+                       (FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE),
+                       (ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE),
+                       CreateDisposition.OPEN_IF,
+                       out dirFileId,
+                       out dirTreeId,
+                       out dirSessionId);
+
+            this.fsaAdapter.AssertAreEqual(this.Manager,
+                MessageStatus.SUCCESS,
+                status,
+                $"Create directory with name {dirName} is expected to succeed.");
+
+            Dictionary<string, Smb2.FILEID> files = new Dictionary<string, Smb2.FILEID>();
+            files.Add(".", Smb2.FILEID.Zero);
+            files.Add("..", Smb2.FILEID.Zero);
+
+            int filesNumber = 5;
+            Smb2.FILEID fileId;
+            uint treeId = 0;
+            ulong sessionId = 0;
+            for (int i = 0; i < filesNumber; i++)
+            {
+                // Create a new file
+                String fileName = this.fsaAdapter.ComposeRandomFileName(8);
+                BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create a file name: {fileName}");
+                
+                status = this.fsaAdapter.CreateFile(
+                    fileName,
+                    (FileAttribute)0,
+                    CreateOptions.NON_DIRECTORY_FILE,
+                    (FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE),
+                    (ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE | ShareAccess.FILE_SHARE_DELETE),
+                    CreateDisposition.OPEN_IF,
+                    out fileId,
+                    out treeId,
+                    out sessionId);
+
+                files.Add(fileName, fileId );
+
+                this.fsaAdapter.AssertAreEqual(this.Manager,
+                    MessageStatus.SUCCESS,
+                    status,
+                    $"Create file with name {dirName}\\{fileName} is expected to succeed.");
+            }
+            foreach (KeyValuePair<string, Smb2.FILEID> entry in files)
+            {
+                status = this.fsaAdapter.QueryDirectoryInfo(                    
+                    dirFileId,
+                    dirTreeId,
+                    dirSessionId,             
+                    "*",                  
+                    FileInfoClass.FILE_BOTH_DIR_INFORMATION,                  
+                    true,
+                    false,
+                    false
+                    );
+
+                if (this.fsaAdapter.TestConfig.IsWindowsPlatform)
+                {
+                    if (entry.Key == "." || entry.Key == "..")
+                    {
+                        this.fsaAdapter.AssertAreEqual(this.Manager,
+                            MessageStatus.SUCCESS,
+                            status,
+                            $"Query directory {this.fsaAdapter.UncSharePath }\\{dirName} for {entry.Key} is expected to succeed.");
+                    }
+                    else
+                    {
+                        this.fsaAdapter.AssertAreEqual(this.Manager,
+                            MessageStatus.NO_MORE_FILES,
+                            status,
+                            $"Query directory {this.fsaAdapter.UncSharePath }\\{dirName} for {entry.Key} is expected to fail with NO_MORE_FILES error.");
+                    }
+                }
+                else
+                {
+                    BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Query directory { this.fsaAdapter.UncSharePath }\\{ dirName} for {entry.Key} returned status { status}.");                  
+                }
+            }
+            
+        }
+        /// <summary>
+        /// Create file
+        /// </summary>
+        /// <param name="fileName">File name</param>      
+        /// <returns>An NTSTATUS code that specifies the result</returns>
         public MessageStatus CreateFile(string fileName)
         {
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Create a file with type: CreateOptions.NON_DIRECTORY_FILE and FileAttribute.NORMAL and name: " + fileName);
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create a file with name: {fileName}");
 
             MessageStatus status = MessageStatus.SUCCESS;
-          
+
             status = this.fsaAdapter.CreateFile(
                         fileName,
-                        (FileAttribute) 0,
+                        (FileAttribute)0,
                         CreateOptions.NON_DIRECTORY_FILE,
                         (FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE),
-                        (ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE| ShareAccess.FILE_SHARE_DELETE),
+                        (ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE | ShareAccess.FILE_SHARE_DELETE),
                         CreateDisposition.OPEN_IF);
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Create file and return with status " + status.ToString());
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create file and return with status {status}");
 
             return status;
         }
 
-        public MessageStatus CreateDirectory(string fileName)
+        /// <summary>
+        /// Create directory
+        /// </summary>
+        /// <param name="dirName">Direcotry name</param>        
+        /// <returns>An NTSTATUS code that specifies the result</returns>
+        public MessageStatus CreateDirectory(string dirName)
         {
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Create a directory with type: CreateOptions.DIRECTORY_FILE and name: " + fileName);
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create a directory with name: {dirName}");
 
             MessageStatus status = MessageStatus.SUCCESS;
 
             status = this.fsaAdapter.CreateFile(
-                        fileName,
+                        dirName,
                         FileAttribute.DIRECTORY,
                         CreateOptions.DIRECTORY_FILE,
                         (FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE),
                         (ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE),
                         CreateDisposition.OPEN_IF);
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Create directory and return with status " + status.ToString());
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create directory and return with status {status}");
 
             return status;
         }
-               
+        /// <summary>
+        /// Create directory
+        /// </summary>
+        /// <param name="dirName">Direcotry name</param>
+        /// <param name="fileId">The fileid of the created directory</param>
+        /// <param name="treeId">The treeId of the created directory</param>
+        /// <param name="sessionId">The sessionId of the created directory</param>
+        /// <returns>An NTSTATUS code that specifies the result</returns>
+        public MessageStatus CreateDirectory(
+            string dirName,
+            out Smb2.FILEID fileId, 
+            out uint treeId, 
+            out ulong sessionId)
+        {
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create a directory with name: {dirName}");
 
-        public MessageStatus QueryDirectory(string path, string searchPattern = "*", FileInfoClass fileinfoClass = FileInfoClass.FILE_ID_BOTH_DIR_INFORMATION)
-        {            
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Query a directory information: " + path);
+            MessageStatus status = MessageStatus.SUCCESS;
 
+            status = this.fsaAdapter.CreateFile(
+                        dirName,
+                        FileAttribute.DIRECTORY,
+                        CreateOptions.DIRECTORY_FILE,
+                        (FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE),
+                        (ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE),
+                        CreateDisposition.OPEN_IF,
+                        out fileId,
+                        out treeId,
+                        out sessionId
+                        );
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create directory and return with status {status}");
+
+            return status;
+        }
+
+        /// </summary>
+        /// <param name="dirName">The directory name for query. </param>
+        /// <param name="searchPattern">A Unicode string containing the file name pattern to match. </param>
+        /// <param name="fileInfoClass">The FileInfoClass to query. </param>
+        /// <param name="returnSingleEntry">A boolean indicating whether the return single entry for query.</param>
+        /// <param name="restartScan">A boolean indicating whether the enumeration should be restarted.</param>
+        /// <param name="isNoRecordsReturned">True: if No Records Returned.</param>
+        /// <param name="isOutBufferSizeLess">True: if OutputBufferSize is less than the size needed to return a single entry</param>
+        /// <param name="outBufferSize">The state of OutBufferSize in subsection 
+        /// of section 3.1.5.5.4</param>
+        /// <returns>An NTSTATUS code that specifies the result</returns>
+        public MessageStatus QueryDirectory(
+            string dirName,
+            string searchPattern = "*",
+            FileInfoClass fileinfoClass = FileInfoClass.FILE_ID_BOTH_DIR_INFORMATION,
+            bool returnSingleEntry = false,
+            bool restartScan = false,
+            bool isDirectoryNotRight = false,
+            bool isOutPutBufferNotEnough = false
+            )
+        {
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Query a directory information: {dirName}");
+           
             MessageStatus status = this.fsaAdapter.QueryDirectoryInfo(
               searchPattern,
               FileInfoClass.FILE_ID_BOTH_DIR_INFORMATION,
-              false,
-              false,
-              false,
-              false);
-            
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, string.Format("Query directory with search pattern {0} and return with status {1}. ", searchPattern, status.ToString()));
+              returnSingleEntry,
+              restartScan,
+              isOutPutBufferNotEnough);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Query directory with search pattern {searchPattern} and return with status {status}. ");
 
             return status;
         }
 
-       
+        /// </summary>
+        /// <param name="fileId">The fileid for the directory. </param>
+        /// <param name="treeId">The treeId for the directory. </param>
+        /// <param name="sessionId">The sessionId for the directory. </param>
+        /// <param name="searchPattern">A Unicode string containing the file name pattern to match. </param>
+        /// <param name="fileInfoClass">The FileInfoClass to query. </param>
+        /// <param name="returnSingleEntry">A boolean indicating whether the return single entry for query.</param>
+        /// <param name="restartScan">A boolean indicating whether the enumeration should be restarted.</param>
+        /// <param name="isOutBufferSizeLess">True: if OutputBufferSize is less than the size needed to return a single entry</param>
+        /// of section 3.1.5.5.4</param>
+        /// <returns>An NTSTATUS code that specifies the result</returns>
+        public MessageStatus QueryDirectory(
+            Smb2.FILEID fileId, 
+            uint treeId,
+            ulong sessionId, 
+            string searchPattern = "*", 
+            FileInfoClass fileinfoClass = FileInfoClass.FILE_ID_BOTH_DIR_INFORMATION,
+            bool returnSingleEntry = false,
+            bool restartScan = false,     
+            bool isOutPutBufferNotEnough = false
+            )
+        {
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Query a directory information with fileid {fileId}");
+           
+            MessageStatus status = this.fsaAdapter.QueryDirectoryInfo(
+                fileId,
+                treeId,
+                sessionId,
+                searchPattern,
+                FileInfoClass.FILE_ID_BOTH_DIR_INFORMATION,
+                returnSingleEntry,
+                restartScan,
+                isOutPutBufferNotEnough);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Query directory with search pattern {searchPattern} and return with status {status}. ");
+
+            return status;
+        }
         #endregion
     }
 }
+

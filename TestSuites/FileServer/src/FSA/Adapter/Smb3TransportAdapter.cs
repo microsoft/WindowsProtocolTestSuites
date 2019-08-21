@@ -587,6 +587,66 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             return (MessageStatus)status;
         }
 
+        /// <summary>
+        /// Basic CreateFile method
+        /// </summary>
+        /// <param name="fileName">The file name</param>
+        /// <param name="fileAttribute">Desired File Attribute</param>
+        /// <param name="desiredAccess">Desired Access to the file.</param>
+        /// <param name="shareAccess">Share Access to the file.</param>
+        /// <param name="createOptions">Specifies the options to be applied when creating or opening the file.</param>
+        /// <param name="createDisposition">The desired disposition for the open.</param>
+        /// <param name="createAction">A bitmask for the open operation, as specified in [MS-SMB2] section 2.2.13</param>
+        /// <param name="fileId">The fileId for the open.</param>
+        /// <param name="treeId">The treeId for the open.</param>
+        /// <param name="sessionId">The sessionId for the open.</param>
+        /// <returns>An NTSTATUS code that specifies the result.</returns>
+        public MessageStatus CreateFile(
+            string fileName,
+            UInt32 fileAttribute,
+            UInt32 desiredAccess,
+            UInt32 shareAccess,
+            UInt32 createOptions,
+            UInt32 createDisposition,
+            out UInt32 createAction,
+            out FILEID fileId,
+            out uint treeId,
+            out ulong sessionId
+         )
+        {
+            CREATE_Response createResponse;
+            Smb2CreateContextResponse[] serverCreateContexts;
+            this.fileName = fileName;
+            this.fileType = (((CreateOptions_Values)createOptions) & CreateOptions_Values.FILE_NON_DIRECTORY_FILE) == CreateOptions_Values.FILE_NON_DIRECTORY_FILE ? FileType.DataFile : FileType.DirectoryFile;
+            uint status = this.smb2Client.Create(
+                1,
+                64,
+                this.packetHeaderFlag,
+                this.messageId++,
+                this.sessionId,
+                this.treeId,
+                fileName,
+                (AccessMask)desiredAccess,
+                (ShareAccess_Values)shareAccess,
+                (CreateOptions_Values)createOptions,
+                (CreateDisposition_Values)createDisposition,
+                (File_Attributes)fileAttribute,
+                ImpersonationLevel_Values.Impersonation,
+                SecurityFlags_Values.NONE,
+                RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE,
+                null,
+                out this.fileId,
+                out serverCreateContexts,
+                out packetHeader,
+                out createResponse);
+
+            createAction = (UInt32)createResponse.CreateAction;
+
+            fileId = this.fileId;
+            treeId = this.treeId;
+            sessionId = this.sessionId;
+            return (MessageStatus)status;
+        }
         #endregion
 
         #region 3.1.5.2   Server Requests a Read
@@ -750,6 +810,58 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 out outBuffer,
                 out packetHeader,
                 out responsePayload);
+            return (MessageStatus)status;
+        }
+
+        /// <summary>
+        /// Query an existing directory with specific file name pattern.
+        /// </summary>
+        /// <param name="fileId">The fileId for the open.</param>
+        /// <param name="treeId">The treeId for the open.</param>
+        /// <param name="sessionId">The sessionId for the open.</param>
+        /// <param name="fileInformationClass">The type of information to be queried, as specified in [MS-FSCC] section 2.4</param>
+        /// <param name="maxOutPutSize">The maximum number of bytes to return</param>
+        /// <param name="restartScan">If true, indicating the enumeration of the directory should be restarted</param>
+        /// <param name="returnSingleEntry">If true, indicate return an single entry of the query</param>
+        /// <param name="fileIndex">An index number from which to resume the enumeration</param>
+        /// <param name="fileNamePattern">A Unicode string containing the file name pattern to match. "* ?" must be treated as wildcards</param>
+        /// <param name="outBuffer">The query result</param>
+        /// <returns>NTStatus code</returns>
+        public MessageStatus QueryDirectory(
+            FILEID fileId,
+            uint treeId,
+            ulong sessionId,
+            byte fileInformationClass,
+            UInt32 maxOutPutSize,
+            bool restartScan,
+            bool returnSingleEntry,
+            uint fileIndex,
+            string fileNamePattern,
+            out byte[] outBuffer            
+            )
+        {
+            QUERY_DIRECTORY_Response responsePayload;
+            QUERY_DIRECTORY_Request_Flags_Values requestFlag =
+                restartScan ? QUERY_DIRECTORY_Request_Flags_Values.RESTART_SCANS : QUERY_DIRECTORY_Request_Flags_Values.NONE;
+            requestFlag |= returnSingleEntry ? QUERY_DIRECTORY_Request_Flags_Values.RETURN_SINGLE_ENTRY : QUERY_DIRECTORY_Request_Flags_Values.NONE;
+
+            uint status = this.smb2Client.QueryDirectory(
+                1,
+                1,
+                this.packetHeaderFlag,
+                this.messageId++,
+                sessionId,
+                treeId,
+                (FileInformationClass_Values)fileInformationClass,
+                requestFlag,
+                fileIndex,
+                fileId,
+                fileNamePattern,
+                maxOutPutSize,
+                out outBuffer,
+                out packetHeader,
+                out responsePayload);
+           
             return (MessageStatus)status;
         }
 

@@ -12,6 +12,7 @@ using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb;
 using NamespaceSmb = Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb;
+using Smb2 = Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 {
@@ -462,6 +463,43 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             }
         }
 
+        /// <summary>
+        /// Create a new file or open an existing file.
+        /// </summary>
+        /// <param name="fileName">The name of the data file or directory to be created or opened</param>
+        /// <param name="fileAttribute">A bitmask for the open operation, as specified in [MS-SMB2] section 2.2.13</param>
+        /// <param name="desiredAccess">A bitmask for the open operation, as specified in [MS-SMB2] section 2.2.13.1</param>
+        /// <param name="shareAccess">A bitmask for the open operation, as specified in [MS-SMB2] section 2.2.13</param>
+        /// <param name="createOptions">A bitmask for the open operation, as specified in [MS-SMB2] section 2.2.13</param>
+        /// <param name="createDisposition">A bitmask for the open operation, as specified in [MS-SMB2] section 2.2.13</param>
+        /// <param name="createAction">A bitmask for the open operation, as specified in [MS-SMB2] section 2.2.13</param>
+        /// <param name="fileId">The fileId for the open.</param>
+        /// <param name="treeId">The treeId for the open.</param>
+        /// <param name="sessionId">The sessionId for the open.</param>
+        /// <returns>NTStatus code</returns>
+        /// Disable warning CA1800 because it will affect the implementation of Adapter
+        [SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
+        public MessageStatus CreateFile(
+            string fileName,
+            UInt32 fileAttribute,
+            UInt32 desiredAccess,
+            UInt32 shareAccess,
+            UInt32 createOptions,
+            UInt32 createDisposition,
+            out UInt32 createAction,
+            out Smb2.FILEID fileId,
+            out uint treeId,
+            out ulong sessionId
+         )
+        {
+            fileId = Smb2.FILEID.Zero;
+            treeId = 0;
+            sessionId = 0;    
+            createAction = (uint)CreateAction.NULL;
+            return MessageStatus.SUCCESS;
+           
+        }
+
         #endregion
 
         #region 3.1.5.2   Server Requests a Read
@@ -619,6 +657,62 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             }
         }
 
+        /// <summary>
+        /// Query an existing directory with specific file name pattern.
+        /// </summary>
+        /// <param name="fileId">The fileId for the open.</param>
+        /// <param name="treeId">The treeId for the open.</param>
+        /// <param name="sessionId">The sessionId for the open.</param>
+        /// <param name="fileInformationClass">The type of information to be queried, as specified in [MS-FSCC] section 2.4</param>
+        /// <param name="maxOutPutSize">The maximum number of bytes to return</param>
+        /// <param name="restartScan">If true, indicating the enumeration of the directory should be restarted</param>
+        /// <param name="returnSingleEntry">If true, indicate return an single entry of the query</param>
+        /// <param name="fileIndex">An index number from which to resume the enumeration</param>
+        /// <param name="fileNamePattern">A Unicode string containing the file name pattern to match. "* ?" must be treated as wildcards</param>
+        /// <param name="outBuffer">The query result</param>
+        /// <returns>NTStatus code</returns>
+        [SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
+        public MessageStatus QueryDirectory(
+            Smb2.FILEID fileId,
+            uint treeId,
+            ulong sessionId,
+            byte fileInformationClass,
+            UInt32 maxOutPutSize,
+            bool restartScan,
+            bool returnSingleEntry,
+            uint fileIndex,
+            string fileNamePattern,
+            out byte[] outBuffer
+            )
+        {
+            SmbPacket packet = this.smbClient.CreateTrans2QueryPathInformationRequest(
+                (ushort)treeId,
+                fileNamePattern,
+                Trans2SmbParametersFlags.NONE,
+                (QueryInformationLevel)(fileInformationClass),
+                (ushort)maxOutPutSize,
+                true);
+
+            SmbPacket response = this.SendPacketAndExpectResponse<NamespaceSmb.SmbTrans2QueryPathInformationResponsePacket>(packet);
+
+            if (response.SmbHeader.Command != SmbCommand.SMB_COM_TRANSACTION2)
+            {
+                throw new InvalidOperationException("No query directory response.");
+            }
+
+            if (response is Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb.SmbTrans2QueryPathInformationResponsePacket)
+            {
+                Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb.SmbTrans2QueryPathInformationResponsePacket queryDirectoryResponse =
+                    (Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb.SmbTrans2QueryPathInformationResponsePacket)response;
+                outBuffer = queryDirectoryResponse.SmbData.Trans2_Data;
+                return MessageStatus.SUCCESS;
+            }
+            else
+            {
+                outBuffer = null;
+                return (MessageStatus)response.SmbHeader.Status;
+            }
+        }
         #endregion
 
         #region 3.1.5.6   Server Requests Flushing Cached Data
