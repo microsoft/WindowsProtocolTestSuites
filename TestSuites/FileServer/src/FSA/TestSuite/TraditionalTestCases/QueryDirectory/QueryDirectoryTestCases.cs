@@ -206,9 +206,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
                 status,
                 $"Create directory with name {dirName} is expected to succeed.");
 
-            Dictionary<string, Smb2.FILEID> files = new Dictionary<string, Smb2.FILEID>();
-            files.Add(".", Smb2.FILEID.Zero);
-            files.Add("..", Smb2.FILEID.Zero);
+            List<string> files = new List<string>();
+            files.Add(".");
+            files.Add("..");
 
             int filesNumber = 1000;
             Smb2.FILEID fileId;
@@ -217,11 +217,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             for (int i = 0; i < filesNumber; i++)
             {
                 // Create a new file
-                String fileName = this.fsaAdapter.ComposeRandomFileName(8);
+                string fileName = this.fsaAdapter.ComposeRandomFileName(8);
                 BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create a file name: {fileName}");
                 
                 status = this.fsaAdapter.CreateFile(
-                    $"{dirName}\\{ fileName}",
+                    $"{dirName}\\{fileName}",
                     (FileAttribute)0,
                     CreateOptions.NON_DIRECTORY_FILE,
                     (FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE),
@@ -231,7 +231,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
                     out treeId,
                     out sessionId);
 
-                files.Add(fileName, fileId );
+                files.Add(fileName );
 
                 this.fsaAdapter.AssertAreEqual(this.Manager,
                     MessageStatus.SUCCESS,
@@ -240,7 +240,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             }
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Query the dirctory entry one by one.");
-            foreach (KeyValuePair<string, Smb2.FILEID> entry in files)
+            foreach (string file in files)
             {
                 status = this.fsaAdapter.QueryDirectoryInfo(                    
                     dirFileId,
@@ -255,7 +255,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
                 this.fsaAdapter.AssertAreEqual(this.Manager,
                     MessageStatus.SUCCESS,
                     status,
-                    $"Query directory {this.fsaAdapter.UncSharePath }\\{dirName} for {entry.Key} is expected to succeed.");
+                    $"Query directory {this.fsaAdapter.UncSharePath }\\{dirName} for {file} is expected to succeed.");
                    
             }
             
