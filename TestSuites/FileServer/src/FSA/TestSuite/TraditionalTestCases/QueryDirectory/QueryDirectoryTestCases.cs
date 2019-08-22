@@ -221,7 +221,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
                 BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create a file name: {fileName}");
                 
                 status = this.fsaAdapter.CreateFile(
-                    fileName,
+                    $"{dirName}\\{ fileName}",
                     (FileAttribute)0,
                     CreateOptions.NON_DIRECTORY_FILE,
                     (FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE),
