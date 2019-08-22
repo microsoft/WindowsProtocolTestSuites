@@ -238,6 +238,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
                     status,
                     $"Create file with name {dirName}\\{fileName} is expected to succeed.");
             }
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Query the dirctory entry one by one.");
             foreach (KeyValuePair<string, Smb2.FILEID> entry in files)
             {
                 status = this.fsaAdapter.QueryDirectoryInfo(                    
@@ -249,29 +251,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
                     true,
                     false,
                     false
-                    );
-
-                if (this.fsaAdapter.TestConfig.IsWindowsPlatform)
-                {
-                    if (entry.Key == "." || entry.Key == "..")
-                    {
-                        this.fsaAdapter.AssertAreEqual(this.Manager,
-                            MessageStatus.SUCCESS,
-                            status,
-                            $"Query directory {this.fsaAdapter.UncSharePath }\\{dirName} for {entry.Key} is expected to succeed.");
-                    }
-                    else
-                    {
-                        this.fsaAdapter.AssertAreEqual(this.Manager,
-                            MessageStatus.NO_MORE_FILES,
-                            status,
-                            $"Query directory {this.fsaAdapter.UncSharePath }\\{dirName} for {entry.Key} is expected to fail with NO_MORE_FILES error.");
-                    }
-                }
-                else
-                {
-                    BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Query directory { this.fsaAdapter.UncSharePath }\\{ dirName} for {entry.Key} returned status { status}.");                  
-                }
+                    );              
+                this.fsaAdapter.AssertAreEqual(this.Manager,
+                    MessageStatus.SUCCESS,
+                    status,
+                    $"Query directory {this.fsaAdapter.UncSharePath }\\{dirName} for {entry.Key} is expected to succeed.");
+                   
             }
             
         }
