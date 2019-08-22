@@ -210,7 +210,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             files.Add(".", Smb2.FILEID.Zero);
             files.Add("..", Smb2.FILEID.Zero);
 
-            int filesNumber = 5;
+            int filesNumber = 1000;
             Smb2.FILEID fileId;
             uint treeId = 0;
             ulong sessionId = 0;
