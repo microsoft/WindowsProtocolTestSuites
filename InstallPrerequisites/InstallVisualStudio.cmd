@@ -3,10 +3,10 @@
 
 :: First argument is the vs_community.exe full path
 :: Update vs installer
-%1 --update
+%1 update --installPath %3 --passive --norestart
 
 :: Install vs_community with the following 
-%1 --installPath %2 ^
+%1 %2 --installPath %3 ^
 --add Microsoft.VisualStudio.Workload.NativeDesktop ^
 --add Microsoft.VisualStudio.Workload.ManagedDesktop ^
 --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 ^

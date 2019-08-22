@@ -33,7 +33,7 @@
 
 Param
 (
-	[parameter(Mandatory=$true, ValueFromPipeline=$true, HelpMessage="The Category is used to specify which set of tools need to be downloaded and installed, based on different test suite names, such as FileServer")]
+	[parameter(Mandatory=$true, ValueFromPipeline=$true, HelpMessage="If you want to run a specific test suite, please input the test suite name as Category, such as FileServer. If you want to build test suites or PTM, input BuildTestSuites as Category")]
 	[String]$Category,
 	[parameter(Mandatory=$false, ValueFromPipeline=$true, HelpMessage="The ConfigPath is used to specify prerequisites configure file path")]
 	[String]$ConfigPath
@@ -331,7 +331,28 @@ Function DownloadAndInstallApplication
 	}    
 }
 
-# Download and install prerequisite visual studio extension
+# Find the Visual Studio installation path of a specific version
+Function FindSpecificVersionOfVisualStudio
+{
+	param(
+		$Version,
+		$VSInstallationPaths
+	)
+
+	$VSPath = $VSInstallationPaths | Where-Object{$_ -match $Version}
+	if ($VSPath.Count -gt 1)
+	{
+		# VS extension can be installed on all the same versions of the Visual studio ( For example, 2019 Enterprise, 2019 Professional ) at one time. 		
+		# So only one path is enough.
+		return $VSPath[0]
+	}
+	else
+	{
+		return $VSPath	
+	}	
+}
+
+# Download and install visual studio extension
 Function DownloadAndInstallVsExtension
 {
 	param(
@@ -348,15 +369,14 @@ Function DownloadAndInstallVsExtension
 	Write-Host $content
 
 	$FLAGS  = $AppItem.Arguments
-	$ExitCode = 0
 
 	if ($AppItem -match "2017")
 	{
-		$path = ($VSInstallationPaths | Where-Object{$_ -match "2017"})[0]
+		$path = FindSpecificVersionOfVisualStudio -Version 2017 -VSInstallationPaths $VSInstallationPaths
 	}
 	elseif ($AppItem -match "2019") 
 	{
-		$path = ($VSInstallationPaths | Where-Object{$_ -match "2019"})[0]		
+		$path = FindSpecificVersionOfVisualStudio -Version 2019 -VSInstallationPaths $VSInstallationPaths	
 	}
 	else
 	{
@@ -365,7 +385,7 @@ Function DownloadAndInstallVsExtension
 		Write-Host "ERROR $content"; 
 	}
 
-	$ExitCode = $ExitCode = (Start-Process -FILEPATH "$path\Common7\IDE\vsixinstaller.exe" -ArgumentList "$OutputPath $FLAGS" -Wait -PassThru).ExitCode
+	$ExitCode = (Start-Process -FILEPATH "$path\Common7\IDE\vsixinstaller.exe" -ArgumentList "$OutputPath $FLAGS" -Wait -PassThru).ExitCode
 
 	if ($ExitCode -NE 0)
 	{

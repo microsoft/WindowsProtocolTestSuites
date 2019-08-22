@@ -18,12 +18,12 @@ Function Check-HeaderExistance {
         return $true # return true to avoid download the Network Direct DDK zip file 
     }
 
-    $HeaderFolderPath = (Get-Item -Path "..\ProtoSDK\RDMA\include\").FullName
+    $HeaderFolderPath = (Get-Item -Path "..\ProtoSDK\RDMA").FullName
 
-    $HeaderExisted = Test-Path -Path $HeaderFolderPath\ndspi.h
+    $HeaderExisted = Test-Path -Path $HeaderFolderPath\include\ndspi.h
     if ($HeaderExisted)
     {
-        $HeaderExisted = Test-Path -Path $HeaderFolderPath\ndstatus.h
+        $HeaderExisted = Test-Path -Path $HeaderFolderPath\include\ndstatus.h
     }
 
     if ($HeaderExisted)
@@ -42,7 +42,7 @@ Function Extract-Header{
     try {
         $ArtifactFolder = (Get-Item -Path $DownloadedArtifact).Directory.FullName
         Expand-Archive $DownloadedArtifact -DestinationPath $ArtifactFolder
-        Copy-Item -Path $ArtifactFolder\NetDirect\include\* -Destination "..\ProtoSDK\RDMA\include\"        
+        robocopy $ArtifactFolder\NetDirect\include\ "..\ProtoSDK\RDMA\include\"        
     }
     catch {
         Write-Host "Extract header files from Network Direct DDK failed." -ForegroundColor Red
