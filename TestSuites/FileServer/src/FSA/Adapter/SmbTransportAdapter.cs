@@ -685,7 +685,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             out byte[] outBuffer
             )
         {
-            
+            //No implementation for SMBTransportadapter
             outBuffer = null;
             return MessageStatus.SUCCESS;            
         }
