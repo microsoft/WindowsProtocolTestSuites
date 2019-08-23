@@ -207,6 +207,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
                 $"Create directory with name {dirName} is expected to succeed.");
 
             List<string> files = new List<string>();
+
+            //[MS-FSCC] section 2.4.8 FileBothDirectoryInformation
+            //This information class returns a list that contains a FILE_BOTH_DIR_INFORMATION data element
+            //for each file or directory within the target directory.
+            //This list MUST reflect the presence of a subdirectory named "." (synonymous with the target directory itself) within the target directory 
+            //and one named ".." (synonymous with the parent directory of the target directory).
             files.Add(".");
             files.Add("..");
 
