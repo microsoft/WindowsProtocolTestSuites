@@ -685,33 +685,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             out byte[] outBuffer
             )
         {
-            SmbPacket packet = this.smbClient.CreateTrans2QueryPathInformationRequest(
-                (ushort)treeId,
-                fileNamePattern,
-                Trans2SmbParametersFlags.NONE,
-                (QueryInformationLevel)(fileInformationClass),
-                (ushort)maxOutPutSize,
-                true);
-
-            SmbPacket response = this.SendPacketAndExpectResponse<NamespaceSmb.SmbTrans2QueryPathInformationResponsePacket>(packet);
-
-            if (response.SmbHeader.Command != SmbCommand.SMB_COM_TRANSACTION2)
-            {
-                throw new InvalidOperationException("No query directory response.");
-            }
-
-            if (response is Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb.SmbTrans2QueryPathInformationResponsePacket)
-            {
-                Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb.SmbTrans2QueryPathInformationResponsePacket queryDirectoryResponse =
-                    (Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb.SmbTrans2QueryPathInformationResponsePacket)response;
-                outBuffer = queryDirectoryResponse.SmbData.Trans2_Data;
-                return MessageStatus.SUCCESS;
-            }
-            else
-            {
-                outBuffer = null;
-                return (MessageStatus)response.SmbHeader.Status;
-            }
+            
+            outBuffer = null;
+            return MessageStatus.SUCCESS;            
         }
         #endregion
 
