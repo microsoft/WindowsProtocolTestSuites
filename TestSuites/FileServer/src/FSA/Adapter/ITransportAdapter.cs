@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc;
+using Smb2 = Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 {
@@ -118,6 +119,32 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             UInt32 createDisposition,
             out UInt32 createAction
          );
+        /// <summary>
+        /// Basic CreateFile method
+        /// </summary>
+        /// <param name="fileName">The file name</param>
+        /// <param name="fileAttribute">Desired File Attribute</param>
+        /// <param name="desiredAccess">Desired Access to the file.</param>
+        /// <param name="shareAccess">Share Access to the file.</param>
+        /// <param name="createOption">Specifies the options to be applied when creating or opening the file.</param>
+        /// <param name="createDisposition">The desired disposition for the open.</param>
+        /// <param name="createAction">A bitmask for the open operation, as specified in [MS-SMB2] section 2.2.13</param>
+        /// <param name="fileId">The fileId for the open.</param>
+        /// <param name="treeId">The treeId for the open.</param>
+        /// <param name="sessionId">The sessionId for the open.</param>
+        /// <returns>An NTSTATUS code that specifies the result.</returns>
+        MessageStatus CreateFile(           
+            string fileName,
+            UInt32 fileAttribute,
+            UInt32 desiredAccess,
+            UInt32 shareAccess,
+            UInt32 createOptions,
+            UInt32 createDisposition,
+            out UInt32 createAction,
+            out Smb2.FILEID fileId,
+            out uint treeId,
+            out ulong sessionId
+         );
         #endregion
 
         #region 3.1.5.2   Server Requests a Read
@@ -166,6 +193,33 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// <param name="outBuffer">The output data of this control operation</param>
         /// <returns>NTSTATUS code</returns>
         MessageStatus QueryDirectory(
+            byte fileInformationClass,
+            UInt32 maxOutPutSize,
+            bool restartScan,
+            bool returnSingleEntry,
+            UInt32 fileIndex,
+            string fileNamePattern,
+            out byte[] outBuffer
+            );
+
+        /// <summary>
+        /// Query an existing directory with specific file name pattern.
+        /// </summary>
+        /// <param name="fileId">The fileId for the open.</param>
+        /// <param name="treeId">The treeId for the open.</param>
+        /// <param name="sessionId">The sessionId for the open.</param>
+        /// <param name="fileInformationClass">The type of information to be queried, as specified in [MS-FSCC] section 2.4</param>
+        /// <param name="maxOutPutSize">The maximum number of bytes to return</param>
+        /// <param name="restartScan">If true, indicating the enumeration of the directory should be restarted</param>
+        /// <param name="returnSingleEntry">If true, indicate return an single entry of the query</param>
+        /// <param name="fileIndex">An index number from which to resume the enumeration</param>
+        /// <param name="fileNamePattern">A Unicode string containing the file name pattern to match. "* ?" must be treated as wildcards</param>
+        /// <param name="outBuffer">The query result</param>
+        /// <returns>NTStatus code</returns>
+        MessageStatus QueryDirectory(
+            Smb2.FILEID fileId,
+            uint treeId,
+            ulong sessionId,
             byte fileInformationClass,
             UInt32 maxOutPutSize,
             bool restartScan,
