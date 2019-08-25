@@ -61,11 +61,151 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///  &lt;Properties&gt;
+        ///    &lt;Group name=&quot;Common&quot;&gt;
+        ///      &lt;!-- START - OVERALL ENVIRONMENT CONFIG --&gt;
+        ///      &lt;Property name=&quot;AllowBreakEnvironment&quot; value=&quot;false&quot;&gt;
+        ///         [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string AD_ServerTestSuite_deployment_ptfconfig {
+            get {
+                return ResourceManager.GetString("AD_ServerTestSuite_deployment_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///  &lt;Properties&gt;
+        ///    &lt;Property name=&quot;TestName&quot; value=&quot;AD_Family_Test_Suite&quot; /&gt;
+        ///    &lt;Property name=&quot;FeatureName&quot; value=&quot;AD_Family&quot; /&gt;
+        ///    &lt;Property name=&quot;Version&quot;  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string AD_ServerTestSuite_ptfconfig {
+            get {
+                return ResourceManager.GetString("AD_ServerTestSuite_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to append test category..
         /// </summary>
         internal static string AppendCategoryError {
             get {
                 return ResourceManager.GetString("AppendCategoryError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///  &lt;Include&gt;
+        ///    &lt;File name=&quot;CommonTestSuite.deployment.ptfconfig&quot;/&gt;
+        ///  &lt;/Include&gt;
+        ///
+        ///  &lt;Properties&gt;
+        ///    &lt;Group name=&quot;Auth&quot;&gt;
+        ///      &lt;Group  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Auth_ServerTestSuite_deployment_ptfconfig {
+            get {
+                return ResourceManager.GetString("Auth_ServerTestSuite_deployment_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///  &lt;Include&gt;
+        ///    &lt;File name=&quot;CommonTestSuite.ptfconfig&quot;/&gt;
+        ///  &lt;/Include&gt;
+        ///
+        ///  &lt;Properties/&gt;
+        ///&lt;/TestSite&gt;
+        ///.
+        /// </summary>
+        internal static string Auth_ServerTestSuite_ptfconfig {
+            get {
+                return ResourceManager.GetString("Auth_ServerTestSuite_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///
+        ///  &lt;Properties&gt;
+        ///
+        ///    &lt;!--
+        ///        Please edit the following settings according to your test environment
+        ///    --&gt;
+        ///
+        ///    &lt;!--
+        ///        SU [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string BranchCache_TestSuite_deployment_ptfconfig {
+            get {
+                return ResourceManager.GetString("BranchCache_TestSuite_deployment_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot; 
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; 
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///  
+        ///  &lt;Properties&gt;
+        ///    &lt;Property name=&quot;TestName&quot; value=&quot;BranchCache Test&quot; /&gt;
+        ///    &lt;Property name=&quot;FeatureName&quot; value=&quot;BranchCache&quot; /&gt;
+        ///   [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string BranchCache_TestSuite_ptfconfig {
+            get {
+                return ResourceManager.GetString("BranchCache_TestSuite_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///  &lt;Properties&gt;
+        ///
+        ///    &lt;!--
+        ///        Tag named Choice is used for the ComboBox in UI design
+        ///        Tag named Description is used for the com [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CommonTestSuite_deployment_ptfconfig {
+            get {
+                return ResourceManager.GetString("CommonTestSuite_deployment_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///
+        ///  &lt;Properties&gt;
+        ///
+        ///    &lt;Group name=&quot;Common&quot;&gt;
+        ///      &lt;Property name=&quot;TestName&quot; value=&quot;FileServer Family Test&quot; /&gt;
+        ///      &lt;Property name=&quot;Feat [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CommonTestSuite_ptfconfig {
+            get {
+                return ResourceManager.GetString("CommonTestSuite_ptfconfig", resourceCulture);
             }
         }
         
@@ -206,6 +346,37 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///  &lt;Properties&gt;
+        ///    &lt;!--Common properties--&gt;
+        ///    &lt;Property name=&quot;TransportType&quot; value=&quot;tcp&quot;&gt;
+        ///      &lt;Description&gt;
+        ///        The default transport type
+        ///      &lt;/Des [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Kerberos_ServerTestSuite_deployment_ptfconfig {
+            get {
+                return ResourceManager.GetString("Kerberos_ServerTestSuite_deployment_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///  &lt;Properties&gt;
+        ///    &lt;Property name=&quot;ConsoleBufferHeight&quot; value=&quot;600&quot;/&gt;
+        ///    &lt;!--The directory of the keytab files. Leave empty to make keys  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Kerberos_ServerTestSuite_ptfconfig {
+            get {
+                return ResourceManager.GetString("Kerberos_ServerTestSuite_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to load adapters from the test suite assembly:
         ///{0}.
         /// </summary>
@@ -274,6 +445,415 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///
+        ///  &lt;Properties&gt;    
+        ///    &lt;Group name=&quot;Domain&quot;&gt;
+        ///      &lt;Property name=&quot;DomainName&quot;        value=&quot;contoso.com&quot;/&gt;
+        ///      &lt;Property name=&quot;Usern [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MS_ADFSPIP_ClientTestSuite_deployment_ptfconfig {
+            get {
+                return ResourceManager.GetString("MS_ADFSPIP_ClientTestSuite_deployment_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///  &lt;Properties&gt;
+        ///    &lt;!-- Test suite properties which value not changed when running in different test environments --&gt;
+        ///    &lt;!--&lt;Property na [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MS_ADFSPIP_ClientTestSuite_ptfconfig {
+            get {
+                return ResourceManager.GetString("MS_ADFSPIP_ClientTestSuite_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///  &lt;Properties&gt;
+        ///    &lt;!--Basic Configuration.--&gt;
+        ///
+        ///    &lt;!--Category: Domain Information.--&gt;
+        ///    &lt;!--Scope: All scope (Windows, NonWindows).- [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MS_ADOD_ODTestSuite_deployment_ptfconfig {
+            get {
+                return ResourceManager.GetString("MS_ADOD_ODTestSuite_deployment_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot; 
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; 
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///  
+        ///  &lt;Properties&gt;
+        ///    &lt;Property name=&quot;TestName&quot; value=&quot;MS-ADOD Test&quot; /&gt;
+        ///    &lt;Property name=&quot;ExpectedExecutionTime&quot; value=&quot;1200&quot; /&gt;
+        ///  &lt; [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MS_ADOD_ODTestSuite_ptfconfig {
+            get {
+                return ResourceManager.GetString("MS_ADOD_ODTestSuite_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///
+        ///  &lt;Properties&gt;
+        ///    &lt;!-- Windows configuration --&gt;
+        ///      &lt;!--Basic configuration--&gt;       
+        ///        &lt;!--Scope: KDC domain--&gt;
+        ///        &lt;!- [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MS_AZOD_ODTestSuite_deployment_ptfconfig {
+            get {
+                return ResourceManager.GetString("MS_AZOD_ODTestSuite_deployment_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot; 
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; 
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///  
+        ///  &lt;Properties&gt;
+        ///    &lt;Property name=&quot;TestName&quot; value=&quot;MS-AZOD Test&quot; /&gt;
+        ///  &lt;/Properties&gt;
+        ///
+        ///  &lt;Adapters&gt;
+        ///    &lt;!--&lt;Adapter xsi:type=&quot;int [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MS_AZOD_ODTestSuite_ptfconfig {
+            get {
+                return ResourceManager.GetString("MS_AZOD_ODTestSuite_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///  &lt;Include&gt;
+        ///    &lt;File name=&quot;CommonTestSuite.deployment.ptfconfig&quot;/&gt;
+        ///  &lt;/Include&gt;
+        ///
+        ///  &lt;Properties&gt;
+        ///    &lt;Group name=&quot;DFSC&quot;&gt;
+        ///      &lt;!--T [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MS_DFSC_ServerTestSuite_deployment_ptfconfig {
+            get {
+                return ResourceManager.GetString("MS_DFSC_ServerTestSuite_deployment_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///  &lt;Include&gt;
+        ///    &lt;File name=&quot;CommonTestSuite.ptfconfig&quot;/&gt;
+        ///  &lt;/Include&gt;
+        ///
+        ///  &lt;Properties/&gt;
+        ///&lt;/TestSite&gt;
+        ///.
+        /// </summary>
+        internal static string MS_DFSC_ServerTestSuite_ptfconfig {
+            get {
+                return ResourceManager.GetString("MS_DFSC_ServerTestSuite_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///
+        ///  &lt;Include&gt;
+        ///    &lt;File name=&quot;CommonTestSuite.deployment.ptfconfig&quot;/&gt;
+        ///  &lt;/Include&gt;
+        ///
+        ///  &lt;Properties&gt;
+        ///    &lt;Group name=&quot;FSA&quot;&gt;
+        ///      &lt;Proper [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MS_FSA_ServerTestSuite_deployment_ptfconfig {
+            get {
+                return ResourceManager.GetString("MS_FSA_ServerTestSuite_deployment_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot; 
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; 
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///
+        ///  &lt;Include&gt;
+        ///    &lt;File name=&quot;CommonTestSuite.ptfconfig&quot;/&gt;
+        ///  &lt;/Include&gt;
+        ///
+        ///  &lt;Properties /&gt;
+        ///  
+        ///  &lt;Adapters&gt;
+        ///    &lt;Adapter xsi:type=&quot;man [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MS_FSA_ServerTestSuite_ptfconfig {
+            get {
+                return ResourceManager.GetString("MS_FSA_ServerTestSuite_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///  &lt;Include&gt;
+        ///    &lt;File name=&quot;CommonTestSuite.deployment.ptfconfig&quot;/&gt;
+        ///  &lt;/Include&gt;
+        ///  &lt;Properties&gt;
+        ///    &lt;!--
+        ///        Please edit the follow [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MS_FSRVP_ServerTestSuite_deployment_ptfconfig {
+            get {
+                return ResourceManager.GetString("MS_FSRVP_ServerTestSuite_deployment_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///  &lt;Include&gt;
+        ///    &lt;File name=&quot;CommonTestSuite.ptfconfig&quot;/&gt;
+        ///  &lt;/Include&gt;
+        ///
+        ///  &lt;Properties/&gt;
+        ///&lt;/TestSite&gt;
+        ///.
+        /// </summary>
+        internal static string MS_FSRVP_ServerTestSuite_ptfconfig {
+            get {
+                return ResourceManager.GetString("MS_FSRVP_ServerTestSuite_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///  &lt;Include&gt;
+        ///    &lt;File name=&quot;CommonTestSuite.deployment.ptfconfig&quot;/&gt;
+        ///  &lt;/Include&gt;
+        ///
+        ///  &lt;Properties&gt;
+        ///    &lt;Group name=&quot;RSVD&quot;&gt;
+        ///      &lt;Prop [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MS_RSVD_ServerTestSuite_deployment_ptfconfig {
+            get {
+                return ResourceManager.GetString("MS_RSVD_ServerTestSuite_deployment_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///  &lt;Include&gt;
+        ///    &lt;File name=&quot;CommonTestSuite.ptfconfig&quot;/&gt;
+        ///  &lt;/Include&gt;
+        ///
+        ///  &lt;Properties/&gt;
+        ///&lt;/TestSite&gt;
+        ///.
+        /// </summary>
+        internal static string MS_RSVD_ServerTestSuite_ptfconfig {
+            get {
+                return ResourceManager.GetString("MS_RSVD_ServerTestSuite_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///  &lt;Include&gt;
+        ///    &lt;File name=&quot;CommonTestSuite.deployment.ptfconfig&quot;/&gt;
+        ///  &lt;/Include&gt;
+        ///
+        ///  &lt;Properties&gt;
+        ///    &lt;Group name=&quot;SMB2&quot;&gt;
+        ///      &lt;!--Tag [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MS_SMB2_ServerTestSuite_deployment_ptfconfig {
+            get {
+                return ResourceManager.GetString("MS_SMB2_ServerTestSuite_deployment_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///  &lt;Include&gt;
+        ///    &lt;File name=&quot;CommonTestSuite.ptfconfig&quot;/&gt;
+        ///  &lt;/Include&gt;
+        ///
+        ///  &lt;Properties/&gt;
+        ///&lt;/TestSite&gt;
+        ///.
+        /// </summary>
+        internal static string MS_SMB2_ServerTestSuite_ptfconfig {
+            get {
+                return ResourceManager.GetString("MS_SMB2_ServerTestSuite_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///  &lt;Include&gt;
+        ///    &lt;File name=&quot;CommonTestSuite.deployment.ptfconfig&quot;/&gt;
+        ///  &lt;/Include&gt;
+        ///
+        ///  &lt;Properties&gt;
+        ///    &lt;Group name=&quot;SMB2&quot;&gt;
+        ///      &lt;!--Tag [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MS_SMB2Model_ServerTestSuite_deployment_ptfconfig {
+            get {
+                return ResourceManager.GetString("MS_SMB2Model_ServerTestSuite_deployment_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///  &lt;Include&gt;
+        ///    &lt;File name=&quot;CommonTestSuite.ptfconfig&quot;/&gt;
+        ///  &lt;/Include&gt;
+        ///
+        ///  &lt;Properties/&gt;
+        ///  
+        ///  &lt;Adapters&gt;
+        ///    &lt;Adapter xsi:type=&quot;managed [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MS_SMB2Model_ServerTestSuite_ptfconfig {
+            get {
+                return ResourceManager.GetString("MS_SMB2Model_ServerTestSuite_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot; 
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///
+        ///  &lt;Properties&gt;
+        ///    &lt;!--Computer name of system under test (SUT)--&gt;
+        ///    &lt;Property name=&quot;SutComputerName&quot; value=&quot;SMBD-SUT01&quot; /&gt;
+        ///    &lt;!--I [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MS_SMBD_ServerTestSuite_deployment_ptfconfig {
+            get {
+                return ResourceManager.GetString("MS_SMBD_ServerTestSuite_deployment_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///  &lt;Properties&gt;
+        ///    &lt;Property name=&quot;TestName&quot; value=&quot;SMBD&quot; /&gt;
+        ///    &lt;Property name=&quot;FeatureName&quot; value=&quot;MS-SMBD&quot; /&gt;
+        ///
+        ///    &lt;!--Security packag [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MS_SMBD_ServerTestSuite_ptfconfig {
+            get {
+                return ResourceManager.GetString("MS_SMBD_ServerTestSuite_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///  &lt;Include&gt;
+        ///    &lt;File name=&quot;CommonTestSuite.deployment.ptfconfig&quot;/&gt;
+        ///  &lt;/Include&gt;
+        ///
+        ///  &lt;Properties&gt;
+        ///    &lt;Group name=&quot;SQOS&quot;&gt;
+        ///      &lt;Prop [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MS_SQOS_ServerTestSuite_deployment_ptfconfig {
+            get {
+                return ResourceManager.GetString("MS_SQOS_ServerTestSuite_deployment_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///  &lt;Include&gt;
+        ///    &lt;File name=&quot;CommonTestSuite.ptfconfig&quot;/&gt;
+        ///  &lt;/Include&gt;
+        ///
+        ///  &lt;Properties/&gt;
+        ///&lt;/TestSite&gt;
+        ///.
+        /// </summary>
+        internal static string MS_SQOS_ServerTestSuite_ptfconfig {
+            get {
+                return ResourceManager.GetString("MS_SQOS_ServerTestSuite_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [TestPassed].
         /// </summary>
         internal static string PassedTag {
@@ -303,11 +883,117 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///
+        ///  &lt;Properties&gt;
+        ///
+        ///    &lt;!--Block Begin: Properties that required to be set ***--&gt;
+        ///    &lt;!--The RDP listening port number.--&gt;
+        ///    &lt;Property [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string RDP_ClientTestSuite_deployment_ptfconfig {
+            get {
+                return ResourceManager.GetString("RDP_ClientTestSuite_deployment_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///  &lt;Properties&gt;
+        ///    &lt;!-- Test suite properties which value not changed when running in different test environments --&gt;
+        ///    &lt;!--&lt;Property na [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string RDP_ClientTestSuite_ptfconfig {
+            get {
+                return ResourceManager.GetString("RDP_ClientTestSuite_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///
+        ///  &lt;Properties&gt;
+        ///
+        ///    &lt;!--Block Begin: Properties that required to be set ***--&gt;
+        ///    &lt;!--Whether a negotiation protocol is used.--&gt;
+        ///     [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string RDP_ServerTestSuite_deployment_ptfconfig {
+            get {
+                return ResourceManager.GetString("RDP_ServerTestSuite_deployment_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///  &lt;Properties&gt;
+        ///    &lt;!-- Test suite properties which value not changed when running in different test environments --&gt;
+        ///    &lt;!--&lt;Property na [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string RDP_ServerTestSuite_ptfconfig {
+            get {
+                return ResourceManager.GetString("RDP_ServerTestSuite_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to DefaultRegistryPath is not specified..
         /// </summary>
         internal static string RegistryPathNotSpecified {
             get {
                 return ResourceManager.GetString("RegistryPathNotSpecified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///  &lt;Include&gt;
+        ///    &lt;File name=&quot;CommonTestSuite.deployment.ptfconfig&quot;/&gt;
+        ///  &lt;/Include&gt;
+        ///
+        ///  &lt;Properties&gt;
+        ///
+        ///    &lt;Group name=&quot;Cluster&quot;&gt;
+        ///      &lt;! [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ServerFailoverTestSuite_deployment_ptfconfig {
+            get {
+                return ResourceManager.GetString("ServerFailoverTestSuite_deployment_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///
+        ///  &lt;Include&gt;
+        ///    &lt;File name=&quot;CommonTestSuite.ptfconfig&quot;/&gt;
+        ///  &lt;/Include&gt;
+        ///
+        ///  &lt;Properties&gt;
+        ///    &lt;Group name=&quot;Cluster&quot;&gt;
+        ///      &lt;Property nam [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ServerFailoverTestSuite_ptfconfig {
+            get {
+                return ResourceManager.GetString("ServerFailoverTestSuite_ptfconfig", resourceCulture);
             }
         }
         
