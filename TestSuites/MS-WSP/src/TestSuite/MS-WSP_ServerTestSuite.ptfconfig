@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+  <Properties/>
+
+  
+  <Adapters>
+    <Adapter xsi:type="managed" name="IWspAdapter" adaptertype="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.WspAdapter"/>
+    <Adapter xsi:type="powershell" name="IWSPSUTAdapter" scriptdir="."/>
+  </Adapters>
+  <TestLog defaultprofile="Verbose">
+    <Sinks>
+      <File id="XmlLog" directory=".\TestLog" file="MS-WSP-Vista-2K8-Domain-64-FetchMore.xml" format="xml"/>
+    </Sinks>
+    <Profiles>
+      <Profile name="Verbose" extends="Error">
+        <!-- START: XML LOGGING RULES-->
+        <Rule kind="CheckSucceeded" sink="XmlLog"/>
+        <Rule kind ="Comment" sink="XmlLog"/>
+        <Rule kind="CheckFailed" sink="XmlLog" />
+        <Rule kind="Checkpoint" sink="XmlLog"/>
+        <!-- END: XML LOGGING RULES-->
+      </Profile>
+    </Profiles>
+  </TestLog>
+</TestSite>
+

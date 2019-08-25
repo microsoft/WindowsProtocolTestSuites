@@ -1,0 +1,4 @@
+Before you can run tests, you must do the following:
+
+Generate the test from the model, by selecting the TestSuite machine in the Config.cord designer, and then clicking the "Generate Tests" link.
+   

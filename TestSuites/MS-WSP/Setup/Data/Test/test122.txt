@@ -1,0 +1,13 @@
+F:\Users\test\Desktop\WinPresenterFinal\WinPresenter\WinViewer\obj\Debug\WinViewer.exe
+F:\Users\test\Desktop\WinPresenterFinal\WinPresenter\WinViewer\obj\Debug\WinViewer.pdb
+F:\Users\test\Desktop\WinPresenterFinal\WinPresenter\WinViewer\bin\Debug\WinViewer.exe
+F:\Users\test\Desktop\WinPresenterFinal\WinPresenter\WinViewer\bin\Debug\WinViewer.pdb
+F:\Users\test\Desktop\WinPresenterFinal\WinPresenter\WinViewer\bin\Debug\Interop.RDPCOMAPILib.dll
+F:\Users\test\Desktop\WinPresenterFinal\WinPresenter\WinViewer\bin\Debug\AxInterop.RDPCOMAPILib.dll
+F:\Users\test\Desktop\WinPresenterFinal\WinPresenter\WinViewer\obj\Debug\ResolveAssemblyReference.cache
+F:\Users\test\Desktop\WinPresenterFinal\WinPresenter\WinViewer\obj\Debug\Interop.RDPCOMAPILib.dll
+F:\Users\test\Desktop\WinPresenterFinal\WinPresenter\WinViewer\obj\Debug\AxInterop.RDPCOMAPILib.dll
+F:\Users\test\Desktop\WinPresenterFinal\WinPresenter\WinViewer\obj\Debug\WinViewer.csproj.ResolveComReference.cache
+F:\Users\test\Desktop\WinPresenterFinal\WinPresenter\WinViewer\obj\Debug\WinViewer.WinViewer.resources
+F:\Users\test\Desktop\WinPresenterFinal\WinPresenter\WinViewer\obj\Debug\WinViewer.Properties.Resources.resources
+F:\Users\test\Desktop\WinPresenterFinal\WinPresenter\WinViewer\obj\Debug\WinViewer.csproj.GenerateResource.Cache
