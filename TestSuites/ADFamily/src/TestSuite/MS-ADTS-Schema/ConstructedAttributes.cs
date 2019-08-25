@@ -991,7 +991,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
 
             foreach (DirectoryEntry keyEntry in keyVersionUsers)
             {
-                if (keyEntry.Name.Equals("CN=Administrator"))
+                if (keyEntry.Name.Equals("CN=" + adAdapter.DomainAdministratorName))
                 {
                     keyEntry.RefreshCache(new string[] { "msDS-KeyVersionNumber" });
                     keyVerNo = keyEntry.Properties["msDS-KeyVersionNumber"];
@@ -1276,7 +1276,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             if (serverOS >= OSVersion.WinSvr2008)
             {
                 listOfObjects = new List<string>();
-                listOfObjects.Add("CN=Administrator,CN=Users," + adAdapter.rootDomainDN);
+                listOfObjects.Add("CN=" + adAdapter.DomainAdministratorName + ",CN=Users," + adAdapter.rootDomainDN);
 
                 foreach (string entryDN in listOfObjects)
                 {
@@ -1454,7 +1454,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
                 isRootDseAttribute = true;
                 isBacklinkattribute = true;
                 listOfObjects = new List<string>();
-                listOfObjects.Add("CN=Administrator,CN=Users," + adAdapter.rootDomainDN);
+                listOfObjects.Add("CN=" + adAdapter.DomainAdministratorName + ",CN=Users," + adAdapter.rootDomainDN);
                 foreach (string entryDN in listOfObjects)
                 {
                     DirectoryEntry userEntry = null;
@@ -1621,7 +1621,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             #region allowedChildClassesEffective
 
             listOfObjects = new List<string>();
-            listOfObjects.Add("CN=Administrator,CN=Users," + adAdapter.rootDomainDN);
+            listOfObjects.Add("CN=" + adAdapter.DomainAdministratorName + ",CN=Users," + adAdapter.rootDomainDN);
             isSystemFlagval = true;
             isRootDseAttribute = true;
             isBacklinkattribute = true;

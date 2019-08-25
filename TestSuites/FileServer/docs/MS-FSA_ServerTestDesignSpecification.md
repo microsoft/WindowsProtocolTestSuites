@@ -211,6 +211,13 @@
             * [AlternateDataStream_FsCtl_Set_Compression_Dir](#_Toc427488812)
             * [AlternateDataStream_FsCtl_Set_ZeroData_File](#_Toc427488813)
             * [AlternateDataStream_FsCtl_Set_ZeroData_Dir](#_Toc427488814)
+    * [Test cases for Create and Query Directory](#Test-cases-for-create-and-query-directory)
+        * [QueryDirectory](#QueryDirectory)
+            * [Fs_CreateDirectory_QueryDirectory_Suffix_I30_INDEX_ALLOCATION](#_Toc427488836)
+            * [Fs_CreateDiretory_QueryDirectory_Suffix_INDEX_ALLOCATION](#_Toc427488837)
+			* [Fs_CreateFiles_QueryDirectory_With_Single_Entry_Flag](#_Toc427488838)
+		* [QueryFileInformation](#QueryFileInformation)
+			* [Fs_CreateFiles_Suffix_DATA](#_Toc427488839)
     * [Test cases for Other Scenarios](#Test-cases-for-other-scenarios)
         * [IsCreateFileSupported](#IsCreateFileSupported)
             * [CreateFile_InvalidStreamName](#_Toc427488835)
@@ -3509,6 +3516,53 @@ Test matrix for InputBuffer.ChecksumAlgorithm
 | Message Sequence| CreateFile (Directory) | 
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | Request a FsControl on this Alternate Data Stream created on this file|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+### <a name="Test-cases-for-create-and-query-directory-scenarios"/>Test cases for Create and Query Directory Scenarios
+
+#### <a name="QueryDirectory"/>QueryDirectory
+
+##### <a name="_Toc427488836"/> Fs_CreateDirectory_QueryDirectory_Suffix_I30_INDEX_ALLOCATION
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if Create and Query directory with stream type and stream name suffix :$I30:$INDEX_ALLOCATION is supported.| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Directory) with suffix :$I30:$INDEX_ALLOCATION| 
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+| | Query server directory with created directory name|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+##### <a name="_Toc427488837"/> Fs_CreateDirectory_QueryDirectory_Suffix_INDEX_ALLOCATION
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if Create and Query directory with stream type suffix ::$INDEX_ALLOCATION is supported.| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Directory) with suffix ::$INDEX_ALLOCATION| 
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+| | Query server directory with created directory name|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+
+##### <a name="_Toc427488838"/> Fs_CreateFiles_QueryDirectory_With_Single_Entry_Flag
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a lot of files and then query the directoy info one by one with flag SMB2_RETURN_SINGLE_ENTRY.| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (Directory) in share| 
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+| | Create a lot of files under the share folder|
+| | Verify server return with **STATUS_SUCCESS** for each file created in supported file system|
+| | Query server directory for each entry under the directory|
+| | Verify server behavior with different result for supported file system|
+
+#### <a name="QueryFileInformation"/>QueryFileInformation
+##### <a name="_Toc427488839"/> Fs_CreateFiles_Suffix_DATA
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if Create file with ::$DATA as suffix and then query file access info is supported.| 
+| | Test environment: NTFS, ReFS| 
+| Message Sequence| CreateFile (File) with suffix ::$DATA| 
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
+| | Query file access information for created file|
 | | Verify server return with **STATUS_SUCCESS** for supported file system|
 
 

@@ -1,71 +1,79 @@
 <Dependency>
   <tools>
-    <tool name="MMA_x64" FileName="MessageAnalyzer64.msi" AppName="Microsoft Message Analyzer" version="4.0.8108.0" url="https://download.microsoft.com/download/2/8/3/283DE38A-5164-49DB-9883-9D1CC432174D/MessageAnalyzer64.msi" arguments="/q"/>
-    <tool name="MMA_x86" FileName="MessageAnalyzer.msi" AppName="Microsoft Message Analyzer" version="4.0.8108.0" url="https://download.microsoft.com/download/2/8/3/283DE38A-5164-49DB-9883-9D1CC432174D/MessageAnalyzer.msi" arguments="/q"/>
-    <tool name="SE" FileName="SpecExplorer.msi" AppName="Spec Explorer 2010" version="3.5.3146.0" url="https://specexplorerteam.gallerycdn.vsassets.io/extensions/specexplorerteam/specexplorer2010visualstudiopowertool-5089/3.5.3146.0/1482139098514/36449/3/SpecExplorer.msi" arguments="/q"/>
-    <tool name="PTF" FileName="ProtocolTestFramework.msi" AppName="Microsoft Protocol Test Framework" version="1.0.6500.0" BackwardCompatible="false" url="https://github.com/Microsoft/ProtocolTestFramework/releases/download/1.0.6500.0/ProtocolTestFrameworkInstaller.msi" arguments="/q"/>
-    <tool name="Wix314" FileName="Wix314.exe" AppName="WiX Toolset v3.14" version="WiX v3.14.0.2927" url="https://wixtoolset.org/downloads/v3.14.0.2927/wix314.exe" arguments="/q"/>
-    <tool name="OpenXMLSDK" FileName="OpenXMLSDK.msi" AppName="Open XML SDK 2.5" version="2.5.5631" url="https://download.microsoft.com/download/5/5/3/553C731E-9333-40FB-ADE3-E02DC9643B31/OpenXMLSDKV25.msi" arguments="/q"/>
-    <tool name="VS2017Community" FileName="vs_community.exe" AppName="Visual Studio Community 2017" version="15.7.27703.2047" url="https://aka.ms/vs/15/release/vs_community.exe" arguments="" />
-    <tool name="WixVS2017Extension" FileName="Votive2017.vsix" AppName="Wix Toolset Visual Studio 2017 Extension" DllName="votive.dll" version="0.9.21.62588" url="https://robmensching.gallerycdn.vsassets.io/extensions/robmensching/wixtoolsetvisualstudio2017extension/0.9.21.62588/1494013210879/250616/4/Votive2017.vsix" arguments="/q"/>
+    <tool Type="Installer" name="MMA_x64" FileName="MessageAnalyzer64.msi" AppName="Microsoft Message Analyzer" version="4.0.8108.0" url="https://download.microsoft.com/download/2/8/3/283DE38A-5164-49DB-9883-9D1CC432174D/MessageAnalyzer64.msi" arguments="/q"/>
+    <tool Type="Installer" name="MMA_x86" FileName="MessageAnalyzer.msi" AppName="Microsoft Message Analyzer" version="4.0.8108.0" url="https://download.microsoft.com/download/2/8/3/283DE38A-5164-49DB-9883-9D1CC432174D/MessageAnalyzer.msi" arguments="/q"/>
+    <tool Type="Installer" name="SE" FileName="SpecExplorer.msi" AppName="Spec Explorer 2010" version="3.5.3146.0" url="https://specexplorerteam.gallerycdn.vsassets.io/extensions/specexplorerteam/specexplorer2010visualstudiopowertool-5089/3.5.3146.0/1482139098514/36449/3/SpecExplorer.msi" arguments="/q"/>
+    <tool Type="Installer" name="PTF" FileName="ProtocolTestFramework.msi" AppName="Microsoft Protocol Test Framework" version="1.0.6500.0" BackwardCompatible="false" url="https://github.com/Microsoft/ProtocolTestFramework/releases/download/1.0.6500.0/ProtocolTestFrameworkInstaller.msi" arguments="/q"/>
+    <tool Type="Installer" name="Wix314" FileName="Wix314.exe" AppName="WiX Toolset v3.14" version="3.14.0.2927" url="https://wixtoolset.org/downloads/v3.14.0.2927/wix314.exe" arguments="/q"/>
+    <tool Type="Installer" name="OpenXMLSDK" FileName="OpenXMLSDK.msi" AppName="Open XML SDK 2.5" version="2.5.5631" url="https://download.microsoft.com/download/5/5/3/553C731E-9333-40FB-ADE3-E02DC9643B31/OpenXMLSDKV25.msi" arguments="/q"/>
+    <tool Type="Custom" name="VisualStudio" FileName="vs_community.exe" url="https://aka.ms/vs/15/release/vs_community.exe" command="InstallVisualStudio.ps1" />
+    <tool Type="VsExtension" name="WixVS2017Extension" FileName="Votive2017.vsix" AppName="Wix Toolset Visual Studio 2017 Extension" DllName="votive.dll" version="0.9.21.62588" url="https://robmensching.gallerycdn.vsassets.io/extensions/robmensching/wixtoolsetvisualstudio2017extension/0.9.21.62588/1494013210879/250616/4/Votive2017.vsix" arguments="/q"/>
+    <tool Type="VsExtension" name="WixVS2019Extension" FileName="Votive2019.vsix" AppName="Wix Toolset Visual Studio 2019 Extension" DllName="votive.dll" version="1.0.0.4" url="https://wixtoolset.gallerycdn.vsassets.io/extensions/wixtoolset/wixtoolsetvisualstudio2019extension/1.0.0.4/1563296438961/Votive2019.vsix" arguments="/q"/>
+    <tool Type="Custom" name="NetFx3" Command="Install-NetFx3.ps1" />
+    <tool Type="Custom" name="NuGetCLI" FileName="nuget.exe" url="https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" Command="Install-NuGetCLI.ps1" />
+    <tool Type="Custom" name="NetworkDirectDDK" FileName="NetworkDirect_DDK.zip" url="https://download.microsoft.com/download/4/B/8/4B8C0949-F5C0-4E14-BA40-49073F727A8B/NetworkDirect_DDK.zip" Command="ExtractHeaderFilesFromDDK.ps1"/>
   </tools>
   <BuildTestSuites>
-    <tool>VS2017Community</tool>
+    <tool>VisualStudio</tool>
     <tool>SE</tool>
     <tool>PTF</tool>
+    <tool>NetFx3</tool>
     <tool>wix314</tool>
     <tool>WixVS2017Extension</tool>
+    <tool>WixVS2019Extension</tool>
+    <tool>NuGetCLI</tool>
+    <tool>NetworkDirectDDK</tool>
   </BuildTestSuites>
   <FileServer>
-    <tool>VS2017Community</tool>
+    <tool>VisualStudio</tool>
     <tool>SE</tool>
     <tool>PTF</tool>
   </FileServer>
   <Kerberos>
-    <tool>VS2017Community</tool>
+    <tool>VisualStudio</tool>
     <tool>SE</tool>
     <tool>PTF</tool>
   </Kerberos>
   <SMB>
-    <tool>VS2017Community</tool>
+    <tool>VisualStudio</tool>
     <tool>SE</tool>
     <tool>PTF</tool>
   </SMB>
   <SMBD>
-    <tool>VS2017Community</tool>
+    <tool>VisualStudio</tool>
     <tool>SE</tool>
     <tool>PTF</tool>
   </SMBD>
   <RDP>
-    <tool>VS2017Community</tool>
+    <tool>VisualStudio</tool>
     <tool>PTF</tool>
     <tool>SE</tool>
   </RDP>
   <BranchCache>
-    <tool>VS2017Community</tool>
+    <tool>VisualStudio</tool>
     <tool>SE</tool>
     <tool>PTF</tool>
   </BranchCache>
   <ADFamily>
-    <tool>VS2017Community</tool>
+    <tool>VisualStudio</tool>
     <tool>PTF</tool>
     <tool>SE</tool>
     <tool>MMA_x64</tool>
     <tool>OpenXMLSDK</tool>
   </ADFamily>
   <AZOD>
-    <tool>VS2017Community</tool>
+    <tool>VisualStudio</tool>
     <tool>SE</tool>
     <tool>PTF</tool>
     <tool>MMA_x64</tool>
   </AZOD>
   <ADFSPIP>
-    <tool>VS2017Community</tool>
+    <tool>VisualStudio</tool>
     <tool>PTF</tool>
     <tool>SE</tool>
   </ADFSPIP>
   <ADOD>
-    <tool>VS2017Community</tool>
+    <tool>VisualStudio</tool>
     <tool>SE</tool>
     <tool>PTF</tool>
     <tool>MMA_x64</tool>

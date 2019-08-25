@@ -216,7 +216,7 @@ Test scenarios are categorized as below table and will be described in following
 | Category                 | Test Cases | Comments                                                                                                          |
 |--------------------------|------------|-------------------------------------------------------------------------------------------------------------------|
 | SMB2 BVT                 | 87         | SMB2 common scenarios.                                                                                            |
-| SMB2 Feature Test        | 2608       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
+| SMB2 Feature Test        | 2609       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
 | SMB2 Feature Combination | 12         | Extended test with more complex message sequence for new features in SMB 3.0 dialect and later.                   |
 | FSRVP Test               | 14         | Test for MS-FSRVP                                                                                                 |
 | Server Failover Test     | 48         | Test server failover for MS-SMB2, MS-SWN and MS-FSRVP                                                             |
@@ -515,7 +515,7 @@ This is used to test SMB2 common user scenarios.
 | **Test ID**              | BVT\_Negotiate\_SMB311                                                                                                                                                     |
 | **Description**         | This test case is designed to test whether server (including the server doesn't implement dialect 3.11) can handle NEGOTIATE with Smb 3.11 dialect and Negotiate Contexts. |
 | **Prerequisites**        |                                                                                                                                                                            |
-| **Test Execution Steps** | 1.  Client send Negotiate request with dialect SMB 3.11, SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context and SMB2\_ENCRYPTION\_CAPABILITIES context.                        |
+| **Test Execution Steps** | 1.  Client sends Negotiate request with dialect SMB 3.11, SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context and SMB2\_ENCRYPTION\_CAPABILITIES context.                        |
 |                          | 2.  Server returns correct SMB2 NEGOTIATE response according to their supported dialect.                                                                                   |
 | **Cleanup**              |                                                                                                                                                                            |
 
@@ -525,7 +525,7 @@ This is used to test SMB2 common user scenarios.
 | **Test ID**              | BVT\_Negotiate\_SMB311\_Preauthentication                                                                                                             |
 | **Description**         | This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect and SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context only. |
 | **Prerequisites**        | The server implements dialect 3.11.                                                                                                                   |
-| **Test Execution Steps** | 1.  Client send Negotiate request with dialect SMB 3.11, SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context.                                              |
+| **Test Execution Steps** | 1.  Client sends Negotiate request with dialect SMB 3.11, SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context.                                              |
 |                          | 2.  Server returns SMB2 NEGOTIATE response with dialect 3.11 and the correct SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context.                          |
 | **Cleanup**              |                                                                                                                                                       |
 
@@ -535,7 +535,7 @@ This is used to test SMB2 common user scenarios.
 | **Test ID**              | BVT\_Negotiate\_SMB311\_Preauthentication\_Encryption\_CCM                                                                                                                                |
 | **Description**         | This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect and SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context and SMB2\_ENCRYPTION\_CAPABILITIES context with AES-128-CCM preferred. |
 | **Prerequisites**        | The server implements dialect 3.11.                                                                                                                                                       |
-| **Test Execution Steps** | 1.  Client send Negotiate request with dialect SMB 3.11, SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context and SMB2\_ENCRYPTION\_CAPABILITIES context with AES-128-CCM preferred.            |
+| **Test Execution Steps** | 1.  Client sends Negotiate request with dialect SMB 3.11, SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context and SMB2\_ENCRYPTION\_CAPABILITIES context with AES-128-CCM preferred.            |
 |                          | 2.  Server returns SMB2 NEGOTIATE response with dialect 3.11 and the correct Ciphers in SMB2\_ENCRYPTION\_CAPABILITIES context.                                                           |
 | **Cleanup**              |                                                                                                                                                                                           |
 
@@ -545,7 +545,7 @@ This is used to test SMB2 common user scenarios.
 | **Test ID**              | BVT\_Negotiate\_SMB311\_Preauthentication\_Encryption\_GCM                                                                                                                                |
 | **Description**         | This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect and SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context and SMB2\_ENCRYPTION\_CAPABILITIES context with AES-128-GCM preferred. |
 | **Prerequisites**        | The server implements dialect 3.11.                                                                                                                                                       |
-| **Test Execution Steps** | 1.  Client send Negotiate request with dialect SMB 3.11, SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context and SMB2\_ENCRYPTION\_CAPABILITIES context with AES-128-GCM preferred.            |
+| **Test Execution Steps** | 1.  Client sends Negotiate request with dialect SMB 3.11, SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context and SMB2\_ENCRYPTION\_CAPABILITIES context with AES-128-GCM preferred.            |
 |                          | 2.  Server returns SMB2 NEGOTIATE response with dialect 3.11 and the correct Ciphers in SMB2\_ENCRYPTION\_CAPABILITIES  context.                                                          |
 | **Cleanup**              |                                                                                                                                                                                           |
 
@@ -555,7 +555,7 @@ This is used to test SMB2 common user scenarios.
 | **Test ID**              | BVT_Negotiate_SMB311_CompressionEnabled |
 | **Description**          | This test case is designed to test whether server can handle NEGOTIATE with supported compression algorithms in SMB2_COMPRESSION_CAPABILITIES context. |
 | **Prerequisites**        | The server implements dialect 3.11 and compression feature. |
-| **Test Execution Steps** | 1.  Client send Negotiate request with dialect SMB 3.11, SMB2_PREAUTH_INTEGRITY_CAPABILITIES context and SMB2_COMPRESSION_CAPABILITIES context with all supported compression algorithms. |
+| **Test Execution Steps** | 1.  Client sends Negotiate request with dialect SMB 3.11, SMB2_PREAUTH_INTEGRITY_CAPABILITIES context and SMB2_COMPRESSION_CAPABILITIES context with all supported compression algorithms. |
 |                          | 2.  Server returns SMB2 NEGOTIATE response with the expected SMB2_COMPRESSION_CAPABILITIES, if it supports the compression feature, as below: |
 |                          |     a.  If server is Windows, CompressionAlgorithms is set to the first common algorithm supported by the client and server. |
 |                          |     b.  If server is non-Windows, CompressionAlgorithms is set to all the algorithms in the CompressionAlgorithms field of Negotiate request, in the order they are received. |
@@ -3164,7 +3164,7 @@ See section [Scenario](#3.1.14.1).
 |||
 |---|---|
 |**Test ID**|AppInstanceVersion_SMB311_SMB302|
-|**Description**|Check if server can fail the create request if the second client send a create request with dialect302 and AppInstanceID create context.|
+|**Description**|Check if server can fail the create request if the second Client sends a create request with dialect302 and AppInstanceID create context.|
 |**Prerequisites**|The server implements dialect 3.11.|
 |**Test Execution Steps**|Start the first client by sending the following requests: NEGOTIATE with dialect 3.11; SESSION_SETUP; TREE_CONNECT.|
 ||The first client sends CREATE request with AppInstanceVersionHigh = 1, AppInstanceVersionLow = 0.|
@@ -4980,7 +4980,7 @@ This model has 4 scenarios.
 
 **Negotiate** means the client can exchange the capabilities with the server.
 
-The feature has 94 Model-Based test cases and 7 traditional test case.
+The feature has 94 Model-Based test cases and 8 traditional test cases.
 
 For traditional test cases, please refer to section [Negotiation](#3.1.6)
 
@@ -5036,7 +5036,7 @@ Scenario see section [Scenario](#3.1.6.1).
 |**Test ID**|Negotiate_SMB311_WithoutAnyContexts|
 |**Description**|This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect and without any Negotiate Contexts.|
 |**Prerequisites**|The server implements dialect 3.11.|
-|**Test Execution Steps**|Client send Negotiate request with dialect SMB 3.11, and without any Negotiate Contexts.|
+|**Test Execution Steps**|Client sends Negotiate request with dialect SMB 3.11, and without any Negotiate Contexts.|
 ||Verify server fails the negotiate request with STATUS_INVALID_PARAMETER.|
 |**Cleanup**||
 
@@ -5056,7 +5056,7 @@ Scenario see section [Scenario](#3.1.6.1).
 |**Test ID**|Negotiate_SMB311_InvalidHashAlgorithm|
 |**Description**|This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect and with an invalid HashAlgorithm in SMB2_PREAUTH_INTEGRITY_CAPABILITIES Context.|
 |**Prerequisites**|The server implements dialect 3.11.|
-|**Test Execution Steps**|Client send Negotiate request with dialect SMB 3.11, SMB2_PREAUTH_INTEGRITY_CAPABILITIES context and set HashAlgorithm to an invalid value: 0xFFFF.|
+|**Test Execution Steps**|Client sends Negotiate request with dialect SMB 3.11, SMB2_PREAUTH_INTEGRITY_CAPABILITIES context and set HashAlgorithm to an invalid value: 0xFFFF.|
 ||Verify server fails the negotiate request with STATUS_SMB_NO_PREAUTH_INTEGRITY_HASH_OVERLAP.|
 |**Cleanup**||
 
@@ -5066,7 +5066,7 @@ Scenario see section [Scenario](#3.1.6.1).
 |**Test ID**|Negotiate_SMB311_InvalidCipher|
 |**Description**|This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect and with an invalid Cihper in SMB2_ENCRYPTION_CAPABILITIES Context.|
 |**Prerequisites**|The server implements dialect 3.11.|
-|**Test Execution Steps**|Client Send Negotiate request with dialect SMB 3.11, SMB2_ENCRYPTION_CAPABILITIES context and set Cipher to an invalid value: 0xFFFF.|
+|**Test Execution Steps**|Client sends Negotiate request with dialect SMB 3.11, SMB2_ENCRYPTION_CAPABILITIES context and set Cipher to an invalid value: 0xFFFF.|
 ||Verify that server sets Connection.CipherId to 0 from the response.|
 |**Cleanup**||
 
@@ -5076,7 +5076,7 @@ Scenario see section [Scenario](#3.1.6.1).
 |**Test ID**|Negotiate_SMB311_Compression_CompressionAlgorithmNotSupported|
 |**Description**|This test case is designed to test whether server can handle NEGOTIATE with unsupported compression algorithms in SMB2_COMPRESSION_CAPABILITIES context.|
 |**Prerequisites**|The server implements dialect 3.11 and compression feature.|
-|**Test Execution Steps**|Client Send Negotiate request with dialect SMB 3.11, SMB2_COMPRESSION_CAPABILITIES context and set CompressionAlgorithms to a unsupported value: 0x0004.|
+|**Test Execution Steps**|Client sends Negotiate request with dialect SMB 3.11, SMB2_COMPRESSION_CAPABILITIES context and set CompressionAlgorithms to a unsupported value: 0x0004.|
 ||Verify that server returns a Negotiate response, setting SMB2_COMPRESSION_CAPABILITIES negotiate response context with CompressionAlgorithmCount set to 1 and CompressionAlgorithms set to "NONE".|
 |**Cleanup**||
 
@@ -5086,7 +5086,7 @@ Scenario see section [Scenario](#3.1.6.1).
 |**Test ID**|Negotiate_SMB311_Compression_InvalidSmbDialect|
 |**Description**|This test case is designed to test whether server ignores SMB2_COMPRESSION_CAPABILITIES context when negotiate with SMB dialect less than 3.1.1.|
 |**Prerequisites**|The server implements dialect 3.11 and compression feature.|
-|**Test Execution Steps**|Client Send Negotiate request with dialects less than SMB 3.11, SMB2_COMPRESSION_CAPABILITIES context and set CompressionAlgorithms to all supported compression algorithms.|
+|**Test Execution Steps**|Client sends Negotiate request with dialects less than SMB 3.11, SMB2_COMPRESSION_CAPABILITIES context and set CompressionAlgorithms to all supported compression algorithms.|
 ||Verify that server returns a Negotiate response without SMB2_COMPRESSION_CAPABILITIES.|
 |**Cleanup**||
 
@@ -5096,7 +5096,7 @@ Scenario see section [Scenario](#3.1.6.1).
 |**Test ID**|Negotiate_SMB311_Compression_CompressionContextInvalidDataLength|
 |**Description**|This test case is designed to test whether server handle SMB2_COMPRESSION_CAPABILITIES context with invalid DataLength field when negotiate.|
 |**Prerequisites**|The server implements dialect 3.11 and compression feature.|
-|**Test Execution Steps**|Client Send Negotiate request with dialect SMB 3.11, SMB2_COMPRESSION_CAPABILITIES context and set DataLength to 4 which is less than the size of SMB2_COMPRESSION_CAPABILITIES.|
+|**Test Execution Steps**|Client sends Negotiate request with dialect SMB 3.11, SMB2_COMPRESSION_CAPABILITIES context and set DataLength to 4 which is less than the size of SMB2_COMPRESSION_CAPABILITIES.|
 ||Verify that server returns a Negotiate response with Status set to STATUS_INVALID_PARAMETER.|
 |**Cleanup**||
 
@@ -5106,10 +5106,18 @@ Scenario see section [Scenario](#3.1.6.1).
 |**Test ID**|Negotiate_SMB311_Compression_CompressionAlgorithmEmpty|
 |**Description**|This test case is designed to test whether server handle SMB2_COMPRESSION_CAPABILITIES context with invalid CompressionAlgorithmCount field when negotiate.|
 |**Prerequisites**|The server implements dialect 3.11 and compression feature.|
-|**Test Execution Steps**|Client Send Negotiate request with dialect SMB 3.11, SMB2_COMPRESSION_CAPABILITIES context and set CompressionAlgorithmCount field to zero.|
+|**Test Execution Steps**|Client sends Negotiate request with dialect SMB 3.11, SMB2_COMPRESSION_CAPABILITIES context and set CompressionAlgorithmCount field to zero.|
 ||Verify that server returns a Negotiate response with Status set to STATUS_INVALID_PARAMETER.|
 |**Cleanup**||
 
+|||
+|---|---|
+|**Test ID**|Negotiate_SMB311_ContextID_NetName|
+|**Description**|This test case is designed to test whether server can ignore SMB2_NETNAME_NEGOTIATE_CONTEXT_ID context when negotiate.|
+|**Prerequisites**|The server implements dialect 3.11.|
+|**Test Execution Steps**|Client sends Negotiate request with dialect SMB 3.11, SMB2_PREAUTH_INTEGRITY_CAPABILITIES context, SMB2_ENCRYPTION_CAPABILITIES context and SMB2_NETNAME_NEGOTIATE_CONTEXT_ID context.|
+||Verify that server returns a Negotiate response with Status set to STATUS_SUCCESS and ignore the SMB2_NETNAME_NEGOTIATE_CONTEXT_ID.|
+|**Cleanup**||
 
 #### <a name="3.2.10">Oplock
 
@@ -6280,7 +6288,7 @@ Scenario see [Scenario](#3.1.57).
 |**Description**| This test case is designed to test whether server will disconnect the connection if it received a compressed message with invalid length. |
 | **Prerequisites** | The server implements dialect 3.11 and compression feature. |
 | **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to all supported ones; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
-|                          | 2.  Client send a compressed message with invalid length, which is less than the size of SMB2 COMPRESSION_TRANSFORM_HEADER. |
+|                          | 2.  Client sends a compressed message with invalid length, which is less than the size of SMB2 COMPRESSION_TRANSFORM_HEADER. |
 |                          | 3.  Verifies the SMB2 connection is closed by SUT. | 
 | **Cleanup**              ||
 
@@ -6290,7 +6298,7 @@ Scenario see [Scenario](#3.1.57).
 |**Description**| This test case is designed to test whether server will disconnect the connection if the ProtocolId in the decompressed message is invalid. |
 | **Prerequisites** | The server implements dialect 3.11 and compression feature. |
 | **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to all supported ones; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
-|                          | 2.  Client send a compressed message with the ProtocolId in the decompressed message is invalid, which is of value 0xFFFFFFFF. |
+|                          | 2.  Client sends a compressed message with the ProtocolId in the decompressed message is invalid, which is of value 0xFFFFFFFF. |
 |                          | 3.  Verifies the SMB2 connection is closed by SUT. | 
 | **Cleanup**              ||
 
@@ -6300,7 +6308,7 @@ Scenario see [Scenario](#3.1.57).
 |**Description**| This test case is designed to test whether server will disconnect the connection if the CompressionAlgorithm in the compressed message is invalid. |
 | **Prerequisites** | The server implements dialect 3.11 and compression feature. |
 | **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to all supported ones; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
-|                          | 2.  Client send a compressed message with invalid CompressionAlgorithm with value 0x0004, which should be unsupported by SUT. |
+|                          | 2.  Client sends a compressed message with invalid CompressionAlgorithm with value 0x0004, which should be unsupported by SUT. |
 |                          | 3.  Verifies the SMB2 connection is closed by SUT. | 
 | **Cleanup**              ||
 
@@ -9100,7 +9108,7 @@ The test cases are designed with below assumptions, and these terms will be used
 |||
 |---|---|
 |**Test ID**|DomainReferralV2ToDC|
-|**Description**|Client send a v2 Domain referral request to DC,  and expects negative response|
+|**Description**|Client sends a v2 Domain referral request to DC,  and expects negative response|
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
 ||2. Client sends a Domain referral v2 REQ_GET_DFS_REFERRAL message (RequestFileName is empty, MaxReferralLevel is 2) to DC.|

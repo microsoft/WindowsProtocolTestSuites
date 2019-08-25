@@ -2405,14 +2405,14 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment(@"executing step 'call ModifyOperation({""memberOf: CN=Administrator,CN=Builtin,DC=adts88""->[""distinguishedName: CN=Administrator,CN=Users,DC=adts88"",""memberOf: CN=Group Policy Creator Owners,CN=Users,DC=adts88""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
             this.IAD_LDAPModelAdapterInstance.ModifyOperation(this.Make<Microsoft.Modeling.Map<string, Microsoft.Modeling.Sequence<string>>>(new string[] {
                             "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Modeling.Sequence<string>>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Modeling.Sequence<string>>(), "memberOf: CN=Administrator,CN=Builtin,DC=adts88", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Modeling.Sequence<string>>>(new string[] {
+                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Modeling.Sequence<string>>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Modeling.Sequence<string>>(), $"memberOf: CN={Utilities.DomainAdmin},CN=Builtin,DC=adts88", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Modeling.Sequence<string>>>(new string[] {
                                             "Element"}, new object[] {
                                             this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
                                                         "Rep"}, new object[] {
                                                         this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
-                                                                    "distinguishedName: CN=Administrator,CN=Users,DC=adts88",
+                                                                    $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88",
                                                                     this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                                 "Head",
                                                                                 "Tail"}, new object[] {
@@ -8440,7 +8440,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                                         this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
-                                                                    "cn: Administrator",
+                                                                    $"cn: {Utilities.DomainAdmin}",
                                                                     this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                                 "Head",
                                                                                 "Tail"}, new object[] {
@@ -8448,11 +8448,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                                                                 this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                                             "Head",
                                                                                             "Tail"}, new object[] {
-                                                                                            "distinguishedName: CN=Administrator,CN=Users,DC=adts88",
+                                                                                            $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88",
                                                                                             this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                                                         "Head",
                                                                                                         "Tail"}, new object[] {
-                                                                                                        "sAMAccountName: Administrator",
+                                                                                                        $"sAMAccountName: {Utilities.DomainAdmin}",
                                                                                                         this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                                                                     "Head",
                                                                                                                     "Tail"}, new object[] {
@@ -8908,7 +8908,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                                         this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
-                                                                    "cn: Administrator",
+                                                                    $"cn: {Utilities.DomainAdmin}",
                                                                     this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                                 "Head",
                                                                                 "Tail"}, new object[] {
@@ -8916,11 +8916,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                                                                 this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                                             "Head",
                                                                                             "Tail"}, new object[] {
-                                                                                            "distinguishedName: CN=Administrator,CN=Users,DC=adts88",
+                                                                                            $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88",
                                                                                             this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                                                         "Head",
                                                                                                         "Tail"}, new object[] {
-                                                                                                        "name: Administrator",
+                                                                                                        $"name: {Utilities.DomainAdmin}",
                                                                                                         ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})}))}), ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp171);
             this.Manager.Checkpoint("MS-AD_LDAP_R690");
             this.Manager.Checkpoint("MS-AD_LDAP_R1488");
@@ -12640,11 +12640,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                                                     this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                                 "Head",
                                                                                 "Tail"}, new object[] {
-                                                                                "distinguishedName: CN=Administrator,CN=Users,DC=adts88",
+                                                                                $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88",
                                                                                 this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                                             "Head",
                                                                                             "Tail"}, new object[] {
-                                                                                            "cn: Administrator",
+                                                                                            $"cn: {Utilities.DomainAdmin}",
                                                                                             this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                                                         "Head",
                                                                                                         "Tail"}, new object[] {
@@ -15444,7 +15444,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                                                     this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                                 "Head",
                                                                                 "Tail"}, new object[] {
-                                                                                "distinguishedName: CN=Administrator,CN=Users,DC=adts88",
+                                                                                $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88",
                                                                                 ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}))}), ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp297);
             this.Manager.Comment("reaching state \'S1146\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out ConstraintViolation_ERROR_DS_CANT_MOD_" +
@@ -15900,7 +15900,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                                                     this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                                 "Head",
                                                                                 "Tail"}, new object[] {
-                                                                                "distinguishedName: CN=Administrator,CN=Users,DC=adts88",
+                                                                                $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88",
                                                                                 this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                                             "Head",
                                                                                             "Tail"}, new object[] {
@@ -17786,11 +17786,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                                                     this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                                 "Head",
                                                                                 "Tail"}, new object[] {
-                                                                                "distinguishedName: CN=Administrator,CN=Users,DC=adts88",
+                                                                                $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88",
                                                                                 this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                                             "Head",
                                                                                             "Tail"}, new object[] {
-                                                                                            "cn: Administrator",
+                                                                                            $"cn: {Utilities.DomainAdmin}",
                                                                                             this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                                                         "Head",
                                                                                                         "Tail"}, new object[] {
@@ -21738,7 +21738,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                                         this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
-                                                                    "cn: Administrator",
+                                                                    $"cn: {Utilities.DomainAdmin}",
                                                                     this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                                 "Head",
                                                                                 "Tail"}, new object[] {
@@ -21746,11 +21746,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                                                                 this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                                             "Head",
                                                                                             "Tail"}, new object[] {
-                                                                                            "distinguishedName: CN=Administrator,CN=Users,DC=adts88",
+                                                                                            $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88",
                                                                                             this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                                                         "Head",
                                                                                                         "Tail"}, new object[] {
-                                                                                                        "sAMAccountName: Administrator",
+                                                                                                        $"sAMAccountName: {Utilities.DomainAdmin}",
                                                                                                         ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})}))}), ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp414);
             this.Manager.Checkpoint("MS-AD_LDAP_R4362");
             this.Manager.Comment("reaching state \'S1158\'");
@@ -22203,7 +22203,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                                         this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
-                                                                    "cn: Administrator",
+                                                                    $"cn: {Utilities.DomainAdmin}",
                                                                     this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                                 "Head",
                                                                                 "Tail"}, new object[] {
@@ -22211,11 +22211,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                                                                 this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                                             "Head",
                                                                                             "Tail"}, new object[] {
-                                                                                            "distinguishedName: CN=Administrator,CN=Users,DC=adts88",
+                                                                                            $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88",
                                                                                             this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                                                         "Head",
                                                                                                         "Tail"}, new object[] {
-                                                                                                        "sAMAccountName: Administrator",
+                                                                                                        $"sAMAccountName: {Utilities.DomainAdmin}",
                                                                                                         ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})}))}), ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp423);
             this.Manager.Checkpoint("MS-AD_LDAP_R748");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
@@ -22673,7 +22673,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                                         this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
-                                                                    "cn: Administrator",
+                                                                    $"cn: {Utilities.DomainAdmin}",
                                                                     this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                                 "Head",
                                                                                 "Tail"}, new object[] {
@@ -22685,7 +22685,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                                                                             this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                                                         "Head",
                                                                                                         "Tail"}, new object[] {
-                                                                                                        "sAMAccountName: Administrator",
+                                                                                                        $"sAMAccountName: {Utilities.DomainAdmin}",
                                                                                                         ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})}))}), ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp432);
             this.Manager.Checkpoint("MS-AD_LDAP_R1003");
             this.Manager.Comment("reaching state \'S1160\'");
@@ -23610,7 +23610,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                                         this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
-                                                                    "cn: Administrator",
+                                                                    $"cn: {Utilities.DomainAdmin}",
                                                                     this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                                 "Head",
                                                                                 "Tail"}, new object[] {
@@ -23622,7 +23622,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                                                                             this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                                                         "Head",
                                                                                                         "Tail"}, new object[] {
-                                                                                                        "sAMAccountName: Administrator",
+                                                                                                        $"sAMAccountName: {Utilities.DomainAdmin}",
                                                                                                         ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})}))}), ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp450);
             this.Manager.Checkpoint("MS-AD_LDAP_R1008");
             this.Manager.Comment("reaching state \'S1161\'");

@@ -309,8 +309,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             Utilities.MoveEntry(currentWorkingDC.FQDN, currentPort, meetingObject, newMeetingParent);
 
             // restore the entry : "CN=Administrator,CN=Users,DC=contoso,DC=com"
-            string administratorObject = "CN=Administrator1,CN=Users," + rootDomainNC;
-            string newName = "Administrator";
+            string administratorObject = $"CN={DomainAdministratorName}1,CN=Users,{rootDomainNC}";
+            string newName = DomainAdministratorName;
             Utilities.RenameEntry(currentWorkingDC.FQDN, currentPort, administratorObject, newName);
 
             // restore the entry : "CN=account,CN=Schema,CN=Configuration,DC=contoso,DC=com";
@@ -6940,7 +6940,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                             string distinguishedName = Encoding.ASCII.GetString(entry.objectName.ByteArrayValue);
                             if (distinguishedName.ToLower(CultureInfo.InvariantCulture).Contains("Users".ToLower(CultureInfo.InvariantCulture)))
                             {
-                                if (distinguishedName.ToLower(CultureInfo.InvariantCulture) == ("CN=Administrator,CN=Users," + rootDomainNC).ToLower(CultureInfo.InvariantCulture))
+                                if (distinguishedName.ToLower(CultureInfo.InvariantCulture) == ($"CN={DomainAdministratorName},CN=Users,{rootDomainNC}").ToLower(CultureInfo.InvariantCulture))
                                 {
                                     PartialAttributeList attributeNames = entry.attributes;
                                     foreach (PartialAttributeList_element attribute in attributeNames.Elements)
@@ -7662,7 +7662,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                               (Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.Asn1CodecV3.SearchResultEntry)
                               entrypacket.GetInnerRequestOrResponse();
                                 string distinguisdedName = Encoding.ASCII.GetString(entry.objectName.ByteArrayValue);
-                                if (distinguisdedName.ToLower(CultureInfo.InvariantCulture) == ("CN=Administrator,CN=Users," + rootDomainNC).ToLower(CultureInfo.InvariantCulture))
+                                if (distinguisdedName.ToLower(CultureInfo.InvariantCulture) == ($"CN={DomainAdministratorName},CN=Users,{rootDomainNC}").ToLower(CultureInfo.InvariantCulture))
                                 {
                                     isUserPresent = true;
                                     PartialAttributeList attributeNames = entry.attributes;
@@ -9573,7 +9573,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     attrsMod,
                     null);
                 adLdapClient.ModifyObject(
-                    string.Format("CN=Administrator,CN=Users,{0}", rootDomainNC),
+                    string.Format("CN={0},CN=Users,{1}", DomainAdministratorName, rootDomainNC),
                     attrsMod,
                     null);
 
@@ -9597,7 +9597,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 adLdapClient.DeleteTreeControl("cn=10.14.3.0/24/35,cn=subnets,cn=sites," + configurationNC);
                 adLdapClient.DeleteTreeControl("cn=account1,cn=schema," + configurationNC);
                 adLdapClient.DeleteTreeControl("cn=acs-resource-limits1,cn=schema," + configurationNC);
-                adLdapClient.DeleteTreeControl("cn=administrator1,cn=users," + rootDomainNC);
+                adLdapClient.DeleteTreeControl($"cn={DomainAdministratorName}1,cn=users,{rootDomainNC}");
                 adLdapClient.DeleteTreeControl("cn=adtstestsite,cn=sites," + configurationNC);
                 adLdapClient.DeleteTreeControl("cn=adtstesttdiclass,cn=schema," + configurationNC);
                 adLdapClient.DeleteTreeControl("cn=child,cn=testcontainer1," + rootDomainNC);
@@ -9691,7 +9691,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 adLdapClient.DeleteTreeControl("cn>cont," + rootDomainNC);
                 adLdapClient.DeleteTreeControl("dc=contoso," + rootDomainNC);
                 adLdapClient.DeleteTreeControl("dc=testappnc," + rootDomainNC);
-                adLdapClient.DeleteTreeControl("ou=administrator,cn=users," + rootDomainNC);
+                adLdapClient.DeleteTreeControl($"ou={DomainAdministratorName},cn=users,{rootDomainNC}");
                 adLdapClient.DeleteTreeControl("ou=testou," + rootDomainNC);
                 adLdapClient.DeleteTreeControl("ou=testrootdn," + rootDomainNC);
                 adLdapClient.DeleteTreeControl("cn=account,cn=schema,cn=configuration,dc=child," + rootDomainNC);
