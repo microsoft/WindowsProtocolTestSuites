@@ -872,6 +872,15 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The profile version is newer than test suite..
+        /// </summary>
+        internal static string ProfileNewerError {
+            get {
+                return ResourceManager.GetString("ProfileNewerError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The profile does not match the installed test suite.
         ///The profile is for {0} {1}.
         ///The test suite is {2} {3}..
@@ -879,6 +888,16 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         internal static string ProfileNotMatchError {
             get {
                 return ResourceManager.GetString("ProfileNotMatchError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version of Protocol Test Manager ({0}) is lesser than version of the test suite ({1}).
+        ///Please upgrade Protocol Test Manager to the same version with the test suite..
+        /// </summary>
+        internal static string PTMNeedUpgrade {
+            get {
+                return ResourceManager.GetString("PTMNeedUpgrade", resourceCulture);
             }
         }
         
@@ -1003,6 +1022,16 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         internal static string TestSuiteFolder {
             get {
                 return ResourceManager.GetString("TestSuiteFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version of Protocol Test Manager ({0}) is greater than version of the test suite ({1}).
+        ///Please upgrade the test suite to the same version of Protocol Test Manager..
+        /// </summary>
+        internal static string TestSuiteNeedUpgrade {
+            get {
+                return ResourceManager.GetString("TestSuiteNeedUpgrade", resourceCulture);
             }
         }
         

@@ -116,7 +116,13 @@ namespace Microsoft.Protocols.TestManager.Kernel
             profilePackage.Flush();
             profilePackage.Close();
         }
-        private static void CopyStream(Stream src, Stream des)
+
+        /// <summary>
+        /// Copy the content of a stream to another stream
+        /// </summary>
+        /// <param name="src">Source stream</param>
+        /// <param name="des">Destination stream</param>
+        public static void CopyStream(Stream src, Stream des)
         {
             const int bufSize = 4096;
             byte[] buf = new byte[bufSize];
@@ -200,7 +206,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             }
         }
         
-        public static Dictionary<string, string> PtfConfigContent = new Dictionary<string, string>
+        public static Dictionary<string, string> DefaultPtfConfigContent = new Dictionary<string, string>
         {
             ["AD_ServerTestSuite.ptfconfig"]                        = StringResource.AD_ServerTestSuite_ptfconfig,
             ["AD_ServerTestSuite.deployment.ptfconfig"]             = StringResource.AD_ServerTestSuite_deployment_ptfconfig,

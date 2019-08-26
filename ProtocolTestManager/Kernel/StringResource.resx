@@ -338,4 +338,15 @@ The test suite is {2} {3}.</value>
   <data name="RDP_ServerTestSuite_deployment_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\..\TestSuites\RDP\Server\src\TestSuite\RDP_ServerTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="ProfileNewerError" xml:space="preserve">
+    <value>The profile version is newer than test suite.</value>
+  </data>
+  <data name="PTMNeedUpgrade" xml:space="preserve">
+    <value>Version of Protocol Test Manager ({0}) is lesser than version of the test suite ({1}).
+Please upgrade Protocol Test Manager to the same version with the test suite.</value>
+  </data>
+  <data name="TestSuiteNeedUpgrade" xml:space="preserve">
+    <value>Version of Protocol Test Manager ({0}) is greater than version of the test suite ({1}).
+Please upgrade the test suite to the same version of Protocol Test Manager.</value>
+  </data>
 </root>

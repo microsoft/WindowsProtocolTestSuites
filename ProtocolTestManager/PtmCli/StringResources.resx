@@ -117,8 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="PtmProfileUpgraded" xml:space="preserve">
+    <value>The PTM profile has been upgraded. New profile is saved as {0}.</value>
+  </data>
   <data name="UnknownReportFormat" xml:space="preserve">
     <value>Unknown format: {0}.</value>
+  </data>
+  <data name="UnknownTestSuiteMessage" xml:space="preserve">
+    <value>Unknown test suite: {0}.</value>
   </data>
 </root>

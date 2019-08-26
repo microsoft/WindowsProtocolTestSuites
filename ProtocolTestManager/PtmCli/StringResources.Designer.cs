@@ -61,11 +61,29 @@ namespace Microsoft.Protocols.TestManager.CLI {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The PTM profile has been upgraded. New profile is saved as {0}..
+        /// </summary>
+        internal static string PtmProfileUpgraded {
+            get {
+                return ResourceManager.GetString("PtmProfileUpgraded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unknown format: {0}..
         /// </summary>
         internal static string UnknownReportFormat {
             get {
                 return ResourceManager.GetString("UnknownReportFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown test suite: {0}..
+        /// </summary>
+        internal static string UnknownTestSuiteMessage {
+            get {
+                return ResourceManager.GetString("UnknownTestSuiteMessage", resourceCulture);
             }
         }
     }
