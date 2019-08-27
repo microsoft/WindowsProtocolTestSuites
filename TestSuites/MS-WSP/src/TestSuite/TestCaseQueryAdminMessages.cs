@@ -208,13 +208,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
             this.Manager.Comment("reaching state \'S10\'");
             this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(TestCaseQueryAdminMessages.CPMCiStateInOutResponseInfo, null, new CPMCiStateInOutResponseDelegate1(this.TestCaseQueryAdminMessagesS0CPMCiStateInOutResponseChecker)));
             this.Manager.Comment("reaching state \'S12\'");
-            this.Manager.Comment("executing step \'call CPMForceMergeIn(True)\'");
-            this.IWspAdapterInstance.CPMForceMergeIn(true);
-            this.Manager.Comment("reaching state \'S14\'");
-            this.Manager.Comment("checking step \'return CPMForceMergeIn\'");
-            this.Manager.Comment("reaching state \'S16\'");
-            this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(TestCaseQueryAdminMessages.CPMForceMergeInResponseInfo, null, new CPMForceMergeInResponseDelegate1(this.TestCaseQueryAdminMessagesS0CPMForceMergeInResponseChecker)));
-            this.Manager.Comment("reaching state \'S18\'");
             this.Manager.Comment("executing step \'call CPMDisconnect()\'");
             this.IWspAdapterInstance.CPMDisconnect();
             this.Manager.Comment("reaching state \'S20\'");
@@ -273,13 +266,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
             this.Manager.Comment("reaching state \'S11\'");
             this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(TestCaseQueryAdminMessages.CPMCiStateInOutResponseInfo, null, new CPMCiStateInOutResponseDelegate1(this.TestCaseQueryAdminMessagesS2CPMCiStateInOutResponseChecker)));
             this.Manager.Comment("reaching state \'S13\'");
-            this.Manager.Comment("executing step \'call CPMForceMergeIn(False)\'");
-            this.IWspAdapterInstance.CPMForceMergeIn(false);
-            this.Manager.Comment("reaching state \'S15\'");
-            this.Manager.Comment("checking step \'return CPMForceMergeIn\'");
-            this.Manager.Comment("reaching state \'S17\'");
-            this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(TestCaseQueryAdminMessages.CPMForceMergeInResponseInfo, null, new CPMForceMergeInResponseDelegate1(this.TestCaseQueryAdminMessagesS2CPMForceMergeInResponseChecker)));
-            this.Manager.Comment("reaching state \'S19\'");
             this.Manager.Comment("executing step \'call CPMDisconnect()\'");
             this.IWspAdapterInstance.CPMDisconnect();
             this.Manager.Comment("reaching state \'S21\'");

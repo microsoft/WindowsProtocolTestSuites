@@ -168,6 +168,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
         public MessageBuilderParameter parameter;
 
+        /// <summary>
+        /// Indicates if we use 64-bit or 32-bit when building requests.
+        /// </summary>
+        public bool Is64bit = true;
+
         #endregion
 
         /// <summary>
@@ -1735,7 +1740,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                     size = 12;
                     break;
                 case StorageType.VT_VARIANT:
-                    size = 24;
+                    if (this.Is64bit)
+                    {
+                        size = 24;
+                    }
+                    else
+                    {
+                        size = 16;
+                    }
                     break;
                 default:
                     break;

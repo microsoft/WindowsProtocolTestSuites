@@ -80,13 +80,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         void CPMCiStateInOut();
         /// <summary>
-        /// CPMForceMergeIn() request is send to perform 
-        /// any maintenance necessary to improve query performance.
-        /// </summary>
-        /// <param name="isAdminClient">Indicates the client 
-        /// has a admin privilege to the catalog.</param>
-        void CPMForceMergeIn(bool isAdminClient);
-        /// <summary>
         /// CPMGetNotifyIn() requests that the client wants to be notified
         /// of rowset changes.
         /// </summary>
@@ -195,12 +188,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// from CPMCiStateInOut request.
         /// </summary>
         event CPMCiStateInOutResponseHandler CPMCiStateInOutResponse;
-
-        /// <summary>
-        /// This event is used to get the response 
-        /// from CPMForceMergeIn request.
-        /// </summary>
-        event CPMForceMergeInResponseHandler CPMForceMergeInResponse;
 
         /// <summary>
         /// This event is used to get the response from CPMGetNotify request.

@@ -112,7 +112,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         public uint clientVersion = 0;
 
         public CPMSetBindingsIn setBindingsIn;
-
         #endregion
 
         #region Initialize & Cleanup
@@ -304,6 +303,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     && (msgStatus == 0x00000000))
                 {
                     validator.ValidateConnectOutResponse(connectOutMessage);
+                    builder.Is64bit = validator.Is64bit;
                     isClientConnected = true;
                 }
 
@@ -722,15 +722,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// is valid</param>
         public void CPMSetBindingsIn(bool isValidBinding, bool isCursorValid)
         {
-            //if (!isValidBinding)
-            //{
-            //    if (wspTestSite.Properties["TDI-19919"].ToUpper() == "OPEN")
-            //    {
-            //        uint error = (uint)WspErrorCode.DB_E_BADBINDINFO;
-            //        CPMSetBindingsInResponse(error);
-            //        return;
-            //    }
-            //}
             uint cursorAssociated = 0;
             if (isCursorValid)
             {
@@ -1016,91 +1007,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         public event CPMCiStateInOutResponseHandler
             CPMCiStateInOutResponse;
-
-        #endregion
-
-        #region CPMForceMergeIn and CPMForceMergeInResponse
-
-        /// <summary>
-        /// CPMForceMergeIn() request is sent to perform any 
-        /// maintenance necessary to improve query performance.
-        /// </summary>
-        /// <param name="isClientAdmin">Indicates whether the 
-        /// client has Admin privilege.</param>
-        public void CPMForceMergeIn(bool isClientAdmin)
-        {
-            //uint cursorAssociated = GetCursor(clientMachineName);
-            byte[] forceMergeInMessage = builder.GetCPMForceMergeIn(1);
-            byte[] forceMergeInResponseMessage;
-            uint checkSum = 0;
-            RequestSender sender;
-            if (isClientAdmin)
-            {
-                sender
-                = GetRequestSender(isClientConnected);
-            }
-            else
-            {
-                sender
-                = GetRequestSender(isClientAdmin);
-            }
-            //Get the Sender
-            bytesRead = sender.SendMessage(forceMergeInMessage,
-                out forceMergeInResponseMessage);
-            if (sender == defaultSender)
-            {
-                // This means that disconnect message has been sent
-                // through the pipe which does not have a connect In
-                // sent across it.
-                // If the sender.SendMessage() method is successful
-                // Requirement 598 is validated
-                wspTestSite.CaptureRequirement(598,
-                   "In Windows the same pipe connection is used for the " +
-                   "following messages, except when the error is returned" +
-                   "in a CPMConnectOut message.");
-
-            }
-            // RequestSender objects uses path '\\pipe\\MSFTEWDS'
-            // for the protocol transport
-            wspTestSite.CaptureRequirement(3, @"All messages MUST be " +
-                 "transported using a named pipe: \\pipe\\MSFTEWDS");
-
-            if (forceMergeInResponseMessage != null)
-            {
-                int startingIndex = 0;
-                uint msgId = Helper.GetUInt(forceMergeInResponseMessage,
-                    ref startingIndex);
-                uint msgStatus = Helper.GetUInt(forceMergeInResponseMessage,
-                    ref startingIndex);
-                if (msgStatus != 0)
-                {
-                    wspTestSite.CaptureRequirementIfAreEqual<int>(bytesRead,
-                        Constant.SIZE_OF_HEADER, 619,
-                        "Whenever an error occurs during processing of a " +
-                        "message sent by a client, the server MUST respond " +
-                        "with the message header (only) of the message sent " +
-                        "by the client, keeping the _msg field intact.");
-                    //If 4 byte Non Zero field is read as status
-                    // The requirement 620 gets validated
-                    wspTestSite.CaptureRequirement(620, "Whenever an error " +
-                        "occurs during processing of a message sent by a " +
-                        "client, the server MUST set the _status field to " +
-                        "the error code value.");
-                }
-                if ((msgId == (uint)MessageType.CPMForceMergeIn)
-                    && (msgStatus == 0x00000000))
-                {
-                    validator.ValidateForceMergeInResponse
-                        (forceMergeInResponseMessage, checkSum);
-                }
-                CPMForceMergeInResponse(msgStatus); // Fire Response Event
-            }
-        }
-        /// <summary>
-        /// This event is used to get the response from 
-        /// CPMForceMergeIn request.
-        /// </summary>
-        public event CPMForceMergeInResponseHandler CPMForceMergeInResponse;
 
         #endregion
 

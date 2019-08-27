@@ -200,13 +200,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
             this.Manager.Comment("reaching state \'S2\'");
             this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(TestCaseAdmin_StatusInvalidParameter.CPMCiStateInOutResponseInfo, null, new CPMCiStateInOutResponseDelegate1(this.TestCaseAdmin_StatusInvalidParameterS0CPMCiStateInOutResponseChecker)));
             this.Manager.Comment("reaching state \'S3\'");
-            this.Manager.Comment("executing step \'call CPMForceMergeIn(True)\'");
-            this.IWspAdapterInstance.CPMForceMergeIn(true);
-            this.Manager.Comment("reaching state \'S4\'");
-            this.Manager.Comment("checking step \'return CPMForceMergeIn\'");
-            this.Manager.Comment("reaching state \'S5\'");
-            this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(TestCaseAdmin_StatusInvalidParameter.CPMForceMergeInResponseInfo, null, new CPMForceMergeInResponseDelegate1(this.TestCaseAdmin_StatusInvalidParameterS0CPMForceMergeInResponseChecker)));
-            this.Manager.Comment("reaching state \'S6\'");
             this.Manager.Comment("executing step \'call CPMDisconnect()\'");
             this.IWspAdapterInstance.CPMDisconnect();
             this.Manager.Comment("reaching state \'S7\'");

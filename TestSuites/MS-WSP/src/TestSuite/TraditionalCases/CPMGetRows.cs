@@ -81,7 +81,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMCreateQueryIn(false);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
-            wspAdapter.CPMSetBindingsIn(true, false);
+            wspAdapter.CPMSetBindingsIn(true, true);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn and expects success.");
             CPMGetRowsOut getRowsOut;
