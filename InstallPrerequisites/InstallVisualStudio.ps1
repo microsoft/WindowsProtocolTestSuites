@@ -32,8 +32,8 @@ Function CheckAndModify-VS2017OrLater {
 		return $false
 	}
 
-	$VSInstallationPaths = cmd /c "`"$VSWherePath`" -format value -property installationpath"
-	$VSDisplayNames = cmd /c "`"$VSWherePath`" -format value -property displayname"
+	[string[]]$VSInstallationPaths = cmd /c "`"$VSWherePath`" -format value -property installationpath"
+	[string[]]$VSDisplayNames = cmd /c "`"$VSWherePath`" -format value -property displayname"
 
 	if ($VSInstallationPaths -eq $null)
 	{

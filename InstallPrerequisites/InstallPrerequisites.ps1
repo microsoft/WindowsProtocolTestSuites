@@ -339,17 +339,11 @@ Function FindSpecificVersionOfVisualStudio
 		$VSInstallationPaths
 	)
 
-	$VSPath = $VSInstallationPaths | Where-Object{$_ -match $Version}
-	if ($VSPath.Count -gt 1)
-	{
-		# VS extension can be installed on all the same versions of the Visual studio ( For example, 2019 Enterprise, 2019 Professional ) at one time. 		
-		# So only one path is enough.
-		return $VSPath[0]
-	}
-	else
-	{
-		return $VSPath	
-	}	
+	[string[]]$VSPath = $VSInstallationPaths | Where-Object{$_ -match $Version}
+
+	# VS extension can be installed on all the same versions of the Visual studio ( For example, 2019 Enterprise, 2019 Professional ) at one time. 		
+	# So only one path is enough.
+	return $VSPath[0]
 }
 
 # Download and install visual studio extension
