@@ -64,7 +64,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <summary>
         /// Delegate to be passed to Logger, then status and log of the case could be shown on UI.
         /// </summary>
-        public delegate void UpdateCaseDelegate(TestCaseStatus status, string testCaseName, string log);
+        public delegate void UpdateCaseDelegate(TestCaseStatus status, string testCaseName, TestCaseDetail detail, string log);
         public UpdateCaseDelegate UpdateCase;
 
         /// <summary>
@@ -148,14 +148,15 @@ namespace Microsoft.Protocols.TestManager.Kernel
             }
 
             TestCaseStatus status;
-            if (!Utility.ParseFileGetStatus(e.FullPath, out status))
+            TestCaseDetail caseDetail;
+            if (!Utility.ParseFileGetStatus(e.FullPath, out status, out caseDetail))
             {
                 // The file name format is not correct, ignore it.
                 return;
             }
 
             // Pass case status/name/log path/ to logger to update UI.
-            UpdateCase(status, caseName, e.FullPath);
+            UpdateCase(status, caseName, caseDetail, e.FullPath);
         }
 
         /// <summary>
@@ -176,5 +177,77 @@ namespace Microsoft.Protocols.TestManager.Kernel
             }
             isFirstTimeAccess = null;
         }
+    }
+
+    /// <summary>
+    /// Represents a detailed StandardOut log
+    /// </summary>
+    public class StandardOutDetail
+    {
+        /// <summary>
+        /// The type of the StandardOut log
+        /// </summary>
+        public string Type;
+
+        /// <summary>
+        /// The content of the StandardOut log
+        /// </summary>
+        public string Content;
+    }
+
+    /// <summary>
+    /// Represents detailed test case information
+    /// </summary>
+    public class TestCaseDetail
+    {
+        /// <summary>
+        /// The name of the test case
+        /// </summary>
+        public string Name;
+
+        /// <summary>
+        /// The start time of the test case
+        /// </summary>
+        public DateTimeOffset StartTime;
+
+        /// <summary>
+        /// The end time of the test case
+        /// </summary>
+        public DateTimeOffset EndTime;
+
+        /// <summary>
+        /// The result of the test case
+        /// </summary>
+        public string Result;
+
+        /// <summary>
+        /// The source assembly of the test case
+        /// </summary>
+        public string Source;
+
+        /// <summary>
+        /// The ErrorStackTrace log of the test case
+        /// </summary>
+        public List<string> ErrorStackTrace;
+
+        /// <summary>
+        /// The ErrorMessage log of the test case
+        /// </summary>
+        public List<string> ErrorMessage;
+
+        /// <summary>
+        /// The StandardOut log of the test case
+        /// </summary>
+        public List<StandardOutDetail> StandardOut;
+
+        /// <summary>
+        /// The Types in StandardOut log 
+        /// </summary>
+        public List<string> StandardOutTypes;
+
+        /// <summary>
+        /// The path of the capture file if any
+        /// </summary>
+        public string CapturePath;
     }
 }

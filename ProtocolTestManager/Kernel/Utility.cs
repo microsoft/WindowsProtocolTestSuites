@@ -8,6 +8,7 @@ using System.IO;
 using System.Xml;
 using System.Diagnostics;
 using System.Reflection;
+using System.Web.Script.Serialization;
 
 namespace Microsoft.Protocols.TestManager.Kernel
 {
@@ -1069,58 +1070,21 @@ namespace Microsoft.Protocols.TestManager.Kernel
         }
 
         /// <summary>
-        /// Generates plain text case list.
+        /// Get a text case list of selected result.
         /// </summary>
         /// <param name="passed">Include passed test cases</param>
         /// <param name="failed">Include failed test cases</param>
         /// <param name="inconclusive">Include inconclusive test cases</param>
         /// <param name="notrun">Include not run test cases</param>
         /// <returns>A list of CaseListItem</returns>
-        public List<CaseListItem> GenerateTextCaseListItems(bool passed, bool failed, bool inconclusive, bool notrun)
+        public List<TestCase> SelectTestCases(bool passed, bool failed, bool inconclusive, bool notrun)
         {
-            List<CaseListItem> items = new List<CaseListItem>();
-            foreach (var i in selectedCases)
-            {
-                if (i.Status == TestCaseStatus.Passed && passed ||
-                    i.Status == TestCaseStatus.Failed && failed ||
-                    i.Status == TestCaseStatus.NotRun && notrun ||
-                    i.Status == TestCaseStatus.Other && inconclusive)
-                {
-                    items.Add(new CaseListItem(i.Name, i.Status));
-                }
-            }
-            return items;
-        }
-
-        /// <summary>
-        /// The way of sorting items in the test case list
-        /// </summary>
-        public enum SortBy { Name, Outcome };
-
-        /// <summary>
-        /// Convert the list to plain text report
-        /// </summary>
-        /// <param name="items">Case list</param>
-        /// <param name="showOutcome">shows test case outcome in the list</param>
-        /// <param name="sortby">The way of sorting items in the test case list</param>
-        /// <param name="separator">The style of the text file</param>
-        /// <returns>Plain text report</returns>
-        public static string GeneratePlainTextReport(List<CaseListItem> items, bool showOutcome, SortBy sortby, CaseListItem.Separator separator)
-        {
-            if (sortby == SortBy.Name)
-            {
-                items.Sort((x, y) => { return string.Compare(x.Name, y.Name); });
-            }
-            else
-            {
-                items.Sort((x, y) => { return string.Compare(x.Outcome, y.Outcome); });
-            }
-            StringBuilder sb = new StringBuilder();
-            foreach (var i in items)
-            {
-                sb.AppendLine(i.FormatText(showOutcome, separator));
-            }
-            return sb.ToString();
+            return selectedCases.Where(c =>
+                c.Status == TestCaseStatus.Passed && passed ||
+                c.Status == TestCaseStatus.Failed && failed ||
+                c.Status == TestCaseStatus.NotRun && notrun ||
+                c.Status == TestCaseStatus.Other && inconclusive
+            ).ToList();
         }
 
         #endregion
@@ -1183,22 +1147,36 @@ namespace Microsoft.Protocols.TestManager.Kernel
         }
 
         /// <summary>
-        /// Parse the file content to get the case status
-        /// Result format in file: "Result":"Result: Passed"
+        /// Parse the file content to get the case status and detail
         /// </summary>
-        public static bool ParseFileGetStatus(string filePath, out TestCaseStatus status)
+        public static bool ParseFileGetStatus(string filePath, out TestCaseStatus status, out TestCaseDetail detail)
         {
             status = TestCaseStatus.NotRun;
+            detail = null;
 
             // The file may be opened exclusively by vstest.console.exe. Retry opening here
             // to wait for vstest.console.exe writing logs.
             string content = ReadFileWithRetry(filePath);
 
-            int startIndex = content.IndexOf(AppConfig.ResultKeyword);
-            startIndex += AppConfig.ResultKeyword.Length;
-            int endIndex = content.IndexOf("\"", startIndex);
-            string statusStr = content.Substring(startIndex, endIndex - startIndex);
-            switch (statusStr)
+            var detailLine = content.Split(new char[] { '\r', '\n' }).Where(l => l.StartsWith(AppConfig.DetailKeyword));
+            string detailStr;
+            if (detailLine.Count() == 0)
+            {
+                return false;
+            }
+            else
+            {
+                detailStr = detailLine.First();
+            }
+
+            int startIndex = AppConfig.DetailKeyword.Length;
+            int endIndex = detailStr.Length - 1;
+            string detailJson = detailStr.Substring(startIndex, endIndex - startIndex);
+
+            JavaScriptSerializer serializer = new JavaScriptSerializer() { MaxJsonLength = 32 * 1024 * 1024 };
+            detail = serializer.Deserialize<TestCaseDetail>(detailJson);
+
+            switch (detail.Result)
             {
                 case AppConfig.HtmlLogStatusPassed:
                     status = TestCaseStatus.Passed;
@@ -1215,50 +1193,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
             }
 
             return true;
-        }
-    }
-
-    /// <summary>
-    /// Items for the plain text report
-    /// </summary>
-    public class CaseListItem
-    {
-        /// <summary>
-        /// The separator in the case list
-        /// </summary>
-        public enum Separator { Space, Comma };
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="name">Name of the test case</param>
-        /// <param name="status">The status of the test case</param>
-        public CaseListItem(string name, TestCaseStatus status)
-        {
-            Name = name;
-            Outcome = status == TestCaseStatus.Other ? "Inconclusive" : status.ToString();
-        }
-        /// <summary>
-        /// The outcome of the test case
-        /// </summary>
-        public string Outcome;
-
-        /// <summary>
-        /// The name of the test case
-        /// </summary>
-        public string Name;
-
-        /// <summary>
-        /// Generates a line in the plain text case list.
-        /// </summary>
-        /// <param name="showOutcome">Shows the outcome</param>
-        /// <param name="separator">The separator</param>
-        /// <returns>An item in the report</returns>
-        public string FormatText(bool showOutcome, Separator separator)
-        {
-            if (!showOutcome) return Name;
-            if (separator == Separator.Space) return string.Format("{0} {1}", Outcome, Name);
-            return string.Format("{0},{1}", Outcome, Name);
         }
     }
 }
