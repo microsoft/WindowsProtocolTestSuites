@@ -7,7 +7,7 @@ jobs:
 - job:
   displayName: InstallPrerequisites
   pool: 
-    name: Azure Agents
+    name: AzureAgents1
   workspace:
     clean: all
   timeoutInMinutes: 0
