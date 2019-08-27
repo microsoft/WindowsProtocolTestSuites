@@ -141,13 +141,28 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                 );
 
         /// <summary>
-        /// Get the value of a single-valued attribute
+        /// Get the byte array value of a single-valued attribute
         /// </summary>
         /// <param name="dc">The directory server to which the LDAP connection will be made to.</param>
         /// <param name="dn">The distinguished name of the object the attribute is to modify.</param>
         /// <param name="attributeName">The name of the attribute.</param>
         /// <returns>The value of the given attribute of the object.</returns>
-        object GetAttributeValue(
+        byte[] GetAttributeValueInBytes(
+            DsServer dc,
+            string dn,
+            string attributeName,
+            string ldapFilter = "(objectClass=*)",
+            System.DirectoryServices.Protocols.SearchScope searchScope
+                = System.DirectoryServices.Protocols.SearchScope.Base);
+
+        /// <summary>
+        /// Get the string value of a single-valued attribute
+        /// </summary>
+        /// <param name="dc">The directory server to which the LDAP connection will be made to.</param>
+        /// <param name="dn">The distinguished name of the object the attribute is to modify.</param>
+        /// <param name="attributeName">The name of the attribute.</param>
+        /// <returns>The value of the given attribute of the object.</returns>
+        string GetAttributeValueInString(
             DsServer dc,
             string dn,
             string attributeName,

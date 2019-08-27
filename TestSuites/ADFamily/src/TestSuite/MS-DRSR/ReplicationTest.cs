@@ -2250,7 +2250,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             DSNAME existedObjDsName = ldapAdapter.GetDsName(server, existedObjDN).Value;
             Guid startGuid = existedObjDsName.Guid;
 
-            object usn = ldapAdapter.GetAttributeValue(server, "", "highestCommittedUSN");
+            string usn = ldapAdapter.GetAttributeValueInString(server, "", "highestCommittedUSN");
 
 
             //Prepare the UTD filter.
@@ -2261,7 +2261,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             UPTODATE_CURSOR_V1[] orgCursors = utdFilter.rgCursors;
             utdFilter.rgCursors = new UPTODATE_CURSOR_V1[utdFilter.cNumCursors];
             utdFilter.rgCursors[0].uuidDsa = server.InvocationId;
-            utdFilter.rgCursors[0].usnHighPropUpdate = long.Parse((string)usn);
+            utdFilter.rgCursors[0].usnHighPropUpdate = long.Parse(usn);
             for (int i = 0; i < orgCursors.Length; i++)
             {
                 utdFilter.rgCursors[i + 1] = orgCursors[i];
@@ -2322,7 +2322,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             DSNAME existedObjDsName = ldapAdapter.GetDsName(server, existedObjDN).Value;
             Guid startGuid = existedObjDsName.Guid;
 
-            object usn = ldapAdapter.GetAttributeValue(server, "", "highestCommittedUSN");
+            string usn = ldapAdapter.GetAttributeValueInString(server, "", "highestCommittedUSN");
 
 
             //Prepare the UTD filter.
@@ -2333,7 +2333,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             UPTODATE_CURSOR_V1[] orgCursors = utdFilter.rgCursors;
             utdFilter.rgCursors = new UPTODATE_CURSOR_V1[utdFilter.cNumCursors];
             utdFilter.rgCursors[0].uuidDsa = server.InvocationId;
-            utdFilter.rgCursors[0].usnHighPropUpdate = long.Parse((string)usn);
+            utdFilter.rgCursors[0].usnHighPropUpdate = long.Parse(usn);
             for (int i = 0; i < orgCursors.Length; i++)
             {
                 utdFilter.rgCursors[i + 1] = orgCursors[i];

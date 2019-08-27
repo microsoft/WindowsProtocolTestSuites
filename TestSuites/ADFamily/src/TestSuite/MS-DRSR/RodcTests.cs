@@ -558,7 +558,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             for (timeOut = 0; timeOut < kMaxTimeOut; ++timeOut)
             {
                 searchFlags = Convert.ToUInt32(
-                        ldapAdapter.GetAttributeValue(dc1, attrDn, searchFlagsAttr)
+                        ldapAdapter.GetAttributeValueInString(dc1, attrDn, searchFlagsAttr)
                     );
 
                 if ((searchFlags & kRODC_FAS) != 0)
@@ -722,7 +722,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             // schema nc
             string schemaNc = LdapUtility.GetDnFromNcType(dc, NamingContext.SchemaNC);
 
-            return (string)ldapAdapter.GetAttributeValue(
+            return ldapAdapter.GetAttributeValueInString(
                 dc,
                 schemaNc,
                 "lDAPDisplayName",
@@ -769,7 +769,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             UPTODATE_VECTOR_V1_EXT utdVectorDest = ldapAdapter.GetReplUTD(dest, ncType);
 
             // No way to get the object metadata (ENTINF) thru LDAP, so try uSNChanged of the object instead.
-            uint usnChanged = Convert.ToUInt32(ldapAdapter.GetAttributeValue(orig, objectDn, "uSNChanged"));
+            uint usnChanged = Convert.ToUInt32(ldapAdapter.GetAttributeValueInString(orig, objectDn, "uSNChanged"));
 
             for (int i = 0; i < utdVectorDest.cNumCursors; ++i)
             {
