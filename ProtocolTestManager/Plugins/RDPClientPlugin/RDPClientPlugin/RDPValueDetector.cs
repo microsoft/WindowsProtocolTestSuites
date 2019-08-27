@@ -8,7 +8,6 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Protocols.TestManager.Detector;
-using System.Net;
 
 namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 {
@@ -28,7 +27,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 
         private EnvironmentType env = EnvironmentType.Workgroup;
         private DetectionInfo detectionInfo = new DetectionInfo();
-        
+
         #endregion Variables
 
         #region Constant
@@ -166,7 +165,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         public List<DetectingItem> GetDetectionSteps()
         {
             List<DetectingItem> DetectingItems = new List<DetectingItem>();
-            DetectingItems.Add(new DetectingItem("Detect Target SUT IP Address", DetectingStatus.Pending, LogStyle.Default));
+            DetectingItems.Add(new DetectingItem("Ping Target SUT", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Establish RDP Connection with SUT", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Check Specified features Support", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Check Specified Protocols Support", DetectingStatus.Pending, LogStyle.Default));
@@ -181,7 +180,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         {
             try
             {
-                if (!DetectSUTIPAddress())
+                if (!PingSUT())
                 {
                     return false;
                 }
@@ -226,6 +225,8 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 
             propertiesDic.Add("SUTControl.AgentAddress", new List<string>() { detectionInfo.SUTName + ":" + detectionInfo.AgentListenPort });
             propertiesDic.Add("SUTControl.ClientSupportRDPFile", new List<string>() { detectionInfo.IsWindowsImplementation });
+
+
 
             return true;
         }
@@ -357,43 +358,54 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 
         #region Private Methods
 
-        private bool DetectSUTIPAddress()
+        private bool PingSUT()
         {
-            DetectorUtil.WriteLog("===== Detect Target SUT IP Address=====", true, LogStyle.Default);
+            DetectorUtil.WriteLog("Ping Target SUT...");
 
+            Ping pingSender = new Ping();
+            PingOptions options = new PingOptions();
+
+            // Use the default TtL value which is 128,
+            // but change the fragmentation behavior.
+            options.DontFragment = true;
+
+            // Create a buffer of 32 bytes of data to be transmitted.
+            string data = "0123456789ABCDEF0123456789ABCDEF";
+            byte[] buffer = Encoding.ASCII.GetBytes(data);
+            int timeout = 5000;
+            bool result = false;
+            List<PingReply> replys = new List<PingReply>();
             try
             {
-                IPAddress address;
-                //Detect SUT IP address by SUT name
-                //If SUT name is an ip address, skip to resolve, use the ip address directly
-                if (IPAddress.TryParse(detectionInfo.SUTName, out address))
+                for (int i = 0; i < 4; i++)
                 {
-                    DetectorUtil.WriteLog("Finished", false, LogStyle.StepPassed);                    
-                    return true;
+                    replys.Add(pingSender.Send(detectionInfo.SUTName, timeout, buffer, options));
                 }
-                else //DNS resolve the SUT IP address by SUT name
-                {
-                    IPAddress[] addList = Dns.GetHostAddresses(detectionInfo.SUTName);
 
-                    if (null == addList)
-                    {
-                        DetectorUtil.WriteLog(string.Format("The SUT name {0} cannot be resolved.", detectionInfo.SUTName), true, LogStyle.Error);
-                        return false;
-                    }
-                    else
-                    {
-                        DetectorUtil.WriteLog(string.Format("The SUT name {0} can be resolved as :",addList.ToString()), true, LogStyle.StepPassed);
-                        DetectorUtil.WriteLog("Finished", true, LogStyle.StepPassed);
-                        
-                        return true;
-                    }
-                }
             }
             catch (Exception ex)
             {
-                DetectorUtil.WriteLog(string.Format("Failed with error message:", ex.Message), true, LogStyle.StepFailed);               
+                DetectorUtil.WriteLog(String.Format("PingSUT() threw exception: {0}", ex));
+
                 return false;
-            }           
+            }
+            foreach (var reply in replys)
+            {
+
+                result |= (reply.Status == IPStatus.Success);
+            }
+            if (result)
+            {
+                DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
+                return true;
+            }
+            else
+            {
+                DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
+                DetectorUtil.WriteLog("Taget SUT don't respond.");
+                return false;
+            }
+
         }
 
         private CaseSelectRule CreateRule(string ruleCategoryName, bool? isSupported)
