@@ -1007,7 +1007,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// Catalog name not found
         /// </summary>
-        MSS_E_CATALOGNOTFOUND = 0x80042103
+        MSS_E_CATALOGNOTFOUND = 0x80042103,
+
+        /// <summary>
+        /// Start or end of rowset or chapter was reached
+        /// </summary>
+        DB_S_ENDOFROWSET = 0x00040ec6
     }
 
     /// <summary>

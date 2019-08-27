@@ -34,7 +34,19 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
         public void FromBytes(WspBuffer buffer)
         {
-            throw new NotImplementedException();
+            _cBookmarks = buffer.ToStruct<UInt32>();
+            _aBookmarks = new UInt32[_cBookmarks];
+            for (int i = 0; i < _cBookmarks; i++)
+            {
+                _aBookmarks[i] = buffer.ToStruct<UInt32>();
+            }
+
+            _maxRet = buffer.ToStruct<UInt32>();
+            _ascRet = new UInt32[_maxRet];
+            for (int i = 0; i < _maxRet; i++)
+            {
+                _ascRet[i] = buffer.ToStruct<UInt32>();
+            }
         }
 
         public void ToBytes(WspBuffer buffer)

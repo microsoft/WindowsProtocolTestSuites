@@ -81,10 +81,38 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMCreateQueryIn(false);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
-            wspAdapter.CPMSetBindingsIn(true, true);
+            wspAdapter.CPMSetBindingsIn(true, false);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn and expects success.");
-            wspAdapter.CPMGetRowsIn(wspAdapter.GetCursor(wspAdapter.clientMachineName), validRowsToTransfer, MessageBuilder.rowWidth, validReadBuffer, (uint)FetchType.ForwardOrder, (uint)RowSeekType.eRowSeekNext);
+            CPMGetRowsOut getRowsOut;
+            wspAdapter.CPMGetRowsIn(
+                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                validRowsToTransfer,
+                MessageBuilder.rowWidth,
+                validReadBuffer,
+                (uint)FetchType.ForwardOrder,
+                (uint)RowSeekType.eRowSeekNext,
+                out getRowsOut);
+
+            Site.Assert.AreEqual((uint)37, getRowsOut._cRowsReturned, "The rows returned should be 37.");
+            Site.Log.Add(LogEntryKind.TestStep, "The rows returned as below: ");
+
+            StringBuilder strBuilder = new StringBuilder();
+            strBuilder.AppendLine();
+            strBuilder.AppendLine("      System.ItemName;  System.ItemFolderNameDisplay");
+            for (int i = 0; i < getRowsOut._cRowsReturned; i++)
+            {
+                strBuilder.Append(string.Format("Row {0}: ", i));
+                for (int j = 0; j < getRowsOut.Rows[i].Columns.Length; j++)
+                {
+                    strBuilder.Append(getRowsOut.Rows[i].Columns[j].Data);
+                    strBuilder.Append(";      ");
+                }
+                strBuilder.AppendLine();
+            }
+
+            Site.Log.Add(LogEntryKind.Debug, strBuilder.ToString());
+
         }
 
         [TestMethod]
@@ -97,14 +125,22 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMConnectInRequest();
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
-            wspAdapter.CPMCreateQueryIn(true);
+            wspAdapter.CPMCreateQueryIn(false);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
             wspAdapter.CPMSetBindingsIn(true, true);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn with invalid cursor and expects ERROR_INVALID_PARAMETER .");
             argumentType = ArgumentType.InvalidCursor;
-            wspAdapter.CPMGetRowsIn(invalidCursor, validRowsToTransfer, MessageBuilder.rowWidth, validReadBuffer, (uint)FetchType.ForwardOrder, (uint)RowSeekType.eRowSeekNext);
+            CPMGetRowsOut getRowsOut;
+            wspAdapter.CPMGetRowsIn(
+                invalidCursor,
+                validRowsToTransfer,
+                MessageBuilder.rowWidth,
+                validReadBuffer,
+                (uint)FetchType.ForwardOrder,
+                (uint)RowSeekType.eRowSeekNext,
+                out getRowsOut);
         }
 
         [TestMethod]
@@ -117,14 +153,22 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMConnectInRequest();
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
-            wspAdapter.CPMCreateQueryIn(true);
+            wspAdapter.CPMCreateQueryIn(false);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
             wspAdapter.CPMSetBindingsIn(true, true);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn with invalid RowWidth and expects ERROR_INVALID_PARAMETER .");
             argumentType = ArgumentType.InvalidRowWidth;
-            wspAdapter.CPMGetRowsIn(wspAdapter.GetCursor(wspAdapter.clientMachineName), validRowsToTransfer, invalidRowsWidth, validReadBuffer, (uint)FetchType.ForwardOrder, (uint)RowSeekType.eRowSeekNext);
+            CPMGetRowsOut getRowsOut;
+            wspAdapter.CPMGetRowsIn(
+                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                validRowsToTransfer,
+                invalidRowsWidth,
+                validReadBuffer,
+                (uint)FetchType.ForwardOrder,
+                (uint)RowSeekType.eRowSeekNext,
+                out getRowsOut);
         }
 
         [TestMethod]
@@ -137,14 +181,22 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMConnectInRequest();
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
-            wspAdapter.CPMCreateQueryIn(true);
+            wspAdapter.CPMCreateQueryIn(false);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
             wspAdapter.CPMSetBindingsIn(true, true);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn with invalid ReadBuffer and expects STATUS_INVALID_PARAMETER .");
             argumentType = ArgumentType.InvalidReadBuffer;
-            wspAdapter.CPMGetRowsIn(wspAdapter.GetCursor(wspAdapter.clientMachineName), validRowsToTransfer, MessageBuilder.rowWidth, invalidReadBuffer, (uint)FetchType.ForwardOrder, (uint)RowSeekType.eRowSeekNext);
+            CPMGetRowsOut getRowsOut;
+            wspAdapter.CPMGetRowsIn(
+                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                validRowsToTransfer,
+                MessageBuilder.rowWidth,
+                invalidReadBuffer,
+                (uint)FetchType.ForwardOrder,
+                (uint)RowSeekType.eRowSeekNext,
+                out getRowsOut);
         }
 
         #endregion
@@ -170,7 +222,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             switch (argumentType)
             {
                 case ArgumentType.AllValid:
-                    Site.Assert.AreEqual((uint)0, errorCode, "Server should return succeed for CPMGetRowsIn.");
+                    bool succeed = errorCode == 0 || errorCode == (uint)WspErrorCode.DB_S_ENDOFROWSET ? true : false;
+                    Site.Assert.IsTrue(succeed, "Server should return succeed or DB_S_ENDOFROWSET for CPMGetRowsIn.");
                     break;
                 case ArgumentType.InvalidCursor:
                     Site.Assert.AreEqual((uint)WspErrorCode.ERROR_INVALID_PARAMETER, errorCode, "Server should return ERROR_INVALID_PARAMETER if Cursor of CPMGetRowsIn is invalid.");

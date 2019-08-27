@@ -111,6 +111,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         public uint clientVersion = 0;
 
+        public CPMSetBindingsIn setBindingsIn;
+
         #endregion
 
         #region Initialize & Cleanup
@@ -736,12 +738,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             }
             else
             {
-                cursorAssociated = uint.MaxValue - 10;
+                cursorAssociated = 0;
             }
 
 
             //uint cursorAssociated = GetCursor(clientMachineName);
             var setBindingsInMessage = builder.GetCPMSetBindingsIn(cursorAssociated, out tableColumns, isValidBinding);
+            this.setBindingsIn = setBindingsInMessage;
             byte[] setbindingsInResponseMessageBytes;
             RequestSender sender
                 = GetRequestSender(isClientConnected); //Get the Sender
@@ -837,7 +840,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 cursorAssociated = (uint)r.Next(50, 60);
             }
 
-            CPMGetRowsIn(cursorAssociated, builder.parameter.RowsToTransfer, builder.parameter.EachRowSize, builder.parameter.BufferSize, 0, builder.parameter.EType);
+            CPMGetRowsOut getRowsOut;
+            CPMGetRowsIn(cursorAssociated, builder.parameter.RowsToTransfer, builder.parameter.EachRowSize, builder.parameter.BufferSize, 0, builder.parameter.EType, out getRowsOut);
         }
 
         /// <summary>
@@ -849,7 +853,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="cbReadBuffer">This field MUST be set to the maximum of the value of _cbRowWidth or 1000 times the value of _cRowsToTransfer, rounded up to the nearest 512 byte multiple. The value MUST NOT exceed 0x00004000</param>
         /// <param name="fBwdFetch">Indicating the order in which to fetch the rows</param>
         /// <param name="eType">Type of SeekDescription</param>
-        public void CPMGetRowsIn(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType)
+        public void CPMGetRowsIn(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType, out CPMGetRowsOut getRowsOut)
         {
             var getRowsInMessage = builder.GetCPMRowsInMessage(cursor, rowsToTransfer, rowWidth, cbReadBuffer, fBwdFetch, eType, out rowsInReserve);
             byte[] getRowsOutMessage;
@@ -877,6 +881,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             wspTestSite.CaptureRequirement(3, @"All messages MUST be " +
                 "transported using a named pipe: \\pipe\\MSFTEWDS");
 
+            getRowsOut = new CPMGetRowsOut();
             if (getRowsOutMessage != null)
             {
                 int startingIndex = 0;
@@ -886,9 +891,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     = Helper.GetUInt(getRowsOutMessage, ref startingIndex);
 
                 uint offsetUsed = GetOffsetUsed();
-                validator.ValidateGetRowsOut(getRowsOutMessage,
+                validator.ValidateGetRowsOut(getRowsInMessage, this.setBindingsIn, getRowsOutMessage,
                     checkSum, rowsInReserve, rowsInClientBase, tableColumns,
-                    offsetUsed, out lastDocumentWorkId);
+                    offsetUsed, out lastDocumentWorkId, out getRowsOut);
 
                 // Fire Response Event
                 CPMGetRowsOut(msgStatus);

@@ -89,7 +89,7 @@
     <Property name="R549Implementated" value="true" />
 
     <!-- It specifies the Search Scope. (Path of the Network folder to be searched)-->
-    <Property name="QueryPath" value="file://SUT/Test/" />
+    <Property name="QueryPath" value="file://sut/test/data/test" />
     <!-- It specifies the Search Query.Text to be present in name of Searched File -->
     <Property name="QueryText" value="test" />
 
@@ -121,8 +121,8 @@
     <!--*******************************************-->
 
     <!--   Column when SetBindings-->
-    <Property name="NumberOfSetBindingsColumns" value="1" />
-
+    <Property name="NumberOfSetBindingsColumns" value="2" />
+    
     <Property name="columnGuid_0" value="6B8DA074-3B5C-43BC-886F-0A2CDCE00B6F" />
     <Property name="columnPropertyId_0" value="100" />
     <Property name="columnValueOffset_0" value="8" />
@@ -130,44 +130,13 @@
     <Property name="columnLengthOffset_0" value="4" />
     <Property name="columnStorageType_0" value="12" />
 
-    <!--<Property name="columnGuid_0" value="B725F130-47EF-101A-A5F1-02608C9EEBAC" />
-    <Property name="columnPropertyId_0" value="11" />
-    <Property name="columnValueOffset_0" value="8" />
-    <Property name="columnStatusOffset_0" value="2" />
-    <Property name="columnLengthOffset_0" value="4" />
-    <Property name="columnStorageType_0" value="12" />-->
-
-
-    <!--<Property name="columnGuid_0" value="6B8DA074-3B5C-43BC-886F-0A2CDCE00B6F" />
-    <Property name="columnPropertyId_0" value="100" />
-    <Property name="columnValueOffset_0" value="8" />
-    <Property name="columnStatusOffset_0" value="2" />
-    <Property name="columnLengthOffset_0" value="4" />
-    <Property name="columnStorageType_0" value="12" />-->
-    <!-- VT_VARIANT-->
     <Property name="columnGuid_1" value="B725F130-47EF-101A-A5F1-02608C9EEBAC" />
-    <Property name="columnPropertyId_1" value="22" />
+    <Property name="columnPropertyId_1" value="2" />
     <Property name="columnValueOffset_1" value="32" />
     <Property name="columnStatusOffset_1" value="3" />
     <Property name="columnLengthOffset_1" value="56" />
     <Property name="columnStorageType_1" value="12" />
-    <!-- VT_VARIANT-->
-    <Property name="columnGuid_2" value="B725F130-47EF-101A-A5F1-02608C9EEBAC" />
-    <Property name="columnPropertyId_2" value="19" />
-    <Property name="columnValueOffset_2" value="64" />
-    <Property name="columnStatusOffset_2" value="60" />
-    <Property name="columnLengthOffset_2" value="88" />
-    <Property name="columnStorageType_2" value="12" />
-    <!-- VT_VARIANT-->
-    <Property name="columnGuid_3" value="49691C90-7E17-101A-A91C-08002B2ECDA9" />
-    <Property name="columnPropertyId_3" value="5" />
-    <!-- Work Id VT_I4-->
-    <Property name="columnValueOffset_3" value="72" />
-    <Property name="columnStatusOffset_3" value="45" />
-    <Property name="columnLengthOffset_3" value="0" />
-    <!-- Not using-->
-    <Property name="columnStorageType_3" value="3" />
-    <!-- VT_I4-->
+    
     <!-- GUID and Property that specifies Query Work Id-->
     <Property name="WorkIdPropertyGuid" value="49691C90-7E17-101A-A91C-08002B2ECDA9" />
     <Property name="WorkId" value="5" />

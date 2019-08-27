@@ -49,6 +49,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         public static readonly CFullPropSpec System_ItemName = new CFullPropSpec(new Guid("6B8DA074-3B5C-43BC-886F-0A2CDCE00B6F"), 100);
 
         /// <summary>
+        /// System.ItemFolderNameDisplay
+        /// This is the user-friendly display name of the parent folder of an item. 
+        /// </summary>
+        public static readonly CFullPropSpec System_ItemFolderNameDisplay = new CFullPropSpec(new Guid("B725F130-47EF-101A-A5F1-02608C9EEBAC"), 2);
+
+        /// <summary>
         /// System.Search.Scope
         /// Used to narrow the scope of a query to the specified directory and subdirectories.
         /// </summary>
@@ -65,6 +71,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// Allows a content restriction over all textual properties. Cannot be retrieved.
         /// </summary>
         public static readonly CFullPropSpec QueryAll = new CFullPropSpec(new Guid("49691C90-7E17-101A-A91C-08002B2ECDA9"), 6);
+
+
         #endregion
     }
 }

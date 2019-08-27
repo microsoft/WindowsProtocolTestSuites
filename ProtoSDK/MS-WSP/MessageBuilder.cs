@@ -163,7 +163,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public static uint chapter;
 
-        public static uint rowWidth = 40;
+        public static uint rowWidth = 72;
 
 
         public MessageBuilderParameter parameter;
@@ -1458,7 +1458,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             var result = new CColumnSet();
 
             // Index of Properties to be queried
-            uint[] indexes = new uint[] { 0 };
+            uint[] indexes = new uint[] { 0,1 };
             // Links to the 'pidMapper' field
 
             result.count = (UInt32)indexes.Length;
@@ -1481,6 +1481,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             result.aPropSpec = new CFullPropSpec[]
             {
                 WspConsts.System_ItemName,
+                WspConsts.System_ItemFolderNameDisplay,
                 WspConsts.System_Search_Scope,
                 WspConsts.System_Search_Contents,
             };
@@ -1546,8 +1547,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
                 StatusOffset = column.StatusOffset,
 
-                LengthOffset = column.LengthOffset,
             };
+
+            if (column.LengthOffset != 0)
+            {
+                result.LengthOffset = column.LengthOffset;
+            }
 
             return result;
         }

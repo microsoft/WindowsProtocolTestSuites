@@ -28,7 +28,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
         public void FromBytes(WspBuffer buffer)
         {
-            throw new NotImplementedException();
+            _bmkOffset = buffer.ToStruct<UInt32>();
+            _cskip = buffer.ToStruct<UInt32>();
+            _hRegion = buffer.ToStruct<UInt32>();
         }
 
         public void ToBytes(WspBuffer buffer)
