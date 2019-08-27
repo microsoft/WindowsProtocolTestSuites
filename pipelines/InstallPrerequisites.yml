@@ -1,0 +1,21 @@
+trigger: none
+
+variables:
+  - group: InstallPrerequisitesVariable
+
+jobs:
+- job:
+  displayName: InstallPrerequisites
+  pool: 
+    name: Azure Agents
+  workspace:
+    clean: all
+  timeoutInMinutes: 0
+
+  steps:
+  - script: 'git clone --single-branch --progress -b $(test.helperBranch) %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
+    displayName: 'Fetch external repo'
+    env:
+      EXTREPO_URL: $(extRepo.url)
+      EXTREPO_DIR: $(extRepo.dir)
+    timeoutInMinutes: 0
