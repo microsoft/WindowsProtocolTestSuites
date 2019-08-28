@@ -11,6 +11,8 @@ using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd;
 using System.Security.Principal;
+using System.Diagnostics;
+using System.IO;
 
 namespace Microsoft.Protocols.TestManager.FileServerPlugin
 {
@@ -21,16 +23,6 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
     {
         private string initiatorHostName = "Client01";
 
-        private string vhdOnSharePath;
-
-        [DllImport("advapi32.dll")]
-        private static extern bool LogonUser(String lpszUserName,
-            String lpszDomain,
-            String lpszPassword,
-            int dwLogonType,
-            int dwLogonProvider,
-            ref IntPtr phToken);
-
         /// <summary>
         /// Check if the server supports RSVD.
         /// </summary>
@@ -40,8 +32,9 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             logWriter.AddLog(LogLevel.Information, "Share path: " + info.targetShareFullPath);
 
             #region Copy test VHD file to the target share to begin detecting RSVD
-            vhdOnSharePath = info.targetShareFullPath + @"\" + vhdName;
-            CopyTestVHD(vhdOnSharePath);
+
+            string vhdOnSharePath = Path.Combine(info.targetShareFullPath, vhdName);
+            CopyTestVHD(info.targetShareFullPath, vhdOnSharePath);
             #endregion
 
             #region RSVD version 2
@@ -75,6 +68,8 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 logWriter.AddLog(LogLevel.Information, @"The server doesn't support RSVD.");
             }
             #endregion
+
+            DeleteTestVHD(info.targetShareFullPath, vhdOnSharePath);
             return result;
         }
 
@@ -191,30 +186,31 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             return false;
         }
 
-        private IntPtr GetUserToken()
+        private void ConnectShareByNetUse(string sharePath)
         {
-            const int LOGON32_PROVIDER_DEFAULT = 0;
-            const int LOGON32_LOGON_INTERACTIVE = 2;
-            IntPtr tokenHandle = new IntPtr();
-            LogonUser(Credential.AccountName, Credential.DomainName, Credential.Password, LOGON32_LOGON_INTERACTIVE, LOGON32_PROVIDER_DEFAULT, ref tokenHandle);
-
-            return tokenHandle;
+            Process process = new Process();
+            process.StartInfo.FileName = "net.exe";
+            process.StartInfo.Arguments = $"use {sharePath} {Credential.Password} /user:{Credential.DomainName}\\{Credential.AccountName}";
+            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.CreateNoWindow = true;
+            process.Start();
+            process.WaitForExit();
         }
 
-        private void CopyTestVHD(string vhdOnSharePath)
+        private void CopyTestVHD(string sharePath, string vhdOnSharePath)
         {
             try
             {
-                using (WindowsImpersonationContext context = WindowsIdentity.Impersonate(GetUserToken()))
-                {
-                    if (System.IO.File.Exists(vhdOnSharePath))
-                    {
-                        return;
-                    }
+                ConnectShareByNetUse(sharePath);
 
-                    string vhdxPath = GetVhdSourcePath();
-                    System.IO.File.Copy(vhdxPath, vhdOnSharePath);
+                if (System.IO.File.Exists(vhdOnSharePath))
+                {
+                    return;
                 }
+
+                string vhdxPath = GetVhdSourcePath();
+                System.IO.File.Copy(vhdxPath, vhdOnSharePath);
             }
             catch (Exception e)
             {
@@ -222,19 +218,18 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             }
         }
 
-        public void DeleteTestVHD()
+        private void DeleteTestVHD(string sharePath, string vhdOnSharePath)
         {
             try
             {
-                using (WindowsImpersonationContext context = WindowsIdentity.Impersonate(GetUserToken()))
-                {
-                    if (!System.IO.File.Exists(vhdOnSharePath))
-                    {
-                        return;
-                    }
+                ConnectShareByNetUse(sharePath);
 
-                    System.IO.File.Delete(vhdOnSharePath);
+                if (!System.IO.File.Exists(vhdOnSharePath))
+                {
+                    return;
                 }
+
+                System.IO.File.Delete(vhdOnSharePath);
             }
             catch (Exception e)
             {

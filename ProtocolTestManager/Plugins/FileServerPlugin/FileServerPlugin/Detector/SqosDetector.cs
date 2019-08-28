@@ -10,6 +10,7 @@ using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Sqos;
+using System.IO;
 
 namespace Microsoft.Protocols.TestManager.FileServerPlugin
 {
@@ -32,8 +33,8 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             }
 
             #region copy test VHD file to share
-            vhdOnSharePath = info.targetShareFullPath + @"\" + vhdName;
-            CopyTestVHD(vhdOnSharePath);
+            string vhdOnSharePath = Path.Combine(info.targetShareFullPath, vhdName);
+            CopyTestVHD(info.targetShareFullPath, vhdOnSharePath);
             #endregion
 
             #region SQOS dialect 1.1
@@ -68,6 +69,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             }
             #endregion
 
+            DeleteTestVHD(info.targetShareFullPath, vhdOnSharePath);
             return result;
         }
 
