@@ -10,6 +10,7 @@ using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd;
+using System.Security.Principal;
 
 namespace Microsoft.Protocols.TestManager.FileServerPlugin
 {
@@ -19,6 +20,17 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
     public partial class FSDetector
     {
         private string initiatorHostName = "Client01";
+
+        private string vhdOnSharePath;
+
+        [DllImport("advapi32.dll")]
+        private static extern bool LogonUser(String lpszUserName,
+            String lpszDomain,
+            String lpszPassword,
+            int dwLogonType,
+            int dwLogonProvider,
+            ref IntPtr phToken);
+
         /// <summary>
         /// Check if the server supports RSVD.
         /// </summary>
@@ -28,7 +40,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             logWriter.AddLog(LogLevel.Information, "Share path: " + info.targetShareFullPath);
 
             #region Copy test VHD file to the target share to begin detecting RSVD
-            string vhdOnSharePath = info.targetShareFullPath + @"\" + vhdName;
+            vhdOnSharePath = info.targetShareFullPath + @"\" + vhdName;
             CopyTestVHD(vhdOnSharePath);
             #endregion
 
@@ -179,20 +191,54 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             return false;
         }
 
+        private IntPtr GetUserToken()
+        {
+            const int LOGON32_PROVIDER_DEFAULT = 0;
+            const int LOGON32_LOGON_INTERACTIVE = 2;
+            IntPtr tokenHandle = new IntPtr();
+            LogonUser(Credential.AccountName, Credential.DomainName, Credential.Password, LOGON32_LOGON_INTERACTIVE, LOGON32_PROVIDER_DEFAULT, ref tokenHandle);
+
+            return tokenHandle;
+        }
+
         private void CopyTestVHD(string vhdOnSharePath)
         {
             try
             {
-                if (System.IO.File.Exists(vhdOnSharePath))
+                using (WindowsImpersonationContext context = WindowsIdentity.Impersonate(GetUserToken()))
                 {
-                    return;
+                    if (System.IO.File.Exists(vhdOnSharePath))
+                    {
+                        return;
+                    }
+
+                    string vhdxPath = GetVhdSourcePath();
+                    System.IO.File.Copy(vhdxPath, vhdOnSharePath);
                 }
-                string vhdxPath = GetVhdSourcePath();
-                System.IO.File.Copy(vhdxPath, vhdOnSharePath);
             }
             catch (Exception e)
             {
                 throw new Exception("Copy test VHD file failed: " + e.Message);
+            }
+        }
+
+        public void DeleteTestVHD()
+        {
+            try
+            {
+                using (WindowsImpersonationContext context = WindowsIdentity.Impersonate(GetUserToken()))
+                {
+                    if (!System.IO.File.Exists(vhdOnSharePath))
+                    {
+                        return;
+                    }
+
+                    System.IO.File.Delete(vhdOnSharePath);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Delete test VHD file failed: " + e.Message);
             }
         }
 

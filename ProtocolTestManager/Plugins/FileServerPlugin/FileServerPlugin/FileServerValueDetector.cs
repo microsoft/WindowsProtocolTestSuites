@@ -243,6 +243,8 @@ namespace Microsoft.Protocols.TestManager.Detector
             DetectRSVD(detector);
             DetectSQOS(detector);
 
+            detector.DeleteTestVHD();
+
             logWriter.AddLog(LogLevel.Information, "===== End detecting =====");
             return true;
         }

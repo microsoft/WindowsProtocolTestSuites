@@ -32,7 +32,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             }
 
             #region copy test VHD file to share
-            string vhdOnSharePath = info.targetShareFullPath + @"\" + vhdName;
+            vhdOnSharePath = info.targetShareFullPath + @"\" + vhdName;
             CopyTestVHD(vhdOnSharePath);
             #endregion
 
