@@ -21,6 +21,7 @@ jobs:
 
   - script: echo $(helperBranch)
             echo $(extRepo.dir)
+            echo $(extRepo.url)
     displayName: 'echo helperBranch'
 
   - script: 'git clone --single-branch --progress -b $(helperBranch) %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
