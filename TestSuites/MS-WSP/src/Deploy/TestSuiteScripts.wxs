@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="TESTSUITE_SCRIPTS_DIR">
+            <Component Id="cmpD162C3EA8320CFDAD64F69DFE4F9D866" Guid="{6FD68C03-D0E0-4630-B2BA-35EF44BF203F}">
+                <File Id="fil6C5CDD44C29F37714693859F2D0A9C4B" KeyPath="yes" Source="!(wix.TESTSUITE_SCRIPTS_DIR)\Config-Client.ps1" />
+            </Component>
+            <Component Id="cmpF2F6F065C4F01B1B4A8B25E34C11E268" Guid="{23C9C02F-53AE-4D41-9ADE-FA96F64F1602}">
+                <File Id="filBBFBD2E245A7A31547098830FC3FBDCD" KeyPath="yes" Source="!(wix.TESTSUITE_SCRIPTS_DIR)\Config-DC.ps1" />
+            </Component>
+            <Component Id="cmpC29664C0691E50DB2F28F241998503DC" Guid="{30CA43D9-BB25-4381-9119-D7D6F41F2961}">
+                <File Id="filAC23A885E318A340D3995D50F7FD2437" KeyPath="yes" Source="!(wix.TESTSUITE_SCRIPTS_DIR)\Config-Server.ps1" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="TESTSUITE_SCRIPTS_FILES">
+            <ComponentRef Id="cmpD162C3EA8320CFDAD64F69DFE4F9D866" />
+            <ComponentRef Id="cmpF2F6F065C4F01B1B4A8B25E34C11E268" />
+            <ComponentRef Id="cmpC29664C0691E50DB2F28F241998503DC" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>

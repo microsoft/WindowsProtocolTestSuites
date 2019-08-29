@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?define SRCDIR=$(env.TestSuiteRoot)\drop\ProtocolTestManager?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="WSPDOCFOLDER">
+            <Component Id="arrowright" Guid="{29DEF96E-BA6E-4C3A-8EAC-6F8B39C5F6D2}">
+                <File Id="arrowright" Source="..\Plugins\WSPPlugin\WSPPlugin\Docs\arrow_right.png" />
+            </Component>
+            <Component Id="deployment" Guid="{A351A6E5-E2FC-4D88-BADC-16BEB07FB0D0}">
+                <File Id="deployment" Source="..\Plugins\WSPPlugin\WSPPlugin\Docs\deployment.html" />
+            </Component>
+            <Component Id="domainhtml" Guid="{0EF5121D-2E5D-424A-8BE2-81F2694ECAF5}">
+                <File Id="domainhtml" Source="..\Plugins\WSPPlugin\WSPPlugin\Docs\domain.html" />
+            </Component>
+            <Component Id="domainpng" Guid="{5B146E71-5253-47D0-8495-D59CB76260DF}">
+                <File Id="domainpng" Source="..\Plugins\WSPPlugin\WSPPlugin\Docs\domain.png" />
+            </Component>
+            <Component Id="indexhtml" Guid="{D24CDA3F-1317-4F67-A793-9921ECD3B7BC}">
+                <File Id="indexhtml" Source="..\Plugins\WSPPlugin\WSPPlugin\Docs\index.html" />
+            </Component>
+            <Component Id="notepng" Guid="{BAF552B4-DD84-4026-A67C-5173992EB680}">
+                <File Id="notepng" Source="..\Plugins\WSPPlugin\WSPPlugin\Docs\note.png" />
+            </Component>
+            <Component Id="workgrouphtml" Guid="{FB13E1D2-D151-4C6C-81B1-355E23A73C52}">
+                <File Id="workgrouphtml" Source="..\Plugins\WSPPlugin\WSPPlugin\Docs\workgroup.html" />
+            </Component>
+            <Component Id="workgrouppng" Guid="{B9DC9833-A9EC-4DFD-8466-B1CFE62593C6}">
+                <File Id="workgrouppng" Source="..\Plugins\WSPPlugin\WSPPlugin\Docs\workgroup.png" />
+            </Component>
+            <Component Id="setupSUThtml" Guid="{8AA0B6EC-CE8B-4B53-AE2F-490AD6CA8F20}">
+                <File Id="setupSUThtml" Source="..\Plugins\WSPPlugin\WSPPlugin\Docs\domain_setupSUT.html" />
+            </Component>
+            <Component Id="workgroupsetupSUThtml" Guid="{8A146640-FC5B-427E-AEB2-7E8FD84BA94C}">
+                <File Id="workgroupsetupSUThtml" Source="..\Plugins\WSPPlugin\WSPPlugin\Docs\workgroup_setupSUT.html" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>	
+    <Fragment>
+        <DirectoryRef Id="LIBFOLDER">
+            <?if $(env.DEBUGVER) = 1?>
+              <Component Id="WSPServerPlugin.pdb" Guid="{D1A69EDE-7B2A-4B48-811A-306AB3B7AB54}">
+                <File Id="WSPServerPlugin.pdb" Source="$(var.SRCDIR)\lib\WSPServerPlugin.pdb" />
+              </Component>
+            <?endif ?>
+            <Component Id="WSPServerPlugin.dll" Guid="{786F9972-EB38-4739-8C45-2684FB803EFA}">
+                <File Id="WSPServerPlugin.dll" Source="$(var.SRCDIR)\lib\WSPServerPlugin.dll" />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="WSPCONFIGFOLDER">
+            <Component Id="WSPConfigFile" Guid="{3EAB6390-17FB-458C-9F80-7380EACBB98F}">
+                <File Id="WSPConfigFile" Source="..\Plugins\WSPPlugin\WSPPlugin\config.xml" />
+            </Component>        
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="WSP_PLUGIN">
+            <ComponentRef Id="arrowright" />
+            <ComponentRef Id="deployment" />
+            <ComponentRef Id="domainpng" />
+            <ComponentRef Id="domainhtml" />
+            <ComponentRef Id="indexhtml" />
+            <ComponentRef Id="notepng" />
+            <ComponentRef Id="workgrouphtml" />
+            <ComponentRef Id="workgrouppng" />
+            <ComponentRef Id="setupSUThtml" />
+            <ComponentRef Id="workgroupsetupSUThtml" />			     
+            <ComponentRef Id="WSPServerPlugin.dll" />
+            <ComponentRef Id="WSPConfigFile" />
+            <?if $(env.DEBUGVER) = 1?>
+              <ComponentRef Id="WSPServerPlugin.pdb" />
+            <?endif ?>
+        </ComponentGroup>
+    </Fragment>
+</Wix>

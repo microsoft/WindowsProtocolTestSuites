@@ -39,6 +39,7 @@
     <Compile Include="FileServerPlugin.wxs" />
     <Compile Include="DependencyCheckWarningDlg.wxs" />
     <Compile Include="SMBDPlugin.wxs" />
+    <Compile Include="WSPServerPlugin.wxs" />
     <EmbeddedResource Include="ProtocolTestManager.wxl" />
     <Content Include="License.rtf" />
   </ItemGroup>
@@ -168,6 +169,14 @@
     <ProjectReference Include="..\Plugins\BranchCachePlugin\BranchCachePlugin\BranchCachePlugin.csproj">
       <Name>BranchCachePlugin</Name>
       <Project>{86BE87C6-846E-48FD-9676-BE6D1FC64C07}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\Plugins\WSPPlugin\WSPPlugin\WSPPlugin.csproj">
+      <Name>WSPPlugin</Name>
+      <Project>{9BE1B25A-956D-40C2-97AF-60227DF8B7BD}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
