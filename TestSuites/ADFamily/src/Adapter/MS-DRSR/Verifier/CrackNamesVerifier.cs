@@ -425,7 +425,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             Guid guid = new Guid(req.V1.rpNames[0]);
             string schemaGuidStr = LdapUtility.GetBinaryString(guid.ToByteArray());
 
-            string name = (string)ldapAd.GetAttributeValue(
+            string name = ldapAd.GetAttributeValueInString(
                 dc,
                 rootDse.schemaNamingContext,
                 "lDAPDisplayName",

@@ -286,11 +286,6 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 LogFailedStatus("ComNegotiate", responseHeader.Status);
             }
 
-            // If server only supports Smb2002, no further SMB2 negotiate needed
-            if (selectedDialect == DialectRevision.Smb2002)
-            {
-                return status;
-            }
 
             PreauthIntegrityHashID[] preauthHashAlgs = null;
             EncryptionAlgorithm[] encryptionAlgs = null;

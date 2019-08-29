@@ -225,6 +225,15 @@ namespace Microsoft.Protocols.TestManager.UI {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No report format selected..
+        /// </summary>
+        internal static string NoReportFormatSelected {
+            get {
+                return ResourceManager.GetString("NoReportFormatSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No test case selected..
         /// </summary>
         internal static string NoTestCaseSelected {
@@ -420,6 +429,15 @@ namespace Microsoft.Protocols.TestManager.UI {
         internal static string TitleFormat {
             get {
                 return ResourceManager.GetString("TitleFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to set test report format..
+        /// </summary>
+        internal static string UnknownReportFormat {
+            get {
+                return ResourceManager.GetString("UnknownReportFormat", resourceCulture);
             }
         }
         
