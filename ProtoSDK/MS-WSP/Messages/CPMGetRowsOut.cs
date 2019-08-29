@@ -247,7 +247,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 case vType_Values.VT_BSTR:
                     int strSize = buffer.Peek<int>(valueOffset);
                     var bytes = buffer.ReadBytesFromOffset(valueOffset + 4, strSize);
-                    value = System.Text.Encoding.UTF8.GetString(bytes, 0, bytes.Length);
+
+                    //TODO: just use UTF8 for a temporary solution
+                    // For vType set to VT_BSTR, this field is a set of characters in an OEM–selected character set. 
+                    // The client and server MUST be configured to have interoperable character sets. There is no requirement that it be null-terminated.
+                    value = System.Text.Encoding.UTF8.GetString(bytes, 0, bytes.Length); 
                     break;
                 case vType_Values.VT_LPSTR:
                     {

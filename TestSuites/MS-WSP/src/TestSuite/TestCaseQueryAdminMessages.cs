@@ -35,8 +35,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
         
         public delegate void CPMCiStateInOutResponseDelegate1(uint errorCode);
         
-        public delegate void CPMForceMergeInResponseDelegate1(uint errorCode);
-        
         public delegate void GetServerPlatformDelegate1(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.SkuOsVersion platform, bool @return);
         
         public delegate void CPMCreateQueryOutResponseDelegate1(uint errorCode);
@@ -76,10 +74,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
         static System.Reflection.MethodBase CPMCiStateInOutInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMCiStateInOut");
         
         static System.Reflection.EventInfo CPMCiStateInOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMCiStateInOutResponse");
-        
-        static System.Reflection.MethodBase CPMForceMergeInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMForceMergeIn", typeof(bool));
-        
-        static System.Reflection.EventInfo CPMForceMergeInResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMForceMergeInResponse");
         
         static System.Reflection.MethodBase CPMDisconnectInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMDisconnect");
         
@@ -164,7 +158,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
             this.IWspAdapterInstance = ((Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter)(this.Manager.GetAdapter(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter))));
             this.Manager.Subscribe(CPMConnectOutResponseInfo, this.IWspAdapterInstance);
             this.Manager.Subscribe(CPMCiStateInOutResponseInfo, this.IWspAdapterInstance);
-            this.Manager.Subscribe(CPMForceMergeInResponseInfo, this.IWspAdapterInstance);
             this.Manager.Subscribe(CPMCreateQueryOutResponseInfo, this.IWspAdapterInstance);
             this.Manager.Subscribe(CPMGetQueryStatusOutResponseInfo, this.IWspAdapterInstance);
             this.Manager.Subscribe(CPMGetQueryStatusExOutResponseInfo, this.IWspAdapterInstance);
@@ -235,14 +228,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
             this.Manager.Checkpoint("MS-WSP_R632");
         }
         
-        private void TestCaseQueryAdminMessagesS0CPMForceMergeInResponseChecker(uint errorCode) {
-            this.Manager.Comment("checking step \'event CPMForceMergeInResponse(0)\'");
-            this.Manager.Assert((errorCode == 0), String.Format("expected \'0\', actual \'{0}\' (errorCode of CPMForceMergeInResponse, state S16)", errorCode));
-            this.Manager.Checkpoint("MS-WSP_R592");
-            this.Manager.Checkpoint("MS-WSP_R599");
-            this.Manager.Checkpoint("MS-WSP_R641");
-            this.Manager.Checkpoint("MS-WSP_R643");
-        }
         #endregion
         
         #region Test Starting in S2
@@ -292,13 +277,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
             this.Manager.Checkpoint("MS-WSP_R630");
             this.Manager.Checkpoint("MS-WSP_R632");
         }
-        
-        private void TestCaseQueryAdminMessagesS2CPMForceMergeInResponseChecker(uint errorCode) {
-            this.Manager.Comment("checking step \'event CPMForceMergeInResponse(2147942405)\'");
-            this.Manager.Assert((errorCode == 2147942405), String.Format("expected \'2147942405\', actual \'{0}\' (errorCode of CPMForceMergeInResponse, state " +
-                        "S17)", errorCode));
-            this.Manager.Checkpoint("MS-WSP_R644");
-        }
+
         #endregion
     }
 }

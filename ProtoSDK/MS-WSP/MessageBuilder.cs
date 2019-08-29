@@ -321,21 +321,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         }
 
         /// <summary>
-        /// Gets the ForceMergeIn message BLOB
-        /// </summary>
-        /// <param name="partId"></param>
-        /// <returns>CPMForceMergeIn BLOB</returns>
-        public byte[] GetCPMForceMergeIn(uint partId)
-        {
-            byte[] mainBlob = new byte[Constant.SIZE_OF_UINT];
-            //================ Converting value into Bytes ==============
-            int index = 0;
-            Helper.CopyBytes(mainBlob, ref index,
-                BitConverter.GetBytes(partId));
-            return AddMessageHeader(MessageType.CPMForceMergeIn, mainBlob);
-        }
-
-        /// <summary>
         /// Gets RatioFinishedIn Message BLOB
         /// </summary>
         /// <param name="cursor">Handle identifying the query for
@@ -1237,7 +1222,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             var node = new CContentRestriction();
 
-            node._Property = WspConsts.QueryAll;
+            node._Property = WspConsts.System_Search_Contents;
 
             node.Cc = (UInt32)queryString.Length;
 

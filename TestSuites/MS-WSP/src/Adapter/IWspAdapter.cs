@@ -296,13 +296,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
     public delegate void CPMCiStateInOutResponseHandler(uint errorCode);
 
     /// <summary>
-    /// CPMForceMergeInResponseHandler is a delegate 
-    /// for CPMForceMergeInResponse event.
-    /// </summary>
-    /// <param name="errorCode">Error code from the server response.</param>
-    public delegate void CPMForceMergeInResponseHandler(uint errorCode);
-
-    /// <summary>
     /// CPMSendNotifyOutResponseHandler is a delegate 
     /// for CPMSendNotifyOutResponse event.
     /// </summary>

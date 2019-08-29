@@ -94,7 +94,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 (uint)RowSeekType.eRowSeekNext,
                 out getRowsOut);
 
-            Site.Assert.AreEqual((uint)37, getRowsOut._cRowsReturned, "The rows returned should be 37.");
+
+            Site.Assert.AreEqual((uint)13, getRowsOut._cRowsReturned, "The rows returned should be 13 since only 13 files out of 37 files have the content \"test\".");
             Site.Log.Add(LogEntryKind.TestStep, "The rows returned as below: ");
 
             StringBuilder strBuilder = new StringBuilder();

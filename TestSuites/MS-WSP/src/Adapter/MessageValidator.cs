@@ -105,7 +105,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     (site.Properties["ClientVersion"]);
 
             // Values greater than or equal to 0x00010000 indicate 64-bit support. Values less than 0x00010000 indicate 32-bit support.
-            if (obtainedServerVersion >= 0x00010000 && clientVersion >= 0x00010000)
+            if (obtainedServerVersion >= WspConsts.Is64bitVersion && clientVersion >= WspConsts.Is64bitVersion)
             {
                 this.Is64bit = true;
             }
@@ -344,33 +344,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 }
             }
             #endregion 
-        }
-
-        /// <summary>
-        /// Validates ForceMergeResponse
-        /// </summary>
-        /// <param name="forceMergeResponse">ForceMergeResponse
-        /// BLOB</param>
-        /// <param name="forceMergeCheckSum">Checksum 
-        /// of forceMergeIn message</param>
-        public void ValidateForceMergeInResponse
-            (byte[] forceMergeResponse, uint forceMergeCheckSum)
-        {
-            int startingIndex = 0;
-            ValidateHeader
-                (forceMergeResponse,
-                MessageType.CPMForceMergeIn,
-                forceMergeCheckSum, ref startingIndex);
-
-            // The Response message contains only the message 
-            //Header with Success Status 
-            //(Validated in ValidateHeader method)
-            site.CaptureRequirementIfIsTrue
-                ((Constant.SIZE_OF_HEADER == startingIndex), 403,
-                "The 4 bytes '_partID' field of the CPMForceMergeIn" +
-                " message MUST be absent" +
-                "when the message is sent by the server.");
-
         }
 
         /// <summary>
@@ -3204,19 +3177,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         messageType, 925,
                         "The value of 4 bytes 'msg' field for the response" +
                         "of CPMCiStateInOut message is 0x000000D9.");
-                    break;
-                case MessageType.CPMForceMergeIn:
-                    site.CaptureRequirementIfAreEqual<uint>(0x000000E1,
-                        messageType, 927,
-                        "The value of 4 bytes 'msg' field for the response" +
-                        "of CPMForceMergeIn message is 0x000000E1.");
-                    //If as a Response to CPMForceMergeIn message, a message
-                    // header is obtained following requirement is validated.
-                    site.CaptureRequirement(646,
-                        "When the server receives a CPMForceMergeIn message" +
-                        "request, the server MUST respond to the client with " +
-                        "a message header for the CPMForceMergeIn, and set" +
-                        "the _status field to the results of the request.");
                     break;
                 case MessageType.CPMFetchValueIn:
                     site.CaptureRequirementIfAreEqual<uint>(0x000000E4,

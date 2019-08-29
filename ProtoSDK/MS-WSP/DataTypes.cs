@@ -583,10 +583,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         CPMCiStateInOut = 0x000000D9,
         /// <summary>
-        ///  MessageId of CPMForceMergeIn
-        /// </summary>
-        CPMForceMergeIn = 0x000000E1,
-        /// <summary>
         ///  MessageId of CPMFetchValueIn
         /// </summary>
         CPMFetchValueIn = 0x000000E4,
@@ -1036,10 +1032,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// CPMUpdateDocumentsIn message of WSP protocol
         /// </summary>
         CPMUpdateDocumentsIn = 3,
-        /// <summary>
-        /// CPMForceMergeIn message of WSP protocol
-        /// </summary>
-        CPMForceMergeIn = 4,
         /// <summary>
         /// CPMCreateQueryIn message of WSP protocol
         /// </summary>
