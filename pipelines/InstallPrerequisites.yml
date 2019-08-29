@@ -13,9 +13,6 @@ jobs:
   timeoutInMinutes: 0
 
   steps:
-  - script: echo Hello, world!
-    displayName: 'Run a one-line script'
-
   - script: echo $(extRepo.url)
     displayName: 'Run a one-line script'
 
@@ -30,3 +27,6 @@ jobs:
       EXTREPO_URL: $(extRepo.url)
       EXTREPO_DIR: $(extRepo.dir)
     timeoutInMinutes: 0
+  
+  - script: $(Build.Repository.LocalPath)\InstallPrerequisites\Setup-InstallEnvironment.ps1
+    displayName: 'Run regression script'
