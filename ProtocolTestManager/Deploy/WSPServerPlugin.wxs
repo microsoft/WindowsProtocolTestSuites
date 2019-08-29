@@ -21,19 +21,10 @@
             </Component>
             <Component Id="notepng" Guid="{BAF552B4-DD84-4026-A67C-5173992EB680}">
                 <File Id="notepng" Source="..\Plugins\WSPPlugin\WSPPlugin\Docs\note.png" />
-            </Component>
-            <Component Id="workgrouphtml" Guid="{FB13E1D2-D151-4C6C-81B1-355E23A73C52}">
-                <File Id="workgrouphtml" Source="..\Plugins\WSPPlugin\WSPPlugin\Docs\workgroup.html" />
-            </Component>
-            <Component Id="workgrouppng" Guid="{B9DC9833-A9EC-4DFD-8466-B1CFE62593C6}">
-                <File Id="workgrouppng" Source="..\Plugins\WSPPlugin\WSPPlugin\Docs\workgroup.png" />
-            </Component>
+            </Component>           
             <Component Id="setupSUThtml" Guid="{8AA0B6EC-CE8B-4B53-AE2F-490AD6CA8F20}">
                 <File Id="setupSUThtml" Source="..\Plugins\WSPPlugin\WSPPlugin\Docs\domain_setupSUT.html" />
-            </Component>
-            <Component Id="workgroupsetupSUThtml" Guid="{8A146640-FC5B-427E-AEB2-7E8FD84BA94C}">
-                <File Id="workgroupsetupSUThtml" Source="..\Plugins\WSPPlugin\WSPPlugin\Docs\workgroup_setupSUT.html" />
-            </Component>
+            </Component>           
         </DirectoryRef>
     </Fragment>	
     <Fragment>
@@ -62,11 +53,8 @@
             <ComponentRef Id="domainpng" />
             <ComponentRef Id="domainhtml" />
             <ComponentRef Id="indexhtml" />
-            <ComponentRef Id="notepng" />
-            <ComponentRef Id="workgrouphtml" />
-            <ComponentRef Id="workgrouppng" />
+            <ComponentRef Id="notepng" />           
             <ComponentRef Id="setupSUThtml" />
-            <ComponentRef Id="workgroupsetupSUThtml" />			     
             <ComponentRef Id="WSPServerPlugin.dll" />
             <ComponentRef Id="WSPConfigFile" />
             <?if $(env.DEBUGVER) = 1?>
