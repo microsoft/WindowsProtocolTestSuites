@@ -15,9 +15,12 @@ jobs:
   steps:
   - script: echo Hello, world!
     displayName: 'Run a one-line script'
-    
+
   - script: echo $(extRepo.url)
     displayName: 'Run a one-line script'
+
+  - script: echo $(helperBranch)
+    displayName: 'echo helperBranch'
 
   - script: 'git clone --single-branch --progress -b $(helperBranch) %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
     displayName: 'Fetch external repo'
