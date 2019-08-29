@@ -152,6 +152,8 @@
         <File Id="filB1F637A87332EB226195B7A4905B3CCF" Source="$(var.PROTOSDK_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.pdb" />
       </Component>      
 
+   </DirectoryRef>
+    <DirectoryRef Id="TESTSUITE_DATA_DIR">
     </DirectoryRef>
     
 	</Fragment>

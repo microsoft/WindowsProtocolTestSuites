@@ -2,7 +2,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
     <Fragment>
         <DirectoryRef Id="TESTSUITE_BATCH_DIR">
-            <Component Id="cmp524A3D5B76F1DDD42C964F083F6CCAC3" Guid="{78405783-A39F-4AB7-8EFB-48772D5A3569}">
+            <Component Id="cmp524A3D5B76F1DDD42C964F083F6CCAC3" Guid="{FF445055-0462-4F63-A655-04487556AF73}">
                 <File Id="fil7A0D52FB487F1579DF980A211EDC8F5A" KeyPath="yes" Source="!(wix.TESTSUITE_BATCH_DIR)\RunAllTestCases.cmd" />
             </Component>
         </DirectoryRef>

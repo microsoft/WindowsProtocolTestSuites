@@ -34,7 +34,6 @@
   </PropertyGroup>
   <ItemGroup>
     <!--Deployment WXS files-->
-    <Compile Include="EndpointDlg.wxs" />
     <Compile Include="DependencyCheckWarningDlg.wxs" />
     <Compile Include="MS-WSP-TestSuite-ServerEP.wxs" />
     <Compile Include="TestSuiteMiscFiles.wxs" />
@@ -219,6 +218,8 @@
 	<Copy SourceFiles="..\ServerLocalTestRun.testrunconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Bin" />
 	<Copy SourceFiles="..\TestSuite\MS-WSP_ServerTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Bin" />
 	<Copy SourceFiles="..\TestSuite\MS-WSP_ServerTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Bin" />
+  <Copy SourceFiles="@(DataFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\Data\" />
+
   </Target>    
 
 </Project>

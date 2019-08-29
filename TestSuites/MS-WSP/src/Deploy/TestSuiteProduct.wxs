@@ -44,27 +44,33 @@
     <UIRef Id="WixUI_ErrorProgressText" />
 
     <UI>
-      <!-- Replace feature select dialog with our EndpointDlg. -->
-      <Publish Dialog="EndpointDlg" Control="Back" Event="NewDialog" Value="TestSuitePrivacyStatementDlg"><![CDATA[VersionMsi >= "5.00"]]></Publish>
-      <Publish Dialog="EndpointDlg" Control="Back" Event="NewDialog" Value="TestSuitePrivacyStatementLowMsiVersionDlg"><![CDATA[VersionMsi < "5.00"]]></Publish>
-      <Publish Dialog="EndpointDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Order="1">1</Publish>
-
-      <!-- Perform dependency check when installing on test suite machine and clicking Next button. -->
-      <Publish Dialog="EndpointDlg" Control="Next" Event="NewDialog" Value="DependencyCheckWarningDlg" Order="2">
-        <![CDATA[TARGET_ENDPOINT="TESTSUITE" AND (($(var.PTF) AND NOT (PTFVERSION AND PTFVERSION << PTF_BUILDVERSION)) OR ($(var.SE) AND NOT SPEC_EXPLORER_INSTALLED) OR NOT VSInstalled)]]>
-      </Publish>
-      <!-- Optional Warning Dialog. -->
-      <Publish Dialog="DependencyCheckWarningDlg" Control="Back" Event="NewDialog" Value="EndpointDlg">1</Publish>
-      <Publish Dialog="DependencyCheckWarningDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
-
-      <Publish Dialog="LicenseAgreementDlg" Control="Next" Event="NewDialog" Value="TestSuitePrivacyStatementDlg"><![CDATA[VersionMsi >= "5.00"]]></Publish>
-      <Publish Dialog="TestSuitePrivacyStatementDlg" Control="Next" Event="NewDialog" Value="EndpointDlg">1</Publish>
-      <Publish Dialog="TestSuitePrivacyStatementDlg" Control="Back" Event="NewDialog" Value="LicenseAgreementDlg" Order="2">Not Installed</Publish>
+       <Publish Dialog="LicenseAgreementDlg" Control="Next" Event="NewDialog" Value="TestSuitePrivacyStatementDlg"><![CDATA[VersionMsi >= "5.00"]]></Publish>
       <Publish Dialog="LicenseAgreementDlg" Control="Next" Event="NewDialog" Value="TestSuitePrivacyStatementLowMsiVersionDlg"><![CDATA[VersionMsi < "5.00"]]></Publish>
-      <Publish Dialog="TestSuitePrivacyStatementLowMsiVersionDlg" Control="Next" Event="NewDialog" Value="EndpointDlg">1</Publish>
+
+      <Publish Dialog="TestSuitePrivacyStatementDlg" Control="Back" Event="NewDialog" Value="LicenseAgreementDlg" Order="2">Not Installed</Publish>
+      <Publish Dialog="TestSuitePrivacyStatementDlg" Control="Next" Event="NewDialog" Value="DependencyCheckWarningDlg" Order="1">
+        <![CDATA[(($(var.PTF) AND NOT (PTFVERSION AND PTFVERSION << PTF_BUILDVERSION)) OR ($(var.SE) AND NOT SPEC_EXPLORER_INSTALLED) OR NOT VSInstalled)]]>
+      </Publish>
+      <Publish Dialog="TestSuitePrivacyStatementDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Order="2">
+        <![CDATA[NOT ((($(var.PTF) AND NOT (PTFVERSION AND PTFVERSION << PTF_BUILDVERSION)) OR ($(var.SE) AND NOT SPEC_EXPLORER_INSTALLED) OR NOT VSInstalled))]]>
+      </Publish>
+      <Publish Dialog="DependencyCheckWarningDlg" Control="Back" Event="NewDialog" Value="TestSuitePrivacyStatementDlg"><![CDATA[VersionMsi >= "5.00"]]></Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="TestSuitePrivacyStatementDlg"><![CDATA[VersionMsi >= "5.00"]]></Publish>
+
       <Publish Dialog="TestSuitePrivacyStatementLowMsiVersionDlg" Control="Back" Event="NewDialog" Value="LicenseAgreementDlg" Order="2">Not Installed</Publish>
-      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="EndpointDlg">1</Publish>
-      <Publish Dialog="MaintenanceTypeDlg" Control="ChangeButton" Event="NewDialog" Value="EndpointDlg">1</Publish>
+      <Publish Dialog="TestSuitePrivacyStatementLowMsiVersionDlg" Control="Next" Event="NewDialog" Value="DependencyCheckWarningDlg" Order="1">
+        <![CDATA[(($(var.PTF) AND NOT (PTFVERSION AND PTFVERSION << PTF_BUILDVERSION)) OR ($(var.SE) AND NOT SPEC_EXPLORER_INSTALLED) OR VSInstalled)]]>
+      </Publish>
+      <Publish Dialog="TestSuitePrivacyStatementLowMsiVersionDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Order="2">
+        <![CDATA[NOT ((($(var.PTF) AND NOT (PTFVERSION AND PTFVERSION << PTF_BUILDVERSION)) OR ($(var.SE) AND NOT SPEC_EXPLORER_INSTALLED) OR VSInstalled))]]>
+      </Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="TestSuitePrivacyStatementLowMsiVersionDlg"><![CDATA[VersionMsi < "5.00"]]></Publish>
+      <Publish Dialog="DependencyCheckWarningDlg" Control="Back" Event="NewDialog" Value="TestSuitePrivacyStatementLowMsiVersionDlg"><![CDATA[VersionMsi < "5.00"]]></Publish>
+
+      <!-- Optional Warning Dialog. -->
+
+      <Publish Dialog="DependencyCheckWarningDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+      <Publish Dialog="MaintenanceTypeDlg" Control="ChangeButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
     </UI>
 
   <!-- Dependency List -->
@@ -168,6 +174,7 @@
                 </Directory>
                 <Directory Id="TESTSUITE_SCRIPTS_DIR" Name="Scripts" />
                 <Directory Id="TESTSUITE_COMMON_SCRIPTS_DIR" Name="Batch" />
+                <Directory Id="TESTSUITE_DATA_DIR" Name="Data"/>
               </Directory>
             </Directory>
           </Directory>
@@ -204,8 +211,6 @@
                   Target="[System64Folder]msiexec.exe"
                   Arguments="/x [ProductCode]"/>
 
-
-
         <RemoveFolder Id="TestSuiteProgramsMenuFolder" On="uninstall" />
         <RegistryValue Id="GeneralShortcutsKeyPath"
                        Root="HKCU"
@@ -235,46 +240,7 @@
                        Type="integer"
                        Value="1"
                        KeyPath="yes" />
-      </Component>
-
-      <Component Id="SutShortcuts" Guid="*">
-        <Shortcut Id="OpenSutDirShortcut"
-                  Name="Open Test Suite Directory"
-                  Description="Open root directory of the test suite"
-                  Target="[WindowsFolder]explorer.exe"
-                  Arguments="."
-                  WorkingDirectory="TESTSUITE_ROOT_DIR"/>
-        <RegistryValue Id="SutShortcutsKeyPath"
-                       Root="HKCU"
-                       Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_ENDPOINT)-!(wix.TESTSUITE_VERSION)"
-                       Name="SUT"
-                       Type="integer"
-                       Value="1"
-                       KeyPath="yes" />
-      </Component>
-
-      <Component Id="DomainShortcuts" Guid="*">
-        <Shortcut Id="OpenDomainDirShortcut"
-                  Name="Open Test Suite Directory"
-                  Description="Open root directory of the test suite"
-                  Target="[WindowsFolder]explorer.exe"
-                  Arguments="."
-                  WorkingDirectory="TESTSUITE_ROOT_DIR"/>
-        <!--
-        <Shortcut Id="ConfigDomainShortcut"
-                  Name="Configure Domain"
-                  Description="Configure domain"
-                  Target="[TESTSUITE_SCRIPTS_DIR]!(wix.CONFIG_DOMAIN_SCRIPT)"
-                  WorkingDirectory="TESTSUITE_SCRIPTS_DIR" />
-        -->
-        <RegistryValue Id="DomainShortcutsKeyPath"
-                       Root="HKCU"
-                       Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_ENDPOINT)-!(wix.TESTSUITE_VERSION)"
-                       Name="Domain"
-                       Type="integer"
-                       Value="1"
-                       KeyPath="yes" />
-      </Component>
+      </Component>      
 
     </DirectoryRef>
 
@@ -333,56 +299,19 @@
 
     <!-- Features -->
     <FeatureRef Id="TestSuiteFeatures">
-
       <ComponentRef Id="LICENSE.rtf" />
       <ComponentRef Id="GeneralShortcuts" />
       <ComponentRef Id="SetPowerShellExecutionPolicyToRemoteSigned" />
       <ComponentRef Id="SaveTargetEndpoint" />
-
-      <Feature Id="TestSuiteFeature" Level="1">
-        <!-- If TARGET_ENDPOINT doesn't equal "TESTSUITE", donot install on test suite. -->
-        <Condition Level="0"><![CDATA[TARGET_ENDPOINT<>"TESTSUITE" AND CLIENTUILEVEL<>0]]></Condition>
-
-        <!-- Test Suite Files. -->
-        <ComponentRef Id="TestSuiteShortcuts" />
-        <ComponentRef Id="DesktopShortcuts" />
-        <ComponentGroupRef Id="COMMON_BATCH_FILES" />
-        <ComponentGroupRef Id="TESTSUITE_BATCH_FILES" />
-        <ComponentGroupRef Id="TESTSUITE_BIN_FILES" />
-        <ComponentGroupRef Id="TESTSUITE_SCRIPTS_FILES" />
-        <ComponentGroupRef Id="TESTSUITE_MISC_FILES"/>
-				<ComponentGroupRef Id="TESTSUITE_PTFCONFIG_FILES"/>
-
-      </Feature>
-
-      <Feature Id="SutFeature" Level="1">
-        <!-- If TARGET_ENDPOINT doesn't equal "SUT", donot install on SUT. -->
-        <Condition Level="0"><![CDATA[TARGET_ENDPOINT<>"SUT" AND CLIENTUILEVEL<>0]]></Condition>
-
-        <ComponentRef Id="SutShortcuts" />
-        <ComponentGroupRef Id="TESTSUITE_SCRIPTS_FILES" />
-        <ComponentGroupRef Id="TESTSUITE_SUT_FILES"/>
-
-      </Feature>
-
-      <Feature Id="DomainFeature" Level="1">
-        <!-- If TARGET_ENDPOINT doesn't equal "DOMAIN", donot install on domain. -->
-        <Condition Level="0"><![CDATA[TARGET_ENDPOINT<>"DOMAIN" AND CLIENTUILEVEL<>0]]></Condition>
-
-        <ComponentRef Id="DomainShortcuts" />
-        <ComponentGroupRef Id="TESTSUITE_SCRIPTS_FILES" />
-        <ComponentGroupRef Id="TESTSUITE_DOMAIN_FILES"/>
-
-      </Feature>
-
+      <ComponentRef Id="TestSuiteShortcuts" />
+      <ComponentRef Id="DesktopShortcuts" />
+      <ComponentGroupRef Id="COMMON_BATCH_FILES" />
+      <ComponentGroupRef Id="TESTSUITE_BATCH_FILES" />
+      <ComponentGroupRef Id="TESTSUITE_BIN_FILES" />
+      <ComponentGroupRef Id="TESTSUITE_SCRIPTS_FILES" />
+      <ComponentGroupRef Id="TESTSUITE_DATA_FILES" />
+      <ComponentGroupRef Id="TESTSUITE_MISC_FILES"/>
+      <ComponentGroupRef Id="TESTSUITE_PTFCONFIG_FILES"/> 
     </FeatureRef>
-
-    <UI>
-      <Publish Dialog="EndpointDlg" Control="Next" Event="Remove" Value="ALL">1</Publish>
-      <Publish Dialog="EndpointDlg" Control="Next" Event="AddLocal" Value="TestSuiteFeature">TARGET_ENDPOINT="TESTSUITE"</Publish>
-      <Publish Dialog="EndpointDlg" Control="Next" Event="AddLocal" Value="SutFeature">TARGET_ENDPOINT="SUT"</Publish>
-      <Publish Dialog="EndpointDlg" Control="Next" Event="AddLocal" Value="DomainFeature">TARGET_ENDPOINT="DOMAIN"</Publish>
-    </UI>
-
   </Fragment>
 </Wix>
