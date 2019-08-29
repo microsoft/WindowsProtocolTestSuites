@@ -20,6 +20,8 @@ jobs:
     displayName: 'Run a one-line script'
 
   - script: echo $(helperBranch)
+            echo $(Build.Repository.LocalPath)
+            echo $(Pipeline.Workspace)
     displayName: 'echo helperBranch'
 
   - script: 'git clone --single-branch --progress -b $(helperBranch) %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
