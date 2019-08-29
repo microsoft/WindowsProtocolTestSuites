@@ -13,7 +13,13 @@ jobs:
   timeoutInMinutes: 0
 
   steps:
-  - script: 'git clone --single-branch --progress -b $(test.helperBranch) %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
+  - script: echo Hello, world!
+    displayName: 'Run a one-line script'
+    
+  - script: echo $(extRepo.url)
+    displayName: 'Run a one-line script'
+
+  - script: 'git clone --single-branch --progress -b $(helperBranch) %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
     displayName: 'Fetch external repo'
     env:
       EXTREPO_URL: $(extRepo.url)
