@@ -9,7 +9,7 @@ jobs:
   pool: 
     name: AzureAgents1
   workspace:
-    clean: all
+    clean: false
   timeoutInMinutes: 0
 
   steps:
