@@ -14,10 +14,11 @@ $InvocationPath = Split-Path $MyInvocation.MyCommand.Definition -parent
 Write-Host "InvocationPath: $InvocationPath"
 
 function Main {
-    if(!(Test-Path $VHDName\$VHDPath)){
-        Write-Host "Cannot find the VHD on $VHDName\$VHDPath" Exit
-    }
-    Write-Host "Workspace $(Pipeline.Workspace)"
+    # if(!(Test-Path $VHDName\$VHDPath)){
+    #     Write-Host "Cannot find the VHD on $VHDName\$VHDPath" Exit
+    # }
+    # Write-Host "Workspace $(Pipeline.Workspace)"
+    Write-Host "test script"
 }
 
 Main
