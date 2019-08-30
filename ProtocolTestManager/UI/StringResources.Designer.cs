@@ -261,6 +261,16 @@ namespace Microsoft.Protocols.TestManager.UI {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The PTM profile has been upgraded.
+        ///New profile is saved as {0}..
+        /// </summary>
+        internal static string PtmProfileUpgraded {
+            get {
+                return ResourceManager.GetString("PtmProfileUpgraded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://github.com/microsoft/WindowsProtocolTestSuites/releases/latest.
         /// </summary>
         internal static string ReleaseLink {

@@ -249,4 +249,8 @@ Do you want to abort the execution?</value>
   <data name="NoReportFormatSelected" xml:space="preserve">
     <value>No report format selected.</value>
   </data>
+  <data name="PtmProfileUpgraded" xml:space="preserve">
+    <value>The PTM profile has been upgraded.
+New profile is saved as {0}.</value>
+  </data>
 </root>
