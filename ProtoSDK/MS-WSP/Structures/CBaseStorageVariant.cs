@@ -5,6 +5,7 @@ using System;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 {
+    [Flags]
     public enum vType_Values : UInt16
     {
         /// <summary>

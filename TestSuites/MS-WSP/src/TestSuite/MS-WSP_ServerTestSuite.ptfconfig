@@ -4,7 +4,7 @@
           xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
   <Properties/>
 
-  
+
   <Adapters>
     <Adapter xsi:type="managed" name="IWspAdapter" adaptertype="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.WspAdapter"/>
     <Adapter xsi:type="powershell" name="IWSPSUTAdapter" scriptdir="."/>
@@ -17,10 +17,24 @@
       <Profile name="Verbose" extends="Error">
         <!-- START: XML LOGGING RULES-->
         <Rule kind="CheckSucceeded" sink="XmlLog"/>
-        <Rule kind ="Comment" sink="XmlLog"/>
+        <Rule kind="Comment" sink="XmlLog"/>
         <Rule kind="CheckFailed" sink="XmlLog" />
         <Rule kind="Checkpoint" sink="XmlLog"/>
+        <Rule kind="TestStep" sink="XmlLog"/>
+        <Rule kind="Debug" sink="XmlLog"/>
         <!-- END: XML LOGGING RULES-->
+
+        <!-- Show for Console -->
+        <Rule kind="TestStep" sink="Console" delete="false"/>
+        <Rule kind="CheckSucceeded" sink="Console" delete="false"/>
+        <Rule kind="CheckFailed" sink="Console" delete="false"/>
+        <Rule kind="CheckInconclusive" sink="Console" delete="false"/>
+        <Rule kind="Comment" sink="Console" delete="false"/>
+        <Rule kind="Warning" sink="Console" delete="false"/>
+        <Rule kind="Debug" sink="Console" delete="false"/>
+        <Rule kind="TestFailed" sink="Console" delete="false"/>
+        <Rule kind="TestInconclusive" sink="Console" delete="false"/>
+        <Rule kind="TestPassed" sink="Console" delete="false"/>
       </Profile>
     </Profiles>
   </TestLog>

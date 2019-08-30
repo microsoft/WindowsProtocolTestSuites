@@ -583,10 +583,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         CPMCiStateInOut = 0x000000D9,
         /// <summary>
-        ///  MessageId of CPMForceMergeIn
-        /// </summary>
-        CPMForceMergeIn = 0x000000E1,
-        /// <summary>
         ///  MessageId of CPMFetchValueIn
         /// </summary>
         CPMFetchValueIn = 0x000000E4,
@@ -1007,7 +1003,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// Catalog name not found
         /// </summary>
-        MSS_E_CATALOGNOTFOUND = 0x80042103
+        MSS_E_CATALOGNOTFOUND = 0x80042103,
+
+        /// <summary>
+        /// Start or end of rowset or chapter was reached
+        /// </summary>
+        DB_S_ENDOFROWSET = 0x00040ec6
     }
 
     /// <summary>
@@ -1031,10 +1032,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// CPMUpdateDocumentsIn message of WSP protocol
         /// </summary>
         CPMUpdateDocumentsIn = 3,
-        /// <summary>
-        /// CPMForceMergeIn message of WSP protocol
-        /// </summary>
-        CPMForceMergeIn = 4,
         /// <summary>
         /// CPMCreateQueryIn message of WSP protocol
         /// </summary>

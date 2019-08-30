@@ -35,8 +35,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
         
         public delegate void CPMCiStateInOutResponseDelegate1(uint errorCode);
         
-        public delegate void CPMForceMergeInResponseDelegate1(uint errorCode);
-        
         public delegate void GetServerPlatformDelegate1(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.SkuOsVersion platform, bool @return);
         
         public delegate void CPMCreateQueryOutResponseDelegate1(uint errorCode);
@@ -76,10 +74,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
         static System.Reflection.MethodBase CPMCiStateInOutInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMCiStateInOut");
         
         static System.Reflection.EventInfo CPMCiStateInOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMCiStateInOutResponse");
-        
-        static System.Reflection.MethodBase CPMForceMergeInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMForceMergeIn", typeof(bool));
-        
-        static System.Reflection.EventInfo CPMForceMergeInResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMForceMergeInResponse");
         
         static System.Reflection.MethodBase CPMDisconnectInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMDisconnect");
         
@@ -164,7 +158,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
             this.IWspAdapterInstance = ((Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter)(this.Manager.GetAdapter(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter))));
             this.Manager.Subscribe(CPMConnectOutResponseInfo, this.IWspAdapterInstance);
             this.Manager.Subscribe(CPMCiStateInOutResponseInfo, this.IWspAdapterInstance);
-            this.Manager.Subscribe(CPMForceMergeInResponseInfo, this.IWspAdapterInstance);
             this.Manager.Subscribe(CPMCreateQueryOutResponseInfo, this.IWspAdapterInstance);
             this.Manager.Subscribe(CPMGetQueryStatusOutResponseInfo, this.IWspAdapterInstance);
             this.Manager.Subscribe(CPMGetQueryStatusExOutResponseInfo, this.IWspAdapterInstance);
@@ -208,13 +201,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
             this.Manager.Comment("reaching state \'S10\'");
             this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(TestCaseQueryAdminMessages.CPMCiStateInOutResponseInfo, null, new CPMCiStateInOutResponseDelegate1(this.TestCaseQueryAdminMessagesS0CPMCiStateInOutResponseChecker)));
             this.Manager.Comment("reaching state \'S12\'");
-            this.Manager.Comment("executing step \'call CPMForceMergeIn(True)\'");
-            this.IWspAdapterInstance.CPMForceMergeIn(true);
-            this.Manager.Comment("reaching state \'S14\'");
-            this.Manager.Comment("checking step \'return CPMForceMergeIn\'");
-            this.Manager.Comment("reaching state \'S16\'");
-            this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(TestCaseQueryAdminMessages.CPMForceMergeInResponseInfo, null, new CPMForceMergeInResponseDelegate1(this.TestCaseQueryAdminMessagesS0CPMForceMergeInResponseChecker)));
-            this.Manager.Comment("reaching state \'S18\'");
             this.Manager.Comment("executing step \'call CPMDisconnect()\'");
             this.IWspAdapterInstance.CPMDisconnect();
             this.Manager.Comment("reaching state \'S20\'");
@@ -242,14 +228,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
             this.Manager.Checkpoint("MS-WSP_R632");
         }
         
-        private void TestCaseQueryAdminMessagesS0CPMForceMergeInResponseChecker(uint errorCode) {
-            this.Manager.Comment("checking step \'event CPMForceMergeInResponse(0)\'");
-            this.Manager.Assert((errorCode == 0), String.Format("expected \'0\', actual \'{0}\' (errorCode of CPMForceMergeInResponse, state S16)", errorCode));
-            this.Manager.Checkpoint("MS-WSP_R592");
-            this.Manager.Checkpoint("MS-WSP_R599");
-            this.Manager.Checkpoint("MS-WSP_R641");
-            this.Manager.Checkpoint("MS-WSP_R643");
-        }
         #endregion
         
         #region Test Starting in S2
@@ -273,13 +251,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
             this.Manager.Comment("reaching state \'S11\'");
             this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(TestCaseQueryAdminMessages.CPMCiStateInOutResponseInfo, null, new CPMCiStateInOutResponseDelegate1(this.TestCaseQueryAdminMessagesS2CPMCiStateInOutResponseChecker)));
             this.Manager.Comment("reaching state \'S13\'");
-            this.Manager.Comment("executing step \'call CPMForceMergeIn(False)\'");
-            this.IWspAdapterInstance.CPMForceMergeIn(false);
-            this.Manager.Comment("reaching state \'S15\'");
-            this.Manager.Comment("checking step \'return CPMForceMergeIn\'");
-            this.Manager.Comment("reaching state \'S17\'");
-            this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(TestCaseQueryAdminMessages.CPMForceMergeInResponseInfo, null, new CPMForceMergeInResponseDelegate1(this.TestCaseQueryAdminMessagesS2CPMForceMergeInResponseChecker)));
-            this.Manager.Comment("reaching state \'S19\'");
             this.Manager.Comment("executing step \'call CPMDisconnect()\'");
             this.IWspAdapterInstance.CPMDisconnect();
             this.Manager.Comment("reaching state \'S21\'");
@@ -306,13 +277,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
             this.Manager.Checkpoint("MS-WSP_R630");
             this.Manager.Checkpoint("MS-WSP_R632");
         }
-        
-        private void TestCaseQueryAdminMessagesS2CPMForceMergeInResponseChecker(uint errorCode) {
-            this.Manager.Comment("checking step \'event CPMForceMergeInResponse(2147942405)\'");
-            this.Manager.Assert((errorCode == 2147942405), String.Format("expected \'2147942405\', actual \'{0}\' (errorCode of CPMForceMergeInResponse, state " +
-                        "S17)", errorCode));
-            this.Manager.Checkpoint("MS-WSP_R644");
-        }
+
         #endregion
     }
 }

@@ -111,6 +111,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         public uint clientVersion = 0;
 
+        public CPMSetBindingsIn setBindingsIn;
         #endregion
 
         #region Initialize & Cleanup
@@ -302,6 +303,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     && (msgStatus == 0x00000000))
                 {
                     validator.ValidateConnectOutResponse(connectOutMessage);
+                    builder.Is64bit = validator.Is64bit;
                     isClientConnected = true;
                 }
 
@@ -720,15 +722,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// is valid</param>
         public void CPMSetBindingsIn(bool isValidBinding, bool isCursorValid)
         {
-            //if (!isValidBinding)
-            //{
-            //    if (wspTestSite.Properties["TDI-19919"].ToUpper() == "OPEN")
-            //    {
-            //        uint error = (uint)WspErrorCode.DB_E_BADBINDINFO;
-            //        CPMSetBindingsInResponse(error);
-            //        return;
-            //    }
-            //}
             uint cursorAssociated = 0;
             if (isCursorValid)
             {
@@ -736,12 +729,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             }
             else
             {
-                cursorAssociated = uint.MaxValue - 10;
+                cursorAssociated = 0;
             }
 
 
             //uint cursorAssociated = GetCursor(clientMachineName);
             var setBindingsInMessage = builder.GetCPMSetBindingsIn(cursorAssociated, out tableColumns, isValidBinding);
+            this.setBindingsIn = setBindingsInMessage;
             byte[] setbindingsInResponseMessageBytes;
             RequestSender sender
                 = GetRequestSender(isClientConnected); //Get the Sender
@@ -826,7 +820,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 cursorAssociated = (uint)r.Next(50, 60);
             }
 
-            CPMGetRowsIn(cursorAssociated, builder.parameter.RowsToTransfer, builder.parameter.EachRowSize, builder.parameter.BufferSize, 0, builder.parameter.EType);
+            CPMGetRowsOut getRowsOut;
+            CPMGetRowsIn(cursorAssociated, builder.parameter.RowsToTransfer, builder.parameter.EachRowSize, builder.parameter.BufferSize, 0, builder.parameter.EType, out getRowsOut);
         }
 
         /// <summary>
@@ -838,7 +833,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="cbReadBuffer">This field MUST be set to the maximum of the value of _cbRowWidth or 1000 times the value of _cRowsToTransfer, rounded up to the nearest 512 byte multiple. The value MUST NOT exceed 0x00004000</param>
         /// <param name="fBwdFetch">Indicating the order in which to fetch the rows</param>
         /// <param name="eType">Type of SeekDescription</param>
-        public void CPMGetRowsIn(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType)
+        public void CPMGetRowsIn(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType, out CPMGetRowsOut getRowsOut)
         {
             var getRowsInMessage = builder.GetCPMRowsInMessage(cursor, rowsToTransfer, rowWidth, cbReadBuffer, fBwdFetch, eType, out rowsInReserve);
             byte[] getRowsOutMessage;
@@ -866,6 +861,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             wspTestSite.CaptureRequirement(3, @"All messages MUST be " +
                 "transported using a named pipe: \\pipe\\MSFTEWDS");
 
+            getRowsOut = new CPMGetRowsOut();
             if (getRowsOutMessage != null)
             {
                 int startingIndex = 0;
@@ -875,9 +871,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     = Helper.GetUInt(getRowsOutMessage, ref startingIndex);
 
                 uint offsetUsed = GetOffsetUsed();
-                validator.ValidateGetRowsOut(getRowsOutMessage,
+                validator.ValidateGetRowsOut(getRowsInMessage, this.setBindingsIn, getRowsOutMessage,
                     checkSum, rowsInReserve, rowsInClientBase, tableColumns,
-                    offsetUsed, out lastDocumentWorkId);
+                    offsetUsed, out lastDocumentWorkId, out getRowsOut);
 
                 // Fire Response Event
                 CPMGetRowsOut(msgStatus);
@@ -1011,91 +1007,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         public event CPMCiStateInOutResponseHandler
             CPMCiStateInOutResponse;
-
-        #endregion
-
-        #region CPMForceMergeIn and CPMForceMergeInResponse
-
-        /// <summary>
-        /// CPMForceMergeIn() request is sent to perform any 
-        /// maintenance necessary to improve query performance.
-        /// </summary>
-        /// <param name="isClientAdmin">Indicates whether the 
-        /// client has Admin privilege.</param>
-        public void CPMForceMergeIn(bool isClientAdmin)
-        {
-            //uint cursorAssociated = GetCursor(clientMachineName);
-            byte[] forceMergeInMessage = builder.GetCPMForceMergeIn(1);
-            byte[] forceMergeInResponseMessage;
-            uint checkSum = 0;
-            RequestSender sender;
-            if (isClientAdmin)
-            {
-                sender
-                = GetRequestSender(isClientConnected);
-            }
-            else
-            {
-                sender
-                = GetRequestSender(isClientAdmin);
-            }
-            //Get the Sender
-            bytesRead = sender.SendMessage(forceMergeInMessage,
-                out forceMergeInResponseMessage);
-            if (sender == defaultSender)
-            {
-                // This means that disconnect message has been sent
-                // through the pipe which does not have a connect In
-                // sent across it.
-                // If the sender.SendMessage() method is successful
-                // Requirement 598 is validated
-                wspTestSite.CaptureRequirement(598,
-                   "In Windows the same pipe connection is used for the " +
-                   "following messages, except when the error is returned" +
-                   "in a CPMConnectOut message.");
-
-            }
-            // RequestSender objects uses path '\\pipe\\MSFTEWDS'
-            // for the protocol transport
-            wspTestSite.CaptureRequirement(3, @"All messages MUST be " +
-                 "transported using a named pipe: \\pipe\\MSFTEWDS");
-
-            if (forceMergeInResponseMessage != null)
-            {
-                int startingIndex = 0;
-                uint msgId = Helper.GetUInt(forceMergeInResponseMessage,
-                    ref startingIndex);
-                uint msgStatus = Helper.GetUInt(forceMergeInResponseMessage,
-                    ref startingIndex);
-                if (msgStatus != 0)
-                {
-                    wspTestSite.CaptureRequirementIfAreEqual<int>(bytesRead,
-                        Constant.SIZE_OF_HEADER, 619,
-                        "Whenever an error occurs during processing of a " +
-                        "message sent by a client, the server MUST respond " +
-                        "with the message header (only) of the message sent " +
-                        "by the client, keeping the _msg field intact.");
-                    //If 4 byte Non Zero field is read as status
-                    // The requirement 620 gets validated
-                    wspTestSite.CaptureRequirement(620, "Whenever an error " +
-                        "occurs during processing of a message sent by a " +
-                        "client, the server MUST set the _status field to " +
-                        "the error code value.");
-                }
-                if ((msgId == (uint)MessageType.CPMForceMergeIn)
-                    && (msgStatus == 0x00000000))
-                {
-                    validator.ValidateForceMergeInResponse
-                        (forceMergeInResponseMessage, checkSum);
-                }
-                CPMForceMergeInResponse(msgStatus); // Fire Response Event
-            }
-        }
-        /// <summary>
-        /// This event is used to get the response from 
-        /// CPMForceMergeIn request.
-        /// </summary>
-        public event CPMForceMergeInResponseHandler CPMForceMergeInResponse;
 
         #endregion
 

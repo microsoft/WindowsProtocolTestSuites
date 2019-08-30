@@ -19,6 +19,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         private ITestSite site;
 
         /// <summary>
+        /// Indicates if we use 64-bit or 32-bit when validating responses.
+        /// </summary>
+        public bool Is64bit;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="site">ITestSite</param>
@@ -95,18 +100,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             //-----------------------------  Server Version   
             uint obtainedServerVersion = connectOutResponse._serverVersion;
-            uint actualServerVersion
-                = Convert.ToUInt32(site.Properties["WindowsServerVersion"]);
+            uint clientVersion
+                    = Convert.ToUInt32
+                    (site.Properties["ClientVersion"]);
 
+            // Values greater than or equal to 0x00010000 indicate 64-bit support. Values less than 0x00010000 indicate 32-bit support.
+            if (obtainedServerVersion >= WspConsts.Is64bitVersion && clientVersion >= WspConsts.Is64bitVersion)
+            {
+                this.Is64bit = true;
+            }
+            else
+            {
+                this.Is64bit = false;
+            }
+
+            uint serverOffset = Convert.ToUInt32(site.Properties.Get("ServerOffset"));
             #region Windows Behaviour Validation
 
-            if (Convert.ToUInt32(site.Properties.Get("ServerOffset"))
-                    == Constant.OFFSET_32)
+            if (serverOffset == Constant.OFFSET_32)
             {
-                uint clientVersion
-                        = Convert.ToUInt32
-                        (site.Properties["ClientVersion"]);
-
                 //Updated by:v-zhil
                 //Delta testing
                 site.CaptureRequirementIfIsTrue
@@ -142,10 +154,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             {
                 // if server is handling 32 bit offset
 
-                if (Convert.ToUInt32(site.Properties.Get("ServerOffset"))
-                    == Constant.OFFSET_32)
+                if (serverOffset == Constant.OFFSET_32)
                 {
-
                     uint actualValue
                         = Convert.ToUInt32
                         (site.Properties["ServerVersion"]);
@@ -154,9 +164,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         "Values less than 0x00010000, of 4 bytes " +
                         "_serverVersion field of CPMConnectOut message ," +
                         "indicates 32-bit support.");
-                    uint clientVersion
-                        = Convert.ToUInt32
-                        (site.Properties["ClientVersion"]);
 
                     //Windows Behavior
                     // For 32-bit Windows Systems in 
@@ -182,8 +189,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     }
                 }
                 // if server is handling 64 bit offset
-                if (Convert.ToUInt32(site.Properties.Get("ServerOffset"))
-                    == Constant.OFFSET_64)
+                if (serverOffset == Constant.OFFSET_64)
                 {
                     uint actualValue
                         = Convert.ToUInt32
@@ -195,9 +201,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         "of 4 bytes _serverVersion field of " +
                         "CPMConnectOut message ," +
                         "indicates 64-bit support.");
-                    uint clientVersion
-                        = Convert.ToUInt32
-                        (site.Properties["ClientVersion"]);
 
                     // For 64-bit Windows Systems in
                     //which WDS 4.0 is installed
@@ -341,33 +344,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 }
             }
             #endregion 
-        }
-
-        /// <summary>
-        /// Validates ForceMergeResponse
-        /// </summary>
-        /// <param name="forceMergeResponse">ForceMergeResponse
-        /// BLOB</param>
-        /// <param name="forceMergeCheckSum">Checksum 
-        /// of forceMergeIn message</param>
-        public void ValidateForceMergeInResponse
-            (byte[] forceMergeResponse, uint forceMergeCheckSum)
-        {
-            int startingIndex = 0;
-            ValidateHeader
-                (forceMergeResponse,
-                MessageType.CPMForceMergeIn,
-                forceMergeCheckSum, ref startingIndex);
-
-            // The Response message contains only the message 
-            //Header with Success Status 
-            //(Validated in ValidateHeader method)
-            site.CaptureRequirementIfIsTrue
-                ((Constant.SIZE_OF_HEADER == startingIndex), 403,
-                "The 4 bytes '_partID' field of the CPMForceMergeIn" +
-                " message MUST be absent" +
-                "when the message is sent by the server.");
-
         }
 
         /// <summary>
@@ -1269,6 +1245,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         ///  Validates CPMGetRowsOut message
         /// </summary>
+        /// <param name="getRowsIn">The CPMGetRowsIn request, used to unmarshal the CPMGetRowsOut response</param>
+        /// <param name="setBingdingsIn">The CPMSetBindingsIn request, used to unmarshal the CPMGetRowsOut response</param>
         /// <param name="rowsInCheckSum">checksum of RowsIn message</param>
         /// <param name="clientBase"> uint parameter clientBase</param>
         /// <param name="columns"> Array of tablecolumns</param>
@@ -1276,333 +1254,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="reserved"> reserved field</param>
         /// <param name="rowsOutResponse">Rowsout response blob obtained</param>
         /// <param name="workId">out parameter workId </param>
-        public void ValidateGetRowsOut(Byte[] rowsOutResponse,
+        /// <param name="getRowsOut">The unmarshaled response</param>
+        public void ValidateGetRowsOut(CPMGetRowsIn getRowsIn, CPMSetBindingsIn setBingdingsIn, Byte[] rowsOutResponse,
             uint rowsInCheckSum, uint reserved, uint clientBase,
-            TableColumn[] columns, uint offsetUsed, out uint workId)
+            TableColumn[] columns, uint offsetUsed, out uint workId, out CPMGetRowsOut getRowsOut)
         {
             int startingIndex = 0;
-            workId = 0xfffffff0;
-            uint rowSize = 0;
-            int WORK_ID_PROPERTY = 5; // by default it is 5
-            uint lastOffsetValue = 0; // Offset of first Row field
+            workId = 0xfffffff0; // TODO: set this value correctly
             ValidateHeader(rowsOutResponse, MessageType.CPMGetRowsIn,
                 rowsInCheckSum, ref startingIndex);
 
-            var header = new WspMessageHeader();
-            Helper.FromBytes(ref header, rowsOutResponse);
-
-            if (header._status != 0)
-            {
-                // failed message
-                return;
-            }
-
-            //---------------------    _cRowsReturned   -----------------------
-            uint rowsReturned
-                = Helper.GetUInt(rowsOutResponse, ref startingIndex);
-            // If GetUInt returns success the requirement 530 is validated
-            site.CaptureRequirement(530,
-                "The 4 bytes '_cRowsReturned' field of the CPMGetRowsOut" +
-                "message is the number of rows returned in Rows.");
-            //If rowsReturned field is obtained from the Server.
-            // requirement 719 is validated.
-            site.CaptureRequirement(719,
-                "When the server receives a CPMGetRowsIn message request" +
-                "from a client, the server MUST store the actual number of" +
-                "rows fetched in _cRowsReturned.");
-            //---------------------         eType   --
-            RowSeekType eType
-                = (RowSeekType)Helper.GetUInt(rowsOutResponse,
-                ref startingIndex);
-            bool isValidEType = GetValidEType(eType);
-            site.CaptureRequirementIfIsTrue(isValidEType, 531,
-                "The 4 bytes 'eType' field of the CPMGetRowsOut message" +
-                "MUST contain one of the following values: " +
-                "eRowsSeekNone(0x00000000),  eRowSeekNext(0x00000001)," +
-                "eRowSeekAt(0x00000002),  eRowSeekAtRatio(0x00000003)," +
-                "eRowSeekByBookmark(0x00000004).");
-            //---------------------        _chapt   --
-            uint chapt = Helper.GetUInt(rowsOutResponse, ref startingIndex);
-            byte columnStatus = 0xf; // Non permitted value
-            if (eType != RowSeekType.eRowSeekNone)
-            {
-                switch (eType) // Validation for each RowSeekType
-                {
-                    case RowSeekType.eRowSeekNext:
-                        byte[] rowSeekNext = Helper.GetData(rowsOutResponse,
-                            ref startingIndex, Constant.SIZE_OF_UINT);
-                        RowsSeekNext(rowSeekNext);
-                        break;
-                    case RowSeekType.eRowSeekAt:
-                        byte[] rowSeekAt = Helper.GetData(rowsOutResponse,
-                                            ref startingIndex,
-                                            3 * Constant.SIZE_OF_UINT);
-                        RowsSeekAt(rowSeekAt);
-                        break;
-                    case RowSeekType.eRowSeekAtRatio:
-                        byte[] rowSeekAtRatio = Helper.GetData(rowsOutResponse,
-                                                ref startingIndex,
-                                                3 * Constant.SIZE_OF_UINT);
-                        RowSeekAtRatio(rowSeekAtRatio);
-                        break;
-                    case RowSeekType.eRowSeekByBookmark:
-                        uint numberOfBookMarks
-                            = Helper.GetUIntWithOutAdvancing(rowsOutResponse,
-                            startingIndex);
-                        uint numberOfHResults
-                            = Helper.GetUIntWithOutAdvancing(rowsOutResponse,
-                            (int)(startingIndex +
-                            numberOfBookMarks * Constant.SIZE_OF_UINT));
-                        uint totalBytes
-                            = (numberOfBookMarks + numberOfHResults + 2)
-                            * Constant.SIZE_OF_UINT;
-                        byte[] rowSeekByBookMark
-                            = Helper.GetData(rowsOutResponse,
-                            ref startingIndex, (int)totalBytes);
-                        RowSeekByBookmark(rowSeekByBookMark);
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            if (chapt == MessageBuilder.chapter)
-            {
-                //MS-WSP_R720
-                site.CaptureRequirementIfAreEqual<uint>(MessageBuilder.chapter, chapt, 720,
-                    "[When the server receives a CPMGetRowsIn message request from a client, " +
-                    "the server MUST]Copy the chapter field from CPMGetRowsIn to a CPMGetRowsOut message to be sent.");
-            }
-
-            // cbReserved value from GetRowsIn Message
-            uint cbReserved = reserved;
-            uint paddingBytes
-                = cbReserved - ((uint)startingIndex % cbReserved);
-            uint paddingRows
-                = GetPaddingBytes(paddingBytes, rowsOutResponse,
-                ref startingIndex);
-            object offset2; // Could be 64 bit or 32 bit
-            site.CaptureRequirementIfIsTrue(paddingRows >= 0 && paddingRows <= (reserved - 1), 534,
-                "The  'paddingRows' field of the CPMGetRowsOut" +
-                "message MUST be of  length 0 to _cbReserved-1 bytes. ");
-
-            for (int i = 0; i < rowsReturned; i++)
-            {
-                rowSize = MessageBuilder.rowWidth;
-                byte[] row = new byte[rowSize];
-                int rowIndex = 0;
-                Array.Copy(rowsOutResponse, startingIndex, row, 0, rowSize);
-                startingIndex += (int)rowSize;
-                // This is an iteration of obtained Rows from the Server.
-                // If the 'row' field is populated.
-                // requirement 721 is validated.
-                site.CaptureRequirement(721,
-                    "When the server receives a CPMGetRowsIn message request" +
-                    "from a client, the server MUST Store fetched rows in " +
-                    "the Rows field.");
-                for (int j = 0; j < Int32.Parse(site.Properties.Get("NumberOfSetBindingsColumns")); j++)
-                {
-                    rowIndex = columns[j].ValueOffset;
-                    StorageType type = columns[j].Type;
-                    //Validating vType of CRowVariant structure.
-                    bool isValidType = GetValidVType((uint)type);
-
-                    if (columns[j].StatusOffset > 0)
-                    {
-                        columnStatus = row[(int)(columns[j].StatusOffset)];
-                        bool IsValidStatus = columnStatus == 0x00
-                            || columnStatus == 0x01
-                            || columnStatus == 0x02;
-                        site.CaptureRequirementIfIsTrue(IsValidStatus, 722,
-                            "When the server receives a CPMGetRowsIn message" +
-                            "request from a client, if StatusUsed is set to " +
-                            "0x01 in the CTableColumn of the CPMSetBindingIn " +
-                            "message for the column, the server MUST set the" +
-                            "status byte to either 0x00 or 0x01 or 0x02.");
-
-                    }
-                    site.CaptureRequirementIfIsTrue(isValidType, 319,
-                        "The 2 bytes 'vType' field of the CRowVariant " +
-                        "structure  MUST be one of the following values:" +
-                        "VT_EMPTY(0x0000), VT_NULL(0x0001), VT_I1(0x0010)," +
-                        "VT_UI1(0x0011), VT_I2(0x0002), VT_UI2(0x0012)," +
-                        "VT_BOOL( 0x000B), VT_I4(0x0003), VT_UI4(0x0013)," +
-                        "VT_R4(0x0004), VT_INT(0x0016), VT_UINT( 0x0017)," +
-                        "VT_ERROR(0x000A), VT_I8(0x0014), VT_UI8(0x0015)," +
-                        "VT_R8(0x0005), VT_CY(0x0006), VT_DATE(0x0007)," +
-                        "VT_FILETIME(0x0040), VT_DECIMAL(0x000E) , " +
-                        "VT_CLSID(0x0048), VT_BLOB(0x0041), " +
-                        "VT_BLOB_OBJECT (0x0046), VT_BSTR(0x0008)," +
-                        "VT_LPSTR(0x001E), VT_LPWSTR(0x001F), " +
-                        "VT_COMPRESSED_LPWSTR(0x0023), VT_VARIANT(0x000C)");
-
-                    site.CaptureRequirementIfIsTrue(isValidType, 540,
-                        "vType in the Row Data MUST contain the data type.");
-
-                    // VT_VARIANT type correspondings 
-                    if (StorageType.VT_VARIANT == type)
-                    // to a CRowVariant Structure
-                    {
-                        ushort actualType = GetUShort(row, ref rowIndex);
-                        ushort reserved1 = GetUShort(row, ref rowIndex);
-                        // If TableColumn is obtained Requirement 322
-                        // is validated.
-                        site.CaptureRequirement(322,
-                            "For any arbitrary value of 'reserved1' field of" +
-                            "the CRowVariant structure, server " +
-                            "returns success.");
-
-                        uint reserved2 = Helper.GetUInt(row, ref rowIndex);
-                        // If TableColumn is obtained Requirement 325
-                        // is validated.
-                        site.CaptureRequirement(325,
-                            "For any arbitrary value of 'reserved2' field of" +
-                            "the CRowVariant structure, " +
-                            "server returns success.");
-                        // If TableColumn is obtained as specified by
-                        // RowsIn message tableColumn offset
-                        // Requirement 539 is validated.
-                        site.CaptureRequirement(539,
-                            "The fixed sized area (at the beginning of " +
-                            "the row buffer) in the row data MUST contain" +
-                            "a CRowVariant for each column, stored at the " +
-                            "offset specified in the most recent " +
-                            "CPMSetBindingsIn message.");
-
-
-                        if (IsVariableLengthType(actualType))
-                        {
-                            // Value is present at the offset
-                            if (offsetUsed == Constant.OFFSET_64)
-                            {
-                                offset2
-                                    = (ulong)BitConverter.ToUInt64
-                                    (row, rowIndex);
-                                rowIndex += 2 * Constant.SIZE_OF_UINT;
-                                //If 64 bit offset field is obtained.
-                                // Requirement 327 is validated
-                                site.CaptureRequirement(327,
-                                    " 'Offset' field of the CRowVariant " +
-                                    "structure  MUST be 64-byte value " +
-                                    "(8 bytes long) if 64-bit offsets are" +
-                                    "being used.");
-                                //If 64 bit offset field is obtained.
-                                // Requirement 542 is validated
-                                site.CaptureRequirement(542,
-                                    "If 64-bit offsets are being used, the " +
-                                    "Offset field in CRowVariant MUST " +
-                                    "contain a 64-bit value.");
-                            }
-                            else
-                            {
-                                offset2 = Helper.GetUInt(row, ref rowIndex);
-                                //If 32 bit offset field is obtained.
-                                // Requirement 327 is validated
-                                site.CaptureRequirement(326,
-                                    " 'Offset' field of the CRowVariant " +
-                                    "structure  MUST be a 32-bit value " +
-                                    "(4 bytes long) if 32-bit offsets are " +
-                                    "being used. ");
-                                //If 32 bit offset field is obtained.
-                                // Requirement 541 is validated
-                                site.CaptureRequirement(541,
-                                    "If 32-bit offsets are being used," +
-                                    "the Offset field of CRowVariant " +
-                                    "structure in the row data MUST contain" +
-                                    "a 32-bit value.");
-                            }
-                            // If GetUInt returns success then the requirement 
-                            // 326 is validated
-
-                            uint datalength
-                                = BitConverter.ToUInt32(row,
-                                columns[j].LengthOffset);
-                            // Deducting size of VT_VARIANT
-                            int actualLength
-                                = (int)(datalength - 24);
-                            byte[] variableData = null;
-
-                            if (offsetUsed == Constant.OFFSET_64)
-                            {
-                                variableData = ReadVariableDataFromBuffer2(rowsOutResponse,
-                                (ulong)offset2 - (ulong)clientBase, actualLength);
-
-                                var mystring = Encoding.Unicode.GetString(variableData);
-                            }
-                            else
-                            {
-                                variableData = ReadVariableDataFromBuffer(rowsOutResponse,
-                                (uint)offset2 - clientBase, actualLength);
-                            }
-
-                            // If VariableData is obtained as specified.
-                            //Requirement 11 validated
-                            site.CaptureRequirement(11,
-                                " 'vValue' field of CBaseStorageVariant" +
-                                "structure i.e. the value for the match" +
-                                "operation MUST have syntax as indicated" +
-                            "in the vType field.");
-                            // If VariableData is obtained from the offset 
-                            //specified, Req 537 is validated
-                            site.CaptureRequirement(537,
-                                "Fixed-sized columns in the Rows Data MUST" +
-                                "be stored at the offsets specified by the" +
-                                "most recent CPMSetBindingsIn message.");
-
-                        }
-                        else
-                        {
-                            //Read as the value not the offset
-                            StorageType baseStorageType
-                                = (StorageType)actualType;
-                            byte[] getFixedSize
-                                = ReadFixedLengthData(row,
-                                ref rowIndex, baseStorageType);
-                            var mystring = Encoding.Unicode.GetString(getFixedSize);
-                        }
-                    }
-                    else
-                    {
-                        byte[] data
-                            = ReadFixedLengthData(row, ref rowIndex, type);
-                        WORK_ID_PROPERTY
-                           = Convert.ToInt32(site.Properties["WorkId"]);
-                        // This is Work Id
-                        string workIdGuid
-                            = site.Properties["WorkIdPropertyGuid"];
-                        if (columns[j].Guid.Equals(new
-                            Guid(workIdGuid)))
-                        {
-                            if (columns[j].PropertyId == WORK_ID_PROPERTY)
-                            {
-                                workId = BitConverter.ToUInt32(data, 0);
-                            }
-                        }
-                        if (columns[j].StatusOffset > 0)
-                        {
-                            byte status = row[(int)columns[j].StatusOffset];
-                            site.CaptureRequirementIfIsTrue(status == 0 && rowsOutResponse.Length > 2048, 726,
-                                "When the server receives a CPMGetRowsIn message request from a client," +
-                                "[ if the property value is present and is not too big in the CPMGetRowsOut " +
-                                "message(greater than 2048 bytes) to be sent by the server]othewise, " +
-                                "it[The sever] MUST set the status byte to StatusOK.");
-                        }
-                    }
-                }
-                //If all the rows are obtained as specified
-                // in for loop above, Req 536 is validated
-                site.CaptureRequirement(536,
-                    " Rows Data in the 'Rows' field of the CPMGetRowsOut" +
-                    "message  MUST be stored in forward order.");
-            }
-            long totalResultSetSize = rowsReturned * rowSize;
-            long buffer = Convert.ToInt64(site.Properties["BufferSize"]);
-            site.CaptureRequirementIfIsTrue(totalResultSetSize < buffer, 712,
-                "When the server receives a CPMGetRowsIn message request from" +
-                "a client, the server MUST fetch as many rows as fit in a " +
-                "buffer, the size of which is indicated by _cbReadBuffer," +
-                "but not more than indicated by _cRowsToTransfer.");
-
+            getRowsOut = new CPMGetRowsOut();
+            getRowsOut.Is64Bit = this.Is64bit;
+            getRowsOut.Request = getRowsIn;
+            getRowsOut.BindingRequest = setBingdingsIn;
+            Helper.FromBytes(ref getRowsOut, rowsOutResponse);
         }
 
         /// <summary>
@@ -3511,19 +3177,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         messageType, 925,
                         "The value of 4 bytes 'msg' field for the response" +
                         "of CPMCiStateInOut message is 0x000000D9.");
-                    break;
-                case MessageType.CPMForceMergeIn:
-                    site.CaptureRequirementIfAreEqual<uint>(0x000000E1,
-                        messageType, 927,
-                        "The value of 4 bytes 'msg' field for the response" +
-                        "of CPMForceMergeIn message is 0x000000E1.");
-                    //If as a Response to CPMForceMergeIn message, a message
-                    // header is obtained following requirement is validated.
-                    site.CaptureRequirement(646,
-                        "When the server receives a CPMForceMergeIn message" +
-                        "request, the server MUST respond to the client with " +
-                        "a message header for the CPMForceMergeIn, and set" +
-                        "the _status field to the results of the request.");
                     break;
                 case MessageType.CPMFetchValueIn:
                     site.CaptureRequirementIfAreEqual<uint>(0x000000E4,

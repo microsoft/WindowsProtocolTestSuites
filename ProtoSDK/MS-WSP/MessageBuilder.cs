@@ -163,10 +163,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public static uint chapter;
 
-        public static uint rowWidth = 40;
+        public static uint rowWidth = 72;
 
 
         public MessageBuilderParameter parameter;
+
+        /// <summary>
+        /// Indicates if we use 64-bit or 32-bit when building requests.
+        /// </summary>
+        public bool Is64bit = true;
 
         #endregion
 
@@ -313,21 +318,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 Encoding.Unicode.GetBytes(rootPath));
             return AddMessageHeader(MessageType.CPMUpdateDocumentsIn,
                 mainBlob);
-        }
-
-        /// <summary>
-        /// Gets the ForceMergeIn message BLOB
-        /// </summary>
-        /// <param name="partId"></param>
-        /// <returns>CPMForceMergeIn BLOB</returns>
-        public byte[] GetCPMForceMergeIn(uint partId)
-        {
-            byte[] mainBlob = new byte[Constant.SIZE_OF_UINT];
-            //================ Converting value into Bytes ==============
-            int index = 0;
-            Helper.CopyBytes(mainBlob, ref index,
-                BitConverter.GetBytes(partId));
-            return AddMessageHeader(MessageType.CPMForceMergeIn, mainBlob);
         }
 
         /// <summary>
@@ -1232,7 +1222,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             var node = new CContentRestriction();
 
-            node._Property = WspConsts.QueryAll;
+            node._Property = WspConsts.System_Search_Contents;
 
             node.Cc = (UInt32)queryString.Length;
 
@@ -1458,7 +1448,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             var result = new CColumnSet();
 
             // Index of Properties to be queried
-            uint[] indexes = new uint[] { 0 };
+            uint[] indexes = new uint[] { 0,1 };
             // Links to the 'pidMapper' field
 
             result.count = (UInt32)indexes.Length;
@@ -1481,6 +1471,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             result.aPropSpec = new CFullPropSpec[]
             {
                 WspConsts.System_ItemName,
+                WspConsts.System_ItemFolderNameDisplay,
                 WspConsts.System_Search_Scope,
                 WspConsts.System_Search_Contents,
             };
@@ -1546,8 +1537,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
                 StatusOffset = column.StatusOffset,
 
-                LengthOffset = column.LengthOffset,
             };
+
+            if (column.LengthOffset != 0)
+            {
+                result.LengthOffset = column.LengthOffset;
+            }
 
             return result;
         }
@@ -1730,7 +1725,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                     size = 12;
                     break;
                 case StorageType.VT_VARIANT:
-                    size = 24;
+                    if (this.Is64bit)
+                    {
+                        size = 24;
+                    }
+                    else
+                    {
+                        size = 16;
+                    }
                     break;
                 default:
                     break;
