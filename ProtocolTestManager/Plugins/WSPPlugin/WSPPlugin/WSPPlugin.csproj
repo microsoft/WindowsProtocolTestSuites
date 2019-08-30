@@ -131,6 +131,9 @@
     <Resource Include="Docs\arrow_right.png" />
     <Resource Include="Docs\domain.png" />
     <Content Include="Docs\configure.html" />
+    <Content Include="Docs\deployment.html" />
+    <Content Include="Docs\domain.html" />
+    <Content Include="Docs\domain_setupSUT.html" />
     <Content Include="Docs\index.html" />
     <Content Include="Docs\network.html" />
     <Resource Include="Docs\note.png" />

@@ -3,27 +3,25 @@
   <Properties>
     <!-- IP/ Machine Name for the Beacon Logging-->
     <Property name="ServerComputerName" value="sut" />
-    <!-- Name of the Server Machine Under test-->
-    <Property name="SERVER_MACHINE_NAME" value="sut" />
-    <!-- Name of the Domain Under test-->
-    <Property name="DomainName" value="contoso.com" />
+    <!-- Username to access the system Under test-->
+    <Property name="UserName" value="Administrator" />
     <!-- Password of user Under test-->
     <Property name="Password" value="Password01!" />
+    <!-- Name of the Domain Under test-->
+    <Property name="DomainName" value="contoso.com" />    
     <!--Win2003,Win2008,Other-->
     <Property name="ServerOSVersion" value="Win7"/>
     <!-- Path of shared folder on server machine-->
     <Property name="SharedPath" value="C:\Test\Data\Test" />
-    <!-- Name of the Client User name initiating the MS-WSP request messages-->
-    <Property name="CLIENT_USERNAME" value="Administrator" />
-    <!-- Name of the Client Machine name initiating the MS-WSP request messages-->
-    <Property name="CLIENT_MACHINE_NAME" value="DRIVER" />
+       <!-- Name of the Client Machine name initiating the MS-WSP request messages-->
+    <Property name="ClientName" value="DRIVER" />
     <!-- Name of the Catalog to be searched-->
     <Property name="CatalogName" value="Windows\SystemIndex" />
     <!-- Name of the Language Locale of all query string and query text-->
     <Property name="LanguageLocale" value="EN" />
     <!--en-us -->
     <!-- Name of the Language Locale ID value of all query string and query text-->
-    <Property name="LCID_VALUE" value="1033" />
+    <Property name="LCIDValue" value="1033" />
     <!-- Specify the Machine Architecture of the Server Under Test
     Whether it is 64 bit or 32 bit-->
     <Property name="ServerOffset" value="64" />
@@ -100,9 +98,7 @@
     HINT: SIZE around 40 is sufficient for retrieve values in fragments
     -->
     <Property name="CbChunk" value="38" />
-    <!-- Properties that are unlikely to change-->
-    <Property name="TestName" value="MS-WSP Test" />
-    <Property name="FeatureName" value="Sample" />
+   
     <!-- Configurable properties related to CPMConnectIn message -->
     <!-- 32 for 32-bit systems and 64 for 64-bit systems-->
     <!-- ConnectIn and Connect Out-->
