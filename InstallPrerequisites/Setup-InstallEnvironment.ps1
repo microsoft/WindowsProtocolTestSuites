@@ -23,7 +23,7 @@ function Get-VHD {
         Write-Host "Cannot find the VHD on $VHDPath\$VHDName" Exit
     }
     Write-Host "Copy VHD from $VHDPath\$VHDName to $WinteropProtocolTesting\VM\InstallPrerequisites..."
-    if(!(Test-Path)) {
+    if(!(Test-Path "$WinteropProtocolTesting\VM\InstallPrerequisites")) {
         mkdir "$WinteropProtocolTesting\VM\InstallPrerequisites"
     }
     Copy-Item $VHDPath\$VHDName -Destination "$WinteropProtocolTesting\VM\InstallPrerequisites\" -Force
