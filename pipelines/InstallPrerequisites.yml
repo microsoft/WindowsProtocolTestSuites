@@ -33,4 +33,5 @@ jobs:
     inputs:
       targetType: filePath
       filePath: $(Build.Repository.LocalPath)\InstallPrerequisites\Setup-InstallEnvironment.ps1
+      arguments: '-Workspace "$(Pipeline.Workspace)"'
     timeoutInMinutes: 0

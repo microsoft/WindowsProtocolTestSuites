@@ -3,6 +3,7 @@
 
 Param
 (
+    [string]$Workspace,
     # The virtual hard disk for creating a server VM
     [string]$VHDName = "18362.1.amd64fre.19h1_release.190318-1202_server_serverdatacenter_en-us_vl_VS2017.vhd",
     # The path
@@ -19,7 +20,7 @@ function Main {
     if(!(Test-Path $VHDName\$VHDPath)){
         Write-Host "Cannot find the VHD on $VHDName\$VHDPath" Exit
     }
-    Write-Host "Workspace $(Pipeline.Workspace)"
+    Write-Host "Workspace $Workspace"
     Write-Host "test script"
 }
 
