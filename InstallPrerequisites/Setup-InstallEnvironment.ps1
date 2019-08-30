@@ -26,7 +26,7 @@ function Get-VHD {
     if(!(Test-Path "$WinteropProtocolTesting\VM\InstallPrerequisites")) {
         mkdir "$WinteropProtocolTesting\VM\InstallPrerequisites"
     }
-    Copy-Item $VHDPath\$VHDName -Destination "$WinteropProtocolTesting\VM\InstallPrerequisites\" -Force
+    Copy-Item "$VHDPath\$VHDName" -Destination "$WinteropProtocolTesting\VM\InstallPrerequisites\" -Force
     Rename-Item "$WinteropProtocolTesting\VM\InstallPrerequisites\$VHDName" -NewName "InstallPrerequisites.vhd" -Force
     Write-Host "Copy VHD finished"
 }
