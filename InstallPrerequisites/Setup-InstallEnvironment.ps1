@@ -11,17 +11,28 @@ Param
 )
 
 $InvocationPath = Split-Path $MyInvocation.MyCommand.Definition -parent
-
+$WinteropProtocolTesting = "$Workspace\..\..\WinteropProtocolTesting"
 Write-Host "=============================================="
 Write-Host "InvocationPath: $InvocationPath"
+Write-Host "Workspace： $Workspace"
+Write-Host "WinteropProtocolTesting: $WinteropProtocolTesting"
 Write-Host "=============================================="
 
-function Main {
-    if(!(Test-Path $VHDName\$VHDPath)){
-        Write-Host "Cannot find the VHD on $VHDName\$VHDPath" Exit
+function Get-VHD {
+    if(!(Test-Path $VHDPath\$VHDName)){
+        Write-Host "Cannot find the VHD on $VHDPath\$VHDName" Exit
     }
-    Write-Host "Workspace $Workspace"
-    Write-Host "test script"
+    Write-Host "Copy VHD from $VHDPath\$VHDName to $WinteropProtocolTesting\VM\InstallPrerequisites..."
+    if(!(Test-Path)) {
+        mkdir "$WinteropProtocolTesting\VM\InstallPrerequisites"
+    }
+    Copy-Item $VHDPath\$VHDName -Destination "$WinteropProtocolTesting\VM\InstallPrerequisites\" -Force
+    Rename-Item "$WinteropProtocolTesting\VM\InstallPrerequisites\$VHDName" -NewName "InstallPrerequisites.vhd" -Force
+    Write-Host "Copy VHD finished"
+}
+
+function Main {
+    Get-VHD
 }
 
 Main
