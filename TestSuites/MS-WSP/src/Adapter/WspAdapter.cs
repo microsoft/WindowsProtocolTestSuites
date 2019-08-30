@@ -73,7 +73,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// Name of the connected Client
         /// </summary>
-        public string ClientComputerName = null;
+        public string clientMachineName = null;
         /// <summary>
         /// Catalog Name to Query
         /// </summary>
@@ -111,6 +111,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         public uint clientVersion = 0;
 
+        public CPMSetBindingsIn setBindingsIn;
         #endregion
 
         #region Initialize & Cleanup
@@ -127,10 +128,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             wspTestSite.DefaultProtocolDocShortName = "MS-WSP";
             validator = new MessageValidator(wspTestSite);
             serverMachineName
-                = wspTestSite.Properties.Get("ServerComputerName");
-            ClientComputerName = wspTestSite.Properties.Get("ClientComputerName");
+                = wspTestSite.Properties.Get("SERVER_MACHINE_NAME");
+            clientMachineName = wspTestSite.Properties.Get("CLIENT_MACHINE_NAME");
             catalogName = wspTestSite.Properties.Get("CatalogName");
-            userName = wspTestSite.Properties.Get("ClientUserName");
+            userName = wspTestSite.Properties.Get("CLIENT_USERNAME");
             pipePath
                 = string.Format(@"\\{0}\\pipe\MSFTEWDS", serverMachineName);
             clientVersion = (uint)Convert.ToUInt32
@@ -180,7 +181,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             parameter.BufferSize = UInt32.Parse(wspTestSite.Properties.Get("BufferSize"));
 
-            parameter.LCIDValue = UInt32.Parse(wspTestSite.Properties.Get("LCIDValue"));
+            parameter.LCID_VALUE = UInt32.Parse(wspTestSite.Properties.Get("LCID_VALUE"));
 
             parameter.ClientBase = UInt32.Parse(wspTestSite.Properties.Get("ClientBase"));
 
@@ -257,18 +258,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             string locale = wspTestSite.Properties.Get("LanguageLocale");
 
             string serverName = serverMachineName;
-            var connectInMessage = builder.GetConnectInMessage(clientVersion, isClientRemote, userName, ClientComputerName, serverName, catalogName, locale);
+            var connectInMessage = builder.GetConnectInMessage(clientVersion, isClientRemote, userName, clientMachineName, serverName, catalogName, locale);
 
             //Send the connectIn message to Server.
-            if (!connectedClients.ContainsKey(ClientComputerName))
+            if (!connectedClients.ContainsKey(clientMachineName))
             {
                 client = new WspClient();
                 client.sender = new RequestSender(pipePath);
-                connectedClients.Add(ClientComputerName, client);
+                connectedClients.Add(clientMachineName, client);
             }
             else
             {
-                client = connectedClients[ClientComputerName];
+                client = connectedClients[clientMachineName];
             }
             // Send CPMConnectIn Message
             //Write the message in the Pipe and Get the response 
@@ -302,9 +303,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     && (msgStatus == 0x00000000))
                 {
                     validator.ValidateConnectOutResponse(connectOutMessage);
+                    builder.Is64bit = validator.Is64bit;
                     isClientConnected = true;
                 }
 
+                //Updated by v-aliche
+                //Delta Testing
                 startingIndexconnect = 0;
                 validator.ValidateHeader
                     (connectInMessageBytes,
@@ -400,7 +404,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     queryOutMessage.Request = queryInMessage;
 
                     validator.ValidateCreateQueryOutResponse(queryOutMessage, numberOfCategorization, out cursor);
-                    cursorMap.Add(ClientComputerName, cursor[0]);
+                    cursorMap.Add(clientMachineName, cursor[0]);
                 }
                 CPMCreateQueryOutResponse(msgStatus);
             }
@@ -429,7 +433,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             uint cursorAssociated = 0;
             if (isCursorValid)
             {
-                cursorAssociated = GetCursor(ClientComputerName);
+                cursorAssociated = GetCursor(clientMachineName);
             }
             else
             {
@@ -518,7 +522,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             uint cursorAssociated = 0;
             if (isCursorValid)
             {
-                cursorAssociated = GetCursor(ClientComputerName);
+                cursorAssociated = GetCursor(clientMachineName);
             }
             else
             {
@@ -618,7 +622,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             uint cursorAssociated = 0;
             if (isCursorValid)
             {
-                cursorAssociated = GetCursor(ClientComputerName);
+                cursorAssociated = GetCursor(clientMachineName);
             }
             else
             {
@@ -718,28 +722,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// is valid</param>
         public void CPMSetBindingsIn(bool isValidBinding, bool isCursorValid)
         {
-            //if (!isValidBinding)
-            //{
-            //    if (wspTestSite.Properties["TDI-19919"].ToUpper() == "OPEN")
-            //    {
-            //        uint error = (uint)WspErrorCode.DB_E_BADBINDINFO;
-            //        CPMSetBindingsInResponse(error);
-            //        return;
-            //    }
-            //}
             uint cursorAssociated = 0;
             if (isCursorValid)
             {
-                cursorAssociated = GetCursor(ClientComputerName);
+                cursorAssociated = GetCursor(clientMachineName);
             }
             else
             {
-                cursorAssociated = uint.MaxValue - 10;
+                cursorAssociated = 0;
             }
 
 
-            //uint cursorAssociated = GetCursor(ClientComputerName);
+            //uint cursorAssociated = GetCursor(clientMachineName);
             var setBindingsInMessage = builder.GetCPMSetBindingsIn(cursorAssociated, out tableColumns, isValidBinding);
+            this.setBindingsIn = setBindingsInMessage;
             byte[] setbindingsInResponseMessageBytes;
             RequestSender sender
                 = GetRequestSender(isClientConnected); //Get the Sender
@@ -816,7 +812,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             uint cursorAssociated = 0;
             if (isCursorValid)
             {
-                cursorAssociated = GetCursor(ClientComputerName);
+                cursorAssociated = GetCursor(clientMachineName);
             }
             else
             {
@@ -824,7 +820,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 cursorAssociated = (uint)r.Next(50, 60);
             }
 
-            CPMGetRowsIn(cursorAssociated, builder.parameter.RowsToTransfer, builder.parameter.EachRowSize, builder.parameter.BufferSize, 0, builder.parameter.EType);
+            CPMGetRowsOut getRowsOut;
+            CPMGetRowsIn(cursorAssociated, builder.parameter.RowsToTransfer, builder.parameter.EachRowSize, builder.parameter.BufferSize, 0, builder.parameter.EType, out getRowsOut);
         }
 
         /// <summary>
@@ -836,7 +833,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="cbReadBuffer">This field MUST be set to the maximum of the value of _cbRowWidth or 1000 times the value of _cRowsToTransfer, rounded up to the nearest 512 byte multiple. The value MUST NOT exceed 0x00004000</param>
         /// <param name="fBwdFetch">Indicating the order in which to fetch the rows</param>
         /// <param name="eType">Type of SeekDescription</param>
-        public void CPMGetRowsIn(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType)
+        public void CPMGetRowsIn(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType, out CPMGetRowsOut getRowsOut)
         {
             var getRowsInMessage = builder.GetCPMRowsInMessage(cursor, rowsToTransfer, rowWidth, cbReadBuffer, fBwdFetch, eType, out rowsInReserve);
             byte[] getRowsOutMessage;
@@ -864,6 +861,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             wspTestSite.CaptureRequirement(3, @"All messages MUST be " +
                 "transported using a named pipe: \\pipe\\MSFTEWDS");
 
+            getRowsOut = new CPMGetRowsOut();
             if (getRowsOutMessage != null)
             {
                 int startingIndex = 0;
@@ -873,9 +871,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     = Helper.GetUInt(getRowsOutMessage, ref startingIndex);
 
                 uint offsetUsed = GetOffsetUsed();
-                validator.ValidateGetRowsOut(getRowsOutMessage,
+                validator.ValidateGetRowsOut(getRowsInMessage, this.setBindingsIn, getRowsOutMessage,
                     checkSum, rowsInReserve, rowsInClientBase, tableColumns,
-                    offsetUsed, out lastDocumentWorkId);
+                    offsetUsed, out lastDocumentWorkId, out getRowsOut);
 
                 // Fire Response Event
                 CPMGetRowsOut(msgStatus);
@@ -904,7 +902,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             uint cbSoFar = 0;
             uint cbChunk
                 = Convert.ToUInt32(wspTestSite.Properties["CbChunk"]);
-            uint cursor = GetCursor(ClientComputerName);
+            uint cursor = GetCursor(clientMachineName);
             uint workId = GetWorkIdFromRowsOutMessage();
             byte[] fetchValueOut = null;
             byte[] value = null;
@@ -1012,91 +1010,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
         #endregion
 
-        #region CPMForceMergeIn and CPMForceMergeInResponse
-
-        /// <summary>
-        /// CPMForceMergeIn() request is sent to perform any 
-        /// maintenance necessary to improve query performance.
-        /// </summary>
-        /// <param name="isClientAdmin">Indicates whether the 
-        /// client has Admin privilege.</param>
-        public void CPMForceMergeIn(bool isClientAdmin)
-        {
-            //uint cursorAssociated = GetCursor(ClientComputerName);
-            byte[] forceMergeInMessage = builder.GetCPMForceMergeIn(1);
-            byte[] forceMergeInResponseMessage;
-            uint checkSum = 0;
-            RequestSender sender;
-            if (isClientAdmin)
-            {
-                sender
-                = GetRequestSender(isClientConnected);
-            }
-            else
-            {
-                sender
-                = GetRequestSender(isClientAdmin);
-            }
-            //Get the Sender
-            bytesRead = sender.SendMessage(forceMergeInMessage,
-                out forceMergeInResponseMessage);
-            if (sender == defaultSender)
-            {
-                // This means that disconnect message has been sent
-                // through the pipe which does not have a connect In
-                // sent across it.
-                // If the sender.SendMessage() method is successful
-                // Requirement 598 is validated
-                wspTestSite.CaptureRequirement(598,
-                   "In Windows the same pipe connection is used for the " +
-                   "following messages, except when the error is returned" +
-                   "in a CPMConnectOut message.");
-
-            }
-            // RequestSender objects uses path '\\pipe\\MSFTEWDS'
-            // for the protocol transport
-            wspTestSite.CaptureRequirement(3, @"All messages MUST be " +
-                 "transported using a named pipe: \\pipe\\MSFTEWDS");
-
-            if (forceMergeInResponseMessage != null)
-            {
-                int startingIndex = 0;
-                uint msgId = Helper.GetUInt(forceMergeInResponseMessage,
-                    ref startingIndex);
-                uint msgStatus = Helper.GetUInt(forceMergeInResponseMessage,
-                    ref startingIndex);
-                if (msgStatus != 0)
-                {
-                    wspTestSite.CaptureRequirementIfAreEqual<int>(bytesRead,
-                        Constant.SIZE_OF_HEADER, 619,
-                        "Whenever an error occurs during processing of a " +
-                        "message sent by a client, the server MUST respond " +
-                        "with the message header (only) of the message sent " +
-                        "by the client, keeping the _msg field intact.");
-                    //If 4 byte Non Zero field is read as status
-                    // The requirement 620 gets validated
-                    wspTestSite.CaptureRequirement(620, "Whenever an error " +
-                        "occurs during processing of a message sent by a " +
-                        "client, the server MUST set the _status field to " +
-                        "the error code value.");
-                }
-                if ((msgId == (uint)MessageType.CPMForceMergeIn)
-                    && (msgStatus == 0x00000000))
-                {
-                    validator.ValidateForceMergeInResponse
-                        (forceMergeInResponseMessage, checkSum);
-                }
-                CPMForceMergeInResponse(msgStatus); // Fire Response Event
-            }
-        }
-        /// <summary>
-        /// This event is used to get the response from 
-        /// CPMForceMergeIn request.
-        /// </summary>
-        public event CPMForceMergeInResponseHandler CPMForceMergeInResponse;
-
-        #endregion
-
         #region CPMGetNotifyIn and CPMSendNotifyOut
 
         /// <summary>
@@ -1110,7 +1023,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             uint cursorAssociated = 0;
             if (isCursorValid)
             {
-                cursorAssociated = GetCursor(ClientComputerName);
+                cursorAssociated = GetCursor(clientMachineName);
             }
             else
             {
@@ -1194,7 +1107,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             uint cursorAssociated = 0;
             if (isCursorValid)
             {
-                cursorAssociated = GetCursor(ClientComputerName);
+                cursorAssociated = GetCursor(clientMachineName);
             }
             else
             {
@@ -1202,7 +1115,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             }
             uint errorCode = 0xFFFFFFFF; // Get it from Server
                                          //string machineName = GetMachineName(machineNameValue);
-                                         //uint cursor = GetCursor(ClientComputerName);
+                                         //uint cursor = GetCursor(clientMachineName);
             byte[] freeCursorOut;
             byte[] freeCursor = builder.GetFreeCursorIn(cursorAssociated);
             RequestSender sender = GetRequestSender(isClientConnected);
@@ -1258,9 +1171,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             byte[] disconnectResponse = null;
             RequestSender sender = null;
             byte[] disconnectMessage = builder.GetDisconnectMessage();
-            if (connectedClients.ContainsKey(ClientComputerName))
+            if (connectedClients.ContainsKey(clientMachineName))
             {
-                sender = connectedClients[ClientComputerName].sender;
+                sender = connectedClients[clientMachineName].sender;
             }
             else
             {
@@ -1286,10 +1199,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             wspTestSite.CaptureRequirement(3, @"All messages MUST be " +
                 "transported using a named pipe: \\pipe\\MSFTEWDS");
 
-            if (connectedClients.ContainsKey(ClientComputerName))
+            if (connectedClients.ContainsKey(clientMachineName))
             {
                 // Remove the Request Sender associated with the client
-                connectedClients.Remove(ClientComputerName);
+                connectedClients.Remove(clientMachineName);
             }
         }
 
@@ -1365,7 +1278,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 case (int)EventType.PROPAGATE_ADD:
                     fileName = wspTestSite.Properties["NewFile1"];
                     //Create a file on remote server
-                    sutStatus = sutAdapter.CreateFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["ClientUserName"], wspTestSite.Properties["Password"], fileName);
+                    sutStatus = sutAdapter.CreateFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["CLIENT_USERNAME"], wspTestSite.Properties["Password"], fileName);
                     if (sutStatus != 0)
                     {
                         wspTestSite.Log.Add(LogEntryKind.Comment, "File created failed on server");
@@ -1375,7 +1288,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     {
                         fileName = wspTestSite.Properties["NewFile2"];
                         //Create a file on remote server
-                        sutStatus = sutAdapter.CreateFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["ClientUserName"], wspTestSite.Properties["Password"], fileName);
+                        sutStatus = sutAdapter.CreateFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["CLIENT_USERNAME"], wspTestSite.Properties["Password"], fileName);
 
                         if (sutStatus != 0)
                         {
@@ -1387,7 +1300,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 case (int)EventType.PROPAGATE_DELETE:
                     fileName = wspTestSite.Properties["ExistFile1"];
                     //Delete a file on remote server
-                    sutStatus = sutAdapter.DeleteFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["ClientUserName"], wspTestSite.Properties["Password"], fileName);
+                    sutStatus = sutAdapter.DeleteFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["CLIENT_USERNAME"], wspTestSite.Properties["Password"], fileName);
                     if (sutStatus != 0)
                     {
                         wspTestSite.Log.Add(LogEntryKind.Comment, "File deleted failed on server");
@@ -1397,7 +1310,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     {
                         fileName = wspTestSite.Properties["ExistFile2"];
                         //Delete a file on remote server
-                        sutStatus = sutAdapter.DeleteFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["ClientUserName"], wspTestSite.Properties["Password"], fileName);
+                        sutStatus = sutAdapter.DeleteFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["CLIENT_USERNAME"], wspTestSite.Properties["Password"], fileName);
                         if (sutStatus != 0)
                         {
                             wspTestSite.Log.Add(LogEntryKind.Comment, "File deleted failed on server");
@@ -1408,7 +1321,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 case (int)EventType.PROPAGATE_MODIFY:
                     fileName = wspTestSite.Properties["ExistFile3"];
                     //Modify a file on remote server
-                    sutStatus = sutAdapter.ModifyFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["ClientUserName"], wspTestSite.Properties["Password"], fileName);
+                    sutStatus = sutAdapter.ModifyFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["CLIENT_USERNAME"], wspTestSite.Properties["Password"], fileName);
                     if (sutStatus != 0)
                     {
                         wspTestSite.Log.Add(LogEntryKind.Comment, "File operation failed on server while modifying");
@@ -1418,7 +1331,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     {
                         fileName = wspTestSite.Properties["ExistFile4"];
                         //Modify a file on remote server
-                        sutStatus = sutAdapter.ModifyFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["ClientUserName"], wspTestSite.Properties["Password"], fileName);
+                        sutStatus = sutAdapter.ModifyFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["CLIENT_USERNAME"], wspTestSite.Properties["Password"], fileName);
                         if (sutStatus != 0)
                         {
                             wspTestSite.Log.Add(LogEntryKind.Comment, "File operation failed on server while modifying");
@@ -1473,7 +1386,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     {
                         fileName = wspTestSite.Properties["NewFile2"];
                         //Delete file on the remote server
-                        sutStatus = sutAdapter.DeleteFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["ClientUserName"], wspTestSite.Properties["Password"], fileName);
+                        sutStatus = sutAdapter.DeleteFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["CLIENT_USERNAME"], wspTestSite.Properties["Password"], fileName);
 
                         if (sutStatus != 0)
                         {
@@ -1483,7 +1396,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     }
                     fileName = wspTestSite.Properties["NewFile1"];
                     //Delete file on the remote server
-                    sutStatus = sutAdapter.DeleteFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["ClientUserName"], wspTestSite.Properties["Password"], fileName);
+                    sutStatus = sutAdapter.DeleteFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["CLIENT_USERNAME"], wspTestSite.Properties["Password"], fileName);
 
                     if (sutStatus != 0)
                     {
@@ -1494,7 +1407,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 case (int)EventType.PROPAGATE_DELETE:
                     fileName = wspTestSite.Properties["ExistFile1"];
                     //Create file on the remote server
-                    sutStatus = sutAdapter.CreateFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["ClientUserName"], wspTestSite.Properties["Password"], fileName);
+                    sutStatus = sutAdapter.CreateFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["CLIENT_USERNAME"], wspTestSite.Properties["Password"], fileName);
                     if (sutStatus != 0)
                     {
                         wspTestSite.Log.Add(LogEntryKind.Comment, "File created failed on server");
@@ -1504,7 +1417,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     {
                         fileName = wspTestSite.Properties["ExistFile2"];
                         //Create file on the remote server
-                        sutStatus = sutAdapter.CreateFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["ClientUserName"], wspTestSite.Properties["Password"], fileName);
+                        sutStatus = sutAdapter.CreateFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["CLIENT_USERNAME"], wspTestSite.Properties["Password"], fileName);
                         if (sutStatus != 0)
                         {
                             wspTestSite.Log.Add(LogEntryKind.Comment, "File created failed on server");
@@ -1517,7 +1430,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     {
                         fileName = wspTestSite.Properties["ExistFile4"];
                         //Delete file on the remote server
-                        sutStatus = sutAdapter.DeleteFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["ClientUserName"], wspTestSite.Properties["Password"], fileName);
+                        sutStatus = sutAdapter.DeleteFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["CLIENT_USERNAME"], wspTestSite.Properties["Password"], fileName);
                         if (sutStatus != 0)
                         {
                             wspTestSite.Log.Add(LogEntryKind.Comment, "File deleted failed on server");
@@ -1526,14 +1439,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     }
                     fileName = wspTestSite.Properties["ExistFile3"];
                     //Delete file on the remote server
-                    sutStatus = sutAdapter.DeleteFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["ClientUserName"], wspTestSite.Properties["Password"], fileName);
+                    sutStatus = sutAdapter.DeleteFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["CLIENT_USERNAME"], wspTestSite.Properties["Password"], fileName);
                     if (sutStatus != 0)
                     {
                         wspTestSite.Log.Add(LogEntryKind.Comment, "File deleted failed on server");
                         return;
                     }
                     //Create file on the remote server
-                    sutStatus = sutAdapter.CreateFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["ClientUserName"], wspTestSite.Properties["Password"], fileName);
+                    sutStatus = sutAdapter.CreateFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["CLIENT_USERNAME"], wspTestSite.Properties["Password"], fileName);
                     if (sutStatus != 0)
                     {
                         wspTestSite.Log.Add(LogEntryKind.Comment, "File created failed on server");
@@ -1543,7 +1456,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     {
                         fileName = wspTestSite.Properties["ExistFile4"];
                         //Create file on the remote server
-                        sutStatus = sutAdapter.CreateFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["ClientUserName"], wspTestSite.Properties["Password"], fileName);
+                        sutStatus = sutAdapter.CreateFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["CLIENT_USERNAME"], wspTestSite.Properties["Password"], fileName);
                         if (sutStatus != 0)
                         {
                             wspTestSite.Log.Add(LogEntryKind.Comment, "File created failed on server");
@@ -1849,7 +1762,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         {
             if (isclientConnected)
             {
-                return connectedClients[ClientComputerName];
+                return connectedClients[clientMachineName];
             }
             else
             {
@@ -1867,7 +1780,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         {
             if (isclientConnected)
             {
-                return connectedClients[ClientComputerName].sender;
+                return connectedClients[clientMachineName].sender;
             }
             else
             {

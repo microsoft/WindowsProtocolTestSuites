@@ -80,13 +80,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         void CPMCiStateInOut();
         /// <summary>
-        /// CPMForceMergeIn() request is send to perform 
-        /// any maintenance necessary to improve query performance.
-        /// </summary>
-        /// <param name="isAdminClient">Indicates the client 
-        /// has a admin privilege to the catalog.</param>
-        void CPMForceMergeIn(bool isAdminClient);
-        /// <summary>
         /// CPMGetNotifyIn() requests that the client wants to be notified
         /// of rowset changes.
         /// </summary>
@@ -197,12 +190,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         event CPMCiStateInOutResponseHandler CPMCiStateInOutResponse;
 
         /// <summary>
-        /// This event is used to get the response 
-        /// from CPMForceMergeIn request.
-        /// </summary>
-        event CPMForceMergeInResponseHandler CPMForceMergeInResponse;
-
-        /// <summary>
         /// This event is used to get the response from CPMGetNotify request.
         /// </summary>
         event CPMSendNotifyOutResponseHandler CPMSendNotifyOutResponse;
@@ -307,13 +294,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
     /// </summary>
     /// <param name="errorCode">Error code from the server response.</param>
     public delegate void CPMCiStateInOutResponseHandler(uint errorCode);
-
-    /// <summary>
-    /// CPMForceMergeInResponseHandler is a delegate 
-    /// for CPMForceMergeInResponse event.
-    /// </summary>
-    /// <param name="errorCode">Error code from the server response.</param>
-    public delegate void CPMForceMergeInResponseHandler(uint errorCode);
 
     /// <summary>
     /// CPMSendNotifyOutResponseHandler is a delegate 

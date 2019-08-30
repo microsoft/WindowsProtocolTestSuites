@@ -53,8 +53,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
         
         public delegate void CPMCiStateInOutResponseDelegate1(uint errorCode);
         
-        public delegate void CPMForceMergeInResponseDelegate1(uint errorCode);
-        
         public delegate void CPMSendNotifyOutResponseDelegate1(uint errorCode);
         
         public delegate void CPMFreeCursorOutResponseDelegate1(uint errorCode);
@@ -97,8 +95,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
         
         static System.Reflection.MethodBase CPMCiStateInOutInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMCiStateInOut");
         
-        static System.Reflection.MethodBase CPMForceMergeInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMForceMergeIn", typeof(bool));
-        
         static System.Reflection.MethodBase CPMGetNotifyInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMGetNotify", typeof(bool));
         
         static System.Reflection.MethodBase CPMFreeCursorInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMFreeCursorIn", typeof(bool));
@@ -126,8 +122,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
         static System.Reflection.EventInfo CPMFetchValueOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMFetchValueOutResponse");
         
         static System.Reflection.EventInfo CPMCiStateInOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMCiStateInOutResponse");
-        
-        static System.Reflection.EventInfo CPMForceMergeInResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMForceMergeInResponse");
         
         static System.Reflection.EventInfo CPMSendNotifyOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMSendNotifyOutResponse");
         
@@ -172,7 +166,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS {
             this.Manager.Subscribe(CPMGetRowsOutInfo, this.IWspAdapterInstance);
             this.Manager.Subscribe(CPMFetchValueOutResponseInfo, this.IWspAdapterInstance);
             this.Manager.Subscribe(CPMCiStateInOutResponseInfo, this.IWspAdapterInstance);
-            this.Manager.Subscribe(CPMForceMergeInResponseInfo, this.IWspAdapterInstance);
             this.Manager.Subscribe(CPMSendNotifyOutResponseInfo, this.IWspAdapterInstance);
             this.Manager.Subscribe(CPMFreeCursorOutResponseInfo, this.IWspAdapterInstance);
             this.Manager.Subscribe(CPMFindIndicesOutResponseInfo, this.IWspAdapterInstance);

@@ -30,7 +30,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// SeekDescription contains a CRowSeekByBookmark structure.
         /// </summary>
-        eRowSeekByBookmark = 0x00000004,    }
+        eRowSeekByBookmark = 0x00000004,
+    }
 
     /// <summary>
     /// The CPMGetRowsIn message requests rows from a query.

@@ -214,5 +214,34 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 ReadOffset++;
             }
         }
+
+        /// <summary>
+        /// Peeks the value at given offset in the stream without changing ReadOffset.
+        /// </summary>
+        public T Peek<T>(int offset) where T : struct
+        {
+            var result = TypeMarshal.ToStruct<T>(buffer.Buffer, ref offset);
+            return result;
+        }
+
+        /// <summary>
+        /// Read a specific amount of byte array from a specific offset.
+        /// </summary>
+        public byte[] ReadBytesFromOffset(int offset, int count)
+        {
+            var result = new byte[count];
+            Buffer.BlockCopy(buffer.Buffer, offset, result, 0, count);
+            return result;
+        }
+
+        /// <summary>
+        /// Read a specific amount of byte array.
+        /// </summary>
+        public byte[] ReadBytes(int count)
+        {
+            var result = ReadBytesFromOffset(ReadOffset, count);
+            ReadOffset += count;
+            return result;
+        }
     }
 }

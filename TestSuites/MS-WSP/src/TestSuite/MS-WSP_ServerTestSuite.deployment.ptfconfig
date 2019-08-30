@@ -1,30 +1,34 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
-  <Properties>   
-    <!-- Name of the Server Machine Under test-->
+  <Properties>
+    <!-- IP/ Machine Name for the Beacon Logging-->
     <Property name="ServerComputerName" value="sut" />
+    <!-- Name of the Server Machine Under test-->
+    <Property name="SERVER_MACHINE_NAME" value="sut" />
     <!-- Name of the Domain Under test-->
     <Property name="DomainName" value="contoso.com" />
-    <!-- Name of the User name to access SUT-->
-    <Property name="UserName" value="Administrator" />
-    <!-- Password of User to access SUT-->
-    <Property name="Password" value="Password01!" />    
+    <!-- Password of user Under test-->
+    <Property name="Password" value="Password01!" />
     <!--Win2003,Win2008,Other-->
     <Property name="ServerOSVersion" value="Win7"/>
     <!-- Path of shared folder on server machine-->
-    <Property name="SharedPath" value="\\sut\Test" />    
+    <Property name="SharedPath" value="C:\Test\Data\Test" />
+    <!-- Name of the Client User name initiating the MS-WSP request messages-->
+    <Property name="CLIENT_USERNAME" value="Administrator" />
     <!-- Name of the Client Machine name initiating the MS-WSP request messages-->
-    <Property name="ClientComputerName" value="driver" />
+    <Property name="CLIENT_MACHINE_NAME" value="DRIVER" />
     <!-- Name of the Catalog to be searched-->
     <Property name="CatalogName" value="Windows\SystemIndex" />
     <!-- Name of the Language Locale of all query string and query text-->
     <Property name="LanguageLocale" value="EN" />
     <!--en-us -->
     <!-- Name of the Language Locale ID value of all query string and query text-->
-    <Property name="LCIDValue" value="1033" />
-    <!-- Specify the Machine Architecture of the Server Under Test Whether it is 64 bit or 32 bit-->
+    <Property name="LCID_VALUE" value="1033" />
+    <!-- Specify the Machine Architecture of the Server Under Test
+    Whether it is 64 bit or 32 bit-->
     <Property name="ServerOffset" value="64" />
-    <!-- Specify the Machine Architecture of the WSP Client Whether it is 64 bit or 32 bit-->
+    <!-- Specify the Machine Architecture of the WSP Client 
+    Whether it is 64 bit or 32 bit-->
     <Property name="ClientOffset" value="64" />
     <!-- Specify whether the Server Under Test is a Windows or Non-Windows Sever
     This is required for Windows Specific requirement validation-->
@@ -85,7 +89,7 @@
     <Property name="R549Implementated" value="true" />
 
     <!-- It specifies the Search Scope. (Path of the Network folder to be searched)-->
-    <Property name="QueryPath" value="file://SUT/Test/" />
+    <Property name="QueryPath" value="file://sut/test/data/test" />
     <!-- It specifies the Search Query.Text to be present in name of Searched File -->
     <Property name="QueryText" value="test" />
 
@@ -96,7 +100,9 @@
     HINT: SIZE around 40 is sufficient for retrieve values in fragments
     -->
     <Property name="CbChunk" value="38" />
-   
+    <!-- Properties that are unlikely to change-->
+    <Property name="TestName" value="MS-WSP Test" />
+    <Property name="FeatureName" value="Sample" />
     <!-- Configurable properties related to CPMConnectIn message -->
     <!-- 32 for 32-bit systems and 64 for 64-bit systems-->
     <!-- ConnectIn and Connect Out-->
@@ -115,8 +121,8 @@
     <!--*******************************************-->
 
     <!--   Column when SetBindings-->
-    <Property name="NumberOfSetBindingsColumns" value="1" />
-
+    <Property name="NumberOfSetBindingsColumns" value="2" />
+    
     <Property name="columnGuid_0" value="6B8DA074-3B5C-43BC-886F-0A2CDCE00B6F" />
     <Property name="columnPropertyId_0" value="100" />
     <Property name="columnValueOffset_0" value="8" />
@@ -124,45 +130,13 @@
     <Property name="columnLengthOffset_0" value="4" />
     <Property name="columnStorageType_0" value="12" />
 
-    <!--<Property name="columnGuid_0" value="B725F130-47EF-101A-A5F1-02608C9EEBAC" />
-    <Property name="columnPropertyId_0" value="11" />
-    <Property name="columnValueOffset_0" value="8" />
-    <Property name="columnStatusOffset_0" value="2" />
-    <Property name="columnLengthOffset_0" value="4" />
-    <Property name="columnStorageType_0" value="12" />-->
-
-
-    <!--<Property name="columnGuid_0" value="6B8DA074-3B5C-43BC-886F-0A2CDCE00B6F" />
-    <Property name="columnPropertyId_0" value="100" />
-    <Property name="columnValueOffset_0" value="8" />
-    <Property name="columnStatusOffset_0" value="2" />
-    <Property name="columnLengthOffset_0" value="4" />
-    <Property name="columnStorageType_0" value="12" />-->
-   
-    <!-- VT_VARIANT-->
     <Property name="columnGuid_1" value="B725F130-47EF-101A-A5F1-02608C9EEBAC" />
-    <Property name="columnPropertyId_1" value="22" />
+    <Property name="columnPropertyId_1" value="2" />
     <Property name="columnValueOffset_1" value="32" />
     <Property name="columnStatusOffset_1" value="3" />
     <Property name="columnLengthOffset_1" value="56" />
     <Property name="columnStorageType_1" value="12" />
-    <!-- VT_VARIANT-->
-    <Property name="columnGuid_2" value="B725F130-47EF-101A-A5F1-02608C9EEBAC" />
-    <Property name="columnPropertyId_2" value="19" />
-    <Property name="columnValueOffset_2" value="64" />
-    <Property name="columnStatusOffset_2" value="60" />
-    <Property name="columnLengthOffset_2" value="88" />
-    <Property name="columnStorageType_2" value="12" />
-    <!-- VT_VARIANT-->
-    <Property name="columnGuid_3" value="49691C90-7E17-101A-A91C-08002B2ECDA9" />
-    <Property name="columnPropertyId_3" value="5" />
-    <!-- Work Id VT_I4-->
-    <Property name="columnValueOffset_3" value="72" />
-    <Property name="columnStatusOffset_3" value="45" />
-    <Property name="columnLengthOffset_3" value="0" />
-    <!-- Not using-->
-    <Property name="columnStorageType_3" value="3" />
-    <!-- VT_I4-->
+    
     <!-- GUID and Property that specifies Query Work Id-->
     <Property name="WorkIdPropertyGuid" value="49691C90-7E17-101A-A91C-08002B2ECDA9" />
     <Property name="WorkId" value="5" />

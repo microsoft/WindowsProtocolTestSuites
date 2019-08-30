@@ -28,7 +28,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
         public void FromBytes(WspBuffer buffer)
         {
-            throw new NotImplementedException();
+            _ulNumerator = buffer.ToStruct<UInt32>();
+            _ulDenominator = buffer.ToStruct<UInt32>();
+            _hRegion = buffer.ToStruct<UInt32>();
         }
 
         public void ToBytes(WspBuffer buffer)
