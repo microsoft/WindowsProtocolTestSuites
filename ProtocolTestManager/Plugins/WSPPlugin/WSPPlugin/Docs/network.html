@@ -42,7 +42,7 @@
 <body>
 <div class="Context">
 <p>
-	You can run this test suite in a workgroup or domain environment using either physical or virtual machines. This section describes the test environment
+	You can run this test suite in a domain environment using either physical or virtual machines. This section describes the test environment
 	using physical computers. For information about configuring a virtual machine, see
     <a href="https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/create-virtual-machine">
         https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/create-virtual-machine
@@ -80,33 +80,6 @@
 
 <div class="Context" style="float: left">
     <img class="img" src="domain.png" />
-</div>
-<div style="clear:both" />
-
-<h3>
-	Workgroup Environment
-</h3>
-<p>
-	The workgroup environment requires interactions between the following computers:
-</p>
-<ul>
-	<li>
-		<p>
-			The driver computer, which runs the test cases by sending requests over the wire in the form of protocol messages.
-		</p>
-	</li>
-	<li>
-		<p>
-			The SUT, which runs a Server implementation of the protocol that is being tested. The SUT responds to the requests that the driver computer sends.
-		</p>
-	</li>
-</ul>
-<p>
-	The following figure shows the workgroup environment:
-</p>
-
-<div class="Context" style="float: left">
-    <img class="img" src="workgroup.png" />   
 </div>
 <div style="clear:both" />
 

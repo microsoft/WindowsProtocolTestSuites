@@ -21,7 +21,7 @@
     <Property name="LanguageLocale" value="EN" />
     <!--en-us -->
     <!-- Name of the Language Locale ID value of all query string and query text-->
-    <Property name="LCID_VALUE" value="1033" />
+    <Property name="LCIDValue" value="1033" />
     <!-- Specify the Machine Architecture of the Server Under Test Whether it is 64 bit or 32 bit-->
     <Property name="ServerOffset" value="64" />
     <!-- Specify the Machine Architecture of the WSP Client Whether it is 64 bit or 32 bit-->
@@ -96,9 +96,7 @@
     HINT: SIZE around 40 is sufficient for retrieve values in fragments
     -->
     <Property name="CbChunk" value="38" />
-    <!-- Properties that are unlikely to change-->
-    <Property name="TestName" value="MS-WSP Test" />
-    <Property name="FeatureName" value="Sample" />
+   
     <!-- Configurable properties related to CPMConnectIn message -->
     <!-- 32 for 32-bit systems and 64 for 64-bit systems-->
     <!-- ConnectIn and Connect Out-->
@@ -140,6 +138,7 @@
     <Property name="columnStatusOffset_0" value="2" />
     <Property name="columnLengthOffset_0" value="4" />
     <Property name="columnStorageType_0" value="12" />-->
+   
     <!-- VT_VARIANT-->
     <Property name="columnGuid_1" value="B725F130-47EF-101A-A5F1-02608C9EEBAC" />
     <Property name="columnPropertyId_1" value="22" />

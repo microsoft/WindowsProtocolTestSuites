@@ -2868,12 +2868,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             //"The 4 byte '_status' field of the message header is an HRESULT"+
             //", indicating the status of the requested operation.");
 
-
-
-
-
-
-
             // Keep reading the checkSum and reserved here even we don't verify them (since TD says that server will verify the checkSum instead of client).
             uint checkSum = header._ulChecksum;
 

@@ -46,7 +46,6 @@
             <li>The driver computer runs the test cases by sending requests over the wire in the form of protocol messages. </li>
             <li>The SUT runs an implementation of the protocol that is being tested. The SUT responds to the requests that the driver computer sends.</li>
             <li>The domain controller (DC) responds to security authentication requests (logging in, checking permissions, etc.) within the domain.</li>
-            <li>Any additional computers and server roles are specified to provide functionality that is required to test the protocol implementation.</li>
         </ul>
         <div class="Context">
             <div style="font-weight:600"><img class="img" src="note.png"/>Note</div>
@@ -68,131 +67,29 @@
                     <th>DNS Server</th>
                 </tr>
                 <tr>
-                    <td rowspan="2">DC01</td>
+                    <td>DC01</td>
                     <td>External1</td>
                     <td>192.168.1.1</td>
                     <td>255.255.255.0</td>
-                    <td>&lt;empty&gt;</td>
                     <td>127.0.0.1</td>
-                </tr>
+                    <td>192.168.1.1</td>
+                </tr>               
                 <tr>
-                    <td>External2</td>
-                    <td>192.168.2.1</td>
-                    <td>255.255.255.0</td>
-                    <td>&lt;empty&gt;</td>
-                    <td>127.0.0.1</td>
-                </tr>
-                <tr>
-                    <td rowspan="2">Client01</td>
+                    <td>Client01</td>
                     <td>External1</td>
                     <td>192.168.1.111</td>
                     <td>255.255.255.0</td>
                     <td>192.168.1.1</td>
                     <td>192.168.1.1</td>
-                </tr>
+                </tr>               
                 <tr>
-                    <td>External2</td>
-                    <td>192.168.2.111</td>
-                    <td>255.255.255.0</td>
-                    <td>192.168.2.1</td>
-                    <td>192.168.2.1</td>
-                </tr>
-                <tr>
-                    <td rowspan="4">Node01</td>
+                    <td>WSPServer</td>
                     <td>External1</td>
                     <td>192.168.1.11</td>
                     <td>255.255.255.0</td>
                     <td>192.168.1.1</td>
                     <td>192.168.1.1</td>
-                </tr>
-                <tr>
-                    <td>External2</td>
-                    <td>192.168.2.11</td>
-                    <td>255.255.255.0</td>
-                    <td>192.168.2.1</td>
-                    <td>192.168.2.1</td>
-                </tr>
-                <tr>
-                    <td>Cluster</td>
-                    <td>10.10.0.11</td>
-                    <td>255.255.255.0</td>
-                    <td>&lt;empty&gt;</td>
-                    <td>&lt;empty&gt;</td>
-                </tr>
-                <tr>
-                    <td>iSCSI</td>
-                    <td>192.168.0.11</td>
-                    <td>255.255.255.0</td>
-                    <td>&lt;empty&gt;</td>
-                    <td>&lt;empty&gt;</td>
-                </tr>
-                <tr>
-                    <td rowspan="4">Node02</td>
-                    <td>External1</td>
-                    <td>192.168.1.12</td>
-                    <td>255.255.255.0</td>
-                    <td>192.168.1.1</td>
-                    <td>192.168.1.1</td>
-                </tr>
-                <tr>
-                    <td>External2</td>
-                    <td>192.168.2.12</td>
-                    <td>255.255.255.0</td>
-                    <td>192.168.2.1</td>
-                    <td>192.168.2.1</td>
-                </tr>
-                <tr>
-                    <td>Cluster</td>
-                    <td>10.10.0.12</td>
-                    <td>255.255.255.0</td>
-                    <td>&lt;empty&gt;</td>
-                    <td>&lt;empty&gt;</td>
-                </tr>
-                <tr>
-                    <td>iSCSI</td>
-                    <td>192.168.0.12</td>
-                    <td>255.255.255.0</td>
-                    <td>&lt;empty&gt;</td>
-                    <td>&lt;empty&gt;</td>
-                </tr>
-                <tr>
-                    <td>Storage01</td>
-                    <td>iSCSI</td>
-                    <td>192.168.0.1</td>
-                    <td>255.255.255.0</td>
-                    <td>&lt;empty&gt;</td>
-                    <td>&lt;empty&gt;</td>
-                </tr>
-                <tr>
-                    <td rowspan="2">Cluster01</td>
-                    <td>External01</td>
-                    <td>192.168.1.100</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>External02</td>
-                    <td>192.168.2.100</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td rowspan="2">GeneralFS</td>
-                    <td>External01</td>
-                    <td>192.168.1.200</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>External02</td>
-                    <td>192.168.2.200</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
+                </tr>                           
             </table>
         </div>
     <div class="icon" style ="margin-top:20px">

@@ -71,10 +71,7 @@
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Configs.cs" />
-    <Compile Include="DetectionResultControl.xaml.cs">
-      <DependentUpon>DetectionResultControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Detector\WSPDetector.cs" />
+    <Compile Include="WSPDetector.cs" />
     <Compile Include="ImpersonationHelper.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Utility.cs" />
@@ -137,20 +134,12 @@
     <Content Include="Docs\index.html" />
     <Content Include="Docs\network.html" />
     <Resource Include="Docs\note.png" />
-    <Resource Include="Docs\workgroup.png" />
     <Resource Include="Icons\supported.png" />
     <Resource Include="Icons\undetected.png" />
     <Resource Include="Icons\unsupported.png" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="DetectionResultControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="SUTControlAdapter\Check-PSRemoting.ps1" />
-    <None Include="SUTControlAdapter\TriggerClientDisconnectAll.ps1" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">

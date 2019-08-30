@@ -50,7 +50,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
         public uint BufferSize;
 
-        public uint LCID_VALUE;
+        public uint LCIDValue;
 
         public uint ClientBase;
 
@@ -1174,7 +1174,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             node._prval = GetBaseStorageVariant(vType_Values.VT_LPWSTR, new VT_LPWSTR(searchScope));
 
-            node._lcid = parameter.LCID_VALUE;
+            node._lcid = parameter.LCIDValue;
 
             result.Restriction = node;
 
@@ -1238,7 +1238,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             node._pwcsPhrase = queryString;
 
-            node.Lcid = parameter.LCID_VALUE;
+            node.Lcid = parameter.LCIDValue;
 
             node._ulGenerateMethod = _ulGenerateMethod_Values.GENERATE_METHOD_EXACT;
 
@@ -1590,7 +1590,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 aGroupArray = new CColumnGroup[0]
             };
 
-            message.Lcid = parameter.LCID_VALUE;
+            message.Lcid = parameter.LCIDValue;
 
             message.Header = new WspMessageHeader
             {

@@ -34,27 +34,78 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
         public string IsServerWindows { get; set; }
 
         public string LanguageLocale { get; set; }
+        public string LCIDValue { get; set; }
+        public string QueryPath { get; set; }
+        public string QueryText { get; set; }
+        public string CbChunk { get; set; }
+        public string PropertySet_One_DBProperties { get; set; }
+
+        public string PropertySet_Two_DBProperties { get; set; }
+
+        public string Array_PropertySet_One_Guid { get; set; }
+        public string Array_PropertySet_One_DBProperties { get; set; }
+
+        public string Array_PropertySet_Two_Guid { get; set; }
+
+        public string Array_PropertySet_Two_DBProperties { get; set; }
+
+        public string Array_PropertySet_Three_Guid { get; set; }
+
+        public string Array_PropertySet_Three_DBProperties { get; set; }
+
+        public string Array_PropertySet_Four_Guid { get; set; }
+        public string Array_PropertySet_Four_DBProperties { get; set; }
+
+        public string NumberOfSetBindingsColumns { get; set; }
+
+        public string columnGuid_0 { get; set; }
+        public string columnPropertyId_0 { get; set; }
+        public string columnValueOffset_0 { get; set; }
+        public string columnStatusOffset_0 { get; set; }
+        public string columnLengthOffset_0 { get; set; }
+        public string columnStorageType_0 { get; set; }
+
+        public string columnGuid_1 { get; set; }
+        public string columnPropertyId_1 { get; set; }
+        public string columnValueOffset_1 { get; set; }
+        public string columnStatusOffset_1 { get; set; }
+        public string columnLengthOffset_1 { get; set; }
+        public string columnStorageType_1 { get; set; }
+
+        public string columnGuid_2 { get; set; }
+        public string columnPropertyId_2 { get; set; }
+        public string columnValueOffset_2 { get; set; }
+        public string columnStatusOffset_2 { get; set; }
+        public string columnLengthOffset_2 { get; set; }
+        public string columnStorageType_2 { get; set; }
+
+        public string columnGuid_3 { get; set; }
+        public string columnPropertyId_3 { get; set; }
+        public string columnValueOffset_3 { get; set; }
+        public string columnStatusOffset_3 { get; set; }
+        public string columnLengthOffset_3 { get; set; }
+        public string columnStorageType_3 { get; set; }
+
+        public string WorkIdPropertyGuid { get; set; }
+        public string WorkId { get; set; }
+        public string ClientBase { get; set; }
+        public string BufferSize { get; set; }
+        public string RowsToTransfer { get; set; }
+        public string EType { get; set; }
 
 
         public void LoadDefaultValues()
-        {            
-            this.DomainName = DetectorUtil.GetPropertyValue("DomainName");
-            this.ServerComputerName = DetectorUtil.GetPropertyValue("ServerComputerName");
-            this.ServerVersion = DetectorUtil.GetPropertyValue("ServerOSVersion");
-            this.UserName = DetectorUtil.GetPropertyValue("UserName");
-            this.Password = DetectorUtil.GetPropertyValue("Password");
+        {                    
 
-            this.SharedPath = DetectorUtil.GetPropertyValue("SharedPath");
-            this.CatalogName = DetectorUtil.GetPropertyValue("CatalogName");
-            this.ServerOffset = DetectorUtil.GetPropertyValue("ServerOffset");
-
-            this.ClientName = DetectorUtil.GetPropertyValue("ClientComputerName");
-            this.ClientOffset = DetectorUtil.GetPropertyValue("ClientOffset");
-
-            this.IsWDSInstalled = DetectorUtil.GetPropertyValue("IsWDSInstalled");
-            this.IsServerWindows = DetectorUtil.GetPropertyValue("IsServerWindows");
-
-            this.LanguageLocale = DetectorUtil.GetPropertyValue("LanguageLocale");
+            Type cfg = typeof(Configs);
+            foreach (var p in cfg.GetProperties())
+            {                
+                var val = DetectorUtil.GetPropertyValue(p.Name);
+                if (val != null)
+                {
+                    p.SetValue(this, val, null);
+                }
+            }
         }
 
         public Dictionary<string, List<string>> ToDictionary()

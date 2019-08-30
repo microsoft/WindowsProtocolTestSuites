@@ -42,25 +42,21 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
 
         Logger logWriter = new Logger();
         private DetectionInfo detectionInfo = new DetectionInfo();
-
+        
         private const string DomainName = "DomainName";
         private const string ServerComputerName = "ServerComputerName";
         private const string UserName = "UserName";
         private const string Password = "Password";
-        //private const string ServerOSVersion = "ServerOSVersion";
-        //private const string ServerOffset = "ServerOffset";
-        
+           
         private const string SharedPath = "SharedPath";
         private const string CatalogName = "CatalogName";
-
-        private const string ClientOffset = "ClientOffset";
-        private const string ClientName = "ClientComputerName";
-        //private const string ClientVersion = "ClientVersion";
-        
+                   
         private const string IsWDSInstalled = "IsWDSInstalled";
         private const string IsServerWindows = "IsServerWindows";
-        #endregion Private Types      
 
+        private const string LanguageLocale = "LanguageLocale";
+        private const string LCIDValue = "LCIDValue";
+        #endregion Private Types      
 
         #region Implemented IValueDetector
 
@@ -71,7 +67,6 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
         public void SelectEnvironment(string NetworkEnvironment)
         {
             return;
-
         }
 
         /// <summary>
@@ -80,7 +75,6 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
         /// <returns>A instance of Prerequisites class.</returns>
         public Prerequisites GetPrerequisites()
         {
-
             Configs config = new Configs();
             config.LoadDefaultValues();
             Prerequisites prereq = new Prerequisites()
@@ -99,7 +93,9 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
 
             prereq.AddProperty(IsServerWindows, config.IsServerWindows);
             prereq.AddProperty(IsWDSInstalled, config.IsWDSInstalled);
-
+            prereq.AddProperty(LanguageLocale, config.LanguageLocale);
+            prereq.AddProperty(LCIDValue, config.LCIDValue);
+            
             return prereq;
         }
 
@@ -118,35 +114,28 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
             // Save the prerequisites set by user
             detectionInfo.DomainName = properties[DomainName];
             detectionInfo.ServerComputerName = properties[ServerComputerName];
-            detectionInfo.ServerUserName = properties[UserName];
-            detectionInfo.ServerUserPassword = properties[Password];
+            detectionInfo.UserName = properties[UserName];
+            detectionInfo.Password = properties[Password];
             detectionInfo.CatalogName = properties[CatalogName];
-            detectionInfo.SharedPath = properties[SharedPath];            
-
-            detectionInfo.ClientOffset = properties[ClientOffset];
-            detectionInfo.ClientName = properties[ClientName];
+            detectionInfo.SharedPath = properties[SharedPath];    
 
             detectionInfo.IsServerWindows = bool.Parse(properties[IsServerWindows]);
-            detectionInfo.IsWDSInstalled = bool.Parse(properties[IsWDSInstalled]);          
+            detectionInfo.IsWDSInstalled = bool.Parse(properties[IsWDSInstalled]);
 
+            detectionInfo.LanguageLocale = properties[LanguageLocale];
+            detectionInfo.LCIDValue = properties[LCIDValue];
             this.properties = properties;
 
             // Check the validity of the inputs
             if (string.IsNullOrEmpty(detectionInfo.DomainName)
                 || string.IsNullOrEmpty(detectionInfo.ServerComputerName)
-                || string.IsNullOrEmpty(detectionInfo.ServerUserName)
-                || string.IsNullOrEmpty(detectionInfo.ServerUserPassword))
+                || string.IsNullOrEmpty(detectionInfo.UserName)
+                || string.IsNullOrEmpty(detectionInfo.Password))
             {
                 throw new Exception(string.Format(
                     "Following boxes should not be empty: {0} Domain Name, {1} Server Computer Name, {2} Server User Name or {3} Server User Password",
                     Environment.NewLine, Environment.NewLine, Environment.NewLine, Environment.NewLine));
-            }
-
-            // Check the validity of the inputs
-            if (string.IsNullOrEmpty(detectionInfo.ClientOffset))
-            {
-                throw new Exception(string.Format("Following boxes should not be empty: {0} ClientOffset", Environment.NewLine));
-            }
+            }          
 
             return true;
         }
@@ -169,19 +158,28 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
         /// <returns>Return true if the function succeeded.</returns>
         public bool RunDetection()
         {
-            logWriter.AddLog(LogLevel.Information, "===== Start detecting =====");
+            WSPDetector detector = new WSPDetector(logWriter, detectionInfo);
 
-            WSPDetector detector = new WSPDetector(logWriter,detectionInfo);           
+            logWriter.AddLog(LogLevel.Information, "===== Start detecting =====");                   
 
             // Terminate the whole detection if any exception happens in the following processes
             if (!DetectSUTConnection(detector))
+            {
+                logWriter.AddLog(LogLevel.Error, "===== Detecting SUT Connection failed.=====");
                 return false;
+            }           
 
             if (!DetectPlatformInfo(detector))
+            {
+                logWriter.AddLog(LogLevel.Error, "===== Detecting SUT Platform Info failed.=====");
                 return false;
+            }
 
             if (!DetectShareInfo(detector))
+            {
+                logWriter.AddLog(LogLevel.Error, "===== Detecting SUT Share Info failed.=====");
                 return false;
+            }
 
             logWriter.AddLog(LogLevel.Information, "===== End detecting =====");
             return true;
@@ -193,16 +191,23 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
         /// <param name="propertiesDic">Dictionary which contains property information</param>
         /// <returns>Return true if the property information is successfully obtained.</returns>
         public bool GetDetectedProperty(out Dictionary<string, List<string>> propertiesDic)
-        {
+        {           
             propertiesDic = new Dictionary<string, List<string>>();
-
+            propertiesDic.Add("ServerComputerName", new List<string>() { detectionInfo.ServerComputerName });
+            propertiesDic.Add("DomainName", new List<string>() { detectionInfo.DomainName });
+            propertiesDic.Add("UserName", new List<string>() { detectionInfo.UserName });
+            propertiesDic.Add("Password", new List<string>() { detectionInfo.Password });
             propertiesDic.Add("ServerOSVersion", new List<string>() { detectionInfo.ServerOSVersion });
             propertiesDic.Add("ServerVersion", new List<string>() { detectionInfo.ServerVersion });
+            propertiesDic.Add("SharedPath", new List<string>() { detectionInfo.SharedPath });
             propertiesDic.Add("ServerOffset", new List<string>() { detectionInfo.ServerOffset });
-            propertiesDic.Add("ClientOffset", new List<string>() { detectionInfo.ClientOffset });
-            propertiesDic.Add("ClientVersion", new List<string>() { detectionInfo.ClientVersion });            
-            propertiesDic.Add("IsServerWindows", new List<string>() { detectionInfo.IsServerWindows.ToString() });
+            propertiesDic.Add("ClientComputerName", new List<string>() { detectionInfo.ClientName });
+            propertiesDic.Add("CatalogName", new List<string>() { detectionInfo.CatalogName });
             propertiesDic.Add("IsWDSInstalled", new List<string>() { detectionInfo.IsWDSInstalled.ToString() });
+            propertiesDic.Add("ClientOffset", new List<string>() { detectionInfo.ClientOffset });
+            propertiesDic.Add("ClientVersion", new List<string>() { detectionInfo.ClientVersion });
+            propertiesDic.Add("IsServerWindows", new List<string>() { detectionInfo.IsServerWindows.ToString() });
+            propertiesDic.Add("LanguageLocale", new List<string>() { detectionInfo.LanguageLocale});
             return true;
         }
 
@@ -231,9 +236,23 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
         /// <returns>Detection result.</returns>
         public object GetSUTSummary()
         {
-            DetectionResultControl SUTSummaryControl = new DetectionResultControl();
-            SUTSummaryControl.LoadDetectionInfo(detectionInfo);
-            return SUTSummaryControl;
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Please confirm the test environment. ");
+            sb.AppendLine("If they are not correct, please correct them on the Configure Test Cases page.");
+            sb.AppendLine();
+            sb.AppendLine(string.Format("Domain Name: {0}", detectionInfo.DomainName));
+            sb.AppendLine(string.Format("Domain Administrator Username: {0}", detectionInfo.UserName));
+            sb.AppendLine(string.Format("Domain Administrator Password: {0}", detectionInfo.Password));
+            sb.AppendLine();
+            sb.AppendLine(string.Format("Client Computer Name : {0}", detectionInfo.ClientName));
+            sb.AppendLine(string.Format("Client Computer Operating System Version: {0}", detectionInfo.ClientVersion));
+            sb.AppendLine(string.Format("Client Offset: {0}", detectionInfo.ClientOffset));
+            sb.AppendLine();
+            sb.AppendLine(string.Format("Is Search Service Installed: {0}", detectionInfo.IsWDSInstalled));
+            sb.AppendLine(string.Format("Is SUT Windows Server: {0}", detectionInfo.IsServerWindows));
+            sb.AppendLine(string.Format("Language Locale: {0}", detectionInfo.LanguageLocale));
+            sb.AppendLine();
+            return sb.ToString();
         }
 
         /// <summary>
@@ -297,30 +316,24 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
 
         private bool CheckUsernamePassword(WSPDetector detector)
         {
+            bool result = true;
+
             logWriter.AddLog(LogLevel.Information, "===== Check the Credential =====");
 
             try
             {
                 detector.CheckUsernamePassword(detectionInfo);
-            }
-            catch (SspiException ex)
-            {
-                Win32Exception winException = new Win32Exception((int)ex.ErrorCode);
-                logWriter.AddLog(LogLevel.Warning, "Failed", false, LogStyle.StepFailed);
-                logWriter.AddLineToLog(LogLevel.Information);
-                logWriter.AddLog(LogLevel.Error, string.Format("The User cannot log on\r\nError: 0x{0:x8} ({1})\r\nPlease check the credential", winException.NativeErrorCode, winException.Message));
-            }
+                logWriter.AddLog(LogLevel.Information, "Finished", false, LogStyle.StepPassed);
+            }            
             catch (Exception ex)
             {
-                logWriter.AddLog(LogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                result = false;                
                 logWriter.AddLineToLog(LogLevel.Information);
                 logWriter.AddLog(LogLevel.Error, string.Format("The User cannot log on:{0} \r\nPlease check the credential", ex.Message));
+                logWriter.AddLog(LogLevel.Warning, "Failed", false, LogStyle.StepFailed);
             }
 
-            logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);
-            logWriter.AddLineToLog(LogLevel.Information);
-
-            return true;
+            return result;
         }
 
         private bool DetectPlatformInfo(WSPDetector detector)
@@ -328,8 +341,14 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
             bool result = false;
             logWriter.AddLog(LogLevel.Information, "===== Detect SUT Platform and Useraccounts =====");
             result = detector.FetchPlatformInfo(ref detectionInfo);
-            logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);
-            logWriter.AddLineToLog(LogLevel.Information);
+            if (result)
+            {
+                logWriter.AddLog(LogLevel.Information, "Finished", false, LogStyle.StepPassed);
+            }
+            else
+            {
+                logWriter.AddLog(LogLevel.Information, "Finished", false, LogStyle.StepFailed);
+            }
             return result;
         }            
        
@@ -340,6 +359,7 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
             try
             {
                 result = detector.FetchShareInfo(ref detectionInfo);
+                logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);
             }
             catch (Exception ex)
             {
@@ -347,10 +367,8 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
                 logWriter.AddLineToLog(LogLevel.Information);
                 logWriter.AddLog(LogLevel.Information, string.Format("FetchShareInfo failed, reason: {0}", ex.Message));
                 logWriter.AddLog(LogLevel.Error, string.Format("Detect share info failed. Cannot do further detection.", ex.Message));
+                logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepFailed);
             }
-
-            logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);
-            logWriter.AddLineToLog(LogLevel.Information);
                        
             return result;
         }

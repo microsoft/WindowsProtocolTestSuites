@@ -78,9 +78,9 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
 
         public string ServerVersion { get; set; }
 
-        public string ServerUserName { get; set; }
+        public string UserName { get; set; }
 
-        public string ServerUserPassword { get; set; }
+        public string Password { get; set; }
         public string ServerOSVersion { get; set; }
         public string SharedPath { get; set; }
 
@@ -90,14 +90,15 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
 
         public string ClientName { get; set; }
 
-        public string ClientUserName { get; set; }
-
         public string ClientOffset { get; set; }
         public string ClientVersion { get; set; }
 
         public bool IsWDSInstalled { get; set; }
-        public bool IsServerWindows { get; set; }        
+        public bool IsServerWindows { get; set; }
+        public string LanguageLocale { get; set; }
 
+        public string LCIDValue { get; set; }
+        
         /// <summary>
         /// Constructor.
         /// </summary>
