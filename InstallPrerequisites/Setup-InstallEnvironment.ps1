@@ -44,47 +44,47 @@ function Download-VHD {
 #------------------------------------------------------------------------------------------
 Function Check-HostPrerequisites {
 
-    Write-TestSuiteInfo "Check prerequisites of the host for test suite environment setup:"
+    Write-Host "Check prerequisites of the host for test suite environment setup:"
 
-    Write-TestSuiteStep "Check if the host operating system version is supported or not."
+    Write-Host "Check if the host operating system version is supported or not."
     if ([Double]$Script:HostOsBuildNumber -le [Double]"6.1") {
-        Write-TestSuiteError "Unsupported operating system version $Script:HostOsBuildNumber. Must be larger than 6.1." -Exit
+        Write-Host "Unsupported operating system version $Script:HostOsBuildNumber. Must be larger than 6.1." -BackgroundColor "Red" -Exit
     }
     else {
-        Write-TestSuiteSuccess "Supported operating system version $Script:HostOsBuildNumber."
+        Write-Host "Supported operating system version $Script:HostOsBuildNumber."
     }
 
-    Write-TestSuiteStep "Check if the host has enabled router by registry key."
+    Write-Host "Check if the host has enabled router by registry key."
     # http://technet.microsoft.com/en-us/library/cc962461.aspx
     If ((Get-ItemProperty -path HKLM:\system\CurrentControlSet\services\Tcpip\Parameters -name IpEnableRouter -ErrorAction Silentlycontinue).ipenablerouter -ne 1) {
-        Write-TestSuiteWarning "Router is disabled. Registry key IpEnableRouter under path HKLM:\system\CurrentControlSet\services\Tcpip\Parameters is not set to 1. Set it now..."
+        Write-Host "Router is disabled. Registry key IpEnableRouter under path HKLM:\system\CurrentControlSet\services\Tcpip\Parameters is not set to 1. Set it now..."
         Set-ItemProperty -Path HKLM:\system\CurrentControlSet\services\Tcpip\Parameters -Name IpEnableRouter -Value 1
     }
     else {
-        Write-TestSuiteSuccess "Router is enabled."
+        Write-Host "Router is enabled."
     }
 
-    Write-TestSuiteStep "Check if `"RSAT-Hyper-V-Tools`" feature is installed or not."
-    Write-TestSuiteInfo "Import ServerManager module if not imported."
+    Write-Host "Check if `"RSAT-Hyper-V-Tools`" feature is installed or not."
+    Write-Host "Import ServerManager module if not imported."
     Import-Module ServerManager
     $FeatureName = "RSAT-Hyper-V-Tools"
     $Feature = Get-WindowsFeature | Where { $_.Name -eq "$FeatureName" }
     if($Feature.Installed -eq $false) {
-        Write-TestSuiteWarning "Feature not installed. Install it now..."
+        Write-Host "Feature not installed. Install it now..."
         Add-WindowsFeature -Name $FeatureName -IncludeAllSubFeature -IncludeManagementTools
         Wait-TestSuiteActivityComplete -ActivityName "Install $FeatureName" -TimeoutInSeconds 5
     }
     else {
-        Write-TestSuiteSuccess "Feature already installed."
+        Write-Host "Feature already installed." -BackgroundColor "Blue"
     }
     
-    Write-TestSuiteStep "Check if `"Hyper-V v3.0 PowerShell Module`" is imported:"
+    Write-Host "Check if `"Hyper-V v3.0 PowerShell Module`" is imported:"
     if (!(Get-Module -ListAvailable Hyper-V)) {
-        Write-TestSuiteWarning "Module not imported. Import it now..."
+        Write-Host "Module not imported. Import it now..." -BackgroundColor "Yellow"
         Import-Module Hyper-V
     } 
     else {
-        Write-TestSuiteSuccess "Module already imported."
+        Write-Host "Module already imported."
     }
 }
 
