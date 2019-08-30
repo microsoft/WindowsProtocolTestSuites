@@ -32,6 +32,9 @@ function Download-VHD {
         mkdir "$WinteropProtocolTesting\VM\InstallPrerequisites"
     }
     Copy-Item "$VHDPath\$VHDName" -Destination "$WinteropProtocolTesting\VM\InstallPrerequisites\" -Force
+    if(Test-Path "$WinteropProtocolTesting\VM\InstallPrerequisites\$VHDName") {
+        Remove-Item "$WinteropProtocolTesting\VM\InstallPrerequisites\$VHDName" -Force
+    }
     Rename-Item "$WinteropProtocolTesting\VM\InstallPrerequisites\$VHDName" -NewName "InstallPrerequisites.vhd" -Force
     Write-Host "Copy VHD finished"
 }
