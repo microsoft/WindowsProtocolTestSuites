@@ -95,9 +95,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             //-----------------------------  Server Version   
             uint obtainedServerVersion = connectOutResponse._serverVersion;
-            uint actualServerVersion
-                = Convert.ToUInt32(site.Properties["WindowsServerVersion"]);
-
+            
             #region Windows Behaviour Validation
 
             if (Convert.ToUInt32(site.Properties.Get("ServerOffset"))

@@ -1,0 +1,390 @@
+// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using Microsoft.Protocols.TestManager.Detector;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.NetworkInformation;
+using System.Text;
+using System.Net;
+using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using System.ComponentModel;
+using System.Management;
+
+namespace Microsoft.Protocols.TestManager.WSPServerPlugin
+{
+    static class PluginHelper
+    {
+        public static void AddProperty(this Prerequisites prereq, string property, params string[] value)
+        {
+            prereq.Properties.Add(property, value.ToList());
+        }
+
+        public static void AddProperty(this Prerequisites prereq, string property, List<string> value)
+        {
+            prereq.Properties.Add(property, value);
+        }
+
+        public static void AddRule(this List<CaseSelectRule> rules, string name, RuleStatus status)
+        {
+            rules.Add(new CaseSelectRule()
+            {
+                Name = name,
+                Status = status
+            });
+        }
+
+    }
+
+    public class WSPValueDetector : IValueDetector
+    {
+        #region Private Types
+
+        Logger logWriter = new Logger();
+        private DetectionInfo detectionInfo = new DetectionInfo();
+
+        private const string DomainName = "DomainName";
+        private const string ServerComputerName = "ServerComputerName";
+        private const string UserName = "UserName";
+        private const string Password = "Password";
+        //private const string ServerOSVersion = "ServerOSVersion";
+        //private const string ServerOffset = "ServerOffset";
+        
+        private const string SharedPath = "SharedPath";
+        private const string CatalogName = "CatalogName";
+
+        private const string ClientOffset = "ClientOffset";
+        private const string ClientName = "ClientComputerName";
+        //private const string ClientVersion = "ClientVersion";
+        
+        private const string IsWDSInstalled = "IsWDSInstalled";
+        private const string IsServerWindows = "IsServerWindows";
+        #endregion Private Types      
+
+
+        #region Implemented IValueDetector
+
+        /// <summary>
+        /// Set selected test environment.
+        /// </summary>
+        /// <param name="Environment"></param>
+        public void SelectEnvironment(string NetworkEnvironment)
+        {
+            return;
+
+        }
+
+        /// <summary>
+        /// Get the prerequisites for auto-detection.
+        /// </summary>
+        /// <returns>A instance of Prerequisites class.</returns>
+        public Prerequisites GetPrerequisites()
+        {
+
+            Configs config = new Configs();
+            config.LoadDefaultValues();
+            Prerequisites prereq = new Prerequisites()
+            {
+                Title = "MS-WSP",
+                Summary = "Please input the below info to detect SUT.",
+                Properties = new Dictionary<string, List<string>>()
+            };
+
+            prereq.AddProperty(DomainName, config.DomainName);
+            prereq.AddProperty(ServerComputerName, config.ServerComputerName);
+            prereq.AddProperty(UserName, config.UserName);
+            prereq.AddProperty(Password, config.Password);
+            prereq.AddProperty(SharedPath, config.SharedPath);
+            prereq.AddProperty(CatalogName, config.CatalogName);
+
+            prereq.AddProperty(IsServerWindows, config.IsServerWindows);
+            prereq.AddProperty(IsWDSInstalled, config.IsWDSInstalled);
+
+            return prereq;
+        }
+
+        private Dictionary<string, string> properties;
+        /// <summary>
+        /// Set the values for the required properties.
+        /// </summary>
+        /// <param name="properties">Property name and values.</param>
+        /// <returns>
+        /// Return true if no property is needed. Return false means there are
+        /// other property required. PTF Tool will invoke GetPrerequisites and
+        /// pop up a dialog to set the value of the properties.
+        /// </returns>
+        public bool SetPrerequisiteProperties(Dictionary<string, string> properties)
+        {
+            // Save the prerequisites set by user
+            detectionInfo.DomainName = properties[DomainName];
+            detectionInfo.ServerComputerName = properties[ServerComputerName];
+            detectionInfo.ServerUserName = properties[UserName];
+            detectionInfo.ServerUserPassword = properties[Password];
+            detectionInfo.CatalogName = properties[CatalogName];
+            detectionInfo.SharedPath = properties[SharedPath];            
+
+            detectionInfo.ClientOffset = properties[ClientOffset];
+            detectionInfo.ClientName = properties[ClientName];
+
+            detectionInfo.IsServerWindows = bool.Parse(properties[IsServerWindows]);
+            detectionInfo.IsWDSInstalled = bool.Parse(properties[IsWDSInstalled]);          
+
+            this.properties = properties;
+
+            // Check the validity of the inputs
+            if (string.IsNullOrEmpty(detectionInfo.DomainName)
+                || string.IsNullOrEmpty(detectionInfo.ServerComputerName)
+                || string.IsNullOrEmpty(detectionInfo.ServerUserName)
+                || string.IsNullOrEmpty(detectionInfo.ServerUserPassword))
+            {
+                throw new Exception(string.Format(
+                    "Following boxes should not be empty: {0} Domain Name, {1} Server Computer Name, {2} Server User Name or {3} Server User Password",
+                    Environment.NewLine, Environment.NewLine, Environment.NewLine, Environment.NewLine));
+            }
+
+            // Check the validity of the inputs
+            if (string.IsNullOrEmpty(detectionInfo.ClientOffset))
+            {
+                throw new Exception(string.Format("Following boxes should not be empty: {0} ClientOffset", Environment.NewLine));
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Add Detection steps to the log when detecting
+        /// </summary>
+        public List<DetectingItem> GetDetectionSteps()
+        {
+            List<DetectingItem> DetectingItems = new List<DetectingItem>();
+            DetectingItems.Add(new DetectingItem("Detect Target SUT Connection", DetectingStatus.Pending, LogStyle.Default));
+            DetectingItems.Add(new DetectingItem("Detect Targer SUT OS Version", DetectingStatus.Pending, LogStyle.Default));
+            DetectingItems.Add(new DetectingItem("Check the Credential to Shared Path", DetectingStatus.Pending, LogStyle.Default));
+            return DetectingItems;
+        }
+
+        /// <summary>
+        /// Run auto detection properly.
+        /// </summary>
+        /// <returns>Return true if the function succeeded.</returns>
+        public bool RunDetection()
+        {
+            logWriter.AddLog(LogLevel.Information, "===== Start detecting =====");
+
+            WSPDetector detector = new WSPDetector(logWriter,detectionInfo);           
+
+            // Terminate the whole detection if any exception happens in the following processes
+            if (!DetectSUTConnection(detector))
+                return false;
+
+            if (!DetectPlatformInfo(detector))
+                return false;
+
+            if (!DetectShareInfo(detector))
+                return false;
+
+            logWriter.AddLog(LogLevel.Information, "===== End detecting =====");
+            return true;
+        }
+
+        /// <summary>
+        /// Get the detection result.
+        /// </summary>
+        /// <param name="propertiesDic">Dictionary which contains property information</param>
+        /// <returns>Return true if the property information is successfully obtained.</returns>
+        public bool GetDetectedProperty(out Dictionary<string, List<string>> propertiesDic)
+        {
+            propertiesDic = new Dictionary<string, List<string>>();
+
+            propertiesDic.Add("ServerOSVersion", new List<string>() { detectionInfo.ServerOSVersion });
+            propertiesDic.Add("ServerVersion", new List<string>() { detectionInfo.ServerVersion });
+            propertiesDic.Add("ServerOffset", new List<string>() { detectionInfo.ServerOffset });
+            propertiesDic.Add("ClientOffset", new List<string>() { detectionInfo.ClientOffset });
+            propertiesDic.Add("ClientVersion", new List<string>() { detectionInfo.ClientVersion });            
+            propertiesDic.Add("IsServerWindows", new List<string>() { detectionInfo.IsServerWindows.ToString() });
+            propertiesDic.Add("IsWDSInstalled", new List<string>() { detectionInfo.IsWDSInstalled.ToString() });
+            return true;
+        }
+
+        /// <summary>
+        /// Get selected rules
+        /// </summary>
+        /// <returns>Selected rules</returns>
+        public List<CaseSelectRule> GetSelectedRules()
+        {
+            List<CaseSelectRule> caseList = new List<CaseSelectRule>();
+
+            caseList.Add(CreateRule("Priority.BVT", true));
+            caseList.Add(CreateRule("Priority.NonBVT", true));
+
+
+            #region Features
+
+            #endregion Features
+
+            return caseList;
+        }
+
+        /// <summary>
+        /// Get a summary of the detection result.
+        /// </summary>
+        /// <returns>Detection result.</returns>
+        public object GetSUTSummary()
+        {
+            DetectionResultControl SUTSummaryControl = new DetectionResultControl();
+            SUTSummaryControl.LoadDetectionInfo(detectionInfo);
+            return SUTSummaryControl;
+        }
+
+        /// <summary>
+        /// Get the list of properties that will be hidden in the configure page.
+        /// </summary>
+        /// <param name="rules">Selected rules.</param>
+        /// <returns>The list of properties which will not be shown in the configure page.</returns>
+        public List<string> GetHiddenProperties(List<CaseSelectRule> rules)
+        {
+            List<string> hiddenPropertiesList = new List<string>();
+
+            // Hidden the following properties in MS-WSP_ServerTestSuite.ptfconfig:
+            // 1. TestName
+            // 2. ProtocolName
+            // 3. Version
+            hiddenPropertiesList.AddRange(DetectorUtil.GetPropertiesByFile("MS-WSP_ServerTestSuite.ptfconfig"));
+            return hiddenPropertiesList;
+        }
+
+        /// <summary>
+        /// Return false if check failed and set failed property in dictionary
+        /// </summary>
+        /// <param name="properties"></param>
+        /// <returns></returns>
+        public bool CheckConfigrationSettings(Dictionary<string, string> properties)
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// Dispose
+        /// </summary>
+        public void Dispose()
+        {
+        }
+
+        #endregion Implemented IValueDetector
+
+        #region Private Methods
+        private bool DetectSUTConnection(WSPDetector detector)
+        {
+            DetectorUtil.WriteLog("===== Detect Target SUT IP Address=====", true, LogStyle.Default);
+
+            bool result = false;
+            try
+            {
+                result= detector.DetectSUTConnection(ref detectionInfo);
+                logWriter.AddLog(LogLevel.Information, "Passed", false, LogStyle.StepPassed);
+
+            }
+            catch (Exception ex)
+            {
+                logWriter.AddLog(LogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLog(LogLevel.Error, ex.Message);
+            }
+
+            logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+            logWriter.AddLineToLog(LogLevel.Information);
+            return result;
+        }
+
+        private bool CheckUsernamePassword(WSPDetector detector)
+        {
+            logWriter.AddLog(LogLevel.Information, "===== Check the Credential =====");
+
+            try
+            {
+                detector.CheckUsernamePassword(detectionInfo);
+            }
+            catch (SspiException ex)
+            {
+                Win32Exception winException = new Win32Exception((int)ex.ErrorCode);
+                logWriter.AddLog(LogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLineToLog(LogLevel.Information);
+                logWriter.AddLog(LogLevel.Error, string.Format("The User cannot log on\r\nError: 0x{0:x8} ({1})\r\nPlease check the credential", winException.NativeErrorCode, winException.Message));
+            }
+            catch (Exception ex)
+            {
+                logWriter.AddLog(LogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLineToLog(LogLevel.Information);
+                logWriter.AddLog(LogLevel.Error, string.Format("The User cannot log on:{0} \r\nPlease check the credential", ex.Message));
+            }
+
+            logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+            logWriter.AddLineToLog(LogLevel.Information);
+
+            return true;
+        }
+
+        private bool DetectPlatformInfo(WSPDetector detector)
+        {
+            bool result = false;
+            logWriter.AddLog(LogLevel.Information, "===== Detect SUT Platform and Useraccounts =====");
+            result = detector.FetchPlatformInfo(ref detectionInfo);
+            logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+            logWriter.AddLineToLog(LogLevel.Information);
+            return result;
+        }            
+       
+        private bool DetectShareInfo(WSPDetector detector)
+        {
+            logWriter.AddLog(LogLevel.Information, "===== Fetch Share Info =====");
+            bool result = false;
+            try
+            {
+                result = detector.FetchShareInfo(ref detectionInfo);
+            }
+            catch (Exception ex)
+            {
+                logWriter.AddLog(LogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLineToLog(LogLevel.Information);
+                logWriter.AddLog(LogLevel.Information, string.Format("FetchShareInfo failed, reason: {0}", ex.Message));
+                logWriter.AddLog(LogLevel.Error, string.Format("Detect share info failed. Cannot do further detection.", ex.Message));
+            }
+
+            logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+            logWriter.AddLineToLog(LogLevel.Information);
+                       
+            return result;
+        }
+
+        private CaseSelectRule CreateRule(string ruleCategoryName, bool? isSupported)
+        {
+            CaseSelectRule rule = null;
+            if (isSupported == null)
+            {
+                rule = new CaseSelectRule() { Name = ruleCategoryName, Status = RuleStatus.Unknown };
+            }
+            else
+            {
+                if (isSupported.Value)
+                {
+                    rule = new CaseSelectRule() { Name = ruleCategoryName, Status = RuleStatus.Selected };
+                }
+                else
+                {
+                    rule = new CaseSelectRule() { Name = ruleCategoryName, Status = RuleStatus.NotSupported };
+                }
+            }
+
+            return rule;
+        }
+
+        private string NullableBoolToString(bool? value)
+        {
+            if (value == null)
+            {
+                return "false";
+            }
+            return value.Value.ToString().ToLower();
+        }
+        #endregion Private Methods
+    } 
+}

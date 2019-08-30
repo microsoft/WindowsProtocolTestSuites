@@ -1,22 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
-  <Properties>
-    <!-- IP/ Machine Name for the Beacon Logging-->
-    <Property name="ServerComputerName" value="sut" />
+  <Properties>   
     <!-- Name of the Server Machine Under test-->
-    <Property name="SERVER_MACHINE_NAME" value="sut" />
+    <Property name="ServerComputerName" value="sut" />
     <!-- Name of the Domain Under test-->
     <Property name="DomainName" value="contoso.com" />
-    <!-- Password of user Under test-->
-    <Property name="Password" value="Password01!" />
+    <!-- Name of the User name to access SUT-->
+    <Property name="UserName" value="Administrator" />
+    <!-- Password of User to access SUT-->
+    <Property name="Password" value="Password01!" />    
     <!--Win2003,Win2008,Other-->
     <Property name="ServerOSVersion" value="Win7"/>
     <!-- Path of shared folder on server machine-->
-    <Property name="SharedPath" value="C:\Test\Data\Test" />
-    <!-- Name of the Client User name initiating the MS-WSP request messages-->
-    <Property name="CLIENT_USERNAME" value="Administrator" />
+    <Property name="SharedPath" value="\\sut\Test" />    
     <!-- Name of the Client Machine name initiating the MS-WSP request messages-->
-    <Property name="CLIENT_MACHINE_NAME" value="DRIVER" />
+    <Property name="ClientComputerName" value="driver" />
     <!-- Name of the Catalog to be searched-->
     <Property name="CatalogName" value="Windows\SystemIndex" />
     <!-- Name of the Language Locale of all query string and query text-->
@@ -24,11 +22,9 @@
     <!--en-us -->
     <!-- Name of the Language Locale ID value of all query string and query text-->
     <Property name="LCID_VALUE" value="1033" />
-    <!-- Specify the Machine Architecture of the Server Under Test
-    Whether it is 64 bit or 32 bit-->
+    <!-- Specify the Machine Architecture of the Server Under Test Whether it is 64 bit or 32 bit-->
     <Property name="ServerOffset" value="64" />
-    <!-- Specify the Machine Architecture of the WSP Client 
-    Whether it is 64 bit or 32 bit-->
+    <!-- Specify the Machine Architecture of the WSP Client Whether it is 64 bit or 32 bit-->
     <Property name="ClientOffset" value="64" />
     <!-- Specify whether the Server Under Test is a Windows or Non-Windows Sever
     This is required for Windows Specific requirement validation-->

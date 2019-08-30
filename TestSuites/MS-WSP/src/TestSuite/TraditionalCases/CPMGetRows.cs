@@ -84,7 +84,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMSetBindingsIn(true, true);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn and expects success.");
-            wspAdapter.CPMGetRowsIn(wspAdapter.GetCursor(wspAdapter.clientMachineName), validRowsToTransfer, MessageBuilder.rowWidth, validReadBuffer, (uint)FetchType.ForwardOrder, (uint)RowSeekType.eRowSeekNext);
+            wspAdapter.CPMGetRowsIn(wspAdapter.GetCursor(wspAdapter.ClientComputerName), validRowsToTransfer, MessageBuilder.rowWidth, validReadBuffer, (uint)FetchType.ForwardOrder, (uint)RowSeekType.eRowSeekNext);
         }
 
         [TestMethod]
@@ -124,7 +124,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn with invalid RowWidth and expects ERROR_INVALID_PARAMETER .");
             argumentType = ArgumentType.InvalidRowWidth;
-            wspAdapter.CPMGetRowsIn(wspAdapter.GetCursor(wspAdapter.clientMachineName), validRowsToTransfer, invalidRowsWidth, validReadBuffer, (uint)FetchType.ForwardOrder, (uint)RowSeekType.eRowSeekNext);
+            wspAdapter.CPMGetRowsIn(wspAdapter.GetCursor(wspAdapter.ClientComputerName), validRowsToTransfer, invalidRowsWidth, validReadBuffer, (uint)FetchType.ForwardOrder, (uint)RowSeekType.eRowSeekNext);
         }
 
         [TestMethod]
@@ -144,7 +144,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn with invalid ReadBuffer and expects STATUS_INVALID_PARAMETER .");
             argumentType = ArgumentType.InvalidReadBuffer;
-            wspAdapter.CPMGetRowsIn(wspAdapter.GetCursor(wspAdapter.clientMachineName), validRowsToTransfer, MessageBuilder.rowWidth, invalidReadBuffer, (uint)FetchType.ForwardOrder, (uint)RowSeekType.eRowSeekNext);
+            wspAdapter.CPMGetRowsIn(wspAdapter.GetCursor(wspAdapter.ClientComputerName), validRowsToTransfer, MessageBuilder.rowWidth, invalidReadBuffer, (uint)FetchType.ForwardOrder, (uint)RowSeekType.eRowSeekNext);
         }
 
         #endregion
