@@ -19,7 +19,7 @@ Write-Host "WinteropProtocolTesting: $WinteropProtocolTesting"
 Write-Host "=============================================="
 
 function Get-VHD {
-    if(!(Test-Path $VHDPath\$VHDName)){
+    if(!(Test-Path "$VHDPath\$VHDName")){
         Write-Host "Cannot find the VHD on $VHDPath\$VHDName" Exit
     }
     Write-Host "Copy VHD from $VHDPath\$VHDName to $WinteropProtocolTesting\VM\InstallPrerequisites..."
