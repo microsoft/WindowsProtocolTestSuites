@@ -21,12 +21,16 @@ jobs:
             echo $(extRepo.url)
     displayName: 'echo helperBranch'
 
-  - script: 'git clone --single-branch --progress -b $(helperBranch) %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
-    displayName: 'Fetch external repo'
-    env:
-      EXTREPO_URL: $(extRepo.url)
-      EXTREPO_DIR: $(extRepo.dir)
-    timeoutInMinutes: 0
+  # - script: 'git clone --single-branch --progress -b $(helperBranch) %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
+  #   displayName: 'Fetch external repo'
+  #   env:
+  #     EXTREPO_URL: $(extRepo.url)
+  #     EXTREPO_DIR: $(extRepo.dir)
+  #   timeoutInMinutes: 0
   
-  - script: $(Build.Repository.LocalPath)\InstallPrerequisites\Setup-InstallEnvironment.ps1
+  - task: PowerShell@2
     displayName: 'Run regression script'
+    inputs:
+      targetType: filePath
+      filePath: $(Build.Repository.LocalPath)\InstallPrerequisites\Setup-InstallEnvironment.ps1
+    timeoutInMinutes: 0
