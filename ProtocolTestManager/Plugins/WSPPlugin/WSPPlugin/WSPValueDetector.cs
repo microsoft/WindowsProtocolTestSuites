@@ -221,7 +221,6 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
             caseList.Add(CreateRule("Priority.BVT", true));
             caseList.Add(CreateRule("Priority.NonBVT", true));
 
-
             #region Features
 
             #endregion Features
@@ -246,6 +245,10 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
             sb.AppendLine(string.Format("Client Computer Name : {0}", detectionInfo.ClientName));
             sb.AppendLine(string.Format("Client Computer Operating System Version: {0}", detectionInfo.ClientVersion));
             sb.AppendLine(string.Format("Client Offset: {0}", detectionInfo.ClientOffset));
+            sb.AppendLine();
+            sb.AppendLine(string.Format("Server Computer Name : {0}", detectionInfo.ServerComputerName));
+            sb.AppendLine(string.Format("Server Computer Operating System Version: {0}", detectionInfo.ServerVersion));
+            sb.AppendLine(string.Format("Server Offset: {0}", detectionInfo.ServerOffset));
             sb.AppendLine();
             sb.AppendLine(string.Format("Is Search Service Installed: {0}", detectionInfo.IsWDSInstalled));
             sb.AppendLine(string.Format("Is SUT Windows Server: {0}", detectionInfo.IsServerWindows));
