@@ -13,11 +13,14 @@ Param
 $InvocationPath = Split-Path $MyInvocation.MyCommand.Definition -parent
 $WinteropProtocolTesting = "$Workspace\..\..\WinteropProtocolTesting"
 $HostOsBuildNumber       = "" + [Environment]::OSVersion.Version.Major + "." + [Environment]::OSVersion.Version.Minor
-Write-Host "=============================================="
+$Script:VmDirPath = "$WinteropProtocolTesting\VM\InstallPrerequisites\"
+
+Write-Host "=========================================================="
 Write-Host "InvocationPath: $InvocationPath"
 Write-Host "Workspace： $Workspace"
 Write-Host "WinteropProtocolTesting: $WinteropProtocolTesting"
-Write-Host "=============================================="
+Write-Host "VmDirPath: $Script:VmDirPath"
+Write-Host "=========================================================="
 
 #------------------------------------------------------------------------------------------
 # Sleeping for a particular amount of time to wait for an activity to be completed
@@ -83,7 +86,6 @@ function Download-VHD {
     }
     Copy-Item "$VHDPath\$VHDName" -Destination "$WinteropProtocolTesting\VM\InstallPrerequisites\" -Force
     Rename-Item "$WinteropProtocolTesting\VM\InstallPrerequisites\$VHDName" -NewName "InstallPrerequisites.vhd" -Force
-    $Script:VmDirPath = "$WinteropProtocolTesting\VM\InstallPrerequisites\\InstallPrerequisites.vhd"
     Write-Host "Copy VHD finished"
 }
 
