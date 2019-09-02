@@ -19,6 +19,28 @@ Write-Host "Workspace： $Workspace"
 Write-Host "WinteropProtocolTesting: $WinteropProtocolTesting"
 Write-Host "=============================================="
 
+#------------------------------------------------------------------------------------------
+# Format the input xml file and display it to the screen
+#------------------------------------------------------------------------------------------
+Function Format-TestSuiteXml {
+    Param(
+    [Parameter(ValueFromPipeline=$True)]
+    [xml]$Xml,
+    [int]$Indent = 2)
+
+    Process {
+        $StringWriter = New-Object System.IO.StringWriter
+        $XmlWriter = New-Object System.Xml.XmlTextWriter $StringWriter
+        $XmlWriter.Formatting = "indented"
+        $XmlWriter.Indentation = $Indent
+        [xml]$Xml.WriteContentTo($XmlWriter)
+        $XmlWriter.Flush()
+        $StringWriter.Flush()
+
+        # Output the result
+        Write-Output $("`n" + $StringWriter.ToString())
+    }
+}
 function Read-Configurationfile {
     Write-Host "Read and parse the XML configuration file."
     if(!(Test-Path -Path "$InvocationPath\InstallPrerequisites.xml")){
