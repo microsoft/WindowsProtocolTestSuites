@@ -19,6 +19,16 @@ Write-Host "Workspace： $Workspace"
 Write-Host "WinteropProtocolTesting: $WinteropProtocolTesting"
 Write-Host "=============================================="
 
+function Read-Configurationfile {
+    Write-Host "Read and parse the XML configuration file."
+    if(!(Test-Path -Path ".\InstallPrerequisites.xml")){
+        Write-Error "Cannot find InstallPrerequisites.xml" Exit
+    }
+    [Xml]$Script:Setup = Get-Content ".\InstallPrerequisites.xml"
+    $Script:Setup | Format-TestSuiteXml -Indent 4
+    $Script:VM = $Script:Setup.lab.servers.vm
+}
+
 #------------------------------------------------------------------------------------------
 # Download VHD from share folder to workspace
 #------------------------------------------------------------------------------------------
@@ -44,7 +54,7 @@ function Download-VHD {
 #------------------------------------------------------------------------------------------
 Function Check-HostPrerequisites {
 
-    Write-Host "Check prerequisites of the host for test suite environment setup:"
+    Write-Host "Check prerequisites of the host for test suite environment setup"
 
     Write-Host "Check if the host operating system version is supported or not."
     if ([Double]$Script:HostOsBuildNumber -le [Double]"6.1") {
@@ -88,9 +98,36 @@ Function Check-HostPrerequisites {
     }
 }
 
+function Clean-VM {
+    Write-Host "Clean up the VM. VMName: $($Script:VM.Name)"
+    $HostVms = (Get-VM  | Select-Object -Property Name)
+    $HostVms | ForEach-Object {
+        if($_.Name -eq $Script:VM.Name){
+            Write-Host "The VM already exist, will be deleted."
+            Remove-VM -Name $TestVMName -Force
+        }
+    }
+}
+
+function Deploy-VirtualNetworkSwitches {
+    Write-Host "Deploy virtual network switches for this test suite."
+    $VNetName = $Script:Setup.lab.network.name
+    $VmNetworkAdapter = Get-VMNetworkAdapter -All | Where { $_.Name -eq $VNetName }
+    if ($VmNetworkAdapter -eq $null) {
+        Write-Host "Create a new internal virtual switch."
+        New-VMSwitch -Name $VNetName -SwitchType Internal
+        # Wait for the operating system to refresh the newly created network adapter
+        Wait-TestSuiteActivityComplete -ActivityName "virtual switch $($VNetName)" -TimeoutInSeconds 5
+    }
+    $VmNetworkAdapter = Get-VMNetworkAdapter -All | Where { $_.Name -eq $Vnet.name }
+}
+
 function Main {    
+    Read-Configurationfile
     Download-VHD
     Check-HostPrerequisites
+    Clean-VM
+    Deploy-VirtualNetworkSwitches
 }
 
 Main
