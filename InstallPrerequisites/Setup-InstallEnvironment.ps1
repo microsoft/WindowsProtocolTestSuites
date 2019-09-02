@@ -228,14 +228,14 @@ Function Create-TestSuiteVM {
         }
         
         Write-Host "Check whether VHD file exists or not."
-        $Vm.disk = "$WinteropProtocolTesting\VM\InstallPrerequisites\\InstallPrerequisites.vhd"
-        Write-Host "Vm.disk: $Vm.disk"
-        if (!(Test-Path $Vm.disk)) {
-            Write-Host "$($Vm.disk) file not found." -Exit
+        $VmDisk = "$WinteropProtocolTesting\VM\InstallPrerequisites\\InstallPrerequisites.vhd"
+        Write-Host "Vm.disk: $VmDisk"
+        if (!(Test-Path $VmDisk)) {
+            Write-Host "$($VmDisk) file not found." -Exit
         }
 
         Write-Host "Attach VHD to this virtual machine."
-        Add-VMHardDiskDrive -VMName $Vm.hypervname -ControllerType IDE -ControllerNumber 0 -ControllerLocation 0 -Path $Vm.disk
+        Add-VMHardDiskDrive -VMName $Vm.hypervname -ControllerType IDE -ControllerNumber 0 -ControllerLocation 0 -Path $VmDisk
 
         Write-Host "Set the VM note with the Current User, Computer Name and IP Addresses (The note will be shown in VStorm Portal as VM Description)."
         $VmNote = $env:USERNAME + ": " + $Vm.name + ": " + $Vm.ip
