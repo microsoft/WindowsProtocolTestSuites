@@ -252,7 +252,6 @@ function Main {
     Clean-VM
     Deploy-VirtualNetworkSwitches
     Deploy-TestSuiteVirtualMachines
-    Deploy-TestSuiteVirtualMachines
 }
 
 Main
