@@ -144,7 +144,7 @@ function Clean-VM {
     $HostVms | ForEach-Object {
         if($_.Name -eq $Script:VM.Name){
             Write-Host "The VM already exist, will be deleted."
-            Remove-VM -Name $TestVMName -Force
+            Remove-VM -Name $Script:VM.Name -Force
         }
     }
 }
