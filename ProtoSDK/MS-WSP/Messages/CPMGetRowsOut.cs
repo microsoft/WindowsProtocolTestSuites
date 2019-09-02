@@ -164,7 +164,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                             }
 
                             // TypeMarshal does not support read data by 64-bit offset, so cast dataOffset to int here.
-                            Rows[i].Columns[j].Data = ReadValueByType(Rows[i].Columns[j].rowVariant.vType, (int)dataOffset, buffer); 
+                            Rows[i].Columns[j].Data = ReadValueByType(Rows[i].Columns[j].rowVariant.vType, Convert.ToInt32(dataOffset), buffer); 
                         }
                         else
                         {
