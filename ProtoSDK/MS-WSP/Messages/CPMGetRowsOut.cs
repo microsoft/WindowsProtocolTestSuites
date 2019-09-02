@@ -153,22 +153,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                             Rows[i].Columns[j].rowVariant.Is64bit = this.Is64Bit;
                             WspBuffer rowVariantBuffer = new WspBuffer(buffer.ReadBytesFromOffset(valueOffset, BindingRequest.aColumns[j].ValueSize.Value));
                             Rows[i].Columns[j].rowVariant.FromBytes(rowVariantBuffer);
-                            object dataOffset;
+                            int dataOffset;
                             if (this.Is64Bit)
                             {
                                 // If 64-bit offsets are being used, the reserved2 field of the message header is used as the upper 32-bits and _ulClientBase as the lower 32-bits of a 64-bit value.
                                 Int64 clientBase = Convert.ToInt64(Request.Header._ulReserved2);
                                 clientBase = clientBase << 32;
                                 clientBase += ((CPMGetRowsIn)Request)._ulClientBase;
-                                dataOffset = (Int64)Rows[i].Columns[j].rowVariant.Offset - clientBase;
+
+                                // Since the ReadBuffer cannot excced 0x4000, so the dataOffset should be a 32-bit value.
+                                dataOffset = Convert.ToInt32((Int64)Rows[i].Columns[j].rowVariant.Offset - clientBase); 
                             }
                             else
                             {
                                 dataOffset = (Int32)Rows[i].Columns[j].rowVariant.Offset - (int)((CPMGetRowsIn)Request)._ulClientBase;
                             }
 
-                            // Since the ReadBuffer cannot excceed 0x4000, so the dataOffset (the offset inside the ReadBuffer) should be a 32-bit value.
-                            Rows[i].Columns[j].Data = ReadValueByType(Rows[i].Columns[j].rowVariant.vType, Convert.ToInt32(dataOffset), buffer); 
+                            Rows[i].Columns[j].Data = ReadValueByType(Rows[i].Columns[j].rowVariant.vType, dataOffset, buffer); 
                         }
                         else
                         {
