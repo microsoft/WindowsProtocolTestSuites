@@ -20,6 +20,21 @@ Write-Host "WinteropProtocolTesting: $WinteropProtocolTesting"
 Write-Host "=============================================="
 
 #------------------------------------------------------------------------------------------
+# Sleeping for a particular amount of time to wait for an activity to be completed
+#------------------------------------------------------------------------------------------
+Function Wait-TestSuiteActivityComplete {
+    Param(
+    [Parameter(ValueFromPipeline=$True)]
+    [string]$ActivityName,
+    [int]$TimeoutInSeconds = 0)
+
+    for ([int]$Tick = 0; $Tick -le $TimeoutInSeconds; $Tick++) {
+        Write-Progress -Activity "Wait for $ActivityName ..." -SecondsRemaining ($TimeoutInSeconds - $Tick) -PercentComplete (($Tick / $TimeoutInSeconds) * 100)
+        if ($Tick -lt $TimeoutInSeconds) { Start-Sleep 1 }
+    }
+    Write-Progress -Activity "Wait for $ActivityName ..." -Completed
+}
+#------------------------------------------------------------------------------------------
 # Format the input xml file and display it to the screen
 #------------------------------------------------------------------------------------------
 Function Format-TestSuiteXml {
