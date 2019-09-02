@@ -43,11 +43,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// MessageBuilder builds client requests
         /// </summary>
-        MessageBuilder builder = null;
+        public MessageBuilder builder = null;
         /// <summary>
         /// Validates Server responses
         /// </summary>
-        MessageValidator validator = null;
+        public MessageValidator validator = null;
         /// <summary>
         /// Maps list of connected clients
         /// </summary>
@@ -351,63 +351,50 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         public void CPMCreateQueryIn(bool ENABLEROWSETEVENTS)
         {
-            uint[] cursor = null;// to be obtained from the server
-            uint numberOfCategorization = 0;
             string queryScope = wspTestSite.Properties.Get("QueryPath");
             string queryText = wspTestSite.Properties.Get("QueryText");
 
-            // Get hold of appropriate Sender (Pipe with/without connection)
+            var queryInMessage = builder.GetCPMCreateQueryIn(queryScope, queryText, ENABLEROWSETEVENTS);
+
+            CPMCreateQueryIn(
+                queryInMessage.ColumnSet,
+                queryInMessage.RestrictionArray,
+                queryInMessage.SortSet,
+                queryInMessage.CCategorizationSet,
+                queryInMessage.RowSetProperties,
+                queryInMessage.PidMapper,
+                queryInMessage.GroupArray,
+                queryInMessage.Lcid);
+        }
+
+        /// <summary>
+        /// Create and send CPMCreateQueryIn and expect response.
+        /// </summary>
+        public void CPMCreateQueryIn(
+            CColumnSet? columnSet,
+            CRestrictionArray? restrictionArray,
+            CInGroupSortAggregSets? sortSet,
+            CCategorizationSet? categorizationSet,
+            CRowsetProperties rowsetProperties,
+            CPidMapper pidMapper,
+            CColumnGroupArray groupArray,
+            uint lcid)
+        {
             var client = GetClient(isClientConnected);
-            var queryInMessage = builder.GetCPMCreateQueryIn(queryScope, queryText, out numberOfCategorization, ENABLEROWSETEVENTS);
-            //get checkSum field (It has to be same in the response)
-            var queryInMessageBytes = Helper.ToBytes(queryInMessage);
-            uint checkSum = GetCheckSumField(queryInMessageBytes);
-            client.SendCPMCreateQueryIn(queryInMessage.ColumnSet, queryInMessage.RestrictionArray, queryInMessage.SortSet, queryInMessage.CCategorizationSet, queryInMessage.RowSetProperties, queryInMessage.PidMapper, queryInMessage.GroupArray, queryInMessage.Lcid);
-            // If the Pipe is not the one with CPMConnectionIn request 
-            //already sent
-            if (client == defaultClient)
+
+            client.SendCPMCreateQueryIn(columnSet, restrictionArray, sortSet, categorizationSet, rowsetProperties, pidMapper, groupArray, lcid);
+
+            CPMCreateQueryOut response;
+            client.ExpectMessage<CPMCreateQueryOut>(out response);
+
+            if (response.Header._status == 0)
             {
-                // This means that disconnect message has been sent
-                // through the pipe which does not have a connect In
-                // sent across it.
-                // If the sender.SendMessage() method is successful
-                // Requirement 598 is validated
-                wspTestSite.CaptureRequirement(598,
-                   "In Windows the same pipe connection is used for the " +
-                   "following messages, except when the error is returned" +
-                   "in a CPMConnectOut message.");
+                uint[] cursor = null;// to be obtained from the server
+                validator.ValidateCreateQueryOutResponse(response, out cursor);
+                cursorMap.Add(clientMachineName, cursor[0]);
             }
-            // RequestSender objects uses path '\\pipe\\MSFTEWDS'
-            // for the protocol transport
-            wspTestSite.CaptureRequirement(3, @"All messages MUST be " +
-                "transported using a named pipe: \\pipe\\MSFTEWDS");
-            // If there is any object listening to this event
-            if (CPMCreateQueryOutResponse != null)
-            {
-                CPMCreateQueryOut queryOutMessage;
 
-                client.ExpectMessage(out queryOutMessage);
-
-                uint msgId = (UInt32)queryOutMessage.Header._msg;
-                uint msgStatus = queryOutMessage.Header._status;
-                if (msgStatus != 0) // Error Condition
-                {
-                    // Req 620 is validated.
-                    wspTestSite.CaptureRequirement(620,
-                        "Whenever an error occurs during processing of a " +
-                        "message sent by a client, the server MUST set the " +
-                        "_status field to the error code value.");
-                }
-                if ((msgId == (uint)MessageType.CPMCreateQueryOut)
-                    && (msgStatus == 0x00000000))
-                {
-                    queryOutMessage.Request = queryInMessage;
-
-                    validator.ValidateCreateQueryOutResponse(queryOutMessage, numberOfCategorization, out cursor);
-                    cursorMap.Add(clientMachineName, cursor[0]);
-                }
-                CPMCreateQueryOutResponse(msgStatus);
-            }
+            CPMCreateQueryOutResponse(response.Header._status);
         }
 
         /// <summary>
