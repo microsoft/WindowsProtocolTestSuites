@@ -148,7 +148,8 @@ function Clean-VM {
 
 function Deploy-VirtualNetworkSwitches {
     Write-Host "Deploy virtual network switches for this test suite."
-    $VNetName = $Script:Setup.lab.network.name
+    $VNetName = $Script:Setup.lab.network.vnet.name
+    Write-Host "VNetName: $VNetName"
     $VmNetworkAdapter = Get-VMNetworkAdapter -All | Where { $_.Name -eq $VNetName }
     if ($VmNetworkAdapter -eq $null) {
         Write-Host "Create a new internal virtual switch. Name:$VNetName"
@@ -158,7 +159,7 @@ function Deploy-VirtualNetworkSwitches {
     }
     $VmNetworkAdapter = Get-VMNetworkAdapter -All | Where { $_.Name -eq $Vnet.name }
     if ($VmNetworkAdapter -eq $null) {
-        Write-TestSuiteError $("No virtual network adapter found by the newly created virtual switch's name - " + $Vnet.name) -Exit
+        Write-Host $("No virtual network adapter found by the newly created virtual switch's name - " + $Vnet.name) -Exit
     }
     else {
         $VmNetworkAdapter | Format-Table -Property Name, SwitchName, DeviceID, MacAddress, Status -AutoSize
