@@ -83,6 +83,7 @@ function Download-VHD {
     }
     Copy-Item "$VHDPath\$VHDName" -Destination "$WinteropProtocolTesting\VM\InstallPrerequisites\" -Force
     Rename-Item "$WinteropProtocolTesting\VM\InstallPrerequisites\$VHDName" -NewName "InstallPrerequisites.vhd" -Force
+    $Script:VmDirPath = "$WinteropProtocolTesting\VM\InstallPrerequisites\\InstallPrerequisites.vhd"
     Write-Host "Copy VHD finished"
 }
 
@@ -176,12 +177,84 @@ function Deploy-VirtualNetworkSwitches {
     }
 }
 
+#------------------------------------------------------------------------------------------
+# Create virtual machine
+#------------------------------------------------------------------------------------------
+Function Create-TestSuiteVM {
+    Param(
+    [Parameter(ValueFromPipeline=$True)]
+    $Vm)
+    
+    Process {
+
+        Write-Host "Start creating VM for $($Vm.hypervname)."
+
+        Write-Host "Create a new virtual machine with name - $($Vm.hypervname) under location - $($Script:VmDirPath)."
+        New-VM -Name $Vm.hypervname -Path $Script:VmDirPath
+
+        Write-Host "Configure the CPU for this virtual machine to - $($Vm.cpu)."
+        Set-VM -Name $Vm.hypervname -ProcessorCount $Vm.cpu
+
+        $VmMem = [int]$Vm.memory * 1024 * 1024
+        Write-Host "Configure the memory for this virtual machine to - $($Vm.memory) MB ($VmMem Bytes)."
+        if (($Vm.minimumram -ne $null) -and ($Vm.maximumram -ne $null)) {
+            $MinMem = [int]$Vm.minimumram * 1024 * 1024
+            $MaxMem = [int]$Vm.maximumram * 1024 * 1024
+            Write-Host "Minimum memory - $($Vm.minimumram) MB ($MinMem Bytes) and Maximum memory - $($Vm.maximumram) MB ($MaxMem Bytes)."
+            Set-VM -Name $Vm.hypervname -DynamicMemory -MemoryStartupBytes $VmMem -MemoryMinimumBytes $MinMem -MemoryMaximumBytes $MaxMem
+        }
+        else {
+            Set-VM -Name $Vm.hypervname -StaticMemory -MemoryStartupBytes $VmMem
+        }
+
+        Write-Host "Remove the existing virtual network adapters of this virtual machine."
+        Remove-VMNetworkAdapter -VMName $Vm.hypervname
+        
+        Write-Host "Add a new virtual network adapter to this virtual machine, and connect it to the following virtual switches."
+        $NicNumber = 0;
+        [array]$ServerVnet    = $Vm.vnet
+        $VirtualSwitch = $ServerVnet[0]
+        foreach($ip in $Vm.ip) {
+            if($ServerVnet.Count -gt 1)
+            {
+                $VirtualSwitch = $ServerVnet[$NicNumber]
+            }
+            
+            Write-Host "set virtual network adapter for ip:$ip - $VirtualSwitch"
+            Add-VMNetworkAdapter -VMName $Vm.hypervname -SwitchName $VirtualSwitch
+            $NicNumber++;
+        }
+
+        Write-Host "Wait for create VHD job to be ready within 3600 seconds."
+        $Job = Get-Job -Name "Create VHD for $($Vm.hypervname)"
+        while($Job.State -eq "running") {
+            Wait-Host -ActivityName "Create VHD for $($Vm.hypervname)" -TimeoutInSeconds 5
+        }
+        $Job | Wait-Job -Timeout 3600
+        Write-Host "Check whether VHD file exists or not."
+        if (!(Test-Path $Vm.disk)) {
+            Write-Host "$($Vm.disk) file not found." -Exit
+        }
+
+        Write-Host "Attach VHD to this virtual machine."
+        Add-VMHardDiskDrive -VMName $Vm.hypervname -ControllerType IDE -ControllerNumber 0 -ControllerLocation 0 -Path $Vm.disk
+
+        Write-Host "Set the VM note with the Current User, Computer Name and IP Addresses (The note will be shown in VStorm Portal as VM Description)."
+        $VmNote = $env:USERNAME + ": " + $Vm.name + ": " + $Vm.ip
+        Set-VM -VMName $Vm.hypervname -Notes $VmNote
+    }
+}
+Function Deploy-TestSuiteVirtualMachines {
+    Download-VHD
+    $Script:VM | Sort -Property installorder | Create-TestSuiteVM
+}
 function Main {    
     Read-Configurationfile
-    Download-VHD
     Check-HostPrerequisites
     Clean-VM
     Deploy-VirtualNetworkSwitches
+    Deploy-TestSuiteVirtualMachines
+    Deploy-TestSuiteVirtualMachines
 }
 
 Main
