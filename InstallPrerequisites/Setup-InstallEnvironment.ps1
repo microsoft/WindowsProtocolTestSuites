@@ -151,12 +151,28 @@ function Deploy-VirtualNetworkSwitches {
     $VNetName = $Script:Setup.lab.network.name
     $VmNetworkAdapter = Get-VMNetworkAdapter -All | Where { $_.Name -eq $VNetName }
     if ($VmNetworkAdapter -eq $null) {
-        Write-Host "Create a new internal virtual switch."
+        Write-Host "Create a new internal virtual switch. Name:$VNetName"
         New-VMSwitch -Name $VNetName -SwitchType Internal
         # Wait for the operating system to refresh the newly created network adapter
         Wait-TestSuiteActivityComplete -ActivityName "virtual switch $($VNetName)" -TimeoutInSeconds 5
     }
     $VmNetworkAdapter = Get-VMNetworkAdapter -All | Where { $_.Name -eq $Vnet.name }
+    if ($VmNetworkAdapter -eq $null) {
+        Write-TestSuiteError $("No virtual network adapter found by the newly created virtual switch's name - " + $Vnet.name) -Exit
+    }
+    else {
+        $VmNetworkAdapter | Format-Table -Property Name, SwitchName, DeviceID, MacAddress, Status -AutoSize
+
+        Write-Host "Set the statistic IP address and subnet to this physical network adapter."
+        if($([IPAddress]$Vnet.ip).AddressFamily -eq "InterNetwork") {
+            netsh interface ipv4 set address $NetworkAdapter.InterfaceIndex static $Vnet.ip $Vnet.subnet
+            Write-TestSuiteSuccess $("IP address - " + $Vnet.ip + " and subnet - " + $Vnet.subnet + " have been updated.")
+        }
+        else {
+            netsh interface ipv6 set address $NetworkAdapter.interfaceindex $Vnet.ip
+            Write-TestSuiteSuccess $("IP address - " + $Vnet.ip + " has been updated.")
+        }
+    }
 }
 
 function Main {    
