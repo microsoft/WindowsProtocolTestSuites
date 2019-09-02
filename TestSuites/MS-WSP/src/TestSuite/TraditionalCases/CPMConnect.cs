@@ -147,7 +147,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             switch (argumentType)
             {
                 case ArgumentType.AllValid:
-                    Site.Assert.AreEqual((uint)0, errorCode, "Server should return succeed for COMConnectIn.");
+                    Site.Assert.AreEqual((uint)WspErrorCode.SUCCESS, errorCode, "Server should return succeed for COMConnectIn.");
                     break;
                 case ArgumentType.InvalidIsClientRemote:
                     Site.Assert.AreEqual((uint)WspErrorCode.STATUS_INVALID_PARAMETER, errorCode, "Server should return STATUS_INVALID_PARAMETER if isClientRemote of CPMConnectIn is invalid.");
