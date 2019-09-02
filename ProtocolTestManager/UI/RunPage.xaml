@@ -163,7 +163,7 @@
                 <Separator />
                 <MenuItem x:Name="SaveProfile" Header="Save Profile ..." Click="SaveProfile_Click"/>
                 <Separator />
-                <MenuItem x:Name="ExportTextCaseList" Header="Export Plain Text Report ..." Click="GenerateTextReport_Click"/>
+                <MenuItem x:Name="ExportTestReport" Header="Export Test Report ..." Click="GenerateTestReport_Click"/>
             </MenuItem>
         </Menu>
         <GridSplitter Grid.Column="1" Width="5" AutomationProperties.Name="Splitter" Margin="0,21,0,0" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>

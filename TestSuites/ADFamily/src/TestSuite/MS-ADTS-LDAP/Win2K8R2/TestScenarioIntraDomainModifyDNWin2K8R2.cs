@@ -4807,11 +4807,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                             this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
-                                        "CN=Administrator,CN=Users,DC=adts88",
+                                        $"CN={Utilities.DomainAdmin},CN=Users,DC=adts88",
                                         this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
-                                                    "CN=Administrator1,CN=Users,DC=adts88",
+                                                    $"CN={Utilities.DomainAdmin}1,CN=Users,DC=adts88",
                                                     this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                 "Head",
                                                                 "Tail"}, new object[] {
@@ -5212,7 +5212,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                         this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
-                                                    "CN=Administrator,CN=Users,DC=adts88",
+                                                    $"CN={Utilities.DomainAdmin},CN=Users,DC=adts88",
                                                     this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                 "Head",
                                                                 "Tail"}, new object[] {
@@ -7617,7 +7617,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                             this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
-                                        "CN=Administrator,CN=Users,DC=adts88",
+                                        $"CN={Utilities.DomainAdmin},CN=Users,DC=adts88",
                                         this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
@@ -13307,11 +13307,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                             this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
-                                        "CN=Administrator,CN=Users,DC=adts88",
+                                        $"CN={Utilities.DomainAdmin},CN=Users,DC=adts88",
                                         this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
-                                                    "CN=Administrator1,CN=Users,DC=adts88",
+                                                    $"CN={Utilities.DomainAdmin}1,CN=Users,DC=adts88",
                                                     this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                 "Head",
                                                                 "Tail"}, new object[] {
@@ -15282,7 +15282,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             TestManagerHelpers.AssertAreEqual<ConstrOnAddOpErrs>(this.Manager, ConstrOnAddOpErrs.success, temp340, "errorStatus of AddOperation, state S786");
             this.Manager.Comment("reaching state \'S830\'");
             ConstrOnModDNOpErrs temp341;
-            this.Manager.Comment("executing step \'call ModifyDNOperation([\"CN=Administrator,CN=Users,DC=adts88\",\"nu" +
+            this.Manager.Comment($"executing step \'call ModifyDNOperation([\"CN={Utilities.DomainAdmin},CN=Users,DC=adts88\",\"nu" +
                     "ll,CN=Users,DC=adts88\",\"true\"],RIGHT_DS_WRITE_PROPERTYWithRIGHT_DELETE,RIGHT_DS_" +
                     "CREATE_CHILD,INVALID_RIGHT,False,NoExtendedControl,Windows2K8R2,False,out _)\'");
             this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
@@ -15290,7 +15290,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                             this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
-                                        "CN=Administrator,CN=Users,DC=adts88",
+                                        $"CN={Utilities.DomainAdmin},CN=Users,DC=adts88",
                                         this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
@@ -16511,7 +16511,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                         this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
-                                                    "CN=Administrator,CN=Users,DC=adts88",
+                                                    $"CN={Utilities.DomainAdmin},CN=Users,DC=adts88",
                                                     this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                 "Head",
                                                                 "Tail"}, new object[] {

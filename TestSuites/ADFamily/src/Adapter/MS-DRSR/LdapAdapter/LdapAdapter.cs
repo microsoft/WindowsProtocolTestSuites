@@ -357,7 +357,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             return r;
         }
 
-        public object GetAttributeValue(
+        public byte[] GetAttributeValueInBytes(
             DsServer dc,
             string dn,
             string attributeName,
@@ -365,7 +365,18 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             System.DirectoryServices.Protocols.SearchScope searchScope
                 = System.DirectoryServices.Protocols.SearchScope.Base)
         {
-            return LdapUtility.GetAttributeValue(dc, dn, attributeName, ldapFilter, searchScope);
+            return LdapUtility.GetAttributeValueInBytes(dc, dn, attributeName, ldapFilter, searchScope);
+        }
+
+        public string GetAttributeValueInString(
+            DsServer dc,
+            string dn,
+            string attributeName,
+            string ldapFilter = "(objectClass=*)",
+            System.DirectoryServices.Protocols.SearchScope searchScope
+                = System.DirectoryServices.Protocols.SearchScope.Base)
+        {
+            return LdapUtility.GetAttributeValueInString(dc, dn, attributeName, ldapFilter, searchScope);
         }
 
         /// <summary>
@@ -430,8 +441,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         public string GetUserDn(DsServer dc, DsUser user)
         {
             RootDSE rootDse = LdapUtility.GetRootDSE(dc);
-            return (string)
-                GetAttributeValue(
+            return GetAttributeValueInString(
                 dc,
                 rootDse.defaultNamingContext,
                 "distinguishedName",
@@ -504,7 +514,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             string attrName = "msDS-KeyCredentialLink";
             string filter = "(objectClass=*)";
             System.DirectoryServices.Protocols.SearchScope scope = System.DirectoryServices.Protocols.SearchScope.Subtree;
-            string binVal = (string)GetAttributeValue(dc, dn, attrName, filter, scope);
+            string binVal = GetAttributeValueInString(dc, dn, attrName, filter, scope);
 
             string[] result = binVal.Split(new string[] {":"}, StringSplitOptions.RemoveEmptyEntries);
             return result[result.Length - 1];
@@ -944,7 +954,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
             // Basic
             srv.Domain = GetDomainInfo(serverDnsName, user);
-            srv.NetbiosName = (string)GetAttributeValue(srv, rootDse.serverName, "name");
+            srv.NetbiosName = GetAttributeValueInString(srv, rootDse.serverName, "name");
             srv.DnsHostName = rootDse.dnsHostName;
 
             // Server
@@ -953,7 +963,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
             // NTDS Settings
             srv.NtdsDsaObjectName = rootDse.dsServiceName;
-            srv.InvocationId = new Guid((byte[])LdapUtility.GetAttributeValue(srv, rootDse.dsServiceName, "invocationid"));
+            srv.InvocationId = new Guid(LdapUtility.GetAttributeValueInBytes(srv, rootDse.dsServiceName, "invocationid"));
             srv.NtdsDsaObjectGuid = LdapUtility.GetObjectGuid(srv, rootDse.dsServiceName).Value;
 
             if (isDc)
@@ -964,7 +974,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             if (isDc)
             {
                 // Computer
-                srv.ComputerObjectName = (string)GetAttributeValue(
+                srv.ComputerObjectName = GetAttributeValueInString(
                     srv,
                     "OU=Domain Controllers," + rootDse.defaultNamingContext,
                     "distinguishedName",
@@ -1094,7 +1104,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         public UPTODATE_VECTOR_V1_EXT GetReplUTD(DsServer dc, NamingContext nc)
         {
             string baseDn = LdapUtility.GetDnFromNcType(dc, nc);
-            byte[] data = (byte[])GetAttributeValue(dc, baseDn, "replUpToDateVector");
+            byte[] data = GetAttributeValueInBytes(dc, baseDn, "replUpToDateVector");
 
             // replUpToDateVector contains a UPTODATE_VECTOR_V2_EXT structure.
             // We make a V1 structure instead.
@@ -1134,27 +1144,27 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             {
                 string defaultNC = LdapUtility.ConvertUshortArrayToString(
                     ((AddsDomain)domain).DomainNC.StringName);
-                string pdcOwner = (string)GetAttributeValue(dc, defaultNC, fsmoAttr);
+                string pdcOwner = GetAttributeValueInString(dc, defaultNC, fsmoAttr);
                 domain.FsmoRoleOwners[FSMORoles.PDC] = pdcOwner;
 
                 // RID pool manager master
                 string ridNC = "CN=RID Manager$, CN=System, " + defaultNC;
-                domain.FsmoRoleOwners[FSMORoles.RidAllocation] = (string)GetAttributeValue(dc, ridNC, fsmoAttr);
+                domain.FsmoRoleOwners[FSMORoles.RidAllocation] = GetAttributeValueInString(dc, ridNC, fsmoAttr);
 
                 // Infrastructure master
                 string infraNC = "CN=Infrastructure, " + defaultNC;
-                domain.FsmoRoleOwners[FSMORoles.Infrastructure] = (string)GetAttributeValue(dc, infraNC, fsmoAttr);
+                domain.FsmoRoleOwners[FSMORoles.Infrastructure] = GetAttributeValueInString(dc, infraNC, fsmoAttr);
             }
 
             // Schema master
             string schemaNC = LdapUtility.ConvertUshortArrayToString(
                 domain.SchemaNC.StringName);
-            domain.FsmoRoleOwners[FSMORoles.Schema] = (string)GetAttributeValue(dc, schemaNC, fsmoAttr);
+            domain.FsmoRoleOwners[FSMORoles.Schema] = GetAttributeValueInString(dc, schemaNC, fsmoAttr);
 
             // Domain naming master
             string namingNC = "CN=Partitions, " + LdapUtility.ConvertUshortArrayToString(
                 domain.ConfigNC.StringName);
-            domain.FsmoRoleOwners[FSMORoles.DomainNaming] = (string)GetAttributeValue(dc, namingNC, fsmoAttr);
+            domain.FsmoRoleOwners[FSMORoles.DomainNaming] = GetAttributeValueInString(dc, namingNC, fsmoAttr);
 
             return true;
         }
@@ -1229,7 +1239,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                     {
                         // For performance concern, we first find the "whenCreated"'s
                         // corresponding attrTyp by querying one arbitrary object once.
-                        byte[] metaDataBer = (byte[])GetAttributeValue(
+                        byte[] metaDataBer = GetAttributeValueInBytes(
                             dc,
                             entry.DistinguishedName,
                             "replPropertyMetaData"
@@ -1254,7 +1264,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
                             if (oid == null) continue;
 
-                            string name = (string)GetAttributeValue(
+                            string name = GetAttributeValueInString(
                                 dc,
                                 schemaNc,
                                 "lDAPDisplayName",
@@ -1321,12 +1331,12 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Convert.ToUInt64(System.String)")]
         public ulong GetRidAllocationPoolFromDSA(DsServer dc, string dn)
         {
-            string serverReference = (string)GetAttributeValue(dc, dn, "serverReference");
-            string ridSetReference = (string)GetAttributeValue(dc, serverReference, "ridSetReferences");
+            string serverReference = GetAttributeValueInString(dc, dn, "serverReference");
+            string ridSetReference = GetAttributeValueInString(dc, serverReference, "ridSetReferences");
 
             if (ridSetReference != null)
             {
-                string allocPool = (string)GetAttributeValue(dc, ridSetReference, "rIDAllocationPool");
+                string allocPool = GetAttributeValueInString(dc, ridSetReference, "rIDAllocationPool");
                 return Convert.ToUInt64(allocPool);
             }
             return 0;
@@ -1335,7 +1345,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Convert.ToUInt64(System.String)")]
         public ulong GetRidAllocationPoolFromRIDManager(DsServer dc, string dn)
         {
-            string allocPool = (string)GetAttributeValue(dc, dn, "rIDAvailablePool");
+            string allocPool = GetAttributeValueInString(dc, dn, "rIDAvailablePool");
             return Convert.ToUInt64(allocPool);
 
         }
@@ -1709,14 +1719,14 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             foreach (DirectoryAttribute a in attrCol)
             {
                 string attrName = a.Name;
-                string attrOid = (string)GetAttributeValue(
+                string attrOid = GetAttributeValueInString(
                     dc,
                     rootDse.schemaNamingContext,
                     "attributeID",
                     "(lDAPDisplayName=" + attrName + ")",
                     System.DirectoryServices.Protocols.SearchScope.OneLevel
                     );
-                string attrSyx = (string)GetAttributeValue(
+                string attrSyx = GetAttributeValueInString(
                     dc,
                     rootDse.schemaNamingContext,
                     "attributeSyntax",
@@ -1788,14 +1798,14 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             foreach (DirectoryAttribute a in attCollection)
             {
                 string attrName = a.Name;
-                string attrOid = (string)GetAttributeValue(
+                string attrOid = GetAttributeValueInString(
                     dc,
                     rootDse.schemaNamingContext,
                     "attributeID",
                     "(lDAPDisplayName=" + attrName + ")",
                     System.DirectoryServices.Protocols.SearchScope.OneLevel
                     );
-                string attrSyx = (string)GetAttributeValue(
+                string attrSyx = GetAttributeValueInString(
                     dc,
                     rootDse.schemaNamingContext,
                     "attributeSyntax",
@@ -1849,14 +1859,14 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             SCHEMA_PREFIX_TABLE prefixTable = OIDUtility.CreatePrefixTable();
 
             string attrName = att.Name;
-            string attrOid = (string)GetAttributeValue(
+            string attrOid = GetAttributeValueInString(
                 dc,
                 rootDse.schemaNamingContext,
                 "attributeID",
                 "(lDAPDisplayName=" + attrName + ")",
                 System.DirectoryServices.Protocols.SearchScope.OneLevel
                 );
-            string attrSyx = (string)GetAttributeValue(
+            string attrSyx = GetAttributeValueInString(
                 dc,
                 rootDse.schemaNamingContext,
                 "attributeSyntax",
@@ -1948,14 +1958,14 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                         if (a.Name.ToLower() == "objectsid" || a.Name.ToLower() == "samaccounttype" || a.Name.ToLower() == "samaccountname")
                             continue;
                     }
-                    string attrOid = (string)GetAttributeValue(
+                    string attrOid = GetAttributeValueInString(
                         dc,
                         rootDse.schemaNamingContext,
                         "attributeID",
                         "(lDAPDisplayName=" + attrName + ")",
                         System.DirectoryServices.Protocols.SearchScope.OneLevel
                         );
-                    string attrSyx = (string)GetAttributeValue(
+                    string attrSyx = GetAttributeValueInString(
                         dc,
                         rootDse.schemaNamingContext,
                         "attributeSyntax",

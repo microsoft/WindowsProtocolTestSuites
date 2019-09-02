@@ -11,7 +11,7 @@
 	The Category is used to specify which set of tools need to be downloaded and installed, based on different test suite names, such as "FileServer", Categories are defined in PrerequisitesConfig.xml
 	and you can update this configure file to achieve your requirement.
 	Currently we support the following Categories:
-	* BuildTestSuites (choose this category if you want to build the test suites from source code. To build the test suites of ADFamily/MS-AZOD/MS-ADOD, you need to choose the specific test suite name and run InstallPrerequisites.ps1 again.)
+	* BuildTestSuites (choose this category if you want to build the test suites/PTM from source code. To build the test suites of ADFamily/MS-AZOD/MS-ADOD, you need to choose the specific test suite name and run InstallPrerequisites.ps1 again.)
 	* FileServer
 	* Kerberos
 	* SMB
@@ -27,24 +27,17 @@
 
 .EXAMPLE
 	When you want to run the File Server test suite, type the command below:
-	C:\PS>.\InstallPrerequisites.ps1 -Category 'FileServer' -ConfigPath ".\PrerequisitesConfig.xml"
+	C:\PS>.\InstallPrerequisites.ps1 -Category FileServer -ConfigPath ".\PrerequisitesConfig.xml"
 	The PS script will get all tools defined under FileServer node in PrerequisitesConfig.xml, then download and install these tools.
 #>
 
 Param
 (
-	[parameter(Mandatory=$true, ValueFromPipeline=$true, HelpMessage="The Category is used to specify which set of tools need to be downloaded and installed, based on different test suite names, such as FileServer")]
+	[parameter(Mandatory=$true, ValueFromPipeline=$true, HelpMessage="If you want to run a specific test suite, please input the test suite name as Category, such as FileServer. If you want to build test suites or PTM, input BuildTestSuites as Category")]
 	[String]$Category,
 	[parameter(Mandatory=$false, ValueFromPipeline=$true, HelpMessage="The ConfigPath is used to specify prerequisites configure file path")]
 	[String]$ConfigPath
 )
-
-# ==========================
-# Global Variable 
-# ==========================
-
-# The path where the Visual Studio will be installed
-$VSInstallationPath = "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community"
 
 Function CheckInternetConnection{
   
@@ -118,6 +111,7 @@ Function CheckIfAppInstalled
 Function CheckIfVSExtensionInstalled
 {
 	Param(
+		$VSInstallationPaths,
 		[string]$AppName, # App name
 		[string]$DllName  # The Dll name of the extension. It can be found in the .vsix file if you change it to .zip and unzip it.
 	)
@@ -131,10 +125,22 @@ Function CheckIfVSExtensionInstalled
 
 	# Search the dll name in the extension folder of VS installation path.
 	# If the dll name can be found, then the extension is installed.  
-	$DllPath = Get-ChildItem -Path $VSInstallationPath\Common7\IDE\Extensions -Filter $DllName -Recurse
-	if(-not $DllPath)
+
+	foreach ($path in $VSInstallationPaths)
 	{
-		return $false
+		if (($AppName -match "2017" -and $path -match "2017") -or ($AppName -match "2019" -and $path -match "2019"))
+		{
+			$DllPath = Get-ChildItem -Path $path\Common7\IDE\Extensions -Filter $DllName -Recurse
+			if(-not $DllPath)
+			{
+				Write-Host "$AppName is not installed in $path" -ForegroundColor Yellow
+				return $false
+			}
+			else 
+			{
+				Write-Host "$AppName is already installed in $path"	
+			}
+		}
 	}
 
 	return $true
@@ -325,10 +331,26 @@ Function DownloadAndInstallApplication
 	}    
 }
 
-# Download and install prerequisite visual studio extension
+# Find the Visual Studio installation path of a specific version
+Function FindSpecificVersionOfVisualStudio
+{
+	param(
+		$Version,
+		$VSInstallationPaths
+	)
+
+	[string[]]$VSPath = $VSInstallationPaths | Where-Object{$_ -match $Version}
+
+	# VS extension can be installed on all the same versions of the Visual studio ( For example, 2019 Enterprise, 2019 Professional ) at one time. 		
+	# So only one path is enough.
+	return $VSPath[0]
+}
+
+# Download and install visual studio extension
 Function DownloadAndInstallVsExtension
 {
 	param(
+		$VSInstallationPaths,
 		$AppItem,
 		[string]$OutputPath
 	)
@@ -341,9 +363,23 @@ Function DownloadAndInstallVsExtension
 	Write-Host $content
 
 	$FLAGS  = $AppItem.Arguments
-	$ExitCode = 0
 
-	$ExitCode = $ExitCode = (Start-Process -FILEPATH "$VSInstallationPath\Common7\IDE\vsixinstaller.exe" -ArgumentList "$OutputPath $FLAGS" -Wait -PassThru).ExitCode
+	if ($AppItem -match "2017")
+	{
+		$path = FindSpecificVersionOfVisualStudio -Version 2017 -VSInstallationPaths $VSInstallationPaths
+	}
+	elseif ($AppItem -match "2019") 
+	{
+		$path = FindSpecificVersionOfVisualStudio -Version 2019 -VSInstallationPaths $VSInstallationPaths	
+	}
+	else
+	{
+		$failedList += $AppItem.Name
+		$content = "Install " + $AppItem.Name +" failed, we only support install Visual Studio 2017 or 2019 extensions now."
+		Write-Host "ERROR $content"; 
+	}
+
+	$ExitCode = (Start-Process -FILEPATH "$path\Common7\IDE\vsixinstaller.exe" -ArgumentList "$OutputPath $FLAGS" -Wait -PassThru).ExitCode
 
 	if ($ExitCode -NE 0)
 	{
@@ -359,7 +395,40 @@ Function DownloadAndInstallVsExtension
 	{
 		$failedList += $AppItem.Name
 		$content = "Install " + $AppItem.Name +" failed, Error Code:" + $ExitCode
-		Write-Host "ERROR $ExitCode"; 
+		Write-Host "ERROR $content"; 
+	}
+}
+
+# Get the installation path of Visual Studio
+Function GetVSInstallationPaths
+{
+	if ([IntPtr]::Size -eq 4)  # 32-bit
+	{
+		$VSWherePath = "${env:ProgramFiles}\Microsoft Visual Studio\Installer\vswhere.exe"
+	}
+	else # 64-bit
+	{
+		$VSWherePath = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+	}
+
+	$VSWherePathExisted = Test-Path -Path $VSWherePath
+
+	if ($VSWherePathExisted -eq $false)
+	{
+		Write-Host "$VSWherePath is not found."	-ForegroundColor Yellow
+		return $null
+	}
+
+	$VSInstallationPaths = cmd /c "`"$VSWherePath`" -format value -property installationPath"
+	if ($VSInstallationPaths)
+	{
+		Write-Host "Installation path of Visual Studio is $VSInstallationPaths." 
+		return $VSInstallationPaths			
+	}
+	else
+	{
+		Write-Host "Did not find installation path of Visual Studio." -ForegroundColor Yellow
+		return $null				
 	}
 }
 
@@ -427,7 +496,6 @@ foreach($item in $downloadList)
 		"Custom" {
 			$isInstalled = & "$currentPath\$($item.Command)" -Action Check
 			if($isInstalled) {
-				Write-Host "$($item.Name) has already been installed." -ForegroundColor Green
 				continue
 			}
 
@@ -448,8 +516,11 @@ foreach($item in $downloadList)
 			if($result) {
 				Write-Host "$($item.Name) is installed successfully." -ForegroundColor Green
 			}
-			else {
+			else 
+			{
+				$failedList += $item.Name
 				Write-Host "Failed to install $($item.Name)!" -ForegroundColor Red
+				break
 			}
 		}
 		"Installer" {
@@ -475,7 +546,7 @@ foreach($item in $downloadList)
 					$IsInstalled = $false;
 					$ErrorMessage = $_.Exception.Message
 					Write-Host $ErrorMessage -ForegroundColor Red
-					Break;
+					Break
 				}
 
 				if($item.NeedRestart)
@@ -493,11 +564,24 @@ foreach($item in $downloadList)
 				{
 					$content = $item.AppName + " is already installed"
 				}
-				Write-Host $content -ForegroundColor Green
+				Write-Host $content
 			}
 		}
 		"VsExtension" {
-			$isInstalled = CheckIfVSExtensionInstalled -AppName $item.AppName -DllName $item.DllName
+			# Get VS installation path
+			if (-not $VSInstallationPaths)
+			{
+				$VSInstallationPaths = GetVSInstallationPaths
+			}
+
+			if (-not $VSInstallationPaths)
+			{
+				Write-Host "VS Extension cannot be installed" -ForegroundColor red
+				$failedList += $item.Name
+				break
+			}
+
+			$isInstalled = CheckIfVSExtensionInstalled -VSInstallationPaths $VSInstallationPaths -AppName $item.AppName -DllName $item.DllName
 
 			if(-not $isInstalled)
 			{
@@ -512,20 +596,20 @@ foreach($item in $downloadList)
 
 				try
 				{
-					DownloadAndInstallVsExtension -AppItem $item -OutputPath $outputPath
+					DownloadAndInstallVsExtension -VSInstallationPaths $VSInstallationPaths -AppItem $item -OutputPath $outputPath
 				}
 				catch
 				{
 					$failedList += $item.Name
-					$IsInstalled = $false;
+					$IsInstalled = $false
 					$ErrorMessage = $_.Exception.Message
 					Write-Host $ErrorMessage -ForegroundColor Red
-					Break;
+					Break
 				}
 
 				if($item.NeedRestart)
 				{
-					$IsNeedRestart = $true;
+					$IsNeedRestart = $true
 				}
 			}
 		}

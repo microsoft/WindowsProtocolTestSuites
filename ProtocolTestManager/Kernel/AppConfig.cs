@@ -43,9 +43,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public const string HtmlLogStatusInconclusive = "Inconclusive";
 
         /// <summary>
-        /// Keyword used to search the test status in the html log file
+        /// Keyword used to search the test detail in the html log file
         /// </summary>
-        public const string ResultKeyword = "\"Result\":\"Result: ";
+        public const string DetailKeyword = "var detailObj=";
 
         /// <summary>
         /// File name of the index html

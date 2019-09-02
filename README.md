@@ -39,36 +39,55 @@ You should install the software listed below based on your testing purpose, incl
     |.NET|.NET Framework 4.7.1 SDK|.NET Framework 4.7.1 SDK||Required|
     |.NET|.NET Framework 4.7.1 targeting pack|.NET Framework 4.7.1 targeting pack|Required|Required|
     |Compilers, build tools, and runtime|C# and Visual Basic Roslyn compilers|C# and Visual Basic Roslyn compilers||Required|
-    |Compilers, build tools, and runtime|VC++ 2017 version 15.9 v14.16 latest v141 tools|MSVC v141 - VS 2017 C++ x64/x86 build tools (v14.16)||Required<sup>1</sup>|
-    |Compilers, build tools, and runtime|Visual C++ 2017 Redistributable Update|C++ 2019 Redistributable Update|Required<sup>1</sup>|Required<sup>1</sup>|
-    |Debugging and testing|Testing tools core features||Required<sup>2</sup>|Required<sup>2</sup>|
-    |Developent Activities|Visual Studio C++ core features|C++ core features||Required<sup>1</sup>|
-    |SDKs, libraries, and frameworks|Windows 10 SDK (10.0.16299.0) for Desktop C++ [x86 and x64]|Windows 10 SDK (10.0.16299.0)||Required<sup>1</sup>|
-1. [Spec Explorer 2010 v3.5.3146.0](https://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/)<br />
+    |Compilers, build tools, and runtime|VC++ 2017 version 15.9 v14.16 latest v141 tools|MSVC v141 - VS 2017 C++ x64/x86 build tools (v14.16)||Required<sup>[1](#footnote1)</sup>|
+    |Compilers, build tools, and runtime|Visual C++ 2017 Redistributable Update|C++ 2019 Redistributable Update|Required<sup>[1](#footnote1)</sup>|Required<sup>[1](#footnote1)</sup>|
+    |Debugging and testing|Testing tools core features||Required<sup>[2](#footnote2)</sup>|Required<sup>[2](#footnote2)</sup>|
+    |Developent Activities|Visual Studio C++ core features|C++ core features||Required<sup>[1](#footnote1)</sup>|
+    |SDKs, libraries, and frameworks|Windows 10 SDK (10.0.16299.0) for Desktop C++ [x86 and x64]|Windows 10 SDK (10.0.16299.0)||Required<sup>[1](#footnote1)</sup>|
+
+    Note:
+
+    <a name="footnote1">1</a>: This individual component is required by ADFamily, MS-SMBD or Protocol Test Manager which have C++ code.
+
+    <a name="footnote2">2</a>: This individual component is installed in Visual Studio 2019 by default.
+
+1. [Spec Explorer 2010 v3.5.3146.0](https://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/)
+
    It is only required if you want to build or run the test suites that contain Model-Based Test cases. If you want to regenerate Model-Based Test cases, you must install Visual Studio 2012.
-1. [Protocol Test Framework build 1.0 (build 1.0.6500.0)](https://github.com/Microsoft/ProtocolTestFramework/releases/tag/1.0.6500.0)<br />
+
+1. [Protocol Test Framework build 1.0 (build 1.0.7000.0)](https://github.com/Microsoft/ProtocolTestFramework/releases/tag/1.0.7000.0)
+
    You can use a released MSI file or build it from source code.
-1. Enable .NET Framework 3.5.1<br/>
+
+1. Enable .NET Framework 3.5.1
+
    1. _Turn Windows features on or off_
-   1. Enable _.NET Framework 3.5 (includes .NET 2.0 and 3.0)<br />
+   1. Enable _.NET Framework 3.5 (includes .NET 2.0 and 3.0)_
+
    This is necessary for WiX Toolset.
-1. [WiX Toolset v3.14](https://wixtoolset.org/releases/v3-14-0-2927/)<br />
-1. [WiX Toolset Visual Studio 2017 Extension](https://marketplace.visualstudio.com/items?itemName=WixToolset.WixToolsetVisualStudio2017Extension) or [Wix Toolset Visual Studio 2019 Extension](https://marketplace.visualstudio.com/items?itemName=WixToolset.WixToolsetVisualStudio2019Extension)<br />
+
+1. [WiX Toolset v3.14](https://wixtoolset.org/releases/v3-14-0-2927/)
+
+1. [WiX Toolset Visual Studio 2017 Extension](https://marketplace.visualstudio.com/items?itemName=WixToolset.WixToolsetVisualStudio2017Extension) or [Wix Toolset Visual Studio 2019 Extension](https://marketplace.visualstudio.com/items?itemName=WixToolset.WixToolsetVisualStudio2019Extension)
+
    WiX Toolset components required if you want to build test suites or Protocol Test Manager from source code.
-1. [NuGet CLI](https://www.nuget.org/downloads)<br />
+
+1. [NuGet CLI](https://www.nuget.org/downloads)
+
    It is required if you want to build Protocol Test Manager. Please download `nuget.exe` into a suitable folder and add that folder to `Path` environment variable 
-1. [Microsoft Message Analyzer](https://www.microsoft.com/en-us/download/details.aspx?id=44226)<br />
+
+1. [Microsoft Message Analyzer](https://www.microsoft.com/en-us/download/details.aspx?id=44226)
+
    It is required if you want to build or run ADFamily, ADOD and AZOD test suites.
-1. [Open XML SDK](https://www.microsoft.com/en-us/download/details.aspx?id=30425)<br />
+
+1. [Open XML SDK](https://www.microsoft.com/en-us/download/details.aspx?id=30425)
+
    It is required if you want to build or run ADFamily test suite.
-1. [Network Direct DDK](https://www.microsoft.com/en-us/download/details.aspx?id=26645)<br />
+
+1. [Network Direct DDK](https://www.microsoft.com/en-us/download/details.aspx?id=26645)
+
    From `NetworkDirect_DDK.zip` extract `ndspi.h` and `ndstatus.h` into project path `ProtoSDK\RDMA\include`. This is to build SMBD test suite.
 
-<small>Note:</small>
-
-<small>1: This individual component is required by ADFamily, MS-SMBD or Protocol Test Manager which have C++ code.</small>
-
-<small>2: This individual component is installed in Visual Studio 2019 by default.</small>
 
 You can use the script in `InstallPrerequisites` folder to automatically download and install these software.
 
@@ -120,7 +139,7 @@ cd WindowsProtocolTestSuites\ProtocolTestManager
 build.cmd
 ```
 
-After the build succeeds, the MSI file of Protocol Test Manager should be generated in the folder *WindowsProtocolTestSuite\drop\ProtocolTestManager\installer\.*
+After the build succeeds, the MSI file of Protocol Test Manager should be generated in the folder `WindowsProtocolTestSuite\drop\ProtocolTestManager\installer\`.
 
 ### Build a test suite
 
@@ -139,7 +158,7 @@ You can download and install the latest msi of test suites, Protocol Test Manage
 ## Run
 
 After the build succeeds, you could set up the test environment, install Protocol Test Manager and install/configure/run the test suite according to its **User Guide**.
-Each test suite has its own **User Guide** in the `WindowsProtocolTestSuites\TestSuites\\[TestSuiteName]\docs` folder.
+Each test suite has its own **User Guide** in the `WindowsProtocolTestSuites\TestSuites\[TestSuiteName]\docs` folder.
 There are two more documents in the same folder:
 
 * **Technical Document**. The Open Specifications documentation for protocols, published by Microsoft. It's the basis of developing Test Suites.
