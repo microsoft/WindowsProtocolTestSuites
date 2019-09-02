@@ -257,6 +257,14 @@
         <File Id="Microsoft.Protocols.TestManager.Kernel.XML"
               Source="$(var.SRCDIR)\bin\Microsoft.Protocols.TestManager.Kernel.XML" />
       </Component>
+      <Component Id="CommandLine.dll" Guid="{7AAF0E8D-7899-4F3A-8B7D-73A3A1CD93F4}" Feature="PTM_Feature">
+        <File Id="CommandLine.dll"
+              Source="$(var.SRCDIR)\bin\CommandLine.dll" />
+      </Component>
+      <Component Id="Newtonsoft.Json.dll" Guid="{94D59B9F-DA3E-4774-8C71-953F3842F0D8}" Feature="PTM_Feature">
+        <File Id="Newtonsoft.Json.dll"
+              Source="$(var.SRCDIR)\bin\Newtonsoft.Json.dll" />
+      </Component>
     </ComponentGroup>
     <ComponentGroup Id="ProductComponents_etc" Directory="ETCFOLDER">
 

@@ -64,6 +64,12 @@ if ErrorLevel 1 (
 	exit /b 1
 )
 
+%nuget% restore "%TestSuiteRoot%ProtocolTestManager\PtmCli\PtmCli.csproj" -SolutionDirectory "%TestSuiteRoot%ProtocolTestManager"
+if ErrorLevel 1 (
+	echo Error: Failed to restore NuGet dependencies
+	exit /b 1
+)
+
 %buildtool% "%TestSuiteRoot%ProtocolTestManager\deploy\ProtocolTestManagerInstaller.wixproj" /p:Platform="x64" /p:Configuration="Release" /t:clean;Rebuild /p:NoWarn=1591 /p:FORDEBUG=%DEBUGVER%
 if ErrorLevel 1 (
 	echo Error: Failed to build Protocol Test Manager

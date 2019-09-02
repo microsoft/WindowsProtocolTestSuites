@@ -381,7 +381,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                             RootDSE rootDse = LdapUtility.GetRootDSE(dc);
                             string schemaNc = rootDse.schemaNamingContext;
 
-                            v = (string)LdapUtility.GetAttributeValue(
+                            v = LdapUtility.GetAttributeValueInString(
                                 dc,
                                 schemaNc,
                                 "governsId",

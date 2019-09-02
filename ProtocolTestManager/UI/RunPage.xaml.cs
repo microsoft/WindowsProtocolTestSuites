@@ -428,11 +428,11 @@ namespace Microsoft.Protocols.TestManager.UI
             }
         }
 
-        private void GenerateTextReport_Click(object sender, RoutedEventArgs e)
+        private void GenerateTestReport_Click(object sender, RoutedEventArgs e)
         {
-            TextReportWindow textReport = new TextReportWindow();
-            textReport.Owner = Pages.mainWindow;
-            textReport.ShowDialog();
+            TestReportWindow testReport = new TestReportWindow();
+            testReport.Owner = Pages.mainWindow;
+            testReport.ShowDialog();
         }
 
         private void AbortExecution_Click(object sender, RoutedEventArgs e)

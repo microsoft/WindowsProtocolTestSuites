@@ -29,7 +29,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                 sidStr.AppendFormat(@"\{0:x2}", sid.Data[i]);
 
             string filter = "(objectSid=" + sidStr.ToString() + ")";
-            string dn = (string)GetAttributeValue(dc, baseDn, "distinguishedName", filter, System.DirectoryServices.Protocols.SearchScope.Subtree);
+            string dn = GetAttributeValueInString(dc, baseDn, "distinguishedName", filter, System.DirectoryServices.Protocols.SearchScope.Subtree);
 
             return LdapUtility.CreateDSNameForObject(dc, dn);
         }
@@ -180,7 +180,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1304:SpecifyCultureInfo", MessageId = "System.String.ToUpper")]
         string DomainNetBIOSNameFromDomain(DsServer dc, DSNAME domainNc)
         {
-            return ((string)GetAttributeValue(
+            return (GetAttributeValueInString(
                 dc,
                 LdapUtility.ConvertUshortArrayToString(domainNc.StringName),
                 "name")).ToUpper();
@@ -415,7 +415,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                         objDn = GetParentObjectDn(objDn);
                         if (objDn != null)
                         {
-                            string srvRef = (string)GetAttributeValue(dc, objDn, "serverReference");
+                            string srvRef = GetAttributeValueInString(dc, objDn, "serverReference");
                             rt = new DSNAME[] { GetDsName(dc, srvRef).Value };
                         }
                     }
@@ -490,7 +490,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             else
                 result = result + "/";
 
-            string name = (string)GetAttributeValue(dc, dn, "name");
+            string name = GetAttributeValueInString(dc, dn, "name");
             result = result + name;
             return result;
         }
@@ -505,14 +505,14 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             switch (formatDesired)
             {
                 case (uint)DS_NAME_FORMAT.DS_FQDN_1779_NAME:
-                    value = (string)GetAttributeValue(dc, dn, "distinguishedName");
+                    value = GetAttributeValueInString(dc, dn, "distinguishedName");
                     break;
                 case (uint)DS_NAME_FORMAT.DS_NT4_ACCOUNT_NAME:
                     value = DomainNetBIOSNameFromDomain(dc, GetObjectNC(dc, obj)) + "\\" +
-                        (string)GetAttributeValue(dc, dn, "sAMAccountName");
+                        GetAttributeValueInString(dc, dn, "sAMAccountName");
                     break;
                 case (uint)DS_NAME_FORMAT.DS_USER_PRINCIPAL_NAME:
-                    value = (string)GetAttributeValue(dc, dn, "userPrincipalName");
+                    value = GetAttributeValueInString(dc, dn, "userPrincipalName");
                     break;
                 case (uint)DS_NAME_FORMAT.DS_CANONICAL_NAME:
                     value = GetCanonicalName(dc, obj, false);
@@ -520,11 +520,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                 case (uint)DS_NAME_FORMAT.DS_UNIQUE_ID_NAME:
                     // curly-braced form.
                     value = "{"
-                        + (new Guid((byte[])GetAttributeValue(dc, dn, "objectGuid"))).ToString()
+                        + (new Guid(GetAttributeValueInBytes(dc, dn, "objectGuid"))).ToString()
                         + "}";
                     break;
                 case (uint)DS_NAME_FORMAT.DS_DISPLAY_NAME:
-                    value = (string)GetAttributeValue(dc, dn, "displayName");
+                    value = GetAttributeValueInString(dc, dn, "displayName");
                     break;
                 case (uint)DS_NAME_FORMAT.DS_SERVICE_PRINCIPAL_NAME:
                     return LdapUtility.GetAttributeValuesString(dc, dn, "servicePrincipalName");
@@ -536,11 +536,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                     break;
                 case (uint)formatDesired_Values.DS_USER_PRINCIPAL_NAME_FOR_LOGON:
                     {
-                        string upn = (string)GetAttributeValue(dc, dn, "userPrincipalName");
+                        string upn = GetAttributeValueInString(dc, dn, "userPrincipalName");
                         if (upn != null)
                             value = upn;
                         else
-                            value = (string)GetAttributeValue(dc, dn, "sAMAccountName") + "@"
+                            value = GetAttributeValueInString(dc, dn, "sAMAccountName") + "@"
                             + DomainNetBIOSNameFromDomain(dc, GetObjectNC(dc, obj));
                     }
                     break;
@@ -764,15 +764,15 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             out string dnsHostName,
             out string serverReference)
         {
-            dsaObjDn = (string)GetAttributeValue(
+            dsaObjDn = GetAttributeValueInString(
                 dc,
                 dn,
                 "distinguishedName",
                 "(objectClass=nTDSDSA)",
                 System.DirectoryServices.Protocols.SearchScope.Subtree
                 );
-            dnsHostName = (string)GetAttributeValue(dc, dn, "dNSHostName");
-            serverReference = (string)GetAttributeValue(dc, dn, "serverReference");
+            dnsHostName = GetAttributeValueInString(dc, dn, "dNSHostName");
+            serverReference = GetAttributeValueInString(dc, dn, "serverReference");
         }
 
         /// <summary>
@@ -913,7 +913,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
                 DsServer srv = new DsServer();
                 // find the dnsHostName of the server object
-                srv.DnsHostName = (string)GetAttributeValue(dc, serverObjDn, "dNSHostName");
+                srv.DnsHostName = GetAttributeValueInString(dc, serverObjDn, "dNSHostName");
                 srv.Site = new DsSite();
                 // Here, the site DN is actually the RDN of the site.
                 srv.Site.DN = siteObjDn.Split(',')[0].Remove(0, 3).Trim();
@@ -1159,7 +1159,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             DSNAME obj = rt[0];
             if (formatOffered == (uint)formatOffered_Values.DS_NT4_ACCOUNT_NAME_SANS_DOMAIN_EX)
             {
-                string uacStr = (string)GetAttributeValue(
+                string uacStr = GetAttributeValueInString(
                     dc,
                     LdapUtility.ConvertUshortArrayToString(obj.StringName),
                     "userAccountControl");

@@ -1,5 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using CommandLine;
+using CommandLine.Text;
 using Microsoft.Protocols.TestManager.Kernel;
 using System;
 using System.Collections.Generic;
@@ -15,8 +17,18 @@ namespace Microsoft.Protocols.TestManager.CLI
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA1016 Mark assemblies with AssemblyVersionAttribute")]
     class Program
     {
-
         static void Main(string[] args)
+        {
+            var parser = new Parser(cfg => {
+                cfg.CaseInsensitiveEnumValues = true;
+                cfg.HelpWriter = Console.Error;
+            });
+            parser.ParseArguments<Options>(args)
+                .WithParsed<Options>(opts => Run(opts))
+                .WithNotParsed<Options>(errs => HandleArgumentError(errs));
+        }
+
+        static void Run(Options options)
         {
             bool isNewInstance = false;
             Mutex mutex = new Mutex(true, "{FE998190-5B44-4816-9A65-295E8A1EBBA1}", out isNewInstance);
@@ -30,51 +42,24 @@ namespace Microsoft.Protocols.TestManager.CLI
 
             try
             {
-                Arguments arg = Arguments.Parse(args);
-
-                if (arg.Help)
-                {
-                    PrintHelpText();
-                    return;
-                }
-
                 Program p = new Program();
                 p.Init();
-                p.LoadTestSuite(arg.Profile);
+                p.LoadTestSuite(options.Profile);
 
-                List<TestCase> testCases = (arg.Category != null) ? p.GetTestCases(arg.Category) : p.GetTestCases(arg.SelectedOnly);
+                List<TestCase> testCases = (options.Categories.Count() > 0) ? p.GetTestCases(options.Categories.ToList()) : p.GetTestCases(options.SelectedOnly);
 
                 p.RunTestSuite(testCases);
 
-                Utility.SortBy sortBy = Utility.SortBy.Name;
-                CaseListItem.Separator separator = CaseListItem.Separator.Space;
-                if (arg.SortBy != null) sortBy = Arguments.GetEnumArg<Utility.SortBy>("sortby", arg.SortBy);
-                if (arg.Separator != null) separator = Arguments.GetEnumArg<CaseListItem.Separator>("separator", arg.Separator);
-                string report = p.GenerateTextReport(arg.Report, arg.OutCome, sortBy, separator);
-
-                if (arg.Report != null)
+                if (options.ReportFile == null)
                 {
-                    using (StreamWriter sw = new StreamWriter(arg.Report))
-                    {
-                        sw.Write(report);
-                    }
+                    p.PrintTestReport(options.Outcome);
                 }
                 else
                 {
-                    Console.Write(report);
+                    p.SaveTestReport(options.ReportFile, options.ReportFormat, options.Outcome);
                 }
                 mutex.ReleaseMutex();
                 mutex = null;
-            }
-            catch (InvalidArgumentException e)
-            {
-                Console.Error.WriteLine("ERROR:");
-                Console.Error.WriteLine(e.Message);
-                Console.Error.WriteLine();
-                PrintHelpText();
-                mutex.ReleaseMutex();
-                mutex = null;
-                Environment.Exit(-1);
             }
             catch (Exception e)
             {
@@ -85,22 +70,22 @@ namespace Microsoft.Protocols.TestManager.CLI
                 Environment.Exit(-1);
             }
         }
-        static void PrintHelpText()
+
+        static void HandleArgumentError(IEnumerable<Error> errors)
         {
-            var ass = Assembly.GetExecutingAssembly();
-            System.Console.Write(StringResources.HelpText);
-            
+            Environment.Exit(-1);
         }
 
-        Utility util = new Utility();
-        TestSuiteFamilies testSuites;
+        Utility util;
+        List<TestSuiteInfo> testSuites;
 
         /// <summary>
         /// Initialize
         /// </summary>
         public void Init()
         {
-            testSuites = util.TestSuiteIntroduction;
+            util = new Utility();
+            testSuites = util.TestSuiteIntroduction.SelectMany(tsFamily => tsFamily).ToList();
         }
 
         /// <summary>
@@ -109,23 +94,25 @@ namespace Microsoft.Protocols.TestManager.CLI
         /// <param name="filename">Filename of the profile</param>
         public void LoadTestSuite(string filename)
         {
-            ProfileUtil profile = ProfileUtil.LoadProfile(filename);
-            TestSuiteInfo tsinfo = null;
-            foreach (var g in testSuites)
+            TestSuiteInfo tsinfo;
+            using (ProfileUtil profile = ProfileUtil.LoadProfile(filename))
             {
-                foreach (var info in g)
+                tsinfo = testSuites.Find(ts => ts.TestSuiteName == profile.Info.TestSuiteName);
+                if (tsinfo == null)
                 {
-                    if (profile.VerifyVersion(info.TestSuiteName, info.TestSuiteVersion))
-                    {
-                        tsinfo = info;
-                        goto FindTestSuite;
-                    }
+                    throw new ArgumentException(String.Format(StringResources.UnknownTestSuiteMessage, profile.Info.TestSuiteName));
                 }
             }
-            FindTestSuite:
-            profile.Dispose();
+
             util.LoadTestSuiteConfig(tsinfo);
             util.LoadTestSuiteAssembly();
+
+            string newProfile;
+            if (util.TryUpgradeProfileSettings(filename, out newProfile))
+            {
+                Console.WriteLine(String.Format(StringResources.PtmProfileUpgraded, newProfile));
+                filename = newProfile;
+            }
             util.LoadProfileSettings(filename);
         }
 
@@ -147,10 +134,9 @@ namespace Microsoft.Protocols.TestManager.CLI
         /// Get test cases using category paramter
         /// </summary>
         /// <param name="category">The specific category of test cases to run</param>
-        public List<TestCase> GetTestCases(string category)
+        public List<TestCase> GetTestCases(List<string> categories)
         {
             List<TestCase> testCaseList = new List<TestCase>();
-            List<string> categories = new List<string>(category.Split(','));
 
             Filter filter = new Filter(categories, RuleType.Selector);
             foreach (TestCase testcase in util.GetTestSuite().TestCaseList)
@@ -187,22 +173,37 @@ namespace Microsoft.Protocols.TestManager.CLI
         }
 
         /// <summary>
-        /// Generates text report.
+        /// Print plain test report to console.
         /// </summary>
-        public string GenerateTextReport(string filename, string outcome, Utility.SortBy sortBy, CaseListItem.Separator separator)
+        public void PrintTestReport(IEnumerable<Outcome> outcomes)
         {
-            string upperCaseOutcome = (outcome == null) ? null : outcome.ToUpper();
-            bool pass = true, fail = true, inconclusive = false, notrun = false;
-            if (outcome != null)
+            bool pass = outcomes.Contains(Outcome.Pass);
+            bool fail = outcomes.Contains(Outcome.Fail);
+            bool inconclusive = outcomes.Contains(Outcome.Inconclusive);
+
+            var testcases = util.SelectTestCases(pass, fail, inconclusive, false);
+            PlainReport report = new PlainReport(testcases);
+            Console.Write(report.GetPlainReport());
+        }
+
+        /// <summary>
+        /// Save test report to disk.
+        /// </summary>
+        public void SaveTestReport(string filename, ReportFormat format, IEnumerable<Outcome> outcomes)
+        {
+            bool pass = outcomes.Contains(Outcome.Pass);
+            bool fail = outcomes.Contains(Outcome.Fail);
+            bool inconclusive = outcomes.Contains(Outcome.Inconclusive);
+
+            var testcases = util.SelectTestCases(pass, fail, inconclusive, false);
+
+            TestReport report = TestReport.GetInstance(format.ToString(), testcases);
+            if (report == null)
             {
-                pass = upperCaseOutcome.Contains("PASS");
-                fail = upperCaseOutcome.Contains("FAIL");
-                inconclusive = upperCaseOutcome.Contains("INCONCLUSIVE");
-                notrun = upperCaseOutcome.Contains("NOTRUN");
+                throw new Exception(String.Format(StringResources.UnknownReportFormat, format.ToString()));
             }
-            var list = util.GenerateTextCaseListItems(pass,fail, inconclusive, notrun);
-            string report = Utility.GeneratePlainTextReport(list, true, sortBy, separator);
-            return report;
+
+            report.ExportReport(filename);
         }
     }
 }
