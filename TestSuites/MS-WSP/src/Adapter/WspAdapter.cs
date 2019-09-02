@@ -181,7 +181,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             parameter.BufferSize = UInt32.Parse(wspTestSite.Properties.Get("BufferSize"));
 
-            parameter.LCIDValue = UInt32.Parse(wspTestSite.Properties.Get("LCIDValue"));
+            parameter.LCID_VALUE = UInt32.Parse(wspTestSite.Properties.Get("LCID_VALUE"));
 
             parameter.ClientBase = UInt32.Parse(wspTestSite.Properties.Get("ClientBase"));
 

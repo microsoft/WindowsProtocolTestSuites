@@ -2,40 +2,40 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
     <Fragment>
         <DirectoryRef Id="TESTSUITE_BIN_DIR">
-            <Component Id="cmp80823DAC7B331DCB246F40DD49DF7B6D" Guid="{CB179C48-05F5-497E-B424-46CBA3C05A68}">
+            <Component Id="cmp80823DAC7B331DCB246F40DD49DF7B6D" Guid="{0F179B0A-9BD3-4706-881D-A7E654DFA020}">
                 <File Id="fil2B47AEC996AC9BF2B527E31190096B3B" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\CreateFile.ps1" />
             </Component>
-            <Component Id="cmpC3C02F84B5C6F7D643476D9639D7CEEE" Guid="{6D0D29FA-AFFF-4270-A063-1FC58430A903}">
+            <Component Id="cmpC3C02F84B5C6F7D643476D9639D7CEEE" Guid="{4087E47F-026E-486D-9FE4-560DDE889DAD}">
                 <File Id="fil0BA7077ED2096F1ADE59836A5B3DA28F" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\DeleteFile.ps1" />
             </Component>
-            <Component Id="cmp221AF26AEE86E6E3410C48FB452DD242" Guid="{975B0422-167F-4162-A5A3-AC9BD73718E5}">
+            <Component Id="cmp221AF26AEE86E6E3410C48FB452DD242" Guid="{4FE1493A-14B8-466F-A1FD-6188D9995757}">
                 <File Id="fil1C5354C4CEF88C9C55215B2421E8375F" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\Get-RemoteSystemDrive.ps1" />
             </Component>
-            <Component Id="cmpE73BADE04523EEFFBEF0F1505D570575" Guid="{E4E2A68B-0600-4839-84FF-3DA42A22E501}">
+            <Component Id="cmpE73BADE04523EEFFBEF0F1505D570575" Guid="{01686950-BDAC-413A-9B5A-7A511CD0EACB}">
                 <File Id="fil5067DB40DCBECA8F9D0BBD8F794200A8" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\ModifyFile.ps1" />
             </Component>
-            <Component Id="cmp0BC209E9AC70E11F9BB30F4366E79567" Guid="{63288206-BFFC-412C-A6B0-1D6537E2158E}">
+            <Component Id="cmp0BC209E9AC70E11F9BB30F4366E79567" Guid="{9C132319-B8BC-4703-B9A3-B790F0670707}">
                 <File Id="filE6FA422279F632CAE1E385C38A29CA7C" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\MS-WSP_ServerAdapter.dll" />
             </Component>
-            <Component Id="cmp5F16DCFD0D3A2B4FFA9401E3DBA03015" Guid="{54953D59-EAC7-4664-8280-5D39B79D694C}">
+            <Component Id="cmp5F16DCFD0D3A2B4FFA9401E3DBA03015" Guid="{005CB6FE-AEFC-4412-A0F4-599776EE7D17}">
                 <File Id="fil1795DA1F3412082580734E9E3C32959E" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\MS-WSP_ServerAdapter.pdb" />
             </Component>
-            <Component Id="cmpD05868BA4B83A7578726732A1D125E95" Guid="{498131C2-D29E-47D9-9EFE-47D5534785C3}">
+            <Component Id="cmpD05868BA4B83A7578726732A1D125E95" Guid="{CA6C0EF0-3F1D-483B-90EE-9B608FCB2DBB}">
                 <File Id="filFEBD915FB10F438355200075B324808E" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\MS-WSP_ServerTestSuite.deployment.ptfconfig" />
             </Component>
-            <Component Id="cmp3DEDCA92A557EA1FFCFE6EF09D466577" Guid="{B4F39A62-4A3C-4C17-9E44-14F6FB36ECE6}">
+            <Component Id="cmp3DEDCA92A557EA1FFCFE6EF09D466577" Guid="{88CA328A-4049-48F0-8FA4-C4C7214DB582}">
                 <File Id="fil0B40A45521B46B559B5A8C09AE835384" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\MS-WSP_ServerTestSuite.dll" />
             </Component>
-            <Component Id="cmp38ECC265F105317A157EE6F380ECD2B6" Guid="{13C71A24-3498-4EE0-A85C-44B62191CCEC}">
+            <Component Id="cmp38ECC265F105317A157EE6F380ECD2B6" Guid="{A67E5AA8-7EBD-4F68-817F-4A1C2DB04A03}">
                 <File Id="fil5C0CEDF262E0DCAA030CA190CB4E1822" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\MS-WSP_ServerTestSuite.pdb" />
             </Component>
-            <Component Id="cmp8988A775ECE8F65D07D98F900381FAA5" Guid="{8203631B-EA8D-483A-8616-BCF1294F22C9}">
+            <Component Id="cmp8988A775ECE8F65D07D98F900381FAA5" Guid="{DEB31FD8-4E2A-4DBF-9B63-FF869DC2BEDA}">
                 <File Id="fil84B58B713AA9914C1EFC891643B9A905" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\MS-WSP_ServerTestSuite.ptfconfig" />
             </Component>
-            <Component Id="cmpDA8FAB7B7E76761560D8EC14FC4D5FAE" Guid="{DDD45E77-05B1-4E2A-8932-E17CD90C8787}">
+            <Component Id="cmpDA8FAB7B7E76761560D8EC14FC4D5FAE" Guid="{B0F018B0-369E-45BD-91B7-899E8078473C}">
                 <File Id="filE3BBCFF25F47A9437BDE37854F0DC2A6" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\ServerLocalTestRun.testrunconfig" />
             </Component>
-            <Component Id="cmp37A94B53A263A46E9A54BFB05A9F27CA" Guid="{584AD451-79B7-4E02-A01A-780DA8CD2AF5}">
+            <Component Id="cmp37A94B53A263A46E9A54BFB05A9F27CA" Guid="{72BA3A8E-A347-4601-8359-A599D2296E7B}">
                 <File Id="fil07DCFC7190B5790A5646701EF3FEC28A" KeyPath="yes" Source="!(wix.TESTSUITE_BIN_DIR)\WSPRemoteExecute-Command.ps1" />
             </Component>
         </DirectoryRef>

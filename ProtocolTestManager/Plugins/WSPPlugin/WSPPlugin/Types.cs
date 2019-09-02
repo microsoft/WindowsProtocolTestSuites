@@ -81,7 +81,6 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
         public string UserName { get; set; }
 
         public string Password { get; set; }
-        public string ServerOSVersion { get; set; }
         public string SharedPath { get; set; }
 
         public string CatalogName { get; set; }
@@ -97,7 +96,7 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
         public bool IsServerWindows { get; set; }
         public string LanguageLocale { get; set; }
 
-        public string LCIDValue { get; set; }
+        public string LCID_VALUE { get; set; }
         
         /// <summary>
         /// Constructor.

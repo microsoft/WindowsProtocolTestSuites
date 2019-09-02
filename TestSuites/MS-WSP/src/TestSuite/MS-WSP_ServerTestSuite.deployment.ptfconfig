@@ -21,7 +21,7 @@
     <Property name="LanguageLocale" value="EN" />
     <!--en-us -->
     <!-- Name of the Language Locale ID value of all query string and query text-->
-    <Property name="LCIDValue" value="1033" />
+    <Property name="LCID_VALUE" value="1033" />
     <!-- Specify the Machine Architecture of the Server Under Test
     Whether it is 64 bit or 32 bit-->
     <Property name="ServerOffset" value="64" />

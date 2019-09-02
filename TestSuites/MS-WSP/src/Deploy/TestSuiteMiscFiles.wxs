@@ -2,6 +2,7 @@
 <?define SYMBOLS_DIR=$(env.TestSuiteRoot)\drop\TestSuites\MS-WSP\Bin?>
 <?define TESTSUITE_DROP_DIR=$(env.TestSuiteRoot)\drop\TestSuites\MS-WSP\Bin?>
 <?define PROTOSDK_SYMBOLS_DIR=$(env.TestSuiteRoot)\drop\ProtoSDK\Bin?>
+<?define PROTOSDK_DROP_DIR=$(env.TestSuiteRoot)\drop\ProtoSDK\Bin?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 	<Fragment>

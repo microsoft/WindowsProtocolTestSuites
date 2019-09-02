@@ -2,34 +2,34 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
     <Fragment>
         <DirectoryRef Id="TESTSUITE_COMMON_SCRIPTS_DIR">
-            <Component Id="cmp69B8870C3FB9A1D97A38D75E62CA08E1" Guid="{1D35618C-4A86-48B2-A1DA-7D583669645B}">
+            <Component Id="cmp69B8870C3FB9A1D97A38D75E62CA08E1" Guid="{B46FD22C-3DEB-4A51-B847-7B908BEEEEA3}">
                 <File Id="fil14B7992D7A9AB986631B635F15810A47" KeyPath="yes" Source="!(wix.TESTSUITE_COMMON_SCRIPTS_DIR)\checkMMA.cmd" />
             </Component>
-            <Component Id="cmpCAC45FB37CF6B079271C84DA44F1CF47" Guid="{72314DDE-6831-4F48-8A93-B05D6DC814C5}">
+            <Component Id="cmpCAC45FB37CF6B079271C84DA44F1CF47" Guid="{722BEDB6-4530-4522-80B0-232F96635262}">
                 <File Id="fil3C5F5AB8459494F1B1578F0CEFD4A058" KeyPath="yes" Source="!(wix.TESTSUITE_COMMON_SCRIPTS_DIR)\checkNuGet.cmd" />
             </Component>
-            <Component Id="cmpCD445738F31060DF38B9CDADD6E0F3BA" Guid="{8DF302EE-D019-4E7C-9E9E-D1C36810C0E2}">
+            <Component Id="cmpCD445738F31060DF38B9CDADD6E0F3BA" Guid="{406CE448-8D1C-4131-BF8B-7003C47B6D79}">
                 <File Id="filF70E9BB72D57B76BEC1E74700477D17B" KeyPath="yes" Source="!(wix.TESTSUITE_COMMON_SCRIPTS_DIR)\checkSpecExplorer.cmd" />
             </Component>
-            <Component Id="cmp2A5D0483EAA4C53D7C40CCDFDC73AD21" Guid="{3EC3DE38-E7E6-4685-8788-89D8C84CD21E}">
+            <Component Id="cmp2A5D0483EAA4C53D7C40CCDFDC73AD21" Guid="{77405FD8-BECB-45B1-BD89-1546F7A10C0B}">
                 <File Id="filD4B03B313179237B56FDA3700F0813B9" KeyPath="yes" Source="!(wix.TESTSUITE_COMMON_SCRIPTS_DIR)\checkWix.cmd" />
             </Component>
-            <Component Id="cmp7B238616C56646A0F9546616E965B919" Guid="{0ADC60BF-394A-4FD6-A2BE-D90641701003}">
+            <Component Id="cmp7B238616C56646A0F9546616E965B919" Guid="{B8EF73FB-6461-40E1-91C7-A412BFB7E065}">
                 <File Id="fil72188DE67D45A53FA4924AC4E59516F1" KeyPath="yes" Source="!(wix.TESTSUITE_COMMON_SCRIPTS_DIR)\setBuildTool.cmd" />
             </Component>
-            <Component Id="cmp627FF0D998CF77365FC3932EA0118E8E" Guid="{8587AA83-5EF4-48C4-91FE-827F1156A3B4}">
+            <Component Id="cmp627FF0D998CF77365FC3932EA0118E8E" Guid="{1F60F522-A831-4745-A763-AB523F007A65}">
                 <File Id="fil3FCF45AC35BF1CCAE622BC35C7908EB6" KeyPath="yes" Source="!(wix.TESTSUITE_COMMON_SCRIPTS_DIR)\setMSTestPath.cmd" />
             </Component>
-            <Component Id="cmp5269BAE4BDDC53742F5DFA484942FFE8" Guid="{65E19D43-1024-4933-813D-CA2431F8E7A3}">
+            <Component Id="cmp5269BAE4BDDC53742F5DFA484942FFE8" Guid="{AE4084FA-D1C6-41D3-B751-B12479607919}">
                 <File Id="fil073538DF550758965AB03C54F02B7DF7" KeyPath="yes" Source="!(wix.TESTSUITE_COMMON_SCRIPTS_DIR)\setPtfVer.cmd" />
             </Component>
-            <Component Id="cmp7053F11E12D1D14D785BA6981AEA189C" Guid="{6601B34A-26D3-47EC-BA8E-22D021AB7824}">
+            <Component Id="cmp7053F11E12D1D14D785BA6981AEA189C" Guid="{BD774DF6-704D-412A-9281-6FEEEC92C90A}">
                 <File Id="filFE878492F09201EA537F46CA49DB7805" KeyPath="yes" Source="!(wix.TESTSUITE_COMMON_SCRIPTS_DIR)\setTestSuiteVer.cmd" />
             </Component>
-            <Component Id="cmp7E33326DFB8E7F0E9AF4A2C582451505" Guid="{8793C013-24EE-435C-839B-16E8C5972F2C}">
+            <Component Id="cmp7E33326DFB8E7F0E9AF4A2C582451505" Guid="{28049C0C-4998-4419-A20F-D2C0AA9B4F59}">
                 <File Id="fil31B5C24CAE95FC990E41BA1D88878110" KeyPath="yes" Source="!(wix.TESTSUITE_COMMON_SCRIPTS_DIR)\setVsPath.cmd" />
             </Component>
-            <Component Id="cmp7010196E2A1AD764426B15C3E9C807E0" Guid="{9A7421DE-0C6B-43BB-9A56-F86D058FFB0A}">
+            <Component Id="cmp7010196E2A1AD764426B15C3E9C807E0" Guid="{64D8D000-146F-4B90-9986-842E97B26EFE}">
                 <File Id="fil90096FBCBF1A01C7A887696E0BAD925D" KeyPath="yes" Source="!(wix.TESTSUITE_COMMON_SCRIPTS_DIR)\setVsTestPath.cmd" />
             </Component>
         </DirectoryRef>

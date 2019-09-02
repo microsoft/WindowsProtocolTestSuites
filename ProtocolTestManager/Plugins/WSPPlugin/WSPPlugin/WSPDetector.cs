@@ -15,16 +15,18 @@ using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
 using System.Management;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic;
+using System.Globalization;
+using System.IO;
+using System.Diagnostics;
 
 namespace Microsoft.Protocols.TestManager.WSPServerPlugin
 {
 
-    public class WSPDetector : IDisposable
+    public class WSPDetector: IDisposable
     {
         public IPAddress SUTIpAddress { get; private set; }
-        public AccountCredential Credential { get; private set; }
 
-        public Logger logWriter;
+         public Logger logWriter;
 
         #region Variables
         private WspClient wspClient = new WspClient();           
@@ -57,8 +59,7 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
                 return sutName;
             }
         }
-       
-             
+                    
         public WSPDetector
             (Logger logger,
             DetectionInfo info
@@ -104,7 +105,11 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
                     else
                     {
                         this.SUTIpAddress = addList[0];
-                        DetectorUtil.WriteLog(string.Format("The SUT name {0} can be resolved as :", addList.ToString()), true, LogStyle.Default);
+                        DetectorUtil.WriteLog(string.Format("The SUT name {0} can be resolved as :", addList[0].ToString()), true, LogStyle.Default);
+                        if(detectionInfo.ServerComputerName == null)
+                        {
+                            detectionInfo.ServerComputerName = addList[0].ToString();
+                        }
                         DetectorUtil.WriteLog("Finished", true, LogStyle.StepPassed);
                         return true;
                     }
@@ -118,7 +123,7 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
             }
         }
 
-        public void CheckUsernamePassword(DetectionInfo info)
+        public bool CheckUsernamePassword(DetectionInfo info)
         {
             using (Smb2Client client = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
             {
@@ -126,7 +131,7 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
                 ulong sessionId;
                 Guid clientGuid;
                 NEGOTIATE_Response negotiateResp;
-                bool encryptionRequired;
+                bool encryptionRequired = false;
                 UserLogon(info, client, out messageId, out sessionId, out clientGuid, out negotiateResp, out encryptionRequired);
 
                 try
@@ -145,13 +150,17 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
                     if (header.Status != Smb2Status.STATUS_SUCCESS)
                     {
                         LogFailedStatus("LOGOFF", header.Status);
+                        return false;
                     }
+
                 }
                 catch (Exception e)
                 {
-                    // Swallow all exceptions when cleaning up.
-                    logWriter.AddLog(LogLevel.Information, "Exception in Cleanup: " + e.Message);
+                    return false;
                 }
+
+                return true;
+
             }
         }
 
@@ -328,38 +337,8 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
         public bool FetchPlatformInfo(ref DetectionInfo info)
         {
             string osArchitecture = info.ServerOffset;
-            string buildNum = info.ServerOSVersion;
             string caption = info.ServerVersion;
-
-            //Get sut os version and offset
-            try
-            {
-                ManagementObjectCollection resultCollection = QueryWmiObject(
-                    info.ServerComputerName,
-                    "SELECT * FROM Win32_OperatingSystem");
-
-                foreach (ManagementBaseObject result in resultCollection)
-                {
-                    foreach (var prop in result.Properties)
-                    {
-                        osArchitecture = result["OSArchitecture"].ToString();
-                        buildNum = result["BuildNumber"].ToString();
-                        caption = result["Caption"].ToString();
-                        break;
-                    }
-                }
-                info.ServerOSVersion = caption;
-                info.ServerOffset = String.CompareOrdinal(osArchitecture.Substring(0, 2), "64") == 0 ? "64" : "32";
-                info.ServerVersion = GetOSVersion(buildNum, osArchitecture, info.IsWDSInstalled).ToString();
-
-                // CPMConnectInRequest(ref info);
-            }
-            catch (Exception ex)
-            {                
-                logWriter.AddLog(LogLevel.Information, $"Detect OS Version failed with  Reason: {ex.Message}");
-                return false;   
-            }
-
+           
             //Get client computer os version and offset
             try
             {
@@ -367,6 +346,8 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
                     info.ClientName,
                     "SELECT * FROM Win32_OperatingSystem");
 
+                string buildNum = String.Empty;
+            
                 foreach (ManagementBaseObject result in resultCollection)
                 {
                     foreach (var prop in result.Properties)
@@ -376,14 +357,35 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
                         break;
                     }
                 }
-                info.ClientOffset = String.CompareOrdinal(osArchitecture.Substring(0,2), "64") == 0 ? "64" : "32";
+                info.ClientOffset = String.CompareOrdinal(osArchitecture.Substring(0, 2), "64") == 0 ? "64" : "32";
                 info.ClientVersion = GetOSVersion(buildNum, osArchitecture, false).ToString();
             }
             catch (Exception ex)
             {
                 logWriter.AddLog(LogLevel.Information, $"Detect OS Version failed with  Reason: {ex.Message}");
                 return false;
+            }            
+
+            //Get sut os version and offset
+            try
+            {
+                bool result = ConnectShareByNetUse(info.SharedPath, info);
+
+                if (result)
+                {
+                    CPMConnectInRequest(ref info);
+                }
+                else
+                {
+                    return false;
+                }
             }
+            catch (Exception ex)
+            {                
+                logWriter.AddLog(LogLevel.Information, $"Detect OS Version failed with  Reason: {ex.Message}");
+                return false;   
+            }
+
             return true;
         }
        
@@ -472,144 +474,52 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
             else
                 return Platform.NonWindows;
         }
-        private MessageBuilderParameter InitializeParameter()
+        private bool ConnectShareByNetUse(string sharePath, DetectionInfo info)
         {
-            Configs config = new Configs();
-            config.LoadDefaultValues();
-
-            char[] delimiter = new char[] { ',' };
-
-            var parameter = new MessageBuilderParameter();
-
-            parameter.PropertySet_One_DBProperties = config.PropertySet_One_DBProperties.Split(delimiter);
-
-            parameter.PropertySet_Two_DBProperties = config.PropertySet_Two_DBProperties.Split(delimiter);
-
-            parameter.Array_PropertySet_One_Guid = new Guid(config.Array_PropertySet_One_Guid);
-
-            parameter.Array_PropertySet_One_DBProperties = config.Array_PropertySet_One_DBProperties.Split(delimiter);
-
-            parameter.Array_PropertySet_Two_Guid = new Guid(config.Array_PropertySet_Two_Guid);
-
-            parameter.Array_PropertySet_Two_DBProperties = config.Array_PropertySet_Two_DBProperties.Split(delimiter);
-
-            parameter.Array_PropertySet_Three_Guid = new Guid(config.Array_PropertySet_Three_Guid);
-
-            parameter.Array_PropertySet_Three_DBProperties = config.Array_PropertySet_Three_DBProperties.Split(delimiter);
-
-            parameter.Array_PropertySet_Four_Guid = new Guid(config.Array_PropertySet_Four_Guid);
-
-            parameter.Array_PropertySet_Four_DBProperties = config.Array_PropertySet_Four_DBProperties.Split(delimiter);
-
-            parameter.EachRowSize = MessageBuilder.rowWidth;
-
-            parameter.EType = UInt32.Parse(config.EType);
-
-            parameter.BufferSize = UInt32.Parse(config.BufferSize);
-
-            parameter.LCIDValue = UInt32.Parse(config.LCIDValue);
-
-            parameter.ClientBase = UInt32.Parse(config.ClientBase);
-
-            parameter.RowsToTransfer = UInt32.Parse(config.RowsToTransfer);
-
-            parameter.NumberOfSetBindingsColumns = Int32.Parse(config.NumberOfSetBindingsColumns);
-
-            parameter.ColumnParameters = new MessageBuilderColumnParameter[parameter.NumberOfSetBindingsColumns];
-
+            try
+            {
+                Process process = new Process();
+                process.StartInfo.FileName = "net.exe";
+                process.StartInfo.Arguments = $"use {sharePath} {info.Password} /user:{info.DomainName}\\{info.UserName}";
+                process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.CreateNoWindow = true;
+                process.Start();
+                process.WaitForExit();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
             
-                parameter.ColumnParameters[0] = new MessageBuilderColumnParameter();
-
-                parameter.ColumnParameters[0].Guid = new Guid(config.columnGuid_0);
-
-                parameter.ColumnParameters[0].PropertyId = UInt32.Parse(config.columnPropertyId_0);
-
-                parameter.ColumnParameters[0].ValueOffset = UInt16.Parse(config.columnValueOffset_0);
-
-                parameter.ColumnParameters[0].StatusOffset = UInt16.Parse(config.columnStatusOffset_0);
-
-                parameter.ColumnParameters[0].LengthOffset = UInt16.Parse(config.columnLengthOffset_0);
-
-                parameter.ColumnParameters[0].StorageType = (StorageType)Enum.Parse(typeof(StorageType), config.columnStorageType_0);
-            
-            
-            return parameter;
         }
+        public object GetPropertyValue(object config, string propertyName)
+        {
+            return config.GetType().GetProperties()
+               .Single(pi => pi.Name == propertyName)
+               .GetValue(config, null);
+        }
+
         public void CPMConnectInRequest(ref DetectionInfo info)
         {
-           
-            Configs config = new Configs();
-            config.LoadDefaultValues();
-
-            char[] delimiter = new char[] { ',' };
-
             var parameter = new MessageBuilderParameter();
+            parameter = ServerHelper.BuildParameter();
 
-            parameter.PropertySet_One_DBProperties = config.PropertySet_One_DBProperties.Split(delimiter);
-
-            parameter.PropertySet_Two_DBProperties = config.PropertySet_Two_DBProperties.Split(delimiter);
-
-            parameter.Array_PropertySet_One_Guid = new Guid(config.Array_PropertySet_One_Guid);
-
-            parameter.Array_PropertySet_One_DBProperties = config.Array_PropertySet_One_DBProperties.Split(delimiter);
-
-            parameter.Array_PropertySet_Two_Guid = new Guid(config.Array_PropertySet_Two_Guid);
-
-            parameter.Array_PropertySet_Two_DBProperties = config.Array_PropertySet_Two_DBProperties.Split(delimiter);
-
-            parameter.Array_PropertySet_Three_Guid = new Guid(config.Array_PropertySet_Three_Guid);
-
-            parameter.Array_PropertySet_Three_DBProperties = config.Array_PropertySet_Three_DBProperties.Split(delimiter);
-
-            parameter.Array_PropertySet_Four_Guid = new Guid(config.Array_PropertySet_Four_Guid);
-
-            parameter.Array_PropertySet_Four_DBProperties = config.Array_PropertySet_Four_DBProperties.Split(delimiter);
-
-            parameter.EachRowSize = MessageBuilder.rowWidth;
-
-            parameter.EType = UInt32.Parse(config.EType);
-
-            parameter.BufferSize = UInt32.Parse(config.BufferSize);
-
-            parameter.LCIDValue = UInt32.Parse(config.LCIDValue);
-
-            parameter.ClientBase = UInt32.Parse(config.ClientBase);
-
-            parameter.RowsToTransfer = UInt32.Parse(config.RowsToTransfer);
-
-            parameter.NumberOfSetBindingsColumns = Int32.Parse(config.NumberOfSetBindingsColumns);
-
-            parameter.ColumnParameters = new MessageBuilderColumnParameter[parameter.NumberOfSetBindingsColumns];
-
-
-            parameter.ColumnParameters[0] = new MessageBuilderColumnParameter();
-
-            parameter.ColumnParameters[0].Guid = new Guid(config.columnGuid_0);
-
-            parameter.ColumnParameters[0].PropertyId = UInt32.Parse(config.columnPropertyId_0);
-
-            parameter.ColumnParameters[0].ValueOffset = UInt16.Parse(config.columnValueOffset_0);
-
-            parameter.ColumnParameters[0].StatusOffset = UInt16.Parse(config.columnStatusOffset_0);
-
-            parameter.ColumnParameters[0].LengthOffset = UInt16.Parse(config.columnLengthOffset_0);
-
-            parameter.ColumnParameters[0].StorageType = (StorageType)Enum.Parse(typeof(StorageType), config.columnStorageType_0);
-
-            
             MessageBuilder builder = new MessageBuilder(parameter);
-                string pipePath = string.Format(@"\\{0}\\pipe\MSFTEWDS", info.ServerComputerName);
+
+            string pipePath = string.Format(@"\\{0}\\pipe\MSFTEWDS", info.ServerComputerName);
             using (WspClient client = new WspClient())
             {
                 client.sender = new RequestSender(pipePath);
-                //connectedClients.Add(info.ClientName, client);
+
                 uint clientversion = 0;
                 uint.TryParse(info.ClientVersion, out clientversion);
 
                 string serverName = info.ServerComputerName;
                 var connectInMessage = builder.GetConnectInMessage(
                     clientversion,
-                    0, 
+                    1,//int isRemote
                     info.UserName, 
                     info.ClientName, 
                     info.ServerComputerName,
@@ -653,7 +563,16 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
                      = Helper.GetUInt(connectInMessageBytes, ref startingIndexconnect);
                     //if serverVersion equals 0x00000102, ir means Windows server 2008 with OS 32-bit
                     //if serverVersion equals 0x00010102, ir means Windows server 2008 with OS 64-bit
-                    info.ServerOSVersion = obtainedServerVersion.ToString();
+                    info.ServerVersion = obtainedServerVersion.ToString();
+                    if (obtainedServerVersion >= WspConsts.Is64bitVersion)
+                    {
+                        info.ServerOffset = "64";
+                    }
+                    else
+                    {
+                        info.ServerOffset = "32";
+                    }                               
+                    
                     logWriter.AddLog(LogLevel.Information, $"ObtainedServerVersion returned from CPMCoonnectOut message is: {obtainedServerVersion}.");
                 }
             }
@@ -692,7 +611,7 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
                 uint checkSumField = Helper.GetUInt(wspMessage, ref index);
                 return checkSumField;
             }
-            private void DetermineSUTIPAddress(IPAddress[] ips)
+        private void DetermineSUTIPAddress(IPAddress[] ips)
         {
             using (Smb2Client client = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
             {
@@ -722,9 +641,7 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
                     logWriter.AddLog(LogLevel.Error, string.Format("Can not connect to {0}.\r\nPlease check Target SUT.", SUTName));
                 }
             }
-        }
-
-       
+        }             
 
         private void LogIPConfig()
         {
@@ -734,104 +651,15 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
         }
 
         public bool FetchShareInfo(ref DetectionInfo info)
-        {           
-            bool result = false;            
-           
-            // Try to connect the share which is input by the user in the "Target Share" field of Auto-Detection page.
-            using (Smb2Client client = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
-            {
-                ulong messageId;
-                ulong sessionId;
-                uint treeId;
-                try
-                {
-                    logWriter.AddLog(LogLevel.Information, string.Format("Try to connect share {0}.", info.SharedPath));
-                    ConnectToShare(info.SharedPath, info, client, out messageId, out sessionId, out treeId);
-                    result = true;
-                }
-                catch(Exception ex)
-                {                    
-                    // Show error to user.
-                    logWriter.AddLog(LogLevel.Error, $"Did not find the share on SUT. Failed with error: ${ex.Message}. ");
-                }
-            }            
-
-            return result;
+        {   
+            return ConnectShareByNetUse(info.SharedPath, info);          
         }
 
         private void LogFailedStatus(string operation, uint status)
         {
             logWriter.AddLog(LogLevel.Information, string.Format(operation + " failed, status: {0}", Smb2Status.GetStatusCode(status)));
         }
-
         
-
-        /// <summary>
-        /// Negotiate, SessionSetup, TreeConnect
-        /// </summary>
-        /// <returns>Return true for success, false for failure</returns>
-        private void ConnectToShare(
-            string sharename,
-            DetectionInfo info,
-            Smb2Client client,
-            out ulong messageId,
-            out ulong sessionId,
-            out uint treeId)
-        {
-            Packet_Header header;
-            Guid clientGuid;
-            NEGOTIATE_Response negotiateResp;
-            bool encryptionRequired = false;
-            UserLogon(info, client, out messageId, out sessionId, out clientGuid, out negotiateResp, out encryptionRequired);
-
-            #region TreeConnect
-            
-            TREE_CONNECT_Response treeConnectResp;
-
-            logWriter.AddLog(LogLevel.Information, "Client sends TreeConnect to server");
-
-            client.TreeConnect(
-                1,
-                1,
-                Packet_Header_Flags_Values.NONE,
-                messageId++,
-                sessionId,
-                sharename,
-                out treeId,
-                out header,
-                out treeConnectResp);
-
-            if (header.Status != Smb2Status.STATUS_SUCCESS)
-            {
-                LogFailedStatus("TREECONNECT", header.Status);
-                logWriter.AddLog(LogLevel.Error, string.Format("TREECONNECT failed with " + Smb2Status.GetStatusCode(header.Status)));
-            }
-
-            try
-            {
-
-                TREE_DISCONNECT_Response treeDisconnectResponse;
-                client.TreeDisconnect(
-                    1,
-                    1,
-                    Packet_Header_Flags_Values.NONE,
-                    messageId++,
-                    sessionId,
-                    treeId,
-                    out header,
-                    out treeDisconnectResponse);
-
-                LOGOFF_Response logoffResponse;
-                client.LogOff(1, 1, Packet_Header_Flags_Values.NONE, messageId++, sessionId, out header, out logoffResponse);
-            }
-            catch (Exception ex)
-            {
-                treeId = 0;
-                logWriter.AddLog(LogLevel.Information, string.Format("TREECONNECT failed with: " + ex.Message));               
-            }
-            #endregion
-        }        
-
         /// <summary>
         /// Dispose
         /// </summary>

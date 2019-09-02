@@ -10,7 +10,6 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
     public class Configs
     {
         public string DomainName { get; set; }
-
         public string ServerComputerName { get; set; }
 
         public string ServerVersion { get; set; }
@@ -34,7 +33,7 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
         public string IsServerWindows { get; set; }
 
         public string LanguageLocale { get; set; }
-        public string LCIDValue { get; set; }
+        public string LCID_VALUE { get; set; }
         public string QueryPath { get; set; }
         public string QueryText { get; set; }
         public string CbChunk { get; set; }

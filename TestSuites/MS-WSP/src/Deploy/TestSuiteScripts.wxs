@@ -2,13 +2,13 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
     <Fragment>
         <DirectoryRef Id="TESTSUITE_SCRIPTS_DIR">
-            <Component Id="cmpD162C3EA8320CFDAD64F69DFE4F9D866" Guid="{2AA0633A-E813-4FA0-B4EC-BE44B9FEE122}">
+            <Component Id="cmpD162C3EA8320CFDAD64F69DFE4F9D866" Guid="{A7026DFF-1DE8-4E86-851F-567B85F6371E}">
                 <File Id="fil6C5CDD44C29F37714693859F2D0A9C4B" KeyPath="yes" Source="!(wix.TESTSUITE_SCRIPTS_DIR)\Config-Client.ps1" />
             </Component>
-            <Component Id="cmpF2F6F065C4F01B1B4A8B25E34C11E268" Guid="{59D4DEB2-D4D3-4445-A910-EDC3DCC6BE63}">
+            <Component Id="cmpF2F6F065C4F01B1B4A8B25E34C11E268" Guid="{577ECE37-7F6E-4E4B-95B2-C322AC1085C0}">
                 <File Id="filBBFBD2E245A7A31547098830FC3FBDCD" KeyPath="yes" Source="!(wix.TESTSUITE_SCRIPTS_DIR)\Config-DC.ps1" />
             </Component>
-            <Component Id="cmpC29664C0691E50DB2F28F241998503DC" Guid="{0D72E916-3E4F-4CDF-B674-D567DC6AF4F2}">
+            <Component Id="cmpC29664C0691E50DB2F28F241998503DC" Guid="{EF2CABA8-025A-482D-8700-FDF5A91E8CEE}">
                 <File Id="filAC23A885E318A340D3995D50F7FD2437" KeyPath="yes" Source="!(wix.TESTSUITE_SCRIPTS_DIR)\Config-Server.ps1" />
             </Component>
         </DirectoryRef>

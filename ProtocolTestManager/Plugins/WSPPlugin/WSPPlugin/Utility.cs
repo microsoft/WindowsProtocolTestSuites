@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
 
 namespace Microsoft.Protocols.TestManager.WSPServerPlugin
 {
@@ -58,7 +59,69 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
         static extern int NetApiBufferFree(IntPtr Buffer);
 
         #endregion
+        public static MessageBuilderParameter BuildParameter()
+        {
+            char[] delimiter = new char[] { ',' };
 
+            Configs config = new Configs();
+            config.LoadDefaultValues();
+
+            var parameter = new MessageBuilderParameter();
+
+            parameter.PropertySet_One_DBProperties = config.PropertySet_One_DBProperties.Split(delimiter);
+
+            parameter.PropertySet_Two_DBProperties = config.PropertySet_Two_DBProperties.Split(delimiter);
+
+            parameter.Array_PropertySet_One_Guid = new Guid(config.Array_PropertySet_One_Guid);
+
+            parameter.Array_PropertySet_One_DBProperties = config.Array_PropertySet_One_DBProperties.Split(delimiter);
+
+            parameter.Array_PropertySet_Two_Guid = new Guid(config.Array_PropertySet_Two_Guid);
+
+            parameter.Array_PropertySet_Two_DBProperties = config.Array_PropertySet_Two_DBProperties.Split(delimiter);
+
+            parameter.Array_PropertySet_Three_Guid = new Guid(config.Array_PropertySet_Three_Guid);
+
+            parameter.Array_PropertySet_Three_DBProperties = config.Array_PropertySet_Three_DBProperties.Split(delimiter);
+
+            parameter.Array_PropertySet_Four_Guid = new Guid(config.Array_PropertySet_Four_Guid);
+
+            parameter.Array_PropertySet_Four_DBProperties = config.Array_PropertySet_Four_DBProperties.Split(delimiter);
+
+            parameter.EachRowSize = MessageBuilder.rowWidth;
+
+            parameter.EType = UInt32.Parse(config.EType);
+
+            parameter.BufferSize = UInt32.Parse(config.BufferSize);
+
+            parameter.LCID_VALUE = UInt32.Parse(config.LCID_VALUE);
+
+            parameter.ClientBase = UInt32.Parse(config.ClientBase);
+
+            parameter.RowsToTransfer = UInt32.Parse(config.RowsToTransfer);
+
+            parameter.NumberOfSetBindingsColumns = Int32.Parse(config.NumberOfSetBindingsColumns);
+
+            parameter.ColumnParameters = new MessageBuilderColumnParameter[parameter.NumberOfSetBindingsColumns];
+
+            for (int i = 0; i < parameter.NumberOfSetBindingsColumns; i++)
+            {
+                parameter.ColumnParameters[i] = new MessageBuilderColumnParameter();
+
+                parameter.ColumnParameters[i].Guid = new Guid((string)config.GetType().GetProperty($"columnGuid_{i}").GetValue(config, null));
+
+                parameter.ColumnParameters[i].PropertyId = UInt32.Parse((string)config.GetType().GetProperty($"columnPropertyId_{i}").GetValue(config, null));
+
+                parameter.ColumnParameters[i].ValueOffset = UInt16.Parse((string)config.GetType().GetProperty($"columnValueOffset_{i}").GetValue(config, null));
+
+                parameter.ColumnParameters[i].StatusOffset = UInt16.Parse((string)config.GetType().GetProperty($"columnStatusOffset_{i}").GetValue(config, null));
+
+                parameter.ColumnParameters[i].LengthOffset = UInt16.Parse((string)config.GetType().GetProperty($"columnLengthOffset_{i}").GetValue(config, null));
+
+                parameter.ColumnParameters[i].StorageType = (StorageType)Enum.Parse(typeof(StorageType), (string)config.GetType().GetProperty($"columnStorageType_{i}").GetValue(config, null));
+            }
+            return parameter;
+        }
         public static string[] EnumShares(string serverName, string userName, string domainName, string password)
         {
             string[] shareList = null;

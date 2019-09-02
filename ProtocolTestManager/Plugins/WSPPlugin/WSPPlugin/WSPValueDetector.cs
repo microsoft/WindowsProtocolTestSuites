@@ -55,7 +55,7 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
         private const string IsServerWindows = "IsServerWindows";
 
         private const string LanguageLocale = "LanguageLocale";
-        private const string LCIDValue = "LCIDValue";
+        private const string LCID_VALUE = "LCID_VALUE";
         #endregion Private Types      
 
         #region Implemented IValueDetector
@@ -94,7 +94,7 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
             prereq.AddProperty(IsServerWindows, config.IsServerWindows);
             prereq.AddProperty(IsWDSInstalled, config.IsWDSInstalled);
             prereq.AddProperty(LanguageLocale, config.LanguageLocale);
-            prereq.AddProperty(LCIDValue, config.LCIDValue);
+            prereq.AddProperty(LCID_VALUE, config.LCID_VALUE);
             
             return prereq;
         }
@@ -123,7 +123,7 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
             detectionInfo.IsWDSInstalled = bool.Parse(properties[IsWDSInstalled]);
 
             detectionInfo.LanguageLocale = properties[LanguageLocale];
-            detectionInfo.LCIDValue = properties[LCIDValue];
+            detectionInfo.LCID_VALUE = properties[LCID_VALUE];
             this.properties = properties;
 
             // Check the validity of the inputs
@@ -197,7 +197,6 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
             propertiesDic.Add("DomainName", new List<string>() { detectionInfo.DomainName });
             propertiesDic.Add("UserName", new List<string>() { detectionInfo.UserName });
             propertiesDic.Add("Password", new List<string>() { detectionInfo.Password });
-            propertiesDic.Add("ServerOSVersion", new List<string>() { detectionInfo.ServerOSVersion });
             propertiesDic.Add("ServerVersion", new List<string>() { detectionInfo.ServerVersion });
             propertiesDic.Add("SharedPath", new List<string>() { detectionInfo.SharedPath });
             propertiesDic.Add("ServerOffset", new List<string>() { detectionInfo.ServerOffset });
@@ -301,19 +300,15 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
             {
                 result= detector.DetectSUTConnection(ref detectionInfo);
                 logWriter.AddLog(LogLevel.Information, "Passed", false, LogStyle.StepPassed);
-
             }
             catch (Exception ex)
             {
                 logWriter.AddLog(LogLevel.Warning, "Failed", false, LogStyle.StepFailed);
                 logWriter.AddLog(LogLevel.Error, ex.Message);
             }
-
-            logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);
-            logWriter.AddLineToLog(LogLevel.Information);
+            
             return result;
         }
-
         private bool CheckUsernamePassword(WSPDetector detector)
         {
             bool result = true;
@@ -322,17 +317,23 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
 
             try
             {
-                detector.CheckUsernamePassword(detectionInfo);
-                logWriter.AddLog(LogLevel.Information, "Finished", false, LogStyle.StepPassed);
-            }            
+                result = detector.CheckUsernamePassword(detectionInfo);
+                if (result)
+                {
+                    logWriter.AddLog(LogLevel.Information, "Finished", false, LogStyle.StepPassed);
+                }
+                else
+                {
+                    logWriter.AddLog(LogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                }
+            }
             catch (Exception ex)
             {
-                result = false;                
+                result = false;
                 logWriter.AddLineToLog(LogLevel.Information);
                 logWriter.AddLog(LogLevel.Error, string.Format("The User cannot log on:{0} \r\nPlease check the credential", ex.Message));
                 logWriter.AddLog(LogLevel.Warning, "Failed", false, LogStyle.StepFailed);
             }
-
             return result;
         }
 
@@ -347,7 +348,7 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
             }
             else
             {
-                logWriter.AddLog(LogLevel.Information, "Finished", false, LogStyle.StepFailed);
+                logWriter.AddLog(LogLevel.Information, "Failed", false, LogStyle.StepFailed);
             }
             return result;
         }            
@@ -359,15 +360,19 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
             try
             {
                 result = detector.FetchShareInfo(ref detectionInfo);
-                logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+                if (result)
+                {
+                    logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+                }
+                else
+                {
+                    logWriter.AddLog(LogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                }
             }
             catch (Exception ex)
             {
-                logWriter.AddLog(LogLevel.Warning, "Failed", false, LogStyle.StepFailed);
-                logWriter.AddLineToLog(LogLevel.Information);
-                logWriter.AddLog(LogLevel.Information, string.Format("FetchShareInfo failed, reason: {0}", ex.Message));
                 logWriter.AddLog(LogLevel.Error, string.Format("Detect share info failed. Cannot do further detection.", ex.Message));
-                logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepFailed);
+                logWriter.AddLog(LogLevel.Warning, "Failed", false, LogStyle.StepFailed);
             }
                        
             return result;
