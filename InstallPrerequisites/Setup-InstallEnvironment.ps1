@@ -240,6 +240,8 @@ Function Create-TestSuiteVM {
         Write-Host "Set the VM note with the Current User, Computer Name and IP Addresses (The note will be shown in VStorm Portal as VM Description)."
         $VmNote = $env:USERNAME + ": " + $Vm.name + ": " + $Vm.ip
         Set-VM -VMName $Vm.hypervname -Notes $VmNote
+        Start-Sleep -Seconds 30
+        # Start-VM -Name $Vm.hypervname
     }
 }
 Function Deploy-TestSuiteVirtualMachines {
