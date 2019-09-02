@@ -579,7 +579,7 @@ In sections [5.1.2.2 Setup to test SMB2](#5.1.2.2) through [5.1.2.5 Setup to tes
 
 ##### <a name="5.1.2.2"/> 5.1.2.2 Setup to test SMB2
 
-The procedures in the subsections that follow create the  test configurations that you will use to test an MSSMB2 protocol implementation.
+The procedures in the subsections that follow create the test configurations that you will use to test an MS-SMB2 protocol implementation.
 
 ###### <a name="5.1.2.2.1"/> 5.1.2.2.1 Create a basic share
 
