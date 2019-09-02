@@ -226,14 +226,10 @@ Function Create-TestSuiteVM {
             Add-VMNetworkAdapter -VMName $Vm.hypervname -SwitchName $VirtualSwitch
             $NicNumber++;
         }
-
-        Write-Host "Wait for create VHD job to be ready within 3600 seconds."
-        $Job = Get-Job -Name "Create VHD for $($Vm.hypervname)"
-        while($Job.State -eq "running") {
-            Wait-Host -ActivityName "Create VHD for $($Vm.hypervname)" -TimeoutInSeconds 5
-        }
-        $Job | Wait-Job -Timeout 3600
+        
         Write-Host "Check whether VHD file exists or not."
+        $Vm.disk = "$WinteropProtocolTesting\VM\InstallPrerequisites\\InstallPrerequisites.vhd"
+        Write-Host "Vm.disk: $Vm.disk"
         if (!(Test-Path $Vm.disk)) {
             Write-Host "$($Vm.disk) file not found." -Exit
         }

@@ -24,7 +24,7 @@
       <name>InstallTest</name>
       <domain></domain>
       <username>Administrator</username>
-      <password>Password01!1</password>
+      <password>Password01!</password>
       <cpu>1</cpu>
       <vnet>InstallTest-Internal</vnet>
       <ip>192.168.20.1</ip>
