@@ -21,10 +21,10 @@ Write-Host "=============================================="
 
 function Read-Configurationfile {
     Write-Host "Read and parse the XML configuration file."
-    if(!(Test-Path -Path ".\InstallPrerequisites.xml")){
+    if(!(Test-Path -Path "$InvocationPath\InstallPrerequisites.xml")){
         Write-Error "Cannot find InstallPrerequisites.xml" Exit
     }
-    [Xml]$Script:Setup = Get-Content ".\InstallPrerequisites.xml"
+    [Xml]$Script:Setup = Get-Content "$InvocationPath\InstallPrerequisites.xml"
     $Script:Setup | Format-TestSuiteXml -Indent 4
     $Script:VM = $Script:Setup.lab.servers.vm
 }
