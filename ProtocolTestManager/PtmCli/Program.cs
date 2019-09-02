@@ -77,7 +77,7 @@ namespace Microsoft.Protocols.TestManager.CLI
         }
 
         Utility util;
-        TestSuiteFamilies testSuites;
+        List<TestSuiteInfo> testSuites;
 
         /// <summary>
         /// Initialize
@@ -85,7 +85,7 @@ namespace Microsoft.Protocols.TestManager.CLI
         public void Init()
         {
             util = new Utility();
-            testSuites = util.TestSuiteIntroduction;
+            testSuites = util.TestSuiteIntroduction.SelectMany(tsFamily => tsFamily).ToList();
         }
 
         /// <summary>
@@ -94,23 +94,25 @@ namespace Microsoft.Protocols.TestManager.CLI
         /// <param name="filename">Filename of the profile</param>
         public void LoadTestSuite(string filename)
         {
-            ProfileUtil profile = ProfileUtil.LoadProfile(filename);
-            TestSuiteInfo tsinfo = null;
-            foreach (var g in testSuites)
+            TestSuiteInfo tsinfo;
+            using (ProfileUtil profile = ProfileUtil.LoadProfile(filename))
             {
-                foreach (var info in g)
+                tsinfo = testSuites.Find(ts => ts.TestSuiteName == profile.Info.TestSuiteName);
+                if (tsinfo == null)
                 {
-                    if (profile.VerifyVersion(info.TestSuiteName, info.TestSuiteVersion))
-                    {
-                        tsinfo = info;
-                        goto FindTestSuite;
-                    }
+                    throw new ArgumentException(String.Format(StringResources.UnknownTestSuiteMessage, profile.Info.TestSuiteName));
                 }
             }
-            FindTestSuite:
-            profile.Dispose();
+
             util.LoadTestSuiteConfig(tsinfo);
             util.LoadTestSuiteAssembly();
+
+            string newProfile;
+            if (util.TryUpgradeProfileSettings(filename, out newProfile))
+            {
+                Console.WriteLine(String.Format(StringResources.PtmProfileUpgraded, newProfile));
+                filename = newProfile;
+            }
             util.LoadProfileSettings(filename);
         }
 

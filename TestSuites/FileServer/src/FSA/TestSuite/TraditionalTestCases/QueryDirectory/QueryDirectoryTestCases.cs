@@ -78,9 +78,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [Description("Create directory with $INDEX_ALLOCATION as stream type and query directory info.")]
         public void Fs_CreateDiretory_QueryDirectory_Suffix_INDEX_ALLOCATION()
         {
-            if (this.fsaAdapter.FileSystem == FileSystem.FAT32)
+            if(this.fsaAdapter.FileSystem == FileSystem.FAT32)
             {
-                this.TestSite.Assume.Inconclusive("File name with stream type and stream name as suffix is not supported by FAT32 system.");
+                this.TestSite.Assume.Inconclusive("File name with stream type or stream data as suffix is not supported by FAT32.");
             }
 
             // Create a new directory with $INDEX_ALLOCATION as stream type
@@ -107,13 +107,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryDirectory)]
-        [TestCategory(TestCategories.NonSmb)]        
+        [TestCategory(TestCategories.NonSmb)]
         [Description("Create directory with :$I30:$INDEX_ALLOCATION as stream type and stream name, then query the directory info.")]
         public void Fs_CreateDirectory_QueryDirectory_Suffix_I30_INDEX_ALLOCATION()
         {
             if (this.fsaAdapter.FileSystem == FileSystem.FAT32)
             {
-                this.TestSite.Assume.Inconclusive("File name with stream type and stream name as suffix is not supported by FAT32 system.");
+                this.TestSite.Assume.Inconclusive("File name with stream type or stream data as suffix is not supported by FAT32.");
             }
 
             // Create a new directory with name as suffix
@@ -146,7 +146,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         {
             if (this.fsaAdapter.FileSystem == FileSystem.FAT32)
             {
-                this.TestSite.Assume.Inconclusive("File name with stream type and stream name as suffix is not supported by FAT32 system.");
+                this.TestSite.Assume.Inconclusive("File name with stream type or stream data as suffix is not supported by FAT32.");
             }
 
             // Create a new file

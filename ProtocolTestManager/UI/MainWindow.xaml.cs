@@ -108,6 +108,8 @@ namespace Microsoft.Protocols.TestManager.UI
                         }
                         isAutoDetected = false;
                         util.InitializeDetector();
+
+                        // Last profile should always on the correct version, no need to upgrade this profile
                         LoadProfile(util.LastRuleSelectionFilename);
                     }
                     catch (Exception e)
@@ -390,7 +392,14 @@ namespace Microsoft.Protocols.TestManager.UI
                 string initialDir = System.IO.Path.Combine(util.AppConfig.AppDataDirectory, StringResources.TestProfileFolder);
                 if (Directory.Exists(initialDir)) openFileDialog.InitialDirectory = initialDir;
                 if (openFileDialog.ShowDialog() != true) return;
-                LoadProfile(openFileDialog.FileName);
+
+                string profile = openFileDialog.FileName, newProfile;
+                if (util.TryUpgradeProfileSettings(profile, out newProfile))
+                {
+                    MessageBox.Show(this, String.Format(StringResources.PtmProfileUpgraded, newProfile));
+                    profile = newProfile;
+                }
+                LoadProfile(profile);
             }
             catch (Exception e)
             {
