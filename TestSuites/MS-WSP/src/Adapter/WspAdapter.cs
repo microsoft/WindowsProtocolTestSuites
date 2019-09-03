@@ -770,7 +770,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// requesting row has a valid cursor.</param>
         public void CPMGetRowsIn(bool isCursorValid)
         {
-            uint cursorAssociated = 0;
+            uint cursorAssociated;
             if (isCursorValid)
             {
                 cursorAssociated = GetCursor(clientMachineName);
@@ -781,8 +781,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 cursorAssociated = (uint)r.Next(50, 60);
             }
 
-            CPMGetRowsOut getRowsOut;
-            CPMGetRowsIn(cursorAssociated, builder.parameter.RowsToTransfer, builder.parameter.EachRowSize, builder.parameter.BufferSize, 0, builder.parameter.EType, out getRowsOut);
+            CPMGetRowsIn(cursorAssociated, builder.parameter.RowsToTransfer, builder.parameter.EachRowSize, builder.parameter.BufferSize, 0, builder.parameter.EType, out CPMGetRowsOut getRowsOut);
         }
 
         /// <summary>
@@ -794,18 +793,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="cbReadBuffer">This field MUST be set to the maximum of the value of _cbRowWidth or 1000 times the value of _cRowsToTransfer, rounded up to the nearest 512 byte multiple. The value MUST NOT exceed 0x00004000</param>
         /// <param name="fBwdFetch">Indicating the order in which to fetch the rows</param>
         /// <param name="eType">Type of SeekDescription</param>
-        public void CPMGetRowsIn(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType, out CPMGetRowsOut getRowsOut)
+        public void CPMGetRowsIn(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType, out CPMGetRowsOut response)
         {
+            // Get hold of appropriate Sender (Pipe with/without connection)
+            var client = GetClient(isClientConnected);
             var getRowsInMessage = builder.GetCPMRowsInMessage(cursor, rowsToTransfer, rowWidth, cbReadBuffer, fBwdFetch, eType, out rowsInReserve);
-            byte[] getRowsOutMessage;
-            uint checkSum = 0;
-            RequestSender sender
-                = GetRequestSender(isClientConnected); //Get the Sender
-
             var getRowsInMessageBytes = Helper.ToBytes(getRowsInMessage);
 
-            sender.SendMessage(getRowsInMessageBytes, out getRowsOutMessage);
-            if (sender == defaultSender)
+            client.SendCPMGetRowsIn(getRowsInMessage._hCursor, getRowsInMessage._cRowsToTransfer, getRowsInMessage._cbRowWidth, getRowsInMessage._cbSeek, getRowsInMessage._cbReserved, getRowsInMessage._cbReadBuffer, getRowsInMessage._ulClientBase, getRowsInMessage._fBwdFetch, getRowsInMessage.eType, getRowsInMessage._chapt, getRowsInMessage.SeekDescription);
+
+            if (client == defaultClient)
             {
                 // This means that disconnect message has been sent
                 // through the pipe which does not have a connect In
@@ -822,23 +819,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             wspTestSite.CaptureRequirement(3, @"All messages MUST be " +
                 "transported using a named pipe: \\pipe\\MSFTEWDS");
 
-            getRowsOut = new CPMGetRowsOut();
-            if (getRowsOutMessage != null)
+            response = new CPMGetRowsOut();
+            if (CPMGetRowsOut != null)
             {
-                int startingIndex = 0;
-                uint msgId
-                    = Helper.GetUInt(getRowsOutMessage, ref startingIndex);
-                uint msgStatus
-                    = Helper.GetUInt(getRowsOutMessage, ref startingIndex);
+                client.ExpectMessage<CPMGetRowsOut>(out response);
 
                 uint offsetUsed = GetOffsetUsed();
-                validator.ValidateGetRowsOut(getRowsInMessage, this.setBindingsIn, getRowsOutMessage,
-                    checkSum, rowsInReserve, rowsInClientBase, tableColumns,
-                    offsetUsed, out lastDocumentWorkId, out getRowsOut);
+                validator.ValidateGetRowsOut(response, out lastDocumentWorkId);
 
                 // Fire Response Event
-                CPMGetRowsOut(msgStatus);
-
+                CPMGetRowsOut(response.Header._status);
             }
         }
 

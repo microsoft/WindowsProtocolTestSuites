@@ -1117,30 +1117,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         ///  Validates CPMGetRowsOut message
         /// </summary>
-        /// <param name="getRowsIn">The CPMGetRowsIn request, used to unmarshal the CPMGetRowsOut response</param>
-        /// <param name="setBingdingsIn">The CPMSetBindingsIn request, used to unmarshal the CPMGetRowsOut response</param>
-        /// <param name="rowsInCheckSum">checksum of RowsIn message</param>
-        /// <param name="clientBase"> uint parameter clientBase</param>
-        /// <param name="columns"> Array of tablecolumns</param>
-        /// <param name="offsetUsed"> Offset used for the message</param>
-        /// <param name="reserved"> reserved field</param>
         /// <param name="rowsOutResponse">Rowsout response blob obtained</param>
         /// <param name="workId">out parameter workId </param>
-        /// <param name="getRowsOut">The unmarshaled response</param>
-        public void ValidateGetRowsOut(CPMGetRowsIn getRowsIn, CPMSetBindingsIn setBingdingsIn, Byte[] rowsOutResponse,
-            uint rowsInCheckSum, uint reserved, uint clientBase,
-            TableColumn[] columns, uint offsetUsed, out uint workId, out CPMGetRowsOut getRowsOut)
+        public void ValidateGetRowsOut(CPMGetRowsOut rowsOutResponse, out uint workId)
         {
-            int startingIndex = 0;
             workId = 0xfffffff0; // TODO: set this value correctly
-            ValidateHeader(rowsOutResponse, MessageType.CPMGetRowsIn,
-                rowsInCheckSum, ref startingIndex);
-
-            getRowsOut = new CPMGetRowsOut();
-            getRowsOut.Is64Bit = this.Is64bit;
-            getRowsOut.Request = getRowsIn;
-            getRowsOut.BindingRequest = setBingdingsIn;
-            Helper.FromBytes(ref getRowsOut, rowsOutResponse);
+            ValidateHeader(rowsOutResponse.Header, WspMessageHeader_msg_Values.CPMGetRowsOut);
         }
 
         /// <summary>

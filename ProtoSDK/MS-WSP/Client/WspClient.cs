@@ -19,14 +19,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
         #region Properties
         /// <summary>
-        /// Indicating whether the client version is 32bit/64-bit (false/true).
+        /// Indicates if we use 64-bit or 32-bit when validating responses.
         /// </summary>
-        public bool Is64bitClientVersion { get; private set; }
-
-        /// <summary>
-        /// Indicating whether the server version is 32bit/64-bit (false/true).
-        /// </summary>
-        public bool Is64bitServerVersion { get; private set; }
+        public bool Is64bit
+        {
+            get
+            {
+                return is64bitClientVersion && is64bitServerVersion;
+            }
+        }
         #endregion
 
         #region Methods
@@ -52,11 +53,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         {
             if ((clientVersion & WspConsts.Is64bitVersion) != 0)
             {
-                Is64bitClientVersion = true;
+                is64bitClientVersion = true;
             }
             else
             {
-                Is64bitClientVersion = false;
+                is64bitClientVersion = false;
             }
 
             var request = new CPMConnectIn()
@@ -152,6 +153,58 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 aColumns = aColumns,
             };
 
+            lastSetBindingsInMessage = request;
+
+            Send(request);
+        }
+
+        /// <summary>
+        /// Send CPMGetRowsIn.
+        /// </summary>
+        /// <param name="_hCursor">_hCursor field to be used.</param>
+        /// <param name="_cRowsToTransfer">_cRowsToTransfer field to be used.</param>
+        /// <param name="_cbRowWidth">_cbRowWidth field to be used.</param>
+        /// <param name="_cbSeek">_cbSeek field to be used.</param>
+        /// <param name="_cbReserved">_cbReserved field to be used.</param>
+        /// <param name="_cbReadBuffer">_cbReadBuffer field to be used.</param>
+        /// <param name="_ulClientBase">_ulClientBase field to be used.</param>
+        /// <param name="_fBwdFetch">_fBwdFetch field to be used.</param>
+        /// <param name="eType">eType field to be used.</param>
+        /// <param name="_chapt">_chapt field to be used.</param>
+        /// <param name="seekDescription">SeekDescription field to be used.</param>
+        public void SendCPMGetRowsIn(
+            uint _hCursor,
+            uint _cRowsToTransfer,
+            uint _cbRowWidth,
+            uint _cbSeek,
+            uint _cbReserved,
+            uint _cbReadBuffer,
+            uint _ulClientBase,
+            uint _fBwdFetch,
+            eType_Values eType,
+            uint _chapt,
+            object seekDescription
+            )
+        {
+            var request = new CPMGetRowsIn
+            {
+                Header = new WspMessageHeader
+                {
+                    _msg = WspMessageHeader_msg_Values.CPMGetRowsIn,
+                },
+                _hCursor = _hCursor,
+                _cRowsToTransfer = _cRowsToTransfer,
+                _cbRowWidth = _cbRowWidth,
+                _cbSeek = _cbSeek,
+                _cbReserved = _cbReserved,
+                _cbReadBuffer = _cbReadBuffer,
+                _ulClientBase = _ulClientBase,
+                _fBwdFetch = _fBwdFetch,
+                eType = eType,
+                _chapt = _chapt,
+                SeekDescription = seekDescription,
+            };
+
             Send(request);
         }
 
@@ -193,6 +246,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 return header._status;
             }
 
+            if (response is CPMGetRowsOut getRowsOut)
+            {
+                getRowsOut.Is64Bit = Is64bit;
+                getRowsOut.BindingRequest = lastSetBindingsInMessage;
+            }
+
             var buffer = new WspBuffer(lastResponseBytes);
 
             response.FromBytes(buffer);
@@ -219,11 +278,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                         var connectOutMessage = (CPMConnectOut)response;
                         if ((connectOutMessage._serverVersion & WspConsts.Is64bitVersion) != 0)
                         {
-                            Is64bitServerVersion = true;
+                            is64bitServerVersion = true;
                         }
                         else
                         {
-                            Is64bitServerVersion = false;
+                            is64bitServerVersion = false;
                         }
                     }
                     break;
@@ -241,5 +300,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         private IWspInMessage lastRequest;
 
         private byte[] lastResponseBytes;
+
+        private CPMSetBindingsIn lastSetBindingsInMessage;
+
+        private bool is64bitClientVersion;
+
+        private bool is64bitServerVersion;
     }
 }
