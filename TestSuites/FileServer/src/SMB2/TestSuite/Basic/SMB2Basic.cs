@@ -12,7 +12,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Text;
 using System.Threading;
-
+//test
 namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 {
     [TestClass]
