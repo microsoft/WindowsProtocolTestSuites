@@ -121,6 +121,41 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         }
 
         /// <summary>
+        /// Send CPMCPMSetBindingsIn.
+        /// </summary>
+        /// <param name="_hCursor">_hCursor field to be used.</param>
+        /// <param name="_cbRow">_cbRow field to be used.</param>
+        /// <param name="_cbBindingDesc">_cbBindingDesc field to be used.</param>
+        /// <param name="_dummy">_dummy field to be used.</param>
+        /// <param name="cColumns">cColumns field to be used.</param>
+        /// <param name="aColumns">aColumns field to be used.</param>
+        public void SendCPMSetBindingsIn(
+            uint _hCursor,
+            uint _cbRow,
+            uint _cbBindingDesc,
+            uint _dummy,
+            uint cColumns,
+            CTableColumn[] aColumns
+            )
+        {
+            var request = new CPMSetBindingsIn
+            {
+                Header = new WspMessageHeader
+                {
+                    _msg = WspMessageHeader_msg_Values.CPMSetBindingsIn,
+                },
+                _hCursor = _hCursor,
+                _cbRow = _cbRow,
+                _cbBindingDesc = _cbBindingDesc,
+                _dummy = _dummy,
+                cColumns = cColumns,
+                aColumns = aColumns,
+            };
+
+            Send(request);
+        }
+
+        /// <summary>
         /// Send message to server.
         /// </summary>
         /// <param name="request">Message to be sent.</param>

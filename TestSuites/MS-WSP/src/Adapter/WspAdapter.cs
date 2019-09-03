@@ -688,27 +688,33 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// is valid</param>
         public void CPMSetBindingsIn(bool isValidBinding, bool isCursorValid)
         {
-            uint cursorAssociated = 0;
-            if (isCursorValid)
-            {
-                cursorAssociated = GetCursor(clientMachineName);
-            }
-            else
-            {
-                cursorAssociated = 0;
-            }
+            uint cursorAssociated = isCursorValid ? GetCursor(clientMachineName) : 0;
 
-
-            //uint cursorAssociated = GetCursor(clientMachineName);
             var setBindingsInMessage = builder.GetCPMSetBindingsIn(cursorAssociated, out tableColumns, isValidBinding);
             this.setBindingsIn = setBindingsInMessage;
-            byte[] setbindingsInResponseMessageBytes;
-            RequestSender sender
-                = GetRequestSender(isClientConnected); //Get the Sender
-                                                       // RequestSender sender = new RequestSender(); //Get the Sender
-            var setBindingsInMessageBytes = Helper.ToBytes(setBindingsInMessage);
-            bytesRead = sender.SendMessage(setBindingsInMessageBytes, out setbindingsInResponseMessageBytes);
-            if (sender == defaultSender)
+
+            CPMSetBindingsIn(
+                setBindingsInMessage._hCursor,
+                setBindingsInMessage._cbRow,
+                setBindingsInMessage._cbBindingDesc,
+                setBindingsInMessage._dummy,
+                setBindingsInMessage.cColumns,
+                setBindingsInMessage.aColumns);
+        }
+
+        /// <summary>
+        /// Create and send CPMSetBindingsIn and expect response.
+        /// </summary>
+        public void CPMSetBindingsIn(uint _hCursor, uint _cbRow, uint _cbBindingDesc, uint _dummy, uint cColumns, CTableColumn[] aColumns)
+        {
+            var client = GetClient(isClientConnected);
+
+            client.SendCPMSetBindingsIn(_hCursor, _cbRow, _cbBindingDesc, _dummy, cColumns, aColumns);
+
+            CPMSetBindingsOut response;
+            client.ExpectMessage<CPMSetBindingsOut>(out response);
+
+            if (client == defaultClient)
             {
                 // This means that disconnect message has been sent
                 // through the pipe which does not have a connect In
@@ -725,38 +731,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             // for the protocol transport
             wspTestSite.CaptureRequirement(3, @"All messages MUST be " +
                          "transported using a named pipe: \\pipe\\MSFTEWDS");
-            if (setbindingsInResponseMessageBytes != null)
+
+            uint msgId = (UInt32)response.Header._msg;
+            uint msgStatus = response.Header._status;
+            if (msgStatus != 0)
             {
-                var response = new CPMSetBindingsOut();
-                response.Request = setBindingsInMessage;
-                Helper.FromBytes(ref response, setbindingsInResponseMessageBytes);
+                //If 4 byte Non Zero field is read as status
+                // The requirement 620 gets validated
+                wspTestSite.CaptureRequirement(620,
+                    "Whenever an error occurs during processing of a " +
+                    "message sent by a client, the server MUST set the " +
+                    "_status field to the error code value.");
 
-                uint msgId = (UInt32)response.Header._msg;
-                uint msgStatus = response.Header._status;
-                if (msgStatus != 0)
-                {
-                    wspTestSite.CaptureRequirementIfAreEqual<int>(bytesRead,
-        Constant.SIZE_OF_HEADER, 619,
-        "Whenever an error occurs during processing of a " +
-        "message sent by a client, the server MUST respond " +
-        "with the message header (only) of the message sent " +
-        "by the client, keeping the _msg field intact.");
-                    //If 4 byte Non Zero field is read as status
-                    // The requirement 620 gets validated
-                    wspTestSite.CaptureRequirement(620,
-                        "Whenever an error occurs during processing of a " +
-                        "message sent by a client, the server MUST set the " +
-                        "_status field to the error code value.");
-
-                }
-                if ((msgId == (uint)MessageType.CPMSetBindingsIn)
-                    && (msgStatus == 0x00000000))
-                {
-                    validator.ValidateSetBindingsInResponse(response);
-                }
-                CPMSetBindingsInResponse(msgStatus); // Fire Response Event
             }
+            if ((msgId == (uint)MessageType.CPMSetBindingsIn)
+                && (msgStatus == 0x00000000))
+            {
+                validator.ValidateSetBindingsInResponse(response);
+            }
+            CPMSetBindingsInResponse(msgStatus); // Fire Response Event
         }
+
         /// <summary>
         /// This event is used to get the response from 
         /// CPMSetBindingsIn request.
