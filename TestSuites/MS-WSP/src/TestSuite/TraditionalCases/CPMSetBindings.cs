@@ -120,17 +120,17 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
         private void CPMConnectOut(uint errorCode)
         {
-            Site.Assert.AreEqual((uint)0, errorCode, "CPMConnectIn should succeed.");
+            Site.Assert.AreEqual((uint)WspErrorCode.SUCCESS, errorCode, "CPMConnectIn should succeed.");
         }
 
         private void CPMCreateQueryOut(uint errorCode)
         {
-            Site.Assert.AreEqual((uint)0, errorCode, "CPMCreateQueryIn should succeed.");
+            Site.Assert.AreEqual((uint)WspErrorCode.SUCCESS, errorCode, "CPMCreateQueryIn should succeed.");
         }
 
         private void CPMGetRowsOut(uint errorCode)
         {
-            bool succeed = errorCode == 0 || errorCode == (uint)WspErrorCode.DB_S_ENDOFROWSET ? true : false;
+            bool succeed = errorCode == (uint)WspErrorCode.SUCCESS || errorCode == (uint)WspErrorCode.DB_S_ENDOFROWSET ? true : false;
             Site.Assert.IsTrue(succeed, "Server should return succeed or DB_S_ENDOFROWSET for CPMGetRowsIn.");
         }
 
@@ -139,10 +139,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             switch (argumentType)
             {
                 case ArgumentType.AllValid:
-                    Site.Assert.AreEqual((uint)0, errorCode, "Server should return succeed for CPMSetBindingsIn.");
+                    Site.Assert.AreEqual((uint)WspErrorCode.SUCCESS, errorCode, "Server should return succeed for CPMSetBindingsIn.");
                     break;
                 case ArgumentType.InvalidRowSize:
-                    Site.Assert.AreNotEqual((uint)0, errorCode, "Server should not return succeed if row size of CPMSetBindingsIn is invalid.");
+                    Site.Assert.AreNotEqual((uint)WspErrorCode.SUCCESS, errorCode, "Server should not return succeed if row size of CPMSetBindingsIn is invalid.");
                     break;
                 case ArgumentType.InvalidCursor:
                     Site.Assert.AreEqual((uint)WspErrorCode.ERROR_INVALID_PARAMETER, errorCode, "Server should return ERROR_INVALID_PARAMETER if the cursor of CPMSetBindingsIn is invalid.");

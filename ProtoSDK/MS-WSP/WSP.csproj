@@ -47,7 +47,6 @@
     <Compile Include="Client\WspClient.cs" />
     <Compile Include="DataTypes.cs" />
     <Compile Include="Helper.cs" />
-    <Compile Include="MessageBuilder.cs" />
     <Compile Include="Messages\CPMConnectOut.cs" />
     <Compile Include="Messages\CPMCreateQueryIn.cs" />
     <Compile Include="Messages\CPMCreateQueryOut.cs" />

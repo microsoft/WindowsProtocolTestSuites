@@ -53,6 +53,7 @@
     </Compile>
     <Compile Include="IWspAdapter.cs" />
     <Compile Include="IWSPSUTAdapter.cs" />
+    <Compile Include="MessageBuilder.cs" />
     <Compile Include="MessageValidator.cs" />
     <Compile Include="WspAdapter.cs" />
   </ItemGroup>
