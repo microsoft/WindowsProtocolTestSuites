@@ -32,6 +32,6 @@ jobs:
     displayName: 'Run regression script'
     inputs:
       targetType: filePath
-      filePath: $(Build.Repository.LocalPath)\InstallPrerequisites\Setup-InstallEnvironment.ps1
+      filePath: $(Build.Repository.LocalPath)\_Helper\InstallPrerequisites\Setup-InstallEnvironment.ps1
       arguments: '-Workspace "$(Pipeline.Workspace)"'
     timeoutInMinutes: 0
