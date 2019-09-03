@@ -496,7 +496,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                     bool isExpectedCompressionContext = client.Smb2Client.CompressionInfo.CompressionIds.Length == 1 && client.Smb2Client.CompressionInfo.CompressionIds[0] == CompressionAlgorithm.NONE;
 
                     BaseTestSite.Assert.IsTrue(
-                        isExpectedCompressionContext, 
+                        isExpectedCompressionContext,
                         "[MS-SMB2] section 3.3.5.4: If the server does not support any of the algorithms provided by the client, " +
                         "the server MUST build an SMB2_COMPRESSION_CAPABILITIES negotiate response context with CompressionAlgorithmCount set to 1 and CompressionAlgorithms set to \"NONE\"."
                         );
@@ -603,11 +603,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Smb311)]
-        [TestCategory(TestCategories.Negotiate)]       
+        [TestCategory(TestCategories.Negotiate)]
+        [TestCategory(TestCategories.Compatibility)]
         [Description("This test case is designed to test whether server can ignore SMB2_NETNAME_NEGOTIATE_CONTEXT_ID context when negotiate.")]
         public void Negotiate_SMB311_ContextID_NetName()
         {
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Send NEGOTIATE request with SMB2_NETNAME_NEGOTIATE_CONTEXT_ID context."); 
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Send NEGOTIATE request with SMB2_NETNAME_NEGOTIATE_CONTEXT_ID context.");
 
             DialectRevision clientMaxDialectSupported = DialectRevision.Smb311;
             PreauthIntegrityHashID[] preauthHashAlgs = new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 };
@@ -633,7 +634,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                              "[MS-SMB2] section 2.2.3.1.3: The SMB2_NETNAME_NEGOTIATE_CONTEXT_ID context is specified in an SMB2 NEGOTIATE request to indicate the server name the client connects to. The server MUST ignore this context. "
                              );
                       }
-                );          
+                );
         }
         #endregion
 
@@ -695,7 +696,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 preauthHashAlgs: preauthHashAlgs,
                 encryptionAlgs: encryptionAlgs,
                 compressionAlgorithms: compressionAlgorithms,
-                addNetNameContextId : addNetNameContextId,
+                addNetNameContextId: addNetNameContextId,
                 checker: checker);
         }
 
