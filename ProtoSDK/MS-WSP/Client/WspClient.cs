@@ -17,6 +17,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         }
         #endregion
 
+        #region Fields
+        public RequestSender sender;
+
+        private IWspInMessage lastRequest;
+
+        private byte[] lastResponseBytes;
+
+        private CPMSetBindingsIn lastSetBindingsInMessage;
+
+        private bool is64bitClientVersion;
+
+        private bool is64bitServerVersion;
+        #endregion
+
         #region Properties
         /// <summary>
         /// Indicates if we use 64-bit or 32-bit when validating responses.
@@ -122,7 +136,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         }
 
         /// <summary>
-        /// Send CPMCPMSetBindingsIn.
+        /// Send CPMSetBindingsIn.
         /// </summary>
         /// <param name="_hCursor">_hCursor field to be used.</param>
         /// <param name="_cbRow">_cbRow field to be used.</param>
@@ -240,7 +254,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 throw new InvalidOperationException("Unexpected response from server!");
             }
 
-            if (header._status != 0)
+            if (header._status != 0 && header._status != (uint)WspErrorCode.DB_S_ENDOFROWSET)
             {
                 response.Header = header;
                 return header._status;
@@ -258,12 +272,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             // Update the state of client according to response.
             UpdateContext(response);
-
-            // Check the response size against unmarshalled size.
-            if (buffer.ReadOffset != buffer.WriteOffset)
-            {
-                throw new InvalidOperationException("Unexpected response size from server!");
-            }
 
             return 0;
         }
@@ -293,18 +301,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         public void Dispose()
         {
 
-        }
-
-        public RequestSender sender;
-
-        private IWspInMessage lastRequest;
-
-        private byte[] lastResponseBytes;
-
-        private CPMSetBindingsIn lastSetBindingsInMessage;
-
-        private bool is64bitClientVersion;
-
-        private bool is64bitServerVersion;
+        }       
     }
 }
