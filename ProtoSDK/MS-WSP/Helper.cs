@@ -126,59 +126,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             return BitConverter.ToUInt32(tempArray, 0);
         }
 
-        /// <summary>
-        /// Returns the Storage SIZE of a given BaseStorageVariant type
-        /// </summary>
-        /// <param name="type">StorageType</param>
-        /// <returns>size in bytes</returns>
-        static public ushort GetSize(StorageType type)
-        {
-            ushort size = 0;
-            switch (type)
-            {
-                case StorageType.VT_EMPTY:
-                    break;
-                case StorageType.VT_NULL:
-                    break;
-                case StorageType.VT_I1:
-                case StorageType.VT_UI1:
-                    size = 1; // Take 1 Byte
-                    break;
-                case StorageType.VT_I2:
-                case StorageType.VT_UI2:
-                case StorageType.VT_BOOL:
-                    size = 2; // Take 2 Bytes
-                    break;
-                case StorageType.VT_I4:
-                case StorageType.VT_UI4:
-                case StorageType.VT_INT:
-                case StorageType.VT_UINT:
-                case StorageType.VT_ERROR:
-                case StorageType.VT_R4:
-                    size = 4; // Take 4 byte
-                    break;
-                case StorageType.VT_I8:
-                case StorageType.VT_UI8:
-                case StorageType.VT_CY:
-                case StorageType.VT_R8:
-                case StorageType.VT_DATE:
-                case StorageType.VT_CLSID:
-                case StorageType.VT_FILETIME:
-                    size = 8;
-                    break;
-
-                case StorageType.VT_DECIMAL:
-                    size = 12;
-                    break;
-                case StorageType.VT_VARIANT:
-                    size = 16;
-                    break;
-                default:
-                    break;
-            }
-            return size;
-        }
-
         public static byte[] ToBytes(IWspObject message)
         {
             var buffer = new WspBuffer();
@@ -219,6 +166,95 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             return checksum;
         }
+
+        /// <summary>
+        /// Update the offset related fields of each CTableColumn.
+        /// </summary>
+        /// <param name="columns">Array of CTableColumn.</param>
+        public static void UpdateTableColumns(CTableColumn[] columns)
+        {
+            ushort offset = 0;
+
+            for (int i = 0; i < columns.Length; i++)
+            {
+                // Status occupies 1 byte.
+                columns[i].StatusOffset = offset;
+
+                offset += 1;
+
+                // Length occupies 4 bytes.
+                columns[i].LengthOffset = offset;
+
+                offset += 4;
+
+                // Value occupies ValueSize bytes.
+                columns[i].ValueOffset = offset;
+
+                offset += columns[i].ValueSize.Value;
+            }
+        }
+
+        /// <summary>
+        /// Returns the Storage SIZE of a given BaseStorageVariant type.
+        /// </summary>
+        /// <param name="type">vType_Values.</param>
+        /// <param name="is64Bit">Is 64-bit supported by both client and server.</param>
+        /// <returns>size in bytes</returns>
+        public static ushort GetSize(vType_Values type, bool is64Bit)
+        {
+            ushort size = 0;
+            switch (type)
+            {
+                case vType_Values.VT_EMPTY:
+                    break;
+                case vType_Values.VT_NULL:
+                    break;
+                case vType_Values.VT_I1:
+                case vType_Values.VT_UI1:
+                    size = 1; // Take 1 Byte
+                    break;
+                case vType_Values.VT_I2:
+                case vType_Values.VT_UI2:
+                case vType_Values.VT_BOOL:
+                    size = 2; // Take 2 Bytes
+                    break;
+                case vType_Values.VT_I4:
+                case vType_Values.VT_UI4:
+                case vType_Values.VT_INT:
+                case vType_Values.VT_UINT:
+                case vType_Values.VT_ERROR:
+                case vType_Values.VT_R4:
+                    size = 4; // Take 4 byte
+                    break;
+                case vType_Values.VT_I8:
+                case vType_Values.VT_UI8:
+                case vType_Values.VT_CY:
+                case vType_Values.VT_R8:
+                case vType_Values.VT_DATE:
+                case vType_Values.VT_CLSID:
+                case vType_Values.VT_FILETIME:
+                    size = 8;
+                    break;
+
+                case vType_Values.VT_DECIMAL:
+                    size = 12;
+                    break;
+                case vType_Values.VT_VARIANT:
+                    if (is64Bit)
+                    {
+                        size = 24;
+                    }
+                    else
+                    {
+                        size = 16;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return size;
+        }
+
     }
 }
 

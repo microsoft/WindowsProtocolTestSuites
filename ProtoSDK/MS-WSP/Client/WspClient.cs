@@ -17,16 +17,31 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         }
         #endregion
 
+        #region Fields
+        public RequestSender sender;
+
+        private IWspInMessage lastRequest;
+
+        private byte[] lastResponseBytes;
+
+        private CPMSetBindingsIn lastSetBindingsInMessage;
+
+        private bool is64bitClientVersion;
+
+        private bool is64bitServerVersion;
+        #endregion
+
         #region Properties
         /// <summary>
-        /// Indicating whether the client version is 32bit/64-bit (false/true).
+        /// Indicates if we use 64-bit or 32-bit when validating responses.
         /// </summary>
-        public bool Is64bitClientVersion { get; private set; }
-
-        /// <summary>
-        /// Indicating whether the server version is 32bit/64-bit (false/true).
-        /// </summary>
-        public bool Is64bitServerVersion { get; private set; }
+        public bool Is64bit
+        {
+            get
+            {
+                return is64bitClientVersion && is64bitServerVersion;
+            }
+        }
         #endregion
 
         #region Methods
@@ -52,11 +67,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         {
             if ((clientVersion & WspConsts.Is64bitVersion) != 0)
             {
-                Is64bitClientVersion = true;
+                is64bitClientVersion = true;
             }
             else
             {
-                Is64bitClientVersion = false;
+                is64bitClientVersion = false;
             }
 
             var request = new CPMConnectIn()
@@ -121,6 +136,93 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         }
 
         /// <summary>
+        /// Send CPMSetBindingsIn.
+        /// </summary>
+        /// <param name="_hCursor">_hCursor field to be used.</param>
+        /// <param name="_cbRow">_cbRow field to be used.</param>
+        /// <param name="_cbBindingDesc">_cbBindingDesc field to be used.</param>
+        /// <param name="_dummy">_dummy field to be used.</param>
+        /// <param name="cColumns">cColumns field to be used.</param>
+        /// <param name="aColumns">aColumns field to be used.</param>
+        public void SendCPMSetBindingsIn(
+            uint _hCursor,
+            uint _cbRow,
+            uint _cbBindingDesc,
+            uint _dummy,
+            uint cColumns,
+            CTableColumn[] aColumns
+            )
+        {
+            var request = new CPMSetBindingsIn
+            {
+                Header = new WspMessageHeader
+                {
+                    _msg = WspMessageHeader_msg_Values.CPMSetBindingsIn,
+                },
+                _hCursor = _hCursor,
+                _cbRow = _cbRow,
+                _cbBindingDesc = _cbBindingDesc,
+                _dummy = _dummy,
+                cColumns = cColumns,
+                aColumns = aColumns,
+            };
+
+            lastSetBindingsInMessage = request;
+
+            Send(request);
+        }
+
+        /// <summary>
+        /// Send CPMGetRowsIn.
+        /// </summary>
+        /// <param name="_hCursor">_hCursor field to be used.</param>
+        /// <param name="_cRowsToTransfer">_cRowsToTransfer field to be used.</param>
+        /// <param name="_cbRowWidth">_cbRowWidth field to be used.</param>
+        /// <param name="_cbSeek">_cbSeek field to be used.</param>
+        /// <param name="_cbReserved">_cbReserved field to be used.</param>
+        /// <param name="_cbReadBuffer">_cbReadBuffer field to be used.</param>
+        /// <param name="_ulClientBase">_ulClientBase field to be used.</param>
+        /// <param name="_fBwdFetch">_fBwdFetch field to be used.</param>
+        /// <param name="eType">eType field to be used.</param>
+        /// <param name="_chapt">_chapt field to be used.</param>
+        /// <param name="seekDescription">SeekDescription field to be used.</param>
+        public void SendCPMGetRowsIn(
+            uint _hCursor,
+            uint _cRowsToTransfer,
+            uint _cbRowWidth,
+            uint _cbSeek,
+            uint _cbReserved,
+            uint _cbReadBuffer,
+            uint _ulClientBase,
+            uint _fBwdFetch,
+            eType_Values eType,
+            uint _chapt,
+            object seekDescription
+            )
+        {
+            var request = new CPMGetRowsIn
+            {
+                Header = new WspMessageHeader
+                {
+                    _msg = WspMessageHeader_msg_Values.CPMGetRowsIn,
+                },
+                _hCursor = _hCursor,
+                _cRowsToTransfer = _cRowsToTransfer,
+                _cbRowWidth = _cbRowWidth,
+                _cbSeek = _cbSeek,
+                _cbReserved = _cbReserved,
+                _cbReadBuffer = _cbReadBuffer,
+                _ulClientBase = _ulClientBase,
+                _fBwdFetch = _fBwdFetch,
+                eType = eType,
+                _chapt = _chapt,
+                SeekDescription = seekDescription,
+            };
+
+            Send(request);
+        }
+
+        /// <summary>
         /// Send message to server.
         /// </summary>
         /// <param name="request">Message to be sent.</param>
@@ -152,10 +254,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 throw new InvalidOperationException("Unexpected response from server!");
             }
 
-            if (header._status != 0)
+            if (header._status != 0 && header._status != (uint)WspErrorCode.DB_S_ENDOFROWSET)
             {
                 response.Header = header;
                 return header._status;
+            }
+
+            if (response is CPMGetRowsOut getRowsOut)
+            {
+                getRowsOut.Is64Bit = Is64bit;
+                getRowsOut.BindingRequest = lastSetBindingsInMessage;
             }
 
             var buffer = new WspBuffer(lastResponseBytes);
@@ -164,12 +272,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             // Update the state of client according to response.
             UpdateContext(response);
-
-            // Check the response size against unmarshalled size.
-            if (buffer.ReadOffset != buffer.WriteOffset)
-            {
-                throw new InvalidOperationException("Unexpected response size from server!");
-            }
 
             return 0;
         }
@@ -184,11 +286,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                         var connectOutMessage = (CPMConnectOut)response;
                         if ((connectOutMessage._serverVersion & WspConsts.Is64bitVersion) != 0)
                         {
-                            Is64bitServerVersion = true;
+                            is64bitServerVersion = true;
                         }
                         else
                         {
-                            Is64bitServerVersion = false;
+                            is64bitServerVersion = false;
                         }
                     }
                     break;
@@ -199,12 +301,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         public void Dispose()
         {
 
-        }
-
-        public RequestSender sender;
-
-        private IWspInMessage lastRequest;
-
-        private byte[] lastResponseBytes;
+        }       
     }
 }
