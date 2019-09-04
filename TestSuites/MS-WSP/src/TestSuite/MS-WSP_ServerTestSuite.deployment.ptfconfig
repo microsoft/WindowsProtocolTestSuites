@@ -120,23 +120,6 @@
     <Property name="Array_PropertySet_Four_DBProperties" value="3,4,2" />
     <!--*******************************************-->
 
-    <!--   Column when SetBindings-->
-    <Property name="NumberOfSetBindingsColumns" value="2" />
-    
-    <Property name="columnGuid_0" value="6B8DA074-3B5C-43BC-886F-0A2CDCE00B6F" />
-    <Property name="columnPropertyId_0" value="100" />
-    <Property name="columnValueOffset_0" value="8" />
-    <Property name="columnStatusOffset_0" value="2" />
-    <Property name="columnLengthOffset_0" value="4" />
-    <Property name="columnStorageType_0" value="12" />
-
-    <Property name="columnGuid_1" value="B725F130-47EF-101A-A5F1-02608C9EEBAC" />
-    <Property name="columnPropertyId_1" value="2" />
-    <Property name="columnValueOffset_1" value="32" />
-    <Property name="columnStatusOffset_1" value="3" />
-    <Property name="columnLengthOffset_1" value="56" />
-    <Property name="columnStorageType_1" value="12" />
-    
     <!-- GUID and Property that specifies Query Work Id-->
     <Property name="WorkIdPropertyGuid" value="49691C90-7E17-101A-A91C-08002B2ECDA9" />
     <Property name="WorkId" value="5" />

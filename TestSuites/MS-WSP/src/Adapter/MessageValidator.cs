@@ -1114,30 +1114,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         ///  Validates CPMGetRowsOut message
         /// </summary>
-        /// <param name="getRowsIn">The CPMGetRowsIn request, used to unmarshal the CPMGetRowsOut response</param>
-        /// <param name="setBingdingsIn">The CPMSetBindingsIn request, used to unmarshal the CPMGetRowsOut response</param>
-        /// <param name="rowsInCheckSum">checksum of RowsIn message</param>
-        /// <param name="clientBase"> uint parameter clientBase</param>
-        /// <param name="columns"> Array of tablecolumns</param>
-        /// <param name="offsetUsed"> Offset used for the message</param>
-        /// <param name="reserved"> reserved field</param>
         /// <param name="rowsOutResponse">Rowsout response blob obtained</param>
         /// <param name="workId">out parameter workId </param>
-        /// <param name="getRowsOut">The unmarshaled response</param>
-        public void ValidateGetRowsOut(CPMGetRowsIn getRowsIn, CPMSetBindingsIn setBingdingsIn, Byte[] rowsOutResponse,
-            uint rowsInCheckSum, uint reserved, uint clientBase,
-            TableColumn[] columns, uint offsetUsed, out uint workId, out CPMGetRowsOut getRowsOut)
+        public void ValidateGetRowsOut(CPMGetRowsOut rowsOutResponse, out uint workId)
         {
-            int startingIndex = 0;
             workId = 0xfffffff0; // TODO: set this value correctly
-            ValidateHeader(rowsOutResponse, MessageType.CPMGetRowsIn,
-                rowsInCheckSum, ref startingIndex);
-
-            getRowsOut = new CPMGetRowsOut();
-            getRowsOut.Is64Bit = this.Is64bit;
-            getRowsOut.Request = getRowsIn;
-            getRowsOut.BindingRequest = setBingdingsIn;
-            Helper.FromBytes(ref getRowsOut, rowsOutResponse);
+            ValidateHeader(rowsOutResponse.Header, WspMessageHeader_msg_Values.CPMGetRowsOut);
         }
 
         /// <summary>
@@ -2015,7 +1997,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 // last 2 bits of 4 Bytes vType are vData1 and vData2
                 byte vData1 = bytes[startingIndex - 1];
                 byte vData2 = bytes[startingIndex - 2];
-                if ((StorageType)vType != StorageType.VT_DECIMAL)
+                if ((vType_Values)vType != vType_Values.VT_DECIMAL)
                 {
                     site.CaptureRequirementIfAreEqual<byte>(0, vData1, 9,
                         "The value of 1 byte field 'vData1' of " +
@@ -2125,8 +2107,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     "property) to the vValue field.");
 
 
-                if ((StorageType)vType == StorageType.VT_LPSTR
-                    || (StorageType)vType == StorageType.VT_LPWSTR)
+                if ((vType_Values)vType == vType_Values.VT_LPSTR
+                    || (vType_Values)vType == vType_Values.VT_LPWSTR)
                 {
                     string unicodeString
                         = Encoding.Unicode.GetString(variableData);
@@ -2202,13 +2184,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             int length = 0;
             if (IsVariableLengthType((ushort)vType))
             {
-                switch ((StorageType)vType)
+                switch ((vType_Values)vType)
                 {
-                    case StorageType.VT_BLOB:
-                    case StorageType.VT_BSTR:
-                    case StorageType.VT_LPSTR:
-                    case StorageType.VT_LPWSTR:
-                    case StorageType.VT_COMPRESSED_LPWSTR:
+                    case vType_Values.VT_BLOB:
+                    case vType_Values.VT_BSTR:
+                    case vType_Values.VT_LPSTR:
+                    case vType_Values.VT_LPWSTR:
+                    case vType_Values.VT_COMPRESSED_LPWSTR:
                         // First 4 byte should specify the length
                         length = BitConverter.ToInt32(bytes, (int)offset);
                         //site.CaptureRequirementIfIsTrue(length > 0, 31,
@@ -2230,27 +2212,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             }
             else
             {
-                length = Helper.GetSize((StorageType)vType);
+                length = Helper.GetSize((vType_Values)vType, Is64bit);
             }
             return length;
         }
 
         #region Private Helper Methods
-
-        /// <summary>
-        /// Validates RowsSeekNext
-        /// </summary>
-        /// <param name="bytes">message Blob</param>
-        private void RowsSeekNext(Byte[] bytes)
-        {
-            int startingIndex = 0;
-            //-----------------------        _cSkip  --
-            uint skip = Helper.GetUInt(bytes, ref startingIndex);
-            // If GetUInt returns successfully Requirement 309 is validated
-            //site.CaptureRequirement(309, 
-            //    "The 4 bytes '_cskip' field of the  CRowSeekNext structure"+
-            //    "specifies the number of rows to skip in the rowset.");
-        }
 
         /// <summary>
         /// Validates RowSeekAt Type
@@ -2522,49 +2489,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         }
 
         /// <summary>
-        /// Gets valid eType
-        /// </summary>
-        /// <param name="eType">eType</param>
-        /// <returns> bool value</returns>
-        private bool GetValidEType(RowSeekType eType)
-        {
-            bool result = false;
-            switch ((uint)eType)
-            {
-                case 0x00000000:
-                case 0x00000001:
-                case 0x00000002:
-                case 0x00000003:
-                case 0x00000004:
-                    result = true;
-                    break;
-                default:
-                    result = false;
-                    break;
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="count"></param>
-        /// <param name="bytes"></param>
-        /// <param name="startingIndex"></param>
-        /// <returns></returns>
-        public uint GetPaddingBytes(uint count, byte[] bytes,
-            ref int startingIndex)
-        {
-            byte[] tempArray = new byte[count];
-            for (int i = 0; i < count; i++)
-            {
-                tempArray[i] = bytes[i + startingIndex];
-            }
-            startingIndex += (int)count;
-            return BitConverter.ToUInt32(tempArray, 0);
-        }
-
-        /// <summary>
         /// Returns Unsigned Short field from a BLOB data
         /// </summary>
         /// <param name="bytes"></param>
@@ -2590,23 +2514,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         {
             bool result = false;
             bool IsValidVector
-                = (vType != (uint)(0x1000 | (int)StorageType.VT_DECIMAL)
-                && vType != (uint)(0x1000 | (int)StorageType.VT_INT)
-                && vType != (uint)(0x1000 | (int)StorageType.VT_UINT)
-                && vType != (uint)(0x1000 | (int)StorageType.VT_BLOB));
+                = (vType != (uint)(0x1000 | (int)vType_Values.VT_DECIMAL)
+                && vType != (uint)(0x1000 | (int)vType_Values.VT_INT)
+                && vType != (uint)(0x1000 | (int)vType_Values.VT_UINT)
+                && vType != (uint)(0x1000 | (int)vType_Values.VT_BLOB));
             site.CaptureRequirementIfIsTrue(IsValidVector, 7,
                 "VT_VECTOR type modifier MUST NOT be combined(binary ORed)" +
                 "with the following types: VT_INT, VT_UINT," +
                 "VT_DECIMAL, VT_BLOB.");
 
             bool isValidArray
-                = 0x2000 != (uint)(0x2000 | (int)StorageType.VT_I8)
-                && 0x2000 != (uint)(0x2000 | (int)StorageType.VT_UI8)
-                && 0x2000 != (uint)(0x2000 | (int)StorageType.VT_FILETIME)
-                && 0x2000 != (uint)(0x2000 | (int)StorageType.VT_CLSID)
-                && 0x2000 != (uint)(0x2000 | (int)StorageType.VT_BLOB)
-                && 0x2000 != (uint)(0x2000 | (int)StorageType.VT_LPSTR)
-                && 0x2000 != (uint)(0x2000 | (int)StorageType.VT_LPWSTR);
+                = 0x2000 != (uint)(0x2000 | (int)vType_Values.VT_I8)
+                && 0x2000 != (uint)(0x2000 | (int)vType_Values.VT_UI8)
+                && 0x2000 != (uint)(0x2000 | (int)vType_Values.VT_FILETIME)
+                && 0x2000 != (uint)(0x2000 | (int)vType_Values.VT_CLSID)
+                && 0x2000 != (uint)(0x2000 | (int)vType_Values.VT_BLOB)
+                && 0x2000 != (uint)(0x2000 | (int)vType_Values.VT_LPSTR)
+                && 0x2000 != (uint)(0x2000 | (int)vType_Values.VT_LPWSTR);
             site.CaptureRequirementIfIsTrue(isValidArray, 8,
                 "VT_ARRAY type modifier MUST NOT be combined(binary ORed)" +
                 "with the following types: VT_I8, VT_UI8, VT_FILETIME," +
@@ -2616,33 +2540,33 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             switch ((uint)vType)
             {
-                case (uint)StorageType.VT_BLOB:
-                case (uint)StorageType.VT_BOOL:
-                case (uint)StorageType.VT_BSTR:
-                case (uint)StorageType.VT_CLSID:
-                case (uint)StorageType.VT_COMPRESSED_LPWSTR:
-                case (uint)StorageType.VT_CY:
-                case (uint)StorageType.VT_DATE:
-                case (uint)StorageType.VT_DECIMAL:
-                case (uint)StorageType.VT_EMPTY:
-                case (uint)StorageType.VT_ERROR:
-                case (uint)StorageType.VT_FILETIME:
-                case (uint)StorageType.VT_I1:
-                case (uint)StorageType.VT_I2:
-                case (uint)StorageType.VT_I4:
-                case (uint)StorageType.VT_I8:
-                case (uint)StorageType.VT_INT:
-                case (uint)StorageType.VT_LPSTR:
-                case (uint)StorageType.VT_LPWSTR:
-                case (uint)StorageType.VT_NULL:
-                case (uint)StorageType.VT_R4:
-                case (uint)StorageType.VT_R8:
-                case (uint)StorageType.VT_UI1:
-                case (uint)StorageType.VT_UI2:
-                case (uint)StorageType.VT_UI4:
-                case (uint)StorageType.VT_UI8:
-                case (uint)StorageType.VT_UINT:
-                case (uint)StorageType.VT_VARIANT:
+                case (uint)vType_Values.VT_BLOB:
+                case (uint)vType_Values.VT_BOOL:
+                case (uint)vType_Values.VT_BSTR:
+                case (uint)vType_Values.VT_CLSID:
+                case (uint)vType_Values.VT_COMPRESSED_LPWSTR:
+                case (uint)vType_Values.VT_CY:
+                case (uint)vType_Values.VT_DATE:
+                case (uint)vType_Values.VT_DECIMAL:
+                case (uint)vType_Values.VT_EMPTY:
+                case (uint)vType_Values.VT_ERROR:
+                case (uint)vType_Values.VT_FILETIME:
+                case (uint)vType_Values.VT_I1:
+                case (uint)vType_Values.VT_I2:
+                case (uint)vType_Values.VT_I4:
+                case (uint)vType_Values.VT_I8:
+                case (uint)vType_Values.VT_INT:
+                case (uint)vType_Values.VT_LPSTR:
+                case (uint)vType_Values.VT_LPWSTR:
+                case (uint)vType_Values.VT_NULL:
+                case (uint)vType_Values.VT_R4:
+                case (uint)vType_Values.VT_R8:
+                case (uint)vType_Values.VT_UI1:
+                case (uint)vType_Values.VT_UI2:
+                case (uint)vType_Values.VT_UI4:
+                case (uint)vType_Values.VT_UI8:
+                case (uint)vType_Values.VT_UINT:
+                case (uint)vType_Values.VT_VARIANT:
                     result = true;
                     break;
                 default:
@@ -2655,16 +2579,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         /// <param name="row">Row Array</param>
         /// <param name="rowIndex">Current Index of the row array</param>
-        /// <param name="baseStorageType">Type of data storrage type</param>
+        /// <param name="basevType_Values">Type of data storrage type</param>
         /// <returns>Fixed length data blob</returns>
         private byte[] ReadFixedLengthData(byte[] row,
-            ref int rowIndex, StorageType baseStorageType)
+            ref int rowIndex, vType_Values basevType_Values)
         {
             byte[] fixedSizedData = null;
-            switch (baseStorageType)
+            switch (basevType_Values)
             {
 
-                case StorageType.VT_I1:
+                case vType_Values.VT_I1:
 
                     fixedSizedData
                         = Helper.GetData(row, ref rowIndex,
@@ -2675,7 +2599,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         "The size of VT_I1  value of the vValue field of" +
                         "CBaseStorageVariant structure is 1 byte.");
                     break;
-                case StorageType.VT_UI1:
+                case vType_Values.VT_UI1:
                     // Read One Bytes
                     fixedSizedData
                         = Helper.GetData(row, ref rowIndex,
@@ -2686,7 +2610,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         "The size of VT_UI1  value of the vValue field" +
                         "of CBaseStorageVariant structure is 1 byte.");
                     break;
-                case StorageType.VT_I2:
+                case vType_Values.VT_I2:
                     fixedSizedData
                         = Helper.GetData(row, ref rowIndex,
                         Constant.SIZE_OF_USHORT);
@@ -2696,7 +2620,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     "The size of VT_I2  value of the vValue field of" +
                     "CBaseStorageVariant structure is 2 bytes.");
                     break;
-                case StorageType.VT_UI2:
+                case vType_Values.VT_UI2:
                     fixedSizedData
                         = Helper.GetData(row, ref rowIndex,
                         Constant.SIZE_OF_USHORT);
@@ -2706,7 +2630,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         "The size of VT_UI2  value of the vValue field " +
                         "of CBaseStorageVariant structure is 2 bytes.");
                     break;
-                case StorageType.VT_BOOL:
+                case vType_Values.VT_BOOL:
                     fixedSizedData
                         = Helper.GetData(row, ref rowIndex,
                         Constant.SIZE_OF_USHORT);
@@ -2716,7 +2640,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         "The size of VT_BOOL  value of the vValue field" +
                         "of CBaseStorageVariant structure is 2 bytes.");
                     break;
-                case StorageType.VT_I4:
+                case vType_Values.VT_I4:
                     fixedSizedData
                         = Helper.GetData(row, ref rowIndex,
                         Constant.SIZE_OF_UINT);
@@ -2726,7 +2650,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         "The size of VT_I4  value of the vValue field of" +
                         "CBaseStorageVariant structure is 4 bytes.");
                     break;
-                case StorageType.VT_UI4:
+                case vType_Values.VT_UI4:
                     fixedSizedData
                         = Helper.GetData(row, ref rowIndex,
                         Constant.SIZE_OF_UINT);
@@ -2736,7 +2660,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         "The size of VT_UI4  value of the vValue field of" +
                         "CBaseStorageVariant structure is 4 bytes.");
                     break;
-                case StorageType.VT_R4:
+                case vType_Values.VT_R4:
                     fixedSizedData
                         = Helper.GetData(row, ref rowIndex,
                         Constant.SIZE_OF_UINT);
@@ -2746,7 +2670,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         "The size of VT_R4  value of the vValue field of" +
                         "CBaseStorageVariant structure is 4 bytes.");
                     break;
-                case StorageType.VT_INT:
+                case vType_Values.VT_INT:
                     fixedSizedData
                         = Helper.GetData(row, ref rowIndex,
                         Constant.SIZE_OF_UINT);
@@ -2756,7 +2680,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         "The size of VT_INT  value of the vValue field" +
                         "of CBaseStorageVariant structure is 4 bytes.");
                     break;
-                case StorageType.VT_UINT:
+                case vType_Values.VT_UINT:
                     fixedSizedData
                         = Helper.GetData(row, ref rowIndex,
                         Constant.SIZE_OF_UINT);
@@ -2766,7 +2690,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         "The size of VT_UINT  value of the vValue field " +
                         "of CBaseStorageVariant structure is 4 bytes.");
                     break;
-                case StorageType.VT_ERROR:
+                case vType_Values.VT_ERROR:
                     fixedSizedData
                         = Helper.GetData(row, ref rowIndex,
                         Constant.SIZE_OF_UINT);
@@ -2777,7 +2701,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         "of CBaseStorageVariant structure is 4 bytes.");
                     break;
 
-                case StorageType.VT_I8:
+                case vType_Values.VT_I8:
                     fixedSizedData
                         = Helper.GetData(row, ref rowIndex,
                         2 * Constant.SIZE_OF_UINT);
@@ -2787,7 +2711,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     "The size of VT_I8 value of the vValue field of" +
                     "CBaseStorageVariant structure is 8 bytes.");
                     break;
-                case StorageType.VT_UI8:
+                case vType_Values.VT_UI8:
                     fixedSizedData = Helper.GetData(row, ref rowIndex,
                         2 * Constant.SIZE_OF_UINT);
                     //Successful Retrieval of 8 bytes
@@ -2796,7 +2720,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         "The size of VT_UI8 value of the vValue field of" +
                         "CBaseStorageVariant structure is 8 bytes.");
                     break;
-                case StorageType.VT_R8:
+                case vType_Values.VT_R8:
                     fixedSizedData = Helper.GetData(row, ref rowIndex,
                         2 * Constant.SIZE_OF_UINT);
                     //Successful Retrieval of 8 bytes
@@ -2805,7 +2729,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         "of the vValue field of CBaseStorageVariant " +
                         "structure is 8 bytes.");
                     break;
-                case StorageType.VT_CY:
+                case vType_Values.VT_CY:
                     fixedSizedData = Helper.GetData(row, ref rowIndex,
                         2 * Constant.SIZE_OF_UINT);
                     //Successful Retrieval of 8 bytes
@@ -2814,7 +2738,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         "The size of VT_CY value of the vValue field of" +
                         "CBaseStorageVariant structure is 8 bytes.");
                     break;
-                case StorageType.VT_DATE:
+                case vType_Values.VT_DATE:
                     fixedSizedData = Helper.GetData(row, ref rowIndex,
                         2 * Constant.SIZE_OF_UINT);
                     //Successful Retrieval of 8 bytes
@@ -2823,7 +2747,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         "The size of VT_DATE value of the vValue field" +
                         "of CBaseStorageVariant structure is 8 bytes.");
                     break;
-                case StorageType.VT_FILETIME:
+                case vType_Values.VT_FILETIME:
                     fixedSizedData = Helper.GetData(row, ref rowIndex,
                         2 * Constant.SIZE_OF_UINT);
                     //Successful Retrieval of 8 bytes
@@ -2832,7 +2756,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         "The size of VT_FILETIME value of the vValue" +
                         "field of CBaseStorageVariant structure is 8 bytes.");
                     break;
-                case StorageType.VT_DECIMAL:
+                case vType_Values.VT_DECIMAL:
                     fixedSizedData
                         = Helper.GetData(row, ref rowIndex,
                         Constant.SIZE_OF_GUID);
@@ -2842,7 +2766,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         "The size of VT_DECIMAL value of the vValue field" +
                         "of CBaseStorageVariant structure is 8 bytes.");
                     break;
-                case StorageType.VT_CLSID:
+                case vType_Values.VT_CLSID:
                     fixedSizedData = Helper.GetData(row, ref rowIndex,
                         Constant.SIZE_OF_GUID);
                     //Successful Retrieval of 16 bytes
@@ -2871,41 +2795,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             return value;
         }
 
-        private byte[] ReadVariableDataFromBuffer2(byte[] rowsInResponse,
-            ulong offset2, int actualLength)
-        {
-            byte[] value = new byte[actualLength];
-            Array.Copy(rowsInResponse, (long)offset2, value, 0, actualLength);
-            return value;
-        }
-
         private bool IsVariableLengthType(ushort actualType)
         {
             bool isVariableType = false;
-            switch ((StorageType)actualType)
+            switch ((vType_Values)actualType)
             {
-                case StorageType.VT_BLOB:
-                case StorageType.VT_BSTR:
-                case StorageType.VT_LPSTR:
-                case StorageType.VT_LPWSTR:
-                case StorageType.VT_COMPRESSED_LPWSTR:
-                case StorageType.VT_VARIANT:
+                case vType_Values.VT_BLOB:
+                case vType_Values.VT_BSTR:
+                case vType_Values.VT_LPSTR:
+                case vType_Values.VT_LPWSTR:
+                case vType_Values.VT_COMPRESSED_LPWSTR:
+                case vType_Values.VT_VARIANT:
                     isVariableType = true;
                     break;
                 default:
                     break;
             }
             return isVariableType;
-        }
-
-        private ushort GetUShort(byte[] bytes, ushort startingIndex)
-        {
-            byte[] tempArray = new byte[Constant.SIZE_OF_USHORT];
-            for (int i = 0; i < Constant.SIZE_OF_USHORT; i++)
-            {
-                tempArray[i] = bytes[i + startingIndex];
-            }
-            return BitConverter.ToUInt16(tempArray, 0);
         }
 
         /// <summary>
