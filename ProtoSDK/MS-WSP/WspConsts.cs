@@ -72,7 +72,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public static readonly CFullPropSpec QueryAll = new CFullPropSpec(new Guid("49691C90-7E17-101A-A91C-08002B2ECDA9"), 6);
 
+        public static readonly CFullPropSpec System_DateCreated = new CFullPropSpec(new Guid("B725F130-47EF-101A-A5F1-02608C9EEBAC"), 15);
 
+        public static readonly CFullPropSpec System_Size = new CFullPropSpec(new Guid("B725F130-47EF-101A-A5F1-02608C9EEBAC"), 12);
+
+        public static readonly CFullPropSpec System_Image_HorizontalSize = new CFullPropSpec(new Guid("6444048F-4C8B-11D1-8B70-080036B11A03"), 3);
+
+        public static readonly CFullPropSpec System_FileName = new CFullPropSpec(new Guid("41CF5AE0-F75A-4806-BD87-59C7D9248EB9"), 100);
         #endregion
     }
 }

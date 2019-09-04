@@ -1095,7 +1095,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="queryString">Search Query String</param>
         /// <param name="searchScope">Search Query Scope</param>
         /// <returns>CRestrictionArray structure BLOB</returns>
-        public CRestrictionArray GetRestrictionArray(string queryString, string searchScope)
+        public CRestrictionArray GetRestrictionArray(string queryString, string searchScope, CFullPropSpec prop)
         {
             var result = new CRestrictionArray();
 
@@ -1103,7 +1103,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             result.isPresent = 0x01;
 
-            result.Restriction = GetQueryPathRestriction(queryString, searchScope);
+            result.Restriction = GetQueryPathRestriction(queryString, searchScope, prop);
 
             return result;
         }
@@ -1117,7 +1117,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="queryString"></param>
         /// <param name="searchScope"></param>
         /// <returns>CPropertyRestrictionNode structure BLOB</returns>
-        public CRestriction GetQueryPathRestriction(string queryString, string searchScope)
+        public CRestriction GetQueryPathRestriction(string queryString, string searchScope, CFullPropSpec prop)
         {
             var result = new CRestriction();
 
@@ -1133,7 +1133,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             node._paNode[0] = GetPropertyRestriction(searchScope);
 
-            node._paNode[1] = GetContentRestriction(queryString);
+            node._paNode[1] = GetContentRestriction(queryString, prop);
 
             result.Restriction = node;
 
@@ -1212,7 +1212,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// begining of the message</param>
         /// <param name="queryString">Query String of the search</param>
         /// <returns>ContentRestriction structure Node</returns>
-        private CRestriction GetContentRestriction(string queryString)
+        private CRestriction GetContentRestriction(string queryString, CFullPropSpec prop)
         {
             var result = new CRestriction();
 
@@ -1222,7 +1222,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             var node = new CContentRestriction();
 
-            node._Property = WspConsts.System_Search_Contents;
+            node._Property = prop;
 
             node.Cc = (UInt32)queryString.Length;
 
@@ -1559,7 +1559,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// string representing the scope of search</param>
         /// <param name="queryText">A NON null terminated unicode string representing the query string</param>
         /// <param name="ENABLEROWSETEVENTS">flag for ENABLEROWSETEVENTS</param>
-        public CPMCreateQueryIn GetCPMCreateQueryIn(string path, string queryText, bool ENABLEROWSETEVENTS)
+        public CPMCreateQueryIn GetCPMCreateQueryIn(string path, string queryText, CFullPropSpec prop, bool ENABLEROWSETEVENTS)
         {
             searchScope = path;
 
@@ -1569,7 +1569,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             message.ColumnSet = GetColumnSet();
 
-            message.RestrictionArray = GetRestrictionArray(queryString, searchScope);
+            message.RestrictionArray = GetRestrictionArray(queryString, searchScope, prop);
 
             message.SortSet = null;
 

@@ -354,7 +354,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             string queryScope = wspTestSite.Properties.Get("QueryPath");
             string queryText = wspTestSite.Properties.Get("QueryText");
 
-            var queryInMessage = builder.GetCPMCreateQueryIn(queryScope, queryText, ENABLEROWSETEVENTS);
+            var queryInMessage = builder.GetCPMCreateQueryIn(queryScope, queryText, WspConsts.System_Search_Contents, ENABLEROWSETEVENTS);
 
             CPMCreateQueryIn(
                 queryInMessage.ColumnSet,
