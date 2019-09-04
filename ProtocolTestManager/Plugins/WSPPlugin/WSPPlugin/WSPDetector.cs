@@ -336,6 +336,12 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
         }
         public bool FetchPlatformInfo(ref DetectionInfo info)
         {
+            if (!info.IsServerWindows)
+            {
+                logWriter.AddLog(LogLevel.Information, "SUT is non Windows. Skip the OS Version detection.");
+
+                return true;
+            }
             string osArchitecture = info.ServerOffset;
             string caption = info.ServerVersion;
            
@@ -359,6 +365,9 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
                 }
                 info.ClientOffset = String.CompareOrdinal(osArchitecture.Substring(0, 2), "64") == 0 ? "64" : "32";
                 info.ClientVersion = GetOSVersion(buildNum, osArchitecture, false).ToString();
+
+                logWriter.AddLog(LogLevel.Information, "Detect OS Version finished successfully.");
+
             }
             catch (Exception ex)
             {
@@ -553,25 +562,16 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
                 if ((msgId == (uint)MessageType.CPMConnectOut)
                     && (msgStatus == 0x00000000))
                 {
-                    int startingIndexconnect = 0;
-                    ValidateHeader(
-                        connectInMessageBytes,
-                        MessageType.CPMConnectOut,
-                        checkSum, ref startingIndexconnect);
+                    info.ServerVersion = connectOutMessage._serverVersion.ToString();
 
-                    uint obtainedServerVersion
-                     = Helper.GetUInt(connectInMessageBytes, ref startingIndexconnect);
-                    //if serverVersion equals 0x00000102, ir means Windows server 2008 with OS 32-bit
-                    //if serverVersion equals 0x00010102, ir means Windows server 2008 with OS 64-bit
-                    info.ServerVersion = obtainedServerVersion.ToString();
-                    if (obtainedServerVersion >= WspConsts.Is64bitVersion)
+                    if ((connectOutMessage._serverVersion & WspConsts.Is64bitVersion) != 0)
                     {
-                        info.ServerOffset = "64";
+                        info.ServerOffset = "64";                        
                     }
                     else
                     {
                         info.ServerOffset = "32";
-                    }                               
+                    }                                     
                     
                     logWriter.AddLog(LogLevel.Information, $"ObtainedServerVersion returned from CPMCoonnectOut message is: {obtainedServerVersion}.");
                 }

@@ -302,12 +302,12 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
             try
             {
                 result= detector.DetectSUTConnection(ref detectionInfo);
-                logWriter.AddLog(LogLevel.Information, "Passed", false, LogStyle.StepPassed);
+                logWriter.AddLog(LogLevel.Information, "Finished", false, LogStyle.StepPassed);
             }
             catch (Exception ex)
             {
                 logWriter.AddLog(LogLevel.Warning, "Failed", false, LogStyle.StepFailed);
-                logWriter.AddLog(LogLevel.Error, ex.Message);
+                logWriter.AddLog(LogLevel.Error, ex.ToString());
             }
             
             return result;
@@ -334,7 +334,7 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
             {
                 result = false;
                 logWriter.AddLineToLog(LogLevel.Information);
-                logWriter.AddLog(LogLevel.Error, string.Format("The User cannot log on:{0} \r\nPlease check the credential", ex.Message));
+                logWriter.AddLog(LogLevel.Error, string.Format("The User cannot log on:{0} \r\nPlease check the credential", ex.ToString()));
                 logWriter.AddLog(LogLevel.Warning, "Failed", false, LogStyle.StepFailed);
             }
             return result;
@@ -374,7 +374,7 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
             }
             catch (Exception ex)
             {
-                logWriter.AddLog(LogLevel.Error, string.Format("Detect share info failed. Cannot do further detection.", ex.Message));
+                logWriter.AddLog(LogLevel.Error, string.Format("Detect share info failed. Cannot do further detection.", ex.ToString()));
                 logWriter.AddLog(LogLevel.Warning, "Failed", false, LogStyle.StepFailed);
             }
                        

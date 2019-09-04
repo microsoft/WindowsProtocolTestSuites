@@ -122,38 +122,5 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
             }
             return parameter;
         }
-        public static string[] EnumShares(string serverName, string userName, string domainName, string password)
-        {
-            string[] shareList = null;
-
-            using (new ImpersonationHelper(userName, domainName, password))
-            {
-                List<string> ShareInfos = new List<string>();
-                int entriesread = 0;
-                int totalentries = 0;
-                int resume_handle = 0;
-                IntPtr bufPtr = IntPtr.Zero;
-                int nStructSize = Marshal.SizeOf(typeof(SHARE_INFO_1));
-                StringBuilder server = new StringBuilder(serverName);
-
-                if (NetShareEnum(server, 1, ref bufPtr, MAX_PREFERRED_LENGTH, ref entriesread, ref totalentries, ref resume_handle)
-                    == (int)NetError.NERR_Success)
-                {
-                    IntPtr currentPtr = bufPtr;
-
-                    for (int i = 0; i < entriesread; i++)
-                    {
-                        SHARE_INFO_1 shi1 = (SHARE_INFO_1)Marshal.PtrToStructure(currentPtr, typeof(SHARE_INFO_1));
-                        ShareInfos.Add(shi1.shi1_netname);
-                        currentPtr = new IntPtr(currentPtr.ToInt64() + nStructSize);
-                    }
-
-                    NetApiBufferFree(bufPtr);
-                    shareList = ShareInfos.ToArray();
-                }
-            }
-
-            return shareList;
-        }
     }
 }

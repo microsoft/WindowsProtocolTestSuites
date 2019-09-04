@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+    <Folder Include="SUTControlAdapter\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
@@ -72,7 +73,6 @@
     </Compile>
     <Compile Include="Configs.cs" />
     <Compile Include="WSPDetector.cs" />
-    <Compile Include="ImpersonationHelper.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Utility.cs" />
     <Compile Include="WSPValueDetector.cs" />
@@ -140,9 +140,6 @@
     <Resource Include="Icons\supported.png" />
     <Resource Include="Icons\undetected.png" />
     <Resource Include="Icons\unsupported.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="SUTControlAdapter\Check-PSRemoting.ps1" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
