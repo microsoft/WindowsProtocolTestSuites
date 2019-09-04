@@ -103,23 +103,7 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
             parameter.NumberOfSetBindingsColumns = Int32.Parse(config.NumberOfSetBindingsColumns);
 
             parameter.ColumnParameters = new MessageBuilderColumnParameter[parameter.NumberOfSetBindingsColumns];
-
-            for (int i = 0; i < parameter.NumberOfSetBindingsColumns; i++)
-            {
-                parameter.ColumnParameters[i] = new MessageBuilderColumnParameter();
-
-                parameter.ColumnParameters[i].Guid = new Guid((string)config.GetType().GetProperty($"columnGuid_{i}").GetValue(config, null));
-
-                parameter.ColumnParameters[i].PropertyId = UInt32.Parse((string)config.GetType().GetProperty($"columnPropertyId_{i}").GetValue(config, null));
-
-                parameter.ColumnParameters[i].ValueOffset = UInt16.Parse((string)config.GetType().GetProperty($"columnValueOffset_{i}").GetValue(config, null));
-
-                parameter.ColumnParameters[i].StatusOffset = UInt16.Parse((string)config.GetType().GetProperty($"columnStatusOffset_{i}").GetValue(config, null));
-
-                parameter.ColumnParameters[i].LengthOffset = UInt16.Parse((string)config.GetType().GetProperty($"columnLengthOffset_{i}").GetValue(config, null));
-
-                parameter.ColumnParameters[i].StorageType = (StorageType)Enum.Parse(typeof(StorageType), (string)config.GetType().GetProperty($"columnStorageType_{i}").GetValue(config, null));
-            }
+           
             return parameter;
         }
     }

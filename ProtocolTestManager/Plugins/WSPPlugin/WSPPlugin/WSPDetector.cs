@@ -336,15 +336,9 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
         }
         public bool FetchPlatformInfo(ref DetectionInfo info)
         {
-            if (!info.IsServerWindows)
-            {
-                logWriter.AddLog(LogLevel.Information, "SUT is non Windows. Skip the OS Version detection.");
-
-                return true;
-            }
             string osArchitecture = info.ServerOffset;
             string caption = info.ServerVersion;
-           
+
             //Get client computer os version and offset
             try
             {
@@ -353,7 +347,7 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
                     "SELECT * FROM Win32_OperatingSystem");
 
                 string buildNum = String.Empty;
-            
+
                 foreach (ManagementBaseObject result in resultCollection)
                 {
                     foreach (var prop in result.Properties)
@@ -373,7 +367,14 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
             {
                 logWriter.AddLog(LogLevel.Information, $"Detect OS Version failed with  Reason: {ex.Message}");
                 return false;
-            }            
+            }
+
+            if (!info.IsServerWindows)
+            {
+                logWriter.AddLog(LogLevel.Information, "SUT is non Windows. Skip the OS Version detection.");
+
+                return true;
+            }             
 
             //Get sut os version and offset
             try
@@ -573,7 +574,7 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
                         info.ServerOffset = "32";
                     }                                     
                     
-                    logWriter.AddLog(LogLevel.Information, $"ObtainedServerVersion returned from CPMCoonnectOut message is: {obtainedServerVersion}.");
+                    logWriter.AddLog(LogLevel.Information, $"ServerVersion returned from CPMCoonnectOut message is: {info.ServerVersion}.");
                 }
             }
         }

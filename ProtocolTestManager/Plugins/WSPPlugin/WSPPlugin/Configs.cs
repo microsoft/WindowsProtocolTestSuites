@@ -38,7 +38,6 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
         public string QueryText { get; set; }
         public string CbChunk { get; set; }
         public string PropertySet_One_DBProperties { get; set; }
-
         public string PropertySet_Two_DBProperties { get; set; }
 
         public string Array_PropertySet_One_Guid { get; set; }
@@ -56,35 +55,7 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
         public string Array_PropertySet_Four_DBProperties { get; set; }
 
         public string NumberOfSetBindingsColumns { get; set; }
-
-        public string columnGuid_0 { get; set; }
-        public string columnPropertyId_0 { get; set; }
-        public string columnValueOffset_0 { get; set; }
-        public string columnStatusOffset_0 { get; set; }
-        public string columnLengthOffset_0 { get; set; }
-        public string columnStorageType_0 { get; set; }
-
-        public string columnGuid_1 { get; set; }
-        public string columnPropertyId_1 { get; set; }
-        public string columnValueOffset_1 { get; set; }
-        public string columnStatusOffset_1 { get; set; }
-        public string columnLengthOffset_1 { get; set; }
-        public string columnStorageType_1 { get; set; }
-
-        public string columnGuid_2 { get; set; }
-        public string columnPropertyId_2 { get; set; }
-        public string columnValueOffset_2 { get; set; }
-        public string columnStatusOffset_2 { get; set; }
-        public string columnLengthOffset_2 { get; set; }
-        public string columnStorageType_2 { get; set; }
-
-        public string columnGuid_3 { get; set; }
-        public string columnPropertyId_3 { get; set; }
-        public string columnValueOffset_3 { get; set; }
-        public string columnStatusOffset_3 { get; set; }
-        public string columnLengthOffset_3 { get; set; }
-        public string columnStorageType_3 { get; set; }
-
+      
         public string WorkIdPropertyGuid { get; set; }
         public string WorkId { get; set; }
         public string ClientBase { get; set; }
