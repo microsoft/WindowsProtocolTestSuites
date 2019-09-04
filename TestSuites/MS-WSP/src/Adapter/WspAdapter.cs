@@ -187,27 +187,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             parameter.RowsToTransfer = UInt32.Parse(wspTestSite.Properties.Get("RowsToTransfer"));
 
-            parameter.NumberOfSetBindingsColumns = Int32.Parse(wspTestSite.Properties.Get("NumberOfSetBindingsColumns"));
-
-            parameter.ColumnParameters = new MessageBuilderColumnParameter[parameter.NumberOfSetBindingsColumns];
-
-            for (int i = 0; i < parameter.NumberOfSetBindingsColumns; i++)
-            {
-                parameter.ColumnParameters[i] = new MessageBuilderColumnParameter();
-
-                parameter.ColumnParameters[i].Guid = new Guid(wspTestSite.Properties.Get($"columnGuid_{i}"));
-
-                parameter.ColumnParameters[i].PropertyId = UInt32.Parse(wspTestSite.Properties.Get($"columnPropertyId_{i}"));
-
-                parameter.ColumnParameters[i].ValueOffset = UInt16.Parse(wspTestSite.Properties.Get($"columnValueOffset_{i}"));
-
-                parameter.ColumnParameters[i].StatusOffset = UInt16.Parse(wspTestSite.Properties.Get($"columnStatusOffset_{i}"));
-
-                parameter.ColumnParameters[i].LengthOffset = UInt16.Parse(wspTestSite.Properties.Get($"columnLengthOffset_{i}"));
-
-                parameter.ColumnParameters[i].StorageType = (StorageType)Enum.Parse(typeof(StorageType), wspTestSite.Properties.Get($"columnStorageType_{i}"));
-            }
-
             return parameter;
         }
 
