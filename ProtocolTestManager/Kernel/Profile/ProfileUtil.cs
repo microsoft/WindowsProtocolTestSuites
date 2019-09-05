@@ -246,6 +246,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
             ["RDP_ServerTestSuite.deployment.ptfconfig"]            = StringResource.RDP_ServerTestSuite_deployment_ptfconfig,
             ["MS-SMBD_ServerTestSuite.ptfconfig"]                   = StringResource.MS_SMBD_ServerTestSuite_ptfconfig,
             ["MS-SMBD_ServerTestSuite.deployment.ptfconfig"]        = StringResource.MS_SMBD_ServerTestSuite_deployment_ptfconfig,
+            ["MS-WSP_ServerTestSuite.ptfconfig"]                    = StringResource.MS_WSP_ServerTestSuite_ptfconfig,
+            ["MS-WSP_ServerTestSuite.deployment.ptfconfig"]         = StringResource.MS_WSP_ServerTestSuite_deployment_ptfconfig,
         };
 
         public static Dictionary<string, string[]> PtfConfigFilesByTestSuite = new Dictionary<string, string[]>
@@ -317,6 +319,11 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 "MS-SMBD_ServerTestSuite.ptfconfig",
                 "MS-SMBD_ServerTestSuite.deployment.ptfconfig",
+            },
+            ["MS-WSP"] = new string[]
+            {
+                "MS-WSP_ServerTestSuite.ptfconfig",
+                "MS-WSP_ServerTestSuite.deployment.ptfconfig",
             },
         };
     }

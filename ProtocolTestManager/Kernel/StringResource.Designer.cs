@@ -88,39 +88,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
                 return ResourceManager.GetString("AD_ServerTestSuite_ptfconfig", resourceCulture);
             }
         }
-
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  &lt;Properties&gt;
-        ///    &lt;Group name=&quot;Common&quot;&gt;
-        ///      &lt;!-- START - OVERALL ENVIRONMENT CONFIG --&gt;
-        ///      &lt;Property name=&quot;AllowBreakEnvironment&quot; value=&quot;false&quot;&gt;
-        ///         [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string WSP_ServerTestSuite_deployment_ptfconfig
-        {
-            get
-            {
-                return ResourceManager.GetString("WSP_ServerTestSuite_deployment_ptfconfig", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  &lt;Properties&gt;
-        ///    &lt;Property name=&quot;TestName&quot; value=&quot;AD_Family_Test_Suite&quot; /&gt;
-        ///    &lt;Property name=&quot;FeatureName&quot; value=&quot;AD_Family&quot; /&gt;
-        ///    &lt;Property name=&quot;Version&quot;  [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string WSP_ServerTestSuite_ptfconfig
-        {
-            get
-            {
-                return ResourceManager.GetString("WSP_ServerTestSuite_ptfconfig", resourceCulture);
-            }
-        }
+        
         /// <summary>
         ///   Looks up a localized string similar to Failed to append test category..
         /// </summary>
@@ -886,6 +854,38 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///  &lt;Properties&gt;
+        ///    &lt;!-- IP/ Machine Name for the Beacon Logging--&gt;
+        ///    &lt;Property name=&quot;ServerComputerName&quot; value=&quot;sut&quot; /&gt;
+        ///    &lt;!-- Username to access the system [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MS_WSP_ServerTestSuite_deployment_ptfconfig {
+            get {
+                return ResourceManager.GetString("MS_WSP_ServerTestSuite_deployment_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
+        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
+        ///  &lt;Properties&gt;
+        ///    &lt;Property name=&quot;TestName&quot; value=&quot;MS-WSP Test&quot; /&gt;
+        ///    &lt;Property name=&quot;FeatureName&quot; value=&quot;WSP&quot; /&gt;
+        ///  &lt;/Properties&gt;
+        ///
+        ///   [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MS_WSP_ServerTestSuite_ptfconfig {
+            get {
+                return ResourceManager.GetString("MS_WSP_ServerTestSuite_ptfconfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [TestPassed].
         /// </summary>
         internal static string PassedTag {
@@ -1091,37 +1091,6 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         internal static string VSTestNotInstalled {
             get {
                 return ResourceManager.GetString("VSTestNotInstalled", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  &lt;Properties&gt;
-        ///    &lt;!-- IP/ Machine Name for the Beacon Logging--&gt;
-        ///    &lt;Property name=&quot;ServerComputerName&quot; value=&quot;sut&quot; /&gt;
-        ///    &lt;!-- Username to access the system [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string WSP_ServerTestSuite_deployment_ptfconfig {
-            get {
-                return ResourceManager.GetString("WSP_ServerTestSuite_deployment_ptfconfig", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  &lt;Properties/&gt;
-        ///
-        ///
-        ///  &lt;Adapters&gt;
-        ///    &lt;Adapter xsi:type=&quot;managed&quot; name=&quot;IWspAdapter&quot; adaptertype=&quot;Microsoft.Protocols.TestTools.StackSdk.Fi [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string WSP_ServerTestSuite_ptfconfig {
-            get {
-                return ResourceManager.GetString("WSP_ServerTestSuite_ptfconfig", resourceCulture);
             }
         }
         
