@@ -131,6 +131,10 @@
         <File Id="Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.pdb"
               Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.pdb" />
       </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.pdb" Guid="*" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.pdb"
+              Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.pdb" />
+      </Component>
       <?endif ?>
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.Asn1Base.dll" Guid="{76A7792D-FDCD-4092-9BDE-9E5D3795BFC5}" Feature="PTM_Feature">
         <File Id="Microsoft.Protocols.TestTools.StackSdk.Asn1Base.dll"
@@ -263,6 +267,10 @@
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.dll" Guid="{758C671E-62DF-4764-BD16-A3D771E31484}" Feature="PTM_Feature">
         <File Id="Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.dll"
               Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.dll" Guid="{E97E277F-D4CA-4176-9E26-52447C286031}" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.dll"
+              Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.dll" />
       </Component>
     </ComponentGroup>
 

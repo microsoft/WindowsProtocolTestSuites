@@ -338,6 +338,12 @@ The test suite is {2} {3}.</value>
   <data name="RDP_ServerTestSuite_deployment_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\..\TestSuites\RDP\Server\src\TestSuite\RDP_ServerTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="MS_WSP_ServerTestSuite_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\MS-WSP\src\TestSuite\MS-WSP_ServerTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="MS_WSP_ServerTestSuite_deployment_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\MS-WSP\src\TestSuite\MS-WSP_ServerTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="ProfileNewerError" xml:space="preserve">
     <value>The profile version is newer than test suite.</value>
   </data>
