@@ -72,6 +72,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         public static readonly CFullPropSpec QueryAll = new CFullPropSpec(new Guid("49691C90-7E17-101A-A91C-08002B2ECDA9"), 6);
 
+        /// <summary>
+        /// System.FileExtension
+        /// This is the file extension of the file-based item, including the leading period
+        /// </summary>
+        public static readonly CFullPropSpec System_FileExtension = new CFullPropSpec(new Guid("E4F10A3C-49E6-405D-8288-A23BD4EEAA6C"), 100);
+
+        /// <summary>
+        /// System.Path
+        /// The full physical path to the file, including the file name.
+        /// </summary>
+        public static readonly CFullPropSpec Path = new CFullPropSpec(new Guid("B725F130-47EF-101A-A5F1-02608C9EEBAC"), 11);
 
         #endregion
     }

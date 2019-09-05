@@ -147,8 +147,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         public void SendCPMSetBindingsIn(
             uint _hCursor,
             uint _cbRow,
-            uint _cbBindingDesc,
-            uint _dummy,
             uint cColumns,
             CTableColumn[] aColumns
             )
@@ -161,8 +159,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 },
                 _hCursor = _hCursor,
                 _cbRow = _cbRow,
-                _cbBindingDesc = _cbBindingDesc,
-                _dummy = _dummy,
                 cColumns = cColumns,
                 aColumns = aColumns,
             };

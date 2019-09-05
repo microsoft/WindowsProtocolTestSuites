@@ -94,10 +94,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
                 buffer.Add(ValueUsed);
             }
-            else
-            {
-                throw new InvalidOperationException("ValueOffset and ValueSize should be present or absent at the same time!");
-            }
 
             byte StatusUsed;
 

@@ -22,7 +22,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         {
             AllValid,
             InvalidRowSize,
-            InvalidCursor
+            InvalidCursor,
+            InvalidcColumn,
+            InvalidaColumn
         }
         private ArgumentType argumentType;
 
@@ -81,11 +83,84 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         }
 
         [TestMethod]
+        [TestCategory("BVT")]
+        [TestCategory("CPMSetBindings")]
+        [Description("This test case is designed to test the basic functionality of CPMSetBindings with multiple columns.")]
+        public void BVT_CPMSetBindingsWithMultipleColumns()
+        {
+            argumentType = ArgumentType.AllValid;
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
+            wspAdapter.CPMConnectInRequest();
+
+            var columnSet = wspAdapter.builder.GetColumnSet(3);
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray(Site.Properties.Get("QueryText"), Site.Properties.Get("QueryPath"));
+            var pidMapper = new CPidMapper();
+            pidMapper.aPropSpec = new CFullPropSpec[]
+            {
+                WspConsts.System_ItemName,
+                WspConsts.System_ItemFolderNameDisplay,
+                WspConsts.System_FileExtension,
+                WspConsts.System_Search_Scope,
+                WspConsts.System_Search_Contents,
+            };
+            pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn with multiple columns and expects success.");
+            var columns = GetTableColumns();
+            CTableColumn[] aColumns = columns.Select(column => wspAdapter.builder.GetTableColumn(column)).ToArray();
+            Helper.UpdateTableColumns(aColumns);
+            uint cColumns = (uint)aColumns.Length;
+            wspAdapter.CPMSetBindingsIn(
+                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                (uint)wspAdapter.builder.parameter.EachRowSize,
+                cColumns,
+                aColumns
+                );
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn and expects success.");
+            wspAdapter.CPMGetRowsIn(true);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMSetBindings")]
+        [Description("This test case is designed to verify the server response if the columns of SetBindings contained in CreateQuery")]
+        public void CPMSetBindingsWithColumnsContainedInCreateQuery()
+        {
+            argumentType = ArgumentType.AllValid;
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
+            wspAdapter.CPMConnectInRequest();
+
+            var columnSet = wspAdapter.builder.GetColumnSet(3);
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray(Site.Properties.Get("QueryText"), Site.Properties.Get("QueryPath"));
+            var pidMapper = new CPidMapper();
+            pidMapper.aPropSpec = new CFullPropSpec[]
+            {
+                WspConsts.System_ItemName,
+                WspConsts.System_ItemFolderNameDisplay,
+                WspConsts.System_FileExtension,
+                WspConsts.System_Search_Scope,
+                WspConsts.System_Search_Contents,
+            };
+            pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn with columns contained in CreateQuery and expects success.");
+            wspAdapter.CPMSetBindingsIn(true, true);
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn and expects success.");
+            wspAdapter.CPMGetRowsIn(true);
+        }
+
+        [TestMethod]
         [TestCategory("CPMSetBindings")]
         [Description("This test case is designed to verify the server response if invalid row size is sent in CPMSetBindingsIn.")]
         public void CPMSetBindings_InvalidRowSize()
         {
-
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
             wspAdapter.CPMConnectInRequest();
 
@@ -103,7 +178,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [Description("This test case is designed to verify the server response if invalid cursor is sent in CPMSetBindingsIn.")]
         public void CPMSetBindings_InvalidCursor()
         {
-
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
             wspAdapter.CPMConnectInRequest();
 
@@ -114,6 +188,69 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             argumentType = ArgumentType.InvalidCursor;
             wspAdapter.CPMSetBindingsIn(true, false);
             //ERROR_INVALID_STATUS
+        }
+
+        [TestMethod]
+        [TestCategory("CPMSetBindings")]
+        [Description("This test case is designed to verify the server response if invalid cColumn is sent in CPMSetBindingsIn.")]
+        public void CPMSetBindings_InvalidcColumn()
+        {
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
+            wspAdapter.CPMConnectInRequest();
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
+            wspAdapter.CPMCreateQueryIn(true);
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn with invalid cColumn and expects NOT SUCCEED.");
+            argumentType = ArgumentType.InvalidcColumn;
+            var columns = wspAdapter.builder.GetDefaultTableColumns();
+            CTableColumn[] aColumns = columns.Select(column => wspAdapter.builder.GetTableColumn(column)).ToArray();
+            Helper.UpdateTableColumns(aColumns);
+            uint cColumns = (uint)(aColumns.Length + 1);
+            wspAdapter.CPMSetBindingsIn(
+                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                (uint)wspAdapter.builder.parameter.EachRowSize,
+                cColumns,
+                aColumns
+                );
+        }
+
+        [TestMethod]
+        [TestCategory("CPMSetBindings")]
+        [Description("This test case is designed to verify the server response if the columns of SetBindings is not contained in CreateQuery")]
+        public void CPMSetBindingsWithColumnsNotContainedInCreateQuery()
+        {
+            argumentType = ArgumentType.InvalidaColumn;
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
+            wspAdapter.CPMConnectInRequest();
+
+            var columnSet = wspAdapter.builder.GetColumnSet(2);
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray(Site.Properties.Get("QueryText"), Site.Properties.Get("QueryPath"));
+            var pidMapper = new CPidMapper();
+            pidMapper.aPropSpec = new CFullPropSpec[]
+            {
+                WspConsts.System_ItemName,
+                WspConsts.System_ItemFolderNameDisplay,
+                WspConsts.System_Search_Scope,
+                WspConsts.System_Search_Contents,
+            };
+            pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn with column not contained in CreateQuery and expects NOT SUCCEED.");
+            var columns = GetTableColumns();
+            CTableColumn[] aColumns = columns.Select(column => wspAdapter.builder.GetTableColumn(column)).ToArray();
+            Helper.UpdateTableColumns(aColumns);
+            uint cColumns = (uint)aColumns.Length;
+            wspAdapter.CPMSetBindingsIn(
+                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                (uint)wspAdapter.builder.parameter.EachRowSize,
+                cColumns,
+                aColumns
+                );
         }
 
         #endregion
@@ -147,7 +284,53 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 case ArgumentType.InvalidCursor:
                     Site.Assert.AreEqual((uint)WspErrorCode.ERROR_INVALID_PARAMETER, errorCode, "Server should return ERROR_INVALID_PARAMETER if the cursor of CPMSetBindingsIn is invalid.");
                     break;
+                case ArgumentType.InvalidcColumn:
+                    Site.Assert.AreNotEqual((uint)WspErrorCode.SUCCESS, errorCode, "Server should not return succeed if the cColumn of CPMSetBindingsIn is invalid.");
+                    break;
+                case ArgumentType.InvalidaColumn:
+                    Site.Assert.AreNotEqual((uint)WspErrorCode.SUCCESS, errorCode, "Server should not return succeed if the columns of SetBindings is not contained in CreateQuery.");
+                    break;
             }
+        }
+
+        private TableColumn[] GetTableColumns()
+        {
+            TableColumn[] columns = null;
+            switch (argumentType)
+            {               
+                case ArgumentType.InvalidaColumn:
+                    columns = new TableColumn[]
+                    {
+                        new TableColumn()
+                        {
+                            Property = WspConsts.System_FileExtension,
+                            Type = vType_Values.VT_VARIANT,
+                        }
+                    };
+                    break;
+                case ArgumentType.AllValid:
+                    columns = new TableColumn[]
+                    {
+                        new TableColumn()
+                        {
+                            Property = WspConsts.System_ItemName,
+                            Type = vType_Values.VT_VARIANT,
+                        },
+                        new TableColumn()
+                        {
+                            Property = WspConsts.System_ItemFolderNameDisplay,
+                            Type = vType_Values.VT_VARIANT,
+                        },
+                        new TableColumn()
+                        {
+                            Property = WspConsts.System_FileExtension,
+                            Type = vType_Values.VT_VARIANT,
+                        },
+                    };
+                    break;
+            }
+
+            return columns;
         }
     }
 }
