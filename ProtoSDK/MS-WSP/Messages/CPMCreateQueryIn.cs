@@ -9,7 +9,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CPMCreateQueryIn message creates a new query.
     /// </summary>
-    public struct CPMCreateQueryIn : IWspInMessage
+    public class CPMCreateQueryIn : IWspInMessage
     {
         /// <summary>
         /// A 32-bit unsigned integer indicating the number of bytes from the beginning of this field to the end of the message.

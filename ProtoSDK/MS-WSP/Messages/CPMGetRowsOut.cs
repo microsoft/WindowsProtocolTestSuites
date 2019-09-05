@@ -27,7 +27,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CPMCreateRowsOut message contains a response to a CPMCreateRowsIn message.
     /// </summary>
-    public struct CPMGetRowsOut : IWspOutMessage
+    public class CPMGetRowsOut : IWspOutMessage
     {
         /// <summary>
         /// A 32-bit unsigned integer indicating the number of rows returned in Rows.
@@ -123,7 +123,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             int rowStartIndex = initialReadOffset + (int)((CPMGetRowsIn)Request)._cbReserved;
             int paddingSize = rowStartIndex - buffer.ReadOffset;
             paddingRows = buffer.ReadBytes(paddingSize);
-            
+
             rowStartIndex = buffer.ReadOffset;
             Rows = new Row[_cRowsReturned];
             uint cColumns = BindingRequest.cColumns;
@@ -153,23 +153,36 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                             Rows[i].Columns[j].rowVariant.Is64bit = this.Is64Bit;
                             WspBuffer rowVariantBuffer = new WspBuffer(buffer.ReadBytesFromOffset(valueOffset, BindingRequest.aColumns[j].ValueSize.Value));
                             Rows[i].Columns[j].rowVariant.FromBytes(rowVariantBuffer);
-                            int dataOffset;
-                            if (this.Is64Bit)
-                            {
-                                // If 64-bit offsets are being used, the reserved2 field of the message header is used as the upper 32-bits and _ulClientBase as the lower 32-bits of a 64-bit value.
-                                Int64 clientBase = Convert.ToInt64(Request.Header._ulReserved2);
-                                clientBase = clientBase << 32;
-                                clientBase += ((CPMGetRowsIn)Request)._ulClientBase;
 
-                                // Since the ReadBuffer cannot excceed 0x4000, so the dataOffset should be a 32-bit value.
-                                dataOffset = Convert.ToInt32((Int64)Rows[i].Columns[j].rowVariant.Offset - clientBase); 
+                            if (Rows[i].Columns[j].rowVariant.vType == vType_Values.VT_LPWSTR)
+                            {
+                                int dataOffset;
+                                if (this.Is64Bit)
+                                {
+                                    // If 64-bit offsets are being used, the reserved2 field of the message header is used as the upper 32-bits and _ulClientBase as the lower 32-bits of a 64-bit value.
+                                    Int64 clientBase = Convert.ToInt64(Request.Header._ulReserved2);
+                                    clientBase = clientBase << 32;
+                                    clientBase += ((CPMGetRowsIn)Request)._ulClientBase;
+
+                                    // Since the ReadBuffer cannot excced 0x4000, so the dataOffset should be a 32-bit value.
+                                    dataOffset = Convert.ToInt32((Int64)Rows[i].Columns[j].rowVariant.Offset - clientBase);
+                                }
+                                else
+                                {
+                                    dataOffset = (Int32)Rows[i].Columns[j].rowVariant.Offset - (int)((CPMGetRowsIn)Request)._ulClientBase;
+                                }
+
+                                Rows[i].Columns[j].Data = ReadValueByType(Rows[i].Columns[j].rowVariant.vType, dataOffset, buffer);
+                            }
+                            else if (Rows[i].Columns[j].rowVariant.vType == vType_Values.VT_VECTOR)
+                            {
+                                throw new NotImplementedException();
                             }
                             else
                             {
-                                dataOffset = (Int32)Rows[i].Columns[j].rowVariant.Offset - (int)((CPMGetRowsIn)Request)._ulClientBase;
+                                // If the type is not a string, the offset field saves the actual data.
+                                Rows[i].Columns[j].Data = ReadValueByType(Rows[i].Columns[j].rowVariant.vType, 8, rowVariantBuffer);
                             }
-
-                            Rows[i].Columns[j].Data = ReadValueByType(Rows[i].Columns[j].rowVariant.vType, dataOffset, buffer); 
                         }
                         else
                         {
@@ -256,7 +269,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                     //TODO: just use UTF8 for a temporary solution
                     // For vType set to VT_BSTR, this field is a set of characters in an OEM–selected character set. 
                     // The client and server MUST be configured to have interoperable character sets. There is no requirement that it be null-terminated.
-                    value = System.Text.Encoding.UTF8.GetString(bytes, 0, bytes.Length); 
+                    value = System.Text.Encoding.UTF8.GetString(bytes, 0, bytes.Length);
                     break;
                 case vType_Values.VT_LPSTR:
                     {
@@ -280,7 +293,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         private int GetNullTerminatedUnicodeStringLength(WspBuffer buffer, int startOffset)
         {
             int length = 0;
-            while (buffer.Peek<ushort>(startOffset) !=0 )
+            while (buffer.Peek<ushort>(startOffset) != 0)
             {
                 startOffset += 2;
                 length += 2;

@@ -239,7 +239,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <typeparam name="T">Response type.</typeparam>
         /// <param name="response">Response from server.</param>
         /// <returns>Status</returns>
-        public UInt32 ExpectMessage<T>(out T response) where T : struct, IWspOutMessage
+        public UInt32 ExpectMessage<T>(out T response) where T : IWspOutMessage, new()
         {
             response = new T();
 
@@ -260,8 +260,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 return header._status;
             }
 
-            if (response is CPMGetRowsOut getRowsOut)
+            if (response is CPMGetRowsOut)
             {
+                CPMGetRowsOut getRowsOut = response as CPMGetRowsOut;
                 getRowsOut.Is64Bit = Is64bit;
                 getRowsOut.BindingRequest = lastSetBindingsInMessage;
             }
@@ -301,6 +302,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         public void Dispose()
         {
 
-        }       
+        }
     }
 }

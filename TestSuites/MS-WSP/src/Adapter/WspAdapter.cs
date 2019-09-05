@@ -703,12 +703,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         }
 
         /// <summary>
+        /// CPMSetBindingsIn() requests the bindings of columns to a rowset.
+        /// </summary>
+        public void CPMSetBindingsIn(CTableColumn[] aColumns)
+        {
+            CPMSetBindingsIn(
+                GetCursor(clientMachineName),
+                MessageBuilder.rowWidth,
+                0,
+                0,
+                (uint)aColumns.Length,
+                aColumns);
+        }
+
+        /// <summary>
         /// Create and send CPMSetBindingsIn and expect response.
         /// </summary>
         public void CPMSetBindingsIn(uint _hCursor, uint _cbRow, uint _cbBindingDesc, uint _dummy, uint cColumns, CTableColumn[] aColumns)
         {
             var client = GetClient(isClientConnected);
 
+            Helper.UpdateTableColumns(aColumns);
             client.SendCPMSetBindingsIn(_hCursor, _cbRow, _cbBindingDesc, _dummy, cColumns, aColumns);
 
             CPMSetBindingsOut response;
@@ -782,6 +797,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             }
 
             CPMGetRowsIn(cursorAssociated, builder.parameter.RowsToTransfer, builder.parameter.EachRowSize, builder.parameter.BufferSize, 0, builder.parameter.EType, out CPMGetRowsOut getRowsOut);
+        }
+
+        /// <summary>
+        /// CPMGetRowsIn() message requests rows from a query.
+        /// </summary>
+        public void CPMGetRowsIn(out CPMGetRowsOut getRowsOut)
+        {
+            uint cursorAssociated = GetCursor(clientMachineName);
+            getRowsOut = null;
+            CPMGetRowsIn(cursorAssociated, builder.parameter.RowsToTransfer, builder.parameter.EachRowSize, builder.parameter.BufferSize, 0, builder.parameter.EType, out getRowsOut);
         }
 
         /// <summary>
