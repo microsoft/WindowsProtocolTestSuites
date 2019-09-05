@@ -98,11 +98,7 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
 
             parameter.ClientBase = UInt32.Parse(config.ClientBase);
 
-            parameter.RowsToTransfer = UInt32.Parse(config.RowsToTransfer);
-
-            parameter.NumberOfSetBindingsColumns = Int32.Parse(config.NumberOfSetBindingsColumns);
-
-            parameter.ColumnParameters = new MessageBuilderColumnParameter[parameter.NumberOfSetBindingsColumns];
+            parameter.RowsToTransfer = UInt32.Parse(config.RowsToTransfer);           
            
             return parameter;
         }

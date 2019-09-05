@@ -5,23 +5,8 @@ using System;
 using System.Linq;
 using System.Text;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 {
-    public class MessageBuilderColumnParameter
-    {
-        public Guid Guid;
-
-        public uint PropertyId;
-
-        public ushort ValueOffset;
-
-        public ushort StatusOffset;
-
-        public ushort LengthOffset;
-
-        public StorageType StorageType;
-    }
-
     public class MessageBuilderParameter
     {
         public string[] PropertySet_One_DBProperties;
@@ -55,10 +40,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         public uint ClientBase;
 
         public uint RowsToTransfer;
-
-        public int NumberOfSetBindingsColumns;
-
-        public MessageBuilderColumnParameter[] ColumnParameters;
     }
 
     /// <summary>
@@ -355,7 +336,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             byte[] padding = null;
             int messageOffset = 0;
             messageOffset += 4 * Constant.SIZE_OF_UINT;
-            TableColumn[] col = GetTableColumnFromConfig();
             byte[] propSpec = GetFullPropSec(WspConsts.System_ItemName._guidPropSet,
                 PROPERTY_ID, (int)WspConsts.System_ItemName.PrSpec, ref messageOffset);
             if (messageOffset % OFFSET_4 != 0)
@@ -1095,7 +1075,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <param name="queryString">Search Query String</param>
         /// <param name="searchScope">Search Query Scope</param>
         /// <returns>CRestrictionArray structure BLOB</returns>
-        private CRestrictionArray GetRestrictionArray(string queryString, string searchScope)
+        public CRestrictionArray GetRestrictionArray(string queryString, string searchScope)
         {
             var result = new CRestrictionArray();
 
@@ -1117,7 +1097,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <param name="queryString"></param>
         /// <param name="searchScope"></param>
         /// <returns>CPropertyRestrictionNode structure BLOB</returns>
-        private CRestriction GetQueryPathRestriction(string queryString, string searchScope)
+        public CRestriction GetQueryPathRestriction(string queryString, string searchScope)
         {
             var result = new CRestriction();
 
@@ -1243,8 +1223,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// Gets a Vector form of a Base Storage Type
         /// </summary>
-        /// <param name="type">StorageType (Vector Item type)</param>
-        /// <param name="inputvalues">StorageType
+        /// <param name="type">vType_Values (Vector Item type)</param>
+        /// <param name="inputvalues">vType_Values
         /// (Vector Item values)</param>
         /// <returns>Vector Base Storage Type BLOB</returns>
         private CBaseStorageVariant GetVector<T>(vType_Values type, T[] inputvalues) where T : struct
@@ -1280,7 +1260,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         }
 
         /// <summary>
-        /// Gets Safe Array of given StorageType
+        /// Gets Safe Array of given vType_Values
         /// </summary>
         /// <param name="type">Type of item(s)</param>
         /// <param name="arrayValue">Value of item(s)</param>
@@ -1380,7 +1360,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             // SIZE of ColumnCount and Columns combined to be assigned later.
             uint dummy = 0;// Dummy value
             Random r = new Random();
-            columns = GetTableColumnFromConfig();
+            columns = GetDefaultTableColumns();
 
             if (!isValidBinding)
             {
@@ -1408,34 +1388,35 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 aColumns = columns.Select(column => GetTableColumn(column)).ToArray(),
             };
 
+            Helper.UpdateTableColumns(message.aColumns);
+
             return message;
         }
 
         /// <summary>
-        /// Reads the table Columns details from the configuration file
+        /// Get the default table columns details.
         /// </summary>
         /// <returns>array of Table Column</returns>
-        private TableColumn[] GetTableColumnFromConfig()
+        private TableColumn[] GetDefaultTableColumns()
         {
-            int numberofTableColumns = parameter.NumberOfSetBindingsColumns;
-            TableColumn[] columns = new TableColumn[numberofTableColumns];
-            for (int i = 0; i < numberofTableColumns; i++)
+            var columns = new TableColumn[]
             {
-                columns[i] = new TableColumn();
-                columns[i].Guid = parameter.ColumnParameters[i].Guid;
-                columns[i].PropertyId = parameter.ColumnParameters[i].PropertyId;
-                columns[i].ValueOffset = parameter.ColumnParameters[i].ValueOffset;
-                columns[i].StatusOffset = parameter.ColumnParameters[i].StatusOffset;
-                columns[i].LengthOffset = parameter.ColumnParameters[i].LengthOffset;
-                columns[i].Type = parameter.ColumnParameters[i].StorageType;
-            }
+                new TableColumn()
+                {
+                    Property = WspConsts.System_ItemName,
+                    Type = vType_Values.VT_VARIANT,
+                },
+                new TableColumn()
+                {
+                    Property = WspConsts.System_ItemFolderNameDisplay,
+                    Type = vType_Values.VT_VARIANT,
+                },
+            };
+
+
+
             return columns;
         }
-        #region Get Table Column for CPMSetBindingsIn message
-
-
-
-        #endregion
 
         /// <summary>
         /// Gets ColumnSet structure
@@ -1443,12 +1424,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <param name="messageOffset">offset from the
         /// beginning of the message</param>
         /// <returns>ColumnSet structure BLOB</returns>
-        private CColumnSet GetColumnSet()
+        public CColumnSet GetColumnSet(int numberOfColumns = 2)
         {
             var result = new CColumnSet();
 
             // Index of Properties to be queried
-            uint[] indexes = new uint[] { 0,1 };
+            uint[] indexes = new uint[numberOfColumns];
+
+            for (uint i = 0; i < numberOfColumns; i++)
+            {
+                indexes[i] = i;
+            }
             // Links to the 'pidMapper' field
 
             result.count = (UInt32)indexes.Length;
@@ -1525,24 +1511,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         {
             var result = new CTableColumn()
             {
-                PropSpec = new CFullPropSpec(column.Guid, column.PropertyId),
+                PropSpec = column.Property,
 
                 vType = (vType_Values)column.Type,
 
                 AggregateType = CAggregSpec_type_Values.DBAGGTTYPE_BYNONE,
 
-                ValueOffset = column.ValueOffset,
-
-                ValueSize = GetSize(column.Type),
-
-                StatusOffset = column.StatusOffset,
-
+                ValueSize = Helper.GetSize(column.Type, Is64bit),
             };
-
-            if (column.LengthOffset != 0)
-            {
-                result.LengthOffset = column.LengthOffset;
-            }
 
             return result;
         }
@@ -1552,15 +1528,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         /// <param name="path">A null terminated unicode
         /// string representing the scope of search</param>
-        /// <param name="queryText">A NON null terminated 
-        /// unicode string representing the query string</param>
-        /// <param name="numberOfCategorization">Number of 
-        /// Categorization Set</param>
+        /// <param name="queryText">A NON null terminated unicode string representing the query string</param>
         /// <param name="ENABLEROWSETEVENTS">flag for ENABLEROWSETEVENTS</param>
-        public CPMCreateQueryIn GetCPMCreateQueryIn(string path, string queryText, out uint numberOfCategorization, bool ENABLEROWSETEVENTS)
+        public CPMCreateQueryIn GetCPMCreateQueryIn(string path, string queryText, bool ENABLEROWSETEVENTS)
         {
-            numberOfCategorization = 0;
-
             searchScope = path;
 
             queryString = queryText;
@@ -1680,74 +1651,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             return messagewithHeader;
         }
 
-        /// <summary>
-        /// Returns the Storage SIZE of a given BaseStorageVariant type
-        /// </summary>
-        /// <param name="type">StorageType</param>
-        /// <returns>size in bytes</returns>
-        private ushort GetSize(StorageType type)
-        {
-            ushort size = 0;
-            switch (type)
-            {
-                case StorageType.VT_EMPTY:
-                    break;
-                case StorageType.VT_NULL:
-                    break;
-                case StorageType.VT_I1:
-                case StorageType.VT_UI1:
-                    size = 1; // Take 1 Byte
-                    break;
-                case StorageType.VT_I2:
-                case StorageType.VT_UI2:
-                case StorageType.VT_BOOL:
-                    size = 2; // Take 2 Bytes
-                    break;
-                case StorageType.VT_I4:
-                case StorageType.VT_UI4:
-                case StorageType.VT_INT:
-                case StorageType.VT_UINT:
-                case StorageType.VT_ERROR:
-                case StorageType.VT_R4:
-                    size = 4; // Take 4 byte
-                    break;
-                case StorageType.VT_I8:
-                case StorageType.VT_UI8:
-                case StorageType.VT_CY:
-                case StorageType.VT_R8:
-                case StorageType.VT_DATE:
-                case StorageType.VT_CLSID:
-                case StorageType.VT_FILETIME:
-                    size = 8;
-                    break;
-
-                case StorageType.VT_DECIMAL:
-                    size = 12;
-                    break;
-                case StorageType.VT_VARIANT:
-                    if (this.Is64bit)
-                    {
-                        size = 24;
-                    }
-                    else
-                    {
-                        size = 16;
-                    }
-                    break;
-                default:
-                    break;
-            }
-            return size;
-        }
-
-        private byte[] ToBytes(IWspInMessage obj)
-        {
-            var buffer = new WspBuffer();
-
-            obj.ToBytes(buffer);
-
-            return buffer.GetBytes();
-        }
         #endregion
     }
 
@@ -1757,29 +1660,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     public struct TableColumn
     {
         /// <summary>
-        /// Guid of the Column
+        /// Guid and property of the Column
         /// </summary>
-        public Guid Guid;
-        /// <summary>
-        /// Property Id of the column
-        /// </summary>
-        public uint PropertyId;
+        public CFullPropSpec Property;
+
         /// <summary>
         /// Base Storage Type of the Column
         /// </summary>
-        public StorageType Type;
-        /// <summary>
-        /// Length Offset of the Column
-        /// </summary>
-        public ushort LengthOffset;
-        /// <summary>
-        /// Value offset of the column
-        /// </summary>
-        public ushort ValueOffset;
-        /// <summary>
-        /// Status Offset of the Column
-        /// </summary>
-        public ushort StatusOffset;
+        public vType_Values Type;
     }
 
     /// <summary>

@@ -30,10 +30,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(count);
-
-            foreach (var property in aPropSpec)
+            if (aPropSpec != null)
             {
-                property.ToBytes(buffer);
+                foreach (var property in aPropSpec)
+                {
+                    property.ToBytes(buffer);
+                }
             }
         }
     }

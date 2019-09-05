@@ -48,14 +48,12 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
         private const string UserName = "UserName";
         private const string Password = "Password";
            
-        private const string SharedPath = "SharedPath";
+        private const string QueryPath = "QueryPath";
         private const string CatalogName = "CatalogName";
                    
         private const string IsWDSInstalled = "IsWDSInstalled";
         private const string IsServerWindows = "IsServerWindows";
-
-        private const string LanguageLocale = "LanguageLocale";
-        private const string LCID_VALUE = "LCID_VALUE";
+      
         #endregion Private Types      
 
         #region Implemented IValueDetector
@@ -88,14 +86,12 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
             prereq.AddProperty(ServerComputerName, config.ServerComputerName);
             prereq.AddProperty(UserName, config.UserName);
             prereq.AddProperty(Password, config.Password);
-            prereq.AddProperty(SharedPath, config.SharedPath);
+            prereq.AddProperty(QueryPath, config.QueryPath);
             prereq.AddProperty(CatalogName, config.CatalogName);
 
             prereq.AddProperty(IsServerWindows, config.IsServerWindows);
             prereq.AddProperty(IsWDSInstalled, config.IsWDSInstalled);
-            prereq.AddProperty(LanguageLocale, config.LanguageLocale);
-            prereq.AddProperty(LCID_VALUE, config.LCID_VALUE);
-            
+      
             return prereq;
         }
 
@@ -117,18 +113,15 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
             detectionInfo.UserName = properties[UserName];
             detectionInfo.Password = properties[Password];
             detectionInfo.CatalogName = properties[CatalogName];
-            detectionInfo.SharedPath = properties[SharedPath];    
+            detectionInfo.QueryPath = properties[QueryPath];    
 
             detectionInfo.IsServerWindows = bool.Parse(properties[IsServerWindows]);
             detectionInfo.IsWDSInstalled = bool.Parse(properties[IsWDSInstalled]);
 
-            detectionInfo.LanguageLocale = properties[LanguageLocale];
-            detectionInfo.LCID_VALUE = properties[LCID_VALUE];
             this.properties = properties;
 
             // Check the validity of the inputs
-            if (string.IsNullOrEmpty(detectionInfo.DomainName)
-                || string.IsNullOrEmpty(detectionInfo.ServerComputerName)
+            if (string.IsNullOrEmpty(detectionInfo.ServerComputerName)
                 || string.IsNullOrEmpty(detectionInfo.UserName)
                 || string.IsNullOrEmpty(detectionInfo.Password))
             {
@@ -175,9 +168,9 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
                 return false;
             }
 
-            if (!DetectShareInfo(detector))
+            if (!ConnectToShare(detector))
             {
-                logWriter.AddLog(LogLevel.Error, "===== Detecting SUT Share Info failed.=====");
+                logWriter.AddLog(LogLevel.Error, "===== Connecting to SUT Share Info failed.=====");
                 return false;
             }
 
@@ -198,14 +191,15 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
             propertiesDic.Add("UserName", new List<string>() { detectionInfo.UserName });
             propertiesDic.Add("Password", new List<string>() { detectionInfo.Password });
             propertiesDic.Add("ServerVersion", new List<string>() { detectionInfo.ServerVersion });
-            propertiesDic.Add("SharedPath", new List<string>() { detectionInfo.SharedPath });
+            propertiesDic.Add("QueryPath", new List<string>() { detectionInfo.QueryPath });
             propertiesDic.Add("ServerOffset", new List<string>() { detectionInfo.ServerOffset });
-            propertiesDic.Add("ClientComputerName", new List<string>() { detectionInfo.ClientName });
+            propertiesDic.Add("ClientName", new List<string>() { detectionInfo.ClientName });
             propertiesDic.Add("CatalogName", new List<string>() { detectionInfo.CatalogName });
             propertiesDic.Add("IsWDSInstalled", new List<string>() { detectionInfo.IsWDSInstalled.ToString() });
             propertiesDic.Add("ClientOffset", new List<string>() { detectionInfo.ClientOffset });
             propertiesDic.Add("ClientVersion", new List<string>() { detectionInfo.ClientVersion });
             propertiesDic.Add("IsServerWindows", new List<string>() { detectionInfo.IsServerWindows.ToString() });
+            propertiesDic.Add("LCID_VALUE", new List<string>() { detectionInfo.LCID_VALUE });
             propertiesDic.Add("LanguageLocale", new List<string>() { detectionInfo.LanguageLocale});
             return true;
         }
@@ -253,6 +247,7 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
             sb.AppendLine(string.Format("Is Search Service Installed: {0}", detectionInfo.IsWDSInstalled));
             sb.AppendLine(string.Format("Is SUT Windows Server: {0}", detectionInfo.IsServerWindows));
             sb.AppendLine(string.Format("Language Locale: {0}", detectionInfo.LanguageLocale));
+            sb.AppendLine(string.Format("LCID Value: {0}", detectionInfo.LCID_VALUE));
             sb.AppendLine();
             return sb.ToString();
         }
@@ -356,13 +351,13 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
             return result;
         }            
        
-        private bool DetectShareInfo(WSPDetector detector)
+        private bool ConnectToShare(WSPDetector detector)
         {
-            logWriter.AddLog(LogLevel.Information, "===== Fetch Share Info =====");
+            logWriter.AddLog(LogLevel.Information, "===== Connect to SUT Share =====");
             bool result = false;
             try
             {
-                result = detector.FetchShareInfo(ref detectionInfo);
+                result = detector.ConnectToShare(ref detectionInfo);
                 if (result)
                 {
                     logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);
@@ -374,7 +369,7 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
             }
             catch (Exception ex)
             {
-                logWriter.AddLog(LogLevel.Error, string.Format("Detect share info failed. Cannot do further detection.", ex.ToString()));
+                logWriter.AddLog(LogLevel.Error, string.Format("Cannot connect to share. Cannot do further detection.", ex.ToString()));
                 logWriter.AddLog(LogLevel.Warning, "Failed", false, LogStyle.StepFailed);
             }
                        

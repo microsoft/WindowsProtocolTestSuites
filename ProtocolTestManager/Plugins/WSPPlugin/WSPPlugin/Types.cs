@@ -73,29 +73,19 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
     {
         // Parameters for Detecting      
         public string DomainName { get; set; }
-
         public string ServerComputerName { get; set; }
-
         public string ServerVersion { get; set; }
-
         public string UserName { get; set; }
-
         public string Password { get; set; }
-        public string SharedPath { get; set; }
-
+        public string QueryPath { get; set; }
         public string CatalogName { get; set; }
-
         public string ServerOffset { get; set; }
-
         public string ClientName { get; set; }
-
         public string ClientOffset { get; set; }
         public string ClientVersion { get; set; }
-
         public bool IsWDSInstalled { get; set; }
         public bool IsServerWindows { get; set; }
         public string LanguageLocale { get; set; }
-
         public string LCID_VALUE { get; set; }
         
         /// <summary>

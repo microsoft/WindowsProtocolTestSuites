@@ -43,11 +43,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// MessageBuilder builds client requests
         /// </summary>
-        MessageBuilder builder = null;
+        public MessageBuilder builder = null;
         /// <summary>
         /// Validates Server responses
         /// </summary>
-        MessageValidator validator = null;
+        public MessageValidator validator = null;
         /// <summary>
         /// Maps list of connected clients
         /// </summary>
@@ -186,27 +186,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             parameter.ClientBase = UInt32.Parse(wspTestSite.Properties.Get("ClientBase"));
 
             parameter.RowsToTransfer = UInt32.Parse(wspTestSite.Properties.Get("RowsToTransfer"));
-
-            parameter.NumberOfSetBindingsColumns = Int32.Parse(wspTestSite.Properties.Get("NumberOfSetBindingsColumns"));
-
-            parameter.ColumnParameters = new MessageBuilderColumnParameter[parameter.NumberOfSetBindingsColumns];
-
-            for (int i = 0; i < parameter.NumberOfSetBindingsColumns; i++)
-            {
-                parameter.ColumnParameters[i] = new MessageBuilderColumnParameter();
-
-                parameter.ColumnParameters[i].Guid = new Guid(wspTestSite.Properties.Get($"columnGuid_{i}"));
-
-                parameter.ColumnParameters[i].PropertyId = UInt32.Parse(wspTestSite.Properties.Get($"columnPropertyId_{i}"));
-
-                parameter.ColumnParameters[i].ValueOffset = UInt16.Parse(wspTestSite.Properties.Get($"columnValueOffset_{i}"));
-
-                parameter.ColumnParameters[i].StatusOffset = UInt16.Parse(wspTestSite.Properties.Get($"columnStatusOffset_{i}"));
-
-                parameter.ColumnParameters[i].LengthOffset = UInt16.Parse(wspTestSite.Properties.Get($"columnLengthOffset_{i}"));
-
-                parameter.ColumnParameters[i].StorageType = (StorageType)Enum.Parse(typeof(StorageType), wspTestSite.Properties.Get($"columnStorageType_{i}"));
-            }
 
             return parameter;
         }
@@ -351,63 +330,50 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         public void CPMCreateQueryIn(bool ENABLEROWSETEVENTS)
         {
-            uint[] cursor = null;// to be obtained from the server
-            uint numberOfCategorization = 0;
             string queryScope = wspTestSite.Properties.Get("QueryPath");
             string queryText = wspTestSite.Properties.Get("QueryText");
 
-            // Get hold of appropriate Sender (Pipe with/without connection)
+            var queryInMessage = builder.GetCPMCreateQueryIn(queryScope, queryText, ENABLEROWSETEVENTS);
+
+            CPMCreateQueryIn(
+                queryInMessage.ColumnSet,
+                queryInMessage.RestrictionArray,
+                queryInMessage.SortSet,
+                queryInMessage.CCategorizationSet,
+                queryInMessage.RowSetProperties,
+                queryInMessage.PidMapper,
+                queryInMessage.GroupArray,
+                queryInMessage.Lcid);
+        }
+
+        /// <summary>
+        /// Create and send CPMCreateQueryIn and expect response.
+        /// </summary>
+        public void CPMCreateQueryIn(
+            CColumnSet? columnSet,
+            CRestrictionArray? restrictionArray,
+            CInGroupSortAggregSets? sortSet,
+            CCategorizationSet? categorizationSet,
+            CRowsetProperties rowsetProperties,
+            CPidMapper pidMapper,
+            CColumnGroupArray groupArray,
+            uint lcid)
+        {
             var client = GetClient(isClientConnected);
-            var queryInMessage = builder.GetCPMCreateQueryIn(queryScope, queryText, out numberOfCategorization, ENABLEROWSETEVENTS);
-            //get checkSum field (It has to be same in the response)
-            var queryInMessageBytes = Helper.ToBytes(queryInMessage);
-            uint checkSum = GetCheckSumField(queryInMessageBytes);
-            client.SendCPMCreateQueryIn(queryInMessage.ColumnSet, queryInMessage.RestrictionArray, queryInMessage.SortSet, queryInMessage.CCategorizationSet, queryInMessage.RowSetProperties, queryInMessage.PidMapper, queryInMessage.GroupArray, queryInMessage.Lcid);
-            // If the Pipe is not the one with CPMConnectionIn request 
-            //already sent
-            if (client == defaultClient)
+
+            client.SendCPMCreateQueryIn(columnSet, restrictionArray, sortSet, categorizationSet, rowsetProperties, pidMapper, groupArray, lcid);
+
+            CPMCreateQueryOut response;
+            client.ExpectMessage<CPMCreateQueryOut>(out response);
+
+            if (response.Header._status == 0)
             {
-                // This means that disconnect message has been sent
-                // through the pipe which does not have a connect In
-                // sent across it.
-                // If the sender.SendMessage() method is successful
-                // Requirement 598 is validated
-                wspTestSite.CaptureRequirement(598,
-                   "In Windows the same pipe connection is used for the " +
-                   "following messages, except when the error is returned" +
-                   "in a CPMConnectOut message.");
+                uint[] cursor = null;// to be obtained from the server
+                validator.ValidateCreateQueryOutResponse(response, out cursor);
+                cursorMap.Add(clientMachineName, cursor[0]);
             }
-            // RequestSender objects uses path '\\pipe\\MSFTEWDS'
-            // for the protocol transport
-            wspTestSite.CaptureRequirement(3, @"All messages MUST be " +
-                "transported using a named pipe: \\pipe\\MSFTEWDS");
-            // If there is any object listening to this event
-            if (CPMCreateQueryOutResponse != null)
-            {
-                CPMCreateQueryOut queryOutMessage;
 
-                client.ExpectMessage(out queryOutMessage);
-
-                uint msgId = (UInt32)queryOutMessage.Header._msg;
-                uint msgStatus = queryOutMessage.Header._status;
-                if (msgStatus != 0) // Error Condition
-                {
-                    // Req 620 is validated.
-                    wspTestSite.CaptureRequirement(620,
-                        "Whenever an error occurs during processing of a " +
-                        "message sent by a client, the server MUST set the " +
-                        "_status field to the error code value.");
-                }
-                if ((msgId == (uint)MessageType.CPMCreateQueryOut)
-                    && (msgStatus == 0x00000000))
-                {
-                    queryOutMessage.Request = queryInMessage;
-
-                    validator.ValidateCreateQueryOutResponse(queryOutMessage, numberOfCategorization, out cursor);
-                    cursorMap.Add(clientMachineName, cursor[0]);
-                }
-                CPMCreateQueryOutResponse(msgStatus);
-            }
+            CPMCreateQueryOutResponse(response.Header._status);
         }
 
         /// <summary>
@@ -722,27 +688,33 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// is valid</param>
         public void CPMSetBindingsIn(bool isValidBinding, bool isCursorValid)
         {
-            uint cursorAssociated = 0;
-            if (isCursorValid)
-            {
-                cursorAssociated = GetCursor(clientMachineName);
-            }
-            else
-            {
-                cursorAssociated = 0;
-            }
+            uint cursorAssociated = isCursorValid ? GetCursor(clientMachineName) : 0;
 
-
-            //uint cursorAssociated = GetCursor(clientMachineName);
             var setBindingsInMessage = builder.GetCPMSetBindingsIn(cursorAssociated, out tableColumns, isValidBinding);
             this.setBindingsIn = setBindingsInMessage;
-            byte[] setbindingsInResponseMessageBytes;
-            RequestSender sender
-                = GetRequestSender(isClientConnected); //Get the Sender
-                                                       // RequestSender sender = new RequestSender(); //Get the Sender
-            var setBindingsInMessageBytes = Helper.ToBytes(setBindingsInMessage);
-            bytesRead = sender.SendMessage(setBindingsInMessageBytes, out setbindingsInResponseMessageBytes);
-            if (sender == defaultSender)
+
+            CPMSetBindingsIn(
+                setBindingsInMessage._hCursor,
+                setBindingsInMessage._cbRow,
+                setBindingsInMessage._cbBindingDesc,
+                setBindingsInMessage._dummy,
+                setBindingsInMessage.cColumns,
+                setBindingsInMessage.aColumns);
+        }
+
+        /// <summary>
+        /// Create and send CPMSetBindingsIn and expect response.
+        /// </summary>
+        public void CPMSetBindingsIn(uint _hCursor, uint _cbRow, uint _cbBindingDesc, uint _dummy, uint cColumns, CTableColumn[] aColumns)
+        {
+            var client = GetClient(isClientConnected);
+
+            client.SendCPMSetBindingsIn(_hCursor, _cbRow, _cbBindingDesc, _dummy, cColumns, aColumns);
+
+            CPMSetBindingsOut response;
+            client.ExpectMessage<CPMSetBindingsOut>(out response);
+
+            if (client == defaultClient)
             {
                 // This means that disconnect message has been sent
                 // through the pipe which does not have a connect In
@@ -759,38 +731,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             // for the protocol transport
             wspTestSite.CaptureRequirement(3, @"All messages MUST be " +
                          "transported using a named pipe: \\pipe\\MSFTEWDS");
-            if (setbindingsInResponseMessageBytes != null)
+
+            uint msgId = (UInt32)response.Header._msg;
+            uint msgStatus = response.Header._status;
+            if (msgStatus != 0)
             {
-                var response = new CPMSetBindingsOut();
-                response.Request = setBindingsInMessage;
-                Helper.FromBytes(ref response, setbindingsInResponseMessageBytes);
+                //If 4 byte Non Zero field is read as status
+                // The requirement 620 gets validated
+                wspTestSite.CaptureRequirement(620,
+                    "Whenever an error occurs during processing of a " +
+                    "message sent by a client, the server MUST set the " +
+                    "_status field to the error code value.");
 
-                uint msgId = (UInt32)response.Header._msg;
-                uint msgStatus = response.Header._status;
-                if (msgStatus != 0)
-                {
-                    wspTestSite.CaptureRequirementIfAreEqual<int>(bytesRead,
-        Constant.SIZE_OF_HEADER, 619,
-        "Whenever an error occurs during processing of a " +
-        "message sent by a client, the server MUST respond " +
-        "with the message header (only) of the message sent " +
-        "by the client, keeping the _msg field intact.");
-                    //If 4 byte Non Zero field is read as status
-                    // The requirement 620 gets validated
-                    wspTestSite.CaptureRequirement(620,
-                        "Whenever an error occurs during processing of a " +
-                        "message sent by a client, the server MUST set the " +
-                        "_status field to the error code value.");
-
-                }
-                if ((msgId == (uint)MessageType.CPMSetBindingsIn)
-                    && (msgStatus == 0x00000000))
-                {
-                    validator.ValidateSetBindingsInResponse(response);
-                }
-                CPMSetBindingsInResponse(msgStatus); // Fire Response Event
             }
+            if ((msgId == (uint)MessageType.CPMSetBindingsIn)
+                && (msgStatus == 0x00000000))
+            {
+                validator.ValidateSetBindingsInResponse(response);
+            }
+            CPMSetBindingsInResponse(msgStatus); // Fire Response Event
         }
+
         /// <summary>
         /// This event is used to get the response from 
         /// CPMSetBindingsIn request.
@@ -809,7 +770,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// requesting row has a valid cursor.</param>
         public void CPMGetRowsIn(bool isCursorValid)
         {
-            uint cursorAssociated = 0;
+            uint cursorAssociated;
             if (isCursorValid)
             {
                 cursorAssociated = GetCursor(clientMachineName);
@@ -820,8 +781,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 cursorAssociated = (uint)r.Next(50, 60);
             }
 
-            CPMGetRowsOut getRowsOut;
-            CPMGetRowsIn(cursorAssociated, builder.parameter.RowsToTransfer, builder.parameter.EachRowSize, builder.parameter.BufferSize, 0, builder.parameter.EType, out getRowsOut);
+            CPMGetRowsIn(cursorAssociated, builder.parameter.RowsToTransfer, builder.parameter.EachRowSize, builder.parameter.BufferSize, 0, builder.parameter.EType, out CPMGetRowsOut getRowsOut);
         }
 
         /// <summary>
@@ -833,18 +793,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="cbReadBuffer">This field MUST be set to the maximum of the value of _cbRowWidth or 1000 times the value of _cRowsToTransfer, rounded up to the nearest 512 byte multiple. The value MUST NOT exceed 0x00004000</param>
         /// <param name="fBwdFetch">Indicating the order in which to fetch the rows</param>
         /// <param name="eType">Type of SeekDescription</param>
-        public void CPMGetRowsIn(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType, out CPMGetRowsOut getRowsOut)
+        public void CPMGetRowsIn(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType, out CPMGetRowsOut response)
         {
+            // Get hold of appropriate Sender (Pipe with/without connection)
+            var client = GetClient(isClientConnected);
             var getRowsInMessage = builder.GetCPMRowsInMessage(cursor, rowsToTransfer, rowWidth, cbReadBuffer, fBwdFetch, eType, out rowsInReserve);
-            byte[] getRowsOutMessage;
-            uint checkSum = 0;
-            RequestSender sender
-                = GetRequestSender(isClientConnected); //Get the Sender
-
             var getRowsInMessageBytes = Helper.ToBytes(getRowsInMessage);
 
-            sender.SendMessage(getRowsInMessageBytes, out getRowsOutMessage);
-            if (sender == defaultSender)
+            client.SendCPMGetRowsIn(getRowsInMessage._hCursor, getRowsInMessage._cRowsToTransfer, getRowsInMessage._cbRowWidth, getRowsInMessage._cbSeek, getRowsInMessage._cbReserved, getRowsInMessage._cbReadBuffer, getRowsInMessage._ulClientBase, getRowsInMessage._fBwdFetch, getRowsInMessage.eType, getRowsInMessage._chapt, getRowsInMessage.SeekDescription);
+
+            if (client == defaultClient)
             {
                 // This means that disconnect message has been sent
                 // through the pipe which does not have a connect In
@@ -861,23 +819,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             wspTestSite.CaptureRequirement(3, @"All messages MUST be " +
                 "transported using a named pipe: \\pipe\\MSFTEWDS");
 
-            getRowsOut = new CPMGetRowsOut();
-            if (getRowsOutMessage != null)
+            response = new CPMGetRowsOut();
+            if (CPMGetRowsOut != null)
             {
-                int startingIndex = 0;
-                uint msgId
-                    = Helper.GetUInt(getRowsOutMessage, ref startingIndex);
-                uint msgStatus
-                    = Helper.GetUInt(getRowsOutMessage, ref startingIndex);
+                client.ExpectMessage<CPMGetRowsOut>(out response);
 
                 uint offsetUsed = GetOffsetUsed();
-                validator.ValidateGetRowsOut(getRowsInMessage, this.setBindingsIn, getRowsOutMessage,
-                    checkSum, rowsInReserve, rowsInClientBase, tableColumns,
-                    offsetUsed, out lastDocumentWorkId, out getRowsOut);
+                validator.ValidateGetRowsOut(response, out lastDocumentWorkId);
 
                 // Fire Response Event
-                CPMGetRowsOut(msgStatus);
-
+                CPMGetRowsOut(response.Header._status);
             }
         }
 

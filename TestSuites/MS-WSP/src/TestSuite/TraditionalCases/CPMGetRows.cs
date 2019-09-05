@@ -205,17 +205,17 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
         private void CPMSetBindingsOut(uint errorCode)
         {
-            Site.Assert.AreEqual((uint)0, errorCode, "CPMSetBindingsIn should succeed.");
+            Site.Assert.AreEqual((uint)WspErrorCode.SUCCESS, errorCode, "CPMSetBindingsIn should succeed.");
         }
 
         private void CPMConnectOut(uint errorCode)
         {
-            Site.Assert.AreEqual((uint)0, errorCode, "CPMConnectIn should succeed.");
+            Site.Assert.AreEqual((uint)WspErrorCode.SUCCESS, errorCode, "CPMConnectIn should succeed.");
         }
 
         private void CPMCreateQueryOut(uint errorCode)
         {
-            Site.Assert.AreEqual((uint)0, errorCode, "CPMCreateQueryIn should succeed.");
+            Site.Assert.AreEqual((uint)WspErrorCode.SUCCESS, errorCode, "CPMCreateQueryIn should succeed.");
         }
 
         private void CPMGetRowsOut(uint errorCode)
@@ -223,7 +223,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             switch (argumentType)
             {
                 case ArgumentType.AllValid:
-                    bool succeed = errorCode == 0 || errorCode == (uint)WspErrorCode.DB_S_ENDOFROWSET ? true : false;
+                    bool succeed = errorCode == (uint)WspErrorCode.SUCCESS || errorCode == (uint)WspErrorCode.DB_S_ENDOFROWSET ? true : false;
                     Site.Assert.IsTrue(succeed, "Server should return succeed or DB_S_ENDOFROWSET for CPMGetRowsIn.");
                     break;
                 case ArgumentType.InvalidCursor:

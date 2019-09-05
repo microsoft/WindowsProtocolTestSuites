@@ -29,9 +29,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         {
             buffer.Add(count);
 
-            foreach (var group in aGroupArray)
+            if (aGroupArray != null)
             {
-                group.ToBytes(buffer);
+                foreach (var group in aGroupArray)
+                {
+                    group.ToBytes(buffer);
+                }
             }
         }
     }

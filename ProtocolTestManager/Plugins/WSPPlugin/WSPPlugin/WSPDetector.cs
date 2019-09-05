@@ -360,6 +360,9 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
                 info.ClientOffset = String.CompareOrdinal(osArchitecture.Substring(0, 2), "64") == 0 ? "64" : "32";
                 info.ClientVersion = GetOSVersion(buildNum, osArchitecture, false).ToString();
 
+                info.LCID_VALUE = CultureInfo.CurrentCulture.LCID.ToString();
+                info.LanguageLocale = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
+
                 logWriter.AddLog(LogLevel.Information, "Detect OS Version finished successfully.");
 
             }
@@ -379,7 +382,7 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
             //Get sut os version and offset
             try
             {
-                bool result = ConnectShareByNetUse(info.SharedPath, info);
+                bool result = ConnectShareByNetUse(info.QueryPath, info);
 
                 if (result)
                 {
@@ -441,68 +444,51 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
 
             return wspVersion;
         }
-        private Platform ConvertPlatform(string osVersion, string buildNumber)
-        {
-            if (osVersion.StartsWith("10.0."))
-            {
-                int build;
-                if (!Int32.TryParse(buildNumber, out build))
-                {
-                    // build number is empty or not a number
-                    return Platform.WindowsServer2016;
-                }
-
-                if (build < 16299)
-                {
-                    return Platform.WindowsServer2016;
-                }
-                else if (build < 17134)
-                {
-                    return Platform.WindowsServerV1709;
-                }
-                else if (build < 17763)
-                {
-                    return Platform.WindowsServerV1803;
-                }
-                else if (build < 18362)
-                {
-                    return Platform.WindowsServer2019;
-                }
-                else
-                {
-                    return Platform.WindowsServerV1903;
-                }
-            }
-            else if (osVersion.StartsWith("6.3."))
-                return Platform.WindowsServer2012R2;
-            else if (osVersion.StartsWith("6.2."))
-                return Platform.WindowsServer2012;
-            else if (osVersion.StartsWith("6.1."))
-                return Platform.WindowsServer2008R2;
-            else if (osVersion.StartsWith("6.0."))
-                return Platform.WindowsServer2008;
-            else
-                return Platform.NonWindows;
-        }
+     
         private bool ConnectShareByNetUse(string sharePath, DetectionInfo info)
         {
+            bool status = true;
+            //convert file://sut/test/data/test" to \\sut\test\data\test
+            try
+            {
+                sharePath = sharePath.Split(':')[1].Replace(@"/", @"\");
+            }
+            catch
+            {
+                sharePath = info.QueryPath;
+            }
+
             try
             {
                 Process process = new Process();
                 process.StartInfo.FileName = "net.exe";
-                process.StartInfo.Arguments = $"use {sharePath} {info.Password} /user:{info.DomainName}\\{info.UserName}";
                 process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.CreateNoWindow = true;
+
+                process.StartInfo.Arguments = $" use /delete {sharePath} ";               
                 process.Start();
                 process.WaitForExit();
-                return true;
+
+                process.StartInfo.Arguments =
+                    $" use {sharePath} {info.Password} /user:{info.DomainName}\\{info.UserName}";               
+                process.Start();
+
+                process.WaitForExit();
+               
+                // Read the standard error of net.exe and write it on to console.                
+                if (process.ExitCode !=0)
+                {
+                    status = false;
+                }
+               
             }
             catch
             {
                 return false;
             }
-            
+
+            return status;
         }
         public object GetPropertyValue(object config, string propertyName)
         {
@@ -529,16 +515,14 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
                 string serverName = info.ServerComputerName;
                 var connectInMessage = builder.GetConnectInMessage(
                     clientversion,
-                    1,//int isRemote
+                    1,//isRemote
                     info.UserName, 
                     info.ClientName, 
                     info.ServerComputerName,
                     info.CatalogName, 
                     info.LanguageLocale);
                 
-                // Send CPMConnectIn Message
-                //Write the message in the Pipe and Get the response 
-                //in the outputBuffer
+                // Send CPMConnectIn Message, Write the message in the Pipe and Get the response in the outputBuffer
 
                 var connectInMessageBytes = Helper.ToBytes(connectInMessage);
                 uint checkSum = GetCheckSumField(connectInMessageBytes);
@@ -578,29 +562,7 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
                 }
             }
         }
-        /// <summary>
-        /// Validates MS-WSP Message Header
-        /// </summary>
-        /// <param name="responseBytes">response message BLOB</param>
-        /// <param name="requestType">type of WSP message</param>
-        /// <param name="requestMessageChecksum">checksum of 
-        /// request message</param>
-        /// <param name="index">index of the BLOB</param>
-        public void ValidateHeader(byte[] responseBytes,
-            MessageType requestType, uint requestMessageChecksum,
-            ref int index)
-        {
-            var buffer = new WspBuffer(responseBytes);
-
-            var header = new WspMessageHeader();
-
-            header.FromBytes(buffer);
-
-            index = buffer.ReadOffset;
-
-            return;
-
-        }
+      
         /// <summary>
         /// Fetches Checksum field from a WSP message
         /// </summary>
@@ -643,7 +605,6 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
                 }
             }
         }             
-
         private void LogIPConfig()
         {
             logWriter.AddLog(LogLevel.Information, "ipconfig /all");
@@ -651,9 +612,9 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
             logWriter.AddLog(LogLevel.Information, result);
         }
 
-        public bool FetchShareInfo(ref DetectionInfo info)
+        public bool ConnectToShare(ref DetectionInfo info)
         {   
-            return ConnectShareByNetUse(info.SharedPath, info);          
+            return ConnectShareByNetUse(info.QueryPath, info);          
         }
 
         private void LogFailedStatus(string operation, uint status)

@@ -85,6 +85,7 @@
     <Compile Include="TestCaseSetScopePrioritization.cs" />
     <Compile Include="TestCaseSetScopePrioritization_StatusInvalidParameter.cs" />
     <Compile Include="TestCaseUpdateDocumentsIn_StatusInvalid.cs" />
+    <Compile Include="TraditionalCases\CPMCreateQuery.cs" />
     <Compile Include="TraditionalCases\CPMGetRows.cs" />
     <Compile Include="TraditionalCases\CPMSetBindings.cs" />
   </ItemGroup>
