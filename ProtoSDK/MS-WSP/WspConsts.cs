@@ -73,21 +73,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         public static readonly CFullPropSpec QueryAll = new CFullPropSpec(new Guid("49691C90-7E17-101A-A91C-08002B2ECDA9"), 6);
 
         /// <summary>
+        /// System.DateCreated
         /// The date and time the item was created. 
         /// </summary>
         public static readonly CFullPropSpec System_DateCreated = new CFullPropSpec(new Guid("B725F130-47EF-101A-A5F1-02608C9EEBAC"), 15);
 
         /// <summary>
+        /// System.Size
         /// The size, in bytes, of the file.
         /// </summary>
         public static readonly CFullPropSpec System_Size = new CFullPropSpec(new Guid("B725F130-47EF-101A-A5F1-02608C9EEBAC"), 12);
 
         /// <summary>
+        /// System.Image.HorizontalSize
         /// The horizontal size, in pixels.
         /// </summary>
         public static readonly CFullPropSpec System_Image_HorizontalSize = new CFullPropSpec(new Guid("6444048F-4C8B-11D1-8B70-080036B11A03"), 3);
 
         /// <summary>
+        /// System.FileName
         /// This is the file name (including extension) of the file. 
         /// </summary>
         public static readonly CFullPropSpec System_FileName = new CFullPropSpec(new Guid("41CF5AE0-F75A-4806-BD87-59C7D9248EB9"), 100);
