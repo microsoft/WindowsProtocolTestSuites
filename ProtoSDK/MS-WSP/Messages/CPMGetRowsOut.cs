@@ -164,7 +164,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                                     clientBase = clientBase << 32;
                                     clientBase += ((CPMGetRowsIn)Request)._ulClientBase;
 
-                                    // Since the ReadBuffer cannot excced 0x4000, so the dataOffset should be a 32-bit value.
+                                    // Since the ReadBuffer cannot excceed 0x4000, so the dataOffset should be a 32-bit value.
                                     dataOffset = Convert.ToInt32((Int64)Rows[i].Columns[j].rowVariant.Offset - clientBase);
                                 }
                                 else

@@ -242,7 +242,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Assert.AreEqual((uint)1, getRowsOut._cRowsReturned, "The number of row returned should be 1.");
             Site.Assert.AreEqual("test106.txt", getRowsOut.Rows[0].Columns[0].Data.ToString().ToLower(), "The file name should be test106.txt.");
-            Site.Assert.AreEqual("3/29/2019 2:05:37 AM", getRowsOut.Rows[0].Columns[1].Data.ToString(), "The create date should be 3/29/2019 2:05:37 AM.");
+            Site.Assert.IsTrue(getRowsOut.Rows[0].Columns[1].Data is DateTime, "The second column of the row should be in DateTime format.");
+            Site.Log.Add(LogEntryKind.Debug, "The create date is {0}", getRowsOut.Rows[0].Columns[1].Data);
         }
 
 
