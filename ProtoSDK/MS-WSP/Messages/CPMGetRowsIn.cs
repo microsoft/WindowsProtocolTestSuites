@@ -36,7 +36,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CPMGetRowsIn message requests rows from a query.
     /// </summary>
-    public struct CPMGetRowsIn : IWspInMessage
+    public class CPMGetRowsIn : IWspInMessage
     {
         /// <summary>
         /// A 32-bit value representing the handle from the CPMCreateQueryOut message identifying the query for which to retrieve rows.

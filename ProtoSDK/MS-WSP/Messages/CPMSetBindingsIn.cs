@@ -8,7 +8,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CPMSetBindingsIn message requests the binding of columns to a rowset.
     /// </summary>
-    public struct CPMSetBindingsIn : IWspInMessage
+    public class CPMSetBindingsIn : IWspInMessage
     {
         #region Fields
         /// <summary>

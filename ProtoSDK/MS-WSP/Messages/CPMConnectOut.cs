@@ -9,7 +9,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CPMConnectOut message contains a response to a CPMConnectIn message.
     /// </summary>
-    public struct CPMConnectOut : IWspOutMessage
+    public class CPMConnectOut : IWspOutMessage
     {
         #region Fields
         /// <summary>

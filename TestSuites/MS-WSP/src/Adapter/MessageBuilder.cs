@@ -1074,8 +1074,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         /// <param name="queryString">Search Query String</param>
         /// <param name="searchScope">Search Query Scope</param>
+        /// <param name="queryStringProperty">The property used by queryString</param>
         /// <returns>CRestrictionArray structure BLOB</returns>
-        public CRestrictionArray GetRestrictionArray(string queryString, string searchScope)
+        public CRestrictionArray GetRestrictionArray(string queryString, string searchScope, CFullPropSpec queryStringProperty)
         {
             var result = new CRestrictionArray();
 
@@ -1083,7 +1084,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             result.isPresent = 0x01;
 
-            result.Restriction = GetQueryPathRestriction(queryString, searchScope);
+            result.Restriction = GetQueryPathRestriction(queryString, searchScope, queryStringProperty);
 
             return result;
         }
@@ -1092,12 +1093,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// Gets Node restriction specific to the query 
         /// scope and the queryText
         /// </summary>
-        /// <param name="messageOffset">Offset from the
-        /// beginning from the message</param>
-        /// <param name="queryString"></param>
-        /// <param name="searchScope"></param>
         /// <returns>CPropertyRestrictionNode structure BLOB</returns>
-        public CRestriction GetQueryPathRestriction(string queryString, string searchScope)
+        public CRestriction GetQueryPathRestriction(string queryString, string searchScope, CFullPropSpec queryStringProperty)
         {
             var result = new CRestriction();
 
@@ -1113,7 +1110,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             node._paNode[0] = GetPropertyRestriction(searchScope);
 
-            node._paNode[1] = GetContentRestriction(queryString);
+            node._paNode[1] = GetContentRestriction(queryString, queryStringProperty);
 
             result.Restriction = node;
 
@@ -1124,8 +1121,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// Gets CPropertyRestriction specific to the query path
         /// </summary>
-        /// <param name="messageOffset">offset from 
-        /// the beginning of the message</param>
         /// <param name="searchScope">Scope of the current search</param>
         /// <returns></returns>
         private CRestriction GetPropertyRestriction(string searchScope)
@@ -1155,7 +1150,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// Get rowset event structure
         /// </summary>
         /// <param name="ENABLEROWSETEVENTS"></param>
-        /// <param name="messageOffset"></param>
         /// <returns></returns>
         private CRowsetProperties GetRowSetProperties(bool ENABLEROWSETEVENTS)
         {
@@ -1188,11 +1182,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// Gets the ContentRestrictionNode structure specific 
         /// to the query Text
         /// </summary>
-        /// <param name="messageOffset">offset from the 
-        /// begining of the message</param>
         /// <param name="queryString">Query String of the search</param>
+        /// <param name="queryStringProperty">Property used by Query string</param>
         /// <returns>ContentRestriction structure Node</returns>
-        private CRestriction GetContentRestriction(string queryString)
+        private CRestriction GetContentRestriction(string queryString, CFullPropSpec queryStringProperty)
         {
             var result = new CRestriction();
 
@@ -1202,7 +1195,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             var node = new CContentRestriction();
 
-            node._Property = WspConsts.System_Search_Contents;
+            node._Property = queryStringProperty;
 
             node.Cc = (UInt32)queryString.Length;
 
@@ -1524,23 +1517,43 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         }
 
         /// <summary>
+        /// Gets TableColumn structure from given values
+        /// </summary>
+        /// <param name="column">TableColumn information</param>
+        /// <returns>CTableColumn structure.</returns>
+        public CTableColumn GetTableColumn(CFullPropSpec property, vType_Values type)
+        {
+            var result = new CTableColumn()
+            {
+                PropSpec = property,
+
+                vType = type,
+
+                AggregateType = CAggregSpec_type_Values.DBAGGTTYPE_BYNONE,
+
+                ValueSize = Helper.GetSize(type, Is64bit),
+            };
+
+            return result;
+        }
+
+        /// <summary>
         /// Gets the CreateQueryIn message
         /// </summary>
         /// <param name="path">A null terminated unicode
         /// string representing the scope of search</param>
-        /// <param name="queryText">A NON null terminated unicode string representing the query string</param>
+        /// <param name="queryString">A NON null terminated unicode string representing the query string</param>
+        /// <param name="queryStringProperty">The property used by queryString</param>
         /// <param name="ENABLEROWSETEVENTS">flag for ENABLEROWSETEVENTS</param>
-        public CPMCreateQueryIn GetCPMCreateQueryIn(string path, string queryText, bool ENABLEROWSETEVENTS)
+        public CPMCreateQueryIn GetCPMCreateQueryIn(string path, string queryString, CFullPropSpec queryStringProperty, bool ENABLEROWSETEVENTS)
         {
             searchScope = path;
-
-            queryString = queryText;
 
             var message = new CPMCreateQueryIn();
 
             message.ColumnSet = GetColumnSet();
 
-            message.RestrictionArray = GetRestrictionArray(queryString, searchScope);
+            message.RestrictionArray = GetRestrictionArray(queryString, searchScope, queryStringProperty);
 
             message.SortSet = null;
 

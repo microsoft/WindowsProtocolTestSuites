@@ -135,7 +135,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             return buffer.GetBytes();
         }
 
-        public static void FromBytes<T>(ref T t, byte[] bytes) where T : struct, IWspObject
+        public static void FromBytes<T>(ref T t, byte[] bytes) where T : IWspObject, new ()
         {
             var buffer = new WspBuffer(bytes);
 

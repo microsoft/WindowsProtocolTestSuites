@@ -8,7 +8,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CPMSetBindingsOut message contains a response to a CPMSetBindingsIn message.
     /// </summary>
-    public struct CPMSetBindingsOut : IWspOutMessage
+    public class CPMSetBindingsOut : IWspOutMessage
     {
         public IWspInMessage Request { get; set; }
 

@@ -8,7 +8,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CPMCreateQueryOut message contains a response to a CPMCreateQueryIn message.
     /// </summary>
-    public struct CPMCreateQueryOut : IWspOutMessage
+    public class CPMCreateQueryOut : IWspOutMessage
     {
         /// <summary>
         /// A 32-bit unsigned integer. MUST be set to one of the following values.
