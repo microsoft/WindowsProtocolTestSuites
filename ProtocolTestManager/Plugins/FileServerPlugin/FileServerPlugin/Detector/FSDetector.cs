@@ -407,7 +407,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             #endregion
 
             #region Session Setup
-            // If server only supports Smb2002, no further SMB2 negotiate needed, it will not consume the message id 
+
             if (selectedDialect == DialectRevision.Smb2002)
             {
                 messageId--;

@@ -211,7 +211,7 @@ if($cluster -eq $null)
         # Failed to create cluster in Threshold if let New-Cluster cmdlet auto add cluster disks
         # So create a cluster without cluster disks, then add cluster disks separately.
         
-        .\Write-Info.ps1 "Create cluster with current node without storage. ip: $clusterIps"
+        .\Write-Info.ps1 "Create cluster with current node without storage"
         New-Cluster -Name $clusterName -Node $env:COMPUTERNAME -StaticAddress $clusterIps -NoStorage
         Start-Sleep 20
 
@@ -248,7 +248,7 @@ if($cluster -eq $null)
     }
     else
     {
-        .\Write-Info.ps1 "Create cluster, ip:$clusterIps"
+        .\Write-Info.ps1 "Create cluster"
         New-Cluster -Name $clusterName -Node $clusterNodes -StaticAddress $clusterIps
         Start-Sleep 20
 
@@ -306,7 +306,7 @@ $csv.Name = "SMBScaleOutDisk"
 #----------------------------------------------------------------------------
 # Create GeneralFS role
 #----------------------------------------------------------------------------
-.\Write-Info.ps1 "Add ClusterFileServerRole ip:$generalFsIps"
+.\Write-Info.ps1 "Add ClusterFileServerRole"
 $fileServerGroup = Get-ClusterGroup | where {$_.Name -eq  $config.lab.ha.generalfs.name}
 if($fileServerGroup -eq $null)
 {
