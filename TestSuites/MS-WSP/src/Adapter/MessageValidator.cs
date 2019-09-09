@@ -764,7 +764,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             "set to the results of the specified binding.");
 
             site.CaptureRequirement(496, "The 4 bytes '_hCursor'" +
-            " field of the CPMSetBindingsIn message  MUST be absent" +
+            " field of the CPMSetBindingsIn message MUST be absent" +
                 "when the message is sent by the server.");
 
             // The Response message contains only the 
@@ -813,9 +813,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 messageStatus, 514, "For any arbitrary" +
             " value of Padding bytes in the array of " +
             "CTableColumn structures, server response is success.");
-
-
-
         }
 
         /// <summary>

@@ -144,7 +144,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         public static uint chapter;
 
-        public static uint rowWidth = 72;
+        public static uint rowWidth = 92;
 
 
         public MessageBuilderParameter parameter;
@@ -1390,7 +1390,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// Get the default table columns details.
         /// </summary>
         /// <returns>array of Table Column</returns>
-        private TableColumn[] GetDefaultTableColumns()
+        public TableColumn[] GetDefaultTableColumns()
         {
             var columns = new TableColumn[]
             {
@@ -1500,7 +1500,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         /// <param name="column">TableColumn information</param>
         /// <returns>CTableColumn structure.</returns>
-        private CTableColumn GetTableColumn(TableColumn column)
+        public CTableColumn GetTableColumn(TableColumn column)
         {
             var result = new CTableColumn()
             {
