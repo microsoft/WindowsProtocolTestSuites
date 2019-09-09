@@ -95,6 +95,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// This is the file name (including extension) of the file. 
         /// </summary>
         public static readonly CFullPropSpec System_FileName = new CFullPropSpec(new Guid("41CF5AE0-F75A-4806-BD87-59C7D9248EB9"), 100);
+
+        /// <summary>
+        /// System.FileExtension
+        /// This is the file extension of the file-based item, including the leading period
+        /// </summary>
+        public static readonly CFullPropSpec System_FileExtension = new CFullPropSpec(new Guid("E4F10A3C-49E6-405D-8288-A23BD4EEAA6C"), 100);
+
+        /// <summary>
+        /// System.Path
+        /// The full physical path to the file, including the file name.
+        /// </summary>
+        public static readonly CFullPropSpec Path = new CFullPropSpec(new Guid("B725F130-47EF-101A-A5F1-02608C9EEBAC"), 11);
         #endregion
     }
 }

@@ -93,7 +93,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMConnectInRequest();
 
             var columnSet = wspAdapter.builder.GetColumnSet(3);
-            var restrictionArray = wspAdapter.builder.GetRestrictionArray(Site.Properties.Get("QueryText"), Site.Properties.Get("QueryPath"));
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray("test106.txt", Site.Properties.Get("QueryPath"), WspConsts.System_FileName);
             var pidMapper = new CPidMapper();
             pidMapper.aPropSpec = new CFullPropSpec[]
             {
@@ -110,18 +110,19 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn with multiple columns and expects success.");
             var columns = GetTableColumns();
-            CTableColumn[] aColumns = columns.Select(column => wspAdapter.builder.GetTableColumn(column)).ToArray();
-            Helper.UpdateTableColumns(aColumns);
-            uint cColumns = (uint)aColumns.Length;
             wspAdapter.CPMSetBindingsIn(
                 wspAdapter.GetCursor(wspAdapter.clientMachineName),
                 (uint)wspAdapter.builder.parameter.EachRowSize,
-                cColumns,
-                aColumns
+                (uint)columns.Length,
+                columns
                 );
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn and expects success.");
-            wspAdapter.CPMGetRowsIn(true);
+            wspAdapter.CPMGetRowsIn(out CPMGetRowsOut getRowsOut);
+
+            Site.Assert.AreEqual("test106.txt", getRowsOut.Rows[0].Columns[0].Data.ToString().ToLower(), "The file name should be test106.txt.");
+            Site.Assert.AreEqual("test", getRowsOut.Rows[0].Columns[1].Data.ToString().ToLower(), "The name of the folder should be test.");
+            Site.Assert.AreEqual(".txt", getRowsOut.Rows[0].Columns[2].Data.ToString().ToLower(), "The file extension of the file should be .txt.");
         }
 
         [TestMethod]
@@ -135,7 +136,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMConnectInRequest();
 
             var columnSet = wspAdapter.builder.GetColumnSet(3);
-            var restrictionArray = wspAdapter.builder.GetRestrictionArray(Site.Properties.Get("QueryText"), Site.Properties.Get("QueryPath"));
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray(Site.Properties.Get("QueryText"), Site.Properties.Get("QueryPath"), WspConsts.System_Search_Contents);
             var pidMapper = new CPidMapper();
             pidMapper.aPropSpec = new CFullPropSpec[]
             {
@@ -227,7 +228,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMConnectInRequest();
 
             var columnSet = wspAdapter.builder.GetColumnSet(2);
-            var restrictionArray = wspAdapter.builder.GetRestrictionArray(Site.Properties.Get("QueryText"), Site.Properties.Get("QueryPath"));
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray(Site.Properties.Get("QueryText"), Site.Properties.Get("QueryPath"), WspConsts.System_Search_Contents);
             var pidMapper = new CPidMapper();
             pidMapper.aPropSpec = new CFullPropSpec[]
             {
@@ -243,14 +244,11 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn with column not contained in CreateQuery and expects NOT SUCCEED.");
             var columns = GetTableColumns();
-            CTableColumn[] aColumns = columns.Select(column => wspAdapter.builder.GetTableColumn(column)).ToArray();
-            Helper.UpdateTableColumns(aColumns);
-            uint cColumns = (uint)aColumns.Length;
             wspAdapter.CPMSetBindingsIn(
                 wspAdapter.GetCursor(wspAdapter.clientMachineName),
                 (uint)wspAdapter.builder.parameter.EachRowSize,
-                cColumns,
-                aColumns
+                (uint)columns.Length,
+                columns
                 );
         }
 
@@ -294,39 +292,23 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             }
         }
 
-        private TableColumn[] GetTableColumns()
+        private CTableColumn[] GetTableColumns()
         {
-            TableColumn[] columns = null;
+            CTableColumn[] columns = new CTableColumn[] { };
             switch (argumentType)
             {               
                 case ArgumentType.InvalidaColumns:
-                    columns = new TableColumn[]
+                    columns = new CTableColumn[]
                     {
-                        new TableColumn()
-                        {
-                            Property = WspConsts.System_FileExtension,
-                            Type = vType_Values.VT_VARIANT,
-                        }
+                        wspAdapter.builder.GetTableColumn(WspConsts.System_FileExtension, vType_Values.VT_VARIANT)
                     };
                     break;
                 case ArgumentType.AllValid:
-                    columns = new TableColumn[]
+                    columns = new CTableColumn[]
                     {
-                        new TableColumn()
-                        {
-                            Property = WspConsts.System_ItemName,
-                            Type = vType_Values.VT_VARIANT,
-                        },
-                        new TableColumn()
-                        {
-                            Property = WspConsts.System_ItemFolderNameDisplay,
-                            Type = vType_Values.VT_VARIANT,
-                        },
-                        new TableColumn()
-                        {
-                            Property = WspConsts.System_FileExtension,
-                            Type = vType_Values.VT_VARIANT,
-                        },
+                        wspAdapter.builder.GetTableColumn(WspConsts.System_ItemName, vType_Values.VT_VARIANT),
+                        wspAdapter.builder.GetTableColumn(WspConsts.System_ItemFolderNameDisplay, vType_Values.VT_VARIANT),
+                        wspAdapter.builder.GetTableColumn(WspConsts.System_FileExtension, vType_Values.VT_VARIANT)
                     };
                     break;
             }

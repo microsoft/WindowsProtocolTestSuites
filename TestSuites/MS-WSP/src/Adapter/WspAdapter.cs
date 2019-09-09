@@ -696,8 +696,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             CPMSetBindingsIn(
                 setBindingsInMessage._hCursor,
                 setBindingsInMessage._cbRow,
-                setBindingsInMessage._cbBindingDesc,
-                setBindingsInMessage._dummy,
                 setBindingsInMessage.cColumns,
                 setBindingsInMessage.aColumns);
         }
@@ -710,8 +708,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             CPMSetBindingsIn(
                 GetCursor(clientMachineName),
                 MessageBuilder.rowWidth,
-                0,
-                0,
                 (uint)aColumns.Length,
                 aColumns);
         }
@@ -719,12 +715,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// Create and send CPMSetBindingsIn and expect response.
         /// </summary>
-        public void CPMSetBindingsIn(uint _hCursor, uint _cbRow, uint _cbBindingDesc, uint _dummy, uint cColumns, CTableColumn[] aColumns)
+        public void CPMSetBindingsIn(uint _hCursor, uint _cbRow, uint cColumns, CTableColumn[] aColumns)
         {
             var client = GetClient(isClientConnected);
 
             Helper.UpdateTableColumns(aColumns);
-            client.SendCPMSetBindingsIn(_hCursor, _cbRow, _cbBindingDesc, _dummy, cColumns, aColumns);
+            client.SendCPMSetBindingsIn(_hCursor, _cbRow, cColumns, aColumns);
 
             CPMSetBindingsOut response;
             client.ExpectMessage<CPMSetBindingsOut>(out response);
