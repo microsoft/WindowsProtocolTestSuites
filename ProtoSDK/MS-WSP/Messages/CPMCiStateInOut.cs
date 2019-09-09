@@ -166,7 +166,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CPMCiStateInOut message contains information about the state of the GSS.
     /// </summary>
-    public struct CPMCiStateInOut : IWspInMessage, IWspOutMessage
+    public class CPMCiStateInOut : IWspInMessage, IWspOutMessage
     {
         public CPMCiState State;
 

@@ -23,7 +23,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             AllValid,
             ColumnSetAbsent,
             RestrictionArrayAbsent,
-            PidMapperAbsent
+            PidMapperAbsent,
         }
         private ArgumentType argumentType;
 
@@ -72,14 +72,14 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMConnectInRequest();
 
             var columnSet = wspAdapter.builder.GetColumnSet(2);
-            var restrictionArray = wspAdapter.builder.GetRestrictionArray(Site.Properties.Get("QueryText"), Site.Properties.Get("QueryPath"));
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray(Site.Properties.Get("QueryText"), Site.Properties.Get("QueryPath"), WspConsts.System_Search_Contents);
             var pidMapper = new CPidMapper();
             pidMapper.aPropSpec = new CFullPropSpec[]
             {
                 WspConsts.System_ItemName,
                 WspConsts.System_ItemFolderNameDisplay,
                 WspConsts.System_Search_Scope,
-                WspConsts.System_Search_Contents,
+                WspConsts.System_FileName,
             };
             pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
 
@@ -102,7 +102,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
             wspAdapter.CPMConnectInRequest();
 
-            var restrictionArray = wspAdapter.builder.GetRestrictionArray(Site.Properties.Get("QueryText"), Site.Properties.Get("QueryPath"));
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray(Site.Properties.Get("QueryText"), Site.Properties.Get("QueryPath"), WspConsts.System_Search_Contents);
 
             var pidMapper = new CPidMapper();
             pidMapper.aPropSpec = new CFullPropSpec[]
@@ -153,14 +153,184 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             var columnSet = wspAdapter.builder.GetColumnSet(2);
 
-            var restrictionArray = wspAdapter.builder.GetRestrictionArray(Site.Properties.Get("QueryText"), Site.Properties.Get("QueryPath"));
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray(Site.Properties.Get("QueryText"), Site.Properties.Get("QueryPath"), WspConsts.System_FileName);
 
             argumentType = ArgumentType.PidMapperAbsent;
             wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, new CCategorizationSet(), new CRowsetProperties(), new CPidMapper(), new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
         }
 
+        [TestMethod]
+        [TestCategory("BVT")]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if image info can be retrieved by CPMCreateQuery.")]
+        public void BVT_CPMCreateQuery_QueryImage()
+        {
+            argumentType = ArgumentType.AllValid;
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
+            wspAdapter.CPMConnectInRequest();
+
+            var columnSet = wspAdapter.builder.GetColumnSet(2);
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray("*.png", Site.Properties.Get("QueryPath"), WspConsts.System_FileName);
+            var pidMapper = new CPidMapper();
+            pidMapper.aPropSpec = new CFullPropSpec[]
+            {
+                WspConsts.System_ItemName,
+                WspConsts.System_Image_HorizontalSize,
+                WspConsts.System_Search_Scope,
+                WspConsts.System_FileName,
+            };
+            pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+
+            var columns = new CTableColumn[]
+            {
+                wspAdapter.builder.GetTableColumn(WspConsts.System_ItemName, vType_Values.VT_VARIANT),
+                wspAdapter.builder.GetTableColumn(WspConsts.System_Image_HorizontalSize, vType_Values.VT_VARIANT)
+            };
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
+            wspAdapter.CPMSetBindingsIn(columns);
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn and expects success.");
+            argumentType = ArgumentType.AllValid;
+            wspAdapter.CPMGetRowsIn(out CPMGetRowsOut getRowsOut);
+
+            Site.Assert.AreEqual((uint)1, getRowsOut._cRowsReturned, "The number of image file should be 1.");
+            Site.Assert.AreEqual("test.png", getRowsOut.Rows[0].Columns[0].Data, "The name of the image file should be test.png.");
+            Site.Assert.AreEqual(1279, Convert.ToInt32(getRowsOut.Rows[0].Columns[1].Data), "The HorizontalSize of the image file should be 1279.");
+        }
+
+        [TestMethod]
+        [TestCategory("BVT")]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if the create date of the file can be retrieved by CPMCreateQuery.")]
+        public void BVT_CPMCreateQuery_QueryDateCreated()
+        {
+            argumentType = ArgumentType.AllValid;
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
+            wspAdapter.CPMConnectInRequest();
+
+            var columnSet = wspAdapter.builder.GetColumnSet(2);
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray("test106.txt", Site.Properties.Get("QueryPath"), WspConsts.System_FileName);
+            var pidMapper = new CPidMapper();
+            pidMapper.aPropSpec = new CFullPropSpec[]
+            {
+                WspConsts.System_ItemName,
+                WspConsts.System_DateCreated,
+                WspConsts.System_Search_Scope,
+                WspConsts.System_FileName,
+            };
+            pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+
+            var columns = new CTableColumn[]
+            {
+                wspAdapter.builder.GetTableColumn(WspConsts.System_ItemName, vType_Values.VT_VARIANT),
+                wspAdapter.builder.GetTableColumn(WspConsts.System_DateCreated, vType_Values.VT_VARIANT)
+            };
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
+            wspAdapter.CPMSetBindingsIn(columns);
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn and expects success.");
+            argumentType = ArgumentType.AllValid;
+            wspAdapter.CPMGetRowsIn(out CPMGetRowsOut getRowsOut);
+
+            Site.Assert.AreEqual((uint)1, getRowsOut._cRowsReturned, "The number of row returned should be 1.");
+            Site.Assert.AreEqual("test106.txt", getRowsOut.Rows[0].Columns[0].Data.ToString().ToLower(), "The file name should be test106.txt.");
+            Site.Assert.IsTrue(getRowsOut.Rows[0].Columns[1].Data is DateTime, "The second column of the row should be in DateTime format.");
+            Site.Log.Add(LogEntryKind.Debug, "The create date is {0}", getRowsOut.Rows[0].Columns[1].Data);
+        }
+
+
+        [TestMethod]
+        [TestCategory("BVT")]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if the size of the files can be retrieved in ascend order by CPMCreateQuery.")]
+        public void BVT_CPMCreateQuery_SortAscend()
+        {
+            CPMCreateQuery_Sort(ascend: true);
+        }
+
+        [TestMethod]
+        [TestCategory("BVT")]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if the size of the files can be retrieved in descend order by CPMCreateQuery.")]
+        public void BVT_CPMCreateQuery_SortDescend()
+        {
+            CPMCreateQuery_Sort(ascend: false);
+        }
+
         #endregion
 
+
+        private void CPMCreateQuery_Sort(bool ascend)
+        {
+            argumentType = ArgumentType.AllValid;
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
+            wspAdapter.CPMConnectInRequest();
+
+            var columnSet = wspAdapter.builder.GetColumnSet(2);
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray("*.txt", Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size", WspConsts.System_FileName);
+            var pidMapper = new CPidMapper();
+            pidMapper.aPropSpec = new CFullPropSpec[]
+            {
+                WspConsts.System_ItemName,
+                WspConsts.System_Size,
+                WspConsts.System_Search_Scope,
+                WspConsts.System_FileName,
+            };
+            pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
+
+            CInGroupSortAggregSets inGroupSortAggregSets = new CInGroupSortAggregSets();
+            inGroupSortAggregSets.cCount = 1;
+            inGroupSortAggregSets.SortSets = new CSortSet[1];
+            inGroupSortAggregSets.SortSets[0].count = 1;
+            inGroupSortAggregSets.SortSets[0].sortArray = new CSort[1];
+            inGroupSortAggregSets.SortSets[0].sortArray[0].dwOrder = ascend ? dwOrder_Values.QUERY_SORTASCEND : dwOrder_Values.QUERY_DESCEND;
+            inGroupSortAggregSets.SortSets[0].sortArray[0].pidColumn = 1; // Sort by Size.
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, inGroupSortAggregSets, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+
+            var columns = new CTableColumn[]
+            {
+                wspAdapter.builder.GetTableColumn(WspConsts.System_ItemName, vType_Values.VT_VARIANT),
+                wspAdapter.builder.GetTableColumn(WspConsts.System_Size, vType_Values.VT_VARIANT)
+            };
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
+            wspAdapter.CPMSetBindingsIn(columns);
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn and expects success.");
+            argumentType = ArgumentType.AllValid;
+            wspAdapter.CPMGetRowsIn(out CPMGetRowsOut getRowsOut);
+
+            Site.Assert.AreEqual((uint)3, getRowsOut._cRowsReturned, "Number of rows returned should be 3.");
+
+            string[] fileNameList = null;
+            int[] sizeList = null;
+            if (ascend)
+            {
+                fileNameList = new string[] { "test27.txt", "test1.txt", "test132.txt" };
+                sizeList = new int[] { 30, 1124, 3868 };
+            }
+            else
+            {
+                fileNameList = new string[] { "test132.txt", "test1.txt", "test27.txt" };
+                sizeList = new int[] { 3868, 1124, 30 };
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                Site.Assert.AreEqual(fileNameList[i], getRowsOut.Rows[i].Columns[0].Data, "The index {0} file in Ascend order should be {1}.", i, fileNameList[i]);
+                Site.Assert.AreEqual(sizeList[i], Convert.ToInt32(getRowsOut.Rows[i].Columns[1].Data), "The size of {0} should be {1} bytes.", fileNameList[i], sizeList[i]);
+            }
+        }
 
         private void CPMSetBindingsOut(uint errorCode)
         {

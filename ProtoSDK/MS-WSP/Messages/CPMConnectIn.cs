@@ -8,7 +8,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CPMConnectIn message begins a session between the client and server.
     /// </summary>
-    public struct CPMConnectIn : IWspInMessage
+    public class CPMConnectIn : IWspInMessage
     {
         /// <summary>
         /// A 32-bit integer indicating whether the server is to validate the checksum value specified in the _ulChecksum field of the message headers for messages sent by the client.

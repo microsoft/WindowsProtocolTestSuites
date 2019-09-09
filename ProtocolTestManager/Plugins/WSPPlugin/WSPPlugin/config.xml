@@ -1,0 +1,29 @@
+
+<Config>
+  <ConfigFilePath>
+    <PtfFileName>Bin\MS-WSP_ServerTestSuite.deployment.ptfconfig</PtfFileName>
+    <PtfFileName>Bin\MS-WSP_ServerTestSuite.ptfconfig</PtfFileName>
+  </ConfigFilePath>
+  <PtfFileNames>
+    <PtfFileName>MS-WSP_ServerTestSuite.deployment.ptfconfig</PtfFileName>
+    <PtfFileName>MS-WSP_ServerTestSuite.ptfconfig</PtfFileName>
+  </PtfFileNames>
+  <DllFileNames>
+    <DllFileName>Bin\MS-WSP_ServerTestSuite.dll</DllFileName>
+  </DllFileNames>
+  <AutoDetectionDllName>WSPServerPlugin.dll</AutoDetectionDllName>
+
+  <ConfigCaseRule>    
+    <Group name = "Priority">
+      <Rule name = "BVT">
+        <Category name = "BVT"/>
+      </Rule>
+
+      <Rule name = "NonBVT">
+        <Category name = "!BVT"/>
+      </Rule>
+    </Group>
+
+  </ConfigCaseRule>
+  <TestSetting>Bin\ServerLocal.TestSettings</TestSetting>
+</Config>

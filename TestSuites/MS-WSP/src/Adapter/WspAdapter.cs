@@ -128,10 +128,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             wspTestSite.DefaultProtocolDocShortName = "MS-WSP";
             validator = new MessageValidator(wspTestSite);
             serverMachineName
-                = wspTestSite.Properties.Get("SERVER_MACHINE_NAME");
-            clientMachineName = wspTestSite.Properties.Get("CLIENT_MACHINE_NAME");
+                = wspTestSite.Properties.Get("ServerComputerName");
+            clientMachineName = wspTestSite.Properties.Get("ClientName");
             catalogName = wspTestSite.Properties.Get("CatalogName");
-            userName = wspTestSite.Properties.Get("CLIENT_USERNAME");
+            userName = wspTestSite.Properties.Get("UserName");
             pipePath
                 = string.Format(@"\\{0}\\pipe\MSFTEWDS", serverMachineName);
             clientVersion = (uint)Convert.ToUInt32
@@ -333,7 +333,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             string queryScope = wspTestSite.Properties.Get("QueryPath");
             string queryText = wspTestSite.Properties.Get("QueryText");
 
-            var queryInMessage = builder.GetCPMCreateQueryIn(queryScope, queryText, ENABLEROWSETEVENTS);
+            var queryInMessage = builder.GetCPMCreateQueryIn(queryScope, queryText, WspConsts.System_Search_Contents, ENABLEROWSETEVENTS);
 
             CPMCreateQueryIn(
                 queryInMessage.ColumnSet,
@@ -696,18 +696,35 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             CPMSetBindingsIn(
                 setBindingsInMessage._hCursor,
                 setBindingsInMessage._cbRow,
+                setBindingsInMessage._cbBindingDesc,
+                setBindingsInMessage._dummy,
                 setBindingsInMessage.cColumns,
                 setBindingsInMessage.aColumns);
         }
 
         /// <summary>
+        /// CPMSetBindingsIn() requests the bindings of columns to a rowset.
+        /// </summary>
+        public void CPMSetBindingsIn(CTableColumn[] aColumns)
+        {
+            CPMSetBindingsIn(
+                GetCursor(clientMachineName),
+                MessageBuilder.rowWidth,
+                0,
+                0,
+                (uint)aColumns.Length,
+                aColumns);
+        }
+
+        /// <summary>
         /// Create and send CPMSetBindingsIn and expect response.
         /// </summary>
-        public void CPMSetBindingsIn(uint _hCursor, uint _cbRow, uint cColumns, CTableColumn[] aColumns)
+        public void CPMSetBindingsIn(uint _hCursor, uint _cbRow, uint _cbBindingDesc, uint _dummy, uint cColumns, CTableColumn[] aColumns)
         {
             var client = GetClient(isClientConnected);
 
-            client.SendCPMSetBindingsIn(_hCursor, _cbRow, cColumns, aColumns);
+            Helper.UpdateTableColumns(aColumns);
+            client.SendCPMSetBindingsIn(_hCursor, _cbRow, _cbBindingDesc, _dummy, cColumns, aColumns);
 
             CPMSetBindingsOut response;
             client.ExpectMessage<CPMSetBindingsOut>(out response);
@@ -780,6 +797,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             }
 
             CPMGetRowsIn(cursorAssociated, builder.parameter.RowsToTransfer, builder.parameter.EachRowSize, builder.parameter.BufferSize, 0, builder.parameter.EType, out CPMGetRowsOut getRowsOut);
+        }
+
+        /// <summary>
+        /// CPMGetRowsIn() message requests rows from a query.
+        /// </summary>
+        public void CPMGetRowsIn(out CPMGetRowsOut getRowsOut)
+        {
+            uint cursorAssociated = GetCursor(clientMachineName);
+            getRowsOut = null;
+            CPMGetRowsIn(cursorAssociated, builder.parameter.RowsToTransfer, builder.parameter.EachRowSize, builder.parameter.BufferSize, 0, builder.parameter.EType, out getRowsOut);
         }
 
         /// <summary>
@@ -1227,7 +1254,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 case (int)EventType.PROPAGATE_ADD:
                     fileName = wspTestSite.Properties["NewFile1"];
                     //Create a file on remote server
-                    sutStatus = sutAdapter.CreateFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["CLIENT_USERNAME"], wspTestSite.Properties["Password"], fileName);
+                    sutStatus = sutAdapter.CreateFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["UserName"], wspTestSite.Properties["Password"], fileName);
                     if (sutStatus != 0)
                     {
                         wspTestSite.Log.Add(LogEntryKind.Comment, "File created failed on server");
@@ -1237,7 +1264,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     {
                         fileName = wspTestSite.Properties["NewFile2"];
                         //Create a file on remote server
-                        sutStatus = sutAdapter.CreateFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["CLIENT_USERNAME"], wspTestSite.Properties["Password"], fileName);
+                        sutStatus = sutAdapter.CreateFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["UserName"], wspTestSite.Properties["Password"], fileName);
 
                         if (sutStatus != 0)
                         {
@@ -1249,7 +1276,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 case (int)EventType.PROPAGATE_DELETE:
                     fileName = wspTestSite.Properties["ExistFile1"];
                     //Delete a file on remote server
-                    sutStatus = sutAdapter.DeleteFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["CLIENT_USERNAME"], wspTestSite.Properties["Password"], fileName);
+                    sutStatus = sutAdapter.DeleteFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["UserName"], wspTestSite.Properties["Password"], fileName);
                     if (sutStatus != 0)
                     {
                         wspTestSite.Log.Add(LogEntryKind.Comment, "File deleted failed on server");
@@ -1259,7 +1286,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     {
                         fileName = wspTestSite.Properties["ExistFile2"];
                         //Delete a file on remote server
-                        sutStatus = sutAdapter.DeleteFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["CLIENT_USERNAME"], wspTestSite.Properties["Password"], fileName);
+                        sutStatus = sutAdapter.DeleteFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["UserName"], wspTestSite.Properties["Password"], fileName);
                         if (sutStatus != 0)
                         {
                             wspTestSite.Log.Add(LogEntryKind.Comment, "File deleted failed on server");
@@ -1270,7 +1297,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 case (int)EventType.PROPAGATE_MODIFY:
                     fileName = wspTestSite.Properties["ExistFile3"];
                     //Modify a file on remote server
-                    sutStatus = sutAdapter.ModifyFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["CLIENT_USERNAME"], wspTestSite.Properties["Password"], fileName);
+                    sutStatus = sutAdapter.ModifyFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["UserName"], wspTestSite.Properties["Password"], fileName);
                     if (sutStatus != 0)
                     {
                         wspTestSite.Log.Add(LogEntryKind.Comment, "File operation failed on server while modifying");
@@ -1280,7 +1307,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     {
                         fileName = wspTestSite.Properties["ExistFile4"];
                         //Modify a file on remote server
-                        sutStatus = sutAdapter.ModifyFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["CLIENT_USERNAME"], wspTestSite.Properties["Password"], fileName);
+                        sutStatus = sutAdapter.ModifyFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["UserName"], wspTestSite.Properties["Password"], fileName);
                         if (sutStatus != 0)
                         {
                             wspTestSite.Log.Add(LogEntryKind.Comment, "File operation failed on server while modifying");
@@ -1335,7 +1362,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     {
                         fileName = wspTestSite.Properties["NewFile2"];
                         //Delete file on the remote server
-                        sutStatus = sutAdapter.DeleteFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["CLIENT_USERNAME"], wspTestSite.Properties["Password"], fileName);
+                        sutStatus = sutAdapter.DeleteFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["UserName"], wspTestSite.Properties["Password"], fileName);
 
                         if (sutStatus != 0)
                         {
@@ -1345,7 +1372,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     }
                     fileName = wspTestSite.Properties["NewFile1"];
                     //Delete file on the remote server
-                    sutStatus = sutAdapter.DeleteFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["CLIENT_USERNAME"], wspTestSite.Properties["Password"], fileName);
+                    sutStatus = sutAdapter.DeleteFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["UserName"], wspTestSite.Properties["Password"], fileName);
 
                     if (sutStatus != 0)
                     {
@@ -1356,7 +1383,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 case (int)EventType.PROPAGATE_DELETE:
                     fileName = wspTestSite.Properties["ExistFile1"];
                     //Create file on the remote server
-                    sutStatus = sutAdapter.CreateFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["CLIENT_USERNAME"], wspTestSite.Properties["Password"], fileName);
+                    sutStatus = sutAdapter.CreateFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["UserName"], wspTestSite.Properties["Password"], fileName);
                     if (sutStatus != 0)
                     {
                         wspTestSite.Log.Add(LogEntryKind.Comment, "File created failed on server");
@@ -1366,7 +1393,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     {
                         fileName = wspTestSite.Properties["ExistFile2"];
                         //Create file on the remote server
-                        sutStatus = sutAdapter.CreateFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["CLIENT_USERNAME"], wspTestSite.Properties["Password"], fileName);
+                        sutStatus = sutAdapter.CreateFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["UserName"], wspTestSite.Properties["Password"], fileName);
                         if (sutStatus != 0)
                         {
                             wspTestSite.Log.Add(LogEntryKind.Comment, "File created failed on server");
@@ -1379,7 +1406,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     {
                         fileName = wspTestSite.Properties["ExistFile4"];
                         //Delete file on the remote server
-                        sutStatus = sutAdapter.DeleteFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["CLIENT_USERNAME"], wspTestSite.Properties["Password"], fileName);
+                        sutStatus = sutAdapter.DeleteFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["UserName"], wspTestSite.Properties["Password"], fileName);
                         if (sutStatus != 0)
                         {
                             wspTestSite.Log.Add(LogEntryKind.Comment, "File deleted failed on server");
@@ -1388,14 +1415,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     }
                     fileName = wspTestSite.Properties["ExistFile3"];
                     //Delete file on the remote server
-                    sutStatus = sutAdapter.DeleteFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["CLIENT_USERNAME"], wspTestSite.Properties["Password"], fileName);
+                    sutStatus = sutAdapter.DeleteFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["UserName"], wspTestSite.Properties["Password"], fileName);
                     if (sutStatus != 0)
                     {
                         wspTestSite.Log.Add(LogEntryKind.Comment, "File deleted failed on server");
                         return;
                     }
                     //Create file on the remote server
-                    sutStatus = sutAdapter.CreateFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["CLIENT_USERNAME"], wspTestSite.Properties["Password"], fileName);
+                    sutStatus = sutAdapter.CreateFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["UserName"], wspTestSite.Properties["Password"], fileName);
                     if (sutStatus != 0)
                     {
                         wspTestSite.Log.Add(LogEntryKind.Comment, "File created failed on server");
@@ -1405,7 +1432,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     {
                         fileName = wspTestSite.Properties["ExistFile4"];
                         //Create file on the remote server
-                        sutStatus = sutAdapter.CreateFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["CLIENT_USERNAME"], wspTestSite.Properties["Password"], fileName);
+                        sutStatus = sutAdapter.CreateFile(wspTestSite.Properties["ServerComputerName"], wspTestSite.Properties["DomainName"], wspTestSite.Properties["UserName"], wspTestSite.Properties["Password"], fileName);
                         if (sutStatus != 0)
                         {
                             wspTestSite.Log.Add(LogEntryKind.Comment, "File created failed on server");

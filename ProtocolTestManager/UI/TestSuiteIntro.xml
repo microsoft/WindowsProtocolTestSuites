@@ -54,4 +54,10 @@
       <TestSuiteDetail>BranchCache test suite is designed to test the implementations of MS-PCCRTP, MS-PCCRR, MS-PCHC and MS-PCCRC protocols.</TestSuiteDetail>
     </TestSuite>
   </Group>
+  <Group name="MS-WSP">
+    <TestSuite name="MS-WSP" folder="C:\MicrosoftProtocolTests\MS-WSP\Server-Endpoint\$(TestSuiteVersion)">
+      <Description></Description>
+      <TestSuiteDetail>MS-WSP test suite is designed to test the implementations of MS-WSP protocol.</TestSuiteDetail>
+    </TestSuite>
+  </Group>
 </TestSuiteSelectionConfig>
