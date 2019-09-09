@@ -143,7 +143,8 @@ Function Config-Environment
     .\Scripts\Join-Domain.ps1 -domainWorkgroup "Domain" -domainName $param["domain"] -userName $param["username"] -userPassword $param["password"] -testResultsPath $WorkingPath 2>&1 | Write-Output
 
     Write-Host "Enable remoting"
-    Enable-Remoting
+    #Enable-Remoting -SkipNetworkProfileCheck -Force
+    Enable-PSRemoting -SkipNetworkProfileCheck -Force
 }
 
 
