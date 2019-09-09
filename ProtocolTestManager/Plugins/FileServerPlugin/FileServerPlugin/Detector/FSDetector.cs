@@ -113,35 +113,53 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             logWriter.AddLineToLog(LogLevel.Information);
         }
 
-        public NetworkInfo PingTargetSUT()
+        public NetworkInfo DetectSUTConnection()
         {
             NetworkInfo networkInfo = new NetworkInfo();
-            IPAddress[] addList = Dns.GetHostAddresses(sutName);
-
-            if (null == addList)
+            IPAddress address;
+            //Detect SUT IP address by SUT name
+            //If SUT name is an ip address, skip to resolve, use the ip address directly
+            try
             {
-                logWriter.AddLog(LogLevel.Error, string.Format("The SUT name {0} is incorrect.", SUTName));
-            }
 
-            networkInfo.SUTIpList = new List<IPAddress>();
-            logWriter.AddLog(LogLevel.Information, "IP addresses returned from Dns.GetHostAddresses:");
-            foreach (var item in addList)
-            {
-                logWriter.AddLog(LogLevel.Information, item.ToString());
-                if (item.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                if (IPAddress.TryParse(sutName, out address))
                 {
-                    networkInfo.SUTIpList.Add(item);
+                    networkInfo.SUTIpList.Add(address);
                 }
-            }
+                else //DNS resolve the SUT IP address by SUT name
+                {
+                    IPAddress[] addList = Dns.GetHostAddresses(sutName);
 
-            if (networkInfo.SUTIpList.Count == 0)
+                    if (null == addList)
+                    {
+                        logWriter.AddLog(LogLevel.Error, string.Format("The SUT name {0} is incorrect.", SUTName));
+                    }
+
+                    networkInfo.SUTIpList = new List<IPAddress>();
+                    logWriter.AddLog(LogLevel.Information, "IP addresses returned from Dns.GetHostAddresses:");
+                    foreach (var item in addList)
+                    {
+                        logWriter.AddLog(LogLevel.Information, item.ToString());
+                        if (item.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                        {
+                            networkInfo.SUTIpList.Add(item);
+                        }
+                    }
+
+                    if (networkInfo.SUTIpList.Count == 0)
+                    {
+                        logWriter.AddLog(LogLevel.Error, string.Format("No available IP address resolved for target SUT {0}.", SUTName));
+                    }
+                }
+                DetermineSUTIPAddress(networkInfo.SUTIpList.ToArray());
+
+                return networkInfo;
+            }
+            catch
             {
-                logWriter.AddLog(LogLevel.Error, string.Format("No available IP address on target SUT {0}.", SUTName));
+                logWriter.AddLog(LogLevel.Error, string.Format("Detect Target SUT connection failed with SUT name: {0}.", SUTName));
+                return null;
             }
-
-            DetermineSUTIPAddress(networkInfo.SUTIpList.ToArray());
-
-            return networkInfo;
         }
 
         private void DetermineSUTIPAddress(IPAddress[] ips)
@@ -268,11 +286,6 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 LogFailedStatus("ComNegotiate", responseHeader.Status);
             }
 
-            // If server only supports Smb2002, no further SMB2 negotiate needed
-            if (selectedDialect == DialectRevision.Smb2002)
-            {
-                return status;
-            }
 
             PreauthIntegrityHashID[] preauthHashAlgs = null;
             EncryptionAlgorithm[] encryptionAlgs = null;
@@ -589,10 +602,11 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 logWriter.AddLog(LogLevel.Information, string.Format("EnumShares failed, reason: {0}", ex.Message));
             }
 
+
             if (shareList == null)
             {
                 // EnumShares may fail because the SUT doesn't support SRVS.
-                // Try to connect the default share "SMBBasic"
+                // Try to connect the share which is input by the user in the "Target Share" field of Auto-Detection page.
                 using (Smb2Client client = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
                 {
                     ulong messageId;
@@ -600,8 +614,9 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     uint treeId;
                     try
                     {
-                        ConnectToShare(defautBasicShare, info, client, out messageId, out sessionId, out treeId);
-                        shareList = new string[] { defautBasicShare };
+                        logWriter.AddLog(LogLevel.Information, string.Format("Try to connect share {0}.", info.BasicShareName));
+                        ConnectToShare(info.BasicShareName, info, client, out messageId, out sessionId, out treeId);
+                        shareList = new string[] { info.BasicShareName };
                     }
                     catch
                     {

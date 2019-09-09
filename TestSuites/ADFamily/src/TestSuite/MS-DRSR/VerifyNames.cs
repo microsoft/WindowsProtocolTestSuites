@@ -149,7 +149,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             dsUser.StringName = new ushort[1];
             dsUser.SidLen = 28;
             dsUser.Sid = new NT4SID();
-            dsUser.Sid.Data = (byte[])ldapAdapter.GetAttributeValue(server, dn, "objectSid");
+            dsUser.Sid.Data = ldapAdapter.GetAttributeValueInBytes(server, dn, "objectSid");
 
             // Prefix table
             SCHEMA_PREFIX_TABLE prefixTable = OIDUtility.CreatePrefixTable();
@@ -221,7 +221,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
             // Create a DSNAME with only SAMAccountName.
             string userDn = ldapAdapter.GetUserDn(server, user);
-            string sAMAccountName = (string)ldapAdapter.GetAttributeValue(server, userDn, "sAMAccountName");
+            string sAMAccountName = ldapAdapter.GetAttributeValueInString(server, userDn, "sAMAccountName");
             DSNAME dsUser = DrsuapiClient.CreateDsName(sAMAccountName, Guid.Empty, null);
 
             // Prefix table

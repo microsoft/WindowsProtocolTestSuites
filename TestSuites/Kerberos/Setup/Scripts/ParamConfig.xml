@@ -17,21 +17,29 @@
       <NetBiosName>ENDPOINT01$</NetBiosName>
       <Password>Password05!</Password>
       <Department>HR</Department>
+      <DefaultServiceName>host/ENDPOINT01.contoso.com</DefaultServiceName>
+      <ServiceSalt>CONTOSO.COMhostendpoint01.contoso.com</ServiceSalt>
     </ClientComputer>
     <FileShare>
       <FQDN>AP01.CONTOSO.COM</FQDN>
       <NetBiosName>AP01$</NetBiosName>
       <IPv4Address>192.168.21.10</IPv4Address>
       <Password>Password02!</Password>
-	  <FsrmProperty>PETImpactLevel</FsrmProperty>
+	    <FsrmProperty>PETImpactLevel</FsrmProperty>
       <Policy>PETAccessPolicy</Policy>
       <Value>PET_HBI</Value>
+      <DefaultServiceName>host/ap01.contoso.com</DefaultServiceName>
+      <ServiceSalt>CONTOSO.COMhostap01.contoso.com</ServiceSalt>
+      <Smb2ServiceName>cifs/ap01.contoso.com</Smb2ServiceName>
     </FileShare>
     <LdapServer>
       <FQDN>DC01.CONTOSO.COM</FQDN>
       <NetBiosName>DC01$</NetBiosName>
       <IPv4Address>192.168.21.1</IPv4Address>
       <Password>Password01!</Password>
+      <DefaultServiceName>ldap/dc01.contoso.com</DefaultServiceName>
+      <ServiceSalt>CONTOSO.COMhostdc01.contoso.com</ServiceSalt>
+      <LdapServiceName>ldap/dc01.contoso.com</LdapServiceName>
     </LdapServer>
     <WebServer>
       <FQDN>AP01.CONTOSO.COM</FQDN>
@@ -42,6 +50,10 @@
       <user>contoso\test01</user>
       <Rights>ReadAndExecute,ListDirectory</Rights>
       <Permission>Allow</Permission>
+      <DefaultServiceName>host/ap01.contoso.com</DefaultServiceName>
+      <ServiceSalt>CONTOSO.COMhostap01.contoso.com</ServiceSalt>
+      <HttpServiceName>http/ap01.contoso.com</HttpServiceName>
+      <HttpUri>http://AP01.contoso.com</HttpUri>
     </WebServer>
     <AuthNotRequired>
       <FQDN>AuthNotRequired.CONTOSO.COM</FQDN>
@@ -200,21 +212,33 @@
       <FsrmProperty>PETImpactLevel</FsrmProperty>
       <Policy>PETAccessPolicy</Policy>
       <Value>PET_HBI</Value>
+      <DefaultServiceName>host/ap02.kerb.com</DefaultServiceName>
+      <ServiceSalt>KERB.COMhostap02.kerb.com</ServiceSalt>
+      <Smb2ServiceName>cifs/ap02.contoso.com</Smb2ServiceName>
     </FileShare>
     <WebServer>
       <FQDN>AP02.KERB.COM</FQDN>
       <IPv4Address>192.168.21.20</IPv4Address>
       <NetBiosName>AP02$</NetBiosName>
       <Password>Password04!</Password>
+      <wwwroot>C:\inetpub\wwwroot</wwwroot>
       <user>contoso\test01</user>
       <Rights>ReadAndExecute,ListDirectory</Rights>
+      <wwwroot>C:\inetpub\wwwroot</wwwroot>
       <Permission>Allow</Permission>
+      <DefaultServiceName>host/ap02.kerb.com</DefaultServiceName>
+      <ServiceSalt>KERB.COMhostap02.kerb.com</ServiceSalt>
+      <HttpServiceName>http/ap02.kerb.com</HttpServiceName>
+      <HttpUri>http://ap02.kerb.com</HttpUri>
     </WebServer>
     <LdapServer>
       <FQDN>DC02.KERB.COM</FQDN>
       <IPv4Address>192.168.21.2</IPv4Address>
       <NetBiosName>DC02$</NetBiosName>
       <Password>Password03!</Password>
+      <DefaultServiceName>host/dc02.kerb.com</DefaultServiceName>
+      <ServiceSalt>CONTOSO.COMhostdc02.kerb.com</ServiceSalt>
+      <LdapServiceName>ldap/dc02.kerb.com</LdapServiceName>
     </LdapServer>
     <Administrator>
       <Username>administrator</Username>

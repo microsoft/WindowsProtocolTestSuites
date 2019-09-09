@@ -5505,10 +5505,10 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
                 object expectedResult = string.Empty;
 
                 //process the search Result for the expected property. 
-                ADTSHelper.ProcessSearchRespone(searchResponseUser, "Administrator", "name", out expectedResult);
+                ADTSHelper.ProcessSearchRespone(searchResponseUser, DomainAdministratorName, "name", out expectedResult);
 
                 //Validate MS-ADTS-Security_R518
-                TestClassBase.BaseTestSite.CaptureRequirementIfAreEqual<string>("Administrator", expectedResult.ToString(), 518,
+                TestClassBase.BaseTestSite.CaptureRequirementIfAreEqual<string>(DomainAdministratorName, expectedResult.ToString(), 518,
                     @"An Administrator has name as Administrator");
 
                 bool checkResult;
@@ -5517,7 +5517,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
                 TestClassBase.BaseTestSite.Log.Add(
                     LogEntryKind.Comment,
                     "Verify the objectClass of Administrator");
-                checkResult = ADTSHelper.SearchResponseHasValue(searchResponseUser, "Administrator", "objectClass", "user", out msg);
+                checkResult = ADTSHelper.SearchResponseHasValue(searchResponseUser, DomainAdministratorName, "objectClass", "user", out msg);
                 TestClassBase.BaseTestSite.Log.Add(
                     LogEntryKind.Comment,
                     msg);
@@ -5528,7 +5528,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
                     @"An Administrator has objectClass as user");
 
                 //process the search Result for the expected property. 
-                ADTSHelper.ProcessSearchRespone(searchResponseUser, "Administrator", "primaryGroupID", out expectedResult);
+                ADTSHelper.ProcessSearchRespone(searchResponseUser, DomainAdministratorName, "primaryGroupID", out expectedResult);
 
                 //Validate MS-ADTS-Security_R521
                 TestClassBase.BaseTestSite.CaptureRequirementIfAreEqual<int>(513, Convert.ToInt32(expectedResult), 521,

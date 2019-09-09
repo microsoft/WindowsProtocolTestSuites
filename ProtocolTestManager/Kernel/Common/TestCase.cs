@@ -33,6 +33,24 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// </summary>
         public string FullName { get; set; }
 
+        /// <summary>
+        /// The class name of the test case
+        /// </summary>
+        public string ClassName
+        {
+            get
+            {
+                int i = this.FullName.LastIndexOf('.');
+                string className = i < 0 ? this.FullName : this.FullName.Substring(0, i);
+                return className;
+            }
+        }
+
+        /// <summary>
+        /// The assembly where the test case located
+        /// </summary>
+        public string Assembly { get; set; }
+
         private bool isChecked;
         /// <summary>
         /// Indicate the test case is checked for running by case
@@ -64,28 +82,35 @@ namespace Microsoft.Protocols.TestManager.Kernel
             }
         }
 
-        private string log;
         /// <summary>
-        /// The log of the test case
+        /// The start time of the test case
         /// </summary>
-        public string Log
-        {
-            get { return log; }
-            set
-            {
-                log = value;
-                if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("Log"));
-            }
-        }
+        public DateTimeOffset StartTime { get; set; }
+
+        /// <summary>
+        /// The end time of the test case
+        /// </summary>
+        public DateTimeOffset EndTime { get; set; }
+
+        /// <summary>
+        /// The standard output of the test case
+        /// </summary>
+        public string StdOut { get; set; }
+
+        /// <summary>
+        /// The error stack trace of the test case
+        /// </summary>
+        public string ErrorStackTrace { get; set; }
+
+        /// <summary>
+        /// The error message of the test case
+        /// </summary>
+        public string ErrorMessage { get; set; }
 
         /// <summary>
         /// The uri of the html log
         /// </summary>
-        public Uri LogUri
-        {
-            get;
-            set;
-        }
+        public Uri LogUri { get; set; }
 
         //Default value of IsSelected is false
         public TestCase()

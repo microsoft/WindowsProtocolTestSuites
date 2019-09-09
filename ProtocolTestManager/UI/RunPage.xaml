@@ -139,8 +139,8 @@
                 <ContextMenu>
                     <MenuItem Header="Uncheck All" Click="UncheckAll_Click"/>
                     <Separator/>
-                    <MenuItem Header="Run Selected Tests" Click="RunTest_Click"/>
-                    <MenuItem Header="Run All Tests" Click="RunAll_Click"/>
+                    <MenuItem Header="Run Selected Cases" Name="RunSelectedMenuItem" Click="RunTest_Click"/>
+                    <MenuItem Header="Run All Cases" Click="RunAll_Click"/>
                 </ContextMenu>
             </TreeView.ContextMenu>
         </TreeView>
@@ -148,7 +148,9 @@
             <Hyperlink Name="RunAllLink" Click="RunAll_Click">Run All</Hyperlink>
         </TextBlock>
         <TextBlock Name="RunSelected" HorizontalAlignment="Left" Margin="49,0,0,7" VerticalAlignment="Bottom">
-            <Hyperlink Name="RunSelectedLink" Click="RunTest_Click">Run Selected Test</Hyperlink>
+            <Hyperlink Name="RunSelectedLink" Click="RunTest_Click">
+                <TextBlock x:Name="RunSelectedLinkText">Run Selected Cases</TextBlock>
+            </Hyperlink>
         </TextBlock>
         <TextBlock Name="AbortExecution" HorizontalAlignment="Left" Margin="10,0,0,7" Visibility="Collapsed" VerticalAlignment="Bottom">
             <Hyperlink Name="AbortExecutionLink" Focusable="False" Click="AbortExecution_Click">Abort Execution</Hyperlink>
@@ -161,7 +163,7 @@
                 <Separator />
                 <MenuItem x:Name="SaveProfile" Header="Save Profile ..." Click="SaveProfile_Click"/>
                 <Separator />
-                <MenuItem x:Name="ExportTextCaseList" Header="Export Plain Text Report ..." Click="GenerateTextReport_Click"/>
+                <MenuItem x:Name="ExportTestReport" Header="Export Test Report ..." Click="GenerateTestReport_Click"/>
             </MenuItem>
         </Menu>
         <GridSplitter Grid.Column="1" Width="5" AutomationProperties.Name="Splitter" Margin="0,21,0,0" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>

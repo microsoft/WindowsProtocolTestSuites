@@ -28,6 +28,9 @@ Param
     [string]$WorkingPath = "C:\temp"
 )
 
+$newEnvPath=$env:Path+";.\;.\scripts\"
+$env:Path=$newEnvPath
+
 #------------------------------------------------------------------------------------------
 # Global Variables:
 # ScriptFileFullPath: Full Path of this script file
@@ -42,7 +45,6 @@ $ScriptFileFullPath      = $MyInvocation.MyCommand.Definition
 $ScriptName              = [System.IO.Path]::GetFileName($ScriptFileFullPath)
 $SignalFileFullPath      = "$WorkingPath\Configure-DC01.finished.signal"
 $LogFileFullPath         = "$ScriptFileFullPath.log"
-$Parameters              = @{}
 $DataFile                = "$WorkingPath\Scripts\ParamConfig.xml"
 [xml]$KrbParams          = $null
 $Domain                  = ""
@@ -108,11 +110,6 @@ Function Write-ConfigLog
 #------------------------------------------------------------------------------------------
 Function Read-ConfigParameters()
 {
-    Write-ConfigLog "Getting the parameters from environment config file..." -ForegroundColor Yellow
-    $VMName = .\GetVMNameByComputerName.ps1
-    .\GetVmParameters.ps1 -VMName $VMName -RefParamArray ([ref]$Parameters)
-    $Parameters
-
     Write-ConfigLog "Getting the parameters from Kerberos config file..." -ForegroundColor Yellow
     if(Test-Path -Path $DataFile)
     {
@@ -138,11 +135,11 @@ Function Init-Environment()
     Write-ConfigLog "Executing [$ScriptName]..." -ForegroundColor Cyan
 
     # Switch to the script path
-    Write-ConfigLog "Switching to $WorkingPath..." -ForegroundColor Yellow
-    Push-Location $WorkingPath
+    #Write-ConfigLog "Switching to $WorkingPath..." -ForegroundColor Yellow
+    #Push-Location $WorkingPath
 
     # Update ParamConfig.xml
-    .\scripts\UpdateConfigFile.ps1
+    UpdateConfigFile.ps1 -WorkingPath $WorkingPath
 
     # Read the config parameters
     Read-ConfigParameters
@@ -165,7 +162,7 @@ Function Complete-Configure
     Stop-Transcript
 
     # remove the schedule task to execute the script next step after restart
-    .\RestartAndRunFinish.ps1
+    RestartAndRunFinish.ps1
 }
 
 
@@ -461,7 +458,7 @@ Function Config-DC01()
 
 
 
-	$osVersion = .\Get-OSVersionNumber.ps1
+	$osVersion = Get-OSVersionNumber.ps1
 	$os2012R2 = "6.3"
 	if([double]$osVersion -ge [double]$os2012R2)
 	{
@@ -614,11 +611,11 @@ Function Config-DC01()
 
 	# Get variables of the file
 	#.\Get-IADSearchRoot.ps1
-	$root = .\Get-IADSearchRoot.ps1 -ServerName $serverName -objectDN $objectDN -Username $userName -Password $password
+	$root = Get-IADSearchRoot.ps1 -ServerName $serverName -objectDN $objectDN -Username $userName -Password $password
 	#. Get-IADComputer.ps1
-	$computer = .\Get-IADComputer -Name $computerName -SearchRoot $root
+	$computer = Get-IADComputer -Name $computerName -SearchRoot $root
 	#. Set-IADComputer.ps1
-	$null = $computer|.\Set-IADComputer -PreAuthenticationNotRequired
+	$null = $computer|Set-IADComputer -PreAuthenticationNotRequired
 
 	$userNetBiosName = $KrbParams.Parameters.LocalRealm.LocalResource01.NetBiosName
 	$userFQDN = $KrbParams.Parameters.LocalRealm.LocalResource01.FQDN
@@ -820,10 +817,23 @@ Function Config-DC01()
 	# Configure Group Policy for Claims
 	#-----------------------------------------------------------------------------------------------
 	Write-Host "Extract GPOBackup files"
-	C:\temp\Scripts\Extract-ZipFile.ps1 -ZipFile C:\temp\Scripts\Dc01GPO.zip -Destination C:\temp\Scripts\Dc01GPO
+	#C:\temp\Scripts\Extract-ZipFile.ps1 -ZipFile C:\temp\Scripts\Dc01GPO.zip -Destination C:\temp\Scripts\Dc01GPO
+    &"$WorkingPath\Scripts\Extract-ZipFile.ps1" -ZipFile "$WorkingPath\Scripts\Dc01GPO.zip" -Destination "$WorkingPath\Scripts\Dc01GPO"
 
+	Write-Host "Update Group Policy"
+	$currDomainName = (Get-WmiObject win32_computersystem).Domain
+	$currDomain = Get-ADDomain $currDomainName
+	if($currDomain.name -ne "contoso") {
+		Get-ChildItem -Path "$WorkingPath\Scripts\Dc01GPO" -exclude *.pol -File -Recurse | ForEach-Object {
+			$content =($_|Get-Content)
+			if ($content | Select-String -Pattern 'contoso') {
+				$content = $content -replace 'contoso',$currDomain.name   
+				[IO.File]::WriteAllText($_.FullName, ($content -join "`r`n"))
+			}
+		}
+	}
 	Write-Host "Configurating Group Policy"
-	Import-GPO -BackupId 3830DC6A-0AB3-42DF-ADF4-DDCCBC65D86F -TargetName "Default Domain Policy" -Path "C:\temp\Scripts\Dc01GPO" -CreateIfNeeded
+	Import-GPO -BackupId 3830DC6A-0AB3-42DF-ADF4-DDCCBC65D86F -TargetName "Default Domain Policy" -Path "$WorkingPath\Scripts\Dc01GPO" -CreateIfNeeded
     	
 	gpupdate /force 
 

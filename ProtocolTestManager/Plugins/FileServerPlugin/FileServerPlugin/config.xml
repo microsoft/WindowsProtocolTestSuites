@@ -15,9 +15,14 @@
     <PtfFileName>Bin\MS-SMB2Model_ServerTestSuite.deployment.ptfconfig</PtfFileName>
   </ConfigFilePath>
   <Adapters>
-    <Adapter  displayname="An SUT control adapter" name="ISutProtocolControlAdapter">
+    <Adapter  displayname="Common SUT control adapter" name="ISutProtocolControlAdapter">
       <Adapter type="powershell" name="ISutProtocolControlAdapter" scriptdir=".\"/>
       <Adapter type="interactive" name="ISutProtocolControlAdapter"/>
+    </Adapter>
+    <Adapter  displayname="Failover SUT control adapter" name="ISutControlAdapter">
+      <Adapter type="powershell" name="ISutControlAdapter" scriptdir=".\"/>
+      <Adapter type="shell" name="ISutControlAdapter" scriptdir=".\"/>
+      <Adapter type="interactive" name="ISutControlAdapter"/>
     </Adapter>
   </Adapters>
   <PtfFileNames>

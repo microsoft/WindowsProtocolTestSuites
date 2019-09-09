@@ -120,7 +120,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "{0}. Create an Alternate Data Stream with name: " + dataStreamName1 + " on this file.", ++testStep);
             status = this.fsaAdapter.CreateFile(
                         fileName + ":" + dataStreamName1 + ":$DATA",
-                        FileAttribute.NORMAL | FileAttribute.INTEGRITY_STREAM, // Set Integrity field
+                        FileAttribute.NORMAL,
                         CreateOptions.NON_DIRECTORY_FILE,
                         FileAccess.GENERIC_ALL,
                         ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE | ShareAccess.FILE_SHARE_DELETE,
@@ -273,9 +273,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             foreach (FileStreamInformation fileStreamInformation in fileStreamInformations)
             {
                 string streamName = Encoding.Unicode.GetString(fileStreamInformation.StreamName);
-                KeyValuePair<string, long> streamListElement = streamList.SingleOrDefault(x => x.Key.Equals(streamName));
-                BaseTestSite.Assert.IsNotNull(streamListElement, "The stream with name {0} is found.", streamListElement.Key);
-                BaseTestSite.Assert.AreEqual(streamListElement.Value, (long)fileStreamInformation.StreamSize,
+                bool foundMatchedStream = streamList.ContainsKey(streamName);
+                BaseTestSite.Assert.IsTrue(foundMatchedStream, "The stream with name {0} is found.", streamName);
+                BaseTestSite.Assert.AreEqual(streamList[streamName], (long)fileStreamInformation.StreamSize,
                     "The StreamSize field of each of the returned FILE_STREAM_INFORMATION data elements should match the size of bytes written to each data stream.");
             }
         }

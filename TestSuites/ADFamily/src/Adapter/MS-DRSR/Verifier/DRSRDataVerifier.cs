@@ -1071,17 +1071,17 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             if (ncType == NamingContext.SchemaNC)
             {
                 nc = target.Domain.SchemaNC;
-                owner = ldapAd.GetAttributeValue(p, LdapUtility.ConvertUshortArrayToString(nc.StringName), "fSMORoleOwner").ToString();
+                owner = ldapAd.GetAttributeValueInString(p, LdapUtility.ConvertUshortArrayToString(nc.StringName), "fSMORoleOwner");
             }
             else if (ncType == NamingContext.ConfigNC)
             {
                 nc = target.Domain.ConfigNC;
-                owner = ldapAd.GetAttributeValue(p, "cn=partitions," + LdapUtility.ConvertUshortArrayToString(nc.StringName), "fSMORoleOwner").ToString();
+                owner = ldapAd.GetAttributeValueInString(p, "cn=partitions," + LdapUtility.ConvertUshortArrayToString(nc.StringName), "fSMORoleOwner");
             }
             else if (ncType == NamingContext.DomainNC)
             {
                 nc = ((AddsDomain)target.Domain).DomainNC;
-                owner = ldapAd.GetAttributeValue(p, LdapUtility.ConvertUshortArrayToString(nc.StringName), "fSMORoleOwner").ToString();
+                owner = ldapAd.GetAttributeValueInString(p, LdapUtility.ConvertUshortArrayToString(nc.StringName), "fSMORoleOwner");
 
             }
             testSite.Assert.IsFalse(owner.ToLower().Contains(target.ServerObjectName.ToLower()), "server should abandon its fsmo roles for successful IDL_DRSReplicaDemotion");
@@ -1373,7 +1373,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                     );
 
                 // Get RDN Ldap value
-                string rdnLdap = (string)ldapAd.GetAttributeValue(srv, objectDNs[0], "name");
+                string rdnLdap = ldapAd.GetAttributeValueInString(srv, objectDNs[0], "name");
 
                 testSite.Assert.IsTrue(
                     DrsrHelper.AreDNsSame(rdnLdap, rdn),

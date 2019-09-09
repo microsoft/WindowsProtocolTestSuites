@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Threading;
 using Microsoft.Protocols.TestManager.Kernel;
+using System.Diagnostics;
 
 namespace Microsoft.Protocols.TestManager.UI
 {
@@ -29,16 +30,18 @@ namespace Microsoft.Protocols.TestManager.UI
         {
             introduction = testsuiteintro;
             StackPanel stack = new StackPanel();
+            bool noTestSuiteInstalled = true;
             foreach (TestSuiteFamily family in introduction)
             {
                 Grid grid = new Grid();
-                GroupBox g = new GroupBox()
+                GroupBox gTestSuiteFamily = new GroupBox()
                 {
                     Header = family.Name,
                     FontSize = 14,
                     Content = grid
                 };
                 int row = 0;
+                
                 foreach (TestSuiteInfo info in family)
                 {
                     grid.RowDefinitions.Add(new RowDefinition());
@@ -50,6 +53,7 @@ namespace Microsoft.Protocols.TestManager.UI
                     Grid.SetRow(version, row);
                     if (info.IsInstalled)
                     {
+                        noTestSuiteInstalled = false;
                         if (info.IsConfiged)
                         {
                             Run runDirectly = new Run(StringResources.Run);
@@ -85,10 +89,35 @@ namespace Microsoft.Protocols.TestManager.UI
                     }
                     row++;
                 }
-                stack.Children.Add(g);
+                stack.Children.Add(gTestSuiteFamily);
             }
-            ScrollContent.Content = stack;
 
+            if (noTestSuiteInstalled)
+            {
+                stack.Children.Add(new TextBlock()); // Empty line
+
+                // First sentence
+                var hint = new TextBlock()
+                {
+                    Foreground = Brushes.Red,
+                    Text = StringResources.InstallAtLeastOneTestSuite
+                };
+                stack.Children.Add(hint);
+
+                // Second and the third sentence, they're in the same line.
+                hint = new TextBlock();
+                hint.Foreground = Brushes.Red;
+                hint.Text = StringResources.GetLatestRelease;
+                var link = new Hyperlink();
+                link.Inlines.Add(StringResources.ThisLink);
+                link.NavigateUri = new Uri(StringResources.ReleaseLink);
+                link.RequestNavigate += Hyperlink_RequestNavigate;
+                hint.Inlines.Add(link);
+                hint.Inlines.Add(StringResources.RestartPTM);
+                stack.Children.Add(hint);
+            }
+
+            ScrollContent.Content = stack;
         }
 
         public TestSuiteWindow()
@@ -100,6 +129,13 @@ namespace Microsoft.Protocols.TestManager.UI
         {
             ScrollViewer scv = (ScrollViewer)sender;
             scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+            e.Handled = true;
+        }
+
+        // Fired when clicking the hyper link, it should open the link by the web browser.
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
         }
 

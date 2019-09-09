@@ -805,7 +805,7 @@ The following table describes the required properties for all the test cases.
 | | **G-SSIM**: Gradient-Based-SSIM|
 | | These algorithms are used to verify the image encoded by using RemoteFX codec. If VerifySUTDisplay.Enable is false, this property should be ignored.|
 | | Default value: **MS-SSIM**|
-|  **VerifySUTDisplay.IQA.AssessValueThreshold**| Threshold for expected assess value, which is used for IQA algorithm when verifying RemoteFX codec, the test suite concludes two images similar if the IQA value is not smaller than this threshold. The value should in **[0, 1]**. If VerifySUTDisplay.Enable is false, this property should be ignored.|
+|  **VerifySUTDisplay.IQA.AssessValueThreshold**| Threshold for expected assess value, which is used for IQA algorithm when verifying RemoteFX codec, the test suite concludes two images similar if the IQA value is not smaller than this threshold. The value should be a float number satisfying 0 ≤ VerifySUTDisplay.IQA.AssessValueThreshold ≤ 1. If VerifySUTDisplay.Enable is false, this property should be ignored.|
 | | Default value: **0.98**|
 |  **VerifySUTDisplay.Shift.X**| Horizontal position of the RDP client window relative to left-top of the screen.|
 | | If VerifySUTDisplay.Enable is false, this property should be ignored.|
@@ -893,7 +893,7 @@ The following table describes the properties which are only required for test ca
 | | Default value: **768**|
 |  **changedDesktopWidth**| The changed width of screen resolution|
 | | Default value: **1152**|
-|  **changedDekstopHeight**| The changed height of screen resolution|
+|  **changedDesktopHeight**| The changed height of screen resolution|
 | | Default value: **864**|
 |  **originalMonitorNumber**| The original number of screens|
 | | Default value: **1**|

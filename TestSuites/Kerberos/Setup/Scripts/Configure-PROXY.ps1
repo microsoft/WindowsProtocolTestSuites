@@ -28,6 +28,9 @@ Param
     [string]$WorkingPath = "C:\temp"
 )
 
+$newEnvPath=$env:Path+";.\;.\scripts\"
+$env:Path=$newEnvPath
+
 #------------------------------------------------------------------------------------------
 # Global Variables:
 # ScriptFileFullPath: Full Path of this script file
@@ -42,7 +45,6 @@ $ScriptFileFullPath      = $MyInvocation.MyCommand.Definition
 $ScriptName              = [System.IO.Path]::GetFileName($ScriptFileFullPath)
 $SignalFileFullPath      = "$WorkingPath\Configure-PROXY.finished.signal"
 $LogFileFullPath         = "$ScriptFileFullPath.log"
-$Parameters              = @{}
 $DataFile                = "$WorkingPath\Scripts\ParamConfig.xml"
 [xml]$KrbParams          = $null
 
@@ -100,11 +102,6 @@ Function Write-ConfigLog
 #------------------------------------------------------------------------------------------
 Function Read-ConfigParameters()
 {
-    Write-ConfigLog "Getting the parameters from environment config file..." -ForegroundColor Yellow
-    $VMName = .\GetVMNameByComputerName.ps1
-    .\GetVmParameters.ps1 -VMName $VMName -RefParamArray ([ref]$Parameters)
-    $Parameters
-
     Write-ConfigLog "Getting the parameters from Kerberos config file..." -ForegroundColor Yellow
     if(Test-Path -Path $DataFile)
     {
@@ -137,10 +134,10 @@ Function Init-Environment()
 
     # Switch to the script path
     Write-ConfigLog "Switching to $WorkingPath..." -ForegroundColor Yellow
-    Push-Location $WorkingPath
+    #Push-Location $WorkingPath
 
     # Update ParamConfig.xml
-    .\Scripts\UpdateConfigFile.ps1
+    UpdateConfigFile.ps1 -WorkingPath $WorkingPath
 
     # Read the config parameters
     Read-ConfigParameters
@@ -155,7 +152,7 @@ Function Proceed-ScriptWithRestart
     $NextStep = $Step + 1
 
     # add a schedule task to execute the script next step after restart
-    .\RestartAndRun.ps1 -ScriptPath $ScriptFileFullPath `
+    RestartAndRun.ps1 -ScriptPath $ScriptFileFullPath `
                         -PhaseIndicator "-Step $NextStep" `
                         -AutoRestart $true
 }
@@ -176,7 +173,7 @@ Function Complete-Configure
     Stop-Transcript
 
     # remove the schedule task to execute the script next step after restart
-    .\RestartAndRunFinish.ps1
+    RestartAndRunFinish.ps1
 }
 
 #------------------------------------------------------------------------------------------

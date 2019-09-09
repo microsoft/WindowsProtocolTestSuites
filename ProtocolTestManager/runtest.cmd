@@ -6,9 +6,9 @@
 set CurrentPath=%~dp0
 set TestSuiteRoot=%CurrentPath%..\
 
-call "%CurrentPath%..\common\setVsPath.cmd"
+call "%TestSuiteRoot%\common\setVsTestPath.cmd"
 if ErrorLevel 1 (
 	exit /b 1
 )
 
-%vspath%..\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe ".\KernelTest\bin\Debug\CodeCoverage.dll" /Settings:testsettings1.testsettings /Logger:trx
+%vstest% "%CurrentPath%\KernelTest\bin\Debug\CodeCoverage.dll" /Settings:"%CurrentPath%\testsettings1.testsettings" /Logger:trx

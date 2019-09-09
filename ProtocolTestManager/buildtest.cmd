@@ -16,6 +16,23 @@ if ErrorLevel 1 (
 	exit /b 1
 )
 
+call "%CurrentPath%..\common\checkNuGet.cmd"
+if ErrorLevel 1 (
+	exit /b 1
+)
+
+%nuget% restore "%TestSuiteRoot%ProtocolTestManager\Kernel\Kernel.csproj" -SolutionDirectory "%TestSuiteRoot%ProtocolTestManager"
+if ErrorLevel 1 (
+	echo Error: Failed to restore NuGet dependencies
+	exit /b 1
+)
+
+%nuget% restore "%TestSuiteRoot%ProtocolTestManager\PtmCli\PtmCli.csproj" -SolutionDirectory "%TestSuiteRoot%ProtocolTestManager"
+if ErrorLevel 1 (
+	echo Error: Failed to restore NuGet dependencies
+	exit /b 1
+)
+
 %buildtool% KernelTest\KernelTest.csproj /t:clean;rebuild /p:NoWarn=1591
 if ErrorLevel 1 (
 	echo Error: Failed to build KernelTest

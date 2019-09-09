@@ -24,9 +24,9 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             {
                 DsServer sut = (DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC1];
                 uint epo = 0;
-                object got = LdapUtility.GetAttributeValue(sut, sut.NtdsDsaObjectName, "msDs-ReplicationEpoch");
+                string got = LdapUtility.GetAttributeValueInString(sut, sut.NtdsDsaObjectName, "msDs-ReplicationEpoch");
                 if (got != null)
-                    epo = uint.Parse(got.ToString());
+                    epo = uint.Parse(got);
                 return DRSClient.CreateDrsExtensions(true, DRS_EXTENSIONS_IN_FLAGS.DRS_EXT_BASE,
                     ((DsServer)EnvironmentConfig.MachineStore[EnvironmentConfig.Machine.WritableDC1]).Site.Guid,
                     0,

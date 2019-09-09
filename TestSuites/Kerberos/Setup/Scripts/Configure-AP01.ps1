@@ -28,6 +28,8 @@ Param
 
     [string]$WorkingPath = "C:\temp" 
 )
+$newEnvPath=$env:Path+";.\;.\scripts\"
+$env:Path=$newEnvPath
 
 #------------------------------------------------------------------------------------------
 # Global Variables:
@@ -43,7 +45,6 @@ $ScriptFileFullPath      = $MyInvocation.MyCommand.Definition
 $ScriptName              = [System.IO.Path]::GetFileName($ScriptFileFullPath)
 $SignalFileFullPath      = "$WorkingPath\Configure-AP01.finished.signal"
 $LogFileFullPath         = "$ScriptFileFullPath.log"
-$Parameters              = @{}
 $DataFile                = "$WorkingPath\Scripts\ParamConfig.xml"
 [xml]$KrbParams          = $null
 
@@ -101,11 +102,6 @@ Function Write-ConfigLog
 #------------------------------------------------------------------------------------------
 Function Read-ConfigParameters()
 {
-    Write-ConfigLog "Getting the parameters from environment config file..." -ForegroundColor Yellow
-    $VMName = .\GetVMNameByComputerName.ps1
-    .\GetVmParameters.ps1 -VMName $VMName -RefParamArray ([ref]$Parameters)
-    $Parameters
-
     Write-ConfigLog "Getting the parameters from Kerberos config file..." -ForegroundColor Yellow
     if(Test-Path -Path $DataFile)
     {
@@ -125,7 +121,6 @@ Function Init-Environment()
 {
 	# Switch to the script path
     Write-ConfigLog "Switching to $WorkingPath..." -ForegroundColor Yellow
-    Push-Location $WorkingPath
 	
     # Start logging
     Start-ConfigLog
@@ -134,7 +129,7 @@ Function Init-Environment()
     Write-ConfigLog "Executing [$ScriptName]..." -ForegroundColor Cyan
 
     # Update ParamConfig.xml
-    .\Scripts\UpdateConfigFile.ps1
+    UpdateConfigFile.ps1 -WorkingPath $WorkingPath
 
     # Read the config parameters
     Read-ConfigParameters
@@ -156,7 +151,7 @@ Function Complete-Configure
     Stop-Transcript
 
     # remove the schedule task to execute the script next step after restart
-    .\RestartAndRunFinish.ps1
+    RestartAndRunFinish.ps1
 }
 
 #------------------------------------------------------------------------------------------
@@ -259,14 +254,13 @@ Function Config-AP01()
     cmd /c schtasks /Run /TN $TaskName  
 
 	# For 2012R2, need to set the policy
-	$OsVersion = .\Get-OSVersionNumber.ps1
+	$OsVersion = Get-OSVersionNumber.ps1
 	$0S2012R2 = "6.3"
 
 	if([double]$SutOSVersion -ge [double]$0S2012R2)
 	{
 		Set-ADComputer -Identity $FileServerName  -AuthenticationPolicy ComputerRestrictedPolicy
 	}
-	
 }
 
 #------------------------------------------------------------------------------------------
