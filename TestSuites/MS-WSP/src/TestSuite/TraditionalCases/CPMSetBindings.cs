@@ -23,8 +23,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             AllValid,
             InvalidRowSize,
             InvalidCursor,
-            InvalidcColumn,
-            InvalidaColumn
+            InvalidcColumns,
+            InvalidaColumns
         }
         private ArgumentType argumentType;
 
@@ -125,9 +125,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         }
 
         [TestMethod]
+        [TestCategory("BVT")]
         [TestCategory("CPMSetBindings")]
         [Description("This test case is designed to verify the server response if the columns of SetBindings contained in CreateQuery")]
-        public void CPMSetBindingsWithColumnsContainedInCreateQuery()
+        public void BVT_CPMSetBindingsWithColumnsContainedInCreateQuery()
         {
             argumentType = ArgumentType.AllValid;
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
@@ -192,8 +193,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
         [TestMethod]
         [TestCategory("CPMSetBindings")]
-        [Description("This test case is designed to verify the server response if invalid cColumn is sent in CPMSetBindingsIn.")]
-        public void CPMSetBindings_InvalidcColumn()
+        [Description("This test case is designed to verify the server response if invalid cColumns is sent in CPMSetBindingsIn.")]
+        public void CPMSetBindings_InvalidcColumns()
         {
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
@@ -202,8 +203,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
             wspAdapter.CPMCreateQueryIn(true);
 
-            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn with invalid cColumn and expects NOT SUCCEED.");
-            argumentType = ArgumentType.InvalidcColumn;
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn with invalid cColumns and expects NOT SUCCEED.");
+            argumentType = ArgumentType.InvalidcColumns;
             var columns = wspAdapter.builder.GetDefaultTableColumns();
             CTableColumn[] aColumns = columns.Select(column => wspAdapter.builder.GetTableColumn(column)).ToArray();
             Helper.UpdateTableColumns(aColumns);
@@ -221,7 +222,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [Description("This test case is designed to verify the server response if the columns of SetBindings is not contained in CreateQuery")]
         public void CPMSetBindingsWithColumnsNotContainedInCreateQuery()
         {
-            argumentType = ArgumentType.InvalidaColumn;
+            argumentType = ArgumentType.InvalidaColumns;
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
             wspAdapter.CPMConnectInRequest();
 
@@ -284,10 +285,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 case ArgumentType.InvalidCursor:
                     Site.Assert.AreEqual((uint)WspErrorCode.ERROR_INVALID_PARAMETER, errorCode, "Server should return ERROR_INVALID_PARAMETER if the cursor of CPMSetBindingsIn is invalid.");
                     break;
-                case ArgumentType.InvalidcColumn:
-                    Site.Assert.AreNotEqual((uint)WspErrorCode.SUCCESS, errorCode, "Server should not return succeed if the cColumn of CPMSetBindingsIn is invalid.");
+                case ArgumentType.InvalidcColumns:
+                    Site.Assert.AreNotEqual((uint)WspErrorCode.SUCCESS, errorCode, "Server should not return succeed if the cColumns of CPMSetBindingsIn is invalid.");
                     break;
-                case ArgumentType.InvalidaColumn:
+                case ArgumentType.InvalidaColumns:
                     Site.Assert.AreNotEqual((uint)WspErrorCode.SUCCESS, errorCode, "Server should not return succeed if the columns of SetBindings is not contained in CreateQuery.");
                     break;
             }
@@ -298,7 +299,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             TableColumn[] columns = null;
             switch (argumentType)
             {               
-                case ArgumentType.InvalidaColumn:
+                case ArgumentType.InvalidaColumns:
                     columns = new TableColumn[]
                     {
                         new TableColumn()
