@@ -297,11 +297,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             DYNVC_CAPS_Version version = DYNVC_CAPS_Version.VERSION3;
             if (pdu is CapsVer1ReqDvcPdu)
             {
-                version = DYNVC_CAPS_Version.VERSION1;
+                version = (DYNVC_CAPS_Version)(((CapsVer1ReqDvcPdu)pdu).Version);
             }
             else if (pdu is CapsVer2ReqDvcPdu)
             {
-                version = DYNVC_CAPS_Version.VERSION2;
+                version = (DYNVC_CAPS_Version)(((CapsVer2ReqDvcPdu)pdu).Version);
             }
 
             // Response a RDPEDYC caps response PDU
