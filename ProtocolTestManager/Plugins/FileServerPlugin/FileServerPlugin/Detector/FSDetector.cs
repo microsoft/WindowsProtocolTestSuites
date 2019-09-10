@@ -272,8 +272,10 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             out DialectRevision selectedDialect,
             out byte[] gssToken,
             out Packet_Header responseHeader,
-            out NEGOTIATE_Response responsePayload)
+            out NEGOTIATE_Response responsePayload,
+            out ulong nextMessageId)
         {
+            nextMessageId = messageId;
             uint status = client.MultiProtocolNegotiate(
                     new string[] { "SMB 2.002", "SMB 2.???" },
                     out selectedDialect,
@@ -320,6 +322,9 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 0,
                 preauthHashAlgs,
                 encryptionAlgs);
+
+            // SMB2 negotiate is consume the message id
+            nextMessageId++;
 
             return status;
         }
@@ -370,7 +375,6 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             out NEGOTIATE_Response negotiateResp,
             out bool encryptionRequired)
         {
-            messageId = 1;
             sessionId = 0;
             logWriter.AddLog(LogLevel.Information, "Client connects to server");
             client.ConnectOverTCP(SUTIpAddress);
@@ -387,7 +391,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 1,
                 1,
                 Packet_Header_Flags_Values.NONE,
-                messageId++,
+                1,
                 info.requestDialect,
                 SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
                 Capabilities_Values.GLOBAL_CAP_DFS | Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING | Capabilities_Values.GLOBAL_CAP_LARGE_MTU
@@ -396,7 +400,8 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 out selectedDialect,
                 out gssToken,
                 out header,
-                out negotiateResp);
+                out negotiateResp,
+                out messageId);
 
             if (header.Status != Smb2Status.STATUS_SUCCESS)
             {
@@ -407,12 +412,6 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             #endregion
 
             #region Session Setup
-            // If server only supports Smb2002, no further SMB2 negotiate needed, it will not consume the message id 
-            if (selectedDialect == DialectRevision.Smb2002)
-            {
-                messageId--;
-            }
-
             SESSION_SETUP_Response sessionSetupResp;
 
             SspiClientSecurityContext sspiClientGss =
@@ -510,6 +509,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 byte[] gssToken;
                 Packet_Header responseHeader;
                 NEGOTIATE_Response responsePayload;
+                ulong messageId;
                 logWriter.AddLog(LogLevel.Information, "Client sends multi-protocol Negotiate to server");
                 MultiProtocolNegotiate(
                     smb2Client,
@@ -524,7 +524,8 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     out selectedDialect,
                     out gssToken,
                     out responseHeader,
-                    out responsePayload);
+                    out responsePayload,
+                    out messageId);
 
                 if (responseHeader.Status != Smb2Status.STATUS_SUCCESS)
                 {
