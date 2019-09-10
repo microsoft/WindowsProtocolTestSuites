@@ -112,11 +112,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
             if(pdu is CapsVer1ReqDvcPdu)
             {
-                version = DYNVC_CAPS_Version.VERSION1;
+                version = (DYNVC_CAPS_Version)(((CapsVer1ReqDvcPdu)pdu).Version);
             }
             else if(pdu is CapsVer2ReqDvcPdu)
             {
-                version = DYNVC_CAPS_Version.VERSION2;
+                version = (DYNVC_CAPS_Version)(((CapsVer2ReqDvcPdu)pdu).Version);
             }
 
             this.SendDVCCapResponsePDU(version);
