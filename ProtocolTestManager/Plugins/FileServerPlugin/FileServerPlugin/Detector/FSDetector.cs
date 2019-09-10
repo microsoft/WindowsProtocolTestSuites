@@ -264,7 +264,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             ushort creditCharge,
             ushort creditRequest,
             Packet_Header_Flags_Values flags,
-            ulong messageId,
+            ref ulong messageId,
             DialectRevision[] dialects,
             SecurityMode_Values securityMode,
             Capabilities_Values capabilities,
@@ -272,10 +272,8 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             out DialectRevision selectedDialect,
             out byte[] gssToken,
             out Packet_Header responseHeader,
-            out NEGOTIATE_Response responsePayload,
-            out ulong nextMessageId)
+            out NEGOTIATE_Response responsePayload)
         {
-            nextMessageId = messageId;
             uint status = client.MultiProtocolNegotiate(
                     new string[] { "SMB 2.002", "SMB 2.???" },
                     out selectedDialect,
@@ -324,7 +322,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 encryptionAlgs);
 
             // SMB2 negotiate is consume the message id
-            nextMessageId++;
+            messageId++;
 
             return status;
         }
@@ -375,6 +373,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             out NEGOTIATE_Response negotiateResp,
             out bool encryptionRequired)
         {
+            messageId = 1;
             sessionId = 0;
             logWriter.AddLog(LogLevel.Information, "Client connects to server");
             client.ConnectOverTCP(SUTIpAddress);
@@ -391,7 +390,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 1,
                 1,
                 Packet_Header_Flags_Values.NONE,
-                1,
+                ref messageId,
                 info.requestDialect,
                 SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
                 Capabilities_Values.GLOBAL_CAP_DFS | Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING | Capabilities_Values.GLOBAL_CAP_LARGE_MTU
@@ -400,8 +399,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 out selectedDialect,
                 out gssToken,
                 out header,
-                out negotiateResp,
-                out messageId);
+                out negotiateResp);
 
             if (header.Status != Smb2Status.STATUS_SUCCESS)
             {
@@ -509,14 +507,14 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 byte[] gssToken;
                 Packet_Header responseHeader;
                 NEGOTIATE_Response responsePayload;
-                ulong messageId;
+                ulong messageId = 1;
                 logWriter.AddLog(LogLevel.Information, "Client sends multi-protocol Negotiate to server");
                 MultiProtocolNegotiate(
                     smb2Client,
                     0,
                     1,
                     Packet_Header_Flags_Values.NONE,
-                    1,
+                    ref messageId,
                     info.requestDialect,
                     SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
                     Capabilities_Values.GLOBAL_CAP_DFS | Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING | Capabilities_Values.GLOBAL_CAP_ENCRYPTION | Capabilities_Values.GLOBAL_CAP_LARGE_MTU | Capabilities_Values.GLOBAL_CAP_LEASING | Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL | Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES,
@@ -524,8 +522,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     out selectedDialect,
                     out gssToken,
                     out responseHeader,
-                    out responsePayload,
-                    out messageId);
+                    out responsePayload);
 
                 if (responseHeader.Status != Smb2Status.STATUS_SUCCESS)
                 {

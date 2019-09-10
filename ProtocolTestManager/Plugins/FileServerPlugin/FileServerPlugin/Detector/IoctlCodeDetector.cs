@@ -633,7 +633,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     1,
                     1,
                     Packet_Header_Flags_Values.NONE,
-                    1,
+                    ref messageId,
                     preferredDialects,
                     SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
                     Capabilities_Values.GLOBAL_CAP_DFS | Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING | Capabilities_Values.GLOBAL_CAP_LARGE_MTU
@@ -642,8 +642,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     out selectedDialect,
                     out gssToken,
                     out header,
-                    out negotiateResponse,
-                    out messageId);
+                    out negotiateResponse);
 
                 if (header.Status != Smb2Status.STATUS_SUCCESS)
                 {
