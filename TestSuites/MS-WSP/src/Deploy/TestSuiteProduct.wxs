@@ -258,11 +258,12 @@
                   Description="Run all test cases in the test suite"
                   Target="[TESTSUITE_BATCH_DIR]!(wix.RUN_TESTS_COMMAND)"
                   WorkingDirectory="TESTSUITE_BATCH_DIR" />
-        <Shortcut Id="RunByCategoryShortcut_Desktop"
+                  <!-- Keep for future use -->
+        <!--Shortcut Id="RunByCategoryShortcut_Desktop"
                  Name="Run !(wix.TESTSUITE_NAME) !(wix.TESTSUITE_ENDPOINT)-Test Cases By Category"
                  Description="Run test cases by category in the test suite"
                  Target="[TESTSUITE_BATCH_DIR]!(wix.RUN_BY_CATEGORY_COMMAND)"
-                 WorkingDirectory="TESTSUITE_BATCH_DIR" />
+                 WorkingDirectory="TESTSUITE_BATCH_DIR" /-->
 
         <RegistryValue Id="TestSuiteShortcutsKeyPath_Desktop"
                         Root="HKCU"
