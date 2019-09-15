@@ -16,6 +16,9 @@ jobs:
   - script: echo $(helperBranch)
             echo $(extRepo.dir)
             echo $(extRepo.url)
+            echo $(ReleaseMSIPath)
+            echo $(ReleasePathUserName)
+            echo $(ReleasePathPwd)
     displayName: 'echo variables'
 
   - script: 'git clone --single-branch --progress -b $(helperBranch) %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
@@ -31,4 +34,6 @@ jobs:
       targetType: filePath
       filePath: $(Build.Repository.LocalPath)\_Helper\InstallPrerequisites\Setup-InstallEnvironment.ps1
       arguments: '-Workspace "$(Pipeline.Workspace)" -SourcePath "$(Build.Repository.LocalPath)" -ReleaseMSIPath "$(ReleaseMSIPath)" -ReleasePathUserName "$(ReleasePathUserName)" -ReleasePathPwd "$(ReleasePathPwd)"'
+    env:
+
     timeoutInMinutes: 0
