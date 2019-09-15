@@ -14,10 +14,9 @@ jobs:
 
   steps:
   - script: echo $(helperBranch)
-            echo $(extRepo.dir)
-            echo $(extRepo.url)
-            echo $(ReleaseMSIPath)
-            echo $(ReleaseMSIUserName)
+                 $(extRepo.dir)
+                 $(ReleaseMSIPath)
+                 $(ReleaseMSIUserName)
     displayName: 'echo variables'
 
   - script: 'git clone --single-branch --progress -b $(helperBranch) %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
