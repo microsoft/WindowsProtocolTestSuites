@@ -17,8 +17,7 @@ jobs:
             echo $(extRepo.dir)
             echo $(extRepo.url)
             echo $(ReleaseMSIPath)
-            echo $(ReleasePathUserName)
-            echo $(ReleasePathPwd)
+            echo $(ReleaseMSIUserName)
     displayName: 'echo variables'
 
   - script: 'git clone --single-branch --progress -b $(helperBranch) %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
@@ -33,9 +32,9 @@ jobs:
     inputs:
       targetType: filePath
       filePath: $(Build.Repository.LocalPath)\_Helper\InstallPrerequisites\Setup-InstallEnvironment.ps1
-      arguments: '-Workspace "$(Pipeline.Workspace)" -SourcePath "$(Build.Repository.LocalPath)" -ReleaseMSIPath %MSI_PATH% -ReleasePathUserName %MSI_USER% -ReleasePathPwd MSI_PWD'
+      arguments: '-Workspace "$(Pipeline.Workspace)" -SourcePath "$(Build.Repository.LocalPath)" -ReleaseMSIPath %MSI_PATH% -ReleasePathUserName %MSI_USER% -ReleasePathPwd %MSI_PWD%'
     env:
       MSI_PATH: $(ReleaseMSIPath)
-      MSI_USER: $(ReleasePathUserName)
-      MSI_PWD: $(ReleasePathPwd)
+      MSI_USER: $(ReleaseMSIUserName)
+      MSI_PWD: $(ReleaseMSIPassword)
     timeoutInMinutes: 0
