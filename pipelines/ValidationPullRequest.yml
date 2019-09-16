@@ -1,6 +1,8 @@
 trigger: none 
 
 variables:
+  - name: testBranch
+    value: 'v-zhanh/privatePipeline'
   - group: External Repo Variables
 
 resources:
@@ -8,7 +10,7 @@ resources:
     - repository: template
       type: git
       name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
-      ref: v-zhanh/privatePipeline
+      ref: $(testBranch)
 
 jobs:
 - job:
