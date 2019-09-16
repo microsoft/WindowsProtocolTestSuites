@@ -18,6 +18,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
     public class Smb2MultiChannelOverRdma : Smb2OverSmbdTestBase
     {
         #region Variables
+        private Guid clientId;
         private Smb2OverSmbdTestClient mainChannelClient;
         private Smb2OverSmbdTestClient alternativeChannelClient;
         private TestConfig testConfig;
@@ -42,6 +43,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         {
             base.TestInitialize();
             this.testConfig = new TestConfig(BaseTestSite);
+            this.clientId = Guid.NewGuid();
             this.mainChannelClient = new Smb2OverSmbdTestClient(
                 testConfig.Smb2ConnectionTimeout);
             this.alternativeChannelClient = new Smb2OverSmbdTestClient(
@@ -149,7 +151,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
             // SMB2 Negotiate
             DialectRevision[] negotiatedDialects = new DialectRevision[] { DialectRevision.Smb30, DialectRevision.Smb2002, DialectRevision.Smb21 };
             DialectRevision selectedDialect;
-            NtStatus status = (NtStatus)mainChannelClient.Smb2Negotiate(negotiatedDialects, out selectedDialect);
+            NtStatus status = (NtStatus)mainChannelClient.Smb2Negotiate(negotiatedDialects, clientId, out selectedDialect);
             BaseTestSite.Assert.AreEqual<NtStatus>(NtStatus.STATUS_SUCCESS, status, "Status of SMB2 Negotiate is {0}", status);
 
 
@@ -281,7 +283,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
             // SMB2 Negotiate
             DialectRevision[] negotiatedDialects = new DialectRevision[] { DialectRevision.Smb30 };
             DialectRevision selectedDialect;
-            status = (NtStatus)alternativeChannelClient.Smb2Negotiate(negotiatedDialects, out selectedDialect);
+            status = (NtStatus)alternativeChannelClient.Smb2Negotiate(negotiatedDialects, clientId, out selectedDialect);
             BaseTestSite.Assert.AreEqual<NtStatus>(NtStatus.STATUS_SUCCESS, status, "Status of SMB2 Negotiate is {0}", status);
 
 
