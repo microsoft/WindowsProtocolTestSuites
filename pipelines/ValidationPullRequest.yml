@@ -8,7 +8,7 @@ resources:
     - repository: template
       type: git
       name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
-      ref: v-zhanh/privatePipeline
+      ref: ((pipelineBranch))
 
 jobs:
 - job:
