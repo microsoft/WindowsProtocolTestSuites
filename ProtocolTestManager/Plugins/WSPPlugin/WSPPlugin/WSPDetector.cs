@@ -452,6 +452,11 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
             try
             {
                 sharePath = sharePath.Split(':')[1].Replace(@"/", @"\");
+
+                //Net use commmand does not support "\" as the end of a share
+                //For example: Net use \\sut\test\ Password01! /user:contoso/administrator will bring error code 53
+                //The correct net use command is: Net use \\sut\test Password01! /user:contoso/administrator
+                sharePath = sharePath.TrimEnd('\\');
             }
             catch
             {
