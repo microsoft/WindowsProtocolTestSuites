@@ -10,7 +10,7 @@ resources:
     - repository: template
       type: git
       name: $(testBranch)
-      ref: $(testBranch)
+      ref: v-zhanh/privatePipeline
 
 jobs:
 - job:
