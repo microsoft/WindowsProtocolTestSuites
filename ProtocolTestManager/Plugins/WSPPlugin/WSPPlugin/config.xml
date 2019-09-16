@@ -25,5 +25,5 @@
     </Group>
 
   </ConfigCaseRule>
-  <TestSetting>Bin\ServerLocal.TestSettings</TestSetting>
+  <TestSetting>Bin\ServerLocalTestRun.testrunconfig</TestSetting>
 </Config>
