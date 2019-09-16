@@ -207,12 +207,14 @@
   <ItemGroup>
 	<WSPDataFiles Include="..\..\Setup\Data\*" />
 	<WSPDataTestFiles Include="..\..\Setup\Data\Test\*" />
+  <WSPDataCreateQuerySizeFiles Include="..\..\Setup\Data\CreateQuery_Size\*" />
 	<WSPScriptFiles Include="..\..\Setup\Scripts\*" />
 	<AdapterScriptFiles Include="..\Adapter\SUTControlAdapter\*.ps1" />
   </ItemGroup>
   <Target Name="CopyFilesToBin" BeforeTargets="GenDeployWxsFile" >
 	<Copy SourceFiles="@(WSPDataFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Data" />	
 	<Copy SourceFiles="@(WSPDataTestFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Data\Test" />	
+  <Copy SourceFiles="@(WSPDataCreateQuerySizeFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Data\CreateQuery_Size" />	
 	<Copy SourceFiles="@(WSPScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Scripts" />	
 	<Copy SourceFiles="@(AdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Bin" />	
 	<Copy SourceFiles="..\ServerLocalTestRun.testrunconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Bin" />
