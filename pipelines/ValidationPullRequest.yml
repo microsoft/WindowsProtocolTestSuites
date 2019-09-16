@@ -8,7 +8,7 @@ resources:
     - repository: template
       type: git
       name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
-      ref: $(Build.SourceBranchName)
+      ref: $(Build.SourceBranch
 
 jobs:
 - job:
