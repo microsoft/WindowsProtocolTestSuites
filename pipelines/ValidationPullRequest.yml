@@ -10,7 +10,7 @@ resources:
     - repository: template
       type: git
       name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
-      ref: $(branchName)
+      ref: ((branchName))
 
 jobs:
 - job:
