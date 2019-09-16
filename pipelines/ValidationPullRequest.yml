@@ -8,7 +8,7 @@ resources:
     - repository: template
       type: git
       name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
-      ref: ${{pipelineBranch.ref}}
+      ref: ($pipelineBranch.ref)
 
 jobs:
 - job:
