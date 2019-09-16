@@ -633,7 +633,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     1,
                     1,
                     Packet_Header_Flags_Values.NONE,
-                    messageId++,
+                    ref messageId,
                     preferredDialects,
                     SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
                     Capabilities_Values.GLOBAL_CAP_DFS | Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING | Capabilities_Values.GLOBAL_CAP_LARGE_MTU

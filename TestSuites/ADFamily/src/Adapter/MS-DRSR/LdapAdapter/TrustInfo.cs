@@ -243,7 +243,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
             foreach (string o in tdos)
             {
-                byte[] trustInfo = (byte[])LdapUtility.GetAttributeValue(dc, o, "msDS-TrustForestTrustInfo");
+                byte[] trustInfo = LdapUtility.GetAttributeValueInBytes(dc, o, "msDS-TrustForestTrustInfo");
                 if (!TrustInfo.UnmarshalForestTrustInfo(trustInfo, out f))
                     return false;
 
@@ -297,7 +297,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
             foreach (string o in tdos)
             {
-                byte[] trustInfo = (byte[])LdapUtility.GetAttributeValue(dc, o, "msDS-TrustForestTrustInfo");
+                byte[] trustInfo = LdapUtility.GetAttributeValueInBytes(dc, o, "msDS-TrustForestTrustInfo");
                 if (!TrustInfo.UnmarshalForestTrustInfo(trustInfo, out f))
                     return false;
 
@@ -310,7 +310,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                             && (e.Flags & (uint)TrustInfo.FOREST_TRUST_RECORD_FLAGS_DOMAIN_INFO.NETBIOS_DISABLED_MASK) == 0
                             && ForestTrustOwnsName(f, ee.NetbiosName))
                         {
-                            referredDomain = (string)LdapUtility.GetAttributeValue(dc, o, "trustPartner");
+                            referredDomain = LdapUtility.GetAttributeValueInString(dc, o, "trustPartner");
                             return true;
                         }
                     }
@@ -336,7 +336,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
             foreach (string o in tdos)
             {
-                byte[] trustInfo = (byte[])LdapUtility.GetAttributeValue(dc, o, "msDS-TrustForestTrustInfo");
+                byte[] trustInfo = LdapUtility.GetAttributeValueInBytes(dc, o, "msDS-TrustForestTrustInfo");
                 if (!TrustInfo.UnmarshalForestTrustInfo(trustInfo, out f))
                     return false;
 
@@ -350,7 +350,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                             && (e.Flags & (uint)TrustInfo.FOREST_TRUST_RECORD_FLAGS_DOMAIN_INFO.LSA_SID_DISABLED_CONFLICT) == 0
                             && ForestTrustOwnsName(f, ee.DnsName))
                         {
-                            referredDomain = (string)LdapUtility.GetAttributeValue(dc, o, "trustPartner");
+                            referredDomain = LdapUtility.GetAttributeValueInString(dc, o, "trustPartner");
                             return true;
                         }
                     }

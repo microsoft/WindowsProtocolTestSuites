@@ -244,14 +244,14 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                 cid = Client.ComputerObjectGuid;
 
                 bDcClient = true;
-                object replEpochObj = ldapAd.GetAttributeValue(
+                string replEpochObj = ldapAd.GetAttributeValueInString(
                     server,
                     server.NtdsDsaObjectName,
                     "msDS-ReplicationEpoch"
                     );
                 if (replEpochObj != null)
                 {
-                    replEpoch = uint.Parse((string)replEpochObj);
+                    replEpoch = uint.Parse(replEpochObj);
                 }
 
 
@@ -575,7 +575,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             // create PAS if needed
             // get the abstract PAS from LDAP (nc!partialAttributeSet)
 
-            byte[] pasData = (byte[])ldapAd.GetAttributeValue(dest, ncName, "partialAttributeSet");
+            byte[] pasData = ldapAd.GetAttributeValueInBytes(dest, ncName, "partialAttributeSet");
 
             uint[] cPAS = null;
 
@@ -728,7 +728,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             // get the abstract PAS from LDAP (nc!partialAttributeSet)
 
             string nc = LdapUtility.GetDnFromNcType(destDc, ncType);
-            byte[] pasData = (byte[])ldapAd.GetAttributeValue(destDc, nc, "partialAttributeSet");
+            byte[] pasData = ldapAd.GetAttributeValueInBytes(destDc, nc, "partialAttributeSet");
 
             uint[] cPAS = null;
 

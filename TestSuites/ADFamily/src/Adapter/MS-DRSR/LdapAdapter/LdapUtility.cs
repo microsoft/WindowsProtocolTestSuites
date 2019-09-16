@@ -103,7 +103,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
         public static string GetObjectDnByGuid(DsServer dc, string baseDn, Guid guid)
         {
-            return (string)GetAttributeValue(
+            return GetAttributeValueInString(
                 dc,
                 baseDn,
                 "distinguishedName",
@@ -114,7 +114,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
         public static string GetObjectDnBySid(DsServer dc, string baseDn, NT4SID sid)
         {
-            return (string)GetAttributeValue(
+            return GetAttributeValueInString(
                 dc,
                 baseDn,
                 "distinguishedName",
@@ -130,8 +130,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             string baseDn)
         {
             // Construct a primary group SID
-            int primaryGroupId = Convert.ToInt32((string)GetAttributeValue(dc, name, "primaryGroupID"));
-            byte[] userSid = (byte[])GetAttributeValue(dc, name, "objectSid");
+            int primaryGroupId = Convert.ToInt32(GetAttributeValueInString(dc, name, "primaryGroupID"));
+            byte[] userSid = GetAttributeValueInBytes(dc, name, "objectSid");
 
             StringBuilder escapedGroupSid = new StringBuilder();
             for (uint i = 0; i < userSid.Length - 4; ++i)
@@ -146,7 +146,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             }
 
             string tfilter = "(&(objectClass=group)(objectSid=" + escapedGroupSid.ToString() + "))";
-            string dn = (string)GetAttributeValue(dc, baseDn, "distinguishedName", tfilter, System.DirectoryServices.Protocols.SearchScope.Subtree);
+            string dn = GetAttributeValueInString(dc, baseDn, "distinguishedName", tfilter, System.DirectoryServices.Protocols.SearchScope.Subtree);
 
             return CreateDSNameForObject(dc, dn);
         }
@@ -255,18 +255,9 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
         public static string GetObjectStringSid(DsServer srv, string dn)
         {
-            object d = GetAttributeValue(srv, dn, "objectSid");
-            if (d == null)
+            byte[] data = GetAttributeValueInBytes(srv, dn, "objectSid");
+            if (data == null)
                 return null;
-            byte[] data = null;
-            if (d is string)
-            {
-                data = OIDUtility.ToBinary((string)d);
-            }
-            else if (d is byte[])
-            {
-                data = (byte[])d;
-            }
 
             SecurityIdentifier sid = new SecurityIdentifier(data, 0);
             return sid.ToString();
@@ -274,7 +265,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
         public static string GetObjectStringSidHistory(DsServer srv, string dn)
         {
-            byte[] data = (byte[])GetAttributeValue(srv, dn, "SidHistory");
+            byte[] data = GetAttributeValueInBytes(srv, dn, "SidHistory");
             if (data == null)
                 return null;
 
@@ -356,7 +347,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                     newDn += (rDns[j] + ", ");
                 newDn += rDns[rDns.Length - 1];
 
-                string name = (string)GetAttributeValue(
+                string name = GetAttributeValueInString(
                     srv,
                     newDn,
                     "distinguishedName",
@@ -380,20 +371,20 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             string rootDseDn = "";  // empty DN means rootDSE
             RootDSE rootDse = new RootDSE();
 
-            rootDse.defaultNamingContext = (string)GetAttributeValue(srv, rootDseDn, "defaultNamingContext");
-            rootDse.configurationNamingContext = (string)GetAttributeValue(srv, rootDseDn, "configurationNamingContext");
-            rootDse.schemaNamingContext = (string)GetAttributeValue(srv, rootDseDn, "schemaNamingContext");
-            rootDse.rootDomainNamingContext = (string)GetAttributeValue(srv, rootDseDn, "rootDomainNamingContext");
+            rootDse.defaultNamingContext = GetAttributeValueInString(srv, rootDseDn, "defaultNamingContext");
+            rootDse.configurationNamingContext = GetAttributeValueInString(srv, rootDseDn, "configurationNamingContext");
+            rootDse.schemaNamingContext = GetAttributeValueInString(srv, rootDseDn, "schemaNamingContext");
+            rootDse.rootDomainNamingContext = GetAttributeValueInString(srv, rootDseDn, "rootDomainNamingContext");
 
-            rootDse.serverName = (string)GetAttributeValue(srv, rootDseDn, "serverName");
-            rootDse.dnsHostName = (string)GetAttributeValue(srv, rootDseDn, "dnsHostName");
+            rootDse.serverName = GetAttributeValueInString(srv, rootDseDn, "serverName");
+            rootDse.dnsHostName = GetAttributeValueInString(srv, rootDseDn, "dnsHostName");
 
-            rootDse.domainControllerFunctionality = Convert.ToInt32(GetAttributeValue(srv, rootDseDn, "domainControllerFunctionality"));
-            rootDse.domainFunctionality = Convert.ToInt32(GetAttributeValue(srv, rootDseDn, "domainFunctionality"));
-            rootDse.forestFunctionality = Convert.ToInt32(GetAttributeValue(srv, rootDseDn, "forestFunctionality"));
-            rootDse.dsServiceName = (string)GetAttributeValue(srv, rootDseDn, "dsServiceName");
+            rootDse.domainControllerFunctionality = Convert.ToInt32(GetAttributeValueInString(srv, rootDseDn, "domainControllerFunctionality"));
+            rootDse.domainFunctionality = Convert.ToInt32(GetAttributeValueInString(srv, rootDseDn, "domainFunctionality"));
+            rootDse.forestFunctionality = Convert.ToInt32(GetAttributeValueInString(srv, rootDseDn, "forestFunctionality"));
+            rootDse.dsServiceName = GetAttributeValueInString(srv, rootDseDn, "dsServiceName");
 
-            string gcReady = (string)GetAttributeValue(srv, rootDseDn, "isGlobalCatalogReady");
+            string gcReady = GetAttributeValueInString(srv, rootDseDn, "isGlobalCatalogReady");
             if (gcReady == null || gcReady.ToUpper() != "TRUE")
                 rootDse.isGcReady = false;
             else
@@ -407,9 +398,9 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             if (dn == null)
                 return null;
 
-            object t = GetAttributeValue(srv, dn, "objectGuid");
-            if (t != null)
-                return new Guid((byte[])t);
+            byte[] data = GetAttributeValueInBytes(srv, dn, "objectGuid");
+            if (data != null)
+                return new Guid(data);
 
             return null;
         }
@@ -444,7 +435,39 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
         }
 
-        public static object GetAttributeValue(
+        public static object[] GetAttributeValuesOfType(
+            DsServer dc,
+            string dn,
+            string attributeName,
+            string ldapFilter,
+            System.DirectoryServices.Protocols.SearchScope searchScope,
+            Type valuesType)
+        {
+            SearchResultEntryCollection results = null;
+            ResultCode ret = Search(
+                dc,
+                dn,
+                ldapFilter,
+                searchScope,
+                new string[] { attributeName },
+                out results);
+
+            if (ret != ResultCode.Success)
+                return null;
+
+            foreach (SearchResultEntry e in results)
+            {
+                DirectoryAttribute attr = e.Attributes[attributeName];
+                if (attr == null)
+                    return null;
+                else
+                    return attr.GetValues(valuesType);
+            }
+
+            return null;
+        }
+
+        public static string[] GetAttributeValuesString(
             DsServer dc,
             string dn,
             string attributeName,
@@ -452,58 +475,42 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             System.DirectoryServices.Protocols.SearchScope searchScope
                 = System.DirectoryServices.Protocols.SearchScope.Base)
         {
-            SearchResultEntryCollection results = null;
-            ResultCode ret = Search(
-                dc,
-                dn,
-                ldapFilter,
-                searchScope,
-                new string[] { attributeName },
-                out results);
-
-            if (ret != ResultCode.Success)
-                return null;
-
-            foreach (SearchResultEntry e in results)
-            {
-                DirectoryAttribute attr = e.Attributes[attributeName];
-                if (attr == null)
-                    return null;
-                else
-                    return attr[0];
-            }
-
-            return null;
+            return (string[])(GetAttributeValuesOfType(dc, dn, attributeName, ldapFilter, searchScope, typeof(string)));
         }
 
-        public static string[] GetAttributeValuesString(
-          DsServer dc, string dn, string attributeName,
+        public static byte[][] GetAttributeValuesBytes(
+            DsServer dc,
+            string dn,
+            string attributeName,
             string ldapFilter = "(objectClass=*)",
             System.DirectoryServices.Protocols.SearchScope searchScope
                 = System.DirectoryServices.Protocols.SearchScope.Base)
         {
-            SearchResultEntryCollection results = null;
-            ResultCode ret = Search(
-                dc,
-                dn,
-                ldapFilter,
-                searchScope,
-                new string[] { attributeName },
-                out results);
+            return (byte[][])(GetAttributeValuesOfType(dc, dn, attributeName, ldapFilter, searchScope, typeof(byte[])));
+        }
 
-            if (ret != ResultCode.Success)
-                return null;
+        public static string GetAttributeValueInString(
+            DsServer dc,
+            string dn,
+            string attributeName,
+            string ldapFilter = "(objectClass=*)",
+            System.DirectoryServices.Protocols.SearchScope searchScope
+                = System.DirectoryServices.Protocols.SearchScope.Base)
+        {
+            string[] attrs = GetAttributeValuesString(dc, dn, attributeName, ldapFilter, searchScope);
+            return attrs?[0];
+        }
 
-            foreach (SearchResultEntry e in results)
-            {
-                DirectoryAttribute attr = e.Attributes[attributeName];
-                if (attr == null)
-                    return null;
-                else
-                    return (string[])attr.GetValues(typeof(string));
-            }
-
-            return null;
+        public static byte[] GetAttributeValueInBytes(
+            DsServer dc,
+            string dn,
+            string attributeName,
+            string ldapFilter = "(objectClass=*)",
+            System.DirectoryServices.Protocols.SearchScope searchScope
+                = System.DirectoryServices.Protocols.SearchScope.Base)
+        {
+            byte[][] attrs = GetAttributeValuesBytes(dc, dn, attributeName, ldapFilter, searchScope);
+            return attrs?[0];
         }
 
         public static LdapConnection CreateConnection(
@@ -562,7 +569,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
         public static PROPERTY_META_DATA? AttrStamp(DsServer dc, string objDn, uint attrTyp)
         {
-            byte[] metaDataBer = (byte[])GetAttributeValue(dc, objDn, "replPropertyMetaData");
+            byte[] metaDataBer = GetAttributeValueInBytes(dc, objDn, "replPropertyMetaData");
             if (metaDataBer == null)
                 return null;
 
@@ -639,7 +646,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         /// <returns>SAM name</returns>
         public static string GetObjectSAMNameFromDN(DsServer svr, string dn)
         {
-            return GetAttributeValue(svr, dn, "samaccountname").ToString();
+            return GetAttributeValueInString(svr, dn, "samaccountname");
         }
 
         /// <summary>
@@ -681,7 +688,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
         public static LDAP_PROPERTY_META_DATA[] GetMetaData(DsServer dc, string objDn)
         {
-            byte[] metaDataBer = (byte[])GetAttributeValue(dc, objDn, "replPropertyMetaData");
+            byte[] metaDataBer = GetAttributeValueInBytes(dc, objDn, "replPropertyMetaData");
             if (metaDataBer == null)
                 return null;
 
@@ -694,7 +701,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         {
             RootDSE rootDse = LdapUtility.GetRootDSE(dc);
             SCHEMA_PREFIX_TABLE prefixTable = OIDUtility.CreatePrefixTable();
-            string attrOid = (string)GetAttributeValue(
+            string attrOid = GetAttributeValueInString(
                     dc,
                     rootDse.schemaNamingContext,
                     "attributeID",

@@ -7,6 +7,21 @@ using System.Collections.Generic;
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 {
     #region Basic Types
+    /// <summary>
+    /// RDPEDYC specific exception thrown when mismatched PDU is unmarshaled.
+    /// </summary>
+    public class RdpedycPduMismatchException : Exception
+    {
+        /// <summary>
+        /// Construct an instance with message.
+        /// </summary>
+        /// <param name="message">The error message.</param>
+        public RdpedycPduMismatchException(string message)
+            : base(message)
+        {
+        }
+    }
+
     public class ConstLength
     {
         //According to section 3.1.5.1.4 of MS-RDPEDYC,
@@ -59,12 +74,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         /// <summary>
         /// Raw data of the header fields.
         /// </summary>
-        public byte RawData 
-        { 
-            get 
-            { 
+        public byte RawData
+        {
+            get
+            {
                 // Always re-caculate the latest result.
-                return (byte)(((int)Cmd << 4) | (Sp << 2) | (int)CbChannelId); 
+                return (byte)(((int)Cmd << 4) | (Sp << 2) | (int)CbChannelId);
             }
         }
 
@@ -94,32 +109,33 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
     }
 
-    public enum Cmd_Values : int {
-        
+    public enum Cmd_Values : int
+    {
+
         /// <summary>
         ///  The message contained in the optionalFields field is
         ///  a Create Request PDU or a Create Response PDU.
         /// </summary>
         Create = 0x01,
-        
+
         /// <summary>
         ///  The message contained in the optionalFields field is
         ///  a Data First PDU.
         /// </summary>
         FirstData = 0x02,
-        
+
         /// <summary>
         ///  The message contained in the optionalFields field is
         ///  a Data PDU.
         /// </summary>
         Data = 0x03,
-        
+
         /// <summary>
         ///  The message contained in the optionalFields field is
         ///  a Close Request PDU or a Close Response PDU.
         /// </summary>
         Close = 0x04,
-        
+
         /// <summary>
         ///  The message contained in the optionalFields field is
         ///  a Capability Request PDU or a Capabilities Response
@@ -232,7 +248,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         VERSION2 = 0x0002,
         VERSION3 = 0x0003,
     }
-  
+
     #endregion
 
     #region MS-RDPEDYC PDUs
@@ -255,7 +271,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
                 HeaderBits = new Header(Cmd, 0, 0);
             }
         }
-        
+
         #region Encoding Members
 
         public override void Encode(PduMarshaler marshaler)
@@ -294,6 +310,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
                 }
             }
             catch (OverflowException)
+            {
+                marshaler.Reset();
+            }
+            catch (RdpedycPduMismatchException)
             {
                 marshaler.Reset();
             }
@@ -501,9 +521,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
         protected override Cmd_Values Cmd
         {
-            get 
-            { 
-                return Cmd_Values.Unknown; 
+            get
+            {
+                return Cmd_Values.Unknown;
             }
         }
 
@@ -568,6 +588,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         {
             Pad = marshaler.ReadByte();
             Version = marshaler.ReadUInt16();
+
+            if (Version != (ushort)DYNVC_CAPS_Version.VERSION1)
+            {
+                throw new RdpedycPduMismatchException($"Version should be {DYNVC_CAPS_Version.VERSION1}!");
+            }
         }
     }
 
@@ -638,6 +663,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         {
             Pad = marshaler.ReadByte();
             Version = marshaler.ReadUInt16();
+
+            if (Version != (ushort)DYNVC_CAPS_Version.VERSION2)
+            {
+                throw new RdpedycPduMismatchException($"Version should be {DYNVC_CAPS_Version.VERSION2}!");
+            }
+
             PriorityCharge0 = marshaler.ReadUInt16();
             PriorityCharge1 = marshaler.ReadUInt16();
             PriorityCharge2 = marshaler.ReadUInt16();
@@ -712,6 +743,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         {
             Pad = marshaler.ReadByte();
             Version = marshaler.ReadUInt16();
+
+            if (Version != (ushort)DYNVC_CAPS_Version.VERSION3)
+            {
+                throw new RdpedycPduMismatchException($"Version should be {DYNVC_CAPS_Version.VERSION3}!");
+            }
+
             PriorityCharge0 = marshaler.ReadUInt16();
             PriorityCharge1 = marshaler.ReadUInt16();
             PriorityCharge2 = marshaler.ReadUInt16();
@@ -740,12 +777,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         public CapsRespDvcPdu()
         {
             HeaderBits = new Header(Cmd_Values.Capability, 0x00, cbChId_Values.OneByte);
-            Pad = 0x00;           
+            Pad = 0x00;
         }
 
         public CapsRespDvcPdu(ushort version)
         {
-            HeaderBits = new Header(Cmd_Values.Capability, 0x00, cbChId_Values.OneByte);            
+            HeaderBits = new Header(Cmd_Values.Capability, 0x00, cbChId_Values.OneByte);
             Pad = 0x00;
             Version = version;
         }
@@ -780,11 +817,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         public string ChannelName;
 
         public CreateReqDvcPdu()
-        {            
+        {
         }
 
         public CreateReqDvcPdu(int priority, uint channelId, string channelName)
-        {           
+        {
             HeaderBits = new Header(Cmd, priority, cbChId_Values.Invalid);
 
             this.ChannelId = channelId;
@@ -891,7 +928,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
                     break;
             }
 
-            if(!isSp)
+            if (!isSp)
             {
                 // If the 3-4 bit is Len, this value indicates the length of Length field.
                 // Length field is applied to DYNVC_DATA_FIRST and DYNVC_DATA_FIRST_COMPRESSED structures.
@@ -916,7 +953,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             return len;
         }
     }
-    
+
     public class DataFirstDvcPdu : DataDvcBasePdu
     {
         public uint Length { get; set; }
@@ -959,7 +996,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             Data = marshaler.ReadToEnd();
         }
     }
-    
+
     public class DataDvcPdu : DataDvcBasePdu
     {
         public DataDvcPdu()
@@ -1003,9 +1040,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
     /// </summary>
     public class DataFirstCompressedDvcPdu : DataDvcBasePdu
     {
-        public uint Length { get; set; }        
+        public uint Length { get; set; }
 
-        public DataFirstCompressedDvcPdu(){ }
+        public DataFirstCompressedDvcPdu() { }
 
         /// <summary>
         /// Construct the DataFirstCompressedDvcPdu
@@ -1018,12 +1055,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             this.ChannelId = channelId;
             this.Length = length;
 
-            this.Data = data;           
-            
+            this.Data = data;
+
             UpdateCbChannelId();
             UpdateLengthOfLength(length);
         }
-    
+
         public int GetNonDataSize()
         {
             return NonDataSize(false);
@@ -1047,7 +1084,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             Length = ReadLength(marshaler);
             Data = marshaler.ReadToEnd();
         }
-    
+
     }
 
     /// <summary>
@@ -1065,7 +1102,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         /// uncompressedSize, and segmentArray fields MUST be present, and the segment field MUST NOT be present. 
         /// </summary>
         MULTIPART = 0xE1
-    }   
+    }
 
     public enum SEGMENT_PART_SISE : uint
     {
@@ -1087,7 +1124,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
     /// </summary>
     public class DataCompressedDvcPdu : DataDvcBasePdu
     {
-        public DataCompressedDvcPdu(){ }
+        public DataCompressedDvcPdu() { }
 
         public DataCompressedDvcPdu(uint channelId, byte[] data)
         {
@@ -1132,12 +1169,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         }
 
         public CloseDvcPdu(uint channelId)
-        {           
+        {
             HeaderBits.Cmd = Cmd_Values.Close;
             HeaderBits.Sp = 0x00;
             ChannelId = channelId;
 
-            UpdateCbChannelId();            
+            UpdateCbChannelId();
         }
 
         protected override Cmd_Values Cmd
@@ -1187,7 +1224,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             }
         }
 
-        public SoftSyncReqDvcPDU(){ }
+        public SoftSyncReqDvcPDU() { }
 
         /// <summary>
         /// Constructor
@@ -1195,7 +1232,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         public SoftSyncReqDvcPDU(SoftSyncReqFlags_Value flags, ushort numberOfTunnels, SoftSyncChannelList[] softSyncChannelLists)
         {
             HeaderBits = new Header(Cmd_Values.SoftSyncReq, 0x00, 0x00);
-            this.Pad = 0x00;            
+            this.Pad = 0x00;
             this.Flags = flags;
             this.NumberOfTunnels = numberOfTunnels;
             this.SoftSyncChannelLists = softSyncChannelLists;
@@ -1204,7 +1241,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
             this.Length = 8;
 
-            if(flags.HasFlag(SoftSyncReqFlags_Value.SOFT_SYNC_CHANNEL_LIST_PRESENT))
+            if (flags.HasFlag(SoftSyncReqFlags_Value.SOFT_SYNC_CHANNEL_LIST_PRESENT))
             {
                 if (softSyncChannelLists == null)
                 {
@@ -1224,7 +1261,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             marshaler.WriteUInt32(Length);
             marshaler.WriteUInt16((ushort)Flags);
             marshaler.WriteUInt16((ushort)NumberOfTunnels);
-            if(SoftSyncChannelLists != null)
+            if (SoftSyncChannelLists != null)
             {
                 foreach (var li in SoftSyncChannelLists)
                 {
@@ -1255,7 +1292,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             }
             this.SoftSyncChannelLists = list.ToArray();
         }
-        
+
     }
 
     /// <summary>
@@ -1305,7 +1342,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             List<byte> buffer = new List<byte>();
             buffer.AddRange(TypeMarshal.ToBytes<TunnelType_Value>(TunnelType));
             buffer.AddRange(TypeMarshal.ToBytes<ushort>(NumberOfDVCs));
-            foreach(uint i in ListOfDVCIds)
+            foreach (uint i in ListOfDVCIds)
             {
                 buffer.AddRange(TypeMarshal.ToBytes<uint>(i));
             }
@@ -1377,7 +1414,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         }
 
         public SoftSyncResDvcPdu() { }
-        
+
         public SoftSyncResDvcPdu(uint numberOfTunnels, TunnelType_Value[] tunnelsToSwitch)
         {
             HeaderBits = new Header(Cmd_Values.SoftSyncRes, 0x00, 0x00);
