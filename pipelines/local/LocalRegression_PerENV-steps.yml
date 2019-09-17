@@ -27,7 +27,7 @@ steps:
     displayName: Sync-BuildFromShare
     inputs:
       filePath: '${{parameters.extRepoDir}}/AzureScripts/Download-TestsuiteFromShare.ps1'
-      arguments: '-BuildShareFolder %BuildShareFolder% -RootSharePath %RootSharePath% -TestSuiteName %TestSuiteName% -regressionType Local'
+      arguments: '-BuildShareFolder $env:BuildShareFolder -RootSharePath $env:RootSharePath -TestSuiteName $env:TestSuiteName -regressionType Local'
     env:
       BuildShareFolder: ${{parameters.BuildShareFolder}}
       TestSuiteName: ${{parameters.TestSuiteName}}
@@ -38,7 +38,7 @@ steps:
     displayName: Clean Up
     inputs:
       filePath: 'Cleanup-TestSuiteEnvironment.ps1'
-      arguments: '-TestSuiteName %TestSuiteName% -EnvironmentName %EnvironmentName%'
+      arguments: '-TestSuiteName $env:TestSuiteName -EnvironmentName $env:EnvironmentName'
       workingDirectory: '$(Pipeline.Workspace)/../../WinteropProtocolTesting/VSTORMLITE'
     env:
       TestSuiteName: ${{parameters.TestSuiteName}}
@@ -49,7 +49,7 @@ steps:
     displayName: Setup Environment
     inputs:
       filePath: 'Setup-TestSuiteEnvironment.ps1'
-      arguments: '-TestSuiteName %TestSuiteName% -EnvironmentName %EnvironmentName%'
+      arguments: '-TestSuiteName $env:TestSuiteName -EnvironmentName $env:EnvironmentName'
       workingDirectory: '$(Pipeline.Workspace)/../../WinteropProtocolTesting/VSTORMLITE'
     env:
       TestSuiteName: ${{parameters.TestSuiteName}}
@@ -60,7 +60,7 @@ steps:
     displayName: TestSuiteCases
     inputs:
       filePath: 'Execute-TestSuiteCases.ps1'
-      arguments: '-TestSuiteName %TestSuiteName% -EnvironmentName %EnvironmentName%'
+      arguments: '-TestSuiteName $env:TestSuiteName -EnvironmentName $env:EnvironmentName'
       workingDirectory: '$(Pipeline.Workspace)/../../WinteropProtocolTesting/VSTORMLITE'
     env:
       TestSuiteName: ${{parameters.TestSuiteName}}
