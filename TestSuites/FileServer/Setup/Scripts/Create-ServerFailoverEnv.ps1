@@ -205,62 +205,18 @@ if($cluster -eq $null)
     }
 	
     # Create cluster
-    $osVersion = Get-OSVersionNumber.ps1
-    if ([double]$osVersion -ge [double]"10.0")
+    .\Write-Info.ps1 "Create cluster"
+    New-Cluster -Name $clusterName -Node $clusterNodes -StaticAddress $clusterIps
+    Start-Sleep 20
+
+    .\Write-Info.ps1 "Check if cluster create succeed"
+    $cluster = Get-cluster | where {$_.Name -eq $clusterName}
+    if($cluster -eq $null)
     {
-        # Failed to create cluster in Threshold if let New-Cluster cmdlet auto add cluster disks
-        # So create a cluster without cluster disks, then add cluster disks separately.
-        
-        .\Write-Info.ps1 "Create cluster with current node without storage"
-        New-Cluster -Name $clusterName -Node $env:COMPUTERNAME -StaticAddress $clusterIps -NoStorage
-        Start-Sleep 20
-
-        .\Write-Info.ps1 "Check if cluster create succeed"
-        $cluster = Get-cluster | Where-Object {$_.Name -eq $clusterName}
-        if($cluster -eq $null)
-        {
-            .\Write-Info.ps1 "Create Cluster failed."
-            Write-ConfigFailureSignal
-            exit ExitCode
-        }
-
-        .\Write-Info.ps1 "Add ClusterNode for nodes other than current node"
-        $_clusterNodes = @()
-        foreach ($_clusterNode in $clusterNodeList)
-        {
-            # Only add nodes other than current node into ClusterNodes
-            if ($_clusterNode.name -ne $env:COMPUTERNAME) {
-                $_clusterNodes += $_clusterNode.name
-            }
-        }
-        Get-Cluster -Name $clusterName | Add-ClusterNode -Name $_clusterNodes
-
-        .\Write-Info.ps1 "Get available storages."
-        $disks = Get-ClusterAvailableDisk
-        $quorumDisk = $disks | sort Size | Select-Object -First 1
-
-        .\Write-Info.ps1 "Add cluster storages."
-        $disks | Add-ClusterDisk
-        Start-Sleep 10
-
-        .\Write-Info.ps1 "Set Cluster Quorum Disk."
-        Set-ClusterQuorum  -NodeAndDiskMajority $quorumDisk.Name
+        .\Write-Info.ps1 "Create Cluster failed."
+        Write-ConfigFailureSignal
+        exit ExitCode
     }
-    else
-    {
-        .\Write-Info.ps1 "Create cluster"
-        New-Cluster -Name $clusterName -Node $clusterNodes -StaticAddress $clusterIps
-        Start-Sleep 20
-
-        .\Write-Info.ps1 "Check if cluster create succeed"
-        $cluster = Get-cluster | where {$_.Name -eq $clusterName}
-        if($cluster -eq $null)
-        {
-            .\Write-Info.ps1 "Create Cluster failed."
-            Write-ConfigFailureSignal
-            exit ExitCode
-        }
-    }    
 }
 
 #----------------------------------------------------------------------------
@@ -448,7 +404,7 @@ if($retryTime -le 0)
 # Create infrastructure share before adding cluster shared volume
 #----------------------------------------------------------------------------
 $build = [environment]::OSVersion.Version.Build
-if ($build -ge 17609)
+if (($build -ge 17609) -and (![string]::IsNullOrEmpty($infraFsName)))
 {
     $InfrastructureGroup = Get-ClusterGroup | where {$_.Name -eq $infraFsName}
     if($InfrastructureGroup -eq $null)
