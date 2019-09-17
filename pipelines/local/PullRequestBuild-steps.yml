@@ -1,0 +1,78 @@
+parameters:
+  extRepoUrl : ""
+  extRepoDir : ""
+
+steps:
+  - script: 'git clone -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
+    displayName: 'Fetch external repo'
+    env:
+      EXTREPO_URL: ${{parameters.extRepoUrl}}
+      EXTREPO_DIR: ${{parameters.extRepoDir}}
+    timeoutInMinutes: 0
+
+  - task: PowerShell@2
+    inputs:
+      filePath: '${{parameters.extRepoDir}}/CopyLabScriptToTestSuite.ps1'
+      workingDirectory: '${{parameters.extRepoDir}}'
+  - task: BatchScript@1
+    displayName: 'Build ADFamily'
+    inputs:
+      filename: 'TestSuites/ADFamily/src/build.cmd'
+
+  - task: BatchScript@1
+    displayName: 'Build BranchCache'
+    inputs:
+      filename: 'TestSuites/BranchCache/src/build.cmd'
+
+  - task: BatchScript@1
+    displayName: 'Build FileServer'
+    inputs:
+      filename: 'TestSuites/FileServer/src/build.cmd'
+
+  - task: BatchScript@1
+    displayName: 'Build Kerberos'
+    inputs:
+      filename: 'TestSuites/Kerberos/src/build.cmd'
+
+  - task: BatchScript@1
+    displayName: 'Build MS-ADFSPIP'
+    inputs:
+      filename: 'TestSuites/MS-ADFSPIP/src/build.cmd'
+
+  - task: BatchScript@1
+    displayName: 'Build MS-ADOD'
+    inputs:
+      filename: 'TestSuites/MS-ADOD/src/build.cmd'
+
+  - task: BatchScript@1
+    displayName: 'build MS-AZOD'
+    inputs:
+      filename: 'TestSuites/MS-AZOD/src/build.cmd'
+
+  - task: BatchScript@1
+    displayName: 'build MS-SMB'
+    inputs:
+      filename: 'TestSuites/MS-SMB/src/build.cmd'
+
+  - task: BatchScript@1
+    displayName: 'build MS-SMBD'
+    inputs:
+      filename: 'TestSuites/MS-SMBD/src/build.cmd'
+
+  - task: BatchScript@1
+    displayName: 'build RDPClient'
+    inputs:
+      filename: TestSuites/RDP/Client/src/build.cmd
+
+  - task: BatchScript@1
+    displayName: 'build RDPServer'
+    inputs:
+      filename: TestSuites/RDP/Server/src/build.cmd
+
+  - task: NuGetToolInstaller@1
+    inputs:
+      versionSpec: 
+  - task: BatchScript@1
+    displayName: 'build PTM'
+    inputs:
+      filename: ProtocolTestManager/build.cmd
