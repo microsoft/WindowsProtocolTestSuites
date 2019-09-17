@@ -1,0 +1,69 @@
+parameters:
+  extRepoUrl : ""
+  extRepoDir : ""
+  TestSuiteName : ""
+  EnvironmentName : ""
+  BuildShareFolder : ""
+  RootSharePath : ""
+  HelperBranch : "master"
+
+steps:
+  - powershell: |
+    Write-Host "TestSuiteName ${{parameters.TestSuiteName}}"
+    Write-Host "EnvironmentName ${{parameters.EnvironmentName}}"
+    Write-Host "RootSharePath ${{parameters.RootSharePath}}"   
+    Write-Host "BuildShareFolder ${{parameters.BuildShareFolder}}"    
+    Write-Host "HelperBranch ${{parameters.HelperBranch}}"
+    displayName: 'Show parameters'
+
+  - script: 'git clone -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" -b $(HelperBranch) %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
+    displayName: 'Fetch external repo'
+    env:
+      EXTREPO_URL: ${{parameters.extRepoUrl}}
+      EXTREPO_DIR: ${{parameters.extRepoDir}}
+    timeoutInMinutes: 0
+
+  - task: PowerShell@2
+    displayName: Sync-BuildFromShare
+    inputs:
+      filePath: '${{parameters.extRepoDir}}/AzureScripts/Download-TestsuiteFromShare.ps1'
+      arguments: '-BuildShareFolder %BuildShareFolder% -RootSharePath %RootSharePath% -TestSuiteName %TestSuiteName% -regressionType Local'
+    env:
+      BuildShareFolder: ${{parameters.BuildShareFolder}}
+      TestSuiteName: ${{parameters.TestSuiteName}}
+      RootSharePath: ${{parameters.RootSharePath}}
+    timeoutInMinutes: 0
+
+  - task: PowerShell@2
+    displayName: Clean Up
+    inputs:
+      filePath: 'Cleanup-TestSuiteEnvironment.ps1'
+      arguments: '-TestSuiteName %TestSuiteName% -EnvironmentName %EnvironmentName%'
+      workingDirectory: '$(Pipeline.Workspace)/../../WinteropProtocolTesting/VSTORMLITE'
+    env:
+      TestSuiteName: ${{parameters.TestSuiteName}}
+      EnvironmentName: ${{parameters.EnvironmentName}}
+    timeoutInMinutes: 0
+
+  - task: PowerShell@2
+    displayName: Setup Environment
+    inputs:
+      filePath: 'Setup-TestSuiteEnvironment.ps1'
+      arguments: '-TestSuiteName %TestSuiteName% -EnvironmentName %EnvironmentName%'
+      workingDirectory: '$(Pipeline.Workspace)/../../WinteropProtocolTesting/VSTORMLITE'
+    env:
+      TestSuiteName: ${{parameters.TestSuiteName}}
+      EnvironmentName: ${{parameters.EnvironmentName}}
+    timeoutInMinutes: 0
+
+  - task: PowerShell@2
+    displayName: TestSuiteCases
+    inputs:
+      filePath: 'Execute-TestSuiteCases.ps1'
+      arguments: '-TestSuiteName %TestSuiteName% -EnvironmentName %EnvironmentName%'
+      workingDirectory: '$(Pipeline.Workspace)/../../WinteropProtocolTesting/VSTORMLITE'
+    env:
+      TestSuiteName: ${{parameters.TestSuiteName}}
+      EnvironmentName: ${{parameters.EnvironmentName}}
+    timeoutInMinutes: 0
+
