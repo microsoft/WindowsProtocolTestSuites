@@ -1,8 +1,22 @@
-#############################################################################
+###########################################################################################
 ## Copyright (c) Microsoft. All rights reserved.
 ## Licensed under the MIT license. See LICENSE file in the project root for full license information.
+###########################################################################################
+
+###########################################################################################
 ##
-#############################################################################
+## Microsoft Windows Powershell Scripting
+## File:           Create-DNSRecords.ps1
+## Purpose:        Create static DNS records for Cluster and GeneralFS.
+## Requirements:   Windows Powershell 5.0
+## Supported OS:   Windows Server 2012 R2, Windows Server 2016, and later.
+## Input parameter is 
+##      workingDir              :  The working directory for the script execution
+##      protocolConfigFile      :  Path to the XML configuration file for the current test environment
+## Process:
+##  1. Read the host names and IP addresses of Cluster and GeneralFS from XML configuration file.
+##  2. Add static DNS records to resolve host names to host IP addresses.
+###########################################################################################
 
 param($workingDir = "$env:SystemDrive\Temp", $protocolConfigFile = "$workingDir\Protocol.xml")
 
