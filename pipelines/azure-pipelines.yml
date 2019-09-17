@@ -20,7 +20,7 @@ jobs:
   timeoutInMinutes: 0
 
   steps:
-  - template: $(PRBuild-steps)@template
+  - template: pipelines/local/PullRequestBuild-steps.yml@template
     parameters:
       extRepoUrl: $(extRepo.url)
       extRepoDir: $(extRepo.dir)
