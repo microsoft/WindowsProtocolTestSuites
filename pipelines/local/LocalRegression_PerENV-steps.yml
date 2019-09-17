@@ -9,7 +9,7 @@ parameters:
 
 steps:
   - powershell: |
-    Write-Host "TestSuiteName ${{parameters.TestSuiteName}}""
+    Write-Host "TestSuiteName ${{parameters.TestSuiteName}}"
     displayName: 'Show parameters'
 
   - script: 'git clone -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" -b $(HelperBranch) %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
