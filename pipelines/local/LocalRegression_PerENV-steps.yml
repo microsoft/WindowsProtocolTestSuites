@@ -62,6 +62,7 @@ steps:
     env:
       TestSuiteName: ${{parameters.TestSuiteName}}
       EnvironmentName: ${{parameters.EnvironmentName}}
+    ignoreLASTEXITCODE: true
     timeoutInMinutes: 0
 
   - task: PublishTestResults@2
