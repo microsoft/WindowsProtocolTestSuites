@@ -37,9 +37,9 @@ steps:
   - task: PowerShell@2
     displayName: Clean Up
     inputs:
-      filePath: 'Cleanup-TestSuiteEnvironment.ps1'
+      filePath: '$(Agent.HomeDirectory)/../WinteropProtocolTesting/VSTORMLITE/Cleanup-TestSuiteEnvironment.ps1'
       arguments: '-TestSuiteName $env:TestSuiteName -EnvironmentName $env:EnvironmentName'
-      workingDirectory: 'D:/WinteropProtocolTesting/VSTORMLITE'
+      
     env:
       TestSuiteName: ${{parameters.TestSuiteName}}
       EnvironmentName: ${{parameters.EnvironmentName}}
