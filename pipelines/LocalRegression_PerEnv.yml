@@ -12,7 +12,7 @@ resources:
 
 jobs:
 - job:
-  displayName: Verify Pull Requests
+  displayName: LocalPipelines
   pool: 
     name: TestSuiteBuildPool
   workspace:
