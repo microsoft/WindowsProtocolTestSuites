@@ -39,7 +39,6 @@ steps:
     inputs:
       filePath: '$(Agent.HomeDirectory)/../WinteropProtocolTesting/VSTORMLITE/Cleanup-TestSuiteEnvironment.ps1'
       arguments: '-TestSuiteName $env:TestSuiteName -EnvironmentName $env:EnvironmentName'
-      
     env:
       TestSuiteName: ${{parameters.TestSuiteName}}
       EnvironmentName: ${{parameters.EnvironmentName}}
@@ -48,9 +47,8 @@ steps:
   - task: PowerShell@2
     displayName: Setup Environment
     inputs:
-      filePath: 'Setup-TestSuiteEnvironment.ps1'
+      filePath: '$(Agent.HomeDirectory)/../WinteropProtocolTesting/VSTORMLITE/Setup-TestSuiteEnvironment.ps1'
       arguments: '-TestSuiteName $env:TestSuiteName -EnvironmentName $env:EnvironmentName'
-      workingDirectory: '$(Agent.HomeDirectory)/../WinteropProtocolTesting/VSTORMLITE'
     env:
       TestSuiteName: ${{parameters.TestSuiteName}}
       EnvironmentName: ${{parameters.EnvironmentName}}
@@ -59,11 +57,19 @@ steps:
   - task: PowerShell@2
     displayName: TestSuiteCases
     inputs:
-      filePath: 'Execute-TestSuiteCases.ps1'
+      filePath: '$(Agent.HomeDirectory)/../WinteropProtocolTesting/VSTORMLITE/Execute-TestSuiteCases.ps1'
       arguments: '-TestSuiteName $env:TestSuiteName -EnvironmentName $env:EnvironmentName'
-      workingDirectory: '$(Agent.HomeDirectory)/../WinteropProtocolTesting/VSTORMLITE'
     env:
       TestSuiteName: ${{parameters.TestSuiteName}}
       EnvironmentName: ${{parameters.EnvironmentName}}
     timeoutInMinutes: 0
+
+  - task: PublishTestResults@2
+    displayName: 'Publish trx files'
+    inputs:
+      testResultsFormat: VSTest
+      testResultsFiles: '$(Agent.HomeDirectory)/../WinteropProtocolTesting/TestResults/${{parameters.TestSuiteName}}/*.trx'
+      failTaskOnFailedTests: true
+    timeoutInMinutes: 0
+    condition: always()
 
