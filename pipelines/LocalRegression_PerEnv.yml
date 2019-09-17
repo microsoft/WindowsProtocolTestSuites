@@ -24,3 +24,8 @@ jobs:
     parameters:
       extRepoUrl: $(extRepo.url)
       extRepoDir: $(extRepo.dir)
+      TestSuiteName: 'RDPServer'
+      EnvironmentName: ''
+      BuildShareFolder: ''
+      RootSharePath: ''
+      HelperBranch: 'master'
