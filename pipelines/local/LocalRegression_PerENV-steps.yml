@@ -39,7 +39,7 @@ steps:
     inputs:
       filePath: 'Cleanup-TestSuiteEnvironment.ps1'
       arguments: '-TestSuiteName $env:TestSuiteName -EnvironmentName $env:EnvironmentName'
-      workingDirectory: '$(Pipeline.Workspace)/../../../WinteropProtocolTesting/VSTORMLITE'
+      workingDirectory: '$(Agent.HomeDirectory)/../WinteropProtocolTesting/VSTORMLITE'
     env:
       TestSuiteName: ${{parameters.TestSuiteName}}
       EnvironmentName: ${{parameters.EnvironmentName}}
@@ -50,7 +50,7 @@ steps:
     inputs:
       filePath: 'Setup-TestSuiteEnvironment.ps1'
       arguments: '-TestSuiteName $env:TestSuiteName -EnvironmentName $env:EnvironmentName'
-      workingDirectory: '$(Pipeline.Workspace)/../../../WinteropProtocolTesting/VSTORMLITE'
+      workingDirectory: '$(Agent.HomeDirectory)/../WinteropProtocolTesting/VSTORMLITE'
     env:
       TestSuiteName: ${{parameters.TestSuiteName}}
       EnvironmentName: ${{parameters.EnvironmentName}}
@@ -61,7 +61,7 @@ steps:
     inputs:
       filePath: 'Execute-TestSuiteCases.ps1'
       arguments: '-TestSuiteName $env:TestSuiteName -EnvironmentName $env:EnvironmentName'
-      workingDirectory: '$(Pipeline.Workspace)/../../../WinteropProtocolTesting/VSTORMLITE'
+      workingDirectory: '$(Agent.HomeDirectory)/../WinteropProtocolTesting/VSTORMLITE'
     env:
       TestSuiteName: ${{parameters.TestSuiteName}}
       EnvironmentName: ${{parameters.EnvironmentName}}
