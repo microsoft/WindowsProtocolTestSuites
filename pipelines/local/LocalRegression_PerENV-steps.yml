@@ -9,14 +9,19 @@ parameters:
 
 steps:
   - powershell: |
-    Write-Host "TestSuiteName"
+    Write-Host "TestSuiteName ${{parameters.TestSuiteName}}"
+    Write-Host "EnvironmentName ${{parameters.EnvironmentName}}"
+    Write-Host "RootSharePath ${{parameters.RootSharePath}}"   
+    Write-Host "BuildShareFolder ${{parameters.BuildShareFolder}}"    
+    Write-Host "HelperBranch ${{parameters.HelperBranch}}"
     displayName: 'Show parameters'
 
-  - script: 'git clone -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" -b $(HelperBranch) %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
+  - script: 'git clone -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" -b %HelperBranch% %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
     displayName: 'Fetch external repo'
     env:
       EXTREPO_URL: ${{parameters.extRepoUrl}}
       EXTREPO_DIR: ${{parameters.extRepoDir}}
+      HelperBranch: ${{parameters.HelperBranch}}
     timeoutInMinutes: 0
 
   - task: PowerShell@2
