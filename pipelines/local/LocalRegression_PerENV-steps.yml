@@ -59,10 +59,10 @@ steps:
     inputs:
       filePath: '$(Agent.HomeDirectory)/../WinteropProtocolTesting/VSTORMLITE/Execute-TestSuiteCases.ps1'
       arguments: '-TestSuiteName $env:TestSuiteName -EnvironmentName $env:EnvironmentName'
+      ignoreLASTEXITCODE: true
     env:
       TestSuiteName: ${{parameters.TestSuiteName}}
       EnvironmentName: ${{parameters.EnvironmentName}}
-    ignoreLASTEXITCODE: true
     timeoutInMinutes: 0
 
   - task: PublishTestResults@2
