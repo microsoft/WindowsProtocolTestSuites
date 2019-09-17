@@ -25,7 +25,7 @@ jobs:
       extRepoUrl: $(extRepo.url)
       extRepoDir: $(extRepo.dir)
       TestSuiteName: 'RDPServer'
-      EnvironmentName: ''
-      BuildShareFolder: ''
-      RootSharePath: ''
-      HelperBranch: 'master'
+      EnvironmentName: 'RDP_Server_Local_RS5.xml'
+      BuildShareFolder: '\\pet-storage-04\PrototestRegressionShare\ProtocolTestSuite'
+      RootSharePath: '\\pet-storage-04\PrototestRegressionShare\ProtocolTestSuite\jenkins-Build_Local_Regression-445'
+      HelperBranch: 'v-zhanh/ADO'
