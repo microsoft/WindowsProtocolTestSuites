@@ -85,7 +85,7 @@ jobs:
       inputs:
         testResultsFormat: VSTest
         testResultsFiles: '$(Common.TestResultsDirectory)/*.trx'
-        failTaskOnFailedTests: true
+        buildConfiguration: ${{parameters.EnvironmentName}}
       timeoutInMinutes: 0
       condition: always()
 
