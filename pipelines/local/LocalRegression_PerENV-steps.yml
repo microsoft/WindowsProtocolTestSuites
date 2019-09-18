@@ -1,11 +1,11 @@
 parameters:
-  extRepoUrl : ""
-  extRepoDir : ""
-  TestSuiteName : ""
-  EnvironmentName : ""
-  BuildShareFolder : ""
-  RootSharePath : ""
-  HelperBranch : "master"
+  extRepoUrl : ''
+  extRepoDir : ''
+  TestSuiteName : ''
+  EnvironmentName : ''
+  BuildShareFolder : ''
+  RootSharePath : ''
+  HelperBranch : ''
 
 jobs:
 - job:
@@ -75,7 +75,7 @@ jobs:
       timeoutInMinutes: 0
 
     - task: CopyFiles@2
-      displayName: 'Copy Test Results to: $(Common.TestResultsDirectory)'
+      displayName: 'Copy Test Results to: Common Test Results Directory'
       inputs:
         SourceFolder: '$(Agent.HomeDirectory)/../WinteropProtocolTesting/TestResults/${{parameters.TestSuiteName}}'
         TargetFolder: '$(Common.TestResultsDirectory)'
