@@ -8,13 +8,12 @@ parameters:
   HelperBranch : "master"
 
 jobs:
- - job: 
- displayName: PipelineForLocalRegressionPerENV
- pool: 
-    name: TestSuiteHostPool
-  workspace:
-    clean: false
-  timeoutInMinutes: 0
+ - job: test
+  pool: 
+      name: TestSuiteHostPool
+    workspace:
+      clean: false
+    timeoutInMinutes: 0
 
   steps:
     - script: echo "TestSuiteName ${{parameters.TestSuiteName}}"
