@@ -11,15 +11,6 @@ resources:
       ref: v-zhanh/LocalPipelines
 
 jobs:
-- job:
-  displayName: LocalPipelines
-  pool: 
-    name: TestSuiteHostPool
-  workspace:
-    clean: false
-  timeoutInMinutes: 0
-
-  steps:
   - template: pipelines/local/LocalRegression_PerENV-steps.yml@template
     parameters:
       extRepoUrl: $(extRepo.url)
