@@ -9,8 +9,7 @@ parameters:
 
 jobs:
  - job: Test
-    pool: 
-      name: TestSuiteHostPool
+    pool: TestSuiteHostPool
 
   steps:
     - script: echo "TestSuiteName ${{parameters.TestSuiteName}}"
