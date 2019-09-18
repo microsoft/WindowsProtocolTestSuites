@@ -65,11 +65,17 @@ steps:
       EnvironmentName: ${{parameters.EnvironmentName}}
     timeoutInMinutes: 0
 
+  - task: CopyFiles@2
+    displayName: 'Copy Test Results to: $(Common.TestResultsDirectory)'
+    inputs:
+      SourceFolder: '$(Agent.HomeDirectory)/../WinteropProtocolTesting/TestResults/${{parameters.TestSuiteName}}'
+      TargetFolder: '$(Common.TestResultsDirectory)'
+
   - task: PublishTestResults@2
     displayName: 'Publish trx files'
     inputs:
       testResultsFormat: VSTest
-      testResultsFiles: '$(Agent.HomeDirectory)/../WinteropProtocolTesting/TestResults/${{parameters.TestSuiteName}}/*.trx'
+      testResultsFiles: '$(Common.TestResultsDirectory)/*.trx'
       failTaskOnFailedTests: true
     timeoutInMinutes: 0
     condition: always()
