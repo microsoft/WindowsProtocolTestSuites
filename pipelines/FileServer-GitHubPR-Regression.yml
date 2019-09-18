@@ -24,11 +24,11 @@ variables:
 
 jobs:
 - job:
-  displayName: Test
+  displayName: Run regression
   pool: 
-    name: TestSuiteHostPool
+    name: Azure Agents
   workspace:
-    clean: false
+    clean: all
   timeoutInMinutes: 0
 
   steps:
