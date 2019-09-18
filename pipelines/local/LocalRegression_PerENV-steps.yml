@@ -7,7 +7,6 @@ parameters:
   RootSharePath : ""
   HelperBranch : "master"
 
-jobs:
  - job: Test
     pool: TestSuiteHostPool
 
