@@ -9,7 +9,7 @@ parameters:
 
 jobs:
  - job: 
- displayName: PipelineForLocalRegression_PerENV
+ displayName: PipelineForLocalRegressionPerENV
  pool: 
     name: TestSuiteHostPool
   workspace:
