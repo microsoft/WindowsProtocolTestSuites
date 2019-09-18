@@ -8,12 +8,9 @@ parameters:
   HelperBranch : "master"
 
 jobs:
- - job: test
-  pool: 
+ - job: Test
+    pool: 
       name: TestSuiteHostPool
-    workspace:
-      clean: false
-    timeoutInMinutes: 0
 
   steps:
     - script: echo "TestSuiteName ${{parameters.TestSuiteName}}"
