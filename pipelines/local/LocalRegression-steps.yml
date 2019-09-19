@@ -1,12 +1,13 @@
 parameters:
   extRepoUrl : ''
   extRepoDir : ''
-  TestSuiteName : ''
+  configFile : ''
+  helperBranch : ''
+  testSuiteName : ''
   EnvironmentName : ''
   BuildShareFolder : ''
   RootSharePath : ''
-  HelperBranch : ''
-
+  
 jobs:
 - job:
   displayName: Run regression
@@ -17,13 +18,6 @@ jobs:
   timeoutInMinutes: 0
 
   steps:
-    - script: echo "TestSuiteName ${{parameters.TestSuiteName}}"
-              echo "EnvironmentName ${{parameters.EnvironmentName}}"
-              echo "RootSharePath ${{parameters.RootSharePath}}"   
-              echo "BuildShareFolder ${{parameters.BuildShareFolder}}"    
-              echo "HelperBranch ${{parameters.HelperBranch}}"
-      displayName: 'Show parameters'
-
     - script: 'git clone -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" -b %HelperBranch% %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
       displayName: 'Fetch external repo'
       env:
@@ -37,9 +31,8 @@ jobs:
     inputs:
       targetType: filePath
       filePath: '$(extRepo.dir)/AzureScripts/Run-AzRegressionWithCSV.ps1'
-      arguments: '-ConfigFile "$(test.configFile)" -TestSuiteName $env:TestSuiteName -EnvType "Local" -HelperBranch "$(test.helperBranch)" -NeedBuild -AccessToken "$(System.AccessToken)" -BuildTag "$(test.buildTag)" -PipelineName "$(test.downstreamPipelineName)" -ApiUrl "$(build.apiUrl)" -SubscriptionId "$(azure.subscriptionId)" -ApplicationId "$(azure.applicationId)" -ThumbPrint "$(azure.thumbPrint)" -TenantId "$(azure.tenantId)" -StorageAccount "$(azure.storageAccount)" -StorageShareName "$(azure.storageShareName)" -LocalRegressionShare "$(build.sharePath)" -FileShareResourceGroup "$(azure.fileShareResourceGroup)" -IsTriggeredFromGitHub $false'
+      arguments: '-ConfigFile "${{parameters.configFile}}" -TestSuiteName ${{parameters.testSuiteName}} -EnvType "Local" -HelperBranch "${{test.helperBranch}}" -NeedBuild -AccessToken "$(System.AccessToken)" -BuildTag "$(test.buildTag)" -PipelineName "$(test.downstreamPipelineName)" -ApiUrl "$(build.apiUrl)" -SubscriptionId "$(azure.subscriptionId)" -ApplicationId "$(azure.applicationId)" -ThumbPrint "$(azure.thumbPrint)" -TenantId "$(azure.tenantId)" -StorageAccount "$(azure.storageAccount)" -StorageShareName "$(azure.storageShareName)" -LocalRegressionShare "$(build.sharePath)" -FileShareResourceGroup "$(azure.fileShareResourceGroup)" -IsTriggeredFromGitHub $false'
     env:
-      TestSuiteName: ${{parameters.TestSuiteName}}
       BUILD_BUILDID: $(Build.BuildId)
       SMTP_SENDERPASSWORD: $(smtp.senderPassword)
       SMTP_SMTPHOST: $(smtp.smtpHost)
