@@ -1,0 +1,24 @@
+trigger: none 
+
+variables:
+  - group: Azure Account
+  - group: External Repo Variables
+  - group: SMTP Account
+
+resources:
+  repositories:
+    - repository: template
+      type: git
+      name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
+      ref: v-zhanh/LocalPipelines
+
+jobs:
+  - template: pipelines/local/LocalRegression-steps.yml@template
+    parameters:
+      extRepoUrl: $(extRepo.url)
+      extRepoDir: $(extRepo.dir)
+      TestSuiteName: $(test.testSuiteName)
+      EnvironmentName: $(test.environmentName)
+      RootSharePath: '\\pet-storage-04\PrototestRegressionShare\ProtocolTestSuite'
+      BuildShareFolder: $(test.buildShareFolder)      
+      HelperBranch: $(test.helperBranch)
