@@ -20,5 +20,4 @@ jobs:
       TestSuiteName: $(test.testSuiteName)
       EnvironmentName: $(test.environmentName)
       RootSharePath: '\\pet-storage-04\PrototestRegressionShare\ProtocolTestSuite'
-      BuildShareFolder: $(test.buildShareFolder)      
       HelperBranch: $(test.helperBranch)
