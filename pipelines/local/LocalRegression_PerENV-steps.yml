@@ -58,6 +58,7 @@ jobs:
       inputs:
         filePath: '$(Agent.HomeDirectory)/../WinteropProtocolTesting/VSTORMLITE/Setup-TestSuiteEnvironment.ps1'
         arguments: '-TestSuiteName $env:TestSuiteName -EnvironmentName $env:EnvironmentName'
+        errorActionPreference: continue
       env:
         TestSuiteName: ${{parameters.TestSuiteName}}
         EnvironmentName: ${{parameters.EnvironmentName}}
