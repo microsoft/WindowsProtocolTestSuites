@@ -2,6 +2,7 @@ trigger: none
 
 variables:
   - group: Azure Account
+  - group: Access Tokens
   - group: Build Variables
   - group: External Repo Variables
   - group: SMTP Account
