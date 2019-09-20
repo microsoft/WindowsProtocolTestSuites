@@ -7,8 +7,6 @@ variables:
   - group: SMTP Account
   - name: test.buildTag
     value: Local-Regression-$(Build.BuildNumber)
-  - name: test.downstreamPipelineName
-    value: RDPServer_Local_Regression_PerENV
 
 resources:
   repositories:
