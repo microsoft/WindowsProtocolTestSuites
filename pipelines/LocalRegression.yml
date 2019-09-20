@@ -2,8 +2,11 @@ trigger: none
 
 variables:
   - group: Azure Account
+  - group: Build Variables
   - group: External Repo Variables
   - group: SMTP Account
+  - name: test.buildTag
+    value: Local-Regression-$(Build.BuildNumber)
 
 resources:
   repositories:
@@ -17,8 +20,8 @@ jobs:
     parameters:
       extRepoUrl: $(extRepo.url)
       extRepoDir: $(extRepo.dir)
+      configFile: 'TestSuites\LocalRegression.csv'
+      RootSharePath: $(build.sharePath)
       TestSuiteName: $(test.testSuiteName)
       EnvironmentName: $(test.environmentName)
-      RootSharePath: '\\pet-storage-04\PrototestRegressionShare\ProtocolTestSuite'
-      BuildShareFolder: $(test.buildShareFolder)      
       HelperBranch: $(test.helperBranch)
