@@ -94,5 +94,5 @@ jobs:
       displayName: 'Publish report'
       inputs:
         PathtoPublish: '$(Common.TestResultsDirectory)'
-    timeoutInMinutes: 0
-    condition: always()
+      timeoutInMinutes: 0
+      condition: always()
