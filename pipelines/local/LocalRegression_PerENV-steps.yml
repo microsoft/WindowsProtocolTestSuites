@@ -90,3 +90,10 @@ jobs:
       timeoutInMinutes: 0
       condition: always()
 
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish report'
+      inputs:
+        PathtoPublish: '$(Common.TestResultsDirectory)'
+    timeoutInMinutes: 0
+    condition: always()
+
