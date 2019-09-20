@@ -20,7 +20,7 @@ jobs:
     - script: echo "TestSuiteName ${{parameters.TestSuiteName}}"
               echo "EnvironmentName ${{parameters.EnvironmentName}}"
               echo "RootSharePath ${{parameters.RootSharePath}}"   
-              echo "BuildShareFolder ${{parameters.BuildShareFolder}}"    
+              echo "BuildShareFolder ${{parameters.RootSharePath}}\${{parameters.BuildShareFolder}}"    
               echo "HelperBranch ${{parameters.HelperBranch}}"
       displayName: 'Show parameters'
 
@@ -38,7 +38,7 @@ jobs:
         filePath: '${{parameters.extRepoDir}}/AzureScripts/Download-TestsuiteFromShare.ps1'
         arguments: '-BuildShareFolder $env:BuildShareFolder -RootSharePath $env:RootSharePath -TestSuiteName $env:TestSuiteName -regressionType Local'
       env:
-        BuildShareFolder: ${{parameters.BuildShareFolder}}
+        BuildShareFolder: ${{parameters.RootSharePath}}\${{parameters.BuildShareFolder}}
         TestSuiteName: ${{parameters.TestSuiteName}}
         RootSharePath: ${{parameters.RootSharePath}}
       timeoutInMinutes: 0
