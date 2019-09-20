@@ -96,4 +96,3 @@ jobs:
         PathtoPublish: '$(Common.TestResultsDirectory)'
     timeoutInMinutes: 0
     condition: always()
-
