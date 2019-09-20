@@ -18,6 +18,7 @@ jobs:
     parameters:
       extRepoUrl: $(extRepo.url)
       extRepoDir: $(extRepo.dir)
+      configFile: 'TestSuites\LocalRegression.csv'
       TestSuiteName: $(test.testSuiteName)
       EnvironmentName: $(test.environmentName)
       RootSharePath: '\\pet-storage-04\PrototestRegressionShare\ProtocolTestSuite'
