@@ -6,7 +6,7 @@ variables:
   - group: External Repo Variables
   - group: SMTP Account
   - name: test.buildTag
-    value: Local-Regression-$(Build.BuildNumber)
+    value: $(Build.DefinitionName)-$(Build.BuildNumber)
 
 resources:
   repositories:
