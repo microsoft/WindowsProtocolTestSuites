@@ -234,6 +234,17 @@ Function Config-Phase1()
     # Kept receiving 53, if not stabilize during domain join
     Sleep 60
     .\Join-Domain.ps1 -domainWorkgroup "Domain" -domainName $Parameters["domain"] -userName $Parameters["username"] -userPassword $Parameters["password"] -testResultsPath $ScriptPath 2>&1 | Write-Output
+
+    # Update host files
+    if($IsAzure)
+    {
+        $file = "$env:windir\System32\drivers\etc\hosts"
+        foreach ($Vm in $content.lab.servers.vm) {
+            $currIp = $Vm.ip
+            $currName = $Vm.name
+            "$currIp $currName" | Add-Content -PassThru $file
+        }
+    }
 }
 
 #------------------------------------------------------------------------------------------

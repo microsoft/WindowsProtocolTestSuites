@@ -1,0 +1,71 @@
+trigger: none
+
+pr:
+  branches:
+    include:
+      - staging
+  paths:
+    include:
+      - TestSuites/FileServer/*
+      - ProtoSDK/*
+    exclude:
+      - TestSuites/FileServer/docs/*
+
+variables:
+  - group: Access Tokens
+  - group: Azure Account
+  - group: Build Variables
+  - group: External Repo Variables
+  - group: SMTP Account
+  - name: test.buildTag
+    value: FileServer-GitHubPR-Regression-$(Build.BuildNumber)
+  - name: test.downstreamPipelineName
+    value: FileServer-GitHubPR-Regression_PerENV
+
+jobs:
+- job:
+  displayName: Run regression
+  pool: 
+    name: Azure Agents
+  workspace:
+    clean: all
+  timeoutInMinutes: 0
+
+  steps:
+  - script: 'git clone --single-branch --progress -b $(test.helperBranch) %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
+    displayName: 'Fetch external repo'
+    env:
+      EXTREPO_URL: $(extRepo.url)
+      EXTREPO_DIR: $(extRepo.dir)
+    timeoutInMinutes: 0
+
+  - task: PowerShell@2
+    displayName: 'Run regression script'
+    inputs:
+      targetType: filePath
+      filePath: '$(extRepo.dir)/AzureScripts/Run-AzRegressionWithCSV.ps1'
+      arguments: '-ConfigFile "$(test.configFile)" -TestSuiteName "FileServer" -EnvType "GitHub" -HelperBranch "$(test.helperBranch)" -NeedBuild -AccessToken "$(tokens.pipelineTriggerToken)" -BuildTag "$(test.buildTag)" -PipelineName "$(test.downstreamPipelineName)" -ApiUrl "$(build.apiUrl)" -SubscriptionId "$(azure.subscriptionId)" -ApplicationId "$(azure.applicationId)" -ThumbPrint "$(azure.thumbPrint)" -TenantId "$(azure.tenantId)" -StorageAccount "$(azure.storageAccount)" -StorageShareName "$(azure.storageShareName)" -LocalRegressionShare "$(build.sharePath)" -FileShareResourceGroup "$(azure.fileShareResourceGroup)" -IsTriggeredFromGitHub $true'
+    env:
+      BUILD_BUILDID: $(Build.BuildId)
+      SMTP_SENDERPASSWORD: $(smtp.senderPassword)
+      SMTP_SMTPHOST: $(smtp.smtpHost)
+      SMTP_SMTPPORT: $(smtp.smtpPort)
+      SMTP_SENDERUSERNAME: $(smtp.senderUsername)
+      SMTP_SENDTO: $(smtp.sendTo)
+    timeoutInMinutes: 0
+
+  - task: PublishTestResults@2
+    displayName: 'Publish trx files'
+    inputs:
+      testResultsFormat: VSTest
+      testResultsFiles: '$(Build.Repository.LocalPath)/TestResults/*/*.trx'
+      failTaskOnFailedTests: true
+    timeoutInMinutes: 0
+    condition: always()
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish report'
+    inputs:
+      PathtoPublish: '$(Build.Repository.LocalPath)/TestResults'
+    timeoutInMinutes: 0
+    condition: always()

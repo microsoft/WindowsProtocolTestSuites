@@ -326,8 +326,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             ret = drsTestClient.DrsAddEntry(dcServerType, reqVer, entInfObjList, pClientCreds, out outVersion, out outMessage);
             BaseTestSite.Assert.AreEqual<uint>(0, ret, "IDL_DRSAddEntry: Checking return value - got: {0}, expect: {1}, should return 0 on success", ret, 0);
 
-            object val = ldapAdapter.GetAttributeValue(dcServer, dn, "enabled");
-            BaseTestSite.Assert.IsTrue(val == null ? true : bool.Parse(val.ToString()), "Enabled attribute of crossRef should be true or not set now");
+            string val = ldapAdapter.GetAttributeValueInString(dcServer, dn, "enabled");
+            BaseTestSite.Assert.IsTrue(val == null ? true : bool.Parse(val), "Enabled attribute of crossRef should be true or not set now");
             AddObjectUpdate addUpdate = new AddObjectUpdate(dcServerType, dn);
             this.updateStorage.PushUpdate(addUpdate);
         }
@@ -506,7 +506,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                     DirectoryAttributeCollection atts = new DirectoryAttributeCollection();
                     string modObj1Dn = ldapAdapter.TestAddUserObj(dcServer);
                     DSNAME? obj1Name = ldapAdapter.GetDsName(dcServer, modObj1Dn);
-                    object orgAtt1 = ldapAdapter.GetAttributeValue(dcServer, modObj1Dn, "displayName");
+                    string orgAtt1 = ldapAdapter.GetAttributeValueInString(dcServer, modObj1Dn, "displayName");
                     string modifiedAtt1 = orgAtt1 + "Modified";
                     DirectoryAttribute att1 = new DirectoryAttribute("displayName", modifiedAtt1);
                     atts.Add(att1);
@@ -521,7 +521,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                     atts = new DirectoryAttributeCollection();
                     string modObj2Dn = ldapAdapter.TestAddUserObj(dcServer);
                     DSNAME? obj2Name = ldapAdapter.GetDsName(dcServer, modObj2Dn);
-                    object orgAtt2 = ldapAdapter.GetAttributeValue(dcServer, modObj2Dn, "displayName");
+                    string orgAtt2 = ldapAdapter.GetAttributeValueInString(dcServer, modObj2Dn, "displayName");
                     string modifiedAtt2 = orgAtt2 + "Modified";
                     DirectoryAttribute att2 = new DirectoryAttribute("displayName", modifiedAtt2);
                     atts.Add(att2);
@@ -560,10 +560,10 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 
                     #region Verify the modified attributes with LDAP
 
-                    object afterModifiedAtt1 = ldapAdapter.GetAttributeValue(dcServer, modObj1Dn, "displayName");
+                    string afterModifiedAtt1 = ldapAdapter.GetAttributeValueInString(dcServer, modObj1Dn, "displayName");
                     BaseTestSite.Assert.AreEqual<string>(modifiedAtt1, afterModifiedAtt1.ToString(), "LDAP: the modified attribute should be verified.");
 
-                    object afterModifiedAtt2 = ldapAdapter.GetAttributeValue(dcServer, modObj2Dn, "displayName");
+                    string afterModifiedAtt2 = ldapAdapter.GetAttributeValueInString(dcServer, modObj2Dn, "displayName");
                     BaseTestSite.Assert.AreEqual<string>(modifiedAtt2, afterModifiedAtt2.ToString(), "LDAP: the modified attribute should be verified.");
 
                     #endregion

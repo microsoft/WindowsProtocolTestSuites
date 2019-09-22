@@ -61,58 +61,29 @@ namespace Microsoft.Protocols.TestManager.CLI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Protocol Test Manager Command Line Interface
-        ///Description:
-        ///ptmcli.exe &lt;-p|-profile profileName&gt; [-s|-selected] [-r|-report reportfile]
-        ///           [-outcome pass,fail,inconclusive,notrun] [-sortby name|outcome]
-        ///           [-separator comma|space]
-        ///
-        ///Options:
-        ///-p | -profile profileName   Specifies the file name of profile of the test 
-        ///                            suite to run.
-        ///
-        ///-s | -selected              Turn this switch on to run only the test cases
-        ///                            selected in the Run Page [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to The PTM profile has been upgraded. New profile is saved as {0}..
         /// </summary>
-        internal static string HelpText {
+        internal static string PtmProfileUpgraded {
             get {
-                return ResourceManager.GetString("HelpText", resourceCulture);
+                return ResourceManager.GetString("PtmProfileUpgraded", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid argument: {0}..
+        ///   Looks up a localized string similar to Unknown format: {0}..
         /// </summary>
-        internal static string InvalidArgumentMessage {
+        internal static string UnknownReportFormat {
             get {
-                return ResourceManager.GetString("InvalidArgumentMessage", resourceCulture);
+                return ResourceManager.GetString("UnknownReportFormat", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The value of argument {0} is invalid: {1}..
+        ///   Looks up a localized string similar to Unknown test suite: {0}..
         /// </summary>
-        internal static string InvalidValueOfArgumentMessage {
+        internal static string UnknownTestSuiteMessage {
             get {
-                return ResourceManager.GetString("InvalidValueOfArgumentMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The value of argument {0} is missing..
-        /// </summary>
-        internal static string MissingArgumentValue {
-            get {
-                return ResourceManager.GetString("MissingArgumentValue", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unknown argument: {0}..
-        /// </summary>
-        internal static string UnknownArgumentMessage {
-            get {
-                return ResourceManager.GetString("UnknownArgumentMessage", resourceCulture);
+                return ResourceManager.GetString("UnknownTestSuiteMessage", resourceCulture);
             }
         }
     }

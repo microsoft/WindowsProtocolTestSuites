@@ -81,31 +81,13 @@ namespace Microsoft.Protocols.TestManager.Detector
             reqs.Summary = "Please set the following values:";
             reqs.Properties = new Dictionary<string, List<string>>();
 
-            List<string> TrustType = new List<string>();
-
-            TrustType.Add("Forest");
-            TrustType.Add("Realm");
-            TrustType.Add("NoTrust");
-
-            reqs.Properties.Add("TrustType", TrustType);
+            reqs.Properties.Add("TrustType", ServerHelper.ConstructValueListUsingPtfConfig("TrustType", "Forest", "Realm", "NoTrust", "Child"));
 
             //KkdcpInfo
-
-            List<string> IsKkdcpSupported = new List<string>();
-
-            IsKkdcpSupported.Add("true");
-            IsKkdcpSupported.Add("false");
-
-            reqs.Properties.Add("Support KKDCP", IsKkdcpSupported);
-
-            List<string> kkdcpProxyUrl = new List<string>();
-
-            kkdcpProxyUrl.Add("https://proxy01.contoso.com/kdcproxy");
-
-            reqs.Properties.Add("KKDCP proxy Url", kkdcpProxyUrl);
+            reqs.Properties.Add("Support KKDCP", ServerHelper.ConstructValueListUsingPtfConfig("IsClaimSupported", "true", "false"));
+            reqs.Properties.Add("KKDCP proxy Url", ServerHelper.ConstructValueListUsingPtfConfig("KKDCPServerUrl"));
 
             #region local realm
-
             reqs.Properties.Add("Local Domain", ServerHelper.ConstructValueListUsingPtfConfig("LocalRealm.RealmName"));
             reqs.Properties.Add("Local Domain Admin", ServerHelper.ConstructValueListUsingPtfConfig("LocalRealm.Users.Admin.Username"));
             reqs.Properties.Add("Local Domain Admin Pwd", ServerHelper.ConstructValueListUsingPtfConfig("LocalRealm.Users.Admin.Password"));
@@ -114,49 +96,21 @@ namespace Microsoft.Protocols.TestManager.Detector
             reqs.Properties.Add("Local AP is File Server", ServerHelper.ConstructValueList("true", "false"));
             reqs.Properties.Add("Local AP is HTTP Server", ServerHelper.ConstructValueList("true", "false"));
 
-            List<string> LocalHttpUri = new List<string>();
-            LocalHttpUri.Add("Http://ap01.contoso.com");
-            reqs.Properties.Add("Local HTTP Server Uri", LocalHttpUri);
+            reqs.Properties.Add("Local HTTP Server Uri", ServerHelper.ConstructValueListUsingPtfConfig("LocalRealm.WebServer01.HttpUri"));
 
             #endregion
 
             #region  cross realm prequisite
-
-            List<string> trustDomainName = new List<string>();
-            trustDomainName.Add("Kerb.com");
-            reqs.Properties.Add("Trust Domain", trustDomainName);
-
-            List<string> trustDomainAdminUsername = new List<string>();
-            trustDomainAdminUsername.Add("Administrator");
-            reqs.Properties.Add("Trust Domain Admin User", trustDomainAdminUsername);
-
-            List<string> trustDomainAdminPwd = new List<string>();
-            trustDomainAdminPwd.Add("Password01#");
-            reqs.Properties.Add("Trust Domain Admin Pwd", trustDomainAdminPwd);
-
-            List<string> ForestTrustPwd = new List<string>();
-            ForestTrustPwd.Add("Password01!");
-            reqs.Properties.Add("Trust Password", ForestTrustPwd);
-
-            List<string> IsTrustLdapAPSUT = new List<string>();
-            IsTrustLdapAPSUT.Add("true");
-            IsTrustLdapAPSUT.Add("false");
-            reqs.Properties.Add("Trust DC is LDAP Server", IsTrustLdapAPSUT);
+            reqs.Properties.Add("Trust Domain", ServerHelper.ConstructValueListUsingPtfConfig("TrustedRealm.RealmName"));
+            reqs.Properties.Add("Trust Domain Admin User", ServerHelper.ConstructValueListUsingPtfConfig("TrustedRealm.Users.Admin.Username"));
+            reqs.Properties.Add("Trust Domain Admin Pwd", ServerHelper.ConstructValueListUsingPtfConfig("TrustedRealm.Users.Admin.Password"));
+            reqs.Properties.Add("Trust Password", ServerHelper.ConstructValueListUsingPtfConfig("TrustedRealm.TrustPassword"));
+            reqs.Properties.Add("Trust DC is LDAP Server", ServerHelper.ConstructValueList("true", "false"));
             reqs.Properties.Add("Trust AP Server Name", ServerHelper.ConstructValueListUsingPtfConfig("TrustedRealm.FileServer01.FQDN"));
+            reqs.Properties.Add("Trust AP is File Server", ServerHelper.ConstructValueList("true", "false"));
+            reqs.Properties.Add("Trust AP is HTTP Server", ServerHelper.ConstructValueList("true", "false"));
 
-            List<string> IsTrustSmbAPSUT = new List<string>();
-            IsTrustSmbAPSUT.Add("true");
-            IsTrustSmbAPSUT.Add("false");
-            reqs.Properties.Add("Trust AP is File Server", IsTrustSmbAPSUT);
-
-            List<string> IsTrustHttpAPSUT = new List<string>();
-            IsTrustHttpAPSUT.Add("true");
-            IsTrustHttpAPSUT.Add("false");
-            reqs.Properties.Add("Trust AP is HTTP Server", IsTrustHttpAPSUT);
-
-            List<string> TrustHttpUri = new List<string>();
-            TrustHttpUri.Add("http://ap02.kerb.com");
-            reqs.Properties.Add("Trust Http Server Uri", TrustHttpUri);
+            reqs.Properties.Add("Trust Http Server Uri", ServerHelper.ConstructValueListUsingPtfConfig("TrustedRealm.WebServer01.HttpUri"));
 
             #endregion
             return reqs;
@@ -248,6 +202,19 @@ namespace Microsoft.Protocols.TestManager.Detector
                 detectionInfo.localDomain.Admin = localDomainAdminUsername;
                 detectionInfo.localDomain.AdminPassword = localDomainAdminPwd;
 
+                this.detectionInfo.localAP.authNotReqService.DefaultServiceName = $"host/AuthNotRequired.{localDomainName}";
+                this.detectionInfo.localAP.authNotReqService.ServiceSalt = $"{localDomainName.ToUpper()}hostauthnotrequired.{localDomainName}";
+                this.detectionInfo.localAP.authNotReqService.FQDN = $"AuthNotRequired.{localDomainName}";
+
+                this.detectionInfo.localAP.localResourceService1.DefaultServiceName = $"host/localResource01.{localDomainName}";
+                this.detectionInfo.localAP.localResourceService1.ServiceSalt = $"{localDomainName.ToUpper()}hostlocalresource01.{localDomainName}";
+                this.detectionInfo.localAP.localResourceService1.FQDN = $"localResource01.{localDomainName}";
+
+                this.detectionInfo.localAP.localResourceService2.DefaultServiceName = $"host/localResource02.{localDomainName}";
+                this.detectionInfo.localAP.localResourceService2.ServiceSalt = $"{localDomainName.ToUpper()}hostlocalresource02.{localDomainName}";
+                this.detectionInfo.localAP.localResourceService2.FQDN = $"localResource02.{localDomainName}";
+
+                this.detectionInfo.localUsers["User01"].Salt = $"{localDomainName.ToUpper()}test01";
             }
 
             #endregion
@@ -323,6 +290,7 @@ namespace Microsoft.Protocols.TestManager.Detector
                 {
                     this.hasLocalWebAP = true;
                     detectionInfo.HasHttpServer = true;
+                    this.detectionInfo.localAP.httpService.HttpServiceName = $"http/{localSmbServerName}";
                     this.detectionInfo.localAP.httpService.Uri = localHttpUri;
                 }
                 else
@@ -359,13 +327,11 @@ namespace Microsoft.Protocols.TestManager.Detector
             string isTrustLdapAPSUT = string.Empty;
 
             #region trust domain
-
+            string trustDomainName = string.Empty;
             if (this.detectionInfo.trustType != KerberosTrustType.NoTrust)
             {
                 //trust domain and DC
                 #region
-
-                string trustDomainName = string.Empty;
                 string trustDomainAdminUsername = string.Empty;
                 string trustDomainAdminPwd = string.Empty;
                 string trustPwd = string.Empty;
@@ -396,10 +362,10 @@ namespace Microsoft.Protocols.TestManager.Detector
 
                     detectionInfo.trustDC.IPv4 = ServerHelper.GetDCIP(this.detectionInfo.trustDomain.Name);
                     detectionInfo.trustDC.IPv6 = ServerHelper.GetDCIP(this.detectionInfo.trustDomain.Name);
-
+                    detectionInfo.trustDC.DefaultServiceName = $"krbtgt/{trustDomainName.ToUpper()}";
                 }
             }
-                #endregion
+            #endregion
 
             //trust smb ap
 
@@ -415,7 +381,13 @@ namespace Microsoft.Protocols.TestManager.Detector
                 this.hasTrustSmbAP = true;
 
                 //build up the detectioninfo with the local AP computer configurations
+                detectionInfo.trustAP.ComputerName = trustSmbServerName.Split('.')[0];
                 detectionInfo.trustAP.FQDN = trustSmbServerName;
+                detectionInfo.trustAP.NetBIOS = $"{trustSmbServerName.Split('.')[0]}$";
+                detectionInfo.trustAP.ServiceSalt = $"{trustDomainName.ToUpper()}host{trustSmbServerName}";
+                detectionInfo.trustAP.DefaultServiceName = $"host/{trustSmbServerName}";
+                detectionInfo.trustAP.smb2Service.SMB2ServiceName = $"cifs/{trustSmbServerName}";
+                detectionInfo.trustAP.httpService.HttpServiceName = $"http/{trustSmbServerName}";
             }
 
             #endregion

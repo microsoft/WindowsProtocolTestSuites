@@ -53,15 +53,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (domain == null)
             {
-                throw new ArgumentNullException("domain");
+                throw new ArgumentNullException(nameof(domain));
             }
             if (cName == null)
             {
-                throw new ArgumentNullException("cName");
+                throw new ArgumentNullException(nameof(cName));
             }
             if (password == null)
             {
-                throw new ArgumentNullException("password");
+                throw new ArgumentNullException(nameof(password));
             }
 
             kileDecoder = new KileDecoder();
@@ -189,11 +189,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (asReq == null)
             {
-                throw new ArgumentNullException("asReq");
+                throw new ArgumentNullException(nameof(asReq));
             }
             if (asRep == null)
             {
-                throw new ArgumentNullException("asRep");
+                throw new ArgumentNullException(nameof(asRep));
             }
 
             ExchangeLegWithKdc(asReq, true);
@@ -214,11 +214,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (tgsReq == null)
             {
-                throw new ArgumentNullException("tgsReq");
+                throw new ArgumentNullException(nameof(tgsReq));
             }
             if (tgsRep == null)
             {
-                throw new ArgumentNullException("tgsRep");
+                throw new ArgumentNullException(nameof(tgsRep));
             }
 
             ExchangeLegWithKdc(tgsReq, true);
@@ -241,18 +241,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (apReq == null)
             {
-                throw new ArgumentNullException("apReq");
+                throw new ArgumentNullException(nameof(apReq));
             }
             if (apRep == null)
             {
-                throw new ArgumentNullException("apRep");
+                throw new ArgumentNullException(nameof(apRep));
             }
 
-            KileApRequest apReqPdu = new KileApRequest(kileDecoder.serverContext);
+            var apReqPdu = new KileApRequest(kileDecoder.serverContext);
             apReqPdu.FromBytes(apReq);
             kileDecoder.clientContext.UpdateContext(apReqPdu);
 
-            KileApResponse apRepPdu = new KileApResponse(kileDecoder.clientContext);
+            var apRepPdu = new KileApResponse(kileDecoder.clientContext);
             apRepPdu.FromBytes(apRep);
             kileDecoder.serverContext.UpdateContext(apRepPdu);
         }
@@ -272,10 +272,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (apRep == null)
             {
-                throw new ArgumentNullException("apRep");
+                throw new ArgumentNullException(nameof(apRep));
             }
 
-            KileApResponse apRepPdu = new KileApResponse(kileDecoder.serverContext);
+            var apRepPdu = new KileApResponse(kileDecoder.serverContext);
             apRepPdu.FromBytes(apRep);
             kileDecoder.clientContext.UpdateContext(apRepPdu);
         }
@@ -295,7 +295,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (token == null)
             {
-                throw new ArgumentNullException("token");
+                throw new ArgumentNullException(nameof(token));
             }
 
             return Decrypt(token, true);
@@ -316,7 +316,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (token == null)
             {
-                throw new ArgumentNullException("token");
+                throw new ArgumentNullException(nameof(token));
             }
 
             return Decrypt(token, false);
@@ -337,7 +337,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (securityBuffers == null)
             {
-                throw new ArgumentNullException("securityBuffers");
+                throw new ArgumentNullException(nameof(securityBuffers));
             }
 
             return Decrypt(securityBuffers, true);
@@ -358,7 +358,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (securityBuffers == null)
             {
-                throw new ArgumentNullException("securityBuffers");
+                throw new ArgumentNullException(nameof(securityBuffers));
             }
 
             return Decrypt(securityBuffers, false);
@@ -379,7 +379,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (securityBuffers == null)
             {
-                throw new ArgumentNullException("securityBuffers");
+                throw new ArgumentNullException(nameof(securityBuffers));
             }
 
             return Verify(securityBuffers, true);
@@ -400,7 +400,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (securityBuffers == null)
             {
-                throw new ArgumentNullException("securityBuffers");
+                throw new ArgumentNullException(nameof(securityBuffers));
             }
 
             return Verify(securityBuffers, false);

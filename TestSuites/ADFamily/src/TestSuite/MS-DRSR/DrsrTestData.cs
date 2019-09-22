@@ -13,7 +13,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         public const string DRSAddEntry_V2_Create_crossRef_newObjectPrefixName = "test";
         public static string DRSWriteSPN_V1_Success_AddSPNs_sPN1 = "host/dc";
         public static string DRSWriteSPN_V1_Success_AddSPNs_sPN2 = "host/ds3";
-        public static string DRSGetReplInfo_ExistUser = "CN=Administrator,CN=Users";
+        public static string DRSGetReplInfo_ExistUser = "CN={0},CN=Users";
         public static string DRSGetReplInfo_ExistGroup = "CN=Domain Admins,CN=Users";
         public static string DRSGetNCChanges_NewPassword = "TestPassword!";
         public static string DRSGetNCChanges_OldPassword = "1*admin";

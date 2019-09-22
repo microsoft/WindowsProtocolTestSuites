@@ -36,7 +36,7 @@ echo    SWN                           Test cases to test MS-SWN protocol
 echo    RsvdVersion1                  Test cases to test MS-RSVD version 1
 echo    RsvdVersion2                  Test cases to test MS-RSVD version 2
 echo    SQOS                          Test cases to test MS-SQOS protocol
-echo    Auth                          Test cases to test all Authentication & Authorization scenarios
+echo    Auth                          Test cases to test all Authentication and Authorization scenarios
 echo    KerberosAuthentication        Test cases for Kerberos Authentication
 echo    FileAccessCheck               Test cases to test File Access Check scenario
 echo    FolderAccessCheck             Test cases to test Folder Access Check scenario

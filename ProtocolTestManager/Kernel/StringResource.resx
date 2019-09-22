@@ -151,7 +151,7 @@
     <value>config.xml</value>
   </data>
   <data name="ConfigLoadError" xml:space="preserve">
-    <value>Failed to load the test suite configure file config.xml:
+    <value>Failed to load the test suite:
 {0}</value>
   </data>
   <data name="LoadAdapterError" xml:space="preserve">
@@ -216,10 +216,137 @@ The test suite is {2} {3}.</value>
   <data name="PassedTag" xml:space="preserve">
     <value>[TestPassed]</value>
   </data>
-  <data name="Vs2017RegPath32" xml:space="preserve">
-    <value>SOFTWARE\Microsoft\VisualStudio\\SxS\VS7</value>
+  <data name="HtmlTestLoggerLocation" xml:space="preserve">
+    <value>Common7\IDE\Extensions\TestPlatform\Extensions\Microsoft.Protocols.TestTools.Html.TestLogger.dll</value>
+    <comment>Relative path to the VS installation folder</comment>
   </data>
-  <data name="Vs2017RegPath64" xml:space="preserve">
-    <value>SOFTWARE\WOW6432Node\Microsoft\VisualStudio\SxS\VS7</value>
+  <data name="HtmlTestLoggerNotInstalled" xml:space="preserve">
+    <value>Cannot find html test logger, try to reinstall Protocol Test Framework.</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="AD_ServerTestSuite_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\ADFamily\src\TestSuite\AD_ServerTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="AD_ServerTestSuite_deployment_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\ADFamily\src\TestSuite\AD_ServerTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="BranchCache_TestSuite_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\BranchCache\src\TestSuite\BranchCache_TestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="BranchCache_TestSuite_deployment_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\BranchCache\src\TestSuite\BranchCache_TestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="Auth_ServerTestSuite_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\FileServer\src\Auth\TestSuite\Auth_ServerTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="Auth_ServerTestSuite_deployment_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\FileServer\src\Auth\TestSuite\Auth_ServerTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="CommonTestSuite_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\FileServer\src\Common\TestSuite\CommonTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="CommonTestSuite_deployment_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\FileServer\src\Common\TestSuite\CommonTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="MS_DFSC_ServerTestSuite_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\FileServer\src\DFSC\TestSuite\MS-DFSC_ServerTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="MS_DFSC_ServerTestSuite_deployment_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\FileServer\src\DFSC\TestSuite\MS-DFSC_ServerTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="MS_FSA_ServerTestSuite_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\FileServer\src\FSA\TestSuite\MS-FSA_ServerTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="MS_FSA_ServerTestSuite_deployment_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\FileServer\src\FSA\TestSuite\MS-FSA_ServerTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="MS_FSRVP_ServerTestSuite_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\FileServer\src\FSRVP\TestSuite\MS-FSRVP_ServerTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="MS_FSRVP_ServerTestSuite_deployment_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\FileServer\src\FSRVP\TestSuite\MS-FSRVP_ServerTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="MS_RSVD_ServerTestSuite_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\FileServer\src\RSVD\TestSuite\MS-RSVD_ServerTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="MS_RSVD_ServerTestSuite_deployment_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\FileServer\src\RSVD\TestSuite\MS-RSVD_ServerTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="ServerFailoverTestSuite_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\FileServer\src\ServerFailover\TestSuite\ServerFailoverTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="ServerFailoverTestSuite_deployment_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\FileServer\src\ServerFailover\TestSuite\ServerFailoverTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="MS_SMB2_ServerTestSuite_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\FileServer\src\SMB2\TestSuite\MS-SMB2_ServerTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="MS_SMB2_ServerTestSuite_deployment_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\FileServer\src\SMB2\TestSuite\MS-SMB2_ServerTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="MS_SMB2Model_ServerTestSuite_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\FileServer\src\SMB2Model\TestSuite\MS-SMB2Model_ServerTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="MS_SMB2Model_ServerTestSuite_deployment_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\FileServer\src\SMB2Model\TestSuite\MS-SMB2Model_ServerTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="MS_SQOS_ServerTestSuite_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\FileServer\src\SQOS\TestSuite\MS-SQOS_ServerTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="MS_SQOS_ServerTestSuite_deployment_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\FileServer\src\SQOS\TestSuite\MS-SQOS_ServerTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="Kerberos_ServerTestSuite_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\Kerberos\src\TestSuite\Kerberos_ServerTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="Kerberos_ServerTestSuite_deployment_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\Kerberos\src\TestSuite\Kerberos_ServerTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="MS_ADFSPIP_ClientTestSuite_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\MS-ADFSPIP\src\TestSuite\PTFConfig\MS-ADFSPIP_ClientTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="MS_ADFSPIP_ClientTestSuite_deployment_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\MS-ADFSPIP\src\TestSuite\PTFConfig\MS-ADFSPIP_ClientTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="MS_ADOD_ODTestSuite_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\MS-ADOD\src\TestSuite\MS-ADOD_ODTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="MS_ADOD_ODTestSuite_deployment_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\MS-ADOD\src\TestSuite\MS-ADOD_ODTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="MS_AZOD_ODTestSuite_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\MS-AZOD\src\TestSuite\MS-AZOD_ODTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="MS_AZOD_ODTestSuite_deployment_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\MS-AZOD\src\TestSuite\MS-AZOD_ODTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="MS_SMBD_ServerTestSuite_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\MS-SMBD\src\TestSuite\MS-SMBD_ServerTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="MS_SMBD_ServerTestSuite_deployment_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\MS-SMBD\src\TestSuite\MS-SMBD_ServerTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="RDP_ClientTestSuite_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\RDP\Client\src\TestSuite\RDP_ClientTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="RDP_ClientTestSuite_deployment_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\RDP\Client\src\TestSuite\RDP_ClientTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="RDP_ServerTestSuite_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\RDP\Server\src\TestSuite\RDP_ServerTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="RDP_ServerTestSuite_deployment_ptfconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\TestSuites\RDP\Server\src\TestSuite\RDP_ServerTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="ProfileNewerError" xml:space="preserve">
+    <value>The profile version is newer than test suite.</value>
+  </data>
+  <data name="PTMNeedUpgrade" xml:space="preserve">
+    <value>Version of Protocol Test Manager ({0}) is lesser than version of the test suite ({1}).
+Please upgrade Protocol Test Manager to the same version with the test suite.</value>
+  </data>
+  <data name="TestSuiteNeedUpgrade" xml:space="preserve">
+    <value>Version of Protocol Test Manager ({0}) is greater than version of the test suite ({1}).
+Please upgrade the test suite to the same version of Protocol Test Manager.</value>
   </data>
 </root>

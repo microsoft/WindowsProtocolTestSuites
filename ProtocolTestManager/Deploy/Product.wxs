@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?define SRCDIR=$(env.TestSuiteRoot)\drop\ProtocolTestManager?>
-<!-- IF VS installed, wix will set VS2017_ROOT_FOLDER with correct path, otherwise it will use home drive instead, Wix compare function not support special character, so only use "Studio" here -->
-<?define CheckVSPath="Studio" ?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Product Id="*"
@@ -52,12 +50,20 @@
 
     <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
 
-    <PropertyRef Id="VS2017_ROOT_FOLDER"/>
-
-    <Property Id="VSInstalled">0</Property>
-
+    <!-- Visual Studio dependency check-->
+    <PropertyRef Id="VS2017_ROOT_FOLDER" />
+    <PropertyRef Id="VS2019_ROOT_FOLDER" />
+    <Property Id="VSTEST">
+      <DirectorySearch Id="Vs2019VsTestSearch" Path="[VS2019_ROOT_FOLDER]\Common7\IDE\CommonExtensions\Microsoft\TestWindow\">
+        <FileSearch Name="vstest.console.exe" />
+      </DirectorySearch>
+      <DirectorySearch Id="Vs2017VsTestSearch" Path="[VS2017_ROOT_FOLDER]\Common7\IDE\CommonExtensions\Microsoft\TestWindow\">
+        <FileSearch Name="vstest.console.exe" />
+      </DirectorySearch>
+    </Property>
+    
     <SetProperty Id="VSInstalled" After="AppSearch" Value="1">
-      <![CDATA[ (VS2017_ROOT_FOLDER >< $(var.CheckVSPath)) ]]>
+      <![CDATA[VSTEST]]>
     </SetProperty>
 
     <!-- Progress Texts for UI -->
@@ -95,9 +101,9 @@
       <Publish Dialog="CustomizeDlg" Control="Back" Event="NewDialog" Value="PrivacyDlg" Order="2">NOT Installed</Publish>
       <Publish Dialog="CustomizeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
 
-      <Publish Dialog="CustomizeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Order="1"><![CDATA[VSInstalled = "1"]]></Publish>
+      <Publish Dialog="CustomizeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Order="1"><![CDATA[VSInstalled]]></Publish>
       <Publish Dialog="CustomizeDlg" Control="Next" Event="NewDialog" Value="DependencyCheckWarningDlg" Order="2">
-        <![CDATA[VSInstalled = "0"]]>
+        <![CDATA[NOT VSInstalled]]>
       </Publish>
       <Publish Dialog="DependencyCheckWarningDlg" Control="Back" Event="NewDialog" Value="CustomizeDlg">1</Publish>
       <Publish Dialog="DependencyCheckWarningDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
@@ -250,6 +256,14 @@
       <Component Id="Microsoft.Protocols.TestManager.Kernel.XML" Guid="{A792E1AF-4BD2-415C-AE99-9271547793A4}" Feature="PTM_Feature">
         <File Id="Microsoft.Protocols.TestManager.Kernel.XML"
               Source="$(var.SRCDIR)\bin\Microsoft.Protocols.TestManager.Kernel.XML" />
+      </Component>
+      <Component Id="CommandLine.dll" Guid="{7AAF0E8D-7899-4F3A-8B7D-73A3A1CD93F4}" Feature="PTM_Feature">
+        <File Id="CommandLine.dll"
+              Source="$(var.SRCDIR)\bin\CommandLine.dll" />
+      </Component>
+      <Component Id="Newtonsoft.Json.dll" Guid="{94D59B9F-DA3E-4774-8C71-953F3842F0D8}" Feature="PTM_Feature">
+        <File Id="Newtonsoft.Json.dll"
+              Source="$(var.SRCDIR)\bin\Newtonsoft.Json.dll" />
       </Component>
     </ComponentGroup>
     <ComponentGroup Id="ProductComponents_etc" Directory="ETCFOLDER">

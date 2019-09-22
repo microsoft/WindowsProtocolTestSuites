@@ -7,10 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Protocols.TestManager.Detector;
-using System.DirectoryServices.ActiveDirectory;
 using System.Windows.Controls;
 using System.Net;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.Protocols.TestManager.Detector.Common;
 
 namespace Microsoft.Protocols.TestManager.AZODPlugin

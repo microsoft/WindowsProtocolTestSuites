@@ -5,14 +5,23 @@
 
 @echo off
 
-set vspath=
+set vswhere=
 
-if not exist "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" (
+for /d %%i in ("%ProgramFiles(x86)%","%ProgramFiles%") do (
+	if exist "%%~i\Microsoft Visual Studio\Installer\vswhere.exe" (
+		set "vswhere=%%~i\Microsoft Visual Studio\Installer\vswhere.exe"
+		break
+	)
+)
+
+if [vswhere] equ [] (
 	echo Error: please make sure you have installed Visual Studio 2017 or later.
 	exit /b 1
 )
 
-for /f "usebackq tokens=1*" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"`) do (
+set vspath=
+
+for /f "usebackq tokens=1*" %%i in (`"%vswhere%"`) do (
 	if %%i equ installationPath: (
 		set vspath=%%j
 		exit /b 0

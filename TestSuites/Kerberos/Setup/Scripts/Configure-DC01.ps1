@@ -45,7 +45,6 @@ $ScriptFileFullPath      = $MyInvocation.MyCommand.Definition
 $ScriptName              = [System.IO.Path]::GetFileName($ScriptFileFullPath)
 $SignalFileFullPath      = "$WorkingPath\Configure-DC01.finished.signal"
 $LogFileFullPath         = "$ScriptFileFullPath.log"
-$Parameters              = @{}
 $DataFile                = "$WorkingPath\Scripts\ParamConfig.xml"
 [xml]$KrbParams          = $null
 $Domain                  = ""
@@ -111,11 +110,6 @@ Function Write-ConfigLog
 #------------------------------------------------------------------------------------------
 Function Read-ConfigParameters()
 {
-    Write-ConfigLog "Getting the parameters from environment config file..." -ForegroundColor Yellow
-    $VMName = GetVMNameByComputerName.ps1
-    GetVmParameters.ps1 -VMName $VMName -RefParamArray ([ref]$Parameters)
-    $Parameters
-
     Write-ConfigLog "Getting the parameters from Kerberos config file..." -ForegroundColor Yellow
     if(Test-Path -Path $DataFile)
     {
@@ -826,6 +820,18 @@ Function Config-DC01()
 	#C:\temp\Scripts\Extract-ZipFile.ps1 -ZipFile C:\temp\Scripts\Dc01GPO.zip -Destination C:\temp\Scripts\Dc01GPO
     &"$WorkingPath\Scripts\Extract-ZipFile.ps1" -ZipFile "$WorkingPath\Scripts\Dc01GPO.zip" -Destination "$WorkingPath\Scripts\Dc01GPO"
 
+	Write-Host "Update Group Policy"
+	$currDomainName = (Get-WmiObject win32_computersystem).Domain
+	$currDomain = Get-ADDomain $currDomainName
+	if($currDomain.name -ne "contoso") {
+		Get-ChildItem -Path "$WorkingPath\Scripts\Dc01GPO" -exclude *.pol -File -Recurse | ForEach-Object {
+			$content =($_|Get-Content)
+			if ($content | Select-String -Pattern 'contoso') {
+				$content = $content -replace 'contoso',$currDomain.name   
+				[IO.File]::WriteAllText($_.FullName, ($content -join "`r`n"))
+			}
+		}
+	}
 	Write-Host "Configurating Group Policy"
 	Import-GPO -BackupId 3830DC6A-0AB3-42DF-ADF4-DDCCBC65D86F -TargetName "Default Domain Policy" -Path "$WorkingPath\Scripts\Dc01GPO" -CreateIfNeeded
     	

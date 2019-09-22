@@ -4,7 +4,7 @@
 @echo off
 
 if not defined WIX (
-	echo Error: WiX Toolset version 3.11 or higher should be installed
+	echo Error: WiX Toolset version 3.14 or higher should be installed
 	exit /b 1
 )
 

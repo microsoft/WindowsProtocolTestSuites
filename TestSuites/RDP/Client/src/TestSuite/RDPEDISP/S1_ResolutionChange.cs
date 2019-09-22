@@ -36,7 +36,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             ChangeDesktopResolution(this.TestContext.TestName);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Send Surface management commands");
-            this.rdpedispAdapter.restartGraphicsPipeline(changedDesktopWidth, changedDekstopHeight);
+            this.rdpedispAdapter.restartGraphicsPipeline(changedDesktopWidth, changedDesktopHeight);
 
             // wait time to display the result and then restore the default configuration
             System.Threading.Thread.Sleep(1000);
@@ -69,10 +69,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             ChangeDesktopResolution(this.TestContext.TestName);
                         
             this.TestSite.Log.Add(LogEntryKind.Comment, "Initialize Deactivation-Reactivation Sequence");
-            this.rdpedispAdapter.initiateDeactivationReactivation(changedDesktopWidth, changedDekstopHeight);
+            this.rdpedispAdapter.initiateDeactivationReactivation(changedDesktopWidth, changedDesktopHeight);
             Image testImage = LoadImage();
             this.Site.Assume.AreNotEqual<Image>(null, testImage, "Cannot load the test image");
-            this.rdpedispAdapter.RdprfxSendImage(testImage, changedDesktopWidth, changedDekstopHeight);
+            this.rdpedispAdapter.RdprfxSendImage(testImage, changedDesktopWidth, changedDesktopHeight);
 
             // wait time to display the result and then restore the default configuration
             System.Threading.Thread.Sleep(1000);
@@ -85,7 +85,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
         /// </summary>
         private void ChangeDesktopResolution(string caseName)
         {
-            int result = this.rdpedispSutControlAdapter.TriggerResolutionChangeOnClient(caseName, changedDesktopWidth, changedDekstopHeight);
+            int result = this.rdpedispSutControlAdapter.TriggerResolutionChangeOnClient(caseName, changedDesktopWidth, changedDesktopHeight);
             System.Threading.Thread.Sleep(SUTAdapterWaitTime);
             this.TestSite.Assert.IsTrue(result >= 0, "Test case fails due to fail operation.");
 
@@ -99,7 +99,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             this.Site.Assert.AreEqual<int>(0, monitor.Left, "The left point of the only one monitor should be 0");
             this.Site.Assert.AreEqual<int>(0, monitor.Top, "The Top point of the only one monitor should be 0");
             this.Site.Assert.AreEqual<uint>(changedDesktopWidth, monitor.Width, "The width of monitor MUST be {0}", changedDesktopWidth);
-            this.Site.Assert.AreEqual<uint>(changedDekstopHeight, monitor.Height, "The height of monitor MUST be {0}", changedDekstopHeight);
+            this.Site.Assert.AreEqual<uint>(changedDesktopHeight, monitor.Height, "The height of monitor MUST be {0}", changedDesktopHeight);
             this.Site.Assert.AreEqual<MonitorLayout_OrientationValues>(MonitorLayout_OrientationValues.ORIENTATION_LANDSCAPE, monitor.Orientation, "The height of monitor MUST be LANDSCAPE");
         }
     }

@@ -236,7 +236,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             // Get the primary group first
             DSNAME primaryGroup = LdapUtility.GetPrimaryGroup(dc, name, baseDn).Value;
             uint groupType = (uint)Convert.ToInt32(
-                (string)LdapUtility.GetAttributeValue(
+                LdapUtility.GetAttributeValueInString(
                     dc,
                     LdapUtility.ConvertUshortArrayToString(primaryGroup.StringName),
                     "groupType")
@@ -254,7 +254,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             {
                 // Get groupType and filter using the filters
                 groupType = (uint)Convert.ToInt32(
-                    LdapUtility.GetAttributeValue(dc, grpName, "groupType")
+                    LdapUtility.GetAttributeValueInString(dc, grpName, "groupType")
                     );
 
                 if (!FilterGroupOperationType(operationType, groupType))

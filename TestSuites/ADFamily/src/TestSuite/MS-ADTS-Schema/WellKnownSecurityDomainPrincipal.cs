@@ -109,7 +109,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
                 consisting of the objectSid of the domain NC root followed by the RID specified for each child.");
 
             //MS-ADTS-Schema_R812
-            childEntry = dirEntry.Children.Find("CN=Administrator");
+            childEntry = dirEntry.Children.Find($"CN={adAdapter.DomainAdministratorName}");
             rid = childEntry.Properties["primaryGroupID"];
             childEntry = dirEntry.Children.Find("CN=Domain Users");
             childEntry.RefreshCache(new string[] { "primaryGroupToken" });
@@ -307,7 +307,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
                 "For the Well-Known Domain-Relative Security Principals the Parent must be Users container");
 
             //MS-ADTS-Schema_R813
-            childEntry = dirEntry.Children.Find("CN=Administrator");
+            childEntry = dirEntry.Children.Find($"CN={adAdapter.DomainAdministratorName}");
             PropertyValueCollection objectClass = childEntry.Properties["objectClass"];
             DataSchemaSite.CaptureRequirementIfIsTrue(
                 objectClass.Contains((object)"user"),

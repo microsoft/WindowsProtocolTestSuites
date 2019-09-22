@@ -1019,23 +1019,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
         #region Negotiate
         public uint Negotiate(
-            ushort creditCharge,
-            ushort creditRequest,
-            Packet_Header_Flags_Values flags,
-            ulong messageId,
-            DialectRevision[] dialects,
-            SecurityMode_Values securityMode,
-            Capabilities_Values capabilities,
-            Guid clientGuid,
-            out DialectRevision selectedDialect,
-            out byte[] gssToken,
-            out Packet_Header responseHeader,
-            out NEGOTIATE_Response responsePayload,
-            ushort channelSequence = 0,
-            PreauthIntegrityHashID[] preauthHashAlgs = null,
-            EncryptionAlgorithm[] encryptionAlgs = null,
-            CompressionAlgorithm[] compressionAlgorithms = null,
-            bool addDefaultEncryption = false)
+             ushort creditCharge,
+             ushort creditRequest,
+             Packet_Header_Flags_Values flags,
+             ulong messageId,
+             DialectRevision[] dialects,
+             SecurityMode_Values securityMode,
+             Capabilities_Values capabilities,
+             Guid clientGuid,
+             out DialectRevision selectedDialect,
+             out byte[] gssToken,
+             out Packet_Header responseHeader,
+             out NEGOTIATE_Response responsePayload,
+             ushort channelSequence = 0,
+             PreauthIntegrityHashID[] preauthHashAlgs = null,
+             EncryptionAlgorithm[] encryptionAlgs = null,
+             CompressionAlgorithm[] compressionAlgorithms = null,
+             SMB2_NETNAME_NEGOTIATE_CONTEXT_ID netNameContext = null,
+             bool addDefaultEncryption = false
+         )
         {
             var request = new Smb2NegotiateRequestPacket();
 
@@ -1093,6 +1095,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 compresssionCapbilities.Header.DataLength = (ushort)(compresssionCapbilities.GetDataLength());
                 request.NegotiateContext_COMPRESSION = compresssionCapbilities;
 
+                request.PayLoad.NegotiateContextCount++;
+            }
+
+            if (netNameContext != null)
+            {
+                request.NegotiateContext_NETNAME = netNameContext;
                 request.PayLoad.NegotiateContextCount++;
             }
 
@@ -1775,6 +1783,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         {
             var request = new Smb2WriteRequestPacket();
 
+            // SMB2 header
             request.Header.CreditCharge = creditCharge;
             request.Header.Command = Smb2Command.WRITE;
             request.Header.CreditRequestResponse = creditRequest;
@@ -1784,17 +1793,37 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             request.Header.SessionId = sessionId;
             request.Header.Status = channelSequence;
 
-            request.PayLoad.Length = (uint)content.Length;
-            request.PayLoad.Offset = offset;
-            request.PayLoad.FileId = fileId;
+            // SMB2 WRITE request
             request.PayLoad.Channel = channel;
-            request.PayLoad.WriteChannelInfoOffset = request.BufferOffset;
-            request.PayLoad.WriteChannelInfoLength = (ushort)writeChannelInfo.Length;
-            request.PayLoad.DataOffset = (ushort)(request.BufferOffset + writeChannelInfo.Length);
+
+            if (channel == Channel_Values.CHANNEL_NONE)
+            {
+                // Non-RDMA
+                request.PayLoad.WriteChannelInfoOffset = 0;
+                request.PayLoad.WriteChannelInfoLength = 0;
+                request.PayLoad.RemainingBytes = 0;
+                request.PayLoad.DataOffset = request.BufferOffset;
+                request.PayLoad.Length = (uint)content.Length;
+                request.Buffer = content.ToArray();
+            }
+            else
+            {
+                // RDMA
+                request.PayLoad.WriteChannelInfoOffset = request.BufferOffset;
+                request.PayLoad.WriteChannelInfoLength = (ushort)writeChannelInfo.Length;
+                request.PayLoad.RemainingBytes = (uint)content.Length;
+                request.PayLoad.DataOffset = 0;
+                request.PayLoad.Length = 0;
+                request.Buffer = writeChannelInfo.ToArray();
+            }
+
+            request.PayLoad.Offset = offset;
+
+            request.PayLoad.FileId = fileId;
+
             request.PayLoad.Flags = writeFlags;
 
-            request.Buffer = writeChannelInfo.Concat(content).ToArray();
-
+            // SMB2 compression
             request.EligibleForCompression = compressWrite;
 
             SendPacket(request);

@@ -1272,7 +1272,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             DsUser user = EnvironmentConfig.UserStore[EnvironmentConfig.User.ParentDomainUser];
             string userDn = ldapAdapter.GetUserDn(server, user);
             string nt4Acc = server.Domain.NetbiosName + "\\" +
-                (string)ldapAdapter.GetAttributeValue(server, userDn, "sAMAccountName");
+                ldapAdapter.GetAttributeValueInString(server, userDn, "sAMAccountName");
 
             uint ret = 0;
             ret = drsTestClient.DrsBind(
@@ -1324,7 +1324,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             RootDSE rootDse = LdapUtility.GetRootDSE(server);
             string dn = DRSTestData.DrsCrackNames_DisplayNameRDN + "," + rootDse.configurationNamingContext;
 
-            string displayName = (string)ldapAdapter.GetAttributeValue(server, dn, "displayName");
+            string displayName = ldapAdapter.GetAttributeValueInString(server, dn, "displayName");
 
             uint ret = 0;
             ret = drsTestClient.DrsBind(
@@ -1765,7 +1765,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             DsUser user = EnvironmentConfig.UserStore[EnvironmentConfig.User.ParentDomainUser];
             string userDn = ldapAdapter.GetUserDn(server, user);
 
-            string samAcc = (string)ldapAdapter.GetAttributeValue(server, userDn, "sAMAccountName");
+            string samAcc = ldapAdapter.GetAttributeValueInString(server, userDn, "sAMAccountName");
 
             BaseTestSite.Assert.IsNotNull(
                 samAcc,
@@ -1839,7 +1839,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                 "IDL_DRSCrackNames: cannot modify altSecurityIdentities attribute of the object: {0}",
                 userDn);
 
-            string altSec = (string)ldapAdapter.GetAttributeValue(
+            string altSec = ldapAdapter.GetAttributeValueInString(
                 server,
                 userDn,
                 "altSecurityIdentities"
@@ -1905,7 +1905,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             DsUser user = EnvironmentConfig.UserStore[EnvironmentConfig.User.ParentDomainUser];
             string userDn = ldapAdapter.GetUserDn(server, user);
 
-            string samAcc = (string)ldapAdapter.GetAttributeValue(server, userDn, "sAMAccountName");
+            string samAcc = ldapAdapter.GetAttributeValueInString(server, userDn, "sAMAccountName");
 
             /*
             CrackNameUpdate update = new CrackNameUpdate();
@@ -2110,7 +2110,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
             string schemaNc = rootDse.schemaNamingContext;
 
             // Try to look up CN=Site class.
-            byte[] guidByte = (byte[])ldapAdapter.GetAttributeValue(
+            byte[] guidByte = ldapAdapter.GetAttributeValueInBytes(
                 server,
                 "CN=Site," + schemaNc,
                 "schemaIDGUID");
