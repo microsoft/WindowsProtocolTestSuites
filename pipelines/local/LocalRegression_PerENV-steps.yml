@@ -87,6 +87,7 @@ jobs:
         testResultsFormat: VSTest
         testResultsFiles: '$(Common.TestResultsDirectory)/*.trx'
         buildConfiguration: ${{parameters.EnvironmentName}}
+        mergeTestResults: true
       timeoutInMinutes: 0
       condition: always()
 

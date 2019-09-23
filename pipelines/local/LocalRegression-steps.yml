@@ -46,7 +46,6 @@ jobs:
       inputs:
         testResultsFormat: VSTest
         testResultsFiles: '$(Build.Repository.LocalPath)/TestResults/*/*.trx'
-        failTaskOnFailedTests: true
       timeoutInMinutes: 0
       condition: always()
 
