@@ -9,7 +9,7 @@ resources:
     - repository: template
       type: git
       name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
-      ref: v-zhanh/LocalPipelines
+      ref: AzurePipelines
 
 jobs:
   - template: pipelines/local/LocalRegression_PerENV-steps.yml@template
