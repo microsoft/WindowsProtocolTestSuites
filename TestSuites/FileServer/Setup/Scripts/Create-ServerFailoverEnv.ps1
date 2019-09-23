@@ -216,7 +216,7 @@ if($cluster -eq $null)
         .\Write-Info.ps1 "Create Cluster failed."
         Write-ConfigFailureSignal
         exit ExitCode
-    }
+    }    
 }
 
 #----------------------------------------------------------------------------
@@ -339,6 +339,32 @@ if($fileServerShare -eq $null)
     }
 }
 
+#----------------------------------------------------------------------------
+# Modify IP resource of GeneralFS to make traffic go over load balancer on Azure
+#----------------------------------------------------------------------------
+$isAzureCluster = ($config.lab.core.regressiontype -match "Azure") -and ($config.lab.ha.cluster -ne $null)
+if ($isAzureCluster) {
+    $clusterNetworkName = (Get-ClusterNetwork)[0].Name
+    $ipResourceName = (Get-ClusterResource | Where-Object { ($_.ResourceType -eq "IP Address") -and ($_.OwnerGroup -eq $config.lab.ha.generalfs.name) })[0].Name
+    $lbIP = $config.lab.ha.generalfs.ip
+    $params = @{
+        "Address" = "$lbIP"
+        "ProbePort" = "59999"
+        "SubnetMask" = "255.255.255.255"
+        "Network" = "$clusterNetworkName"
+        "OverrideAddressMatch" = 1
+        "EnableDhcp" = 0
+    }
+
+    Get-ClusterResource -Name $ipResourceName | Set-ClusterParameter -Multiple $params
+
+    # Take the IP resource offline and bring it online again
+    Stop-ClusterResource -Name $ipResourceName
+    Start-ClusterResource -Name $ipResourceName
+
+    # Start GeneralFS role
+    Start-ClusterGroup -Name $config.lab.ha.generalfs.name
+}
 
 #----------------------------------------------------------------------------
 # Create ScaleoutFS role
