@@ -2,6 +2,7 @@ trigger: none
 
 variables:
   - group: External Repo Variables
+  - group: InstallPrerequisitesVariable
 
 resources:
   repositories:
