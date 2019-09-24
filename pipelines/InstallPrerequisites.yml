@@ -21,7 +21,7 @@ jobs:
   timeoutInMinutes: 0
 
   steps:
-  - template: pipelines/local/PullRequestBuild-steps.yml@template
+  - template: pipelines/local/InstallPrerequisites-steps.yml@template
     parameters:
       extRepoUrl: $(extRepo.url)
       extRepoDir: $(extRepo.dir)
