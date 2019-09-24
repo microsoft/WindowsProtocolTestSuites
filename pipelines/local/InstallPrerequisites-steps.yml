@@ -1,6 +1,3 @@
-variables:
-  - group: InstallPrerequisitesVariable
-
 jobs:
 - job:
   displayName: InstallPrerequisites
