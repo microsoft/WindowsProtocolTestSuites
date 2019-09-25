@@ -1,8 +1,10 @@
 steps:
   - script: echo $(helperBranch)
-                  $(extRepo.dir)
-                  $(ReleaseMSIPath)
-                  $(ReleaseMSIUserName)
+                 $(Build.SourceBranch)
+                 $(Build.SourceBranchName)
+                 $(Build.QueuedBy)
+                 $(Build.QueuedById)
+                 $(Build.RequestedFor)
     displayName: 'echo variables'
 
   - script: 'git clone --single-branch --progress -b $(helperBranch) %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
