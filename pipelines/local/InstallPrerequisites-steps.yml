@@ -1,12 +1,4 @@
 steps:
-  - script: echo $(helperBranch)
-                 $(Build.SourceBranch)
-                 $(Build.SourceBranchName)
-                 $(Build.QueuedBy)
-                 $(Build.QueuedById)
-                 $(Build.RequestedFor)
-    displayName: 'echo variables'
-
   - script: 'git clone --single-branch --progress -b $(helperBranch) %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
     displayName: 'Fetch external repo'
     env:
@@ -19,5 +11,5 @@ steps:
     inputs:
       targetType: filePath
       filePath: $(Build.Repository.LocalPath)\_Helper\TestInstallPrerequisites\Setup-InstallEnvironment.ps1
-      arguments: '-Workspace "$(Pipeline.Workspace)" -SourcePath "$(Build.Repository.LocalPath)" -HelperBranch "$(helperBranch)" -ReleaseMSIPath "$(ReleaseMSIPath)" -ReleaseMSIUserName "$(ReleaseMSIUserName)" -ReleaseMSIPassword "$(ReleaseMSIPassword)"'
+      arguments: '-Workspace "$(Pipeline.Workspace)" -SourcePath "$(Build.Repository.LocalPath)" -HelperBranch "$(helperBranch)" -TestSuiteBranch $(Build.SourceBranch) -BuildUser $(Build.QueuedBy) -ReleaseMSIPath "$(ReleaseMSIPath)" -ReleaseMSIUserName "$(ReleaseMSIUserName)" -ReleaseMSIPassword "$(ReleaseMSIPassword)"'
     timeoutInMinutes: 0
