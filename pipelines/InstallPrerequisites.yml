@@ -3,6 +3,7 @@ trigger: none
 variables:
   - group: External Repo Variables
   - group: InstallPrerequisitesVariable
+  - group: SMTP Account
 
 resources:
   repositories:
