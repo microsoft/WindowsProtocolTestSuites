@@ -20,7 +20,7 @@ jobs:
     parameters:
       extRepoUrl: $(extRepo.url)
       extRepoDir: $(extRepo.dir)
-      configFile: 'TestSuites\LocalRegression.csv'
+      configFile: $(build.localRegressionConfigFile)
       RootSharePath: $(build.sharePath)
       TestSuiteName: $(test.testSuiteName)
       EnvironmentName: $(test.environmentName)
