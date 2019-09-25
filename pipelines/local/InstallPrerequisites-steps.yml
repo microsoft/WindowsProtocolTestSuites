@@ -11,5 +11,5 @@ steps:
     inputs:
       targetType: filePath
       filePath: $(Build.Repository.LocalPath)\_Helper\TestInstallPrerequisites\Setup-InstallEnvironment.ps1
-      arguments: '-Workspace "$(Pipeline.Workspace)" -SourcePath "$(Build.Repository.LocalPath)" -HelperBranch "$(helperBranch)" -TestSuiteBranch $(Build.SourceBranch) -BuildUser $(Build.QueuedBy) -ReleaseMSIPath "$(ReleaseMSIPath)" -ReleaseMSIUserName "$(ReleaseMSIUserName)" -ReleaseMSIPassword "$(ReleaseMSIPassword)"'
+      arguments: '-Workspace "$(Pipeline.Workspace)" -SourcePath "$(Build.Repository.LocalPath)" -HelperBranch "$(helperBranch)" -TestSuiteBranch $(Build.SourceBranch) -BuildUser $(Build.QueuedBy) -ReleaseMSIPath "$(ReleaseMSIPath)" -ReleaseMSIUserName "$(ReleaseMSIUserName)" -ReleaseMSIPassword "$(ReleaseMSIPassword)" -SenderUsername "${smtp.senderUsername}" -SenderPassword "${smtp.senderPassword}"'
     timeoutInMinutes: 0
