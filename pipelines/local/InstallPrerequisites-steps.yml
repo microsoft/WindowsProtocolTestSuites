@@ -1,5 +1,5 @@
 steps:
-  - script: 'git clone --single-branch --progress -b $(helperBranch) %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
+  - script: 'git clone -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
     displayName: 'Fetch external repo'
     env:
       EXTREPO_URL: $(extRepo.url)
