@@ -1,0 +1,48 @@
+jobs:
+- job:
+  displayName: Run regression
+  pool: 
+    name: TestSuiteAzurePool
+  workspace:
+    clean: false
+  timeoutInMinutes: 0
+
+  steps:
+    - script: 'git clone -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" -b %HelperBranch% %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
+      displayName: 'Fetch external repo'
+      env:
+        EXTREPO_URL: ${{parameters.extRepoUrl}}
+        EXTREPO_DIR: ${{parameters.extRepoDir}}
+        HelperBranch: ${{parameters.HelperBranch}}
+      timeoutInMinutes: 0
+
+    - task: PowerShell@2
+      displayName: 'Run regression script'
+      inputs:
+        targetType: filePath
+        filePath: '$(extRepo.dir)/AzureScripts/Run-AzRegressionWithCSV.ps1'
+        arguments: '-ConfigFile "${{parameters.configFile}}" -TestSuiteName ${{parameters.testSuiteName}} -EnvType "Azure" -HelperBranch "${{parameters.helperBranch}}" -NeedBuild -AccessToken "$(System.AccessToken)" -BuildTag "$(test.buildTag)" -PipelineName "$(test.downstreamPipelineName)" -ApiUrl "$(build.apiUrl)" -SubscriptionId "$(azure.subscriptionId)" -ApplicationId "$(azure.applicationId)" -ThumbPrint "$(azure.thumbPrint)" -TenantId "$(azure.tenantId)" -StorageAccount "$(azure.storageAccount)" -StorageShareName "$(azure.storageShareName)" -LocalRegressionShare "$(build.sharePath)" -FileShareResourceGroup "$(azure.fileShareResourceGroup)" -IsTriggeredFromGitHub $false'
+      env:
+        BUILD_BUILDID: $(Build.BuildId)
+        SMTP_SENDERPASSWORD: $(smtp.senderPassword)
+        SMTP_SMTPHOST: $(smtp.smtpHost)
+        SMTP_SMTPPORT: $(smtp.smtpPort)
+        SMTP_SENDERUSERNAME: $(smtp.senderUsername)
+        SMTP_SENDTO: $(smtp.sendTo)
+      timeoutInMinutes: 0
+
+    - task: PublishTestResults@2
+      displayName: 'Publish trx files'
+      inputs:
+        testResultsFormat: VSTest
+        testResultsFiles: '$(Build.Repository.LocalPath)/TestResults/*/*.trx'
+      timeoutInMinutes: 0
+      condition: always()
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish report'
+      inputs:
+        PathtoPublish: '$(Build.Repository.LocalPath)/TestResults'
+      timeoutInMinutes: 0
+      condition: always()
+
