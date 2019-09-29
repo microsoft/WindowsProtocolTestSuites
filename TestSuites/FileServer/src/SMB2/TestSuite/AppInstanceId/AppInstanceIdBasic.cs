@@ -161,11 +161,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             TestConfig.CheckCreateContext(CreateContextTypeValue.SMB2_CREATE_APP_INSTANCE_ID);
             #endregion
 
-            var expectedCreateResponseStatus = TestConfig.Platform < Platform.WindowsServer2016 ?
+            // If Open.CreateGuid is NULL, and Open.TreeConnect.Share.IsCA is FALSE, the server
+            // SHOULD < 298 > close the open as specified in section 3.3.4.17.
+            // <298> Section 3.3.5.9.13: Windows Server 2012 and Windows Server 2012 R2 servers do not close the open.
+            var is2012Or2012R2 = TestConfig.Platform == Platform.WindowsServer2012 || 
+                TestConfig.Platform == Platform.WindowsServer2012R2;
+
+            var expectedCreateResponseStatus = is2012Or2012R2 ?
                 Smb2Status.STATUS_SHARING_VIOLATION :
                 Smb2Status.STATUS_SUCCESS;
 
-            var expectedInitialOpenStatusAfterReopen = TestConfig.Platform < Platform.WindowsServer2016 ?
+            var expectedInitialOpenStatusAfterReopen = is2012Or2012R2 ?
                 Smb2Status.STATUS_SUCCESS :
                 Smb2Status.STATUS_FILE_CLOSED;
 
