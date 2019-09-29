@@ -247,14 +247,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                         BaseTestSite.Assert.AreNotEqual(
                                     Smb2Status.STATUS_FILE_CLOSED,
                                     header.Status,
-                                    "The initial open is closed. Write should not succeed. Actually server returns with {0}.", Smb2Status.GetStatusCode(header.Status));
+                                    "The initial open is not closed. Write should  succeed. Actually server returns with {0}.", Smb2Status.GetStatusCode(header.Status));
                     }
                     else
                     {
                         BaseTestSite.Assert.AreEqual(
                             Smb2Status.STATUS_FILE_CLOSED,
                             header.Status,
-                            "The initial open is not closed. Write should succeed. Actually server returns with {0}.", Smb2Status.GetStatusCode(header.Status));
+                            "The initial open is closed. Write should not succeed. Actually server returns with {0}.", Smb2Status.GetStatusCode(header.Status));
                     }
                 });
 
