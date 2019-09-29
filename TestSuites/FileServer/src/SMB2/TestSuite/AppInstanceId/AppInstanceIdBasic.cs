@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
@@ -90,7 +90,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             TestConfig.CheckCreateContext(CreateContextTypeValue.SMB2_CREATE_APP_INSTANCE_ID, CreateContextTypeValue.SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2);
             #endregion
 
-            AppInstanceIdTest(sameAppInstanceId: true, containCreateDurableContext: true);
+            AppInstanceIdTest(
+                sameAppInstanceId: true, 
+                containCreateDurableContext: true,
+                expectedCreateResponseStatus: Smb2Status.STATUS_SUCCESS,
+                expectedInitialOpenStatusAfterReopen: Smb2Status.STATUS_FILE_CLOSED);
         }
 
         [TestMethod]
@@ -108,7 +112,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             TestConfig.CheckCreateContext(CreateContextTypeValue.SMB2_CREATE_APP_INSTANCE_ID, CreateContextTypeValue.SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2);
             #endregion
 
-            AppInstanceIdTest(sameAppInstanceId: false, containCreateDurableContext: true);
+            AppInstanceIdTest(
+                sameAppInstanceId: false, 
+                containCreateDurableContext: true,
+                expectedCreateResponseStatus: Smb2Status.STATUS_SHARING_VIOLATION,
+                expectedInitialOpenStatusAfterReopen: Smb2Status.STATUS_SUCCESS);
         }
 
         [TestMethod]
@@ -129,7 +137,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             TestConfig.CheckCreateContext(CreateContextTypeValue.SMB2_CREATE_APP_INSTANCE_ID);
             #endregion
 
-            AppInstanceIdTest(sameAppInstanceId: true, containCreateDurableContext: false);
+            AppInstanceIdTest(
+                sameAppInstanceId: true, 
+                containCreateDurableContext: false,
+                expectedCreateResponseStatus: Smb2Status.STATUS_SUCCESS,
+                expectedInitialOpenStatusAfterReopen: Smb2Status.STATUS_FILE_CLOSED);
         }
 
         [TestMethod]
@@ -149,128 +161,25 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             TestConfig.CheckCreateContext(CreateContextTypeValue.SMB2_CREATE_APP_INSTANCE_ID);
             #endregion
 
-            string content = Smb2Utility.CreateRandomString(TestConfig.WriteBufferLengthInKb);
+            var expectedCreateResponseStatus = TestConfig.Platform < Platform.WindowsServer2016 ?
+                Smb2Status.STATUS_SHARING_VIOLATION :
+                Smb2Status.STATUS_SUCCESS;
 
-            #region Client 1 Connect to Server
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start the first client by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT");
-            clientForInitialOpen = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
-            clientForInitialOpen.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress, TestConfig.ClientNic1IPAddress);
-            clientForInitialOpen.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
-            clientForInitialOpen.SessionSetup(
-                TestConfig.DefaultSecurityPackage,
-                TestConfig.SutComputerName,
-                TestConfig.AccountCredential,
-                TestConfig.UseServerGssToken);
-            uint treeIdForInitialOpen;
-            clientForInitialOpen.TreeConnect(sharePath, out treeIdForInitialOpen);
+            var expectedInitialOpenStatusAfterReopen = TestConfig.Platform < Platform.WindowsServer2016 ?
+                Smb2Status.STATUS_SUCCESS :
+                Smb2Status.STATUS_FILE_CLOSED;
 
-            Guid appInstanceId = Guid.NewGuid();
-            FILEID fileIdForInitialOpen;
-            BaseTestSite.Log.Add(
-                LogEntryKind.TestStep,
-                "The first client sends CREATE request for exclusive open with SMB2_CREATE_APP_INSTANCE_ID create context.");
-            Smb2CreateContextResponse[] serverCreateContexts;
-            Smb2CreateContextRequest[] createContextsRequestForInitialOpen = null;
-
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 create context is not included in the CREATE request.");
-            createContextsRequestForInitialOpen = new Smb2CreateContextRequest[] {
-                    new Smb2CreateAppInstanceId
-                    {
-                         AppInstanceId = appInstanceId
-                    }
-            };
-
-            clientForInitialOpen.Create(
-                treeIdForInitialOpen,
-                fileName,
-                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out fileIdForInitialOpen,
-                out serverCreateContexts,
-                RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE,
-                createContextsRequestForInitialOpen,
-                shareAccess: ShareAccess_Values.NONE);
-            #endregion
-
-            #region Client 2 Connect to Server
-
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start the second client by sending the following requests: NEGOTIATE; SESSION-SETUP; TREE_CONNECT");
-            clientForReOpen = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
-            clientForReOpen.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress, TestConfig.ClientNic2IPAddress);
-            clientForReOpen.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
-            clientForReOpen.SessionSetup(
-                TestConfig.DefaultSecurityPackage,
-                TestConfig.SutComputerName,
-                TestConfig.AccountCredential,
-                TestConfig.UseServerGssToken);
-            uint treeIdForReOpen;
-            clientForReOpen.TreeConnect(sharePath, out treeIdForReOpen);
-
-            FILEID fileIdForReOpen;
-            BaseTestSite.Log.Add(
-                LogEntryKind.TestStep,
-                "The second client sends CREATE request for exclusive open with the {0} SMB2_CREATE_APP_INSTANCE_ID of the first client.", "same");
-            Smb2CreateContextRequest[] createContextsRequestForReOpen = null;
-
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 create context is not included in the CREATE request.");
-            createContextsRequestForReOpen = new Smb2CreateContextRequest[] {
-                    new Smb2CreateAppInstanceId
-                    {
-                         AppInstanceId = appInstanceId
-                    }
-            };
-
-
-            clientForReOpen.Create(
-                treeIdForReOpen,
-                fileName,
-                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out fileIdForReOpen,
-                out serverCreateContexts,
-                RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE,
-                createContextsRequestForReOpen,
-                shareAccess: ShareAccess_Values.NONE,
-                checker: (header, response) =>
-                {
-
-                });
-
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "The first client sends another WRITE request.");
-
-            // If Open.CreateGuid is NULL, and Open.TreeConnect.Share.IsCA is FALSE, the server SHOULD <298> close the open as specified in section 3.3.4.17
-            clientForInitialOpen.Write(treeIdForInitialOpen, fileIdForInitialOpen, content,
-                checker: (header, response) =>
-                {
-                    BaseTestSite.Log.Add(LogEntryKind.TestStep, "header.Status:{0}", header.Status);
-                    if (TestConfig.Platform < Platform.WindowsServer2016)
-                    {
-                        // <298> Section 3.3.5.9.13: Windows Server 2012 and Windows Server 2012 R2 servers do not close the open.
-                        BaseTestSite.Assert.AreNotEqual(
-                                    Smb2Status.STATUS_FILE_CLOSED,
-                                    header.Status,
-                                    "The initial open is not closed. Write should  succeed. Actually server returns with {0}.", Smb2Status.GetStatusCode(header.Status));
-                    }
-                    else
-                    {
-                        BaseTestSite.Assert.AreEqual(
-                            Smb2Status.STATUS_FILE_CLOSED,
-                            header.Status,
-                            "The initial open is closed. Write should not succeed. Actually server returns with {0}.", Smb2Status.GetStatusCode(header.Status));
-                    }
-                });
-
-            // The first open is closed, no need to do clean up job.
-            // Clean up the second client.
-            if (TestConfig.Platform > Platform.WindowsServer2016)
-            {
-                BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down the second client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF; DISCONNECT");
-                clientForReOpen.Close(treeIdForReOpen, fileIdForReOpen);
-                clientForReOpen.TreeDisconnect(treeIdForReOpen);
-                clientForReOpen.LogOff();
-                clientForReOpen.Disconnect();
-            }
-            #endregion
+            AppInstanceIdTest(
+                sameAppInstanceId: true, 
+                containCreateDurableContext: false,
+                expectedCreateResponseStatus: expectedCreateResponseStatus,
+                expectedInitialOpenStatusAfterReopen: expectedInitialOpenStatusAfterReopen);
         }
-        private void AppInstanceIdTest(bool sameAppInstanceId, bool containCreateDurableContext)
+        private void AppInstanceIdTest(
+            bool sameAppInstanceId, 
+            bool containCreateDurableContext, 
+            uint expectedCreateResponseStatus,
+            uint expectedInitialOpenStatusAfterReopen)
         {
             string content = Smb2Utility.CreateRandomString(TestConfig.WriteBufferLengthInKb);
 
@@ -385,59 +294,56 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 shareAccess: ShareAccess_Values.NONE,
                 checker: (header, response) =>
                 {
-                    if (sameAppInstanceId)
-                    {
-                        BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, header.Status, "The second client should create the open successfully.");
-                    }
-                    else
-                    {
-                        BaseTestSite.Assert.AreNotEqual(Smb2Status.STATUS_SUCCESS, header.Status, "The second client should not create the open successfully.");
-                    }
+                    BaseTestSite.Assert.AreEqual(
+                        expectedCreateResponseStatus,
+                        header.Status,
+                        (expectedCreateResponseStatus == Smb2Status.STATUS_SUCCESS ?
+                        "The open will be closed. Create should succeed. Actually server returns with {0}."
+                        : "The open cannot be closed. Create should not succeed. Actually server returns with {0}."),
+                        Smb2Status.GetStatusCode(header.Status));
                 });
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "The first client sends another WRITE request.");
 
-            if (sameAppInstanceId)
-            {
-                clientForInitialOpen.Write(treeIdForInitialOpen, fileIdForInitialOpen, content,
+            clientForInitialOpen.Write(treeIdForInitialOpen, fileIdForInitialOpen, content,
                     checker: (header, response) =>
                     {
-                        BaseTestSite.Assert.AreNotEqual(
-                            Smb2Status.STATUS_SUCCESS,
-                            header.Status,
-                            "The initial open is closed. Write should not succeed. Actually server returns with {0}.", Smb2Status.GetStatusCode(header.Status));
-                        BaseTestSite.CaptureRequirementIfAreEqual(
-                            Smb2Status.STATUS_FILE_CLOSED,
-                            header.Status,
-                            RequirementCategory.STATUS_FILE_CLOSED.Id,
-                            RequirementCategory.STATUS_FILE_CLOSED.Description);
+                        BaseTestSite.Assert.AreEqual(
+                        expectedInitialOpenStatusAfterReopen,
+                        header.Status,
+                        (expectedInitialOpenStatusAfterReopen == Smb2Status.STATUS_SUCCESS ?
+                        "The initial open is not closed. Write should succeed. Actually server returns with {0}."
+                        : "The initial open is closed. Write should not succeed. Actually server returns with {0}."),
+                         Smb2Status.GetStatusCode(header.Status));
+
+                        if(sameAppInstanceId && expectedCreateResponseStatus!= Smb2Status.STATUS_SHARING_VIOLATION)
+                        {
+                            BaseTestSite.CaptureRequirementIfAreEqual(
+                                Smb2Status.STATUS_FILE_CLOSED,
+                                header.Status,
+                                RequirementCategory.STATUS_FILE_CLOSED.Id,
+                                RequirementCategory.STATUS_FILE_CLOSED.Description);
+                        }
                     });
 
-                // The first open is closed, no need to do clean up job.
-                // Clean up the second client.
+
+            if (expectedCreateResponseStatus == Smb2Status.STATUS_SUCCESS)
+            {
                 BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down the second client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF; DISCONNECT");
                 clientForReOpen.Close(treeIdForReOpen, fileIdForReOpen);
-                clientForReOpen.TreeDisconnect(treeIdForReOpen);
-                clientForReOpen.LogOff();
-                clientForReOpen.Disconnect();
             }
-            else
-            {
-                BaseTestSite.Log.Add(LogEntryKind.TestStep, "The initial open is not closed. Write should succeed.");
-                clientForInitialOpen.Write(treeIdForInitialOpen, fileIdForInitialOpen, content);
+            clientForReOpen.TreeDisconnect(treeIdForReOpen);
+            clientForReOpen.LogOff();
+            clientForReOpen.Disconnect();
 
+            if (expectedInitialOpenStatusAfterReopen == Smb2Status.STATUS_SUCCESS)
+            {
                 BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down the first client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
                 clientForInitialOpen.Close(treeIdForInitialOpen, fileIdForInitialOpen);
-                clientForInitialOpen.TreeDisconnect(treeIdForInitialOpen);
-                clientForInitialOpen.LogOff();
-
-                // The second client doesn't create the open succesfully, so no need to close the open.
-                BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down the second client by sending the following requests: TREE_DISCONNECT; LOG_OFF; DISCONNECT");
-                clientForReOpen.TreeDisconnect(treeIdForReOpen);
-                clientForReOpen.LogOff();
-                clientForReOpen.Disconnect();
             }
 
+            clientForInitialOpen.TreeDisconnect(treeIdForInitialOpen);
+            clientForInitialOpen.LogOff();
             #endregion
         }
         #endregion
