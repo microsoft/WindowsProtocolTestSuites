@@ -232,7 +232,7 @@ Function GetDownloadTools{
 	$downloadList = New-Object System.Collections.ArrayList;
 	foreach($item in $toolXML.Dependency.$ToolCategory.tool)
 	{
-		$ndTool = $tools | Where-Object {$_.Name -eq $item}
+		$ndTool = $tools | Where-Object{$_.Name -eq $item} | Select-Object $_
 		$index = $downloadList.Add($ndTool)
 	}
 
