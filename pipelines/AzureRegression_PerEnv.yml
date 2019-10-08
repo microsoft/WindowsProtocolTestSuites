@@ -12,7 +12,7 @@ resources:
       ref: v-xinzli/AzurePipelineTemplate
 
 jobs:
-  - template: pipelines/Azure/LocalRegression_PerENV-steps.yml@template
+  - template: pipelines/Azure/AzureRegression_PerENV-steps.yml@template
     parameters:
       extRepoUrl: $(extRepo.url)
       extRepoDir: $(extRepo.dir)
