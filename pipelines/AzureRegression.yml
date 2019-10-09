@@ -20,7 +20,7 @@ jobs:
     parameters:
       extRepoUrl: $(extRepo.url)
       extRepoDir: $(extRepo.dir)
-      configFile: $(build.localRegressionConfigFile)
+      configFile: $(build.AzureRegressionConfigFile)
       RootSharePath: $(build.sharePath)
       TestSuiteName: $(test.testSuiteName)
       EnvironmentName: $(test.environmentName)
