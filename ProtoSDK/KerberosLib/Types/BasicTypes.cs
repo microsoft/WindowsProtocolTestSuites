@@ -397,7 +397,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <summary>
         /// When set, this flag indicates that the ticket has either been forwarded TGT.
         /// </summary>
-        FORWARDED =  (uint)1 << 29,
+        FORWARDED = (uint)1 << 29,
 
         /// <summary>
         /// The PROXIABLE flag is normally only interpreted by the TGS, and can be ignored by end servers. 
@@ -930,6 +930,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         ZERO_LENGTH_MESSAGE
     }
 
+    /// <summary>
+    /// Values of Data-type in KERB-ERROR-DATA.
+    /// </summary>
+    public enum KERB_ERR_TYPE
+    {
+        /// <summary>
+        /// Clock skew recovery was attempted.
+        /// </summary>
+        KERB_AP_ERR_TYPE_SKEW_RECOVERY = 2,
+
+        /// <summary>
+        /// The Data-value field contains extended, implementation-specific error information.
+        /// </summary>
+        KERB_ERR_TYPE_EXTENDED = 3, 
+    }
 
     /// <summary>
     /// Represents different modes associated with the KRB_PRIV message.
