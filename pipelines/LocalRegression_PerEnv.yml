@@ -1,7 +1,6 @@
 trigger: none 
 
 variables:
-  - group: Azure Account
   - group: External Repo Variables
   - group: Build Variables
 
