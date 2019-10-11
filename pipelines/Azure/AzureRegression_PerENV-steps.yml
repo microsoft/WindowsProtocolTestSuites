@@ -36,7 +36,7 @@ jobs:
       displayName: Sync-BuildFromShare
       inputs:
         filePath: '${{parameters.extRepoDir}}/AzureScripts/Download-TestsuiteFromShare.ps1'
-        arguments: '-BuildShareFolder $env:BuildShareFolder -RootSharePath $env:RootSharePath -TestSuiteName $env:TestSuiteName -regressionType Azure'
+        arguments: '-BuildShareFolder "$(test.buildShareFolder)" -TestSuiteName "$(test.testSuiteName)" -RegressionType "Azure" -ApplicationId "$(azure.applicationId)" -ThumbPrint "$(azure.thumbPrint)" -TenantId "$(azure.tenantId)" -StorageAccount "$(azure.storageAccount)" -StorageShareName "$(azure.storageShareName)" -FileShareResourceGroup "$(azure.fileShareResourceGroup)" -RootSharePath "$(build.sharePath)"'
       env:
         BuildShareFolder: ${{parameters.RootSharePath}}\${{parameters.BuildShareFolder}}
         TestSuiteName: ${{parameters.TestSuiteName}}
