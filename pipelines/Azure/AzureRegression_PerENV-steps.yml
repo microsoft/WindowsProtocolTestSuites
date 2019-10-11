@@ -1,15 +1,12 @@
-trigger: none
-
-pr:
-  branches:
-    exclude:
-      - '*'
-
-variables:
-  - group: Azure Account
-  - group: Build Variables
-  - group: External Repo Variables
-
+parameters:
+  extRepoUrl : ''
+  extRepoDir : ''
+  TestSuiteName : ''
+  EnvironmentName : ''
+  BuildShareFolder : ''
+  RootSharePath : ''
+  HelperBranch : ''
+  
 jobs:
 - job:
   displayName: Test
