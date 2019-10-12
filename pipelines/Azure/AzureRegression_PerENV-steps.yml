@@ -45,7 +45,8 @@ jobs:
       inputs:
         targetType: filePath
         filePath: '$(extRepo.dir)/RunRegression/AzureScripts/Run-TestSuiteRegression.ps1'
-        arguments: '-TestSuiteName "$(test.testSuiteName)" -EnvironmentName "$(test.environmentName)" -SubscriptionId "$(azure.subscriptionId)" -ResourceGroup "$(test.resourceGroup)" -ApplicationId "$(azure.applicationId)" -ThumbPrint "$(azure.ThumbPrint)" -TenantId "$(azure.tenantId)" -FileShareResourceGroup "$(azure.fileShareResourceGroup)" -StorageAccount "$(azure.storageAccount)" -StorageShareName "$(azure.storageShareName)"'
+        arguments: '-TestSuiteName "$(test.testSuiteName)" -EnvironmentName "$(test.environmentName)" -SubscriptionId "$(azure.subscriptionId)" -ResourceGroup "$(test.resourceGroup)" -ApplicationId "$(azure.applicationId)" -ThumbPrint "$(azure.ThumbPrint)" -TenantId "$(azure.tenantId)" -FileShareResourceGroup "$(azure.fileShareResourceGroup)" -StorageAccount "$(azure.storageAccount)" -StorageShareName "$(azure.storageShareName)"' 
+        errorActionPreference: continue
       timeoutInMinutes: 0
 
     - task: PublishTestResults@2
