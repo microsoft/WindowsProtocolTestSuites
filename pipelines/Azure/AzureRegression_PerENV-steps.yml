@@ -54,7 +54,6 @@ jobs:
       inputs:
         testResultsFormat: VSTest
         testResultsFiles: '$(extRepo.dir)/RunRegression/TestResults/*.trx'
-        failTaskOnFailedTests: true
       timeoutInMinutes: 0
       condition: always()
 
