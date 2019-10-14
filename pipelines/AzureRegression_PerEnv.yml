@@ -10,7 +10,7 @@ resources:
     - repository: template
       type: git
       name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
-      ref: v-xinzli/AzurePipelineTemplate
+      ref: AzurePipelines
 
 jobs:
   - template: pipelines/Azure/AzureRegression_PerENV-steps.yml@template
