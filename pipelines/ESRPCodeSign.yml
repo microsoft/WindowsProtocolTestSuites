@@ -1,0 +1,24 @@
+trigger: none 
+
+variables:
+  - group: Azure Account
+  - group: Build Variables
+  - group: External Repo Variables
+  - group: SMTP Account
+  - name: test.buildTag
+    value: $(Build.DefinitionName)-$(Build.BuildNumber)
+
+resources:
+  repositories:
+    - repository: template
+      type: git
+      name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
+      ref: v-zhanh/CodeSignTemplates
+
+jobs:
+  - template: pipelines/local/ESRPCodeSign-TestSuite-steps.yml@template
+    parameters:
+      extRepoUrl: $(extRepo.url)
+      extRepoDir: $(extRepo.dir)
+      TestSuiteName: $(test.testSuiteName)
+      HelperBranch: $(test.helperBranch)
