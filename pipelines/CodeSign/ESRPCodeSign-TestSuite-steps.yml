@@ -14,7 +14,7 @@ steps:
     displayName: 'Copy CodeSign files'
     inputs:
       SourceFolder: '${{parameters.extRepoDir}}/CodeSign'
-      TargetFolder: './'
+      TargetFolder: 'CodeSign'
 
   - task: CopyFiles@2
     displayName: 'Copy RDMA'
