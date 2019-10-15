@@ -25,4 +25,4 @@ steps:
   - task: PowerShell@2
     inputs:
       filePath: 'CodeSign/Execute-SignTestSuites.ps1 -TestSuiteName $(test.testSuiteName)'
-      workingDirectory: 'CodeSign'
+      workingDirectory: '$(Build.SourcesDirectory)/CodeSign'
