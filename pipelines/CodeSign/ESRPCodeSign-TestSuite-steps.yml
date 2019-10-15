@@ -11,13 +11,13 @@ steps:
     timeoutInMinutes: 0
 
   - task: CopyFiles@2
-    displayName: 'Copy Test Results to: Common Test Results Directory'
+    displayName: 'Copy CodeSign files'
     inputs:
       SourceFolder: '${{parameters.extRepoDir}}/CodeSign'
-      TargetFolder: ''
+      TargetFolder: './'
 
   - task: CopyFiles@2
-    displayName: 'Copy Test Results to: Common Test Results Directory'
+    displayName: 'Copy RDMA'
     inputs:
       SourceFolder: '${{parameters.extRepoDir}}/ProtoSDK/RDMA'
       TargetFolder: 'ProtoSDK/RDMA'
