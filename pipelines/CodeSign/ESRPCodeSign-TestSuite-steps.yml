@@ -22,7 +22,7 @@ steps:
       SourceFolder: '${{parameters.extRepoDir}}/ProtoSDK/RDMA'
       TargetFolder: 'ProtoSDK/RDMA'
 
-        - task: PowerShell@2
-  - inputs:
+  - task: PowerShell@2
+    inputs:
       filePath: 'CodeSign/Execute-SignTestSuites.ps1 -TestSuiteName $(test.testSuiteName)'
       workingDirectory: 'CodeSign'
