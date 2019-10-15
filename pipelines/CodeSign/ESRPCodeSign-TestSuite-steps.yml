@@ -1,0 +1,28 @@
+parameters:
+  extRepoUrl : ""
+  extRepoDir : ""
+
+steps:
+  - script: 'git clone -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
+    displayName: 'Fetch external repo'
+    env:
+      EXTREPO_URL: ${{parameters.extRepoUrl}}
+      EXTREPO_DIR: ${{parameters.extRepoDir}}
+    timeoutInMinutes: 0
+
+  - task: CopyFiles@2
+    displayName: 'Copy Test Results to: Common Test Results Directory'
+    inputs:
+      SourceFolder: '${{parameters.extRepoDir}}/CodeSign'
+      TargetFolder: ''
+
+  - task: CopyFiles@2
+    displayName: 'Copy Test Results to: Common Test Results Directory'
+    inputs:
+      SourceFolder: '${{parameters.extRepoDir}}/ProtoSDK/RDMA'
+      TargetFolder: 'ProtoSDK/RDMA'
+
+        - task: PowerShell@2
+  - inputs:
+      filePath: 'CodeSign/Execute-SignTestSuites.ps1 -TestSuiteName $(test.testSuiteName)'
+      workingDirectory: 'CodeSign'
