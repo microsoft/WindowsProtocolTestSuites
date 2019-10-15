@@ -23,7 +23,7 @@ steps:
       TargetFolder: 'ProtoSDK/RDMA'
 
   - task: PowerShell@2
+    displayName: 'Run code sign script'
     inputs:
       targetType: filePath
       filePath: '$(Build.SourcesDirectory)/CodeSign/Execute-SignTestSuites.ps1 -TestSuiteName $(test.testSuiteName)'
-      workingDirectory: '$(Build.SourcesDirectory)/CodeSign'
