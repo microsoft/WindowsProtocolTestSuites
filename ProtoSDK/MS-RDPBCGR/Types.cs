@@ -3975,6 +3975,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  RDP 5.0, 5.1, and 5.2.
         /// </summary>
         PREAMBLE_VERSION_3_0 = 0x03,
+
+        /// <summary>
+        /// Indicates that extended error information using the Licensing Error Message (section 2.2.1.12.1.3) is supported.
+        /// </summary>
+        EXTENDED_ERROR_MSG_SUPPORTED = 0x80
     }
 
     /// <summary>
@@ -4010,7 +4015,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  set to 0, then this field is not included in the Licensing
         ///  Binary BLOB structure.
         /// </summary>
-        //[StaticSize(1, StaticSizeMode.Elements)]
+        [Size("wBlobLen")]
         public byte[] blobData;
     }
 
@@ -5693,6 +5698,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  The slow path header.
         /// </summary>
         public SlowPathPduCommonHeader commonHeader;
+
+        public LICENSE_PREAMBLE preamble;
 
         /// <summary>
         ///  The RDPELE message includes preamble and LicensingMessage.
