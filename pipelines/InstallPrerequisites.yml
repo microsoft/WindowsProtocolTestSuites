@@ -10,13 +10,13 @@ resources:
     - repository: template
       type: git
       name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
-      ref: v-xinzli/InstallPrerequisites2
+      ref: AzurePipelines
 
 jobs:
 - job:
   displayName: Verify Pull Requests
   pool: 
-    name: AzureAgents1
+    name: TestSuiteHostPool
   workspace:
     clean: false
   timeoutInMinutes: 0
