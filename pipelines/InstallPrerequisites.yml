@@ -1,0 +1,28 @@
+trigger: none 
+
+variables:
+  - group: External Repo Variables
+  - group: InstallPrerequisitesVariable
+  - group: SMTP Account
+
+resources:
+  repositories:
+    - repository: template
+      type: git
+      name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
+      ref: AzurePipelines
+
+jobs:
+- job:
+  displayName: Verify Pull Requests
+  pool: 
+    name: TestSuiteHostPool
+  workspace:
+    clean: false
+  timeoutInMinutes: 0
+
+  steps:
+  - template: pipelines/local/InstallPrerequisites-steps.yml@template
+    parameters:
+      extRepoUrl: $(extRepo.url)
+      extRepoDir: $(extRepo.dir)
