@@ -14,6 +14,7 @@
   <DeploymentItem filename="ServerFailover\TestSuite\ServerFailoverTestSuite.ptfconfig" />
   <DeploymentItem filename="ServerFailover\TestSuite\ServerFailoverTestSuite.deployment.ptfconfig" />
   <DeploymentItem filename="ServerFailover\Adapter\WindowsSutControlAdapter\" />
+  <DeploymentItem filename="ServerFailover\Adapter\ShellSutControlAdapter\" />
   <DeploymentItem filename="ServerLocalTestRun.testrunconfig" />
   <DeploymentItem filename="SMB2\TestSuite\MS-SMB2_ServerTestSuite.ptfconfig" />
   <DeploymentItem filename="SMB2\TestSuite\MS-SMB2_ServerTestSuite.deployment.ptfconfig" />
