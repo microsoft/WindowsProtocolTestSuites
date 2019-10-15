@@ -28,3 +28,4 @@ steps:
       targetType: filePath
       filePath: 'CodeSign/Execute-SignTestSuites.ps1'
       arguments: '-TestSuiteName $(test.testSuiteName)'
+      workingDirectory: 'CodeSign'
