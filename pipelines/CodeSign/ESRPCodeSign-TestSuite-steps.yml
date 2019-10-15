@@ -26,4 +26,5 @@ steps:
     displayName: 'Run code sign script'
     inputs:
       targetType: filePath
-      filePath: '$(Build.SourcesDirectory)/CodeSign/Execute-SignTestSuites.ps1 -TestSuiteName $(test.testSuiteName)'
+      filePath: 'CodeSign/Execute-SignTestSuites.ps1'
+      arguments: '-TestSuiteName $(test.testSuiteName)'
