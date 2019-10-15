@@ -16,6 +16,15 @@ resources:
       ref: v-zhanh/CodeSignTemplates
 
 jobs:
+- job:
+  displayName: Code Sign
+  pool: 
+    name: TestSuiteESRPCodeSignPool
+  workspace:
+    clean: false
+  timeoutInMinutes: 0
+
+  steps:
   - template: pipelines/local/ESRPCodeSign-TestSuite-steps.yml@template
     parameters:
       extRepoUrl: $(extRepo.url)
