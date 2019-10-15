@@ -1,0 +1,65 @@
+parameters:
+  extRepoUrl : ''
+  extRepoDir : ''
+  TestSuiteName : ''
+  EnvironmentName : ''
+  BuildShareFolder : ''
+  RootSharePath : ''
+  HelperBranch : ''
+
+jobs:
+- job:
+  displayName: Test
+  pool: 
+    name: TestSuiteAzurePool
+  workspace:
+    clean: false
+  timeoutInMinutes: 0
+
+  steps:
+    - script: echo "TestSuiteName ${{parameters.TestSuiteName}}"
+              echo "EnvironmentName ${{parameters.EnvironmentName}}"
+              echo "RootSharePath ${{parameters.RootSharePath}}"   
+              echo "BuildShareFolder ${{parameters.RootSharePath}}\${{parameters.BuildShareFolder}}"    
+              echo "HelperBranch ${{parameters.HelperBranch}}"
+      displayName: 'Show parameters'
+
+    - script: 'git clone -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" -b %HelperBranch% %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
+      displayName: 'Fetch external repo'
+      env:
+        EXTREPO_URL: ${{parameters.extRepoUrl}}
+        EXTREPO_DIR: ${{parameters.extRepoDir}}
+        HelperBranch: ${{parameters.HelperBranch}}
+      timeoutInMinutes: 0
+
+    - task: PowerShell@2
+      displayName: 'Download build from share'
+      inputs:
+        targetType: filePath
+        filePath: '$(extRepo.dir)/AzureScripts/Download-TestsuiteFromShare.ps1'
+        arguments: '-BuildShareFolder "$(test.buildShareFolder)" -TestSuiteName "$(test.testSuiteName)" -RegressionType "Azure" -ApplicationId "$(azure.applicationId)" -ThumbPrint "$(azure.thumbPrint)" -TenantId "$(azure.tenantId)" -StorageAccount "$(azure.storageAccount)" -StorageShareName "$(azure.storageShareName)" -FileShareResourceGroup "$(azure.fileShareResourceGroup)" -RootSharePath "$(build.sharePath)"'
+      timeoutInMinutes: 0
+
+    - task: PowerShell@2
+      displayName: 'Run regression'
+      inputs:
+        targetType: filePath
+        filePath: '$(extRepo.dir)/RunRegression/AzureScripts/Run-TestSuiteRegression.ps1'
+        arguments: '-TestSuiteName "$(test.testSuiteName)" -EnvironmentName "$(test.environmentName)" -SubscriptionId "$(azure.subscriptionId)" -ResourceGroup "$(test.resourceGroup)" -ApplicationId "$(azure.applicationId)" -ThumbPrint "$(azure.ThumbPrint)" -TenantId "$(azure.tenantId)" -FileShareResourceGroup "$(azure.fileShareResourceGroup)" -StorageAccount "$(azure.storageAccount)" -StorageShareName "$(azure.storageShareName)"' 
+        errorActionPreference: continue
+      timeoutInMinutes: 0
+
+    - task: PublishTestResults@2
+      displayName: 'Publish trx files'
+      inputs:
+        testResultsFormat: VSTest
+        testResultsFiles: '$(extRepo.dir)/RunRegression/TestResults/*.trx'
+      timeoutInMinutes: 0
+      condition: always()
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish report'
+      inputs:
+        PathtoPublish: '$(extRepo.dir)/RunRegression/TestResults'
+      timeoutInMinutes: 0
+      condition: always()
