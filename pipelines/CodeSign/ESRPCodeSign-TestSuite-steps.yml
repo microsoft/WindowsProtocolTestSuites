@@ -51,7 +51,7 @@ steps:
     displayName: 'Copy Verify Results' 
     inputs:
       SourceFolder: '$(Build.BinariesDirectory)/Results'
-      Contents: '**'
+      Contents: '*.html'
       TargetFolder: '$(Build.StagingDirectory)'
 
   - task: PublishBuildArtifacts@1
