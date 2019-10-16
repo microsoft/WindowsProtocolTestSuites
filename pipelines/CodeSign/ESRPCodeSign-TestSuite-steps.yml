@@ -34,4 +34,4 @@ steps:
       targetType: filePath
       filePath: '$(Build.BinariesDirectory)/CodeSign/Execute-SignTestSuites.ps1'
       arguments: '-TestSuiteName $(test.testSuiteName)'
-      workingDirectory: 'CodeSign'
+      workingDirectory: '$(Build.BinariesDirectory)/CodeSign'
