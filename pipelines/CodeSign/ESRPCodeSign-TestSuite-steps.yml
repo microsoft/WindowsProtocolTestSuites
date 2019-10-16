@@ -1,6 +1,7 @@
 parameters:
-  extRepoUrl : ""
-  extRepoDir : ""
+  extRepoUrl : ''
+  extRepoDir : ''
+  HelperBranch : 'master'
 
 steps:
   - task: CopyFiles@2
@@ -9,11 +10,12 @@ steps:
       SourceFolder: '$(Build.Repository.LocalPath)'
       TargetFolder: '$(Build.BinariesDirectory)'
 
-  - script: 'git clone -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
+  - script: 'git clone -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" -b %HelperBranch% %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
     displayName: 'Fetch external repo'
     env:
       EXTREPO_URL: ${{parameters.extRepoUrl}}
       EXTREPO_DIR: ${{parameters.extRepoDir}}
+      HelperBranch: ${{parameters.HelperBranch}}
     timeoutInMinutes: 0
 
   - task: CopyFiles@2
