@@ -1,12 +1,9 @@
 trigger: none 
 
 variables:
-  - group: Azure Account
-  - group: Build Variables
   - group: External Repo Variables
-  - group: SMTP Account
-  - name: test.buildTag
-    value: $(Build.DefinitionName)-$(Build.BuildNumber)
+  - name: test.enableRegression
+    value: false
 
 resources:
   repositories:
@@ -31,3 +28,7 @@ jobs:
       extRepoDir: $(extRepo.dir)
       TestSuiteName: $(test.testSuiteName)
       HelperBranch: $(test.helperBranch)
+
+  - template: pipelines/local/ESRPCodeSign-TestSuite-Regression-steps.yml@template
+    parameters:
+        enableRegression: $(test.enableRegression)
