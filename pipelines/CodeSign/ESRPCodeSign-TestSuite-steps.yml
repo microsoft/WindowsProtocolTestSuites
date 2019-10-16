@@ -9,7 +9,6 @@ steps:
     inputs:
       SourceFolder: '$(Build.Repository.LocalPath)'
       TargetFolder: '$(Build.BinariesDirectory)'
-      CleanTargetFolder: true
 
   - script: 'git clone -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" -b %HelperBranch% %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
     displayName: 'Fetch external repo'
@@ -38,6 +37,20 @@ steps:
       filePath: '$(Build.BinariesDirectory)/CodeSign/Execute-SignTestSuites.ps1'
       arguments: '-TestSuiteName $(test.testSuiteName)'
       workingDirectory: '$(Build.BinariesDirectory)/CodeSign'
+
+  - task: PowerShell@2
+    displayName: 'CodeSign Verify'
+    inputs:
+      targetType: 'inline'
+      script: |
+        Get-ChildItem -Path $(TargetFolder) -Filter "*.msi" | Foreach-Object { $(Build.BinariesDirectory)/CodeSign/Test/CodeSignVerify.ps1 -MsiPath $_.FullName -ReportPath "$(Build.BinariesDirectory)/Results/$($_.Name).html" }
+
+  - task: CopyFiles@2
+    displayName: 'Copy Verify results' 
+    inputs:
+      SourceFolder: '$(Build.BinariesDirectory)/Results'
+      Contents: '**'
+      TargetFolder: '$(Build.StagingDirectory)'
 
   - task: PublishBuildArtifacts@1
     displayName: 'Publish MSI'
