@@ -3,6 +3,12 @@ parameters:
   extRepoDir : ""
 
 steps:
+  - task: CopyFiles@2
+    displayName: 'Copy TestSuite'
+    inputs:
+      SourceFolder: '$(Build.Repository.LocalPath)'
+      TargetFolder: '$(Build.BinariesDirectory)'
+
   - script: 'git clone -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
     displayName: 'Fetch external repo'
     env:
@@ -14,18 +20,18 @@ steps:
     displayName: 'Copy CodeSign files'
     inputs:
       SourceFolder: '${{parameters.extRepoDir}}/CodeSign'
-      TargetFolder: 'CodeSign'
+      TargetFolder: '$(Build.BinariesDirectory)/CodeSign'
 
   - task: CopyFiles@2
     displayName: 'Copy RDMA'
     inputs:
       SourceFolder: '${{parameters.extRepoDir}}/ProtoSDK/RDMA'
-      TargetFolder: 'ProtoSDK/RDMA'
+      TargetFolder: '$(Build.BinariesDirectory)/ProtoSDK/RDMA'
 
   - task: PowerShell@2
     displayName: 'Run code sign script'
     inputs:
       targetType: filePath
-      filePath: 'CodeSign/Execute-SignTestSuites.ps1'
+      filePath: '$(Build.BinariesDirectory)/CodeSign/Execute-SignTestSuites.ps1'
       arguments: '-TestSuiteName $(test.testSuiteName)'
       workingDirectory: 'CodeSign'
