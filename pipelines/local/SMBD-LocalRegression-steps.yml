@@ -1,0 +1,76 @@
+parameters:
+  extRepoUrl : ''
+  extRepoDir : ''
+  configFile : ''
+  helperBranch : ''
+  testSuiteName : ''
+  EnvironmentName : ''
+  BuildShareFolder : ''
+  RootSharePath : ''
+  
+jobs:
+- job:
+  displayName: Run regression
+  pool: 
+    name: TestSuiteBuildPool
+  workspace:
+    clean: false
+  timeoutInMinutes: 0
+
+  steps:
+    - script: 'git clone -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" -b %HelperBranch% %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
+      displayName: 'Fetch external repo'
+      env:
+        EXTREPO_URL: ${{parameters.extRepoUrl}}
+        EXTREPO_DIR: ${{parameters.extRepoDir}}
+        HelperBranch: ${{parameters.HelperBranch}}
+      timeoutInMinutes: 0
+
+    - task: PowerShell@2
+      displayName: 'Copy LabScript To TestSuite'
+      inputs:
+        targetType: filePath
+        filePath: '$(extRepo.dir)/CopyLabScriptToTestSuite.ps1'
+      timeoutInMinutes: 0
+
+    - task: BatchScript@1
+      displayName: 'build MS-SMBD'
+      inputs:
+        filename: 'TestSuites/MS-SMBD/src/build.cmd'
+
+    - task: PowerShell@2
+      displayName: 'Copy TestSuite To Share'
+      inputs:
+        targetType: filePath
+        filePath: '$(extRepo.dir)/CommonScript/CopyTestSuiteToShare.ps1'
+        arguments: '-TestSuite MS-SMBD -TestSuiteShareFolder $(Build.BinariesDirectory)'
+      timeoutInMinutes: 0
+
+    - task: PowerShell@2
+      displayName: 'Run test'
+      continueOnError: true
+      inputs:
+        targetType: 'inline'
+        script: |
+          [System.dateTime]::UtcNow.ToString("MM/dd/yyyy HH:mm:ss") | Out-File 'StartTime.txt' -Encoding utf8 -Force
+          $(extRepo.dir)\TestSuites\MS-SMBD\Setup\Scripts\Execute-ProtocolTest.ps1 -SharedPath $(Build.BinariesDirectory) -MachineName "SMBD-Driver" -EnvironmentName Chelsio -TestResultPath ".\"
+          $(extRepo.dir)\TestSuites\MS-SMBD\Setup\Scripts\Execute-ProtocolTest.ps1 -SharedPath $(Build.BinariesDirectory) -MachineName "SMBD-Driver" -EnvironmentName Mellanox -TestResultPath ".\"
+          $(extRepo.dir)\TestSuites\MS-SMBD\Setup\Scripts\Generate-Report.ps1 -TestResultPath ".\"
+          Remove-Item 'StartTime.txt' -Force
+        errorActionPreference: continue
+
+    - task: PublishTestResults@2
+      displayName: 'Publish trx files'
+      inputs:
+        testResultsFormat: VSTest
+        testResultsFiles: '$(Build.Repository.LocalPath)/TestResults/*/*.trx'
+      timeoutInMinutes: 0
+      condition: always()
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish report'
+      inputs:
+        PathtoPublish: '$(Build.Repository.LocalPath)/TestResults'
+      timeoutInMinutes: 0
+      condition: always()
+
