@@ -43,7 +43,7 @@ jobs:
       inputs:
         targetType: filePath
         filePath: '$(extRepo.dir)/CommonScript/CopyTestSuiteToShare.ps1'
-        arguments: '-TestSuite MS-SMBD -TestSuiteShareFolder $(Build.BinariesDirectory)/ProtocolTestSuite'
+        arguments: '-TestSuite MS-SMBD -TestSuiteShareFolder $(Build.BinariesDirectory)\ProtocolTestSuite'
         errorActionPreference: continue
       timeoutInMinutes: 0
 
