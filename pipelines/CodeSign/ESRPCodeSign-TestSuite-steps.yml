@@ -49,10 +49,10 @@ steps:
 
   - task: PowerShell@2
     displayName: 'Verify CodeSign '
+    continueOnError: true
     inputs:
       targetType: 'inline'
       script: |
-        Remove-Item -Path "$(Build.BinariesDirectory)/Inputs" -Recurse -Force -ErrorAction SilentlyContinue
         New-Item -Path "$(Build.BinariesDirectory)/Inputs" -ItemType Directory -Force
         Copy-Item -Path "$(Build.StagingDirectory)/*.msi" -Destination "$(Build.BinariesDirectory)/Inputs" -Recurse -Force
         New-Item -Path "$(Build.BinariesDirectory)/Results" -ItemType Directory -Force
