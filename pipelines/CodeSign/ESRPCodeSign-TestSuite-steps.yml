@@ -46,6 +46,7 @@ steps:
       Contents: '**\*.msi'
       TargetFolder: '$(Build.StagingDirectory)'
       OverWrite: true
+      flattenFolders: true
 
   - task: PowerShell@2
     displayName: 'Verify CodeSign '
