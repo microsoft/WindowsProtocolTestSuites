@@ -43,7 +43,7 @@ jobs:
       inputs:
         targetType: filePath
         filePath: '$(extRepo.dir)/CommonScript/CopyTestSuiteToShare.ps1'
-        arguments: '-TestSuite MS-SMBD -TestSuiteShareFolder $(Build.BinariesDirectory)\ProtocolTestSuite'
+        arguments: '-TestSuite MS-SMBD -TestSuiteShareFolder $(Build.StagingDirectory)\ProtocolTestSuite'
         errorActionPreference: continue
       timeoutInMinutes: 0
 
@@ -54,8 +54,8 @@ jobs:
         targetType: 'inline'
         script: |
           [System.dateTime]::UtcNow.ToString("MM/dd/yyyy HH:mm:ss") | Out-File 'StartTime.txt' -Encoding utf8 -Force
-          $(extRepo.dir)\TestSuites\MS-SMBD\Setup\Scripts\Execute-ProtocolTest.ps1 -SharedPath $(Build.BinariesDirectory) -MachineName "SMBD-Driver" -EnvironmentName Chelsio -TestResultPath ".\"
-          $(extRepo.dir)\TestSuites\MS-SMBD\Setup\Scripts\Execute-ProtocolTest.ps1 -SharedPath $(Build.BinariesDirectory) -MachineName "SMBD-Driver" -EnvironmentName Mellanox -TestResultPath ".\"
+          $(extRepo.dir)\TestSuites\MS-SMBD\Setup\Scripts\Execute-ProtocolTest.ps1 -SharedPath $(Build.StagingDirectory) -MachineName "SMBD-Driver" -EnvironmentName Chelsio -TestResultPath ".\"
+          $(extRepo.dir)\TestSuites\MS-SMBD\Setup\Scripts\Execute-ProtocolTest.ps1 -SharedPath $(Build.StagingDirectory) -MachineName "SMBD-Driver" -EnvironmentName Mellanox -TestResultPath ".\"
           $(extRepo.dir)\TestSuites\MS-SMBD\Setup\Scripts\Generate-Report.ps1 -TestResultPath ".\"
           Remove-Item 'StartTime.txt' -Force
         errorActionPreference: continue
