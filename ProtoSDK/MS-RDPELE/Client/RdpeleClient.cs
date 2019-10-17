@@ -172,6 +172,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
             int publicExponentLength = publicKey[5 + modulusLength];
             publicExponent = new byte[publicExponentLength];
             Buffer.BlockCopy(publicKey, 6 + modulusLength, publicExponent, 0, publicExponentLength);
+
+            // ASN.1 uses big-endian, but the Proprietary Server Certificate uses little-endian, to utilize them, save little-endian format for both cases.
+            Array.Reverse(publicExponent);
+            Array.Reverse(modulus);
         }
     }
 }

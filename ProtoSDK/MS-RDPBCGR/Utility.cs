@@ -87,8 +87,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             byte[] encryptedData = RSAEncrypt(randomData, exponent, modulus);
 
-            // The resultant encrypted client random is copied into a zeroed-out buffer, which is of size: (bitlen / 8) + 8
-            byte[] result = new byte[encryptedData.Length + 8]; 
+            // The result may contain extra zero in the end (the extra zero in the end indicate it is a positive number),
+            // the actual length should subtract the zero length.
+            // So divide the length by 8 and multiple the length by 8 again.
+            // [MS-RDPBCGR] 5.3.4.1 The resultant encrypted client random is copied into a zeroed-out buffer, which is of size: (bitlen / 8) + 8
+            // So add 8 bytes padding in the end.
+            byte[] result = new byte[encryptedData.Length / 8 * 8 + 8];
 
             Array.Copy(encryptedData, result, encryptedData.Length);
             return result;
@@ -691,7 +695,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 securityHeader = header;
             }
             // else no security header
-            if ((flag.HasFlag(TS_SECURITY_HEADER_flags_Values.SEC_AUTODETECT_REQ) 
+            if ((flag.HasFlag(TS_SECURITY_HEADER_flags_Values.SEC_AUTODETECT_REQ)
                 || flag.HasFlag(TS_SECURITY_HEADER_flags_Values.SEC_AUTODETECT_RSP)
                 || flag.HasFlag(TS_SECURITY_HEADER_flags_Values.SEC_TRANSPORT_REQ)
                 || flag.HasFlag(TS_SECURITY_HEADER_flags_Values.SEC_HEARTBEAT)
@@ -1240,25 +1244,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="data">The data to be encrypted.</param>
         /// <param name="exponent">Exponent of RSA.</param>
         /// <param name="modulus">Modulus of RSA.</param>
-        /// <returns>Whether the certificate is valid.</returns>
+        /// <returns>Encrypted data.</returns>
         private static byte[] RSAEncrypt(byte[] data, byte[] exponent, byte[] modulus)
         {
-            Array.Reverse(data);
-            Array.Reverse(exponent);
-            Array.Reverse(modulus);
+            // Add an extra zero after the end of the byte array, to indicate that it is a positive number.
+            byte[] tempData = new byte[data.Length + 1];
+            byte[] tempExponent = new byte[exponent.Length + 1];
+            byte[] tempModulus = new byte[modulus.Length + 1];
+            Buffer.BlockCopy(data, 0, tempData, 0, data.Length);
+            Buffer.BlockCopy(exponent, 0, tempExponent, 0, exponent.Length);
+            Buffer.BlockCopy(modulus, 0, tempModulus, 0, modulus.Length);
 
-            BigInteger mpData = new BigInteger(data);
-            BigInteger mpExponent = new BigInteger(exponent);
-            BigInteger mpModulus = new BigInteger(modulus);
+            BigInteger mpData = new BigInteger(tempData);
+            BigInteger mpExponent = new BigInteger(tempExponent);
+            BigInteger mpModulus = new BigInteger(tempModulus);
 
             // mpResult = mpData ^ mpExponent mod mpModulus.
             BigInteger mpResult = BigInteger.ModPow(mpData, mpExponent, mpModulus);
 
             byte[] result = mpResult.ToByteArray();
-
-            Array.Reverse(data);
-            Array.Reverse(exponent);
-            Array.Reverse(modulus);
 
             return result;
         }
