@@ -8,7 +8,7 @@ resources:
     - repository: template
       type: git
       name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
-      ref: v-zhanh/CodeSignTemplates
+      ref: AzurePipelines
 
 jobs:
 - job:
