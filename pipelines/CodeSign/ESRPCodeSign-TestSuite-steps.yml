@@ -45,7 +45,7 @@ steps:
       SourceFolder: '$(Build.BinariesDirectory)/drop'
       Contents: '**\*.msi'
       TargetFolder: '$(Build.StagingDirectory)'
-      OverWrite:true
+      OverWrite: true
 
   - task: PowerShell@2
     displayName: 'Verify CodeSign '
