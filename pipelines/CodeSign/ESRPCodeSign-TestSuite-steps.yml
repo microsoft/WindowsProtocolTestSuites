@@ -38,6 +38,7 @@ steps:
       filePath: '$(Build.BinariesDirectory)/CodeSign/Execute-SignTestSuites.ps1'
       arguments: '-TestSuiteName $(test.testSuiteName)'
       workingDirectory: '$(Build.BinariesDirectory)/CodeSign'
+      errorActionPreference: continue
 
   - task: CopyFiles@2
     displayName: 'Copy MSI' 
