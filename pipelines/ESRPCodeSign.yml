@@ -2,8 +2,6 @@ trigger: none
 
 variables:
   - group: External Repo Variables
-  - name: test.enableRegression
-    value: false
 
 resources:
   repositories:
@@ -28,7 +26,3 @@ jobs:
       extRepoDir: $(extRepo.dir)
       TestSuiteName: $(test.testSuiteName)
       HelperBranch: $(test.helperBranch)
-
-  - template: pipelines/local/ESRPCodeSign-TestSuite-Regression-steps.yml@template
-    parameters:
-        enableRegression: $(test.enableRegression)
