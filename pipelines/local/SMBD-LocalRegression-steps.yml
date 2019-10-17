@@ -44,6 +44,7 @@ jobs:
         targetType: filePath
         filePath: '$(extRepo.dir)/CommonScript/CopyTestSuiteToShare.ps1'
         arguments: '-TestSuite MS-SMBD -TestSuiteShareFolder $(Build.BinariesDirectory)'
+        errorActionPreference: continue
       timeoutInMinutes: 0
 
     - task: PowerShell@2
