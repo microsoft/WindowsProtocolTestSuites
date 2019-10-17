@@ -109,14 +109,14 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Send SMBDirect Data Transfer messages.");
 
             #region Send SMBDirect Data Transfer messages
-           
+
             // devide data into multiple segments
             List<SmbdDataTransferMessage> messages = SmbdClient.SplitData2Segments(
                 smb2WriteRequest,
                 smbdAdapter.ClientConnection.MaxSendSize - (uint)SmbdDataTransferMessage.DEFAULT_DATA_OFFSET);
 
             SmbdDataTransferMessage transferPackage;
-            for (int index = 0; index < messages.Count; )
+            for (int index = 0; index < messages.Count;)
             {
                 for (; index < messages.Count && smbdAdapter.ClientConnection.SendCredits > 0; ++index)
                 {
@@ -440,7 +440,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
                 smb2WriteRequest
                 );
             BaseTestSite.Assert.AreEqual<NtStatus>(status, NtStatus.STATUS_SUCCESS, "Status of send SMBDirect Data Transfer message is {0}", status);
-            
+
             // wait for connection to be terminated 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Verify server connection will be terminated.");
             smbdAdapter.WaitRdmaDisconnect();
@@ -468,7 +468,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
                 smb2WriteRequest
                 );
             BaseTestSite.Assert.AreEqual<NtStatus>(status, NtStatus.STATUS_SUCCESS, "Status of send SMBDirect Data Transfer message is {0}", status);
-            
+
             // wait for connection to be terminated 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Verify server connection will be terminated.");
             smbdAdapter.WaitRdmaDisconnect();
@@ -718,7 +718,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
 
             #region Send Data
             SmbdDataTransferMessage transferPackage;
-            for (int index = 0; index < messages.Count; )
+            for (int index = 0; index < messages.Count;)
             {
                 for (; index < messages.Count && smbdAdapter.ClientConnection.SendCredits > 0; ++index)
                 {
@@ -816,7 +816,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
                 smbdAdapter.ServerConnection.MaxReceiveSize - (uint)SmbdDataTransferMessage.DEFAULT_DATA_OFFSET);
 
             #region Send Data
-            for (int index = 0; index < messages.Count; )
+            for (int index = 0; index < messages.Count;)
             {
                 for (; index < messages.Count && smbdAdapter.ClientConnection.SendCredits > 0; ++index)
                 {
@@ -1321,7 +1321,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
             bool isUseMaxSendSize = false,
             bool isUseMaxFragmentedSize = false)
         {
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Connect to server over RDMA");         
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Connect to server over RDMA");
             NtStatus status = smbdAdapter.ConnectToServerOverRDMA();
             BaseTestSite.Assert.AreEqual<NtStatus>(NtStatus.STATUS_SUCCESS, status, "Status of SMBD connection is {0}", status);
 
@@ -1376,18 +1376,17 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
             // receive write response
             SmbdDataTransferMessage transferPackage;
             NtStatus status;
-            status = (NtStatus)smbdAdapter.SmbdReceivDataTransferMessage(
-                smbdAdapter.TestConfig.Smb2ConnectionTimeout,
-                out transferPackage
-                );
 
-            while (transferPackage.DataLength == 0)
+            do
             {
                 // Discard data transfer package that only grants credits to client without data
                 status = (NtStatus)smbdAdapter.SmbdReceivDataTransferMessage(
                     smbdAdapter.TestConfig.Smb2ConnectionTimeout,
                     out transferPackage);
-            }
+
+                BaseTestSite.Assert.AreEqual(NtStatus.STATUS_SUCCESS, status, "Data transfer message should be received with status STATUS_SUCCESS.");
+
+            } while (transferPackage.DataLength == 0);
 
             #region Check SMBDirect Data Transfer message
             BaseTestSite.Assert.IsTrue(
@@ -1718,7 +1717,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
             {
                 modifiedRemainingDataLength = (uint)remainingDataLength;
             }
-            
+
             status = (NtStatus)smbdAdapter.SmbdSendDataTransferMessage(
                     (ushort)(messages.Count),
                     1,
