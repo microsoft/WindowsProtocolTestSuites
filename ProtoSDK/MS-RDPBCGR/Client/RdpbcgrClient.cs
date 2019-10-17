@@ -75,7 +75,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// A context contains all major PDUs information.
         /// </summary>
-        private RdpbcgrClientContext context;
+        public RdpbcgrClientContext context;
 
         /// <summary>
         /// This member indicates UpdateSessionKey has completed.

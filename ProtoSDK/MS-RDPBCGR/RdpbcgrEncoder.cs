@@ -13,7 +13,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     /// <summary>
     /// Encode different types to a byte stream.
     /// </summary>
-    internal class RdpbcgrEncoder
+    public class RdpbcgrEncoder
     {
         /// <summary>
         /// Encode a structure to a byte list.
@@ -302,7 +302,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="context">The context used to encrypt the data body.
         /// If the securityHeader is the type of TS_SECURITY_HEADER, then this argument can be null.
         /// Otherwise, this argument can not be null, the dataBody will not be encrypted.</param>
-        internal static void EncodeSlowPathPdu(List<byte> sendBuffer,
+        public static void EncodeSlowPathPdu(List<byte> sendBuffer,
                                                SlowPathPduCommonHeader commonHeader,
                                                byte[] dataBody,
                                                RdpbcgrClientContext context)
