@@ -44,15 +44,18 @@ steps:
     inputs:
       targetType: 'inline'
       script: |
+        Remove-Item -Path "$(Build.BinariesDirectory)/Inputs" -Recurse -Force -ErrorAction SilentlyContinue
+        New-Item -Path "$(Build.BinariesDirectory)/Inputs" -ItemType Directory -Force
+        Copy-Item -Path "$(TargetFolder)/*.msi" -Destination "$(Build.BinariesDirectory)/Inputs" -Recurse -Force
         New-Item -Path "$(Build.BinariesDirectory)/Results" -ItemType Directory -Force
-        Get-ChildItem -Path $(TargetFolder) -Filter "*.msi" | Foreach-Object { $(Build.BinariesDirectory)/CodeSign/Test/CodeSignVerify.ps1 -MsiPath $_.FullName -ReportPath "$(Build.BinariesDirectory)/Results/$($_.Name).html" }
+        Get-ChildItem -Path "$(Build.BinariesDirectory)/Inputs" -Filter "*.msi" | Foreach-Object { $(Build.BinariesDirectory)/CodeSign/Test/CodeSignVerify.ps1 -MsiPath $_.FullName -ReportPath "$(Build.BinariesDirectory)/Results/$($_.Name).html" }
 
   - task: CopyFiles@2
     displayName: 'Copy Verify Results' 
     inputs:
       SourceFolder: '$(Build.BinariesDirectory)/Results'
       Contents: '*.html'
-      TargetFolder: '$(Build.StagingDirectory)'
+      TargetFolder: '$(TargetFolder)'
 
   - task: PublishBuildArtifacts@1
     displayName: 'Publish MSI'
