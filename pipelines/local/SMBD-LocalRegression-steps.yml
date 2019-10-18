@@ -60,18 +60,25 @@ jobs:
           Remove-Item 'StartTime.txt' -Force
         errorActionPreference: continue
 
+    - task: CopyFiles@2
+      displayName: 'Copy Test Results to: Common Test Results Directory'
+      inputs:
+        SourceFolder: '$(extRepo.dir)'
+        Contents: '**\*.trx'
+        TargetFolder: '$(Common.TestResultsDirectory)'
+        flattenFolders: true
+
     - task: PublishTestResults@2
       displayName: 'Publish trx files'
       inputs:
         testResultsFormat: VSTest
         testResultsFiles: '$(Build.Repository.LocalPath)/TestResults/*/*.trx'
       timeoutInMinutes: 0
-      condition: always()
 
     - task: PublishBuildArtifacts@1
       displayName: 'Publish report'
       inputs:
         PathtoPublish: '$(Build.Repository.LocalPath)/TestResults'
       timeoutInMinutes: 0
-      condition: always()
+
 
