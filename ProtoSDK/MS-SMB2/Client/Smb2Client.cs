@@ -974,8 +974,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             string[] dialects,
             out DialectRevision selectedDialect,
             out byte[] gssToken,
-            out Packet_Header responseHeader,
-            out NEGOTIATE_Response responsePayload)
+            out Smb2NegotiateResponsePacket response)
         {
             var request = new SmbNegotiateRequestPacket();
 
@@ -998,7 +997,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 request.PayLoad.ByteCount = (ushort)request.PayLoad.DialectName.Length;
             }
 
-            var response = SendPacketAndExpectResponse<Smb2NegotiateResponsePacket>(request);
+            response = SendPacketAndExpectResponse<Smb2NegotiateResponsePacket>(request);
 
             selectedDialect = response.PayLoad.DialectRevision;
             gssToken = response.Buffer.Skip(response.PayLoad.SecurityBufferOffset - response.BufferOffset).Take(response.PayLoad.SecurityBufferLength).ToArray();
@@ -1008,9 +1007,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             {
                 dialect = selectedDialect;
             }
-
-            responseHeader = response.Header;
-            responsePayload = response.PayLoad;
 
             return response.Header.Status;
         }
@@ -1029,8 +1025,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
              Guid clientGuid,
              out DialectRevision selectedDialect,
              out byte[] gssToken,
-             out Packet_Header responseHeader,
-             out NEGOTIATE_Response responsePayload,
+             out Smb2NegotiateRequestPacket request,
+             out Smb2NegotiateResponsePacket response,
              ushort channelSequence = 0,
              PreauthIntegrityHashID[] preauthHashAlgs = null,
              EncryptionAlgorithm[] encryptionAlgs = null,
@@ -1039,7 +1035,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
              bool addDefaultEncryption = false
          )
         {
-            var request = new Smb2NegotiateRequestPacket();
+            request = new Smb2NegotiateRequestPacket();
 
             request.Header.CreditCharge = creditCharge;
             request.Header.Command = Smb2Command.NEGOTIATE;
@@ -1114,15 +1110,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 Smb2Utility.Align8(ref request.PayLoad.NegotiateContextOffset);
             }
 
-            var response = SendPacketAndExpectResponse<Smb2NegotiateResponsePacket>(request);
+            response = SendPacketAndExpectResponse<Smb2NegotiateResponsePacket>(request);
 
             selectedDialect = response.PayLoad.DialectRevision;
             gssToken = response.Buffer.Skip(response.PayLoad.SecurityBufferOffset - response.BufferOffset).Take(response.PayLoad.SecurityBufferLength).ToArray();
 
             dialect = response.PayLoad.DialectRevision;
-
-            responseHeader = response.Header;
-            responsePayload = response.PayLoad;
 
             if (dialect >= DialectRevision.Smb311 && dialect != DialectRevision.Smb2Unknown)
             {
