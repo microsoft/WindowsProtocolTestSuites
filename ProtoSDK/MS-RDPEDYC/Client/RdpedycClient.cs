@@ -365,32 +365,30 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         /// <returns></returns>
         private CreateReqDvcPdu ExpectDVCCreateRequestPDU(TimeSpan timeout, string channelName, DynamicVC_TransportType transportType)
         {
+            DateTime endTime = DateTime.Now + timeout;
+            while (DateTime.Now < endTime)
             {
-                DateTime endTime = DateTime.Now + timeout;
-                while (DateTime.Now < endTime)
+                if (unprocessedDVCPacketBuffer.Count > 0)
                 {
-                    if (unprocessedDVCPacketBuffer.Count > 0)
+                    lock (unprocessedDVCPacketBuffer)
                     {
-                        lock (unprocessedDVCPacketBuffer)
+                        for (int i = 0; i < unprocessedDVCPacketBuffer.Count; i++)
                         {
-                            for (int i = 0; i < unprocessedDVCPacketBuffer.Count; i++)
+                            if (transportType == unprocessedDVCPacketBuffer[i].TransportType
+                                && unprocessedDVCPacketBuffer[i].PDU is CreateReqDvcPdu
+                                && (string.Equals((unprocessedDVCPacketBuffer[i].PDU as CreateReqDvcPdu).ChannelName.Trim('\0'), channelName, StringComparison.OrdinalIgnoreCase)))
                             {
-                                if (transportType == unprocessedDVCPacketBuffer[i].TransportType
-                                    && unprocessedDVCPacketBuffer[i].PDU is CreateReqDvcPdu
-                                    && (string.Equals((unprocessedDVCPacketBuffer[i].PDU as CreateReqDvcPdu).ChannelName.Trim('\0'), channelName, StringComparison.OrdinalIgnoreCase)))
-                                {
-                                    CreateReqDvcPdu pdu = unprocessedDVCPacketBuffer[i].PDU as CreateReqDvcPdu;
-                                    unprocessedDVCPacketBuffer.RemoveAt(i);
-                                    return pdu;
-                                }
+                                CreateReqDvcPdu pdu = unprocessedDVCPacketBuffer[i].PDU as CreateReqDvcPdu;
+                                unprocessedDVCPacketBuffer.RemoveAt(i);
+                                return pdu;
                             }
                         }
                     }
-
-                    Thread.Sleep(this.waitInterval);
                 }
-                return null;
+
+                Thread.Sleep(this.waitInterval);
             }
+            return null;
         }
 
         /// <summary>

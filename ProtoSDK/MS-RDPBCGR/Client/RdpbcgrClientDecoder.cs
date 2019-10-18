@@ -19,7 +19,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     /// <summary>
     /// MS-RDPBCGR Decoder Class
     /// </summary>
-    internal class RdpbcgrDecoder
+    public class RdpbcgrDecoder
     {
         #region Private Class Members
         /// <summary>
@@ -62,7 +62,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="startIndex">start index</param>
         /// <param name="bytesToRead">specified length</param>
         /// <returns>bytes of specified length</returns>
-        private byte[] GetBytes(byte[] data, ref int startIndex, int bytesToRead)
+        private static byte[] GetBytes(byte[] data, ref int startIndex, int bytesToRead)
         {
             // if input data is null
             if (null == data)
@@ -440,7 +440,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="index">parser index</param>
         /// <param name="isBigEndian">big endian format flag</param>
         /// <returns>parsed UInt16 number</returns>
-        private UInt16 ParseUInt16(byte[] data, ref int index, bool isBigEndian)
+        private static UInt16 ParseUInt16(byte[] data, ref int index, bool isBigEndian)
         {
             // Read 2 bytes
             byte[] bytes = GetBytes(data, ref index, sizeof(UInt16));
@@ -464,7 +464,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="index">parser index</param>
         /// <param name="isBigEndian">big endian format flag</param>
         /// <returns>parsed UInt32 number</returns>
-        private UInt32 ParseUInt32(byte[] data, ref int index, bool isBigEndian)
+        public static UInt32 ParseUInt32(byte[] data, ref int index, bool isBigEndian)
         {
             // Read 4 bytes
             byte[] bytes = GetBytes(data, ref index, sizeof(UInt32));
@@ -1126,7 +1126,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="data">data to be parsed</param>
         /// <param name="currentIndex">current parser index</param>
         /// <returns>PROPRIETARYSERVERCERTIFICATE</returns>
-        private PROPRIETARYSERVERCERTIFICATE ParseProprietaryServerCertificate(byte[] data, ref int currentIndex)
+        public static PROPRIETARYSERVERCERTIFICATE ParseProprietaryServerCertificate(byte[] data, ref int currentIndex)
         {
             PROPRIETARYSERVERCERTIFICATE cert = new PROPRIETARYSERVERCERTIFICATE();
 
@@ -1165,11 +1165,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="currentIndex">current parser index</param>
         /// <param name="size">cert data size</param>
         /// <returns>X509 Certificate Chain</returns>
-        private X509_CERTIFICATE_CHAIN ParseX509CertificateChain(byte[] data, ref int currentIndex, int size)
+        public static X509_CERTIFICATE_CHAIN ParseX509CertificateChain(byte[] data, ref int currentIndex, int size)
         {
             X509_CERTIFICATE_CHAIN cert = new X509_CERTIFICATE_CHAIN();
 
             cert.NumCertBlobs = (int)ParseUInt32(data, ref currentIndex, false);
+            cert.CertBlobArray = new CERT_BLOB[cert.NumCertBlobs];
             for (int i = 0; i < cert.CertBlobArray.Length; i++)
             {
                 cert.CertBlobArray[i].cbCert = (int)ParseUInt32(data, ref currentIndex, false);
@@ -1187,7 +1188,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="data">data to be parsed</param>
         /// <param name="currentIndex">current parser index</param>
         /// <returns>RSA_PUBLIC_KEY</returns>
-        private RSA_PUBLIC_KEY ParseRsaPublicKey(byte[] data, ref int currentIndex)
+        private static RSA_PUBLIC_KEY ParseRsaPublicKey(byte[] data, ref int currentIndex)
         {
             RSA_PUBLIC_KEY key = new RSA_PUBLIC_KEY();
 
@@ -4863,7 +4864,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 // RDPELE Type PDU
                 RdpelePdu elePdu = new RdpelePdu(clientContext);
                 elePdu.commonHeader = pdu.commonHeader;
-                elePdu.rdpeleData = decryptedUserData;
+                elePdu.preamble = pdu.preamble;
+
+                elePdu.rdpeleData = new byte[decryptedUserData.Length - userDataIndex];
+                Buffer.BlockCopy(decryptedUserData, userDataIndex, elePdu.rdpeleData, 0, decryptedUserData.Length - userDataIndex);
                 return elePdu;
             }
 
