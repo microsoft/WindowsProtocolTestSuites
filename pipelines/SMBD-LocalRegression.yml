@@ -20,8 +20,5 @@ jobs:
     parameters:
       extRepoUrl: $(extRepo.url)
       extRepoDir: $(extRepo.dir)
-      configFile: $(build.localRegressionConfigFile)
       RootSharePath: $(build.sharePath)
-      TestSuiteName: $(test.testSuiteName)
-      EnvironmentName: $(test.environmentName)
       HelperBranch: $(test.helperBranch)
