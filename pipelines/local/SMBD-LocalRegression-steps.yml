@@ -46,7 +46,14 @@ jobs:
 
     - task: PowerShell@2
       displayName: 'Run test'
-      continueOnError: true
+      env:
+          MAIL_User: $(smtp.senderUsername)
+          MAIL_PWD: $(smtp.senderPassword)
+          BUILD_BUILDID: $(Build.BuildId)
+          BUILD_URL: $(Build.BuildUri)
+          BUILD_USER: $(Build.QueuedBy)
+          HelperBranch: ${{parameters.HelperBranch}}
+          TestSuiteBranch: $(Build.SourceBranchName)
       inputs:
         targetType: 'inline'
         script: |
@@ -55,14 +62,6 @@ jobs:
           $(extRepo.dir)\TestSuites\MS-SMBD\Setup\Scripts\Execute-ProtocolTest.ps1 -SharedPath $(Build.StagingDirectory) -MachineName "SMBD-Driver" -EnvironmentName Mellanox -TestResultPath $(Common.TestResultsDirectory)
           $(extRepo.dir)\TestSuites\MS-SMBD\Setup\Scripts\Generate-Report.ps1 -TestResultPath $(Common.TestResultsDirectory)
           workingDirectory: '$(extRepo.dir)'
-        env:
-          MAIL_User: $(smtp.senderUsername)
-          MAIL_PWD: $(smtp.senderPassword)
-          BUILD_BUILDID: $(Build.BuildId)
-          BUILD_URL: $(Build.BuildUri)
-          BUILD_USER: $(Build.QueuedBy)
-          HelperBranch: ${{parameters.HelperBranch}}
-          TestSuiteBranch: $(Build.SourceBranchName)
         errorActionPreference: continue
 
     - task: PublishTestResults@2
