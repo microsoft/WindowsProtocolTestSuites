@@ -1,6 +1,7 @@
 parameters:
   extRepoUrl : ''
   extRepoDir : ''
+  enableRegression: false
   HelperBranch : 'master'
 
 jobs:
