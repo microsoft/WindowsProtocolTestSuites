@@ -19,6 +19,6 @@ jobs:
     parameters:
         extRepoUrl: $(extRepo.url)
         extRepoDir: $(extRepo.dir)
-        enableRegression: true
+        enableRegression: $(test.enableRegression)
         testSuiteName: $(test.testSuiteName)
         HelperBranch: $(test.helperBranch)
