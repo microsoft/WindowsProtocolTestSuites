@@ -29,11 +29,9 @@ jobs:
             buildConfigurationType: json
             buildConfiguration: |
               {
-                "default": {
-                  "sourceBranch": "staging",
-                  "parameters": {
-                      "test.sourceBuildTag": $(test.buildTag)
-                  }
+                "sourceBranch": "staging",
+                "parameters": {
+                  "test.sourceBuildTag": $(test.buildTag)
                 }
               }
           condition: or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'RDPServer'))
