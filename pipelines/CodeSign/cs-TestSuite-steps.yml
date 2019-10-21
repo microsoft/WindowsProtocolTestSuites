@@ -37,4 +37,3 @@ jobs:
                   }
                 }
               }
-          condition: or(eq('${{ parameters.testSuiteName }}', $null), eq('${{ parameters.testSuiteName }}', 'RDPServer'))
