@@ -96,6 +96,7 @@ jobs:
           displayName: Run RDPServer_Local_Regression
           inputs:
             buildDefinitionName: 'RDPServer_Local_Regression'
+            buildConfigurationType: json
             buildConfiguration: |
             {
               "default": {
