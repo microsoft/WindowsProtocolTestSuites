@@ -2,6 +2,7 @@ parameters:
   extRepoUrl : ''
   extRepoDir : ''
   enableRegression: false
+  testSuiteName: ''
   HelperBranch : 'master'
 
 jobs:
