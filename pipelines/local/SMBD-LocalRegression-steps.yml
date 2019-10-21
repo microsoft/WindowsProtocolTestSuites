@@ -69,13 +69,13 @@ jobs:
       displayName: 'Publish trx files'
       inputs:
         testResultsFormat: VSTest
-        testResultsFiles: '$(Build.Repository.LocalPath)/TestResults/*/*.trx'
+        testResultsFiles: '$(Common.TestResultsDirectory)/*.trx'
       timeoutInMinutes: 0
 
     - task: PublishBuildArtifacts@1
       displayName: 'Publish report'
       inputs:
-        PathtoPublish: '$(Build.Repository.LocalPath)/TestResults'
+        PathtoPublish: '$(Common.TestResultsDirectory)'
       timeoutInMinutes: 0
 
 
