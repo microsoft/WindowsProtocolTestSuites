@@ -37,4 +37,4 @@ jobs:
                   }
                 }
               }
-          condition: or(eq('${{ parameters.testSuiteName }}', '$null'), eq('${{ parameters.testSuiteName }}', 'RDPServer'))
+          condition: orx(eq('${{ parameters.testSuiteName }}', '$null'), eq('${{ parameters.testSuiteName }}', 'RDPServer'))
