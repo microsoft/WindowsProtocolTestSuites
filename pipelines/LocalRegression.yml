@@ -13,7 +13,7 @@ resources:
     - repository: template
       type: git
       name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
-      ref: AzurePipelines
+      ref: v-zhanh/CSRegressionSteps
 
 jobs:
   - template: pipelines/local/LocalRegression-steps.yml@template
