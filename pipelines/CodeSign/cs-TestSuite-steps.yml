@@ -31,7 +31,7 @@ jobs:
               {
                 "sourceBranch": "staging",
                 "parameters": {
-                  "test.sourceBuildTag": $(test.buildTag)
+                  "test.sourceBuildTag": "$(test.buildTag)"
                 }
               }
               authToken: $(System.AccessToken)
