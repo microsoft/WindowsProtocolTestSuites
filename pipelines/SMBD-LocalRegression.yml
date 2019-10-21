@@ -1,19 +1,16 @@
 trigger: none 
 
 variables:
-  - group: Azure Account
   - group: Build Variables
   - group: External Repo Variables
   - group: SMTP Account
-  - name: test.buildTag
-    value: $(Build.DefinitionName)-$(Build.BuildNumber)
 
 resources:
   repositories:
     - repository: template
       type: git
       name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
-      ref: v-zhanh/SMBDSteps
+      ref: AzurePipelines
 
 jobs:
   - template: pipelines/local/SMBD-LocalRegression-steps.yml@template
