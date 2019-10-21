@@ -29,9 +29,10 @@ jobs:
             buildConfigurationType: json
             buildConfiguration: |
               {
-                "sourceBranch": "staging",
+                "sourceBranch": "v-zhanh/csr",
                 "parameters": {
                   "test.sourceBuildTag": "$(test.buildTag)"
                 }
               }
+            async: true
           condition: or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'RDPServer'))
