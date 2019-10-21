@@ -4,7 +4,7 @@ variables:
   - group: External Repo Variables
   - group: Build Variables
   - name: test.enableRegression
-    value: true
+    value: false
   - name: test.buildTag
     value: $(Build.DefinitionName)-$(Build.BuildNumber)
 
