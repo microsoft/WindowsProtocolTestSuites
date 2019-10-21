@@ -50,10 +50,8 @@ jobs:
           MAIL_User: $(smtp.senderUsername)
           MAIL_PWD: $(smtp.senderPassword)
           BUILD_BUILDID: $(Build.BuildId)
-          BUILD_URL: $(Build.BuildUri)
-          BUILD_USER: $(Build.QueuedBy)
           HelperBranch: ${{parameters.HelperBranch}}
-          TestSuiteBranch: $(Build.SourceBranchName)
+          SYSTEM_ACCESSTOKEN: $(System.AccessToken)
       inputs:
         targetType: 'inline'
         script: |
