@@ -15,7 +15,7 @@ jobs:
     timeoutInMinutes: 0
 
     steps:
-      - ${{ if eq(parameters.enableRegression, true) }}:
+      - ${{ if eq(parameters.enableRegression, 'true') }}:
         - task: CopyFiles@2
           displayName: 'Copy MSI to share' 
           inputs:
@@ -37,3 +37,4 @@ jobs:
                   }
                 }
               }
+          condition: or(eq('${{ parameters.testSuiteName '$null'}}', ), eq('${{ parameters.testSuiteName }}', 'RDPServer'))
