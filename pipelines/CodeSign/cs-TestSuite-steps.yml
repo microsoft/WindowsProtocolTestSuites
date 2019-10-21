@@ -14,8 +14,6 @@ jobs:
     timeoutInMinutes: 0
 
     steps:
-      - script: echo ${{ parameters.enableRegression }}
-
       - ${{ if eq(parameters.enableRegression, true) }}:
         - task: CopyFiles@2
           displayName: 'Copy MSI to share' 
