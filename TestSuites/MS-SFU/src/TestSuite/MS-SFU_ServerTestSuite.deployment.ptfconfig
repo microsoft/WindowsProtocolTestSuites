@@ -24,7 +24,7 @@
     <!-- Type of RestrictedUser -->
     <Property name="RestrictedUserType" value="NT_ENTERPRISE" />
     <!-- FQDN of service1a -->
-    <Property name="Service1aFQDN" value="service1a/SUT01@BLAH.COM" />
+    <Property name="Service1aFQDN" value="service1a/AP01.BLAH.COM" />
     <!-- User of service1a -->
     <Property name="Service1aUserName" value="service1auser" />
     <!-- User type of service1a -->
@@ -34,7 +34,7 @@
     <!-- Salt of service1a -->
     <Property name="Service1aSalt" value="service1a" />
     <!-- FQDN of service1b -->
-    <Property name="Service1bFQDN" value="service1b/SUT01@BLAH.COM" />
+    <Property name="Service1bFQDN" value="service1b/AP01.BLAH.COM" />
     <!-- User of service1b -->
     <Property name="Service1bUserName" value="service1buser" />
     <!-- User type of service1b -->
@@ -44,7 +44,7 @@
     <!-- Salt of service1b -->
     <Property name="Service1bSalt" value="service1b" />
     <!-- FQDN of service2 -->
-    <Property name="Service2FQDN" value="service2/SUT01@BLAH.COM" />
+    <Property name="Service2FQDN" value="service2/AP01.BLAH.COM" />
     <!-- User of service2 -->
     <Property name="Service2UserName" value="service2user" />
     <!-- Password of service2 -->

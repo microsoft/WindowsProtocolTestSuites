@@ -228,25 +228,51 @@ This section provides information about how to set up an application server for 
 
 Log into the Domain Controller DC01 using domain administrator credentials DC01
 
-Create standard domain users on DC01 with user name "testuser" and password "Password01!"
+1. Run below PowerShell commands to create a domain user on DC01 with user name `testuser` and any password:
+    
+    ```
+    New-ADUser testuser -AccountPassword (ConvertTo-SecureString "Password01!" -Force -AsPlainText) -Enabled $true
+    ```
 
-Create standard domain users on DC01 with user name "service1user" and password "Password01!". This user is for both S4U2Self and S4U2Proxy scenarios.
+1. Run below PowerShell commands to create a restricted domain user on DC01 with user name `restricteduser` and any password:
 
-Create standard domain users on DC01 with user name "service2user" and password "Password01!". This user is for the S4U2Proxy scenario only.
+    ```
+    New-ADUser restricteduser -AccountPassword (ConvertTo-SecureString "Password01!" -Force -AsPlainText) -Enabled $true
+    Set-ADUser restricteduser -AccountNotDelegated $true
+    ```
 
-Run PowerShell with administrator privilege:
+1. Run below PowerShell commands to create `service1a` on DC01 with user name `service1auser` and password `Password01!`:
 
-  _setspn -u -s service1/AP01@BLAH.COM service1user_
+    ```
+    New-ADUser service1auser -AccountPassword (ConvertTo-SecureString "Password01!" -Force -AsPlainText) -Enabled $true
+    setspn -u -s service1a/AP01.BLAH.COM service1auser
+    ktpass /princ service1a/AP01.BLAH.COM /mapuser service1auser@BLAH.COM /pass Password01! /out keytab.tab /ptype KRB5_NT_PRINCIPAL Crypto ALL /rawsalt service1a
+    ```
 
-  _Ktpass.exe  /princ service1/AP01@BLAH.COM /mapuser BLAH\service1user /pass Password01! /out keytab.tab /ptype KRB5_NT_PRINCIPAL Crypto ALL /rawsalt service1_
+1. Run below PowerShell commands to create `service1b` on DC01 with user name `service1buser` and password `Password01!`:
 
-  _setspn -u -s service2/AP01@BLAH.COM service2user_
+    ```
+    New-ADUser service1buser -AccountPassword (ConvertTo-SecureString "Password01!" -Force -AsPlainText) -Enabled $true
+    setspn -u -s service1b/AP01.BLAH.COM service1buser
+    ktpass /princ service1b/AP01.BLAH.COM /mapuser service1buser@BLAH.COM /pass Password01! /out keytab.tab /ptype KRB5_NT_PRINCIPAL Crypto ALL /rawsalt service1b
+    ```
 
-  _Ktpass.exe  /princ service2/AP01@BLAH.COM /mapuser BLAH\service2user /pass Password01! /out keytab.tab /ptype KRB5_NT_PRINCIPAL Crypto ALL /rawsalt service2_
+1. Run below PowerShell commands to create `service2` on DC01 with user name `service2user` and password `Password01!`:
 
-  _Set-ADUser service2user -PrincipalsAllowedToDelegateToAccount (Get-ADUser service1user)_
+    ```
+    New-ADUser service2user -AccountPassword (ConvertTo-SecureString "Password01!" -Force -AsPlainText) -Enabled $true
+    setspn -u -s service2/AP01.BLAH.COM service2user
+    ktpass /princ service2/AP01.BLAH.COM /mapuser service2user@BLAH.COM /pass Password01! /out keytab.tab /ptype KRB5_NT_PRINCIPAL Crypto ALL /rawsalt service2
+    ```
 
-  _gpupdate /force_
+1. Run below PowerShell commands to configure delegations:
+
+    ```
+    Set-ADAccountControl service1auser -TrustedToAuthForDelegation $true
+    Set-ADObject "CN=service1auser,CN=Users,DC=BLAH,DC=COM" -Replace @{ "msDS-AllowedToDelegateTo" = @("service2/AP01.BLAH.COM") }
+    Set-ADUser service2user -PrincipalsAllowedToDelegateToAccount @((Get-ADUser service1buser))
+    ```
+
 
 ### Config Driver Computer and Run Test Cases
 
