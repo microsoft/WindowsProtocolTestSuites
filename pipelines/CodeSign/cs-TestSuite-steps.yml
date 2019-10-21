@@ -98,12 +98,12 @@ jobs:
             buildDefinitionName: 'RDPServer_Local_Regression'
             buildConfigurationType: json
             buildConfiguration: |
-            {
-              "default": {
-                "sourceBranch": "staging",
-                "parameters": {
-                    "test.sourceBuildTag": $(test.buildTag)
+              {
+                "default": {
+                  "sourceBranch": "staging",
+                  "parameters": {
+                      "test.sourceBuildTag": $(test.buildTag)
+                  }
                 }
               }
-            }
           condition: or(eq('${{ parameters.testSuiteName }}', $null), eq('${{ parameters.testSuiteName }}', 'RDPServer'))
