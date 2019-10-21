@@ -87,7 +87,7 @@ jobs:
 
       - ${{ if eq(parameters.enableRegression, 'true') }}:
         - task: CopyFiles@2
-          displayName: 'Copy MSI' 
+          displayName: 'Copy MSI to share' 
           inputs:
             SourceFolder: '$(Build.BinariesDirectory)/drop'
             Contents: '**'
