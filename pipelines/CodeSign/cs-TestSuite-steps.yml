@@ -83,3 +83,24 @@ jobs:
           PathtoPublish: '$(Build.StagingDirectory)'
           timeoutInMinutes: 0
           condition: always()
+
+      - ${{ if eq(parameters.enableRegression, 'true') }}:
+        - task: CopyFiles@2
+          displayName: 'Copy MSI' 
+          inputs:
+            SourceFolder: '$(Build.BinariesDirectory)/drop'
+            Contents: '**'
+            TargetFolder: '$(build.sharePath)/$(test.buildTag)'
+
+        - task: jb.queue-build.queue-build-task.queue-build@2
+          displayName: Run RDPServer_Local_Regression
+          inputs:
+            buildDefinitionName: 'RDPServer_Local_Regression'
+            buildConfiguration: |
+            {
+                "sourceBranch": "staging",
+                "parameters": {
+                    "test.sourceBuildTag": $(test.buildTag)
+                }
+            }
+          condition: or(eq('${{ parameters.testSuiteName }}', $null), eq('${{ parameters.testSuiteName }}', 'RDPServer'))
