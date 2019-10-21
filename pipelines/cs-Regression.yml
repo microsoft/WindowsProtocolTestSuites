@@ -20,5 +20,5 @@ jobs:
         extRepoUrl: $(extRepo.url)
         extRepoDir: $(extRepo.dir)
         enableRegression: true
-        TestSuiteName: $(test.testSuiteName)
+        testSuiteName: $(test.testSuiteName)
         HelperBranch: $(test.helperBranch)
