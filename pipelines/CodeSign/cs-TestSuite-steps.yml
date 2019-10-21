@@ -37,4 +37,4 @@ jobs:
                   }
                 }
               }
-          condition: and(succeeded(), eq('${{ parameters.testSuiteName }}', 'RDPServer'))
+          condition: and(succeeded(), eq(${{ parameters.testSuiteName }}, 'RDPServer'))
