@@ -34,5 +34,4 @@ jobs:
                   "test.sourceBuildTag": "$(test.buildTag)"
                 }
               }
-              authToken: $(System.AccessToken)
           condition: or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'RDPServer'))
