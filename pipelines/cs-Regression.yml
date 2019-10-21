@@ -3,8 +3,6 @@ trigger: none
 variables:
   - group: External Repo Variables
   - group: Build Variables
-  - name: test.enableRegression
-    value: false
   - name: test.buildTag
     value: $(Build.DefinitionName)-$(Build.BuildNumber)
 
@@ -21,6 +19,5 @@ jobs:
     parameters:
         extRepoUrl: $(extRepo.url)
         extRepoDir: $(extRepo.dir)
-        enableRegression: $(test.enableRegression)
-        TestSuiteName: $(test.testSuiteName)
+        enableRegression: true
         HelperBranch: $(test.helperBranch)
