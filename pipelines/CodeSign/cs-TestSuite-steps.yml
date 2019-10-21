@@ -25,7 +25,7 @@ jobs:
         - task: jb.queue-build.queue-build-task.queue-build@2
           displayName: Run RDPServer_Local_Regression
           inputs:
-            buildDefinitionName: 'Local Regression/RDPServer_Local_Regression'
+            buildDefinitionName: 'Local Regression\RDPServer_Local_Regression'
             buildConfigurationType: json
             buildConfiguration: |
               {
