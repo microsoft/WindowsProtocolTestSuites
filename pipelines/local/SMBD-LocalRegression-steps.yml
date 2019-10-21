@@ -52,15 +52,15 @@ jobs:
           BUILD_BUILDID: $(Build.BuildId)
           HelperBranch: ${{parameters.HelperBranch}}
           SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+          ApiUrl: $(build.apiUrl)
       inputs:
         targetType: 'inline'
         script: |
           [System.dateTime]::UtcNow.ToString("MM/dd/yyyy HH:mm:ss") | Out-File '$(Common.TestResultsDirectory)\StartTime.txt' -Encoding utf8 -Force
           $(extRepo.dir)\TestSuites\MS-SMBD\Setup\Scripts\Execute-ProtocolTest.ps1 -SharedPath $(Build.StagingDirectory) -MachineName "SMBD-Driver" -EnvironmentName Chelsio -TestResultPath $(Common.TestResultsDirectory)
           $(extRepo.dir)\TestSuites\MS-SMBD\Setup\Scripts\Execute-ProtocolTest.ps1 -SharedPath $(Build.StagingDirectory) -MachineName "SMBD-Driver" -EnvironmentName Mellanox -TestResultPath $(Common.TestResultsDirectory)
-          Push-Location $(extRepo.dir)
           $(extRepo.dir)\TestSuites\MS-SMBD\Setup\Scripts\Generate-Report.ps1 -TestResultPath $(Common.TestResultsDirectory)
-          workingDirectory: '$(extRepo.dir)'
+        workingDirectory: '$(extRepo.dir)'
         errorActionPreference: continue
 
     - task: PublishTestResults@2
