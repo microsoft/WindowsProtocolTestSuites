@@ -29,10 +29,175 @@ jobs:
             buildConfigurationType: json
             buildConfiguration: |
               {
-                "sourceBranch": "v-zhanh/csr",
+                "sourceBranch": "$(Build.SourceBranch)",
                 "parameters": {
                   "test.sourceBuildTag": "$(test.buildTag)"
                 }
               }
             async: true
           condition: or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'RDPServer'))
+        
+        - task: jb.queue-build.queue-build-task.queue-build@2
+          displayName: Run RDPClient_Local_Regression
+          inputs:
+            buildDefinitionName: 'Local Regression\RDPClient_Local_Regression'
+            buildConfigurationType: json
+            buildConfiguration: |
+              {
+                "sourceBranch": "$(Build.SourceBranch)",
+                "parameters": {
+                  "test.sourceBuildTag": "$(test.buildTag)"
+                }
+              }
+            async: true
+          condition: or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'RDPClient'))
+        
+        - task: jb.queue-build.queue-build-task.queue-build@2
+          displayName: Run MS-SMB_Local_Regression
+          inputs:
+            buildDefinitionName: 'Local Regression\MS-SMB_Local_Regression'
+            buildConfigurationType: json
+            buildConfiguration: |
+              {
+                "sourceBranch": "$(Build.SourceBranch)",
+                "parameters": {
+                  "test.sourceBuildTag": "$(test.buildTag)"
+                }
+              }
+            async: true
+          condition: or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'MS-SMB'))
+        
+        - task: jb.queue-build.queue-build-task.queue-build@2
+          displayName: Run MS-AZOD_SingleDomain_Local_Regression
+          inputs:
+            buildDefinitionName: 'Local Regression\MS-AZOD_SingleDomain_Local_Regression'
+            buildConfigurationType: json
+            buildConfiguration: |
+              {
+                "sourceBranch": "$(Build.SourceBranch)",
+                "parameters": {
+                  "test.sourceBuildTag": "$(test.buildTag)"
+                }
+              }
+            async: true
+          condition: or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'MS-AZOD'))
+
+        - task: jb.queue-build.queue-build-task.queue-build@2
+          displayName: Run MS-AZOD_CrossDomain_Local_Regression
+          inputs:
+            buildDefinitionName: 'Local Regression\MS-AZOD_CrossDomain_Local_Regression'
+            buildConfigurationType: json
+            buildConfiguration: |
+              {
+                "sourceBranch": "$(Build.SourceBranch)",
+                "parameters": {
+                  "test.sourceBuildTag": "$(test.buildTag)"
+                }
+              }
+            async: true
+          condition: or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'MS-AZOD'))
+
+        - task: jb.queue-build.queue-build-task.queue-build@2
+          displayName: Run MS-ADOD_Local_Regression
+          inputs:
+            buildDefinitionName: 'Local Regression\MS-ADOD_Local_Regression'
+            buildConfigurationType: json
+            buildConfiguration: |
+              {
+                "sourceBranch": "$(Build.SourceBranch)",
+                "parameters": {
+                  "test.sourceBuildTag": "$(test.buildTag)"
+                }
+              }
+            async: true
+          condition: or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'MS-ADOD'))
+
+        - task: jb.queue-build.queue-build-task.queue-build@2
+          displayName: Run MS-ADFSPIP_Local_Regression
+          inputs:
+            buildDefinitionName: 'Local Regression\MS-ADFSPIP_Local_Regression'
+            buildConfigurationType: json
+            buildConfiguration: |
+              {
+                "sourceBranch": "$(Build.SourceBranch)",
+                "parameters": {
+                  "test.sourceBuildTag": "$(test.buildTag)"
+                }
+              }
+            async: true
+          condition: or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'MS-ADFSPIP'))
+
+        - task: jb.queue-build.queue-build-task.queue-build@2
+          displayName: Run Kerberos_Local_Regression
+          inputs:
+            buildDefinitionName: 'Local Regression\Kerberos_Local_Regression'
+            buildConfigurationType: json
+            buildConfiguration: |
+              {
+                "sourceBranch": "$(Build.SourceBranch)",
+                "parameters": {
+                  "test.sourceBuildTag": "$(test.buildTag)"
+                }
+              }
+            async: true
+          condition: or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'Kerberos'))
+
+        - task: jb.queue-build.queue-build-task.queue-build@2
+          displayName: Run FileServer_Standard_Local_Regression
+          inputs:
+            buildDefinitionName: 'Local Regression\FileServer_Standard_Local_Regression'
+            buildConfigurationType: json
+            buildConfiguration: |
+              {
+                "sourceBranch": "$(Build.SourceBranch)",
+                "parameters": {
+                  "test.sourceBuildTag": "$(test.buildTag)"
+                }
+              }
+            async: true
+          condition: or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'FileServer'))
+
+        - task: jb.queue-build.queue-build-task.queue-build@2
+          displayName: Run FileServer_Cluster_Local_Regression
+          inputs:
+            buildDefinitionName: 'Local Regression\FileServer_Cluster_Local_Regression'
+            buildConfigurationType: json
+            buildConfiguration: |
+              {
+                "sourceBranch": "$(Build.SourceBranch)",
+                "parameters": {
+                  "test.sourceBuildTag": "$(test.buildTag)"
+                }
+              }
+            async: true
+          condition: or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'FileServer'))
+
+        - task: jb.queue-build.queue-build-task.queue-build@2
+          displayName: Run BranchCache_Local_Regression
+          inputs:
+            buildDefinitionName: 'Local Regression\BranchCache_Local_Regression'
+            buildConfigurationType: json
+            buildConfiguration: |
+              {
+                "sourceBranch": "$(Build.SourceBranch)",
+                "parameters": {
+                  "test.sourceBuildTag": "$(test.buildTag)"
+                }
+              }
+            async: true
+          condition: or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'BranchCache'))
+
+        - task: jb.queue-build.queue-build-task.queue-build@2
+          displayName: Run ADFamily_Local_Regression
+          inputs:
+            buildDefinitionName: 'Local Regression\ADFamily_Local_Regression'
+            buildConfigurationType: json
+            buildConfiguration: |
+              {
+                "sourceBranch": "$(Build.SourceBranch)",
+                "parameters": {
+                  "test.sourceBuildTag": "$(test.buildTag)"
+                }
+              }
+            async: true
+          condition: or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'ADFamily'))
