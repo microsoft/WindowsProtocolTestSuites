@@ -1,0 +1,19 @@
+trigger: none 
+
+variables:
+  - group: External Repo Variables
+
+resources:
+  repositories:
+    - repository: template
+      type: git
+      name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
+      ref: AzurePipelines
+
+jobs:
+  - template: pipelines/CodeSign/cs-TestSuite-steps.yml@template
+    parameters:
+        extRepoUrl: $(extRepo.url)
+        extRepoDir: $(extRepo.dir)
+        TestSuiteName: $(test.testSuiteName)
+        HelperBranch: $(test.helperBranch)    
