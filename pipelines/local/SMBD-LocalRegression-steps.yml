@@ -34,6 +34,14 @@ jobs:
       displayName: 'build MS-SMBD'
       inputs:
         filename: 'TestSuites/MS-SMBD/src/build.cmd'
+      condition: eq(variables['test.sourceBuildTag'], '')
+
+    - task: CopyFiles@2
+      displayName: 'Copy Sign drop to: drop folder'
+      inputs:
+        SourceFolder: '$(build.sharePath)/$(test.sourceBuildTag)'
+        TargetFolder: '$(Build.SourcesDirectory)/drop'
+      condition: ne(variables['test.sourceBuildTag'], '')
 
     - task: PowerShell@2
       displayName: 'Copy TestSuite To Share'
