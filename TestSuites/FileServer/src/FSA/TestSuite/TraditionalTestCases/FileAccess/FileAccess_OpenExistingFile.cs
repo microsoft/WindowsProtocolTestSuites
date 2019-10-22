@@ -30,7 +30,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                         FileAttribute.NORMAL,
                         CreateOptions.NON_DIRECTORY_FILE,
                         FileAccess.GENERIC_WRITE,
-                        ShareAccess.FILE_SHARE_READ,
+                        ShareAccess.FILE_SHARE_WRITE,
                         CreateDisposition.OPEN);
 
             //Step 2: Verify test result
@@ -86,7 +86,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                         FileAttribute.READONLY,
                         CreateOptions.NON_DIRECTORY_FILE,
                         FileAccess.GENERIC_ALL,
-                        ShareAccess.FILE_SHARE_READ, //Change to share write?????
+                        ShareAccess.FILE_SHARE_WRITE,
                         CreateDisposition.CREATE);
 
             //Step 2: Verify test result
