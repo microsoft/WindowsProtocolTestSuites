@@ -1540,7 +1540,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             bool returnSingleEntry = true;
             byte[] outBuffer = null;
             string randomFile = null;
-            string ramdomFileName = this.ComposeRandomFileName();
+            string randomFileName = this.ComposeRandomFileName();
             uint createAction = 0;
             uint fileIndex = 0;
             uint maxOutputSize = (uint)(isOutPutBufferNotEnough ? 1 : this.transBufferSize);
@@ -1549,10 +1549,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             {
                 case FileNamePattern.LengthIsNotAMultipleOf4:
                     //Extend file name and make its length not multiple of 4.
-                    if ((ramdomFileName.Length % 4) == 0)
+                    if ((randomFileName.Length % 4) == 0)
                     {
                         randomFile += "0";
-                        ramdomFileName += "0";
+                        randomFileName += "0";
                     }
                     break;
 
@@ -1566,12 +1566,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     break;
 
                 default:
-                    randomFile = ramdomFileName;
+                    randomFile = randomFileName;
                     break;
             }
 
             MessageStatus returnedStatus = this.transAdapter.CreateFile(
-                ramdomFileName,
+                randomFileName,
                 (uint)FileAttribute.NORMAL,
                 (uint)(FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE),
                 (uint)(ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE),
@@ -1622,7 +1622,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             bool returnSingleEntry = true;
             byte[] outBuffer = null;
             string randomFile = null;
-            string ramdomFileName = this.ComposeRandomFileName();
+            string randomFileName = this.ComposeRandomFileName();
             uint fileIndex = 0;
             uint maxOutputSize = (uint)(isOutPutBufferNotEnough ? 1 : this.transBufferSize);
 
@@ -5523,7 +5523,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         {
             int randomNumber = 0;
             char fileNameLetter = ' ';
-            string ramdomFileName = null;
+            string randomFileName = null;
 
             for (int i = 0; i < fileNameLength; i++)
             {
@@ -5533,11 +5533,47 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     randomNumber = randomRange.Next(1, 52);
                 }
                 fileNameLetter = (char)(97 + randomNumber % 26);
-                ramdomFileName = ramdomFileName + fileNameLetter.ToString(); ;
+                randomFileName = randomFileName + fileNameLetter.ToString(); ;
             }
 
-            AddTestFileName(gOpenMode, ramdomFileName);
-            return ramdomFileName;
+            AddTestFileName(gOpenMode, randomFileName);
+            return randomFileName;
+        }
+
+        /// <summary>
+        /// Create a random string 
+        /// </summary>
+        /// <param name="length">The length of the file name.</param>
+        /// <returns>A random string of the given length.</returns>
+        public string GenerateRandomString(int length)
+        {
+            int randomNumber = 0;
+            char c = ' ';
+            string randomString = null;
+
+            for (int i = 0; i < length; i++)
+            {
+                //Create a random string from 'a' to 'z'by range 1 to 52
+                lock (randomRange)
+                {
+                    randomNumber = randomRange.Next(1, 52);
+                }
+                c = (char)(97 + randomNumber % 26);
+                randomString = randomString + c.ToString(); ;
+            }
+            return randomString;
+        }
+
+        //Delete the test file explicitly
+        public void DeleteFile(string fileName)
+        {
+            this.sutProtocolController.DeleteFile($"\\\\{testConfig.SutComputerName}\\{this.shareName}", fileName);
+        }
+
+        //Delete the test directory explicitly
+        public void DeleteDirectory(string dirName)
+        {            
+            this.sutProtocolController.DeleteDirectory($"\\\\{testConfig.SutComputerName}\\{this.shareName}",dirName);
         }
 
         /// <summary>

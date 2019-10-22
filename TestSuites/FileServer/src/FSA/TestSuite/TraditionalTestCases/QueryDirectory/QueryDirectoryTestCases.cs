@@ -85,7 +85,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
 
             // Create a new directory with $INDEX_ALLOCATION as stream type
             string dirName = this.fsaAdapter.ComposeRandomFileName(8);
-
+           
             dirName = $"{dirName}::$INDEX_ALLOCATION";
 
             MessageStatus status = CreateDirectory(dirName);
@@ -101,6 +101,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
                 MessageStatus.SUCCESS,
                 status,
                 $"Query directory with file name { this.fsaAdapter.UncSharePath}\\{ dirName} is expected to succeed.");
+
         }
 
         [TestMethod()]
@@ -118,7 +119,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
 
             // Create a new directory with name as suffix
             string dirName = this.fsaAdapter.ComposeRandomFileName(8);
-
+           
             dirName = $"{dirName}:$I30:$INDEX_ALLOCATION";
 
             MessageStatus status = CreateDirectory(dirName);
@@ -150,8 +151,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             }
 
             // Create a new file
-            String fileName = this.fsaAdapter.ComposeRandomFileName(8);
-            fileName = $"{fileName}.txt::$DATA";
+            String fileName = this.fsaAdapter.GenerateRandomString(8);
+            string fullFilename = $"{fileName}.txt";
+            fileName = $"{fullFilename}::$DATA";
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create a file {fileName}");
 
@@ -189,6 +191,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
              MessageStatus.SUCCESS,
              status,
              $"Query access information of file {fileName} is expected to succeed.");
+
+            this.fsaAdapter.DeleteFile(fullFilename);
         }
 
         [TestMethod()]
@@ -200,8 +204,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         public void Fs_CreateFiles_QueryDirectory_With_Single_Entry_Flag()
         {
             // Create a new directory
-            string dirName = this.fsaAdapter.ComposeRandomFileName(8);
-
+            string dirName = this.fsaAdapter.ComposeRandomFileName(8);            
             Smb2.FILEID dirFileId;
             uint dirTreeId = 0;
             ulong dirSessionId = 0;
@@ -238,7 +241,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             for (int i = 0; i < filesNumber; i++)
             {
                 // Create a new file
-                string fileName = this.fsaAdapter.ComposeRandomFileName(8);
+                string fileName = this.fsaAdapter.GenerateRandomString(8);
                 BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create a file name: {fileName}");
                 
                 status = this.fsaAdapter.CreateFile(
@@ -279,6 +282,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
                     $"Query directory {this.fsaAdapter.UncSharePath }\\{dirName} for {file} is expected to succeed.");
                    
             }
+            this.fsaAdapter.CloseOpen();
+            
+            //Clean up the test files and the test direcotry before exit the test case.
+            this.fsaAdapter.DeleteDirectory(dirName);                    
             
         }
         /// <summary>
