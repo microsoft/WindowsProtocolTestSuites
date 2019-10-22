@@ -272,3 +272,18 @@ jobs:
               }
             async: true
           condition: or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'ADFamily'))
+        
+        - task: jb.queue-build.queue-build-task.queue-build@2
+          displayName: Run MS-SMBD_Local_Regression
+          inputs:
+            buildDefinitionName: 'Local Regression\MS-SMBD_Local_Regression'
+            buildConfigurationType: json
+            buildConfiguration: |
+              {
+                "sourceBranch": "$(Build.SourceBranch)",
+                "parameters": {
+                  "test.sourceBuildTag": "$(test.buildTag)"
+                }
+              }
+            async: true
+          condition: or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'MS-SMBD'))
