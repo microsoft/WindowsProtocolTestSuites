@@ -74,18 +74,33 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
                     // Decrypt platform challenge for future use.
                     byte[] encryptedPlatformChallenge = licensePdu.LicensingMessage.ServerPlatformChallenge.Value.EncryptedPlatformChallenge.blobData;
                     platformChallenge = RC4(encryptedPlatformChallenge);
+
+                    if (!VerifyServerMAC(licensePdu.LicensingMessage.ServerPlatformChallenge.Value.MACData, platformChallenge))
+                    {
+                        throw new Exception("The MACData of PLATFORM_CHALLENGE from Server is invalid!");
+                    }
                 }
                 else if (licensePdu.preamble.bMsgType == bMsgType_Values.NEW_LICENSE)
                 {
                     // Decrypt the license info for future use.
                     var decryptedLicenseInfo = RC4(licensePdu.LicensingMessage.ServerNewLicense.Value.EncryptedLicenseInfo.blobData);
                     newLicenseInfo = TypeMarshal.ToStruct<NEW_LICENSE_INFO>(decryptedLicenseInfo);
+
+                    if (!VerifyServerMAC(licensePdu.LicensingMessage.ServerNewLicense.Value.MACData, decryptedLicenseInfo))
+                    {
+                        throw new Exception("The MACData of SERVER_NEW_LICENSE from Server is invalid!");
+                    }
                 }
                 else if (licensePdu.preamble.bMsgType == bMsgType_Values.UPGRADE_LICENSE)
                 {
                     // Decrypt the license info for future use.
                     var decryptedLicenseInfo = RC4(licensePdu.LicensingMessage.ServerUgradeLicense.Value.EncryptedLicenseInfo.blobData);
                     upgradedLicenseInfo = TypeMarshal.ToStruct<NEW_LICENSE_INFO>(decryptedLicenseInfo);
+
+                    if (!VerifyServerMAC(licensePdu.LicensingMessage.ServerUgradeLicense.Value.MACData, decryptedLicenseInfo))
+                    {
+                        throw new Exception("The MACData of SERVER_UPGRADE_LICENSE from Server is invalid!");
+                    }
                 }
                 else
                 {
@@ -208,12 +223,24 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
             var data = challengeDataBytes.Concat(hardwareIDBytes).ToArray();
             response.MACData = EncryptionAlgorithm.GenerateNonFIPSDataSignature(macSaltKey, data, 16 * 8); // n is 16 * 8 bits.
 
-             TS_LICENSE_PDU pdu = ConstructLicensePDU(bMsgType_Values.PLATFORM_CHALLENGE_RESPONSE, new LicensingMessage { ClientPlatformChallengeResponse = response });
+            TS_LICENSE_PDU pdu = ConstructLicensePDU(bMsgType_Values.PLATFORM_CHALLENGE_RESPONSE, new LicensingMessage { ClientPlatformChallengeResponse = response });
             rdpbcgrClient.SendBytes(pdu.ToBytes());
         }
 
         public NEW_LICENSE_INFO? GetNewLicenseInfo() { return newLicenseInfo; }
         public NEW_LICENSE_INFO? GetUpgradedLicenseInfo() { return upgradedLicenseInfo; }
+
+        /// <summary>
+        /// Verify if the MACData received from server is valid or not.
+        /// </summary>
+        /// <param name="receivedMAC">The MACData received from Server</param>
+        /// <param name="decryptedData">The decrypted data from Server, which is protected by MACData</param>
+        /// <returns>If the received MAC is valid or not</returns>
+        public bool VerifyServerMAC(byte[] receivedMAC, byte[] decryptedData)
+        {
+            var calculatedMAC = EncryptionAlgorithm.GenerateNonFIPSDataSignature(macSaltKey, decryptedData, 16 * 8);
+            return Enumerable.SequenceEqual(receivedMAC, calculatedMAC);
+        }
 
         /// <summary>
         /// Decode the cert from the RDP server and get the public key, in order to encrypt PreMasterSecret
