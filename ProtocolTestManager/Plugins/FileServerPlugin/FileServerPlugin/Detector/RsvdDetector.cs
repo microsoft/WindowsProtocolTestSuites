@@ -10,6 +10,9 @@ using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd;
+using System.Security.Principal;
+using System.Diagnostics;
+using System.IO;
 
 namespace Microsoft.Protocols.TestManager.FileServerPlugin
 {
@@ -19,6 +22,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
     public partial class FSDetector
     {
         private string initiatorHostName = "Client01";
+
         /// <summary>
         /// Check if the server supports RSVD.
         /// </summary>
@@ -28,8 +32,9 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             logWriter.AddLog(LogLevel.Information, "Share path: " + info.targetShareFullPath);
 
             #region Copy test VHD file to the target share to begin detecting RSVD
-            string vhdOnSharePath = info.targetShareFullPath + @"\" + vhdName;
-            CopyTestVHD(vhdOnSharePath);
+
+            string vhdOnSharePath = Path.Combine(info.targetShareFullPath, vhdName);
+            CopyTestVHD(info.targetShareFullPath, vhdOnSharePath);
             #endregion
 
             #region RSVD version 2
@@ -63,6 +68,8 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 logWriter.AddLog(LogLevel.Information, @"The server doesn't support RSVD.");
             }
             #endregion
+
+            DeleteTestVHD(info.targetShareFullPath, vhdOnSharePath);
             return result;
         }
 
@@ -179,20 +186,54 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             return false;
         }
 
-        private void CopyTestVHD(string vhdOnSharePath)
+        private void ConnectShareByNetUse(string sharePath)
+        {
+            Process process = new Process();
+            process.StartInfo.FileName = "net.exe";
+            process.StartInfo.Arguments = $"use {sharePath} {Credential.Password} /user:{Credential.DomainName}\\{Credential.AccountName}";
+            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.CreateNoWindow = true;
+            process.Start();
+            process.WaitForExit();
+        }
+
+        private void CopyTestVHD(string sharePath, string vhdOnSharePath)
         {
             try
             {
+                ConnectShareByNetUse(sharePath);
+
                 if (System.IO.File.Exists(vhdOnSharePath))
                 {
                     return;
                 }
+
                 string vhdxPath = GetVhdSourcePath();
                 System.IO.File.Copy(vhdxPath, vhdOnSharePath);
             }
             catch (Exception e)
             {
                 throw new Exception("Copy test VHD file failed: " + e.Message);
+            }
+        }
+
+        private void DeleteTestVHD(string sharePath, string vhdOnSharePath)
+        {
+            try
+            {
+                ConnectShareByNetUse(sharePath);
+
+                if (!System.IO.File.Exists(vhdOnSharePath))
+                {
+                    return;
+                }
+
+                System.IO.File.Delete(vhdOnSharePath);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Delete test VHD file failed: " + e.Message);
             }
         }
 

@@ -4,8 +4,9 @@
 #############################################################
 
 $domainName = $PTFProp_Common_PrimaryDomain_DNSName
+$normalDomainUserAccount = $PTFProp_Common_DomainAdministratorName
 $domainNC = "DC=" + $domainName.Replace(".",",DC=")
 
-$objectPath = "cn=Administrator, cn=Users, $domainNC"
+$objectPath = "cn=$normalDomainUserAccount, cn=Users, $domainNC"
 
 return $objectPath

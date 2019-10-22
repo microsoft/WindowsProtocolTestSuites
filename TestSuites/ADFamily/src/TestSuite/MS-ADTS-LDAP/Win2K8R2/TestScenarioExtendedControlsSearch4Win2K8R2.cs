@@ -82,7 +82,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("checking step \'return Initialize\'");
             this.Manager.Comment("reaching state \'S2\'");
             this.Manager.Comment(@"executing step 'call SearchOpReq(""CN=Administrator,CN=Users,DC=adts88"",""(objectClass=user)"",Subtree,[""sAMAccountName"",""cn"",""ntSecurityDescriptor"",""member;range=10-0"",""msDS-QuotaUsed"",""msDS-QuotaEffective"",""member;range=1-0""],LDAP_SERVER_SD_FLAGS_OID,AD_DS)'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Administrator,CN=Users,DC=adts88", "(objectClass=user)", SearchScope.Subtree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq($"CN={Utilities.DomainAdmin},CN=Users,DC=adts88", "(objectClass=user)", SearchScope.Subtree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
                             "Rep"}, new object[] {
                             this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                         "Head",

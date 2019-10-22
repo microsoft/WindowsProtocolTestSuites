@@ -123,8 +123,8 @@
     <Compile Include="TestSuiteWindow.xaml.cs">
       <DependentUpon>TestSuiteWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TextReportWindow.xaml.cs">
-      <DependentUpon>TextReportWindow.xaml</DependentUpon>
+    <Compile Include="TestReportWindow.xaml.cs">
+      <DependentUpon>TestReportWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="WelcomePage.xaml.cs">
       <DependentUpon>WelcomePage.xaml</DependentUpon>
@@ -176,7 +176,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TextReportWindow.xaml">
+    <Page Include="TestReportWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

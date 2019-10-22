@@ -116,7 +116,13 @@ namespace Microsoft.Protocols.TestManager.Kernel
             profilePackage.Flush();
             profilePackage.Close();
         }
-        private static void CopyStream(Stream src, Stream des)
+
+        /// <summary>
+        /// Copy the content of a stream to another stream
+        /// </summary>
+        /// <param name="src">Source stream</param>
+        /// <param name="des">Destination stream</param>
+        public static void CopyStream(Stream src, Stream des)
         {
             const int bufSize = 4096;
             byte[] buf = new byte[bufSize];
@@ -199,5 +205,119 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 Close();
             }
         }
+        
+        public static Dictionary<string, string> DefaultPtfConfigContent = new Dictionary<string, string>
+        {
+            ["AD_ServerTestSuite.ptfconfig"]                        = StringResource.AD_ServerTestSuite_ptfconfig,
+            ["AD_ServerTestSuite.deployment.ptfconfig"]             = StringResource.AD_ServerTestSuite_deployment_ptfconfig,
+            ["MS-ADFSPIP_ClientTestSuite.ptfconfig"]                = StringResource.MS_ADFSPIP_ClientTestSuite_ptfconfig,
+            ["MS-ADFSPIP_ClientTestSuite.deployment.ptfconfig"]     = StringResource.MS_ADFSPIP_ClientTestSuite_deployment_ptfconfig,
+            ["MS-ADOD_ODTestSuite.ptfconfig"]                       = StringResource.MS_ADOD_ODTestSuite_ptfconfig,
+            ["MS-ADOD_ODTestSuite.deployment.ptfconfig"]            = StringResource.MS_ADOD_ODTestSuite_deployment_ptfconfig,
+            ["MS-AZOD_ODTestSuite.ptfconfig"]                       = StringResource.MS_AZOD_ODTestSuite_ptfconfig,
+            ["MS-AZOD_ODTestSuite.deployment.ptfconfig"]            = StringResource.MS_AZOD_ODTestSuite_deployment_ptfconfig,
+            ["BranchCache_TestSuite.ptfconfig"]                     = StringResource.BranchCache_TestSuite_ptfconfig,
+            ["BranchCache_TestSuite.deployment.ptfconfig"]          = StringResource.BranchCache_TestSuite_deployment_ptfconfig,
+            ["Auth_ServerTestSuite.ptfconfig"]                      = StringResource.Auth_ServerTestSuite_ptfconfig,
+            ["Auth_ServerTestSuite.deployment.ptfconfig"]           = StringResource.Auth_ServerTestSuite_deployment_ptfconfig,
+            ["CommonTestSuite.ptfconfig"]                           = StringResource.CommonTestSuite_ptfconfig,
+            ["CommonTestSuite.deployment.ptfconfig"]                = StringResource.CommonTestSuite_deployment_ptfconfig,
+            ["MS-DFSC_ServerTestSuite.ptfconfig"]                   = StringResource.MS_DFSC_ServerTestSuite_ptfconfig,
+            ["MS-DFSC_ServerTestSuite.deployment.ptfconfig"]        = StringResource.MS_DFSC_ServerTestSuite_deployment_ptfconfig,
+            ["MS-FSA_ServerTestSuite.ptfconfig"]                    = StringResource.MS_FSA_ServerTestSuite_ptfconfig,
+            ["MS-FSA_ServerTestSuite.deployment.ptfconfig"]         = StringResource.MS_FSA_ServerTestSuite_deployment_ptfconfig,
+            ["MS-FSRVP_ServerTestSuite.ptfconfig"]                  = StringResource.MS_FSRVP_ServerTestSuite_ptfconfig,
+            ["MS-FSRVP_ServerTestSuite.deployment.ptfconfig"]       = StringResource.MS_FSRVP_ServerTestSuite_deployment_ptfconfig,
+            ["MS-RSVD_ServerTestSuite.ptfconfig"]                   = StringResource.MS_RSVD_ServerTestSuite_ptfconfig,
+            ["MS-RSVD_ServerTestSuite.deployment.ptfconfig"]        = StringResource.MS_RSVD_ServerTestSuite_deployment_ptfconfig,
+            ["MS-SMB2_ServerTestSuite.ptfconfig"]                   = StringResource.MS_SMB2_ServerTestSuite_ptfconfig,
+            ["MS-SMB2_ServerTestSuite.deployment.ptfconfig"]        = StringResource.MS_SMB2_ServerTestSuite_deployment_ptfconfig,
+            ["MS-SMB2Model_ServerTestSuite.ptfconfig"]              = StringResource.MS_SMB2Model_ServerTestSuite_ptfconfig,
+            ["MS-SMB2Model_ServerTestSuite.deployment.ptfconfig"]   = StringResource.MS_SMB2Model_ServerTestSuite_deployment_ptfconfig,
+            ["MS-SQOS_ServerTestSuite.ptfconfig"]                   = StringResource.MS_SQOS_ServerTestSuite_ptfconfig,
+            ["MS-SQOS_ServerTestSuite.deployment.ptfconfig"]        = StringResource.MS_SQOS_ServerTestSuite_deployment_ptfconfig,
+            ["ServerFailoverTestSuite.ptfconfig"]                   = StringResource.ServerFailoverTestSuite_ptfconfig,
+            ["ServerFailoverTestSuite.deployment.ptfconfig"]        = StringResource.ServerFailoverTestSuite_deployment_ptfconfig,
+            ["Kerberos_ServerTestSuite.ptfconfig"]                  = StringResource.Kerberos_ServerTestSuite_ptfconfig,
+            ["Kerberos_ServerTestSuite.deployment.ptfconfig"]       = StringResource.Kerberos_ServerTestSuite_deployment_ptfconfig,
+            ["RDP_ClientTestSuite.ptfconfig"]                       = StringResource.RDP_ClientTestSuite_ptfconfig,
+            ["RDP_ClientTestSuite.deployment.ptfconfig"]            = StringResource.RDP_ClientTestSuite_deployment_ptfconfig,
+            ["RDP_ServerTestSuite.ptfconfig"]                       = StringResource.RDP_ServerTestSuite_ptfconfig,
+            ["RDP_ServerTestSuite.deployment.ptfconfig"]            = StringResource.RDP_ServerTestSuite_deployment_ptfconfig,
+            ["MS-SMBD_ServerTestSuite.ptfconfig"]                   = StringResource.MS_SMBD_ServerTestSuite_ptfconfig,
+            ["MS-SMBD_ServerTestSuite.deployment.ptfconfig"]        = StringResource.MS_SMBD_ServerTestSuite_deployment_ptfconfig,
+        };
+
+        public static Dictionary<string, string[]> PtfConfigFilesByTestSuite = new Dictionary<string, string[]>
+        {
+            ["ADFamily"] = new string[]
+            {
+                "AD_ServerTestSuite.ptfconfig",
+                "AD_ServerTestSuite.deployment.ptfconfig",
+            },
+            ["MS-ADFSPIP"] = new string[]
+            {
+                "MS-ADFSPIP_ClientTestSuite.ptfconfig",
+                "MS-ADFSPIP_ClientTestSuite.deployment.ptfconfig",
+            },
+            ["MS-ADOD"] = new string[]
+            {
+                "MS-ADOD_ODTestSuite.ptfconfig",
+                "MS-ADOD_ODTestSuite.deployment.ptfconfig",
+            },
+            ["MS-AZOD"] = new string[]
+            {
+                "MS-AZOD_ODTestSuite.ptfconfig",
+                "MS-AZOD_ODTestSuite.deployment.ptfconfig",
+            },
+            ["BranchCache"] = new string[]
+            {
+                "BranchCache_TestSuite.ptfconfig",
+                "BranchCache_TestSuite.deployment.ptfconfig",
+            },
+            ["FileServer"] = new string[]
+            {
+                "Auth_ServerTestSuite.ptfconfig",
+                "Auth_ServerTestSuite.deployment.ptfconfig",
+                "CommonTestSuite.ptfconfig",
+                "CommonTestSuite.deployment.ptfconfig",
+                "MS-DFSC_ServerTestSuite.ptfconfig",
+                "MS-DFSC_ServerTestSuite.deployment.ptfconfig",
+                "MS-FSA_ServerTestSuite.ptfconfig",
+                "MS-FSA_ServerTestSuite.deployment.ptfconfig",
+                "MS-FSRVP_ServerTestSuite.ptfconfig",
+                "MS-FSRVP_ServerTestSuite.deployment.ptfconfig",
+                "MS-RSVD_ServerTestSuite.ptfconfig",
+                "MS-RSVD_ServerTestSuite.deployment.ptfconfig",
+                "MS-SMB2_ServerTestSuite.ptfconfig",
+                "MS-SMB2_ServerTestSuite.deployment.ptfconfig",
+                "MS-SMB2Model_ServerTestSuite.ptfconfig",
+                "MS-SMB2Model_ServerTestSuite.deployment.ptfconfig",
+                "MS-SQOS_ServerTestSuite.ptfconfig",
+                "MS-SQOS_ServerTestSuite.deployment.ptfconfig",
+                "ServerFailoverTestSuite.ptfconfig",
+                "ServerFailoverTestSuite.deployment.ptfconfig",
+            },
+            ["Kerberos"] = new string[]
+            {
+                "Kerberos_ServerTestSuite.ptfconfig",
+                "Kerberos_ServerTestSuite.deployment.ptfconfig",
+            },
+            ["RDP-Client"] = new string[]
+            {
+                "RDP_ClientTestSuite.ptfconfig",
+                "RDP_ClientTestSuite.deployment.ptfconfig",
+            },
+            ["RDP-Server"] = new string[]
+            {
+                "RDP_ServerTestSuite.ptfconfig",
+                "RDP_ServerTestSuite.deployment.ptfconfig",
+            },
+            ["MS-SMBD"] = new string[]
+            {
+                "MS-SMBD_ServerTestSuite.ptfconfig",
+                "MS-SMBD_ServerTestSuite.deployment.ptfconfig",
+            },
+        };
     }
 }

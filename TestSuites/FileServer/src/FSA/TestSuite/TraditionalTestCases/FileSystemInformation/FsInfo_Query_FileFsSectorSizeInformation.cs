@@ -266,20 +266,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             //4.4. Verify FileSystemEffectivePhysicalBytesPerSectorForAtomicity
             BaseTestSite.Log.Add(LogEntryKind.Comment, "----------------------------");
             BaseTestSite.Log.Add(LogEntryKind.Comment, "4.4. Verify FileSystemEffectivePhysicalBytesPerSectorForAtomicity.");
-            BaseTestSite.Log.Add(LogEntryKind.Comment, "PhysicalBytesPerSectorForAtomicity: " + fileFsSectorSizeInfo.PhysicalBytesPerSectorForAtomicity);
-
-            if (fileFsSectorSizeInfo.PhysicalBytesPerSectorForAtomicity > systemPageSize)
-            {
-                BaseTestSite.Log.Add(LogEntryKind.Comment, "If OutputBuffer.PhysicalBytesPerSectorForAtomicity is greater than Open.Volume.SystemPageSize:");
-                BaseTestSite.Log.Add(LogEntryKind.Comment, "Set OutputBuffer.FileSystemEffectivePhysicalBytesPerSectorForAtomicity to Open.Volume.SystemPageSize.");
-                this.fsaAdapter.AssertAreEqual(this.Manager, systemPageSize, fileFsSectorSizeInfo.FileSystemEffectivePhysicalBytesPerSectorForAtomicity,"");
-            }
-            else
-            {
-                BaseTestSite.Log.Add(LogEntryKind.Comment, "If OutputBuffer.PhysicalBytesPerSectorForAtomicity is less than or equal to Open.Volume.SystemPageSize:");
-                BaseTestSite.Log.Add(LogEntryKind.Comment, "Set OutputBuffer.FileSystemEffectivePhysicalBytesPerSectorForAtomicity to OutputBuffer.PhysicalBytesPerSectorForAtomicity.");
-                this.fsaAdapter.AssertAreEqual(this.Manager, fileFsSectorSizeInfo.PhysicalBytesPerSectorForAtomicity, fileFsSectorSizeInfo.FileSystemEffectivePhysicalBytesPerSectorForAtomicity,"");
-            }
+            BaseTestSite.Log.Add(LogEntryKind.Comment, "FileSystemEffectivePhysicalBytesPerSectorForAtomicity MUST be a power of two, MUST be greater than or equal to LogicalBytesPerSector, MUST be less than or equal to Volume.SystemPageSize");
+            this.fsaAdapter.AssertAreEqual(this.Manager, true, FsaUtility.IsPowerOfTwo(fileFsSectorSizeInfo.FileSystemEffectivePhysicalBytesPerSectorForAtomicity), "It MUST be a power of two.");
+            this.fsaAdapter.AssertAreEqual(this.Manager, true, fileFsSectorSizeInfo.FileSystemEffectivePhysicalBytesPerSectorForAtomicity >= fileFsSectorSizeInfo.LogicalBytesPerSector, "It MUST be greater than or equal to LogicalBytesPerSector");
+            this.fsaAdapter.AssertAreEqual(this.Manager, true, fileFsSectorSizeInfo.FileSystemEffectivePhysicalBytesPerSectorForAtomicity <= systemPageSize, "It MUST be less than or equal to Volume.SystemPageSize");
         }
         #endregion
     }

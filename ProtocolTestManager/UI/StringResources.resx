@@ -228,4 +228,29 @@ Do you want to abort the execution?</value>
   <data name="StopDetectButton" xml:space="preserve">
     <value>_Cancel</value>
   </data>
+  <data name="GetLatestRelease" xml:space="preserve">
+    <value>  You can get the latest released test suites from </value>
+  </data>
+  <data name="InstallAtLeastOneTestSuite" xml:space="preserve">
+    <value>  To configure and run Windows Protocol Test Suites, you should install at least one test suite.</value>
+  </data>
+  <data name="ReleaseLink" xml:space="preserve">
+    <value>https://github.com/microsoft/WindowsProtocolTestSuites/releases/latest</value>
+  </data>
+  <data name="RestartPTM" xml:space="preserve">
+    <value>  Restart Protocol Test Manager after you install the test suite.</value>
+  </data>
+  <data name="ThisLink" xml:space="preserve">
+    <value>this link.</value>
+  </data>
+  <data name="UnknownReportFormat" xml:space="preserve">
+    <value>Failed to set test report format.</value>
+  </data>
+  <data name="NoReportFormatSelected" xml:space="preserve">
+    <value>No report format selected.</value>
+  </data>
+  <data name="PtmProfileUpgraded" xml:space="preserve">
+    <value>The PTM profile has been upgraded.
+New profile is saved as {0}.</value>
+  </data>
 </root>

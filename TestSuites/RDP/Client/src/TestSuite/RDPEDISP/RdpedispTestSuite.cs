@@ -33,7 +33,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
         ushort originalDesktopWidth;
         ushort originalDesktopHeight;
         ushort changedDesktopWidth;
-        ushort changedDekstopHeight;
+        ushort changedDesktopHeight;
         ushort originalMonitorNumber;
         ushort changedMonitorNumber;
         const uint maxNumMonitors = 4;
@@ -78,7 +78,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
                 originalDesktopWidth = Convert.ToUInt16(Site.Properties["originalDesktopWidth"]);
                 originalDesktopHeight = Convert.ToUInt16(Site.Properties["originalDesktopHeight"]);
                 changedDesktopWidth = Convert.ToUInt16(Site.Properties["changedDesktopWidth"]);
-                changedDekstopHeight = Convert.ToUInt16(Site.Properties["changedDekstopHeight"]);
+                changedDesktopHeight = Convert.ToUInt16(Site.Properties["changedDesktopHeight"]);
                 originalMonitorNumber = Convert.ToUInt16(Site.Properties["originalMonitorNumber"]);
                 changedMonitorNumber = Convert.ToUInt16(Site.Properties["changedMonitorNumber"]);
             }
@@ -87,7 +87,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
                 originalDesktopWidth = 1024;
                 originalDesktopHeight = 768;
                 changedDesktopWidth = 1152;
-                changedDekstopHeight = 864;
+                changedDesktopHeight = 864;
                 originalMonitorNumber = 1;
                 changedMonitorNumber = 2;
             }
@@ -234,7 +234,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             // send an orignal image wait for BUG 5670070 Fixed
             //Image gridsImage = LoadImage();
             //this.Site.Assume.AreNotEqual<Image>(null, gridsImage, "Cannot load the Grids image");
-            //this.rdpedispAdapter.RdprfxSendImage(gridsImage, changedDesktopWidth, changedDekstopHeight);
+            //this.rdpedispAdapter.RdprfxSendImage(gridsImage, changedDesktopWidth, changedDesktopHeight);
             //System.Threading.Thread.Sleep(1000);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Send Display Control capability PDU");

@@ -120,15 +120,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (domain == null)
             {
-                throw new ArgumentNullException("domain");
+                throw new ArgumentNullException(nameof(domain));
             }
             if (cName == null)
             {
-                throw new ArgumentNullException("cName");
+                throw new ArgumentNullException(nameof(cName));
             }
             if (password == null)
             {
-                throw new ArgumentNullException("password");
+                throw new ArgumentNullException(nameof(password));
             }
 
             context = new KileClientContext();
@@ -153,7 +153,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <exception cref="System.ArgumentException">Thrown when the connection type is neither TCP nor UDP</exception>
         public void Connect(string kdcAddress, int kdcPort, KileConnectionType transportType)
         {
-            SocketTransportConfig transportConfig = new SocketTransportConfig();
+            var transportConfig = new SocketTransportConfig();
             transportConfig.Role = Role.Client;
             transportConfig.MaxConnections = 1;
             transportConfig.BufferSize = transportBufferSize;
@@ -213,7 +213,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                                          Asn1SequenceOf<PA_DATA> paData,
                                          params EncryptionType[] encryptionTypes)
         {
-            KileAsRequest request = new KileAsRequest(context);
+            var request = new KileAsRequest(context);
             request.Request.msg_type = new Asn1Integer((int)MsgType.KRB_AS_REQ);
             request.Request.pvno = new Asn1Integer(ConstValue.KERBEROSV5);
             request.Request.padata = paData;
@@ -246,7 +246,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
 
             if (encryptionTypes != null)
             {
-                KerbInt32[] etypes = new KerbInt32[encryptionTypes.Length];
+                var etypes = new KerbInt32[encryptionTypes.Length];
                 for (int i = 0; i < encryptionTypes.Length; i++)
                 {
                     etypes[i] = new KerbInt32((int)encryptionTypes[i]);
@@ -285,9 +285,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (sName == null)
             {
-                throw new ArgumentNullException("sName");
+                throw new ArgumentNullException(nameof(sName));
             }
-            PrincipalName sname = new PrincipalName(new KerbInt32((int)PrincipalType.NT_SRV_INST),
+            var sname = new PrincipalName(new KerbInt32((int)PrincipalType.NT_SRV_INST),
                 KileUtility.String2SeqKerbString(sName.Split('/')));
             return CreateTgsRequest(context.UserRealm, context.UserName, sname, kdcOptions, nonce, context.UserRealm, paData,
                 checksumType, additionalTicket, authorizationData);
@@ -329,22 +329,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (cRealm == null)
             {
-                throw new ArgumentNullException("cRealm");
+                throw new ArgumentNullException(nameof(cRealm));
             }
             if (cName == null)
             {
-                throw new ArgumentNullException("cName");
+                throw new ArgumentNullException(nameof(cName));
             }
             if (sName == null)
             {
-                throw new ArgumentNullException("sName");
+                throw new ArgumentNullException(nameof(sName));
             }
             if (realm == null)
             {
-                throw new ArgumentNullException("realm");
+                throw new ArgumentNullException(nameof(realm));
             }
 
-            KileTgsRequest request = new KileTgsRequest(context);
+            var request = new KileTgsRequest(context);
             request.Request.msg_type = new Asn1Integer((int)MsgType.KRB_TGS_REQ);
             request.Request.pvno = new Asn1Integer(ConstValue.KERBEROSV5);
 
@@ -365,7 +365,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
 
             if (authorizationData != null)
             {
-                Asn1BerEncodingBuffer asnBuffer = new Asn1BerEncodingBuffer();
+                var asnBuffer = new Asn1BerEncodingBuffer();
                 authorizationData.BerEncode(asnBuffer, true);
 
                 request.Request.req_body.enc_authorization_data = new EncryptedData();
@@ -387,7 +387,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             #endregion construct req_body
 
             #region construct PA_DATA
-            Asn1BerEncodingBuffer bodyBuffer = new Asn1BerEncodingBuffer();
+            var bodyBuffer = new Asn1BerEncodingBuffer();
             request.Request.req_body.BerEncode(bodyBuffer);
             PA_DATA tgsPaData = ConstructTgsPaData(cRealm, cName, checksumType, bodyBuffer.Data);
 
@@ -469,13 +469,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (cRealm == null)
             {
-                throw new ArgumentNullException("cRealm");
+                throw new ArgumentNullException(nameof(cRealm));
             }
             if (cName == null)
             {
-                throw new ArgumentNullException("cName");
+                throw new ArgumentNullException(nameof(cName));
             }
-            KileApRequest request = new KileApRequest(context);
+            var request = new KileApRequest(context);
             request.Authenticator = CreateAuthenticator(cRealm,
                                                         cName,
                                                         checksumType,
@@ -507,10 +507,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (apResponseToken == null)
             {
-                throw new ArgumentNullException("apResponseToken");
+                throw new ArgumentNullException(nameof(apResponseToken));
             }
 
-            KileApResponse response = new KileApResponse(context);
+            var response = new KileApResponse(context);
             response.FromBytes(apResponseToken);
             return response;
         }
@@ -522,11 +522,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <returns>The created KRB_CRED.</returns>
         public KrbCred CreateKrbCredRequest()
         {
-            KrbCred cred = new KrbCred(context);
+            var cred = new KrbCred(context);
             cred.KerberosCred.msg_type = new Asn1Integer((int)MsgType.KRB_CRED);
             cred.KerberosCred.pvno = new Asn1Integer(ConstValue.KERBEROSV5);
 
-            Ticket[] ticket = new Ticket[] { context.ApTicket };
+            var ticket = new Ticket[] { context.ApTicket };
             cred.KerberosCred.tickets = new Asn1SequenceOf<Ticket>(ticket);
 
             EncryptionKey key = context.ContextKey;
@@ -544,7 +544,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <returns>The created KRB_PRIV.</returns>
         public KrbPriv CreateKrbPrivRequest(KRB_PRIV_REQUEST krbPrivRequest, byte[] userData)
         {
-            KrbPriv priv = new KrbPriv(context);
+            var priv = new KrbPriv(context);
             priv.KerberosPriv.msg_type = new Asn1Integer((int)MsgType.KRB_PRIV);
             priv.KerberosPriv.pvno = new Asn1Integer(ConstValue.KERBEROSV5);
 
@@ -564,7 +564,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (errorToken == null)
             {
-                throw new ArgumentNullException("errorToken");
+                throw new ArgumentNullException(nameof(errorToken));
             }
 
             byte[] errorBody = KileUtility.VerifyGssApiTokenHeader(errorToken);
@@ -582,7 +582,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             }
 
             errorBody = ArrayUtility.SubArray(errorBody, sizeof(TOK_ID));
-            KileKrbError error = new KileKrbError();
+            var error = new KileKrbError();
             error.FromBytes(errorBody);
             return error;
         }
@@ -627,7 +627,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             }
 
             byte[] keyBuffer = KileUtility.GenerateRandomBytes((uint)baseKey.keyvalue.ByteArrayValue.Length);
-            EncryptionKey newKey = new EncryptionKey(new KerbInt32(baseKey.keytype.Value), new Asn1OctetString(keyBuffer));
+            var newKey = new EncryptionKey(new KerbInt32(baseKey.keytype.Value), new Asn1OctetString(keyBuffer));
             return newKey;
         }
         #endregion helper methods
@@ -645,7 +645,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (pdu == null)
             {
-                throw new ArgumentNullException("pdu");
+                throw new ArgumentNullException(nameof(pdu));
             }
 
             context.UpdateContext(pdu);
@@ -663,7 +663,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (packetBuffer == null)
             {
-                throw new ArgumentNullException("packetBuffer");
+                throw new ArgumentNullException(nameof(packetBuffer));
             }
 
             kdcTransport.SendBytes(packetBuffer);
@@ -720,7 +720,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                                                   EncryptionKey key,
                                                   byte[] checksumBody)
         {
-            Authenticator plaintextAuthenticator = new Authenticator();
+            var plaintextAuthenticator = new Authenticator();
             plaintextAuthenticator.authenticator_vno = new Asn1Integer(ConstValue.KERBEROSV5);
             plaintextAuthenticator.crealm = cRealm;
             plaintextAuthenticator.cname = cName;
@@ -733,7 +733,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             if (checksumType == ChecksumType.ap_authenticator_8003)
             {
                 // compute the checksum
-                AuthCheckSum checksum = new AuthCheckSum();
+                var checksum = new AuthCheckSum();
                 checksum.Lgth = ConstValue.AUTHENTICATOR_CHECKSUM_LENGTH;
                 checksum.Bnd = new byte[checksum.Lgth];
                 checksum.Flags = (int)flag;
@@ -771,7 +771,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <returns>The constructed PaData.</returns>
         private PA_DATA ConstructTgsPaData(Realm cRealm, PrincipalName cName, ChecksumType checksumType, byte[] checksumBody)
         {
-            AP_REQ request = new AP_REQ();
+            var request = new AP_REQ();
 
             KerbAuthDataTokenRestrictions adRestriction =
                     ConstructKerbAuthDataTokenRestrictions(0,
@@ -790,7 +790,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                                                               authData,
                                                               context.TgsSessionKey,
                                                               checksumBody);
-            Asn1BerEncodingBuffer asnBuffPlainAuthenticator = new Asn1BerEncodingBuffer();
+            var asnBuffPlainAuthenticator = new Asn1BerEncodingBuffer();
             authenticator.BerEncode(asnBuffPlainAuthenticator, true);
             byte[] encAsnEncodedAuth =
                 KileUtility.Encrypt((EncryptionType)context.TgsSessionKey.keytype.Value,
@@ -806,7 +806,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             request.msg_type = new Asn1Integer((int)MsgType.KRB_AP_REQ);
             request.pvno = new Asn1Integer(ConstValue.KERBEROSV5);
             request.ticket = context.TgsTicket;
-            Asn1BerEncodingBuffer apBerBuffer = new Asn1BerEncodingBuffer();
+            var apBerBuffer = new Asn1BerEncodingBuffer();
             request.BerEncode(apBerBuffer, true);
 
             return new PA_DATA(new KerbInt32((int)PaDataType.PA_TGS_REQ), new Asn1OctetString(apBerBuffer.Data));
@@ -820,14 +820,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <returns>The EncKrbCredPart.</returns>
         private EncKrbCredPart ConstrutCredEncryptedData(EncryptionKey key)
         {
-            EncKrbCredPart encKrbCred = new EncKrbCredPart();
+            var encKrbCred = new EncKrbCredPart();
             encKrbCred.nonce = new KerbUInt32((uint)Math.Abs((int)DateTime.Now.Ticks));
             encKrbCred.timestamp = new KerberosTime(KileUtility.GetCurrentUTCTime());
             encKrbCred.usec = new Microseconds(0);
             encKrbCred.s_address = new HostAddress(new KerbInt32((int)AddressType.NetBios),
                                                    new Asn1OctetString(Dns.GetHostName()));
 
-            KrbCredInfo[] krbCredInfo = new KrbCredInfo[1];
+            var krbCredInfo = new KrbCredInfo[1];
             krbCredInfo[0] = new KrbCredInfo();
             krbCredInfo[0].key = key;
             encKrbCred.ticket_info = new Asn1SequenceOf<KrbCredInfo>(krbCredInfo);
@@ -844,7 +844,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <returns>The EncKrbPrivPart.</returns>
         private EncKrbPrivPart ConstructEncKrbPrivPart(KRB_PRIV_REQUEST krbPrivRequest, byte[] userData)
         {
-            EncKrbPrivPart encKrbPriv = new EncKrbPrivPart();
+            var encKrbPriv = new EncKrbPrivPart();
             encKrbPriv.s_address = new HostAddress(new KerbInt32((int)AddressType.NetBios),
                                                    new Asn1OctetString(Dns.GetHostName()));
             encKrbPriv.usec = new Microseconds(0);

@@ -2,10 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Diagnostics;
 using System.IO;
+using System.Management;
+using System.Text;
 
 namespace Microsoft.Protocols.TestManager.Kernel
 {
@@ -284,9 +284,36 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public void AbortExecution()
         {
             if (runningCaseStack != null) runningCaseStack.Clear();
-            if (vstestProcess != null && !vstestProcess.HasExited) vstestProcess.Kill();
+
+            TerminateProcessTree(vstestProcess.Id);
         }
 
+        private void TerminateProcessTree(int pid)
+        {
+            try
+            {
+                var process = Process.GetProcessById(pid);
+
+                process.CloseMainWindow();
+
+                process.Kill();
+
+                // Enumerate all child processes and terminate them.
+                var searcher = new ManagementObjectSearcher($"select * from Win32_Process where ParentProcessId={pid}");
+                var result = searcher.Get();
+                foreach (var item in result)
+                {
+                    int childPid = Convert.ToInt32(item["ProcessId"]);
+                    TerminateProcessTree(childPid);
+                }
+
+                process.WaitForExit();
+            }
+            catch (Exception ex)
+            {
+                Utility.LogException(new List<Exception> { ex });
+            }
+        }
     }
 
     public delegate void TestFinishedEvent(object sender, TestFinishedEventArgs args);

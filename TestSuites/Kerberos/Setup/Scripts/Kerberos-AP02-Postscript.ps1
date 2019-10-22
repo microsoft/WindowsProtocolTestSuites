@@ -15,8 +15,21 @@ Param
 
 Push-Location $WorkingPath
 
+$ConfigFile = "c:\temp\Protocol.xml"
 $Parameters              = @{}
 $ScriptsSignalFile = "$WorkingPath\post.finished.signal" # Config signal file
+$IsAzure                 = $false
+try {
+    [xml]$content = Get-Content $ConfigFile -ErrorAction Stop
+    $currentCore = $content.lab.core
+    if(![string]::IsNullOrEmpty($currentCore.regressiontype) -and ($currentCore.regressiontype -eq "Azure")){
+        $IsAzure = $true;
+        $ScriptsSignalFile = "C:\PostScript.Completed.signal"
+    }
+}
+catch {
+    
+}
 
 #------------------------------------------------------------------------------------------
 # Function: Write-ConfigLog
@@ -40,8 +53,13 @@ Function Write-ConfigLog
 Function Read-ConfigParameters()
 {
     Write-ConfigLog "Getting the parameters from environment config file..." -ForegroundColor Yellow
-    $VMName = .\GetVMNameByComputerName.ps1
-    .\GetVmParameters.ps1 -VMName $VMName -RefParamArray ([ref]$Parameters)
+    if($IsAzure)
+    {
+        .\GetVmParametersByComputerName.ps1 -RefParamArray ([ref]$Parameters)
+    } else {
+        $VMName = .\GetVMNameByComputerName.ps1
+        .\GetVmParameters.ps1 -VMName $VMName -RefParamArray ([ref]$Parameters)
+    }
     $Parameters
 }
 
@@ -62,14 +80,10 @@ Function Config-Phase1()
     Write-ConfigLog "Setting execution policy..." -ForegroundColor Yellow
     .\Set-ExecutionPolicy-Unrestricted.ps1
 
-    # Set network configurations
-    Write-ConfigLog "Setting network configurations..." -ForegroundColor Yellow
-    .\Set-NetworkConfiguration.ps1 -IPAddress $Parameters["ip"] -SubnetMask $Parameters["subnet"] -Gateway $Parameters["gateway"] -DNS ($Parameters["dns"].Split(';'))
-
     # Get domain account
     Write-ConfigLog "Trying to get the domain account" -ForegroundColor Yellow
     $DomainParameters = @{}
-    .\Get-DomainControllerParameters.ps1 -DomainName $Parameters["domain"] -RefParamArray ([ref]$DomainParameters)
+    .\Get-DomainControllerParameters.ps1 -DomainName $Parameters["domain"] -RefParamArray ([ref]$DomainParameters) -ConfigFile $ConfigFile
 
     # Set autologon, use domain administrator to logon
     Write-ConfigLog "Setting autologon..." -ForegroundColor Yellow
@@ -83,6 +97,7 @@ Function Config-Phase1()
 	# Turn off firewall
     Write-ConfigLog "Turn off firewall..." -ForegroundColor Yellow
     .\Disable_Firewall.ps1
+
 
 }
 
@@ -109,8 +124,12 @@ Function Main
 	Write-ConfigLog "Write signal file`: post.finished.signal to hard drive."
 	cmd /C ECHO CONFIG FINISHED > $ScriptsSignalFile
 
+    if(-not $IsAzure)
+    {
+        Set-ItemProperty -Path HKLM:\Software\Microsoft\Windows\CurrentVersion\Run -Name Install -Value "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -command `"c:\temp\controller.ps1 -phase 4`"";
+    }
 	Sleep 5
-	Restart-Computer
+	Restart-Computer -Force
 }
 
 Main

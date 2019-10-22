@@ -10,6 +10,7 @@ param($workingDir = "$env:SystemDrive\Temp")
 $scriptPath = Split-Path $MyInvocation.MyCommand.Definition -parent
 $env:Path += ";$scriptPath;$scriptPath\Scripts"
 Push-Location $workingDir
+
 #----------------------------------------------------------------------------
 # Start loging using start-transcript cmdlet
 #----------------------------------------------------------------------------
@@ -45,6 +46,19 @@ else
 
 $gpoFolder = Get-ChildItem -Path $gpoBackupFolder
 $gpoGuid = $gpoFolder.Name.Replace("{","").Replace("}","")
+
+.\Write-Info.ps1 "Update Group Policy"
+$domainName = (Get-WmiObject win32_computersystem).Domain
+$domain = Get-ADDomain $domainName
+if($domain.name -ne "contoso") {
+    Get-ChildItem -Path $gpoBackupFolder -exclude *.pol -File -Recurse | ForEach-Object {
+        $content =($_|Get-Content)
+        if ($content | Select-String -Pattern 'contoso') {
+            $content = $content -replace 'contoso',$domain.name   
+            [IO.File]::WriteAllText($_.FullName, ($content -join "`r`n"))
+        }
+    }
+}
 
 .\Write-Info.ps1 "Configurating Group Policy"
 Import-GPO -BackupId $gpoGuid -TargetName "Default Domain Policy" -Path $gpoBackupFolder -CreateIfNeeded

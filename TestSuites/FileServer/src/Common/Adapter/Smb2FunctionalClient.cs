@@ -578,7 +578,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         {
             PreauthIntegrityHashID[] preauthHashAlgs = null;
             EncryptionAlgorithm[] encryptionAlgs = null;
-            SMB2_NETNAME_NEGOTIATE_CONTEXT_ID netNameContext = new SMB2_NETNAME_NEGOTIATE_CONTEXT_ID();
+            SMB2_NETNAME_NEGOTIATE_CONTEXT_ID netNameContext = null;
 
             // For back compatibility, if dialects contains SMB 3.11, preauthentication integrity context should be present.
             if (Array.IndexOf(dialects, DialectRevision.Smb311) >= 0)

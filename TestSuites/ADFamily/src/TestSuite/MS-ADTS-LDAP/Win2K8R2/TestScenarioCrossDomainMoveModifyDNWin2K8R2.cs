@@ -9980,7 +9980,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                             this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
-                                        "CN=Administrator,CN=Users,DC=LDAP,DC=com",
+                                        $"CN={Utilities.DomainAdmin},CN=Users,DC=LDAP,DC=com",
                                         this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
@@ -17088,11 +17088,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                             this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
-                                        "CN=Administrator,CN=Users,DC=LDAP,DC=com",
+                                        $"CN={Utilities.DomainAdmin},CN=Users,DC=LDAP,DC=com",
                                         this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
-                                                    "CN=Administrator,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com",
+                                                    $"CN={Utilities.DomainAdmin},CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com",
                                                     this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                 "Head",
                                                                 "Tail"}, new object[] {
@@ -27760,7 +27760,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                             this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
-                                        "CN=Administrator,CN=Users,DC=LDAP,DC=com",
+                                        $"CN={Utilities.DomainAdmin},CN=Users,DC=LDAP,DC=com",
                                         this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
@@ -29187,11 +29187,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                             this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
-                                        "CN=Administrator,CN=Users,DC=LDAP,DC=com",
+                                        $"CN={Utilities.DomainAdmin},CN=Users,DC=LDAP,DC=com",
                                         this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
-                                                    "CN=Administrator,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com",
+                                                    "CN="+Utilities.DomainAdmin+",CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com",
                                                     this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
                                                                 "Head",
                                                                 "Tail"}, new object[] {

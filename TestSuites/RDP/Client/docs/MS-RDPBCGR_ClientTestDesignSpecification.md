@@ -1189,7 +1189,7 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 
 |  **S1\_Connection**| | 
 | -------------| ------------- |
-|  **Test ID**| S1\_ConnectionTest\_BasicSettingExchange\_NegativeTest\_MCSConnectResonseFailure| 
+|  **Test ID**| S1\_ConnectionTest\_BasicSettingExchange\_NegativeTest\_MCSConnectResponseFailure|
 |  **Priority**| P1| 
 |  **Description** | This test case verifies that SUT drops the connection when the result field of the MCS Connect Response PDU is not set to rt-successful (non 0).| 
 |  **Prerequisites**| N/A  | 

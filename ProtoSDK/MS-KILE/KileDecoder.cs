@@ -105,7 +105,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
 
                 if (serverContextList != null)
                 {
-                    KileConnection kileConnection = new KileConnection((IPEndPoint)endPoint);
+                    var kileConnection = new KileConnection((IPEndPoint)endPoint);
 
                     if (!serverContextList.ContainsKey(kileConnection))
                     {
@@ -152,7 +152,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 if (pduLength == 0 && receivedBytes.Length == sizeof(int))
                 {
                     consumedLength = sizeof(int);
-                    KrbZero krbZeroPdu = new KrbZero(clientContext);
+                    var krbZeroPdu = new KrbZero(clientContext);
                     return new KilePdu[] { krbZeroPdu };
                 }
 

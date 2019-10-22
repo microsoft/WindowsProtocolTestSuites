@@ -71,7 +71,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (ticketEncryptKey == null)
             {
-                throw new ArgumentNullException("ticketEncryptKey");
+                throw new ArgumentNullException(nameof(ticketEncryptKey));
             }
 
             server = new KileServer("");
@@ -114,11 +114,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (inToken == null)
             {
-                throw new ArgumentNullException("inToken");
+                throw new ArgumentNullException(nameof(inToken));
             }
             if (isInitialToken)
             {
-                KileApRequest apRequest = new KileApRequest(server.Context);
+                var apRequest = new KileApRequest(server.Context);
                 apRequest.FromBytes(inToken, ticketEncryptKey);
                 bool isMutualAuth = (apRequest.Request.ap_options.ByteArrayValue[0] << 24 & (int)ApOptions.MutualRequired)
                     == (int)ApOptions.MutualRequired;
@@ -126,12 +126,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
 
                 if (isMutualAuth || isDceStyle)
                 {
-                    EncryptionKey apSubKey = new EncryptionKey(new KerbInt32((int)EncryptionType.RC4_HMAC),
+                    var apSubKey = new EncryptionKey(new KerbInt32((int)EncryptionType.RC4_HMAC),
                         new Asn1OctetString(Guid.NewGuid().ToByteArray()));
                     KileApResponse apResponse = server.CreateApResponse(apSubKey);
 
                     // Set a random sequence number
-                    Random randomNumber = new Random();
+                    var randomNumber = new Random();
                     apResponse.ApEncPart.seq_number = new KerbUInt32(randomNumber.Next());
                     server.context.currentLocalSequenceNumber = (ulong)apResponse.ApEncPart.seq_number.Value;
                     token = apResponse.ToBytes();
@@ -151,7 +151,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             }
             else
             {
-                KileApResponse apResponse = new KileApResponse(server.Context);
+                var apResponse = new KileApResponse(server.Context);
                 apResponse.FromBytes(inToken);
 
                 if (server.Context.CurrentLocalSequenceNumber != (ulong)apResponse.ApEncPart.seq_number.Value)

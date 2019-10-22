@@ -1,0 +1,26 @@
+trigger: none 
+
+variables:
+  - group: External Repo Variables
+
+resources:
+  repositories:
+    - repository: template
+      type: git
+      name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
+      ref: AzurePipelines
+
+jobs:
+- job:
+  displayName: Verify Pull Requests
+  pool: 
+    name: TestSuiteBuildPool
+  workspace:
+    clean: false
+  timeoutInMinutes: 0
+
+  steps:
+  - template: pipelines/local/PullRequestBuild-steps.yml@template
+    parameters:
+      extRepoUrl: $(extRepo.url)
+      extRepoDir: $(extRepo.dir)
