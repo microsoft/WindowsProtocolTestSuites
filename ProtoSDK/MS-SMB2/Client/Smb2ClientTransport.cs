@@ -144,9 +144,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             out Packet_Header responseHeader,
             out NEGOTIATE_Response responsePayload)
         {
-            Smb2NegotiateRequestPacket negotiateRequest;
-            Smb2NegotiateResponsePacket negotiateResponse;
-
             uint status = client.Negotiate(
                             creditCharge,
                             creditRequest,
@@ -158,15 +155,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                             clientGuid,
                             out selectedDialect,
                             out gssToken,
-                            out negotiateRequest,
-                            out negotiateResponse);
-            
+                            out responseHeader,
+                            out responsePayload);
+
             negotiatedDialect = selectedDialect;
-            responsePayload = negotiateResponse.PayLoad;
-            responseHeader = negotiateResponse.Header;
 
             serverCapabilities = (Capabilities_Values)responsePayload.Capabilities;
-            
+
             return status;
         }
 
@@ -1216,8 +1211,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             }
 
             // Negotiate:
-            Smb2NegotiateRequestPacket negotiateRequest;
-            Smb2NegotiateResponsePacket negotiateResponse;
+            NEGOTIATE_Response negotiateResponse;
             CheckStatusCode(
                 client.Negotiate(
                     1,
@@ -1231,21 +1225,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     clientGuid,
                     out selectedDialect,
                     out serverGssToken,
-                    out negotiateRequest,
+                    out header,
                     out negotiateResponse,
                     preauthHashAlgs: preauthIntegrityHashIDArray,
                     encryptionAlgs: encryptionAlgorithmArray));
 
             negotiatedDialect = selectedDialect;
 
-            serverCapabilities = (Capabilities_Values)negotiateResponse.PayLoad.Capabilities;
-            header = negotiateResponse.Header;
+            serverCapabilities = (Capabilities_Values)negotiateResponse.Capabilities;
 
             // 3.2.5.2: If the SecurityMode field in the SMB2 header of the response has the SMB2_NEGOTIATE_SIGNING_REQUIRED bit set, 
             // the client MUST set Connection.RequireSigning to TRUE.
             // 3.2.5.3.1: If the global setting RequireMessageSigning is set to TRUE or 
             // Connection.RequireSigning is set to TRUE then Session.SigningRequired MUST be set to TRUE
-            bool session_SigningRequired = negotiateResponse.PayLoad.SecurityMode.HasFlag(NEGOTIATE_Response_SecurityMode_Values.NEGOTIATE_SIGNING_REQUIRED);
+            bool session_SigningRequired = negotiateResponse.SecurityMode.HasFlag(NEGOTIATE_Response_SecurityMode_Values.NEGOTIATE_SIGNING_REQUIRED);
             if (session_SigningRequired)
             {
                 // 3.2.4.1.1: If the client signs the request, it MUST set the SMB2_FLAGS_SIGNED bit in the Flags field of the SMB2 header.
@@ -1285,7 +1278,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     out serverGssToken,
                     out header,
                     out sessionSetupResponse);
-                
+
                 CheckStatusCode(status);
 
                 if ((status == Smb2Status.STATUS_MORE_PROCESSING_REQUIRED || status == Smb2Status.STATUS_SUCCESS) &&
@@ -1312,14 +1305,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
             context.ConnectionTable = new Dictionary<string, Smb2ClientConnection>();
             context.ConnectionTable.Add("Smb2ClientConnection", smb2CliConn);
-            
+
             // Tree connect:
             TREE_CONNECT_Response treeConnectResponse;
 
             status = client.TreeConnect(
                     1,
                     1,
-                    treeconnect_SigningRequired? headerFlags| Packet_Header_Flags_Values.FLAGS_SIGNED:headerFlags,
+                    treeconnect_SigningRequired ? headerFlags | Packet_Header_Flags_Values.FLAGS_SIGNED : headerFlags,
                     messageId++,
                     sessionId,
                     "\\\\" + serverPrincipleName + "\\" + shareName,

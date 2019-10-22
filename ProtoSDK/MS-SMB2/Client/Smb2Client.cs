@@ -974,6 +974,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             string[] dialects,
             out DialectRevision selectedDialect,
             out byte[] gssToken,
+            out Packet_Header responseHeader,
+            out NEGOTIATE_Response responsePayload)
+        {
+            Smb2NegotiateResponsePacket response;
+            MultiProtocolNegotiate(dialects, out selectedDialect, out gssToken, out response);
+
+            responseHeader = response.Header;
+            responsePayload = response.PayLoad;
+
+            return response.Header.Status;
+        }
+
+        public uint MultiProtocolNegotiate(
+            string[] dialects,
+            out DialectRevision selectedDialect,
+            out byte[] gssToken,
             out Smb2NegotiateResponsePacket response)
         {
             var request = new SmbNegotiateRequestPacket();
@@ -1145,6 +1161,38 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 preauthContext.UpdateConnectionState(request);
                 preauthContext.UpdateConnectionState(response);
             }
+
+            return response.Header.Status;
+        }
+
+        public uint Negotiate(
+             ushort creditCharge,
+             ushort creditRequest,
+             Packet_Header_Flags_Values flags,
+             ulong messageId,
+             DialectRevision[] dialects,
+             SecurityMode_Values securityMode,
+             Capabilities_Values capabilities,
+             Guid clientGuid,
+             out DialectRevision selectedDialect,
+             out byte[] gssToken,
+             out Packet_Header responseHeader,
+             out NEGOTIATE_Response responsePayload,
+             ushort channelSequence = 0,
+             PreauthIntegrityHashID[] preauthHashAlgs = null,
+             EncryptionAlgorithm[] encryptionAlgs = null,
+             CompressionAlgorithm[] compressionAlgorithms = null,
+             SMB2_NETNAME_NEGOTIATE_CONTEXT_ID netNameContext = null,
+             bool addDefaultEncryption = false
+         )
+        {
+            Smb2NegotiateRequestPacket request;
+            Smb2NegotiateResponsePacket response;
+            Negotiate(creditCharge, creditRequest, flags, messageId, dialects, securityMode, capabilities, clientGuid, out selectedDialect, out gssToken, out request, out response,
+                channelSequence, preauthHashAlgs, encryptionAlgs, compressionAlgorithms, netNameContext, addDefaultEncryption);
+
+            responseHeader = response.Header;
+            responsePayload = response.PayLoad;
 
             return response.Header.Status;
         }
