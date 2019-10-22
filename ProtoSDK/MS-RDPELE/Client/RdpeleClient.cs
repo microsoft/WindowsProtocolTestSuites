@@ -216,7 +216,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
         public NEW_LICENSE_INFO? GetUpgradedLicenseInfo() { return upgradedLicenseInfo; }
 
         /// <summary>
-        /// Decode the cert from the RDP server and get the public key, in case to encrypt PreMasterSecret;
+        /// Decode the cert from the RDP server and get the public key, in order to encrypt PreMasterSecret
         /// </summary>
         private void DecodeCert(byte[] certBlob)
         {
@@ -283,7 +283,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
         }
 
         /// <summary>
-        /// RC4 is used to encrypt and decrpt data according to [MS-RDPELE] 5.1.3 & 5.1.4
+        /// RC4 is used to encrypt and decrypt data according to [MS-RDPELE] 5.1.3 & 5.1.4
         /// </summary>
         private byte[] RC4(byte[] input)
         {

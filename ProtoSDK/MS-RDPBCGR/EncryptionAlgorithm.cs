@@ -596,7 +596,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                                       serverRandom);
             byte[] masterSecret = RdpbcgrUtility.ConcatenateArrays(Salt1, Salt2, Salt3);
 
-            // 	SaltedHash2(S, I) = MD5(S + SHA-1 (I + S + ServerRandom + ClientRandom))
+            //  SaltedHash2(S, I) = MD5(S + SHA-1 (I + S + ServerRandom + ClientRandom))
             //  MasterHash(I) = SaltedHash2(MasterSecret, I)
             //  SessionKeyBlob = MasterHash('A') + MasterHash('BB') + MasterHash('CCC')
             byte[] Salt11 = SaltedHash(masterSecret,
@@ -613,7 +613,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                                        clientRandom);
             byte[] sessionKey = RdpbcgrUtility.ConcatenateArrays(Salt11, Salt21, Salt31);
 
-            // 	MAC-salt-key = First128Bits(SessionKeyBlob)
+            //  MAC-salt-key = First128Bits(SessionKeyBlob)
             macKey = GetFirstNBits(128, sessionKey);
 
             // FinalHash(K) = MD5(K + ClientRandom + ServerRandom)
