@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using System.Security.Cryptography.X509Certificates;
 using System.Runtime.InteropServices;
+using Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic;
+using System.Security.Cryptography;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
 {
@@ -26,8 +28,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
         private byte[] clientRandom;
         private byte[] serverRandom;
 
+        private byte[] macSaltKey;
+        private byte[] licensingEncryptionKey;
+
+        private byte[] platformChallenge;
+
         private PROPRIETARYSERVERCERTIFICATE? proprietaryCert;
         private X509_CERTIFICATE_CHAIN? x509CertChain;
+
+        private NEW_LICENSE_INFO? newLicenseInfo;
+        private NEW_LICENSE_INFO? upgradedLicenseInfo;
 
         public RdpeleClient(RdpbcgrClient rdpbcgrClient)
         {
@@ -55,8 +65,31 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
 
                 if (licensePdu.preamble.bMsgType == bMsgType_Values.LICENSE_REQUEST)
                 {
+                    // Save server random and decode cert to get public key for future use.
                     serverRandom = licensePdu.LicensingMessage.ServerLicenseRequest.Value.ServerRandom;
                     DecodeCert(licensePdu.LicensingMessage.ServerLicenseRequest.Value.ServerCertificate.blobData);
+                }
+                else if (licensePdu.preamble.bMsgType == bMsgType_Values.PLATFORM_CHALLENGE)
+                {
+                    // Decrypt platform challenge for future use.
+                    byte[] encryptedPlatformChallenge = licensePdu.LicensingMessage.ServerPlatformChallenge.Value.EncryptedPlatformChallenge.blobData;
+                    platformChallenge = RC4(encryptedPlatformChallenge);
+                }
+                else if (licensePdu.preamble.bMsgType == bMsgType_Values.NEW_LICENSE)
+                {
+                    // Decrypt the license info for future use.
+                    var decryptedLicenseInfo = RC4(licensePdu.LicensingMessage.ServerNewLicense.Value.EncryptedLicenseInfo.blobData);
+                    newLicenseInfo = TypeMarshal.ToStruct<NEW_LICENSE_INFO>(decryptedLicenseInfo);
+                }
+                else if (licensePdu.preamble.bMsgType == bMsgType_Values.UPGRADE_LICENSE)
+                {
+                    // Decrypt the license info for future use.
+                    var decryptedLicenseInfo = RC4(licensePdu.LicensingMessage.ServerUgradeLicense.Value.EncryptedLicenseInfo.blobData);
+                    upgradedLicenseInfo = TypeMarshal.ToStruct<NEW_LICENSE_INFO>(decryptedLicenseInfo);
+                }
+                else
+                {
+                    throw new Exception($"The received PDU type should not be {licensePdu.preamble.bMsgType}!");
                 }
             }
 
@@ -65,6 +98,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
 
         /// <summary>
         /// Construct and send CLIENT_NEW_LICENSE_REQUEST
+        /// Meanwhile, generate the two licensing keys: licensing encryption key and MAC salt key.
         /// </summary>
         public void SendClientNewLicenseRequest(uint preferredKeyExchangeAlg, uint platformId, string clientUserName, string clientMachineName)
         {
@@ -79,6 +113,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
 
             preMasterSecret = new byte[48];
             random.NextBytes(preMasterSecret);
+
+            // Generate licensingEncryptionKey and macSaltKey
+            EncryptionAlgorithm.GenerateLicensingKeys(preMasterSecret, clientRandom, serverRandom, out macSaltKey, out licensingEncryptionKey);
+
             request.EncryptedPreMasterSecret.blobData = RdpbcgrUtility.GenerateEncryptedRandom(preMasterSecret, publicExponent, modulus);
             request.EncryptedPreMasterSecret.wBlobLen = (ushort)request.EncryptedPreMasterSecret.blobData.Length;
             request.EncryptedPreMasterSecret.wBlobType = wBlobType_Values.BB_RANDOM_BLOB;
@@ -91,25 +129,91 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
             request.ClientMachineName.blobData = Encoding.UTF8.GetBytes(clientMachineName);
             request.ClientMachineName.wBlobLen = (ushort)request.ClientMachineName.blobData.Length;
 
-            TS_LICENSE_PDU pdu = new TS_LICENSE_PDU(rdpbcgrClient.context);
-            RdpbcgrUtility.FillCommonHeader(rdpbcgrClient.context, ref pdu.commonHeader, TS_SECURITY_HEADER_flags_Values.SEC_LICENSE_PKT);
-            pdu.LicensingMessage.ClientNewLicenseRequest = request;
-            pdu.preamble.bMsgType = bMsgType_Values.NEW_LICENSE_REQUEST;
-            pdu.preamble.bVersion = bVersion_Values.PREAMBLE_VERSION_3_0 | bVersion_Values.EXTENDED_ERROR_MSG_SUPPORTED;
-
+            TS_LICENSE_PDU pdu = ConstructLicensePDU(bMsgType_Values.NEW_LICENSE_REQUEST, new LicensingMessage { ClientNewLicenseRequest = request });
             var bytes = pdu.ToBytes();
             rdpbcgrClient.SendBytes(bytes);
         }
 
-        public void SendClientLicenseInformation()
+        /// <summary>
+        /// Construct and send CLIENT_LICENSE_INFO
+        /// Meanwhile, generate the two licensing keys: licensing encryption key and MAC salt key.
+        /// </summary>
+        public void SendClientLicenseInformation(uint preferredKeyExchangeAlg, uint platformId, byte[] licenseInfo, CLIENT_HARDWARE_ID clientHardwareID)
         {
+            CLIENT_LICENSE_INFO info = new CLIENT_LICENSE_INFO();
+            info.PreferredKeyExchangeAlg = preferredKeyExchangeAlg;
+            info.PlatformId = platformId;
 
+            info.LicenseInfo.blobData = licenseInfo;
+            info.LicenseInfo.wBlobLen = (ushort)licenseInfo.Length;
+            info.LicenseInfo.wBlobType = wBlobType_Values.BB_DATA_BLOB;
+
+            var random = new Random();
+            clientRandom = new byte[32];
+            random.NextBytes(clientRandom);
+            info.ClientRandom = clientRandom;
+
+            preMasterSecret = new byte[48];
+            random.NextBytes(preMasterSecret);
+
+            EncryptionAlgorithm.GenerateLicensingKeys(preMasterSecret, clientRandom, serverRandom, out macSaltKey, out licensingEncryptionKey);
+
+            info.EncryptedPreMasterSecret.blobData = RdpbcgrUtility.GenerateEncryptedRandom(preMasterSecret, publicExponent, modulus);
+            info.EncryptedPreMasterSecret.wBlobLen = (ushort)info.EncryptedPreMasterSecret.blobData.Length;
+            info.EncryptedPreMasterSecret.wBlobType = wBlobType_Values.BB_RANDOM_BLOB;
+
+            CLIENT_HARDWARE_ID hardwareID = new CLIENT_HARDWARE_ID();
+            hardwareID = clientHardwareID;
+
+            info.EncryptedHWID.wBlobType = wBlobType_Values.BB_ENCRYPTED_DATA_BLOB;
+            var hardwareIDBytes = TypeMarshal.ToBytes<CLIENT_HARDWARE_ID>(hardwareID);
+            info.EncryptedHWID.blobData = RC4(hardwareIDBytes);
+            info.EncryptedHWID.wBlobLen = (ushort)info.EncryptedHWID.blobData.Length;
+
+            // MACData (16 bytes): An array of 16 bytes containing an MD5 digest (Message Authentication Code (MAC)) 
+            // that is generated over the unencrypted Client Hardware Identification structure. 
+            info.MACData = EncryptionAlgorithm.GenerateNonFIPSDataSignature(macSaltKey, hardwareIDBytes, 16 * 8); // n is 16 * 8 bits.
+
+            TS_LICENSE_PDU pdu = ConstructLicensePDU(bMsgType_Values.LICENSE_INFO, new LicensingMessage { ClientLicenseInfo = info });
+            rdpbcgrClient.SendBytes(pdu.ToBytes());
         }
 
-        public void SendClientPlatformChallengeResponse()
+        /// <summary>
+        /// Construct and send CLIENT_PLATFORM_CHALLENGE_RESPONSE with encrypted Platform Challeng Response
+        /// </summary>
+        public void SendClientPlatformChallengeResponse(CLIENT_HARDWARE_ID clientHardwareID)
         {
+            CLIENT_PLATFORM_CHALLENGE_RESPONSE response = new CLIENT_PLATFORM_CHALLENGE_RESPONSE();
 
+            PLATFORM_CHALLENGE_RESPONSE_DATA challengeData = new PLATFORM_CHALLENGE_RESPONSE_DATA();
+            challengeData.pbChallenge = platformChallenge;
+            challengeData.cbChallenge = (ushort)platformChallenge.Length;
+            challengeData.wClientType = 0x0100;
+            challengeData.wVersion = 0x0100;
+            challengeData.wLicenseDetailLevel = 0x0003;
+            response.EncryptedPlatformChallengResponse.wBlobType = wBlobType_Values.BB_ENCRYPTED_DATA_BLOB;
+            var challengeDataBytes = TypeMarshal.ToBytes<PLATFORM_CHALLENGE_RESPONSE_DATA>(challengeData);
+            response.EncryptedPlatformChallengResponse.blobData = RC4(challengeDataBytes);
+            response.EncryptedPlatformChallengResponse.wBlobLen = (ushort)response.EncryptedPlatformChallengResponse.blobData.Length;
+
+            CLIENT_HARDWARE_ID hardwareID = new CLIENT_HARDWARE_ID();
+            hardwareID = clientHardwareID;
+
+            response.EncryptedHWID.wBlobType = wBlobType_Values.BB_ENCRYPTED_DATA_BLOB;
+            var hardwareIDBytes = TypeMarshal.ToBytes<CLIENT_HARDWARE_ID>(hardwareID);
+            response.EncryptedHWID.blobData = RC4(hardwareIDBytes);
+            response.EncryptedHWID.wBlobLen = (ushort)response.EncryptedHWID.blobData.Length;
+
+            // MACData (16 bytes): An array of 16 bytes containing an MD5 digest (MAC) generated over the Platform Challenge Response Data and decrypted Client Hardware Identification. 
+            var data = challengeDataBytes.Concat(hardwareIDBytes).ToArray();
+            response.MACData = EncryptionAlgorithm.GenerateNonFIPSDataSignature(macSaltKey, data, 16 * 8); // n is 16 * 8 bits.
+
+             TS_LICENSE_PDU pdu = ConstructLicensePDU(bMsgType_Values.PLATFORM_CHALLENGE_RESPONSE, new LicensingMessage { ClientPlatformChallengeResponse = response });
+            rdpbcgrClient.SendBytes(pdu.ToBytes());
         }
+
+        public NEW_LICENSE_INFO? GetNewLicenseInfo() { return newLicenseInfo; }
+        public NEW_LICENSE_INFO? GetUpgradedLicenseInfo() { return upgradedLicenseInfo; }
 
         /// <summary>
         /// Decode the cert from the RDP server and get the public key, in case to encrypt PreMasterSecret;
@@ -176,6 +280,28 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
             // ASN.1 uses big-endian, but the Proprietary Server Certificate uses little-endian, to utilize them, save little-endian format for both cases.
             Array.Reverse(publicExponent);
             Array.Reverse(modulus);
+        }
+
+        /// <summary>
+        /// RC4 is used to encrypt and decrpt data according to [MS-RDPELE] 5.1.3 & 5.1.4
+        /// </summary>
+        private byte[] RC4(byte[] input)
+        {
+            RC4CryptoServiceProvider rc4Enc = new RC4CryptoServiceProvider();
+            ICryptoTransform rc4Encrypt = rc4Enc.CreateEncryptor(licensingEncryptionKey, null);
+            byte[] output = new byte[input.Length];
+            rc4Encrypt.TransformBlock(input, 0, input.Length, output, 0);
+            return output;
+        }
+
+        private TS_LICENSE_PDU ConstructLicensePDU(bMsgType_Values messageType, LicensingMessage message)
+        {
+            TS_LICENSE_PDU pdu = new TS_LICENSE_PDU(rdpbcgrClient.context);
+            RdpbcgrUtility.FillCommonHeader(rdpbcgrClient.context, ref pdu.commonHeader, TS_SECURITY_HEADER_flags_Values.SEC_LICENSE_PKT);
+            pdu.LicensingMessage = message;
+            pdu.preamble.bMsgType = messageType;
+            pdu.preamble.bVersion = bVersion_Values.PREAMBLE_VERSION_3_0 | bVersion_Values.EXTENDED_ERROR_MSG_SUPPORTED;
+            return pdu;
         }
     }
 }
