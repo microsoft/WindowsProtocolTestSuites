@@ -58,6 +58,7 @@ jobs:
           MAIL_User: $(smtp.senderUsername)
           MAIL_PWD: $(smtp.senderPassword)
           BUILD_BUILDID: $(Build.BuildId)
+          SOURCE_BUILDTAG: $(test.sourceBuildTag)
           HelperBranch: ${{parameters.HelperBranch}}
           SYSTEM_ACCESSTOKEN: $(System.AccessToken)
           ApiUrl: $(build.apiUrl)

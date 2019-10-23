@@ -107,7 +107,7 @@ jobs:
                 }
               }
             async: true
-          condition: or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'RDPServer'))
+          condition: and(succeeded(), or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'RDPServer')))
         
         - task: jb.queue-build.queue-build-task.queue-build@2
           displayName: Run RDPClient_Local_Regression
