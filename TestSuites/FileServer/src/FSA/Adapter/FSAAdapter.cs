@@ -5518,8 +5518,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// Create a random file name
         /// </summary>
         /// <param name="fileNameLength">The length of the file name.</param>
+        /// <param name="extension">File extension to apend to the end of the filename.</param>
+        /// <param name="opt">Directory will be added to test directory list, else, will be added to test file list for cleanup</param>
+        /// <param name="addtoList">True for add to the testfiles.</param>        /// 
         /// <returns>A file name with a random string of the given length.</returns>
-        public string ComposeRandomFileName(int fileNameLength)
+        public string ComposeRandomFileName(int fileNameLength,  string extension = "", CreateOptions opt = CreateOptions.DIRECTORY_FILE,  bool addToList = true)
         {
             int randomNumber = 0;
             char fileNameLetter = ' ';
@@ -5533,49 +5536,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     randomNumber = randomRange.Next(1, 52);
                 }
                 fileNameLetter = (char)(97 + randomNumber % 26);
-                randomFileName = randomFileName + fileNameLetter.ToString(); ;
+                randomFileName = randomFileName + fileNameLetter.ToString() ; ;
             }
 
-            AddTestFileName(gOpenMode, randomFileName);
-            return randomFileName;
-        }
-
-        /// <summary>
-        /// Create a random string 
-        /// </summary>
-        /// <param name="length">The length of the file name.</param>
-        /// <returns>A random string of the given length.</returns>
-        public string GenerateRandomString(int length)
-        {
-            int randomNumber = 0;
-            char c = ' ';
-            string randomString = null;
-
-            for (int i = 0; i < length; i++)
+            randomFileName = randomFileName + extension;
+                
+            if (addToList )
             {
-                //Create a random string from 'a' to 'z'by range 1 to 52
-                lock (randomRange)
-                {
-                    randomNumber = randomRange.Next(1, 52);
-                }
-                c = (char)(97 + randomNumber % 26);
-                randomString = randomString + c.ToString(); ;
+                AddTestFileName(opt, randomFileName);
             }
-            return randomString;
-        }
-
-        //Delete the test file explicitly
-        public void DeleteFile(string fileName)
-        {
-            this.sutProtocolController.DeleteFile($"\\\\{testConfig.SutComputerName}\\{this.shareName}", fileName);
-        }
-
-        //Delete the test directory explicitly
-        public void DeleteDirectory(string dirName)
-        {            
-            this.sutProtocolController.DeleteDirectory($"\\\\{testConfig.SutComputerName}\\{this.shareName}",dirName);
-        }
-
+            return randomFileName;
+        }       
         /// <summary>
         /// Get SUT platformType.
         /// </summary>

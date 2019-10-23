@@ -151,9 +151,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             }
 
             // Create a new file
-            String fileName = this.fsaAdapter.GenerateRandomString(8);
-            string fullFilename = $"{fileName}.txt";
-            fileName = $"{fullFilename}::$DATA";
+            String fileName = this.fsaAdapter.ComposeRandomFileName(8, ".txt", CreateOptions.NON_DIRECTORY_FILE );
+            fileName = $"{fileName}::$DATA";
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create a file {fileName}");
 
@@ -192,7 +191,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
              status,
              $"Query access information of file {fileName} is expected to succeed.");
 
-            this.fsaAdapter.DeleteFile(fullFilename);
         }
 
         [TestMethod()]
@@ -234,14 +232,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             files.Add(".");
             files.Add("..");
 
-            int filesNumber = 1000;
+            int filesNumber = 5;
             Smb2.FILEID fileId;
             uint treeId = 0;
             ulong sessionId = 0;
             for (int i = 0; i < filesNumber; i++)
             {
                 // Create a new file
-                string fileName = this.fsaAdapter.GenerateRandomString(8);
+                string fileName = this.fsaAdapter.ComposeRandomFileName(8, ".txt", CreateOptions.NON_DIRECTORY_FILE,false);
                 BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create a file name: {fileName}");
                 
                 status = this.fsaAdapter.CreateFile(
@@ -282,11 +280,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
                     $"Query directory {this.fsaAdapter.UncSharePath }\\{dirName} for {file} is expected to succeed.");
                    
             }
-            this.fsaAdapter.CloseOpen();
-            
-            //Clean up the test files and the test direcotry before exit the test case.
-            this.fsaAdapter.DeleteDirectory(dirName);                    
-            
+            this.fsaAdapter.CloseOpen();           
         }
         /// <summary>
         /// Create file

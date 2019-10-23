@@ -22,7 +22,11 @@ else
 Try
 {
 	CMD /C "net.exe use $share $password /user:$account"
-	Remove-Item "$share\$fileName" -force
+
+	if (Test-Path  -Path "$share\$fileName" )
+	{
+		Remove-Item "$share\$fileName" -force -ErrorAction SilentlyContinue
+	}	
 }
 Finally
 {
