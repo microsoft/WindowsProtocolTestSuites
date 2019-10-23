@@ -62,6 +62,7 @@ jobs:
       - task: PowerShell@2
         displayName: 'Verify CodeSign '
         continueOnError: true
+        ignoreLASTEXITCODE: true
         inputs:
           targetType: 'inline'
           script: |
