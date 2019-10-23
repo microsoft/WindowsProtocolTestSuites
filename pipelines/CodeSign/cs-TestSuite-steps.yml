@@ -62,7 +62,6 @@ jobs:
       - task: PowerShell@2
         displayName: 'Verify CodeSign '
         continueOnError: true
-        ignoreLASTEXITCODE: true
         inputs:
           targetType: 'inline'
           script: |
@@ -71,6 +70,7 @@ jobs:
             New-Item -Path "$(Build.BinariesDirectory)/Results" -ItemType Directory -Force
             Get-ChildItem -Path "$(Build.BinariesDirectory)/Inputs" -Filter "*.msi" | Foreach-Object { $(Build.BinariesDirectory)/CodeSign/Test/CodeSignVerify.ps1 -MsiPath $_.FullName -ReportPath "$(Build.BinariesDirectory)/Results/$($_.Name).html" }
           errorActionPreference: continue
+          ignoreLASTEXITCODE: true
 
       - task: CopyFiles@2
         displayName: 'Copy Verify Results' 
