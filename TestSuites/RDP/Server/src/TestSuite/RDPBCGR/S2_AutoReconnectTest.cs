@@ -32,20 +32,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             #region Test Code
 
-            if (this.transportProtocol == EncryptedProtocol.NegotiationCredSsp ||
-                this.transportProtocol == EncryptedProtocol.DirectCredSsp)
-            {
-                Site.Assume.Fail("Cannot test auto-reconnect when using CredSSP security protocol.");
-            }
 
             this.Site.Log.Add(LogEntryKind.Comment, "Establish transport connection with RDP Server, encrypted protocol is {0}.", transportProtocol.ToString());
             rdpbcgrAdapter.ConnectToServer(this.transportProtocol);
 
             string[] SVCNames = new string[] { RdpConstValue.SVCNAME_RDPEDYC };
-            rdpbcgrAdapter.EstablishRDPConnection(requestProtocol, SVCNames, CompressionType.PACKET_COMPR_TYPE_RDP61, 
+            rdpbcgrAdapter.EstablishRDPConnection(requestProtocol, SVCNames, CompressionType.PACKET_COMPR_TYPE_RDP61,
                 false, // Is reconnect
                 true,  // Is auto logon
-                supportAutoReconnect:true);
+                supportAutoReconnect: true);
 
             this.Site.Assume.IsTrue(rdpbcgrAdapter.IsServerSupportAutoReconnect(), "To run test case for auto reconnect, the RDP server should be configured to support auto reconnect.");
 
@@ -57,7 +52,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             // Wait a few time before reconnect
             System.Threading.Thread.Sleep(1000);
 
-            this.Site.Log.Add(LogEntryKind.Comment, "Establish transport connection with RDP Server, encrypted protocol is {0}.", transportProtocol.ToString());            
+            this.Site.Log.Add(LogEntryKind.Comment, "Establish transport connection with RDP Server, encrypted protocol is {0}.", transportProtocol.ToString());
             rdpbcgrAdapter.ConnectToServer(this.transportProtocol);
 
             this.Site.Log.Add(LogEntryKind.Comment, "Reconnect to RDP Server.");
