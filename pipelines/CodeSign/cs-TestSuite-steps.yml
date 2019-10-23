@@ -122,7 +122,7 @@ jobs:
                 }
               }
             async: true
-          condition: or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'RDPClient'))
+          condition: and(succeeded(), or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'RDPClient')))
         
         - task: jb.queue-build.queue-build-task.queue-build@2
           displayName: Run MS-SMB_Local_Regression
@@ -137,7 +137,7 @@ jobs:
                 }
               }
             async: true
-          condition: or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'MS-SMB'))
+          condition: and(succeeded(), or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'MS-SMB')))
         
         - task: jb.queue-build.queue-build-task.queue-build@2
           displayName: Run MS-AZOD_SingleDomain_Local_Regression
@@ -152,7 +152,7 @@ jobs:
                 }
               }
             async: true
-          condition: or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'MS-AZOD'))
+          condition: and(succeeded(), or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'MS-AZOD')))
 
         - task: jb.queue-build.queue-build-task.queue-build@2
           displayName: Run MS-AZOD_CrossDomain_Local_Regression
@@ -167,7 +167,7 @@ jobs:
                 }
               }
             async: true
-          condition: or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'MS-AZOD'))
+          condition: and(succeeded(), or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'MS-AZOD')))
 
         - task: jb.queue-build.queue-build-task.queue-build@2
           displayName: Run MS-ADOD_Local_Regression
@@ -182,7 +182,7 @@ jobs:
                 }
               }
             async: true
-          condition: or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'MS-ADOD'))
+          condition: and(succeeded(), or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'MS-ADOD')))
 
         - task: jb.queue-build.queue-build-task.queue-build@2
           displayName: Run MS-ADFSPIP_Local_Regression
@@ -197,7 +197,7 @@ jobs:
                 }
               }
             async: true
-          condition: or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'MS-ADFSPIP'))
+          condition: and(succeeded(), or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'MS-ADFSPIP')))
 
         - task: jb.queue-build.queue-build-task.queue-build@2
           displayName: Run Kerberos_Local_Regression
@@ -212,7 +212,7 @@ jobs:
                 }
               }
             async: true
-          condition: or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'Kerberos'))
+          condition: and(succeeded(), or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'Kerberos')))
 
         - task: jb.queue-build.queue-build-task.queue-build@2
           displayName: Run FileServer_Standard_Local_Regression
@@ -227,7 +227,7 @@ jobs:
                 }
               }
             async: true
-          condition: or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'FileServer'))
+          condition: and(succeeded(), or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'FileServer')))
 
         - task: jb.queue-build.queue-build-task.queue-build@2
           displayName: Run FileServer_Cluster_Local_Regression
@@ -242,7 +242,7 @@ jobs:
                 }
               }
             async: true
-          condition: or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'FileServer'))
+          condition: and(succeeded(), or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'FileServer')))
 
         - task: jb.queue-build.queue-build-task.queue-build@2
           displayName: Run BranchCache_Local_Regression
@@ -257,7 +257,7 @@ jobs:
                 }
               }
             async: true
-          condition: or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'BranchCache'))
+          condition: and(succeeded(), or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'BranchCache')))
 
         - task: jb.queue-build.queue-build-task.queue-build@2
           displayName: Run ADFamily_Local_Regression
@@ -272,7 +272,7 @@ jobs:
                 }
               }
             async: true
-          condition: or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'ADFamily'))
+          condition: and(succeeded(), or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'ADFamily')))
         
         - task: jb.queue-build.queue-build-task.queue-build@2
           displayName: Run MS-SMBD_Local_Regression
@@ -287,4 +287,4 @@ jobs:
                 }
               }
             async: true
-          condition: or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'MS-SMBD'))
+          condition: and(succeeded(), or(eq(variables['test.testSuiteName'], '$null'), eq(variables['test.testSuiteName'], 'MS-SMBD')))
