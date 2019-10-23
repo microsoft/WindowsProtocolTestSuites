@@ -12,7 +12,7 @@ resources:
     - repository: template
       type: git
       name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
-      ref: v-zhanh/CSRegressionSteps
+      ref: AzurePipelines
 
 jobs:
   - template: pipelines/CodeSign/cs-TestSuite-steps.yml@template
