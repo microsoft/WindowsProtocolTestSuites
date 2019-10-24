@@ -89,7 +89,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             this.Site.Log.Add(LogEntryKind.Comment, "Send a Client Info PDU.");
             rdpbcgrAdapter.SendClientInfoPDU(NegativeType.None, CompressionType.PACKET_COMPR_TYPE_RDP61, false);
-
+            rdpbcgrAdapter.ProcessLicenseSequence(timeout);
             #endregion Security Commencement phase / Secure Setting Exchange Phase
 
             this.Site.Log.Add(LogEntryKind.Comment, "Process network auto detect phase.");

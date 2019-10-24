@@ -56,7 +56,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
         {
             TS_LICENSE_PDU licensePdu = null;
             StackPacket packet = rdpbcgrClient.ExpectPdu(timeout);
-            if (packet != null && packet is RdpelePdu)
+            if (packet == null)
+                return null;
+            if (packet is Server_License_Error_Pdu_Valid_Client)
+            {
+                licensePdu = new TS_LICENSE_PDU(rdpbcgrClient.context);
+                licensePdu.commonHeader = ((Server_License_Error_Pdu_Valid_Client)packet).commonHeader;
+                licensePdu.preamble = ((Server_License_Error_Pdu_Valid_Client)packet).preamble;
+                licensePdu.LicensingMessage.LicenseError = ((Server_License_Error_Pdu_Valid_Client)packet).validClientMessage;
+            }
+            else if (packet is RdpelePdu)
             {
                 licensePdu = new TS_LICENSE_PDU(rdpbcgrClient.context);
                 licensePdu.commonHeader = ((RdpelePdu)packet).commonHeader;
@@ -74,6 +83,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
                     // Decrypt platform challenge for future use.
                     byte[] encryptedPlatformChallenge = licensePdu.LicensingMessage.ServerPlatformChallenge.Value.EncryptedPlatformChallenge.blobData;
                     platformChallenge = RC4(encryptedPlatformChallenge);
+                    if (platformChallenge == null)
+                    {
+                        throw new Exception("The decrpyted PlatformChallenge should not be NULL!");
+                    }
 
                     if (!VerifyServerMAC(licensePdu.LicensingMessage.ServerPlatformChallenge.Value.MACData, platformChallenge))
                     {
@@ -131,6 +144,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
 
             // Generate licensingEncryptionKey and macSaltKey
             EncryptionAlgorithm.GenerateLicensingKeys(preMasterSecret, clientRandom, serverRandom, out macSaltKey, out licensingEncryptionKey);
+            if (macSaltKey == null)
+            {
+                throw new Exception("The generated MAC-salt-key should not be NULL!");
+            }
+
+            if (licensingEncryptionKey == null)
+            {
+                throw new Exception("The generated LicensingEncryptionKey should not be NULL!");
+            }
 
             request.EncryptedPreMasterSecret.blobData = RdpbcgrUtility.GenerateEncryptedRandom(preMasterSecret, publicExponent, modulus);
             request.EncryptedPreMasterSecret.wBlobLen = (ushort)request.EncryptedPreMasterSecret.blobData.Length;
@@ -172,6 +194,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
             random.NextBytes(preMasterSecret);
 
             EncryptionAlgorithm.GenerateLicensingKeys(preMasterSecret, clientRandom, serverRandom, out macSaltKey, out licensingEncryptionKey);
+            if (macSaltKey == null)
+            {
+                throw new Exception("The generated MAC-salt-key should not be NULL!");
+            }
+
+            if (licensingEncryptionKey == null)
+            {
+                throw new Exception("The generated LicensingEncryptionKey should not be NULL!");
+            }
 
             info.EncryptedPreMasterSecret.blobData = RdpbcgrUtility.GenerateEncryptedRandom(preMasterSecret, publicExponent, modulus);
             info.EncryptedPreMasterSecret.wBlobLen = (ushort)info.EncryptedPreMasterSecret.blobData.Length;

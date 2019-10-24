@@ -195,11 +195,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="isRoutingTokenPresent">Whether RoutingToken is present</param>
         /// <param name="isCookiePresent">Whether Cookie is present</param>
         /// <param name="isRdpCorrelationInfoPresent">Whether RdpCorrelationInfo is present</param>
-        void SendClientX224ConnectionRequest(NegativeType invalidType, 
+        void SendClientX224ConnectionRequest(NegativeType invalidType,
             requestedProtocols_Values requestedProtocols,
-            bool isRdpNegReqPresent = true, 
-            bool isRoutingTokenPresent = false, 
-            bool isCookiePresent = false, 
+            bool isRdpNegReqPresent = true,
+            bool isRoutingTokenPresent = false,
+            bool isCookiePresent = false,
             bool isRdpCorrelationInfoPresent = false);
 
         /// <summary>
@@ -213,13 +213,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="supportMultitransportReliable">Set the support of reliable multitransport</param>
         /// <param name="supportMultitransportLossy">Set the support of lossy multitransport</param>
         /// <param name="isMonitorDataPresent">Whether the Client Monitor Data is present</param>
-        void SendClientMCSConnectInitialPDU(NegativeType invalidType, 
-            string[] SVCNames, 
-            bool supportEGFX, 
-            bool supportAutoDetect, 
-            bool supportHeartbeatPDU, 
-            bool supportMultitransportReliable, 
-            bool supportMultitransportLossy, 
+        void SendClientMCSConnectInitialPDU(NegativeType invalidType,
+            string[] SVCNames,
+            bool supportEGFX,
+            bool supportAutoDetect,
+            bool supportHeartbeatPDU,
+            bool supportMultitransportReliable,
+            bool supportMultitransportLossy,
             bool isMonitorDataPresent);
 
         /// <summary>
@@ -267,11 +267,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="supportSVCCompression">Set the support of static virtual channel data compression</param>
         /// <param name="supportRemoteFXCodec">Set the support of RemoteFX codecs</param>
         void SendClientConfirmActivePDU(NegativeType invalidType,
-            bool supportAutoReconnect, 
-            bool supportFastPathInput, 
-            bool supportFastPathOutput, 
-            bool supportSurfaceCommands, 
-            bool supportSVCCompression, 
+            bool supportAutoReconnect,
+            bool supportFastPathInput,
+            bool supportFastPathOutput,
+            bool supportSurfaceCommands,
+            bool supportSVCCompression,
             bool supportRemoteFXCodec);
 
         /// <summary>
@@ -492,7 +492,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="invalidType">Invalid Type used for negative test case</param>
         /// <param name="requestId">The ID which is the same as he requestId field of the associated Initiate Multitransport Request PDU </param>
         void SendClientInitiateMultitransportErrorPDU(NegativeType invalidType, uint requestId);
-        
+
         #endregion Multitransport Bootstrapping
 
         #region Expect Methods
@@ -520,7 +520,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         void WaitForLogon(TimeSpan timeout, bool expectCookie = false);
 
         #endregion Expect Methods
-        
+
         #region Verify Capability
 
         /// <summary>
@@ -550,7 +550,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// </summary>
         /// <returns>Return true if supported, otherwise, return false</returns>
         bool IsServerSupportUDPFECR();
-        
+
         /// <summary>
         /// Whether server support RDP-UDP FEC lossy transport
         /// Check flags field of TS_UD_SC_MULTITRANSPORT
@@ -588,9 +588,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="supportSurfaceCommands">Set the support of surface commands</param>
         /// <param name="supportSVCCompression">Set the support of static virtual channel data compression</param>
         /// <param name="supportRemoteFXCodec">Set the support of RemoteFX codecs</param>
-        void EstablishRDPConnection(requestedProtocols_Values requestedProtocols, 
-            string[] SVCNames, 
-            CompressionType highestCompressionTypeSupported, 
+        void EstablishRDPConnection(requestedProtocols_Values requestedProtocols,
+            string[] SVCNames,
+            CompressionType highestCompressionTypeSupported,
             bool isReconnect = false,
             bool autoLogon = false,
             bool supportEGFX = false,
@@ -646,6 +646,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// Process the network auto-detect sequence 
         /// </summary>
         void ProcessAutoDetectSequence();
+
+        /// <summary>
+        /// Process the message sequences defined in [MS-RDPELE]
+        /// </summary>
+        void ProcessLicenseSequence(TimeSpan timeout);
 
         #endregion sequences
     }

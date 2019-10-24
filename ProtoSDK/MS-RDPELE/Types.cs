@@ -67,7 +67,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
                     licensingMessageBytes = TypeMarshal.ToBytes<CLIENT_PLATFORM_CHALLENGE_RESPONSE>(LicensingMessage.ClientPlatformChallengeResponse.Value);
                     break;
                 case bMsgType_Values.ERROR_ALERT:
-                    // TODO
+                    licensingMessageBytes = TypeMarshal.ToBytes<LICENSE_ERROR_MESSAGE>(LicensingMessage.LicenseError.Value);
                     break;
                 default:
                     break;
@@ -107,7 +107,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
                     LicensingMessage.ClientPlatformChallengeResponse = TypeMarshal.ToStruct<CLIENT_PLATFORM_CHALLENGE_RESPONSE>(data);
                     break;
                 case bMsgType_Values.ERROR_ALERT:
-                    // TODO
+                    LicensingMessage.LicenseError = TypeMarshal.ToStruct<LICENSE_ERROR_MESSAGE>(data);
                     break;
                 default:
                     break;
@@ -343,6 +343,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
 
         [Case("bMsgType_Values.NEW_LICENSE")]
         public SERVER_NEW_LICENSE? ServerNewLicense;
+
+        [Case("bMsgType_Values.ERROR_ALERT")]
+        public LICENSE_ERROR_MESSAGE? LicenseError;
     }
 
     /// <summary>

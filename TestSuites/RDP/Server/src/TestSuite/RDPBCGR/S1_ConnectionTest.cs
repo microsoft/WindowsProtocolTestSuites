@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele;
 
 namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 {
@@ -35,7 +36,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             this.Site.Log.Add(LogEntryKind.Comment, "Send a Client X.224 Connection Request PDU with all security protocols supported to SUT.");
             rdpbcgrAdapter.SendClientX224ConnectionRequest(NegativeType.None,
-                requestedProtocols_Values.PROTOCOL_RDP_FLAG| requestedProtocols_Values.PROTOCOL_SSL_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_EX);
+                requestedProtocols_Values.PROTOCOL_RDP_FLAG | requestedProtocols_Values.PROTOCOL_SSL_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_EX);
 
             this.Site.Log.Add(LogEntryKind.Comment, "Expecting SUT to send a Server X224 Connection Confirm with RDP Negotiation Response.");
             Server_X_224_Connection_Confirm_Pdu confirmPdu = rdpbcgrAdapter.ExpectPacket<Server_X_224_Connection_Confirm_Pdu>(timeout);
@@ -245,9 +246,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             this.Site.Log.Add(LogEntryKind.Comment, "Send a Client Info PDU.");
             rdpbcgrAdapter.SendClientInfoPDU(NegativeType.None, CompressionType.PACKET_COMPR_TYPE_RDP61, false);
-
-            Server_License_Error_Pdu_Valid_Client licenseErrorPdu = rdpbcgrAdapter.ExpectPacket<Server_License_Error_Pdu_Valid_Client>(timeout);
-            this.Site.Assert.IsNotNull(licenseErrorPdu, "RDP Server MUST send a Server License Error PDU during Licensing phase.");
+            rdpbcgrAdapter.ProcessLicenseSequence(timeout);
 
             #endregion Test Code
         }
@@ -322,13 +321,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 rdpbcgrAdapter.SendClientSecurityExchangePDU(NegativeType.None);
             }
 
+            #endregion Security Commencement phase, Secure Setting Exchange Phase and Licensing phase
+
             this.Site.Log.Add(LogEntryKind.Comment, "Send a Client Info PDU.");
             rdpbcgrAdapter.SendClientInfoPDU(NegativeType.None, CompressionType.PACKET_COMPR_TYPE_RDP61, false);
-
-            Server_License_Error_Pdu_Valid_Client licenseErrorPdu = rdpbcgrAdapter.ExpectPacket<Server_License_Error_Pdu_Valid_Client>(timeout);
-            this.Site.Assert.IsNotNull(licenseErrorPdu, "RDP Server MUST send a Server License Error PDU during Licensing phase.");
-
-            #endregion Security Commencement phase, Secure Setting Exchange Phase and Licensing phase
+            rdpbcgrAdapter.ProcessLicenseSequence(timeout);
 
             Server_Demand_Active_Pdu demandActivePdu = rdpbcgrAdapter.ExpectPacket<Server_Demand_Active_Pdu>(timeout);
             this.Site.Assert.IsNotNull(demandActivePdu, "If the Licensing phase of the RDP Connection Sequence is successfully completed, RDP server must send a Server Demand Active PDU.");
@@ -423,9 +420,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             this.Site.Log.Add(LogEntryKind.Comment, "Send a Client Info PDU.");
             rdpbcgrAdapter.SendClientInfoPDU(NegativeType.None, CompressionType.PACKET_COMPR_TYPE_RDP61, false);
-
-            Server_License_Error_Pdu_Valid_Client licenseErrorPdu = rdpbcgrAdapter.ExpectPacket<Server_License_Error_Pdu_Valid_Client>(timeout);
-            this.Site.Assert.IsNotNull(licenseErrorPdu, "RDP Server MUST send a Server License Error PDU during Licensing phase.");
+            rdpbcgrAdapter.ProcessLicenseSequence(timeout);
 
             #endregion Security Commencement phase, Secure Setting Exchange Phase and Licensing phase
 
