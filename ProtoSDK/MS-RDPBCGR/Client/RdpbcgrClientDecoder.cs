@@ -4868,6 +4868,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
                 elePdu.rdpeleData = new byte[decryptedUserData.Length - userDataIndex];
                 Buffer.BlockCopy(decryptedUserData, userDataIndex, elePdu.rdpeleData, 0, decryptedUserData.Length - userDataIndex);
+
+                // If this is the last RDPELE message, change the client context status to end licensing packets processing.
+                if (pdu.preamble.bMsgType == bMsgType_Values.NEW_LICENSE
+                    || pdu.preamble.bMsgType == bMsgType_Values.UPGRADE_LICENSE)
+                {
+                    clientContext.IsWaitingLicenseErrorPdu = false;
+                }
+
                 return elePdu;
             }
 
