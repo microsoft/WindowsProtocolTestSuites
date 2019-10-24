@@ -978,7 +978,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             out NEGOTIATE_Response responsePayload)
         {
             Smb2NegotiateResponsePacket response;
-            MultiProtocolNegotiate(dialects, out selectedDialect, out gssToken, out response);
+            SmbNegotiateRequestPacket request;
+            MultiProtocolNegotiate(dialects, out selectedDialect, out gssToken, out request, out response);
 
             responseHeader = response.Header;
             responsePayload = response.PayLoad;
@@ -990,9 +991,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             string[] dialects,
             out DialectRevision selectedDialect,
             out byte[] gssToken,
+            out SmbNegotiateRequestPacket request,
             out Smb2NegotiateResponsePacket response)
         {
-            var request = new SmbNegotiateRequestPacket();
+            request = new SmbNegotiateRequestPacket();
 
             // Use the same flags windows SMB2 client sends
             // Some flags such as Unicode support are required by some SMB2 server implementations

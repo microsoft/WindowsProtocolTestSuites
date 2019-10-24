@@ -674,44 +674,53 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             }
         }
 
-        public void CheckNegotiateContext(Smb2NegotiateRequestPacket request, Smb2NegotiateResponsePacket response)
+        public void CheckNegotiateContext<T>(T request, Smb2NegotiateResponsePacket response)
         {
             if (response.PayLoad.DialectRevision != DialectRevision.Smb311)
             {
                 return;
             }
 
-            // 3.3.5.4: if Dialect is "3.1.1" Then the server MUST build a NegotiateContextList for its negotiate response and check Including below:
-            // 1. The server MUST add an SMB2_PREAUTH_INTEGRITY_CAPABILITIES negotiate context to the response's NegotiateContextList.
-            if (response.NegotiateContext_PREAUTH == null)
+            if (request is Smb2NegotiateRequestPacket)
             {
-                Site.Assert.Fail("The server MUST add an SMB2_PREAUTH_INTEGRITY_CAPABILITIES negotiate context to the response's NegotiateContextList.");
+                Smb2NegotiateRequestPacket smb2Request = request as Smb2NegotiateRequestPacket;
+                // 3.3.5.4: if Dialect is "3.1.1" Then the server MUST build a NegotiateContextList for its negotiate response and check Including below:
+                // 1. The server MUST add an SMB2_PREAUTH_INTEGRITY_CAPABILITIES negotiate context to the response's NegotiateContextList.
+                if (response.NegotiateContext_PREAUTH == null)
+                {
+                    Site.Assert.Fail("The server MUST add an SMB2_PREAUTH_INTEGRITY_CAPABILITIES negotiate context to the response's NegotiateContextList.");
+                }
+
+                // 2. HashAlgorithmCount MUST be set to 1
+                Site.Assert.AreEqual<int>(1, response.NegotiateContext_PREAUTH.Value.HashAlgorithmCount, "The response's SMB2_PREAUTH_INTEGRITY_CAPABILITIES.HashAlgorithmCount MUST be set to 1");
+
+                // 3. SMB2_PREAUTH_INTEGRITY_CAPABILITIES Salt buffer length same as SaltLength
+                Site.Assert.AreEqual<int>(response.NegotiateContext_PREAUTH.Value.SaltLength, response.NegotiateContext_PREAUTH.Value.Salt.Length, "The response's SMB2_PREAUTH_INTEGRITY_CAPABILITIES Salt buffer length must same as SaltLength");
+
+                // 4. If client haven't send a negotiate context the server should not response except SMB2_PREAUTH_INTEGRITY_CAPABILITIES
+
+                if ((smb2Request.NegotiateContext_ENCRYPTION == null) && (response.NegotiateContext_ENCRYPTION != null))
+                {
+                    Site.Assert.Fail("The server Should not response a SMB2_ENCRYPTION_CAPABILITIES as it's not sent in request.");
+                }
+                if ((smb2Request.NegotiateContext_COMPRESSION == null) && (response.NegotiateContext_COMPRESSION != null))
+                {
+                    Site.Assert.Fail("The server Should not response a SMB2_COMPRESSION_CAPABILITIES as it's not sent in request.");
+                }
+
+                if (response.NegotiateContext_ENCRYPTION != null)
+                {
+                    Site.Assert.AreEqual<int>(1, response.NegotiateContext_ENCRYPTION.Value.CipherCount, "The response's SMB2_ENCRYPTION_CAPABILITIES.CipherCount MUST be set to 1");
+                }
+                if (response.NegotiateContext_COMPRESSION != null)
+                {
+                    Site.Assert.AreEqual<int>(1, response.NegotiateContext_COMPRESSION.Value.CompressionAlgorithmCount, "The response's SMB2_COMPRESSION_CAPABILITIES.CompressionAlgorithmCount MUST be set to 1");
+                }
             }
-
-            // 2. HashAlgorithmCount MUST be set to 1
-            Site.Assert.AreEqual<int>(1, response.NegotiateContext_PREAUTH.Value.HashAlgorithmCount, "The response's SMB2_PREAUTH_INTEGRITY_CAPABILITIES.HashAlgorithmCount MUST be set to 1");
-
-            // 3. SMB2_PREAUTH_INTEGRITY_CAPABILITIES Salt buffer length same as SaltLength
-            Site.Assert.AreEqual<int>(response.NegotiateContext_PREAUTH.Value.SaltLength, response.NegotiateContext_PREAUTH.Value.Salt.Length, "The response's SMB2_PREAUTH_INTEGRITY_CAPABILITIES Salt buffer length must same as SaltLength");
-
-            // 4. If client haven't send a negotiate context the server should not response except SMB2_PREAUTH_INTEGRITY_CAPABILITIES
-
-            if ((request.NegotiateContext_ENCRYPTION == null) && (response.NegotiateContext_ENCRYPTION != null))
+            else if (request is SmbNegotiateRequestPacket)
             {
-                Site.Assert.Fail("The server Should not response a SMB2_ENCRYPTION_CAPABILITIES as it's not sent in request.");
-            }
-            if ((request.NegotiateContext_COMPRESSION == null) && (response.NegotiateContext_COMPRESSION != null))
-            {
-                Site.Assert.Fail("The server Should not response a SMB2_COMPRESSION_CAPABILITIES as it's not sent in request.");
-            }
-
-            if (response.NegotiateContext_ENCRYPTION != null)
-            {
-                Site.Assert.AreEqual<int>(1, response.NegotiateContext_ENCRYPTION.Value.CipherCount, "The response's SMB2_ENCRYPTION_CAPABILITIES.CipherCount MUST be set to 1");
-            }
-            if (response.NegotiateContext_COMPRESSION != null)
-            {
-                Site.Assert.AreEqual<int>(1, response.NegotiateContext_COMPRESSION.Value.CompressionAlgorithmCount, "The response's SMB2_COMPRESSION_CAPABILITIES.CompressionAlgorithmCount MUST be set to 1");
+                Site.Assert.IsNull(response.NegotiateContext_ENCRYPTION, "The server Should not response a SMB2_ENCRYPTION_CAPABILITIES as request is SmbNegotiateRequestPacket.");
+                Site.Assert.IsNull(response.NegotiateContext_COMPRESSION, "The server Should not response a SMB2_COMPRESSION_CAPABILITIES as request is SmbNegotiateRequestPacket.");
             }
         }
         #endregion

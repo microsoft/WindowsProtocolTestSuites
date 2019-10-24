@@ -438,7 +438,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             ResponseChecker<NEGOTIATE_Response> checker = null)
         {
             Smb2NegotiateResponsePacket negotiateResponse;
-
+            SmbNegotiateRequestPacket request;
             ulong messageId = generateMessageId(sequenceWindow);
             ushort creditCharge = generateCreditCharge(1);
 
@@ -449,6 +449,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 dialects,
                 out selectedDialect,
                 out serverGssToken,
+                out request,
                 out negotiateResponse);
             Packet_Header header = negotiateResponse.Header;
             maxBufferSize = negotiateResponse.PayLoad.MaxReadSize < negotiateResponse.PayLoad.MaxWriteSize ?
@@ -459,7 +460,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             ProduceCredit(messageId, header);
 
             InnerResponseChecker(checker, header, negotiateResponse.PayLoad);
-            testConfig.CheckNegotiateContext(null, negotiateResponse);  //request is not set any negotiatecontext here so set it null.
+            testConfig.CheckNegotiateContext(request, negotiateResponse);  //request is not set any negotiatecontext here so set it null.
             return status;
         }
 
