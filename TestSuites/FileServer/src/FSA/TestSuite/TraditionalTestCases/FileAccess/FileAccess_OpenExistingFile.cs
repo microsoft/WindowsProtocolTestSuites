@@ -21,7 +21,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         public void FileAccess_WriteReadOnlyFile()
         {
             string fileName = this.fsaAdapter.ComposeRandomFileName(8);
-            FileAccess_Create_ReadOnlyFile(fileName);
+            FileAccess_Create_ReadOnlyFile(fileName, FileType.DataFile);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. Open the existing file with write access");
 
@@ -45,11 +45,39 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.FileAccess)]
         [TestCategory(TestCategories.NonSmb)]
-        [Description("Create a read only file and then delete it.")]
-        public void FileAccess_DeleteReadOnlyFile()
+        [Description("Create a read only data file and then delete it.")]
+        public void FileAccess_DeleteReadOnlyDataFile()
         {
             string fileName = this.fsaAdapter.ComposeRandomFileName(8);
-            FileAccess_Create_ReadOnlyFile(fileName);
+            FileAccess_Create_ReadOnlyFile(fileName, FileType.DataFile);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. Delete the existing file");
+
+            MessageStatus status = this.fsaAdapter.CreateFile(
+                        fileName,
+                        FileAttribute.NORMAL,
+                        CreateOptions.DELETE_ON_CLOSE,
+                        FileAccess.DELETE,
+                        ShareAccess.FILE_SHARE_READ,
+                        CreateDisposition.OPEN);
+
+            //Step 2: Verify test result
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "4. Verify returned NTSTATUS code.");
+            this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.CANNOT_DELETE, status,
+                    "If file attributes is read only and create options is  FILE_DELETE_ON_CLOSE, " +
+                    "server will return STATUS_CANNOT_DELETE.");
+
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.FileAccess)]
+        [TestCategory(TestCategories.NonSmb)]
+        [Description("Create a read only directory file and then delete it.")]
+        public void FileAccess_DeleteReadOnlyDirectoryFile()
+        {
+            string fileName = this.fsaAdapter.ComposeRandomFileName(8);
+            FileAccess_Create_ReadOnlyFile(fileName, FileType.DirectoryFile);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. Delete the existing file");
 
@@ -73,18 +101,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
         #region Test Case Utility
 
-        private void FileAccess_Create_ReadOnlyFile(string fileName)
+        private void FileAccess_Create_ReadOnlyFile(string fileName, FileType fileType)
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test case steps:");
             MessageStatus status;
 
             //Step 1: Create read only file
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "1. Create a read only data file");            
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "1. Create a read only data file");
 
+            CreateOptions createFileType = (fileType == FileType.DataFile ? CreateOptions.NON_DIRECTORY_FILE : CreateOptions.DIRECTORY_FILE);
             status = this.fsaAdapter.CreateFile(
                         fileName,
                         FileAttribute.READONLY,
-                        CreateOptions.NON_DIRECTORY_FILE,
+                        createFileType,
                         FileAccess.GENERIC_ALL,
                         ShareAccess.FILE_SHARE_WRITE,
                         CreateDisposition.CREATE);

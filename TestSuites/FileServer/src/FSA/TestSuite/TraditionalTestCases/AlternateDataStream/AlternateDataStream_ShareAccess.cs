@@ -39,7 +39,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.AlternateDataStream)]
         [TestCategory(TestCategories.NonSmb)]
         [Description("Create a directory file and then create another alternate data stream.")]
-        public void AlternateDataStream_DirectoryShareAccess_DirectoryExisted()
+        public void AlternateDataStream_FileShareAccess_DirectoryExisted()
         {
             fileName = this.fsaAdapter.ComposeRandomFileName(8);
             dataStreamName1 = this.fsaAdapter.ComposeRandomFileName(8);
