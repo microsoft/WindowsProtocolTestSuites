@@ -62,7 +62,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 supportAutoReconnect: true);
 
             this.Site.Log.Add(LogEntryKind.Comment, "Wait RDP server to notify user logon.");
-            //rdpbcgrAdapter.WaitForLogon(timeout);
+            rdpbcgrAdapter.WaitForLogon(timeout);
 
             #endregion Test Code
         }
