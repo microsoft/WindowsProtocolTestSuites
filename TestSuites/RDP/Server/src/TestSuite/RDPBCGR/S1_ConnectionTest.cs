@@ -483,14 +483,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #endregion Test Steps
 
             #region Test Code
-            if ((this.transportProtocol == EncryptedProtocol.NegotiationCredSsp ||
-                this.transportProtocol == EncryptedProtocol.DirectCredSsp) &&
-                this.rdpVersion > new Version("10.5") &&
-                this.isWindowsImplementation)
-            {
-                Site.Assume.Fail("The case is not applicable when the SUT is Microsoft RDP, RDP version is larger than 10.5 and security protocol is CredSSP.");
-            }
-
             this.Site.Log.Add(LogEntryKind.Comment, "Establish transport connection with RDP Server, encrypted protocol is {0}.", transportProtocol.ToString());
             rdpbcgrAdapter.ConnectToServer(this.transportProtocol);
 

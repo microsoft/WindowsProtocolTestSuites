@@ -278,7 +278,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security
                 context.Dispose();
             }
             context = new SspiClientSecurityContext(
-                SecurityPackageType.CredSsp, 
+                SecurityPackageType.CredSsp,
                 credential,
                 serverPrincipal,
                 attribute,
@@ -366,7 +366,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security
             while (decryptedMsg == null)
             {
                 // decryptedMsg being null indicates incomplete data, so we continue reading and decrypting.
-                bytesReceived = clientStream.Read(recvBuffer, 0, recvBuffer.Length);
+                bytesReceived = ReceivePacket();
 
                 // The connection has been closed by remote server
                 if (bytesReceived == 0)
@@ -376,7 +376,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security
 
                 // There's pooled data, concatenate the buffer together for decryption
                 if (this.pooledBuffer != null && this.pooledBuffer.Length > 0)
-                {                    
+                {
                     encryptedMsg = new byte[this.pooledBuffer.Length + bytesReceived];
                     Array.Copy(this.pooledBuffer, encryptedMsg, this.pooledBuffer.Length);
                     Array.Copy(recvBuffer, 0, encryptedMsg, this.pooledBuffer.Length, bytesReceived);
@@ -391,7 +391,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security
 
                 byte[] extraData = null;
                 // Do decryption
-                SecurityBuffer[] securityBuffers = new SecurityBuffer[] 
+                SecurityBuffer[] securityBuffers = new SecurityBuffer[]
                 {
                     new SecurityBuffer(SecurityBufferType.Data, encryptedMsg),
                     new SecurityBuffer(SecurityBufferType.Empty, null),
@@ -411,7 +411,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security
                         extraData = ArrayUtility.ConcatenateArrays(extraData, securityBuffers[i].Buffer);
                     }
                 }
-                
+
                 if (extraData != null && extraData.Length > 0)
                 {
                     this.pooledBuffer = extraData;
@@ -422,6 +422,65 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security
             this.endIndex += decryptedMsg.Length;
 
             return Read(buffer, offset, count);
+        }
+
+        private struct TLSHeader
+        {
+            public byte type;
+            public byte version_major;
+            public byte version_minor;
+            public byte length_hi;
+            public byte length_lo;
+        }
+
+        private int ReceivePacket()
+        {
+            // Receive TLS header first.
+            var header = new TLSHeader();
+
+            var headerBuffer = TypeMarshal.ToBytes(header);
+
+            int headerLength = TypeMarshal.ToBytes(header).Length;
+
+            int reveivedLength = 0;
+
+            while (reveivedLength < headerLength)
+            {
+                int lenth = clientStream.Read(headerBuffer, reveivedLength, headerLength - reveivedLength);
+
+                if (lenth == 0)
+                {
+                    return 0;
+                }
+
+                reveivedLength += lenth;
+            }
+
+            Array.Copy(headerBuffer, 0, recvBuffer, 0, headerLength);
+
+            // Calculate the body Length.
+            header = TypeMarshal.ToStruct<TLSHeader>(headerBuffer);
+
+            int bodyLength = (header.length_hi << 8) + header.length_lo;
+
+            // Receive body.
+            int bodyReceivedLength = 0;
+
+            while (bodyReceivedLength < bodyLength)
+            {
+                int lenth = clientStream.Read(recvBuffer, headerLength + bodyReceivedLength, bodyLength - bodyReceivedLength);
+
+                if (lenth == 0)
+                {
+                    return 0;
+                }
+
+                bodyReceivedLength += lenth;
+            }
+
+            int totalLength = headerLength + bodyLength;
+
+            return totalLength;
         }
 
 
@@ -451,14 +510,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security
             Array.Copy(buffer, offset, outBuffer, 0, count);
 
             // Encrypt message
-            SecurityPackageContextStreamSizes streamSizes = 
+            SecurityPackageContextStreamSizes streamSizes =
                 (SecurityPackageContextStreamSizes)context.QueryContextAttributes("SECPKG_ATTR_STREAM_SIZES");
             SecurityBuffer messageBuffer = new SecurityBuffer(SecurityBufferType.Data, buffer);
             SecurityBuffer headerBuffer = new SecurityBuffer(
-                SecurityBufferType.StreamHeader, 
+                SecurityBufferType.StreamHeader,
                 new byte[streamSizes.Header]);
             SecurityBuffer trailerBuffer = new SecurityBuffer(
-                SecurityBufferType.StreamTrailer, 
+                SecurityBufferType.StreamTrailer,
                 new byte[streamSizes.Trailer]);
             SecurityBuffer emptyBuffer = new SecurityBuffer(SecurityBufferType.Empty, null);
 

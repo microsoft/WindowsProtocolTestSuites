@@ -1916,8 +1916,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     HMACMD5 hmac = new HMACMD5(context.ArcRandomBits);
 
                     byte[] clientRandom = null;
-                    if ((context.RequestedProtocol & requestedProtocols_Values.PROTOCOL_SSL_FLAG)
-                        == requestedProtocols_Values.PROTOCOL_SSL_FLAG)
+                    if (context.RequestedProtocol != requestedProtocols_Values.PROTOCOL_RDP_FLAG)
                     {
                         clientRandom = new byte[ConstValue.RECONNECT_CLIENT_RANDOM_LENGTH];
                     }
