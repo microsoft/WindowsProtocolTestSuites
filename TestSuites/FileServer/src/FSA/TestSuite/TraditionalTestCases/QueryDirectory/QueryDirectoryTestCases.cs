@@ -232,7 +232,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             files.Add(".");
             files.Add("..");
 
-            int filesNumber = 5;
+            int filesNumber = 1000;
             Smb2.FILEID fileId;
             uint treeId = 0;
             ulong sessionId = 0;
