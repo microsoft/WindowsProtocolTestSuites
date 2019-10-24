@@ -231,7 +231,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
     /// The Platform Challenge Response Data packet contains information pertaining to the client's license handling capabilities 
     /// and the Client Platform Challenge data sent by the server in the Server Platform Challenge.
     /// </summary>
-    public struct PLAFTORM_CHALLENGE_RESPONSE_DATA
+    public struct PLATFORM_CHALLENGE_RESPONSE_DATA
     {
         /// <summary>
         /// A 16-bit unsigned integer that contains the platform challenge version.
@@ -281,7 +281,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
         /// Contains the NULL-terminated ANSI character set string giving the name of the issuer of this license. 
         /// </summary>
         [Size("cbScope")]
-        public string pbScope;
+        public byte[] pbScope;
 
         /// <summary>
         /// The content and format of this field are the same as the cbCompanyName field of the Product Information structure.
@@ -554,5 +554,4 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
         [StaticSize(16)]
         public byte[] MACData;
     }
-
 }
