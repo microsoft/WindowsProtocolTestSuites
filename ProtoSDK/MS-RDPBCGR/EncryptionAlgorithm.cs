@@ -599,10 +599,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             //  SaltedHash2(S, I) = MD5(S + SHA-1 (I + S + ServerRandom + ClientRandom))
             //  MasterHash(I) = SaltedHash2(MasterSecret, I)
             //  SessionKeyBlob = MasterHash('A') + MasterHash('BB') + MasterHash('CCC')
+
+            // SaltedHash2 is SaltedHash with swapped serverRandaom and clientRandom.
             byte[] Salt11 = SaltedHash(masterSecret,
                                        Encoding.ASCII.GetBytes(ConstValue.NON_FIPS_MASTER_SECRET_A),
                                        serverRandom,
-                                       clientRandom); // SaltedHash2 is SaltedHash with swapped serverRandaom and clientRandom.
+                                       clientRandom); 
             byte[] Salt21 = SaltedHash(masterSecret,
                                        Encoding.ASCII.GetBytes(ConstValue.NON_FIPS_MASTER_SECRET_BB),
                                        serverRandom,
