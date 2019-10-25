@@ -320,7 +320,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         public MessageStatus Negotiate()
         {
             uint status;
-            NEGOTIATE_Response negotiateResponse;
+            Smb2NegotiateRequestPacket negotiateRequest;
+            Smb2NegotiateResponsePacket negotiateResponse;
             Capabilities_Values capabilityValue = Capabilities_Values.GLOBAL_CAP_DFS | Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING |
                 Capabilities_Values.GLOBAL_CAP_LARGE_MTU | Capabilities_Values.GLOBAL_CAP_LEASING |
                 Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL | Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES;
@@ -349,17 +350,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 Guid.NewGuid(),
                 out selectedDialect,
                 out this.gssToken,
-                out packetHeader,
+                out negotiateRequest,
                 out negotiateResponse,
                 0,
                 preauthHashAlgs,
                 encryptionAlgs
                 );
-
+            packetHeader = negotiateResponse.Header;
             if (testConfig.IsGlobalEncryptDataEnabled && testConfig.IsGlobalRejectUnencryptedAccessEnabled)
             {
                 site.Assert.Inconclusive("Test case is not applicable when both IsGlobalEncryptDataEnabled and IsGlobalRejectUnencryptedAccessEnabled set to true.");
             }
+            testConfig.CheckNegotiateContext(negotiateRequest, negotiateResponse);
+
             return (MessageStatus)status;
         }
 
