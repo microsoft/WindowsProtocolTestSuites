@@ -31,21 +31,15 @@ namespace Microsoft.Protocols.TestSuites.SFUProtocol.Adapter
         /// Constructor of SFUFunctionalClient.
         /// </summary>
         /// <param name="site">The test site.</param>
-        public SfuFunctionalClient(ITestSite site)
-        {
-            BaseTestSite = site;
-        }
-
-        /// <summary>
-        /// Connect with SUT.
-        /// </summary>
         /// <param name="service1Info">Information of service1.</param>
         /// <param name="sutAddress">Address of SUT.</param>
         /// <param name="port">Port number</param>
         /// <param name="transport">Transport to be used.</param>
         /// <param name="timeoutForKerberos">Time out for Kerberos.</param>
-        public void Connect(ServiceInfo service1Info, string sutAddress, int port, TransportType transport, TimeSpan timeoutForKerberos)
+        public SfuFunctionalClient(ITestSite site,ServiceInfo service1Info, string sutAddress, int port, TransportType transport, TimeSpan timeoutForKerberos)
         {
+            BaseTestSite = site;
+
             Service1 = service1Info;
 
             timeout = timeoutForKerberos;

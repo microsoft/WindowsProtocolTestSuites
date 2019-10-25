@@ -41,9 +41,9 @@ namespace Microsoft.Protocols.TestSuites.SFUProtocol.Adapter
         #endregion
 
         #region Realm1 related configuration
-        public string Realm1
+        public string Realm
         {
-            get => GetProperty("Realm1");
+            get => GetProperty("Realm");
         }
 
         public UserInfo DelegatedUserInfo
@@ -70,7 +70,7 @@ namespace Microsoft.Protocols.TestSuites.SFUProtocol.Adapter
         {
             get => new ServiceInfo
             {
-                Realm = Realm1,
+                Realm = Realm,
                 ServicePrincipalName = GetProperty("Service1aFQDN"),
                 UserName = GetProperty("Service1aUserName"),
                 UserType = (KerberosAccountType)Enum.Parse(typeof(KerberosAccountType), GetProperty("Service1aUserType")),
@@ -86,7 +86,7 @@ namespace Microsoft.Protocols.TestSuites.SFUProtocol.Adapter
         {
             get => new ServiceInfo
             {
-                Realm = Realm1,
+                Realm = Realm,
                 ServicePrincipalName = GetProperty("Service1bFQDN"),
                 UserName = GetProperty("Service1bUserName"),
                 UserType = (KerberosAccountType)Enum.Parse(typeof(KerberosAccountType), GetProperty("Service1bUserType")),
@@ -102,7 +102,7 @@ namespace Microsoft.Protocols.TestSuites.SFUProtocol.Adapter
         {
             get => new ServiceInfo
             {
-                Realm = Realm1,
+                Realm = Realm,
                 ServicePrincipalName = GetProperty("Service2FQDN"),
                 UserName = GetProperty("Service2UserName"),
                 Password = GetProperty("Service2Password", false),

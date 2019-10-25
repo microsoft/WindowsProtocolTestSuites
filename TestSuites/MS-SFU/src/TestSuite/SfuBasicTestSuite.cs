@@ -32,11 +32,7 @@ namespace Microsoft.Protocols.TestSuites.SFUProtocol.TestSuites
 
         protected void Initialize(ServiceInfo service1Instance)
         {
-            client = new SfuFunctionalClient(BaseTestSite);
-
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Connect with SUT.");
-
-            client.Connect(service1Instance, config.SutAddress, config.Port, config.Transport, config.Timeout);
+            client = new SfuFunctionalClient(BaseTestSite, service1Instance, config.SutAddress, config.Port, config.Transport, config.Timeout);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Authenticate with SUT.");
 

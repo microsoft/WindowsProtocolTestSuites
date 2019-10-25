@@ -14,7 +14,7 @@
     <!-- Time out of SUT -->
     <Property name="Timeout" value="20" />
     <!-- Realm of service1a, service1b and service2 -->
-    <Property name="Realm1" value="BLAH.COM" />
+    <Property name="Realm" value="BLAH.COM" />
     <!-- User to be delegated -->
     <Property name="DelegatedUserName" value="testuser" />
     <!-- Type of DelegatedUser -->
