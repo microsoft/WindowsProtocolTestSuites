@@ -278,15 +278,16 @@ The following diagram shows the basic test environment for MS-FSA. The **DC01** 
 ### <a name="Traditional-Test-cases"/>Traditional Test cases
 
 Traditional Test cases are designed specific to new algorithms in Win8, ReFS file system and Alternate Data Stream.
-There are 133 test cases in total:
+There are 139 test cases in total:
 
 |  **Category** |  **Scenarios** | **Test cases (BVT)** |
 | ------------- | -------------- | -------------------- |
 | Scenarios for FileInformation | 7 | 26 (5) |
 | Scenarios for FileSystemInformation | 4 | 22 (7) |
 | Scenarios for FsControlRequest | 13 | 44 (14) |
-| Scenarios for Alternate Data Stream | 8 | 38 (12) |
+| Scenarios for Alternate Data Stream | 9 | 41 (12) |
 | Scenarios for QuotaInformation | 1 | 2 (0) |
+| Scenarios for FileAccess | 1 | 3 (0) |
 | Other Scenarios | 1 | 1 (0) |
 
 ### <a name="MBT-Test-cases"/>MBT Test cases
@@ -783,6 +784,47 @@ There are 343 test cases in total:
 | | Query Quota Information|
 | | Verify server responses accordingly.|
 
+### <a name="Scenarios-for-FileAccess"/>Scenarios for FileAccess
+
+#### <a name="FileAccess_WriteReadOnlyFile"/>FileAccess_WriteReadOnlyFile
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To write a read only file and check the returned status code.|
+| | Test environment: FAT32, NTFS, ReFS|
+| | Test object: DataFile|
+| | Test coverage:|
+| | If file type is DataFile, file attributes is read only and desired access is write data or append data, server will return STATUS_ACCESS_DENIED |
+| Message Sequence| Create readonly data file.|
+| | Write the read only data file|
+| | Verify server responses accordingly.|
+
+#### <a name="FileAccess_DeleteReadOnlyDataFile"/>FileAccess_DeleteReadOnlyDataFile
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To delete a read only data file and check the returned status code.|
+| | Test environment: FAT32, NTFS, ReFS|
+| | Test object: DataFile|
+| | Test coverage:|
+| | If file attributes is read only and create options is  FILE_DELETE_ON_CLOSE, server will return STATUS_CANNOT_DELETE. |
+| Message Sequence| Create readonly data file.|
+| | Delete the read only data file|
+| | Verify server responses accordingly.|
+
+#### <a name="FileAccess_DeleteReadOnlyDirectoryFile"/>FileAccess_DeleteReadOnlyDirectoryFile
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To delete a read only directory file and check the returned status code.|
+| | Test environment: FAT32, NTFS, ReFS|
+| | Test object: DirectoryFile|
+| | Test coverage:|
+| | If file attributes is read only and create options is  FILE_DELETE_ON_CLOSE, server will return STATUS_CANNOT_DELETE. |
+| Message Sequence| Create readonly directory file.|
+| | Delete the read only directory file|
+| | Verify server responses accordingly.|
+
 ### <a name="Scenarios-for-Alternate-Data-Stream"/>Scenarios for Alternate Data Stream
 
 #### <a name="AlternateDataStream_CreateStream"/>AlternateDataStream_CreateStream
@@ -906,6 +948,42 @@ There are 343 test cases in total:
 | | Create an Alternate Data Stream and write 2048 bytes to the stream.|
 | | Request a FsControl on this Alternate Data Stream created on this file.|
 | | Verify server return with **STATUS_SUCCESS** for supported file systems.|
+
+#### <a name="AlternateDataStream_FileShareAccess_DataFileExisted"/>AlternateDataStream_FileShareAccess_DataFileExisted
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To create a data file and then create another alternate data stream with granted access.|
+| | Test environment: NTFS|
+| | Test object: DataFile|
+| | Test coverage:|
+| Message Sequence| Create a data file.|
+| | Create an Alternate Data Stream with granted access.|
+| | Verify server return with **STATUS_SHARING_VIOLATION** for supported file systems.|
+
+#### <a name="AlternateDataStream_FileShareAccess_DirectoryExisted"/>AlternateDataStream_FileShareAccess_DirectoryExisted
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To create a directory file and then create another alternate data stream with granted access.|
+| | Test environment: NTFS|
+| | Test object: DirectoryFile|
+| | Test coverage:|
+| Message Sequence| Create a directory file.|
+| | Create an Alternate Data Stream with granted access.|
+| | Verify server return with **STATUS_SHARING_VIOLATION** for supported file systems.|
+
+#### <a name="AlternateDataStream_FileShareAccess_AlternateStreamExisted"/>AlternateDataStream_FileShareAccess_AlternateStreamExisted
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To Create an alternate data stream and then create a data file with granted access.|
+| | Test environment: NTFS|
+| | Test object: DataFile|
+| | Test coverage:|
+| Message Sequence| Create an alternate data stream with granted access.|
+| | Create an data file with granted access.|
+| | Verify server return with **STATUS_SHARING_VIOLATION** for supported file systems.|
 
 ### <a name="Other-Scenarios"/>Other Scenarios
 
