@@ -114,6 +114,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         public const string WriteFile = "WriteFile";
         public const string FlushCachedData = "FlushCachedData";
         public const string AlternateDataStream = "AlternateDataStream";
+        public const string FileAccess = "FileAccess";
 
         /// <summary>
         /// Indicate this test case is positive
