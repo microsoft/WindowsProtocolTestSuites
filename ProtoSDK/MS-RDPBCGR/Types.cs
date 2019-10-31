@@ -9502,6 +9502,36 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ERRINFO_LOGOFF_BY_USER = 0x0000000C,
 
         /// <summary>
+        /// The display driver in the remote session did not report any status within the time allotted for startup.
+        /// </summary>
+        ERRINFO_CLOSE_STACK_ON_DRIVER_NOT_READY = 0x0000000F,
+
+        /// <summary>
+        /// The DWM process running in the remote session terminated unexpectedly.
+        /// </summary>
+        ERRINFO_SERVER_DWM_CRASH = 0x00000010,
+
+        /// <summary>
+        /// The display driver in the remote session was unable to complete all the tasks required for startup.
+        /// </summary>
+        ERRINFO_CLOSE_STACK_ON_DRIVER_FAILURE = 0x00000011,
+
+        /// <summary>
+        /// The display driver in the remote session started up successfully, but due to internal failures was not usable by the remoting stack.
+        /// </summary>
+        ERRINFO_CLOSE_STACK_ON_DRIVER_IFACE_FAILURE = 0x00000012,
+
+        /// <summary>
+        /// The Winlogon process running in the remote session terminated unexpectedly.
+        /// </summary>
+        ERRINFO_SERVER_WINLOGON_CRASH = 0x00000017,
+
+        /// <summary>
+        /// The CSRSS process running in the remote session terminated unexpectedly.
+        /// </summary>
+        ERRINFO_SERVER_CSRSS_CRASH = 0x00000018,
+
+        /// <summary>
         /// An internal error has occurred in the Terminal Services licensing component.
         /// </summary>
         ERRINFO_LICENSE_INTERNAL = 0x00000100,
@@ -20197,7 +20227,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     {
         SEC_REDIRECTION_PKT = 0x0400
     }
-    
+
     public enum CERTIFICATE_META_ELEMENT_TypeEnum : UInt32
     {
         ELEMENT_TYPE_CERTIFICATE = 32
