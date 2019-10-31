@@ -1540,7 +1540,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             bool returnSingleEntry = true;
             byte[] outBuffer = null;
             string randomFile = null;
-            string ramdomFileName = this.ComposeRandomFileName();
+            string randomFileName = this.ComposeRandomFileName();
             uint createAction = 0;
             uint fileIndex = 0;
             uint maxOutputSize = (uint)(isOutPutBufferNotEnough ? 1 : this.transBufferSize);
@@ -1549,10 +1549,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             {
                 case FileNamePattern.LengthIsNotAMultipleOf4:
                     //Extend file name and make its length not multiple of 4.
-                    if ((ramdomFileName.Length % 4) == 0)
+                    if ((randomFileName.Length % 4) == 0)
                     {
                         randomFile += "0";
-                        ramdomFileName += "0";
+                        randomFileName += "0";
                     }
                     break;
 
@@ -1566,12 +1566,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     break;
 
                 default:
-                    randomFile = ramdomFileName;
+                    randomFile = randomFileName;
                     break;
             }
 
             MessageStatus returnedStatus = this.transAdapter.CreateFile(
-                ramdomFileName,
+                randomFileName,
                 (uint)FileAttribute.NORMAL,
                 (uint)(FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE),
                 (uint)(ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE),
@@ -1622,7 +1622,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             bool returnSingleEntry = true;
             byte[] outBuffer = null;
             string randomFile = null;
-            string ramdomFileName = this.ComposeRandomFileName();
+            string randomFileName = this.ComposeRandomFileName();
             uint fileIndex = 0;
             uint maxOutputSize = (uint)(isOutPutBufferNotEnough ? 1 : this.transBufferSize);
 
@@ -5518,12 +5518,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// Create a random file name
         /// </summary>
         /// <param name="fileNameLength">The length of the file name.</param>
+        /// <param name="extension">File extension to apend to the end of the filename.</param>
+        /// <param name="opt">Directory will be added to test directory list, else, will be added to test file list for cleanup</param>
+        /// <param name="addtoList">True for add to the testfiles.</param>        /// 
         /// <returns>A file name with a random string of the given length.</returns>
-        public string ComposeRandomFileName(int fileNameLength)
+        public string ComposeRandomFileName(int fileNameLength,  string extension = "", CreateOptions opt = CreateOptions.DIRECTORY_FILE,  bool addToList = true)
         {
             int randomNumber = 0;
             char fileNameLetter = ' ';
-            string ramdomFileName = null;
+            string randomFileName = null;
 
             for (int i = 0; i < fileNameLength; i++)
             {
@@ -5533,13 +5536,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     randomNumber = randomRange.Next(1, 52);
                 }
                 fileNameLetter = (char)(97 + randomNumber % 26);
-                ramdomFileName = ramdomFileName + fileNameLetter.ToString(); ;
+                randomFileName = randomFileName + fileNameLetter.ToString() ; ;
             }
 
-            AddTestFileName(gOpenMode, ramdomFileName);
-            return ramdomFileName;
-        }
-
+            randomFileName = randomFileName + extension;
+                
+            if (addToList )
+            {
+                AddTestFileName(opt, randomFileName);
+            }
+            return randomFileName;
+        }       
         /// <summary>
         /// Get SUT platformType.
         /// </summary>
