@@ -4419,11 +4419,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             try
             {
                 pdu = DecodePdu(packetData);
-                if (pdu.GetType() == typeof(Server_X_224_Connection_Confirm_Pdu))
-                {
-                    // Negotiation-based security-enhanced Connection
-                    client.UpdateTransport();
-                }
             }
             catch (Exception e)
             {
