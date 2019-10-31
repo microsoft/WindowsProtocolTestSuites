@@ -52,7 +52,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// Used to stop the thread
         /// </summary>
         private bool stopThread = false;
-                
+
         /// <summary>
         /// a SyncFilterQueue&lt;TransportEvent&gt; object that contains the event,
         /// such as disconnected and exception.<para/>
@@ -85,6 +85,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// a PacketFilter that is used to filter the packet.
         /// </summary>
         public PacketFilter PacketFilter;
+
+        /// <summary>
+        /// A boolean to avoid double disconnect.
+        /// </summary>
+        private bool disconnected = false;
 
         public const int MilliSecondsToWaitStreamDataAvailable = 1;
 
@@ -161,7 +166,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 throw new InvalidOperationException("stream client is connected.");
             }
-            
+
             this.eventQueue.Clear();
             this.packetCache.Clear();
 
@@ -236,6 +241,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="config">
         /// a TransportConfig object that contains the config to update
         /// </param>
+        /// <param name="auth">An action which authenticates with SUT.</param>
         /// <exception cref="ArgumentException">
         /// thrown when transportConfig is not StreamTransport
         /// </exception>
@@ -245,7 +251,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <exception cref="ArgumentNullException">
         /// thrown when config is null.
         /// </exception>
-        public void UpdateConfig(TransportConfig config)
+        public void UpdateConfig(TransportConfig config, Action auth = null)
         {
             if (disposed)
             {
@@ -277,10 +283,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             #region update the underlayer stream.
 
             // abort the blocked receive thread.
-            if (this.thread != null)
+            EndThread();
+
+            // Authenticate with SUT.
+            if (auth != null)
             {
-                this.stopThread = true;
-                this.thread = null;
+                auth();
             }
 
             // reconnect to received data from new stream.
@@ -293,6 +301,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             #endregion
         }
 
+        private void EndThread()
+        {
+            if (thread != null)
+            {
+                if (thread.IsAlive)
+                {
+                    stopThread = true;
+                }
+
+                thread.Join();
+
+                thread = null;
+            }
+        }
 
         /// <summary>
         /// expect transport event from transport.<para/>
@@ -371,6 +393,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 throw new ObjectDisposedException("StreamTransport");
             }
 
+            if (disconnected)
+            {
+                return;
+            }
+
+            disconnected = true;
+
             if (this.stream == null)
             {
                 throw new InvalidOperationException(
@@ -382,12 +411,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 throw new InvalidOperationException("the received thread does not initialize.");
             }
 
-            if (this.thread.IsAlive)
-            {
-                this.stopThread = true;                
-            }
+            this.stream.Close();
 
-            this.thread = null;
+            EndThread();
 
             this.stream.Dispose();
             this.stream = null;
@@ -502,7 +528,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             this.stream.Write(message, 0, message.Length);
         }
-        
+
         /// <summary>
         /// expect packet from transport.<para/>
         /// the underlayer transport must be TcpClient, Stream or NetbiosClient.
@@ -532,10 +558,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     "stream client is not connected, must invoke Connect() first.");
             }
 
-            
+
             StackPacket packet = packetCache.Dequeue(timeout);
             return packet;
-            
+
         }
 
         #endregion
@@ -573,21 +599,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 // If disposing equals true, dispose all managed and unmanaged resources.
                 if (disposing)
                 {
+                    // Disconnect with SUT.
+                    Disconnect();
+
                     // Free managed resources & other reference types:
-                    if (this.thread != null)
-                    {
-                        if(this.thread.IsAlive)
-                        {
-                            this.thread.Abort();
-                            this.thread.Join();
-                        }
-                        this.thread = null;
-                    }
-                    if (this.stream != null)
-                    {
-                        this.stream.Dispose();
-                        this.stream = null;
-                    }
                     if (this.eventQueue != null)
                     {
                         // the SyncFilterQueue may throw exception, donot arise exception.
@@ -633,7 +648,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             catch
             {
                 // Throw no exception
-            }            
+            }
         }
 
 
@@ -687,7 +702,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     StackPacket[] packets = decoder(localEndPoint, buffer.ToArray(), out consumedLength, out expectedLength);
                     while (packets != null)
                     {
-                        foreach(StackPacket packet in packets)
+                        foreach (StackPacket packet in packets)
                         {
                             packetCache.Enqueue(packet);
                         }

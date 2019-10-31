@@ -650,9 +650,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                         new RemoteCertificateValidationCallback(ValidateServerCertificate),
                         null
                         );
-                    ((SslStream)clientStream).AuthenticateAsClient(serverName, null, TlsVersion, false);
                     transportConfig.Stream = clientStream;
-                    transportStack.UpdateConfig(transportConfig);
+                    transportStack.UpdateConfig(transportConfig, () =>
+                    {
+                        ((SslStream)clientStream).AuthenticateAsClient(serverName, null, TlsVersion, false);
+                    });
                 }
             }
             else if (encryptedProtocol == EncryptedProtocol.NegotiationCredSsp)
@@ -671,9 +673,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                                                      target,
                                                      logonName,
                                                      logonPassword);
-                    ((CredSspStream)clientStream).Authenticate();
                     transportConfig.Stream = clientStream;
-                    transportStack.UpdateConfig(transportConfig);
+                    transportStack.UpdateConfig(transportConfig, () =>
+                    {
+                        ((CredSspStream)clientStream).Authenticate();
+                    });
                 }
             }
             // else do nothing
@@ -2909,23 +2913,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             CheckEncryptionCount();
         }
 
-
-        /// <summary>
-        /// Expect to receive a PDU of any type except virtual channel PDU from the remote host.
-        /// To receive virtual channel PDU, please use method ExpectChannelPDU.
-        /// </summary>
-        /// <param name="timeout">Timeout of receiving PDU.</param>
-        /// <returns>The expected PDU.</returns>
-        /// <exception>TimeoutException.</exception>
-        public StackPacket ExpectPdu(TimeSpan timeout)
+        private StackPacket ExpectPdu(TimeSpan timeout, bool onlySVCPacket, Func<StackPacket, bool> filter)
         {
             if (timeout.TotalMilliseconds < 0)
             {
                 return null;
             }
 
-            // Return the packet is the buffer contains unprocessed packet
-            StackPacket packet = this.context.GetPacketFromBuffer();
+            // Return the packet in the buffer, which is unprocessed packet.
+            StackPacket packet = this.context.GetPacketFromBuffer(onlySVCPacket);
             if (packet != null)
             {
                 return packet;
@@ -2939,18 +2935,48 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 eventPacket = transportStack.ExpectTransportEvent(leftTime);
                 packet = (StackPacket)eventPacket.EventObject;
+
+                if (packet is Server_X_224_Connection_Confirm_Pdu)
+                {
+                    // Negotiation-based security-enhanced Connection
+                    UpdateTransport();
+                }
+
                 if (isAutoReactivate && (packet is Server_Deactivate_All_Pdu))
                 {
                     Reactivate(timeout);
                 }
-                else
+
+                if (filter(packet))
                 {
+                    // Return the packet if it is requested.
                     return packet;
                 }
+                else
+                {
+                    // Add the packet to buffer if it is not requested.
+                    context.AddPacketToBuffer(packet);
+                }
+
                 leftTime = endTime - DateTime.Now;
             }
 
             return null;
+        }
+
+
+        /// <summary>
+        /// Expect to receive a PDU of any type except virtual channel PDU from the remote host.
+        /// To receive virtual channel PDU, please use method ExpectChannelPDU.
+        /// </summary>
+        /// <param name="timeout">Timeout of receiving PDU.</param>
+        /// <returns>The expected PDU.</returns>
+        /// <exception>TimeoutException.</exception>
+        public StackPacket ExpectPdu(TimeSpan timeout)
+        {
+            var result = ExpectPdu(timeout, false, packet => true);
+
+            return result;
         }
 
         /// <summary>
@@ -2961,46 +2987,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <exception>TimeoutException.</exception>
         public StackPacket ExpectChannelPdu(TimeSpan timeout)
         {
-            if (timeout.TotalMilliseconds < 0)
+            var result = ExpectPdu(timeout, false, packet =>
             {
-                return null;
-            }
-
-            StackPacket packet = this.context.GetPacketFromBuffer(true);
-            if (packet != null)
-            {
-                return packet;
-            }
-
-            TimeSpan leftTime = timeout;
-            DateTime endtime = DateTime.Now - timeout;
-
-            while (leftTime.TotalMilliseconds > 0)
-            {
-                TransportEvent eventPacket = transportStack.ExpectTransportEvent(leftTime);
-                packet = (StackPacket)eventPacket.EventObject;
-                if (isAutoReactivate && (packet is Server_Deactivate_All_Pdu))
+                if (packet is MCS_Disconnect_Provider_Ultimatum_Pdu
+                         || packet is ErrorPdu
+                         || packet is Virtual_Channel_RAW_Server_Pdu)                       // some error occurs
                 {
-                    Reactivate(timeout);
+                    return true;
                 }
-                else
-                {
-                    if (packet is MCS_Disconnect_Provider_Ultimatum_Pdu
-                     || packet is ErrorPdu
-                     || packet is Virtual_Channel_RAW_Server_Pdu)                       // some error occurs
-                    {
-                        return packet;
-                    }
-                    else
-                    {
-                        this.context.AddPacketToBuffer(packet);
-                    }
-                }
-                // The remain time to expect
-                leftTime = endtime - DateTime.Now;
-            }
+                return false;
+            });
 
-            return packet;
+            return result;
         }
 
         /// <summary>
