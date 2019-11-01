@@ -235,12 +235,12 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 | **Test ID** | BVT_SingleRealm_S4U2Self_UsingUserName |
 | ------------- | ------------- |
 |  **Priority** | P0 |
-|  **Description** | This test case is used to verify that S4U2Self service ticket could be retrieved using user name. |
+|  **Description** | This test case is used to verify that S4U2Self service ticket could be retrieved using user name of delegated user. |
 |  **Prerequisites**| N/A |
 |  **Test Execution Steps**| Authenticate with SUT using Service1a. |
-| | Exchange S4U2Self with SUT using user name of test user. |
+| | Exchange S4U2Self with SUT using user name of delegated user. |
 | | Verify the below fields in reply, |
-| | The cname and crealm are set to those of test user. |
+| | The cname and crealm are set to those of delegated user. |
 | | The FORWARDABLE is set. |
 |  **Requirements Covered**| N/A |
 |  **Cleanup**| N/A |
@@ -250,12 +250,12 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 | **Test ID** | BVT_SingleRealm_S4U2Self_ResourceBased_UsingUserName |
 | ------------- | ------------- |
 |  **Priority** | P0 |
-|  **Description** | This test case is used to verify that S4U2Self service ticket could be retrieved using user name and resource-based constrained delegation. |
+|  **Description** | This test case is used to verify that S4U2Self service ticket could be retrieved using user name of delegated user and resource-based constrained delegation. |
 |  **Prerequisites**| N/A |
 |  **Test Execution Steps**| Authenticate with SUT using Service1b. |
-| | Exchange S4U2Self with SUT using user name of test user. |
+| | Exchange S4U2Self with SUT using user name of delegated user. |
 | | Verify the below fields in reply, |
-| | The cname and crealm are set to those of test user. |
+| | The cname and crealm are set to those of delegated user. |
 | | The FORWARDABLE is not set. |
 |  **Requirements Covered**| N/A |
 |  **Cleanup**| N/A |
@@ -265,7 +265,7 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 | **Test ID** | SingleRealm_S4U2Self_Restricted_UsingUserName |
 | ------------- | ------------- |
 |  **Priority** | P0 |
-|  **Description** | This test case is used to verify that S4U2Self service ticket could be retrieved using user name for restricted user. |
+|  **Description** | This test case is used to verify that S4U2Self service ticket could be retrieved using user name of restricted user. |
 |  **Prerequisites**| N/A |
 |  **Test Execution Steps**| Authenticate with SUT using Service1a. |
 | | Exchange S4U2Self with SUT using user name of restricted user. |
@@ -283,12 +283,12 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 | **Test ID** | BVT_SingleRealm_S4U2Proxy_UsingUserName |
 | ------------- | ------------- |
 |  **Priority** | P0 |
-|  **Description** | This test case is used to verify that S4U2Proxy service ticket could be retrieved using user name. |
+|  **Description** | This test case is used to verify that S4U2Proxy service ticket could be retrieved using user name of delegated user. |
 |  **Prerequisites**| N/A |
 |  **Test Execution Steps**| Authenticate with SUT using Service1a. |
-| | Exchange S4U2Self with SUT using user name of test user. |
+| | Exchange S4U2Self with SUT using user name of delegated user. |
 | | Verify the below fields in reply, |
-| | The cname and crealm are set to those of test user. |
+| | The cname and crealm are set to those of delegated user. |
 | | The FORWARDABLE is set. |
 | | Exchange S4U2Proxy with SUT using Service2. |
 | | Verify the below fields in reply, |
@@ -303,12 +303,12 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 | **Test ID** | BVT_SingleRealm_S4U2Proxy_ResourceBased_UsingUserName |
 | ------------- | ------------- |
 |  **Priority** | P0 |
-|  **Description** | This test case is used to verify that S4U2Proxy service ticket could be retrieved using user name and resource-based constrained delegation. |
+|  **Description** | This test case is used to verify that S4U2Proxy service ticket could be retrieved using user name of delegated user and resource-based constrained delegation. |
 |  **Prerequisites**| N/A |
 |  **Test Execution Steps**| Authenticate with SUT using Service1b. |
-| | Exchange S4U2Self with SUT using user name of test user. |
+| | Exchange S4U2Self with SUT using user name of delegated user. |
 | | Verify the below fields in reply, |
-| | The cname and crealm are set to those of test user. |
+| | The cname and crealm are set to those of delegated user. |
 | | The FORWARDABLE is not set. |
 | | Exchange S4U2Proxy with SUT using Service2 and resource-based constrained delegation. |
 | | Verify the below fields in reply, |
@@ -323,12 +323,12 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 | **Test ID** | Negative_SingleRealm_S4U2Proxy_ResourceBased_UsingUserName_FlagNotSet |
 | ------------- | ------------- |
 |  **Priority** | P0 |
-|  **Description** | This test case is used to verify that S4U2Proxy service ticket could not be retrieved using user name if not specifying resource-based constrained delegation. |
+|  **Description** | This test case is used to verify that S4U2Proxy service ticket could not be retrieved using user name of delegated user if not specifying resource-based constrained delegation. |
 |  **Prerequisites**| N/A |
 |  **Test Execution Steps**| Authenticate with SUT using Service1a. |
-| | Exchange S4U2Self with SUT using user name of test user. |
+| | Exchange S4U2Self with SUT using user name of delegated user. |
 | | Verify the below fields in reply, |
-| | The cname and crealm are set to those of test user. |
+| | The cname and crealm are set to those of delegated user. |
 | | The FORWARDABLE is not set. |
 | | Exchange S4U2Proxy with SUT using Service2. |
 | | Verify the reply is KRB-ERR-BADOPTION and STATUS_ACCOUNT_RESTRICTION. |
@@ -340,7 +340,7 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 | **Test ID** | Negative_SingleRealm_S4U2Proxy_Restricted_UsingUserName |
 | ------------- | ------------- |
 |  **Priority** | P0 |
-|  **Description** | This test case is used to verify that S4U2Proxy service ticket could not be retrieved for restricted user using user name. |
+|  **Description** | This test case is used to verify that S4U2Proxy service ticket could not be retrieved for restricted user using user name of restricted user. |
 |  **Prerequisites**| N/A |
 |  **Test Execution Steps**| Authenticate with SUT using Service1a. |
 | | Exchange S4U2Self with SUT using user name of restricted user. |
@@ -357,7 +357,7 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 | **Test ID** | Negative_SingleRealm_S4U2Proxy_ResourceBased_Restricted_UsingUserName |
 | ------------- | ------------- |
 |  **Priority** | P0 |
-|  **Description** | This test case is used to verify that S4U2Proxy service ticket could not be retrieved using user name and resource-based constrained delegation. |
+|  **Description** | This test case is used to verify that S4U2Proxy service ticket could not be retrieved using user name of restricted user and resource-based constrained delegation. |
 |  **Prerequisites**| N/A |
 |  **Test Execution Steps**| Authenticate with SUT using Service1b. |
 | | Exchange S4U2Self with SUT using user name of restricted user. |
