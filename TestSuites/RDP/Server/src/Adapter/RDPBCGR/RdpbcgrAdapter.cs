@@ -638,7 +638,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             Site.Log.Add(LogEntryKind.Debug, "Start RDP license procedure");
             Site.Assert.AreEqual(bMsgType_Values.LICENSE_REQUEST, licensePdu.preamble.bMsgType, $"A LICENSE_REQUEST message should be received from server, the real message type is {licensePdu.preamble.bMsgType}");
 
-            rdpeleClient.SendClientNewLicenseRequest(1, PlatformId, userName, localAddress);
+            rdpeleClient.SendClientNewLicenseRequest(KeyExchangeAlg.KEY_EXCHANGE_ALG_RSA, PlatformId, userName, localAddress);
             licensePdu = rdpeleClient.ExpectPdu(timeout);
             Site.Assert.AreEqual(bMsgType_Values.PLATFORM_CHALLENGE, licensePdu.preamble.bMsgType, $"A PLATFORM_CHALLENGE message should be received from server, the real message type is {licensePdu.preamble.bMsgType}");
 

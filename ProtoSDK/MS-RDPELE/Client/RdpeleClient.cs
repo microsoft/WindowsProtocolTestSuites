@@ -128,7 +128,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
         /// Construct and send CLIENT_NEW_LICENSE_REQUEST
         /// Meanwhile, generate the two licensing keys: licensing encryption key and MAC salt key.
         /// </summary>
-        public void SendClientNewLicenseRequest(uint preferredKeyExchangeAlg, uint platformId, string clientUserName, string clientMachineName)
+        public void SendClientNewLicenseRequest(KeyExchangeAlg preferredKeyExchangeAlg, uint platformId, string clientUserName, string clientMachineName)
         {
             CLIENT_NEW_LICENSE_REQUEST request = new CLIENT_NEW_LICENSE_REQUEST();
             request.PreferredKeyExchangeAlg = preferredKeyExchangeAlg;
@@ -175,7 +175,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
         /// Construct and send CLIENT_LICENSE_INFO
         /// Meanwhile, generate the two licensing keys: licensing encryption key and MAC salt key.
         /// </summary>
-        public void SendClientLicenseInformation(uint preferredKeyExchangeAlg, uint platformId, byte[] licenseInfo, CLIENT_HARDWARE_ID clientHardwareID)
+        public void SendClientLicenseInformation(KeyExchangeAlg preferredKeyExchangeAlg, uint platformId, byte[] licenseInfo, CLIENT_HARDWARE_ID clientHardwareID)
         {
             CLIENT_LICENSE_INFO info = new CLIENT_LICENSE_INFO();
             info.PreferredKeyExchangeAlg = preferredKeyExchangeAlg;
