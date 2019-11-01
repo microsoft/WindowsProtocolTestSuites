@@ -93,7 +93,7 @@
     <Content Include="MS-FSA_ServerTestSuite.deployment.ptfconfig">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="MS-FSA_ServerTestSuite.ptfconfig"/>
+    <Content Include="MS-FSA_ServerTestSuite.ptfconfig" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
@@ -146,9 +146,12 @@
     <Compile Include="TraditionalTestCases\AlternateDataStream\AlternateDataStream_LockAndUnlock.cs" />
     <Compile Include="TraditionalTestCases\AlternateDataStream\AlternateDataStream_RenameStream.cs" />
     <Compile Include="TraditionalTestCases\AlternateDataStream\AlternateDataStream_FileInfo_Set_FileValidDataLengthInformation.cs" />
+    <Compile Include="TraditionalTestCases\AlternateDataStream\AlternateDataStream_ShareAccess.cs" />
     <Compile Include="TraditionalTestCases\AlternateDataStream\AlternateDataStream_WriteAndRead.cs" />
     <Compile Include="TraditionalTestCases\CreateFile\CreateFileTestCases.cs" />
     <Compile Include="TraditionalTestCases\CreateFile\CreateFile_InvalidStreamName.cs" />
+    <Compile Include="TraditionalTestCases\FileAccess\FileAccessTestCases.cs" />
+    <Compile Include="TraditionalTestCases\FileAccess\FileAccess_OpenExistingFile.cs" />
     <Compile Include="TraditionalTestCases\FileInformation\FileInfoTestCases.cs" />
     <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Query_FileAttributeTagInformation.cs" />
     <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Query_FileBasicInformation.cs" />
@@ -210,6 +213,7 @@
       <Name>MS-FSA_ServerAdapter</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
     <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\" />
