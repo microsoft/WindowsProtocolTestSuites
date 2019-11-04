@@ -67,7 +67,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
                     licensingMessageBytes = TypeMarshal.ToBytes<CLIENT_PLATFORM_CHALLENGE_RESPONSE>(LicensingMessage.ClientPlatformChallengeResponse.Value);
                     break;
                 case bMsgType_Values.ERROR_ALERT:
-                    // TODO
+                    licensingMessageBytes = TypeMarshal.ToBytes<LICENSE_ERROR_MESSAGE>(LicensingMessage.LicenseError.Value);
                     break;
                 default:
                     break;
@@ -107,7 +107,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
                     LicensingMessage.ClientPlatformChallengeResponse = TypeMarshal.ToStruct<CLIENT_PLATFORM_CHALLENGE_RESPONSE>(data);
                     break;
                 case bMsgType_Values.ERROR_ALERT:
-                    // TODO
+                    LicensingMessage.LicenseError = TypeMarshal.ToStruct<LICENSE_ERROR_MESSAGE>(data);
                     break;
                 default:
                     break;
@@ -343,6 +343,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
 
         [Case("bMsgType_Values.NEW_LICENSE")]
         public SERVER_NEW_LICENSE? ServerNewLicense;
+
+        [Case("bMsgType_Values.ERROR_ALERT")]
+        public LICENSE_ERROR_MESSAGE? LicenseError;
     }
 
     /// <summary>
@@ -380,6 +383,64 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
     }
 
     /// <summary>
+    /// A 32-bit unsigned integer that indicates the key exchange algorithm chosen by the client. 
+    /// </summary>
+    public enum KeyExchangeAlg: uint
+    {
+        None,
+
+        /// <summary>
+        /// indicates an RSA-based key exchange with a 512-bit asymmetric key
+        /// </summary>
+        KEY_EXCHANGE_ALG_RSA = 0x00000001
+    }
+
+    /// <summary>
+    /// The most significant byte of the PlatformId field contains the operating system version of the client.
+    /// </summary>
+    public enum Client_OS_ID: uint
+    {
+        None,
+
+        /// <summary>
+        /// The client operating system version is 3.51.
+        /// </summary>
+        CLIENT_OS_ID_WINNT_351 = 0x01000000,
+
+        /// <summary>
+        /// The client operating system version is 4.00.
+        /// </summary>
+        CLIENT_OS_ID_WINNT_40 = 0x02000000,
+
+        /// <summary>
+        /// The client operating system version is 5.00.
+        /// </summary>
+        CLIENT_OS_ID_WINNT_50 = 0x03000000,
+
+        /// <summary>
+        /// The client operating system version is 5.20 or later.
+        /// </summary>
+        CLIENT_OS_ID_WINNT_POST_52 = 0x04000000
+    }
+
+    /// <summary>
+    /// The second most significant byte of the PlatformId field identifies the ISV that provided the client image.
+    /// </summary>
+    public enum Client_Image_ID: uint
+    {
+        None,
+
+        /// <summary>
+        /// The ISV for the client image is Microsoft.
+        /// </summary>
+        CLIENT_IMAGE_ID_MICROSOFT = 0x00010000,
+
+        /// <summary>
+        /// The ISV for the client image is Citrix.
+        /// </summary>
+        CLIENT_IMAGE_ID_CITRIX = 0x00020000
+    }
+    /// <summary>
     /// [MS-RDPELE] 2.2.2.2	Client New License Request (CLIENT_NEW_LICENSE_REQUEST)
     /// The Client New License Request packet is sent to a server when the client cannot find a license matching the product information 
     /// provided in the Server License Request message. 
@@ -390,7 +451,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
         /// A 32-bit unsigned integer that indicates the key exchange algorithm chosen by the client. 
         /// It MUST be set to KEY_EXCHANGE_ALG_RSA (0x00000001), which indicates an RSA-based key exchange with a 512-bit asymmetric key.
         /// </summary>
-        public uint PreferredKeyExchangeAlg;
+        public KeyExchangeAlg PreferredKeyExchangeAlg;
 
         /// <summary>
         /// A 32-bit unsigned integer. 
@@ -430,7 +491,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
         /// <summary>
         /// The content and format of this field are the same as the PreferredKeyExchangeAlg field of the Client New License Request (section 2.2.2.2) message.
         /// </summary>
-        public uint PreferredKeyExchangeAlg;
+        public KeyExchangeAlg PreferredKeyExchangeAlg;
 
         /// <summary>
         /// The content and format of this field are the same as the PlatformId field of the Client New License Request message.

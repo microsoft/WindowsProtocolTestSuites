@@ -12,6 +12,7 @@ using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestSuites.Rdp;
 using System.Security.Authentication;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele;
 
 namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 {
@@ -20,8 +21,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         #region Variables
 
         private const string SVCNameForRDPEDYC = "DRDYNVC";
-
         public RdpbcgrClient rdpbcgrClientStack;
+        public RdpeleClient rdpeleClient;
 
         private TimeSpan pduWaitTimeSpan = new TimeSpan(0, 0, 20);
         
@@ -202,6 +203,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 localAddress,
                 serverPort);
             rdpbcgrClientStack.TlsVersion = tlsVersion;
+            rdpeleClient = new RdpeleClient(rdpbcgrClientStack);
             isLogon = false;
         }
 
@@ -616,6 +618,33 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             }
 
             SendPdu(pdu);
+        }
+
+        public void ProcessLicenseSequence(TimeSpan timeout)
+        {
+            TS_LICENSE_PDU licensePdu = rdpeleClient.ExpectPdu(timeout);
+
+            if (licensePdu.preamble.bMsgType == bMsgType_Values.ERROR_ALERT)
+            {
+                // If the target machine is a personal terminal server, whether the client sends the license or not, 
+                // the server always sends a license error message with the error code STATUS_VALID_CLIENT and the state transition code ST_NO_TRANSITION. 
+                Site.Assert.AreEqual(dwErrorCode_Values.STATUS_VALID_CLIENT, licensePdu.LicensingMessage.LicenseError.Value.dwErrorCode, 
+                    $"A license error message with the error code STATUS_VALID_CLIENT should be received, the real error code is {licensePdu.LicensingMessage.LicenseError.Value.dwErrorCode}.");
+                return;
+            }
+
+            Site.Log.Add(LogEntryKind.Debug, "Start RDP license procedure");
+            Site.Assert.AreEqual(bMsgType_Values.LICENSE_REQUEST, licensePdu.preamble.bMsgType, $"A LICENSE_REQUEST message should be received from server, the real message type is {licensePdu.preamble.bMsgType}");
+
+            rdpeleClient.SendClientNewLicenseRequest(KeyExchangeAlg.KEY_EXCHANGE_ALG_RSA, (uint)Client_OS_ID.CLIENT_OS_ID_WINNT_POST_52 | (uint)Client_Image_ID.CLIENT_IMAGE_ID_MICROSOFT, userName, localAddress);
+            licensePdu = rdpeleClient.ExpectPdu(timeout);
+            Site.Assert.AreEqual(bMsgType_Values.PLATFORM_CHALLENGE, licensePdu.preamble.bMsgType, $"A PLATFORM_CHALLENGE message should be received from server, the real message type is {licensePdu.preamble.bMsgType}");
+
+            rdpeleClient.SendClientPlatformChallengeResponse(new CLIENT_HARDWARE_ID { PlatformId = (uint)Client_OS_ID.CLIENT_OS_ID_WINNT_POST_52 | (uint)Client_Image_ID.CLIENT_IMAGE_ID_MICROSOFT, Data1 = 1, Data2 = 2, Data3 = 3, Data4 = 4 });
+            licensePdu = rdpeleClient.ExpectPdu(timeout);
+            Site.Assert.AreEqual(bMsgType_Values.NEW_LICENSE, licensePdu.preamble.bMsgType, $"A NEW_LICENSE message should be received from server, the real message type is {licensePdu.preamble.bMsgType}");
+
+            Site.Log.Add(LogEntryKind.Debug, "End RDP license procedure");
         }
 
         /// <summary>

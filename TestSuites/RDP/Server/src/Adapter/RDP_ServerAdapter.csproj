@@ -85,6 +85,10 @@
       <Project>{cfbafde2-f509-4ac8-817a-0c26c1b27653}</Project>
       <Name>Rdpedyc</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPELE\Rdpele.csproj">
+      <Project>{838d09c1-93d9-46ec-8cc7-3b747ccfc4e9}</Project>
+      <Name>Rdpele</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEMT\Rdpemt.csproj">
       <Project>{9E44ED93-D10D-42E3-A8BF-AD1923859857}</Project>
       <Name>Rdpemt</Name>
