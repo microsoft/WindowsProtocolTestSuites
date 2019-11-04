@@ -175,8 +175,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #endregion
 
             #region Licensing
-            Server_License_Error_Pdu_Valid_Client licenseErrorPdu = ExpectPacket<Server_License_Error_Pdu_Valid_Client>(pduWaitTimeSpan);
-            Site.Assert.IsNotNull(licenseErrorPdu, "Expecting a Server License Error PDU.");
+            ProcessLicenseSequence(pduWaitTimeSpan);
 
             #endregion
 
