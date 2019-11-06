@@ -38,11 +38,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
         {
             base.TestInitialize();
 
-            string isEDYCSupported = this.Site.Properties["RDPEDYCSupported"];
-
-            if (string.IsNullOrEmpty(isEDYCSupported)
-                || String.Compare(isEDYCSupported, "true", StringComparison.OrdinalIgnoreCase) != 0
-                )
+            if (!testConfig.isEDYCSupported)
             {
                 Site.Assert.Inconclusive("Skip this test case since SUT does not support RDPEDYC.");
             }

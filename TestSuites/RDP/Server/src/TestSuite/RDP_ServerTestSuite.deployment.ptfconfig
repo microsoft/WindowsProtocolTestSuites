@@ -46,7 +46,7 @@
     <!-- Whether the SUT supports RDPEDYC. The value should be true or false.-->
     <Property name="RDPEDYCSupported" value="true"/>
 
-    <Property name="WaitTime" value="60"/>
+    <Property name="Timeout" value="60"/>
     <!-- Block End -->
     
   </Properties>

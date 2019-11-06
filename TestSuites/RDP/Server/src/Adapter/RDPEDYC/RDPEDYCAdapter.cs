@@ -15,7 +15,7 @@ using Microsoft.Protocols.TestSuites.Rdpbcgr;
 
 namespace Microsoft.Protocols.TestSuites.Rdpedyc
 {    
-    public partial class RdpedycAdapter : ManagedAdapterBase, IRdpedycAdapter
+    public partial class RdpedycAdapter : ManagedAdapterBase
     {
         public const string SVCNameForEGT = "Microsoft::Windows::RDS::Geometry::v08.01";
 
@@ -28,10 +28,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
             base.Reset();
         }
 
+        public RdpedycAdapter(TestConfig testConfig)
+        {
+            this.bcgrAdapter = new RdpbcgrAdapter(testConfig);
+        }
+
         public override void Initialize(ITestSite testSite )
         {
             base.Initialize(testSite);
-            this.bcgrAdapter = new RdpbcgrAdapter();
             bcgrAdapter.Initialize(testSite);
             this.bcgrAdapter.Reset();
         }

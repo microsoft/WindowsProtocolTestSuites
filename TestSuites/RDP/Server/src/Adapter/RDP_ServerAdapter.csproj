@@ -55,18 +55,16 @@
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="PtfPropUtility.cs" />
-    <Compile Include="RDPBCGR\IRdpbcgrAdapter.cs" />
     <Compile Include="RDPBCGR\RdpbcgrAdapter.cs" />
     <Compile Include="RDPBCGR\RdpbcgrAdapter_Sequences.cs" />
     <Compile Include="RDPBCGR\RdpbcgrCapSet.cs" />
     <Compile Include="RDPBCGR\RdpbcgrConstValue.cs" />
     <Compile Include="RDPBCGR\RdpbcgrTypes.cs" />
     <Compile Include="RDPBCGR\RdpbcgrAdapter_ReceiveMethod.cs" />
-    <Compile Include="RDPEDYC\IRdpedycAdapter.cs" />
-    <Compile Include="RDPEDYC\RDPEDYCAdapter.cs" />
-    <Compile Include="RDPEMT\IRdpemtAdapter.cs" />
+    <Compile Include="RDPEDYC\RdpedycAdapter.cs" />
     <Compile Include="RDPEMT\RdpemtAdapter.cs" />
     <Compile Include="RDPEMT\RdpemtTypes.cs" />
+    <Compile Include="TestConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\Asn1Base\Asn1Base.csproj">
