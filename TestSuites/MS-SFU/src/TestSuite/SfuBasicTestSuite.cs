@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Protocols.TestSuites.SFUProtocol.Adapter;
+using Microsoft.Protocols.TestSuites.SfuProtocol.Adapter;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib;
@@ -10,7 +10,7 @@ using Microsoft.Protocols.TestTools.StackSdk.Security.Samr;
 using System;
 using System.Linq;
 
-namespace Microsoft.Protocols.TestSuites.SFUProtocol.TestSuites
+namespace Microsoft.Protocols.TestSuites.SfuProtocol.TestSuites
 {
     public class SfuBasicTestSuite : TestClassBase
     {

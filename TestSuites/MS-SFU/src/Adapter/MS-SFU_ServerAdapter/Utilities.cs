@@ -8,7 +8,7 @@ using Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib;
 using System;
 using System.Linq;
 
-namespace Microsoft.Protocols.TestSuites.SFUProtocol.Adapter
+namespace Microsoft.Protocols.TestSuites.SfuProtocol.Adapter
 {
     /// <summary>
     /// MS-SFU utilities.

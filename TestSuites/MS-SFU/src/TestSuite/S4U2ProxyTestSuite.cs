@@ -5,7 +5,7 @@ using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Microsoft.Protocols.TestSuites.SFUProtocol.TestSuites
+namespace Microsoft.Protocols.TestSuites.SfuProtocol.TestSuites
 {
     [TestClass]
     public class S4U2ProxyTestSuite : SfuBasicTestSuite

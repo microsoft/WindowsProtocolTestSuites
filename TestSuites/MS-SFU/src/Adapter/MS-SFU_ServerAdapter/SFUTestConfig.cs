@@ -7,7 +7,7 @@ using Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib;
 using System;
 using System.Collections.Generic;
 
-namespace Microsoft.Protocols.TestSuites.SFUProtocol.Adapter
+namespace Microsoft.Protocols.TestSuites.SfuProtocol.Adapter
 {
     public class SfuTestConfig
     {

@@ -3,7 +3,7 @@
 
 using Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib;
 
-namespace Microsoft.Protocols.TestSuites.SFUProtocol.Adapter
+namespace Microsoft.Protocols.TestSuites.SfuProtocol.Adapter
 {
     /// <summary>
     /// The delegate type of response checker.

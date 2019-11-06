@@ -8,7 +8,7 @@ using Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic;
 using Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib;
 using System;
 
-namespace Microsoft.Protocols.TestSuites.SFUProtocol.Adapter
+namespace Microsoft.Protocols.TestSuites.SfuProtocol.Adapter
 {
     /// <summary>
     /// SFU functional client.
@@ -28,7 +28,7 @@ namespace Microsoft.Protocols.TestSuites.SFUProtocol.Adapter
         private EncryptionType asRepEncrytType;
 
         /// <summary>
-        /// Constructor of SFUFunctionalClient.
+        /// Constructor of SfuFunctionalClient.
         /// </summary>
         /// <param name="site">The test site.</param>
         /// <param name="service1Info">Information of service1.</param>
