@@ -35,8 +35,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             rdpbcgrAdapter.ConnectToServer(this.transportProtocol);
 
             this.Site.Log.Add(LogEntryKind.Comment, "Send a Client X.224 Connection Request PDU with all security protocols supported to SUT.");
-            rdpbcgrAdapter.SendClientX224ConnectionRequest(NegativeType.None,
-                requestedProtocols_Values.PROTOCOL_RDP_FLAG | requestedProtocols_Values.PROTOCOL_SSL_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_EX);
+            rdpbcgrAdapter.SendClientX224ConnectionRequest(NegativeType.None, requestProtocol);
 
             this.Site.Log.Add(LogEntryKind.Comment, "Expecting SUT to send a Server X224 Connection Confirm with RDP Negotiation Response.");
             Server_X_224_Connection_Confirm_Pdu confirmPdu = rdpbcgrAdapter.ExpectPacket<Server_X_224_Connection_Confirm_Pdu>(timeout);
@@ -50,8 +49,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 {
                     this.Site.Log.Add(LogEntryKind.Comment, "Received a Server X.224 Connection Confirm PDU with RDP Negotiation Failure, whose failureCode field is SSL_NOT_ALLOWED_BY_SERVER. Reconnect to the RDP Server and send Client X.224 Connection Request PDU only support RDP protocol.");
                     rdpbcgrAdapter.Disconnect();
-                    rdpbcgrAdapter.ConnectToServer(this.transportProtocol);
-                    rdpbcgrAdapter.SendClientX224ConnectionRequest(NegativeType.None, requestedProtocols_Values.PROTOCOL_RDP_FLAG);
+
+                    transportProtocol = EncryptedProtocol.Rdp;
+
+                    rdpbcgrAdapter.ConnectToServer(transportProtocol);
+
+                    requestProtocol = requestedProtocols_Values.PROTOCOL_RDP_FLAG;
+
+                    rdpbcgrAdapter.SendClientX224ConnectionRequest(NegativeType.None, requestProtocol);
                     this.Site.Log.Add(LogEntryKind.Comment, "Expecting SUT to send a Server X224 Connection Confirm with RDP Negotiation Response.");
                     confirmPdu = rdpbcgrAdapter.ExpectPacket<Server_X_224_Connection_Confirm_Pdu>(timeout);
                     this.Site.Assert.IsNotNull(confirmPdu, "RDP Server MUST response a Server X224 Connection Confirm PDP after receiving a Client X224 Connection Request PDU.");

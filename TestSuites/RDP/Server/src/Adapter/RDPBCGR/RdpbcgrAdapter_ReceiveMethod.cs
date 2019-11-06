@@ -9,7 +9,7 @@ using System.Linq;
 namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 {
     public partial class RdpbcgrAdapter
-    {        
+    {
 
         #region Private Receive Method
 
@@ -37,6 +37,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             else if (packet is Server_X_224_Negotiate_Failure_Pdu)
             {
                 ReceiveServerX224NegotiateFailurePDU(packet as Server_X_224_Negotiate_Failure_Pdu);
+            }
+            else if (packet is Early_User_Authorization_Result_PDU earlyUserAuthorizationResultPDU)
+            {
+                ReceiveServerEarlyUserAuthorizationResultPDU(earlyUserAuthorizationResultPDU);
             }
             else if (packet is Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response)
             {
@@ -150,6 +154,20 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             }
         }
 
+        private void ReceiveServerEarlyUserAuthorizationResultPDU(Early_User_Authorization_Result_PDU earlyUserAuthorizationResultPDU)
+        {
+            if (verifyPduEnabled)
+            {
+                VerifyPdu(earlyUserAuthorizationResultPDU);
+            }
+
+            if (OnServerEarlyAuthorizationResultPDUHandler != null)
+            {
+                OnServerEarlyAuthorizationResultPDUHandler(earlyUserAuthorizationResultPDU);
+            }
+        }
+
+
         private void ReceiveServerMCSConnectResponse(Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response mcsConnectResponse)
         {
             if (verifyPduEnabled)
@@ -260,7 +278,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             {
                 VerifyPdu(fontMapPdu);
             }
-                        
+
 
             if (OnServerFontMapPDUReceived != null)
             {
@@ -418,8 +436,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 VerifyPdu(saveSessionInfoPdu);
             }
 
-            if(saveSessionInfoPdu != null && 
-                (saveSessionInfoPdu.saveSessionInfoPduData.infoType == infoType_Values.INFOTYPE_LOGON ||saveSessionInfoPdu.saveSessionInfoPduData.infoType == infoType_Values.INFOTYPE_LOGON_LONG || saveSessionInfoPdu.saveSessionInfoPduData.infoType == infoType_Values.INFOTYPE_LOGON_PLAINNOTIFY))
+            if (saveSessionInfoPdu != null &&
+                (saveSessionInfoPdu.saveSessionInfoPduData.infoType == infoType_Values.INFOTYPE_LOGON || saveSessionInfoPdu.saveSessionInfoPduData.infoType == infoType_Values.INFOTYPE_LOGON_LONG || saveSessionInfoPdu.saveSessionInfoPduData.infoType == infoType_Values.INFOTYPE_LOGON_PLAINNOTIFY))
             {
                 // Notify logon.
                 isLogon = true;
@@ -495,6 +513,18 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         }
 
+        /// <summary>
+        /// Verify Early User Authorization Result PDU.
+        /// </summary>
+        /// <param name="earlyUserAuthorizationResultPDU">The received Early User Authorization Result PDU.</param>
+        public void VerifyPdu(Early_User_Authorization_Result_PDU earlyUserAuthorizationResultPDU)
+        {
+            var values = Enum.GetValues(typeof(Authorization_Result_value)).Cast<Authorization_Result_value>();
+
+            bool isKnownValue = values.Any(value => value == earlyUserAuthorizationResultPDU.authorizationResult);
+
+            Site.Assert.IsTrue(isKnownValue, "The authorizationResult should be one of {0}.", String.Join(", ", values));
+        }
         #endregion Connection Initiation
 
         #region Basic Setting Exchange
@@ -810,7 +840,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 Site.Assert.IsNull(updatePdu.commonHeader.securityHeader, "In Graphics Update PDU or Server Pointer Update PDU, If the Encryption Level selected by the server is ENCRYPTION_LEVEL_NONE (0) and the Encryption Method selected by the server is ENCRYPTION_METHOD_NONE (0), then the security header MUST NOT be included in the PDU.");
             }
 
-            if(updatePdu.slowPathUpdates != null)
+            if (updatePdu.slowPathUpdates != null)
             {
                 foreach (RdpbcgrSlowPathUpdatePdu spUpdate in updatePdu.slowPathUpdates)
                 {
@@ -909,7 +939,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             Site.Assert.IsTrue(autoDetectRequest.commonHeader.securityHeader.flags.HasFlag(TS_SECURITY_HEADER_flags_Values.SEC_AUTODETECT_REQ), "In Server_Auto_Detect_Request_PDU, the flags field of the security header MUST contain the SEC_AUTODETECT_REQ (0x1000) flag.");
 
             VerifyStructure(autoDetectRequest.autoDetectReqData);
-        
+
         }
 
         #endregion Auto-Detect
@@ -951,7 +981,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             Site.Assert.IsNotNull(heartbeatPdu.commonHeader.securityHeader, "In Server_Heartbeat_PDU, the security header Must be present.");
             Site.Assert.IsTrue(heartbeatPdu.commonHeader.securityHeader.flags.HasFlag(TS_SECURITY_HEADER_flags_Values.SEC_HEARTBEAT), "In Server_Heartbeat_PDU, the flags field of the security header MUST contain the SEC_HEARTBEAT (0x4000) flag.");
-            
+
         }
 
         #endregion Connection Health Monitoring
@@ -970,7 +1000,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             if (saveSessionPdu.saveSessionInfoPduData.infoType == infoType_Values.INFOTYPE_LOGON)
             {
                 Site.Assert.IsTrue(saveSessionPdu.saveSessionInfoPduData.infoData is TS_LOGON_INFO, "In Server_Save_Session_Info_Pdu, infoType field is INFOTYPE_LOGON indicates that The infoData field which follows contains a Logon Info Version 1 structure.");
-                
+
             }
             else if (saveSessionPdu.saveSessionInfoPduData.infoType == infoType_Values.INFOTYPE_LOGON_LONG)
             {
@@ -1046,10 +1076,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             Site.Assert.IsTrue(
                 serverVersions.Any(version => version == (uint)serverCoreData.version),
-                String.Format("The version field of TS_UD_SC_CORE contains value: {0}.", String.Join(", ", serverVersions.Select(version => String.Format("0x{0:X08}",version)))));
+                String.Format("The version field of TS_UD_SC_CORE contains value: {0}.", String.Join(", ", serverVersions.Select(version => String.Format("0x{0:X08}", version)))));
 
 
-            uint flags =(uint)(requestedProtocols_Values.PROTOCOL_RDP_FLAG | requestedProtocols_Values.PROTOCOL_SSL_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_EX);
+            uint flags = (uint)(requestedProtocols_Values.PROTOCOL_RDP_FLAG | requestedProtocols_Values.PROTOCOL_SSL_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_EX);
             uint negFlags = (uint)(~flags);
             Site.Assert.AreEqual<uint>(0, (uint)serverCoreData.clientRequestedProtocols & negFlags, "The clientRequestedProtocols field of TS_UD_SC_CORE, which contains the flags sent by the client in the requestedProtocols field of the RDP Negotiation Request."
                 + "Available flags: PROTOCOL_RDP (0x00000000), PROTOCOL_SSL (0x00000001), PROTOCOL_HYBRID (0x00000002), PROTOCOL_HYBRID_EX (0x00000008).");
@@ -1059,7 +1089,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             negFlags = (uint)(~flags);
             Site.Assert.AreEqual<uint>(0, (uint)serverCoreData.earlyCapabilityFlags & negFlags, "The earlyCapabilityFlags field of TS_UD_SC_CORE contains flags: "
                 + "RNS_UD_SC_EDGE_ACTIONS_SUPPORTED (0x00000001), RNS_UD_SC_DYNAMIC_DST_SUPPORTED (0x00000002).");
-            
+
         }
 
         /// <summary>
@@ -1233,7 +1263,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             Site.Assert.AreEqual<byte>(0x08, bwPayload.headerLength, "In RDP_BW_PAYLOAD, the headerLength field MUST be set to 0x06.");
             Site.Assert.AreEqual<HeaderTypeId_Values>(HeaderTypeId_Values.TYPE_ID_AUTODETECT_REQUEST, bwPayload.headerTypeId, "In RDP_BW_PAYLOAD, the headerTypeId field MUST be to TYPE_ID_AUTODETECT_REQUEST (0x00).");
             Site.Assert.IsTrue(bwPayload.requestType == AUTO_DETECT_REQUEST_TYPE.RDP_BW_PAYLOAD, "In RDP_BW_PAYLOAD, the requestType field MUST be 0x0002.");
-            
+
         }
 
         /// <summary>
@@ -1262,7 +1292,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             }
             else
             {
-                Site.Assert.AreEqual<byte>(0x06, bwStop.headerLength, "In RDP_BW_STOP, the headerLength field MUST be set to 0x06 if the requestType field is not set to 0x002B.");            
+                Site.Assert.AreEqual<byte>(0x06, bwStop.headerLength, "In RDP_BW_STOP, the headerLength field MUST be set to 0x06 if the requestType field is not set to 0x002B.");
             }
         }
 
@@ -1379,7 +1409,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 return;
             }
 
-            Site.Assert.AreEqual<ushort>((ushort)updateType_Values.UPDATETYPE_SYNCHRONIZE, update.updateType, "In TS_UPDATE_SYNC, the updateType field MUST be set to UPDATETYPE_SYNCHRONIZE (0x0003).");            
+            Site.Assert.AreEqual<ushort>((ushort)updateType_Values.UPDATETYPE_SYNCHRONIZE, update.updateType, "In TS_UPDATE_SYNC, the updateType field MUST be set to UPDATETYPE_SYNCHRONIZE (0x0003).");
         }
 
         /// <summary>
@@ -1442,7 +1472,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             byte flag = (byte)(compressedType_Values.CompressionTypeMask | compressedType_Values.PACKET_AT_FRONT
                 | compressedType_Values.PACKET_COMPRESSED | compressedType_Values.PACKET_FLUSHED);
             byte negFlag = (byte)(~flag);
-            bool isSatisfy =((byte)update.compressionFlags & negFlag) == 0;
+            bool isSatisfy = ((byte)update.compressionFlags & negFlag) == 0;
             Site.Assert.IsTrue(isSatisfy, "In TS_FP_UPDATE, the compressionFlags field contains: "
                 + "CompressionTypeMask (0x0F), PACKET_COMPRESSED (0x20), PACKET_AT_FRONT (0x40), PACKET_FLUSHED (0x80).");
 

@@ -14,6 +14,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
     public delegate void ServerX224ConnectionConfirmHandler(Server_X_224_Connection_Confirm_Pdu x224Confirm);
     public delegate void ServerX224NegotiateFailurePDUHandler(Server_X_224_Negotiate_Failure_Pdu x224Failure);
+    public delegate void ServerEarlyUserAuthorizationResultPDUHandler(Early_User_Authorization_Result_PDU earlyUserAuthorizationResultPDU);
     public delegate void ServerMCSConnectResponseHandler(Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response mcsConnectResponse);
     public delegate void ServerMCSAttachUserConfirmHandler(Server_MCS_Attach_User_Confirm_Pdu attachUserConfirm);
     public delegate void ServerMCSChannelJoinConfirmHandler(Server_MCS_Channel_Join_Confirm_Pdu channelJoinConfirm);

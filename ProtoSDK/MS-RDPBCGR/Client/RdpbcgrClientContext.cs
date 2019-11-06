@@ -133,6 +133,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
         private RdpbcgrClient client;
         private bool isAuthenticatingRDSTLS;
+        private bool isExpectingEarlyUserAuthorizationResultPDU;
 
         #endregion private members
 
@@ -175,6 +176,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 lock (contextLock)
                 {
                     isAuthenticatingRDSTLS = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Indicating whether is expecting Early User Authorization Result PDU.
+        /// </summary>
+        public bool IsExpectingEarlyUserAuthorizationResultPDU
+        {
+            get
+            {
+                lock (contextLock)
+                {
+                    return isExpectingEarlyUserAuthorizationResultPDU;
+                }
+            }
+            set
+            {
+                lock (contextLock)
+                {
+                    isExpectingEarlyUserAuthorizationResultPDU = value;
                 }
             }
         }
@@ -1206,6 +1228,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             isSwitchOn = true;
             unprocessedPacketBuffer = new List<StackPacket>(); ;
             isAuthenticatingRDSTLS = false;
+            isExpectingEarlyUserAuthorizationResultPDU = false;
         }
         #endregion constructor
 
@@ -1231,10 +1254,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 else if (pdu.GetType() == typeof(Server_X_224_Connection_Confirm_Pdu))
                 {
                     x224ConnectionConfirmPdu = ((Server_X_224_Connection_Confirm_Pdu)pdu.Clone()).rdpNegData;
+
+                    if (x224ConnectionConfirmPdu.selectedProtocol == selectedProtocols_Values.PROTOCOL_HYBRID_EX)
+                    {
+                        isExpectingEarlyUserAuthorizationResultPDU = true;
+                    }
+                    else
+                    {
+                        isExpectingEarlyUserAuthorizationResultPDU = false;
+                    }
                 }
                 else if (pdu.GetType() == typeof(Server_X_224_Negotiate_Failure_Pdu))
                 {
                     x224NegotiateFailurePdu = ((Server_X_224_Negotiate_Failure_Pdu)pdu.Clone()).rdpNegFailure;
+                }
+                else if (pdu.GetType() == typeof(Early_User_Authorization_Result_PDU))
+                {
+                    isExpectingEarlyUserAuthorizationResultPDU = false;
                 }
                 else if (pdu.GetType() == typeof(Client_MCS_Connect_Initial_Pdu_with_GCC_Conference_Create_Request))
                 {
