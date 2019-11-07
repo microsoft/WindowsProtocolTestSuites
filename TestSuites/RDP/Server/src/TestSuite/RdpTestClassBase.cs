@@ -52,6 +52,21 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
         protected override void TestCleanup()
         {
+            if (rdpbcgrAdapter != null)
+            {
+                rdpbcgrAdapter.Reset();
+            }
+
+            if (rdpemtAdapter != null)
+            {
+                rdpemtAdapter.Reset();
+            }
+
+            if (rdpedycAdapter != null)
+            {
+                rdpedycAdapter.Reset();
+            }
+
             base.TestCleanup();
         }
         #endregion
