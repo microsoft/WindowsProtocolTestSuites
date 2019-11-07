@@ -46,6 +46,9 @@
     <!-- Whether the SUT supports RDPEDYC. The value should be true or false.-->
     <Property name="RDPEDYCSupported" value="true"/>
 
+    <!-- Whether the SUT supports RDPELE. The value should be true or false.-->
+    <Property name="RDPELESupported" value="false"/>
+    
     <Property name="Timeout" value="60"/>
     <!-- Block End -->
     

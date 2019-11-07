@@ -17,8 +17,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
     /// </summary>
     public class TestConfig
     {
-        public TimeSpan timeout = new TimeSpan(0, 0, 20);
-
+        public TimeSpan timeout;
         public string domain;
         public string serverName;
         public int serverPort;
@@ -33,6 +32,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         public requestedProtocols_Values requestProtocol;
         public Version rdpVersion;
         public bool isEDYCSupported;
+        public bool isELESupported;
 
         public ITestSite Site
         {
@@ -91,15 +91,17 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             }
 
             int waitTime;
-            if (PtfPropUtility.GetIntPtfProperty(Site, "Timeout", out waitTime))
+            if (!PtfPropUtility.GetIntPtfProperty(Site, "Timeout", out waitTime))
             {
-                timeout = new TimeSpan(0, 0, waitTime);
+                AssumeFailForInvalidPtfProp("Timeout");
             }
+            timeout = new TimeSpan(0, 0, waitTime);
 
             PtfPropUtility.GetBoolPtfProperty(Site, "IsWindowsImplementation", out isWindowsImplementation);
             PtfPropUtility.GetBoolPtfProperty(Site, "VerifyRdpbcgrMessages", out verifyPduEnabled);
             PtfPropUtility.GetBoolPtfProperty(Site, "VerifyShouldBehaviors", out verifyShouldBehaviors);
             PtfPropUtility.GetBoolPtfProperty(Site, "RDPEDYCSupported", out isEDYCSupported);
+            PtfPropUtility.GetBoolPtfProperty(Site, "RDPELESupported", out isELESupported);
 
             if (PtfPropUtility.GetStringPtfProperty(Site, "RDP.Version", out tempStr))
             {
@@ -189,7 +191,6 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             {
                 AssumeFailForInvalidPtfProp("RDP.Security.Protocol");
             }
-
 
             #endregion
         }
