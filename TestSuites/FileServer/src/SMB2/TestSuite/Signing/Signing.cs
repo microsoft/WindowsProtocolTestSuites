@@ -96,10 +96,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("This test case is designed to test whether server set the Signature field to zero in Encrypted message.")]
         public void Signing_VerifySignatureWhenEncrypted()
         {
+            
             #region Check Applicability
             TestConfig.CheckDialect(DialectRevision.Smb30);
             TestConfig.CheckCapabilities(NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_ENCRYPTION);
             #endregion
+
+            // It should been send signed Request
+            testConfig.SendSignedRequest = true;
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends NEGOTIATE with the capability GLOBAL_CAP_ENCRYPTION.");
             client.Negotiate(

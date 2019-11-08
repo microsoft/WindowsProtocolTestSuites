@@ -16,7 +16,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
     /// <summary>
     /// Communicate with target machine using MS-SMB2 protocol
     /// </summary>
-    public class Smb2TransportAdapter : ManagedAdapterBase, ITransportAdapter
+    public class Smb3TransportAdapter : ManagedAdapterBase, ITransportAdapter
     {
         #region fields
 
@@ -63,12 +63,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         #endregion
 
         #region Constructors
-        public Smb2TransportAdapter()
+        public Smb3TransportAdapter()
         {
             this.requestDialects = new DialectRevision[] { DialectRevision.Smb2002, DialectRevision.Smb21, DialectRevision.Smb30 };
         }
 
-        public Smb2TransportAdapter(DialectRevision[] dialects, FSATestConfig testConfig)
+        public Smb3TransportAdapter(DialectRevision[] dialects, FSATestConfig testConfig)
         {
             this.requestDialects = dialects;
             this.testConfig = testConfig;

@@ -62,6 +62,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Signing
 
         public void NegotiateRequest(ModelDialectRevision maxSmbVersionClientSupported, SigningFlagType signingFlagType, SigningEnabledType signingEnabledType, SigningRequiredType signingRequiredType)
         {
+            // It should been send signed Request
+            testConfig.SendSignedRequest = true;
+
             testClient = new Smb2FunctionalClient(testConfig.Timeout, testConfig, this.Site);
             testClient.ConnectToServer(testConfig.UnderlyingTransport, testConfig.SutComputerName, testConfig.SutIPAddress);
 

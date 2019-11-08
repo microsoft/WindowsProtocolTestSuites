@@ -29,6 +29,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
         public DialectRevision MaxSmbVersionClientSupported;
 
+        public bool SendSignedRequest;
+
         public List<string> ActiveTDIs;
 
         public readonly int WriteBufferLengthInKb;
@@ -149,14 +151,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             get
             {
                 return Boolean.Parse(GetProperty("IsMultiCreditSupported"));
-            }
-        }
-
-        public bool SendSignedRequest
-        {
-            get
-            {
-                return Boolean.Parse(GetProperty("SendSignedRequest"));
             }
         }
 
@@ -425,6 +419,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             SupportedEncryptionAlgorithmList = ParsePropertyToList<EncryptionAlgorithm>("SupportedEncryptionAlgorithms");
 
             SupportedCompressionAlgorithmList = ParsePropertyToList<CompressionAlgorithm>("SupportedCompressionAlgorithms");
+
+            SendSignedRequest = Boolean.Parse(GetProperty("SendSignedRequest"));
+
+            if (!SendSignedRequest && MaxSmbVersionSupported == DialectRevision.Smb311)
+            {
+                Site.Assert.Fail("The Max Smb Version should not smb311 if this SendSignedRequest is set to true");
+            }
         }
 
         public bool IsIoCtlCodeSupported(CtlCode_Values ioCtlCode)
