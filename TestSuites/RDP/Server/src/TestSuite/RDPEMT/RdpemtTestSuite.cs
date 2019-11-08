@@ -13,6 +13,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
     [TestClass]
     public partial class RdpemtTestSuite : RdpTestClassBase
     {
+        protected RdpemtAdapter rdpemtAdapter;
+        protected RdpbcgrAdapter rdpbcgrAdapter;
+
         #region Class Initialization and Cleanup
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
@@ -31,18 +34,23 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         protected override void TestInitialize()
         {
             base.TestInitialize();
+            this.rdpbcgrAdapter = new RdpbcgrAdapter(testConfig);
+            this.rdpbcgrAdapter.Initialize(Site);
+
+            this.rdpemtAdapter = new RdpemtAdapter(testConfig);
+            this.rdpemtAdapter.Initialize(Site);
         }
 
         protected override void TestCleanup()
         {
             if (rdpbcgrAdapter != null)
             {
-                rdpbcgrAdapter.ClientInitiatedDisconnect();
+                rdpbcgrAdapter.Reset();
             }
 
             if (rdpemtAdapter != null)
             {
-                rdpemtAdapter.Disconnect();
+                rdpemtAdapter.Reset();
             }
 
             base.TestCleanup();

@@ -14,9 +14,6 @@ namespace Microsoft.Protocols.TestSuites.Rdp
     public abstract class RdpTestClassBase : TestClassBase
     {
         #region Adapter Instances
-        protected RdpbcgrAdapter rdpbcgrAdapter;
-        protected RdpemtAdapter rdpemtAdapter;
-        protected RdpedycAdapter rdpedycAdapter;
 
         protected TestConfig testConfig;
 
@@ -40,33 +37,10 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         protected override void TestInitialize()
         {
             testConfig = new TestConfig(Site);
-            this.rdpbcgrAdapter = new RdpbcgrAdapter(testConfig); 
-            this.rdpbcgrAdapter.Initialize(Site);
-
-            this.rdpemtAdapter = new RdpemtAdapter(testConfig);
-            this.rdpemtAdapter.Initialize(Site);
-
-            this.rdpedycAdapter = new RdpedycAdapter(testConfig);
-            this.rdpedycAdapter.Initialize(Site);
         }
 
         protected override void TestCleanup()
         {
-            if (rdpbcgrAdapter != null)
-            {
-                rdpbcgrAdapter.Reset();
-            }
-
-            if (rdpemtAdapter != null)
-            {
-                rdpemtAdapter.Reset();
-            }
-
-            if (rdpedycAdapter != null)
-            {
-                rdpedycAdapter.Reset();
-            }
-
             base.TestCleanup();
         }
         #endregion

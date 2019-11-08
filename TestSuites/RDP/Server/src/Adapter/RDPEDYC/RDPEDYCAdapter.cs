@@ -25,6 +25,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
        
         public override void Reset()
         {
+            if (rdpedycClientStack != null)
+            {
+                rdpedycClientStack.Dispose();
+            }
+
             this.bcgrAdapter.Reset();
             base.Reset();
         }
@@ -99,7 +104,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
                 supportRemoteFXCodec
                 );
 
-            rdpedycClientStack = new RdpedycClient(bcgrAdapter.rdpbcgrClientStack, bcgrAdapter.rdpbcgrClientStack.Context, false);
+            rdpedycClientStack = new RdpedycClient(bcgrAdapter.rdpbcgrClientStack.Context, false);
             
         }
 
