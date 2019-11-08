@@ -25,6 +25,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
        
         public override void Reset()
         {
+            this.bcgrAdapter.Reset();
             base.Reset();
         }
 
@@ -37,7 +38,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
         {
             base.Initialize(testSite);
             bcgrAdapter.Initialize(testSite);
-            this.bcgrAdapter.Reset();
         }
 
         /// <summary>
