@@ -197,7 +197,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// Event will be raised when a Server Heartbeat PDU is received
         /// </summary>
         public event ServerHeartbeatPDUHandler OnServerHeartbeatPDUReceived;
-        
+
         /// <summary>
         /// Event will be raised when a Server Save Session Info PDU is received
         /// </summary>
@@ -282,7 +282,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         {
             rdpbcgrClientStack.Connect(encryptedProtocol);
         }
-      
+
         /// <summary>
         /// Disconnect transport connection with RDP Server
         /// </summary>
@@ -320,11 +320,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="isRoutingTokenPresent">Whether RoutingToken is present</param>
         /// <param name="isCookiePresent">Whether Cookie is present</param>
         /// <param name="isRdpCorrelationInfoPresent">Whether RdpCorrelationInfo is present</param>
-        public void SendClientX224ConnectionRequest(NegativeType invalidType, 
+        public void SendClientX224ConnectionRequest(NegativeType invalidType,
             requestedProtocols_Values requestedProtocols,
-            bool isRdpNegReqPresent = true, 
-            bool isRoutingTokenPresent = false, 
-            bool isCookiePresent = false, 
+            bool isRdpNegReqPresent = true,
+            bool isRoutingTokenPresent = false,
+            bool isCookiePresent = false,
             bool isRdpCorrelationInfoPresent = false)
         {
             Client_X_224_Connection_Request_Pdu x224ConnectReqPdu = rdpbcgrClientStack.CreateX224ConnectionRequestPdu(requestedProtocols);
@@ -394,21 +394,21 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="supportMultitransportReliable">Set the support of reliable multitransport</param>
         /// <param name="supportMultitransportLossy">Set the support of lossy multitransport</param>
         /// <param name="isMonitorDataPresent">Whether the Client Monitor Data is present</param>
-        public void SendClientMCSConnectInitialPDU(NegativeType invalidType, 
-            string[] SVCNames, 
-            bool supportEGFX, 
-            bool supportAutoDetect, 
-            bool supportHeartbeatPDU, 
-            bool supportMultitransportReliable, 
-            bool supportMultitransportLossy, 
+        public void SendClientMCSConnectInitialPDU(NegativeType invalidType,
+            string[] SVCNames,
+            bool supportEGFX,
+            bool supportAutoDetect,
+            bool supportHeartbeatPDU,
+            bool supportMultitransportReliable,
+            bool supportMultitransportLossy,
             bool isMonitorDataPresent)
         {
-            Client_MCS_Connect_Initial_Pdu_with_GCC_Conference_Create_Request request = rdpbcgrClientStack.CreateMCSConnectInitialPduWithGCCConferenceCreateRequestPdu(Dns.GetHostName(), 
-                RdpbcgrTestData.DefaultClientBuild, 
-                System.Guid.NewGuid().ToString(), 
+            Client_MCS_Connect_Initial_Pdu_with_GCC_Conference_Create_Request request = rdpbcgrClientStack.CreateMCSConnectInitialPduWithGCCConferenceCreateRequestPdu(Dns.GetHostName(),
+                RdpbcgrTestData.DefaultClientBuild,
+                System.Guid.NewGuid().ToString(),
                 encryptionMethod_Values._128BIT_ENCRYPTION_FLAG,
-                SVCNames, 
-                supportMultitransportReliable, 
+                SVCNames,
+                supportMultitransportReliable,
                 supportMultitransportLossy,
                 isMonitorDataPresent);
 
@@ -568,7 +568,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         {
             // Create random data
             byte[] clientRandom = RdpbcgrUtility.GenerateRandom(RdpConstValue.CLIENT_RANDOM_SIZE);
-            
+
             Client_Security_Exchange_Pdu exchangePdu = rdpbcgrClientStack.CreateSecurityExchangePdu(clientRandom);
             // Make invalid Packet if invalidType is not None
             if (invalidType == NegativeType.InvalidTPKTLength)
@@ -578,7 +578,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             else if (invalidType == NegativeType.InvalidFlagsInSecurityHeader)
             {
                 // Not set SEC_EXCHANGE_PKT flag in flags field of securityHeader
-                exchangePdu.commonHeader.securityHeader.flags ^= TS_SECURITY_HEADER_flags_Values.SEC_EXCHANGE_PKT;                    
+                exchangePdu.commonHeader.securityHeader.flags ^= TS_SECURITY_HEADER_flags_Values.SEC_EXCHANGE_PKT;
             }
             else if (invalidType == NegativeType.SecurityExchangePDU_InvalidLength)
             {
@@ -682,23 +682,23 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="supportSVCCompression">Set the support of static virtual channel data compression</param>
         /// <param name="supportRemoteFXCodec">Set the support of RemoteFX codecs</param>
         public void SendClientConfirmActivePDU(NegativeType invalidType,
-            bool supportAutoReconnect, 
-            bool supportFastPathInput, 
-            bool supportFastPathOutput, 
-            bool supportSurfaceCommands, 
+            bool supportAutoReconnect,
+            bool supportFastPathInput,
+            bool supportFastPathOutput,
+            bool supportSurfaceCommands,
             bool supportSVCCompression,
             bool supportRemoteFXCodec)
         {
             // Create capability sets
             RdpbcgrCapSet capSet = new RdpbcgrCapSet();
-            Collection<ITsCapsSet> caps = capSet.CreateCapabilitySets(supportAutoReconnect, 
-                supportFastPathInput, 
-                supportFastPathOutput, 
-                supportSurfaceCommands, 
+            Collection<ITsCapsSet> caps = capSet.CreateCapabilitySets(supportAutoReconnect,
+                supportFastPathInput,
+                supportFastPathOutput,
+                supportSurfaceCommands,
                 supportSVCCompression,
                 supportRemoteFXCodec);
 
-            Client_Confirm_Active_Pdu pdu =  rdpbcgrClientStack.CreateConfirmActivePdu(caps);
+            Client_Confirm_Active_Pdu pdu = rdpbcgrClientStack.CreateConfirmActivePdu(caps);
 
             // Make invalid Packet if invalidType is not None
             if (invalidType == NegativeType.InvalidTPKTLength)
@@ -812,7 +812,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 if (pdu.commonHeader.securityHeader is TS_SECURITY_HEADER2)
                 {
                     ((TS_SECURITY_HEADER2)pdu.commonHeader.securityHeader).dataSignature = new byte[8];
-                }                
+                }
             }
             else if (invalidType == NegativeType.InvalidLengthInShareHeader)
             {
@@ -826,8 +826,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             {
                 // Set an invalid type in messageType field of the first input event
                 TS_INPUT_EVENT inputEvent = pdu.slowPathInputEvents[0];
-                inputEvent.messageType =(TS_INPUT_EVENT_messageType_Values)0xFF;
-                pdu.slowPathInputEvents[0] = inputEvent;                    
+                inputEvent.messageType = (TS_INPUT_EVENT_messageType_Values)0xFF;
+                pdu.slowPathInputEvents[0] = inputEvent;
             }
 
             SendPdu(pdu);
@@ -970,14 +970,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 pdu.fpInputHeader.actionCode |=
                     (byte)((int)encryptionFlags_Values.FASTPATH_INPUT_ENCRYPTED << 6);
             }
-            else if(invalidType == NegativeType.InvalidEventType)
+            else if (invalidType == NegativeType.InvalidEventType)
             {
                 TS_FP_INPUT_EVENT fpInputEvent = pdu.fpInputEvents[0];
                 fpInputEvent.eventHeader.eventFlagsAndCode = (byte)(((int)0x07 << 5));
                 pdu.fpInputEvents[0] = fpInputEvent;
             }
 
-            SendPdu(pdu);            
+            SendPdu(pdu);
         }
 
         #region TS_FP_INPUT_EVENT generation
@@ -1135,7 +1135,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 if (pdu.commonHeader.securityHeader is TS_SECURITY_HEADER2)
                 {
                     ((TS_SECURITY_HEADER2)pdu.commonHeader.securityHeader).dataSignature = new byte[8];
-                }                
+                }
             }
             else if (invalidType == NegativeType.InvalidLengthInShareHeader)
             {
@@ -1143,7 +1143,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             }
 
             SendPdu(pdu);
-            
+
         }
 
         /// <summary>
@@ -1195,7 +1195,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         {
             // Create virtual channel PDU(s), if length of virtualChannelData is too large, split it to multiple virtual channel PDUs
             Collection<Virtual_Channel_RAW_Pdu> virtualChannelPduList = rdpbcgrClientStack.CreateCompleteVirtualChannelPdu(
-                            channelId,                            
+                            channelId,
                             virtualChannelData
                             );
 
@@ -1242,7 +1242,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="sequenceNumber">The message sequence number</param>
         public void SendClientAutoDetectResponsePDUWithRTTResponse(NegativeType invalidType, ushort sequenceNumber)
         {
-            RDP_RTT_RESPONSE rttResponse  = RdpbcgrUtility.GenerateRTTMeasureResponse(sequenceNumber);
+            RDP_RTT_RESPONSE rttResponse = RdpbcgrUtility.GenerateRTTMeasureResponse(sequenceNumber);
             Client_Auto_Detect_Response_PDU pdu = rdpbcgrClientStack.CreateAutoDetectResponsePdu(rttResponse);
             // Make invalid Packet if invalidType is not None
             if (invalidType == NegativeType.InvalidTPKTLength)
@@ -1388,7 +1388,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                         }
                     }
                 }
-            } 
+            }
             this.Site.Log.Add(LogEntryKind.Debug, "Timeout when expecting a {0}.", typeof(T).Name);
             return null;
         }
@@ -1402,26 +1402,20 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         {
             try
             {
-                DateTime endTime = DateTime.Now + timeout;
-                while (DateTime.Now < endTime)
-                {
-                    TS_INPUT_EVENT synchronizeEvent = this.GenerateSynchronizeEvent(false, true, false, false);
-                    this.SendClientInputEventPDU(NegativeType.None, new TS_INPUT_EVENT[] { synchronizeEvent });
-                    System.Threading.Thread.Sleep(sendInterval);
-                }
-                
-            }
-            catch (InvalidOperationException)
-            {
-                Site.Log.Add(LogEntryKind.Comment, "Underlayer transport throw exception indicates the connection has been terminated.");
+                rdpbcgrClientStack.ExpectDisconnect(timeout);
+
                 return true;
             }
-            catch (System.IO.IOException ioEx)
+            catch (TimeoutException)
             {
-                Site.Log.Add(LogEntryKind.Comment, "IO exception when sending packet" + ioEx.Message);
-                return true;
+                Site.Log.Add(LogEntryKind.Comment, "Timed out waiting for disconnection from SUT.");
+
+                return false;
             }
-            return false;
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -1555,7 +1549,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         private void SendPdu(StackPacket packet)
         {
             this.Site.Log.Add(LogEntryKind.Debug, "Send a {0} to SUT.", packet.GetType().Name);
-            rdpbcgrClientStack.SendPdu(packet);                        
+            rdpbcgrClientStack.SendPdu(packet);
             System.Threading.Thread.Sleep(sendInterval);//To avoid the combination with other sending request.
         }
 

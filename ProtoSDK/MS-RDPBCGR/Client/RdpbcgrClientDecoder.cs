@@ -4407,7 +4407,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             // Get bytes for only one packet
             byte[] packetData = GetPacket(receivedBytes);
-            if (null == packetData)
+            if (packetData == null || packetData.Length == 0)
             {
                 // Received bytes does not contain enough data
                 consumedLength = 0;

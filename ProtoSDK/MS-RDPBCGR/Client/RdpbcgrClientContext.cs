@@ -1429,9 +1429,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// Get a unprocessed packet from buffer
         /// </summary>
-        /// <param name="isSVCPacket">Whether need a SVC packet</param>
+        /// <param name="filter">A function to filter out the packets.</param>
         /// <returns></returns>
-        public StackPacket GetPacketFromBuffer(bool onlySVCPacket = false)
+        public StackPacket GetPacketFromBuffer(Func<StackPacket, bool> filter)
         {
             if (unprocessedPacketBuffer.Count > 0)
             {
@@ -1439,27 +1439,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 {
                     if (unprocessedPacketBuffer.Count > 0)
                     {
-                        if (onlySVCPacket)
+                        for (int i = 0; i < unprocessedPacketBuffer.Count; i++)
                         {
-                            for (int i = 0; i < unprocessedPacketBuffer.Count; i++)
+                            var packet = unprocessedPacketBuffer[i];
+                            if (filter(packet))
                             {
-                                if (unprocessedPacketBuffer[i] is Virtual_Channel_RAW_Server_Pdu
-                                        || unprocessedPacketBuffer[i] is ErrorPdu
-                                        || unprocessedPacketBuffer[i] is MCS_Disconnect_Provider_Ultimatum_Pdu)
-                                {
-                                    // if the packet is ErrorPdu or MCS_Disconnect_Provider_Ultimatum_Pdu, there's some error in the connection
-                                    // should return this two types of PDU, so as to notify the error
-                                    StackPacket pdu = unprocessedPacketBuffer[i];
-                                    unprocessedPacketBuffer.RemoveAt(i);
-                                    return pdu;
-                                }
+                                unprocessedPacketBuffer.RemoveAt(i);
+                                return packet;
                             }
-                        }
-                        else
-                        {
-                            StackPacket pdu = unprocessedPacketBuffer[0];
-                            unprocessedPacketBuffer.RemoveAt(0);
-                            return pdu;
                         }
                     }
 
