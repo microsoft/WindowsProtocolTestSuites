@@ -15,8 +15,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
         private TimeSpan waitInterval = new TimeSpan(0, 0, 0, 0, 100);
 
-        private RdpbcgrClient rdpbcgrClient = null;
-
         private RdpbcgrClientContext clientSessionContext = null;
 
         private Dictionary<DynamicVC_TransportType, IDVCTransport> transportDic;
@@ -36,13 +34,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="client"></param>
         /// <param name="context"></param>
         /// <param name="autoCreateChannel"></param>
         /// <param name="callBackMethodsDic"></param>
-        public RdpedycClient(RdpbcgrClient client, RdpbcgrClientContext context, bool autoCreateChannel = true)
+        public RdpedycClient(RdpbcgrClientContext context, bool autoCreateChannel = true)
         {
-            this.rdpbcgrClient = client;
             this.clientSessionContext = context;
             transportDic = new Dictionary<DynamicVC_TransportType, IDVCTransport>();
             unprocessedDVCPacketBuffer = new List<UnprocessedDVCPDUInfo>();

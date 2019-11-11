@@ -14,48 +14,15 @@ using System.Net;
 
 namespace Microsoft.Protocols.TestSuites.Rdpemt
 {
-    public partial class RdpemtAdapter : ManagedAdapterBase, IRdpemtAdapter
+    public partial class RdpemtAdapter : ManagedAdapterBase
     {
         private Dictionary<Multitransport_Protocol_value, Server_Initiate_Multitransport_Request_PDU> serverInitiateMultitransportRequestPDUs = new Dictionary<Multitransport_Protocol_value, Server_Initiate_Multitransport_Request_PDU>();
         private Dictionary<Multitransport_Protocol_value, RdpeudpClient> rdpeudpClients = new Dictionary<Multitransport_Protocol_value, RdpeudpClient>();
         private Dictionary<Multitransport_Protocol_value, RdpemtClient> rdpemtClients = new Dictionary<Multitransport_Protocol_value, RdpemtClient>();
-        private TimeSpan timeout;
-        private string localAddress;
-        private int serverPort;
-        private string serverName;
-
-        /// <summary>
-        /// Initialize the adapter.
-        /// </summary>
-        /// <param name="testSite"></param>
-        public override void Initialize(ITestSite testSite)
+        private TestConfig testConfig;
+        public RdpemtAdapter(TestConfig testConfig)
         {
-            base.Initialize(testSite);
-            LoadConfig();
-        }
-
-        private void LoadConfig()
-        {
-            string tempStr;
-
-            if (PtfPropUtility.GetStringPtfProperty(Site, "RDP.ServerName", out tempStr))
-            {
-                serverName = tempStr;
-            }
-
-            serverPort = int.Parse(Site.Properties["RDP.ServerPort"]);
-
-            if (PtfPropUtility.GetStringPtfProperty(Site, "RDP.ClientName", out tempStr))
-            {
-                localAddress = tempStr;
-            }
-
-            string strWaitTime = Site.Properties["WaitTime"];
-            if (strWaitTime != null)
-            {
-                int waitSeconds = Int32.Parse(strWaitTime);
-                timeout = new TimeSpan(0, 0, waitSeconds);
-            }
+            this.testConfig = testConfig;
         }
 
         /// <summary>
@@ -119,16 +86,16 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
 
                 serverInitiateMultitransportRequestPDUs[request.requestedProtocol] = request;
 
-                var rdpeudpClient = new RdpeudpClient(new IPEndPoint(localAddress.ParseIPAddress(), 0), new IPEndPoint(serverName.ParseIPAddress(), serverPort), mode, true);
+                var rdpeudpClient = new RdpeudpClient(new IPEndPoint(testConfig.localAddress.ParseIPAddress(), 0), new IPEndPoint(testConfig.serverName.ParseIPAddress(), testConfig.serverPort), mode, true);
 
                 rdpeudpClients[request.requestedProtocol] = rdpeudpClient;
 
                 rdpeudpClient.Start();
 
-                rdpeudpClient.Connect(timeout);
+                rdpeudpClient.Connect(testConfig.timeout);
 
 
-                var rdpemtClient = new RdpemtClient(rdpeudpClient.Socket, serverName, false);
+                var rdpemtClient = new RdpemtClient(rdpeudpClient.Socket, testConfig.serverName, false);
 
                 rdpemtClient.PDUReceived += VerifyPDU;
 
@@ -226,7 +193,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         /// <returns>The Tunnel Create Response PDU sent by server.</returns>
         public RDP_TUNNEL_CREATERESPONSE ExpectTunnelCreateResponse(Multitransport_Protocol_value requestedProtocol)
         {
-            return rdpemtClients[requestedProtocol].ExpectTunnelCreateResponse(timeout);
+            return rdpemtClients[requestedProtocol].ExpectTunnelCreateResponse(testConfig.timeout);
         }
     }
 }
