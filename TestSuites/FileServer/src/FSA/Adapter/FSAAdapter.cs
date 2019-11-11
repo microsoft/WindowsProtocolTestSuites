@@ -276,11 +276,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     break;
 
                 case Transport.SMB2:
-                    this.transAdapter = new Smb3TransportAdapter(new Smb2.DialectRevision[] { Smb2.DialectRevision.Smb2002, Smb2.DialectRevision.Smb21 }, testConfig);
+                    this.transAdapter = new Smb2TransportAdapter(new Smb2.DialectRevision[] { Smb2.DialectRevision.Smb2002, Smb2.DialectRevision.Smb21 }, testConfig);
                     break;
 
                 case Transport.SMB3:
-                    this.transAdapter = new Smb3TransportAdapter(negotiateDialects, testConfig);
+                    this.transAdapter = new Smb2TransportAdapter(negotiateDialects, testConfig);
                     break;
 
                 default:
@@ -3740,12 +3740,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             Smb2.FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX_Request_Flags_Values flags
             )
         {
-            if (!(transAdapter is Smb3TransportAdapter))
+            if (!(transAdapter is Smb2TransportAdapter))
             {
                 Site.Assume.Inconclusive("FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX is only supported by SMB2 transport!");
             }
 
-            var sourceFileId = (transAdapter as Smb3TransportAdapter).FileId;
+            var sourceFileId = (transAdapter as Smb2TransportAdapter).FileId;
 
             var request = new Smb2.FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX_Request();
 

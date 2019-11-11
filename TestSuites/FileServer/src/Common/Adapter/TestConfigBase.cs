@@ -424,7 +424,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
             if (!SendSignedRequest && MaxSmbVersionSupported == DialectRevision.Smb311)
             {
-                Site.Assert.Fail("The Max Smb Version should not smb311 if this SendSignedRequest is set to true");
+                Site.Assume.Fail("The config \"SendSignedRequest\" should not be false if \"MaxSmbVersionSupported\" is \"Smb311\".");
             }
         }
 
