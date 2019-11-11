@@ -34,7 +34,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="client"></param>
         /// <param name="context"></param>
         /// <param name="autoCreateChannel"></param>
         /// <param name="callBackMethodsDic"></param>
