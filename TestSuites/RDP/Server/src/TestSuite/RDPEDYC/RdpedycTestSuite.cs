@@ -19,6 +19,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
     [TestClass]
     public partial class RdpedycTestSuite : RdpTestClassBase
     {
+        protected RdpedycAdapter rdpedycAdapter;
+
         #region Class Initialization and Cleanup
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
@@ -38,27 +40,21 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
         {
             base.TestInitialize();
 
-            string isEDYCSupported = this.Site.Properties["RDPEDYCSupported"];
-
-            if (string.IsNullOrEmpty(isEDYCSupported)
-                || String.Compare(isEDYCSupported, "true", StringComparison.OrdinalIgnoreCase) != 0
-                )
+            if (!testConfig.isEDYCSupported)
             {
                 Site.Assert.Inconclusive("Skip this test case since SUT does not support RDPEDYC.");
             }
+
+            this.rdpedycAdapter = new RdpedycAdapter(testConfig);
+            this.rdpedycAdapter.Initialize(Site);
         }
 
         protected override void TestCleanup()
         {
-            if (rdpbcgrAdapter != null)
-            {
-                rdpbcgrAdapter.ClientInitiatedDisconnect();
-            }
             if (rdpedycAdapter != null)
             {
                 rdpedycAdapter.Dispose();
             }
-
 
             base.TestCleanup();
         }

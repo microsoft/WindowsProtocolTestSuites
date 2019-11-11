@@ -136,7 +136,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
                 {
                     Site.Log.Add(LogEntryKind.Comment, "If a match for the RequestID and SecurityCookie pair is found on the server for a pending multitransport request, the server associates the incoming multitransport connection with the existing session and MUST send the client an RDP_TUNNEL_CREATERESPONSE PDU with a successful HRESULT code.");
 
-                    if (isWindowsImplementation)
+                    if (testConfig.isWindowsImplementation)
                     {
                         Site.Log.Add(LogEntryKind.Comment, "Windows always sends an HrResponse code of S_OK (0x0) if the connection is accepted");
 
@@ -157,7 +157,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
                 {
                     Site.Log.Add(LogEntryKind.Comment, "If a match is not found, the server can either close the connection to the client or send an RDP_TUNNEL_CREATERESPONSE PDU with an unsuccessful HRESULT code.");
 
-                    if (isWindowsImplementation)
+                    if (testConfig.isWindowsImplementation)
                     {
                         Site.Log.Add(LogEntryKind.Comment, "Windows closes the connection to the client if a successful match is not found.");
 

@@ -15,6 +15,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
     [TestClass]
     public partial class RdpbcgrTestSuite : RdpTestClassBase
     {
+        protected RdpbcgrAdapter rdpbcgrAdapter;
+
         #region Class Initialization and Cleanup
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
@@ -33,13 +35,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         protected override void TestInitialize()
         {
             base.TestInitialize();
+            this.rdpbcgrAdapter = new RdpbcgrAdapter(testConfig);
+            this.rdpbcgrAdapter.Initialize(Site);
         }
 
         protected override void TestCleanup()
         {
             if (rdpbcgrAdapter != null)
             {
-                rdpbcgrAdapter.ClientInitiatedDisconnect();
+                rdpbcgrAdapter.Reset();
             }
             base.TestCleanup();
         }

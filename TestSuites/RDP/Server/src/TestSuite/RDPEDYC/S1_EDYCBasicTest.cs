@@ -31,7 +31,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
             this.rdpedycAdapter.Initialize(this.Site);          
 
             // Set up RDPBCGR connection with server
-            this.rdpedycAdapter.ConnectToServer(transportProtocol, requestProtocol, new string[] { RdpConstValue.SVCNAME_RDPEDYC }, CompressionType.PACKET_COMPR_TYPE_NONE,false, true);
+            this.rdpedycAdapter.ConnectToServer(testConfig.transportProtocol, testConfig.requestProtocol, new string[] { RdpConstValue.SVCNAME_RDPEDYC }, CompressionType.PACKET_COMPR_TYPE_NONE,false, true);
           
             // Capability exchange
             this.Site.Log.Add(LogEntryKind.Debug, "Expect the Exchange Capabilites PDU from SUT.");
@@ -39,12 +39,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
             // Expect the geometry channel create request from server
             this.Site.Log.Add(LogEntryKind.Debug, "Expect the DVC channel create PDU from SUT.");
 
-            DynamicVirtualChannel channel = this.rdpedycAdapter.ExpectChannel(timeout, DynamicVC_TransportType.RDP_TCP);
+            DynamicVirtualChannel channel = this.rdpedycAdapter.ExpectChannel(testConfig.timeout, DynamicVC_TransportType.RDP_TCP);
           
             // Expect the geometry channel close request from server
             this.Site.Log.Add(LogEntryKind.Debug, "Expect the DVC channel close PDU from SUT.");
 
-            this.rdpedycAdapter.CloseChannel(timeout, (ushort)channel.ChannelId);
+            this.rdpedycAdapter.CloseChannel(testConfig.timeout, (ushort)channel.ChannelId);
 
             this.Site.Log.Add(LogEntryKind.Debug, "The DVC channel is closed successfully.");
 
@@ -63,17 +63,17 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
             this.rdpedycAdapter.Initialize(this.Site);
 
             // Set up RDPBCGR connection with server            
-            this.rdpedycAdapter.ConnectToServer(transportProtocol, requestProtocol, new string[] { RdpConstValue.SVCNAME_RDPEDYC }, CompressionType.PACKET_COMPR_TYPE_NONE, false, true);
+            this.rdpedycAdapter.ConnectToServer(testConfig.transportProtocol, testConfig.requestProtocol, new string[] { RdpConstValue.SVCNAME_RDPEDYC }, CompressionType.PACKET_COMPR_TYPE_NONE, false, true);
 
             // Capability exchange
             this.Site.Log.Add(LogEntryKind.Debug, "Expect the Exchange Capabilites PDU from SUT.");
 
-            this.rdpedycAdapter.ExchangeCapabilities(timeout);
+            this.rdpedycAdapter.ExchangeCapabilities(testConfig.timeout);
 
             // Expect the geometry channel create request from server
             this.Site.Log.Add(LogEntryKind.Debug, "Expect the DVC channel create PDU from SUT.");
 
-            DynamicVirtualChannel channel = this.rdpedycAdapter.ExpectChannel(timeout, DynamicVC_TransportType.RDP_TCP);
+            DynamicVirtualChannel channel = this.rdpedycAdapter.ExpectChannel(testConfig.timeout, DynamicVC_TransportType.RDP_TCP);
 
             // Send data to server
             this.Site.Log.Add(LogEntryKind.Debug, "Send the DYNVC_Data PDU to SUT.");
@@ -82,7 +82,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
             // Expect the geometry channel close request from server
             this.Site.Log.Add(LogEntryKind.Debug, "Expect the DVC channel close PDU from SUT.");
 
-            this.rdpedycAdapter.CloseChannel(timeout, (ushort)channel.ChannelId);
+            this.rdpedycAdapter.CloseChannel(testConfig.timeout, (ushort)channel.ChannelId);
 
             this.Site.Log.Add(LogEntryKind.Debug, "The DVC channel is closed successfully.");
 
@@ -101,13 +101,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
             this.rdpedycAdapter.Initialize(this.Site);
 
             // Set up RDPBCGR connection with server
-            this.rdpedycAdapter.ConnectToServer(transportProtocol, requestProtocol, new string[] { RdpConstValue.SVCNAME_RDPEDYC }, CompressionType.PACKET_COMPR_TYPE_NONE, false, true);
+            this.rdpedycAdapter.ConnectToServer(testConfig.transportProtocol, testConfig.requestProtocol, new string[] { RdpConstValue.SVCNAME_RDPEDYC }, CompressionType.PACKET_COMPR_TYPE_NONE, false, true);
 
             // Capability exchange
             this.Site.Log.Add(LogEntryKind.Debug, "Expect the Exchange Capabilites PDU from SUT.");
 
             // This PDU MUST NOT be used unless both DVC managers support version 3 of the Remote Desktop Protocol: dynamic Virtual Channel Extension, and a reliable transport is being used (UDP-Random or TCP).)
-            DYNVC_CAPS_Version capVersion = this.rdpedycAdapter.ExchangeCapabilities(timeout);
+            DYNVC_CAPS_Version capVersion = this.rdpedycAdapter.ExchangeCapabilities(testConfig.timeout);
 
             if (capVersion != DYNVC_CAPS_Version.VERSION3)
             {
@@ -117,7 +117,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
             // Expect the geometry channel create request from server
             this.Site.Log.Add(LogEntryKind.Debug, "Expect the DVC channel create PDU from SUT.");
 
-            DynamicVirtualChannel channel = this.rdpedycAdapter.ExpectChannel(timeout, DynamicVC_TransportType.RDP_TCP);
+            DynamicVirtualChannel channel = this.rdpedycAdapter.ExpectChannel(testConfig.timeout, DynamicVC_TransportType.RDP_TCP);
 
             // Send compressed data sequence to server
             this.Site.Log.Add(LogEntryKind.Debug, "Expect the DYNVC_Data PDU from SUT.");
@@ -127,7 +127,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
             // Expect the geometry channel close request from server
             this.Site.Log.Add(LogEntryKind.Debug, "Expect the DVC channel close PDU from SUT.");
 
-            this.rdpedycAdapter.CloseChannel(timeout, (ushort)channel.ChannelId);
+            this.rdpedycAdapter.CloseChannel(testConfig.timeout, (ushort)channel.ChannelId);
 
             this.Site.Log.Add(LogEntryKind.Debug, "The DVC channel is closed successfully.");
 
