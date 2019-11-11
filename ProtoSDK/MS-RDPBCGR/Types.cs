@@ -2884,7 +2884,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                                                         infoPacket.extraInfo.cbClientDir);
                     }
 
-                    RdpbcgrEncoder.EncodeStructure(infoBuffer, (ushort)infoPacket.extraInfo.clientTimeZone.Bias);
+                    RdpbcgrEncoder.EncodeStructure(infoBuffer, infoPacket.extraInfo.clientTimeZone.Bias);
                     RdpbcgrEncoder.EncodeUnicodeString(infoBuffer,
                                                        infoPacket.extraInfo.clientTimeZone.StandardName,
                                                        ConstValue.TIME_ZONE_STANDARD_NAME_SIZE);
