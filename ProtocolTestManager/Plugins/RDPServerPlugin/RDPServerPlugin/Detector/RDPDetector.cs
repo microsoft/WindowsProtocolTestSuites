@@ -452,7 +452,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 DetectorUtil.WriteLog("Detect RDPEMT unsupported");
             }
 
-            rdpedycClient = new RdpedycClient(rdpbcgrClient, rdpbcgrClient.Context, false);
+            rdpedycClient = new RdpedycClient(rdpbcgrClient.Context, false);
 
             try
             {
