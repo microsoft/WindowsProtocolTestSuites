@@ -1,0 +1,36 @@
+parameters:
+  extRepoUrl : ''
+  extRepoDir : ''
+  extRepoBranch : 'master'
+  RemoteName: 'vso'
+  RemoteUrl: 'git@ssh.dev.azure.com:v3/iatsh/WindowsProtocolTestSuites/WindowsProtocolTestSuites'
+  SyncBranch: 'staging'
+  MirrorBranch: 'mirror'
+
+jobs:
+  - job:
+    displayName: Sync-Branch-Between-Repo
+    pool: 
+      name: TestSuiteESRPCodeSignPool
+    workspace:
+      clean: false
+    timeoutInMinutes: 0
+
+    steps:
+      - script: 'git clone -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" -b %EXTREPO_Branch% %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
+        displayName: 'Fetch external repo'
+        env:
+          EXTREPO_URL: ${{parameters.extRepoUrl}}
+          EXTREPO_DIR: ${{parameters.extRepoDir}}
+          EXTREPO_Branch: ${{parameters.extRepoBranch}}
+        timeoutInMinutes: 0
+
+      - task: PowerShell@2
+        displayName: 'Sync-Branch-Between-Repo'
+        inputs:
+          targetType: filePath
+          filePath: $(extRepo.dir)\GitSync\Sync-Branch-Between-Repo.ps1
+          arguments: '-RemoteName ${{parameters.RemoteName}} -RemoteUrl ${{parameters.RemoteUrl}} -SyncBranch ${{parameters.SyncBranch}} -MirrorBranch ${{parameters.MirrorBranch}}'
+          timeoutInMinutes: 0    
+
+        
