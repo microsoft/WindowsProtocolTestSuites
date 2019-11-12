@@ -119,12 +119,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Signing
             string sharePath = Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare);
             Packet_Header_Flags_Values headerFlags = (signingFlagType == SigningFlagType.SignedFlagSet) ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE;
 
-            if (signingFlagType == SigningFlagType.SignedFlagNotSet)
-            {
-                // Inform SDK to disable signning.
-                testClient.EnableSessionSigningAndEncryption(enableSigning: false, enableEncryption: false);
-            }
-
+            // Inform SDK to disable/enable signing according to SigningFlagType.
+            bool isEnableSigning = !(signingFlagType == SigningFlagType.SignedFlagNotSet);
+            testClient.EnableSessionSigningAndEncryption(enableSigning: isEnableSigning, enableEncryption: false);
+           
             uint status = testClient.TreeConnect(
                 headerFlags,
                 sharePath,

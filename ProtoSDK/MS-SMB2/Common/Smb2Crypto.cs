@@ -88,15 +88,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
             #endregion
 
             #region Sign
-            if (originalPacket is Smb2TreeConnectRequestPacket)
-            {
-                var header = (originalPacket as Smb2TreeConnectRequestPacket).Header;
-                if (header.Flags == Packet_Header_Flags_Values.FLAGS_SIGNED)
-                {
-                    cryptoInfo.EnableSessionSigning = true;
-                }
-            }
-
             if (cryptoInfo.EnableSessionSigning)
             {
                 if (isCompound)
