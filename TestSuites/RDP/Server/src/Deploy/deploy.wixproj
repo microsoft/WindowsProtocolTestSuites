@@ -103,6 +103,14 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLLOCATION</RefTargetDir>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPELE\Rdpele.csproj">
+      <Name>Rdpele</Name>
+      <Project>{838D09C1-93D9-46EC-8CC7-3B747CCFC4E9}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEMT\Rdpemt.csproj">
       <Name>Rdpemt</Name>
       <Project>{9e44ed93-d10d-42e3-a8bf-ad1923859857}</Project>
