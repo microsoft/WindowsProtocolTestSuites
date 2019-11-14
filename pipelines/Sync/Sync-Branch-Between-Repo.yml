@@ -13,7 +13,7 @@ jobs:
     pool: 
       name: TestSuiteBuildPool
     workspace:
-      clean: false
+      clean: all
     timeoutInMinutes: 0
 
     steps:
