@@ -1,0 +1,21 @@
+trigger: none 
+
+variables:
+  - group: External Repo Variables
+
+resources:
+  repositories:
+    - repository: template
+      type: git
+      name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
+      ref: v-zhanh/syncSteps
+
+jobs:
+  - template: pipelines/Sync/Merge-Branch.yml@template
+    parameters:
+        extRepoUrl: $(extRepo.url)
+        extRepoDir: $(extRepo.dir)
+        extRepoBranch: $(extRepo.helperBranch)    
+        RemoteName: $(repo.RemoteName)
+        RemoteUrl: $(repo.RemoteUrl)
+        BranchesToMerge: $(repo.BranchesToMerge)
