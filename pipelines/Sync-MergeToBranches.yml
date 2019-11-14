@@ -2,7 +2,7 @@ trigger:
   batch : true
   branches:
     include: 
-    - v-zhanh/TestSync
+    - staging
 
 variables:
   - group: External Repo Variables
@@ -12,7 +12,7 @@ resources:
     - repository: template
       type: git
       name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
-      ref: v-zhanh/syncSteps
+      ref: AzurePipelines
 
 jobs:
   - template: pipelines/Sync/Merge-Branch-steps.yml@template

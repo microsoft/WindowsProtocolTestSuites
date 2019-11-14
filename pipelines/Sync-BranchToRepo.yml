@@ -8,7 +8,7 @@ resources:
     - repository: template
       type: git
       name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
-      ref: v-zhanh/syncSteps
+      ref: AzurePipelines
 
 jobs:
   - template: pipelines/Sync/Sync-Branch-Between-Repo-steps.yml@template
