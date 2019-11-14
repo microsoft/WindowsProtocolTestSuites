@@ -18,7 +18,7 @@ jobs:
   - template: pipelines/Sync/Merge-Branch-steps.yml@template
     parameters:
         extRepoUrl: $(extRepo.url)
-        extRepoDir: $(extRepo.dir)
+        extRepoDir: $(Build.BinariesDirectory)
         extRepoBranch: $(extRepo.helperBranch)    
         RemoteName: $(repo.RemoteName)
         RemoteUrl: $(repo.RemoteUrl)
