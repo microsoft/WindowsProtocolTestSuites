@@ -2,16 +2,16 @@ parameters:
   extRepoUrl : ''
   extRepoDir : ''
   extRepoBranch : 'master'
-  RemoteName: 'vso'
-  RemoteUrl: 'git@ssh.dev.azure.com:v3/iatsh/WindowsProtocolTestSuites/WindowsProtocolTestSuites'
-  SyncBranch: 'staging'
-  MirrorBranch: 'mirror'
+  RemoteName: ''
+  RemoteUrl: ''
+  SyncBranch: ''
+  MirrorBranch: ''
 
 jobs:
   - job:
-    displayName: Sync-Branch-Between-Repo
+    displayName: Sync Branch Between Repo
     pool: 
-      name: TestSuiteBuildPool
+      vmImage: 'windows-latest'
     workspace:
       clean: false
     timeoutInMinutes: 0
