@@ -16,25 +16,44 @@ using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele;
 
 namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 {
-    public partial class RdpbcgrAdapter : ManagedAdapterBase, IRdpbcgrAdapter
+    #region Delegate
+
+    public delegate void ServerX224ConnectionConfirmHandler(Server_X_224_Connection_Confirm_Pdu x224Confirm);
+    public delegate void ServerX224NegotiateFailurePDUHandler(Server_X_224_Negotiate_Failure_Pdu x224Failure);
+    public delegate void ServerEarlyUserAuthorizationResultPDUHandler(Early_User_Authorization_Result_PDU earlyUserAuthorizationResultPDU);
+    public delegate void ServerMCSConnectResponseHandler(Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response mcsConnectResponse);
+    public delegate void ServerMCSAttachUserConfirmHandler(Server_MCS_Attach_User_Confirm_Pdu attachUserConfirm);
+    public delegate void ServerMCSChannelJoinConfirmHandler(Server_MCS_Channel_Join_Confirm_Pdu channelJoinConfirm);
+    public delegate void ServerLicenseErrorPDUHandler(Server_License_Error_Pdu_Valid_Client licenseErrorPdu);
+    public delegate void ServerDemandActivePDUHandler(Server_Demand_Active_Pdu demandActivePdu);
+    public delegate void ServerSynchronizePDUHandler(Server_Synchronize_Pdu synchronizePdu);
+    public delegate void ServerCooperateControlPDUHandler(Server_Control_Pdu_Cooperate controlPdu);
+    public delegate void ServerGrantedControlPDUHandler(Server_Control_Pdu_Granted_Control controlPdu);
+    public delegate void ServerFontMapPDUHandler(Server_Font_Map_Pdu fontMapPdu);
+    public delegate void ServerShutdownRequestDeniedPDUHandler(Server_Shutdown_Request_Denied_Pdu shutdownRequest);
+    public delegate void ServerMCSDisconnectProviderUltimatumHandler(MCS_Disconnect_Provider_Ultimatum_Pdu disconnectProvider);
+    public delegate void ServerDeactivateAllPDUHandler(Server_Deactivate_All_Pdu deactiveAllPdu);
+    public delegate void ServerVirtualChannelPDUHandler(Virtual_Channel_RAW_Server_Pdu virtualChannelPdu);
+    public delegate void ServerSlowPathOutputUpdatePDUHandler(SlowPathOutputPdu updatePdu);
+    public delegate void ServerFastPathUpdatePDUHandler(TS_FP_UPDATE_PDU updatePdu);
+    public delegate void ServerRedirectionPacketHandler(Server_Redirection_Pdu redirectionPdu);
+    public delegate void EnhancedSecurityServerRedirectionPacketHandler(Enhanced_Security_Server_Redirection_Pdu redirectionPdu);
+    public delegate void ServerAutoDetectRequestHandler(Server_Auto_Detect_Request_PDU autoDetectRequest);
+    public delegate void ServerInitiateMultitransportRequestHandler(Server_Initiate_Multitransport_Request_PDU multitransportReq);
+    public delegate void ServerHeartbeatPDUHandler(Server_Heartbeat_PDU heartbeatPdu);
+    public delegate void ServerSaveSessionInfoPDUHandler(Server_Save_Session_Info_Pdu saveSessionInfoPdu);
+
+    #endregion Delegate
+
+    public partial class RdpbcgrAdapter : ManagedAdapterBase
     {
         #region Variables
 
         private const string SVCNameForRDPEDYC = "DRDYNVC";
         public RdpbcgrClient rdpbcgrClientStack;
         public RdpeleClient rdpeleClient;
+        private TestConfig testConfig;
 
-        private TimeSpan pduWaitTimeSpan = new TimeSpan(0, 0, 20);
-
-        private string domain;
-        private string serverName;
-        private int serverPort;
-        private string userName;
-        private string password;
-        private string localAddress;
-        private bool verifyPduEnabled;
-        private bool verifyShouldBehaviors;
-        private SslProtocols tlsVersion = SslProtocols.None;
         private int sendInterval = 100;
 
         private List<StackPacket> receiveBuffer;
@@ -193,6 +212,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         #endregion Event
 
+        public RdpbcgrAdapter(TestConfig testConfig)
+        {
+            this.testConfig = testConfig;
+        }
+
         /// <summary>
         /// Init the RdpbcgrAdapter
         /// </summary>
@@ -200,15 +224,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         public override void Initialize(ITestSite testSite)
         {
             base.Initialize(testSite);
-            LoadClientConfiguation();
             receiveBuffer = new List<StackPacket>();
-            rdpbcgrClientStack = new RdpbcgrClient(domain,
-                serverName,
-                userName,
-                password,
-                localAddress,
-                serverPort);
-            rdpbcgrClientStack.TlsVersion = tlsVersion;
+            rdpbcgrClientStack = new RdpbcgrClient(testConfig.domain,
+                testConfig.serverName,
+                testConfig.userName,
+                testConfig.password,
+                testConfig.localAddress,
+                testConfig.serverPort);
+            rdpbcgrClientStack.TlsVersion = testConfig.tlsVersion;
             rdpeleClient = new RdpeleClient(rdpbcgrClientStack);
             isLogon = false;
         }
@@ -291,7 +314,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             {
                 Site.Log.Add(LogEntryKind.Comment, "User have been logged on in the connection, perform a client initiated disconnection before disconnecting transport connection.");
                 this.SendClientShutdownRequestPDU();
-                this.ExpectPacket<Server_Shutdown_Request_Denied_Pdu>(pduWaitTimeSpan);
+                this.ExpectPacket<Server_Shutdown_Request_Denied_Pdu>(testConfig.timeout);
                 MCS_Disconnect_Provider_Ultimatum_Pdu ultimatumPdu = rdpbcgrClientStack.CreateMCSDisconnectProviderUltimatumPdu(RdpConstValue.RN_USER_REQUESTED);
                 this.SendPdu(ultimatumPdu);
             }
@@ -630,7 +653,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="autoLogon">Indicate wether auto logon using username and password of info packet</param>
         public void SendClientInfoPDU(NegativeType invalidType, CompressionType highestCompressionTypeSupported, bool isReconnect = false, bool autoLogon = true)
         {
-            Client_Info_Pdu pdu = rdpbcgrClientStack.CreateClientInfoPdu(RdpbcgrTestData.DefaultClientInfoPduFlags, domain, userName, password, localAddress, null, null, isReconnect);
+            Client_Info_Pdu pdu = rdpbcgrClientStack.CreateClientInfoPdu(
+                RdpbcgrTestData.DefaultClientInfoPduFlags, testConfig.domain, testConfig.userName, testConfig.password, testConfig.localAddress, null, null, isReconnect);
             if (autoLogon)
             {
                 pdu.infoPacket.flags |= flags_Values.INFO_AUTOLOGON;
@@ -690,7 +714,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             Site.Log.Add(LogEntryKind.Debug, "Start RDP license procedure");
             Site.Assert.AreEqual(bMsgType_Values.LICENSE_REQUEST, licensePdu.preamble.bMsgType, $"A LICENSE_REQUEST message should be received from server, the real message type is {licensePdu.preamble.bMsgType}");
 
-            rdpeleClient.SendClientNewLicenseRequest(KeyExchangeAlg.KEY_EXCHANGE_ALG_RSA, (uint)Client_OS_ID.CLIENT_OS_ID_WINNT_POST_52 | (uint)Client_Image_ID.CLIENT_IMAGE_ID_MICROSOFT, userName, localAddress);
+            rdpeleClient.SendClientNewLicenseRequest(
+                KeyExchangeAlg.KEY_EXCHANGE_ALG_RSA, (uint)Client_OS_ID.CLIENT_OS_ID_WINNT_POST_52 | (uint)Client_Image_ID.CLIENT_IMAGE_ID_MICROSOFT, testConfig.userName, testConfig.localAddress);
             licensePdu = rdpeleClient.ExpectPdu(timeout);
             Site.Assert.AreEqual(bMsgType_Values.PLATFORM_CHALLENGE, licensePdu.preamble.bMsgType, $"A PLATFORM_CHALLENGE message should be received from server, the real message type is {licensePdu.preamble.bMsgType}");
 
@@ -1432,26 +1457,20 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         {
             try
             {
-                DateTime endTime = DateTime.Now + timeout;
-                while (DateTime.Now < endTime)
-                {
-                    TS_INPUT_EVENT synchronizeEvent = this.GenerateSynchronizeEvent(false, true, false, false);
-                    this.SendClientInputEventPDU(NegativeType.None, new TS_INPUT_EVENT[] { synchronizeEvent });
-                    System.Threading.Thread.Sleep(sendInterval);
-                }
+                rdpbcgrClientStack.ExpectDisconnect(timeout);
 
-            }
-            catch (InvalidOperationException)
-            {
-                Site.Log.Add(LogEntryKind.Comment, "Underlayer transport throw exception indicates the connection has been terminated.");
                 return true;
             }
-            catch (System.IO.IOException ioEx)
+            catch (TimeoutException)
             {
-                Site.Log.Add(LogEntryKind.Comment, "IO exception when sending packet" + ioEx.Message);
-                return true;
+                Site.Log.Add(LogEntryKind.Comment, "Timed out waiting for disconnection from SUT.");
+
+                return false;
             }
-            return false;
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -1577,92 +1596,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         #endregion Methods in IRdpbcgrAdapter
 
         #region Private methods
-
-        /// <summary>
-        /// Load configuration from PTF config file
-        /// </summary>
-        private void LoadClientConfiguation()
-        {
-            string tempStr;
-
-            if (PtfPropUtility.GetStringPtfProperty(Site, "RDP.ServerName", out tempStr))
-            {
-                this.serverName = tempStr;
-            }
-            if (PtfPropUtility.GetStringPtfProperty(Site, "RDP.ServerDomain", out tempStr))
-            {
-                if (tempStr != null && tempStr.Length > 0)
-                {
-                    this.domain = tempStr;
-                }
-                else
-                {
-                    this.domain = this.serverName;
-                }
-            }
-            this.serverPort = int.Parse(Site.Properties["RDP.ServerPort"]);
-            if (PtfPropUtility.GetStringPtfProperty(Site, "RDP.ServerUserName", out tempStr))
-            {
-                this.userName = tempStr;
-            }
-            if (PtfPropUtility.GetStringPtfProperty(Site, "RDP.ServerUserPassword", out tempStr))
-            {
-                this.password = tempStr;
-            }
-            if (PtfPropUtility.GetStringPtfProperty(Site, "RDP.ClientName", out tempStr))
-            {
-                this.localAddress = tempStr;
-            }
-
-            #region WaitTime
-            string strWaitTime = Site.Properties["WaitTime"];
-            if (strWaitTime != null)
-            {
-                int waitSeconds = Int32.Parse(strWaitTime);
-                pduWaitTimeSpan = new TimeSpan(0, 0, waitSeconds);
-            }
-            #endregion
-
-            PtfPropUtility.GetBoolPtfProperty(Site, "VerifyRdpbcgrMessages", out verifyPduEnabled);
-            PtfPropUtility.GetBoolPtfProperty(Site, "VerifyShouldBehaviors", out verifyShouldBehaviors);
-
-            string strRDPSecurityProtocol = string.Empty;
-            string strRDPSecurityTlsVersion = string.Empty;
-
-            try
-            {
-                PtfPropUtility.GetStringPtfProperty(Site, "RDP.Security.Protocol", out strRDPSecurityProtocol);
-                if (strRDPSecurityProtocol.Equals("TLS", StringComparison.CurrentCultureIgnoreCase))
-                {
-                    PtfPropUtility.GetStringPtfProperty(Site, "RDP.Security.TLS.Version", out strRDPSecurityTlsVersion);
-                    // TLS1.0, TLS1.1, TLS1.2 or None
-                    if (strRDPSecurityTlsVersion.Equals("TLS1.0", StringComparison.CurrentCultureIgnoreCase))
-                    {
-                        tlsVersion = SslProtocols.Tls;
-                    }
-                    else if (strRDPSecurityTlsVersion.Equals("TLS1.1", StringComparison.CurrentCultureIgnoreCase))
-                    {
-                        tlsVersion = SslProtocols.Tls11;
-                    }
-                    else if (strRDPSecurityTlsVersion.Equals("TLS1.2", StringComparison.CurrentCultureIgnoreCase))
-                    {
-                        tlsVersion = SslProtocols.Tls12;
-                    }
-                    else if (strRDPSecurityTlsVersion.Equals("None", StringComparison.CurrentCultureIgnoreCase))
-                    {
-                        tlsVersion = SslProtocols.None;
-                    }
-                    else
-                    {
-                        this.Site.Assume.Fail("The property value \"RDP.Security.TLS.Version\" is invalid in PTFConfig file.");
-                    }
-                }
-            }
-            catch
-            {
-                this.Site.Assume.Fail("The properties \"RDP.Security.Protocol\" and \"RDP.Security.TLS.Version\" are not present properly in PTFConfig file.");
-            }
-        }
 
         /// <summary>
         /// This method is used to send packet to SUT.

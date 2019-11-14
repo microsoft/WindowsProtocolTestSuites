@@ -33,11 +33,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #region Test Code
 
 
-            this.Site.Log.Add(LogEntryKind.Comment, "Establish transport connection with RDP Server, encrypted protocol is {0}.", transportProtocol.ToString());
-            rdpbcgrAdapter.ConnectToServer(this.transportProtocol);
+            this.Site.Log.Add(LogEntryKind.Comment, "Establish transport connection with RDP Server, encrypted protocol is {0}.", testConfig.transportProtocol.ToString());
+            rdpbcgrAdapter.ConnectToServer(testConfig.transportProtocol);
 
             string[] SVCNames = new string[] { RdpConstValue.SVCNAME_RDPEDYC };
-            rdpbcgrAdapter.EstablishRDPConnection(requestProtocol, SVCNames, CompressionType.PACKET_COMPR_TYPE_RDP61,
+            rdpbcgrAdapter.EstablishRDPConnection(testConfig.requestProtocol, SVCNames, CompressionType.PACKET_COMPR_TYPE_RDP61,
                 false, // Is reconnect
                 true,  // Is auto logon
                 supportAutoReconnect: true);
@@ -45,24 +45,24 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.Site.Assume.IsTrue(rdpbcgrAdapter.IsServerSupportAutoReconnect(), "To run test case for auto reconnect, the RDP server should be configured to support auto reconnect.");
 
             this.Site.Log.Add(LogEntryKind.Comment, "Wait RDP server to notify user logon.");
-            rdpbcgrAdapter.WaitForLogon(timeout, true);
+            rdpbcgrAdapter.WaitForLogon(testConfig.timeout, true);
 
             this.Site.Log.Add(LogEntryKind.Comment, "Disconnect transport layer connection with RDP server.");
             rdpbcgrAdapter.Disconnect();
             // Wait a few time before reconnect
             System.Threading.Thread.Sleep(1000);
 
-            this.Site.Log.Add(LogEntryKind.Comment, "Establish transport connection with RDP Server, encrypted protocol is {0}.", transportProtocol.ToString());
-            rdpbcgrAdapter.ConnectToServer(this.transportProtocol);
+            this.Site.Log.Add(LogEntryKind.Comment, "Establish transport connection with RDP Server, encrypted protocol is {0}.", testConfig.transportProtocol.ToString());
+            rdpbcgrAdapter.ConnectToServer(testConfig.transportProtocol);
 
             this.Site.Log.Add(LogEntryKind.Comment, "Reconnect to RDP Server.");
-            rdpbcgrAdapter.EstablishRDPConnection(requestProtocol, SVCNames, CompressionType.PACKET_COMPR_TYPE_RDP61,
+            rdpbcgrAdapter.EstablishRDPConnection(testConfig.requestProtocol, SVCNames, CompressionType.PACKET_COMPR_TYPE_RDP61,
                 true,  // Is reconnect
                 true,  // Is auto logon
                 supportAutoReconnect: true);
 
             this.Site.Log.Add(LogEntryKind.Comment, "Wait RDP server to notify user logon.");
-            rdpbcgrAdapter.WaitForLogon(timeout);
+            rdpbcgrAdapter.WaitForLogon(testConfig.timeout);
 
             #endregion Test Code
         }

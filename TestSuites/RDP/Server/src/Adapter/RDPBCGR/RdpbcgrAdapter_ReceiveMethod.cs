@@ -130,7 +130,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         private void ReceiveServerX224ConnectionConfirm(Server_X_224_Connection_Confirm_Pdu x224Confirm)
         {
-            if (verifyPduEnabled)
+            if (testConfig.verifyPduEnabled)
             {
                 VerifyPdu(x224Confirm);
             }
@@ -143,7 +143,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         private void ReceiveServerX224NegotiateFailurePDU(Server_X_224_Negotiate_Failure_Pdu x224Failure)
         {
-            if (verifyPduEnabled)
+            if (testConfig.verifyPduEnabled)
             {
                 VerifyPdu(x224Failure);
             }
@@ -156,7 +156,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         private void ReceiveServerEarlyUserAuthorizationResultPDU(Early_User_Authorization_Result_PDU earlyUserAuthorizationResultPDU)
         {
-            if (verifyPduEnabled)
+            if (testConfig.verifyPduEnabled)
             {
                 VerifyPdu(earlyUserAuthorizationResultPDU);
             }
@@ -170,7 +170,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         private void ReceiveServerMCSConnectResponse(Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response mcsConnectResponse)
         {
-            if (verifyPduEnabled)
+            if (testConfig.verifyPduEnabled)
             {
                 VerifyPdu(mcsConnectResponse);
             }
@@ -183,7 +183,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         private void ReceiveServerMCSAttachUserConfirm(Server_MCS_Attach_User_Confirm_Pdu attachUserConfirm)
         {
-            if (verifyPduEnabled)
+            if (testConfig.verifyPduEnabled)
             {
                 VerifyPdu(attachUserConfirm);
             }
@@ -196,7 +196,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         private void ReceiveServerMCSChannelJoinConfirm(Server_MCS_Channel_Join_Confirm_Pdu channelJoinConfirm)
         {
-            if (verifyPduEnabled)
+            if (testConfig.verifyPduEnabled)
             {
                 VerifyPdu(channelJoinConfirm);
             }
@@ -209,7 +209,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         private void ReceiveServerLicenseErrorPDU(Server_License_Error_Pdu_Valid_Client licenseErrorPdu)
         {
-            if (verifyPduEnabled)
+            if (testConfig.verifyPduEnabled)
             {
                 VerifyPdu(licenseErrorPdu);
             }
@@ -222,7 +222,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         private void ReceiveServerDemandActivePDU(Server_Demand_Active_Pdu demandActivePdu)
         {
-            if (verifyPduEnabled)
+            if (testConfig.verifyPduEnabled)
             {
                 VerifyPdu(demandActivePdu);
             }
@@ -235,7 +235,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         private void ReceiveServerSynchronizePDU(Server_Synchronize_Pdu synchronizePdu)
         {
-            if (verifyPduEnabled)
+            if (testConfig.verifyPduEnabled)
             {
                 VerifyPdu(synchronizePdu);
             }
@@ -248,7 +248,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         private void ReceiveServerCooperateControlPDU(Server_Control_Pdu_Cooperate controlPdu)
         {
-            if (verifyPduEnabled)
+            if (testConfig.verifyPduEnabled)
             {
                 VerifyPdu(controlPdu);
             }
@@ -261,7 +261,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         private void ReceiveServerGrantedControlPDU(Server_Control_Pdu_Granted_Control controlPdu)
         {
-            if (verifyPduEnabled)
+            if (testConfig.verifyPduEnabled)
             {
                 VerifyPdu(controlPdu);
             }
@@ -274,7 +274,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         private void ReceiveServerFontMapPDU(Server_Font_Map_Pdu fontMapPdu)
         {
-            if (verifyPduEnabled)
+            if (testConfig.verifyPduEnabled)
             {
                 VerifyPdu(fontMapPdu);
             }
@@ -288,7 +288,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         private void ReceiveServerShutdownRequestDeniedPDU(Server_Shutdown_Request_Denied_Pdu shutdownRequest)
         {
-            if (verifyPduEnabled)
+            if (testConfig.verifyPduEnabled)
             {
                 VerifyPdu(shutdownRequest);
             }
@@ -301,7 +301,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         private void ReceiveServerMCSDisconnectProviderUltimatum(MCS_Disconnect_Provider_Ultimatum_Pdu disconnectProvider)
         {
-            if (verifyPduEnabled)
+            if (testConfig.verifyPduEnabled)
             {
                 VerifyPdu(disconnectProvider);
             }
@@ -314,7 +314,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         private void ReceiveServerDeactivateAllPDU(Server_Deactivate_All_Pdu deactiveAllPdu)
         {
-            if (verifyPduEnabled)
+            if (testConfig.verifyPduEnabled)
             {
                 VerifyPdu(deactiveAllPdu);
             }
@@ -327,7 +327,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         private void ReceiveServerVirtualChannelPDU(Virtual_Channel_RAW_Server_Pdu virtualChannelPdu)
         {
-            if (verifyPduEnabled)
+            if (testConfig.verifyPduEnabled)
             {
                 VerifyPdu(virtualChannelPdu);
             }
@@ -340,7 +340,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         private void ReceiveServerSlowPathOutputUpdatePDU(SlowPathOutputPdu updatePdu)
         {
-            if (verifyPduEnabled)
+            if (testConfig.verifyPduEnabled)
             {
                 VerifyPdu(updatePdu);
             }
@@ -353,7 +353,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         private void ReceiveServerFastPathUpdatePDU(TS_FP_UPDATE_PDU updatePdu)
         {
-            if (verifyPduEnabled)
+            if (testConfig.verifyPduEnabled)
             {
                 VerifyPdu(updatePdu);
             }
@@ -366,7 +366,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         private void ReceiveServerRedirectionPacket(Server_Redirection_Pdu redirectionPdu)
         {
-            if (verifyPduEnabled)
+            if (testConfig.verifyPduEnabled)
             {
                 VerifyPdu(redirectionPdu);
             }
@@ -379,7 +379,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         private void ReceiveEnhancedSecurityServerRedirectionPacket(Enhanced_Security_Server_Redirection_Pdu redirectionPdu)
         {
-            if (verifyPduEnabled)
+            if (testConfig.verifyPduEnabled)
             {
                 VerifyPdu(redirectionPdu);
             }
@@ -392,7 +392,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         private void ReceiveServerAutoDetectRequest(Server_Auto_Detect_Request_PDU autoDetectRequest)
         {
-            if (verifyPduEnabled)
+            if (testConfig.verifyPduEnabled)
             {
                 VerifyPdu(autoDetectRequest);
             }
@@ -405,7 +405,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         private void ReceiveServerInitiateMultitransportRequest(Server_Initiate_Multitransport_Request_PDU multitransportReq)
         {
-            if (verifyPduEnabled)
+            if (testConfig.verifyPduEnabled)
             {
                 VerifyPdu(multitransportReq);
             }
@@ -418,7 +418,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         private void ReceiveServerHeartbeatPDU(Server_Heartbeat_PDU heartbeatPdu)
         {
-            if (verifyPduEnabled)
+            if (testConfig.verifyPduEnabled)
             {
                 VerifyPdu(heartbeatPdu);
             }
@@ -431,7 +431,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         private void ReceiveServerSaveSessionInfoPDU(Server_Save_Session_Info_Pdu saveSessionInfoPdu)
         {
-            if (verifyPduEnabled)
+            if (testConfig.verifyPduEnabled)
             {
                 VerifyPdu(saveSessionInfoPdu);
             }
@@ -723,7 +723,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 Site.Assert.IsNull(fontMapPdu.commonHeader.securityHeader, "In Server_Font_Map_Pdu, If the Encryption Level selected by the server is ENCRYPTION_LEVEL_NONE (0) and the Encryption Method selected by the server is ENCRYPTION_METHOD_NONE (0), then the security header MUST NOT be included in the PDU.");
             }
 
-            if (verifyShouldBehaviors)
+            if (testConfig.verifyShouldBehaviors)
             {
                 Site.Assert.AreEqual<ushort>(0, fontMapPdu.fontMapPduData.numberEntries, "In Server_Font_Map_Pdu, the numberEntries field of the fontMapPduData field should be set to zero.");
                 Site.Assert.AreEqual<ushort>(0, fontMapPdu.fontMapPduData.totalNumEntries, "In Server_Font_Map_Pdu, the totalNumEntries field of the fontMapPduData field should be set to zero.");

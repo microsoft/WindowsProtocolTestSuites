@@ -6,6 +6,7 @@ using System.Threading;
 using System.Net.Sockets;
 using System.Collections.Generic;
 using Microsoft.Protocols.TestTools.StackSdk.Transport;
+using System.Linq;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 {
@@ -176,6 +177,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             this.thread = new Thread(StreamReceiveLoop);
             this.thread.IsBackground = true;
+            this.thread.Name = "StreamReceiveLoop() of RdpbcgrClientTransportStack";
             this.stopThread = false;
             this.thread.Start();
 
@@ -697,31 +699,64 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     }
 
                     this.buffer.AddRange(ArrayUtility.SubArray<byte>(data, 0, receivedLength));
+
                     int expectedLength = 0;
+
                     int consumedLength = 0;
-                    StackPacket[] packets = decoder(localEndPoint, buffer.ToArray(), out consumedLength, out expectedLength);
-                    while (packets != null)
+
+                    bool errorPduReceived = false;
+
+                    while (buffer.Count > 0)
                     {
+                        StackPacket[] packets = decoder(localEndPoint, buffer.ToArray(), out consumedLength, out expectedLength);
+
+                        if (packets == null)
+                        {
+                            break;
+                        }
+
                         foreach (StackPacket packet in packets)
                         {
                             packetCache.Enqueue(packet);
+                        }
+
+                        if (packets.Any(packet => packet is ErrorPdu))
+                        {
+                            errorPduReceived = true;
                         }
 
                         if (consumedLength > 0)
                         {
                             buffer.RemoveRange(0, consumedLength);
                         }
+                    }
 
-                        packets = decoder(localEndPoint, buffer.ToArray(), out consumedLength, out expectedLength);
+                    if (errorPduReceived)
+                    {
+                        // Exit since ErrorPdu is received from decoder. 
+                        break;
                     }
                 }
                 catch (Exception ex)
                 {
+                    if (ex is IOException ioException)
+                    {
+                        if (ioException.InnerException is SocketException socketException)
+                        {
+                            if (socketException.SocketErrorCode == SocketError.ConnectionReset)
+                            {
+                                // Add the disconnected transport event, if connection is reset by SUT.
+                                this.AddEvent(new TransportEvent(EventType.Disconnected, null, this.localEndPoint, null));
+                                break;
+                            }
+                        }
+                    }
+
                     // handle exception event, return.
                     this.AddEvent(new TransportEvent(
                         EventType.Exception, null, this.localEndPoint, ex));
 
-                    throw;
+                    break;
                 }
             }
         }

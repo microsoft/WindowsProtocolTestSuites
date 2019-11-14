@@ -35,6 +35,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         private RDP_NEG_FAILURE x224NegotiateFailurePdu;
 
         /// <summary>
+        /// In Early_User_Authorization_Result_PDU.
+        /// </summary>
+        private Early_User_Authorization_Result_PDU earlyUserAuthorizationResultPDU;
+
+        /// <summary>
         /// In Client_MCS_Connect_Initial_Pdu_with_GCC_Conference_Create_Request
         /// </summary>
         private MCSConnectInitial mcsConnectInitialPdu;
@@ -1227,8 +1232,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             this.client = bcgrClient;
             isSwitchOn = true;
             unprocessedPacketBuffer = new List<StackPacket>(); ;
-            isAuthenticatingRDSTLS = false;
-            isExpectingEarlyUserAuthorizationResultPDU = false;
         }
         #endregion constructor
 
@@ -1254,15 +1257,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 else if (pdu.GetType() == typeof(Server_X_224_Connection_Confirm_Pdu))
                 {
                     x224ConnectionConfirmPdu = ((Server_X_224_Connection_Confirm_Pdu)pdu.Clone()).rdpNegData;
-
-                    if (x224ConnectionConfirmPdu.selectedProtocol == selectedProtocols_Values.PROTOCOL_HYBRID_EX)
-                    {
-                        isExpectingEarlyUserAuthorizationResultPDU = true;
-                    }
-                    else
-                    {
-                        isExpectingEarlyUserAuthorizationResultPDU = false;
-                    }
                 }
                 else if (pdu.GetType() == typeof(Server_X_224_Negotiate_Failure_Pdu))
                 {
@@ -1270,7 +1264,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 }
                 else if (pdu.GetType() == typeof(Early_User_Authorization_Result_PDU))
                 {
-                    isExpectingEarlyUserAuthorizationResultPDU = false;
+                    earlyUserAuthorizationResultPDU = pdu.Clone() as Early_User_Authorization_Result_PDU;
                 }
                 else if (pdu.GetType() == typeof(Client_MCS_Connect_Initial_Pdu_with_GCC_Conference_Create_Request))
                 {
@@ -1405,6 +1399,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 lastErrorInfo = errorInfo_Values.ERRINFO_NONE;
                 lastStatusInfo = StatusCode_Values.TS_STATUS_NO_STATUS;
                 pduCountToUpdate = ConstValue.PDU_COUNT_TO_UPDATE_SESSION_KEY;
+                isAuthenticatingRDSTLS = false;
+                isExpectingEarlyUserAuthorizationResultPDU = false;
             }
         }
 
@@ -1419,6 +1415,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 x224ConnectionRequestPdu = null;
                 x224ConnectionConfirmPdu = null;
                 x224NegotiateFailurePdu = null;
+                earlyUserAuthorizationResultPDU = null;
                 mcsConnectInitialPdu = null;
                 mcsConnectResponsePdu = null;
                 userChannelId = 0;
@@ -1465,9 +1462,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// Get a unprocessed packet from buffer
         /// </summary>
-        /// <param name="isSVCPacket">Whether need a SVC packet</param>
+        /// <param name="filter">A function to filter out the packets.</param>
         /// <returns></returns>
-        public StackPacket GetPacketFromBuffer(bool onlySVCPacket = false)
+        public StackPacket GetPacketFromBuffer(Func<StackPacket, bool> filter)
         {
             if (unprocessedPacketBuffer.Count > 0)
             {
@@ -1475,27 +1472,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 {
                     if (unprocessedPacketBuffer.Count > 0)
                     {
-                        if (onlySVCPacket)
+                        for (int i = 0; i < unprocessedPacketBuffer.Count; i++)
                         {
-                            for (int i = 0; i < unprocessedPacketBuffer.Count; i++)
+                            var packet = unprocessedPacketBuffer[i];
+                            if (filter(packet))
                             {
-                                if (unprocessedPacketBuffer[i] is Virtual_Channel_RAW_Server_Pdu
-                                        || unprocessedPacketBuffer[i] is ErrorPdu
-                                        || unprocessedPacketBuffer[i] is MCS_Disconnect_Provider_Ultimatum_Pdu)
-                                {
-                                    // if the packet is ErrorPdu or MCS_Disconnect_Provider_Ultimatum_Pdu, there's some error in the connection
-                                    // should return this two types of PDU, so as to notify the error
-                                    StackPacket pdu = unprocessedPacketBuffer[i];
-                                    unprocessedPacketBuffer.RemoveAt(i);
-                                    return pdu;
-                                }
+                                unprocessedPacketBuffer.RemoveAt(i);
+                                return packet;
                             }
-                        }
-                        else
-                        {
-                            StackPacket pdu = unprocessedPacketBuffer[0];
-                            unprocessedPacketBuffer.RemoveAt(0);
-                            return pdu;
                         }
                     }
 
