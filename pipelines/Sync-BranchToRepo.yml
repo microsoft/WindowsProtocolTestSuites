@@ -11,7 +11,7 @@ resources:
       ref: v-zhanh/syncSteps
 
 jobs:
-  - template: pipelines/Sync/Sync-Branch-Between-Repo.yml@template
+  - template: pipelines/Sync/Sync-Branch-Between-Repo-steps.yml@template
     parameters:
         extRepoUrl: $(extRepo.url)
         extRepoDir: $(extRepo.dir)
