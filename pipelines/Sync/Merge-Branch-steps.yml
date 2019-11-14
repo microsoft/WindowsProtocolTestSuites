@@ -1,0 +1,35 @@
+parameters:
+  extRepoUrl : ''
+  extRepoDir : ''
+  extRepoBranch : 'master'
+  RemoteName: ''
+  RemoteUrl: ''
+  BranchesToMerge: ''
+
+jobs:
+  - job:
+    displayName: Sync Branch Between Repo
+    pool: 
+      name: TestSuiteBuildPool
+    workspace:
+      clean: all
+    timeoutInMinutes: 0
+
+    steps:
+      - script: 'git clone -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" -b %EXTREPO_Branch% %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
+        displayName: 'Fetch external repo'
+        env:
+          EXTREPO_URL: ${{parameters.extRepoUrl}}
+          EXTREPO_DIR: ${{parameters.extRepoDir}}
+          EXTREPO_Branch: ${{parameters.extRepoBranch}}
+        timeoutInMinutes: 0
+
+      - task: PowerShell@2
+        displayName: 'Merge Branch'
+        inputs:
+          targetType: filePath
+          filePath: $(extRepo.dir)\GitSync\Merge-Branch.ps1
+          arguments: '-SSHRemote ${{parameters.RemoteName}} -SSHRemoteURL ${{parameters.RemoteUrl}} -BranchesToMerge ${{parameters.BranchesToMerge}}'
+          timeoutInMinutes: 0    
+
+        
