@@ -11,7 +11,7 @@ jobs:
   - job:
     displayName: Sync Branch Between Repo
     pool: 
-      vmImage: 'windows-latest'
+      name: TestSuiteBuildPool
     workspace:
       clean: false
     timeoutInMinutes: 0
