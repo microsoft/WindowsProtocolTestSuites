@@ -21,12 +21,8 @@ jobs:
                 echo "extRepoDir ${{parameters.extRepoDir}"
         displayName: 'Show parameters'
         
-      - script: 'git clone -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" -b %EXTREPO_Branch% %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
+      - script: 'git clone -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" -b ${{parameters.extRepoBranch}} ${{parameters.extRepoUrl}} ${{parameters.extRepoDir}} 2>&1'
         displayName: 'Fetch external repo'
-        env:
-          EXTREPO_URL: ${{parameters.extRepoUrl}}
-          EXTREPO_DIR: ${{parameters.extRepoDir}}
-          EXTREPO_Branch: ${{parameters.extRepoBranch}}
         timeoutInMinutes: 0
 
       - task: PowerShell@2
