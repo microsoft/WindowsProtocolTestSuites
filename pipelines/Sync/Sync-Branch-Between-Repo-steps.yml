@@ -33,7 +33,7 @@ jobs:
         displayName: 'Sync-Branch-Between-Repo'
         inputs:
           targetType: filePath
-          filePath: $(extRepo.dir)\GitSync\Sync-Branch-Between-Repo.ps1
+          filePath: ${{parameters.extRepoDir}}\GitSync\Sync-Branch-Between-Repo.ps1
           arguments: '-RemoteName ${{parameters.RemoteName}} -RemoteUrl ${{parameters.RemoteUrl}} -SyncBranch ${{parameters.SyncBranch}} -MirrorBranch ${{parameters.MirrorBranch}}'
           timeoutInMinutes: 0    
 

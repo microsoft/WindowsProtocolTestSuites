@@ -32,7 +32,7 @@ jobs:
         displayName: 'Merge Branch'
         inputs:
           targetType: filePath
-          filePath: $(extRepo.dir)\GitSync\Merge-Branch.ps1
+          filePath: ${{parameters.extRepoDir}}\GitSync\Merge-Branch.ps1
           arguments: '-SSHRemote ${{parameters.RemoteName}} -SSHRemoteURL ${{parameters.RemoteUrl}} -BranchesToMerge ${{parameters.BranchesToMerge}}'
           timeoutInMinutes: 0    
 
