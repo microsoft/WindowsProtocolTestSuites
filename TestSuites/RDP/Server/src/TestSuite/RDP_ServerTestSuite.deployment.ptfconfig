@@ -47,7 +47,7 @@
     <Property name="RDPEDYCSupported" value="true"/>
 
     <!-- Whether the SUT supports RDPELE. The value should be true or false.-->
-    <Property name="RDPELESupported" value="false"/>
+    <Property name="RDPELESupported" value="true"/>
     <!--Whether the SUT issues a temporary license when issuing a license to the client for the first time-->
     <Property name="IssueTemporaryLicenseForTheFirstTime" value="true"/>
 
