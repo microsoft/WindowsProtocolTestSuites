@@ -418,7 +418,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 case EncryptedProtocol.NegotiationCredSsp:
                 case EncryptedProtocol.DirectCredSsp:
                     {
-                        Site.Assume.IsTrue(x224Confirm.rdpNegData.selectedProtocol == selectedProtocols_Values.PROTOCOL_HYBRID_FLAG || x224Confirm.rdpNegData.selectedProtocol == selectedProtocols_Values.PROTOCOL_HYBRID_EX, "The selected protocol should be HYBRID or HYBRID_EX when CredSSP is configured as the security protocol.");
+                        bool isCredSspSelected = x224Confirm.rdpNegData.selectedProtocol == selectedProtocols_Values.PROTOCOL_HYBRID_FLAG || x224Confirm.rdpNegData.selectedProtocol == selectedProtocols_Values.PROTOCOL_HYBRID_EX;
+
+                        Site.Assume.IsTrue(isCredSspSelected, "The selected protocol should be HYBRID or HYBRID_EX when CredSSP is configured as the security protocol.");
 
                         if (encryptedProtocol == EncryptedProtocol.NegotiationCredSsp && x224Confirm.rdpNegData.selectedProtocol == selectedProtocols_Values.PROTOCOL_HYBRID_EX)
                         {
@@ -706,7 +708,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             {
                 // If the target machine is a personal terminal server, whether the client sends the license or not, 
                 // the server always sends a license error message with the error code STATUS_VALID_CLIENT and the state transition code ST_NO_TRANSITION. 
-                Site.Assert.AreEqual(dwErrorCode_Values.STATUS_VALID_CLIENT, licensePdu.LicensingMessage.LicenseError.Value.dwErrorCode, 
+                Site.Assert.AreEqual(dwErrorCode_Values.STATUS_VALID_CLIENT, licensePdu.LicensingMessage.LicenseError.Value.dwErrorCode,
                     $"A license error message with the error code STATUS_VALID_CLIENT should be received, the real error code is {licensePdu.LicensingMessage.LicenseError.Value.dwErrorCode}.");
                 return;
             }

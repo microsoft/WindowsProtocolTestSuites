@@ -186,7 +186,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         }
 
         /// <summary>
-        /// Indicating whether is expecting Early User Authorization Result PDU.
+        /// Indicating whether the client is expecting Early User Authorization Result PDU.
         /// </summary>
         public bool IsExpectingEarlyUserAuthorizationResultPDU
         {
