@@ -47,6 +47,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpele
             licensePdu = rdpbcgrAdapter.rdpeleClient.ExpectPdu(testConfig.timeout);
             Site.Assert.AreEqual(bMsgType_Values.NEW_LICENSE, licensePdu.preamble.bMsgType, $"A NEW_LICENSE message should be received from server, the real message type is {licensePdu.preamble.bMsgType}");
             byte[] licenseInfo = rdpbcgrAdapter.rdpeleClient.GetNewLicenseInfo().Value.pbLicenseInfo; // Get the license info for the next step
+            rdpbcgrAdapter.Disconnect();
 
             Site.Log.Add(LogEntryKind.TestStep, "Set up a second RDPBCGR connection with server.");
             rdpbcgrAdapter = new RdpbcgrAdapter(testConfig);

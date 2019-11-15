@@ -46,6 +46,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpele
 
         protected override void TestCleanup()
         {
+            rdpbcgrAdapter?.Reset();
             base.TestCleanup();
         }
         #endregion

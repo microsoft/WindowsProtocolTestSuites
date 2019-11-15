@@ -48,6 +48,7 @@
 
     <!-- Whether the SUT supports RDPELE. The value should be true or false.-->
     <Property name="RDPELESupported" value="false"/>
+    <!--Whether the SUT issues a temporary license when issuing a license to the client for the first time-->
     <Property name="IssueTemporaryLicenseForTheFirstTime" value="true"/>
 
     <Property name="Timeout" value="60"/>
