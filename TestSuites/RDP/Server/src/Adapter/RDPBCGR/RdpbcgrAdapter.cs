@@ -663,8 +663,16 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 KeyExchangeAlg.KEY_EXCHANGE_ALG_RSA, (uint)Client_OS_ID.CLIENT_OS_ID_WINNT_POST_52 | (uint)Client_Image_ID.CLIENT_IMAGE_ID_MICROSOFT, testConfig.userName, testConfig.localAddress);
             licensePdu = rdpeleClient.ExpectPdu(timeout);
             Site.Assert.AreEqual(bMsgType_Values.PLATFORM_CHALLENGE, licensePdu.preamble.bMsgType, $"A PLATFORM_CHALLENGE message should be received from server, the real message type is {licensePdu.preamble.bMsgType}");
-
-            rdpeleClient.SendClientPlatformChallengeResponse(new CLIENT_HARDWARE_ID { PlatformId = (uint)Client_OS_ID.CLIENT_OS_ID_WINNT_POST_52 | (uint)Client_Image_ID.CLIENT_IMAGE_ID_MICROSOFT, Data1 = 1, Data2 = 2, Data3 = 3, Data4 = 4 });
+            Random random = new Random();
+            CLIENT_HARDWARE_ID clientHWID = new CLIENT_HARDWARE_ID
+            {
+                PlatformId = (uint)Client_OS_ID.CLIENT_OS_ID_WINNT_POST_52 | (uint)Client_Image_ID.CLIENT_IMAGE_ID_MICROSOFT,
+                Data1 = (uint)random.Next(),
+                Data2 = (uint)random.Next(),
+                Data3 = (uint)random.Next(),
+                Data4 = (uint)random.Next()
+            };
+            rdpeleClient.SendClientPlatformChallengeResponse(clientHWID);
             licensePdu = rdpeleClient.ExpectPdu(timeout);
             Site.Assert.AreEqual(bMsgType_Values.NEW_LICENSE, licensePdu.preamble.bMsgType, $"A NEW_LICENSE message should be received from server, the real message type is {licensePdu.preamble.bMsgType}");
 

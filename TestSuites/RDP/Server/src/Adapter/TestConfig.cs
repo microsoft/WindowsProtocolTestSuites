@@ -32,7 +32,9 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         public requestedProtocols_Values requestProtocol;
         public Version rdpVersion;
         public bool isEDYCSupported;
+
         public bool isELESupported;
+        public bool issueTemporaryLicenseForTheFirstTime;
 
         public ITestSite Site
         {
@@ -102,6 +104,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             PtfPropUtility.GetBoolPtfProperty(Site, "VerifyShouldBehaviors", out verifyShouldBehaviors);
             PtfPropUtility.GetBoolPtfProperty(Site, "RDPEDYCSupported", out isEDYCSupported);
             PtfPropUtility.GetBoolPtfProperty(Site, "RDPELESupported", out isELESupported);
+            PtfPropUtility.GetBoolPtfProperty(Site, "IssueTemporaryLicenseForTheFirstTime", out issueTemporaryLicenseForTheFirstTime);
 
             if (PtfPropUtility.GetStringPtfProperty(Site, "RDP.Version", out tempStr))
             {
