@@ -67,6 +67,9 @@
     <Compile Include="RDPBCGR\S3_InputTest.cs" />
     <Compile Include="RDPBCGR\S4_OutputTest.cs" />
     <Compile Include="RDPBCGR\S5_StaticVirtualChannelTest.cs" />
+    <Compile Include="RDPELE\RdpeleTestSuite.cs" />
+    <Compile Include="RDPELE\S1_NewLicenseRequest.cs" />
+    <Compile Include="RDPELE\S2_LicenseInfo.cs" />
     <Compile Include="RDPEMT\RdpemtTestSuite.cs" />
     <Compile Include="RDPEMT\S1_MultitransportConnectionInitiationTest.cs" />
     <Compile Include="RDPEDYC\RdpedycTestSuite.cs" />
