@@ -4446,7 +4446,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             // Get packet length according to PDU type (slow-path/fast-path)
             int packetLength = 0;
-            if (ConstValue.SLOW_PATH_PDU_INDICATOR_VALUE == receivedBytes[ConstValue.SLOW_PATH_PDU_INDICATOR_INDEX])
+
+            if (clientContext.IsExpectingEarlyUserAuthorizationResultPDU)
+            {
+                var pduUsedToCalculateSize = new Early_User_Authorization_Result_PDU();
+
+                int expectedLength = pduUsedToCalculateSize.ToBytes().Length;
+
+                if (receivedBytes.Length < expectedLength)
+                {
+                    // Not enough data for Early User Authorization Result PDU.
+                    return null;
+                }
+
+                packetLength = expectedLength;
+            }
+            else if (ConstValue.SLOW_PATH_PDU_INDICATOR_VALUE == receivedBytes[ConstValue.SLOW_PATH_PDU_INDICATOR_INDEX])
             {
                 // Slow-path PDU
                 if (receivedBytes.Length < Marshal.SizeOf(typeof(TpktHeader)))
@@ -4523,6 +4538,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 // switch RDSTLS PDU
                 pdu = SwitchRDSTLSAuthenticationPDU(data);
+            }
+            else if (clientContext.IsExpectingEarlyUserAuthorizationResultPDU)
+            {
+                var pduUsedToCalculateSize = new Early_User_Authorization_Result_PDU();
+
+                int expectedLength = pduUsedToCalculateSize.ToBytes().Length;
+
+                if (data.Length != expectedLength)
+                {
+                    // Inconsistent size for Early User Authorization Result PDU.
+                    throw new FormatException(ConstValue.ERROR_MESSAGE_DATA_LENGTH_INCONSISTENT);
+                }
+
+                pdu = DecodeEarlyUserAuthorizationResultPDU(data);
+
+                // Reset since one Early User Authorization Result PDU is expected.
+                clientContext.IsExpectingEarlyUserAuthorizationResultPDU = false;
             }
             else
             {
@@ -4649,6 +4681,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             return pdu;
         }
 
+        /// <summary>
+        /// Decode Early User Authorization Result PDU.
+        /// </summary>
+        /// <param name="data">Data containing the PDU to be decoded.</param>
+        /// <returns>A decoded Early User Authorization Result PDU.</returns>
+        public StackPacket DecodeEarlyUserAuthorizationResultPDU(byte[] data)
+        {
+            int currentIndex = 0;
+
+            var earlyUserAuthorizationResultPDU = new Early_User_Authorization_Result_PDU();
+
+            earlyUserAuthorizationResultPDU.authorizationResult = (Authorization_Result_value)ParseUInt32(data, ref currentIndex, false);
+
+
+            // Check if data length exceeded expectation.
+            VerifyDataLength(data.Length, currentIndex, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
+
+            return earlyUserAuthorizationResultPDU;
+        }
 
         /// <summary>
         /// [TD Reference 3.2.5.3.4]

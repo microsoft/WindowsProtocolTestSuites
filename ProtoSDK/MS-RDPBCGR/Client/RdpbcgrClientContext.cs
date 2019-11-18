@@ -35,6 +35,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         private RDP_NEG_FAILURE x224NegotiateFailurePdu;
 
         /// <summary>
+        /// In Early_User_Authorization_Result_PDU.
+        /// </summary>
+        private Early_User_Authorization_Result_PDU earlyUserAuthorizationResultPDU;
+
+        /// <summary>
         /// In Client_MCS_Connect_Initial_Pdu_with_GCC_Conference_Create_Request
         /// </summary>
         private MCSConnectInitial mcsConnectInitialPdu;
@@ -133,6 +138,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
         private RdpbcgrClient client;
         private bool isAuthenticatingRDSTLS;
+        private bool isExpectingEarlyUserAuthorizationResultPDU;
 
         #endregion private members
 
@@ -175,6 +181,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 lock (contextLock)
                 {
                     isAuthenticatingRDSTLS = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Indicating whether the client is expecting Early User Authorization Result PDU.
+        /// </summary>
+        public bool IsExpectingEarlyUserAuthorizationResultPDU
+        {
+            get
+            {
+                lock (contextLock)
+                {
+                    return isExpectingEarlyUserAuthorizationResultPDU;
+                }
+            }
+            set
+            {
+                lock (contextLock)
+                {
+                    isExpectingEarlyUserAuthorizationResultPDU = value;
                 }
             }
         }
@@ -1205,7 +1232,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             this.client = bcgrClient;
             isSwitchOn = true;
             unprocessedPacketBuffer = new List<StackPacket>(); ;
-            isAuthenticatingRDSTLS = false;
         }
         #endregion constructor
 
@@ -1235,6 +1261,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 else if (pdu.GetType() == typeof(Server_X_224_Negotiate_Failure_Pdu))
                 {
                     x224NegotiateFailurePdu = ((Server_X_224_Negotiate_Failure_Pdu)pdu.Clone()).rdpNegFailure;
+                }
+                else if (pdu.GetType() == typeof(Early_User_Authorization_Result_PDU))
+                {
+                    earlyUserAuthorizationResultPDU = pdu.Clone() as Early_User_Authorization_Result_PDU;
                 }
                 else if (pdu.GetType() == typeof(Client_MCS_Connect_Initial_Pdu_with_GCC_Conference_Create_Request))
                 {
@@ -1369,6 +1399,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 lastErrorInfo = errorInfo_Values.ERRINFO_NONE;
                 lastStatusInfo = StatusCode_Values.TS_STATUS_NO_STATUS;
                 pduCountToUpdate = ConstValue.PDU_COUNT_TO_UPDATE_SESSION_KEY;
+                isAuthenticatingRDSTLS = false;
+                isExpectingEarlyUserAuthorizationResultPDU = false;
             }
         }
 
@@ -1383,6 +1415,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 x224ConnectionRequestPdu = null;
                 x224ConnectionConfirmPdu = null;
                 x224NegotiateFailurePdu = null;
+                earlyUserAuthorizationResultPDU = null;
                 mcsConnectInitialPdu = null;
                 mcsConnectResponsePdu = null;
                 userChannelId = 0;
