@@ -682,6 +682,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     transportStack.UpdateConfig(transportConfig, () =>
                     {
                         ((CredSspStream)clientStream).Authenticate();
+
+                        if (Context.ServerSelectedProtocol == (uint)selectedProtocols_Values.PROTOCOL_HYBRID_EX)
+                        {
+                            // Expect Early User Authorization Result PDU from SUT.
+                            Context.IsExpectingEarlyUserAuthorizationResultPDU = true;
+                        }
                     });
                 }
             }

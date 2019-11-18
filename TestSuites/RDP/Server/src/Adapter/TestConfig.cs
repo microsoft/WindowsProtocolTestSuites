@@ -175,7 +175,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             }
             else if (strRDPSecurityProtocol.Equals("CredSSP", StringComparison.CurrentCultureIgnoreCase))
             {
-                requestProtocol = requestedProtocols_Values.PROTOCOL_HYBRID_FLAG;
+                requestProtocol = requestedProtocols_Values.PROTOCOL_SSL_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_EX;
                 if (isNegotiationBased)
                 {
                     transportProtocol = EncryptedProtocol.NegotiationCredSsp;

@@ -20,6 +20,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
     public delegate void ServerX224ConnectionConfirmHandler(Server_X_224_Connection_Confirm_Pdu x224Confirm);
     public delegate void ServerX224NegotiateFailurePDUHandler(Server_X_224_Negotiate_Failure_Pdu x224Failure);
+    public delegate void ServerEarlyUserAuthorizationResultPDUHandler(Early_User_Authorization_Result_PDU earlyUserAuthorizationResultPDU);
     public delegate void ServerMCSConnectResponseHandler(Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response mcsConnectResponse);
     public delegate void ServerMCSAttachUserConfirmHandler(Server_MCS_Attach_User_Confirm_Pdu attachUserConfirm);
     public delegate void ServerMCSChannelJoinConfirmHandler(Server_MCS_Channel_Join_Confirm_Pdu channelJoinConfirm);
@@ -69,6 +70,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         private bool serverSupportUDPFECR = false;
         private bool serverSupportUDPFECL = false;
         private bool serverSupportUDPPrefferred = false;
+        private EncryptedProtocol encryptedProtocol;
         #endregion Variables
 
         #region Properties
@@ -97,6 +99,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// Event will be raised when a Server X224 Negotiate Failure PDU is received
         /// </summary>
         public event ServerX224NegotiateFailurePDUHandler OnServerX224NegotiateFailurePDUReceived;
+
+        /// <summary>
+        /// Event will be raised when a Server Early User Authorization Result PDU is received
+        /// </summary>
+        public event ServerEarlyUserAuthorizationResultPDUHandler OnServerEarlyAuthorizationResultPDUHandler;
 
         /// <summary>
         /// Event will be raised when a Server MCS Connect Response PDU is received
@@ -240,6 +247,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #region Unregister Events
 
             OnServerX224ConnectionConfirmReceived = null;
+            OnServerEarlyAuthorizationResultPDUHandler = null;
             OnServerMCSConnectResponseReceived = null;
             OnServerMCSAttachUserConfirmReceived = null;
             OnServerMCSChannelJoinConfirmReceived = null;
@@ -280,6 +288,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="encryptedProtocol">Enctypted protocol</param>
         public void ConnectToServer(EncryptedProtocol encryptedProtocol)
         {
+            this.encryptedProtocol = encryptedProtocol;
+
             rdpbcgrClientStack.Connect(encryptedProtocol);
         }
 
@@ -380,7 +390,54 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 x224ConnectReqPdu.x224Crq.classOptions = 1;
             }
 
+            if (invalidType == NegativeType.None)
+            {
+                // Check whether selected protocol is expected.
+                OnServerX224ConnectionConfirmReceived += RdpbcgrAdapter_OnServerX224ConnectionConfirmReceived;
+            }
+
             SendPdu(x224ConnectReqPdu);
+        }
+
+        private void RdpbcgrAdapter_OnServerX224ConnectionConfirmReceived(Server_X_224_Connection_Confirm_Pdu x224Confirm)
+        {
+            switch (encryptedProtocol)
+            {
+                case EncryptedProtocol.Rdp:
+                    {
+                        Site.Assume.AreEqual(selectedProtocols_Values.PROTOCOL_RDP_FLAG, x224Confirm.rdpNegData.selectedProtocol, "The selected protocol should be RDP when RDP is configured as the security protocol.");
+                    }
+                    break;
+
+                case EncryptedProtocol.NegotiationTls:
+                    {
+                        Site.Assume.AreEqual(selectedProtocols_Values.PROTOCOL_SSL_FLAG, x224Confirm.rdpNegData.selectedProtocol, "The selected protocol should be SSL when TLS is configured as the security protocol.");
+                    }
+                    break;
+
+                case EncryptedProtocol.NegotiationCredSsp:
+                case EncryptedProtocol.DirectCredSsp:
+                    {
+                        bool isCredSspSelected = x224Confirm.rdpNegData.selectedProtocol == selectedProtocols_Values.PROTOCOL_HYBRID_FLAG || x224Confirm.rdpNegData.selectedProtocol == selectedProtocols_Values.PROTOCOL_HYBRID_EX;
+
+                        Site.Assume.IsTrue(isCredSspSelected, "The selected protocol should be HYBRID or HYBRID_EX when CredSSP is configured as the security protocol.");
+
+                        if (encryptedProtocol == EncryptedProtocol.NegotiationCredSsp && x224Confirm.rdpNegData.selectedProtocol == selectedProtocols_Values.PROTOCOL_HYBRID_EX)
+                        {
+                            // Check the early user authorization result.
+                            OnServerEarlyAuthorizationResultPDUHandler += RdpbcgrAdapter_OnServerEarlyAuthorizationResultPDUHandler;
+                        }
+                    }
+                    break;
+
+                default:
+                    throw new InvalidOperationException("Unexpected security protocol!");
+            }
+        }
+
+        private void RdpbcgrAdapter_OnServerEarlyAuthorizationResultPDUHandler(Early_User_Authorization_Result_PDU authorizationResult)
+        {
+            Site.Assert.AreEqual(Authorization_Result_value.AUTHZ_SUCCESS, authorizationResult.authorizationResult, "The authorizationResult should be AUTHZ_SUCCESS when user has permission to access the server.");
         }
 
         /// <summary>
@@ -651,7 +708,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             {
                 // If the target machine is a personal terminal server, whether the client sends the license or not, 
                 // the server always sends a license error message with the error code STATUS_VALID_CLIENT and the state transition code ST_NO_TRANSITION. 
-                Site.Assert.AreEqual(dwErrorCode_Values.STATUS_VALID_CLIENT, licensePdu.LicensingMessage.LicenseError.Value.dwErrorCode, 
+                Site.Assert.AreEqual(dwErrorCode_Values.STATUS_VALID_CLIENT, licensePdu.LicensingMessage.LicenseError.Value.dwErrorCode,
                     $"A license error message with the error code STATUS_VALID_CLIENT should be received, the real error code is {licensePdu.LicensingMessage.LicenseError.Value.dwErrorCode}.");
                 return;
             }
