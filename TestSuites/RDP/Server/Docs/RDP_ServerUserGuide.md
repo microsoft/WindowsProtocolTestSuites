@@ -3,8 +3,6 @@
 ## Contents
 
 * [Introduction](#_Toc396908219)
-* [License Information](#_Toc396908220)
-* [Further Assistance](#_Toc396908221)
 * [Quick Start Checklist](#_Toc396908222)
 * [How Do I?](#_Toc396908223)
 * [Requirements](#_Toc396908224)
@@ -22,15 +20,13 @@
     * [Set Up the Driver Computer](#_Toc396908236)
     * [Set Up a Windows-Based SUT](#_Toc396908237)
     * [Set Up a Windows-Based Domain Controller (DC)](#_Toc396908238)
-    * [Installed Files and Folders](#_Toc396908239)
-* [Configuration](#_Toc396908240)
-    * [Configuring Windows-based Computers](#_Toc396908241)
-    * [Configuring Computers that are Not Based on Windows](#_Toc396908242)
-    * [Configuring the Test Suite](#_Toc396908243)
-* [Running Test Cases](#_Toc396908244)
+    * [Set up Computers that are Not Based on Windows](#_Toc396908242)    
+* [Installed Files and Folders](#_Toc396908239)
+* [Configure and Run Test Cases](#_Toc396908244)
+    * [Configure the Test Suite](#_Toc396908243)
     * [Run All Test Cases](#_Toc396908245)
     * [Check Test Results](#_Toc396908246)
-* [Debugging Test Cases](#_Toc396908247)
+* [Debug Test Cases](#_Toc396908247)
 * [Troubleshooting](#_Toc396908248)
     * [Ping Failure](#_Toc396908249)
 
@@ -42,15 +38,12 @@ This suite of tools is designed to test implementations of the following protoco
 
 * _[MS-RDPBCGR]: Remote Desktop Protocol: Basic Connectivity and Graphics Remoting Specification_
 
+* _[MS-RDPEDYC]: Remote Desktop Protocol: Dynamic Channel Virtual Channel Extension_
+
+* _[MS-RDPEMT]: Remote Desktop Protocol: Multitransport Extension_
+
+
 This suite of tools tests only the protocol implementation behaviors that are observed on the wire. For detailed information about the design of this test suite, see [MS-RDPBCGR_ServerTestDesignSpecification](MS-RDPBCGR_ServerTestDesignSpecification.md). 
-
-## <a name="_Toc396908220"/>License Information
-
-For licensing information, see the End User License Agreement (EULA) that was provided with this test suite. The EULA is contained in the LICENSE.rtf file in the installation folder.
-
-## <a name="_Toc396908221"/>Further Assistance
-
-If you need further information about this test suite or assistance in troubleshooting issues related to this test suite, contact dochelp@microsoft.com.
 
 ## <a name="_Toc396908222"/>Quick Start Checklist
 
@@ -71,11 +64,7 @@ Note
 | □| Set up the Domain Controller (DC). (optional)| See [Set Up the DC](#_Toc396908238). | 
 | □| Set up the network.| See [Network Setup](#_Toc396908230).| 
 | □| Verify the connection from the driver computer to the SUT and other computers.| See [Verify Connectivity from the Driver Computer](#_Toc396908234).| 
-| □| Configure the SUT.| See [Configuring Windows-based Computers](#_Toc396908241) or | 
-| | | [Configuring Computers that are Not Based on Windows](#_Toc396908242)| 
-| □| Configure the DC. (optional)| See [Configuring Computers that are Not Based on Windows](#_Toc396908242) | 
-| □| Configure the driver computer.| See [Configuring Windows-based Computers](#_Toc396908241)| 
-| □| Configure the test suite settings.| See [Configuring the Test Suite](#_Toc396908243).| 
+| □| Configure the test suite settings.| See [Configure the Test Suite](#_Toc396908243).| 
 | □| Run test cases to verify that the test suite is properly installed and configured| See [Running Test Cases](#_Toc396908244).| 
 
 ## <a name="_Toc396908223"/>How Do I?
@@ -85,10 +74,7 @@ Use the following quick reference to learn how to complete common tasks.
 | -------------| ------------- |
 | Set up the test environment| [Network Setup](#_Toc396908230) and [Computer Setup](#_Toc396908235)| 
 | Verify the connection from the driver computer to other computers in the test environment| [Verify Connectivity from the Driver Computer](#_Toc396908234)| 
-| Configure a SUT| [Configure the SUT](#_Toc396908241) or [Configuring Computers that are Not Based on Windows](#_Toc396908242)| 
-| Configure a DC| [Configuring Computers that are Not Based on Windows](#_Toc396908242)| 
-| Configure the driver computer| [Configuring Windows-based Computers](#_Toc396908241)| 
-| Configure the test suite settings| [Configuring the Test Suite](#_Toc396908243)| 
+| Configure the test suite settings| [Configure the Test Suite](#_Toc396908243)| 
 | Run test cases| [Run All Test Cases](#_Toc396908245)| 
 | Debug my own test cases| [Debugging Test Cases](#_Toc396908247)| 
 | Get the results of test runs| [Check Test Results](#_Toc396908246)| 
@@ -106,7 +92,7 @@ Note
 ![image2.png](./image/RDP_ServerUserGuide/image2.png)
 Note 
 
->The driver computer must use a Windows-based operating system.
+>The driver computer must be a Windows-based operating system.
 
 ![image2.png](./image/RDP_ServerUserGuide/image2.png)
 Note 
@@ -245,7 +231,7 @@ Note
 
 >Disable active firewalls in the test environment.
 
-###To check the connection from the driver computer
+To check the connection from the driver computer
 
 * Click the **Start** button, and then click **Run**. 
 
@@ -290,62 +276,6 @@ To set up the driver computer
 ### <a name="_Toc396908237"/>Set Up a Windows-Based SUT
 This section provides information about how to set up a SUT for use with this test suite.
 
-To set up a Windows-based SUT
-
-* Start Remote Desktop Services on the Windows-based SUT.
-
-To set up a SUT that is not based on the Windows operating system, see [Configuring Computers that are Not Based on Windows](#_Toc396908242)**.**
-
-### <a name="_Toc396908238"/>Set Up a Windows-Based Domain Controller (DC)
-This section provides information about how to set up a DC for use with this test suite.
-
-![image2.png](./image/RDP_ServerUserGuide/image2.png)
-Note 
-
-DC is optional. Skip this step if the test environment is workgroup.
-
-To set up a Windows-based DC
-
-* Install Active Directory Domain Services.
-
-To set up a DC that is not based on the Windows operating system, see Configuring Computers that are Not Based on Windows.
-
-### <a name="_Toc396908239"/>Installed Files and Folders
-
-The installation process adds the following folders and files to the driver computer at C:\MicrosoftProtocolTests\RDP\Server-Endpoint\ _&#60; version &#35;  &#62;_ \.
-
-![image2.png](./image/RDP_ServerUserGuide/image2.png)
-Note 
-
->The  _&#60; version &#35;  &#62;_  placeholder indicates the installed build of the test suite.
-
-|  **File or Folder**|  **Description**| 
-| -------------| ------------- |
-| Batch| Command files that you can use to run individual test cases or all test cases| 
-| Bin| Test suite binaries and configuration files| 
-| Docs| The version of each of the following protocol specifications used to develop this test suite:| 
-| | **MS-RDPBCGR.pdf** | 
-| | **RDP_ServerUserGuide.md** – A user guide that explains how to install and configure the driver computer, the SUT, and the DC, as well as how to run test cases| 
-| | **Test suite design documents**, containing conceptual information about the protocol, including probable use, relationships to other protocols, message flow, state diagrams, a short list of properties, and justification for the test and adapter design choices:| 
-| |  **MS-RDPBCGR_ServerTestDesignSpecification.md**| 
-| LICENSE.rtf| The End User License Agreement| 
-
-
-## <a name="_Toc396908240"/>Configuration
-
-This section explains how to configure the test environment.
-
-![image2.png](./image/RDP_ServerUserGuide/image2.png)
-Note 
-
->For workgroup environments, skip tasks that are related to the setup and configuration of DC.
-
-### <a name="_Toc396908241"/>Configuring Windows-based Computers
-
-This section explains how to configure computers for a Windows-based test environment. For general information about configuring computers that are not based on Windows, see [Configuring Computers that are Not Based on Windows](#_Toc396908242).
-
-To configure the SUT
-
 * Log on to the SUT as administrator.
 
 ![image2.png](./image/RDP_ServerUserGuide/image2.png)
@@ -383,13 +313,23 @@ Configure Network detection on RDP Server.
 
 ![image8.png](./image/RDP_ServerUserGuide/image8.png)
 
-To configure the driver computer
+To set up a SUT that is not based on the Windows operating system, see [Configuring Computers that are Not Based on Windows](#_Toc396908242)**.**
 
-* Log on to the driver computer as Administrator. 
+### <a name="_Toc396908238"/>Set Up a Windows-Based Domain Controller (DC)
+This section provides information about how to set up a DC for use with this test suite.
 
-* Follow guide in [Configure the Test Suite](#_Toc396908243) to configure the test suite.
+![image2.png](./image/RDP_ServerUserGuide/image2.png)
+Note 
 
-### <a name="_Toc396908242"/>Configuring Computers that are Not Based on Windows
+DC is optional. Skip this step if the test environment is workgroup.
+
+To set up a Windows-based DC
+
+* Install Active Directory Domain Services.
+
+To set up a DC that is not based on the Windows operating system, see [Configuring Computers that are Not Based on Windows](#_Toc396908242)**.**
+
+### <a name="_Toc396908242"/>Set Up Computers that are Not Based on Windows
 
 This guide provides only basic information about configuring the test environment for computers that are not running Windows-based operating systems. 
 
@@ -407,7 +347,25 @@ To configure the DC
 
 * Install directory domain services.
 
-### <a name="_Toc396908243"/>Configuring the Test Suite
+### <a name="_Toc396908239"/>Installed Files and Folders
+
+The installation process adds the following folders and files to the driver computer at C:\MicrosoftProtocolTests\RDP\Server-Endpoint\ _&#60; version &#35;  &#62;_ \.
+
+![image2.png](./image/RDP_ServerUserGuide/image2.png)
+Note 
+
+>The  _&#60; version &#35;  &#62;_  placeholder indicates the installed build of the test suite.
+
+|  **File or Folder**|  **Description**| 
+| -------------| ------------- |
+| Batch| Command files that you can use to run individual test cases or all test cases| 
+| Bin| Test suite binaries and configuration files| 
+| Scripts| The scripts used to configure computers and the test suite| 
+
+
+## <a name="_Toc396908244"/>Configure and Run Test Cases
+
+### <a name="_Toc396908243"/>Configure the Test Suite
 
 This test suite is installed with default configuration settings. You may need to change these settings if you use a customized test environment or if you customize your test runs. 
 
@@ -424,36 +382,8 @@ You can define various options for the test suite, such as the following:
 * Set time limits on discrete test tasks and for test runs.
 
 To change configuration settings, edit the **RDP_ServerTestSuite.deployment.ptfconfig** file. You can find this file in the directory C:\MicrosoftProtocolTests\RDP\Server-Endpoint\ _&#60; version &#35;  &#62;_ \Bin.
-The following table describes the properties for all the test cases.
 
-| &#32;| &#32; |
-| -------------| ------------- |
-|  **Property**|  **Description**| 
-|  **RDP.Security.Negotiation**| Indicates if the test suite uses the “Negotiation Approach” to select the security mechanism.| 
-| | The possible values are **True** and **False.** If the value is set to **False**, it indicates that the “Direct Approach” will be used.| 
-| | Default value: **True**| 
-|  **RDP.Security.Protocol**| The security protocol used to secure the RDP session. The possible values are **TLS**, **CredSSP** and **RDP**.| 
-| | Default value: **TLS**| 
-|  **RDP.ServerDomain**| Domain name of the SUT, only used in a domain environment.| 
-| | Default value: **Empty string**| 
-|  **RDP.ServerName**| The computer name or IP of the SUT.| 
-| | Default value: **SUT01**| 
-|  **RDP.ServerPort**| Listening port on SUT for Remote Desktop Services.| 
-| | Default value: **3389**| 
-|  **RDP.ServerUserName**| The username on SUT, which is used to logon SUT by using RDP.| 
-| | Default value: **Administrator**| 
-|  **RDP.ServerUserPassword**| The password of the user with **RDP.ServerUserName** on SUT.| 
-| | Default value: **Password01!**| 
-|  **RDP.ClientName**| The computer name or IP of the driver comptuer.| 
-| | Default value: **DriverComputer**| 
-|  **VerifyRdpbcgrMessages**| Indicates whether the test suite verify the RDPBCGR messages received**.**| 
-| | Default value: **True**!| 
-|  **VerifyShouldBehaviors**| Indicates whether the test suite verify the SHOULD behaviors in TD. | 
-| | Default value: **True**| 
-|  **WaitTime**| Indicates the seconds of timeout for test suite expects a message. | 
-| | Default value: **20**| 
-
-## <a name="_Toc396908244"/>Running Test Cases
+### <a name="_Toc396908245"/>Run All Test Cases
 
 This test suite includes command files that you can use to complete some basic test cases. Each test case verifies the protocol implementation based on a given scenario. 
 
@@ -461,8 +391,6 @@ You can find and run all test cases in the following directories:
  C:\MicrosoftProtocolTests\RDP\Server-Endpoint\ _&#60; version &#35;  &#62;_ \Batch
 
 You can run these command files at the command prompt or via the graphical user interface.
-
-### <a name="_Toc396908245"/>Run All Test Cases
 
 Use the steps below to run all test cases.
 
@@ -477,7 +405,8 @@ For running test case with batch: _C:\MicrosoftProtocolTests\RDP\Server-Endpoint
 For running test case with Visual Studio: _C:\MicrosoftProtocolTests\RDP\Server-Endpoint\ &#60; version &#35;  &#62; \Source\Server\TestCode\TestResults_
 For further information about test log settings, see the PTF User Guide in the PTF installation directory.
 
-## <a name="_Toc396908247"/>Debugging Test Cases
+
+## <a name="_Toc396908247"/>Debug Test Cases
 
 ![image2.png](./image/RDP_ServerUserGuide/image2.png)
 Note 
