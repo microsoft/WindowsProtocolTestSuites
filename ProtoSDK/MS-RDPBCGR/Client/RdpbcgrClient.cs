@@ -83,6 +83,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         private ManualResetEvent updateSessionKeyEvent;
 
         /// <summary>
+        /// Indicating whether client disconnects with SUT or not.
+        /// </summary>
+        private bool disconnected;
+
+        /// <summary>
         /// A context contains all needed information.
         /// </summary>
         public RdpbcgrClientContext Context
@@ -677,6 +682,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     transportStack.UpdateConfig(transportConfig, () =>
                     {
                         ((CredSspStream)clientStream).Authenticate();
+
+                        if (Context.ServerSelectedProtocol == (uint)selectedProtocols_Values.PROTOCOL_HYBRID_EX)
+                        {
+                            // Expect Early User Authorization Result PDU from SUT.
+                            Context.IsExpectingEarlyUserAuthorizationResultPDU = true;
+                        }
                     });
                 }
             }
@@ -1237,6 +1248,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             context.LocalIdentity = tcpClient.Client.LocalEndPoint;
             context.RemoteIdentity = tcpClient.Client.RemoteEndPoint;
+
+            disconnected = false;
         }
 
 
@@ -2913,7 +2926,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             CheckEncryptionCount();
         }
 
-        private StackPacket ExpectPdu(TimeSpan timeout, bool onlySVCPacket, Func<StackPacket, bool> filter)
+        private StackPacket ExpectPdu(TimeSpan timeout, Func<StackPacket, bool> filter)
         {
             if (timeout.TotalMilliseconds < 0)
             {
@@ -2921,20 +2934,34 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             }
 
             // Return the packet in the buffer, which is unprocessed packet.
-            StackPacket packet = this.context.GetPacketFromBuffer(onlySVCPacket);
+            StackPacket packet = this.context.GetPacketFromBuffer(filter);
+
             if (packet != null)
             {
                 return packet;
+            }
+
+            if (disconnected)
+            {
+                // No more packet would be available since disconnected.
+                return null;
             }
 
             TransportEvent eventPacket = null;
 
             TimeSpan leftTime = timeout;
             DateTime endTime = DateTime.Now + timeout;
+
             while (leftTime.TotalMilliseconds > 0)
             {
                 eventPacket = transportStack.ExpectTransportEvent(leftTime);
                 packet = (StackPacket)eventPacket.EventObject;
+
+                if (eventPacket.EventType == EventType.Disconnected)
+                {
+                    disconnected = true;
+                    break;
+                }
 
                 if (packet is Server_X_224_Connection_Confirm_Pdu)
                 {
@@ -2974,7 +3001,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <exception>TimeoutException.</exception>
         public StackPacket ExpectPdu(TimeSpan timeout)
         {
-            var result = ExpectPdu(timeout, false, packet => true);
+            var result = ExpectPdu(timeout, packet => true);
 
             return result;
         }
@@ -2987,7 +3014,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <exception>TimeoutException.</exception>
         public StackPacket ExpectChannelPdu(TimeSpan timeout)
         {
-            var result = ExpectPdu(timeout, false, packet =>
+            var result = ExpectPdu(timeout, packet =>
             {
                 if (packet is MCS_Disconnect_Provider_Ultimatum_Pdu
                          || packet is ErrorPdu
@@ -3116,6 +3143,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             return packet;
         }
 
+        /// <summary>
+        /// Expect disconnection event from SUT.
+        /// </summary>
+        /// <param name="timeout">Timeout.</param>
+        /// <exception>TimeoutException.</exception>
+
+        public void ExpectDisconnect(TimeSpan timeout)
+        {
+            transportStack.ExpectDisconnect(timeout);
+        }
         #endregion raw API
 
 
