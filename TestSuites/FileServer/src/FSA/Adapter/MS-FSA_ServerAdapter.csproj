@@ -83,7 +83,7 @@
     <Compile Include="ReqConfigurableSite.cs" />
     <Compile Include="ServerRoleCaptureCode.cs" />
     <Compile Include="SMB2_TDIWorkaround.cs" />
-    <Compile Include="Smb3TransportAdapter.cs" />
+    <Compile Include="Smb2TransportAdapter.cs" />
     <Compile Include="SmbTransportAdapter.cs" />
     <Compile Include="SMB_TDIWorkaround.cs" />
   </ItemGroup>
