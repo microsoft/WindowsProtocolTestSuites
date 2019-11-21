@@ -322,13 +322,13 @@ Important
 
 To set up the driver computer
 
-* Join the Driver computer to the domain provided by the DC if you are using domain environment.
+1. Join the Driver computer to the domain provided by the DC if you are using domain environment.
 
-* Install the required and optional software described earlier.
+1. Install the required and optional software described earlier.
 
-* Build the test suite from source code or download **RDP-TestSuite-ServerEP.msi** from [GitHub](https://github.com/microsoft/WindowsProtocolTestSuites/releases)
+1. Build the test suite from source code or download **RDP-TestSuite-ServerEP.msi** from [GitHub](https://github.com/microsoft/WindowsProtocolTestSuites/releases)
 
-* Run **RDP-TestSuite-ServerEP.msi** on the driver computer.
+1. Run **RDP-TestSuite-ServerEP.msi** on the driver computer.
 
 ### <a name="_Toc396908242"/>Set Up Computers that are Not Based on Windows
 
@@ -350,12 +350,12 @@ To configure the DC
 
 ### <a name="_Toc396908239"/>Installed Files and Folders
 
-The installation process adds the following folders and files to the driver computer at C:\MicrosoftProtocolTests\RDP\Server-Endpoint\ _&#60; version &#35;  &#62;_ \.
+The installation process adds the following folders and files to the driver computer at C:\MicrosoftProtocolTests\RDP\Server-Endpoint\\&#60;version&#35;&#62;\\.
 
 ![image2.png](./image/RDP_ServerUserGuide/image2.png)
 Note 
 
->The  _&#60; version &#35;  &#62;_  placeholder indicates the installed build of the test suite.
+>The _&#60;version&#35;&#62;_ placeholder indicates the installed build of the test suite.
 
 |  **File or Folder**|  **Description**| 
 | -------------| ------------- |
@@ -382,14 +382,14 @@ You can define various options for the test suite, such as the following:
 
 * Set time limits on discrete test tasks and for test runs.
 
-To change configuration settings, edit the **RDP_ServerTestSuite.deployment.ptfconfig** file. You can find this file in the directory C:\MicrosoftProtocolTests\RDP\Server-Endpoint\ _&#60; version &#35;  &#62;_ \Bin.
+To change configuration settings, edit the **RDP_ServerTestSuite.deployment.ptfconfig** file. You can find this file in the directory C:\MicrosoftProtocolTests\RDP\Server-Endpoint\\_&#60;version&#35;&#62;_\Bin.
 
 ### <a name="_Toc396908245"/>Run All Test Cases
 
 This test suite includes command files that you can use to complete some basic test cases. Each test case verifies the protocol implementation based on a given scenario. 
 
 You can find and run all test cases in the following directories: 
- C:\MicrosoftProtocolTests\RDP\Server-Endpoint\ _&#60; version &#35;  &#62;_ \Batch
+ C:\MicrosoftProtocolTests\RDP\Server-Endpoint\\_&#60;version&#35;&#62;_\Batch
 
 You can run test cases via the graphical user interface or the command files:
 
@@ -400,16 +400,16 @@ You can run test cases via the graphical user interface or the command files:
 * Via command files
 
     From the desktop of the driver computer, double-click the **Run All Test Cases** shortcut.
-    Alternatively, go to C:\MicrosoftProtocolTests\RDP\Server-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **RunAllTestCases.cmd** file. 
+    Alternatively, go to C:\MicrosoftProtocolTests\RDP\Server-Endpoint\\_&#60;version&#35;&#62;_\Batch, and double-click the **RunAllTestCases.cmd** file. 
 
 ### <a name="_Toc396908246"/>Check Test Results
 Test suite generates test result files in different paths based on the way how test case is executed.
 
-* For running test cases with PTM: _C:\MicrosoftProtocolTests\RDP\Server-Endpoint\ &#60; version &#35;  &#62; \HtmlTestResults_
+* For running test cases with PTM: _C:\MicrosoftProtocolTests\RDP\Server-Endpoint\\&#60;version&#35;&#62;\HtmlTestResults_
 
-* For running test cases with batch: _C:\MicrosoftProtocolTests\RDP\Server-Endpoint\ &#60; version &#35;  &#62; \Batch\TestResults_
+* For running test cases with batch: _C:\MicrosoftProtocolTests\RDP\Server-Endpoint\\&#60;version&#35;&#62;\Batch\TestResults_
 
-* For running test cases with Visual Studio: _C:\MicrosoftProtocolTests\RDP\Server-Endpoint\ &#60; version &#35;  &#62; \Source\Server\TestCode\TestResults_
+* For running test cases with Visual Studio: _C:\MicrosoftProtocolTests\RDP\Server-Endpoint\\&#60;version&#35;&#62;\Source\Server\TestCode\TestResults_
 
 For further information about test log settings, see the PTF User Guide in the PTF installation directory.
 
@@ -425,12 +425,12 @@ You can use the Visual Studio solution (.sln) file included with this test suite
 ![image2.png](./image/RDP_ServerUserGuide/image2.png)
 Note 
 
-Copy _RDP_ServerTestSuite.deployment.ptfconfig_ and _RDP_ServerTestSuite.ptfconfig_ from C:\MicrosoftProtocolTests\RDP\Server-Endpoint\ &#60; version &#35;  &#62; \Bin to C:\MicrosoftProtocolTests\RDP\Server-Endpoint\ &#60; version &#35;  &#62; \Source\Server\TestCode\TestSuite and replace the original file.
+Copy _RDP_ServerTestSuite.deployment.ptfconfig_ and _RDP_ServerTestSuite.ptfconfig_ from C:\MicrosoftProtocolTests\RDP\Server-Endpoint\\&#60;version&#35;&#62;\Bin to C:\MicrosoftProtocolTests\RDP\Server-Endpoint\\&#60;version&#35;&#62;\Source\Server\TestCode\TestSuite and replace the original file.
 
 To debug a test case
 
 * On the driver computer, use Visual Studio to open the following solution file:
-C:\MicrosoftProtocolTests\RDP\Server-Endpoint\ _&#60; version &#35;  &#62;_ \Source\Server\TestCode\RDP_Server.sln
+C:\MicrosoftProtocolTests\RDP\Server-Endpoint\\_&#60;version&#35;&#62;_\Source\Server\TestCode\RDP_Server.sln
 
 * In the **Solution Explorer** window, right-click the **Solution** ‘**RDP_Server’**, and select **Build Solution**.
 
