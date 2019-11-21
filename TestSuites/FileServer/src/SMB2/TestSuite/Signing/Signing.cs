@@ -105,7 +105,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             client.Negotiate(
                 TestConfig.RequestDialects,
                 TestConfig.IsSMB1NegotiateEnabled,
-                SecurityMode_Values.NEGOTIATE_SIGNING_REQUIRED,
+                SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
                 capabilityValue: Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING | Capabilities_Values.GLOBAL_CAP_LARGE_MTU | Capabilities_Values.GLOBAL_CAP_LEASING | Capabilities_Values.GLOBAL_CAP_ENCRYPTION
                 );
 
@@ -115,7 +115,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 TestConfig.SutComputerName,
                 TestConfig.AccountCredential,
                 TestConfig.UseServerGssToken,
-                SESSION_SETUP_Request_SecurityMode_Values.NEGOTIATE_SIGNING_REQUIRED);
+                SESSION_SETUP_Request_SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED);
 
             string uncSharepath =
                 Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.EncryptedFileShare);
