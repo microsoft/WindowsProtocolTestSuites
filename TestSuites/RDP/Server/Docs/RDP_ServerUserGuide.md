@@ -42,8 +42,9 @@ This suite of tools is designed to test implementations of the following protoco
 
 * _[MS-RDPEMT]: Remote Desktop Protocol: Multitransport Extension_
 
+* _[MS-RDPELE]: Remote Desktop Protocol: Licensing Extension_
 
-This suite of tools tests only the protocol implementation behaviors that are observed on the wire. For detailed information about the design of this test suite, see [MS-RDPBCGR_ServerTestDesignSpecification](MS-RDPBCGR_ServerTestDesignSpecification.md), [MS-RDPEDYCServerTestDesignSpecification](MS-RDPEDYC_ServerTestDesignSpecification.md), [MS-RDPEMT_ServerTestDesignSpecification](MS-RDPEMT_ServerTestDesignSpecification.md). 
+This suite of tools tests only the protocol implementation behaviors that are observed on the wire. For detailed information about the design of this test suite, see [MS-RDPBCGR_ServerTestDesignSpecification](MS-RDPBCGR_ServerTestDesignSpecification.md), [MS-RDPEDYCServerTestDesignSpecification](MS-RDPEDYC_ServerTestDesignSpecification.md), [MS-RDPEMT_ServerTestDesignSpecification](MS-RDPEMT_ServerTestDesignSpecification.md), [MS-RDPELE_ServerTestDesignSpecification](MS-RDPELE_ServerTestDesignSpecification.md). 
 
 ## <a name="_Toc396908222"/>Quick Start Checklist
 
@@ -239,7 +240,7 @@ To check the connection from the driver computer
 
 * At the command prompt, type **ping** followed by the hostname or IP address of the SUT, and then press **Enter**. The following example checks the connection to a SUT named "SUT01":
  
- &#62;  ping SUT01
+    &#62;  ping SUT01
 
 * Repeat these steps until you confirm connectivity between all computers in the test environment.
 
@@ -294,7 +295,7 @@ This section provides information about how to set up a SUT for use with this te
 
     * Select **Allow remote connections to this computer**, and uncheck the check box before **Allow connections only from computers running Remote Desktop with Network Level Authentication (recommend)**.
 
-    * Press **Ok** to close **System Properties**.
+    * Press **OK** to close **System Properties**.
 
 
     ![image7.png](./image/RDP_ServerUserGuide/image7.png)
@@ -308,6 +309,89 @@ This section provides information about how to set up a SUT for use with this te
     * Double click **Select network detection on the server**, on the poped up dialog, click **Enabled** and select **Use both Connect Time Detect and Continuous Network Detect**.
 
     ![image8.png](./image/RDP_ServerUserGuide/image8.png)
+
+1. Install **Remote Desktop Services**
+    * In **Server Manager**, click **Manage**, then select **Add Roles and Features**, click **Next** repeatly untill it comes to **Server Roles** tab. Select **Remote Desktop Services** and click **Next**.
+
+    ![image10.png](./image/RDP_ServerUserGuide/image10.png)
+
+    * Click **Next** repeatly untill it comes to **Role Services** tab. Select **Remote Desktop Licensing**. In the prompt wizard, click **Add Features**
+
+    ![image11.png](./image/RDP_ServerUserGuide/image11.png)
+
+    ![image12.png](./image/RDP_ServerUserGuide/image12.png)
+
+    Then select **Remote Desktop Session Host**. In the prompt wizard, click **Add Features**
+
+    ![image13.png](./image/RDP_ServerUserGuide/image13.png)
+
+    ![image14.png](./image/RDP_ServerUserGuide/image14.png)
+    
+    * Click **Next**, in **Confirmation** tab, click **Install**
+
+    ![image15.png](./image/RDP_ServerUserGuide/image15.png)
+
+    * Restart the computer after installation is finished.
+
+1. Activate RDP License server and install license
+    * Open **Windows Administrative Tools**
+
+    ![image16.png](./image/RDP_ServerUserGuide/image16.png)   
+
+    * Enter **Remote Desktop Services** folder
+
+    ![image17.png](./image/RDP_ServerUserGuide/image17.png)   
+
+    * Open **Remote Desktop Licensing Manager**
+
+    ![image18.png](./image/RDP_ServerUserGuide/image18.png)       
+
+    * In the left panel, right-click the computer name of the SUT, and click **Activate Server**.
+    
+    ![image19.png](./image/RDP_ServerUserGuide/image19.png) 
+
+    * Click **Next**, and in next step, keep the default method **Automatic connection(recommended)**
+    
+    ![image20.png](./image/RDP_ServerUserGuide/image20.png) 
+
+    * Input your **First name**, **Last name**, **Company**, and select one country from the drop down list
+
+    ![image21.png](./image/RDP_ServerUserGuide/image21.png) 
+
+    * Click **Next**
+
+    ![image22.png](./image/RDP_ServerUserGuide/image22.png) 
+
+    * Click **Next** again
+
+    ![image23.png](./image/RDP_ServerUserGuide/image23.png) 
+
+    * Then start to **Install Licenses**, click **Next**, then select **Enterprise Agreement**, and click **Next**
+
+    ![image24.png](./image/RDP_ServerUserGuide/image24.png) 
+
+    * Type **1234567** as the agreement number and click **Next**
+
+    ![image25.png](./image/RDP_ServerUserGuide/image25.png) 
+
+    * Select the appropriate **Product version** according to the OS version of the SUT, choose **RDS Per Device CAL** as **License type**, and input **250** as Quantity. And then click **Next** to install the license.
+
+    ![image26.png](./image/RDP_ServerUserGuide/image26.png) 
+
+1. Configure the Remote Desktop Session Host
+
+    * Start **Command Prompt**, type **gpedit.msc** and press **Enter**.
+    
+    * On the **Local Group Policy Editor**, navigate to **Local Computer Policy\Computer Configuration\Administrative Templates\Windows Components\Remote Desktop Services\Remote Desktop Session Host\Licensing**.    
+
+    * Double click **Use the specified Remote Desktop license servers**, click **Enabled**, input the computer name of the SUT as the license server name, and click **OK**.
+    
+    ![image27.png](./image/RDP_ServerUserGuide/image27.png) 
+
+    * Double click **Set the Remote Desktop licensing mode**, click **Enabled**, choose **Per Device** as the licensing mode, and click **OK**.
+
+    ![image28.png](./image/RDP_ServerUserGuide/image28.png) 
+
 
 To set up a SUT that is not based on the Windows operating system, see [Configuring Computers that are Not Based on Windows](#_Toc396908242)**.**
 
