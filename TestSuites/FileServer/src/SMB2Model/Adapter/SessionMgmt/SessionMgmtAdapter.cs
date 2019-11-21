@@ -41,8 +41,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMg
             {
             }
 
-            connectionList.Clear();
-            sessionTable.Clear();
+            connectionList?.Clear();
+            sessionTable?.Clear();
             base.Reset();
         }
 
