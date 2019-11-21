@@ -195,15 +195,15 @@ You can run this test suite in a workgroup or domain environment using either ph
 
 * Details including computer IP addresses, names and credentials are saved in log files
 
-Refer to the Privacy Statement and EULA for further information.
-
 ### <a name="_Toc396908232"/>Domain Environment
 
 The domain environment requires interactions between the following computers and server roles. Note that the domain controller, required for a domain environment, can be installed on the SUT. 
 
 * The driver computer, which runs the test cases by sending requests over the wire in the form of protocol messages. 
 
-* The SUT, which runs a server implementation of the protocol that is being tested. The SUT responds to the requests sent by the driver computer.
+* The SUT, which runs a server implementation of the protocol that is being tested. The SUT responds to the requests sent by the driver computer. 
+
+    * Note: if you want to test [MS-RDPELE] protocol, then SUT must be connected to internet besides the test network.
 
 * The DC provides functionality that is required to test the protocol implementation. Specifically, the DC hosts Active Directory Domain Services (AD DS).
 
@@ -218,6 +218,8 @@ The workgroup environment requires interactions between the following computers:
 * The driver computer, which runs the test cases by sending requests over the wire in the form of protocol messages. 
 
 * The SUT, which runs a server implementation of the protocol that is being tested. The SUT responds to the requests that the driver computer sends.
+
+    * Note: if you want to test [MS-RDPELE] protocol, then SUT must be connected to internet besides the test network.
 
 The following figure shows the workgroup environment:
 
