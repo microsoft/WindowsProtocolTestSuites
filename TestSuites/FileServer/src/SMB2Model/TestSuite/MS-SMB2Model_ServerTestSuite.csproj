@@ -177,6 +177,7 @@
     <Compile Include="SessionMgmtNewSessionScenarioTestCase.cs" />
     <Compile Include="SessionMgmtReconnectSessionScenarioTestCase.cs" />
     <Compile Include="SigningTestCase.cs" />
+    <Compile Include="SMB2ModelTestAssemblyCleanup.cs" />
     <Compile Include="TreeMgmtTestCase.cs" />
     <Compile Include="ValidateNegotiateInfoTestCase.cs" />
   </ItemGroup>
