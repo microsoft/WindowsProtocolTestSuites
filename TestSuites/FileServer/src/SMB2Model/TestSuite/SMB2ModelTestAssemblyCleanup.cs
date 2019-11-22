@@ -18,7 +18,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             {
                 try
                 {
-                    Directory.Delete(directory);
+                    Directory.Delete(directory, true);
                 }
                 catch (UnauthorizedAccessException)
                 {
