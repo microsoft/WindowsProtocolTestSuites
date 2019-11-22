@@ -1,4 +1,7 @@
-﻿using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
