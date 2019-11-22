@@ -14,22 +14,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
         [AssemblyCleanup]
         public static void AssemblyCleanup()
         {
-            var skipCleanup = false;
-
             foreach (var directory in ModelManagedAdapterBase.AllTestDirectories)
             {
-                if (skipCleanup)
-                {
-                    break;
-                }
-
                 try
                 {
                     Directory.Delete(directory);
                 }
                 catch (UnauthorizedAccessException)
                 {
-                    skipCleanup = true;
+                    break;
                 }
                 catch
                 {
@@ -39,18 +32,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
 
             foreach (var file in ModelManagedAdapterBase.AllTestFiles)
             {
-                if (skipCleanup)
-                {
-                    break;
-                }
-
                 try
                 {
                     File.Delete(file);
                 }
                 catch (UnauthorizedAccessException)
                 {
-                    skipCleanup = true;
+                    break;
                 }
                 catch
                 {
