@@ -138,7 +138,7 @@ function Activate-LicenseServer
     $wmiTSLicenseObject.FirstName="test"
     $wmiTSLicenseObject.LastName="test"
     $wmiTSLicenseObject.Company="test"
-    $wmiTSLicenseObject.CountryRegion="China"
+    $wmiTSLicenseObject.CountryRegion="Albania"   # Just pick one randomly from the collection
     $wmiTSLicenseObject.Put()
 
     $wmiClass = ([wmiclass]"\\$($sutSetting.name)\root\cimv2:Win32_TSLicenseServer")
@@ -158,7 +158,12 @@ function Set-LicenseServer
 function Install-License()
 {
     $keypack = ([wmiclass]"\\$($sutSetting.name)\root\cimv2:Win32_TSLicenseKeyPack")
-    $keypack.InstallAgreementLicenseKeyPack(1, 1234567, 6, 0, 250)
+    # 1 is Agreeement Type: Enterprise Agreement
+    # 1234567 is the agreeement number
+    # 4 is product version: Windows 2012
+    # 0 is product type: per device
+    # 250 is license count
+    $keypack.InstallAgreementLicenseKeyPack(1, 1234567, 4, 0, 250)
 }
 
 function Install-RDSFeature
