@@ -6,6 +6,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Collections.ObjectModel;
+using System.Security.Cryptography.X509Certificates;
 
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
@@ -1047,24 +1048,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 secData.serverRandom = GetBytes(data, ref currentIndex, (int)secData.serverRandomLen.actualData);
 
                 // TS_UD_SC_SEC1: serverCertificate (present)
-                secData.serverCertificate = new SERVER_CERTIFICATE();
-
-                // TS_UD_SC_SEC1: serverCertificate: dwVersion
-                secData.serverCertificate.dwVersion =
-                    (SERVER_CERTIFICATE_dwVersion_Values)ParseUInt32(data, ref currentIndex, false);
-
-                // TS_UD_SC_SEC1: serverCertificate: certData
-                if (SERVER_CERTIFICATE_dwVersion_Values.CERT_CHAIN_VERSION_1 == secData.serverCertificate.dwVersion)
-                {
-                    // proprietary server certificate
-                    secData.serverCertificate.certData = ParseProprietaryServerCertificate(data, ref currentIndex);
-                }
-                else
-                {
-                    // X509 certificate chain
-                    secData.serverCertificate.certData =
-                        ParseX509CertificateChain(data, ref currentIndex, (dataEndIndex - currentIndex));
-                }
+                secData.serverCertificate = DecodeServerCertificate(data, ref currentIndex, secData.serverCertLen.actualData);
             }
             else
             {
@@ -1212,6 +1196,102 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             return key;
         }
+
+        private static void DecodeX509RSAPublicKey(byte[] publicKey, out byte[] modulus, out byte[] publicExponent)
+        {
+            // An RSA public key should be represented with the ASN.1 type RSAPublicKey:
+            //    RSAPublicKey::= SEQUENCE {
+            //        modulus         INTEGER,  --n
+            //        publicExponent  INTEGER   --e
+            //    }
+
+            if (publicKey == null)
+            {
+                throw new Exception("publicKey should not be null!");
+            }
+
+            // 0x30 stands for "SEQUENCE", 0x02 stands for "INTEGER". publicKey[1] is the size of the SEQUENCE which we don't care.
+            if (publicKey[0] != 0x30 || publicKey[2] != 0x02)
+            {
+                throw new Exception("Invalid publicKey!");
+            }
+
+            int modulusLength = publicKey[3]; // publicKey[3] 
+            modulus = new byte[modulusLength];
+            Buffer.BlockCopy(publicKey, 4, modulus, 0, modulusLength);
+
+            // 0x02 stands for "INTEGER"
+            if (publicKey[4 + modulusLength] != 0x02)
+            {
+                throw new Exception("Invalid publicKey!");
+            }
+
+            int publicExponentLength = publicKey[5 + modulusLength];
+            publicExponent = new byte[publicExponentLength];
+            Buffer.BlockCopy(publicKey, 6 + modulusLength, publicExponent, 0, publicExponentLength);
+
+            // ASN.1 uses big-endian, but the Proprietary Server Certificate uses little-endian, to utilize them, save little-endian format for both cases.
+            Array.Reverse(publicExponent);
+            Array.Reverse(modulus);
+        }
+
+        /// <summary>
+        /// Decode the SERVER_CERTIFICATE structure
+        /// </summary>
+        public static SERVER_CERTIFICATE DecodeServerCertificate(byte[] data, ref int currentIndex, uint serverCertLen)
+        {
+            SERVER_CERTIFICATE cert = new SERVER_CERTIFICATE();
+            // According to [MS-RDPBCGR] section 2.2.1.4.3.1, there is a "t" (1-byte field) in the dwVersion.
+            // The real version is the 0-30 bit.
+            var version = ParseUInt32(data, ref currentIndex, false);
+            cert.dwVersion = (SERVER_CERTIFICATE_dwVersion_Values)(version & 0x0FFFF);
+            if (cert.dwVersion == SERVER_CERTIFICATE_dwVersion_Values.CERT_CHAIN_VERSION_1)
+            {
+                // proprietary server certificate
+                cert.certData = RdpbcgrDecoder.ParseProprietaryServerCertificate(data, ref currentIndex);
+            }
+            else if (cert.dwVersion == SERVER_CERTIFICATE_dwVersion_Values.CERT_CHAIN_VERSION_2)
+            {
+                // X509 certificate chain
+                cert.certData = RdpbcgrDecoder.ParseX509CertificateChain(data, ref currentIndex, (int)serverCertLen - 4);
+            }
+            else
+            {
+                throw new Exception($"Invalid dwVersion of SERVER_CERTIFICATE: {version}");
+            }
+
+            return cert;
+        }
+
+        /// <summary>
+        /// Decode the public key from the specified certificate
+        /// </summary>
+        public static void DecodePubicKey(SERVER_CERTIFICATE cert, out byte[] publicExponent, out byte[] modulus)
+        {
+            if (cert.dwVersion == SERVER_CERTIFICATE_dwVersion_Values.CERT_CHAIN_VERSION_1)
+            {
+                // proprietary server certificate
+                var proprietaryCert = (PROPRIETARYSERVERCERTIFICATE)cert.certData;
+                RSA_PUBLIC_KEY rsaPublicKey = proprietaryCert.PublicKeyBlob;
+                publicExponent = BitConverter.GetBytes(rsaPublicKey.pubExp);
+                modulus = rsaPublicKey.modulus;
+            }
+            else if (cert.dwVersion == SERVER_CERTIFICATE_dwVersion_Values.CERT_CHAIN_VERSION_2)
+            {
+                // X509 certificate chain
+                var x509CertChain = (X509_CERTIFICATE_CHAIN)cert.certData;
+                int len = x509CertChain.CertBlobArray.Length;
+                // The public key is in the leaf node of the cert chain.
+                var x509Cert = new X509Certificate2(x509CertChain.CertBlobArray[len - 1].abCert);
+                var publicKey = x509Cert.PublicKey.EncodedKeyValue.RawData;
+                RdpbcgrDecoder.DecodeX509RSAPublicKey(publicKey, out modulus, out publicExponent);
+            }
+            else
+            {
+                throw new Exception($"Invalid dwVersion of SERVER_CERTIFICATE: {cert.dwVersion}");
+            }
+        }
+
         #endregion Sub Field Parsers: Mcs Connect Response
 
 
