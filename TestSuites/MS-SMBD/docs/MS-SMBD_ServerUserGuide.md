@@ -165,7 +165,7 @@ All common softwares listed in [prerequisites](https://github.com/microsoft/Wind
 
     ![image2.png](./image/MS-SMBD_ServerUserGuide/image2.png)Note
 
-    You can download the latest Message Analyzer from below website [http://www.microsoft.com/en-us/download/details.aspx?id=44226](http://www.microsoft.com/en-us/download/details.aspx?id=44226)
+    November 25 2019 - Microsoft Message Analyzer (MMA) has been retired and removed from public-facing sites on microsoft.com. A private MMA build is available for testing purposes; to request it, send an email to [getmma@microsoft.com](mailto:getmma@microsoft.com).
 
 ## <a name="_Toc395696820"/>Network Setup
 
