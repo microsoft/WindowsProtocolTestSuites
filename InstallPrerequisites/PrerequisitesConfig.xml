@@ -56,14 +56,12 @@
     <tool>VisualStudio</tool>
     <tool>PTF</tool>
     <tool>SE</tool>
-    <tool>MMA_x64</tool>
     <tool>OpenXMLSDK</tool>
   </ADFamily>
   <AZOD>
     <tool>VisualStudio</tool>
     <tool>SE</tool>
     <tool>PTF</tool>
-    <tool>MMA_x64</tool>
   </AZOD>
   <ADFSPIP>
     <tool>VisualStudio</tool>
@@ -74,6 +72,5 @@
     <tool>VisualStudio</tool>
     <tool>SE</tool>
     <tool>PTF</tool>
-    <tool>MMA_x64</tool>
   </ADOD>
 </Dependency>
