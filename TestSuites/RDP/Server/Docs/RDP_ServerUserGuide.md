@@ -289,29 +289,6 @@ This section provides information about how to set up a SUT for use with this te
 
 1. Join the SUT to the domain provided by the DC if you are using domain environment.
 
-1. Start Remote Desktop Services
-
-    * In **Control Panel**, open **System**.
-
-    * Click **Remote Settings** on the left. Then you can see **Remote** tab on **System Properties** dialog.
-
-    * Select **Allow remote connections to this computer**, and uncheck the check box before **Allow connections only from computers running Remote Desktop with Network Level Authentication (recommend)**.
-
-    * Press **OK** to close **System Properties**.
-
-
-    ![image7.png](./image/RDP_ServerUserGuide/image7.png)
-
-1. Configure Network detection on RDP Server.
-
-    * Start **Command Prompt**, type **gpedit.msc** and press **Enter**.
-
-    * On the **Local Group Policy Editor**, navigate to **Local Computer Policy\Computer Configuration\Administrative Templates\Windows Components\Remote Desktop Services\Remote Desktop Session Host\Connections**.
-
-    * Double click **Select network detection on the server**, on the poped up dialog, click **Enabled** and select **Use both Connect Time Detect and Continuous Network Detect**.
-
-    ![image8.png](./image/RDP_ServerUserGuide/image8.png)
-
 1. Install **Remote Desktop Services**
     * In **Server Manager**, click **Manage**, then select **Add Roles and Features**, click **Next** repeatly untill it comes to **Server Roles** tab. Select **Remote Desktop Services** and click **Next**.
 
@@ -394,6 +371,27 @@ This section provides information about how to set up a SUT for use with this te
 
     ![image28.png](./image/RDP_ServerUserGuide/image28.png) 
 
+1. Start Remote Desktop Services
+
+    * In **Control Panel**, open **System**.
+
+    * Click **Remote Settings** on the left. Then you can see **Remote** tab on **System Properties** dialog.
+
+    * Select **Allow remote connections to this computer**, and uncheck the check box before **Allow connections only from computers running Remote Desktop with Network Level Authentication (recommend)**.
+
+    * Press **OK** to close **System Properties**.
+
+    ![image7.png](./image/RDP_ServerUserGuide/image7.png)
+
+1. Configure Network detection on RDP Server.
+
+    * Start **Command Prompt**, type **gpedit.msc** and press **Enter**.
+
+    * On the **Local Group Policy Editor**, navigate to **Local Computer Policy\Computer Configuration\Administrative Templates\Windows Components\Remote Desktop Services\Remote Desktop Session Host\Connections**.
+
+    * Double click **Select network detection on the server**, on the poped up dialog, click **Enabled** and select **Use both Connect Time Detect and Continuous Network Detect**.
+
+    ![image8.png](./image/RDP_ServerUserGuide/image8.png)
 
 To set up a SUT that is not based on the Windows operating system, see [Configuring Computers that are Not Based on Windows](#_Toc396908242)**.**
 
