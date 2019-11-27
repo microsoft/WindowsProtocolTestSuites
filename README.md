@@ -76,7 +76,7 @@ You should install the software listed below based on your testing purpose, incl
 
    It is required if you want to build Protocol Test Manager. Please download `nuget.exe` into a suitable folder and add that folder to `Path` environment variable 
 
-1. [Microsoft Message Analyzer](https://www.microsoft.com/en-us/download/details.aspx?id=44226)
+1. Microsoft Message Analyzer
 
    It is required if you want to build or run ADFamily, ADOD and AZOD test suites.
 

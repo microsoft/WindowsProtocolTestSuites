@@ -177,7 +177,7 @@ All common softwares listed in [prerequisites](https://github.com/microsoft/Wind
 
   ![image2.png](./image/ADFamily_ServerUserGuide/image2.png)Note
   
-  You can download the latest Message Analyzer (MA) from the website below. We need to install MA so that our test cases will call MA library to do live capture and verification of the network trace. It’s all automatic process, so users will only need to install the latest version of MA first. [http://www.microsoft.com/en-us/download/details.aspx?id=44226](http://www.microsoft.com/en-us/download/details.aspx?id=44226)
+  November 25 2019 - Microsoft Message Analyzer (MMA) has been retired and removed from public-facing sites on microsoft.com. A private MMA build is available for testing purposes; to request it, send an email to [getmma@microsoft.com](mailto:getmma@microsoft.com).
 
 * **Open XML SDK**
 
