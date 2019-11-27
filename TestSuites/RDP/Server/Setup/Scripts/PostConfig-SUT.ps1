@@ -113,6 +113,10 @@ Function Config-Environment
 
 }
 
+#------------------------------------------------------------------------------------------
+# Function: Config-RDS
+# Configure remote desktop services
+#------------------------------------------------------------------------------------------
 Function Config-RDS
 {
 	# Enable Remote Desktop
@@ -135,6 +139,10 @@ Function RestartAndResume
                         -AutoRestart $true
 }
 
+#------------------------------------------------------------------------------------------
+# Function: Activate-LicenseServer
+# Activate the remote desktop license server
+#------------------------------------------------------------------------------------------
 function Activate-LicenseServer
 {
     $wmiTSLicenseObject = Get-WMIObject Win32_TSLicenseServer -computername $sutSetting.name
@@ -151,6 +159,10 @@ function Activate-LicenseServer
     Write-ConfigLog "Activation status: $result (0 = activated, 1 = not activated)"
 }
 
+#------------------------------------------------------------------------------------------
+# Function: Set-LicenseServer
+# Set the license server name for RDP session host
+#------------------------------------------------------------------------------------------
 function Set-LicenseServer
 {
     $RDPSessionHost = gwmi -namespace "Root/CIMV2/TerminalServices" Win32_TerminalServiceSetting
@@ -158,7 +170,11 @@ function Set-LicenseServer
     $RDPSessionHost.SetSpecifiedLicenseServerList($sutSetting.name)
 }
 
-function Install-License()
+#------------------------------------------------------------------------------------------
+# Function: Install-License
+# Install a per device license on the activated license server
+#------------------------------------------------------------------------------------------
+function Install-License
 {
     $keypack = ([wmiclass]"\\$($sutSetting.name)\root\cimv2:Win32_TSLicenseKeyPack")
     # 1 is Agreeement Type: Enterprise Agreement
@@ -169,6 +185,10 @@ function Install-License()
     $keypack.InstallAgreementLicenseKeyPack(1, 1234567, 4, 0, 250)
 }
 
+#------------------------------------------------------------------------------------------
+# Function: Install-RDSFeature
+# Install remote desktop services and the related features
+#------------------------------------------------------------------------------------------
 function Install-RDSFeature
 {
     Add-WindowsFeature -Name RDS-RD-Server -IncludeAllSubFeature
