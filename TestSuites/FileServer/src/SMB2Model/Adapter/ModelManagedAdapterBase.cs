@@ -14,12 +14,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter
     /// <summary>
     /// This class is a base of the Model adapter.
     /// </summary>
-    public class ModelManagedAdapterBase: ManagedAdapterBase
+    public class ModelManagedAdapterBase : ManagedAdapterBase
     {
         protected SMB2ModelTestConfig testConfig;
         protected ISutProtocolControlAdapter sutProtocolController;
         protected List<string> testFiles = new List<string>();
         protected List<string> testDirectories = new List<string>();
+
+        public static HashSet<string> AllTestFiles { get; } = new HashSet<string>();
+        public static HashSet<string> AllTestDirectories { get; } = new HashSet<string>();
 
         #region Initialization
 
@@ -38,26 +41,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter
         {
             foreach (var directory in testDirectories)
             {
-                try
-                {
-                    sutProtocolController.DeleteDirectory(Smb2Utility.GetShareName(directory), Smb2Utility.GetFileName(directory));
-                }
-                catch
-                {
-                }
+                AllTestDirectories.Add(directory);
             }
 
             testDirectories.Clear();
 
             foreach (var fileName in testFiles)
             {
-                try
-                {
-                    sutProtocolController.DeleteFile(Smb2Utility.GetShareName(fileName), Smb2Utility.GetFileName(fileName));
-                }
-                catch
-                {
-                }
+                AllTestFiles.Add(fileName);
             }
 
             testFiles.Clear();
