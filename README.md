@@ -79,6 +79,7 @@ You should install the software listed below based on your testing purpose, incl
 1. Microsoft Message Analyzer
 
    It is required if you want to build or run ADFamily, ADOD and AZOD test suites.
+   November 25 2019 - Microsoft Message Analyzer (MMA) has been retired and removed from public-facing sites on microsoft.com. A private MMA build is available for testing purposes; to request it, send an email to [getmma@microsoft.com](mailto:getmma@microsoft.com).
 
 1. [Open XML SDK](https://www.microsoft.com/en-us/download/details.aspx?id=30425)
 
