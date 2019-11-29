@@ -509,9 +509,10 @@ You can use the Visual Studio solution (.sln) file included with this test suite
 To debug a test case
 
 * On the driver computer, use Visual Studio to open the following solution file:
-C:\MicrosoftProtocolTests\RDP\Server-Endpoint\\_&#60;version&#35;&#62;_\Source\Server\TestCode\RDP_Server.sln
 
-* In the **Solution Explorer** window, right-click the **Solution** ‘**RDP_Server’**, and select **Build Solution**.
+WindowsProtocolTestSuites\TestSuites\RDP\Server\src\RDP_Server.sln
+
+* In the **Solution Explorer** window, right-click the **Solution** **RDP_Server**, and select **Build Solution**.
 
 * Open the **Test Explorer** window in Visual Studio, select the names of the test cases that you want to debug.
 
