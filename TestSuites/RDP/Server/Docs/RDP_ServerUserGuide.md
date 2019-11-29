@@ -290,11 +290,11 @@ This section provides information about how to set up a SUT for use with this te
 1. Join the SUT to the domain provided by the DC if you are using domain environment.
 
 1. Install **Remote Desktop Services**
-    * In **Server Manager**, click **Manage**, then select **Add Roles and Features**, click **Next** repeatly untill it comes to **Server Roles** tab. Select **Remote Desktop Services** and click **Next**.
+    * In **Server Manager**, click **Manage**, then select **Add Roles and Features**, click **Next** repeatly until it comes to **Server Roles** tab. Select **Remote Desktop Services** and click **Next**.
 
     ![image10.png](./image/RDP_ServerUserGuide/image10.png)
 
-    * Click **Next** repeatly untill it comes to **Role Services** tab. Select **Remote Desktop Licensing**. In the prompt wizard, click **Add Features**
+    * Click **Next** repeatly until it comes to **Role Services** tab. Select **Remote Desktop Licensing**. In the prompt wizard, click **Add Features**
 
     ![image11.png](./image/RDP_ServerUserGuide/image11.png)
 
@@ -505,11 +505,6 @@ Note
 You can get test suite source code from github [https://github.com/Microsoft/WindowsProtocolTestSuites](https://github.com/Microsoft/WindowsProtocolTestSuites)
 
 You can use the Visual Studio solution (.sln) file included with this test suite to debug additional test cases that you create for your protocol implementation. 
-
-![image2.png](./image/RDP_ServerUserGuide/image2.png)
-Note 
-
-Copy _RDP_ServerTestSuite.deployment.ptfconfig_ and _RDP_ServerTestSuite.ptfconfig_ from C:\MicrosoftProtocolTests\RDP\Server-Endpoint\\&#60;version&#35;&#62;\Bin to C:\MicrosoftProtocolTests\RDP\Server-Endpoint\\&#60;version&#35;&#62;\Source\Server\TestCode\TestSuite and replace the original file.
 
 To debug a test case
 
