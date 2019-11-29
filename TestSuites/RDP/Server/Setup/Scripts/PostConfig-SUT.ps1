@@ -19,7 +19,7 @@ Function Write-ConfigLog
     )
 
     $date = Get-Date -f MM-dd-yyyy_HH_mm_ss
-    Write-Output "[$date] $text"
+    Write-Host "[$date] $text" -ForegroundColor $ForegroundColor
 }
 
 $ScriptFileFullPath      = $MyInvocation.MyCommand.Definition
@@ -153,10 +153,27 @@ function Activate-LicenseServer
     $wmiTSLicenseObject.Put()
 
     $wmiClass = ([wmiclass]"\\$($sutSetting.name)\root\cimv2:Win32_TSLicenseServer")
-    $wmiClass.ActivateServerAutomatic()
 
-    $result = $wmiClass.GetActivationStatus().ActivationStatus
-    Write-ConfigLog "Activation status: $result (0 = activated, 1 = not activated)"
+    $retryTimes = 3
+    do {
+        $wmiClass.ActivateServerAutomatic()
+
+        $result = $wmiClass.GetActivationStatus().ActivationStatus
+        Write-ConfigLog "Activation status: $result (0 = activated, 1 = not activated)"
+
+        if ($result -eq 0)
+        {
+            break
+        }
+
+        $retryTimes--
+        Start-sleep 5
+    } while ($retryTimes -gt 0)
+
+    if ($result -ne 0)
+    {
+        Write-ConfigLog "Activate license server failed after retrying 3 times."
+    }
 }
 
 #------------------------------------------------------------------------------------------

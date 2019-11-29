@@ -1268,6 +1268,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// </summary>
         public static void DecodePubicKey(SERVER_CERTIFICATE cert, out byte[] publicExponent, out byte[] modulus)
         {
+            publicExponent = null;
+            modulus = null;
             if (cert.dwVersion == SERVER_CERTIFICATE_dwVersion_Values.CERT_CHAIN_VERSION_1)
             {
                 // proprietary server certificate
