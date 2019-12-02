@@ -247,7 +247,10 @@ To set up the SUT
 
 * Create local or domain user account.
 
-* Create a share folder.
+* Create an SMB2 share folder.
+
+* Create a file with arbitrary content under the SMB2 share folder, and make sure its file size is at least the `MaxWriteSize` supported by the SMB2 implementation of SUT.
+
 
 ### <a name="_Toc395696826"/>Installed Files and Folders
 
