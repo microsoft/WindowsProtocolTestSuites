@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
-using System.Security.Cryptography.X509Certificates;
 using System.Runtime.InteropServices;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic;
 using System.Security.Cryptography;
@@ -32,9 +31,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
         private byte[] licensingEncryptionKey;
 
         private byte[] platformChallenge;
-
-        private PROPRIETARYSERVERCERTIFICATE? proprietaryCert;
-        private X509_CERTIFICATE_CHAIN? x509CertChain;
 
         private NEW_LICENSE_INFO? newLicenseInfo;
         private NEW_LICENSE_INFO? upgradedLicenseInfo;
@@ -76,7 +72,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
                 {
                     // Save server random and decode cert to get public key for future use.
                     serverRandom = licensePdu.LicensingMessage.ServerLicenseRequest.Value.ServerRandom;
-                    DecodeCert(licensePdu.LicensingMessage.ServerLicenseRequest.Value.ServerCertificate.blobData);
+
+                    // According to [MS-RDPELE] section 2.2.2.1
+                    // The terminal server can choose not to send the certificate by setting the wblobLen field in the Licensing Binary BLOB structure to 0. 
+                    // If encryption is in effect and is already protecting RDP traffic, the licensing protocol MAY<3> choose not to send the server certificate 
+                    // (for RDP security measures, see [MS-RDPBCGR] sections 5.3 and 5.4). If the licensing protocol chooses not to send the server certificate, 
+                    // then the client uses the public key obtained from the server certificate sent as part of Server Security Data in the 
+                    // Server MCS Connect Response PDU (see [MS-RDPBCGR] section 2.2.1.4).
+                    if (licensePdu.LicensingMessage.ServerLicenseRequest.Value.ServerCertificate.wBlobLen == 0)
+                    {
+                        publicExponent = rdpbcgrClient.context.ServerExponent;
+                        modulus = rdpbcgrClient.context.ServerModulus;
+                    }
+                    else
+                    {
+                        int index = 0;
+                        SERVER_CERTIFICATE cert = RdpbcgrDecoder.DecodeServerCertificate(
+                            licensePdu.LicensingMessage.ServerLicenseRequest.Value.ServerCertificate.blobData,
+                            ref index,
+                            (uint)licensePdu.LicensingMessage.ServerLicenseRequest.Value.ServerCertificate.blobData.Length);
+                        RdpbcgrDecoder.DecodePubicKey(cert, out publicExponent, out modulus);
+                    }
                 }
                 else if (licensePdu.preamble.bMsgType == bMsgType_Values.PLATFORM_CHALLENGE)
                 {
@@ -271,73 +287,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
         {
             var calculatedMAC = EncryptionAlgorithm.GenerateNonFIPSDataSignature(macSaltKey, decryptedData, 16 * 8);
             return Enumerable.SequenceEqual(receivedMAC, calculatedMAC);
-        }
-
-        /// <summary>
-        /// Decode the cert from the RDP server and get the public key, in order to encrypt PreMasterSecret
-        /// </summary>
-        private void DecodeCert(byte[] certBlob)
-        {
-            int index = 0;
-            uint version = RdpbcgrDecoder.ParseUInt32(certBlob, ref index, false);
-            if (version == (uint)SERVER_CERTIFICATE_dwVersion_Values.CERT_CHAIN_VERSION_1)
-            {
-                // proprietary server certificate
-                proprietaryCert = RdpbcgrDecoder.ParseProprietaryServerCertificate(certBlob, ref index);
-                RSA_PUBLIC_KEY rsaPublicKey = proprietaryCert.Value.PublicKeyBlob;
-                publicExponent = BitConverter.GetBytes(rsaPublicKey.pubExp);
-                modulus = rsaPublicKey.modulus;
-            }
-            else if (version == (uint)SERVER_CERTIFICATE_dwVersion_Values.CERT_CHAIN_VERSION_2)
-            {
-                // X509 certificate chain
-                x509CertChain = RdpbcgrDecoder.ParseX509CertificateChain(certBlob, ref index, certBlob.Length - index);
-                var x509Cert = new X509Certificate2(x509CertChain.Value.CertBlobArray[3].abCert);
-                var publicKey = x509Cert.PublicKey.EncodedKeyValue.RawData;
-                DecodeX509RSAPublicKey(publicKey);
-            }
-            else
-            {
-                throw new Exception($"Invalid certChainVersion: {version}");
-            }
-        }
-
-        private void DecodeX509RSAPublicKey(byte[] publicKey)
-        {
-            // An RSA public key should be represented with the ASN.1 type RSAPublicKey:
-            //    RSAPublicKey::= SEQUENCE {
-            //        modulus         INTEGER,  --n
-            //        publicExponent  INTEGER   --e
-            //    }
-
-            if (publicKey == null)
-            {
-                throw new Exception("publicKey should not be null!");
-            }
-
-            // 0x30 stands for "SEQUENCE", 0x02 stands for "INTEGER". publicKey[1] is the size of the SEQUENCE which we don't care.
-            if (publicKey[0] != 0x30 || publicKey[2] != 0x02)
-            {
-                throw new Exception("Invalid publicKey!");
-            }
-
-            int modulusLength = publicKey[3]; // publicKey[3] 
-            modulus = new byte[modulusLength];
-            Buffer.BlockCopy(publicKey, 4, modulus, 0, modulusLength);
-
-            // 0x02 stands for "INTEGER"
-            if (publicKey[4 + modulusLength] != 0x02)
-            {
-                throw new Exception("Invalid publicKey!");
-            }
-
-            int publicExponentLength = publicKey[5 + modulusLength];
-            publicExponent = new byte[publicExponentLength];
-            Buffer.BlockCopy(publicKey, 6 + modulusLength, publicExponent, 0, publicExponentLength);
-
-            // ASN.1 uses big-endian, but the Proprietary Server Certificate uses little-endian, to utilize them, save little-endian format for both cases.
-            Array.Reverse(publicExponent);
-            Array.Reverse(modulus);
         }
 
         /// <summary>
