@@ -75,6 +75,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter
 
         protected void AddTestFileName(string share, string fileName)
         {
+            if (string.IsNullOrEmpty(share))
+                return;
             testFiles.Add(Path.Combine(share, fileName));
         }
 
