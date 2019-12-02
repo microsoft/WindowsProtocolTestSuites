@@ -111,8 +111,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         private object contextLock;
         private ClientStaticVirtualChannelManager channelManager;
         private EncryptionAlgorithm encryptionAlgorithm;
-        private byte[] x509ServerExponent;
-        private byte[] x509ServerModulus;
+        private byte[] publicExponent;
+        private byte[] modulus;
         private object remoteIdentity;
         private object localIdentity;
 
@@ -296,21 +296,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 lock (contextLock)
                 {
+                    if (publicExponent != null)
+                    {
+                        return publicExponent;
+                    }
+
                     if (mcsConnectResponsePdu != null
                         && mcsConnectResponsePdu.mcsCrsp.gccPdu.serverSecurityData.serverCertificate != null)
                     {
-                        if (mcsConnectResponsePdu.mcsCrsp.gccPdu.serverSecurityData.serverCertificate.dwVersion ==
-                            SERVER_CERTIFICATE_dwVersion_Values.CERT_CHAIN_VERSION_1)
-                        {
-                            return BitConverter.GetBytes(((PROPRIETARYSERVERCERTIFICATE)
-                                (mcsConnectResponsePdu.mcsCrsp.gccPdu.serverSecurityData.serverCertificate.certData))
-                                .PublicKeyBlob.pubExp);
-                        }
-                        else if (mcsConnectResponsePdu.mcsCrsp.gccPdu.serverSecurityData.serverCertificate.dwVersion ==
-                            SERVER_CERTIFICATE_dwVersion_Values.CERT_CHAIN_VERSION_2)
-                        {
-                            return RdpbcgrUtility.CloneByteArray(x509ServerExponent);
-                        }
+                        RdpbcgrDecoder.DecodePubicKey(
+                            mcsConnectResponsePdu.mcsCrsp.gccPdu.serverSecurityData.serverCertificate,
+                            out publicExponent, out modulus);
+                        return publicExponent;
                         // no else
                     }
 
@@ -321,7 +318,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 lock (contextLock)
                 {
-                    x509ServerExponent = RdpbcgrUtility.CloneByteArray(value);
+                    publicExponent = RdpbcgrUtility.CloneByteArray(value);
                 }
             }
         }
@@ -337,21 +334,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 lock (contextLock)
                 {
+                    if (modulus != null)
+                    {
+                        return modulus;
+                    }
+
                     if (mcsConnectResponsePdu != null
                         && mcsConnectResponsePdu.mcsCrsp.gccPdu.serverSecurityData.serverCertificate != null)
                     {
-                        if (mcsConnectResponsePdu.mcsCrsp.gccPdu.serverSecurityData.serverCertificate.dwVersion ==
-                            SERVER_CERTIFICATE_dwVersion_Values.CERT_CHAIN_VERSION_1)
-                        {
-                            PROPRIETARYSERVERCERTIFICATE cert = (PROPRIETARYSERVERCERTIFICATE)
-                                mcsConnectResponsePdu.mcsCrsp.gccPdu.serverSecurityData.serverCertificate.certData;
-                            return RdpbcgrUtility.CloneByteArray(cert.PublicKeyBlob.modulus);
-                        }
-                        else if (mcsConnectResponsePdu.mcsCrsp.gccPdu.serverSecurityData.serverCertificate.dwVersion ==
-                            SERVER_CERTIFICATE_dwVersion_Values.CERT_CHAIN_VERSION_2)
-                        {
-                            return RdpbcgrUtility.CloneByteArray(x509ServerModulus);
-                        }
+                        RdpbcgrDecoder.DecodePubicKey(
+                            mcsConnectResponsePdu.mcsCrsp.gccPdu.serverSecurityData.serverCertificate,
+                            out publicExponent, out modulus);
+                        return modulus;
                         // no else
                     }
 
@@ -362,7 +356,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 lock (contextLock)
                 {
-                    x509ServerModulus = RdpbcgrUtility.CloneByteArray(value);
+                    modulus = RdpbcgrUtility.CloneByteArray(value);
                 }
             }
         }
