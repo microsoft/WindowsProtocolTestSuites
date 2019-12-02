@@ -68,6 +68,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter
 
         protected string GetTestFileName(string share)
         {
+            if (string.IsNullOrEmpty(share))
+            {
+                return null;
+            }
+
             string fileName = CurrentTestCaseName + "_" + Guid.NewGuid().ToString();
             testFiles.Add(Path.Combine(share, fileName));
             return fileName;
@@ -75,11 +80,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter
 
         protected void AddTestFileName(string share, string fileName)
         {
+            if (string.IsNullOrEmpty(share))
+            {
+                return;
+            }
+
             testFiles.Add(Path.Combine(share, fileName));
         }
 
         protected string GetTestDirectoryName(string share)
         {
+            if (string.IsNullOrEmpty(share))
+            {
+                return null;
+            }
+
             string directoryName = CurrentTestCaseName + "_" + Guid.NewGuid().ToString();
             testDirectories.Add(Path.Combine(share, directoryName));
             return directoryName;
@@ -87,6 +102,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter
 
         protected void AddTestDirectoryName(string share, string directoryName)
         {
+            if (string.IsNullOrEmpty(share))
+            {
+                return;
+            }
+
             testDirectories.Add(Path.Combine(share, directoryName));
         }
     }
