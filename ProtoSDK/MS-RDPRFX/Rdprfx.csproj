@@ -1,119 +1,22 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{9DD86DE1-3231-4713-9B45-493F4FE4199C}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx</RootNamespace>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <ProjectReference Include="..\Messages\Messages.csproj" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
-      <Link>SharedAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="Codecs\RdprfxTileUtils.cs" />
-    <Compile Include="Codecs\RemoteFXCodec\RemoteFXCodecContext.cs" />
-    <Compile Include="Codecs\RemoteFXCodec\RemoteFXDecoder.cs" />
-    <Compile Include="Codecs\RemoteFXCodec\RemoteFXEncoder.cs" />
-    <Compile Include="Codecs\RemoteFXCodec\RLGRDecoder.cs" />
-    <Compile Include="Codecs\RemoteFXCodec\RLGREncoder.cs" />
-    <Compile Include="Codecs\RdprfxTileTypes.cs" />
-    <Compile Include="Server\RdprfxServer.cs" />
-    <Compile Include="Server\RdprfxServerDecoder.cs" />
-    <Compile Include="Types\Enums.cs" />
-    <Compile Include="Types\TS_RFX_BLOCKT.cs" />
-    <Compile Include="Types\TS_RFX_CAPS.cs" />
-    <Compile Include="Types\TS_RFX_CAPSET.cs" />
-    <Compile Include="Types\TS_RFX_CHANNELS.cs" />
-    <Compile Include="Types\TS_RFX_CHANNELT.cs" />
-    <Compile Include="Types\TS_RFX_CLNT_CAPS_CONTAINER.cs" />
-    <Compile Include="Types\TS_RFX_CODEC_CHANNELT.cs" />
-    <Compile Include="Types\TS_RFX_CODEC_QUANT.cs" />
-    <Compile Include="Types\TS_RFX_CODEC_VERSIONS.cs" />
-    <Compile Include="Types\TS_RFX_CODEC_VERSIONT.cs" />
-    <Compile Include="Types\TS_RFX_CONTEXT.cs" />
-    <Compile Include="Types\TS_RFX_FRAME_BEGIN.cs" />
-    <Compile Include="Types\TS_RFX_FRAME_END.cs" />
-    <Compile Include="Types\TS_RFX_ICAP.cs" />
-    <Compile Include="Types\TS_RFX_RECT.cs" />
-    <Compile Include="Types\TS_RFX_REGION.cs" />
-    <Compile Include="Types\TS_RFX_SRVR_CAPS_CONTAINER.cs" />
-    <Compile Include="Types\TS_RFX_SYNC.cs" />
-    <Compile Include="Types\TS_RFX_TILE.cs" />
-    <Compile Include="Types\TS_RFX_TILESET.cs" />
-    <Compile Include="Types\TypeMarshal.cs" />
+    <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Messages\Messages.csproj">
-      <Project>{75544419-3f4e-4308-a676-165f45c1462e}</Project>
-      <Name>Messages</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Target Name="AfterBuild">
-    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="..\..\drop\ProtoSDK\Bin\" />
-    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="..\..\drop\ProtoSDK\Bin\" />
-  </Target>
+
 </Project>

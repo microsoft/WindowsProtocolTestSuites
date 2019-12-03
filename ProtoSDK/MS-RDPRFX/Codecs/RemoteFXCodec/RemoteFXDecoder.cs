@@ -187,7 +187,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx
         protected static void dequantization_Component(short[,] compontent, TS_RFX_CODEC_QUANT tsRfxCodecQuant)
         {
             // Quantization factor: HL1, LH1, HH1, HL2, LH2, HH2, HL3, LH3, HH3, LL3            
-            Hashtable scaleValueTable = new Hashtable();
             int HL1_Factor = tsRfxCodecQuant.HL1_HH1 & 0x0f;
             int LH1_Factor = (tsRfxCodecQuant.HH2_LH1 & 0xf0) >> 4;
             int HH1_Factor = (tsRfxCodecQuant.HL1_HH1 & 0xf0) >> 4;
