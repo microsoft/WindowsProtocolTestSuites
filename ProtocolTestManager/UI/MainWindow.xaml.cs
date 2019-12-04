@@ -323,10 +323,20 @@ namespace Microsoft.Protocols.TestManager.UI
                     this.ListBox_Step.IsEnabled = true;
                     Pages.RunPage.EnableControls = true;
                     Pages.AutoDetectionPage.PropertyListBox.IsEnabled = true;
+
                     if (e.Exception.Count > 0)
                     {
                         Utility.LogException(e.Exception);
                         MessageBox.Show("Some exception happened during executing!", "Error", MessageBoxButton.OK);
+                    }
+                    else
+                    {
+                        var counts = new int[] { e.Passed, e.Failed, e.Inconclusive };
+
+                        if (counts.All(count => count == 0))
+                        {
+                            MessageBox.Show("Test agent exited unexpectedly with no test case being executed!", "Error", MessageBoxButton.OK);
+                        }
                     }
                 }));
             };
