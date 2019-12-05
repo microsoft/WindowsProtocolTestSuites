@@ -8,7 +8,7 @@ using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
-using Microsoft.Protocols.TestTools.ExtendedLogging;
+// using Microsoft.Protocols.TestTools.ExtendedLogging;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
 {   
@@ -588,7 +588,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
 
                     // ETW Provider Dump message
                     string messageName = "RDPEGFX:DecompressedData";
-                    ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, "RDPEGFX decompressed data", rawSvrData);
+                    // ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, "RDPEGFX decompressed data", rawSvrData);
                 }
                 else
                 {
@@ -647,7 +647,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
 
                         // ETW Provider Dump message
                         string messageName = "RDPEGFX:DecompressedData";
-                        ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, "RDPEGFX decompressed data", rawPartData);
+                        // ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, "RDPEGFX decompressed data", rawPartData);
                     }
                     else
                     {
