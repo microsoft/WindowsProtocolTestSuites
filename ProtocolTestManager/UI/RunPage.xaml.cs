@@ -74,7 +74,7 @@ namespace Microsoft.Protocols.TestManager.UI
                 var header = new StackPanel()
                 {
                     Orientation = Orientation.Horizontal,
-                    Children = { 
+                    Children = {
                         headerCheckbox,
                         headerLabel
                     }
@@ -137,7 +137,7 @@ namespace Microsoft.Protocols.TestManager.UI
                         var dispatcher = headerCheckbox.Dispatcher;
                         if (dispatcher.CheckAccess())
                         {
-                             headerLabel.Content = i.HeaderText;
+                            headerLabel.Content = i.HeaderText;
                         }
                         else
                         {
@@ -239,11 +239,6 @@ namespace Microsoft.Protocols.TestManager.UI
                 logview.SelectTestCase(selectedTestCase);
             else
                 logview.IsCurrent = true;
-        }
-
-        private void Inprogress_GotFocus(object sender, RoutedEventArgs e)
-        {
-            logview.IsCurrent = true;
         }
 
         private void UncheckAll_Click(object sender, RoutedEventArgs e)
@@ -555,7 +550,12 @@ namespace Microsoft.Protocols.TestManager.UI
         }
         private void SelectedCaseChanged()
         {
-            Pages.RunPage.WebBrowserLog.Url = testcase.LogUri;
+            // testcase could be null because logger.RunningTestCase could be null.
+            // So add check here to avoid null reference exception.
+            if (testcase != null) 
+            {
+                Pages.RunPage.WebBrowserLog.Url = testcase.LogUri;
+            }
         }
 
     }
