@@ -44,6 +44,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         private StreamConfig transportConfig;
         private bool isAutoReactivate;
         protected const ushort TS_UD_CS_SEC_SecurityDataSize = 12;
+        private const int SOCKET_RECEIVE_TIMEOUT = 1;
         private SslProtocols tlsVersion;
 
         /// <summary>
@@ -623,7 +624,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     ((CredSspStream)clientStream).Authenticate();
                 }
             }
-            // else it is only a simple tcp transport
+            else
+            {
+                // It is only a simple TCP transport.
+                // Set non-blocking mode.
+
+                tcpClient.Client.Blocking = false;
+                tcpClient.Client.ReceiveTimeout = SOCKET_RECEIVE_TIMEOUT;
+            }
 
             // create a transport config
             transportConfig = new StreamConfig();
@@ -658,6 +666,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     transportConfig.Stream = clientStream;
                     transportStack.UpdateConfig(transportConfig, () =>
                     {
+                        // Restore to blocking mode.
+                        tcpClient.Client.Blocking = true;
+                        tcpClient.Client.ReceiveTimeout = 0;
+
                         ((SslStream)clientStream).AuthenticateAsClient(serverName, null, TlsVersion, false);
                     });
                 }
@@ -681,6 +693,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     transportConfig.Stream = clientStream;
                     transportStack.UpdateConfig(transportConfig, () =>
                     {
+                        // Restore to blocking mode.
+                        tcpClient.Client.Blocking = true;
+                        tcpClient.Client.ReceiveTimeout = 0;
+
                         ((CredSspStream)clientStream).Authenticate();
 
                         if (Context.ServerSelectedProtocol == (uint)selectedProtocols_Values.PROTOCOL_HYBRID_EX)
