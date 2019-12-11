@@ -140,62 +140,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [TestMethod()]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
-        [TestCategory(TestCategories.QueryFileInformation)]
-        [TestCategory(TestCategories.NonSmb)]
-        [Description("Create file with ::$DATA as suffix and then query file access info.")]
-        public void Fs_CreateFiles_Suffix_DATA()
-        {
-            if (this.fsaAdapter.FileSystem == FileSystem.FAT32)
-            {
-                this.TestSite.Assume.Inconclusive("File name with stream type or stream data as suffix is not supported by FAT32.");
-            }
-
-            // Create a new file
-            String fileName = this.fsaAdapter.ComposeRandomFileName(8, ".txt", CreateOptions.NON_DIRECTORY_FILE );
-            fileName = $"{fileName}::$DATA";
-
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create a file {fileName}");
-
-            Smb2.FILEID fileId;
-            uint treeId = 0;
-            ulong sessionId = 0;
-            MessageStatus status = this.fsaAdapter.CreateFile(
-                fileName,
-                (FileAttribute)0,
-                CreateOptions.NON_DIRECTORY_FILE,
-                (FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE),
-                (ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE | ShareAccess.FILE_SHARE_DELETE),
-                CreateDisposition.OPEN_IF,
-                out fileId,
-                out treeId,
-                out sessionId);
-
-            this.fsaAdapter.AssertAreEqual(this.Manager,
-                MessageStatus.SUCCESS,
-                status,
-                $"Create file with name {fileName} is expected to succeed.");
-
-            long byteCount;
-            byte[] outputBuffer;
-            FILE_ACCESS_INFORMATION fileAccessInfo = new FILE_ACCESS_INFORMATION();
-            uint outputBufferSize = (uint)TypeMarshal.ToBytes<FILE_ACCESS_INFORMATION>(fileAccessInfo).Length;
-
-            status = this.fsaAdapter.QueryFileInformation(
-                FileInfoClass.FILE_ACCESS_INFORMATION,
-                outputBufferSize,
-                out byteCount,
-                out outputBuffer);
-
-            this.fsaAdapter.AssertAreEqual(this.Manager,
-             MessageStatus.SUCCESS,
-             status,
-             $"Query access information of file {fileName} is expected to succeed.");
-
-        }
-
-        [TestMethod()]
-        [TestCategory(TestCategories.Bvt)]
-        [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryDirectory)]
         [TestCategory(TestCategories.NonSmb)]
         [Description("Create a lot of files and then query the directoy info one by one with flag SMB2_RETURN_SINGLE_ENTRY.")]
@@ -281,29 +225,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
                    
             }
             this.fsaAdapter.CloseOpen();           
-        }
-        /// <summary>
-        /// Create file
-        /// </summary>
-        /// <param name="fileName">File name</param>      
-        /// <returns>An NTSTATUS code that specifies the result</returns>
-        public MessageStatus CreateFile(string fileName)
-        {
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create a file with name: {fileName}");
-
-            MessageStatus status = MessageStatus.SUCCESS;
-
-            status = this.fsaAdapter.CreateFile(
-                        fileName,
-                        (FileAttribute)0,
-                        CreateOptions.NON_DIRECTORY_FILE,
-                        (FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE),
-                        (ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE | ShareAccess.FILE_SHARE_DELETE),
-                        CreateDisposition.OPEN_IF);
-
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create file and return with status {status}");
-
-            return status;
         }
 
         /// <summary>
