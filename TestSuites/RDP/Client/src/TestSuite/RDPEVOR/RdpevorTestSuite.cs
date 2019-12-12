@@ -45,8 +45,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpevor
         {
             base.TestInitialize();
 
-            this.rdpevorAdapter = (IRdpevorAdapter)this.TestSite.GetAdapter(typeof(IRdpevorAdapter));
-            this.rdpegtAdapter = (IRdpegtAdapter)this.TestSite.GetAdapter(typeof(IRdpegtAdapter));
+            this.rdpevorAdapter = this.TestSite.GetAdapter<IRdpevorAdapter>();
+            this.rdpegtAdapter = this.TestSite.GetAdapter<IRdpegtAdapter>();
 
             this.rdpevorAdapter.Reset();
             this.rdpegtAdapter.Reset();

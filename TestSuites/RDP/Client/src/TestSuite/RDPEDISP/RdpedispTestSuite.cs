@@ -92,9 +92,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
                 changedMonitorNumber = 2;
             }
 
-            this.rdpedispAdapter = (IRdpedispAdapter)this.TestSite.GetAdapter(typeof(IRdpedispAdapter));
+            this.rdpedispAdapter = this.TestSite.GetAdapter<IRdpedispAdapter>();
             this.rdpedispAdapter.Reset();
-            this.rdpedispSutControlAdapter = (IRdpedispSUTControlAdapter)this.TestSite.GetAdapter(typeof(IRdpedispSUTControlAdapter));
+            this.rdpedispSutControlAdapter = this.TestSite.GetAdapter<IRdpedispSUTControlAdapter>();
             //Start RDP listening.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Starting RDP listening with transport protocol: {0}", transportProtocol.ToString());
             this.rdpbcgrAdapter.StartRDPListening(transportProtocol);
@@ -181,7 +181,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             rdpedycServer.ExchangeCapabilities(waitTime);
             if (notificationType == NotificationType.SurfaceManagementCommand)
             {
-                this.rdpegfxAdapter = (IRdpegfxAdapter)this.TestSite.GetAdapter(typeof(IRdpegfxAdapter));
+                this.rdpegfxAdapter = this.TestSite.GetAdapter<IRdpegfxAdapter>();
                 this.rdpegfxAdapter.Reset();
                 this.rdprfxAdapter = null;
                 // RDPEGFX capability exchange
@@ -191,7 +191,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             }
             else
             {
-                this.rdprfxAdapter = (IRdprfxAdapter)this.TestSite.GetAdapter(typeof(IRdprfxAdapter));
+                this.rdprfxAdapter = this.TestSite.GetAdapter<IRdprfxAdapter>();
                 this.rdprfxAdapter.Reset();                
                 //Initial the RDPRFX adapter context.
                 rdprfxAdapter.Accept(this.rdpbcgrAdapter.ServerStack, this.rdpbcgrAdapter.SessionContext);

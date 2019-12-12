@@ -49,7 +49,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         {
             base.TestInitialize();
 
-            this.rdpeiSUTControlAdapter = (IRdpeiSUTControlAdapter)this.TestSite.GetAdapter(typeof(IRdpeiSUTControlAdapter));
+            this.rdpeiSUTControlAdapter = this.TestSite.GetAdapter<IRdpeiSUTControlAdapter>();
             this.rdpeiSUTControlAdapter.Reset();
             this.rdpbcgrAdapter.TurnVerificationOff(false);
             RdpeiUtility.Initialized(this.TestSite);

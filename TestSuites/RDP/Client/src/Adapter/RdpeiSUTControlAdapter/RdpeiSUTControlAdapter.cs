@@ -31,9 +31,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         public override void Initialize(ITestSite testSite)
         {
             this.site = testSite;
-            this.rdprfxAdapter = (IRdprfxAdapter)Site.GetAdapter(typeof(IRdprfxAdapter));
+            this.rdprfxAdapter = Site.GetAdapter<IRdprfxAdapter>();
             this.rdprfxAdapter.Initialize(testSite);
-            this.rdpbcgrAdapter = (IRdpbcgrAdapter)Site.GetAdapter(typeof(IRdpbcgrAdapter));
+            this.rdpbcgrAdapter = Site.GetAdapter<IRdpbcgrAdapter>();
             RdpeiUtility.Initialized(this.site);
         }
 

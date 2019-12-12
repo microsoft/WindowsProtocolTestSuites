@@ -164,7 +164,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         {
             if (this.rdpefsAdapter == null)
             {
-                this.rdpefsAdapter = (IRdpefsAdapter)this.TestSite.GetAdapter(typeof(IRdpefsAdapter));
+                this.rdpefsAdapter = this.TestSite.GetAdapter<IRdpefsAdapter>();
                 this.rdpefsAdapter.Reset();
                 this.rdpefsAdapter.AttachRdpbcgrAdapter(this.rdpbcgrAdapter);
             }

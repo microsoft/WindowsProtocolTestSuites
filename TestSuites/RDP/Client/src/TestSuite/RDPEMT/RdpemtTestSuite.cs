@@ -337,7 +337,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
             if (rdpefsAdapter == null)
             {
                 this.TestSite.Log.Add(LogEntryKind.Comment, "Create rdpefs adapter.");
-                this.rdpefsAdapter = (IRdpefsAdapter)this.TestSite.GetAdapter(typeof(IRdpefsAdapter));
+                this.rdpefsAdapter = this.TestSite.GetAdapter<IRdpefsAdapter>();
                 this.rdpefsAdapter.Reset();
                 this.rdpefsAdapter.AttachRdpbcgrAdapter(this.rdpbcgrAdapter);
             }

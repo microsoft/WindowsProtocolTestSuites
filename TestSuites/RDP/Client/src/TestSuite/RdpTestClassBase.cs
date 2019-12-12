@@ -92,8 +92,8 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             string rdpVersion = GetSupportedRDPVersion(attrs);
             VerifyRDPVersion(testName, rdpVersion);
 
-            this.rdpbcgrAdapter = (IRdpbcgrAdapter)this.TestSite.GetAdapter(typeof(IRdpbcgrAdapter));
-            this.sutControlAdapter = (IRdpSutControlAdapter)this.TestSite.GetAdapter(typeof(IRdpSutControlAdapter));
+            this.rdpbcgrAdapter = this.TestSite.GetAdapter<IRdpbcgrAdapter>();
+            this.sutControlAdapter = this.TestSite.GetAdapter<IRdpSutControlAdapter>();
             this.rdpbcgrAdapter.Reset();
             LoadConfig();
 

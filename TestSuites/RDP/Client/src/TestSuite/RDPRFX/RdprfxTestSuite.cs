@@ -41,7 +41,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         {
             base.TestInitialize();
 
-            this.rdprfxAdapter = (IRdprfxAdapter)this.TestSite.GetAdapter(typeof(IRdprfxAdapter));
+            this.rdprfxAdapter = this.TestSite.GetAdapter<IRdprfxAdapter>();
             this.rdprfxAdapter.Reset();
             this.rdpbcgrAdapter.TurnVerificationOff(true);
         }

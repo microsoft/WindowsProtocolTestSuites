@@ -52,7 +52,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         protected override void TestInitialize()
         {
             base.TestInitialize();
-            this.rdpegfxAdapter = (IRdpegfxAdapter)this.TestSite.GetAdapter(typeof(IRdpegfxAdapter));
+            this.rdpegfxAdapter = this.TestSite.GetAdapter<IRdpegfxAdapter>();
             this.rdpegfxAdapter.Reset();
             this.GetTestData();
             this.rdpbcgrAdapter.TurnVerificationOff(true);
