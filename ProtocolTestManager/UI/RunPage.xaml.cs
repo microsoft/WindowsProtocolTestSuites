@@ -341,12 +341,8 @@ namespace Microsoft.Protocols.TestManager.UI
             }
             catch (Exception exception)
             {
-                MessageBox.Show(
-                    exception.Message,
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error,
-                    MessageBoxResult.None);
+                UserPromptWindow.Show(StringResources.Error, exception.Message, UserPromptWindow.IconType.Error);
+
                 return;
             }
         }
@@ -364,12 +360,8 @@ namespace Microsoft.Protocols.TestManager.UI
             }
             catch (Exception exception)
             {
-                MessageBox.Show(
-                    exception.Message,
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error,
-                    MessageBoxResult.None);
+                UserPromptWindow.Show(StringResources.Error, exception.Message, UserPromptWindow.IconType.Error);
+
                 return;
             }
         }
@@ -385,17 +377,16 @@ namespace Microsoft.Protocols.TestManager.UI
                     int checkedNumber, notFound;
                     Pages.util.ImportPlaylist(openfile.FileName);
                     Pages.util.ApplyPlaylist(out checkedNumber, out notFound);
-                    if (notFound > 0) MessageBox.Show(string.Format(StringResources.NotFoundCaseMessage, notFound));
+                    if (notFound > 0)
+                    {
+                        UserPromptWindow.Show(StringResources.Error, string.Format(StringResources.NotFoundCaseMessage, notFound), UserPromptWindow.IconType.Error);
+                    }
                 }
             }
             catch (Exception exception)
             {
-                MessageBox.Show(
-                    exception.Message,
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error,
-                    MessageBoxResult.None);
+                UserPromptWindow.Show(StringResources.Error, exception.Message, UserPromptWindow.IconType.Error);
+
                 return;
             }
         }
@@ -413,12 +404,8 @@ namespace Microsoft.Protocols.TestManager.UI
             }
             catch (Exception exception)
             {
-                MessageBox.Show(
-                    exception.Message,
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error,
-                    MessageBoxResult.None);
+                UserPromptWindow.Show(StringResources.Error, exception.Message, UserPromptWindow.IconType.Error);
+
                 return;
             }
         }
@@ -552,7 +539,7 @@ namespace Microsoft.Protocols.TestManager.UI
         {
             // testcase could be null because logger.RunningTestCase could be null.
             // So add check here to avoid null reference exception.
-            if (testcase != null) 
+            if (testcase != null)
             {
                 Pages.RunPage.WebBrowserLog.Url = testcase.LogUri;
             }
