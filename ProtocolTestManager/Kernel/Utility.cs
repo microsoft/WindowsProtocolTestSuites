@@ -1427,7 +1427,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// Log exception detail to Protocol Test Manager folder under Application Data.
         /// </summary>
         /// <param name="exception">An exception list.</param>
-        public static void LogException(List<Exception> exception)
+        /// <returns>Path to the error log generated.</returns>
+        public static string LogException(List<Exception> exception)
         {
             string logName = string.Format("Exception_{0}.log", DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss-fff"));
             string logFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Protocol Test Manager");
@@ -1446,6 +1447,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     errorWriter.WriteLine("Error Detail: {0}", e.ToString());
                 }
             }
+
+            return errorLog;
         }
         #endregion
 

@@ -55,12 +55,8 @@ namespace Microsoft.Protocols.TestManager.UI
                         }
                         catch (Exception e)
                         {
-                            MessageBox.Show(
-                                e.Message,
-                                "Error",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Error,
-                                MessageBoxResult.None);
+                            UserPromptWindow.Show(StringResources.Error, e.Message, UserPromptWindow.IconType.Error);
+
                             return;
                         }
                         ListBox_Step.SelectedIndex = welcomeIndex;
@@ -114,12 +110,8 @@ namespace Microsoft.Protocols.TestManager.UI
                     }
                     catch (Exception e)
                     {
-                        MessageBox.Show(
-                            e.Message,
-                            "Error",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Error,
-                            MessageBoxResult.None);
+                        UserPromptWindow.Show(StringResources.Error, e.Message, UserPromptWindow.IconType.Error);
+
                         return;
                     }
                 };
@@ -195,7 +187,8 @@ namespace Microsoft.Protocols.TestManager.UI
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message, StringResources.InvalidValue, MessageBoxButton.OK, MessageBoxImage.Error);
+                UserPromptWindow.Show(StringResources.Error, e.Message, UserPromptWindow.IconType.Error);
+
                 SetButtonsStatus(true, true);
                 this.ListBox_Step.IsEnabled = true;
                 Pages.AutoDetectionPage.PropertyListBox.IsEnabled = true;
@@ -216,7 +209,8 @@ namespace Microsoft.Protocols.TestManager.UI
                     else
                     {
                         this.ButtonNext.Content = StringResources.DetectButton;
-                        MessageBox.Show(o.Exception.Message, StringResources.DetectionError, MessageBoxButton.OK, MessageBoxImage.Error);
+
+                        UserPromptWindow.Show(StringResources.Error, o.Exception.Message, UserPromptWindow.IconType.Error);
                     }
                     SetButtonsStatus(true, true);
 
@@ -326,8 +320,7 @@ namespace Microsoft.Protocols.TestManager.UI
 
                     if (e.Exception.Count > 0)
                     {
-                        Utility.LogException(e.Exception);
-                        MessageBox.Show("Some exception happened during executing!", "Error", MessageBoxButton.OK);
+                        App.LogExceptionAndPrompt(StringResources.Error, e.Exception);
                     }
                     else
                     {
@@ -335,7 +328,7 @@ namespace Microsoft.Protocols.TestManager.UI
 
                         if (counts.All(count => count == 0))
                         {
-                            MessageBox.Show("Test agent exited unexpectedly with no test case being executed!", "Error", MessageBoxButton.OK);
+                            UserPromptWindow.Show(StringResources.Error, StringResources.NoTestExecuted, UserPromptWindow.IconType.Error);
                         }
                     }
                 }));
@@ -381,7 +374,8 @@ namespace Microsoft.Protocols.TestManager.UI
         {
             if (testcases == null || testcases.Count == 0)
             {
-                MessageBox.Show("No test case is selected.", "Warning");
+                UserPromptWindow.Show(StringResources.Warning, StringResources.NoTestCaseSelected, UserPromptWindow.IconType.Warning);
+
                 return;
             }
             util.SaveLastProfile();
@@ -406,19 +400,16 @@ namespace Microsoft.Protocols.TestManager.UI
                 string profile = openFileDialog.FileName, newProfile;
                 if (util.TryUpgradeProfileSettings(profile, out newProfile))
                 {
-                    MessageBox.Show(this, String.Format(StringResources.PtmProfileUpgraded, newProfile));
+                    UserPromptWindow.Show(StringResources.Information, String.Format(StringResources.PtmProfileUpgraded, newProfile), UserPromptWindow.IconType.Information);
+
                     profile = newProfile;
                 }
                 LoadProfile(profile);
             }
             catch (Exception e)
             {
-                MessageBox.Show(
-                    e.Message,
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error,
-                    MessageBoxResult.None);
+                UserPromptWindow.Show(StringResources.Error, e.Message, UserPromptWindow.IconType.Error);
+
                 return;
             }
         }
