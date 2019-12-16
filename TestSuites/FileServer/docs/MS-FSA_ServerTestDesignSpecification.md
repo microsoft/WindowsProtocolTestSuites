@@ -20,6 +20,7 @@
         * [FileInfo_IsFileValidDataLengthInfoSupported](#FileInfo_IsFileValidDataLengthInfoSupported)
         * [FileInfo_IsShortNameSupported](#FileInfo_IsShortNameSupported)
         * [FileInfo_FileIdInformationSupported](#FileInfo_FileIdInformationSupported)
+        * [FileInfo_FileAccessInformationSupported](#FileInfo_FileAccessInformationSupported)
     * [Scenarios for FileSystemInformation](#Scenarios-for-FileSystemInformation)
         * [FsInfo_FileFsAttributeInformation](#FsInfo_FileFsAttributeInformation)
         * [FsInfo_IsObjectIdSupported](#FsInfo_IsObjectIdSupported)
@@ -88,6 +89,8 @@
         * [FileNormalizedNameInformation](#FileNormalizedNameInformation)
             * [FileInfo_Query_FileNormalizedNameInfo_File](#FileInfo_Query_FileNormalizedNameInfo_File)
             * [FileInfo_Query_FileNormalizedNameInfo_Dir](#FileInfo_Query_FileNormalizedNameInfo_Dir)
+        * [FileAccessInformation](#FileAccessInformation)
+            * [FileInfo_Query_FileAccessInformation_DataSuffix](#FileInfo_Query_FileAccessInformation_DataSuffix)
     * [Test cases for FileSystemInformation](#Test-cases-for-FileSystemInformation)
         * [IsObjectIdSupported](#IsObjectIdSupported)
             * [FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported (BVT)](#FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported-BVT)
@@ -432,6 +435,20 @@ There are 343 test cases in total:
 | | Verify FileId when querying FileIdInformation should be the same with FileReferenceNumber when sending **FSCTL_READ_FILE_USN_DATA**.|
 | | Get VolumeSerialNumber by sending **FSCTL_GET_NTFS_VOLUME_DATA** or **FSCTL_GET_REFS_VOLUME_DATA** to server.|
 | | Verify VolumeSerialNumber when querying FileIdInformation should be the same with VolumeSerialNumber when sending **FSCTL_GET_NTFS_VOLUME_DATA** or **FSCTL_GET_REFS_VOLUME_DATA**.|
+
+#### <a name="FileInfo_FileAccessInformationSupported"/>FileInfo_FileAccessInformationSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if FileAccessInformation supported for different file systems.|
+| | Test environment: NTFS, ReFS|
+| | Test object: DataFile, DirectoryFile|
+| | Test coverage:|
+| | FileInfoClass: FileAccessInformation|
+| | If supported, The operation returns **STATUS_SUCCESS**.|
+| Message Sequence| CreateFile.|
+| | QueryInfo with FileInfoClass.FileAccessInformation|
+| | Verify server responses accordingly.|
 
 ### <a name="Scenarios-for-FileSystemInformation"/>Scenarios for FileSystemInformation
 
@@ -1527,6 +1544,17 @@ There are 343 test cases in total:
 | | } Else {|
 | | &nbsp;&nbsp;&nbsp;&nbsp;Assert.Fail();|
 | | }|
+
+#### <a name="FileAccessInformation"/>FileAccessInformation
+
+##### <a name="FileInfo_Query_FileAccessInformation_DataSuffix"/>FileInfo_Query_FileAccessInformation_DataSuffix
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if FileAccessInformation is supported for a file with ::$DATA as suffix.|
+| Message Sequence| CreateFile with ::$Data as file name suffix.|
+| | QueryInfo with FileInfoClass.FileAccessInformation|
+| | Verify server responses accordingly.|
 
 ### <a name="Test-cases-for-FileSystemInformation">Test cases for FileSystemInformation
 
