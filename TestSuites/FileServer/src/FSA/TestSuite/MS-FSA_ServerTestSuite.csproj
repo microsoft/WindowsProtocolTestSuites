@@ -153,6 +153,7 @@
     <Compile Include="TraditionalTestCases\FileAccess\FileAccessTestCases.cs" />
     <Compile Include="TraditionalTestCases\FileAccess\FileAccess_OpenExistingFile.cs" />
     <Compile Include="TraditionalTestCases\FileInformation\FileInfoTestCases.cs" />
+    <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Query_FileAccessInformation.cs" />
     <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Query_FileAttributeTagInformation.cs" />
     <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Query_FileBasicInformation.cs" />
     <Compile Include="TraditionalTestCases\FileInformation\FileInfo_Query_FileCompressionInformation.cs" />
