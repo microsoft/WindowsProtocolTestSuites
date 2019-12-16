@@ -11,5 +11,5 @@ steps:
     inputs:
       targetType: filePath
       filePath: $(extRepo.dir)\TestInstallPrerequisites\Setup-InstallEnvironment.ps1
-      arguments: '-SourcePath "$(Build.Repository.LocalPath)" -HelperBranch "$(helperBranch)" -TestSuiteBranch "$(Build.SourceBranch)" -BuildUser "$(Build.QueuedBy)" -ReleaseMSIPath "$(ReleaseMSIPath)" -ReleaseMSIUserName "$(ReleaseMSIUserName)" -ReleaseMSIPassword "$(ReleaseMSIPassword)" -SenderUsername "$(smtp.senderUsername)" -SenderPassword "$(smtp.senderPassword)"'
+      arguments: '-SourcePath "$(Build.Repository.LocalPath)" -HelperBranch "$(helperBranch)" -TestSuiteBranch "$(Build.SourceBranch)" -BuildUser "$(Build.QueuedBy)" -VHDName "$(VHDName)" -VHDPath "$(VHDPath)" -ShareResultPath "$(ShareResultPath)" -AnswerFile "$(AnswerFile)" -ReleaseMSIPath "$(ReleaseMSIPath)" -ReleaseMSIUserName "$(ReleaseMSIUserName)" -ReleaseMSIPassword "$(ReleaseMSIPassword)" -SenderUsername "$(smtp.senderUsername)" -SenderPassword "$(smtp.senderPassword)"'
       timeoutInMinutes: 0
