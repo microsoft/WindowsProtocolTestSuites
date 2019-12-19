@@ -5481,8 +5481,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A NULL-terminated 12-character Unicode string containing  the short file name (8.3 name). 
         /// </summary>
-        [StaticSize(12, StaticSizeMode.Elements)]
-        public ushort[] ShortName;
+        [StaticSize(24, StaticSizeMode.Elements)]
+        public byte[] ShortName;
 
         /// <summary>
         /// MUST be ignored by the receiver. 
@@ -5494,8 +5494,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         ///  the  file system. For file systems which do not support  FileId, this field MUST be set to 0, and MUST be 
         ///  ignored. 
         /// </summary>
-        [StaticSize(8, StaticSizeMode.Elements)]
-        public byte[] FileId;
+        public long FileId;
 
         /// <summary>
         /// A sequence of Unicode characters containing the file  name. This field might not be NULL-terminated, and   
@@ -5543,7 +5542,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// file system.  For file systems which do not support FileId, this  field MUST be set to 0, and MUST be  
         /// ignored. 
         /// </summary>
-        public _LARGE_INTEGER FileId;
+        public long FileId;
 
         /// <summary>
         /// A sequence of Unicode characters containing the file  name. This field might not be NULL-terminated, and   
