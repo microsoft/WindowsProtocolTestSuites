@@ -41,20 +41,20 @@ namespace Microsoft.Protocols.TestManager.UI
                 false);
             if (caselist.Count == 0)
             {
-                MessageBox.Show(StringResources.NoTestCaseSelected);
+                UserPromptWindow.Show(StringResources.Error, StringResources.NoTestCaseSelected, UserPromptWindow.IconType.Error);
                 return;
             }
 
             var selectedRadioButton = ReportFormatGroup.Children.OfType<RadioButton>().FirstOrDefault(rb => rb.IsChecked == true);
             if (selectedRadioButton == null)
             {
-                MessageBox.Show(StringResources.NoReportFormatSelected);
+                UserPromptWindow.Show(StringResources.Error, StringResources.NoReportFormatSelected, UserPromptWindow.IconType.Error);
                 return;
             }
             TestReport report = TestReport.GetInstance(selectedRadioButton.Name, caselist);
             if (report == null)
             {
-                MessageBox.Show(StringResources.UnknownReportFormat);
+                UserPromptWindow.Show(StringResources.Error, StringResources.UnknownReportFormat, UserPromptWindow.IconType.Error);
                 return;
             }
 

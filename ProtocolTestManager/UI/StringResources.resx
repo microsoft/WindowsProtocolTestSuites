@@ -253,4 +253,22 @@ Do you want to abort the execution?</value>
     <value>The PTM profile has been upgraded.
 New profile is saved as {0}.</value>
   </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="ExceptionsHappendWithLogsRecorded" xml:space="preserve">
+    <value>Some exception(s) happened during execution. Please open an issue on our GitHub site at [https://github.com/Microsoft/WindowsProtocolTestSuites/issues]. The exception log could be found at [{0}].</value>
+  </data>
+  <data name="NoTestExecuted" xml:space="preserve">
+    <value>Test agent exited unexpectedly with no test case being executed.</value>
+  </data>
+  <data name="Information" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="PTMRunning" xml:space="preserve">
+    <value>ProtocolTestManager is already running...</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
 </root>
