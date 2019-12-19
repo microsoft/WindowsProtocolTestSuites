@@ -776,7 +776,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus temp49;
             this.Manager.Comment("executing step \'call QueryFileInfoPart1(FILE_FULL_DIR_INFORMATIO,NotLessThan,out " +
                     "_,out _)\'");
-            temp49 = this.IFSAAdapterInstance.QueryFileInfoPart1(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileInfoClass.FILE_FULL_DIR_INFORMATIO, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.OutputBufferSize)(1)), out temp47, out temp48);
+            temp49 = this.IFSAAdapterInstance.QueryFileInfoPart1(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileInfoClass.FILE_FULL_DIR_INFORMATION, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.OutputBufferSize)(1)), out temp47, out temp48);
             this.Manager.Checkpoint("MS-FSA_R1601");
             this.Manager.Checkpoint("[In FileFullDirectoryInformation,This operation ]MUST be failed with STATUS_NOT_S" +
                     "UPPORTED.");

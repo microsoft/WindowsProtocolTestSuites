@@ -1226,6 +1226,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// </summary>
         NONE = 0,
 
+        FILE_DIRECTORY_INFORMATION = 1,
+
+        FILE_FULL_DIR_INFORMATION = 2,
+
         FILE_BOTH_DIR_INFORMATION = 3,
 
         FILE_ALTERNATENAME_INFORMATION = 21,
@@ -1299,10 +1303,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         FILE_COMPRESSION_INFORMATION = 28,
 
         FILE_QUOTA_INFORMATION = 32,
-
-        FILE_DIRECTORY_INFORMATION = 1,
-
-        FILE_FULL_DIR_INFORMATIO = 2,
 
         FileNormalizedNameInformation = 48,
 

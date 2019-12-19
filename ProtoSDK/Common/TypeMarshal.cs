@@ -11,6 +11,7 @@ using Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling;
 using Microsoft.Protocols.TestTools.StackSdk.Messages.Runtime.Marshaling;
 using System.Security.Permissions;
 using System.Globalization;
+using System.Collections.Generic;
 
 namespace Microsoft.Protocols.TestTools.StackSdk
 {
@@ -448,6 +449,50 @@ namespace Microsoft.Protocols.TestTools.StackSdk
                     return channel.Read<T>();
                 }
             }
+        }
+
+        /// <summary>
+        /// Unmarshal managed byte array to a structure.
+        /// </summary>
+        /// <typeparam name="T">Type of struct.</typeparam>
+        /// <param name="data">byte array of data.</param>
+        /// <returns>Unmarshalled struct.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when data is null.
+        /// </exception>
+        [SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter")]
+        public static T[] ToArray<T>(byte[] data, int align) where T : struct
+        {
+            if (data == null)
+            {
+                throw new ArgumentNullException("data");
+            }
+            int structureSize = Marshal.SizeOf(typeof(T));
+            int size = data.Length / structureSize;
+            var list = new List<T>();
+            var tempBuffer = new byte[data.Length];
+            int index = 0;
+            while (index + 1 < data.Length)
+            {
+                Buffer.BlockCopy(data, index, tempBuffer, 0, data.Length - index);
+                using (MemoryStream memoryStream = new MemoryStream(tempBuffer))
+                {
+                    using (Channel channel = new Channel(null, memoryStream))
+                    {
+                        var structure = channel.Read<T>();
+                        list.Add(structure);
+                        index += TypeMarshal.ToBytes(structure).Length;
+                        if (align != -1)
+                        {
+                            checked { align--; }
+                            index = (index + align) & ~align;
+                        }
+
+                    }
+                }
+            }
+
+            return list.ToArray();
         }
 
 

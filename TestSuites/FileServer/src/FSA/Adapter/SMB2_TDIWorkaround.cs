@@ -44,7 +44,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         internal static MessageStatus WorkaroundQueryFileInfoPart1(FileSystem fileSystem, FileInfoClass fileInfoClass, OutputBufferSize outputBufferSize, ref ByteCount byteCount, ref OutputBuffer outputBuffer, MessageStatus returnedStatus, ITestSite site)
         {
             if (fileInfoClass == FileInfoClass.NOT_DEFINED_IN_FSCC || fileInfoClass == FileInfoClass.FILE_BOTH_DIR_INFORMATION
-                || fileInfoClass == FileInfoClass.FILE_DIRECTORY_INFORMATION || fileInfoClass == FileInfoClass.FILE_FULL_DIR_INFORMATIO
+                || fileInfoClass == FileInfoClass.FILE_DIRECTORY_INFORMATION || fileInfoClass == FileInfoClass.FILE_FULL_DIR_INFORMATION
                 || fileInfoClass == FileInfoClass.FILE_LINKS_INFORMATION || fileInfoClass == FileInfoClass.FILE_ID_BOTH_DIR_INFORMATION
                 || fileInfoClass == FileInfoClass.FILE_ID_FULL_DIR_INFORMATION || fileInfoClass == FileInfoClass.FILE_ID_GLOBAL_TX_DIR_INFORMATION
                 || fileInfoClass == FileInfoClass.FILE_NAME_INFORMATION || fileInfoClass == FileInfoClass.FILE_NAMES_INFORMATION

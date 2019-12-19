@@ -4979,76 +4979,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     //  </remarks>
     public partial struct FileBothDirectoryInformation
     {
+        public FileCommonDirectoryInformation FileCommonDirectoryInformation;
 
         /// <summary>
-        /// A 32-bit unsigned integer that contains the byte offset  from the beginning of this entry, at which the  
-        /// next  FILE_BOTH_DIR_INFORMATION entry is located, if multiple  entries are present in a buffer. This  
-        /// member is zero  if no other entries follow this one. An implementation  MUST use this value to determine  
-        /// the location of the  next entry (if multiple entries are present in a buffer),  and MUST NOT assume that  
-        /// the value of NextEntryOffset  is the same as the size of the current entry. 
-        /// </summary>
-        public uint NextEntryOffset;
-
-        /// <summary>
-        /// A 32-bit unsigned integer that contains the byte offset  of the file within the parent directory. For file 
-        ///  systems  in which the position of a file within the parent directory  is not fixed and can be changed at  
-        /// any time to maintain  sort order, this field SHOULD be set to 0, and MUST  be ignored. When using NTFS,  
-        /// the position of a file  within the parent directory is not fixed and can be  changed at any time.  
-        /// windows_2000, windows_xp, windows_server_2003,  windows_vista, and windows_server_2008 set this value  to  
-        /// 0 for files on NTFS file systems. 
-        /// </summary>
-        public uint FileIndex;
-
-        /// <summary>
-        /// A 64-bit signed integer that contains the time when  the file was created. All dates and times are in  
-        /// absolute  system-time format, which is represented as a FILETIME  structure. This value MUST be greater  
-        /// than or equal  to 0. 
-        /// </summary>
-        public FILETIME CreationTime;
-
-        /// <summary>
-        /// A 64-bit signed integer that contains the last time  the file was accessed in the format of a FILETIME  
-        /// structure.  This value MUST be greater than or equal to 0. 
-        /// </summary>
-        public FILETIME LastAccessTime;
-
-        /// <summary>
-        /// A 64-bit signed integer that contains the last time  information was written to the file in the format of  
-        ///  a FILETIME structure. This value MUST be greater than  or equal to 0. 
-        /// </summary>
-        public FILETIME LastWriteTime;
-
-        /// <summary>
-        /// A 64-bit signed integer that contains the last time  the file was changed in the format of a FILETIME  
-        /// structure.  This value MUST be greater than or equal to 0. 
-        /// </summary>
-        public FILETIME ChangeTime;
-
-        /// <summary>
-        /// A 64-bit signed integer that contains the absolute new  end-of-file position as a byte offset from the  
-        /// start  of the file. EndOfFile specifies the offset to the  byte immediately following the last valid byte  
-        /// in the  file. Because this value is zero-based, it actually  refers to the first free byte in the file.  
-        /// That is,  it is the offset from the beginning of the file at  which new bytes appended to the file will be 
-        ///  written.  The value of this field MUST be greater than or equal  to 0. 
-        /// </summary>
-        public long EndOfFile;
-
-        /// <summary>
-        /// A 64-bit signed integer that contains the file allocation  size, in bytes. Usually, this value is a  
-        /// multiple of  the sector or cluster size of the underlying physical  device. The value of this field MUST  
-        /// be greater than  or equal to 0. 
-        /// </summary>
-        public long AllocationSize;
-
-        /// <summary>
-        /// A 32-bit unsigned integer that contains the file attributes.  Valid file attributes are specified in  
-        /// section . 
-        /// </summary>
-        public uint FileAttributes;
-
-        /// <summary>
-        /// A 32-bit unsigned integer that contains the length,  in bytes, of the FileName field. The NULL termination 
-        ///   of the string, if present, is not included in the FileNameLength  count. 
+        /// A 32-bit unsigned integer that contains the length,  in bytes, of the FileName field. 
         /// </summary>
         public uint FileNameLength;
 
@@ -5074,8 +5008,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A 24-byte Unicode char field containing the short (8.3)  file name. The file name might be  
         /// NULL-terminated. 
         /// </summary>
-        [StaticSize(12, StaticSizeMode.Elements)]
-        public ushort[] ShortName;
+        [StaticSize(24, StaticSizeMode.Elements)]
+        public byte[] ShortName;
 
         /// <summary>
         /// A sequence of Unicode characters containing the file  name. This field might not be NULL-terminated, and   
@@ -5194,15 +5128,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     #region 2.4.10   FileDirectoryInformation
 
     /// <summary>
-    /// This information class is used to query detailed information  for the files in a directory.  The  
-    /// FILE_DIRECTORY_INFORMATION  data element is as follows. 
+    /// The common part of the structure FileDirectoryInformation, FileBothDirectoryInformation, FileFullDirectoryInformation, 
+    /// FileIdBothDirectoryInformation, FileIdFullDirectoryInformation, FileIdGlobalTxDirectoryInformation
     /// </summary>
-    //  <remarks>
-    //   MS-fscc\b38bf518-9057-4c88-9ddd-5e2d3976a64b.xml
-    //  </remarks>
-    public partial struct FileDirectoryInformation
+    public struct FileCommonDirectoryInformation
     {
-
         /// <summary>
         /// A 32-bit unsigned integer that contains the byte offset  from the beginning of this entry, at which the  
         /// next  FILE_DIRECTORY_INFORMATION entry is located, if multiple  entries are present in a buffer. This  
@@ -5268,6 +5198,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         ///  . 
         /// </summary>
         public uint FileAttributes;
+    }
+
+    /// <summary>
+    /// This information class is used to query detailed information  for the files in a directory.  The  
+    /// FILE_DIRECTORY_INFORMATION  data element is as follows. 
+    /// </summary>
+    //  <remarks>
+    //   MS-fscc\b38bf518-9057-4c88-9ddd-5e2d3976a64b.xml
+    //  </remarks>
+    public partial struct FileDirectoryInformation
+    {
+        public FileCommonDirectoryInformation FileCommonDirectoryInformation;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the length,  in bytes, of the FileName field. 
@@ -5366,77 +5308,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     //  </remarks>
     public partial struct FileFullDirectoryInformation
     {
-
-        /// <summary>
-        /// A 32-bit unsigned integer that contains the byte offset  from the beginning of this entry, at which the  
-        /// next  FILE_FULL_DIR_INFORMATION entry is located, if multiple  entries are present in a buffer. This  
-        /// member is zero  if no other entries follow this one. An implementation  MUST use this value to determine  
-        /// the location of the  next entry (if multiple entries are present in a buffer),  and MUST NOT assume that  
-        /// the value of NextEntryOffset  is the same as the size of the current entry. 
-        /// </summary>
-        public uint NextEntryOffset;
-
-        /// <summary>
-        /// A 32-bit unsigned integer that contains the byte offset  of the file within the parent directory. For file 
-        ///  systems  such as NTFS, in which the position of a file within  the parent directory is not fixed and can  
-        /// be changed  at any time to maintain sort order, this field SHOULD  be set to 0, and MUST be ignored. When  
-        /// using NTFS,  the position of a file within the parent directory  is not fixed and can be changed at any  
-        /// time. windows_2000,  windows_xp, windows_server_2003, windows_vista, and  windows_server_2008 set this  
-        /// value to 0 for files on  NTFS file systems. 
-        /// </summary>
-        public uint FileIndex;
-
-        /// <summary>
-        /// A 64-bit signed integer that contains the time when  the file was created in the format of a FILETIME  
-        /// structure.  This value MUST be greater than or equal to 0. 
-        /// </summary>
-        [PossibleValueRange("0", "")]
-        public FILETIME CreationTime;
-
-        /// <summary>
-        /// A 64-bit signed integer that contains the last time  the file was accessed in the format of a FILETIME  
-        /// structure.  This value MUST be greater than or equal to 0. 
-        /// </summary>
-        [PossibleValueRange("0", "")]
-        public FILETIME LastAccessTime;
-
-        /// <summary>
-        /// A 64-bit signed integer that contains the last time  information was written to the file in the format of  
-        ///  a FILETIME structure. This value MUST be greater than  or equal to 0. 
-        /// </summary>
-        [PossibleValueRange("0", "")]
-        public FILETIME LastWriteTime;
-
-        /// <summary>
-        /// A 64-bit signed integer that contains the last time  the file was changed in the format of a FILETIME  
-        /// structure.  This value MUST be greater than or equal to 0. 
-        /// </summary>
-        [PossibleValueRange("0", "")]
-        public FILETIME ChangeTime;
-
-        /// <summary>
-        /// A 64-bit signed integer that contains the absolute new  end-of-file position as a byte offset from the  
-        /// start  of the file. EndOfFile specifies the offset to the  byte immediately following the last valid byte  
-        /// in the  file. Because this value is zero-based, it actually  refers to the first free byte in the file.  
-        /// That is,  it is the offset from the beginning of the file at  which new bytes appended to the file will be 
-        ///  written.  The value of this field MUST be greater than or equal  to 0. 
-        /// </summary>
-        [PossibleValueRange("0", "9223372036854775807")]
-        public long EndOfFile;
-
-        /// <summary>
-        /// A 64-bit signed integer that contains the file allocation  size, in bytes. Usually, this value is a  
-        /// multiple of  the sector or cluster size of the underlying physical  device. The value of this field MUST  
-        /// be greater than  or equal to 0. 
-        /// </summary>
-        [PossibleValueRange("0", "9223372036854775807")]
-        public long AllocationSize;
-
-        /// <summary>
-        /// A 32-bit unsigned integer that contains the file attributes.  For a list of valid file attributes, see  
-        /// section . 
-        /// </summary>
-        public uint FileAttributes;
+        public FileCommonDirectoryInformation FileCommonDirectoryInformation;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the length,  in bytes, of the FileName field. 
@@ -5583,78 +5455,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     //  </remarks>
     public partial struct FileIdBothDirectoryInformation
     {
-
-        /// <summary>
-        /// A 32-bit unsigned integer that contains the byte offset  from the beginning of this entry, at which the  
-        /// next  FILE_ID_BOTH_DIR_INFORMATION entry is located, if multiple  entries are present in the buffer. This  
-        /// member MUST  be zero if no other entries follow this one. An implementation  MUST use this value to  
-        /// determine the location of the  next entry (if multiple entries are present in a buffer),  and MUST NOT  
-        /// assume that the value of NextEntryOffset  is the same as the size of the current entry. 
-        /// </summary>
-        public uint NextEntryOffset;
-
-        /// <summary>
-        /// A 32-bit unsigned integer that contains the byte offset  of the file within the parent directory. For file 
-        ///  systems  in which the position of a file within the parent directory  is not fixed and can be changed at  
-        /// any time to maintain  sort order, this field SHOULD be set to 0, and MUST  be ignored. When using NTFS,  
-        /// the position of a file  within the parent directory is not fixed and can be  changed at any time.  
-        /// windows_2000, windows_xp, windows_server_2003,  windows_vista, and windows_server_2008 set this value  to  
-        /// 0 for files on NTFS file systems. 
-        /// </summary>
-        public uint FileIndex;
-
-        /// <summary>
-        /// A 64-bit signed integer that contains the time when  the file was created. All dates and times are in  
-        /// absolute  system-time format, which is represented as a FILETIME  structure. The value of this field MUST  
-        /// be greater  than or equal to 0. 
-        /// </summary>
-        [PossibleValueRange("0", "")]
-        public FILETIME CreationTime;
-
-        /// <summary>
-        /// A 64-bit signed integer that contains the last time  the file was accessed in the format of a FILETIME  
-        /// structure.  The value of this field MUST be greater than or equal  to 0. 
-        /// </summary>
-        [PossibleValueRange("0", "")]
-        public FILETIME LastAccessTime;
-
-        /// <summary>
-        /// A 64-bit signed integer that contains the last time  information was written to the file in the format of  
-        ///  a FILETIME structure. The value of this field MUST  be greater than or equal to 0. 
-        /// </summary>
-        [PossibleValueRange("0", "")]
-        public FILETIME LastWriteTime;
-
-        /// <summary>
-        /// A 64-bit signed integer that contains the last time  the file was changed in the format of a FILETIME  
-        /// structure.  The value of this field MUST be greater than or equal  to 0. 
-        /// </summary>
-        [PossibleValueRange("0", "")]
-        public FILETIME ChangeTime;
-
-        /// <summary>
-        /// A 64-bit signed integer that contains the absolute new  end-of-file position as a byte offset from the  
-        /// start  of the file. EndOfFile specifies the offset to the  byte immediately following the last valid byte  
-        /// in the  file. Because this value is zero-based, it actually  refers to the first free byte in the file.  
-        /// That is,  it is the offset from the beginning of the file at  which new bytes appended to the file will be 
-        ///  written.  The value of this field MUST be greater than or equal  to 0. 
-        /// </summary>
-        [PossibleValueRange("0", "9223372036854775807")]
-        public long EndOfFile;
-
-        /// <summary>
-        /// A 64-bit signed integer that contains the file allocation  size in bytes. Usually, this value is a  
-        /// multiple of  the sector or cluster size of the underlying physical  device. The value of this field MUST  
-        /// be greater than  or equal to 0. 
-        /// </summary>
-        [PossibleValueRange("0", "9223372036854775807")]
-        public long AllocationSize;
-
-        /// <summary>
-        /// A 32-bit unsigned integer that contains the file attributes.  Valid attributes are as specified in section 
-        ///  . 
-        /// </summary>
-        public uint FileAttributes;
+        public FileCommonDirectoryInformation FileCommonDirectoryInformation;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the length,  in bytes, of the FileName field. 
@@ -5719,77 +5520,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     //  </remarks>
     public partial struct FileIdFullDirectoryInformation
     {
-
-        /// <summary>
-        /// A 32-bit unsigned integer that contains the byte offset  from the beginning of this entry, at which the  
-        /// next  FILE_ID_FULL_DIR_INFORMATION entry is located, if multiple  entries are present in a buffer. This  
-        /// member MUST be  zero if no other entries follow this one. An implementation  MUST use this value to  
-        /// determine the location of the  next entry (if multiple entries are present in a buffer),  and MUST NOT  
-        /// assume that the value of NextEntryOffset  is the same as the size of the current entry. 
-        /// </summary>
-        public uint NextEntryOffset;
-
-        /// <summary>
-        /// A 32-bit unsigned integer that contains the byte offset  of the file within the parent directory. For file 
-        ///  systems  in which the position of a file within the parent directory  is not fixed and can be changed at  
-        /// any time to maintain  sort order, this field SHOULD be set to 0 and MUST  be ignored. When using NTFS, the 
-        ///  position of a file  within the parent directory is not fixed and can be  changed at any time.  
-        /// windows_2000, windows_xp, windows_server_2003,  windows_vista, and windows_server_2008 set this value  to  
-        /// 0 for files on NTFS file systems. 
-        /// </summary>
-        public uint FileIndex;
-
-        /// <summary>
-        /// A 64-bit signed integer that contains the time when  the file was created in the format of a FILETIME  
-        /// structure.  The value of this field MUST be greater than or equal  to 0. 
-        /// </summary>
-        [PossibleValueRange("0", "")]
-        public FILETIME CreationTime;
-
-        /// <summary>
-        /// A 64-bit signed integer that contains the last time  the file was accessed in the format of a FILETIME  
-        /// structure.  The value of this field MUST be greater than or equal  to 0. 
-        /// </summary>
-        [PossibleValueRange("0", "")]
-        public FILETIME LastAccessTime;
-
-        /// <summary>
-        /// A 64-bit signed integer that contains the last time  information was written to the file in the format of  
-        ///  a FILETIME structure. The value of this field MUST  be greater than or equal to 0. 
-        /// </summary>
-        [PossibleValueRange("0", "")]
-        public FILETIME LastWriteTime;
-
-        /// <summary>
-        /// A 64-bit signed integer that contains the last time  the file was changed in the format of a FILETIME  
-        /// structure.  The value of this field MUST be greater than or equal  to 0. 
-        /// </summary>
-        [PossibleValueRange("0", "")]
-        public FILETIME ChangeTime;
-
-        /// <summary>
-        /// A 64-bit signed integer that contains the absolute new  end-of-file position as a byte offset from the  
-        /// start  of the file. EndOfFile specifies the offset to the  byte immediately following the last valid byte  
-        /// in the  file. Because this value is zero-based, it actually  refers to the first free byte in the file.  
-        /// That is,  it is the offset from the beginning of the file at  which new bytes appended to the file will be 
-        ///  written.  The value of this field MUST be greater than or equal  to 0. 
-        /// </summary>
-        [PossibleValueRange("0", "9223372036854775807")]
-        public long EndOfFile;
-
-        /// <summary>
-        /// A 64-bit signed integer that contains the file allocation  size in bytes. Usually, this value is a  
-        /// multiple of  the sector or cluster size of the underlying physical  device. The value of this field MUST  
-        /// be greater than  or equal to 0. 
-        /// </summary>
-        [PossibleValueRange("0", "9223372036854775807")]
-        public long AllocationSize;
-
-        /// <summary>
-        /// A 32-bit unsigned integer that contains the file attributes.  Valid attributes are as specified in section 
-        ///  . 
-        /// </summary>
-        public uint FileAttributes;
+        public FileCommonDirectoryInformation FileCommonDirectoryInformation;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the length,  in bytes, of the FileName field. 
@@ -5840,68 +5571,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     //  </remarks>
     public partial struct FileIdGlobalTxDirectoryInformation
     {
-
-        /// <summary>
-        /// A 32-bit unsigned integer that contains the byte offset  from the beginning of this entry, at which the  
-        /// next  FILE_ID_FULL_DIR_INFORMATION entry is located, if multiple  entries are present in a buffer. This  
-        /// member MUST be  zero if no other entries follow this one. An implementation  MUST use this value to  
-        /// determine the location of the  next entry (if multiple entries are present in a buffer)  and MUST NOT  
-        /// assume that the value of NextEntryOffset  is the same as the size of the current entry. 
-        /// </summary>
-        public uint NextEntryOffset;
-
-        /// <summary>
-        /// A 32-bit unsigned integer that contains the byte offset  of the file within the parent directory. For file 
-        ///  systems  in which the position of a file within the parent directory  is not fixed and can be changed at  
-        /// any time to maintain  sort order, this field SHOULD be set to 0 and MUST  be ignored. 
-        /// </summary>
-        public uint FileIndex;
-
-        /// <summary>
-        /// A 64-bit signed integer that contains the time when  the file was created in the format of a FILETIME  
-        /// structure.  The value of this field MUST be greater than or equal  to 0. 
-        /// </summary>
-        public FILETIME CreationTime;
-
-        /// <summary>
-        /// A 64-bit signed integer that contains the last time  the file was accessed in the format of a FILETIME  
-        /// structure.  The value of this field MUST be greater than or equal  to 0. 
-        /// </summary>
-        public FILETIME LastAccessTime;
-
-        /// <summary>
-        /// A 64-bit signed integer that contains the last time  information was written to the file in the format of  
-        ///  a FILETIME structure. The value of this field MUST  be greater than or equal to 0. 
-        /// </summary>
-        public FILETIME LastWriteTime;
-
-        /// <summary>
-        /// A 64-bit signed integer that contains the last time  the file was changed in the format of a FILETIME  
-        /// structure.  The value of this field MUST be greater than or equal  to 0. 
-        /// </summary>
-        public FILETIME ChangeTime;
-
-        /// <summary>
-        /// A 64-bit signed integer that contains the absolute new  end-of-file position as a byte offset from the  
-        /// start  of the file. EndOfFile specifies the offset to the  byte immediately following the last valid byte  
-        /// in the  file. Because this value is zero-based, it actually  refers to the first free byte in the file.  
-        /// That is,  it is the offset from the beginning of the file at  which new bytes appended to the file will be 
-        ///  written.  The value of this field MUST be greater than or equal  to 0. 
-        /// </summary>
-        public long EndOfFile;
-
-        /// <summary>
-        /// A 64-bit signed integer that contains the file allocation  size in bytes. Usually, this value is a  
-        /// multiple of  the sector or cluster size of the underlying physical  device. The value of this field MUST  
-        /// be greater than  or equal to 0. 
-        /// </summary>
-        public long AllocationSize;
-
-        /// <summary>
-        /// A 32-bit unsigned integer that contains the file attributes.  Valid attributes are as specified in section 
-        ///  . 
-        /// </summary>
-        public uint FileAttributes;
+        public FileCommonDirectoryInformation FileCommonDirectoryInformation;
 
         /// <summary>
         /// A 32-bit unsigned integer that contains the length,  in bytes, of the FileName field. 
