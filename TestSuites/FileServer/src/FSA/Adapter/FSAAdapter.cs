@@ -81,6 +81,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         private FileAccess gOpenGrantedAccess;
         private StreamType gStreamType;
         private List<string> activeTDIs;
+        public bool Is64bitFileIdSupported;
 
         // Used to generate random file names.
         private static Random randomRange = new Random();
@@ -337,6 +338,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
             //Other Configurations
             this.transBufferSize = uint.Parse(testConfig.GetProperty("BufferSize"));
+            this.Is64bitFileIdSupported = bool.Parse(testConfig.GetProperty("Is64bitFileIdSupported"));
 
             sutProtocolController = Site.GetAdapter<ISutProtocolControlAdapter>();
 

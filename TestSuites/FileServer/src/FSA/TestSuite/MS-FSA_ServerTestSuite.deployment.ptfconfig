@@ -270,6 +270,13 @@
           To specify which requirements checking will be disabled in test case.
         </Description>
       </Property>
+
+      <Property name="Is64bitFileIdSupported" value="true">
+        <Choice>true, false</Choice>
+        <Description>
+          To specify whether 64-bit FileId is supported or not.
+        </Description>
+      </Property>
     </Group>
   </Properties>
 </TestSite>
