@@ -235,7 +235,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [TestCategory(TestCategories.QueryDirectory)]
         [TestCategory(TestCategories.NonSmb)]
         [Description("Verify the Query Directory response with FileNamesInformation from the server.")]
-        public void Fs_CreateDiretory_QueryDirectory_FileNamesInformation()
+        public void BVT_QueryDirectory_FileNamesInformation()
         {
             byte[] outputBuffer;
             string fileName;
@@ -256,7 +256,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [TestCategory(TestCategories.QueryDirectory)]
         [TestCategory(TestCategories.NonSmb)]
         [Description("Verify the Query Directory response with FileDirectoryInformation from the server.")]
-        public void Fs_CreateDiretory_QueryDirectory_FileDirectoryInformation()
+        public void BVT_QueryDirectory_FileDirectoryInformation()
         {
             byte[] outputBuffer;
             string fileName;
@@ -277,7 +277,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [TestCategory(TestCategories.QueryDirectory)]
         [TestCategory(TestCategories.NonSmb)]
         [Description("Verify the Query Directory response with FileFullDirectoryInformation from the server.")]
-        public void Fs_CreateDiretory_QueryDirectory_FileFullDirectoryInformation()
+        public void BVT_QueryDirectory_FileFullDirectoryInformation()
         {
             byte[] outputBuffer;
             string fileName;
@@ -298,7 +298,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [TestCategory(TestCategories.QueryDirectory)]
         [TestCategory(TestCategories.NonSmb)]
         [Description("Verify the Query Directory response with FileIdFullDirectoryInformation from the server.")]
-        public void Fs_CreateDiretory_QueryDirectory_FileIdFullDirectoryInformation()
+        public void BVT_QueryDirectory_FileIdFullDirectoryInformation()
         {
             byte[] outputBuffer;
             string fileName;
@@ -328,7 +328,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [TestCategory(TestCategories.QueryDirectory)]
         [TestCategory(TestCategories.NonSmb)]
         [Description("Verify the Query Directory response with FileBothDirectoryInformation from the server.")]
-        public void Fs_CreateDiretory_QueryDirectory_FileBothDirectoryInformation()
+        public void BVT_QueryDirectory_FileBothDirectoryInformation()
         {
             byte[] outputBuffer;
             string fileName;
@@ -349,7 +349,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [TestCategory(TestCategories.QueryDirectory)]
         [TestCategory(TestCategories.NonSmb)]
         [Description("Verify the Query Directory response with FileIdBothDirectoryInformation from the server.")]
-        public void Fs_CreateDiretory_QueryDirectory_FileIdBothDirectoryInformation()
+        public void BVT_QueryDirectory_FileIdBothDirectoryInformation()
         {
             byte[] outputBuffer;
             string fileName;
@@ -512,9 +512,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         /// <summary>
         /// Check whether the specified fileTime is close to the current time.
         /// </summary>
-        private void VerifyFileTime(DateTime now, long fileTime, string fileTimeName)
+        private void VerifyFileTime(DateTime now, FILETIME fileTime, string fileTimeName)
         {
-            DateTime dateTime = DateTime.FromFileTimeUtc(fileTime);
+            DateTime dateTime = DateTime.FromFileTimeUtc((((long)fileTime.dwHighDateTime) << 32) | fileTime.dwLowDateTime);
             Site.Log.Add(LogEntryKind.Debug, "The {0} is {1}", fileTimeName, dateTime.ToString("yyyy-MM-dd h:mm:ss.fff"));
             TimeSpan interval = now.Subtract(dateTime);
             Site.Assert.IsTrue(interval.TotalSeconds < 2, $"{fileTimeName} should be close to current time.");
@@ -541,6 +541,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
                 "The FileAttributes of the entry should contain {0}.", fileAttribute);
         }
 
+        /// <summary>
+        /// Verify FileDirectoryInformation entry
+        /// </summary>
         private void VerifyFileInformation(FileDirectoryInformation entry, int index, string fileName, FileAttribute fileAttribute, long endOfFile, long allocationSize)
         {
             Site.Log.Add(LogEntryKind.Debug, $"Start to verify entry {index}.");
@@ -550,6 +553,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, "The AllocationSize of the entry should be 0.");
         }
 
+        /// <summary>
+        /// Verify FileFullDirectoryInformation entry
+        /// </summary>
         private void VerifyFileInformation(FileFullDirectoryInformation entry, int index, string fileName, FileAttribute fileAttribute, long endofFile, long allocationSize, uint eaSize)
         {
             Site.Log.Add(LogEntryKind.Debug, $"Start to verify entry {index}.");
@@ -560,6 +566,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
         }
 
+        /// <summary>
+        /// Verify FileIdFullDirectoryInformation entry
+        /// </summary>
         private void VerifyFileInformation(FileIdFullDirectoryInformation entry, int index, string fileName, FileAttribute fileAttribute, long endofFile, long allocationSize, uint eaSize)
         {
             Site.Log.Add(LogEntryKind.Debug, $"Start to verify entry {index}.");
@@ -570,6 +579,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
         }
 
+        /// <summary>
+        /// Verify FileBothDirectoryInformation entry
+        /// </summary>
         private void VerifyFileInformation(FileBothDirectoryInformation entry, int index, string fileName, FileAttribute fileAttribute, long endofFile, long allocationSize, uint eaSize, string shortName)
         {
             Site.Log.Add(LogEntryKind.Debug, $"Start to verify entry {index}.");
@@ -582,6 +594,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             Site.Assert.AreEqual(shortName, System.Text.Encoding.Unicode.GetString(entry.ShortName).Replace("\0", String.Empty), $"The ShortName of the entry should be \"{shortName}\".");
         }
 
+        /// <summary>
+        /// Verify FileIdBothDirectoryInformation entry
+        /// </summary>
         private void VerifyFileInformation(FileIdBothDirectoryInformation entry, int index, string fileName, FileAttribute fileAttribute, long endofFile, long allocationSize, uint eaSize, string shortName)
         {
             Site.Log.Add(LogEntryKind.Debug, $"Start to verify entry {index}.");

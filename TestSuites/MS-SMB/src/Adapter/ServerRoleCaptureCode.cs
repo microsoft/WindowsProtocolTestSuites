@@ -3664,7 +3664,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             //
             Site.CaptureRequirementIfAreEqual<uint>(
                 0,
-                info.FileIndex,
+                info.FileCommonDirectoryInformation.FileIndex,
                 1755,
                 @"[In SMB_FIND_FILE_BOTH_DIRECTORY_INFO Extensions]FileIndex (4 bytes):  This field MUST be set to zero 
                 when sending a response.");
@@ -3680,7 +3680,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             //
             Site.CaptureRequirementIfAreEqual<long>(
                 0,
-                info.EndOfFile,
+                info.FileCommonDirectoryInformation.EndOfFile,
                 1757,
                 @"[In SMB_FIND_FILE_BOTH_DIRECTORY_INFO Extensions]EndOfFile (8 bytes):  This LARGE_INTEGER field MUST 
                 be set to zero when sending a response.");
@@ -3696,7 +3696,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             //
             Site.CaptureRequirementIfAreEqual<long>(
                 0,
-                info.AllocationSize,
+                info.FileCommonDirectoryInformation.AllocationSize,
                 1759,
                 @"[In SMB_FIND_FILE_BOTH_DIRECTORY_INFO Extensions]AllocationSize (8 bytes):  This LARGE_INTEGER field 
                 MUST be set to zero when sending a response.");
@@ -3728,7 +3728,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             //
             Site.CaptureRequirementIfAreEqual<CIFS.SmbFileAttributes32>(
                 CIFS.SmbFileAttributes32.FILE_ATTRIBUTE_DIRECTORY,
-                (CIFS.SmbFileAttributes32)info.FileAttributes,
+                (CIFS.SmbFileAttributes32)info.FileCommonDirectoryInformation.FileAttributes,
                 1775,
                 @"[In SMB_FIND_FILE_BOTH_DIRECTORY_INFO Extensions]ExtFileAttributes (4 bytes):  Extended attributes 
                 for this file that MUST be marked as a DIRECTORY.");
@@ -3800,7 +3800,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             //
             Site.CaptureRequirementIfAreEqual<uint>(
                 0,
-                info.FileIndex,
+                info.FileCommonDirectoryInformation.FileIndex,
                 9469,
                 @"[In SMB_FIND_FILE_ID_FULL_DIRECTORY_INFO]FileIndex (4 bytes):  This field MUST be set to zero when 
                 sending a response.");
@@ -3816,7 +3816,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             //
             Site.CaptureRequirementIfAreEqual<long>(
                 0,
-                info.EndOfFile,
+                info.FileCommonDirectoryInformation.EndOfFile,
                 9471,
                 @"[In SMB_FIND_FILE_ID_FULL_DIRECTORY_INFO]EndOfFile (8 bytes):  This LARGE_INTEGER field MUST be set 
                 to zero when sending a response.");
@@ -3832,7 +3832,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             //
             Site.CaptureRequirementIfAreEqual<long>(
                 0,
-                info.AllocationSize,
+                info.FileCommonDirectoryInformation.AllocationSize,
                 9473,
                 @"[In SMB_FIND_FILE_ID_FULL_DIRECTORY_INFO]AllocationSize (8 bytes):  This LARGE_INTEGER field MUST be 
                 set to zero when sending a response.");
@@ -3864,7 +3864,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             //
             Site.CaptureRequirementIfAreEqual<CIFS.SmbFileAttributes32>(
                 CIFS.SmbFileAttributes32.FILE_ATTRIBUTE_DIRECTORY,
-                (CIFS.SmbFileAttributes32)info.FileAttributes,
+                (CIFS.SmbFileAttributes32)info.FileCommonDirectoryInformation.FileAttributes,
                 9475,
                 @"[In SMB_FIND_FILE_ID_FULL_DIRECTORY_INFO]ExtFileAttributes (4 bytes):  Extended attributes for this 
                 file that MUST be marked as a DIRECTORY.");
@@ -3892,7 +3892,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             //
             Site.CaptureRequirementIfAreEqual<uint>(
                 0,
-                info.FileIndex,
+                info.FileCommonDirectoryInformation.FileIndex,
                 9481,
                 @"[In SMB_FIND_FILE_ID_FULL_DIRECTORY_INFO]Fileindex (4 bytes):  This  field MUST be 
                 set to zero when sending a response.");

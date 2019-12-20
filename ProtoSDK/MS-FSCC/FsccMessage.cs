@@ -4979,6 +4979,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     //  </remarks>
     public partial struct FileBothDirectoryInformation
     {
+        /// <summary>
+        /// The common structure shared by FileDirectoryInformation, FileBothDirectoryInformation, FileFullDirectoryInformation, 
+        /// FileIdBothDirectoryInformation, FileIdFullDirectoryInformation, FileIdGlobalTxDirectoryInformation
+        /// </summary>
         public FileCommonDirectoryInformation FileCommonDirectoryInformation;
 
         /// <summary>
@@ -5155,27 +5159,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A 64-bit signed integer that contains the time when  the file was created. All dates and times are in  
         /// absolute  system-time format, which is represented as a FILETIME  structure. This value MUST be greater  
-        /// than or equal  to 0. 
+        /// than or equal to 0. 
         /// </summary>
-        public long CreationTime;
+        public FILETIME CreationTime;
 
         /// <summary>
         /// A 64-bit signed integer that contains the last time  the file was accessed in the format of a FILETIME  
         /// structure.  This value MUST be greater than or equal to 0. 
         /// </summary>
-        public long LastAccessTime;
+        public FILETIME LastAccessTime;
 
         /// <summary>
         /// A 64-bit signed integer that contains the last time  information was written to the file in the format of  
         ///  a FILETIME structure. This value MUST be greater than  or equal to 0. 
         /// </summary>
-        public long LastWriteTime;
+        public FILETIME LastWriteTime;
 
         /// <summary>
         /// A 64-bit signed integer that contains the last time  the file was changed in the format of a FILETIME  
         /// structure.  This value MUST be greater than or equal to 0. 
         /// </summary>
-        public long ChangeTime;
+        public FILETIME ChangeTime;
 
         /// <summary>
         /// A 64-bit signed integer that contains the absolute new  end-of-file position as a byte offset from the  
@@ -5308,6 +5312,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     //  </remarks>
     public partial struct FileFullDirectoryInformation
     {
+        /// <summary>
+        /// The common structure shared by FileDirectoryInformation, FileBothDirectoryInformation, FileFullDirectoryInformation, 
+        /// FileIdBothDirectoryInformation, FileIdFullDirectoryInformation, FileIdGlobalTxDirectoryInformation
+        /// </summary>
         public FileCommonDirectoryInformation FileCommonDirectoryInformation;
 
         /// <summary>
@@ -5455,6 +5463,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     //  </remarks>
     public partial struct FileIdBothDirectoryInformation
     {
+        /// <summary>
+        /// The common structure shared by FileDirectoryInformation, FileBothDirectoryInformation, FileFullDirectoryInformation, 
+        /// FileIdBothDirectoryInformation, FileIdFullDirectoryInformation, FileIdGlobalTxDirectoryInformation
+        /// </summary>
         public FileCommonDirectoryInformation FileCommonDirectoryInformation;
 
         /// <summary>
@@ -5519,6 +5531,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     //  </remarks>
     public partial struct FileIdFullDirectoryInformation
     {
+        /// <summary>
+        /// The common structure shared by FileDirectoryInformation, FileBothDirectoryInformation, FileFullDirectoryInformation, 
+        /// FileIdBothDirectoryInformation, FileIdFullDirectoryInformation, FileIdGlobalTxDirectoryInformation
+        /// </summary>
         public FileCommonDirectoryInformation FileCommonDirectoryInformation;
 
         /// <summary>
@@ -5570,6 +5586,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     //  </remarks>
     public partial struct FileIdGlobalTxDirectoryInformation
     {
+        /// <summary>
+        /// The common structure shared by FileDirectoryInformation, FileBothDirectoryInformation, FileFullDirectoryInformation, 
+        /// FileIdBothDirectoryInformation, FileIdFullDirectoryInformation, FileIdGlobalTxDirectoryInformation
+        /// </summary>
         public FileCommonDirectoryInformation FileCommonDirectoryInformation;
 
         /// <summary>

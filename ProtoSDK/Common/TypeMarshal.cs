@@ -457,7 +457,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         /// <typeparam name="T">Type of struct.</typeparam>
         /// <param name="data">byte array of data.</param>
         /// <param name="align">The alignment of the structure</param>
-        /// <returns>Unmarshalled struct.</returns>
+        /// <returns>Unmarshalled struct array.</returns>
         /// <exception cref="ArgumentNullException">
         /// Thrown when data is null.
         /// </exception>
@@ -468,30 +468,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk
             {
                 throw new ArgumentNullException("data");
             }
-            int structureSize = Marshal.SizeOf(typeof(T));
-            int size = data.Length / structureSize;
+
             var list = new List<T>();
             var tempBuffer = new byte[data.Length];
             int index = 0;
             while (index + 1 < data.Length)
             {
                 Buffer.BlockCopy(data, index, tempBuffer, 0, data.Length - index);
-                using (MemoryStream memoryStream = new MemoryStream(tempBuffer))
+                var structure = ToStruct<T>(tempBuffer);
+                list.Add(structure);
+                index += TypeMarshal.ToBytes(structure).Length;
+                if (align != -1)
                 {
-                    using (Channel channel = new Channel(null, memoryStream))
-                    {
-                        var structure = channel.Read<T>();
-                        list.Add(structure);
-                        index += TypeMarshal.ToBytes(structure).Length;
-                        if (align != -1)
-                        {
-                            // There could be some padding in the end of one structure.
-                            // So we do alignment after one structure is unmarshaled.
-                            checked { align--; }
-                            index = (index + align) & ~align;
-                        }
-
-                    }
+                    // There could be some padding in the end of one structure.
+                    // So we do alignment after one structure is unmarshaled.
+                    checked { align--; }
+                    index = (index + align) & ~align;
                 }
             }
 
