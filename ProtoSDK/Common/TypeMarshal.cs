@@ -11,7 +11,6 @@ using Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling;
 using Microsoft.Protocols.TestTools.StackSdk.Messages.Runtime.Marshaling;
 using System.Security.Permissions;
 using System.Globalization;
-using System.Collections.Generic;
 
 namespace Microsoft.Protocols.TestTools.StackSdk
 {
@@ -450,6 +449,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk
                 }
             }
         }
+
 
         /// <summary>
         /// Unmarshal managed byte array to a structure from the specified offset.
