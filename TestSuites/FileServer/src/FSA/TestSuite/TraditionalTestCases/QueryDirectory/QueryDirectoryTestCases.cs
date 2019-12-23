@@ -243,7 +243,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             PrepareAndQueryDirectory(FileInfoClass.FILE_NAMES_INFORMATION, out outputBuffer, out fileName, out dirFileId);
 
             Site.Log.Add(LogEntryKind.Debug, "Start to verify the Query Directory response.");
-            FileNamesInformation[] namesInformation = TypeMarshal.ToArray<FileNamesInformation>(outputBuffer, 8);
+            FileNamesInformation[] namesInformation = FsaUtility.UnmarshalFileInformationArray<FileNamesInformation>(outputBuffer);
             Site.Assert.AreEqual(3, namesInformation.Length, "The returned Buffer should contain two entries of FileNamesInformation.");
             Site.Assert.AreEqual(".", System.Text.Encoding.Unicode.GetString(namesInformation[0].FileName), "FileName of the first entry should be \".\".");
             Site.Assert.AreEqual("..", System.Text.Encoding.Unicode.GetString(namesInformation[1].FileName), "FileName of the second entry should be \"..\".");
@@ -264,7 +264,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             PrepareAndQueryDirectory(FileInfoClass.FILE_DIRECTORY_INFORMATION, out outputBuffer, out fileName, out dirFileId);
 
             Site.Log.Add(LogEntryKind.Debug, "Start to verify the Query Directory response.");
-            FileDirectoryInformation[] directoryInformation = TypeMarshal.ToArray<FileDirectoryInformation>(outputBuffer, 8);
+            FileDirectoryInformation[] directoryInformation = FsaUtility.UnmarshalFileInformationArray<FileDirectoryInformation>(outputBuffer);
             Site.Assert.AreEqual(3, directoryInformation.Length, "The returned Buffer should contain 3 entries of FileDirectoryInformation.");
             VerifyFileInformation(directoryInformation[0], 1, ".", FileAttribute.DIRECTORY, 0, 0);
             VerifyFileInformation(directoryInformation[1], 2, "..", FileAttribute.DIRECTORY, 0, 0);
@@ -285,7 +285,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             PrepareAndQueryDirectory(FileInfoClass.FILE_FULL_DIR_INFORMATION, out outputBuffer, out fileName, out dirFileId);
 
             Site.Log.Add(LogEntryKind.Debug, "Start to verify the Query Directory response.");
-            FileFullDirectoryInformation[] directoryInformation = TypeMarshal.ToArray<FileFullDirectoryInformation>(outputBuffer, 8);
+            FileFullDirectoryInformation[] directoryInformation = FsaUtility.UnmarshalFileInformationArray<FileFullDirectoryInformation>(outputBuffer);
             Site.Assert.AreEqual(3, directoryInformation.Length, "The returned Buffer should contain 3 entries of FileFullDirectoryInformation.");
             VerifyFileInformation(directoryInformation[0], 1, ".", FileAttribute.DIRECTORY, 0, 0, 0);
             VerifyFileInformation(directoryInformation[1], 2, "..", FileAttribute.DIRECTORY, 0, 0, 0);
@@ -306,7 +306,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             PrepareAndQueryDirectory(FileInfoClass.FILE_ID_FULL_DIR_INFORMATION, out outputBuffer, out fileName, out dirFileId);
 
             Site.Log.Add(LogEntryKind.Debug, "Start to verify the Query Directory response.");
-            FileIdFullDirectoryInformation[] directoryInformation = TypeMarshal.ToArray<FileIdFullDirectoryInformation>(outputBuffer, 8);
+            FileIdFullDirectoryInformation[] directoryInformation = FsaUtility.UnmarshalFileInformationArray<FileIdFullDirectoryInformation>(outputBuffer);
             Site.Assert.AreEqual(3, directoryInformation.Length, "The returned Buffer should contain 3 entries of FileIdFullDirectoryInformation.");
 
             VerifyFileInformation(directoryInformation[0], 1, ".", FileAttribute.DIRECTORY, 0, 0, 0);
@@ -354,7 +354,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             PrepareAndQueryDirectory(FileInfoClass.FILE_BOTH_DIR_INFORMATION, out outputBuffer, out fileName, out dirFileId);
 
             Site.Log.Add(LogEntryKind.Debug, "Start to verify the Query Directory response.");
-            FileBothDirectoryInformation[] directoryInformation = TypeMarshal.ToArray<FileBothDirectoryInformation>(outputBuffer, 8);
+            FileBothDirectoryInformation[] directoryInformation = FsaUtility.UnmarshalFileInformationArray<FileBothDirectoryInformation>(outputBuffer);
             Site.Assert.AreEqual(3, directoryInformation.Length, "The returned Buffer should contain 3 entries of FileBothDirectoryInformation.");
             VerifyFileInformation(directoryInformation[0], 1, ".", FileAttribute.DIRECTORY, 0, 0, 0, "");
             VerifyFileInformation(directoryInformation[1], 2, "..", FileAttribute.DIRECTORY, 0, 0, 0, "");
@@ -375,7 +375,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             PrepareAndQueryDirectory(FileInfoClass.FILE_ID_BOTH_DIR_INFORMATION, out outputBuffer, out fileName, out dirFileId);
 
             Site.Log.Add(LogEntryKind.Debug, "Start to verify the Query Directory response.");
-            FileIdBothDirectoryInformation[] directoryInformation = TypeMarshal.ToArray<FileIdBothDirectoryInformation>(outputBuffer, 8);
+            FileIdBothDirectoryInformation[] directoryInformation = FsaUtility.UnmarshalFileInformationArray<FileIdBothDirectoryInformation>(outputBuffer);
             Site.Assert.AreEqual(3, directoryInformation.Length, "The returned Buffer should contain 3 entries of FileBothDirectoryInformation.");
 
             VerifyFileInformation(directoryInformation[0], 1, ".", FileAttribute.DIRECTORY, 0, 0, 0, "");
