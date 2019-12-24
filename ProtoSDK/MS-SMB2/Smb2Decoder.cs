@@ -256,11 +256,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     Smb2SinglePacket singlePacket = decompressedPacket as Smb2SinglePacket;
 
                     TryVerifySignatureExceptSessionSetupResponse(singlePacket, singlePacket.Header.SessionId, messageBytes);
+
+                    CheckIfNeedEncrypt(singlePacket);
                 }
                 else if (decompressedPacket is Smb2CompoundPacket)//For Compound packet signature verification
                 {
                     //verify signature of the compound packet
                     TryVerifySignature(decompressedPacket as Smb2CompoundPacket, messageBytes);
+
+                    CheckIfNeedEncrypt(decompressedPacket as Smb2CompoundPacket);
                 }
 
                 return decompressedPacket;
@@ -285,14 +289,51 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     Smb2SinglePacket singlePacket = decodedPacket as Smb2SinglePacket;
 
                     TryVerifySignatureExceptSessionSetupResponse(singlePacket, singlePacket.Header.SessionId, messageBytes);
+
+                    CheckIfNeedEncrypt(singlePacket);
                 }
                 else if (decodedPacket is Smb2CompoundPacket)//For Compound packet signature verification
                 {
                     //verify signature of the compound packet
                     TryVerifySignature(decodedPacket as Smb2CompoundPacket, messageBytes);
+
+                    CheckIfNeedEncrypt(decodedPacket as Smb2CompoundPacket);
                 }
 
                 return decodedPacket;
+            }
+        }
+
+        /// <summary>
+        /// Check if the packet needs to be encrypted but actually not encrypted.
+        /// </summary>
+        private void CheckIfNeedEncrypt(Smb2SinglePacket packet, ulong sessionId = 0)
+        {
+            var realSessionId = sessionId == 0 ? packet.Header.SessionId : sessionId;
+            var cryptoInfo = cryptoInfoTable.ContainsKey(realSessionId) ? cryptoInfoTable[realSessionId] : null;
+            if (cryptoInfo != null)
+            {
+                if (cryptoInfo.EnableSessionEncryption || (cryptoInfo.EnableTreeEncryption.Contains(packet.Header.TreeId) && packet.Header.Command != Smb2Command.TREE_CONNECT))
+                {
+                    throw new Exception($"The packet should be encrypted: \"{packet.ToString()}\"");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Check if the compound packet needs to be encrypted but actually not encrypted.
+        /// </summary>
+        private void CheckIfNeedEncrypt(Smb2CompoundPacket packet)
+        {
+            ulong firstSessionId = packet.Packets[0].Header.SessionId;
+
+            for (int i = 0; i < packet.Packets.Count; i++)
+            {
+                Smb2SinglePacket singlePacket = packet.Packets[i];
+
+                // For Related operations, the sessionId is in the first packet of the compound packet.
+                ulong sessionId = singlePacket.Header.Flags.HasFlag(Packet_Header_Flags_Values.FLAGS_RELATED_OPERATIONS) ? firstSessionId : singlePacket.Header.SessionId;
+                CheckIfNeedEncrypt(singlePacket, sessionId);
             }
         }
 
@@ -980,7 +1021,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     Array.Copy(messageBytes, offset, packetBytes, 0, packetLen);
                     offset += packetLen;
 
-                    // For Related operations, the sessinId is in the first packet of the compound packet.
+                    // For Related operations, the sessionId is in the first packet of the compound packet.
                     ulong sessionId = singlePacket.Header.Flags.HasFlag(Packet_Header_Flags_Values.FLAGS_RELATED_OPERATIONS) ? firstSessionId : singlePacket.Header.SessionId;
 
                     TryVerifySignature(singlePacket, sessionId, packetBytes);
