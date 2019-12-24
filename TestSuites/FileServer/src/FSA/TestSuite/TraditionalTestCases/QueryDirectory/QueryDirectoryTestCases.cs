@@ -548,12 +548,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         /// <summary>
         /// Check whether the specified fileTime is close to the current time.
         /// </summary>
-        private void VerifyFileTime(DateTime now, FILETIME fileTime, string fileTimeName)
+        private void VerifyFileTime(DateTime now, FILETIME fileTime, string fileTimeName, int expectedIntervalInSeconds)
         {
             DateTime dateTime = DateTime.FromFileTimeUtc((((long)fileTime.dwHighDateTime) << 32) | fileTime.dwLowDateTime);
-            Site.Log.Add(LogEntryKind.Debug, "The {0} is {1}", fileTimeName, dateTime.ToString("yyyy-MM-dd h:mm:ss.fff"));
+            Site.Log.Add(LogEntryKind.Debug, "The {0} is {1}", fileTimeName, dateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"));
             TimeSpan interval = now.Subtract(dateTime);
-            Site.Assert.IsTrue(interval.TotalSeconds < 2, $"{fileTimeName} should be close to current time.");
+            Site.Assert.IsTrue(interval.TotalSeconds < expectedIntervalInSeconds, $"{fileTimeName} should be close to current time.");
         }
 
         /// <summary>
@@ -565,12 +565,34 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         private void VerifyFileCommonDirectoryInformation(FileCommonDirectoryInformation entry, FileAttribute fileAttribute)
         {
             DateTime now = DateTime.UtcNow;
-            Site.Log.Add(LogEntryKind.Debug, "The current time is {0}", now.ToString("yyyy-MM-dd h:mm:ss.fff"));
+            Site.Log.Add(LogEntryKind.Debug, "The current time is {0}", now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
 
-            VerifyFileTime(now, entry.CreationTime, "CreationTime");
-            VerifyFileTime(now, entry.LastAccessTime, "LastAccessTime");
-            VerifyFileTime(now, entry.LastWriteTime, "LastWriteTime");
-            VerifyFileTime(now, entry.ChangeTime, "ChangeTime");
+            VerifyFileTime(now, entry.CreationTime, "CreationTime", 2);
+            if (this.fsaAdapter.FileSystem == FileSystem.FAT32)
+            {
+                // For FAT, LastAccessTime is stored in local time 1 day granularity. So enlarge the interval to 1 day (86400 seconds).
+                VerifyFileTime(now, entry.LastAccessTime, "LastAccessTime", 86400);
+            }
+            else
+            {
+                VerifyFileTime(now, entry.LastAccessTime, "LastAccessTime", 2);
+            }
+
+            if (this.fsaAdapter.FileSystem == FileSystem.FAT32)
+            {
+                // For FAT, LastWriteTime is stored in local time 2 second granularity. So enlarge the interval to 3 seconds.
+                VerifyFileTime(now, entry.LastWriteTime, "LastWriteTime", 3); 
+            }
+            else
+            {
+                VerifyFileTime(now, entry.LastWriteTime, "LastWriteTime", 2);
+            }
+
+            if (this.fsaAdapter.FileSystem != FileSystem.FAT32 && this.fsaAdapter.IsChangeTimeSupported)
+            {
+                // FAT does not support ChangeTime.
+                VerifyFileTime(now, entry.ChangeTime, "ChangeTime", 2); 
+            }
 
             Site.Assert.IsTrue(
                 ((FileAttribute)entry.FileAttributes).HasFlag(fileAttribute),
@@ -584,7 +606,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         {
             Site.Log.Add(LogEntryKind.Debug, $"Start to verify entry {index}.");
             VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute);
-            Site.Assert.AreEqual(fileName, System.Text.Encoding.Unicode.GetString(entry.FileName), "FileName of the entry should be \".\".");
+            Site.Assert.AreEqual(fileName, System.Text.Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
             Site.Assert.AreEqual(endOfFile, entry.FileCommonDirectoryInformation.EndOfFile, "The EndOfFile of the entry should be 0.");
             Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, "The AllocationSize of the entry should be 0.");
         }
@@ -596,7 +618,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         {
             Site.Log.Add(LogEntryKind.Debug, $"Start to verify entry {index}.");
             VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute);
-            Site.Assert.AreEqual(fileName, System.Text.Encoding.Unicode.GetString(entry.FileName), "FileName of the entry should be \"..\".");
+            Site.Assert.AreEqual(fileName, System.Text.Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
             Site.Assert.AreEqual(endofFile, entry.FileCommonDirectoryInformation.EndOfFile, "The EndOfFile of the entry should be 0.");
             Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, "The AllocationSize of the entry should be 0.");
             Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
@@ -609,7 +631,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         {
             Site.Log.Add(LogEntryKind.Debug, $"Start to verify entry {index}.");
             VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute);
-            Site.Assert.AreEqual(fileName, System.Text.Encoding.Unicode.GetString(entry.FileName), "FileName of the entry should be \"..\".");
+            Site.Assert.AreEqual(fileName, System.Text.Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
             Site.Assert.AreEqual(endofFile, entry.FileCommonDirectoryInformation.EndOfFile, "The EndOfFile of the entry should be 0.");
             Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, "The AllocationSize of the entry should be 0.");
             Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
@@ -622,7 +644,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         {
             Site.Log.Add(LogEntryKind.Debug, $"Start to verify entry {index}.");
             VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute);
-            Site.Assert.AreEqual(fileName, System.Text.Encoding.Unicode.GetString(entry.FileName), "FileName of the entry should be \"..\".");
+            Site.Assert.AreEqual(fileName, System.Text.Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
             Site.Assert.AreEqual(endofFile, entry.FileCommonDirectoryInformation.EndOfFile, "The EndOfFile of the entry should be 0.");
             Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, "The AllocationSize of the entry should be 0.");
             Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
@@ -637,7 +659,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         {
             Site.Log.Add(LogEntryKind.Debug, $"Start to verify entry {index}.");
             VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute);
-            Site.Assert.AreEqual(fileName, System.Text.Encoding.Unicode.GetString(entry.FileName), "FileName of the entry should be \"..\".");
+            Site.Assert.AreEqual(fileName, System.Text.Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
             Site.Assert.AreEqual(endofFile, entry.FileCommonDirectoryInformation.EndOfFile, "The EndOfFile of the entry should be 0.");
             Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, "The AllocationSize of the entry should be 0.");
             Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
@@ -710,6 +732,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         {
             if (fileName == null || fileName.Length <= 8)
                 throw new Exception("The fileName length is smaller than 8. It does not have a short name.");
+
+            if (this.fsaAdapter.FileSystem == FileSystem.REFS)
+            {
+                return string.Empty; // On REFS, this field MUST be empty.
+            }
+
             string shortName = fileName.Substring(0, 6).ToUpper();
             shortName += "~1";
             return shortName;
