@@ -7,7 +7,17 @@ pr:
   paths:
     include:
       - TestSuites/RDP/Server/*
-      - ProtoSDK/*
+      - ProtoSDK/Asn1Base/*
+      - ProtoSDK/Common/*
+      - ProtoSDK/CryptoLib/*
+      - ProtoSDK/Messages/*
+      - ProtoSDK/MS-RDPBCGR/*
+      - ProtoSDK/MS-RDPEDYC/*
+      - ProtoSDK/MS-RDPEMT/*
+      - ProtoSDK/MS-RDPEUDP/*
+      - ProtoSDK/MS-RDPRFX/*
+      - ProtoSDK/Sspi/*
+      - ProtoSDK/TransportStack/*
     exclude:
       - TestSuites/RDP/Server/docs/*
 

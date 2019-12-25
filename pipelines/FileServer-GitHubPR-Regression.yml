@@ -7,7 +7,28 @@ pr:
   paths:
     include:
       - TestSuites/FileServer/*
-      - ProtoSDK/*
+      - ProtoSDK/Asn1Base/*
+      - ProtoSDK/MS-CIFS/*
+      - ProtoSDK/Claim/*
+      - ProtoSDK/Common/*
+      - ProtoSDK/CryptoLib/*
+      - ProtoSDK/MS-DFSC/*
+      - ProtoSDK/FileAccessService/*
+      - ProtoSDK/MS-FSCC/*
+      - ProtoSDK/MS-Fsrvp/*
+      - ProtoSDK/KerberosLib/*
+      - ProtoSDK/Messages/*
+      - ProtoSDK/MS-Nlmp/*
+      - ProtoSDK/MS-PAC/*
+      - ProtoSDK/MS-Rpce/*
+      - ProtoSDK/MS-RSVD/*
+      - ProtoSDK/MS-SMB/*
+      - ProtoSDK/MS-SMB2/*
+      - ProtoSDK/MS-SQOS/*
+      - ProtoSDK/MS-SRVS/*
+      - ProtoSDK/Sspi/*
+      - ProtoSDK/MS-SWN/*
+      - ProtoSDK/TransportStack/*
     exclude:
       - TestSuites/FileServer/docs/*
 
