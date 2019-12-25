@@ -28,6 +28,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         //The share name of named pipe
         private const string NamedPipeShareName = "IPC$";
 
+        private bool checkEncrypt;
         /// <summary>
         /// The underlying transport type
         /// </summary>
@@ -51,6 +52,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             get
             {
                 return decodeRole;
+            }
+        }
+
+        /// <summary>
+        /// Indicates whether to check the response from the server is actually encrypted.
+        /// </summary>
+        public bool CheckEncrypt
+        {
+            get
+            {
+                return checkEncrypt;
+            }
+            set
+            {
+                checkEncrypt = value;
             }
         }
 
@@ -309,6 +325,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// </summary>
         private void CheckIfNeedEncrypt(Smb2SinglePacket packet, ulong sessionId = 0)
         {
+            if (!CheckEncrypt)
+                return;
             var realSessionId = sessionId == 0 ? packet.Header.SessionId : sessionId;
             var cryptoInfo = cryptoInfoTable.ContainsKey(realSessionId) ? cryptoInfoTable[realSessionId] : null;
             if (cryptoInfo != null)
@@ -325,6 +343,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// </summary>
         private void CheckIfNeedEncrypt(Smb2CompoundPacket packet)
         {
+            if (!CheckEncrypt)
+                return;
             ulong firstSessionId = packet.Packets[0].Header.SessionId;
 
             for (int i = 0; i < packet.Packets.Count; i++)
