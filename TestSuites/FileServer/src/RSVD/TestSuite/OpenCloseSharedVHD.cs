@@ -236,34 +236,27 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
             {
                 return false;
             }
-            try
+            
+            foreach (var context in servercreatecontexts)
             {
-                foreach (var context in servercreatecontexts)
+                Type type = context.GetType();
+                if (type.Name == "Smb2CreateSvhdxOpenDeviceContext")
                 {
-                    Type type = context.GetType();
-                    if (type.Name == "Smb2CreateSvhdxOpenDeviceContext")
-                    {
-                        Smb2CreateSvhdxOpenDeviceContextResponse openDeviceContext = context as Smb2CreateSvhdxOpenDeviceContextResponse;
-                        VerifyFieldInResponse("ServerVersion", TestConfig.ServerServiceVersion, openDeviceContext.Version);
-                    }
-
-                    if (type.Name == "Smb2CreateSvhdxOpenDeviceContextResponseV2")
-                    {
-                        Smb2CreateSvhdxOpenDeviceContextResponseV2 openDeviceContext = context as Smb2CreateSvhdxOpenDeviceContextResponseV2;
-
-                        VerifyFieldInResponse("ServerVersion", TestConfig.ServerServiceVersion, openDeviceContext.Version);
-                        VerifyFieldInResponse("SectorSize", TestConfig.PhysicalSectorSize, openDeviceContext.PhysicalSectorSize);
-                        VerifyFieldInResponse("VirtualSize", TestConfig.VirtualSize, openDeviceContext.VirtualSize);
-                    }
+                    Smb2CreateSvhdxOpenDeviceContextResponse openDeviceContext = context as Smb2CreateSvhdxOpenDeviceContextResponse;
+                    VerifyFieldInResponse("ServerVersion", TestConfig.ServerServiceVersion, openDeviceContext.Version);
                 }
-                return true;
+
+                if (type.Name == "Smb2CreateSvhdxOpenDeviceContextResponseV2")
+                {
+                    Smb2CreateSvhdxOpenDeviceContextResponseV2 openDeviceContext = context as Smb2CreateSvhdxOpenDeviceContextResponseV2;
+
+                    VerifyFieldInResponse("ServerVersion", TestConfig.ServerServiceVersion, openDeviceContext.Version);
+                    VerifyFieldInResponse("SectorSize", TestConfig.PhysicalSectorSize, openDeviceContext.PhysicalSectorSize);
+                    VerifyFieldInResponse("VirtualSize", TestConfig.VirtualSize, openDeviceContext.VirtualSize);
+                }
             }
-            catch
-            {
-                return false;
-            }
-            
-            
+            return true;
+                        
         }
     }
 }

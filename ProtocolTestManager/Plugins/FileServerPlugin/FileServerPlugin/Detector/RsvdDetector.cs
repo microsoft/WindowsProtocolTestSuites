@@ -138,7 +138,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     };
                     foreach (Smb2CreateSvhdxOpenDeviceContext context in contexts)
                     {
-                        logWriter.AddLog(LogLevel.Information, @"Send request with context: ");
+                        logWriter.AddLog(LogLevel.Information, @"OpenSharedVirtualDisk request was sent with context:: ");
                         logWriter.AddLog(LogLevel.Information, @"Version: " + context.Version.ToString());
                         logWriter.AddLog(LogLevel.Information, @"OriginatorFlags: " + context.OriginatorFlags.ToString());
                         logWriter.AddLog(LogLevel.Information, @"InitiatorHostName: " + context.InitiatorHostName.ToString());
@@ -154,11 +154,11 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     out serverContexts,
                     out response);
 
-                logWriter.AddLog(LogLevel.Information, @"Get response with status: " + status);
+                logWriter.AddLog(LogLevel.Information, @"Get OpenSharedVirtualDisk response with status: " + status);
 
                 if (serverContexts == null)
                 {
-                    logWriter.AddLog(LogLevel.Information, @"Get response with a null server Contexts.");
+                    logWriter.AddLog(LogLevel.Information, @"The response does not contain any server contexts.");
                 }
                 else
                 {
@@ -220,29 +220,34 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 }
             }
 
-            foreach (var context in servercreatecontexts)
+            try
             {
-                Type type = context.GetType();
-                if (type.Name == "Smb2CreateSvhdxOpenDeviceContextResponse")
+                foreach (var context in servercreatecontexts)
                 {
-                    Smb2CreateSvhdxOpenDeviceContextResponse openDeviceContext = context as Smb2CreateSvhdxOpenDeviceContextResponse;
-                    if ((openDeviceContext != null) && (openDeviceContext.Version == (uint)expectVersion))
+                    Type type = context.GetType();
+                    if (type.Name == "Smb2CreateSvhdxOpenDeviceContextResponse")
                     {
-                        return true;
+                        Smb2CreateSvhdxOpenDeviceContextResponse openDeviceContext = context as Smb2CreateSvhdxOpenDeviceContextResponse;
+                        if ((openDeviceContext != null) && (openDeviceContext.Version == (uint)expectVersion))
+                        {
+                            return true;
+                        }
                     }
-
-                }
-
-                if (type.Name == "Smb2CreateSvhdxOpenDeviceContextResponseV2")
-                {
-                    Smb2CreateSvhdxOpenDeviceContextResponseV2 openDeviceContext = context as Smb2CreateSvhdxOpenDeviceContextResponseV2;
-                    if ((openDeviceContext != null) && (openDeviceContext.Version == (uint)expectVersion))
+                    
+                    if (type.Name == "Smb2CreateSvhdxOpenDeviceContextResponseV2")
                     {
-                        return true;
-                    }
+                        Smb2CreateSvhdxOpenDeviceContextResponseV2 openDeviceContext = context as Smb2CreateSvhdxOpenDeviceContextResponseV2;
+                        if ((openDeviceContext != null) && (openDeviceContext.Version == (uint)expectVersion))
+                        {
+                            return true;
+                        }
+                    }                    
                 }
             }
-
+            catch
+            {
+                return false;
+            }
             return false;
         }
 
