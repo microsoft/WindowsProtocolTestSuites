@@ -224,7 +224,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
         // Disable signature verification by default.
         private bool disableVerifySignature = true;
-        private bool checkEncrypt;
         private Smb2SessionSetupResponsePacket sessionSetupResponse;
 
         private Smb2ErrorResponsePacket error;
@@ -320,11 +319,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         {
             get
             {
-                return checkEncrypt;
+                return decoder.CheckEncrypt;
             }
             set
             {
-                checkEncrypt = value;
                 decoder.CheckEncrypt = value;
             }
         }
