@@ -318,7 +318,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
 
                 #region  3.1.5.11.11    FileFullDirectoryInformation
 
-                case (FileInfoClass.FILE_FULL_DIR_INFORMATIO):
+                case (FileInfoClass.FILE_FULL_DIR_INFORMATION):
                     {
                         Condition.IsTrue(outputBufferSize == OutputBufferSize.NotLessThan);
                         // This operation is not supported and MUST be failed with STATUS_NOT_SUPPORTED.
