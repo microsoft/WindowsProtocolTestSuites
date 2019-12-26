@@ -3349,7 +3349,7 @@ There are 343 test cases in total:
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Prerequisites| The time of SUT and Driver computers should be the same. Otherwise the verifycation to CreationTime/LastAccessTime/ChangeTime/LastWriteTime may fail.|
+| Prerequisites| The Clock of SUT and Driver computers should be the same. Otherwise the verifycation to CreationTime/LastAccessTime/ChangeTime/LastWriteTime may fail.|
 | Description| Create a directory and a file and then query the directory info with FileInfoClass FileFullDirectoryInformation.|
 | | Test environment: NTFS, ReFS, FAT32|
 | Message Sequence| Create a directory in share|
@@ -3363,7 +3363,7 @@ There are 343 test cases in total:
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Prerequisites| The time of SUT and Driver computers should be the same. Otherwise the verifycation to CreationTime/LastAccessTime/ChangeTime/LastWriteTime may fail.|
+| Prerequisites| The Clock of SUT and Driver computers should be the same. Otherwise the verifycation to CreationTime/LastAccessTime/ChangeTime/LastWriteTime may fail.|
 | Description| Create a directory and a file and then query the directory info with FileInfoClass FileIdFullDirectoryInformation.|
 | | Test environment: NTFS, ReFS, FAT32|
 | Message Sequence| Create a directory in share|
@@ -3377,7 +3377,7 @@ There are 343 test cases in total:
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Prerequisites| The time of SUT and Driver computers should be the same. Otherwise the verifycation to CreationTime/LastAccessTime/ChangeTime/LastWriteTime may fail.|
+| Prerequisites| The Clock of SUT and Driver computers should be the same. Otherwise the verifycation to CreationTime/LastAccessTime/ChangeTime/LastWriteTime may fail.|
 | Description| Create a directory and a file and then query the directory info with FileInfoClass FileBothDirectoryInformation.|
 | | Test environment: NTFS, ReFS, FAT32|
 | Message Sequence| Create a directory in share|
@@ -3391,7 +3391,7 @@ There are 343 test cases in total:
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Prerequisites| The time of SUT and Driver computers should be the same. Otherwise the verifycation to CreationTime/LastAccessTime/ChangeTime/LastWriteTime may fail.|
+| Prerequisites| The Clock of SUT and Driver computers should be the same. Otherwise the verifycation to CreationTime/LastAccessTime/ChangeTime/LastWriteTime may fail.|
 | Description| Create a directory and a file and then query the directory info with FileInfoClass FileIdBothDirectoryInformation.|
 | | Test environment: NTFS, ReFS, FAT32|
 | Message Sequence| Create a directory in share|
