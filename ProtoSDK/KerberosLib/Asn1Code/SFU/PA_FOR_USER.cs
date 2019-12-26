@@ -1,4 +1,7 @@
-﻿using Microsoft.Protocols.TestTools.StackSdk.Asn1;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Protocols.TestTools.StackSdk.Asn1;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
@@ -10,7 +13,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
     {
         public PA_FOR_USER(PA_FOR_USER_ENC value)
         {
-            padata_type = new KerbInt32(129);
+            padata_type = new KerbInt32((long)PaDataType.PA_SFU_PA_FOR_USER);
 
             var buffer = new Asn1BerEncodingBuffer();
             value.BerEncode(buffer, true);

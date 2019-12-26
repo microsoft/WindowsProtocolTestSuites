@@ -41,31 +41,16 @@
   <ItemGroup>
     <Reference Include="Microsoft.Protocols.TestTools">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(PTFPATH_MS-SFU)\Microsoft.Protocols.TestTools.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Protocols.TestTools.Extension">
+    <Reference Include="Microsoft.Protocols.TestTools.Extension, Version=1.0.7000.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(PTFPATH_MS-SFU)\Microsoft.Protocols.TestTools.Extension.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Protocols.TestTools.Messages.Runtime">
+    <Reference Include="Microsoft.Protocols.TestTools.VSTS, Version=1.0.7000.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(PTFPATH_MS-SFU)\Microsoft.Protocols.TestTools.Messages.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Protocols.TestTools.VSTS">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(PTFPATH_MS-SFU)\Microsoft.Protocols.TestTools.VSTS.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(PkgVisualStudio_UnitTest_Corext)\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.SpecExplorer.Runtime, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(SEPATH_MS-SFU)\Microsoft.SpecExplorer.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Xrt.Runtime, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(SEPATH_MS-SFU)\Microsoft.Xrt.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -99,13 +84,23 @@
       <Project>{AEFAF10D-D1BF-44C4-BD9F-5CFF2AFA432F}</Project>
       <Name>Pac</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-SAMR\Samr.csproj">
+      <Project>{188D86B8-E7B8-4C53-A099-041F1E423A16}</Project>
+      <Name>Samr</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Kerberos\src\Adapter\Kerberos_ServerAdapter.csproj">
       <Project>{d3cc3cb3-57fd-437f-aa54-e43ad97ba3b9}</Project>
       <Name>Kerberos_ServerAdapter</Name>
     </ProjectReference>
+    <ProjectReference Include="..\adapter\MS-SFU_ServerAdapter\MS-SFU_ServerAdapter.csproj">
+      <Project>{9B5D8756-BF07-4627-890C-303795687364}</Project>
+      <Name>MS-SFU_ServerAdapter</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SFU_BasicTestSuite.cs" />
+    <Compile Include="S4U2ProxyTestSuite.cs" />
+    <Compile Include="S4U2SelfTestSuite.cs" />
+    <Compile Include="SfuBasicTestSuite.cs" />
   </ItemGroup>
   <Import Project="$(ExtendedTargetsPath)\Microsoft.CSharp.targets" Condition="$(BUILD_COREXT)==1" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" Condition="$(BUILD_COREXT)!=1" />
