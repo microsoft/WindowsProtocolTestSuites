@@ -91,7 +91,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
             Smb2CreateContextResponse[] serverContextResponse;
             OpenSharedVHD(TestConfig.NameOfSharedVHDX, RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_1, null, true, null, out serverContextResponse, null);
 
-            CheckOpenDeviceContext(serverContextResponse);
+            // <9> Section 3.2.5.1:  Windows Server 2012 R2 without [MSKB-3025091] doesn't return SVHDX_OPEN_DEVICE_CONTEXT_RESPONSE.
+            if (TestConfig.Platform == Platform.WindowsServer2012R2)
+            {
+                BaseTestSite.Log.Add(LogEntryKind.Comment, @"<9> Section 3.2.5.1: Windows Server 2012 R2 without [MSKB-3025091] doesn't return SVHDX_OPEN_DEVICE_CONTEXT_RESPONSE.\\");
+            }
+            else
+            {
+                Site.Assert.IsTrue(CheckOpenDeviceContext(serverContextResponse), "Smb2CreateContextResponse is expected to pass the validation.");
+            }
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "2.	Client closes the file.");
             client.CloseSharedVirtualDisk();
@@ -107,7 +115,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1.	Client opens a shared virtual disk file with SMB2 create context SVHDX_OPEN_DEVICE_CONTEXT_V2 and expects success.");
             Smb2CreateContextResponse[] serverContextResponse;
             OpenSharedVHD(TestConfig.NameOfSharedVHDS, RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_2, null, true, null, out serverContextResponse, null);
-            CheckOpenDeviceContext(serverContextResponse);
+
+            // <9> Section 3.2.5.1:  Windows Server 2012 R2 without [MSKB-3025091] doesn't return SVHDX_OPEN_DEVICE_CONTEXT_RESPONSE.
+            if (TestConfig.Platform == Platform.WindowsServer2012R2)
+            {
+                BaseTestSite.Log.Add(LogEntryKind.Comment, @"<9> Section 3.2.5.1: Windows Server 2012 R2 without [MSKB-3025091] doesn't return SVHDX_OPEN_DEVICE_CONTEXT_RESPONSE.\\");
+            }
+            else
+            {
+                Site.Assert.IsTrue(CheckOpenDeviceContext(serverContextResponse), "Smb2CreateContextResponse is expected to pass the validation.");
+            }
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "2.	Client closes the file.");
             client.CloseSharedVirtualDisk();
@@ -213,30 +230,40 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
             client.TreeConnect(uncShareName, out treeId);
         }
 
-        private void CheckOpenDeviceContext(Smb2CreateContextResponse[] servercreatecontexts)
+        private bool CheckOpenDeviceContext(Smb2CreateContextResponse[] servercreatecontexts)
         {
-            // <9> Section 3.2.5.1:  Windows Server 2012 R2 without [MSKB-3025091] doesn't return SVHDX_OPEN_DEVICE_CONTEXT_RESPONSE.
-            if (TestConfig.Platform == Platform.WindowsServer2012R2)
-                return;
-
-            foreach (var context in servercreatecontexts)
+            if (servercreatecontexts == null)
             {
-                Type type = context.GetType();
-                if (type.Name == "Smb2CreateSvhdxOpenDeviceContext")
-                {
-                    Smb2CreateSvhdxOpenDeviceContextResponse openDeviceContext = context as Smb2CreateSvhdxOpenDeviceContextResponse;
-                    VerifyFieldInResponse("ServerVersion", TestConfig.ServerServiceVersion, openDeviceContext.Version);
-                }
-
-                if (type.Name == "Smb2CreateSvhdxOpenDeviceContextResponseV2")
-                {
-                    Smb2CreateSvhdxOpenDeviceContextResponseV2 openDeviceContext = context as Smb2CreateSvhdxOpenDeviceContextResponseV2;
-
-                    VerifyFieldInResponse("ServerVersion", TestConfig.ServerServiceVersion, openDeviceContext.Version);
-                    VerifyFieldInResponse("SectorSize", TestConfig.PhysicalSectorSize, openDeviceContext.PhysicalSectorSize);
-                    VerifyFieldInResponse("VirtualSize", TestConfig.VirtualSize, openDeviceContext.VirtualSize);
-                }
+                return false;
             }
+            try
+            {
+                foreach (var context in servercreatecontexts)
+                {
+                    Type type = context.GetType();
+                    if (type.Name == "Smb2CreateSvhdxOpenDeviceContext")
+                    {
+                        Smb2CreateSvhdxOpenDeviceContextResponse openDeviceContext = context as Smb2CreateSvhdxOpenDeviceContextResponse;
+                        VerifyFieldInResponse("ServerVersion", TestConfig.ServerServiceVersion, openDeviceContext.Version);
+                    }
+
+                    if (type.Name == "Smb2CreateSvhdxOpenDeviceContextResponseV2")
+                    {
+                        Smb2CreateSvhdxOpenDeviceContextResponseV2 openDeviceContext = context as Smb2CreateSvhdxOpenDeviceContextResponseV2;
+
+                        VerifyFieldInResponse("ServerVersion", TestConfig.ServerServiceVersion, openDeviceContext.Version);
+                        VerifyFieldInResponse("SectorSize", TestConfig.PhysicalSectorSize, openDeviceContext.PhysicalSectorSize);
+                        VerifyFieldInResponse("VirtualSize", TestConfig.VirtualSize, openDeviceContext.VirtualSize);
+                    }
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+            
+            
         }
     }
 }
