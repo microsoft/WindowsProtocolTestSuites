@@ -138,7 +138,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     };
                     foreach (Smb2CreateSvhdxOpenDeviceContext context in contexts)
                     {
-                        logWriter.AddLog(LogLevel.Information, @"OpenSharedVirtualDisk request was sent with context:: ");
+                        logWriter.AddLog(LogLevel.Information, @"OpenSharedVirtualDisk request was sent with context: ");
                         logWriter.AddLog(LogLevel.Information, @"Version: " + context.Version.ToString());
                         logWriter.AddLog(LogLevel.Information, @"OriginatorFlags: " + context.OriginatorFlags.ToString());
                         logWriter.AddLog(LogLevel.Information, @"InitiatorHostName: " + context.InitiatorHostName.ToString());
