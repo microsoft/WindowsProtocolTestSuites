@@ -312,6 +312,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             }
         }
 
+        /// <summary>
+        /// Indicates whether to check the response from the server is actually encrypted.
+        /// </summary>
+        public bool CheckEncrypt
+        {
+            get
+            {
+                return decoder.CheckEncrypt;
+            }
+            set
+            {
+                decoder.CheckEncrypt = value;
+            }
+        }
+
         public Smb2ErrorResponsePacket Error
         {
             get
