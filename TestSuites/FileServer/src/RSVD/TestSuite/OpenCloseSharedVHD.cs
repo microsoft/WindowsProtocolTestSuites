@@ -90,16 +90,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1.	Client opens a shared virtual disk file with SMB2 create context SVHDX_OPEN_DEVICE_CONTEXT and expects success.");
             Smb2CreateContextResponse[] serverContextResponse;
             OpenSharedVHD(TestConfig.NameOfSharedVHDX, RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_1, null, true, null, out serverContextResponse, null);
-
-            // <9> Section 3.2.5.1:  Windows Server 2012 R2 without [MSKB-3025091] doesn't return SVHDX_OPEN_DEVICE_CONTEXT_RESPONSE.
-            if (TestConfig.Platform == Platform.WindowsServer2012R2)
-            {
-                BaseTestSite.Log.Add(LogEntryKind.Comment, @"<9> Section 3.2.5.1: Windows Server 2012 R2 without [MSKB-3025091] doesn't return SVHDX_OPEN_DEVICE_CONTEXT_RESPONSE.\\");
-            }
-            else
-            {
-                Site.Assert.IsTrue(CheckOpenDeviceContext(serverContextResponse), "Smb2CreateContextResponse is expected to pass the validation.");
-            }
+            CheckOpenDeviceContext(serverContextResponse);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "2.	Client closes the file.");
             client.CloseSharedVirtualDisk();
@@ -115,16 +106,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1.	Client opens a shared virtual disk file with SMB2 create context SVHDX_OPEN_DEVICE_CONTEXT_V2 and expects success.");
             Smb2CreateContextResponse[] serverContextResponse;
             OpenSharedVHD(TestConfig.NameOfSharedVHDS, RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_2, null, true, null, out serverContextResponse, null);
-
-            // <9> Section 3.2.5.1:  Windows Server 2012 R2 without [MSKB-3025091] doesn't return SVHDX_OPEN_DEVICE_CONTEXT_RESPONSE.
-            if (TestConfig.Platform == Platform.WindowsServer2012R2)
-            {
-                BaseTestSite.Log.Add(LogEntryKind.Comment, @"<9> Section 3.2.5.1: Windows Server 2012 R2 without [MSKB-3025091] doesn't return SVHDX_OPEN_DEVICE_CONTEXT_RESPONSE.\\");
-            }
-            else
-            {
-                Site.Assert.IsTrue(CheckOpenDeviceContext(serverContextResponse), "Smb2CreateContextResponse is expected to pass the validation.");
-            }
+            CheckOpenDeviceContext(serverContextResponse);            
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "2.	Client closes the file.");
             client.CloseSharedVirtualDisk();
@@ -230,11 +212,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
             client.TreeConnect(uncShareName, out treeId);
         }
 
-        private bool CheckOpenDeviceContext(Smb2CreateContextResponse[] servercreatecontexts)
+        private void CheckOpenDeviceContext(Smb2CreateContextResponse[] servercreatecontexts)
         {
-            if (servercreatecontexts == null)
-            {
-                return false;
+            // <9> Section 3.2.5.1:  Windows Server 2012 R2 without [MSKB-3025091] doesn't return SVHDX_OPEN_DEVICE_CONTEXT_RESPONSE.
+            if (TestConfig.Platform == Platform.WindowsServer2012R2)
+            { 
+                return;
             }
             
             foreach (var context in servercreatecontexts)
@@ -254,8 +237,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                     VerifyFieldInResponse("SectorSize", TestConfig.PhysicalSectorSize, openDeviceContext.PhysicalSectorSize);
                     VerifyFieldInResponse("VirtualSize", TestConfig.VirtualSize, openDeviceContext.VirtualSize);
                 }
-            }
-            return true;
+            }          
                         
         }
     }
