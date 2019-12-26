@@ -74,7 +74,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             }
 
             //Step 3: Set Quota Information
-            FILE_QUOTA_INFORMATION[] fileQuotaInformationEntries = FsaUtility.UnmarshalFileQuotaInformation(outputBuffer);
+            FILE_QUOTA_INFORMATION[] fileQuotaInformationEntries = FsaUtility.UnmarshalFileInformationArray<FILE_QUOTA_INFORMATION>(outputBuffer);
             if (fileQuotaInformationEntries.Length > 0)
             {
                 FILE_QUOTA_INFORMATION quotaEntry = fileQuotaInformationEntries[0];

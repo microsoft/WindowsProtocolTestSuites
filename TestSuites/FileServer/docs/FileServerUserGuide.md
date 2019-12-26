@@ -663,7 +663,7 @@ The following summarizes the steps for creating symbolic links.
 
       * In the folder **SMBBasic**, add a symbolic link named **Symboliclink**, which will link to **%SystemDrive%**.
 
-  2. Add a **Symbolic Link** to the **SMBBasic\Sub** folder:
+  2. Add a **Symbolic Link** to the **SMBBasic** folder:
 
       * Add a new folder named **Sub** under the **SMBBasic** folder.
 

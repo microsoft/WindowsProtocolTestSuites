@@ -34,7 +34,7 @@ namespace Microsoft.Protocols.TestManager.UI
 
             if (!isNewInstance)
             {
-                MessageBox.Show("ProtocolTestManager is already running...");
+                UserPromptWindow.Show(StringResources.Error, StringResources.PTMRunning, UserPromptWindow.IconType.Error);
                 mutex = null;
                 App.Current.Shutdown();
                 return;
@@ -56,32 +56,23 @@ namespace Microsoft.Protocols.TestManager.UI
         {
             Exception e = args.Exception;
 
-            ShowErrorMessage(e.ToString());
-            LogExceptionDetail(e);
+            LogExceptionAndPrompt(StringResources.Error, new Exception[] { e });
+
             args.Handled = true;
         }
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            ShowErrorMessage(e.ToString());
-            LogExceptionDetail((Exception)e.ExceptionObject);
+            LogExceptionAndPrompt(StringResources.Error, new Exception[] { (Exception)e.ExceptionObject });
         }
 
-        void ShowErrorMessage(string msg)
+        public static void LogExceptionAndPrompt(string title, IEnumerable<Exception> exceptions)
         {
-            string errorMsg = string.Format("An unexpected error occurred. You have found a bug.{0} Detail Exception:{1}", Environment.NewLine, msg);
-            //Show message
-            MessageBox.Show(
-                    errorMsg,
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error,
-                    MessageBoxResult.None);
-        }
+            string logPath = Utility.LogException(exceptions.ToList());
 
-        void LogExceptionDetail(Exception e)
-        {
-            Utility.LogException(new List<Exception> { e });
+            string errorMsg = string.Format(StringResources.ExceptionsHappendWithLogsRecorded, logPath);
+
+            UserPromptWindow.ShowWithLinks(title, errorMsg, UserPromptWindow.IconType.Error);
         }
     }
 }

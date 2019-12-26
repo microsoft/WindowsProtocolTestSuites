@@ -106,11 +106,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
         #region Constructor
 
-        public Smb2FunctionalClient(TimeSpan timeout, TestConfigBase testConfig, ITestSite baseTestSite)
+        public Smb2FunctionalClient(TimeSpan timeout, TestConfigBase testConfig, ITestSite baseTestSite, bool checkEncrypt = true)
         {
             client = new Smb2Client(timeout);
             this.testConfig = testConfig;
             client.DisableVerifySignature = this.testConfig.DisableVerifySignature;
+            client.CheckEncrypt = checkEncrypt; // Whether to check the response from the server is actually encrypted.
 
             sequenceWindow = new SortedSet<ulong>();
             sequenceWindow.Add(0);

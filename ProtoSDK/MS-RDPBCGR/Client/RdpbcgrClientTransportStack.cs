@@ -92,8 +92,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// </summary>
         private bool disconnected = false;
 
-        public const int MilliSecondsToWaitStreamDataAvailable = 1;
-
         #endregion
 
         #region Constructors
@@ -665,22 +663,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             while (!this.stopThread)
             {
-                // if the underlayer stream is network stream, using the unblock mode.
-                if (networkStream != null)
-                {
-                    // wait for the exit event or stream data is available.
-                    while (!this.stopThread && !networkStream.DataAvailable)
-                    {
-                        Thread.Sleep(MilliSecondsToWaitStreamDataAvailable);
-                    }
-
-                    // if is exit event, do not read and exit.
-                    if (this.stopThread)
-                    {
-                        break;
-                    }
-                }
-
                 int receivedLength = 0;
 
                 // read event
@@ -748,6 +730,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                                 // Add the disconnected transport event, if connection is reset by SUT.
                                 this.AddEvent(new TransportEvent(EventType.Disconnected, null, this.localEndPoint, null));
                                 break;
+                            }
+
+                            if (socketException.SocketErrorCode == SocketError.WouldBlock)
+                            {
+                                // No data was received within receive timeout.
+                                continue;
                             }
                         }
                     }

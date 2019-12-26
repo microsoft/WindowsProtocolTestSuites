@@ -6,31 +6,20 @@ pr:
       - staging
   paths:
     include:
-      - TestSuites/FileServer/*
+      - TestSuites/RDP/Server/*
       - ProtoSDK/Asn1Base/*
-      - ProtoSDK/MS-CIFS/*
-      - ProtoSDK/Claim/*
       - ProtoSDK/Common/*
       - ProtoSDK/CryptoLib/*
-      - ProtoSDK/MS-DFSC/*
-      - ProtoSDK/FileAccessService/*
-      - ProtoSDK/MS-FSCC/*
-      - ProtoSDK/MS-Fsrvp/*
-      - ProtoSDK/KerberosLib/*
       - ProtoSDK/Messages/*
-      - ProtoSDK/MS-Nlmp/*
-      - ProtoSDK/MS-PAC/*
-      - ProtoSDK/MS-Rpce/*
-      - ProtoSDK/MS-RSVD/*
-      - ProtoSDK/MS-SMB/*
-      - ProtoSDK/MS-SMB2/*
-      - ProtoSDK/MS-SQOS/*
-      - ProtoSDK/MS-SRVS/*
+      - ProtoSDK/MS-RDPBCGR/*
+      - ProtoSDK/MS-RDPEDYC/*
+      - ProtoSDK/MS-RDPEMT/*
+      - ProtoSDK/MS-RDPEUDP/*
+      - ProtoSDK/MS-RDPRFX/*
       - ProtoSDK/Sspi/*
-      - ProtoSDK/MS-SWN/*
       - ProtoSDK/TransportStack/*
     exclude:
-      - TestSuites/FileServer/docs/*
+      - TestSuites/RDP/Server/docs/*
 
 variables:
   - group: Access Tokens
@@ -39,9 +28,9 @@ variables:
   - group: External Repo Variables
   - group: SMTP Account
   - name: test.buildTag
-    value: FileServer-GitHubPR-Regression-$(Build.BuildNumber)
+    value: RDPServer-GitHubPR-Regression-$(Build.BuildNumber)
   - name: test.downstreamPipelineName
-    value: FileServer-GitHubPR-Regression_PerENV
+    value: RDPServer-GitHubPR-Regression_PerENV
 
 jobs:
 - job:
@@ -65,7 +54,7 @@ jobs:
     inputs:
       targetType: filePath
       filePath: '$(extRepo.dir)/AzureScripts/Run-AzRegressionWithCSV.ps1'
-      arguments: '-ConfigFile "$(test.configFile)" -TestSuiteName "FileServer" -EnvType "GitHub" -HelperBranch "$(test.helperBranch)" -NeedBuild -AccessToken "$(tokens.pipelineTriggerToken)" -BuildTag "$(test.buildTag)" -PipelineName "$(test.downstreamPipelineName)" -ApiUrl "$(build.apiUrl)" -SubscriptionId "$(azure.subscriptionId)" -ApplicationId "$(azure.applicationId)" -ThumbPrint "$(azure.thumbPrint)" -TenantId "$(azure.tenantId)" -StorageAccount "$(azure.storageAccount)" -StorageShareName "$(azure.storageShareName)" -LocalRegressionShare "$(build.sharePath)" -FileShareResourceGroup "$(azure.fileShareResourceGroup)" -IsTriggeredFromGitHub $true'
+      arguments: '-ConfigFile "$(test.configFile)" -TestSuiteName "RDPServer" -EnvType "GitHub" -HelperBranch "$(test.helperBranch)" -NeedBuild -AccessToken "$(tokens.pipelineTriggerToken)" -BuildTag "$(test.buildTag)" -PipelineName "$(test.downstreamPipelineName)" -ApiUrl "$(build.apiUrl)" -SubscriptionId "$(azure.subscriptionId)" -ApplicationId "$(azure.applicationId)" -ThumbPrint "$(azure.thumbPrint)" -TenantId "$(azure.tenantId)" -StorageAccount "$(azure.storageAccount)" -StorageShareName "$(azure.storageShareName)" -LocalRegressionShare "$(build.sharePath)" -FileShareResourceGroup "$(azure.fileShareResourceGroup)" -IsTriggeredFromGitHub $true'
     env:
       BUILD_BUILDID: $(Build.BuildId)
       SMTP_SENDERPASSWORD: $(smtp.senderPassword)
