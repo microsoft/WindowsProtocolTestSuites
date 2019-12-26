@@ -72,7 +72,7 @@ namespace Microsoft.Protocols.TestManager.UI
 
             string errorMsg = string.Format(StringResources.ExceptionsHappendWithLogsRecorded, logPath);
 
-            UserPromptWindow.Show(title, errorMsg, UserPromptWindow.IconType.Error);
+            UserPromptWindow.ShowWithLinks(title, errorMsg, UserPromptWindow.IconType.Error);
         }
     }
 }

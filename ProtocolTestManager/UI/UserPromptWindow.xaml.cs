@@ -2,10 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Interop;
@@ -21,46 +18,17 @@ namespace Microsoft.Protocols.TestManager.UI
             InitializeComponent();
         }
 
-        private void GenerateContent(string contentString)
+        private void GenerateContent(string contentString, bool hasLinks)
         {
-            // Replace text surrounded by square brackets with link.
-
-            string pattern = @"(\[[^\[\]]*\])";
-
-            var parts = Regex.Split(contentString, pattern);
-
-            var children = parts.Select<string, Inline>(part =>
+            if (hasLinks)
             {
-                bool isLink = Regex.IsMatch(part, pattern);
+                var children = Helper.GenerateInlines(contentString);
 
-                if (isLink)
-                {
-                    var link = new Hyperlink();
-
-                    var target = part.Substring(1, part.Length - 2);
-
-                    link.Inlines.Add(new Run(target));
-
-                    link.NavigateUri = new Uri(target);
-
-                    link.Click += Link_Click;
-
-                    return link;
-                }
-                else
-                {
-                    return new Run(part);
-                }
-            });
-
-            content.Inlines.AddRange(children);
-        }
-
-        private void Link_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Hyperlink link)
+                content.Inlines.AddRange(children);
+            }
+            else
             {
-                ShellOpen(link.NavigateUri.ToString());
+                content.Inlines.Add(new Run(contentString));
             }
         }
 
@@ -75,22 +43,6 @@ namespace Microsoft.Protocols.TestManager.UI
             return result;
         }
 
-        private void ShellOpen(string path)
-        {
-            var startInfo = new ProcessStartInfo()
-            {
-                UseShellExecute = true,
-                FileName = path,
-            };
-
-            var process = new Process()
-            {
-                StartInfo = startInfo,
-            };
-
-            process.Start();
-        }
-
         public enum IconType
         {
             Error,
@@ -98,13 +50,23 @@ namespace Microsoft.Protocols.TestManager.UI
             Information,
         }
 
-        public static void Show(string title, string content, IconType iconType)
+        public static void Show(string title, string text, IconType iconType)
+        {
+            ShowInternal(title, text, false, iconType);
+        }
+
+        public static void ShowWithLinks(string title, string source, IconType iconType)
+        {
+            ShowInternal(title, source, true, iconType);
+        }
+
+        private static void ShowInternal(string title, string content, bool hasLinks, IconType iconType)
         {
             var window = new UserPromptWindow();
 
             window.Title = title;
 
-            window.GenerateContent(content);
+            window.GenerateContent(content, hasLinks);
 
             var iconMap = new Dictionary<IconType, Icon>
             {
