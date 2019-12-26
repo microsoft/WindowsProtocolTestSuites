@@ -12,6 +12,7 @@ using System.Linq;
 using System;
 using System.Collections.Generic;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
+using System.Text;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTestCases.QueryDirectory
 {
@@ -245,9 +246,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             Site.Log.Add(LogEntryKind.Debug, "Start to verify the Query Directory response.");
             FileNamesInformation[] namesInformation = FsaUtility.UnmarshalFileInformationArray<FileNamesInformation>(outputBuffer);
             Site.Assert.AreEqual(3, namesInformation.Length, "The returned Buffer should contain two entries of FileNamesInformation.");
-            Site.Assert.AreEqual(".", System.Text.Encoding.Unicode.GetString(namesInformation[0].FileName), "FileName of the first entry should be \".\".");
-            Site.Assert.AreEqual("..", System.Text.Encoding.Unicode.GetString(namesInformation[1].FileName), "FileName of the second entry should be \"..\".");
-            Site.Assert.AreEqual(fileName, System.Text.Encoding.Unicode.GetString(namesInformation[2].FileName), $"FileName of the third entry should be {fileName}.");
+            Site.Assert.AreEqual(".", Encoding.Unicode.GetString(namesInformation[0].FileName), "FileName of the first entry should be \".\".");
+            Site.Assert.AreEqual("..", Encoding.Unicode.GetString(namesInformation[1].FileName), "FileName of the second entry should be \"..\".");
+            Site.Assert.AreEqual(fileName, Encoding.Unicode.GetString(namesInformation[2].FileName), $"FileName of the third entry should be {fileName}.");
         }
 
         [TestMethod()]
@@ -606,7 +607,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         {
             Site.Log.Add(LogEntryKind.Debug, $"Start to verify entry {index}.");
             VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute);
-            Site.Assert.AreEqual(fileName, System.Text.Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
+            Site.Assert.AreEqual(fileName, Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
             Site.Assert.AreEqual(endOfFile, entry.FileCommonDirectoryInformation.EndOfFile, "The EndOfFile of the entry should be 0.");
             Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, "The AllocationSize of the entry should be 0.");
         }
@@ -618,7 +619,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         {
             Site.Log.Add(LogEntryKind.Debug, $"Start to verify entry {index}.");
             VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute);
-            Site.Assert.AreEqual(fileName, System.Text.Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
+            Site.Assert.AreEqual(fileName, Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
             Site.Assert.AreEqual(endofFile, entry.FileCommonDirectoryInformation.EndOfFile, "The EndOfFile of the entry should be 0.");
             Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, "The AllocationSize of the entry should be 0.");
             Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
@@ -631,7 +632,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         {
             Site.Log.Add(LogEntryKind.Debug, $"Start to verify entry {index}.");
             VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute);
-            Site.Assert.AreEqual(fileName, System.Text.Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
+            Site.Assert.AreEqual(fileName, Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
             Site.Assert.AreEqual(endofFile, entry.FileCommonDirectoryInformation.EndOfFile, "The EndOfFile of the entry should be 0.");
             Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, "The AllocationSize of the entry should be 0.");
             Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
@@ -644,12 +645,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         {
             Site.Log.Add(LogEntryKind.Debug, $"Start to verify entry {index}.");
             VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute);
-            Site.Assert.AreEqual(fileName, System.Text.Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
+            Site.Assert.AreEqual(fileName, Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
             Site.Assert.AreEqual(endofFile, entry.FileCommonDirectoryInformation.EndOfFile, "The EndOfFile of the entry should be 0.");
             Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, "The AllocationSize of the entry should be 0.");
             Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
             Site.Assert.AreEqual(shortName.Length * 2, entry.ShortNameLength, $"The ShortNameLength of the entry should be {shortName.Length * 2}."); // ShortName is unicode in protocol
-            Site.Assert.AreEqual(shortName, System.Text.Encoding.Unicode.GetString(entry.ShortName).Replace("\0", String.Empty), $"The ShortName of the entry should be \"{shortName}\".");
+            Site.Assert.AreEqual(shortName, Encoding.Unicode.GetString(entry.ShortName).Replace("\0", String.Empty), $"The ShortName of the entry should be \"{shortName}\".");
         }
 
         /// <summary>
@@ -659,12 +660,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         {
             Site.Log.Add(LogEntryKind.Debug, $"Start to verify entry {index}.");
             VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute);
-            Site.Assert.AreEqual(fileName, System.Text.Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
+            Site.Assert.AreEqual(fileName, Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
             Site.Assert.AreEqual(endofFile, entry.FileCommonDirectoryInformation.EndOfFile, "The EndOfFile of the entry should be 0.");
             Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, "The AllocationSize of the entry should be 0.");
             Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
             Site.Assert.AreEqual(shortName.Length * 2, entry.ShortNameLength, $"The ShortNameLength of the entry should be {shortName.Length * 2}."); // ShortName is unicode in protocol
-            Site.Assert.AreEqual(shortName, System.Text.Encoding.Unicode.GetString(entry.ShortName).Replace("\0", String.Empty), $"The ShortName of the entry should be \"{shortName}\".");
+            Site.Assert.AreEqual(shortName, Encoding.Unicode.GetString(entry.ShortName).Replace("\0", String.Empty), $"The ShortName of the entry should be \"{shortName}\".");
         }
 
         /// <summary>
