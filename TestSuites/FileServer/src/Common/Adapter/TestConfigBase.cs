@@ -658,6 +658,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             }
         }
 
+        public bool IsCompressionSupported()
+        {
+            if (SupportedCompressionAlgorithmList.Count == 0
+                || (SupportedCompressionAlgorithmList.Count == 1 && SupportedCompressionAlgorithmList[0] == CompressionAlgorithm.NONE))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public void CheckCompressionAlgorithm(CompressionAlgorithm? compressionAlgorithm = null)
         {
             if (SupportedCompressionAlgorithmList.Count == 0
