@@ -7,6 +7,7 @@ using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.Mcs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -1476,7 +1477,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
                 RdpbcgrEncoder.EncodeStructure(coreData, gccPdu.clientCoreData.deviceScaleFactor.actualData);
 
-                labelCoreEnd:
+            labelCoreEnd:
                 userData.AddRange(coreData.ToArray());
             }
             #endregion Encode clientCoreData structure TS_UD_CS_CORE
@@ -14310,11 +14311,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                                        - (fpInputdata.Length % ConstValue.TRIPLE_DES_PAD));
             }
 
-            // encryptionFlags (2 bits): A higher 2-bit field containing the flags 
-            // that describe the cryptographic parameters of the PDU.
-            bool isSalted = ((fpInputHeader.actionCode >> 6) &
-                             (int)encryptionFlags_Values.FASTPATH_INPUT_SECURE_CHECKSUM)
-                             == (int)encryptionFlags_Values.FASTPATH_INPUT_SECURE_CHECKSUM;
+            bool isSalted = fpInputHeader.flags.HasFlag(encryptionFlags_Values.FASTPATH_INPUT_SECURE_CHECKSUM);
+
             context.Encrypt(fpInputdata, isSalted, out encryptedData, out signature);
             if (dataSignature == null)
             {
@@ -14379,15 +14377,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 RdpbcgrEncoder.EncodeStructure(fpHeaderData, fipsInformation);
             }
 
-            // encryptionFlags (2 bits): A higher 2-bit field containing the flags 
-            // that describe the cryptographic parameters of the PDU.
-            if (((fpInputHeader.actionCode >> 6) & (int)encryptionFlags_Values.FASTPATH_INPUT_ENCRYPTED)
-                == (int)encryptionFlags_Values.FASTPATH_INPUT_ENCRYPTED)
+            if (fpInputHeader.flags.HasFlag(encryptionFlags_Values.FASTPATH_INPUT_ENCRYPTED))
             {
                 RdpbcgrEncoder.EncodeBytes(fpHeaderData, dataSignature);
             }
 
-            if ((fpInputHeader.actionCode & (0x0F << 2)) == 0)
+            if (fpInputHeader.numEvents == 0)
             {
                 RdpbcgrEncoder.EncodeStructure(fpHeaderData, numberEvents);
             }
@@ -14466,10 +14461,112 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     public partial struct nested_TS_FP_INPUT_PDU_fpInputHeader
     {
         /// <summary>
+        /// Construct TS_FP_INPUT_PDU from a packed byte.
+        /// </summary>
+        /// <param name="data">The packed byte.</param>
+        public nested_TS_FP_INPUT_PDU_fpInputHeader(byte data)
+        {
+            actionCode = data;
+        }
+
+        /// <summary>
+        /// Construct TS_FP_INPUT_PDU by each field.
+        /// </summary>
+        /// <param name="action">The action field.</param>
+        /// <param name="numEvents">The numEvents field.</param>
+        /// <param name="flags">The flags field.</param>
+        public nested_TS_FP_INPUT_PDU_fpInputHeader(actionCode_Values action, int numEvents, encryptionFlags_Values flags)
+        {
+            var vector = new BitVector32();
+
+            vector[actionField] = (int)action;
+
+            vector[numEventsField] = numEvents;
+
+            vector[flagsField] = (int)flags;
+
+            actionCode = (byte)vector.Data;
+        }
+
+        /// <summary>
         ///  Includes actionCode, numberEvents and encryptionFlags.
         /// </summary>
         [FieldOffset(0)]
-        public byte actionCode;
+        private byte actionCode;
+
+        private static BitVector32.Section actionField = BitVector32.CreateSection(0x3);
+
+        private static BitVector32.Section numEventsField = BitVector32.CreateSection(0xF, actionField);
+
+        private static BitVector32.Section flagsField = BitVector32.CreateSection(0x3, numEventsField);
+
+        /// <summary>
+        /// A 2-bit, unsigned integer that indicates whether the PDU is in fast-path or slow-path format.
+        /// </summary>
+        public actionCode_Values action
+        {
+            get
+            {
+                var vector = new BitVector32(actionCode);
+
+                return (actionCode_Values)vector[actionField];
+            }
+
+            set
+            {
+                var vector = new BitVector32(actionCode);
+
+                vector[actionField] = (int)value;
+
+                actionCode = (byte)vector.Data;
+            }
+        }
+
+        /// <summary>
+        /// A 4-bit, unsigned integer that collapses the number of fast-path input events packed together in the fpInputEvents field into 4 bits if the number of events is in the range 1 to 15.
+        /// If the number of input events is greater than 15, then the numEvents bit field in the fast-path header byte MUST be set to zero, and the numEvents optional field inserted after the dataSignature field. 
+        /// This allows up to 255 input events in one PDU.
+        /// </summary>
+        public int numEvents
+        {
+            get
+            {
+                var vector = new BitVector32(actionCode);
+
+                return vector[numEventsField];
+            }
+
+            set
+            {
+                var vector = new BitVector32(actionCode);
+
+                vector[numEventsField] = value;
+
+                actionCode = (byte)vector.Data;
+            }
+        }
+
+        /// <summary>
+        /// A 2-bit, unsigned integer that contains the flags describing the cryptographic parameters of the PDU.
+        /// </summary>
+        public encryptionFlags_Values flags
+        {
+            get
+            {
+                var vector = new BitVector32(actionCode);
+
+                return (encryptionFlags_Values)vector[flagsField];
+            }
+
+            set
+            {
+                var vector = new BitVector32(actionCode);
+
+                vector[flagsField] = (int)value;
+
+                actionCode = (byte)vector.Data;
+            }
+        }
     }
 
     /// <summary>
