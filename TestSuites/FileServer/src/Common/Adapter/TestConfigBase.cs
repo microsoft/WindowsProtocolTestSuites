@@ -666,6 +666,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 return false;
             }
 
+            // Windows 10 v1809 operating system and prior, Windows Server v1809 operating system and prior, and Windows Server 2019 and prior do not support compression.
+            if (IsWindowsPlatform)
+            {
+                return Platform >= Platform.WindowsServerV1903; 
+            }
+
             return true;
         }
 
