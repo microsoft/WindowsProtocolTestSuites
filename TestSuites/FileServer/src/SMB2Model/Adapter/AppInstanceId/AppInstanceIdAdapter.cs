@@ -145,14 +145,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstan
             testClient.Disconnect();
             testClient = null;
 
-            // Check if the Open is closed. 
-            // If status is success, and fileId is the same with the previous one, then the Open is not closed.
-            // Otherwise, use some other way to check if the Open is closed.
-            bool ifClosed;
-            if (status == Smb2Status.STATUS_SUCCESS && fileId.Persistent == this.open_FileId.Persistent)
-                ifClosed = false;
-            else
-                ifClosed = CheckIfOpenClosed(clientDialect, createType);
+            bool ifClosed = CheckIfOpenClosed(clientDialect, createType);
             this.OpenResponse(ifClosed ? OpenStatus.OpenClosed : OpenStatus.OpenNotClosed);
         }
 
