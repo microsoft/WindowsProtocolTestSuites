@@ -51,6 +51,8 @@
         * [AlternateDataStream_LockAndUnlock](#AlternateDataStream_LockAndUnlock)
         * [AlternateDataStream_QueryAndSet_FileInformation](#AlternateDataStream_QueryAndSet_FileInformation)
         * [AlternateDataStream_FsControl](#AlternateDataStream_FsControl)
+    * [Scenarios for Create and Query Directory](#Scenarios-for-Create-And-Query-Directory)
+        * [Query Directory](#Scenario-QueryDirectory)
     * [Other Scenarios](#Other-Scenarios)
         * [CreateFile_InvalidStreamName](#Scenario-CreateFile_InvalidStreamName)
 * [Traditional Test Case Design](#Traditional-Test-Case-Design)
@@ -215,12 +217,16 @@
             * [AlternateDataStream_FsCtl_Set_ZeroData_File](#AlternateDataStream_FsCtl_Set_ZeroData_File)
             * [AlternateDataStream_FsCtl_Set_ZeroData_Dir](#AlternateDataStream_FsCtl_Set_ZeroData_Dir)
     * [Test cases for Create and Query Directory Scenarios](#Test-cases-for-Create-and-Query-Directory-Scenarios)
-        * [QueryDirectory](#QueryDirectory)
+        * [Query Directory](#Query-Directory)
             * [Fs_CreateDirectory_QueryDirectory_Suffix_I30_INDEX_ALLOCATION](#Fs_CreateDirectory_QueryDirectory_Suffix_I30_INDEX_ALLOCATION)
             * [Fs_CreateDirectory_QueryDirectory_Suffix_INDEX_ALLOCATION](#Fs_CreateDirectory_QueryDirectory_Suffix_INDEX_ALLOCATION)
             * [Fs_CreateFiles_QueryDirectory_With_Single_Entry_Flag](#Fs_CreateFiles_QueryDirectory_With_Single_Entry_Flag)
-        * [QueryFileInformation](#QueryFileInformation)
-            * [Fs_CreateFiles_Suffix_DATA](#Fs_CreateFiles_Suffix_DATA)
+            * [BVT_QueryDirectory_FileNamesInformation](#BVT_QueryDirectory_FileNamesInformation)
+            * [BVT_QueryDirectory_FileDirectoryInformation](#BVT_QueryDirectory_FileDirectoryInformation)
+            * [BVT_QueryDirectory_FileFullDirectoryInformation](#BVT_QueryDirectory_FileFullDirectoryInformation)
+            * [BVT_QueryDirectory_FileIdFullDirectoryInformation](#BVT_QueryDirectory_FileIdFullDirectoryInformation)
+            * [BVT_QueryDirectory_FileBothDirectoryInformation](#BVT_QueryDirectory_FileBothDirectoryInformation)
+            * [BVT_QueryDirectory_FileIdBothDirectoryInformation](#BVT_QueryDirectory_FileIdBothDirectoryInformation)
     * [Test cases for Other Scenarios](#Test-cases-for-Other-Scenarios)
         * [IsCreateFileSupported](#IsCreateFileSupported)
             * [CreateFile_InvalidStreamName](#CreateFile_InvalidStreamName)
@@ -1001,6 +1007,21 @@ There are 343 test cases in total:
 | Message Sequence| Create an alternate data stream with granted access.|
 | | Create an data file with granted access.|
 | | Verify server return with **STATUS_SHARING_VIOLATION** for supported file systems.|
+
+### <a name="Scenarios-for-Create-And-Query-Directory"/>Scenarios for Create and Query Directory
+
+#### <a name="Scenario-QueryDirectory"/>Query Directory
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if Create and Query directory is supported.|
+| | Test environment: NTFS, ReFS, FAT32|
+| | Test object: DirectoryFile|
+| | Test coverage:|
+| Message Sequence| Create a directory file.|
+| | Create a file (files) under the newly created directory.|
+| | Query server directory with created directory name.|
+| | Verify server response.|
 
 ### <a name="Other-Scenarios"/>Other Scenarios
 
@@ -3260,7 +3281,7 @@ There are 343 test cases in total:
 
 ### <a name="Test-cases-for-Create-and-Query-Directory-Scenarios"/>Test cases for Create and Query Directory Scenarios
 
-#### <a name="QueryDirectory"/>QueryDirectory
+#### <a name="Query-Directory"/>Query Directory
 
 ##### <a name="Fs_CreateDirectory_QueryDirectory_Suffix_I30_INDEX_ALLOCATION"/>Fs_CreateDirectory_QueryDirectory_Suffix_I30_INDEX_ALLOCATION
 
@@ -3297,18 +3318,88 @@ There are 343 test cases in total:
 | | Query server directory for each entry under the directory|
 | | Verify server behavior with different result for supported file system|
 
-#### <a name="QueryFileInformation"/>QueryFileInformation
-
-##### <a name="Fs_CreateFiles_Suffix_DATA"/> Fs_CreateFiles_Suffix_DATA
+##### <a name="BVT_QueryDirectory_FileNamesInformation"/>BVT_QueryDirectory_FileNamesInformation
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test if Create file with ::$DATA as suffix and then query file access info is supported.|
-| | Test environment: NTFS, ReFS|
-| Message Sequence| CreateFile (File) with suffix ::$DATA|
-| | Verify server return with **STATUS_SUCCESS** for supported file system|
-| | Query file access information for created file|
-| | Verify server return with **STATUS_SUCCESS** for supported file system|
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileNamesInformation.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileNamesInformation|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectory_FileDirectoryInformation"/>BVT_QueryDirectory_FileDirectoryInformation
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Prerequisites| The Clock of SUT and Driver computers should be the same. Otherwise the verifycation to CreationTime/LastAccessTime/ChangeTime/LastWriteTime may fail.|
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileDirectoryInformation.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileDirectoryInformation|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectory_FileFullDirectoryInformation"/>BVT_QueryDirectory_FileFullDirectoryInformation
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Prerequisites| The Clock of SUT and Driver computers should be the same. Otherwise the verifycation to CreationTime/LastAccessTime/ChangeTime/LastWriteTime may fail.|
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileFullDirectoryInformation.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileFullDirectoryInformation|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectory_FileIdFullDirectoryInformation"/>BVT_QueryDirectory_FileIdFullDirectoryInformation
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Prerequisites| The Clock of SUT and Driver computers should be the same. Otherwise the verifycation to CreationTime/LastAccessTime/ChangeTime/LastWriteTime may fail.|
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileIdFullDirectoryInformation.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileIdFullDirectoryInformation|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectory_FileBothDirectoryInformation"/>BVT_QueryDirectory_FileBothDirectoryInformation
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Prerequisites| The Clock of SUT and Driver computers should be the same. Otherwise the verifycation to CreationTime/LastAccessTime/ChangeTime/LastWriteTime may fail.|
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileBothDirectoryInformation.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileBothDirectoryInformation|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectory_FileIdBothDirectoryInformation"/>BVT_QueryDirectory_FileIdBothDirectoryInformation
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Prerequisites| The Clock of SUT and Driver computers should be the same. Otherwise the verifycation to CreationTime/LastAccessTime/ChangeTime/LastWriteTime may fail.|
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileIdBothDirectoryInformation.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileIdBothDirectoryInformation|
+| | Verify each entry of the response|
 
 ### <a name="Test-cases-for-Other-Scenarios"/>Test cases for Other Scenarios
 
