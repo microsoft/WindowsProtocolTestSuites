@@ -98,7 +98,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             //According to server response, send new dialects for negotiation.
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Send Negotiate request with dialects: Smb2002, Smb21, Smb30, SMB302");
+                $"Send Negotiate request with dialects: {string.Join(",", TestConfig.RequestDialects)}");
             status = client.Negotiate(
                 Packet_Header_Flags_Values.NONE,
                 TestConfig.RequestDialects,
@@ -147,7 +147,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         {
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
-                "Send Negotiate request with dialects: Smb2002, Smb21, Smb30, SMB302 and Signing Required.");
+                $"Send Negotiate request with dialects: {string.Join(",", TestConfig.RequestDialects)} and Signing Required.");
             status = client.Negotiate(
                 Packet_Header_Flags_Values.NONE,
                 TestConfig.RequestDialects,
@@ -336,7 +336,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             var encryptionAlgs = new EncryptionAlgorithm[] {
                 EncryptionAlgorithm.ENCRYPTION_AES128_GCM,
                 EncryptionAlgorithm.ENCRYPTION_AES128_CCM };
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Send Negotiate request with dialect SMB 3.11, and without any Negotiate Contexts.");
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Send Negotiate request with dialect SMB 3.11, and with all the three Negotiate Contexts.");
             client.NegotiateWithContexts(
                 Packet_Header_Flags_Values.NONE,
                 Smb2Utility.GetDialects(DialectRevision.Smb311),
@@ -345,7 +345,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 compressionAlgorithms: TestConfig.SupportedCompressionAlgorithmList.ToArray(),
                 checker: (Packet_Header header, NEGOTIATE_Response response) =>
                 {
-                    CheckNegotiateResponse(header, response, DialectRevision.Smb311, encryptionAlgs, testConfig.IsCompressionSupported());
+                    CheckNegotiateResponse(header, response, DialectRevision.Smb311, encryptionAlgs, TestConfig.IsCompressionSupported());
                 });
         }
 
