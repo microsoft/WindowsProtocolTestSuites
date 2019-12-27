@@ -1105,7 +1105,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 pduSize += 8; //Optional: pdu.dataSignature 
             }
 
-            int numberEvents = (pdu.fpInputHeader.actionCode & 0x3c) >> 2;
+            int numberEvents = pdu.fpInputHeader.numEvents;
             if (numberEvents == 0)
             {
                 numberEvents = pdu.numberEvents;

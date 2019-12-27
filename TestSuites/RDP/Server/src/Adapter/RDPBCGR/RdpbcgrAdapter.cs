@@ -1032,8 +1032,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             }
             else if (invalidType == NegativeType.FastPathInput_InvalidSecFlags)
             {
-                pdu.fpInputHeader.actionCode |=
-                    (byte)((int)encryptionFlags_Values.FASTPATH_INPUT_ENCRYPTED << 6);
+                pdu.fpInputHeader.flags |= encryptionFlags_Values.FASTPATH_INPUT_ENCRYPTED;
             }
             else if (invalidType == NegativeType.InvalidEventType)
             {

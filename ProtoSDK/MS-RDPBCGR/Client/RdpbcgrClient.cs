@@ -2508,21 +2508,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             fastpathInputPdu.fpInputEvents = new Collection<TS_FP_INPUT_EVENT>();
             TS_FP_INPUT_EVENT fpInputEvent = new TS_FP_INPUT_EVENT();
 
-            // actionCode (2 bits): A lower 2-bit code indicating whether the PDU is 
-            // in fast-path or slow-path format.
-            // numberEvents (4 bits): Collapses the number of fast-path input events 
-            // packed together in the fpInputEvents field into 4 bits if the number of 
-            // events is in the range 1 to 15.
-            fastpathInputPdu.fpInputHeader.actionCode =
-                (byte)(((int)actionCode_Values.FASTPATH_INPUT_ACTION_FASTPATH & 0x03)
-                | ((int)(ConstValue.FP_NUMBER_EVENTS & 0x0F) << 2));
+            fastpathInputPdu.fpInputHeader = new nested_TS_FP_INPUT_PDU_fpInputHeader(actionCode_Values.FASTPATH_INPUT_ACTION_FASTPATH, ConstValue.FP_NUMBER_EVENTS, encryptionFlags_Values.None);
 
             if (context.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE)
             {
-                // encryptionFlags (2 bits): A higher 2-bit field containing the flags 
-                // that describe the cryptographic parameters of the PDU.
-                fastpathInputPdu.fpInputHeader.actionCode |=
-                    (byte)((int)encryptionFlags_Values.FASTPATH_INPUT_ENCRYPTED << 6);
+                fastpathInputPdu.fpInputHeader.flags |= encryptionFlags_Values.FASTPATH_INPUT_ENCRYPTED;
             }
 
             fastpathInputPdu.dataSignature = null;
@@ -2610,21 +2600,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 eventNum = (byte)inputEvents.Length;
             }
 
-            // actionCode (2 bits): A lower 2-bit code indicating whether the PDU is 
-            // in fast-path or slow-path format.
-            // numberEvents (4 bits): Collapses the number of fast-path input events 
-            // packed together in the fpInputEvents field into 4 bits if the number of 
-            // events is in the range 1 to 15.
-            fastpathInputPdu.fpInputHeader.actionCode =
-                (byte)(((int)actionCode_Values.FASTPATH_INPUT_ACTION_FASTPATH & 0x03)
-                | ((int)(eventNum & 0x0F) << 2));
+            fastpathInputPdu.fpInputHeader = new nested_TS_FP_INPUT_PDU_fpInputHeader(actionCode_Values.FASTPATH_INPUT_ACTION_FASTPATH, eventNum, encryptionFlags_Values.None);
 
             if (context.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE)
             {
-                // encryptionFlags (2 bits): A higher 2-bit field containing the flags 
-                // that describe the cryptographic parameters of the PDU.
-                fastpathInputPdu.fpInputHeader.actionCode |=
-                    (byte)((int)encryptionFlags_Values.FASTPATH_INPUT_ENCRYPTED << 6);
+                fastpathInputPdu.fpInputHeader.flags |= encryptionFlags_Values.FASTPATH_INPUT_ENCRYPTED;
             }
 
             fastpathInputPdu.dataSignature = null;
