@@ -2797,37 +2797,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
 
         /// <summary>
-        /// Get information from Fast-path Output Header
-        /// </summary>
-        /// <param name="fpOutputHeader">fast-path output header</param>
-        /// <param name="actionCode">action code</param>
-        /// <param name="encryptionFlags">encryption flags</param>
-        private void GetFpInputHeaderInfo(
-            byte fpInputHeader,
-            out nested_TS_FP_UPDATE_PDU_fpOutputHeader_actionCode_Values actionCode,
-            out byte numberEvents,
-            out encryptionFlagsChgd_Values encryptionFlags)
-        {
-            // The following logic is derived from TD section [2.2.9.1.2]
-            // fpOutputHeader is a 1-byte, bit-packed field formed by:
-            // actionCode(2 bits) + reserved(4 bits) + encryptionFlags(2 bits)
-
-            // action code
-            byte code = (byte)(fpInputHeader & 0x03);
-            actionCode = (nested_TS_FP_UPDATE_PDU_fpOutputHeader_actionCode_Values)code;
-
-            byte num = (byte)((fpInputHeader & 0x3c) >> 2);
-            numberEvents = num;
-
-            // encryption flags
-            byte flags = (byte)((fpInputHeader & 0xc0) >> 6);
-            encryptionFlags = (encryptionFlagsChgd_Values)flags;
-
-            return;
-        }
-
-
-        /// <summary>
         /// Get information from Fast-path Update Header
         /// </summary>
         /// <param name="updateHeader">update header</param>
@@ -4200,11 +4169,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             int currentIndex = 0;
             TS_FP_INPUT_PDU pdu = new TS_FP_INPUT_PDU();
 
-            pdu.fpInputHeader.actionCode = ParseByte(data, ref currentIndex);
-            nested_TS_FP_UPDATE_PDU_fpOutputHeader_actionCode_Values actionCode;
-            byte numberEvents;
-            encryptionFlagsChgd_Values encryptionFlags;
-            GetFpInputHeaderInfo(pdu.fpInputHeader.actionCode, out actionCode, out numberEvents, out encryptionFlags);
+            pdu.fpInputHeader = new nested_TS_FP_INPUT_PDU_fpInputHeader(ParseByte(data, ref currentIndex));
+
+            var actionCode = pdu.fpInputHeader.action;
+
+            byte numberEvents = (byte)pdu.fpInputHeader.numEvents;
+
+            var encryptionFlags = pdu.fpInputHeader.flags;
 
             pdu.length1 = ParseByte(data, ref currentIndex);
 

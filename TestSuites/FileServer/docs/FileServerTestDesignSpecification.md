@@ -4980,7 +4980,7 @@ This model has 4 scenarios.
 
 **Negotiate** means the client can exchange the capabilities with the server.
 
-The feature has 94 Model-Based test cases and 8 traditional test cases.
+The feature has 94 Model-Based test cases and 24 traditional test cases.
 
 For traditional test cases, please refer to section [Negotiation](#3.1.6)
 
@@ -5031,6 +5031,17 @@ This model has 1 scenario.
 
 Scenario see section [Scenario](#3.1.6.1).
 
+
+|||
+|---|---|
+|**Test ID**|Negotiate_SMB311_WithAllContexts|
+|**Description**|This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect and with all the three Negotiate Contexts.|
+|**Prerequisites**|The server implements dialect 3.11.|
+|**Test Execution Steps**|Client sends Negotiate request with dialect SMB 3.11, and with all the three Negotiate Contexts.|
+||Verify server returns STATUS_SUCCESS, check the selected dialect, capabilities and negotiate contexts according to server's configuration.|
+|**Cleanup**||
+
+
 |||
 |---|---|
 |**Test ID**|Negotiate_SMB311_WithoutAnyContexts|
@@ -5047,6 +5058,26 @@ Scenario see section [Scenario](#3.1.6.1).
 |**Description**|This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect, with SMB2_ENCRYPTION_CAPABILITIES Context and without SMB2_PREAUTH_INTEGRITY_CAPABILITIES Context.|
 |**Prerequisites**|The server implements dialect 3.11.|
 |**Test Execution Steps**|Send Negotiate request with dialect SMB 3.11, with SMB2_ENCRYPTION_CAPABILITIES context, without SMB2_PREAUTH_INTEGRITY_CAPABILITIES context.|
+||Verify server fails the negotiate request with STATUS_INVALID_PARAMETER.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|Negotiate_SMB311_WithCompressionContextWithoutIntegrityContext|
+|**Description**|This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect, with SMB2_COMPRESSION_CAPABILITIES Context and without SMB2_PREAUTH_INTEGRITY_CAPABILITIES Context.|
+|**Prerequisites**|The server implements dialect 3.11.|
+|**Test Execution Steps**|Send Negotiate request with dialect SMB 3.11, with SMB2_COMPRESSION_CAPABILITIES Context and without SMB2_PREAUTH_INTEGRITY_CAPABILITIES Context.|
+||Verify server fails the negotiate request with STATUS_INVALID_PARAMETER.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|Negotiate_SMB311_WithEncryptionAndCompressionContextsWithoutIntegrityContext|
+|**Description**|This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect, with SMB2_ENCRYPTION_CAPABILITIES and SMB2_COMPRESSION_CAPABILITIES Contexts and without SMB2_PREAUTH_INTEGRITY_CAPABILITIES Context.|
+|**Prerequisites**|The server implements dialect 3.11.|
+|**Test Execution Steps**|Send Negotiate request with dialect SMB 3.11, with SMB2_ENCRYPTION_CAPABILITIES and SMB2_COMPRESSION_CAPABILITIES Contexts and without SMB2_PREAUTH_INTEGRITY_CAPABILITIES Context.|
 ||Verify server fails the negotiate request with STATUS_INVALID_PARAMETER.|
 |**Cleanup**||
 

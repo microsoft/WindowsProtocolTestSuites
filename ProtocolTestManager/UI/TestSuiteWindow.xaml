@@ -12,7 +12,15 @@
 	Title="TestSuiteWindow">
     <Grid  x:Name="Main" Margin="0,0,0,0">
         <Border BorderThickness="1">
-            <ScrollViewer Name="ScrollContent" Margin="0,0,0,0" AutomationProperties.Name="Test suites" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel" BorderThickness="1" Focusable="False">
+            <ScrollViewer Margin="0,0,0,0" AutomationProperties.Name="Test suites" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel" BorderThickness="1" Focusable="False">
+                <StackPanel>
+                    <Grid>
+                        <StackPanel Name="TestSuitesFamilies" />
+                    </Grid>
+                    <Grid>
+                        <TextBlock Name="Hint" TextWrapping="Wrap" Margin="0,16,0,0"></TextBlock>
+                    </Grid>
+                </StackPanel>
             </ScrollViewer>
         </Border>
     </Grid>

@@ -193,7 +193,9 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             F_HandleV2_LeaseV2 = DetectResult.UnSupported;
             F_Leasing_V1 = DetectResult.UnSupported;
             F_Leasing_V2 = DetectResult.UnSupported;
-        }
+            RsvdVersion = 0;
+            SqosVersion = 0;            
+    }
 
         public bool CheckHigherDialect(DialectRevision MaxSupported, DialectRevision ComTarget)
         {

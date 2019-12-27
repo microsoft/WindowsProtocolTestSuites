@@ -81,7 +81,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         private FileAccess gOpenGrantedAccess;
         private StreamType gStreamType;
         private List<string> activeTDIs;
-
+        public bool Is64bitFileIdSupported;
+        public bool IsChangeTimeSupported;
         // Used to generate random file names.
         private static Random randomRange = new Random();
 
@@ -337,6 +338,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
             //Other Configurations
             this.transBufferSize = uint.Parse(testConfig.GetProperty("BufferSize"));
+            this.Is64bitFileIdSupported = bool.Parse(testConfig.GetProperty("Is64bitFileIdSupported"));
+            this.IsChangeTimeSupported = bool.Parse(testConfig.GetProperty("IsChangeTimeSupported"));
 
             sutProtocolController = Site.GetAdapter<ISutProtocolControlAdapter>();
 
@@ -1051,6 +1054,44 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 fileIndex,
                 searchPattern,
                 out outBuffer
+                );
+
+            return returnedStatus;
+        }
+
+        /// </summary>
+        /// Query directory with outputBuffer returned.
+        /// <param name="searchPattern">A Unicode string containing the file name pattern to match. </param>
+        /// <param name="fileInfoClass">The FileInfoClass to query. </param>
+        /// <param name="returnSingleEntry">A boolean indicating whether the return single entry for query.</param>
+        /// <param name="restartScan">A boolean indicating whether the enumeration should be restarted.</param>
+        /// <param name="outputBuffer"> The buffer containing the directory enumeration being returned in the response</param>
+        /// of section 3.1.5.5.4</param>
+        /// <returns>An NTSTATUS code that specifies the result</returns>
+        public MessageStatus QueryDirectory(
+            Smb2.FILEID fileId,
+            uint treeId,
+            ulong sessionId,
+            string searchPattern,
+            FileInfoClass fileInfoClass,
+            bool returnSingleEntry,
+            bool restartScan,
+            out byte[] outputBuffer
+            )
+        {
+            uint fileIndex = 0;
+
+            MessageStatus returnedStatus = this.transAdapter.QueryDirectory(
+                fileId,
+                treeId,
+                sessionId,
+                (byte)fileInfoClass,
+                this.transBufferSize,
+                restartScan,
+                returnSingleEntry,
+                fileIndex,
+                searchPattern,
+                out outputBuffer
                 );
 
             return returnedStatus;
@@ -1803,7 +1844,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                         break;
 
                     case OutBufferSmall.FileFullDirectoryInformation:
-                        fileInfoClass = FileInfoClass.FILE_FULL_DIR_INFORMATIO;
+                        fileInfoClass = FileInfoClass.FILE_FULL_DIR_INFORMATION;
                         break;
 
                     case OutBufferSmall.FileIdBothDirectoryInformation:
@@ -5542,7 +5583,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
             randomFileName = randomFileName + extension;
                 
-            if (addToList )
+            if (addToList)
             {
                 AddTestFileName(opt, randomFileName);
             }

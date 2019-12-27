@@ -126,6 +126,7 @@
     <Compile Include="TestReportWindow.xaml.cs">
       <DependentUpon>TestReportWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helper.cs" />
     <Compile Include="WelcomePage.xaml.cs">
       <DependentUpon>WelcomePage.xaml</DependentUpon>
     </Compile>
