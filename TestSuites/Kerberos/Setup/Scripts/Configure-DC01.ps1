@@ -204,7 +204,10 @@ Function Config-DC01()
 	Write-ConfigLog "Enable the Ticket-Granting Ticket (TGT) delegation on DC01" -ForegroundColor Yellow
 
 	try {
-		cmd /c "netdom trust $domainName /domain:$($KrbParams.Parameters.TrustRealm.RealmName) /enabletgtdelegation:yes"
+		$trustRealmeName = $KrbParams.Parameters.TrustRealm.RealmName
+		$trustRealmeAdmin = $KrbParams.Parameters.TrustRealm.Administrator.Username
+		$trustRealmeAdminPassword = $KrbParams.Parameters.TrustRealm.Administrator.Password
+		cmd /c "netdom trust $domainName /domain:$trustRealmeName /ud:$trustRealmeAdmin /pd:$trustRealmeAdminPassword /EnableTgtDelegation:yes"
 	}
 	catch {
 		throw "Failed to enable TGT delegation on DC01. Error: " + $_.Exception.Message 
