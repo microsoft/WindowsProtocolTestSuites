@@ -177,7 +177,7 @@ Function Config-DC01()
 	Write-ConfigLog "Begin to config DC01 computer"
 	$domainName 	= $KrbParams.Parameters.LocalRealm.RealmName
 	#-----------------------------------------------------------------------------------------------
-	#Create forest trust on local side
+	# Create forest trust on local side
 	#-----------------------------------------------------------------------------------------------
 	Write-ConfigLog "Create forest trust relationship on local side ..." -ForegroundColor Yellow
 
@@ -196,6 +196,21 @@ Function Config-DC01()
 	catch
 	{
 		throw "Failed to create trust relationship. Error: " + $_.Exception.Message
+	}
+
+	#-----------------------------------------------------------------------------------------------
+	# Enable the Ticket-Granting Ticket (TGT) delegation on DC01
+	#-----------------------------------------------------------------------------------------------
+	Write-ConfigLog "Enable the Ticket-Granting Ticket (TGT) delegation on DC01" -ForegroundColor Yellow
+
+	try {
+		$trustRealmeName = $KrbParams.Parameters.TrustRealm.RealmName
+		$trustRealmeAdmin = $KrbParams.Parameters.TrustRealm.Administrator.Username
+		$trustRealmeAdminPassword = $KrbParams.Parameters.TrustRealm.Administrator.Password
+		cmd /c "netdom trust $domainName /domain:$trustRealmeName /ud:$trustRealmeAdmin /pd:$trustRealmeAdminPassword /EnableTgtDelegation:yes"
+	}
+	catch {
+		throw "Failed to enable TGT delegation on DC01. Error: " + $_.Exception.Message 
 	}
 
 	#-----------------------------------------------------------------------------------------------
