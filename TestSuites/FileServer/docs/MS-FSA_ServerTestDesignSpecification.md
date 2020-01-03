@@ -296,7 +296,7 @@ There are 139 test cases in total:
 | Scenarios for FsControlRequest | 13 | 44 (14) |
 | Scenarios for Alternate Data Stream | 9 | 41 (12) |
 | Scenarios for QuotaInformation | 1 | 2 (0) |
-| Scenarios for FileAccess | 1 | 3 (0) |
+| Scenarios for FileAccess | 1 | 2 (0) |
 | Other Scenarios | 1 | 1 (0) |
 
 ### <a name="MBT-Test-cases"/>MBT Test cases
@@ -833,19 +833,6 @@ There are 343 test cases in total:
 | | If file attributes is read only and create options is  FILE_DELETE_ON_CLOSE, server will return STATUS_CANNOT_DELETE. |
 | Message Sequence| Create readonly data file.|
 | | Delete the read only data file|
-| | Verify server responses accordingly.|
-
-#### <a name="FileAccess_DeleteReadOnlyDirectoryFile"/>FileAccess_DeleteReadOnlyDirectoryFile
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To delete a read only directory file and check the returned status code.|
-| | Test environment: FAT32, NTFS, ReFS|
-| | Test object: DirectoryFile|
-| | Test coverage:|
-| | If file attributes is read only and create options is  FILE_DELETE_ON_CLOSE, server will return STATUS_CANNOT_DELETE. |
-| Message Sequence| Create readonly directory file.|
-| | Delete the read only directory file|
 | | Verify server responses accordingly.|
 
 ### <a name="Scenarios-for-Alternate-Data-Stream"/>Scenarios for Alternate Data Stream
