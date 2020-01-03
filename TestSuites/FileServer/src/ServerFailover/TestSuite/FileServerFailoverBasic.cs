@@ -355,6 +355,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                 if (fsType == FileServerType.GeneralFileServer)
                 {
                     currentAccessIpAddr = null;
+                    this.sutController.FlushDNS();
                     IPAddress[] accessIpList = Dns.GetHostEntry(server).AddressList;
                     DoUntilSucceed(() =>
                     {
@@ -381,7 +382,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                 else
                 {
                     currentAccessIpAddr = null;
-
+                    this.sutController.FlushDNS();
                     IPAddress[] accessIpList = Dns.GetHostEntry(server).AddressList;
                     foreach (IPAddress ipAddress in accessIpList)
                     {
@@ -389,7 +390,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                         {
                             // When setting failover mode to StopNodeService for Windows, SMB2 servers on two nodes can still be accessed by the client.
                             // So the client needs to get the new node to access it after failover by comparing host name.
-                            if (string.Compare(currentAccessNode, Dns.GetHostEntry(ipAddress).HostName, true) == 0)
+                            if (!reconnectWithoutFailover && string.Compare(currentAccessNode, Dns.GetHostEntry(ipAddress).HostName, true) == 0)
                             {
                                 continue;
                             }
@@ -461,6 +462,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             #endregion
 
             #region Read content and close the file
+            BaseTestSite.Assert.AreNotEqual(
+                null,
+                currentAccessIpAddr,
+                "Access IP to the file server should not be empty when reconnecting.");
+
             DoUntilSucceed(() => ReadContentAfterFailover(server, currentAccessIpAddr, uncSharePath, file, content, clientGuid, createGuid, fileId),
                     TestConfig.FailoverTimeout,
                     "After failover, retry Read content until succeed within timeout span.");

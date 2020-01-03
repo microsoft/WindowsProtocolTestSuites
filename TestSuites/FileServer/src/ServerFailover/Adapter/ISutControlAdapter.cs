@@ -98,5 +98,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.Adapter
         /// <param name="nodeName">Node name</param>
         [MethodHelp("Refresh Net adapter according to IP address. \r\n")]
         void RefreshNetAdapter(string IPAddress, string nodeName);
+
+        /// <summary>
+        /// Flush DNS of the driver computer
+        /// </summary>
+        [MethodHelp("Flush DNS of the driver computer\r\n")]
+        void FlushDNS();
     }
 }

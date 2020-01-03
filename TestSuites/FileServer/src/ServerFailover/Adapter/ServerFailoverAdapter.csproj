@@ -93,6 +93,9 @@
     <Compile Include="ISutControlAdapter.cs" />
     <Compile Include="ServerFailoverTestConfig.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="WindowsSutControlAdapter\FlushDNS.ps1" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
     <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\" />
