@@ -835,19 +835,6 @@ There are 343 test cases in total:
 | | Delete the read only data file|
 | | Verify server responses accordingly.|
 
-#### <a name="FileAccess_DeleteReadOnlyDirectoryFile"/>FileAccess_DeleteReadOnlyDirectoryFile
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To delete a read only directory file and check the returned status code.|
-| | Test environment: FAT32, NTFS, ReFS|
-| | Test object: DirectoryFile|
-| | Test coverage:|
-| | If file attributes is read only and create options is  FILE_DELETE_ON_CLOSE, server will return STATUS_CANNOT_DELETE. |
-| Message Sequence| Create readonly directory file.|
-| | Delete the read only directory file|
-| | Verify server responses accordingly.|
-
 ### <a name="Scenarios-for-Alternate-Data-Stream"/>Scenarios for Alternate Data Stream
 
 #### <a name="AlternateDataStream_CreateStream"/>AlternateDataStream_CreateStream
