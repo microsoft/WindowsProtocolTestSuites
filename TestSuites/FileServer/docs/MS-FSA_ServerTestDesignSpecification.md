@@ -296,7 +296,7 @@ There are 139 test cases in total:
 | Scenarios for FsControlRequest | 13 | 44 (14) |
 | Scenarios for Alternate Data Stream | 9 | 41 (12) |
 | Scenarios for QuotaInformation | 1 | 2 (0) |
-| Scenarios for FileAccess | 1 | 3 (0) |
+| Scenarios for FileAccess | 1 | 2 (0) |
 | Other Scenarios | 1 | 1 (0) |
 
 ### <a name="MBT-Test-cases"/>MBT Test cases
