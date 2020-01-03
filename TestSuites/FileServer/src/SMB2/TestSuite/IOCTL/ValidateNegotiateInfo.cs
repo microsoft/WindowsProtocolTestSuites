@@ -144,6 +144,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("Test whether the server can terminate the transport connection when receiving a VALIDATE_NEGOTIATE_INFO request with dialect 3.1.1.")]
         public void ValidateNegotiateInfo_Negative_SMB311()
         {
+            // This case is only applicable for the server that implements the SMB 3.1.1 dialect;
+            TestConfig.CheckDialect(DialectRevision.Smb311);
             TestValidateNegotiateInfo(client, ValidateNegotiateInfoRequestType.InvalidSMB311Dialect);
         }
         #endregion
