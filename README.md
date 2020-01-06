@@ -55,7 +55,7 @@ You should install the software listed below based on your testing purpose, incl
 
    It is only required if you want to build or run the test suites that contain Model-Based Test cases. If you want to regenerate Model-Based Test cases, you must install Visual Studio 2012.
 
-1. [Protocol Test Framework build 1.0 (build 1.0.7000.0)](https://github.com/Microsoft/ProtocolTestFramework/releases/tag/1.0.7000.0)
+1. [Protocol Test Framework build 1.0 (build 1.0.7500.0)](https://github.com/Microsoft/ProtocolTestFramework/releases/tag/1.0.7500.0)
 
    You can use a released MSI file or build it from source code.
 
