@@ -55,7 +55,7 @@ You should install the software listed below based on your testing purpose, incl
 
    It is only required if you want to build or run the test suites that contain Model-Based Test cases. If you want to regenerate Model-Based Test cases, you must install Visual Studio 2012.
 
-1. [Protocol Test Framework build 1.0 (build 1.0.7000.0)](https://github.com/Microsoft/ProtocolTestFramework/releases/tag/1.0.7000.0)
+1. [Protocol Test Framework build 1.0 (build 1.0.7500.0)](https://github.com/Microsoft/ProtocolTestFramework/releases/tag/1.0.7500.0)
 
    You can use a released MSI file or build it from source code.
 
@@ -76,9 +76,11 @@ You should install the software listed below based on your testing purpose, incl
 
    It is required if you want to build Protocol Test Manager. Please download `nuget.exe` into a suitable folder and add that folder to `Path` environment variable 
 
-1. [Microsoft Message Analyzer](https://www.microsoft.com/en-us/download/details.aspx?id=44226)
+1. Microsoft Message Analyzer
 
    It is required if you want to build or run ADFamily, ADOD and AZOD test suites.
+   
+   November 25 2019 - Microsoft Message Analyzer (MMA) has been retired and removed from public-facing sites on microsoft.com. A private MMA build is available for testing purposes; to request it, send an email to [getmma@microsoft.com](mailto:getmma@microsoft.com).
 
 1. [Open XML SDK](https://www.microsoft.com/en-us/download/details.aspx?id=30425)
 

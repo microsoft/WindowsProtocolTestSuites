@@ -234,7 +234,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
                 "Register buffer should succeed.");
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Write content to file over RDMA.");
-            status = Smb2WriteOverRdma(fileName, fileContent, Channel_Values.CHANNEL_RDMA_V1_INVALIDATE, descp);
+            status = Smb2WriteOverRdma(fileName, fileContent, Channel_Values.CHANNEL_RDMA_V1, descp);
             BaseTestSite.Assert.AreEqual<NtStatus>(
                 NtStatus.STATUS_SUCCESS,
                 status,

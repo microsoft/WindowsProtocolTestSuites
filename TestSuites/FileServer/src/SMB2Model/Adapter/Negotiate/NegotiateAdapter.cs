@@ -127,21 +127,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Negotiate
 
         public void NegotiateRequest(Sequence<DialectRevision> dialects)
         {
-            Packet_Header responseHeader = new Packet_Header();
+            Smb2NegotiateRequestPacket negotiateRequest;
+            Smb2NegotiateResponsePacket negotiateResponse;
             DialectRevision selectedDialect = DialectRevision.Smb2Unknown;
-            NEGOTIATE_Response responsePayload = new NEGOTIATE_Response();
             byte[] smb2ClientGssToken;
             ModelSmb2Status status = ModelSmb2Status.STATUS_SUCCESS;
 
             try
             {
                 status = (ModelSmb2Status)smb2Client.Negotiate(0, 1, Packet_Header_Flags_Values.NONE, messageId++, dialects.ToArray(), SecurityMode_Values.NONE, Capabilities_Values.NONE, Guid.NewGuid(),
-                    out selectedDialect, out smb2ClientGssToken, out responseHeader, out responsePayload);
+                    out selectedDialect, out smb2ClientGssToken, out negotiateRequest, out negotiateResponse);
                 if (status != ModelSmb2Status.STATUS_SUCCESS)
                 {
                     selectedDialect = DialectRevision.Smb2Unknown;
                 }
                 this.NegotiateResponse(status, selectedDialect);
+                testConfig.CheckNegotiateContext(negotiateRequest, negotiateResponse);
             }
             catch
             {

@@ -74,7 +74,7 @@ namespace Microsoft.Protocols.TestManager.UI
                 var header = new StackPanel()
                 {
                     Orientation = Orientation.Horizontal,
-                    Children = { 
+                    Children = {
                         headerCheckbox,
                         headerLabel
                     }
@@ -137,7 +137,7 @@ namespace Microsoft.Protocols.TestManager.UI
                         var dispatcher = headerCheckbox.Dispatcher;
                         if (dispatcher.CheckAccess())
                         {
-                             headerLabel.Content = i.HeaderText;
+                            headerLabel.Content = i.HeaderText;
                         }
                         else
                         {
@@ -241,11 +241,6 @@ namespace Microsoft.Protocols.TestManager.UI
                 logview.IsCurrent = true;
         }
 
-        private void Inprogress_GotFocus(object sender, RoutedEventArgs e)
-        {
-            logview.IsCurrent = true;
-        }
-
         private void UncheckAll_Click(object sender, RoutedEventArgs e)
         {
             foreach (TestCase testcase in testCaseList)
@@ -346,12 +341,8 @@ namespace Microsoft.Protocols.TestManager.UI
             }
             catch (Exception exception)
             {
-                MessageBox.Show(
-                    exception.Message,
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error,
-                    MessageBoxResult.None);
+                UserPromptWindow.Show(StringResources.Error, exception.Message, UserPromptWindow.IconType.Error);
+
                 return;
             }
         }
@@ -369,12 +360,8 @@ namespace Microsoft.Protocols.TestManager.UI
             }
             catch (Exception exception)
             {
-                MessageBox.Show(
-                    exception.Message,
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error,
-                    MessageBoxResult.None);
+                UserPromptWindow.Show(StringResources.Error, exception.Message, UserPromptWindow.IconType.Error);
+
                 return;
             }
         }
@@ -390,17 +377,16 @@ namespace Microsoft.Protocols.TestManager.UI
                     int checkedNumber, notFound;
                     Pages.util.ImportPlaylist(openfile.FileName);
                     Pages.util.ApplyPlaylist(out checkedNumber, out notFound);
-                    if (notFound > 0) MessageBox.Show(string.Format(StringResources.NotFoundCaseMessage, notFound));
+                    if (notFound > 0)
+                    {
+                        UserPromptWindow.Show(StringResources.Error, string.Format(StringResources.NotFoundCaseMessage, notFound), UserPromptWindow.IconType.Error);
+                    }
                 }
             }
             catch (Exception exception)
             {
-                MessageBox.Show(
-                    exception.Message,
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error,
-                    MessageBoxResult.None);
+                UserPromptWindow.Show(StringResources.Error, exception.Message, UserPromptWindow.IconType.Error);
+
                 return;
             }
         }
@@ -418,12 +404,8 @@ namespace Microsoft.Protocols.TestManager.UI
             }
             catch (Exception exception)
             {
-                MessageBox.Show(
-                    exception.Message,
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error,
-                    MessageBoxResult.None);
+                UserPromptWindow.Show(StringResources.Error, exception.Message, UserPromptWindow.IconType.Error);
+
                 return;
             }
         }
@@ -555,7 +537,12 @@ namespace Microsoft.Protocols.TestManager.UI
         }
         private void SelectedCaseChanged()
         {
-            Pages.RunPage.WebBrowserLog.Url = testcase.LogUri;
+            // testcase could be null because logger.RunningTestCase could be null.
+            // So add check here to avoid null reference exception.
+            if (testcase != null)
+            {
+                Pages.RunPage.WebBrowserLog.Url = testcase.LogUri;
+            }
         }
 
     }

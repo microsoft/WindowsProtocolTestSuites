@@ -1,0 +1,22 @@
+trigger: none 
+
+variables:
+  - group: External Repo Variables
+
+resources:
+  repositories:
+    - repository: template
+      type: git
+      name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
+      ref: AzurePipelines
+
+jobs:
+  - template: pipelines/Sync/Sync-Branch-Between-Repo-steps.yml@template
+    parameters:
+        extRepoUrl: $(extRepo.url)
+        extRepoDir: $(Build.BinariesDirectory)
+        extRepoBranch: $(extRepo.helperBranch)    
+        RemoteName: $(repo.RemoteName)
+        RemoteUrl: $(repo.RemoteUrl)
+        SyncBranch: $(repo.SyncBranch)
+        MirrorBranch: $(repo.MirrorBranch)

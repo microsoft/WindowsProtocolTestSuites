@@ -1,0 +1,21 @@
+trigger: none 
+
+variables:
+  - group: Build Variables
+  - group: External Repo Variables
+  - group: SMTP Account
+
+resources:
+  repositories:
+    - repository: template
+      type: git
+      name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
+      ref: AzurePipelines
+
+jobs:
+  - template: pipelines/local/SMBD-LocalRegression-steps.yml@template
+    parameters:
+      extRepoUrl: $(extRepo.url)
+      extRepoDir: $(extRepo.dir)
+      RootSharePath: $(build.sharePath)
+      HelperBranch: $(test.helperBranch)

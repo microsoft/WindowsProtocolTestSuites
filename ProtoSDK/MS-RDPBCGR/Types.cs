@@ -7,6 +7,7 @@ using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.Mcs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -1476,7 +1477,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
                 RdpbcgrEncoder.EncodeStructure(coreData, gccPdu.clientCoreData.deviceScaleFactor.actualData);
 
-                labelCoreEnd:
+            labelCoreEnd:
                 userData.AddRange(coreData.ToArray());
             }
             #endregion Encode clientCoreData structure TS_UD_CS_CORE
@@ -2884,7 +2885,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                                                         infoPacket.extraInfo.cbClientDir);
                     }
 
-                    RdpbcgrEncoder.EncodeStructure(infoBuffer, (ushort)infoPacket.extraInfo.clientTimeZone.Bias);
+                    RdpbcgrEncoder.EncodeStructure(infoBuffer, infoPacket.extraInfo.clientTimeZone.Bias);
                     RdpbcgrEncoder.EncodeUnicodeString(infoBuffer,
                                                        infoPacket.extraInfo.clientTimeZone.StandardName,
                                                        ConstValue.TIME_ZONE_STANDARD_NAME_SIZE);
@@ -3975,6 +3976,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  RDP 5.0, 5.1, and 5.2.
         /// </summary>
         PREAMBLE_VERSION_3_0 = 0x03,
+
+        /// <summary>
+        /// Indicates that extended error information using the Licensing Error Message (section 2.2.1.12.1.3) is supported.
+        /// </summary>
+        EXTENDED_ERROR_MSG_SUPPORTED = 0x80
     }
 
     /// <summary>
@@ -4010,7 +4016,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  set to 0, then this field is not included in the Licensing
         ///  Binary BLOB structure.
         /// </summary>
-        //[StaticSize(1, StaticSizeMode.Elements)]
+        [Size("wBlobLen")]
         public byte[] blobData;
     }
 
@@ -5693,6 +5699,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  The slow path header.
         /// </summary>
         public SlowPathPduCommonHeader commonHeader;
+
+        public LICENSE_PREAMBLE preamble;
 
         /// <summary>
         ///  The RDPELE message includes preamble and LicensingMessage.
@@ -9493,6 +9501,36 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// The disconnection was initiated by the user logging off his or her session on the server.
         /// </summary>
         ERRINFO_LOGOFF_BY_USER = 0x0000000C,
+
+        /// <summary>
+        /// The display driver in the remote session did not report any status within the time allotted for startup.
+        /// </summary>
+        ERRINFO_CLOSE_STACK_ON_DRIVER_NOT_READY = 0x0000000F,
+
+        /// <summary>
+        /// The DWM process running in the remote session terminated unexpectedly.
+        /// </summary>
+        ERRINFO_SERVER_DWM_CRASH = 0x00000010,
+
+        /// <summary>
+        /// The display driver in the remote session was unable to complete all the tasks required for startup.
+        /// </summary>
+        ERRINFO_CLOSE_STACK_ON_DRIVER_FAILURE = 0x00000011,
+
+        /// <summary>
+        /// The display driver in the remote session started up successfully, but due to internal failures was not usable by the remoting stack.
+        /// </summary>
+        ERRINFO_CLOSE_STACK_ON_DRIVER_IFACE_FAILURE = 0x00000012,
+
+        /// <summary>
+        /// The Winlogon process running in the remote session terminated unexpectedly.
+        /// </summary>
+        ERRINFO_SERVER_WINLOGON_CRASH = 0x00000017,
+
+        /// <summary>
+        /// The CSRSS process running in the remote session terminated unexpectedly.
+        /// </summary>
+        ERRINFO_SERVER_CSRSS_CRASH = 0x00000018,
 
         /// <summary>
         /// An internal error has occurred in the Terminal Services licensing component.
@@ -14273,11 +14311,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                                        - (fpInputdata.Length % ConstValue.TRIPLE_DES_PAD));
             }
 
-            // encryptionFlags (2 bits): A higher 2-bit field containing the flags 
-            // that describe the cryptographic parameters of the PDU.
-            bool isSalted = ((fpInputHeader.actionCode >> 6) &
-                             (int)encryptionFlags_Values.FASTPATH_INPUT_SECURE_CHECKSUM)
-                             == (int)encryptionFlags_Values.FASTPATH_INPUT_SECURE_CHECKSUM;
+            bool isSalted = fpInputHeader.flags.HasFlag(encryptionFlags_Values.FASTPATH_INPUT_SECURE_CHECKSUM);
+
             context.Encrypt(fpInputdata, isSalted, out encryptedData, out signature);
             if (dataSignature == null)
             {
@@ -14342,15 +14377,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 RdpbcgrEncoder.EncodeStructure(fpHeaderData, fipsInformation);
             }
 
-            // encryptionFlags (2 bits): A higher 2-bit field containing the flags 
-            // that describe the cryptographic parameters of the PDU.
-            if (((fpInputHeader.actionCode >> 6) & (int)encryptionFlags_Values.FASTPATH_INPUT_ENCRYPTED)
-                == (int)encryptionFlags_Values.FASTPATH_INPUT_ENCRYPTED)
+            if (fpInputHeader.flags.HasFlag(encryptionFlags_Values.FASTPATH_INPUT_ENCRYPTED))
             {
                 RdpbcgrEncoder.EncodeBytes(fpHeaderData, dataSignature);
             }
 
-            if ((fpInputHeader.actionCode & (0x0F << 2)) == 0)
+            if (fpInputHeader.numEvents == 0)
             {
                 RdpbcgrEncoder.EncodeStructure(fpHeaderData, numberEvents);
             }
@@ -14429,10 +14461,112 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     public partial struct nested_TS_FP_INPUT_PDU_fpInputHeader
     {
         /// <summary>
+        /// Construct TS_FP_INPUT_PDU from a packed byte.
+        /// </summary>
+        /// <param name="data">The packed byte.</param>
+        public nested_TS_FP_INPUT_PDU_fpInputHeader(byte data)
+        {
+            actionCode = data;
+        }
+
+        /// <summary>
+        /// Construct TS_FP_INPUT_PDU by each field.
+        /// </summary>
+        /// <param name="action">The action field.</param>
+        /// <param name="numEvents">The numEvents field.</param>
+        /// <param name="flags">The flags field.</param>
+        public nested_TS_FP_INPUT_PDU_fpInputHeader(actionCode_Values action, int numEvents, encryptionFlags_Values flags)
+        {
+            var vector = new BitVector32();
+
+            vector[actionField] = (int)action;
+
+            vector[numEventsField] = numEvents;
+
+            vector[flagsField] = (int)flags;
+
+            actionCode = (byte)vector.Data;
+        }
+
+        /// <summary>
         ///  Includes actionCode, numberEvents and encryptionFlags.
         /// </summary>
         [FieldOffset(0)]
-        public byte actionCode;
+        private byte actionCode;
+
+        private static BitVector32.Section actionField = BitVector32.CreateSection(0x3);
+
+        private static BitVector32.Section numEventsField = BitVector32.CreateSection(0xF, actionField);
+
+        private static BitVector32.Section flagsField = BitVector32.CreateSection(0x3, numEventsField);
+
+        /// <summary>
+        /// A 2-bit, unsigned integer that indicates whether the PDU is in fast-path or slow-path format.
+        /// </summary>
+        public actionCode_Values action
+        {
+            get
+            {
+                var vector = new BitVector32(actionCode);
+
+                return (actionCode_Values)vector[actionField];
+            }
+
+            set
+            {
+                var vector = new BitVector32(actionCode);
+
+                vector[actionField] = (int)value;
+
+                actionCode = (byte)vector.Data;
+            }
+        }
+
+        /// <summary>
+        /// A 4-bit, unsigned integer that collapses the number of fast-path input events packed together in the fpInputEvents field into 4 bits if the number of events is in the range 1 to 15.
+        /// If the number of input events is greater than 15, then the numEvents bit field in the fast-path header byte MUST be set to zero, and the numEvents optional field inserted after the dataSignature field. 
+        /// This allows up to 255 input events in one PDU.
+        /// </summary>
+        public int numEvents
+        {
+            get
+            {
+                var vector = new BitVector32(actionCode);
+
+                return vector[numEventsField];
+            }
+
+            set
+            {
+                var vector = new BitVector32(actionCode);
+
+                vector[numEventsField] = value;
+
+                actionCode = (byte)vector.Data;
+            }
+        }
+
+        /// <summary>
+        /// A 2-bit, unsigned integer that contains the flags describing the cryptographic parameters of the PDU.
+        /// </summary>
+        public encryptionFlags_Values flags
+        {
+            get
+            {
+                var vector = new BitVector32(actionCode);
+
+                return (encryptionFlags_Values)vector[flagsField];
+            }
+
+            set
+            {
+                var vector = new BitVector32(actionCode);
+
+                vector[flagsField] = (int)value;
+
+                actionCode = (byte)vector.Data;
+            }
+        }
     }
 
     /// <summary>
@@ -20190,7 +20324,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     {
         SEC_REDIRECTION_PKT = 0x0400
     }
-    
+
     public enum CERTIFICATE_META_ELEMENT_TypeEnum : UInt32
     {
         ELEMENT_TYPE_CERTIFICATE = 32

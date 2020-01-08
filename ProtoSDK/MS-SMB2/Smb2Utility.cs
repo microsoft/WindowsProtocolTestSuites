@@ -1178,26 +1178,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             return listFileNotifyInformation.ToArray();
         }
 
-        public static FileBothDirectoryInformation[] UnmarshalFileBothDirectoryInformation(byte[] buffer)
-        {
-            List<FileBothDirectoryInformation> listFileBothDirectoryInformation = new List<FileBothDirectoryInformation>();
-            uint offset = 0;
-            while (offset < buffer.Length)
-            {
-                FileBothDirectoryInformation fileBothDirectoryInformation = TypeMarshal.ToStruct<FileBothDirectoryInformation>(buffer.Skip((int)offset).ToArray());
-                listFileBothDirectoryInformation.Add(fileBothDirectoryInformation);
-                if (fileBothDirectoryInformation.NextEntryOffset == 0)
-                {
-                    break;
-                }
-                else
-                {
-                    offset += fileBothDirectoryInformation.NextEntryOffset;
-                }
-            }
-            return listFileBothDirectoryInformation.ToArray();
-        }
-
         /// <summary>
         /// Test if the response packet is an interim response packet
         /// </summary>

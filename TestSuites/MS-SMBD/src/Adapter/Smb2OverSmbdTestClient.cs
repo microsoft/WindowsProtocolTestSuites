@@ -279,9 +279,14 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
 
         public uint Smb2Negotiate(DialectRevision[] requestDialects, out DialectRevision selectedDialect)
         {
+            return Smb2Negotiate(requestDialects, Guid.NewGuid(), out selectedDialect);
+        }
+
+        public uint Smb2Negotiate(DialectRevision[] requestDialects, Guid clientId, out DialectRevision selectedDialect)
+        {
             uint status;
             NEGOTIATE_Response negotiateResponse;
-            clientGuid = Guid.NewGuid();
+            clientGuid = clientId;
 
             PreauthIntegrityHashID[] preauthHashAlgs = null;
             EncryptionAlgorithm[] encryptionAlgs = null;
@@ -624,7 +629,7 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
                 writeChannelInfo,
                 new byte[length]
                 );
-            
+
             return WriteResponse(messageId, out this.packetHeader, out responsePayload);
         }
 

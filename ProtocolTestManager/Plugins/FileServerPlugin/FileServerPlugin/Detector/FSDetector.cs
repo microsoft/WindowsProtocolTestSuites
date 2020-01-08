@@ -265,7 +265,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             ushort creditCharge,
             ushort creditRequest,
             Packet_Header_Flags_Values flags,
-            ulong messageId,
+            ref ulong messageId,
             DialectRevision[] dialects,
             SecurityMode_Values securityMode,
             Capabilities_Values capabilities,
@@ -287,6 +287,11 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 LogFailedStatus("ComNegotiate", responseHeader.Status);
             }
 
+            // If server only supports Smb2002, no further SMB2 negotiate needed
+            if (selectedDialect == DialectRevision.Smb2002)
+            {
+                return status;
+            }
 
             PreauthIntegrityHashID[] preauthHashAlgs = null;
             EncryptionAlgorithm[] encryptionAlgs = null;
@@ -316,6 +321,9 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 0,
                 preauthHashAlgs,
                 encryptionAlgs);
+
+            // SMB2 negotiate is consume the message id
+            messageId++;
 
             return status;
         }
@@ -383,7 +391,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 1,
                 1,
                 Packet_Header_Flags_Values.NONE,
-                messageId++,
+                ref messageId,
                 info.requestDialect,
                 SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
                 Capabilities_Values.GLOBAL_CAP_DFS | Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING | Capabilities_Values.GLOBAL_CAP_LARGE_MTU
@@ -403,7 +411,6 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             #endregion
 
             #region Session Setup
-
             SESSION_SETUP_Response sessionSetupResp;
 
             SspiClientSecurityContext sspiClientGss =
@@ -501,13 +508,14 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 byte[] gssToken;
                 Packet_Header responseHeader;
                 NEGOTIATE_Response responsePayload;
+                ulong messageId = 1;
                 logWriter.AddLog(LogLevel.Information, "Client sends multi-protocol Negotiate to server");
                 MultiProtocolNegotiate(
                     smb2Client,
                     0,
                     1,
                     Packet_Header_Flags_Values.NONE,
-                    1,
+                    ref messageId,
                     info.requestDialect,
                     SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
                     Capabilities_Values.GLOBAL_CAP_DFS | Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING | Capabilities_Values.GLOBAL_CAP_ENCRYPTION | Capabilities_Values.GLOBAL_CAP_LARGE_MTU | Capabilities_Values.GLOBAL_CAP_LEASING | Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL | Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES,

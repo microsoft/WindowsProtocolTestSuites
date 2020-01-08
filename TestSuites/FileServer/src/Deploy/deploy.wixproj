@@ -398,6 +398,7 @@
   <ItemGroup>
 	<SutProtocolControlAdapterScriptFiles Include="..\Common\Adapter\SutProtocolControlAdapter\*" />
 	<SutControlAdapterScriptFiles Include="..\ServerFailover\Adapter\WindowsSutControlAdapter\*" />
+	<ShellSutControlAdapterScriptFiles Include="..\ServerFailover\Adapter\ShellSutControlAdapter\*" />
     <SetupScriptFiles Include="..\..\Setup\Scripts\*" />
 	<DataFiles Include="..\Data\*" />
   </ItemGroup>
@@ -429,6 +430,7 @@
 	<Copy SourceFiles="..\ServerLocalTestRun.testrunconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
 	<Copy SourceFiles="@(SutProtocolControlAdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\Common\Adapter\SutProtocolControlAdapter\" />	
 	<Copy SourceFiles="@(SutControlAdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\ServerFailover\Adapter\WindowsSutControlAdapter\" />
+	<Copy SourceFiles="@(ShellSutControlAdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\ServerFailover\Adapter\ShellSutControlAdapter\" />
     <Copy SourceFiles="@(SetupScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Scripts" />	
 	<Copy SourceFiles="@(DataFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\Data\" />
   </Target>    

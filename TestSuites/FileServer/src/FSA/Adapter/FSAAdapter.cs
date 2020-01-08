@@ -81,7 +81,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         private FileAccess gOpenGrantedAccess;
         private StreamType gStreamType;
         private List<string> activeTDIs;
-
+        public bool Is64bitFileIdSupported;
+        public bool IsChangeTimeSupported;
         // Used to generate random file names.
         private static Random randomRange = new Random();
 
@@ -266,6 +267,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             this.ipVersion = testConfig.SutIPAddress.AddressFamily == AddressFamily.InterNetworkV6 ? IpVersion.Ipv6 : IpVersion.Ipv4;
 
             //Transport Configuration
+            Smb2.DialectRevision[] negotiateDialects = Smb2.Smb2Utility.GetDialects(testConfig.MaxSmbVersionSupported);
             this.transport = (Transport)Enum.Parse(typeof(Transport), testConfig.GetProperty("Transport"));
             #region Select transAdapter according to transport
             switch (this.transport)
@@ -279,7 +281,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     break;
 
                 case Transport.SMB3:
-                    this.transAdapter = new Smb2TransportAdapter(new Smb2.DialectRevision[] { Smb2.DialectRevision.Smb30, Smb2.DialectRevision.Smb302, Smb2.DialectRevision.Smb311 }, testConfig);
+                    this.transAdapter = new Smb2TransportAdapter(negotiateDialects, testConfig);
                     break;
 
                 default:
@@ -336,6 +338,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
             //Other Configurations
             this.transBufferSize = uint.Parse(testConfig.GetProperty("BufferSize"));
+            this.Is64bitFileIdSupported = bool.Parse(testConfig.GetProperty("Is64bitFileIdSupported"));
+            this.IsChangeTimeSupported = bool.Parse(testConfig.GetProperty("IsChangeTimeSupported"));
 
             sutProtocolController = Site.GetAdapter<ISutProtocolControlAdapter>();
 
@@ -1055,6 +1059,44 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             return returnedStatus;
         }
 
+        /// </summary>
+        /// Query directory with outputBuffer returned.
+        /// <param name="searchPattern">A Unicode string containing the file name pattern to match. </param>
+        /// <param name="fileInfoClass">The FileInfoClass to query. </param>
+        /// <param name="returnSingleEntry">A boolean indicating whether the return single entry for query.</param>
+        /// <param name="restartScan">A boolean indicating whether the enumeration should be restarted.</param>
+        /// <param name="outputBuffer"> The buffer containing the directory enumeration being returned in the response</param>
+        /// of section 3.1.5.5.4</param>
+        /// <returns>An NTSTATUS code that specifies the result</returns>
+        public MessageStatus QueryDirectory(
+            Smb2.FILEID fileId,
+            uint treeId,
+            ulong sessionId,
+            string searchPattern,
+            FileInfoClass fileInfoClass,
+            bool returnSingleEntry,
+            bool restartScan,
+            out byte[] outputBuffer
+            )
+        {
+            uint fileIndex = 0;
+
+            MessageStatus returnedStatus = this.transAdapter.QueryDirectory(
+                fileId,
+                treeId,
+                sessionId,
+                (byte)fileInfoClass,
+                this.transBufferSize,
+                restartScan,
+                returnSingleEntry,
+                fileIndex,
+                searchPattern,
+                out outputBuffer
+                );
+
+            return returnedStatus;
+        }
+
         #endregion
 
         #region 3.1.5.1.2   Open of an Existing File
@@ -1540,7 +1582,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             bool returnSingleEntry = true;
             byte[] outBuffer = null;
             string randomFile = null;
-            string ramdomFileName = this.ComposeRandomFileName();
+            string randomFileName = this.ComposeRandomFileName();
             uint createAction = 0;
             uint fileIndex = 0;
             uint maxOutputSize = (uint)(isOutPutBufferNotEnough ? 1 : this.transBufferSize);
@@ -1549,10 +1591,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             {
                 case FileNamePattern.LengthIsNotAMultipleOf4:
                     //Extend file name and make its length not multiple of 4.
-                    if ((ramdomFileName.Length % 4) == 0)
+                    if ((randomFileName.Length % 4) == 0)
                     {
                         randomFile += "0";
-                        ramdomFileName += "0";
+                        randomFileName += "0";
                     }
                     break;
 
@@ -1566,12 +1608,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     break;
 
                 default:
-                    randomFile = ramdomFileName;
+                    randomFile = randomFileName;
                     break;
             }
 
             MessageStatus returnedStatus = this.transAdapter.CreateFile(
-                ramdomFileName,
+                randomFileName,
                 (uint)FileAttribute.NORMAL,
                 (uint)(FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE),
                 (uint)(ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE),
@@ -1622,7 +1664,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             bool returnSingleEntry = true;
             byte[] outBuffer = null;
             string randomFile = null;
-            string ramdomFileName = this.ComposeRandomFileName();
+            string randomFileName = this.ComposeRandomFileName();
             uint fileIndex = 0;
             uint maxOutputSize = (uint)(isOutPutBufferNotEnough ? 1 : this.transBufferSize);
 
@@ -1802,7 +1844,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                         break;
 
                     case OutBufferSmall.FileFullDirectoryInformation:
-                        fileInfoClass = FileInfoClass.FILE_FULL_DIR_INFORMATIO;
+                        fileInfoClass = FileInfoClass.FILE_FULL_DIR_INFORMATION;
                         break;
 
                     case OutBufferSmall.FileIdBothDirectoryInformation:
@@ -5518,12 +5560,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// Create a random file name
         /// </summary>
         /// <param name="fileNameLength">The length of the file name.</param>
+        /// <param name="extension">File extension to apend to the end of the filename.</param>
+        /// <param name="opt">Directory will be added to test directory list, else, will be added to test file list for cleanup</param>
+        /// <param name="addtoList">True for add to the testfiles.</param>        /// 
         /// <returns>A file name with a random string of the given length.</returns>
-        public string ComposeRandomFileName(int fileNameLength)
+        public string ComposeRandomFileName(int fileNameLength,  string extension = "", CreateOptions opt = CreateOptions.DIRECTORY_FILE,  bool addToList = true)
         {
             int randomNumber = 0;
             char fileNameLetter = ' ';
-            string ramdomFileName = null;
+            string randomFileName = null;
 
             for (int i = 0; i < fileNameLength; i++)
             {
@@ -5533,13 +5578,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     randomNumber = randomRange.Next(1, 52);
                 }
                 fileNameLetter = (char)(97 + randomNumber % 26);
-                ramdomFileName = ramdomFileName + fileNameLetter.ToString(); ;
+                randomFileName = randomFileName + fileNameLetter.ToString() ; ;
             }
 
-            AddTestFileName(gOpenMode, ramdomFileName);
-            return ramdomFileName;
-        }
-
+            randomFileName = randomFileName + extension;
+                
+            if (addToList)
+            {
+                AddTestFileName(opt, randomFileName);
+            }
+            return randomFileName;
+        }       
         /// <summary>
         /// Get SUT platformType.
         /// </summary>

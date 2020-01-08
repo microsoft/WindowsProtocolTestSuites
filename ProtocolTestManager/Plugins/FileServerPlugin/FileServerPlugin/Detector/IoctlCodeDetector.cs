@@ -633,7 +633,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     1,
                     1,
                     Packet_Header_Flags_Values.NONE,
-                    messageId++,
+                    ref messageId,
                     preferredDialects,
                     SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
                     Capabilities_Values.GLOBAL_CAP_DFS | Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING | Capabilities_Values.GLOBAL_CAP_LARGE_MTU
@@ -763,6 +763,9 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 ioCtlFileId.Volatile = 0xFFFFFFFFFFFFFFFF;
 
                 logWriter.AddLog(LogLevel.Information, "Client sends FSCTL_VALIDATE_NEGOTIATE_INFO to server");
+
+                // Validate Negotiate Info Request should be signed.
+                client.EnableSessionSigningAndEncryption(sessionId, true, encryptionRequired);
                 client.IoCtl(
                     1,
                     1,
@@ -818,6 +821,9 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 #endregion
 
                 #region Tree Disconnect
+
+                // Set configuration back after Validating Negotiate Info procedure.
+                client.EnableSessionSigningAndEncryption(sessionId, info.smb2Info.IsRequireMessageSigning, encryptionRequired);
 
                 client.TreeDisconnect(
                     1,

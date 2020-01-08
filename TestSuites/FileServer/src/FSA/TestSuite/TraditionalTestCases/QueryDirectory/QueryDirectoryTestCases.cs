@@ -11,7 +11,8 @@ using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using System.Linq;
 using System;
 using System.Collections.Generic;
-using Smb2 = Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
+using System.Text;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTestCases.QueryDirectory
 {
@@ -21,6 +22,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
     {
         #region Variables
         private FSAAdapter fsaAdapter;
+        private const uint BytesToWrite = 1024;
+        private const int FileNameLength = 20;
         #endregion
 
         #region Class Initialization and Cleanup
@@ -78,7 +81,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [Description("Create directory with $INDEX_ALLOCATION as stream type and query directory info.")]
         public void Fs_CreateDiretory_QueryDirectory_Suffix_INDEX_ALLOCATION()
         {
-            if(this.fsaAdapter.FileSystem == FileSystem.FAT32)
+            if (this.fsaAdapter.FileSystem == FileSystem.FAT32)
             {
                 this.TestSite.Assume.Inconclusive("File name with stream type or stream data as suffix is not supported by FAT32.");
             }
@@ -101,6 +104,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
                 MessageStatus.SUCCESS,
                 status,
                 $"Query directory with file name { this.fsaAdapter.UncSharePath}\\{ dirName} is expected to succeed.");
+
         }
 
         [TestMethod()]
@@ -139,61 +143,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [TestMethod()]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
-        [TestCategory(TestCategories.QueryFileInformation)]
-        [TestCategory(TestCategories.NonSmb)]
-        [Description("Create file with ::$DATA as suffix and then query file access info.")]
-        public void Fs_CreateFiles_Suffix_DATA()
-        {
-            if (this.fsaAdapter.FileSystem == FileSystem.FAT32)
-            {
-                this.TestSite.Assume.Inconclusive("File name with stream type or stream data as suffix is not supported by FAT32.");
-            }
-
-            // Create a new file
-            String fileName = this.fsaAdapter.ComposeRandomFileName(8);
-            fileName = $"{fileName}.txt::$DATA";
-
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create a file {fileName}");
-
-            Smb2.FILEID fileId;
-            uint treeId = 0;
-            ulong sessionId = 0;
-            MessageStatus status = this.fsaAdapter.CreateFile(
-                fileName,
-                (FileAttribute)0,
-                CreateOptions.NON_DIRECTORY_FILE,
-                (FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE),
-                (ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE | ShareAccess.FILE_SHARE_DELETE),
-                CreateDisposition.OPEN_IF,
-                out fileId,
-                out treeId,
-                out sessionId);
-
-            this.fsaAdapter.AssertAreEqual(this.Manager,
-                MessageStatus.SUCCESS,
-                status,
-                $"Create file with name {fileName} is expected to succeed.");
-
-            long byteCount;
-            byte[] outputBuffer;
-            FILE_ACCESS_INFORMATION fileAccessInfo = new FILE_ACCESS_INFORMATION();
-            uint outputBufferSize = (uint)TypeMarshal.ToBytes<FILE_ACCESS_INFORMATION>(fileAccessInfo).Length;
-
-            status = this.fsaAdapter.QueryFileInformation(
-                FileInfoClass.FILE_ACCESS_INFORMATION,
-                outputBufferSize,
-                out byteCount,
-                out outputBuffer);
-
-            this.fsaAdapter.AssertAreEqual(this.Manager,
-             MessageStatus.SUCCESS,
-             status,
-             $"Query access information of file {fileName} is expected to succeed.");
-        }
-
-        [TestMethod()]
-        [TestCategory(TestCategories.Bvt)]
-        [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryDirectory)]
         [TestCategory(TestCategories.NonSmb)]
         [Description("Create a lot of files and then query the directoy info one by one with flag SMB2_RETURN_SINGLE_ENTRY.")]
@@ -201,8 +150,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         {
             // Create a new directory
             string dirName = this.fsaAdapter.ComposeRandomFileName(8);
-
-            Smb2.FILEID dirFileId;
+            FILEID dirFileId;
             uint dirTreeId = 0;
             ulong dirSessionId = 0;
             MessageStatus status = this.fsaAdapter.CreateFile(
@@ -232,15 +180,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             files.Add("..");
 
             int filesNumber = 1000;
-            Smb2.FILEID fileId;
+            FILEID fileId;
             uint treeId = 0;
             ulong sessionId = 0;
             for (int i = 0; i < filesNumber; i++)
             {
                 // Create a new file
-                string fileName = this.fsaAdapter.ComposeRandomFileName(8);
+                string fileName = this.fsaAdapter.ComposeRandomFileName(8, ".txt", CreateOptions.NON_DIRECTORY_FILE, false);
                 BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create a file name: {fileName}");
-                
+
                 status = this.fsaAdapter.CreateFile(
                     $"{dirName}\\{fileName}",
                     (FileAttribute)0,
@@ -252,7 +200,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
                     out treeId,
                     out sessionId);
 
-                files.Add(fileName );
+                files.Add(fileName);
 
                 this.fsaAdapter.AssertAreEqual(this.Manager,
                     MessageStatus.SUCCESS,
@@ -263,54 +211,215 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Query the dirctory entry one by one.");
             foreach (string file in files)
             {
-                status = this.fsaAdapter.QueryDirectoryInfo(                    
+                status = this.fsaAdapter.QueryDirectoryInfo(
                     dirFileId,
                     dirTreeId,
-                    dirSessionId,             
-                    "*",                  
-                    FileInfoClass.FILE_BOTH_DIR_INFORMATION,                  
+                    dirSessionId,
+                    "*",
+                    FileInfoClass.FILE_BOTH_DIR_INFORMATION,
                     true,
                     false,
                     false
-                    );              
+                    );
                 this.fsaAdapter.AssertAreEqual(this.Manager,
                     MessageStatus.SUCCESS,
                     status,
                     $"Query directory {this.fsaAdapter.UncSharePath }\\{dirName} for {file} is expected to succeed.");
-                   
+
             }
-            
+            this.fsaAdapter.CloseOpen();
         }
-        /// <summary>
-        /// Create file
-        /// </summary>
-        /// <param name="fileName">File name</param>      
-        /// <returns>An NTSTATUS code that specifies the result</returns>
-        public MessageStatus CreateFile(string fileName)
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.QueryDirectory)]
+        [TestCategory(TestCategories.NonSmb)]
+        [Description("Verify the Query Directory response with FileNamesInformation from the server.")]
+        public void BVT_QueryDirectory_FileNamesInformation()
         {
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create a file with name: {fileName}");
+            byte[] outputBuffer;
+            string fileName;
+            FILEID dirFileId;
+            PrepareAndQueryDirectory(FileInfoClass.FILE_NAMES_INFORMATION, out outputBuffer, out fileName, out dirFileId);
 
-            MessageStatus status = MessageStatus.SUCCESS;
-
-            status = this.fsaAdapter.CreateFile(
-                        fileName,
-                        (FileAttribute)0,
-                        CreateOptions.NON_DIRECTORY_FILE,
-                        (FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE),
-                        (ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE | ShareAccess.FILE_SHARE_DELETE),
-                        CreateDisposition.OPEN_IF);
-
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create file and return with status {status}");
-
-            return status;
+            Site.Log.Add(LogEntryKind.Debug, "Start to verify the Query Directory response.");
+            FileNamesInformation[] namesInformation = FsaUtility.UnmarshalFileInformationArray<FileNamesInformation>(outputBuffer);
+            Site.Assert.AreEqual(3, namesInformation.Length, "The returned Buffer should contain two entries of FileNamesInformation.");
+            Site.Assert.AreEqual(".", Encoding.Unicode.GetString(namesInformation[0].FileName), "FileName of the first entry should be \".\".");
+            Site.Assert.AreEqual("..", Encoding.Unicode.GetString(namesInformation[1].FileName), "FileName of the second entry should be \"..\".");
+            Site.Assert.AreEqual(fileName, Encoding.Unicode.GetString(namesInformation[2].FileName), $"FileName of the third entry should be {fileName}.");
         }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.QueryDirectory)]
+        [TestCategory(TestCategories.NonSmb)]
+        [Description("Verify the Query Directory response with FileDirectoryInformation from the server.")]
+        public void BVT_QueryDirectory_FileDirectoryInformation()
+        {
+            byte[] outputBuffer;
+            string fileName;
+            FILEID dirFileId;
+            PrepareAndQueryDirectory(FileInfoClass.FILE_DIRECTORY_INFORMATION, out outputBuffer, out fileName, out dirFileId);
+
+            Site.Log.Add(LogEntryKind.Debug, "Start to verify the Query Directory response.");
+            FileDirectoryInformation[] directoryInformation = FsaUtility.UnmarshalFileInformationArray<FileDirectoryInformation>(outputBuffer);
+            Site.Assert.AreEqual(3, directoryInformation.Length, "The returned Buffer should contain 3 entries of FileDirectoryInformation.");
+            VerifyFileInformation(directoryInformation[0], 1, ".", FileAttribute.DIRECTORY, 0, 0);
+            VerifyFileInformation(directoryInformation[1], 2, "..", FileAttribute.DIRECTORY, 0, 0);
+            VerifyFileInformation(directoryInformation[2], 3, fileName, FileAttribute.ARCHIVE, BytesToWrite, this.fsaAdapter.ClusterSizeInKB * 1024);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.QueryDirectory)]
+        [TestCategory(TestCategories.NonSmb)]
+        [Description("Verify the Query Directory response with FileFullDirectoryInformation from the server.")]
+        public void BVT_QueryDirectory_FileFullDirectoryInformation()
+        {
+            byte[] outputBuffer;
+            string fileName;
+            FILEID dirFileId;
+            PrepareAndQueryDirectory(FileInfoClass.FILE_FULL_DIR_INFORMATION, out outputBuffer, out fileName, out dirFileId);
+
+            Site.Log.Add(LogEntryKind.Debug, "Start to verify the Query Directory response.");
+            FileFullDirectoryInformation[] directoryInformation = FsaUtility.UnmarshalFileInformationArray<FileFullDirectoryInformation>(outputBuffer);
+            Site.Assert.AreEqual(3, directoryInformation.Length, "The returned Buffer should contain 3 entries of FileFullDirectoryInformation.");
+            VerifyFileInformation(directoryInformation[0], 1, ".", FileAttribute.DIRECTORY, 0, 0, 0);
+            VerifyFileInformation(directoryInformation[1], 2, "..", FileAttribute.DIRECTORY, 0, 0, 0);
+            VerifyFileInformation(directoryInformation[2], 3, fileName, FileAttribute.ARCHIVE, BytesToWrite, this.fsaAdapter.ClusterSizeInKB * 1024, 0);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.QueryDirectory)]
+        [TestCategory(TestCategories.NonSmb)]
+        [Description("Verify the Query Directory response with FileIdFullDirectoryInformation from the server.")]
+        public void BVT_QueryDirectory_FileIdFullDirectoryInformation()
+        {
+            byte[] outputBuffer;
+            string fileName;
+            FILEID dirFileId;
+            PrepareAndQueryDirectory(FileInfoClass.FILE_ID_FULL_DIR_INFORMATION, out outputBuffer, out fileName, out dirFileId);
+
+            Site.Log.Add(LogEntryKind.Debug, "Start to verify the Query Directory response.");
+            FileIdFullDirectoryInformation[] directoryInformation = FsaUtility.UnmarshalFileInformationArray<FileIdFullDirectoryInformation>(outputBuffer);
+            Site.Assert.AreEqual(3, directoryInformation.Length, "The returned Buffer should contain 3 entries of FileIdFullDirectoryInformation.");
+
+            VerifyFileInformation(directoryInformation[0], 1, ".", FileAttribute.DIRECTORY, 0, 0, 0);
+            if (this.fsaAdapter.Is64bitFileIdSupported)
+            {
+                Site.Assert.AreNotEqual(0, directoryInformation[0].FileId, "FileId of the entry should not be 0.");
+            }
+            else
+            {
+                //For file systems that do not support a 64 - bit file ID, this field MUST be set to 0, and MUST be ignored. 
+                Site.Assert.AreEqual(0, directoryInformation[0].FileId, "FileId of the entry should be 0 if the file system does not support a 64-bit file ID.");
+            }
+
+            VerifyFileInformation(directoryInformation[1], 2, "..", FileAttribute.DIRECTORY, 0, 0, 0);
+            //The NTFS, ReFS, FAT, and exFAT file systems return a FileId value of 0 for the entry named ".." in directory query operations.
+            if (this.fsaAdapter.FileSystem == FileSystem.NTFS || this.fsaAdapter.FileSystem == FileSystem.REFS || this.fsaAdapter.FileSystem == FileSystem.FAT
+                || this.fsaAdapter.FileSystem == FileSystem.EXFAT)
+            {
+                Site.Assert.AreEqual(0, directoryInformation[1].FileId, "FileId of the entry should be 0.");
+            }
+
+            VerifyFileInformation(directoryInformation[2], 3, fileName, FileAttribute.ARCHIVE, BytesToWrite, this.fsaAdapter.ClusterSizeInKB * 1024, 0);
+            if (this.fsaAdapter.Is64bitFileIdSupported)
+            {
+                Site.Assert.AreNotEqual(0, directoryInformation[2].FileId, "FileId of the entry should not be 0.");
+            }
+            else
+            {
+                //For file systems that do not support a 64 - bit file ID, this field MUST be set to 0, and MUST be ignored. 
+                Site.Assert.AreEqual(0, directoryInformation[2].FileId, "FileId of the entry should be 0 if the file system does not support a 64-bit file ID.");
+            }
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.QueryDirectory)]
+        [TestCategory(TestCategories.NonSmb)]
+        [Description("Verify the Query Directory response with FileBothDirectoryInformation from the server.")]
+        public void BVT_QueryDirectory_FileBothDirectoryInformation()
+        {
+            byte[] outputBuffer;
+            string fileName;
+            FILEID dirFileId;
+            PrepareAndQueryDirectory(FileInfoClass.FILE_BOTH_DIR_INFORMATION, out outputBuffer, out fileName, out dirFileId);
+
+            Site.Log.Add(LogEntryKind.Debug, "Start to verify the Query Directory response.");
+            FileBothDirectoryInformation[] directoryInformation = FsaUtility.UnmarshalFileInformationArray<FileBothDirectoryInformation>(outputBuffer);
+            Site.Assert.AreEqual(3, directoryInformation.Length, "The returned Buffer should contain 3 entries of FileBothDirectoryInformation.");
+            VerifyFileInformation(directoryInformation[0], 1, ".", FileAttribute.DIRECTORY, 0, 0, 0, "");
+            VerifyFileInformation(directoryInformation[1], 2, "..", FileAttribute.DIRECTORY, 0, 0, 0, "");
+            VerifyFileInformation(directoryInformation[2], 3, fileName, FileAttribute.ARCHIVE, BytesToWrite, this.fsaAdapter.ClusterSizeInKB * 1024, 0, GetShortName(fileName));
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.QueryDirectory)]
+        [TestCategory(TestCategories.NonSmb)]
+        [Description("Verify the Query Directory response with FileIdBothDirectoryInformation from the server.")]
+        public void BVT_QueryDirectory_FileIdBothDirectoryInformation()
+        {
+            byte[] outputBuffer;
+            string fileName;
+            FILEID dirFileId;
+            PrepareAndQueryDirectory(FileInfoClass.FILE_ID_BOTH_DIR_INFORMATION, out outputBuffer, out fileName, out dirFileId);
+
+            Site.Log.Add(LogEntryKind.Debug, "Start to verify the Query Directory response.");
+            FileIdBothDirectoryInformation[] directoryInformation = FsaUtility.UnmarshalFileInformationArray<FileIdBothDirectoryInformation>(outputBuffer);
+            Site.Assert.AreEqual(3, directoryInformation.Length, "The returned Buffer should contain 3 entries of FileBothDirectoryInformation.");
+
+            VerifyFileInformation(directoryInformation[0], 1, ".", FileAttribute.DIRECTORY, 0, 0, 0, "");
+            if (this.fsaAdapter.Is64bitFileIdSupported)
+            {
+                Site.Assert.AreNotEqual(0, directoryInformation[0].FileId, "FileId of the entry should not be 0.");
+            }
+            else
+            {
+                //For file systems that do not support a 64 - bit file ID, this field MUST be set to 0, and MUST be ignored. 
+                Site.Assert.AreEqual(0, directoryInformation[0].FileId, "FileId of the entry should be 0 if the file system does not support a 64-bit file ID.");
+            }
+
+            VerifyFileInformation(directoryInformation[1], 2, "..", FileAttribute.DIRECTORY, 0, 0, 0, "");
+            //The NTFS, ReFS, FAT, and exFAT file systems return a FileId value of 0 for the entry named ".." in directory query operations.
+            if (this.fsaAdapter.FileSystem == FileSystem.NTFS || this.fsaAdapter.FileSystem == FileSystem.REFS || this.fsaAdapter.FileSystem == FileSystem.FAT
+                || this.fsaAdapter.FileSystem == FileSystem.EXFAT)
+            {
+                Site.Assert.AreEqual(0, directoryInformation[1].FileId, "FileId of the entry should be 0.");
+            }
+
+            VerifyFileInformation(directoryInformation[2], 3, fileName, FileAttribute.ARCHIVE, BytesToWrite, this.fsaAdapter.ClusterSizeInKB * 1024, 0, GetShortName(fileName));
+            if (this.fsaAdapter.Is64bitFileIdSupported)
+            {
+                Site.Assert.AreNotEqual(0, directoryInformation[2].FileId, "FileId of the entry should not be 0.");
+            }
+            else
+            {
+                //For file systems that do not support a 64 - bit file ID, this field MUST be set to 0, and MUST be ignored. 
+                Site.Assert.AreEqual(0, directoryInformation[2].FileId, "FileId of the entry should be 0 if the file system does not support a 64-bit file ID.");
+            }
+        }
+
+        #endregion
+
+        #region Utility
 
         /// <summary>
         /// Create directory
         /// </summary>
         /// <param name="dirName">Direcotry name</param>        
         /// <returns>An NTSTATUS code that specifies the result</returns>
-        public MessageStatus CreateDirectory(string dirName)
+        private MessageStatus CreateDirectory(string dirName)
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create a directory with name: {dirName}");
 
@@ -336,10 +445,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         /// <param name="treeId">The treeId of the created directory</param>
         /// <param name="sessionId">The sessionId of the created directory</param>
         /// <returns>An NTSTATUS code that specifies the result</returns>
-        public MessageStatus CreateDirectory(
+        private MessageStatus CreateDirectory(
             string dirName,
-            out Smb2.FILEID fileId, 
-            out uint treeId, 
+            out FILEID fileId,
+            out uint treeId,
             out ulong sessionId)
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create a directory with name: {dirName}");
@@ -374,7 +483,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         /// <param name="outBufferSize">The state of OutBufferSize in subsection 
         /// of section 3.1.5.5.4</param>
         /// <returns>An NTSTATUS code that specifies the result</returns>
-        public MessageStatus QueryDirectory(
+        private MessageStatus QueryDirectory(
             string dirName,
             string searchPattern = "*",
             FileInfoClass fileinfoClass = FileInfoClass.FILE_ID_BOTH_DIR_INFORMATION,
@@ -385,7 +494,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             )
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Query a directory information: {dirName}");
-           
+
             MessageStatus status = this.fsaAdapter.QueryDirectoryInfo(
               searchPattern,
               FileInfoClass.FILE_ID_BOTH_DIR_INFORMATION,
@@ -409,19 +518,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         /// <param name="isOutBufferSizeLess">True: if OutputBufferSize is less than the size needed to return a single entry</param>
         /// of section 3.1.5.5.4</param>
         /// <returns>An NTSTATUS code that specifies the result</returns>
-        public MessageStatus QueryDirectory(
-            Smb2.FILEID fileId, 
+        private MessageStatus QueryDirectory(
+            FILEID fileId,
             uint treeId,
-            ulong sessionId, 
-            string searchPattern = "*", 
+            ulong sessionId,
+            string searchPattern = "*",
             FileInfoClass fileinfoClass = FileInfoClass.FILE_ID_BOTH_DIR_INFORMATION,
             bool returnSingleEntry = false,
-            bool restartScan = false,     
+            bool restartScan = false,
             bool isOutPutBufferNotEnough = false
             )
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Query a directory information with fileid {fileId}");
-           
+
             MessageStatus status = this.fsaAdapter.QueryDirectoryInfo(
                 fileId,
                 treeId,
@@ -435,6 +544,204 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Query directory with search pattern {searchPattern} and return with status {status}. ");
 
             return status;
+        }
+
+        /// <summary>
+        /// Check whether the specified fileTime is close to the current time.
+        /// </summary>
+        private void VerifyFileTime(DateTime now, FILETIME fileTime, string fileTimeName, int expectedIntervalInSeconds)
+        {
+            DateTime dateTime = DateTime.FromFileTimeUtc((((long)fileTime.dwHighDateTime) << 32) | fileTime.dwLowDateTime);
+            Site.Log.Add(LogEntryKind.Debug, "The {0} is {1}", fileTimeName, dateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+            TimeSpan interval = now.Subtract(dateTime);
+            Site.Assert.IsTrue(interval.TotalSeconds < expectedIntervalInSeconds, $"{fileTimeName} should be close to current time.");
+        }
+
+        /// <summary>
+        /// Verify the FileCommonDirectoryInformation structure which is shared by 
+        /// FileDirectoryInformation, FileFullDirectoryInformation, FileIdFullDirectoryInformation, FileBothDirectoryInformation, FileIdBothDirectoryInformation
+        /// </summary>
+        /// <param name="entry"></param>
+        /// <param name="fileAttribute"></param>
+        private void VerifyFileCommonDirectoryInformation(FileCommonDirectoryInformation entry, FileAttribute fileAttribute)
+        {
+            DateTime now = DateTime.UtcNow;
+            Site.Log.Add(LogEntryKind.Debug, "The current time is {0}", now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+
+            VerifyFileTime(now, entry.CreationTime, "CreationTime", 2);
+            if (this.fsaAdapter.FileSystem == FileSystem.FAT32)
+            {
+                // For FAT, LastAccessTime is stored in local time 1 day granularity. So enlarge the interval to 1 day (86400 seconds).
+                VerifyFileTime(now, entry.LastAccessTime, "LastAccessTime", 86400);
+            }
+            else
+            {
+                VerifyFileTime(now, entry.LastAccessTime, "LastAccessTime", 2);
+            }
+
+            if (this.fsaAdapter.FileSystem == FileSystem.FAT32)
+            {
+                // For FAT, LastWriteTime is stored in local time 2 second granularity. So enlarge the interval to 3 seconds.
+                VerifyFileTime(now, entry.LastWriteTime, "LastWriteTime", 3); 
+            }
+            else
+            {
+                VerifyFileTime(now, entry.LastWriteTime, "LastWriteTime", 2);
+            }
+
+            if (this.fsaAdapter.FileSystem != FileSystem.FAT32 && this.fsaAdapter.IsChangeTimeSupported)
+            {
+                // FAT does not support ChangeTime.
+                VerifyFileTime(now, entry.ChangeTime, "ChangeTime", 2); 
+            }
+
+            Site.Assert.IsTrue(
+                ((FileAttribute)entry.FileAttributes).HasFlag(fileAttribute),
+                "The FileAttributes of the entry should contain {0}.", fileAttribute);
+        }
+
+        /// <summary>
+        /// Verify FileDirectoryInformation entry
+        /// </summary>
+        private void VerifyFileInformation(FileDirectoryInformation entry, int index, string fileName, FileAttribute fileAttribute, long endOfFile, long allocationSize)
+        {
+            Site.Log.Add(LogEntryKind.Debug, $"Start to verify entry {index}.");
+            VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute);
+            Site.Assert.AreEqual(fileName, Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
+            Site.Assert.AreEqual(endOfFile, entry.FileCommonDirectoryInformation.EndOfFile, "The EndOfFile of the entry should be 0.");
+            Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, "The AllocationSize of the entry should be 0.");
+        }
+
+        /// <summary>
+        /// Verify FileFullDirectoryInformation entry
+        /// </summary>
+        private void VerifyFileInformation(FileFullDirectoryInformation entry, int index, string fileName, FileAttribute fileAttribute, long endofFile, long allocationSize, uint eaSize)
+        {
+            Site.Log.Add(LogEntryKind.Debug, $"Start to verify entry {index}.");
+            VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute);
+            Site.Assert.AreEqual(fileName, Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
+            Site.Assert.AreEqual(endofFile, entry.FileCommonDirectoryInformation.EndOfFile, "The EndOfFile of the entry should be 0.");
+            Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, "The AllocationSize of the entry should be 0.");
+            Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
+        }
+
+        /// <summary>
+        /// Verify FileIdFullDirectoryInformation entry
+        /// </summary>
+        private void VerifyFileInformation(FileIdFullDirectoryInformation entry, int index, string fileName, FileAttribute fileAttribute, long endofFile, long allocationSize, uint eaSize)
+        {
+            Site.Log.Add(LogEntryKind.Debug, $"Start to verify entry {index}.");
+            VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute);
+            Site.Assert.AreEqual(fileName, Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
+            Site.Assert.AreEqual(endofFile, entry.FileCommonDirectoryInformation.EndOfFile, "The EndOfFile of the entry should be 0.");
+            Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, "The AllocationSize of the entry should be 0.");
+            Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
+        }
+
+        /// <summary>
+        /// Verify FileBothDirectoryInformation entry
+        /// </summary>
+        private void VerifyFileInformation(FileBothDirectoryInformation entry, int index, string fileName, FileAttribute fileAttribute, long endofFile, long allocationSize, uint eaSize, string shortName)
+        {
+            Site.Log.Add(LogEntryKind.Debug, $"Start to verify entry {index}.");
+            VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute);
+            Site.Assert.AreEqual(fileName, Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
+            Site.Assert.AreEqual(endofFile, entry.FileCommonDirectoryInformation.EndOfFile, "The EndOfFile of the entry should be 0.");
+            Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, "The AllocationSize of the entry should be 0.");
+            Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
+            Site.Assert.AreEqual(shortName.Length * 2, entry.ShortNameLength, $"The ShortNameLength of the entry should be {shortName.Length * 2}."); // ShortName is unicode in protocol
+            Site.Assert.AreEqual(shortName, Encoding.Unicode.GetString(entry.ShortName).Replace("\0", String.Empty), $"The ShortName of the entry should be \"{shortName}\".");
+        }
+
+        /// <summary>
+        /// Verify FileIdBothDirectoryInformation entry
+        /// </summary>
+        private void VerifyFileInformation(FileIdBothDirectoryInformation entry, int index, string fileName, FileAttribute fileAttribute, long endofFile, long allocationSize, uint eaSize, string shortName)
+        {
+            Site.Log.Add(LogEntryKind.Debug, $"Start to verify entry {index}.");
+            VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute);
+            Site.Assert.AreEqual(fileName, Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
+            Site.Assert.AreEqual(endofFile, entry.FileCommonDirectoryInformation.EndOfFile, "The EndOfFile of the entry should be 0.");
+            Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, "The AllocationSize of the entry should be 0.");
+            Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
+            Site.Assert.AreEqual(shortName.Length * 2, entry.ShortNameLength, $"The ShortNameLength of the entry should be {shortName.Length * 2}."); // ShortName is unicode in protocol
+            Site.Assert.AreEqual(shortName, Encoding.Unicode.GetString(entry.ShortName).Replace("\0", String.Empty), $"The ShortName of the entry should be \"{shortName}\".");
+        }
+
+        /// <summary>
+        /// Prepare before testing, including:
+        /// 1. creating a new directory
+        /// 2. creating a new file under the directory
+        /// 3. writing some content to the file
+        /// 4. closing the file to flush the data to the disk
+        /// Then send QueryDirectory with specified FileInfoClass to the server and return the outputBuffer.
+        /// </summary>
+        private void PrepareAndQueryDirectory(FileInfoClass fileInfoClass, out byte[] outputBuffer, out string fileName, out FILEID dirFileId)
+        {
+            outputBuffer = null;
+            string dirName = this.fsaAdapter.ComposeRandomFileName(8);
+            uint treeId = 0;
+            ulong sessionId = 0;
+
+            MessageStatus status = CreateDirectory(dirName, out dirFileId, out treeId, out sessionId);
+
+            Site.Assert.AreEqual(
+                MessageStatus.SUCCESS,
+                status,
+                $"Create should succeed.");
+
+            fileName = this.fsaAdapter.ComposeRandomFileName(FileNameLength, opt: CreateOptions.NON_DIRECTORY_FILE);
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create a file with name: {fileName} under the directory {dirName}");
+            status = this.fsaAdapter.CreateFile(
+                $"{dirName}\\{fileName}",
+                (FileAttribute)0,
+                CreateOptions.NON_DIRECTORY_FILE,
+                (FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE),
+                (ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE | ShareAccess.FILE_SHARE_DELETE),
+                CreateDisposition.OPEN_IF);
+            Site.Assert.AreEqual(
+                MessageStatus.SUCCESS,
+                status,
+                $"Create should succeed.");
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Write {BytesToWrite} bytes to the file {fileName}");
+            long bytesWritten;
+            status = this.fsaAdapter.WriteFile(0, BytesToWrite, out bytesWritten);
+            Site.Assert.AreEqual(
+                MessageStatus.SUCCESS,
+                status,
+                $"Write should succeed.");
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Close the open to the file {fileName}");
+            status = this.fsaAdapter.CloseOpen();
+            Site.Assert.AreEqual(
+                MessageStatus.SUCCESS,
+                status,
+                $"Close should succeed.");
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Query directory with {fileInfoClass}");
+            status = this.fsaAdapter.QueryDirectory(dirFileId, treeId, sessionId, "*", fileInfoClass, false, true, out outputBuffer);
+            Site.Assert.AreEqual(
+                MessageStatus.SUCCESS,
+                status,
+                $"Query directory should succeed.");
+        }
+
+        /// <summary>
+        /// Get 8.3 short name from the original file name.
+        /// </summary>
+        private string GetShortName(string fileName)
+        {
+            if (fileName == null || fileName.Length <= 8)
+                throw new Exception("The fileName length is smaller than 8. It does not have a short name.");
+
+            if (this.fsaAdapter.FileSystem == FileSystem.REFS)
+            {
+                return string.Empty; // On REFS, this field MUST be empty.
+            }
+
+            string shortName = fileName.Substring(0, 6).ToUpper();
+            shortName += "~1";
+            return shortName;
         }
         #endregion
     }

@@ -168,29 +168,37 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             }
         }
 
-        public static FILE_QUOTA_INFORMATION[] UnmarshalFileQuotaInformation(byte[] buffer)
+        /// <summary>
+        /// Unmarshal File information class from a byte array to a structure array, by using field NextEntryOffset
+        /// To use this function, make sure the first 32-bit of the File information class is NextEntryOffset.
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <returns></returns>
+        public static T[] UnmarshalFileInformationArray<T>(byte[] buffer) where T: struct
         {
             if (buffer == null || buffer.Length <= 0)
             {
                 throw new Exception("The input buffer could not be null or empty.");
             }
-            List<FILE_QUOTA_INFORMATION> listFileQuotaInformation = new List<FILE_QUOTA_INFORMATION>();
-            uint offset = 0;
+            List<T> listFileInformation = new List<T>();
+            int offset = 0;
             while (offset < buffer.Length)
             {
-                FILE_QUOTA_INFORMATION fileQuotaInformationStruct = TypeMarshal.ToStruct<FILE_QUOTA_INFORMATION>(buffer.Skip((int)offset).ToArray());
-                listFileQuotaInformation.Add(fileQuotaInformationStruct);
+                T fileQuotaInformationStruct = TypeMarshal.ToStruct<T>(buffer.Skip((int)offset).ToArray());
+                listFileInformation.Add(fileQuotaInformationStruct);
 
-                if (fileQuotaInformationStruct.NextEntryOffset == 0)
+                // The first 32-bit of the structure is NextEntryOffset
+                int nextEntryOffset = BitConverter.ToInt32(buffer, offset);
+                if (nextEntryOffset == 0)
                 {
                     break; //If there are no subsequent structures, the NextEntryOffset field MUST be 0.
                 }
                 else
                 {
-                    offset += fileQuotaInformationStruct.NextEntryOffset;
+                    offset += nextEntryOffset;
                 }
             }
-            return listFileQuotaInformation.ToArray();
+            return listFileInformation.ToArray();
         }
 
     }

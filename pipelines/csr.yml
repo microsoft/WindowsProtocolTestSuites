@@ -1,0 +1,23 @@
+trigger: none 
+
+variables:
+  - group: External Repo Variables
+  - group: Build Variables
+  - name: test.buildTag
+    value: $(Build.DefinitionName)-$(Build.BuildNumber)
+
+
+resources:
+  repositories:
+    - repository: template
+      type: git
+      name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
+      ref: AzurePipelines
+
+jobs:
+  - template: pipelines/CodeSign/cs-TestSuite-steps.yml@template
+    parameters:
+        extRepoUrl: $(extRepo.url)
+        extRepoDir: $(extRepo.dir)
+        enableRegression: true
+        HelperBranch: $(test.helperBranch)

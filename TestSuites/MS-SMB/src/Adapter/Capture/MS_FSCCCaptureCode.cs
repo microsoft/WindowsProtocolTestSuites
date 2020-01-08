@@ -3473,7 +3473,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             // Here only verify the RS partially, since if an implementation assume something or not couldn't be verified in Capture code. Only verify the byte length of NextEntryOffset field.
             Site.CaptureRequirementIfAreEqual<int>(
                 4,
-                Marshal.SizeOf(info.NextEntryOffset),
+                Marshal.SizeOf(info.FileCommonDirectoryInformation.NextEntryOffset),
                 1320,
                 @"[In <FILE_ID_GLOBAL_TX_DIR_INFORMATION>]NextEntryOffset (4 bytes): An implementation MUST NOT assume that the value of NextEntryOffset is the same as the size of the current entry.");
 
@@ -10255,7 +10255,7 @@ characters containing the file name.");
             const int sizeOfNextEntryOffset = 4;
             Site.CaptureRequirementIfAreEqual<int>(
                 sizeOfNextEntryOffset,
-                Marshal.SizeOf(FileBothDirectoryInformationData.NextEntryOffset),
+                Marshal.SizeOf(FileBothDirectoryInformationData.FileCommonDirectoryInformation.NextEntryOffset),
                 1054,
                 @"[In FILE_BOTH_DIR_INFORMATION]NextEntryOffset (4 bytes):  A 32-bit unsigned integer that 
                 contains the byte offset from the beginning of this entry, at which the next 
@@ -10270,13 +10270,13 @@ characters containing the file name.");
                 //
                 Site.Log.Add(LogEntryKind.Debug,
                     "Verify MS-FSCC_R1055, actual NextEntryOffset:{0}.",
-                     FileBothDirectoryInformationData.NextEntryOffset);
+                     FileBothDirectoryInformationData.FileCommonDirectoryInformation.NextEntryOffset);
                 //
                 // Verify MS-FSCC requirement 1055
                 //
                 Site.CaptureRequirementIfIsTrue(
-                    FileBothDirectoryInformationData.NextEntryOffset == 0 &&
-                    Marshal.SizeOf(FileBothDirectoryInformationData.NextEntryOffset) == sizeOfNextEntryOffset,
+                    FileBothDirectoryInformationData.FileCommonDirectoryInformation.NextEntryOffset == 0 &&
+                    Marshal.SizeOf(FileBothDirectoryInformationData.FileCommonDirectoryInformation.NextEntryOffset) == sizeOfNextEntryOffset,
                     1055,
                     @"[In FILE_BOTH_DIR_INFORMATION]NextEntryOffset (4 bytes):  This member is zero if no other 
                     entries follow this one.");
@@ -10292,7 +10292,7 @@ characters containing the file name.");
                 //
                 Site.Log.Add(LogEntryKind.Debug,
                     "Verify MS-FSCC_R1056, actual NextEntryOffset:{0}.",
-                     FileBothDirectoryInformationData.NextEntryOffset);
+                     FileBothDirectoryInformationData.FileCommonDirectoryInformation.NextEntryOffset);
                 //
                 // Verify MS-FSCC requirement 1056
                 //
@@ -10300,7 +10300,7 @@ characters containing the file name.");
                 // is parsed according to this offset information.
                 Site.CaptureRequirementIfAreEqual<int>(
                     sizeOfNextEntryOffset,
-                    Marshal.SizeOf(FileBothDirectoryInformationData.NextEntryOffset),
+                    Marshal.SizeOf(FileBothDirectoryInformationData.FileCommonDirectoryInformation.NextEntryOffset),
                     1056,
                     @"[In FILE_BOTH_DIR_INFORMATION]NextEntryOffset (4 bytes):  An implementation MUST use this 
                     value to determine the location of the next entry (if multiple entries are present in a 
@@ -10352,15 +10352,15 @@ characters containing the file name.");
             //
             Site.Log.Add(LogEntryKind.Debug,
                 "Verify MS-FSCC_R1061 actual  CreationTime: {0}",
-                fileBothDirectoryInformation.CreationTime.ToString());
+                fileBothDirectoryInformation.FileCommonDirectoryInformation.CreationTime.ToString());
 
             //
             // Verify MS-FSCC requirement: MS-FSCC_R1061
             //
             int sizeOfCreationTime = 8;
             bool isVerifyR1061 = (
-                typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc.FILETIME) == fileBothDirectoryInformation.CreationTime.GetType() &&
-                (Marshal.SizeOf(fileBothDirectoryInformation.CreationTime) == sizeOfCreationTime));
+                typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc.FILETIME) == fileBothDirectoryInformation.FileCommonDirectoryInformation.CreationTime.GetType() &&
+                (Marshal.SizeOf(fileBothDirectoryInformation.FileCommonDirectoryInformation.CreationTime) == sizeOfCreationTime));
 
             Site.CaptureRequirementIfIsTrue(
                 isVerifyR1061,
@@ -10379,7 +10379,7 @@ characters containing the file name.");
 
             Site.CaptureRequirementIfAreEqual<Type>(
                  typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc.FILETIME),
-                fileBothDirectoryInformation.CreationTime.GetType(),
+                fileBothDirectoryInformation.FileCommonDirectoryInformation.CreationTime.GetType(),
                 1062,
                 @"[In FILE_BOTH_DIR_INFORMATION]CreationTime (8 bytes): All dates and times are in absolute system-time format, 
                 which is represented as a FILETIME (section 2.1.1) structure.");
@@ -10389,15 +10389,15 @@ characters containing the file name.");
             //
             Site.Log.Add(LogEntryKind.Debug,
                 "Verify MS-FSCC_R1063 actual  CreationTime: {0}",
-                fileBothDirectoryInformation.CreationTime.ToString());
+                fileBothDirectoryInformation.FileCommonDirectoryInformation.CreationTime.ToString());
 
             //
             // Verify MS-FSCC requirement: MS-FSCC_R1063
             //
             bool isVerifyR1063 = (
-                fileBothDirectoryInformation.LastWriteTime.dwHighDateTime >= 0 &&
-                fileBothDirectoryInformation.LastWriteTime.dwLowDateTime >= 0 &&
-                Marshal.SizeOf(fileBothDirectoryInformation.LastWriteTime) == sizeOfCreationTime);
+                fileBothDirectoryInformation.FileCommonDirectoryInformation.LastWriteTime.dwHighDateTime >= 0 &&
+                fileBothDirectoryInformation.FileCommonDirectoryInformation.LastWriteTime.dwLowDateTime >= 0 &&
+                Marshal.SizeOf(fileBothDirectoryInformation.FileCommonDirectoryInformation.LastWriteTime) == sizeOfCreationTime);
 
             Site.CaptureRequirementIfIsTrue(
                 isVerifyR1063,
@@ -10409,14 +10409,14 @@ characters containing the file name.");
             //
             Site.Log.Add(LogEntryKind.Debug,
                 "Verify MS-FSCC_R1070 Actual EndOfFile: {0}",
-                fileBothDirectoryInformation.EndOfFile);
+                fileBothDirectoryInformation.FileCommonDirectoryInformation.EndOfFile);
 
             //
             // Verify MS-FSCC requirement: MS-FSCC_R1070
             //
             bool isVerifyR1070 = (
-                fileBothDirectoryInformation.EndOfFile.GetType() == typeof(Int64) &&
-                Marshal.SizeOf(fileBothDirectoryInformation.EndOfFile) == 8);
+                fileBothDirectoryInformation.FileCommonDirectoryInformation.EndOfFile.GetType() == typeof(Int64) &&
+                Marshal.SizeOf(fileBothDirectoryInformation.FileCommonDirectoryInformation.EndOfFile) == 8);
 
             Site.CaptureRequirementIfIsTrue(
                 isVerifyR1070,
@@ -10429,7 +10429,7 @@ characters containing the file name.");
             //
             Site.Log.Add(LogEntryKind.Debug,
                 "Verify MS-FSCC_R1071 EndOfFile: {0}",
-                fileBothDirectoryInformation.EndOfFile);
+                fileBothDirectoryInformation.FileCommonDirectoryInformation.EndOfFile);
 
             //
             // Verify MS-FSCC requirement: MS-FSCC_R1071
@@ -10440,7 +10440,7 @@ characters containing the file name.");
             // only verify the size of endoffile
             Site.CaptureRequirementIfAreEqual<int>(
                 sizeOfEndOfFile,
-                Marshal.SizeOf(fileBothDirectoryInformation.EndOfFile),
+                Marshal.SizeOf(fileBothDirectoryInformation.FileCommonDirectoryInformation.EndOfFile),
                 1071,
                 @"[In FILE_BOTH_DIR_INFORMATION]EndOfFile (8 bytes):  EndOfFile specifies the offset to the byte 
                 immediately following the last valid byte in the file.");
@@ -10450,14 +10450,14 @@ characters containing the file name.");
             //
             Site.Log.Add(LogEntryKind.Debug,
                 "Verify MS-FSCC_R1073 EndOfFile: {0}",
-                fileBothDirectoryInformation.EndOfFile);
+                fileBothDirectoryInformation.FileCommonDirectoryInformation.EndOfFile);
 
             //
             // Verify MS-FSCC requirement: MS-FSCC_R1073
             //
 
             Site.CaptureRequirementIfIsTrue(
-                fileBothDirectoryInformation.EndOfFile >= 0,
+                fileBothDirectoryInformation.FileCommonDirectoryInformation.EndOfFile >= 0,
                 1073,
                 @"[In FILE_BOTH_DIR_INFORMATION]EndOfFile (8 bytes):  The value of this field MUST be greater than or equal to 0.");
 
@@ -10495,7 +10495,7 @@ characters containing the file name.");
             //
             Site.Log.Add(LogEntryKind.Debug,
                 "Verify MS-FSCC_R1064 actual LastAccessTime: {0}",
-                fileBothDirectoryInformation.LastAccessTime.ToString());
+                fileBothDirectoryInformation.FileCommonDirectoryInformation.LastAccessTime.ToString());
 
             //
             // Verify MS-FSCC requirement: MS-FSCC_R1064
@@ -10503,8 +10503,8 @@ characters containing the file name.");
             // Verify the LastAccessTime's type and value
             const int sizeOfLastAccessTime = 8;
             bool isVerifyR1064 = (
-                fileBothDirectoryInformation.LastAccessTime.GetType() == typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc.FILETIME) &&
-                (Marshal.SizeOf(fileBothDirectoryInformation.LastAccessTime) == sizeOfLastAccessTime));
+                fileBothDirectoryInformation.FileCommonDirectoryInformation.LastAccessTime.GetType() == typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc.FILETIME) &&
+                (Marshal.SizeOf(fileBothDirectoryInformation.FileCommonDirectoryInformation.LastAccessTime) == sizeOfLastAccessTime));
 
             Site.CaptureRequirementIfIsTrue(
                 isVerifyR1064,
@@ -10517,14 +10517,14 @@ characters containing the file name.");
             //
             Site.Log.Add(LogEntryKind.Debug,
                 "Verify MS-FSCC_R1065 actual LastAccessTime: {0}",
-                fileBothDirectoryInformation.LastAccessTime.ToString());
+                fileBothDirectoryInformation.FileCommonDirectoryInformation.LastAccessTime.ToString());
 
             //
             // Verify MS-FSCC requirement: MS-FSCC_R1065
             //
             bool isVerifyR1065 = (
-                fileBothDirectoryInformation.LastAccessTime.dwHighDateTime >= 0 &&
-                fileBothDirectoryInformation.LastAccessTime.dwLowDateTime >= 0);
+                fileBothDirectoryInformation.FileCommonDirectoryInformation.LastAccessTime.dwHighDateTime >= 0 &&
+                fileBothDirectoryInformation.FileCommonDirectoryInformation.LastAccessTime.dwLowDateTime >= 0);
 
             Site.CaptureRequirementIfIsTrue(
                 isVerifyR1065,
@@ -10536,15 +10536,15 @@ characters containing the file name.");
             //
             Site.Log.Add(LogEntryKind.Debug,
                 "Verify MS-FSCC_R1066 actual LastWriteTime: {0}",
-                fileBothDirectoryInformation.LastWriteTime.ToString());
+                fileBothDirectoryInformation.FileCommonDirectoryInformation.LastWriteTime.ToString());
 
             //
             // Verify MS-FSCC requirement: MS-FSCC_R1066
             //
             const int sizeOfLastWriteTime = 8;
             bool isVerifyR1066 = (
-                fileBothDirectoryInformation.LastWriteTime.GetType() == typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc.FILETIME) &&
-                Marshal.SizeOf(fileBothDirectoryInformation.LastWriteTime) == sizeOfLastWriteTime);
+                fileBothDirectoryInformation.FileCommonDirectoryInformation.LastWriteTime.GetType() == typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc.FILETIME) &&
+                Marshal.SizeOf(fileBothDirectoryInformation.FileCommonDirectoryInformation.LastWriteTime) == sizeOfLastWriteTime);
 
             Site.CaptureRequirementIfIsTrue(
                 isVerifyR1066,
@@ -10557,14 +10557,14 @@ characters containing the file name.");
             //
             Site.Log.Add(LogEntryKind.Debug,
                 "Verify MS-FSCC_R1067 actual LastWriteTime: {0}",
-                fileBothDirectoryInformation.LastWriteTime.ToString());
+                fileBothDirectoryInformation.FileCommonDirectoryInformation.LastWriteTime.ToString());
 
             //
             // Verify MS-FSCC requirement: MS-FSCC_R1067
             //
             bool isVerifyR1067 = (
-                fileBothDirectoryInformation.LastWriteTime.dwHighDateTime >= 0 &&
-                fileBothDirectoryInformation.LastWriteTime.dwLowDateTime >= 0);
+                fileBothDirectoryInformation.FileCommonDirectoryInformation.LastWriteTime.dwHighDateTime >= 0 &&
+                fileBothDirectoryInformation.FileCommonDirectoryInformation.LastWriteTime.dwLowDateTime >= 0);
 
             Site.CaptureRequirementIfIsTrue(
                 isVerifyR1067,
@@ -10576,15 +10576,15 @@ characters containing the file name.");
             //
             Site.Log.Add(LogEntryKind.Debug,
                 "Verify MS-FSCC_R1068 actual  ChangeTime: {0}",
-                fileBothDirectoryInformation.ChangeTime.ToString());
+                fileBothDirectoryInformation.FileCommonDirectoryInformation.ChangeTime.ToString());
 
             //
             // Verify MS-FSCC requirement: MS-FSCC_R1068
             //
             const int sizeOfChangeTime = 8;
             bool isVerifyR1068 = (
-                fileBothDirectoryInformation.ChangeTime.GetType() == typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc.FILETIME) &&
-                Marshal.SizeOf(fileBothDirectoryInformation.ChangeTime) == sizeOfChangeTime);
+                fileBothDirectoryInformation.FileCommonDirectoryInformation.ChangeTime.GetType() == typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc.FILETIME) &&
+                Marshal.SizeOf(fileBothDirectoryInformation.FileCommonDirectoryInformation.ChangeTime) == sizeOfChangeTime);
 
             Site.CaptureRequirementIfIsTrue(
                 isVerifyR1068,
@@ -10597,14 +10597,14 @@ characters containing the file name.");
             //
             Site.Log.Add(LogEntryKind.Debug,
                 "Verify MS-FSCC_R1069 Actual ChangeTime: {0}",
-                fileBothDirectoryInformation.ChangeTime.ToString());
+                fileBothDirectoryInformation.FileCommonDirectoryInformation.ChangeTime.ToString());
 
             //
             // Verify MS-FSCC requirement: MS-FSCC_R1069
             //
             bool isVerifyR1069 = (
-                fileBothDirectoryInformation.ChangeTime.dwHighDateTime >= 0 &&
-                fileBothDirectoryInformation.ChangeTime.dwLowDateTime >= 0);
+                fileBothDirectoryInformation.FileCommonDirectoryInformation.ChangeTime.dwHighDateTime >= 0 &&
+                fileBothDirectoryInformation.FileCommonDirectoryInformation.ChangeTime.dwLowDateTime >= 0);
 
             Site.CaptureRequirementIfIsTrue(
                 isVerifyR1069,
@@ -10616,14 +10616,14 @@ characters containing the file name.");
             //
             Site.Log.Add(LogEntryKind.Debug,
                 "Verify MS-FSCC_R1074 Actual AllocationSize: {0},expected AllocationSize: {1}",
-                fileBothDirectoryInformation.AllocationSize, allocationSize);
+                fileBothDirectoryInformation.FileCommonDirectoryInformation.AllocationSize, allocationSize);
 
             //
             // Verify MS-FSCC requirement: MS-FSCC_R1074
             //
             bool isVerifyR1074 = (
-                typeof(Int64) == fileBothDirectoryInformation.AllocationSize.GetType() &&
-                fileBothDirectoryInformation.AllocationSize == allocationSize);
+                typeof(Int64) == fileBothDirectoryInformation.FileCommonDirectoryInformation.AllocationSize.GetType() &&
+                fileBothDirectoryInformation.FileCommonDirectoryInformation.AllocationSize == allocationSize);
 
             Site.CaptureRequirementIfIsTrue(
                 isVerifyR1074,

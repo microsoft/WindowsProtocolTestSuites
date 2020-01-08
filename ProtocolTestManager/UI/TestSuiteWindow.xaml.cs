@@ -29,8 +29,9 @@ namespace Microsoft.Protocols.TestManager.UI
         public void SetIntroduction(TestSuiteFamilies testsuiteintro)
         {
             introduction = testsuiteintro;
-            StackPanel stack = new StackPanel();
+
             bool noTestSuiteInstalled = true;
+
             foreach (TestSuiteFamily family in introduction)
             {
                 Grid grid = new Grid();
@@ -41,7 +42,7 @@ namespace Microsoft.Protocols.TestManager.UI
                     Content = grid
                 };
                 int row = 0;
-                
+
                 foreach (TestSuiteInfo info in family)
                 {
                     grid.RowDefinitions.Add(new RowDefinition());
@@ -89,35 +90,23 @@ namespace Microsoft.Protocols.TestManager.UI
                     }
                     row++;
                 }
-                stack.Children.Add(gTestSuiteFamily);
+
+                TestSuitesFamilies.Children.Add(gTestSuiteFamily);
             }
+
+            // Add hint depending on whether any test suite is installed.
+            string source;
 
             if (noTestSuiteInstalled)
             {
-                stack.Children.Add(new TextBlock()); // Empty line
-
-                // First sentence
-                var hint = new TextBlock()
-                {
-                    Foreground = Brushes.Red,
-                    Text = StringResources.InstallAtLeastOneTestSuite
-                };
-                stack.Children.Add(hint);
-
-                // Second and the third sentence, they're in the same line.
-                hint = new TextBlock();
-                hint.Foreground = Brushes.Red;
-                hint.Text = StringResources.GetLatestRelease;
-                var link = new Hyperlink();
-                link.Inlines.Add(StringResources.ThisLink);
-                link.NavigateUri = new Uri(StringResources.ReleaseLink);
-                link.RequestNavigate += Hyperlink_RequestNavigate;
-                hint.Inlines.Add(link);
-                hint.Inlines.Add(StringResources.RestartPTM);
-                stack.Children.Add(hint);
+                source = StringResources.HintForNoTestSuiteInstalled;
+            }
+            else
+            {
+                source = StringResources.HintForGitHub;
             }
 
-            ScrollContent.Content = stack;
+            Hint.Inlines.AddRange(Helper.GenerateInlines(source));
         }
 
         public TestSuiteWindow()

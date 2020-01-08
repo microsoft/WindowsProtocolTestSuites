@@ -124,7 +124,7 @@ All common softwares listed in [prerequisites](https://github.com/microsoft/Wind
 
     ![](./images/note.png)Note
 
-    You can download the latest Message Analyzer from below website [http://www.microsoft.com/en-us/download/details.aspx?id=44226](http://www.microsoft.com/en-us/download/details.aspx?id=44226)
+    November 25 2019 - Microsoft Message Analyzer (MMA) has been retired and removed from public-facing sites on microsoft.com. A private MMA build is available for testing purposes; to request it, send an email to [getmma@microsoft.com](mailto:getmma@microsoft.com).
 
 ### <a name="4.4"/>System Under Test (SUT)
  The minimum requirements for the SUT are as follows.
