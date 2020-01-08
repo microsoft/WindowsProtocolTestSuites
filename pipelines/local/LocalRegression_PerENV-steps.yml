@@ -24,6 +24,10 @@ jobs:
               echo "HelperBranch ${{parameters.HelperBranch}}"
       displayName: 'Show parameters'
 
+    - script: |
+        hostname > $(Common.TestResultsDirectory)\HostName.txt
+      displayName: 'host name record'
+      
     - script: 'git clone -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" -b %HelperBranch% %EXTREPO_URL% %EXTREPO_DIR% 2>&1'
       displayName: 'Fetch external repo'
       env:
