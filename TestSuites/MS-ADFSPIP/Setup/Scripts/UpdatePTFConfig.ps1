@@ -211,7 +211,6 @@ Function ConfigPTFConfig
 	
     if($DriverOSVersion -in "Win2012R2","Win8.1")
     {
-        $BatchToRun = "Run2012R2TestCases.cmd"
         .\Modify-ConfigGroupFileNode.ps1 -sourceFileName $DepPtfConfig -groupName "ADFS" -nodeName "IsWin2016" -newContent "false"
     }
 }
