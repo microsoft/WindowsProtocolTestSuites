@@ -239,7 +239,7 @@ function Enable-Remoting {
 		Set-NetworkLocation -NetworkLocation "Private"
 		
 		Write-Verbose "Enable PSRemoting"
-		Enable-PSRemoting -Force
+		Enable-PSRemoting -SkipNetworkProfileCheck -Force
 	    # Add all computers to the list of trusted hosts
 	    # This is requires for pssession remoting
 		Write-Verbose "Set TrustedHosts"
