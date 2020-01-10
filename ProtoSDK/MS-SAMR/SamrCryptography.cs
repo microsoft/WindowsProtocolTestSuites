@@ -579,14 +579,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
                 throw new ArgumentNullException("password");
             }
 
-            // Get MD4 CSP
-            MD4 md4 = MD4CryptoServiceProvider.Create();
-            md4.Initialize();
+            byte[] hash;
 
-            // Get password byte array
-            byte[] passwordBuffer = Encoding.Unicode.GetBytes(password);
+            using (MD4 md4 = MD4.Create())
+            {
+                // Get password byte array
+                byte[] passwordBuffer = Encoding.Unicode.GetBytes(password);
+                hash = md4.ComputeHash(passwordBuffer);
+            }
 
-            return md4.ComputeHash(passwordBuffer);
+            return hash;
         }
 
 
