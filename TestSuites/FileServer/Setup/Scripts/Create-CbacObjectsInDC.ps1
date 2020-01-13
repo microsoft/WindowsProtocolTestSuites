@@ -253,7 +253,20 @@ StartService "ADWS"
 # Create CBAC ENV
 #----------------------------------------------------------------------------
 $domainName = (Get-WmiObject win32_computersystem).Domain
-$domain = Get-ADDomain $domainName
+
+# Retry to wait until the ADWS can respond to PowerShell commands correctly
+$retryTimes = 0
+$domain = $null
+while ($retryTimes -lt 30) {
+    $domain = Get-ADDomain $domainName
+    if ($domain -ne $null) {
+        break;
+    }
+    else {
+        Start-Sleep 10
+        $retryTimes += 1
+    }
+}
 
 .\Write-Info.ps1 "Create ADGroups"
 CreateADGroup -groupName "Payroll"
