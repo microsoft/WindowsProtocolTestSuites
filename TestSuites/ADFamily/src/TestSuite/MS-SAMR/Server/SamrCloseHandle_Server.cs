@@ -13,6 +13,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
     public partial class SAMR_TestSuite : TestClassBase
     {
         [TestCategory("MS-SAMR")]
+        [TestCategory("DomainWin2008R2")]
+        [TestCategory("ForestWin2008R2")]
         [TestCategory("PDC")]
         [TestCategory("SAMR-Server")]
         [Description("Calls SamrCloseHandle to close a server handle. Expects a successful return.")]
