@@ -305,7 +305,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic
             }
 
             // CryptoLib RC4 needs no initial vector
-            RC4CryptoServiceProvider rc4 = new RC4CryptoServiceProvider();
+            RC4 rc4 = RC4.Create();
             return rc4.CreateEncryptor(key, null);
         }
 
@@ -324,7 +324,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic
             }
 
             // CryptoLib RC4 needs no initial vector
-            RC4CryptoServiceProvider rc4 = new RC4CryptoServiceProvider();
+            RC4 rc4 = RC4.Create();
             return rc4.CreateDecryptor(key, null);
         }
         #endregion RC4 Crypto Related

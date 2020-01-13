@@ -220,7 +220,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
         /// <param name="key">The encryption key</param>
         private static byte[] RC4Encrypt(byte[] input, int inputOffset, int inputLength, byte[] key)
         {
-            RC4CryptoServiceProvider rc4 = new RC4CryptoServiceProvider();
+            RC4 rc4 = RC4.Create();
             ICryptoTransform crypto = rc4.CreateEncryptor(key, null);
             byte[] output = crypto.TransformFinalBlock(input, inputOffset, inputLength);
 
