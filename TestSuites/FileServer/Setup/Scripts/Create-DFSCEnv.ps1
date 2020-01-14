@@ -44,9 +44,15 @@ function ExitCode()
     return $MyInvocation.ScriptLineNumber 
 }
 
-function GetRandomString($Length)
+function GetRandomString($Length) 
 {
-    (Get-Random).ToString().Substring(0, $Length)
+    $suffix = ""
+    for ($index = 0; $index -lt $Length; $index++)
+    {
+        $suffix += ((Get-Random) % 10).ToString()
+    }
+
+    return $suffix
 }
 
 #----------------------------------------------------------------------------
