@@ -268,6 +268,10 @@ while ($retryTimes -lt 30) {
     }
 }
 
+if ($domain -eq $null) {
+    .\Write-Error.ps1 "Failed to get correct responses from the ADWS service after strating it for 5 minutes."
+}
+
 .\Write-Info.ps1 "Create ADGroups"
 CreateADGroup -groupName "Payroll"
 CreateADGroup -groupName "Payroll Admins" -parentGroupName "Payroll"
