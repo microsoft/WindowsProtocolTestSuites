@@ -44,15 +44,11 @@ function ExitCode()
     return $MyInvocation.ScriptLineNumber 
 }
 
-function GetRandomString($Length) 
+function GetDfsNsNameSuffix() 
 {
-    $suffix = ""
-    for ($index = 0; $index -lt $Length; $index++)
-    {
-        $suffix += ((Get-Random) % 10).ToString()
-    }
-
-    return $suffix
+    $curFt = [DateTime]::UtcNow.ToFileTimeUtc()
+    $curFtBytes = [BitConverter]::GetBytes($curFt)
+    return "$([BitConverter]::ToUInt32($curFtBytes, 0))"
 }
 
 #----------------------------------------------------------------------------
@@ -123,7 +119,7 @@ cmd /C sc start dfs 2>&1 | Write-Info.ps1
 # Create SMBDfs DFSC Environment
 #----------------------------------------------------------------------------
 Write-Info.ps1 "Create unique DFS Namespace Name"
-$smbDfsNsName = "SMBDfs$(GetRandomString(4))"
+$smbDfsNsName = "SMBDfs$(GetDfsNsNameSuffix)"
 
 Write-Info.ps1 "Create SMBDfs shared folder"
 Create-SMBShare.ps1 -name "$smbDfsNsName" -Path "$homeDrive\DFSRoots\$smbDfsNsName" -FullAccess "$fullAccessAccount"
@@ -137,14 +133,14 @@ cmd.exe /c dfsutil root addstd \\$serverComputerName\$smbDfsNsName 2>&1 | Write-
 Write-Info.ps1 "Add share folder to DFS Namespace"
 cmd.exe /c dfscmd /map \\$serverComputerName\$smbDfsNsName\SMBDfsLink \\$serverComputerName\SMBBasic /restore 2>&1 | Write-Info.ps1
 
-Write-Info.ps1 "Write the DFS Namespace to a file"
-Set-Content -Path "$homeDrive\SMBDfs.txt" -Value $smbDfsNsName
+Write-Info.ps1 "Write the DFS Namespace name to a file"
+Set-Content -Path "C:\SMBDfs.txt" -Value $smbDfsNsName
 
 #----------------------------------------------------------------------------
 # Create Standalone DFSC Environment
 #----------------------------------------------------------------------------
 Write-Info.ps1 "Create unique Stand-alone DFS Namespace Name"
-$standaloneNsName = "Standalone$(GetRandomString(4))"
+$standaloneNsName = "Standalone$(GetDfsNsNameSuffix)"
 
 Write-Info.ps1 "Create Standalone shared folder"
 Create-SMBShare.ps1 -name "$standaloneNsName" -Path "$homeDrive\DFSRoots\$standaloneNsName" -FullAccess "$fullAccessAccount"
@@ -158,15 +154,15 @@ cmd.exe /c dfscmd /map \\$serverComputerName\$standaloneNsName\DFSLink \\$target
 Write-Info.ps1 "Add Interink to Stand-alone Namespace"
 cmd.exe /c dfscmd /map \\$serverComputerName\$standaloneNsName\Interlink \\$serverComputerName\$smbDfsNsName\SMBDfsLink /restore 2>&1 | Write-Info.ps1
 
-Write-Info.ps1 "Write the Stand-alone DFS Namespace to a file"
-Set-Content -Path "$homeDrive\Standalone.txt" -Value $standaloneNsName
+Write-Info.ps1 "Write the Stand-alone DFS Namespace name to a file"
+Set-Content -Path "C:\Standalone.txt" -Value $standaloneNsName
 
 #----------------------------------------------------------------------------
 # Create DomainBased DFSC Environment
 #----------------------------------------------------------------------------
 if ((Get-WmiObject Win32_ComputerSystem).PartOfDomain -eq $true) {
     Write-Info.ps1 "Create unique DomainBased DFS Namespace Name"
-    $domainBasedNsName = "DomainBased$(GetRandomString(4))"
+    $domainBasedNsName = "DomainBased$(GetDfsNsNameSuffix)"
 
     Write-Info.ps1 "Create DomainBased shared folder"
     Create-SMBShare.ps1 -name "$domainBasedNsName" -Path "$homeDrive\DFSRoots\$domainBasedNsName" -FullAccess "$fullAccessAccount"
@@ -181,7 +177,7 @@ if ((Get-WmiObject Win32_ComputerSystem).PartOfDomain -eq $true) {
     cmd.exe /c dfscmd /map \\$serverComputerName\$domainBasedNsName\Interlink \\$serverComputerName\$smbDfsNsName\SMBDfsLink /restore 2>&1 | Write-Info.ps1
      
     Write-Info.ps1 "Write the DomainBased DFS Namespace to a file"
-    Set-Content -Path "$homeDrive\DomainBased.txt" -Value $domainBasedNsName
+    Set-Content -Path "C:\DomainBased.txt" -Value $domainBasedNsName
 }
 
 #----------------------------------------------------------------------------
