@@ -182,7 +182,7 @@ if ((Get-WmiObject Win32_ComputerSystem).PartOfDomain -eq $true) {
     Write-Info.ps1 "Add Interink to Domain-based Namespace"
     cmd.exe /c dfscmd /map \\$serverComputerName\$domainBasedNsName\Interlink \\$serverComputerName\$smbDfsNsName\SMBDfsLink /restore 2>&1 | Write-Info.ps1
      
-    Write-Info.ps1 "Write the DomainBased DFS Namespace to a file"
+    Write-Info.ps1 "Write the DomainBased DFS Namespace name to a file"
     Set-Content -Path "C:\DomainBased.txt" -Value $domainBasedNsName
 }
 
