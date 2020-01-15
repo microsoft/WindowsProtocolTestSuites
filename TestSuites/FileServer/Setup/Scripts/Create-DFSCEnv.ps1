@@ -44,11 +44,17 @@ function ExitCode()
     return $MyInvocation.ScriptLineNumber 
 }
 
-function GetDfsNsNameSuffix() 
-{
+function GetDfsNsNameSuffix() {
     $curFt = [DateTime]::UtcNow.ToFileTimeUtc()
     $curFtBytes = [BitConverter]::GetBytes($curFt)
-    return "$([BitConverter]::ToUInt32($curFtBytes, 0))"
+    $suffix = if ([BitConverter]::IsLittleEndian) {
+        "$([BitConverter]::ToUInt32($curFtBytes, 0))" 
+    }
+    else {
+        "$([BitConverter]::ToUInt32($curFtBytes, 4))"
+    }
+
+    return $suffix
 }
 
 #----------------------------------------------------------------------------
