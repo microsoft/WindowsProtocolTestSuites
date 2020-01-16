@@ -48,6 +48,12 @@ namespace Microsoft.Protocols.TestManager.CLI
 
                 List<TestCase> testCases = (options.Categories.Count() > 0) ? p.GetTestCases(options.Categories.ToList()) : p.GetTestCases(options.SelectedOnly);
 
+                Console.CancelKeyPress += (sender, args) =>
+                {
+                    Console.WriteLine("\nAborting test suite.");
+                    p.AbortExecution();
+                };
+
                 p.RunTestSuite(testCases);
 
                 if (options.ReportFile == null)
@@ -170,6 +176,14 @@ namespace Microsoft.Protocols.TestManager.CLI
                 util.SyncRunByCases(testCases);
             }
             Console.WriteLine("Finish running test cases.");
+        }
+
+        /// <summary>
+        /// Abort test suite
+        /// </summary>
+        public void AbortExecution()
+        {
+            util.AbortExecution();
         }
 
         /// <summary>
