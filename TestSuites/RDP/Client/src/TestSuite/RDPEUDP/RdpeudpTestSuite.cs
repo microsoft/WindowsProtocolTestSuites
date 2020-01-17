@@ -227,7 +227,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         {
             // Start UDP listening.
             if (rdpeudpServer == null)
+            {
                 rdpeudpServer = new RdpeudpServer((IPEndPoint)this.rdpbcgrAdapter.SessionContext.LocalIdentity, autoHanlde);
+
+                rdpeudpServer.UnhandledExceptionReceived += (ex) =>
+                {
+                    Site.Log.Add(LogEntryKind.Debug, $"Unhandled exception from RdpeudpServer: {ex}");
+                };
+            }
             if (!rdpeudpServer.Running)
                 rdpeudpServer.Start();
 
@@ -417,7 +424,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
 
                 // Make sure this test packet does not exceed upstream MTU.
                 int maxPayloadsize = GetMaxiumPayloadSizeForSourcePacket(rdpeudpSocketR.UUpStreamMtu);
-                
+
                 dataToSent = dataToSent.Take(maxPayloadsize).ToArray();
 
                 firstPacket = rdpeudpSocketR.CreateSourcePacket(dataToSent);

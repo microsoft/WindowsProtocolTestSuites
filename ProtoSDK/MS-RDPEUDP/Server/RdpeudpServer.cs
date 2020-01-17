@@ -41,6 +41,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
     }
 
     /// <summary>
+    /// Delegate for unhandled exception received.
+    /// </summary>
+    /// <param name="ex">The unhandled exception received.</param>
+    public delegate void UnhandledExceptionReceivedDelegate(Exception ex);
+
+    /// <summary>
     /// RDPEUDP Server
     /// </summary>
     public class RdpeudpServer : IDisposable
@@ -49,19 +55,19 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
 
         // Local Endpoint
         private IPEndPoint localEndPoint;
-        
+
         // UDP Transport stack
         private TransportStack udpTransport;
-        
+
         // Buffer for unprocessed packet
         private List<StackPacketInfo> unprocessedPacketBuffer;
-        
+
         // Dictionary of server sockets created by this server
         private Dictionary<IPEndPoint, RdpeudpServerSocket> serverSocketDic;
-        
+
         // Whether the server the running, this mean the server can receive and send normally
         private bool running = false;
-        
+
         // Thread handle for receiving thread
         private Thread receiveThread;
 
@@ -85,6 +91,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         }
 
         #endregion Properties
+
+        #region Event
+        /// <summary>
+        /// Event for unhandled exception received.
+        /// </summary>
+        public event UnhandledExceptionReceivedDelegate UnhandledExceptionReceived;
+        #endregion
+
         #region Constructor
         /// <summary>
         /// Constructor
@@ -132,7 +146,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
             udpTransport.Stop();
         }
 
-        public RdpeudpServerSocket Accept(IPAddress remoteIP,TransportMode mode, TimeSpan timeout)
+        public RdpeudpServerSocket Accept(IPAddress remoteIP, TransportMode mode, TimeSpan timeout)
         {
             DateTime endTime = DateTime.Now + timeout;
             RdpeudpServerSocket serverSocket = this.CreateSocket(remoteIP, mode, timeout);
@@ -147,9 +161,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
             }
             else
             {
-                serverSocketDic.Remove(serverSocket.RemoteEndPoint);                
+                serverSocketDic.Remove(serverSocket.RemoteEndPoint);
             }
-            
+
             return null;
         }
 
@@ -255,41 +269,48 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// </summary>
         private void ReceiveLoop()
         {
-            TimeSpan timeout;
-            object remoteEndpoint;
-            StackPacket receivedPacket;
-            timeout = new TimeSpan(0, 0, 10);// 100 milliseconds.
-            while (running)
-            {                   // An infinite loop to receive packet from transport stack.
-                try
-                {
-                    receivedPacket = udpTransport.ExpectPacket(timeout, localEndPoint, out remoteEndpoint);
-                    if (serverSocketDic.ContainsKey(remoteEndpoint as IPEndPoint))
+            try
+            {
+                TimeSpan timeout;
+                object remoteEndpoint;
+                StackPacket receivedPacket;
+                timeout = new TimeSpan(0, 0, 10);// 100 milliseconds.
+                while (running)
+                {                   // An infinite loop to receive packet from transport stack.
+                    try
                     {
-                        serverSocketDic[remoteEndpoint as IPEndPoint].ReceivePacket(receivedPacket);
-                    }
-                    else                // If the packet belong to no RDPEUDP socket, try to Accept as a new RDPEUDP socket.
-                    {
-                        StackPacketInfo packetinfo = new StackPacketInfo(localEndPoint, remoteEndpoint, receivedPacket);
-                        lock (this.unprocessedPacketBuffer)
+                        receivedPacket = udpTransport.ExpectPacket(timeout, localEndPoint, out remoteEndpoint);
+                        if (serverSocketDic.ContainsKey(remoteEndpoint as IPEndPoint))
                         {
-                            unprocessedPacketBuffer.Add(packetinfo);
+                            serverSocketDic[remoteEndpoint as IPEndPoint].ReceivePacket(receivedPacket);
                         }
+                        else                // If the packet belong to no RDPEUDP socket, try to Accept as a new RDPEUDP socket.
+                        {
+                            StackPacketInfo packetinfo = new StackPacketInfo(localEndPoint, remoteEndpoint, receivedPacket);
+                            lock (this.unprocessedPacketBuffer)
+                            {
+                                unprocessedPacketBuffer.Add(packetinfo);
+                            }
 
-                        // ETW Provider Dump Message
-                        byte[] packetBytes = receivedPacket.ToBytes();
-                        string messageName = "RDPEUDP:ReceivedPDU";
-                        ExtendedLogger.DumpMessage(messageName, RdpeudpSocket.DumpLevel_LayerTLS, typeof(RdpeudpPacket).Name, packetBytes);
-                        
+                            // ETW Provider Dump Message
+                            byte[] packetBytes = receivedPacket.ToBytes();
+                            string messageName = "RDPEUDP:ReceivedPDU";
+                            ExtendedLogger.DumpMessage(messageName, RdpeudpSocket.DumpLevel_LayerTLS, typeof(RdpeudpPacket).Name, packetBytes);
+
+                        }
                     }
+                    catch (TimeoutException)
+                    { }
+                    Thread.Sleep(RdpeudpSocketConfig.ReceivingInterval);
                 }
-                catch (TimeoutException)
-                { }
-                Thread.Sleep(RdpeudpSocketConfig.ReceivingInterval);
+            }
+            catch (Exception ex)
+            {
+                UnhandledExceptionReceived?.Invoke(ex);
             }
         }
 
-        
+
 
         /// <summary>
         /// Method provided to socket, which can use it to send packet
