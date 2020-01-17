@@ -13,9 +13,6 @@
 * [Test Cases Design](#Test_Cases_Design)
     * [S1_NewLicenseRequest](#S1_NewLicenseRequest)
     * [S2_LicenseInfo](#S2_LicenseInfo)
-	* [S2_LicenseInfo](#S2_ELE_LicenseInfo_With_Lower_OSVersion)
-	* [S2_LicenseInfo](#S2_ELE_LicenseInfo_With_None_OSVersion)
-
 ## <a name="Technical_Document_Analysis"/>Technical Document Analysis
 
 ### <a name="Technical__Document_Overview"/>Technical Document Overview

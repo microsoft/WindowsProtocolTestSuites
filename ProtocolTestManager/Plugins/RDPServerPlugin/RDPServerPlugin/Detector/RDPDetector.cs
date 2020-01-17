@@ -748,7 +748,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                     return false;
                 }
                 
-                DetectorUtil.WriteLog("End RDP license detection.");
+                DetectorUtil.WriteLog("A LICENSE_REQUEST message is received from server, end RDP license detection.");
                 return true;
             }
             catch (Exception e)
