@@ -124,44 +124,32 @@ cmd /C sc start dfs 2>&1 | Write-Info.ps1
 #----------------------------------------------------------------------------
 # Create SMBDfs DFSC Environment
 #----------------------------------------------------------------------------
-Write-Info.ps1 "Create unique DFS Namespace Name"
-$smbDfsNsName = "SMBDfs$(GetDfsNsNameSuffix)"
-
 Write-Info.ps1 "Create SMBDfs shared folder"
-Create-SMBShare.ps1 -name "$smbDfsNsName" -Path "$homeDrive\DFSRoots\$smbDfsNsName" -FullAccess "$fullAccessAccount"
+Create-SMBShare.ps1 -name "SMBDfs" -Path "$homeDrive\DFSRoots\SMBDfs" -FullAccess "$fullAccessAccount"
 
 Write-Info.ps1 "Create SMBBasic if not exist."
 Create-SMBShare.ps1 -name "SMBBasic" -Path "$homeDrive\SMBBasic" -FullAccess "$fullAccessAccount"  -CachingMode BranchCache
 
 Write-Info.ps1 "Create DFS Namespace"
-cmd.exe /c dfsutil root addstd \\$serverComputerName\$smbDfsNsName 2>&1 | Write-Info.ps1
+cmd.exe /c dfsutil root addstd \\$serverComputerName\SMBDfs 2>&1 | Write-Info.ps1
 
 Write-Info.ps1 "Add share folder to DFS Namespace"
-cmd.exe /c dfscmd /map \\$serverComputerName\$smbDfsNsName\SMBDfsLink \\$serverComputerName\SMBBasic /restore 2>&1 | Write-Info.ps1
-
-Write-Info.ps1 "Write the DFS Namespace name to a file"
-Set-Content -Path "C:\SMBDfs.txt" -Value $smbDfsNsName
+cmd.exe /c dfscmd /map \\$serverComputerName\SMBDfs\SMBDfsLink \\$serverComputerName\SMBBasic /restore 2>&1 | Write-Info.ps1
 
 #----------------------------------------------------------------------------
 # Create Standalone DFSC Environment
 #----------------------------------------------------------------------------
-Write-Info.ps1 "Create unique Stand-alone DFS Namespace Name"
-$standaloneNsName = "Standalone$(GetDfsNsNameSuffix)"
-
 Write-Info.ps1 "Create Standalone shared folder"
-Create-SMBShare.ps1 -name "$standaloneNsName" -Path "$homeDrive\DFSRoots\$standaloneNsName" -FullAccess "$fullAccessAccount"
+Create-SMBShare.ps1 -name "Standalone" -Path "$homeDrive\DFSRoots\Standalone" -FullAccess "$fullAccessAccount"
 
 Write-Info.ps1 "Create Stand-alone DFS Namespace"
-cmd.exe /c dfsutil root addstd \\$serverComputerName\$standaloneNsName 2>&1 | Write-Info.ps1
+cmd.exe /c dfsutil root addstd \\$serverComputerName\Standalone 2>&1 | Write-Info.ps1
 
 Write-Info.ps1 "Add Link target to Stand-alone Namespace"
-cmd.exe /c dfscmd /map \\$serverComputerName\$standaloneNsName\DFSLink \\$targetServerName\FileShare /restore 2>&1 | Write-Info.ps1	
+cmd.exe /c dfscmd /map \\$serverComputerName\Standalone\DFSLink \\$targetServerName\FileShare /restore 2>&1 | Write-Info.ps1	
 
 Write-Info.ps1 "Add Interink to Stand-alone Namespace"
-cmd.exe /c dfscmd /map \\$serverComputerName\$standaloneNsName\Interlink \\$serverComputerName\$smbDfsNsName\SMBDfsLink /restore 2>&1 | Write-Info.ps1
-
-Write-Info.ps1 "Write the Stand-alone DFS Namespace name to a file"
-Set-Content -Path "C:\Standalone.txt" -Value $standaloneNsName
+cmd.exe /c dfscmd /map \\$serverComputerName\Standalone\Interlink \\$serverComputerName\SMBDfs\SMBDfsLink /restore 2>&1 | Write-Info.ps1
 
 #----------------------------------------------------------------------------
 # Create DomainBased DFSC Environment
@@ -180,7 +168,7 @@ if ((Get-WmiObject Win32_ComputerSystem).PartOfDomain -eq $true) {
     cmd.exe /c dfscmd /map \\$serverComputerName\$domainBasedNsName\DFSLink \\$targetServerName\FileShare /restore 2>&1 | Write-Info.ps1
 
     Write-Info.ps1 "Add Interink to Domain-based Namespace"
-    cmd.exe /c dfscmd /map \\$serverComputerName\$domainBasedNsName\Interlink \\$serverComputerName\$smbDfsNsName\SMBDfsLink /restore 2>&1 | Write-Info.ps1
+    cmd.exe /c dfscmd /map \\$serverComputerName\$domainBasedNsName\Interlink \\$serverComputerName\SMBDfs\SMBDfsLink /restore 2>&1 | Write-Info.ps1
      
     Write-Info.ps1 "Write the DomainBased DFS Namespace name to a file"
     Set-Content -Path "C:\DomainBased.txt" -Value $domainBasedNsName
