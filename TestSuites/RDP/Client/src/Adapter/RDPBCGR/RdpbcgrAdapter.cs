@@ -1993,7 +1993,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         public void CreateMultitransportChannelConnection(Multitransport_Protocol_value requestedProtocol, TimeSpan timeout)
         {
             if (rdpeudpServer == null)
+            { 
                 rdpeudpServer = new RdpeudpServer((IPEndPoint)this.SessionContext.LocalIdentity);
+
+                rdpeudpServer.UnhandledExceptionReceived += (ex) =>
+                {
+                    Site.Log.Add(LogEntryKind.Debug, $"Unhandled exception from RdpeudpServer: {ex}");
+                };
+            }
             if (!rdpeudpServer.Running)
                 rdpeudpServer.Start();
 
