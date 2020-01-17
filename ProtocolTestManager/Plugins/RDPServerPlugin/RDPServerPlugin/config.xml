@@ -24,25 +24,26 @@
       <Rule name = "RDPEDYC">
         <Category name = "RDPEDYC"/>
       </Rule>
+     <Rule name = "RDPELE">
+        <Category name = "RDPELE"/>
+      </Rule>
     </Group>
 
     <Group name = "RDP Version">
       <Rule name = "RDP 7.0">
-        <Category name = "RDP7.0"/>>
+        <Category name = "RDP7.0"/>
       </Rule>
       <Rule name = "RDP 8.0">
-        <Category name = "RDP8.0"/>>
+        <Category name = "RDP8.0"/>
       </Rule>
       <Rule name = "RDP 8.1">
-        <Category name = "RDP8.1"/>>
-      </Rule>
+        <Category name = "RDP8.1"/>
+      </Rule>     
     </Group>
-
     <Group name = "Priority">
       <Rule name = "BVT">
         <Category name = "BVT"/>
       </Rule>
-
       <Rule name = "NonBVT">
         <Category name = "!BVT"/>
       </Rule>

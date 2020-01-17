@@ -23,12 +23,36 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
         public string Version { get; set; }
 
+        public string SecurityProtocol { get; set; }
+
+        public string TLSVersion { get; set; }
+
+        public string Negotiation { get; set; }
+
+
+
         public void LoadDefaultValues()
         {
             Type cfg = typeof(Configs);
             foreach (var p in cfg.GetProperties())
             {
-                string name = "RDP." + p.Name.Replace("__", ".");
+                string name = "";
+                if (String.Compare(p.Name.ToLower(), "tlsversion")==0)
+                {
+                    name = "RDP.Security.TLS.Version";
+                }
+                else if (String.Compare(p.Name.ToLower(), "securityprotocol") == 0)
+                {
+                    name = "RDP.Security.Protocol";
+                }
+                else if (String.Compare(p.Name.ToLower(), "negotiation") == 0)
+                {
+                    name = "RDP.Security.Negotiation";
+                }
+                else
+                {
+                    name = "RDP." + p.Name.Replace("__", ".");
+                }
                 var val = DetectorUtil.GetPropertyValue(name);
                 if (val != null)
                 {
@@ -43,7 +67,23 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             Type cfg = typeof(Configs);
             foreach (var p in cfg.GetProperties())
             {
-                string name = "RDP." + p.Name.Replace("__", ".");
+                string name = "";
+                if ((String.Compare(p.Name.ToLower(), "tlsversion") == 0))
+                {
+                    name = "RDP.Security.TLS.Version";
+                }
+                else if ((String.Compare(p.Name.ToLower(), "securityprotocol") == 0))
+                {
+                    name = "RDP.Security.Protocol";
+                }
+                else if ((String.Compare(p.Name.ToLower(), "negotiation") == 0))
+                {
+                    name = "RDP.Security.Negotiation";
+                }
+                else
+                {
+                    name = "RDP." + p.Name.Replace("__", ".");
+                }
                 string value = p.GetValue(this, null).ToString();
                 dict.Add(name, new List<string>() { value });
             }
