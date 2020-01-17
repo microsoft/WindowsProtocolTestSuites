@@ -737,42 +737,18 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                     if (dwErrorCode_Values.STATUS_VALID_CLIENT != licensePdu.LicensingMessage.LicenseError.Value.dwErrorCode)
                     {
                         DetectorUtil.WriteLog($"A license error message with the error code STATUS_VALID_CLIENT should be received, but the real error code is {licensePdu.LicensingMessage.LicenseError.Value.dwErrorCode}.");
-                        return false;
                     }
+                    return false;
                 }
 
                 DetectorUtil.WriteLog("Start RDP license procedure");
                 if (bMsgType_Values.LICENSE_REQUEST != licensePdu.preamble.bMsgType)
                 {
                     DetectorUtil.WriteLog($"A LICENSE_REQUEST message should be received from server, but the real message type is {licensePdu.preamble.bMsgType}");
-                }
-
-                rdpeleClient.SendClientNewLicenseRequest(
-                    KeyExchangeAlg.KEY_EXCHANGE_ALG_RSA, (uint)Client_OS_ID.CLIENT_OS_ID_WINNT_POST_52 | (uint)Client_Image_ID.CLIENT_IMAGE_ID_MICROSOFT, config.ServerUserName, config.ClientName);
-                licensePdu = rdpeleClient.ExpectPdu(timeout);
-                if (bMsgType_Values.PLATFORM_CHALLENGE != licensePdu.preamble.bMsgType)
-                {
-                    DetectorUtil.WriteLog($"A PLATFORM_CHALLENGE message should be received from server, but the real message type is {licensePdu.preamble.bMsgType}");
                     return false;
                 }
-
-                Random random = new Random();
-                CLIENT_HARDWARE_ID clientHWID = new CLIENT_HARDWARE_ID
-                {
-                    PlatformId = (uint)Client_OS_ID.CLIENT_OS_ID_WINNT_POST_52 | (uint)Client_Image_ID.CLIENT_IMAGE_ID_MICROSOFT,
-                    Data1 = (uint)random.Next(),
-                    Data2 = (uint)random.Next(),
-                    Data3 = (uint)random.Next(),
-                    Data4 = (uint)random.Next()
-                };
-                rdpeleClient.SendClientPlatformChallengeResponse(clientHWID);
-                licensePdu = rdpeleClient.ExpectPdu(timeout);
-                if (bMsgType_Values.NEW_LICENSE != licensePdu.preamble.bMsgType)
-                {
-                    DetectorUtil.WriteLog($"A NEW_LICENSE message should be received from server, but the real message type is {licensePdu.preamble.bMsgType}");
-                    return false;
-                }
-                DetectorUtil.WriteLog("End RDP license procedure");
+                
+                DetectorUtil.WriteLog("End RDP license detection.");
                 return true;
             }
             catch (Exception e)

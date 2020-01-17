@@ -13,8 +13,8 @@
 * [Test Cases Design](#Test_Cases_Design)
     * [S1_NewLicenseRequest](#S1_NewLicenseRequest)
     * [S2_LicenseInfo](#S2_LicenseInfo)
-	* [S2_LicenseInfo](#S2_ELE_License_With_Lower_OSVersion)
-	* [S2_LicenseInfo](#S2_ELE_License_With_None_OSVersion)
+	* [S2_LicenseInfo](#S2_ELE_LicenseInfo_With_Lower_OSVersion)
+	* [S2_LicenseInfo](#S2_ELE_LicenseInfo_With_None_OSVersion)
 
 ## <a name="Technical_Document_Analysis"/>Technical Document Analysis
 
@@ -172,7 +172,7 @@ _Table 3 Scenario 2_
 | | Test Suite expects Upgrade License PDU from the server.|
 |  **Requirements Covered**| N/A|
 |  **Cleanup**| N/A|
-#### S2_ELE_License_With_None_OSVersion
+#### S2_ELE_LicenseInfo_With_None_OSVersion
 
 | | |
 | -------------| ------------- |
@@ -196,7 +196,7 @@ _Table 3 Scenario 2_
 |  **Requirements Covered**| N/A|
 |  **Cleanup**| N/A|
 
-#### S2_ELE_License_With_Lower_OSVersion
+#### S2_ELE_LicenseInfo_With_Lower_OSVersion
 
 | | |
 | -------------| ------------- |

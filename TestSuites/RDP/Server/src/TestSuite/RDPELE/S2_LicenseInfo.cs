@@ -93,7 +93,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpele
         [TestCategory("NonBVT")]
         [TestCategory("RDP7.0")]
         [Description(@"This test case is used to verify SUT can upgrade the license when Client License Information OS version is lower than server. ")]
-        public void S2_ELE_License_With_Lower_OSVersion()
+        public void S2_ELE_LicenseInfo_With_Lower_OSVersion()
         {
            Site.Log.Add(LogEntryKind.TestStep, "Set up a RDPBCGR connection with server.");
             StartRDPConnect();
@@ -161,7 +161,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpele
         [TestCategory("NonBVT")]
         [TestCategory("RDP7.0")]
         [Description(@"This test case is used to verify SUT can upgrade the license when Client License Information OS version is lower than server. ")]
-        public void S2_ELE_License_With_None_OSVersion()
+        public void S2_ELE_LicenseInfo_With_None_OSVersion()
         {
             Site.Log.Add(LogEntryKind.TestStep, "Set up a RDPBCGR connection with server.");
             StartRDPConnect();
