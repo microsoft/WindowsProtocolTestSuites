@@ -145,7 +145,7 @@ The following table shows the number of test cases for each scenario.
 
 |  **Scenario**|  **Test cases**|  **BVT**|  **P0**|  **P1**|
 | -------------| -------------| -------------| -------------| ------------- |
-| S2_LicenseInfo| 3| 1| 1| 2|
+| S2_LicenseInfo| 1| 1| 1| 0|
 
 _Table 3 Scenario 2_
 
@@ -169,53 +169,6 @@ _Table 3 Scenario 2_
 | | Test Suite sends License Info PDU with the license info saved earlier to the server.|
 | | Test Suite expects Platform Challenge PDU from the server.|
 | | Test Suite sends Platform Challenge Response PDU to the server.|
-| | Test Suite expects Upgrade License PDU from the server.|
-|  **Requirements Covered**| N/A|
-|  **Cleanup**| N/A|
-#### S2_ELE_LicenseInfo_With_None_OSVersion
-
-| | |
-| -------------| ------------- |
-|  **Priority**| P1|
-|  **Description** | This test case is used to verify SUT can upgrade the license when Client License Information OS version is lower than server.|
-|  **Test Execution Steps**| Test Suite initiates an RDP connection to the server and complete the Connection Initiation phase, Basic Setting Exchange phase, Channel Connection phase, RDP Security Commencement phase, Secure Setting Exchange phase.|
-| | Test Suite sends Client Info PDU to the server|
-| | Test Suite expects the Server returns License Request PDU.|
-| | Test Suite sends Client New License Request PDU to the server with platformID Client_OS_ID.CLIENT_OS_ID_WINNT_POST_52 | Client_Image_ID.CLIENT_IMAGE_ID_MICROSOFT.|
-| | Test Suite expects Platform Challenge PDU from the server.|
-| | Test Suite sends Platform Challenge Response PDU to the server with platformID Client_OS_ID.CLIENT_OS_ID_WINNT_POST_52 | Client_Image_ID.CLIENT_IMAGE_ID_MICROSOFT.|
-| | Test Suite expects New License PDU from the server.|
-| | Test Suite saves the license info from the PDU for future use.|
-| | Test Suite initiates a second RDP connection to the server and complete the Connection Initiation phase, Basic Setting Exchange phase, Channel Connection phase, RDP Security Commencement phase, Secure Setting Exchange phase.|
-| | Test Suite sends Client Info PDU to the server|
-| | Test Suite expects the Server returns License Request PDU.|
-| | Test Suite sends License Info PDU with the license info to the server with platformID Client_OS_ID.CLIENT_OS_ID_WINNT_POST_52 | Client_Image_ID.CLIENT_IMAGE_ID_MICROSOFT.|
-| | Test Suite expects Platform Challenge PDU from the server.|
-| | Test Suite sends Platform Challenge Response PDU to the server with platformID Client_OS_ID.None | Client_Image_ID.None.|
-| | Test Suite expects Upgrade License PDU from the server.|
-|  **Requirements Covered**| N/A|
-|  **Cleanup**| N/A|
-
-#### S2_ELE_LicenseInfo_With_Lower_OSVersion
-
-| | |
-| -------------| ------------- |
-|  **Priority**| P1|
-|  **Description** | This test case is used to verify SUT can upgrade the license when Client License Information OS version is lower than server.|
-|  **Test Execution Steps**| Test Suite initiates an RDP connection to the server and complete the Connection Initiation phase, Basic Setting Exchange phase, Channel Connection phase, RDP Security Commencement phase, Secure Setting Exchange phase.|
-| | Test Suite sends Client Info PDU to the server|
-| | Test Suite expects the Server returns License Request PDU.|
-| | Test Suite sends Client New License Request PDU to the server with platformID Client_OS_ID.CLIENT_OS_ID_WINNT_POST_52 | Client_Image_ID.CLIENT_IMAGE_ID_MICROSOFT.|
-| | Test Suite expects Platform Challenge PDU from the server.|
-| | Test Suite sends Platform Challenge Response PDU to the server with platformID Client_OS_ID.CLIENT_OS_ID_WINNT_POST_52 | Client_Image_ID.CLIENT_IMAGE_ID_MICROSOFT.|
-| | Test Suite expects New License PDU from the server.|
-| | Test Suite saves the license info from the PDU for future use.|
-| | Test Suite initiates a second RDP connection to the server and complete the Connection Initiation phase, Basic Setting Exchange phase, Channel Connection phase, RDP Security Commencement phase, Secure Setting Exchange phase.|
-| | Test Suite sends Client Info PDU to the server|
-| | Test Suite expects the Server returns License Request PDU.|
-| | Test Suite sends License Info PDU with the license info to the server with platformID Client_OS_ID.CLIENT_OS_ID_WINNT_POST_52 | Client_Image_ID.CLIENT_IMAGE_ID_MICROSOFT.|
-| | Test Suite expects Platform Challenge PDU from the server.|
-| | Test Suite sends Platform Challenge Response PDU to the server with platformID Client_OS_ID.CLIENT_OS_ID_WINNT_351 | Client_Image_ID.Client_Image_ID.CLIENT_IMAGE_ID_MICROSOFT.|
 | | Test Suite expects Upgrade License PDU from the server.|
 |  **Requirements Covered**| N/A|
 |  **Cleanup**| N/A|
