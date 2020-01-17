@@ -2958,6 +2958,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     disconnected = true;
                     break;
                 }
+                else if (eventPacket.EventType == EventType.Exception)
+                {
+                    packet = new ErrorPdu(eventPacket.EventObject as Exception);
+                }
+
+                if (packet is ErrorPdu)
+                {
+                    // Receive thread has ended due to an exception of error PDU.
+                    disconnected = true;
+                }
 
                 if (packet is Server_X_224_Connection_Confirm_Pdu)
                 {
@@ -2979,6 +2989,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 {
                     // Add the packet to buffer if it is not requested.
                     context.AddPacketToBuffer(packet);
+                }
+
+                if (disconnected)
+                {
+                    // No more packets from receive thread.
+                    break;
                 }
 
                 leftTime = endTime - DateTime.Now;
