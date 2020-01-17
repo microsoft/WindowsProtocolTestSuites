@@ -645,9 +645,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 this.StreamReceiveLoopImp();
             }
-            catch
+            catch (Exception ex)
             {
-                // Throw no exception
+                // Log unhandled exception by adding an exception event.
+                this.AddEvent(new TransportEvent(EventType.Exception, null, this.localEndPoint, ex));
             }
         }
 
@@ -721,6 +722,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 }
                 catch (Exception ex)
                 {
+                    bool handled = false;
+
+                    bool exit = false;
+
                     if (ex is IOException ioException)
                     {
                         if (ioException.InnerException is SocketException socketException)
@@ -729,22 +734,30 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                             {
                                 // Add the disconnected transport event, if connection is reset by SUT.
                                 this.AddEvent(new TransportEvent(EventType.Disconnected, null, this.localEndPoint, null));
-                                break;
+
+                                handled = true;
+
+                                exit = true;
                             }
 
                             if (socketException.SocketErrorCode == SocketError.WouldBlock)
                             {
                                 // No data was received within receive timeout.
-                                continue;
+                                handled = true;
                             }
                         }
                     }
 
-                    // handle exception event, return.
-                    this.AddEvent(new TransportEvent(
-                        EventType.Exception, null, this.localEndPoint, ex));
+                    if (!handled)
+                    {
+                        // Throw to outside handler.
+                        throw;
+                    }
 
-                    break;
+                    if (exit)
+                    {
+                        break;
+                    }
                 }
             }
         }
