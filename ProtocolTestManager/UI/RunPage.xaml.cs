@@ -455,11 +455,11 @@ namespace Microsoft.Protocols.TestManager.UI
 
         private void UpdateRunSelectedText(List<TestCaseGroup> groups)
         {
-            int selectedCaseCount = 0;
-            foreach (var g in groups)
-            {
-                selectedCaseCount += g.TestCaseList.Where(c => c.IsChecked).Count();
-            }
+            var selectedCaseCount = groups
+                .SelectMany(g => g.TestCaseList)
+                .Where(c => c.IsChecked)
+                .GroupBy(c => c.FullName)
+                .Count();
 
             string text = selectedCaseCount == 0 ? "Run Selected Cases" : $"Run Selected Cases ({selectedCaseCount})";
 
