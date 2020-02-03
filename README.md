@@ -53,7 +53,7 @@ You should install the software listed below based on your testing purpose, incl
 
 1. [Spec Explorer 2010 v3.5.3146.0](https://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/)
 
-   It is only required if you want to build or run the test suites that contain Model-Based Test cases. If you want to regenerate Model-Based Test cases, you must install Visual Studio 2012.
+   It is required if you want to build or run the test suites. It is used to implement test scenarios and cases utilizing [Model-Based Testing].
 
 1. [Protocol Test Framework build 1.0 (build 1.0.7500.0)](https://github.com/Microsoft/ProtocolTestFramework/releases/tag/1.0.7500.0)
 
@@ -129,6 +129,8 @@ Some test suites use [Model-Based Testing](https://msdn.microsoft.com/en-us/libr
 * **ADFSPIP Client Test Suite**
 * **AZOD Test Suite**
 * **ADOD Test Suite**
+
+If you want to regenerate Model-Based Test cases, you must install Visual Studio 2012.
 
 ## Build
 
