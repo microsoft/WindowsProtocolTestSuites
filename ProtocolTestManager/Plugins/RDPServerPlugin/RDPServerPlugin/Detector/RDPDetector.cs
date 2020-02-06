@@ -11,9 +11,11 @@ using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp;
 using System.Runtime.InteropServices;
+using System.Security.Authentication;
 
 namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 {
@@ -60,6 +62,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         private List<StackPacket> receiveBuffer = null;
         private RdpbcgrClient rdpbcgrClient = null;
         private RdpedycClient rdpedycClient = null;
+        private RdpeleClient rdpeleClient = null;
 
         private string[] SVCNames;
         private int defaultPort = 3389;
@@ -118,7 +121,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
 
                 CheckSupportedFeatures();
-                CheckSupportedProtocols();
+                CheckSupportedProtocols(config);
                 SetRdpVersion(config);
             }
             catch (Exception e)
@@ -159,6 +162,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 clientAddress.ToString(),
                 Int32.TryParse(config.ServerPort, out port) ? port : defaultPort
                 );
+            rdpbcgrClient.TlsVersion = SslProtocols.Tls;          
         }
 
         private bool LoadConfig()
@@ -319,14 +323,18 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
             // Secure Settings Exchange
             SendClientInfoPDU(config, highestCompressionTypeSupported, isReconnect, autoLogon);
+            rdpeleClient = new RdpeleClient(rdpbcgrClient);
 
-            // Licensing
-            Server_License_Error_Pdu_Valid_Client licenseErrorPdu = ExpectPacket<Server_License_Error_Pdu_Valid_Client>(timeout);
-            if (licenseErrorPdu == null)
+            try
             {
-                return false;
+                detectInfo.IsSupportRDPELE = ProcessLicenseSequence(config, timeout);
             }
-
+            catch
+            {
+                detectInfo.IsSupportRDPELE = false;
+            }
+            rdpeleClient.Dispose();
+           
             // Capabilities Exchange
             Server_Demand_Active_Pdu demandActivePdu = ExpectPacket<Server_Demand_Active_Pdu>(timeout);
             if (demandActivePdu == null)
@@ -423,7 +431,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             return null;
         }
 
-        private void CheckSupportedProtocols()
+        private void CheckSupportedProtocols(Configs config)
         {
             // Notify the UI for detecting protocol supported finished
             DetectorUtil.WriteLog("Check specified protocols support...");
@@ -477,6 +485,15 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             else
             {
                 DetectorUtil.WriteLog("Detect RDPEDYC unsupported");
+            }           
+
+            if (detectInfo.IsSupportRDPELE)
+            {
+                DetectorUtil.WriteLog("Detect RDPELE supported");
+            }
+            else
+            {
+                DetectorUtil.WriteLog("Detect RDPELE unsupported");
             }
 
             DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
@@ -501,7 +518,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             }
             else if (rdpVersion == TS_UD_SC_CORE_version_Values.V2)
             {
-                config.Version = "8.1";
+                config.Version = "8.1"; // RDP 5.0, 5.1, 5.2, 6.0, 6.1, 7.0, 7.1, 8.0, and 8.1 servers
             }
             else if (rdpVersion == TS_UD_SC_CORE_version_Values.V3)
             {
@@ -530,6 +547,10 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             else if (rdpVersion == TS_UD_SC_CORE_version_Values.V9)
             {
                 config.Version = "10.6";
+            }
+            else if (rdpVersion == TS_UD_SC_CORE_version_Values.V10)
+            {
+                config.Version = "10.7";
             }
             else
             {
@@ -701,6 +722,40 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 pdu.infoPacket.flags |= (flags_Values)((uint)pdu.infoPacket.flags | compressionFlag);
             }
             rdpbcgrClient.SendPdu(pdu);
+        }
+
+        private bool ProcessLicenseSequence(Configs config, TimeSpan timeout)
+        {
+            try
+            {
+                TS_LICENSE_PDU licensePdu = rdpeleClient.ExpectPdu(timeout);
+
+                if (licensePdu.preamble.bMsgType == bMsgType_Values.ERROR_ALERT)
+                {
+                    // If the target machine is a personal terminal server, whether the client sends the license or not, 
+                    // the server always sends a license error message with the error code STATUS_VALID_CLIENT and the state transition code ST_NO_TRANSITION. 
+                    if (dwErrorCode_Values.STATUS_VALID_CLIENT != licensePdu.LicensingMessage.LicenseError.Value.dwErrorCode)
+                    {
+                        DetectorUtil.WriteLog($"A license error message with the error code STATUS_VALID_CLIENT should be received, but the real error code is {licensePdu.LicensingMessage.LicenseError.Value.dwErrorCode}.");
+                    }
+                    return false;
+                }
+
+                DetectorUtil.WriteLog("Start RDP license procedure");
+                if (bMsgType_Values.LICENSE_REQUEST != licensePdu.preamble.bMsgType)
+                {
+                    DetectorUtil.WriteLog($"A LICENSE_REQUEST message should be received from server, but the real message type is {licensePdu.preamble.bMsgType}");
+                    return false;
+                }
+                
+                DetectorUtil.WriteLog("A LICENSE_REQUEST message is received from server, end RDP license detection.");
+                return true;
+            }
+            catch (Exception e)
+            {
+                DetectorUtil.WriteLog("RDP license procedure throws exception: " + e.Message);
+                return false;
+            }
         }
 
         private void SendClientConfirmActivePDU(

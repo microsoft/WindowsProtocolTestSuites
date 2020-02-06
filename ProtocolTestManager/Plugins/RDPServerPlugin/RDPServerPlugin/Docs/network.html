@@ -53,24 +53,25 @@
 	Domain Environment
 </h3>
 <p>
-	The domain environment requires interactions between the following computers and server roles. Note that the domain controller, required for a domain
-	environment, can be installed on the SUT.
+	The domain environment requires interactions between the following computers and server roles. Note that the domain controller, required for a domain environment, can be installed on the SUT.
+	
 </p>
 <ul>
 	<li>
 		<p>
-			The driver computer, which runs the test cases by sending requests over the wire in the form of protocol messages.
+			The Driver Computer, which runs the test cases by sending requests over the wire in the form of protocol messages.
 		</p>
 	</li>
 	<li>
 		<p>
-			The SUT, which runs a Server implementation of the protocol that is being tested. The SUT responds to the requests sent by the driver computer.
+			The SUT, which runs a server implementation of the protocol that is being tested. The SUT responds to the requests sent by the driver computer.
+
+			Note: if you want to test [MS-RDPELE] protocol, then SUT must be connected to internet besides the test network.
 		</p>
 	</li>
 	<li>
 		<p>
-			The DC provides functionality that is required to test the protocol implementation. Specifically, the DC hosts Active Directory Domain Services (AD
-			DS).
+			The DC provides functionality that is required to test the protocol implementation. Specifically, the DC hosts Active Directory Domain Services (AD DS).
 		</p>
 	</li>
 </ul>
@@ -92,12 +93,14 @@
 <ul>
 	<li>
 		<p>
-			The driver computer, which runs the test cases by sending requests over the wire in the form of protocol messages.
+			The Driver Computer, which runs the test cases by sending requests over the wire in the form of protocol messages.
 		</p>
 	</li>
 	<li>
 		<p>
 			The SUT, which runs a Server implementation of the protocol that is being tested. The SUT responds to the requests that the driver computer sends.
+			
+			Note: if you want to test [MS-RDPELE] protocol, then SUT must be connected to internet besides the test network.
 		</p>
 	</li>
 </ul>
