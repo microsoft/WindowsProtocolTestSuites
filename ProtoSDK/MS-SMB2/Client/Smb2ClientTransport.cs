@@ -157,7 +157,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                             out gssToken,
                             out responseHeader,
                             out responsePayload);
-            
+
             negotiatedDialect = selectedDialect;
 
             serverCapabilities = (Capabilities_Values)responsePayload.Capabilities;
@@ -1278,7 +1278,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     out serverGssToken,
                     out header,
                     out sessionSetupResponse);
-                
+
                 CheckStatusCode(status);
 
                 if ((status == Smb2Status.STATUS_MORE_PROCESSING_REQUIRED || status == Smb2Status.STATUS_SUCCESS) &&
@@ -1305,14 +1305,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
             context.ConnectionTable = new Dictionary<string, Smb2ClientConnection>();
             context.ConnectionTable.Add("Smb2ClientConnection", smb2CliConn);
-            
+
             // Tree connect:
             TREE_CONNECT_Response treeConnectResponse;
 
             status = client.TreeConnect(
                     1,
                     1,
-                    treeconnect_SigningRequired? headerFlags| Packet_Header_Flags_Values.FLAGS_SIGNED:headerFlags,
+                    treeconnect_SigningRequired ? headerFlags | Packet_Header_Flags_Values.FLAGS_SIGNED : headerFlags,
                     messageId++,
                     sessionId,
                     "\\\\" + serverPrincipleName + "\\" + shareName,

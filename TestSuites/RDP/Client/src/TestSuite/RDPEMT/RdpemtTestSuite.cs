@@ -207,7 +207,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         {
             //Start UDP listening
             if (rdpeudpServer == null)
+            { 
                 rdpeudpServer = new RdpeudpServer((IPEndPoint)this.rdpbcgrAdapter.SessionContext.LocalIdentity, true);
+
+                rdpeudpServer.UnhandledExceptionReceived += (ex) =>
+                {
+                    Site.Log.Add(LogEntryKind.Debug, $"Unhandled exception from RdpeudpServer: {ex}");
+                };
+            }
             if (!rdpeudpServer.Running)
                 rdpeudpServer.Start();
 

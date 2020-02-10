@@ -209,9 +209,8 @@ Function ConfigPTFConfig
     #Update configure file, set IsWin2016 to false if it's in 2012R2 envrionment
     $DriverOSVersion = GetDriverOSVersion
 	
-    if($DriverOSVersion -eq "Win2012R2")
+    if($DriverOSVersion -in "Win2012R2","Win8.1")
     {
-        $BatchToRun = "Run2012R2TestCases.cmd"
         .\Modify-ConfigGroupFileNode.ps1 -sourceFileName $DepPtfConfig -groupName "ADFS" -nodeName "IsWin2016" -newContent "false"
     }
 }

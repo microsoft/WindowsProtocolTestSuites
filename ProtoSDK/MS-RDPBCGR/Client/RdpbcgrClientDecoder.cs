@@ -6,6 +6,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Collections.ObjectModel;
+using System.Security.Cryptography.X509Certificates;
 
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
@@ -19,7 +20,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     /// <summary>
     /// MS-RDPBCGR Decoder Class
     /// </summary>
-    internal class RdpbcgrDecoder
+    public class RdpbcgrDecoder
     {
         #region Private Class Members
         /// <summary>
@@ -62,7 +63,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="startIndex">start index</param>
         /// <param name="bytesToRead">specified length</param>
         /// <returns>bytes of specified length</returns>
-        private byte[] GetBytes(byte[] data, ref int startIndex, int bytesToRead)
+        private static byte[] GetBytes(byte[] data, ref int startIndex, int bytesToRead)
         {
             // if input data is null
             if (null == data)
@@ -440,7 +441,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="index">parser index</param>
         /// <param name="isBigEndian">big endian format flag</param>
         /// <returns>parsed UInt16 number</returns>
-        private UInt16 ParseUInt16(byte[] data, ref int index, bool isBigEndian)
+        private static UInt16 ParseUInt16(byte[] data, ref int index, bool isBigEndian)
         {
             // Read 2 bytes
             byte[] bytes = GetBytes(data, ref index, sizeof(UInt16));
@@ -464,7 +465,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="index">parser index</param>
         /// <param name="isBigEndian">big endian format flag</param>
         /// <returns>parsed UInt32 number</returns>
-        private UInt32 ParseUInt32(byte[] data, ref int index, bool isBigEndian)
+        public static UInt32 ParseUInt32(byte[] data, ref int index, bool isBigEndian)
         {
             // Read 4 bytes
             byte[] bytes = GetBytes(data, ref index, sizeof(UInt32));
@@ -1047,24 +1048,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 secData.serverRandom = GetBytes(data, ref currentIndex, (int)secData.serverRandomLen.actualData);
 
                 // TS_UD_SC_SEC1: serverCertificate (present)
-                secData.serverCertificate = new SERVER_CERTIFICATE();
-
-                // TS_UD_SC_SEC1: serverCertificate: dwVersion
-                secData.serverCertificate.dwVersion =
-                    (SERVER_CERTIFICATE_dwVersion_Values)ParseUInt32(data, ref currentIndex, false);
-
-                // TS_UD_SC_SEC1: serverCertificate: certData
-                if (SERVER_CERTIFICATE_dwVersion_Values.CERT_CHAIN_VERSION_1 == secData.serverCertificate.dwVersion)
-                {
-                    // proprietary server certificate
-                    secData.serverCertificate.certData = ParseProprietaryServerCertificate(data, ref currentIndex);
-                }
-                else
-                {
-                    // X509 certificate chain
-                    secData.serverCertificate.certData =
-                        ParseX509CertificateChain(data, ref currentIndex, (dataEndIndex - currentIndex));
-                }
+                secData.serverCertificate = DecodeServerCertificate(data, ref currentIndex, secData.serverCertLen.actualData);
             }
             else
             {
@@ -1126,7 +1110,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="data">data to be parsed</param>
         /// <param name="currentIndex">current parser index</param>
         /// <returns>PROPRIETARYSERVERCERTIFICATE</returns>
-        private PROPRIETARYSERVERCERTIFICATE ParseProprietaryServerCertificate(byte[] data, ref int currentIndex)
+        public static PROPRIETARYSERVERCERTIFICATE ParseProprietaryServerCertificate(byte[] data, ref int currentIndex)
         {
             PROPRIETARYSERVERCERTIFICATE cert = new PROPRIETARYSERVERCERTIFICATE();
 
@@ -1165,11 +1149,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="currentIndex">current parser index</param>
         /// <param name="size">cert data size</param>
         /// <returns>X509 Certificate Chain</returns>
-        private X509_CERTIFICATE_CHAIN ParseX509CertificateChain(byte[] data, ref int currentIndex, int size)
+        public static X509_CERTIFICATE_CHAIN ParseX509CertificateChain(byte[] data, ref int currentIndex, int size)
         {
             X509_CERTIFICATE_CHAIN cert = new X509_CERTIFICATE_CHAIN();
 
             cert.NumCertBlobs = (int)ParseUInt32(data, ref currentIndex, false);
+            cert.CertBlobArray = new CERT_BLOB[cert.NumCertBlobs];
             for (int i = 0; i < cert.CertBlobArray.Length; i++)
             {
                 cert.CertBlobArray[i].cbCert = (int)ParseUInt32(data, ref currentIndex, false);
@@ -1187,7 +1172,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="data">data to be parsed</param>
         /// <param name="currentIndex">current parser index</param>
         /// <returns>RSA_PUBLIC_KEY</returns>
-        private RSA_PUBLIC_KEY ParseRsaPublicKey(byte[] data, ref int currentIndex)
+        private static RSA_PUBLIC_KEY ParseRsaPublicKey(byte[] data, ref int currentIndex)
         {
             RSA_PUBLIC_KEY key = new RSA_PUBLIC_KEY();
 
@@ -1211,6 +1196,104 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             return key;
         }
+
+        private static void DecodeX509RSAPublicKey(byte[] publicKey, out byte[] modulus, out byte[] publicExponent)
+        {
+            // An RSA public key should be represented with the ASN.1 type RSAPublicKey:
+            //    RSAPublicKey::= SEQUENCE {
+            //        modulus         INTEGER,  --n
+            //        publicExponent  INTEGER   --e
+            //    }
+
+            if (publicKey == null)
+            {
+                throw new Exception("publicKey should not be null!");
+            }
+
+            // 0x30 stands for "SEQUENCE", 0x02 stands for "INTEGER". publicKey[1] is the size of the SEQUENCE which we don't care.
+            if (publicKey[0] != 0x30 || publicKey[2] != 0x02)
+            {
+                throw new Exception("Invalid publicKey!");
+            }
+
+            int modulusLength = publicKey[3]; // publicKey[3] 
+            modulus = new byte[modulusLength];
+            Buffer.BlockCopy(publicKey, 4, modulus, 0, modulusLength);
+
+            // 0x02 stands for "INTEGER"
+            if (publicKey[4 + modulusLength] != 0x02)
+            {
+                throw new Exception("Invalid publicKey!");
+            }
+
+            int publicExponentLength = publicKey[5 + modulusLength];
+            publicExponent = new byte[publicExponentLength];
+            Buffer.BlockCopy(publicKey, 6 + modulusLength, publicExponent, 0, publicExponentLength);
+
+            // ASN.1 uses big-endian, but the Proprietary Server Certificate uses little-endian, to utilize them, save little-endian format for both cases.
+            Array.Reverse(publicExponent);
+            Array.Reverse(modulus);
+        }
+
+        /// <summary>
+        /// Decode the SERVER_CERTIFICATE structure
+        /// </summary>
+        public static SERVER_CERTIFICATE DecodeServerCertificate(byte[] data, ref int currentIndex, uint serverCertLen)
+        {
+            SERVER_CERTIFICATE cert = new SERVER_CERTIFICATE();
+            // According to [MS-RDPBCGR] section 2.2.1.4.3.1, there is a "t" (1-byte field) in the dwVersion.
+            // The real version is the 0-30 bit.
+            var version = ParseUInt32(data, ref currentIndex, false);
+            cert.dwVersion = (SERVER_CERTIFICATE_dwVersion_Values)(version & 0x0FFFF);
+            if (cert.dwVersion == SERVER_CERTIFICATE_dwVersion_Values.CERT_CHAIN_VERSION_1)
+            {
+                // proprietary server certificate
+                cert.certData = RdpbcgrDecoder.ParseProprietaryServerCertificate(data, ref currentIndex);
+            }
+            else if (cert.dwVersion == SERVER_CERTIFICATE_dwVersion_Values.CERT_CHAIN_VERSION_2)
+            {
+                // X509 certificate chain
+                cert.certData = RdpbcgrDecoder.ParseX509CertificateChain(data, ref currentIndex, (int)serverCertLen - 4);
+            }
+            else
+            {
+                throw new Exception($"Invalid dwVersion of SERVER_CERTIFICATE: {version}");
+            }
+
+            return cert;
+        }
+
+        /// <summary>
+        /// Decode the public key from the specified certificate
+        /// </summary>
+        public static void DecodePubicKey(SERVER_CERTIFICATE cert, out byte[] publicExponent, out byte[] modulus)
+        {
+            publicExponent = null;
+            modulus = null;
+            if (cert.dwVersion == SERVER_CERTIFICATE_dwVersion_Values.CERT_CHAIN_VERSION_1)
+            {
+                // proprietary server certificate
+                var proprietaryCert = (PROPRIETARYSERVERCERTIFICATE)cert.certData;
+                RSA_PUBLIC_KEY rsaPublicKey = proprietaryCert.PublicKeyBlob;
+                publicExponent = BitConverter.GetBytes(rsaPublicKey.pubExp);
+                modulus = rsaPublicKey.modulus;
+            }
+            else if (cert.dwVersion == SERVER_CERTIFICATE_dwVersion_Values.CERT_CHAIN_VERSION_2)
+            {
+                // X509 certificate chain
+                var x509CertChain = (X509_CERTIFICATE_CHAIN)cert.certData;
+                int len = x509CertChain.CertBlobArray.Length;
+                // The public key is in the leaf node of the cert chain.
+                var x509Cert = new X509Certificate2(x509CertChain.CertBlobArray[len - 1].abCert);
+                var publicKey = x509Cert.PublicKey.EncodedKeyValue.RawData;
+                RdpbcgrDecoder.DecodeX509RSAPublicKey(publicKey, out modulus, out publicExponent);
+            }
+            else
+            {
+                throw new Exception($"Invalid dwVersion of SERVER_CERTIFICATE: {cert.dwVersion}");
+            }
+        }
+
         #endregion Sub Field Parsers: Mcs Connect Response
 
 
@@ -4406,7 +4489,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             // Get bytes for only one packet
             byte[] packetData = GetPacket(receivedBytes);
-            if (null == packetData)
+            if (packetData == null || packetData.Length == 0)
             {
                 // Received bytes does not contain enough data
                 consumedLength = 0;
@@ -4418,11 +4501,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             try
             {
                 pdu = DecodePdu(packetData);
-                if (pdu.GetType() == typeof(Server_X_224_Connection_Confirm_Pdu))
-                {
-                    // Negotiation-based security-enhanced Connection
-                    client.UpdateTransport();
-                }
             }
             catch (Exception e)
             {
@@ -4450,7 +4528,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             // Get packet length according to PDU type (slow-path/fast-path)
             int packetLength = 0;
-            if (ConstValue.SLOW_PATH_PDU_INDICATOR_VALUE == receivedBytes[ConstValue.SLOW_PATH_PDU_INDICATOR_INDEX])
+
+            if (clientContext.IsExpectingEarlyUserAuthorizationResultPDU)
+            {
+                var pduUsedToCalculateSize = new Early_User_Authorization_Result_PDU();
+
+                int expectedLength = pduUsedToCalculateSize.ToBytes().Length;
+
+                if (receivedBytes.Length < expectedLength)
+                {
+                    // Not enough data for Early User Authorization Result PDU.
+                    return null;
+                }
+
+                packetLength = expectedLength;
+            }
+            else if (ConstValue.SLOW_PATH_PDU_INDICATOR_VALUE == receivedBytes[ConstValue.SLOW_PATH_PDU_INDICATOR_INDEX])
             {
                 // Slow-path PDU
                 if (receivedBytes.Length < Marshal.SizeOf(typeof(TpktHeader)))
@@ -4527,6 +4620,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 // switch RDSTLS PDU
                 pdu = SwitchRDSTLSAuthenticationPDU(data);
+            }
+            else if (clientContext.IsExpectingEarlyUserAuthorizationResultPDU)
+            {
+                var pduUsedToCalculateSize = new Early_User_Authorization_Result_PDU();
+
+                int expectedLength = pduUsedToCalculateSize.ToBytes().Length;
+
+                if (data.Length != expectedLength)
+                {
+                    // Inconsistent size for Early User Authorization Result PDU.
+                    throw new FormatException(ConstValue.ERROR_MESSAGE_DATA_LENGTH_INCONSISTENT);
+                }
+
+                pdu = DecodeEarlyUserAuthorizationResultPDU(data);
+
+                // Reset since one Early User Authorization Result PDU is expected.
+                clientContext.IsExpectingEarlyUserAuthorizationResultPDU = false;
             }
             else
             {
@@ -4653,6 +4763,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             return pdu;
         }
 
+        /// <summary>
+        /// Decode Early User Authorization Result PDU.
+        /// </summary>
+        /// <param name="data">Data containing the PDU to be decoded.</param>
+        /// <returns>A decoded Early User Authorization Result PDU.</returns>
+        public StackPacket DecodeEarlyUserAuthorizationResultPDU(byte[] data)
+        {
+            int currentIndex = 0;
+
+            var earlyUserAuthorizationResultPDU = new Early_User_Authorization_Result_PDU();
+
+            earlyUserAuthorizationResultPDU.authorizationResult = (Authorization_Result_value)ParseUInt32(data, ref currentIndex, false);
+
+
+            // Check if data length exceeded expectation.
+            VerifyDataLength(data.Length, currentIndex, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
+
+            return earlyUserAuthorizationResultPDU;
+        }
 
         /// <summary>
         /// [TD Reference 3.2.5.3.4]
@@ -4863,7 +4992,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 // RDPELE Type PDU
                 RdpelePdu elePdu = new RdpelePdu(clientContext);
                 elePdu.commonHeader = pdu.commonHeader;
-                elePdu.rdpeleData = decryptedUserData;
+                elePdu.preamble = pdu.preamble;
+
+                elePdu.rdpeleData = new byte[decryptedUserData.Length - userDataIndex];
+                Buffer.BlockCopy(decryptedUserData, userDataIndex, elePdu.rdpeleData, 0, decryptedUserData.Length - userDataIndex);
+
+                // If this is the last RDPELE message, change the client context status to end licensing packets processing.
+                if (pdu.preamble.bMsgType == bMsgType_Values.NEW_LICENSE
+                    || pdu.preamble.bMsgType == bMsgType_Values.UPGRADE_LICENSE)
+                {
+                    clientContext.IsWaitingLicenseErrorPdu = false;
+                }
+
                 return elePdu;
             }
 

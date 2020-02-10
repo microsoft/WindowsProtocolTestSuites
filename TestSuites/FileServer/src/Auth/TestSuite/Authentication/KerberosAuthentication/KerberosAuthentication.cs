@@ -43,6 +43,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             NEGOTIATE_WRONG_CHECKSUM_IN_MECHLISTMIC = 1 << 15,
         }
 
+        private Smb2FunctionalClientForKerbAuth smb2Client;
+
+        private Smb2FunctionalClientForKerbAuth smb2Client2;
+
         public const int DefaultKdcPort = 88;
 
         public static bool IsComputerInDomain;
@@ -111,10 +115,24 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                         TestConfig.DefaultSecurityPackage);
                     break;
             }
+
+            smb2Client = null;
+
+            smb2Client2 = null;
         }
 
         protected override void TestCleanup()
         {
+            if (smb2Client != null)
+            {
+                smb2Client.Disconnect();
+            }
+
+            if (smb2Client2 != null)
+            {
+                smb2Client2.Disconnect();
+            }
+
             base.TestCleanup();
         }
         #endregion
@@ -409,7 +427,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Create GSS Token");
             byte[] token = KerberosUtility.AddGssApiTokenHeader(request, OidPkt, GssToken);
 
-            Smb2FunctionalClientForKerbAuth smb2Client = new Smb2FunctionalClientForKerbAuth(TestConfig.Timeout, TestConfig, BaseTestSite);
+            smb2Client = new Smb2FunctionalClientForKerbAuth(TestConfig.Timeout, TestConfig, BaseTestSite);
             smb2Client.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             byte[] repToken;
 
@@ -434,7 +452,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
 
             #region Second client
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Replay the request from another client");
-            Smb2FunctionalClientForKerbAuth smb2Client2 = new Smb2FunctionalClientForKerbAuth(TestConfig.Timeout, TestConfig, BaseTestSite);
+            smb2Client2 = new Smb2FunctionalClientForKerbAuth(TestConfig.Timeout, TestConfig, BaseTestSite);
             smb2Client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             status = DoSessionSetupWithGssToken(smb2Client2, token, out repToken);
 
@@ -451,14 +469,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                 BaseTestSite.Assert.AreEqual(KRB_ERROR_CODE.KRB_AP_ERR_REPEAT, krbError.ErrorCode,
                     "SMB Server should return {0}", KRB_ERROR_CODE.KRB_AP_ERR_REPEAT);
             }
-            smb2Client2.Disconnect();
             #endregion
 
             string path = Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare);
             AccessFile(smb2Client, path);
 
             smb2Client.LogOff();
-            smb2Client.Disconnect();
         }
 
         [TestMethod]
@@ -715,7 +731,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                 token = AddMICTokenToGssApiToken(token, sequenceNumberForMICToken, keyForMICToken, mechListMICModifier);
             }
 
-            Smb2FunctionalClientForKerbAuth smb2Client = new Smb2FunctionalClientForKerbAuth(TestConfig.Timeout, TestConfig, BaseTestSite);
+            smb2Client = new Smb2FunctionalClientForKerbAuth(TestConfig.Timeout, TestConfig, BaseTestSite);
             smb2Client.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
 
             #region Check the result
@@ -740,7 +756,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                     BaseTestSite.Assert.AreEqual(KRB_ERROR_CODE.KRB_AP_ERR_BADMATCH, krbError.ErrorCode,
                         "SMB Server should return {0}", KRB_ERROR_CODE.KRB_AP_ERR_BADMATCH);
                 }
-                smb2Client.Disconnect();
                 return;
             }
             if (variant.HasFlag(CaseVariant.AUTHENTICATOR_WRONG_ENC_KEY) || variant.HasFlag(CaseVariant.TICKET_WRONG_ENC_KEY))
@@ -758,7 +773,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                     BaseTestSite.Assert.AreEqual(KRB_ERROR_CODE.KRB_AP_ERR_MODIFIED, krbError.ErrorCode,
                         "SMB Server should return {0}", KRB_ERROR_CODE.KRB_AP_ERR_MODIFIED);
                 }
-                smb2Client.Disconnect();
                 return;
             }
             if (variant.HasFlag(CaseVariant.AUTHENTICATOR_EXCEED_TIME_SKEW))
@@ -779,7 +793,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                     BaseTestSite.Assert.AreEqual(KRB_ERROR_CODE.KRB_AP_ERR_SKEW, krbError.ErrorCode,
                         "SMB Server should return {0}", KRB_ERROR_CODE.KRB_AP_ERR_SKEW);
                 }
-                smb2Client.Disconnect();
                 return;
             }
             if (variant.HasFlag(CaseVariant.TICKET_WRONG_KVNO) ||
@@ -806,7 +819,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                     BaseTestSite.Assert.AreEqual(KRB_ERROR_CODE.KRB_AP_ERR_TKT_NYV, krbError.ErrorCode,
                         "SMB Server should return {0}", KRB_ERROR_CODE.KRB_AP_ERR_TKT_NYV);
                 }
-                smb2Client.Disconnect();
                 return;
             }
             if (variant.HasFlag(CaseVariant.TICKET_EXPIRED))
@@ -825,14 +837,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                     BaseTestSite.Assert.AreEqual(KRB_ERROR_CODE.KRB_AP_ERR_TKT_EXPIRED, krbError.ErrorCode,
                         "SMB Server should return {0}", KRB_ERROR_CODE.KRB_AP_ERR_TKT_EXPIRED);
                 }
-                smb2Client.Disconnect();
                 return;
             }
             if (variant.HasFlag(CaseVariant.AUTHDATA_UNKNOWN_TYPE_IN_TKT))
             {
                 BaseTestSite.Assert.AreNotEqual(Smb2Status.STATUS_SUCCESS, status,
                     "Session Setup should fail because of the unknown AutherizationData in the ticket");
-                smb2Client.Disconnect();
                 return;
             }
             if (variant.HasFlag(CaseVariant.AUTHDATA_UNKNOWN_TYPE_IN_AUTHENTICATOR))
@@ -852,7 +862,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                 {
                     BaseTestSite.Assert.AreNotEqual(Smb2Status.STATUS_SUCCESS, status,
                         "Session Setup should fail because of the mechListMIC with invalid checksum in the negTokenInit.");
-                    smb2Client.Disconnect();
                     return;
                 }
                 else
@@ -886,7 +895,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             #endregion
 
             smb2Client.LogOff();
-            smb2Client.Disconnect();
         }
 
         private EncTicketPart RetrieveAndDecryptServiceTicket(KerberosFunctionalClient kerberosClient, out EncryptionKey serviceKey)

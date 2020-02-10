@@ -15,7 +15,7 @@ using Microsoft.Protocols.TestSuites.Rdpbcgr;
 
 namespace Microsoft.Protocols.TestSuites.Rdpedyc
 {    
-    public partial class RdpedycAdapter : ManagedAdapterBase, IRdpedycAdapter
+    public partial class RdpedycAdapter : ManagedAdapterBase
     {
         public const string SVCNameForEGT = "Microsoft::Windows::RDS::Geometry::v08.01";
 
@@ -25,15 +25,24 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
        
         public override void Reset()
         {
+            if (rdpedycClientStack != null)
+            {
+                rdpedycClientStack.Dispose();
+            }
+
+            this.bcgrAdapter.Reset();
             base.Reset();
+        }
+
+        public RdpedycAdapter(TestConfig testConfig)
+        {
+            this.bcgrAdapter = new RdpbcgrAdapter(testConfig);
         }
 
         public override void Initialize(ITestSite testSite )
         {
             base.Initialize(testSite);
-            this.bcgrAdapter = new RdpbcgrAdapter();
             bcgrAdapter.Initialize(testSite);
-            this.bcgrAdapter.Reset();
         }
 
         /// <summary>
@@ -95,7 +104,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
                 supportRemoteFXCodec
                 );
 
-            rdpedycClientStack = new RdpedycClient(bcgrAdapter.rdpbcgrClientStack, bcgrAdapter.rdpbcgrClientStack.Context, false);
+            rdpedycClientStack = new RdpedycClient(bcgrAdapter.rdpbcgrClientStack.Context, false);
             
         }
 

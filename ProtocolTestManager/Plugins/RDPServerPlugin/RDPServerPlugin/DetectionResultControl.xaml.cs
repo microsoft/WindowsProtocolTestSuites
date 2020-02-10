@@ -217,6 +217,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             AddResultItem(ref protocolItems, "MS-RDPBCGR", true);
             AddResultItem(ref protocolItems, "MS-RDPEDYC", detectionInfo.IsSupportRDPEDYC);
             AddResultItem(ref protocolItems, "MS-RDPEMT", detectionInfo.IsSupportRDPEMT);
+            AddResultItem(ref protocolItems, "MS-RDPELE", detectionInfo.IsSupportRDPELE);
 
             // Add featuresItems
             AddResultItem(ref featureItems, "Auto Reconnect", detectionInfo.IsSupportAutoReconnect);

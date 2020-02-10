@@ -124,6 +124,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
                 if (IPAddress.TryParse(sutName, out address))
                 {
+                    networkInfo.SUTIpList = new List<IPAddress>();
                     networkInfo.SUTIpList.Add(address);
                 }
                 else //DNS resolve the SUT IP address by SUT name

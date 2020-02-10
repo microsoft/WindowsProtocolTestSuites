@@ -14,6 +14,11 @@
       <ip>192.168.172.250</ip>
       <subnet>255.255.255.0</subnet>
     </vnet>
+    <vnet>
+      <hostisgateway>true</hostisgateway>
+      <name>External</name>
+      <networktype>External</networktype>
+    </vnet>    
   </network>
 
   <servers>
@@ -29,6 +34,10 @@
       <ip>192.168.172.1</ip>
       <gateway>Empty</gateway>
       <dns>Empty</dns>
+      <vnet>External</vnet>
+      <ip>Empty</ip>
+      <gateway>Empty</gateway>
+      <dns>Empty</dns>      
       <memory>4096</memory>
       <skipwaitingforpostscript>true</skipwaitingforpostscript>
       <postscript>Disable_Firewall.ps1;PostConfig-SUT.ps1</postscript>

@@ -44,6 +44,19 @@ function ExitCode()
     return $MyInvocation.ScriptLineNumber 
 }
 
+function GetDfsNsNameSuffix() {
+    $curFt = [DateTime]::UtcNow.ToFileTimeUtc()
+    $curFtBytes = [BitConverter]::GetBytes($curFt)
+    $suffix = if ([BitConverter]::IsLittleEndian) {
+        "$([BitConverter]::ToUInt32($curFtBytes, 0))" 
+    }
+    else {
+        "$([BitConverter]::ToUInt32($curFtBytes, 4))"
+    }
+
+    return $suffix
+}
+
 #----------------------------------------------------------------------------
 # Get content from protocol config file
 #----------------------------------------------------------------------------
@@ -136,25 +149,30 @@ Write-Info.ps1 "Add Link target to Stand-alone Namespace"
 cmd.exe /c dfscmd /map \\$serverComputerName\Standalone\DFSLink \\$targetServerName\FileShare /restore 2>&1 | Write-Info.ps1	
 
 Write-Info.ps1 "Add Interink to Stand-alone Namespace"
-cmd.exe /c dfscmd /map \\$serverComputerName\Standalone\Interlink \\$serverComputerName\SMBDfs\SMBDfsLink /restore 2>&1 | Write-Info.ps1	
+cmd.exe /c dfscmd /map \\$serverComputerName\Standalone\Interlink \\$serverComputerName\SMBDfs\SMBDfsLink /restore 2>&1 | Write-Info.ps1
 
 #----------------------------------------------------------------------------
 # Create DomainBased DFSC Environment
 #----------------------------------------------------------------------------
-if((gwmi win32_computersystem).partofdomain -eq $true)
-{
+if ((Get-WmiObject Win32_ComputerSystem).PartOfDomain -eq $true) {
+    Write-Info.ps1 "Create unique DomainBased DFS Namespace Name"
+    $domainBasedNsName = "DomainBased$(GetDfsNsNameSuffix)"
+
     Write-Info.ps1 "Create DomainBased shared folder"
-	Create-SMBShare.ps1 -name "DomainBased" -Path "$homeDrive\DFSRoots\DomainBased" -FullAccess "$fullAccessAccount"
+    Create-SMBShare.ps1 -name "$domainBasedNsName" -Path "$homeDrive\DFSRoots\$domainBasedNsName" -FullAccess "$fullAccessAccount"
 
-	Write-Info.ps1 "Create Domain-based DFS Namespace"
-	cmd.exe /c dfsutil root adddom \\$serverComputerName\DomainBased 2>&1 | Write-Info.ps1
+    Write-Info.ps1 "Create Domain-based DFS Namespace"
+    cmd.exe /c dfsutil root adddom \\$serverComputerName\$domainBasedNsName 2>&1 | Write-Info.ps1
 
- 	Write-Info.ps1 "Add Link target to Domain-based Namespace"
-	cmd.exe /c dfscmd /map \\$serverComputerName\DomainBased\DFSLink \\$targetServerName\FileShare /restore 2>&1 | Write-Info.ps1
+    Write-Info.ps1 "Add Link target to Domain-based Namespace"
+    cmd.exe /c dfscmd /map \\$serverComputerName\$domainBasedNsName\DFSLink \\$targetServerName\FileShare /restore 2>&1 | Write-Info.ps1
 
- 	Write-Info.ps1 "Add Interink to Domain-based Namespace"
- 	cmd.exe /c dfscmd /map \\$serverComputerName\DomainBased\Interlink \\$serverComputerName\SMBDfs\SMBDfsLink /restore	 2>&1 | Write-Info.ps1
- }
+    Write-Info.ps1 "Add Interink to Domain-based Namespace"
+    cmd.exe /c dfscmd /map \\$serverComputerName\$domainBasedNsName\Interlink \\$serverComputerName\SMBDfs\SMBDfsLink /restore 2>&1 | Write-Info.ps1
+     
+    Write-Info.ps1 "Write the DomainBased DFS Namespace name to a file"
+    Set-Content -Path "C:\DomainBased.txt" -Value $domainBasedNsName
+}
 
 #----------------------------------------------------------------------------
 # Ending

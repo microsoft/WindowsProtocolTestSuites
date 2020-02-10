@@ -9,14 +9,14 @@
     <!--Whether a negotiation protocol is used.-->
     <Property name="RDP.Security.Negotiation" value="True"/>
     <!--One of the TLS, CredSSP, or RDP.-->
-    <Property name="RDP.Security.Protocol" value="TLS"/>    
+    <Property name="RDP.Security.Protocol" value="TLS"/>
     <!--One of the TLS1.0, TLS1.1, or TLS1.2.-->
-    <Property name="RDP.Security.TLS.Version" value="TLS1.0"/>    
+    <Property name="RDP.Security.TLS.Version" value="TLS1.0"/>
 
     <!-- Domain of the tested RDP Server -->
     <Property name="RDP.ServerDomain" value=""/>
     <!-- Computer name or IP of the tested RDP Server-->
-    <Property name="RDP.ServerName" value="192.168.2.1"/>
+    <Property name="RDP.ServerName" value="192.168.172.1"/>
     <!-- Port of RDP service on RDP Server-->
     <Property name="RDP.ServerPort" value="3389"/>
     <!--The user name of local host (RDP server). -->
@@ -24,13 +24,13 @@
     <!--The logon password of "RDP.ServerUserName". -->
     <Property name="RDP.ServerUserPassword" value="Password01!"/>
     <!-- Computer name or IP of the driver computer-->
-    <Property name="RDP.ClientName" value="192.168.2.0"/>
-    
+    <Property name="RDP.ClientName" value="192.168.172.101"/>
+
     <!-- Whether verify RDPBCGR message received -->
     <Property name="VerifyRdpbcgrMessages" value="true"/>
     <!-- Whether verify SHOULD behaviors in TD -->
     <Property name="VerifyShouldBehaviors" value="true"/>
-   
+
     <!--Indicates if SUT is Windows Implementation.-->
     <Property name="IsWindowsImplementation" value="true">
       <Choice>true, false</Choice>
@@ -46,9 +46,14 @@
     <!-- Whether the SUT supports RDPEDYC. The value should be true or false.-->
     <Property name="RDPEDYCSupported" value="true"/>
 
-    <Property name="WaitTime" value="60"/>
+    <!-- Whether the SUT supports RDPELE. The value should be true or false.-->
+    <Property name="RDPELESupported" value="true"/>
+    <!--Whether the SUT issues a temporary license when issuing a license to the client for the first time-->
+    <Property name="IssueTemporaryLicenseForTheFirstTime" value="true"/>
+
+    <Property name="Timeout" value="60"/>
     <!-- Block End -->
-    
+
   </Properties>
   <Adapters>
   </Adapters>

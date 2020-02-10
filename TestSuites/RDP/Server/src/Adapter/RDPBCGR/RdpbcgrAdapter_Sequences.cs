@@ -102,7 +102,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             SendClientX224ConnectionRequest(NegativeType.None, requestedProtocols);
 
-            Server_X_224_Connection_Confirm_Pdu connectionConfirmPdu = ExpectPacket<Server_X_224_Connection_Confirm_Pdu>(pduWaitTimeSpan);
+            Server_X_224_Connection_Confirm_Pdu connectionConfirmPdu = ExpectPacket<Server_X_224_Connection_Confirm_Pdu>(testConfig.timeout);
             if (connectionConfirmPdu == null)
             {
                 TimeSpan waitTime = new TimeSpan(0, 0, 1);
@@ -126,7 +126,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             SendClientMCSConnectInitialPDU(NegativeType.None, SVCNames, supportEGFX, supportAutoDetect, supportHeartbeatPDU, supportMultitransportReliable, supportMultitransportLossy, false);
 
-            Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response connectResponsePdu = ExpectPacket<Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response>(pduWaitTimeSpan);
+            Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response connectResponsePdu = ExpectPacket<Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response>(testConfig.timeout);
             Site.Assert.IsNotNull(connectResponsePdu, "Expecting a Server MCS Connect Response PDU with GCC Conference Create Response.");
             if (connectResponsePdu.mcsCrsp.gccPdu.serverMultitransportChannelData != null)
             {
@@ -152,7 +152,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             SendClientMCSAttachUserRequest(NegativeType.None);
 
-            Server_MCS_Attach_User_Confirm_Pdu userConfirmPdu = ExpectPacket<Server_MCS_Attach_User_Confirm_Pdu>(pduWaitTimeSpan);
+            Server_MCS_Attach_User_Confirm_Pdu userConfirmPdu = ExpectPacket<Server_MCS_Attach_User_Confirm_Pdu>(testConfig.timeout);
             Site.Assert.IsNotNull(userConfirmPdu, "Expecting a Server MCS Attach User Confirm PDU.");
             
             ChannelJoinRequestAndConfirm();
@@ -175,14 +175,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #endregion
 
             #region Licensing
-            Server_License_Error_Pdu_Valid_Client licenseErrorPdu = ExpectPacket<Server_License_Error_Pdu_Valid_Client>(pduWaitTimeSpan);
-            Site.Assert.IsNotNull(licenseErrorPdu, "Expecting a Server License Error PDU.");
+            ProcessLicenseSequence(testConfig.timeout);
 
             #endregion
 
             #region Capabilities Exchange
 
-            Server_Demand_Active_Pdu demandActivePdu = ExpectPacket<Server_Demand_Active_Pdu>(pduWaitTimeSpan);
+            Server_Demand_Active_Pdu demandActivePdu = ExpectPacket<Server_Demand_Active_Pdu>(testConfig.timeout);
             Site.Assert.IsNotNull(demandActivePdu, "Expecting a Server Demand Active PDU.");
             
             SendClientConfirmActivePDU(NegativeType.None, supportAutoReconnect, supportFastPathInput, supportFastPathOutput, supportSurfaceCommands, supportSVCCompression, supportRemoteFXCodec);
@@ -193,17 +192,17 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             SendClientSynchronizePDU();
 
-            Server_Synchronize_Pdu syncPdu = ExpectPacket<Server_Synchronize_Pdu>(pduWaitTimeSpan);
+            Server_Synchronize_Pdu syncPdu = ExpectPacket<Server_Synchronize_Pdu>(testConfig.timeout);
             Site.Assert.IsNotNull(syncPdu, "Expecting a Server Synchronize PDU.");
             
-            Server_Control_Pdu_Cooperate CoopControlPdu = ExpectPacket<Server_Control_Pdu_Cooperate>(pduWaitTimeSpan);
+            Server_Control_Pdu_Cooperate CoopControlPdu = ExpectPacket<Server_Control_Pdu_Cooperate>(testConfig.timeout);
             Site.Assert.IsNotNull(CoopControlPdu, "Expecting a Server Control PDU - Cooperate.");
             
             SendClientControlCooperatePDU();
 
             SendClientControlRequestPDU();
 
-            Server_Control_Pdu_Granted_Control grantedControlPdu = ExpectPacket<Server_Control_Pdu_Granted_Control>(pduWaitTimeSpan);
+            Server_Control_Pdu_Granted_Control grantedControlPdu = ExpectPacket<Server_Control_Pdu_Granted_Control>(testConfig.timeout);
             Site.Assert.IsNotNull(grantedControlPdu, "Expecting a Server Control PDU - Granted Control.");
             
 
@@ -214,7 +213,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             SendClientFontListPDU();
 
-            Server_Font_Map_Pdu fontMapPdu = ExpectPacket<Server_Font_Map_Pdu>(pduWaitTimeSpan);
+            Server_Font_Map_Pdu fontMapPdu = ExpectPacket<Server_Font_Map_Pdu>(testConfig.timeout);
             Site.Assert.IsNotNull(fontMapPdu, "Expecting a Server Font Map PDU.");
             
             #endregion
@@ -252,7 +251,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             {
                 this.Site.Log.Add(LogEntryKind.Comment, "Start to create static virtual channel with channel ID {0}.", channelId);
                 SendClientMCSChannelJoinRequest(NegativeType.None, channelId);
-                Server_MCS_Channel_Join_Confirm_Pdu confirm = ExpectPacket<Server_MCS_Channel_Join_Confirm_Pdu>(pduWaitTimeSpan);
+                Server_MCS_Channel_Join_Confirm_Pdu confirm = ExpectPacket<Server_MCS_Channel_Join_Confirm_Pdu>(testConfig.timeout);
                 this.Site.Assert.IsNotNull(confirm, "The RDP Server MUST response a Channel Join Confirm PDU after receiving a Channel Join Request PDU.");
                 if (confirm.channelJoinConfirm.channelId.Value != channelId)
                 {
@@ -281,7 +280,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             ushort channelId = RDPEDYCChannel.ChannelId;
 
             // Expect a RDPEDYC caps request PDU            
-            Virtual_Channel_RAW_Server_Pdu svcPdu = this.ExpectPacket<Virtual_Channel_RAW_Server_Pdu>(pduWaitTimeSpan);
+            Virtual_Channel_RAW_Server_Pdu svcPdu = this.ExpectPacket<Virtual_Channel_RAW_Server_Pdu>(testConfig.timeout);
             if (svcPdu == null)
             {
                 Site.Assert.Fail("Timeout when receiving RDPEDYC static virtual channel data.");
@@ -509,7 +508,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             while (!sequenceCompleted)
             {
-                Server_Auto_Detect_Request_PDU autoDetectReq = this.ExpectPacket<Server_Auto_Detect_Request_PDU>(pduWaitTimeSpan);
+                Server_Auto_Detect_Request_PDU autoDetectReq = this.ExpectPacket<Server_Auto_Detect_Request_PDU>(testConfig.timeout);
                 Site.Assert.IsNotNull(autoDetectReq, "Timeout to receive a Server_Auto_Detect_Request_PDU before the auto-detect sequence completed.");
 
                 if (autoDetectReq.autoDetectReqData is RDP_RTT_REQUEST)

@@ -44,6 +44,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         private StreamConfig transportConfig;
         private bool isAutoReactivate;
         protected const ushort TS_UD_CS_SEC_SecurityDataSize = 12;
+        private const int SOCKET_RECEIVE_TIMEOUT = 1;
         private SslProtocols tlsVersion;
 
         /// <summary>
@@ -75,12 +76,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// A context contains all major PDUs information.
         /// </summary>
-        private RdpbcgrClientContext context;
+        public RdpbcgrClientContext context;
 
         /// <summary>
         /// This member indicates UpdateSessionKey has completed.
         /// </summary>
         private ManualResetEvent updateSessionKeyEvent;
+
+        /// <summary>
+        /// Indicating whether client disconnects with SUT or not.
+        /// </summary>
+        private bool disconnected;
 
         /// <summary>
         /// A context contains all needed information.
@@ -618,7 +624,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     ((CredSspStream)clientStream).Authenticate();
                 }
             }
-            // else it is only a simple tcp transport
+            else
+            {
+                // It is only a simple TCP transport.
+                // Set non-blocking mode.
+
+                tcpClient.Client.Blocking = false;
+                tcpClient.Client.ReceiveTimeout = SOCKET_RECEIVE_TIMEOUT;
+            }
 
             // create a transport config
             transportConfig = new StreamConfig();
@@ -650,9 +663,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                         new RemoteCertificateValidationCallback(ValidateServerCertificate),
                         null
                         );
-                    ((SslStream)clientStream).AuthenticateAsClient(serverName, null, TlsVersion, false);
                     transportConfig.Stream = clientStream;
-                    transportStack.UpdateConfig(transportConfig);
+                    transportStack.UpdateConfig(transportConfig, () =>
+                    {
+                        // Restore to blocking mode.
+                        tcpClient.Client.Blocking = true;
+                        tcpClient.Client.ReceiveTimeout = 0;
+
+                        ((SslStream)clientStream).AuthenticateAsClient(serverName, null, TlsVersion, false);
+                    });
                 }
             }
             else if (encryptedProtocol == EncryptedProtocol.NegotiationCredSsp)
@@ -671,9 +690,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                                                      target,
                                                      logonName,
                                                      logonPassword);
-                    ((CredSspStream)clientStream).Authenticate();
                     transportConfig.Stream = clientStream;
-                    transportStack.UpdateConfig(transportConfig);
+                    transportStack.UpdateConfig(transportConfig, () =>
+                    {
+                        // Restore to blocking mode.
+                        tcpClient.Client.Blocking = true;
+                        tcpClient.Client.ReceiveTimeout = 0;
+
+                        ((CredSspStream)clientStream).Authenticate();
+
+                        if (Context.ServerSelectedProtocol == (uint)selectedProtocols_Values.PROTOCOL_HYBRID_EX)
+                        {
+                            // Expect Early User Authorization Result PDU from SUT.
+                            Context.IsExpectingEarlyUserAuthorizationResultPDU = true;
+                        }
+                    });
                 }
             }
             // else do nothing
@@ -1233,6 +1264,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             context.LocalIdentity = tcpClient.Client.LocalEndPoint;
             context.RemoteIdentity = tcpClient.Client.RemoteEndPoint;
+
+            disconnected = false;
         }
 
 
@@ -1916,8 +1949,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     HMACMD5 hmac = new HMACMD5(context.ArcRandomBits);
 
                     byte[] clientRandom = null;
-                    if ((context.RequestedProtocol & requestedProtocols_Values.PROTOCOL_SSL_FLAG)
-                        == requestedProtocols_Values.PROTOCOL_SSL_FLAG)
+                    if (context.RequestedProtocol != requestedProtocols_Values.PROTOCOL_RDP_FLAG)
                     {
                         clientRandom = new byte[ConstValue.RECONNECT_CLIENT_RANDOM_LENGTH];
                     }
@@ -2476,21 +2508,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             fastpathInputPdu.fpInputEvents = new Collection<TS_FP_INPUT_EVENT>();
             TS_FP_INPUT_EVENT fpInputEvent = new TS_FP_INPUT_EVENT();
 
-            // actionCode (2 bits): A lower 2-bit code indicating whether the PDU is 
-            // in fast-path or slow-path format.
-            // numberEvents (4 bits): Collapses the number of fast-path input events 
-            // packed together in the fpInputEvents field into 4 bits if the number of 
-            // events is in the range 1 to 15.
-            fastpathInputPdu.fpInputHeader.actionCode =
-                (byte)(((int)actionCode_Values.FASTPATH_INPUT_ACTION_FASTPATH & 0x03)
-                | ((int)(ConstValue.FP_NUMBER_EVENTS & 0x0F) << 2));
+            fastpathInputPdu.fpInputHeader = new nested_TS_FP_INPUT_PDU_fpInputHeader(actionCode_Values.FASTPATH_INPUT_ACTION_FASTPATH, ConstValue.FP_NUMBER_EVENTS, encryptionFlags_Values.None);
 
             if (context.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE)
             {
-                // encryptionFlags (2 bits): A higher 2-bit field containing the flags 
-                // that describe the cryptographic parameters of the PDU.
-                fastpathInputPdu.fpInputHeader.actionCode |=
-                    (byte)((int)encryptionFlags_Values.FASTPATH_INPUT_ENCRYPTED << 6);
+                fastpathInputPdu.fpInputHeader.flags |= encryptionFlags_Values.FASTPATH_INPUT_ENCRYPTED;
             }
 
             fastpathInputPdu.dataSignature = null;
@@ -2578,21 +2600,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 eventNum = (byte)inputEvents.Length;
             }
 
-            // actionCode (2 bits): A lower 2-bit code indicating whether the PDU is 
-            // in fast-path or slow-path format.
-            // numberEvents (4 bits): Collapses the number of fast-path input events 
-            // packed together in the fpInputEvents field into 4 bits if the number of 
-            // events is in the range 1 to 15.
-            fastpathInputPdu.fpInputHeader.actionCode =
-                (byte)(((int)actionCode_Values.FASTPATH_INPUT_ACTION_FASTPATH & 0x03)
-                | ((int)(eventNum & 0x0F) << 2));
+            fastpathInputPdu.fpInputHeader = new nested_TS_FP_INPUT_PDU_fpInputHeader(actionCode_Values.FASTPATH_INPUT_ACTION_FASTPATH, eventNum, encryptionFlags_Values.None);
 
             if (context.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE)
             {
-                // encryptionFlags (2 bits): A higher 2-bit field containing the flags 
-                // that describe the cryptographic parameters of the PDU.
-                fastpathInputPdu.fpInputHeader.actionCode |=
-                    (byte)((int)encryptionFlags_Values.FASTPATH_INPUT_ENCRYPTED << 6);
+                fastpathInputPdu.fpInputHeader.flags |= encryptionFlags_Values.FASTPATH_INPUT_ENCRYPTED;
             }
 
             fastpathInputPdu.dataSignature = null;
@@ -2910,6 +2922,87 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             CheckEncryptionCount();
         }
 
+        private StackPacket ExpectPdu(TimeSpan timeout, Func<StackPacket, bool> filter)
+        {
+            if (timeout.TotalMilliseconds < 0)
+            {
+                return null;
+            }
+
+            // Return the packet in the buffer, which is unprocessed packet.
+            StackPacket packet = this.context.GetPacketFromBuffer(filter);
+
+            if (packet != null)
+            {
+                return packet;
+            }
+
+            if (disconnected)
+            {
+                // No more packet would be available since disconnected.
+                return null;
+            }
+
+            TransportEvent eventPacket = null;
+
+            TimeSpan leftTime = timeout;
+            DateTime endTime = DateTime.Now + timeout;
+
+            while (leftTime.TotalMilliseconds > 0)
+            {
+                eventPacket = transportStack.ExpectTransportEvent(leftTime);
+                packet = (StackPacket)eventPacket.EventObject;
+
+                if (eventPacket.EventType == EventType.Disconnected)
+                {
+                    disconnected = true;
+                    break;
+                }
+                else if (eventPacket.EventType == EventType.Exception)
+                {
+                    packet = new ErrorPdu(eventPacket.EventObject as Exception);
+                }
+
+                if (packet is ErrorPdu)
+                {
+                    // Receive thread has ended due to an exception of error PDU.
+                    disconnected = true;
+                }
+
+                if (packet is Server_X_224_Connection_Confirm_Pdu)
+                {
+                    // Negotiation-based security-enhanced Connection
+                    UpdateTransport();
+                }
+
+                if (isAutoReactivate && (packet is Server_Deactivate_All_Pdu))
+                {
+                    Reactivate(timeout);
+                }
+
+                if (filter(packet))
+                {
+                    // Return the packet if it is requested.
+                    return packet;
+                }
+                else
+                {
+                    // Add the packet to buffer if it is not requested.
+                    context.AddPacketToBuffer(packet);
+                }
+
+                if (disconnected)
+                {
+                    // No more packets from receive thread.
+                    break;
+                }
+
+                leftTime = endTime - DateTime.Now;
+            }
+
+            return null;
+        }
+
 
         /// <summary>
         /// Expect to receive a PDU of any type except virtual channel PDU from the remote host.
@@ -2920,38 +3013,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <exception>TimeoutException.</exception>
         public StackPacket ExpectPdu(TimeSpan timeout)
         {
-            if (timeout.TotalMilliseconds < 0)
-            {
-                return null;
-            }
+            var result = ExpectPdu(timeout, packet => true);
 
-            // Return the packet is the buffer contains unprocessed packet
-            StackPacket packet = this.context.GetPacketFromBuffer();
-            if (packet != null)
-            {
-                return packet;
-            }
-
-            TransportEvent eventPacket = null;
-
-            TimeSpan leftTime = timeout;
-            DateTime endTime = DateTime.Now + timeout;
-            while (leftTime.TotalMilliseconds > 0)
-            {
-                eventPacket = transportStack.ExpectTransportEvent(leftTime);
-                packet = (StackPacket)eventPacket.EventObject;
-                if (isAutoReactivate && (packet is Server_Deactivate_All_Pdu))
-                {
-                    Reactivate(timeout);
-                }
-                else
-                {
-                    return packet;
-                }
-                leftTime = endTime - DateTime.Now;
-            }
-
-            return null;
+            return result;
         }
 
         /// <summary>
@@ -2962,46 +3026,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <exception>TimeoutException.</exception>
         public StackPacket ExpectChannelPdu(TimeSpan timeout)
         {
-            if (timeout.TotalMilliseconds < 0)
+            var result = ExpectPdu(timeout, packet =>
             {
-                return null;
-            }
-
-            StackPacket packet = this.context.GetPacketFromBuffer(true);
-            if (packet != null)
-            {
-                return packet;
-            }
-
-            TimeSpan leftTime = timeout;
-            DateTime endtime = DateTime.Now - timeout;
-
-            while (leftTime.TotalMilliseconds > 0)
-            {
-                TransportEvent eventPacket = transportStack.ExpectTransportEvent(leftTime);
-                packet = (StackPacket)eventPacket.EventObject;
-                if (isAutoReactivate && (packet is Server_Deactivate_All_Pdu))
+                if (packet is MCS_Disconnect_Provider_Ultimatum_Pdu
+                         || packet is ErrorPdu
+                         || packet is Virtual_Channel_RAW_Server_Pdu)                       // some error occurs
                 {
-                    Reactivate(timeout);
+                    return true;
                 }
-                else
-                {
-                    if (packet is MCS_Disconnect_Provider_Ultimatum_Pdu
-                     || packet is ErrorPdu
-                     || packet is Virtual_Channel_RAW_Server_Pdu)                       // some error occurs
-                    {
-                        return packet;
-                    }
-                    else
-                    {
-                        this.context.AddPacketToBuffer(packet);
-                    }
-                }
-                // The remain time to expect
-                leftTime = endtime - DateTime.Now;
-            }
+                return false;
+            });
 
-            return packet;
+            return result;
         }
 
         /// <summary>
@@ -3119,6 +3155,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             return packet;
         }
 
+        /// <summary>
+        /// Expect disconnection event from SUT.
+        /// </summary>
+        /// <param name="timeout">Timeout.</param>
+        /// <exception>TimeoutException.</exception>
+
+        public void ExpectDisconnect(TimeSpan timeout)
+        {
+            transportStack.ExpectDisconnect(timeout);
+        }
         #endregion raw API
 
 

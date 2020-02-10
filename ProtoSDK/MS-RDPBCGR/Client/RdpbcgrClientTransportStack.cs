@@ -6,6 +6,7 @@ using System.Threading;
 using System.Net.Sockets;
 using System.Collections.Generic;
 using Microsoft.Protocols.TestTools.StackSdk.Transport;
+using System.Linq;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 {
@@ -52,7 +53,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// Used to stop the thread
         /// </summary>
         private bool stopThread = false;
-                
+
         /// <summary>
         /// a SyncFilterQueue&lt;TransportEvent&gt; object that contains the event,
         /// such as disconnected and exception.<para/>
@@ -86,7 +87,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// </summary>
         public PacketFilter PacketFilter;
 
-        public const int MilliSecondsToWaitStreamDataAvailable = 1;
+        /// <summary>
+        /// A boolean to avoid double disconnect.
+        /// </summary>
+        private bool disconnected = false;
 
         #endregion
 
@@ -161,7 +165,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 throw new InvalidOperationException("stream client is connected.");
             }
-            
+
             this.eventQueue.Clear();
             this.packetCache.Clear();
 
@@ -171,6 +175,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             this.thread = new Thread(StreamReceiveLoop);
             this.thread.IsBackground = true;
+            this.thread.Name = "StreamReceiveLoop() of RdpbcgrClientTransportStack";
             this.stopThread = false;
             this.thread.Start();
 
@@ -236,6 +241,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="config">
         /// a TransportConfig object that contains the config to update
         /// </param>
+        /// <param name="auth">An action which authenticates with SUT.</param>
         /// <exception cref="ArgumentException">
         /// thrown when transportConfig is not StreamTransport
         /// </exception>
@@ -245,7 +251,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <exception cref="ArgumentNullException">
         /// thrown when config is null.
         /// </exception>
-        public void UpdateConfig(TransportConfig config)
+        public void UpdateConfig(TransportConfig config, Action auth = null)
         {
             if (disposed)
             {
@@ -277,10 +283,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             #region update the underlayer stream.
 
             // abort the blocked receive thread.
-            if (this.thread != null)
+            EndThread();
+
+            // Authenticate with SUT.
+            if (auth != null)
             {
-                this.stopThread = true;
-                this.thread = null;
+                auth();
             }
 
             // reconnect to received data from new stream.
@@ -293,6 +301,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             #endregion
         }
 
+        private void EndThread()
+        {
+            if (thread != null)
+            {
+                if (thread.IsAlive)
+                {
+                    stopThread = true;
+                }
+
+                thread.Join();
+
+                thread = null;
+            }
+        }
 
         /// <summary>
         /// expect transport event from transport.<para/>
@@ -371,6 +393,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 throw new ObjectDisposedException("StreamTransport");
             }
 
+            if (disconnected)
+            {
+                return;
+            }
+
+            disconnected = true;
+
             if (this.stream == null)
             {
                 throw new InvalidOperationException(
@@ -382,12 +411,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 throw new InvalidOperationException("the received thread does not initialize.");
             }
 
-            if (this.thread.IsAlive)
-            {
-                this.stopThread = true;                
-            }
+            this.stream.Close();
 
-            this.thread = null;
+            EndThread();
 
             this.stream.Dispose();
             this.stream = null;
@@ -502,7 +528,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             this.stream.Write(message, 0, message.Length);
         }
-        
+
         /// <summary>
         /// expect packet from transport.<para/>
         /// the underlayer transport must be TcpClient, Stream or NetbiosClient.
@@ -532,10 +558,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     "stream client is not connected, must invoke Connect() first.");
             }
 
-            
+
             StackPacket packet = packetCache.Dequeue(timeout);
             return packet;
-            
+
         }
 
         #endregion
@@ -573,21 +599,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 // If disposing equals true, dispose all managed and unmanaged resources.
                 if (disposing)
                 {
+                    // Disconnect with SUT.
+                    Disconnect();
+
                     // Free managed resources & other reference types:
-                    if (this.thread != null)
-                    {
-                        if(this.thread.IsAlive)
-                        {
-                            this.thread.Abort();
-                            this.thread.Join();
-                        }
-                        this.thread = null;
-                    }
-                    if (this.stream != null)
-                    {
-                        this.stream.Dispose();
-                        this.stream = null;
-                    }
                     if (this.eventQueue != null)
                     {
                         // the SyncFilterQueue may throw exception, donot arise exception.
@@ -630,10 +645,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 this.StreamReceiveLoopImp();
             }
-            catch
+            catch (Exception ex)
             {
-                // Throw no exception
-            }            
+                // Log unhandled exception by adding an exception event.
+                this.AddEvent(new TransportEvent(EventType.Exception, null, this.localEndPoint, ex));
+            }
         }
 
 
@@ -648,22 +664,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             while (!this.stopThread)
             {
-                // if the underlayer stream is network stream, using the unblock mode.
-                if (networkStream != null)
-                {
-                    // wait for the exit event or stream data is available.
-                    while (!this.stopThread && !networkStream.DataAvailable)
-                    {
-                        Thread.Sleep(MilliSecondsToWaitStreamDataAvailable);
-                    }
-
-                    // if is exit event, do not read and exit.
-                    if (this.stopThread)
-                    {
-                        break;
-                    }
-                }
-
                 int receivedLength = 0;
 
                 // read event
@@ -682,31 +682,82 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     }
 
                     this.buffer.AddRange(ArrayUtility.SubArray<byte>(data, 0, receivedLength));
+
                     int expectedLength = 0;
+
                     int consumedLength = 0;
-                    StackPacket[] packets = decoder(localEndPoint, buffer.ToArray(), out consumedLength, out expectedLength);
-                    while (packets != null)
+
+                    bool errorPduReceived = false;
+
+                    while (buffer.Count > 0)
                     {
-                        foreach(StackPacket packet in packets)
+                        StackPacket[] packets = decoder(localEndPoint, buffer.ToArray(), out consumedLength, out expectedLength);
+
+                        if (packets == null)
+                        {
+                            break;
+                        }
+
+                        foreach (StackPacket packet in packets)
                         {
                             packetCache.Enqueue(packet);
+                        }
+
+                        if (packets.Any(packet => packet is ErrorPdu))
+                        {
+                            errorPduReceived = true;
                         }
 
                         if (consumedLength > 0)
                         {
                             buffer.RemoveRange(0, consumedLength);
                         }
+                    }
 
-                        packets = decoder(localEndPoint, buffer.ToArray(), out consumedLength, out expectedLength);
+                    if (errorPduReceived)
+                    {
+                        // Exit since ErrorPdu is received from decoder. 
+                        break;
                     }
                 }
                 catch (Exception ex)
                 {
-                    // handle exception event, return.
-                    this.AddEvent(new TransportEvent(
-                        EventType.Exception, null, this.localEndPoint, ex));
+                    bool handled = false;
 
-                    throw;
+                    bool exit = false;
+
+                    if (ex is IOException ioException)
+                    {
+                        if (ioException.InnerException is SocketException socketException)
+                        {
+                            if (socketException.SocketErrorCode == SocketError.ConnectionReset)
+                            {
+                                // Add the disconnected transport event, if connection is reset by SUT.
+                                this.AddEvent(new TransportEvent(EventType.Disconnected, null, this.localEndPoint, null));
+
+                                handled = true;
+
+                                exit = true;
+                            }
+
+                            if (socketException.SocketErrorCode == SocketError.WouldBlock)
+                            {
+                                // No data was received within receive timeout.
+                                handled = true;
+                            }
+                        }
+                    }
+
+                    if (!handled)
+                    {
+                        // Throw to outside handler.
+                        throw;
+                    }
+
+                    if (exit)
+                    {
+                        break;
+                    }
                 }
             }
         }

@@ -1,0 +1,25 @@
+trigger: 
+  batch : true
+  branches:
+    include: 
+    - staging
+
+variables:
+  - group: External Repo Variables
+
+resources:
+  repositories:
+    - repository: template
+      type: git
+      name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
+      ref: AzurePipelines
+
+jobs:
+  - template: pipelines/Sync/Merge-Branch-steps.yml@template
+    parameters:
+        extRepoUrl: $(extRepo.url)
+        extRepoDir: $(Build.BinariesDirectory)
+        extRepoBranch: $(extRepo.helperBranch)    
+        RemoteName: $(repo.RemoteName)
+        RemoteUrl: $(repo.RemoteUrl)
+        BranchesToMerge: $(repo.BranchesToMerge)

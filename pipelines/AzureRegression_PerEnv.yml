@@ -1,0 +1,24 @@
+trigger: none 
+
+variables:
+  - group: Azure Account
+  - group: External Repo Variables
+  - group: Build Variables
+
+resources:
+  repositories:
+    - repository: template
+      type: git
+      name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
+      ref: AzurePipelines
+
+jobs:
+  - template: pipelines/Azure/AzureRegression_PerENV-steps.yml@template
+    parameters:
+      extRepoUrl: $(extRepo.url)
+      extRepoDir: $(extRepo.dir)
+      RootSharePath: $(build.sharePath)
+      TestSuiteName: $(test.testSuiteName)
+      EnvironmentName: $(test.environmentName)
+      BuildShareFolder: $(test.buildShareFolder)      
+      HelperBranch: $(test.helperBranch)

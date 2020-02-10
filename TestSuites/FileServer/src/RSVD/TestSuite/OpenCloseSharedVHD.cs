@@ -90,7 +90,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1.	Client opens a shared virtual disk file with SMB2 create context SVHDX_OPEN_DEVICE_CONTEXT and expects success.");
             Smb2CreateContextResponse[] serverContextResponse;
             OpenSharedVHD(TestConfig.NameOfSharedVHDX, RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_1, null, true, null, out serverContextResponse, null);
-
             CheckOpenDeviceContext(serverContextResponse);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "2.	Client closes the file.");
@@ -107,7 +106,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1.	Client opens a shared virtual disk file with SMB2 create context SVHDX_OPEN_DEVICE_CONTEXT_V2 and expects success.");
             Smb2CreateContextResponse[] serverContextResponse;
             OpenSharedVHD(TestConfig.NameOfSharedVHDS, RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_2, null, true, null, out serverContextResponse, null);
-            CheckOpenDeviceContext(serverContextResponse);
+            CheckOpenDeviceContext(serverContextResponse);            
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "2.	Client closes the file.");
             client.CloseSharedVirtualDisk();
@@ -217,8 +216,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
         {
             // <9> Section 3.2.5.1:  Windows Server 2012 R2 without [MSKB-3025091] doesn't return SVHDX_OPEN_DEVICE_CONTEXT_RESPONSE.
             if (TestConfig.Platform == Platform.WindowsServer2012R2)
+            { 
                 return;
-
+            }
+            
             foreach (var context in servercreatecontexts)
             {
                 Type type = context.GetType();
@@ -236,7 +237,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
                     VerifyFieldInResponse("SectorSize", TestConfig.PhysicalSectorSize, openDeviceContext.PhysicalSectorSize);
                     VerifyFieldInResponse("VirtualSize", TestConfig.VirtualSize, openDeviceContext.VirtualSize);
                 }
-            }
+            }          
+                        
         }
     }
 }

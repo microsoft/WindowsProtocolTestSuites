@@ -10,7 +10,7 @@ However, each test suite provides users with a useful indication of interoperabi
 * **SMB1 Server Test Suite**. It covers the requirements documented by [MS-SMB], and those documented by other protocols which are related to [MS-SMB], i.e. [MS-FSCC] and [MS-CIFS].
 * **File Server Family Test Suite**. It is designed to test implementations of file server protocol family including [MS-SMB2], [MS-DFSC], [MS-SWN], [MS-FSRVP], [MS-FSA], [MS-RSVD] and [MS-SQOS].
 * **RDP Client Family Test Suite**. It provides interoperability testing for client implementation of RDP family protocols including [MS-RDPBCGR], [MS-RDPEDISP], [MS-RDPEDYC], [MS-RDPEGFX], [MS-RDPEGT], [MS-RDPEI], [MS-RDPEMT], [MS-RDPEUDP], [MS-RDPEUSB], [MS-RDPEVOR] and [MS-RDPRFX].
-* **RDP Server Family Test Suite**. It provides interoperability testing for server implementation of RDP family protocols including [MS-RDPBCGR], [MS-RDPEDYC] and [MS-RDPEMT].  
+* **RDP Server Family Test Suite**. It provides interoperability testing for server implementation of RDP family protocols including [MS-RDPBCGR], [MS-RDPEDYC], [MS-RDPEMT] and [MS-RDPELE].  
 * **Kerberos Server Test Suite**. It is designed to test server implementations of Kerberos protocols including [MS-KILE], [MS-KKDCP] and [MS-PAC].
 * **SMBD Server Test Suite**. It is designed to test the implementations of SMB2&3 direct (RDMA) protocol, as specified in [MS-SMBD] and [MS-SMB2].
 * **Branch Cache Test Suite**. It is designed to test the implementations of [MS-PCCRTP], [MS-PCCRR], [MS-PCHC] and [MS-PCCRC] protocol.
@@ -53,9 +53,9 @@ You should install the software listed below based on your testing purpose, incl
 
 1. [Spec Explorer 2010 v3.5.3146.0](https://visualstudiogallery.msdn.microsoft.com/271d0904-f178-4ce9-956b-d9bfa4902745/)
 
-   It is only required if you want to build or run the test suites that contain Model-Based Test cases. If you want to regenerate Model-Based Test cases, you must install Visual Studio 2012.
+   It is required if you want to build or run the test suites. It is used to implement test scenarios and cases utilizing [Model-Based Testing].
 
-1. [Protocol Test Framework build 1.0 (build 1.0.7000.0)](https://github.com/Microsoft/ProtocolTestFramework/releases/tag/1.0.7000.0)
+1. [Protocol Test Framework build 1.0 (build 1.0.7500.0)](https://github.com/Microsoft/ProtocolTestFramework/releases/tag/1.0.7500.0)
 
    You can use a released MSI file or build it from source code.
 
@@ -76,9 +76,11 @@ You should install the software listed below based on your testing purpose, incl
 
    It is required if you want to build Protocol Test Manager. Please download `nuget.exe` into a suitable folder and add that folder to `Path` environment variable 
 
-1. [Microsoft Message Analyzer](https://www.microsoft.com/en-us/download/details.aspx?id=44226)
+1. Microsoft Message Analyzer
 
    It is required if you want to build or run ADFamily, ADOD and AZOD test suites.
+   
+   November 25 2019 - Microsoft Message Analyzer (MMA) has been retired and removed from public-facing sites on microsoft.com. A private MMA build is available for testing purposes; to request it, send an email to [getmma@microsoft.com](mailto:getmma@microsoft.com).
 
 1. [Open XML SDK](https://www.microsoft.com/en-us/download/details.aspx?id=30425)
 
@@ -128,6 +130,8 @@ Some test suites use [Model-Based Testing](https://msdn.microsoft.com/en-us/libr
 * **AZOD Test Suite**
 * **ADOD Test Suite**
 
+If you want to regenerate Model-Based Test cases, you must install Visual Studio 2012.
+
 ## Build
 
 After you [clone a copy](https://help.github.com/articles/cloning-a-repository/) of this repo, you can run `build.cmd` for Protocol Test Manager and each test suite separately after you have installed all the softwares required for build listed in [Prerequisites](#prerequisites)
@@ -166,11 +170,11 @@ There are two more documents in the same folder:
 
 ## Contribute
 
-You can find contributing guide [here](./blob/master/CONTRIBUTING.md).
+You can find contributing guide [here](./CONTRIBUTING.md).
 
 ## License
 
-Windows Protocol Test Suites are under the [MIT license](./blob/master/LICENSE.txt).
+Windows Protocol Test Suites are under the [MIT license](./LICENSE.txt).
 
 ## Contact
 The following resources are for Windows protocol test suite news, discussion, and support:

@@ -1,0 +1,27 @@
+trigger: none 
+
+variables:
+  - group: Azure Account
+  - group: Build Variables
+  - group: External Repo Variables
+  - group: SMTP Account
+  - name: test.buildTag
+    value: $(Build.DefinitionName)-$(Build.BuildNumber)
+
+resources:
+  repositories:
+    - repository: template
+      type: git
+      name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
+      ref: AzurePipelines
+
+jobs:
+  - template: pipelines/local/LocalRegression-steps.yml@template
+    parameters:
+      extRepoUrl: $(extRepo.url)
+      extRepoDir: $(extRepo.dir)
+      configFile: $(build.localRegressionConfigFile)
+      RootSharePath: $(build.sharePath)
+      TestSuiteName: $(test.testSuiteName)
+      EnvironmentName: $(test.environmentName)
+      HelperBranch: $(test.helperBranch)

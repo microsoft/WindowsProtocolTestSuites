@@ -338,7 +338,7 @@ All common softwares listed in [prerequisites](https://github.com/microsoft/Wind
 
     ![](./image/FileServerUserGuide/image1.png)Note
 
-    You can download the latest Message Analyzer from below website. [http://www.microsoft.com/en-us/download/details.aspx?id=44226](http://www.microsoft.com/en-us/download/details.aspx?id=44226)
+    November 25 2019 - Microsoft Message Analyzer (MMA) has been retired and removed from public-facing sites on microsoft.com. A private MMA build is available for testing purposes; to request it, send an email to [getmma@microsoft.com](mailto:getmma@microsoft.com).
 
 ## <a name="4"/> 4 Network Setup
 
@@ -663,7 +663,7 @@ The following summarizes the steps for creating symbolic links.
 
       * In the folder **SMBBasic**, add a symbolic link named **Symboliclink**, which will link to **%SystemDrive%**.
 
-  2. Add a **Symbolic Link** to the **SMBBasic\Sub** folder:
+  2. Add a **Symbolic Link** to the **SMBBasic** folder:
 
       * Add a new folder named **Sub** under the **SMBBasic** folder.
 

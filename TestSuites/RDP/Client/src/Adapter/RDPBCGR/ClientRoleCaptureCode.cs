@@ -476,16 +476,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="fpInputPdu"></param>
         public void VerifyPdu(TS_FP_INPUT_PDU fpInputPdu)
         {
-            int actionCode;
-            int numberEvents;
-            int encryptionFlags;
             TS_FP_INPUT_EVENT e;
 
-            actionCode = fpInputPdu.fpInputHeader.actionCode & 0x3;
-            numberEvents = (fpInputPdu.fpInputHeader.actionCode & 0x3c) >> 2;
-            encryptionFlags = (fpInputPdu.fpInputHeader.actionCode & 0xc0) >> 6;
+            var actionCode = fpInputPdu.fpInputHeader.action;
+            int numberEvents = fpInputPdu.fpInputHeader.numEvents;
+            var encryptionFlags = fpInputPdu.fpInputHeader.flags;
 
-            CaptureRequirement(actionCode == 0 || actionCode == 3,
+            CaptureRequirement(actionCode == actionCode_Values.FASTPATH_INPUT_ACTION_FASTPATH || actionCode == actionCode_Values.FASTPATH_INPUT_ACTION_X224,
                 @"In TS_FP_INPUT_PDU structure, action is a 2-bit, unsigned integer that indicates whether the PDU is in fast-path (0) or slow-path format (3)."
                 );
 
@@ -520,7 +517,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             if (fpInputPdu.dataSignature == null)
                 Console.WriteLine("fpInputPdu.dataSignature is null");
 
-            if (encryptionFlags == (int)encryptionFlags_Values.FASTPATH_INPUT_ENCRYPTED)
+            if (encryptionFlags == encryptionFlags_Values.FASTPATH_INPUT_ENCRYPTED)
             {
                 site.Assert.IsNotNull(fpInputPdu.dataSignature,
                     @"In TS_FP_INPUT_PDU structure, the dataSignature MUST be present if the FASTPATH_INPUT_ENCRYPTED"

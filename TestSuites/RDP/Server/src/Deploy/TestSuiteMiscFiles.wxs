@@ -19,6 +19,7 @@
       <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Messages.dll" />
       <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpbcgr.dll" />
       <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpedyc.dll" />
+      <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpele.dll" />
       <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpemt.dll" />
       <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpeudp.dll" />
       <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdprfx.dll" />
@@ -33,6 +34,7 @@
       <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Messages.pdb" />
       <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpbcgr.pdb" />
       <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpedyc.pdb" />
+      <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpele.pdb" />
       <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpemt.pdb" />
       <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpeudp.pdb" />
       <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdprfx.pdb" />
@@ -73,6 +75,11 @@
       <Component Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpedyc.dll" Guid="{178BCA68-26FD-427C-AF68-C7E89F6923FE}">
         <File Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpedyc.dll"
               Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc.dll" />
+      </Component>
+
+      <Component Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpele.dll" Guid="{47FEE890-973D-430C-8F9F-F4A246B90F6B}">
+        <File Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpele.dll"
+              Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele.dll" />
       </Component>
 
       <Component Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpbcgr.dll" Guid="{A2E7A451-0903-48AB-98B6-0F0BF9B02F57}">
@@ -138,6 +145,11 @@
       <Component Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpedyc.pdb" Guid="{8BDCDBC9-9F10-4E21-93EB-3ED233C8D60A}">
         <File Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpedyc.pdb"
               Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc.pdb" />
+      </Component>
+
+      <Component Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpele.pdb" Guid="{1E8274E7-995D-40C2-B5BE-DB92F9290819}">
+        <File Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpele.pdb"
+              Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele.pdb" />
       </Component>
 
       <Component Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpbcgr.pdb" Guid="{3F7C7B55-CEFD-4422-AC9A-5C456076BF30}">

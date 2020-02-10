@@ -106,11 +106,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
         #region Constructor
 
-        public Smb2FunctionalClient(TimeSpan timeout, TestConfigBase testConfig, ITestSite baseTestSite)
+        public Smb2FunctionalClient(TimeSpan timeout, TestConfigBase testConfig, ITestSite baseTestSite, bool checkEncrypt = true)
         {
             client = new Smb2Client(timeout);
             this.testConfig = testConfig;
             client.DisableVerifySignature = this.testConfig.DisableVerifySignature;
+            client.CheckEncrypt = checkEncrypt; // Whether to check the response from the server is actually encrypted.
 
             sequenceWindow = new SortedSet<ulong>();
             sequenceWindow.Add(0);
@@ -435,13 +436,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
         public uint MultiProtocolNegotiate(
             string[] dialects,
-            ResponseChecker<NEGOTIATE_Response> checker = null,
-            bool ifHandleRejectUnencryptedAccessSeparately = false,
-            bool ifAddGLOBAL_CAP_ENCRYPTION = true)
+            ResponseChecker<NEGOTIATE_Response> checker = null)
         {
-            Packet_Header header;
-            NEGOTIATE_Response negotiateResponse;
-
+            Smb2NegotiateResponsePacket negotiateResponse;
+            SmbNegotiateRequestPacket request;
             ulong messageId = generateMessageId(sequenceWindow);
             ushort creditCharge = generateCreditCharge(1);
 
@@ -452,18 +450,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 dialects,
                 out selectedDialect,
                 out serverGssToken,
-                out header,
+                out request,
                 out negotiateResponse);
-
-            maxBufferSize = negotiateResponse.MaxReadSize < negotiateResponse.MaxWriteSize ?
-                negotiateResponse.MaxReadSize : negotiateResponse.MaxWriteSize;
+            Packet_Header header = negotiateResponse.Header;
+            maxBufferSize = negotiateResponse.PayLoad.MaxReadSize < negotiateResponse.PayLoad.MaxWriteSize ?
+                negotiateResponse.PayLoad.MaxReadSize : negotiateResponse.PayLoad.MaxWriteSize;
 
             SetCreditGoal();
 
             ProduceCredit(messageId, header);
 
-            InnerResponseChecker(checker, header, negotiateResponse);
-
+            InnerResponseChecker(checker, header, negotiateResponse.PayLoad);
+            testConfig.CheckNegotiateContext(request, negotiateResponse);  //request is not set any negotiatecontext here so set it null.
             return status;
         }
 
@@ -527,9 +525,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                                 header.CreditRequestResponse >= 1,
                                 "The server SHOULD<168> grant the client a non-zero value of credits in response to any non-zero value requested, within administratively configured limits. The server MUST grant the client at least 1 credit when responding to SMB2 NEGOTIATE, actually server returns {0}", header.CreditRequestResponse);
                         }
-                    },
-                    ifHandleRejectUnencryptedAccessSeparately,
-                    ifAddGLOBAL_CAP_ENCRYPTION
+                    }
                 );
 
                 if (isSmb2002Selected)
@@ -634,8 +630,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             bool addNetNameContextId = false
             )
         {
-            Packet_Header header;
-            NEGOTIATE_Response negotiateResponse;
             SMB2_NETNAME_NEGOTIATE_CONTEXT_ID netNameContext = null;
 
             ulong messageId = generateMessageId(sequenceWindow);
@@ -673,6 +667,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 netNameContext.NetName = testConfig.SutComputerName.ToArray();
                 netNameContext.Header.DataLength = netNameContext.GetDataLength();
             }
+            Smb2NegotiateRequestPacket negotiateRequest;
+            Smb2NegotiateResponsePacket negotiateResponse;
 
             uint status = client.Negotiate(              
                creditCharge,
@@ -685,7 +681,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                clientGuid.Value,
                out selectedDialect,
                out serverGssToken,
-               out header,
+               out negotiateRequest,
                out negotiateResponse,
                preauthHashAlgs: preauthHashAlgs,
                encryptionAlgs: encryptionAlgs,
@@ -702,19 +698,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 }
             }
 
-            maxBufferSize = negotiateResponse.MaxReadSize < negotiateResponse.MaxWriteSize ?
-                negotiateResponse.MaxReadSize : negotiateResponse.MaxWriteSize;
+            maxBufferSize = negotiateResponse.PayLoad.MaxReadSize <negotiateResponse.PayLoad.MaxWriteSize ?
+                negotiateResponse.PayLoad.MaxReadSize : negotiateResponse.PayLoad.MaxWriteSize;
 
-            maxTransactSize = negotiateResponse.MaxTransactSize;
+            maxTransactSize = negotiateResponse.PayLoad.MaxTransactSize;
 
             baseTestSite.Assert.IsTrue(
-                header.CreditRequestResponse >= 1,
-                "The server SHOULD<168> grant the client a non-zero value of credits in response to any non-zero value requested, within administratively configured limits. The server MUST grant the client at least 1 credit when responding to SMB2 NEGOTIATE, actually server returns {0}", header.CreditRequestResponse);
+                negotiateResponse.Header.CreditRequestResponse >= 1,
+                "The server SHOULD<168> grant the client a non-zero value of credits in response to any non-zero value requested, within administratively configured limits. The server MUST grant the client at least 1 credit when responding to SMB2 NEGOTIATE, actually server returns {0}", negotiateResponse.Header.CreditRequestResponse);
 
             SetCreditGoal();
 
-            ProduceCredit(messageId, header);
-            InnerResponseChecker(checker, header, negotiateResponse);
+            ProduceCredit(messageId, negotiateResponse.Header);
+            InnerResponseChecker(checker, negotiateResponse.Header, negotiateResponse.PayLoad);
+            testConfig.CheckNegotiateContext(negotiateRequest, negotiateResponse);
 
             return status;
         }

@@ -171,6 +171,24 @@ namespace Microsoft.Protocols.TestManager.UI {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        internal static string Error {
+            get {
+                return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Some exception(s) happened during execution. Please open an issue on our GitHub site at [https://github.com/Microsoft/WindowsProtocolTestSuites/issues]. The exception log could be found at [{0}]..
+        /// </summary>
+        internal static string ExceptionsHappendWithLogsRecorded {
+            get {
+                return ResourceManager.GetString("ExceptionsHappendWithLogsRecorded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This feature is detected not supported..
         /// </summary>
         internal static string FeatureNotSupported {
@@ -189,20 +207,29 @@ namespace Microsoft.Protocols.TestManager.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to   You can get the latest released test suites from .
+        ///   Looks up a localized string similar to Please visit our GitHub repo at [https://aka.ms/wpts], if you have any questions, issues or suggestions..
         /// </summary>
-        internal static string GetLatestRelease {
+        internal static string HintForGitHub {
             get {
-                return ResourceManager.GetString("GetLatestRelease", resourceCulture);
+                return ResourceManager.GetString("HintForGitHub", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to   To configure and run Windows Protocol Test Suites, you should install at least one test suite..
+        ///   Looks up a localized string similar to To configure and run Windows Protocol Test Suites, you should install at least one test suite. You can get the latest released test suites from [https://github.com/microsoft/WindowsProtocolTestSuites/releases/latest]. Restart Protocol Test Manager after you install the test suite..
         /// </summary>
-        internal static string InstallAtLeastOneTestSuite {
+        internal static string HintForNoTestSuiteInstalled {
             get {
-                return ResourceManager.GetString("InstallAtLeastOneTestSuite", resourceCulture);
+                return ResourceManager.GetString("HintForNoTestSuiteInstalled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Information.
+        /// </summary>
+        internal static string Information {
+            get {
+                return ResourceManager.GetString("Information", resourceCulture);
             }
         }
         
@@ -243,6 +270,15 @@ namespace Microsoft.Protocols.TestManager.UI {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Test agent exited unexpectedly with no test case being executed..
+        /// </summary>
+        internal static string NoTestExecuted {
+            get {
+                return ResourceManager.GetString("NoTestExecuted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} test cases in the play list are not found..
         /// </summary>
         internal static string NotFoundCaseMessage {
@@ -271,20 +307,11 @@ namespace Microsoft.Protocols.TestManager.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://github.com/microsoft/WindowsProtocolTestSuites/releases/latest.
+        ///   Looks up a localized string similar to ProtocolTestManager is already running....
         /// </summary>
-        internal static string ReleaseLink {
+        internal static string PTMRunning {
             get {
-                return ResourceManager.GetString("ReleaseLink", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to   Restart Protocol Test Manager after you install the test suite..
-        /// </summary>
-        internal static string RestartPTM {
-            get {
-                return ResourceManager.GetString("RestartPTM", resourceCulture);
+                return ResourceManager.GetString("PTMRunning", resourceCulture);
             }
         }
         
@@ -425,15 +452,6 @@ namespace Microsoft.Protocols.TestManager.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to this link..
-        /// </summary>
-        internal static string ThisLink {
-            get {
-                return ResourceManager.GetString("ThisLink", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Protocol Test Manager - {0} {1}.
         /// </summary>
         internal static string TitleFormat {
@@ -457,6 +475,15 @@ namespace Microsoft.Protocols.TestManager.UI {
         internal static string VSFileName {
             get {
                 return ResourceManager.GetString("VSFileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning.
+        /// </summary>
+        internal static string Warning {
+            get {
+                return ResourceManager.GetString("Warning", resourceCulture);
             }
         }
     }
