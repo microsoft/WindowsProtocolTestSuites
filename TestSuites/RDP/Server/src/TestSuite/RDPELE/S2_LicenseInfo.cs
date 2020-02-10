@@ -17,6 +17,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpele
         [Priority(0)]
         [TestCategory("RDPELE")]
         [TestCategory("BVT")]
+        [TestCategory("RDP7.0")]
         [Description(@"This test case is used to verify SUT can handle Client License Information message correctly. ")]
         public void S2_ELE_LicenseInfo()
         {
@@ -85,6 +86,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpele
                     $"The error code of the ERROR_ALERT message should be STATUS_VALID_CLIENT, the real error code is {licensePdu.LicensingMessage.LicenseError.Value.dwErrorCode}");
             }
 
-        }
+        }           
+       
     }
 }

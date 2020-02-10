@@ -51,6 +51,9 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         private const string ServerPort = "Server Port";
         private const string ServerUserName = "Server User Name";
         private const string ServerUserPassword = "Server User Password";
+        private const string TLSVersion = "TLSVersion";
+        private const string Negotiation = "Negotiation";
+        private const string SecurityProtocol = "Security Protocol";
 
         #endregion Private Types
 
@@ -92,6 +95,10 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             prereq.AddProperty(RDPValueDetector.ServerPort, config.ServerPort);
             prereq.AddProperty(RDPValueDetector.ServerUserName, config.ServerUserName);
             prereq.AddProperty(RDPValueDetector.ServerUserPassword, config.ServerUserPassword);
+            prereq.AddProperty(RDPValueDetector.TLSVersion, config.TLSVersion);
+            prereq.AddProperty(RDPValueDetector.Negotiation, config.Negotiation);
+            prereq.AddProperty(RDPValueDetector.SecurityProtocol, config.SecurityProtocol);
+            
             return prereq;
         }
 
@@ -108,6 +115,12 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         public bool SetPrerequisiteProperties(Dictionary<string, string> properties)
         {
             this.properties = properties;
+            // Save the prerequisites set by user
+            detectionInfo.SUTName = properties[ServerName];
+            detectionInfo.DomainName = properties[ServerDomain];
+            detectionInfo.UserName = properties[ServerUserName];
+            detectionInfo.Port = properties[ServerPort];
+            detectionInfo.TLSVersion = properties[TLSVersion];
             return true;
         }
 
@@ -146,6 +159,9 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 config.ServerPort = properties[RDPValueDetector.ServerPort];
                 config.ServerUserName = properties[RDPValueDetector.ServerUserName];
                 config.ServerUserPassword = properties[RDPValueDetector.ServerUserPassword];
+                config.TLSVersion = properties[RDPValueDetector.TLSVersion];
+                config.Negotiation = properties[RDPValueDetector.Negotiation];
+                config.SecurityProtocol = properties[RDPValueDetector.SecurityProtocol];
                 config.ClientName = Dns.GetHostName();
 
                 DetectorUtil.WriteLog("Finished!", false, LogStyle.StepPassed);
@@ -195,18 +211,33 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
             #region RDP Version
             var rdpVersion = detectionInfo.Version;
-            if (rdpVersion > TS_UD_SC_CORE_version_Values.V1)
+
+            if (rdpVersion >= TS_UD_SC_CORE_version_Values.V2)
             {
                 caseList.Add(CreateRule("RDP Version.RDP 70", true));
                 caseList.Add(CreateRule("RDP Version.RDP 80", true));
                 caseList.Add(CreateRule("RDP Version.RDP 81", true));
             }
+
+            if (rdpVersion >= TS_UD_SC_CORE_version_Values.V3)
+            {
+                caseList.Add(CreateRule("RDP Version.RDP 10.0", true));
+                caseList.Add(CreateRule("RDP Version.RDP 10.1", true));
+                caseList.Add(CreateRule("RDP Version.RDP 10.2", true));
+                caseList.Add(CreateRule("RDP Version.RDP 10.3", true));
+                caseList.Add(CreateRule("RDP Version.RDP 10.4", true));
+                caseList.Add(CreateRule("RDP Version.RDP 10.5", true));
+                caseList.Add(CreateRule("RDP Version.RDP 10.6", true));
+                caseList.Add(CreateRule("RDP Version.RDP 10.7", true));
+            }          
+
             #endregion RDP Version
 
             #region Protocols
             caseList.Add(CreateRule("Protocol.RDPBCGR", true));
             caseList.Add(CreateRule("Protocol.RDPEDYC", detectionInfo.IsSupportRDPEDYC));
             caseList.Add(CreateRule("Protocol.RDPEMT", detectionInfo.IsSupportRDPEMT));
+            caseList.Add(CreateRule("Protocol.RDPELE", detectionInfo.IsSupportRDPELE));
             #endregion Protocols
 
             return caseList;

@@ -3973,7 +3973,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         PREAMBLE_VERSION_2_0 = 0x02,
 
         /// <summary>
-        ///  RDP 5.0, 5.1, and 5.2.
+        /// RDP 5.0, 5.1, 5.2, 6.0, 6.1, 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4, and 10.5
         /// </summary>
         PREAMBLE_VERSION_3_0 = 0x03,
 

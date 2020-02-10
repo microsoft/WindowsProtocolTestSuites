@@ -16,6 +16,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpele
         [Priority(0)]
         [TestCategory("RDPELE")]
         [TestCategory("BVT")]
+        [TestCategory("RDP7.0")]
         [Description("This test case is used to verify SUT can handle Client New License Request correctly. ")]
         public void S1_ELE_NewLicenseRequest()
         {
@@ -45,5 +46,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpele
             licensePdu = rdpbcgrAdapter.rdpeleClient.ExpectPdu(testConfig.timeout);
             Site.Assert.AreEqual(bMsgType_Values.NEW_LICENSE, licensePdu.preamble.bMsgType, $"A NEW_LICENSE message should be received from server, the real message type is {licensePdu.preamble.bMsgType}");
         }
+       
     }
 }

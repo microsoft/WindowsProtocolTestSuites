@@ -18,6 +18,10 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
     {
         // Parameters for Detecting
         public string SUTName;
+        public string DomainName;
+        public string UserName;
+        public string Port;
+        public string TLSVersion;
 
         // Detect Result
         public TS_UD_SC_CORE_version_Values Version;
@@ -27,6 +31,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
         public bool IsSupportRDPEDYC = false;
         public bool IsSupportRDPEMT = false;
+        public bool IsSupportRDPELE = false;
     }
 
     public class ResultItemMap
