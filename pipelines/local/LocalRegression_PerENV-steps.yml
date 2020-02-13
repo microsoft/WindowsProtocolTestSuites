@@ -72,7 +72,7 @@ jobs:
       displayName: TestSuiteCases
       inputs:
         filePath: '$(Agent.HomeDirectory)/../WinteropProtocolTesting/VSTORMLITE/Execute-TestSuiteCases.ps1'
-        arguments: '-TestSuiteName $env:TestSuiteName -EnvironmentName $env:EnvironmentName -SubscriptionId "$(azure.subscriptionId)" -applicationId "$(azure.applicationId)" -thumbPrint "$(azure.thumbPrint)" -tenantId "$(azure.tenantId)" '
+        arguments: '-TestSuiteName $env:TestSuiteName -EnvironmentName $env:EnvironmentName -SubscriptionId "$(azure.subscriptionId)" -applicationId "$(azure.applicationId)" -thumbPrint "$(azure.thumbPrint)" -tenantId "$(azure.tenantId)" -resultStorageAccount "$(azure.resultStorageAccount)" -fileShareResourceGroup "$(azure.fileShareResourceGroup)" '
         errorActionPreference: continue
       env:
         TestSuiteName: ${{parameters.TestSuiteName}}
