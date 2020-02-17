@@ -279,6 +279,15 @@ namespace Microsoft.Protocols.TestManager.UI {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No test results met the selected criteria..
+        /// </summary>
+        internal static string NoTestResults {
+            get {
+                return ResourceManager.GetString("NoTestResults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} test cases in the play list are not found..
         /// </summary>
         internal static string NotFoundCaseMessage {
