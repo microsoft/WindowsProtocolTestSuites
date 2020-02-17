@@ -51,11 +51,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <param name="filename">File name of the exported report</param>
         public override bool ExportReport(string filename)
         {
-            if (this.testCases.Count() == 0)
-            {
-                return false;
-            }
-
             using (StreamWriter sw = new StreamWriter(filename))
             {
                 var serializerSettings = new JsonSerializerSettings
