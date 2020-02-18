@@ -268,7 +268,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             FileDirectoryInformation[] directoryInformation = FsaUtility.UnmarshalFileInformationArray<FileDirectoryInformation>(outputBuffer);
             Site.Assert.AreEqual(3, directoryInformation.Length, "The returned Buffer should contain 3 entries of FileDirectoryInformation.");
             VerifyFileInformation(directoryInformation[0], 1, ".", FileAttribute.DIRECTORY, 0, 0);
-            VerifyFileInformation(directoryInformation[1], 2, "..", FileAttribute.DIRECTORY, 0, 0);
+            VerifyFileInformation(directoryInformation[1], 2, "..", FileAttribute.DIRECTORY, 0, 0, false);
             VerifyFileInformation(directoryInformation[2], 3, fileName, FileAttribute.ARCHIVE, BytesToWrite, this.fsaAdapter.ClusterSizeInKB * 1024);
         }
 
@@ -289,7 +289,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             FileFullDirectoryInformation[] directoryInformation = FsaUtility.UnmarshalFileInformationArray<FileFullDirectoryInformation>(outputBuffer);
             Site.Assert.AreEqual(3, directoryInformation.Length, "The returned Buffer should contain 3 entries of FileFullDirectoryInformation.");
             VerifyFileInformation(directoryInformation[0], 1, ".", FileAttribute.DIRECTORY, 0, 0, 0);
-            VerifyFileInformation(directoryInformation[1], 2, "..", FileAttribute.DIRECTORY, 0, 0, 0);
+            VerifyFileInformation(directoryInformation[1], 2, "..", FileAttribute.DIRECTORY, 0, 0, 0, false);
             VerifyFileInformation(directoryInformation[2], 3, fileName, FileAttribute.ARCHIVE, BytesToWrite, this.fsaAdapter.ClusterSizeInKB * 1024, 0);
         }
 
@@ -321,7 +321,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
                 Site.Assert.AreEqual(0, directoryInformation[0].FileId, "FileId of the entry should be 0 if the file system does not support a 64-bit file ID.");
             }
 
-            VerifyFileInformation(directoryInformation[1], 2, "..", FileAttribute.DIRECTORY, 0, 0, 0);
+            VerifyFileInformation(directoryInformation[1], 2, "..", FileAttribute.DIRECTORY, 0, 0, 0, false);
             //The NTFS, ReFS, FAT, and exFAT file systems return a FileId value of 0 for the entry named ".." in directory query operations.
             if (this.fsaAdapter.FileSystem == FileSystem.NTFS || this.fsaAdapter.FileSystem == FileSystem.REFS || this.fsaAdapter.FileSystem == FileSystem.FAT
                 || this.fsaAdapter.FileSystem == FileSystem.EXFAT)
@@ -358,7 +358,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             FileBothDirectoryInformation[] directoryInformation = FsaUtility.UnmarshalFileInformationArray<FileBothDirectoryInformation>(outputBuffer);
             Site.Assert.AreEqual(3, directoryInformation.Length, "The returned Buffer should contain 3 entries of FileBothDirectoryInformation.");
             VerifyFileInformation(directoryInformation[0], 1, ".", FileAttribute.DIRECTORY, 0, 0, 0, "");
-            VerifyFileInformation(directoryInformation[1], 2, "..", FileAttribute.DIRECTORY, 0, 0, 0, "");
+            VerifyFileInformation(directoryInformation[1], 2, "..", FileAttribute.DIRECTORY, 0, 0, 0, "", false);
             VerifyFileInformation(directoryInformation[2], 3, fileName, FileAttribute.ARCHIVE, BytesToWrite, this.fsaAdapter.ClusterSizeInKB * 1024, 0, GetShortName(fileName));
         }
 
@@ -390,7 +390,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
                 Site.Assert.AreEqual(0, directoryInformation[0].FileId, "FileId of the entry should be 0 if the file system does not support a 64-bit file ID.");
             }
 
-            VerifyFileInformation(directoryInformation[1], 2, "..", FileAttribute.DIRECTORY, 0, 0, 0, "");
+            VerifyFileInformation(directoryInformation[1], 2, "..", FileAttribute.DIRECTORY, 0, 0, 0, "", false);
             //The NTFS, ReFS, FAT, and exFAT file systems return a FileId value of 0 for the entry named ".." in directory query operations.
             if (this.fsaAdapter.FileSystem == FileSystem.NTFS || this.fsaAdapter.FileSystem == FileSystem.REFS || this.fsaAdapter.FileSystem == FileSystem.FAT
                 || this.fsaAdapter.FileSystem == FileSystem.EXFAT)
@@ -554,17 +554,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             DateTime dateTime = DateTime.FromFileTimeUtc((((long)fileTime.dwHighDateTime) << 32) | fileTime.dwLowDateTime);
             Site.Log.Add(LogEntryKind.Debug, "The {0} is {1}", fileTimeName, dateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"));
             TimeSpan interval = now.Subtract(dateTime);
-            Site.Assert.IsTrue(interval.TotalSeconds < expectedIntervalInSeconds, $"{fileTimeName} should be close to current time.");
+            Site.Assert.IsTrue(interval.TotalSeconds < expectedIntervalInSeconds, $"{fileTimeName} should be close to (within {expectedIntervalInSeconds} seconds) current time. " + 
+                "Check the setting of Time Zone on both Driver and SUT if the validation fails.");
         }
 
         /// <summary>
         /// Verify the FileCommonDirectoryInformation structure which is shared by 
         /// FileDirectoryInformation, FileFullDirectoryInformation, FileIdFullDirectoryInformation, FileBothDirectoryInformation, FileIdBothDirectoryInformation
         /// </summary>
-        /// <param name="entry"></param>
-        /// <param name="fileAttribute"></param>
-        private void VerifyFileCommonDirectoryInformation(FileCommonDirectoryInformation entry, FileAttribute fileAttribute)
+        private void VerifyFileCommonDirectoryInformation(FileCommonDirectoryInformation entry, FileAttribute fileAttribute, bool verifyFileTime)
         {
+            Site.Assert.IsTrue(
+                ((FileAttribute)entry.FileAttributes).HasFlag(fileAttribute),
+                "The FileAttributes of the entry should contain {0}.", fileAttribute);
+
+            if (!verifyFileTime)
+            {
+                // Stop here if FileTime does not need to be verified.
+                return;
+            }
+
             DateTime now = DateTime.UtcNow;
             Site.Log.Add(LogEntryKind.Debug, "The current time is {0}", now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
 
@@ -594,19 +603,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
                 // FAT does not support ChangeTime.
                 VerifyFileTime(now, entry.ChangeTime, "ChangeTime", 2); 
             }
-
-            Site.Assert.IsTrue(
-                ((FileAttribute)entry.FileAttributes).HasFlag(fileAttribute),
-                "The FileAttributes of the entry should contain {0}.", fileAttribute);
         }
 
         /// <summary>
         /// Verify FileDirectoryInformation entry
         /// </summary>
-        private void VerifyFileInformation(FileDirectoryInformation entry, int index, string fileName, FileAttribute fileAttribute, long endOfFile, long allocationSize)
+        private void VerifyFileInformation(
+            FileDirectoryInformation entry, 
+            int index, 
+            string fileName, 
+            FileAttribute fileAttribute, 
+            long endOfFile, 
+            long allocationSize,
+            bool verifyFileTime = true)
         {
             Site.Log.Add(LogEntryKind.Debug, $"Start to verify entry {index}.");
-            VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute);
+            VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute, verifyFileTime);
             Site.Assert.AreEqual(fileName, Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
             Site.Assert.AreEqual(endOfFile, entry.FileCommonDirectoryInformation.EndOfFile, "The EndOfFile of the entry should be 0.");
             Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, "The AllocationSize of the entry should be 0.");
@@ -615,10 +627,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         /// <summary>
         /// Verify FileFullDirectoryInformation entry
         /// </summary>
-        private void VerifyFileInformation(FileFullDirectoryInformation entry, int index, string fileName, FileAttribute fileAttribute, long endofFile, long allocationSize, uint eaSize)
+        private void VerifyFileInformation(
+            FileFullDirectoryInformation entry, 
+            int index, 
+            string fileName, 
+            FileAttribute fileAttribute, 
+            long endofFile, 
+            long allocationSize, 
+            uint eaSize,
+            bool verifyFileTime = true)
         {
             Site.Log.Add(LogEntryKind.Debug, $"Start to verify entry {index}.");
-            VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute);
+            VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute, verifyFileTime);
             Site.Assert.AreEqual(fileName, Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
             Site.Assert.AreEqual(endofFile, entry.FileCommonDirectoryInformation.EndOfFile, "The EndOfFile of the entry should be 0.");
             Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, "The AllocationSize of the entry should be 0.");
@@ -628,10 +648,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         /// <summary>
         /// Verify FileIdFullDirectoryInformation entry
         /// </summary>
-        private void VerifyFileInformation(FileIdFullDirectoryInformation entry, int index, string fileName, FileAttribute fileAttribute, long endofFile, long allocationSize, uint eaSize)
+        private void VerifyFileInformation(
+            FileIdFullDirectoryInformation entry, 
+            int index, 
+            string fileName, 
+            FileAttribute fileAttribute, 
+            long endofFile, 
+            long allocationSize, 
+            uint eaSize,
+            bool verifyFileTime = true)
         {
             Site.Log.Add(LogEntryKind.Debug, $"Start to verify entry {index}.");
-            VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute);
+            VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute, verifyFileTime);
             Site.Assert.AreEqual(fileName, Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
             Site.Assert.AreEqual(endofFile, entry.FileCommonDirectoryInformation.EndOfFile, "The EndOfFile of the entry should be 0.");
             Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, "The AllocationSize of the entry should be 0.");
@@ -641,10 +669,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         /// <summary>
         /// Verify FileBothDirectoryInformation entry
         /// </summary>
-        private void VerifyFileInformation(FileBothDirectoryInformation entry, int index, string fileName, FileAttribute fileAttribute, long endofFile, long allocationSize, uint eaSize, string shortName)
+        private void VerifyFileInformation(
+            FileBothDirectoryInformation entry,
+            int index,
+            string fileName, 
+            FileAttribute fileAttribute,
+            long endofFile, 
+            long allocationSize, 
+            uint eaSize, 
+            string shortName,
+            bool verifyFileTime = true)
         {
             Site.Log.Add(LogEntryKind.Debug, $"Start to verify entry {index}.");
-            VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute);
+            VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute, verifyFileTime);
             Site.Assert.AreEqual(fileName, Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
             Site.Assert.AreEqual(endofFile, entry.FileCommonDirectoryInformation.EndOfFile, "The EndOfFile of the entry should be 0.");
             Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, "The AllocationSize of the entry should be 0.");
@@ -656,10 +693,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         /// <summary>
         /// Verify FileIdBothDirectoryInformation entry
         /// </summary>
-        private void VerifyFileInformation(FileIdBothDirectoryInformation entry, int index, string fileName, FileAttribute fileAttribute, long endofFile, long allocationSize, uint eaSize, string shortName)
+        private void VerifyFileInformation(
+            FileIdBothDirectoryInformation entry, 
+            int index, 
+            string fileName, 
+            FileAttribute fileAttribute,
+            long endofFile, 
+            long allocationSize, 
+            uint eaSize, 
+            string shortName,
+            bool verifyFileTime = true)
         {
             Site.Log.Add(LogEntryKind.Debug, $"Start to verify entry {index}.");
-            VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute);
+            VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute, verifyFileTime);
             Site.Assert.AreEqual(fileName, Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
             Site.Assert.AreEqual(endofFile, entry.FileCommonDirectoryInformation.EndOfFile, "The EndOfFile of the entry should be 0.");
             Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, "The AllocationSize of the entry should be 0.");
