@@ -62,7 +62,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             Prerequisites prerequisites = new Prerequisites();
 
             prerequisites.Title = "FileServer";
-            prerequisites.Summary = "Please input the below info to detect SUT.\r\nIf SUT is in WORKGROUP, leave Domain Name blank.";
+            prerequisites.Summary = "Please input the below info to detect SUT.\r\nIf SUT is in WORKGROUP, set it to the value of SutComputerName.\r\nIf SUT does not have a computer name, leave it blank.";
 
             Dictionary<string, List<string>> propertiesDic = new Dictionary<string, List<string>>();
 
