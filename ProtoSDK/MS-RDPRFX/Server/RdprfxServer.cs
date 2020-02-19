@@ -77,7 +77,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx
             rfxContext.CodecChannelT.blockType = blockType_Value.WBT_CONTEXT;
             rfxContext.CodecChannelT.blockLen = 13;
             rfxContext.CodecChannelT.codecId = 0x01;
-            rfxContext.CodecChannelT.channelId = 0x00;
+            rfxContext.CodecChannelT.channelId = 0xFF;
             rfxContext.ctxId = 0x00;
             rfxContext.tileSize = 0x0040;
 
