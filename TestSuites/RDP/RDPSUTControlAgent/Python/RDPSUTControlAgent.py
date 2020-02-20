@@ -109,8 +109,8 @@ class Payload:
             if address_length:
                 start += 2
                 self.address = unpack(
-                    '<%sc' % address_length, raw_payload[start:start + address_length])
-                self.address = str(b''.join(self.address))
+                    '<%ss' % address_length, raw_payload[start:start + address_length])
+                self.address = self.address[0].decode('utf-8', errors="ignore")
                 logging.debug("address", self.address)
         else:
             logging.error("wrong payload type")
@@ -133,7 +133,7 @@ class Message:
         packer = struct.Struct('< h h h i %ss h i i i' %
                                len(self.testcase_name))
         fields = (self.type, self.testsuite_id, self.command_id,
-                  len(self.testcase_name), str(self.testcase_name),
+                  len(self.testcase_name), self.testcase_name,
                   self.request_id, self.rc, 0, 0)
         packed_data = packer.pack(*fields)
         logging.debug('sending "%s"' % binascii.hexlify(packed_data))
@@ -278,6 +278,7 @@ def main():
     port = int(config.get('general', 'bind_port'))
 
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     while True:
         try:
             server.bind((ip_address, port))
@@ -288,13 +289,12 @@ def main():
     logging.info("Listening on %s:%s" % (ip_address, port))
 
     while True:
-        client_sock, address = server.accept()
-        client_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        connection, address = server.accept()
         logging.info("Accepted connection from %s:%s" %
                      (address[0], address[1]))
         client_handler = threading.Thread(
             target=handle_connection,
-            args=(client_sock, config)
+            args=(connection, config)
         )
         client_handler.start()
 
