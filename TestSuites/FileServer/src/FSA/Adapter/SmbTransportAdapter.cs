@@ -38,6 +38,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         private TimeSpan timeout;
         private UInt32 bufferSize;
 
+        private FSATestConfig testConfig;
+
         // The following suppression is adopted because this field will be used by reflection.
         [SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         private ITestSite site;
@@ -192,6 +194,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         #endregion
 
         #region Adapter initialization and cleanup
+
+        public SmbTransportAdapter(FSATestConfig fsaTestConfig)
+        {
+            this.testConfig = fsaTestConfig;
+        }
 
         /// <summary>
         /// Initialize this adapter, will be called by PTF automatically
@@ -760,6 +767,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         [SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
         public MessageStatus IOControl(UInt32 ctlCode, UInt32 maxOutBufferSize, byte[] inBuffer, out byte[] outBuffer)
         {
+            testConfig.CheckFSCTL(ctlCode);
+
             outBuffer = null;
             //Set isFlag to 0 to apply a share root handle as SMB described.
             SmbNtTransactIoctlRequestPacket packet = this.smbClient.CreateNTTransIOCtlRequest(this.fileId, true, 0, ctlCode, inBuffer);
