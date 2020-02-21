@@ -168,11 +168,11 @@ There are two more documents in the same folder:
 
 ## Contribute
 
-You can find contributing guide [here](./CONTRIBUTING.md).
+You can find contributing guide [here](./blob/master/CONTRIBUTING.md).
 
 ## License
 
-Windows Protocol Test Suites are under the [MIT license](./LICENSE.txt).
+Windows Protocol Test Suites are under the [MIT license](./blob/master/LICENSE.txt).
 
 ## Contact
 The following resources are for Windows protocol test suite news, discussion, and support:
