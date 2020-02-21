@@ -40,7 +40,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx
 
         /// <summary>
         /// Negative test against field:
-        /// 2.2.2.1.2   	TS_RFX_CODEC_CHANNELT	channelId (1 byte):  An 8-bit, unsigned integer. Specifies the channel ID. This field MUST be set to 0x00.	
+        /// 2.2.2.1.2   	TS_RFX_CODEC_CHANNELT	channelId (1 byte):  An 8-bit, unsigned integer. Specifies the channel ID. If the blockType is set to WBT_CONTEXT (0xCCC3), then channelId MUST be set to 0xFF. For all other values of blockType, channelId MUST be set to 0x00.
         /// The invalid value for testing: 0x01
         /// </summary>
         TsRfxCodecChannelT_InvalidChannelId,
