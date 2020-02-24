@@ -125,11 +125,16 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                     DetectorUtil.WriteLog("" + e.StackTrace);
                 }
 
-
                 DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
 
-                CheckSupportedFeatures();
+                CheckSupportedFeatures();            
+
                 CheckSupportedProtocols();
+
+                config.RDPEDYCSupported = detectInfo.IsSupportRDPEDYC.ToString();
+
+                config.RDPELESupported = detectInfo.IsSupportRDPELE.ToString();
+                
                 SetRdpVersion(config);               
             }
             catch (Exception e)
