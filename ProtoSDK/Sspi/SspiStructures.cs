@@ -443,16 +443,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
             {
                 try
                 {
-                    Marshal.FreeHGlobal(mem.pointer);
+                    Marshal.FreeHGlobal(mem.pointer);           
                 }
-                catch (COMException)
+                catch (Exception e) //Catch Exception instead of ComException 
                 {
                     // Catch this exception in case the mem.pointer is an invalid handler
+                    Console.WriteLine(e.Message);
                 }
             }
 
             //Free memory allocated by security package 
-            Array.Sort(buffers, delegate(SspiSecurityBuffer x, SspiSecurityBuffer y)
+            Array.Sort(buffers, delegate (SspiSecurityBuffer x, SspiSecurityBuffer y)
             {
                 return x.pSecBuffer.ToInt64().CompareTo(y.pSecBuffer.ToInt64());
             });
