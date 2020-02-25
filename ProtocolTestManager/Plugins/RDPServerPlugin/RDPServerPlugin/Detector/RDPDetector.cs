@@ -577,8 +577,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 x224ConnectReqPdu.tpktHeader.length += (ushort)x224ConnectReqPdu.rdpCorrelationInfo.length;
                 x224ConnectReqPdu.x224Crq.lengthIndicator += (byte)x224ConnectReqPdu.rdpCorrelationInfo.length;
             }
-            rdpbcgrClient.SendPdu(x224ConnectReqPdu);
-            System.Threading.Thread.Sleep(100);
+            rdpbcgrClient.SendPdu(x224ConnectReqPdu);          
         }
 
         private void SendClientMCSConnectInitialPDU(
@@ -702,14 +701,14 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 TS_LICENSE_PDU licensePdu = rdpeleClient.ExpectPdu(timeout);
 
                 if (licensePdu.preamble.bMsgType == bMsgType_Values.ERROR_ALERT)
-                {
+                {                    
                     // If the target machine is a personal terminal server, whether the client sends the license or not, 
                     // the server always sends a license error message with the error code STATUS_VALID_CLIENT and the state transition code ST_NO_TRANSITION. 
                     if (dwErrorCode_Values.STATUS_VALID_CLIENT != licensePdu.LicensingMessage.LicenseError.Value.dwErrorCode)
                     {
                         DetectorUtil.WriteLog($"A license error message with the error code STATUS_VALID_CLIENT should be received, but the real error code is {licensePdu.LicensingMessage.LicenseError.Value.dwErrorCode}.");
-                        return false;
                     }
+                    return false;
                 }
 
                 DetectorUtil.WriteLog("Start RDP license procedure");
