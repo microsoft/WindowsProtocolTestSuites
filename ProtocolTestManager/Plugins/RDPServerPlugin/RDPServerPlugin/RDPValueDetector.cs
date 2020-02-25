@@ -51,10 +51,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         private const string ServerPort = "Server Port";
         private const string ServerUserName = "Server User Name";
         private const string ServerUserPassword = "Server User Password";
-        private const string TLSVersion = "TLSVersion";
-        private const string Negotiation = "Negotiation";
-        private const string SecurityProtocol = "Security Protocol";
-
+      
         #endregion Private Types
 
         #region Variables
@@ -94,11 +91,8 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             prereq.AddProperty(RDPValueDetector.ServerName, config.ServerName);
             prereq.AddProperty(RDPValueDetector.ServerPort, config.ServerPort);
             prereq.AddProperty(RDPValueDetector.ServerUserName, config.ServerUserName);
-            prereq.AddProperty(RDPValueDetector.ServerUserPassword, config.ServerUserPassword);
-            prereq.AddProperty(RDPValueDetector.TLSVersion, config.TLSVersion);
-            prereq.AddProperty(RDPValueDetector.Negotiation, config.Negotiation);
-            prereq.AddProperty(RDPValueDetector.SecurityProtocol, config.SecurityProtocol);
-            
+            prereq.AddProperty(RDPValueDetector.ServerUserPassword, config.ServerUserPassword);            
+        
             return prereq;
         }
 
@@ -119,8 +113,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             detectionInfo.SUTName = properties[ServerName];
             detectionInfo.DomainName = properties[ServerDomain];
             detectionInfo.UserName = properties[ServerUserName];
-            detectionInfo.Port = properties[ServerPort];
-            detectionInfo.TLSVersion = properties[TLSVersion];
+            detectionInfo.Port = properties[ServerPort];     
             return true;
         }
 
@@ -159,10 +152,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 config.ServerPort = properties[RDPValueDetector.ServerPort];
                 config.ServerUserName = properties[RDPValueDetector.ServerUserName];
                 config.ServerUserPassword = properties[RDPValueDetector.ServerUserPassword];
-                config.TLSVersion = properties[RDPValueDetector.TLSVersion];
-                config.Negotiation = properties[RDPValueDetector.Negotiation];
-                config.SecurityProtocol = properties[RDPValueDetector.SecurityProtocol];
-                config.ClientName = Dns.GetHostName();
+                config.ClientName = Dns.GetHostName();               
 
                 DetectorUtil.WriteLog("Finished!", false, LogStyle.StepPassed);
 
@@ -217,19 +207,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 caseList.Add(CreateRule("RDP Version.RDP 70", true));
                 caseList.Add(CreateRule("RDP Version.RDP 80", true));
                 caseList.Add(CreateRule("RDP Version.RDP 81", true));
-            }
-
-            if (rdpVersion >= TS_UD_SC_CORE_version_Values.V3)
-            {
-                caseList.Add(CreateRule("RDP Version.RDP 10.0", true));
-                caseList.Add(CreateRule("RDP Version.RDP 10.1", true));
-                caseList.Add(CreateRule("RDP Version.RDP 10.2", true));
-                caseList.Add(CreateRule("RDP Version.RDP 10.3", true));
-                caseList.Add(CreateRule("RDP Version.RDP 10.4", true));
-                caseList.Add(CreateRule("RDP Version.RDP 10.5", true));
-                caseList.Add(CreateRule("RDP Version.RDP 10.6", true));
-                caseList.Add(CreateRule("RDP Version.RDP 10.7", true));
-            }          
+            }            
 
             #endregion RDP Version
 
@@ -303,7 +281,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 //If SUT name is an ip address, skip to resolve, use the ip address directly
                 if (IPAddress.TryParse(detectionInfo.SUTName, out address))
                 {
-                    DetectorUtil.WriteLog( "Finished", true, LogStyle.StepPassed);                    
+                    DetectorUtil.WriteLog("Finished", true, LogStyle.StepPassed);
                     return true;
                 }
                 else //DNS resolve the SUT IP address by SUT name
@@ -312,20 +290,20 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
                     if (null == addList)
                     {
-                        DetectorUtil.WriteLog( string.Format("The SUT name {0} cannot be resolved.", detectionInfo.SUTName), true, LogStyle.Error);
+                        DetectorUtil.WriteLog(string.Format("The SUT name {0} cannot be resolved.", detectionInfo.SUTName), true, LogStyle.Error);
                         DetectorUtil.WriteLog("Failed", true, LogStyle.StepFailed);
                         return false;
                     }
                     else
                     {
-                        DetectorUtil.WriteLog(string.Format("The SUT name {0} can be resolved as :", addList.ToString()),true, LogStyle.Default);
-                        DetectorUtil.WriteLog("Finished", true, LogStyle.StepPassed);                       
+                        DetectorUtil.WriteLog(string.Format("The SUT name {0} can be resolved as :", addList.ToString()), true, LogStyle.Default);
+                        DetectorUtil.WriteLog("Finished", true, LogStyle.StepPassed);
                         return true;
                     }
                 }
             }
             catch (Exception ex)
-            {                
+            {
                 DetectorUtil.WriteLog(ex.Message, true, LogStyle.StepFailed);
                 DetectorUtil.WriteLog("Failed", true, LogStyle.StepFailed);
                 return false;
