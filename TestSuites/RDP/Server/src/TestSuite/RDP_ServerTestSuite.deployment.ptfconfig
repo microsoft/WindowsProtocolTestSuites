@@ -8,20 +8,10 @@
     <!--Block Begin: Properties that required to be set ***-->
     <!--Whether a negotiation protocol is used.-->
     <Property name="RDP.Security.Negotiation" value="True"/>
-    
-    <Property name="RDP.Security.Protocol" value="TLS">
-      <Choice>TLS, CredSSP, RDP</Choice>
-      <Description>
-          The Security protocol server supports: TLS, CredSSP, RDP
-      </Description>
-    </Property>
-
-    <Property name="RDP.Security.TLS.Version" value="TLS1.0">
-      <Choice>TLS1.0, TLS1.1, TLS1.2</Choice>
-      <Description>
-          The TLS version server supports: TLS1.0, TLS1.1, or TLS1.2
-        </Description>
-      </Property>
+    <!--One of the TLS, CredSSP, or RDP.-->
+    <Property name="RDP.Security.Protocol" value="TLS"/>
+    <!--One of the TLS1.0, TLS1.1, or TLS1.2.-->
+    <Property name="RDP.Security.TLS.Version" value="TLS1.0"/>
 
     <!-- Domain of the tested RDP Server -->
     <Property name="RDP.ServerDomain" value=""/>
@@ -37,23 +27,13 @@
     <Property name="RDP.ClientName" value="192.168.172.101"/>
 
     <!-- Whether verify RDPBCGR message received -->
-    <Property name="VerifyRdpbcgrMessages" value="True">
-      <Choice>True,False</Choice>
-        <Description>
-          If this property is set to true, the test suite will verify the RDPBCGR reponse messages.
-      </Description>
-    </Property>
-    
-    <Property name="VerifyShouldBehaviors" value="True">
-      <Choice>True,False</Choice>
-        <Description>
-          If this property is set to true, the test suite will verify SHOULD behaviors in TD.
-        </Description>
-      </Property>
+    <Property name="VerifyRdpbcgrMessages" value="true"/>
+    <!-- Whether verify SHOULD behaviors in TD -->
+    <Property name="VerifyShouldBehaviors" value="true"/>
 
     <!--Indicates if SUT is Windows Implementation.-->
-    <Property name="IsWindowsImplementation" value="True">
-      <Choice>True, False</Choice>
+    <Property name="IsWindowsImplementation" value="true">
+      <Choice>true, false</Choice>
       <Description>Indicates if SUT is Windows Implementation.</Description>
     </Property>
 
@@ -64,30 +44,16 @@
     </Property>
 
     <!-- Whether the SUT supports RDPEDYC. The value should be true or false.-->
-    <Property name="RDPEDYCSupported" value="True">
-      <Choice>True,False</Choice>
-        <Description>
-          The property specifies whether the server supports RDPEDYC protocol.
-        </Description>
-      </Property>
+    <Property name="RDPEDYCSupported" value="true"/>
 
     <!-- Whether the SUT supports RDPELE. The value should be true or false.-->
-    <Property name="RDPELESupported" value="True">
-      <Choice>True,False</Choice>
-        <Description>
-          The property specifies whether the server supports RDPELE protocol.
-        </Description>
-      </Property>
-
+    <Property name="RDPELESupported" value="true"/>
     <!--Whether the SUT issues a temporary license when issuing a license to the client for the first time-->
-    <Property name="IssueTemporaryLicenseForTheFirstTime" value="True">
-      <Choice>True,False</Choice>
-        <Description>
-          If this property is set to true, the the SUT issues a temporary license when issuing a license to the client for the first time.
-        </Description>
-      </Property>
+    <Property name="IssueTemporaryLicenseForTheFirstTime" value="true"/>
+
     <Property name="Timeout" value="60"/>
- 
+    <!-- Block End -->
+
   </Properties>
   <Adapters>
   </Adapters>
