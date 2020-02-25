@@ -34,7 +34,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
         private ResultItemMap protocolItems = new ResultItemMap() { Header = "Protocols Support Info", Description = protocolDescription };
         private ResultItemMap featureItems = new ResultItemMap() { Header = "Features Support Info", Description = featureDescription };
-
+        
         private List<ResultItemMap> resultItemMapList = new List<ResultItemMap>();
 
         #endregion
@@ -122,7 +122,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                     DataTemplate tempDataTemplate = tempContentPresenter.ContentTemplate;
                     Expander mapHeader = tempDataTemplate.FindName("ResultMapHeader", tempContentPresenter) as Expander;
                     ListBox itemList = tempDataTemplate.FindName("ResultItemList", tempContentPresenter) as ListBox;
-
+                    
                     //Keep the current selection
                     if (!itemList.Items.Contains(selectedItem))
                         itemList.UnselectAll();
