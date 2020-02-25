@@ -25,6 +25,8 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
         public string SecurityProtocol { get; set; }
 
+        public string TLSVersion { get; set; }
+
         public string Negotiation { get; set; }
 
 
@@ -35,7 +37,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             foreach (var p in cfg.GetProperties())
             {
                 string name = "";
-                if (String.Compare(p.Name.ToLower(), "tlsversion") == 0)
+                if (String.Compare(p.Name.ToLower(), "tlsversion")==0)
                 {
                     name = "RDP.Security.TLS.Version";
                 }
