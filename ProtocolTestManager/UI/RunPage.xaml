@@ -108,9 +108,9 @@
     
     <Grid x:Name="LayoutRoot" KeyboardNavigation.IsTabStop="False">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MinWidth="330" Width="Auto"/>
+            <ColumnDefinition MinWidth="335" Width="2*"/>
             <ColumnDefinition Width="5"/>
-            <ColumnDefinition/>
+            <ColumnDefinition MinWidth="345" Width="5*"/>
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Column="0"
             Name="GroupByLable" Text="Group by" 

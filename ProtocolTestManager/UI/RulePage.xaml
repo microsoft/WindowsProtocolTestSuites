@@ -22,14 +22,14 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MinWidth="388" Width="Auto" />
+            <ColumnDefinition MinWidth="280" Width="1*" />
             <ColumnDefinition Width="5" />
-            <ColumnDefinition/>
+            <ColumnDefinition MinWidth="400"  Width="3*" />
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" Orientation="Horizontal">
             <TextBlock Text="Filter" FontFamily="Segoe UI" FontSize="9pt" FontWeight="Bold" Margin="0,0,0,0" VerticalAlignment="Center"/>
-            <TextBlock Text="Selected test cases" FontFamily="Segoe UI" FontSize="9pt" FontWeight="Bold" Margin="0,0,0,0" Padding="180,0,0,0" Height="17" HorizontalAlignment="Left" VerticalAlignment="Center" />
-            <TextBlock Text="0" Name="CaseNumberTextBlock" FontSize="9pt" Margin="0,0,0,0" Padding="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <TextBlock Text="Selected test cases" FontFamily="Segoe UI" FontSize="9pt" FontWeight="Bold" Margin="0,0,0,0" Padding="80,0,0,0" Height="17" HorizontalAlignment="Left" VerticalAlignment="Center" />
+            <TextBlock Text="0" Name="CaseNumberTextBlock" FontSize="9pt" Margin="0,0,0,0" Padding="5,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
         </StackPanel>
         <ScrollViewer Grid.Row="1" Grid.Column="0" Name="scrollViewer"
                       AutomationProperties.Name="Case selection rules" 
