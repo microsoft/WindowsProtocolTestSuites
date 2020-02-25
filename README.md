@@ -116,10 +116,6 @@ Get-ExecutionPolicy
 
 Then rerun the script.
 
-## How to use test suites
-
-Take File Server test suite as an example, you can learn how to configure and run test suite by Protocol Test Manager referring to this [tutorial](./Doc/File%20Server%20SMB%20Test%20Suite%20Lab%20Tutorial_v2.pdf).
-
 ## Model-Based Testing
 
 Some test suites use [Model-Based Testing](https://msdn.microsoft.com/en-us/library/ee620469.aspx):
@@ -158,6 +154,10 @@ build.cmd
 
 After the build succeeds, the MSI file of each test suite should be generated in the folder `WindowsProtocolTestSuite\drop\TestSuites\\[TestSuiteName]\deploy\`.
 Take SMB test suite as an example, `MS-SMB-TestSuite-ServerEP.msi` should be generated in the folder `WindowsProtocolTestSuite\drop\TestSuites\MS-SMB\deploy\`.
+
+## How to use test suites
+
+Take File Server test suite as an example, you can learn how to configure and run test suite by Protocol Test Manager referring to this [tutorial](./Doc/File%20Server%20SMB%20Test%20Suite%20Lab%20Tutorial_v2.pdf).
 
 ## Upgrade from an older version
 
