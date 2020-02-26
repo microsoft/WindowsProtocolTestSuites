@@ -134,7 +134,7 @@ Do you want to continue?</value>
     <value>Configure adapters</value>
   </data>
   <data name="ConfigureTestCase" xml:space="preserve">
-    <value>Configure test case properties</value>
+    <value>Configure test cases</value>
   </data>
   <data name="DetectButton" xml:space="preserve">
     <value>_Detect</value>
