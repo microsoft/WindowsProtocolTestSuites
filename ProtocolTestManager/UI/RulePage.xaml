@@ -26,11 +26,7 @@
             <ColumnDefinition Width="5" />
             <ColumnDefinition MinWidth="400"  Width="3*" />
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" Orientation="Horizontal">
-            <TextBlock Text="Filter" FontFamily="Segoe UI" FontSize="9pt" FontWeight="Bold" Margin="0,0,0,0" VerticalAlignment="Center"/>
-            <TextBlock Text="Selected test cases" FontFamily="Segoe UI" FontSize="9pt" FontWeight="Bold" Margin="0,0,0,0" Padding="80,0,0,0" Height="17" HorizontalAlignment="Left" VerticalAlignment="Center" />
-            <TextBlock Text="0" Name="CaseNumberTextBlock" FontSize="9pt" Margin="0,0,0,0" Padding="5,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-        </StackPanel>
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Filter" FontFamily="Segoe UI" FontSize="9pt" FontWeight="Bold" Margin="0,0,0,0" VerticalAlignment="Center"/>
         <ScrollViewer Grid.Row="1" Grid.Column="0" Name="scrollViewer"
                       AutomationProperties.Name="Case selection rules" 
                       Margin="0,21,0,0" BorderThickness="1,1,1,1" HorizontalAlignment="Stretch">
@@ -40,6 +36,10 @@
 			          ItemsSource="{Binding RuleGroupList}" />
         </ScrollViewer>
         <GridSplitter Grid.Row="1" Grid.Column="1" Width="5" Margin="0,21,0,0" AutomationProperties.Name="Splitter" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+        <StackPanel Grid.Row="0" Grid.Column="2"  HorizontalAlignment="Stretch" Orientation="Horizontal">
+            <TextBlock Text="Selected test cases" FontFamily="Segoe UI" FontSize="9pt" FontWeight="Bold" Margin="0,0,0,0" Height="17" HorizontalAlignment="Left" VerticalAlignment="Center" />
+            <TextBlock Text="0" Name="CaseNumberTextBlock" FontSize="9pt" Margin="0,0,0,0" Padding="5,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        </StackPanel>
         <ListBox Grid.Row="1" Grid.Column="2" x:Name="CaseList" Height="Auto" Margin="0,21,0,0" VerticalAlignment="Stretch" Background="{x:Null}" BorderThickness="1,1,1,1"
                  AutomationProperties.Name="Selected test cases"
                  ItemTemplate="{StaticResource CaseListTemplate}"
