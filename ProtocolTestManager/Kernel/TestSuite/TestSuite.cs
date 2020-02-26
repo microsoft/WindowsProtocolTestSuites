@@ -117,9 +117,10 @@ namespace Microsoft.Protocols.TestManager.Kernel
                                 };
 
                                 var testcaseToolTipBuilder = new StringBuilder();
+                                testcaseToolTipBuilder.Append(testcase.Name);
                                 if (testcase.Category.Any())
                                 {
-                                    testcaseToolTipBuilder.Append(testcase.Name + Environment.NewLine + "Category:");
+                                    testcaseToolTipBuilder.Append(Environment.NewLine + "Category:");
                                     foreach (var category in testcase.Category)
                                     {
                                         testcaseToolTipBuilder.Append(Environment.NewLine + "  " + category);
