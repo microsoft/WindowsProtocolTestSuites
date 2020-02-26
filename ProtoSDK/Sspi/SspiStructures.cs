@@ -448,7 +448,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
                 catch (Exception e) //Catch Exception instead of COMException 
                 {
                     // Catch this exception in case the mem.pointer is an invalid handler
-                    Console.WriteLine(e.Message);
+                    throw new InvalidOperationException ("Unable to free allocated memory with Marshal.FreeHGlobal: " + e.Message);                    
                 }
             }
 
