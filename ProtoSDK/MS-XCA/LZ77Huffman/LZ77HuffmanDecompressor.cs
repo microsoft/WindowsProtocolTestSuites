@@ -18,159 +18,193 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress
         /// <returns>Decompressed Data.</returns>
         public byte[] Decompress(byte[] data)
         {
-            var header = new HuffmanHeader(data);
+            int CurrentPosition = 0;
 
             var result = new List<byte>();
 
             /*
-                Build the decoding table
-                CurrentPosition = 256    // start at the end of the Huffman table
-                NextBits = Read16Bits(InputBuffer + CurrentPosition)
-                CurrentPosition += 2
-                NextBits <<= 16
-                NextBits |= Read16Bits(InputBuffer + CurrentPosition)
-                CurrentPosition += 2
-                ExtraBits = 16
-                Loop until a terminating condition
-                    Next15Bits = NextBits >> (32 – 15)
-                    HuffmanSymbol = DecodingTable[Next15Bits]
-                    HuffmanSymbolBitLength = the bit length of HuffmanSymbol, from the table in
-                                             the input buffer
-                    NextBits <<= HuffmanSymbolBitLength
-                    ExtraBits -= HuffmanSymbolBitLength
-                    If ExtraBits < 0
-                        NextBits |= Read16Bits(InputBuffer + CurrentPosition) << (-ExtraBits)
-                        ExtraBits += 16
-                        CurrentPosition += 2
-                    If HuffmanSymbol < 256
-                        Output the byte value HuffmanSymbol to the output stream.
-                    Else If HuffmanSymbol == 256 and
-                            the entire input buffer has been read and
-                            the expected decompressed size has been written to the output buffer
-                        Decompression is complete.  Return with success.
-                    Else
-                        HuffmanSymbol = HuffmanSymbol - 256
-                        MatchLength = HuffmanSymbol mod 16
-                        MatchOffsetBitLength = HuffmanSymbol / 16
-                        If MatchLength == 15
-                            MatchLength = ReadByte(InputBuffer + CurrentPosition)
-                            CurrentPosition += 1
-                            If MatchLength == 255
-                                MatchLength = Read16Bits(InputBuffer + CurrentPosition)
-                                CurrentPosition += 2
-                                If MatchLength < 15
-                                    The compressed data is invalid. Return error.
-                                MatchLength = MatchLength - 15
-                            MatchLength = MatchLength + 15
-                        MatchLength = MatchLength + 3
-                        MatchOffset = NextBits >> (32 – MatchOffsetBitLength)
-                        MatchOffset += (1 << MatchOffsetBitLength)
-                        NextBits <<= MatchOffsetBitLength
-                        ExtraBits -= MatchOffsetBitLength
-                        If ExtraBits < 0
-                            Read the next 2 bytes the same as the preceding (ExtraBits < 0) case
-                        For i = 0 to MatchLength - 1
-                            Output OutputBuffer[CurrentOutputPosition – MatchOffset + i]
+                Loop until a decompression terminating condition
+	                Build the decoding table
+	                CurrentPosition = 256    // start at the end of the Huffman table
+	                NextBits = Read16Bits(InputBuffer + CurrentPosition)
+	                CurrentPosition += 2
+	                NextBits <<= 16
+	                NextBits |= Read16Bits(InputBuffer + CurrentPosition)
+	                CurrentPosition += 2
+	                ExtraBits = 16
+	                BlockEnd = OutputPosition + 65536
+	
+	                Loop until a block terminating condition
+	                    If OutputPosition >= BlockEnd then terminate block processing
+	                    Loop until a literal processing terminating condition
+	                        Next15Bits = NextBits >> (32 – 15)
+	                        HuffmanSymbol = DecodingTable[Next15Bits]
+	                        HuffmanSymbolBitLength = the bit length of HuffmanSymbol, from the table in the input buffer
+	                        If HuffmanSymbol <= 0
+	                            NextBits <<= HuffmanSymbolBitLength
+	                            ExtraBits -= HuffmanSymbolBitLength
+	
+                                Do
+                                    HuffmanSymbol = - HuffmanSymbol
+                                    HuffmanSymbol += (NextBits >> 31)
+                                    NextBits *= 2
+                                    ExtraBits = ExtraBits - 1
+                                    HuffmanSymbol = DecodingTable[HuffmanSymbol]
+                                While HuffmanSymbol <= 0
+                            Else
+                                DecodedBitCount = HuffmanSymbol & 15
+                                NextBits <<= DecodedBitCount
+                                ExtraBits -= DedcodedBitCount
+
+	                        HuffmanSymbol >>= 4 // Shift by 4 bits to get the symbol value
+	                                            // (the lower 4 bits are the bit length of the symbol)
+	                        HuffmanSymbol -= 256
+	                        If ExtraBits < 0
+	                            NextBits |= Read16Bits(InputBuffer + CurrentPosition) << (-ExtraBits)
+	                            ExtraBits += 16
+	                            CurrentPosition += 2
+	                        If HuffmanSymbol >= 0
+	                            If HuffmanSymbol == 0
+	                                If the entire input buffer has been read and
+	                                the expected decompressed size has been written to the output buffer
+	                                    Decompression is complete.  Return with success.
+	                            Terminate literal processing
+	                        Else
+	                            Output the byte value of HuffmanSymbol to the output stream
+	                    End of literal processing Loop
+	   
+	                    MatchLength = HuffmanSymbol mod 16
+	                    MatchOffsetBitLength = HuffmanSymbol / 16
+	                    If MatchLength == 15
+	                        MatchLength = ReadByte(InputBuffer + CurrentPosition)
+	                        CurrentPosition += 1
+	                        If MatchLength == 255
+	                            MatchLength = Read16Bits(InputBuffer + CurrentPosition)
+	                            CurrentPosition += 2
+	                            If MatchLength < 15
+	                                The compressed data is invalid. Return error.
+	                            MatchLength = MatchLength - 15
+	                        MatchLength = MatchLength + 15
+	                    MatchLength = MatchLength + 3
+	                    MatchOffset = NextBits >> (32 – MatchOffsetBitLength)
+	                    MatchOffset += (1 << MatchOffsetBitLength)
+	                    NextBits <<= MatchOffsetBitLength
+	                    ExtraBits -= MatchOffsetBitLength
+	                    If ExtraBits < 0
+	                        NextBits |= Read16Bits(InputBuffer + CurrentPosition) << (-ExtraBits)
+	                        ExtraBits += 16
+	                        CurrentPosition += 2
+	                    For i = 0 to MatchLength - 1
+	                        Output OutputBuffer[CurrentOutputPosition – MatchOffset + i]
+	                 End of block loop
+	            End of decoding loop
              */
 
-            header.buildDecodingTable();
-
-            int CurrentPosition = 256;
-
-            uint NextBits = Read16Bits(data, CurrentPosition);
-
-            CurrentPosition += 2;
-
-            NextBits <<= 16;
-
-            NextBits |= Read16Bits(data, CurrentPosition);
-
-            CurrentPosition += 2;
-
-            int ExtraBits = 16;
-
-            while (true)
+            while (CurrentPosition < data.Length)
             {
-                uint Next15Bits = NextBits >> (32 - 15);
+                var header = new HuffmanHeader(data, CurrentPosition);
 
-                int HuffmanSymbol = header.DecodingTable[Next15Bits];
+                header.buildDecodingTable();
 
-                int HuffmanSymbolBitLength = header.len[HuffmanSymbol];
+                CurrentPosition += 256;
 
-                NextBits <<= HuffmanSymbolBitLength;
+                uint NextBits = Read16Bits(data, CurrentPosition);
 
-                ExtraBits -= HuffmanSymbolBitLength;
+                CurrentPosition += 2;
 
-                if (ExtraBits < 0)
+                NextBits <<= 16;
+
+                NextBits |= Read16Bits(data, CurrentPosition);
+
+                CurrentPosition += 2;
+
+                int ExtraBits = 16;
+
+                int BlockEnd = result.Count + 65536;
+
+                while (result.Count < BlockEnd)
                 {
-                    NextBits |= Read16Bits(data, CurrentPosition) << (-ExtraBits);
+                    uint Next15Bits = NextBits >> (32 - 15);
 
+                    int HuffmanSymbol = header.DecodingTable[Next15Bits];
 
-                    ExtraBits += 16;
+                    int HuffmanSymbolBitLength = header.len[HuffmanSymbol];
 
-                    CurrentPosition += 2;
-                }
+                    NextBits <<= HuffmanSymbolBitLength;
 
-                if (HuffmanSymbol < 256)
-                {
-                    result.Add((byte)HuffmanSymbol);
-                }
-                else if (HuffmanSymbol == 256 && CurrentPosition == data.Length)
-                {
-                    break;
-                }
-                else
-                {
-                    HuffmanSymbol -= 256;
-                    uint MatchLength = (uint)(HuffmanSymbol % 16);
-                    int MatchOffsetBitLength = HuffmanSymbol / 16;
-                    if (MatchLength == 15)
-                    {
-                        MatchLength = ReadByte(data, CurrentPosition);
-                        CurrentPosition += 1;
-                        if (MatchLength == 255)
-                        {
-                            MatchLength = Read16Bits(data, CurrentPosition);
-                            CurrentPosition += 2;
-                            if (MatchLength < 15)
-                            {
-                                throw new XcaException("[Data error]: MatchLength should not be less than 15!");
-                            }
-                            MatchLength -= 15;
-                        }
-                        MatchLength += 15;
-                    }
-
-                    MatchLength += 3;
-
-                    int MatchOffset = (int)((ulong)NextBits >> (32 - MatchOffsetBitLength));
-
-                    MatchOffset += (1 << MatchOffsetBitLength);
-
-                    NextBits <<= MatchOffsetBitLength;
-
-                    ExtraBits -= MatchOffsetBitLength;
-
+                    ExtraBits -= HuffmanSymbolBitLength;
 
                     if (ExtraBits < 0)
                     {
                         NextBits |= Read16Bits(data, CurrentPosition) << (-ExtraBits);
+
 
                         ExtraBits += 16;
 
                         CurrentPosition += 2;
                     }
 
-                    var location = result.Count;
-                    for (int i = 0; i < MatchLength; i++)
+                    if (HuffmanSymbol < 256)
                     {
-                        int matchPosition = location - MatchOffset + i;
-                        if (matchPosition < 0 || matchPosition >= result.Count)
+                        result.Add((byte)HuffmanSymbol);
+                    }
+                    else if (HuffmanSymbol == 256 && CurrentPosition == data.Length)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        HuffmanSymbol -= 256;
+                        uint MatchLength = (uint)(HuffmanSymbol % 16);
+                        int MatchOffsetBitLength = HuffmanSymbol / 16;
+                        if (MatchLength == 15)
                         {
-                            throw new XcaException("[Data error]: Match offset out of buffer!");
+                            MatchLength = ReadByte(data, CurrentPosition);
+                            CurrentPosition += 1;
+                            if (MatchLength == 255)
+                            {
+                                MatchLength = Read16Bits(data, CurrentPosition);
+                                CurrentPosition += 2;
+                                if (MatchLength < 15)
+                                {
+                                    throw new XcaException("[Data error]: MatchLength should not be less than 15!");
+                                }
+                                MatchLength -= 15;
+                            }
+                            MatchLength += 15;
                         }
-                        byte matchLiteral = result[matchPosition];
-                        result.Add(matchLiteral);
+
+                        MatchLength += 3;
+
+                        int MatchOffset = (int)((ulong)NextBits >> (32 - MatchOffsetBitLength));
+
+                        MatchOffset += (1 << MatchOffsetBitLength);
+
+                        NextBits <<= MatchOffsetBitLength;
+
+                        ExtraBits -= MatchOffsetBitLength;
+
+
+                        if (ExtraBits < 0)
+                        {
+                            NextBits |= Read16Bits(data, CurrentPosition) << (-ExtraBits);
+
+                            ExtraBits += 16;
+
+                            CurrentPosition += 2;
+                        }
+
+                        var location = result.Count;
+                        for (int i = 0; i < MatchLength; i++)
+                        {
+                            int matchPosition = location - MatchOffset + i;
+                            if (matchPosition < 0 || matchPosition >= result.Count)
+                            {
+                                throw new XcaException("[Data error]: Match offset out of buffer!");
+                            }
+                            byte matchLiteral = result[matchPosition];
+                            result.Add(matchLiteral);
+                        }
                     }
                 }
             }
@@ -197,14 +231,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress
         public int[] len;
         public int[] DecodingTable;
 
-        public HuffmanHeader(byte[] input)
+        public HuffmanHeader(byte[] input, int offset)
         {
             len = new int[512];
 
             for (int i = 0; i < 256; i++)
             {
-                len[i * 2 + 0] = (input[i] & 0x0F) >> 0;
-                len[i * 2 + 1] = (input[i] & 0xF0) >> 4;
+                len[i * 2 + 0] = (input[offset + i] & 0x0F) >> 0;
+                len[i * 2 + 1] = (input[offset + i] & 0xF0) >> 4;
             }
         }
 
