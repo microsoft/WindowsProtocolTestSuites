@@ -217,9 +217,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress
                 result.Add(symbol);
             }
 
-            var eof = new LZ77EOF();
-            result.Add(eof);
-
             return result;
         }
 
