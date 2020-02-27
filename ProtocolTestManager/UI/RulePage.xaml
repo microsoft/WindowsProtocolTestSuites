@@ -17,21 +17,33 @@
     </Page.Resources>
 
     <Grid x:Name="LayoutRoot">
-        <ScrollViewer Name="scrollViewer"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="21" />
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MinWidth="280" Width="1*" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition MinWidth="400"  Width="3*" />
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Filter" FontFamily="Segoe UI" FontSize="9pt" FontWeight="Bold" Margin="0,0,0,0" VerticalAlignment="Center"/>
+        <ScrollViewer Grid.Row="1" Grid.Column="0" Name="scrollViewer"
                       AutomationProperties.Name="Case selection rules" 
-                      Margin="0,21,0,0" Width="308" BorderThickness="1,1,1,1" HorizontalAlignment="Left" HorizontalScrollBarVisibility="Disabled">
-        <ItemsControl x:Name="RuleList"  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      Margin="0,21,0,0" BorderThickness="1,1,1,1" HorizontalAlignment="Stretch">
+            <ItemsControl x:Name="RuleList" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                       ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                      HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                      HorizontalAlignment="Stretch" Margin="0,0,5,0"
 			          ItemsSource="{Binding RuleGroupList}" />
         </ScrollViewer>
-        <TextBlock Text="Filter" FontFamily="Segoe UI" FontSize="9pt" FontWeight="Bold" Margin="0,0,0,0" VerticalAlignment="Top"/>
-        <TextBlock Text="Selected test cases" FontFamily="Segoe UI" FontSize="9pt" FontWeight="Bold" Height="17" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="313,0,0,0"/>
-        <TextBlock Text="0" Name="CaseNumberTextBlock" FontSize="9pt" Margin="424,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-        <ListBox x:Name="CaseList" Height="Auto" Margin="313,21,0,0" VerticalAlignment="Stretch" Background="{x:Null}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" BorderThickness="1,1,1,1"
+        <GridSplitter Grid.Row="1" Grid.Column="1" Width="5" Margin="0,21,0,0" AutomationProperties.Name="Splitter" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+        <StackPanel Grid.Row="0" Grid.Column="2"  HorizontalAlignment="Stretch" Orientation="Horizontal">
+            <TextBlock Text="Selected test cases" FontFamily="Segoe UI" FontSize="9pt" FontWeight="Bold" Margin="0,0,0,0" Height="17" HorizontalAlignment="Left" VerticalAlignment="Center" />
+            <TextBlock Text="0" Name="CaseNumberTextBlock" FontSize="9pt" Margin="0,0,0,0" Padding="5,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        </StackPanel>
+        <ListBox Grid.Row="1" Grid.Column="2" x:Name="CaseList" Height="Auto" Margin="0,21,0,0" VerticalAlignment="Stretch" Background="{x:Null}" BorderThickness="1,1,1,1"
                  AutomationProperties.Name="Selected test cases"
-			    ItemTemplate="{StaticResource CaseListTemplate}"
-			    ItemsSource="{Binding SelectedTestCaseList}" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}">
+                 ItemTemplate="{StaticResource CaseListTemplate}"
+			     ItemsSource="{Binding SelectedTestCaseList}" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
                     <Setter Property="AutomationProperties.Name" Value="{Binding Name}"/>
