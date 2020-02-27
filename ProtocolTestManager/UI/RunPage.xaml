@@ -108,9 +108,9 @@
     
     <Grid x:Name="LayoutRoot" KeyboardNavigation.IsTabStop="False">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MinWidth="330" MaxWidth="600" Width="330"/>
+            <ColumnDefinition MinWidth="335" Width="2*"/>
             <ColumnDefinition Width="5"/>
-            <ColumnDefinition/>
+            <ColumnDefinition MinWidth="345" Width="5*"/>
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Column="0"
             Name="GroupByLable" Text="Group by" 
@@ -128,7 +128,6 @@
             <Image Name="ButtonIcon" Source="pack://application:,,,/images/find.png" />
         </Button>
         <TreeView x:Name="TestOutcome" Margin="0,25,0,28" 
-                    ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
                     VirtualizingStackPanel.IsVirtualizing="True"
                     VirtualizingStackPanel.VirtualizationMode="Recycling"
                     ScrollViewer.VerticalScrollBarVisibility="Visible"
@@ -166,7 +165,7 @@
                 <MenuItem x:Name="ExportTestReport" Header="Export Test Report ..." Click="GenerateTestReport_Click"/>
             </MenuItem>
         </Menu>
-        <GridSplitter Grid.Column="1" Width="5" AutomationProperties.Name="Splitter" Margin="0,21,0,0" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+        <GridSplitter Grid.Column="1" Width="5" AutomationProperties.Name="Splitter" Margin="0,25,0,0" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
         <wfi:WindowsFormsHost x:Name="c_wfh" Margin="0,25,1,0" HorizontalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Auto" KeyboardNavigation.IsTabStop="False" Grid.Column="2">
             <wf:WebBrowser x:Name="WebBrowserLog"/>
         </wfi:WindowsFormsHost>
