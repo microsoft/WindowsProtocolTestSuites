@@ -314,7 +314,7 @@ Function Config-Phase3()
 
     # Get OS Version
     Write-ConfigLog "Getting Operating System Version..." -ForegroundColor Yellow
-    $OsVersion = .\Get-OsVersion.ps1 -log
+    $OsVersion = .\Get-OSVersionForADTests.ps1 -log
 }
 
 #------------------------------------------------------------------------------------------
