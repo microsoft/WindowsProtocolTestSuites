@@ -180,32 +180,51 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <returns>True if found, otherwise false.</returns>
         private static bool FindTestSuiteInformationInRegistry(RegistryKey[] registryList, TestSuiteInfo testSuite)
         {
+            string latestTestSuiteVersionString = null;
+            Version latestTestSuiteVersion = null;
+            string latestTestSuiteEndPoint = null;
+
             foreach (var registryPath in registryList)
             {
-                string registryKeyName = registryPath.GetSubKeyNames()
-                                                     .Where((s) => s.Contains(testSuite.TestSuiteName))
-                                                     .FirstOrDefault();
+                var registryKeyNames = registryPath.GetSubKeyNames()
+                                                     .Where(s => s.Contains(testSuite.TestSuiteName));
 
-                if (String.IsNullOrEmpty(registryKeyName))
+                if (!registryKeyNames.Any())
                 {
                     // no match entry
                     continue;
                 }
 
-                // update version
-                Match versionMatch = Regex.Match(registryKeyName, StringResource.VersionRegex);
-                testSuite.TestSuiteVersion = versionMatch.Value;
+                foreach (var registryKeyName in registryKeyNames)
+                {
+                    // match version and endpoint
+                    Match versionMatch = Regex.Match(registryKeyName, StringResource.VersionRegex);
+                    Match endpointMatch = Regex.Match(registryKeyName, StringResource.EndpointRegex);
 
-                // update endpoint
-                Match endpointMatch = Regex.Match(registryKeyName, StringResource.EndpointRegex);
-                testSuite.TestSuiteEndPoint = endpointMatch.Success ? endpointMatch.Value : "";
-
-                // found
-                return true;
+                    // update version and endpoint
+                    if (Version.TryParse(versionMatch.Value, out var currentVersion))
+                    {
+                        if (latestTestSuiteVersion == null || currentVersion > latestTestSuiteVersion)
+                        {
+                            latestTestSuiteVersionString = versionMatch.Value;
+                            latestTestSuiteVersion = currentVersion;
+                            latestTestSuiteEndPoint = endpointMatch.Success ? endpointMatch.Value : "";
+                        }
+                    }
+                }
             }
 
-            // not found
-            return false;
+            if (string.IsNullOrEmpty(latestTestSuiteVersionString) && string.IsNullOrEmpty(latestTestSuiteEndPoint))
+            {
+                // not found
+                return false;
+            }
+
+            testSuite.TestSuiteVersion = latestTestSuiteVersionString;
+            testSuite.TestSuiteEndPoint = latestTestSuiteEndPoint;
+
+            // found
+            return true;
         }
     }
 }
