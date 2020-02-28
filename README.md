@@ -157,7 +157,7 @@ Take SMB test suite as an example, `MS-SMB-TestSuite-ServerEP.msi` should be gen
 
 ## How to use test suites
 
-Take File Server test suite as an example, you can learn how to configure and run test suite by Protocol Test Manager referring to this [tutorial](./Doc/File%20Server%20SMB%20Test%20Suite%20Lab%20Tutorial_v2.pdf).
+Take File Server test suite as an example, you can learn how to configure and run test suite by Protocol Test Manager referring to this [tutorial](./Doc/File%20Server%20SMB2%20Test%20Suite%20Lab%20Tutorial_v2.pdf).
 
 ## Upgrade from an older version
 
