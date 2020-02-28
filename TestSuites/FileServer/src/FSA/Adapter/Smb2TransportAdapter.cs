@@ -63,10 +63,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         #endregion
 
         #region Constructors
-        public Smb2TransportAdapter()
-        {
-            this.requestDialects = new DialectRevision[] { DialectRevision.Smb2002, DialectRevision.Smb21, DialectRevision.Smb30 };
-        }
 
         public Smb2TransportAdapter(DialectRevision[] dialects, FSATestConfig testConfig)
         {
@@ -997,6 +993,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// <returns>NTStatus code</returns>
         public MessageStatus IOControl(UInt32 ctlCode, UInt32 maxOutBufferSize, byte[] inBuffer, out byte[] outBuffer)
         {
+            testConfig.CheckFSCTL(ctlCode);
+
             IOCTL_Response ioctlResponse;
             byte[] inputResponse;
             uint status = this.smb2Client.IoCtl(

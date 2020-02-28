@@ -42,6 +42,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         FSCTL_DELETE_REPARSE_POINT = 0x900ac,
 
         /// <summary>
+        /// The FSCTL_DUPLICATE_EXTENTS_TO_FILE request message requests that the server copy the specified portion of one file 
+        /// (that is the source file) into a specified portion of another file (target file) on the same volume. 
+        /// </summary>
+        FSCTL_DUPLICATE_EXTENTS_TO_FILE = 0x98344,
+
+        /// <summary>
+        /// The FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX request message requests that the server copy the specified 
+        /// portion of the source file into a specified portion of the target file on the same volume. 
+        /// </summary>
+        FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX = 0x983E8,
+
+        /// <summary>
+        /// The FSCTL_FILE_LEVEL_TRIM operation informs the underlying storage medium that the contents of the given range of the file no longer needs to be maintained. 
+        /// </summary>
+        FSCTL_FILE_LEVEL_TRIM = 0x98208,
+
+        /// <summary>
         /// This message requests that the server return the statistical information of the file system such as Type,  
         ///  Version, and so on, as specified in FSCTL_FILESYSTEM_GET_STATISTICS reply, for the file or directory   
         /// associated with the handle on which this FSCTL was invoked. 

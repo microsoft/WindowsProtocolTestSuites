@@ -198,7 +198,7 @@
 
       <Property name="UnsupportedIoCtlCodes" value="FSCTL_OFFLOAD_READ;FSCTL_OFFLOAD_WRITE;FSCTL_FILE_LEVEL_TRIM">
         <Description>
-          List all unsupported IoCtl codes. Current IoCtl codes covered in this test suite include
+          List all unsupported IoCtl codes (defined in [MS-SMB2] section 2.2.31). Current IoCtl codes covered in this test suite include
           FSCTL_LMR_REQUEST_RESILIENCY
           FSCTL_QUERY_NETWORK_INTERFACE_INFO
           FSCTL_OFFLOAD_READ
