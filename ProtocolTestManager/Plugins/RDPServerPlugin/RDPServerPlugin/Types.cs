@@ -21,7 +21,6 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         public string DomainName;
         public string UserName;
         public string Port;
-        public string TLSVersion;
 
         // Detect Result
         public TS_UD_SC_CORE_version_Values Version;
