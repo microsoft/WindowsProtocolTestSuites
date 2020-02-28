@@ -1,9 +1,11 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Microsoft.Protocols.TestSuites.Rdpbcgr
@@ -470,10 +472,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             {
                 Site.Assert.AreEqual<RDP_NEG_RSP_type_Values>(RDP_NEG_RSP_type_Values.V1, rdpNegData.type, "The type field of RDP_NEG_RSP MUST be set to 0x02 (TYPE_RDP_NEG_RSP).");
 
-                byte flags = (byte)(RDP_NEG_RSP_flags_Values.EXTENDED_CLIENT_DATA_SUPPORTED | RDP_NEG_RSP_flags_Values.DYNVC_GFX_PROTOCOL_SUPPORTED | RDP_NEG_RSP_flags_Values.NEGRSP_FLAG_RESERVED | RDP_NEG_RSP_flags_Values.RESTRICTED_ADMIN_MODE_SUPPORTED | RDP_NEG_RSP_flags_Values.REDIRECTED_AUTHENTICATION_MODE_SUPPORTED);
-                byte negFlags = (byte)~flags;
-                Site.Assert.AreEqual<byte>(0, (byte)(((byte)(rdpNegData.flags)) & negFlags), "The flags field of RDP_NEG_RSP contains protocol flags: "
-                    + "EXTENDED_CLIENT_DATA_SUPPORTED (0x01), DYNVC_GFX_PROTOCOL_SUPPORTED (0x02), NEGRSP_FLAG_RESERVED (0x04),  RESTRICTED_ADMIN_MODE_SUPPORTED (0x08).");
+                var validFlags = Enum.GetValues(typeof(RDP_NEG_RSP_flags_Values)).Cast<RDP_NEG_RSP_flags_Values>().Where(flag => flag != RDP_NEG_RSP_flags_Values.None);
+
+                CheckUndefinedFlagValue("flags", "RDP_NEG_RSP", validFlags, rdpNegData.flags);
 
                 Site.Assert.AreEqual<RDP_NEG_RSP_length_Values>(RDP_NEG_RSP_length_Values.V1, rdpNegData.length, "The length field of RDP_NEG_RSP MUST be set to 0x0008 (8 bytes)");
 
@@ -502,13 +503,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 Site.Assert.AreEqual<RDP_NEG_FAILURE_type_Values>(RDP_NEG_FAILURE_type_Values.V1, rdpNegData.type, "In RDP Negotiation Failure, the type field MUST be set to 0x03 (TYPE_RDP_NEG_FAILURE).");
                 Site.Assert.AreEqual<RDP_NEG_FAILURE_flags_Values>(RDP_NEG_FAILURE_flags_Values.V1, rdpNegData.flags, "In RDP Negotiation Failure, the flags field MUST be set to 0x00.");
                 Site.Assert.AreEqual<RDP_NEG_FAILURE_length_Values>(RDP_NEG_FAILURE_length_Values.V1, rdpNegData.length, "In RDP Negotiation Failure, the length field MUST be set to 0x0008 (8 bytes).");
-                Site.Assert.IsTrue(rdpNegData.failureCode == failureCode_Values.SSL_REQUIRED_BY_SERVER
-                    || rdpNegData.failureCode == failureCode_Values.SSL_NOT_ALLOWED_BY_SERVER
-                    || rdpNegData.failureCode == failureCode_Values.SSL_CERT_NOT_ON_SERVER
-                    || rdpNegData.failureCode == failureCode_Values.INCONSISTENT_FLAGS
-                    || rdpNegData.failureCode == failureCode_Values.HYBRID_REQUIRED_BY_SERVER
-                    || rdpNegData.failureCode == failureCode_Values.SSL_WITH_USER_AUTH_REQUIRED_BY_SERVER, "In RDP Negotiation Failure, the failureCode field specifies the failure code: "
-                    + "SSL_REQUIRED_BY_SERVER (0x00000001), SSL_NOT_ALLOWED_BY_SERVER (0x00000002), SSL_CERT_NOT_ON_SERVER (0x00000003), INCONSISTENT_FLAGS (0x00000004), HYBRID_REQUIRED_BY_SERVER (0x00000005), SSL_WITH_USER_AUTH_REQUIRED_BY_SERVER (0x00000006).");
+
+                var validFailureCodeValues = Enum.GetValues(typeof(failureCode_Values)).Cast<failureCode_Values>().Where(value => value != failureCode_Values.NO_FAILURE);
+
+                CheckUndefinedEnumValue("failureCode", "RDP_NEG_RSP", validFailureCodeValues, rdpNegData.failureCode);
             }
 
         }
@@ -1084,12 +1082,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             Site.Assert.AreEqual<uint>(0, (uint)serverCoreData.clientRequestedProtocols & negFlags, "The clientRequestedProtocols field of TS_UD_SC_CORE, which contains the flags sent by the client in the requestedProtocols field of the RDP Negotiation Request."
                 + "Available flags: PROTOCOL_RDP (0x00000000), PROTOCOL_SSL (0x00000001), PROTOCOL_HYBRID (0x00000002), PROTOCOL_HYBRID_EX (0x00000008).");
 
+            var validFlags = Enum.GetValues(typeof(SC_earlyCapabilityFlags_Values)).Cast<SC_earlyCapabilityFlags_Values>();
 
-            flags = (uint)(SC_earlyCapabilityFlags_Values.RNS_UD_SC_DYNAMIC_DST_SUPPORTED | SC_earlyCapabilityFlags_Values.RNS_UD_SC_EDGE_ACTIONS_SUPPORTED | SC_earlyCapabilityFlags_Values.RNS_UD_SC_EDGE_ACTIONS_SUPPORTED_V2);
-            negFlags = (uint)(~flags);
-            Site.Assert.AreEqual<uint>(0, (uint)serverCoreData.earlyCapabilityFlags & negFlags, "The earlyCapabilityFlags field of TS_UD_SC_CORE contains flags: "
-                + "RNS_UD_SC_EDGE_ACTIONS_SUPPORTED (0x00000001), RNS_UD_SC_DYNAMIC_DST_SUPPORTED (0x00000002).");
-
+            CheckUndefinedFlagValue("earlyCapabilityFlags", "TS_UD_SC_CORE", validFlags, serverCoreData.earlyCapabilityFlags);
         }
 
         /// <summary>
@@ -1667,17 +1662,122 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         {
             Site.Assert.AreEqual<RDP_SERVER_REDIRECTION_PACKET_FlagsEnum>(RDP_SERVER_REDIRECTION_PACKET_FlagsEnum.SEC_REDIRECTION_PKT, redirectionPacket.Flags, "In Server Redirection Packet , the Flags field MUST be set to SEC_REDIRECTION_PKT (0x0400).");
 
-            uint flags = (uint)(RedirectionFlags.LB_TARGET_NET_ADDRESS | RedirectionFlags.LB_LOAD_BALANCE_INFO | RedirectionFlags.LB_USERNAME
-                | RedirectionFlags.LB_DOMAIN | RedirectionFlags.LB_PASSWORD | RedirectionFlags.LB_DONTSTOREUSERNAME | RedirectionFlags.LB_SMARTCARD_LOGON
-                | RedirectionFlags.LB_NOREDIRECT | RedirectionFlags.LB_TARGET_FQDN | RedirectionFlags.LB_TARGET_NETBIOS_NAME | RedirectionFlags.LB_TARGET_NET_ADDRESSES
-                | RedirectionFlags.LB_CLIENT_TSV_URL | RedirectionFlags.LB_SERVER_TSV_CAPABLE);
-            uint negFlags = ~flags;
-            bool isSatisfy = ((uint)redirectionPacket.RedirFlags & negFlags) == 0;
-            Site.Assert.IsTrue(isSatisfy, "In Server Redirection Packet , the RedirFlags field contains redirection information flags: "
-                + "LB_TARGET_NET_ADDRESS (0x00000001), LB_LOAD_BALANCE_INFO (0x00000002), LB_USERNAME (0x00000004), LB_DOMAIN (0x00000008), LB_PASSWORD (0x00000010), LB_DONTSTOREUSERNAME (0x00000020), LB_SMARTCARD_LOGON (0x00000040), LB_NOREDIRECT (0x00000080), LB_TARGET_FQDN (0x00000100), LB_TARGET_NETBIOS_NAME (0x00000200), LB_TARGET_NET_ADDRESSES (0x00000800), LB_CLIENT_TSV_URL (0x00001000), LB_SERVER_TSV_CAPABLE (0x00002000).");
+            var validFlags = Enum.GetValues(typeof(RedirectionFlags)).Cast<RedirectionFlags>();
 
+            CheckUndefinedFlagValue("RedirFlags", "Server Redirection Packet", validFlags, redirectionPacket.RedirFlags);
         }
 
         #endregion Verify Structures
+
+        #region Helper functions
+        private void CheckUndefinedEnumValue<T>(string fieldName, string structName, IEnumerable<T> validValues, T actualValue)
+        {
+            bool isUndefinedValue = validValues.All(value => ParseToUint32(value) != ParseToUint32(actualValue));
+
+            var nameValuePairs = GenerateNameValuePairs(validValues);
+
+            string comment = $"The {fieldName} field of {structName} specifies one of values: {nameValuePairs}.";
+
+            Site.Log.Add(LogEntryKind.Comment, $"{comment}");
+
+            string actualValueString = Format<T>(ParseToUint32(actualValue));
+
+            if (IsWindowsImplementation)
+            {
+                Site.Assert.IsFalse(isUndefinedValue, $"For Windows implementation, undefined value of {fieldName} should not be found. The actual value of {fieldName} is {actualValueString}.");
+            }
+            else
+            {
+                string foundOrNot = isUndefinedValue ? "found" : "not found";
+
+                Site.Log.Add(LogEntryKind.Comment, $"For non-Windows implementation, undefined value of {fieldName} is {foundOrNot}. The actual value of {fieldName} is {actualValueString}.");
+            }
+        }
+
+        private void CheckUndefinedFlagValue<T>(string fieldName, string structName, IEnumerable<T> validValues, T actualValue)
+        {
+            uint flags = validValues.Aggregate((uint)0, (ORedValue, flag) => (ORedValue | ParseToUint32(flag)));
+
+            uint negFlags = ~flags;
+
+            uint undefinedFlags = ParseToUint32(actualValue) & negFlags;
+
+            bool hasUndefinedFlags = undefinedFlags != 0;
+
+            string nameValuePairs = GenerateNameValuePairs(validValues);
+
+            string comment = $"The {fieldName} field of {structName} contains protocol flags: {nameValuePairs}.";
+
+            Site.Log.Add(LogEntryKind.Comment, $"{comment}");
+
+            string actualValueString = Format<T>(ParseToUint32(actualValue));
+
+            string undefinedFlagsString = Format<T>(undefinedFlags);
+
+            if (IsWindowsImplementation)
+            {
+                Site.Assert.IsFalse(hasUndefinedFlags, $"For Windows implementation, undefined value of {fieldName} should not be found. The actual value of {fieldName} is {actualValueString} and undefined value is {undefinedFlagsString}.");
+            }
+            else
+            {
+                string foundOrNot = hasUndefinedFlags ? "found" : "not found";
+
+                Site.Log.Add(LogEntryKind.Comment, $"For non-Windows implementation, undefined value of {fieldName} is {foundOrNot}. The actual value of {fieldName} is {actualValueString} and undefined value is {undefinedFlagsString}.");
+            }
+        }
+
+        private string GenerateNameValuePairs<T>(IEnumerable<T> data)
+        {
+            return String.Join(", ", data.Select(item =>
+            {
+                string value = Format<T>(ParseToUint32(item));
+
+                return $"{item} ({value})";
+            }));
+        }
+
+        private UInt32 ParseToUint32<T>(T e)
+        {
+            var underlyingType = Enum.GetUnderlyingType(typeof(T));
+
+            var t2Uint32Dict = new Dictionary<Type, Func<T, UInt32>>
+            {
+                [typeof(byte)] = t => (byte)(object)t,
+                [typeof(UInt16)] = t => (UInt16)(object)t,
+                [typeof(UInt32)] = t => (UInt32)(object)t,
+            };
+
+            return t2Uint32Dict[underlyingType](e);
+        }
+
+        private string Format<T>(UInt32 v)
+        {
+            var underlyingType = Enum.GetUnderlyingType(typeof(T));
+
+            var valueParserDict = new Dictionary<Type, Func<UInt32, string>>
+            {
+                [typeof(byte)] = u => ParseHex((byte)u),
+                [typeof(UInt16)] = u => ParseHex((UInt16)u),
+                [typeof(UInt32)] = u => ParseHex((UInt32)u),
+            };
+
+            return valueParserDict[underlyingType](v);
+        }
+
+        private string ParseHex(byte value)
+        {
+            return $"0x{value:X02}";
+        }
+
+        private string ParseHex(UInt16 value)
+        {
+            return $"0x{value:X04}";
+        }
+
+        private string ParseHex(UInt32 value)
+        {
+            return $"0x{value:X08}";
+        }
+        #endregion
     }
 }
