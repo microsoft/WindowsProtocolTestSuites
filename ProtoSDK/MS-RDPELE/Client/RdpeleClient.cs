@@ -170,21 +170,28 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
                 throw new Exception("The generated LicensingEncryptionKey should not be NULL!");
             }
 
-            request.EncryptedPreMasterSecret.blobData = RdpbcgrUtility.GenerateEncryptedRandom(preMasterSecret, publicExponent, modulus);
-            request.EncryptedPreMasterSecret.wBlobLen = (ushort)request.EncryptedPreMasterSecret.blobData.Length;
-            request.EncryptedPreMasterSecret.wBlobType = wBlobType_Values.BB_RANDOM_BLOB;
+            try
+            {
+                request.EncryptedPreMasterSecret.blobData = RdpbcgrUtility.GenerateEncryptedRandom(preMasterSecret, publicExponent, modulus);
+                request.EncryptedPreMasterSecret.wBlobLen = (ushort)request.EncryptedPreMasterSecret.blobData.Length;
+                request.EncryptedPreMasterSecret.wBlobType = wBlobType_Values.BB_RANDOM_BLOB;
 
-            request.ClientUserName.wBlobType = wBlobType_Values.BB_CLIENT_USER_NAME_BLOB;
-            request.ClientUserName.blobData = Encoding.UTF8.GetBytes(clientUserName);
-            request.ClientUserName.wBlobLen = (ushort)request.ClientUserName.blobData.Length;
+                request.ClientUserName.wBlobType = wBlobType_Values.BB_CLIENT_USER_NAME_BLOB;
+                request.ClientUserName.blobData = Encoding.UTF8.GetBytes(clientUserName);
+                request.ClientUserName.wBlobLen = (ushort)request.ClientUserName.blobData.Length;
 
-            request.ClientMachineName.wBlobType = wBlobType_Values.BB_CLIENT_MACHINE_NAME_BLOB;
-            request.ClientMachineName.blobData = Encoding.UTF8.GetBytes(clientMachineName);
-            request.ClientMachineName.wBlobLen = (ushort)request.ClientMachineName.blobData.Length;
+                request.ClientMachineName.wBlobType = wBlobType_Values.BB_CLIENT_MACHINE_NAME_BLOB;
+                request.ClientMachineName.blobData = Encoding.UTF8.GetBytes(clientMachineName);
+                request.ClientMachineName.wBlobLen = (ushort)request.ClientMachineName.blobData.Length;
 
-            TS_LICENSE_PDU pdu = ConstructLicensePDU(bMsgType_Values.NEW_LICENSE_REQUEST, new LicensingMessage { ClientNewLicenseRequest = request });
-            var bytes = pdu.ToBytes();
-            rdpbcgrClient.SendBytes(bytes);
+                TS_LICENSE_PDU pdu = ConstructLicensePDU(bMsgType_Values.NEW_LICENSE_REQUEST, new LicensingMessage { ClientNewLicenseRequest = request });
+                var bytes = pdu.ToBytes();
+                rdpbcgrClient.SendBytes(bytes);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         /// <summary>

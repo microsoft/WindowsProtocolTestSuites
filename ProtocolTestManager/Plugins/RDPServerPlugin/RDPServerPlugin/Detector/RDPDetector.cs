@@ -102,27 +102,40 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 Initialize(config);
                 ConnectRDPServer();
 
-                bool status = EstablishRDPConnection(
-                    config, requestedProtocol, SVCNames,
-                    CompressionType.PACKET_COMPR_TYPE_NONE,
-                    false,
-                    true,
-                    false,
-                    false,
-                    false,
-                    true,
-                    true);
-                if (!status)
+                try
                 {
-                    DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
-                    return false;
+                    bool status = EstablishRDPConnection(
+                        config, requestedProtocol, SVCNames,
+                        CompressionType.PACKET_COMPR_TYPE_NONE,
+                        false,
+                        true,
+                        false,
+                        false,
+                        false,
+                        false,
+                        false);
+                    if (!status)
+                    {
+                        DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
+                        return false;
+                    }
+                }
+                catch (Exception e)
+                {
+                    DetectorUtil.WriteLog("" + e.StackTrace);
                 }
 
                 DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
 
-                CheckSupportedFeatures();
-                CheckSupportedProtocols(config);
-                SetRdpVersion(config);
+                CheckSupportedFeatures();            
+
+                CheckSupportedProtocols();
+
+                config.RDPEDYCSupported = detectInfo.IsSupportRDPEDYC.ToString();
+
+                config.RDPELESupported = detectInfo.IsSupportRDPELE.ToString();
+                
+                SetRdpVersion(config);               
             }
             catch (Exception e)
             {
@@ -161,8 +174,8 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 config.ServerUserPassword,
                 clientAddress.ToString(),
                 Int32.TryParse(config.ServerPort, out port) ? port : defaultPort
-                );
-            rdpbcgrClient.TlsVersion = SslProtocols.Tls;          
+                );            
+            rdpbcgrClient.TlsVersion = SslProtocols.None;
         }
 
         private bool LoadConfig()
@@ -171,58 +184,10 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             {
                 clientAddress = Dns.GetHostEntry(clientName).AddressList.First();
             }
-
-            bool isNegotiationBased = true;
-            string negotiation = DetectorUtil.GetPropertyValue("RDP.Security.Negotiation");
-            if (negotiation.Equals("true", StringComparison.CurrentCultureIgnoreCase))
-            {
-                isNegotiationBased = true;
-            }
-            else if (negotiation.Equals("false", StringComparison.CurrentCultureIgnoreCase))
-            {
-                isNegotiationBased = false;
-            }
-            else
-            {
-                throw new Exception(
-                    String.Format("The property value \"{0}\" is invalid or not present in RDP.Security.Negotiation in ptfconfig", negotiation));
-            }
-
-            string protocol = DetectorUtil.GetPropertyValue("RDP.Security.Protocol");
-            if (protocol.Equals("TLS", StringComparison.CurrentCultureIgnoreCase))
-            {
-                requestedProtocol = requestedProtocols_Values.PROTOCOL_SSL_FLAG;
-                if (!isNegotiationBased)
-                {
-                    throw new Exception(
-                        String.Format("When TLS is used as the security protocol, RDP.Security.Negotiation must be true;" +
-                        "actually RDP.Security.Negotiation is set to \"{0}\".", negotiation));
-                }
-                encryptedProtocol = EncryptedProtocol.NegotiationTls;
-            }
-            else if (protocol.Equals("CredSSP", StringComparison.CurrentCultureIgnoreCase))
-            {
-                requestedProtocol = requestedProtocols_Values.PROTOCOL_HYBRID_FLAG;
-                if (isNegotiationBased)
-                {
-                    encryptedProtocol = EncryptedProtocol.NegotiationCredSsp;
-                }
-                else
-                {
-                    encryptedProtocol = EncryptedProtocol.NegotiationTls;
-                }
-            }
-            else if (protocol.Equals("RDP", StringComparison.CurrentCultureIgnoreCase))
-            {
-                requestedProtocol = requestedProtocols_Values.PROTOCOL_RDP_FLAG;
-                encryptedProtocol = EncryptedProtocol.Rdp;
-            }
-            else
-            {
-                throw new Exception(
-                    String.Format("The property value \"{0}\" is invalid or not present in RDP.Security.Protocol in ptfconfig", protocol));
-            }
-
+            
+            requestedProtocol = requestedProtocols_Values.PROTOCOL_RDP_FLAG;
+            encryptedProtocol = EncryptedProtocol.Rdp;
+            
             string strWaitTime = DetectorUtil.GetPropertyValue("WaitTime");
             if (strWaitTime != null)
             {
@@ -268,9 +233,16 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         {
             // Connection Initiation
             SendClientX224ConnectionRequest(requestedProtocols);
-            Server_X_224_Connection_Confirm_Pdu connectionConfirmPdu = ExpectPacket<Server_X_224_Connection_Confirm_Pdu>(timeout);
+            Server_X_224_Connection_Confirm_Pdu connectionConfirmPdu = ExpectPacket<Server_X_224_Connection_Confirm_Pdu>(new TimeSpan(0, 0, 60));
             if (connectionConfirmPdu == null)
             {
+                TimeSpan waitTime = new TimeSpan(0, 0, 1);
+                Server_X_224_Negotiate_Failure_Pdu failurePdu = ExpectPacket<Server_X_224_Negotiate_Failure_Pdu>(waitTime);
+                if (failurePdu != null)
+                {
+                    DetectorUtil.WriteLog("Received a Server X224 Connection confirm with RDP_NEG_FAILURE structure.");
+                }
+                DetectorUtil.WriteLog("Expecting a Server X224 Connection Confirm PDU.");
                 return false;
             }
 
@@ -304,7 +276,6 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             }
             detectInfo.IsSupportRDPEMT = serverSupportUDPFECR || serverSupportUDPFECL;
 
-
             // Channel Connection
             SendClientMCSErectDomainRequest();
             SendClientMCSAttachUserRequest();
@@ -334,7 +305,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 detectInfo.IsSupportRDPELE = false;
             }
             rdpeleClient.Dispose();
-           
+
             // Capabilities Exchange
             Server_Demand_Active_Pdu demandActivePdu = ExpectPacket<Server_Demand_Active_Pdu>(timeout);
             if (demandActivePdu == null)
@@ -374,7 +345,6 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             }
             return true;
         }
-
         private void CheckSupportedFeatures()
         {
             DetectorUtil.WriteLog("Check specified features support...");
@@ -431,7 +401,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             return null;
         }
 
-        private void CheckSupportedProtocols(Configs config)
+        private void CheckSupportedProtocols()
         {
             // Notify the UI for detecting protocol supported finished
             DetectorUtil.WriteLog("Check specified protocols support...");
@@ -485,7 +455,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             else
             {
                 DetectorUtil.WriteLog("Detect RDPEDYC unsupported");
-            }           
+            }
 
             if (detectInfo.IsSupportRDPELE)
             {
@@ -498,7 +468,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
             DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
         }
-
+      
         private void SetRdpVersion(Configs config)
         {
             DetectorUtil.WriteLog("Detect RDP version...");
@@ -607,7 +577,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 x224ConnectReqPdu.tpktHeader.length += (ushort)x224ConnectReqPdu.rdpCorrelationInfo.length;
                 x224ConnectReqPdu.x224Crq.lengthIndicator += (byte)x224ConnectReqPdu.rdpCorrelationInfo.length;
             }
-            rdpbcgrClient.SendPdu(x224ConnectReqPdu);
+            rdpbcgrClient.SendPdu(x224ConnectReqPdu);          
         }
 
         private void SendClientMCSConnectInitialPDU(
@@ -731,7 +701,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 TS_LICENSE_PDU licensePdu = rdpeleClient.ExpectPdu(timeout);
 
                 if (licensePdu.preamble.bMsgType == bMsgType_Values.ERROR_ALERT)
-                {
+                {                    
                     // If the target machine is a personal terminal server, whether the client sends the license or not, 
                     // the server always sends a license error message with the error code STATUS_VALID_CLIENT and the state transition code ST_NO_TRANSITION. 
                     if (dwErrorCode_Values.STATUS_VALID_CLIENT != licensePdu.LicensingMessage.LicenseError.Value.dwErrorCode)
@@ -745,10 +715,34 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 if (bMsgType_Values.LICENSE_REQUEST != licensePdu.preamble.bMsgType)
                 {
                     DetectorUtil.WriteLog($"A LICENSE_REQUEST message should be received from server, but the real message type is {licensePdu.preamble.bMsgType}");
+                }
+
+                rdpeleClient.SendClientNewLicenseRequest(
+                    KeyExchangeAlg.KEY_EXCHANGE_ALG_RSA, (uint)Client_OS_ID.CLIENT_OS_ID_WINNT_POST_52 | (uint)Client_Image_ID.CLIENT_IMAGE_ID_MICROSOFT, config.ServerUserName, config.ClientName);
+                licensePdu = rdpeleClient.ExpectPdu(timeout);
+                if (bMsgType_Values.PLATFORM_CHALLENGE != licensePdu.preamble.bMsgType)
+                {
+                    DetectorUtil.WriteLog($"A PLATFORM_CHALLENGE message should be received from server, but the real message type is {licensePdu.preamble.bMsgType}");
                     return false;
                 }
-                
-                DetectorUtil.WriteLog("A LICENSE_REQUEST message is received from server, end RDP license detection.");
+
+                Random random = new Random();
+                CLIENT_HARDWARE_ID clientHWID = new CLIENT_HARDWARE_ID
+                {
+                    PlatformId = (uint)Client_OS_ID.CLIENT_OS_ID_WINNT_POST_52 | (uint)Client_Image_ID.CLIENT_IMAGE_ID_MICROSOFT,
+                    Data1 = (uint)random.Next(),
+                    Data2 = (uint)random.Next(),
+                    Data3 = (uint)random.Next(),
+                    Data4 = (uint)random.Next()
+                };
+                rdpeleClient.SendClientPlatformChallengeResponse(clientHWID);
+                licensePdu = rdpeleClient.ExpectPdu(timeout);
+                if (bMsgType_Values.NEW_LICENSE != licensePdu.preamble.bMsgType)
+                {
+                    DetectorUtil.WriteLog($"A NEW_LICENSE message should be received from server, but the real message type is {licensePdu.preamble.bMsgType}");
+                    return false;
+                }
+                DetectorUtil.WriteLog("End RDP license procedure");
                 return true;
             }
             catch (Exception e)
@@ -871,7 +865,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                         }
                         else if (packet is ErrorPdu)
                         {
-                            throw new Exception(string.Format(((ErrorPdu)packet).ErrorMessage));
+                            DetectorUtil.WriteLog("Expect packste throws exception: " + string.Format(((ErrorPdu)packet).ErrorMessage));
                         }
                         else
                         {
