@@ -83,8 +83,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
                             }
                             if (isTestMethod && !isIgnored)
                             {
-                                // GetCategory
+                                // Get categories and description
                                 List<string> categories = new List<string>();
+                                string description = null;
                                 string caseFullName = method.DeclaringType.FullName + "." + method.Name;
                                 foreach (object attribute in attributes)
                                 {
@@ -98,18 +99,40 @@ namespace Microsoft.Protocols.TestManager.Kernel
                                             categories.Add(str);
                                         }
                                     }
+
+                                    // Record Description
+                                    if (attribute.GetType().Name == "DescriptionAttribute")
+                                    {
+                                        var descriptionProp = attribute.GetType().GetProperty("Description");
+                                        description = descriptionProp.GetValue(attribute, null) as string;
+                                    }
                                 }
+
                                 TestCase testcase = new TestCase()
                                 {
                                     FullName = caseFullName,
                                     Category = categories,
+                                    Description = description,
                                     Name = method.Name
                                 };
-                                testcase.ToolTipOnUI = testcase.Name + Environment.NewLine + "Category:";
-                                foreach (string category in testcase.Category)
+
+                                var testcaseToolTipBuilder = new StringBuilder();
+                                testcaseToolTipBuilder.Append(testcase.Name);
+                                if (testcase.Category.Any())
                                 {
-                                    testcase.ToolTipOnUI += Environment.NewLine + category;
+                                    testcaseToolTipBuilder.Append(Environment.NewLine + "Category:");
+                                    foreach (var category in testcase.Category)
+                                    {
+                                        testcaseToolTipBuilder.Append(Environment.NewLine + "  " + category);
+                                    }
                                 }
+                                if (!string.IsNullOrEmpty(testcase.Description))
+                                {
+                                    testcaseToolTipBuilder.Append(Environment.NewLine + "Description:");
+                                    testcaseToolTipBuilder.Append(Environment.NewLine + "  " + testcase.Description);
+                                }
+                                testcase.ToolTipOnUI = testcaseToolTipBuilder.ToString();
+
                                 _testCaseList.Add(testcase);
                             }
                         }
@@ -128,7 +151,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             List<AppConfigTestCase> testCaseListForSearch = testCategory.TestCases;
             for (int i = 0; i < TestCaseList.Count; i++)
             {
-                string testCaseName = TestCaseList[i].Name;                
+                string testCaseName = TestCaseList[i].Name;
                 for (int j = 0; j < testCaseListForSearch.Count; j++)
                 {
                     if (testCaseListForSearch[j].Name == testCaseName)
