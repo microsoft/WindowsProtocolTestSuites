@@ -479,10 +479,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             return GetProperty("Common", propertyName, checkNullOrEmpty);
         }
 
-        protected List<T> ParsePropertyToList<T>(string property) where T : struct
+        protected List<T> ParsePropertyToList<T>(string property, string groupName = "Common") where T : struct
         {
             List<T> list = new List<T>();
-            string propertyValue = GetProperty(property, false);
+            string propertyValue = GetProperty(groupName, property, false);
             if (string.IsNullOrEmpty(propertyValue)) return list;
 
             string[] values = propertyValue.Split(';');

@@ -273,7 +273,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             switch (this.transport)
             {
                 case Transport.SMB:
-                    this.transAdapter = new SmbTransportAdapter();
+                    this.transAdapter = new SmbTransportAdapter(testConfig);
                     break;
 
                 case Transport.SMB2:

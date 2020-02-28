@@ -284,6 +284,12 @@
           To specify whether ChangeTime is supported or not.
         </Description>
       </Property>
+
+      <Property name="FSCC_UnSupportedFSCTL" value="">
+        <Description>
+          To specify the FSCTL (defined in [MS-FSCC] section 2.3) that the SUT does not support.
+        </Description>
+      </Property>
     </Group>
   </Properties>
 </TestSite>
