@@ -19,6 +19,11 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public List<string> Category { get; set; }
 
         /// <summary>
+        /// The description of the test case
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
         /// The tool tip of the test case on the UI
         /// </summary>
         public string ToolTipOnUI { get; set; }
