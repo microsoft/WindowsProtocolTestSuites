@@ -86,6 +86,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             }
         }
 
+        public bool IsWindowsImplementation
+        {
+            get
+            {
+                return testConfig.isWindowsImplementation;
+            }
+        }
+
         #endregion
 
         #region Event
