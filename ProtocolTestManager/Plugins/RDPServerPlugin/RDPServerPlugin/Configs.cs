@@ -24,20 +24,18 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         public string Version { get; set; }
 
         public string SecurityProtocol { get; set; }
-
-        public string TLSVersion { get; set; }
-
-        public string Negotiation { get; set; }
-
-
-
+       
+        public string RDPELESupported { get; set; }
+   
+        public string RDPEDYCSupported { get; set; }
+      
         public void LoadDefaultValues()
         {
             Type cfg = typeof(Configs);
             foreach (var p in cfg.GetProperties())
             {
                 string name = "";
-                if (String.Compare(p.Name.ToLower(), "tlsversion")==0)
+                if (String.Compare(p.Name.ToLower(), "tlsversion") == 0)
                 {
                     name = "RDP.Security.TLS.Version";
                 }
@@ -49,10 +47,20 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 {
                     name = "RDP.Security.Negotiation";
                 }
+                else if (String.Compare(p.Name.ToLower(), "rdpelesupported") == 0)
+                {
+                    name = "RDPELESupported";
+                }
+                else if (String.Compare(p.Name.ToLower(), "rdpedycsupported") == 0)
+                {
+                    name = "RDPEDYCSupported";
+                }
                 else
                 {
                     name = "RDP." + p.Name.Replace("__", ".");
                 }
+
+             
                 var val = DetectorUtil.GetPropertyValue(name);
                 if (val != null)
                 {
@@ -79,6 +87,14 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 else if ((String.Compare(p.Name.ToLower(), "negotiation") == 0))
                 {
                     name = "RDP.Security.Negotiation";
+                }
+                else if (String.Compare(p.Name.ToLower(), "rdpelesupported") == 0)
+                {
+                    name = "RDPELESupported";
+                }
+                else if (String.Compare(p.Name.ToLower(), "rdpedycsupported") == 0)
+                {
+                    name = "RDPEDYCSupported";
                 }
                 else
                 {
