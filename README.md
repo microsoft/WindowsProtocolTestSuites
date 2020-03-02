@@ -153,7 +153,7 @@ build.cmd
 ```
 
 After the build succeeds, the MSI file of each test suite should be generated in the folder `WindowsProtocolTestSuite\drop\TestSuites\\[TestSuiteName]\deploy\`.
-Take SMB test suite as an example, `MS-SMB-TestSuite-ServerEP.msi` should be generated in the folder `WindowsProtocolTestSuite\drop\TestSuites\MS-SMB\deploy\`.
+Take File Server test suite as an example, `FileServer-TestSuite-ServerEP.msi` should be generated in the folder `WindowsProtocolTestSuite\drop\TestSuites\FileServer\deploy\`.
 
 ## How to use test suites
 
