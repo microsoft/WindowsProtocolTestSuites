@@ -4191,6 +4191,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     {
                         case ServerVersion.NonWin:
                         case ServerVersion.Win2016:
+                        case ServerVersion.Winv1803:
                             partitionsEntry.Properties["msDS-Behavior-Version"].Value = 7;
                             break;
                         case ServerVersion.Win2012R2:
@@ -4807,6 +4808,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             {
                 case ServerVersion.NonWin:
                 case ServerVersion.Win2016:
+                case ServerVersion.Winv1803:
                     partitionsEntry.Properties["msDS-Behavior-Version"].Value = 7;
                     break;
                 case ServerVersion.Win2012R2:
