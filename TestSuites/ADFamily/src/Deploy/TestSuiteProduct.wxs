@@ -152,6 +152,7 @@
                   <Directory Id="WIN2016_TD_DIR" Name="Win2016-TD-XML" />
                   <Directory Id="WIN8_TD_DIR" Name="Win8-TD-XML" />
                   <Directory Id="WINBLUE_TD_DIR" Name="WinBlue-TD-XML" />
+                  <Directory Id="WINV1803_TD_DIR" Name="Winv1803-TD-XML" />
                 </Directory>
               </Directory>
             </Directory>
@@ -339,6 +340,7 @@
         <ComponentGroupRef Id="WINBLUE_TD_FILES" />
         <ComponentGroupRef Id="WIN2016_TD_FILES" />
         <ComponentGroupRef Id="WIN8_TD_FILES" />
+        <ComponentGroupRef Id="WINV1803_TD_FILES" />
         <ComponentGroupRef Id="COMMON_BATCH_FILES" />
       </Feature>
 
