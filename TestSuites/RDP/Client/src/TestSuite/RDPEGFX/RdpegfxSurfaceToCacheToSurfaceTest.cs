@@ -541,22 +541,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
             this.TestSite.Assert.IsNotNull(fid, "Evit the existing cache slot should succeed.");
          
-            //Evict the existing cacheslot
-            try
-            {
-                this.TestSite.Log.Add(LogEntryKind.Comment, "Evict the existing cache slot.");
-                fid = this.rdpegfxAdapter.EvictCachEntry(cacheSlot);
-                // this.rdpegfxAdapter.ExpectFrameAck(fid);
-                this.TestSite.Assert.IsNotNull(fid, "Evit the existing cache slot should succeed.");
-            }
-            catch (Exception ex)
-            {
-                this.TestSite.Assume.Pass("Evict cache slot twice should fail as expected. The operation failed with error message: {0}.", ex.Message);
-                return;
-            }
-
-            this.TestSite.Assume.Fail("Evict a cache slot twice should fail. But the RDP client did not fail the request.");
-
+            //Evict the same cacheslot again
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Evict the same cache slot again.");
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Client should close the channel.");
+            fid = this.rdpegfxAdapter.EvictCachEntry(cacheSlot);
+            this.rdpegfxAdapter.ExpectChannelClosed();
         }
         [TestMethod]
         [Priority(1)]

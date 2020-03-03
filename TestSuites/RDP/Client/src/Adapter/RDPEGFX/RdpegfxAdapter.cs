@@ -1169,6 +1169,22 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         }
 
         /// <summary>
+        /// Method to expect the dynamic channel to be closed.
+        /// </summary>
+        public void ExpectChannelClosed()
+        {
+            TimeSpan timeout = waitTime;
+            DateTime endTime = DateTime.Now + timeout;
+
+            while (egfxServer.IsActive() && (DateTime.Now < endTime))
+            {
+                System.Threading.Thread.Sleep(100);
+            }
+
+            Site.Assert.IsFalse(egfxServer.IsActive(), "RDPEGFX channel is closed");
+        }
+
+        /// <summary>
         /// Method to expect a Frame Acknowledge from client.
         /// </summary>
         public void ExpectFrameAck(uint fid)

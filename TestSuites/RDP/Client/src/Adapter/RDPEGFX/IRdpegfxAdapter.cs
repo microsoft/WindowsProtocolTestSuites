@@ -203,6 +203,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         void DeleteSurface(ushort sid);
 
         /// <summary>
+        /// Method to expect the dynamic channel do be closed.
+        /// </summary>
+        void ExpectChannelClosed();
+
+        /// <summary>
         /// Method to expect a Frame Acknowledge from client.
         /// </summary>
         void ExpectFrameAck(uint fid);

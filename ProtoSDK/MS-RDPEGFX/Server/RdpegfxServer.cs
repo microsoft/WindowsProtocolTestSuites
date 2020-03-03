@@ -70,6 +70,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
 
         #endregion Constructor
 
+
+        public bool IsActive()
+        {
+            return rdpegfxDVC.IsActive;
+        }
+
         /// <summary>
         /// Create dynamic virtual channel.
         /// </summary>
