@@ -1591,6 +1591,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 ADImplementations.AD_DS,
                 adLdapModelAdapter.PDCNetbiosName);
 
+            adLdapModelAdapter.NewTestComputer1();
+
             string dn = "cn=" + adLdapModelAdapter.testComputer1Name + ",cn=computers," + adLdapModelAdapter.rootDomainNC;
 
             Utilities.SetAccessRights(
