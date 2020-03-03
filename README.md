@@ -148,7 +148,7 @@ After the build succeeds, the MSI file of Protocol Test Manager should be genera
 ### Build a test suite
 
 ```
-cd WindowsProtocolTestSuites\TestSuites\MS-SMB\src
+cd WindowsProtocolTestSuites\TestSuites\FileServer\src
 build.cmd
 ```
 
