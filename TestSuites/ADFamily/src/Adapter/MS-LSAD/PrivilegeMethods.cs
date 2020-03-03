@@ -594,7 +594,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad
 
                 #endregion
             }
-            else if (enumerationContext > noOfPrivileges)
+            else if (enumerationContext >= noOfPrivileges)
             {
                 EnumeratePrivileges(handleInput, enumerateResponse.EnumerateNone);
 
@@ -611,7 +611,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad
 
                 #endregion
             }
-            else if (enumerationContext <= noOfPrivileges)
+            else if (enumerationContext < noOfPrivileges)
             {
                 EnumeratePrivileges(handleInput, enumerateResponse.EnumerateAll);
 
