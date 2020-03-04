@@ -12,7 +12,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress
     public class PlainLZ77Compressor : XcaCompressor
     {
         const int MaximumMatchDistance = 8192;
-        const int MaximumMatchLength = 65538;
+        // Here the maximum match length is restricted due to the limit of C# array size.
+        // The actual maximum length value is 4294967295.
+        const int MaximumMatchLength = Int32.MaxValue;
 
         static LZ77Code lz77Code = new LZ77Code(MaximumMatchDistance, MaximumMatchLength);
 
@@ -80,58 +82,116 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress
 
                     MatchOffset <<= 3;
 
-                    MatchOffset |= Math.Min(MatchLength, 7);
-
-                    buffer.WriteBytes(OutputPosition, MatchOffset, 2);
-
-                    OutputPosition += 2;
-
-                    if (MatchLength >= 7)
+                    if (MatchLength < 7)
                     {
+                        MatchOffset += (int)MatchLength;
+
+                        buffer.WriteBytes(OutputPosition, MatchOffset, 2);
+
+                        OutputPosition += 2;
+                    }
+                    else
+                    {
+                        MatchOffset |= 7;
+
+                        buffer.WriteBytes(OutputPosition, MatchOffset, 2);
+
+                        OutputPosition += 2;
+
                         MatchLength -= 7;
+
+                        bool EncodeExtraLen;
 
                         if (LastLengthHalfByte == 0)
                         {
                             LastLengthHalfByte = OutputPosition;
 
-                            buffer.WriteBytes(OutputPosition, Math.Min(MatchLength, 15), 1);
+                            if (MatchLength < 15)
+                            {
+                                buffer.WriteBytes(OutputPosition, MatchLength, 1);
 
-                            OutputPosition += 1;
+                                OutputPosition += 1;
+
+                                EncodeExtraLen = false;
+                            }
+                            else
+                            {
+                                buffer.WriteBytes(OutputPosition, 15, 1);
+
+                                OutputPosition++;
+
+                                EncodeExtraLen = true;
+                            }
                         }
                         else
                         {
-                            byte LastLength = buffer[LastLengthHalfByte];
+                            if (MatchLength < 15)
+                            {
+                                byte LastLength = buffer[LastLengthHalfByte];
 
-                            LastLength |= (byte)(Math.Min(15, MatchLength) << 4);
+                                LastLength |= (byte)(MatchLength << 4);
 
-                            buffer.WriteBytes(LastLengthHalfByte, LastLength, 1);
+                                buffer.WriteBytes(LastLengthHalfByte, LastLength, 1);
 
-                            LastLengthHalfByte = 0;
+                                LastLengthHalfByte = 0;
+
+                                EncodeExtraLen = false;
+                            }
+                            else
+                            {
+                                byte LastLength = buffer[LastLengthHalfByte];
+
+                                LastLength |= 15 << 4;
+
+                                buffer.WriteBytes(LastLengthHalfByte, LastLength, 1);
+
+                                LastLengthHalfByte = 0;
+
+                                EncodeExtraLen = true;
+                            }
                         }
 
-                        if (MatchLength >= 15)
+                        if (EncodeExtraLen)
                         {
                             MatchLength -= 15;
 
-                            buffer.WriteBytes(OutputPosition, Math.Min(MatchLength, 255), 1);
-
-                            OutputPosition += 1;
-
-                            if (MatchLength >= 255)
+                            if (MatchLength < 255)
                             {
+                                buffer.WriteBytes(OutputPosition, MatchLength, 1);
 
-                                MatchLength += (15 + 7);
+                                OutputPosition += 1;
+                            }
+                            else
+                            {
+                                buffer.WriteBytes(OutputPosition, 255, 1);
 
-                                buffer.WriteBytes(OutputPosition, MatchLength, 2);
+                                OutputPosition += 1;
 
-                                OutputPosition += 2;
+                                MatchLength += 7 + 15;
+
+                                if (MatchLength < (1 << 16))
+                                {
+                                    buffer.WriteBytes(OutputPosition, MatchLength, 2);
+
+                                    OutputPosition += 2;
+                                }
+                                else
+                                {
+                                    buffer.WriteBytes(OutputPosition, 0, 2);
+
+                                    OutputPosition += 2;
+
+                                    buffer.WriteBytes(OutputPosition, MatchLength, 4);
+
+                                    OutputPosition += 4;
+                                }
                             }
                         }
                     }
+
                     Flags = (Flags << 1) | 1;
 
                     FlagCount += 1;
-
                 }
                 else if (symbol is LZ77EOF)
                 {

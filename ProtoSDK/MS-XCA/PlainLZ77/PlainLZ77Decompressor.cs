@@ -17,51 +17,54 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress
         public byte[] Decompress(byte[] data)
         {
             /*
-                BufferedFlags = 0
-                BufferedFlagCount = 0
-                InputPosition = 0
-                OutputPosition = 0
-                LastLengthHalfByte = 0
-                Loop until break instruction or error
-                    If BufferedFlagCount == 0
-                        BufferedFlags = read 4 bytes at InputPosition
-                        InputPosition += 4
-                        BufferedFlagCount = 32
-                    BufferedFlagCount = BufferedFlagCount – 1
-                    If (BufferedFlags & (1 << BufferedFlagCount)) == 0
-                        Copy 1 byte from InputPosition to OutputPosition.  Advance both.
-                    Else
-                        If InputPosition == InputBufferSize
-                            Decompression is complete.  Return with success.
-                        MatchBytes = read 2 bytes from InputPosition
-                        InputPosition += 2
-                        MatchLength = MatchBytes mod 8
-                        MatchOffset = (MatchBytes / 8) + 1
-                        If MatchLength == 7
-                            If LastLengthHalfByte == 0
-                                MatchLength = read 1 byte from InputPosition
-                                MatchLength = MatchLength mod 16
-                                LastLengthHalfByte = InputPosition
-                                InputPosition += 1
-                            Else
-                                MatchLength = read 1 byte from LastLengthHalfByte position
-                                MatchLength = MatchLength / 16
-                                LastLengthHalfByte = 0
-                            If MatchLength == 15
-                                MatchLength = read 1 byte from InputPosition
-                                InputPosition += 1
-                                If MatchLength == 255
-                                    MatchLength = read 2 bytes from InputPosition
-                                    InputPosition += 2
-                                    If MatchLength < 15 + 7
-                                       Return error.
-                                    MatchLength -= (15 + 7)
-                                MatchLength += 15
-                            MatchLength += 7
-                        MatchLength += 3
-                        For i = 0 to MatchLength – 1
-                            Copy 1 byte from OutputBuffer[OutputPosition – MatchOffset]
-                            OutputPosition += 1
+                	BufferedFlags = 0
+	                BufferedFlagCount = 0
+	                InputPosition = 0
+	                OutputPosition = 0
+	                LastLengthHalfByte = 0
+	                Loop until break instruction or error
+	                    If BufferedFlagCount == 0
+	                        BufferedFlags = read 4 bytes at InputPosition
+	                        InputPosition += 4
+	                        BufferedFlagCount = 32
+	                    BufferedFlagCount = BufferedFlagCount – 1
+	                    If (BufferedFlags & (1 << BufferedFlagCount)) == 0
+	                        Copy 1 byte from InputPosition to OutputPosition.  Advance both.
+	                    Else
+	                        If InputPosition == InputBufferSize
+	                            Decompression is complete.  Return with success.
+	                        MatchBytes = read 2 bytes from InputPosition
+	                        InputPosition += 2
+	                        MatchLength = MatchBytes mod 8
+	                        MatchOffset = (MatchBytes / 8) + 1
+	                        If MatchLength == 7
+	                            If LastLengthHalfByte == 0
+	                                MatchLength = read 1 byte from InputPosition
+	                                MatchLength = MatchLength mod 16
+	                                LastLengthHalfByte = InputPosition
+	                                InputPosition += 1
+	                            Else
+	                                MatchLength = read 1 byte from LastLengthHalfByte position
+	                                MatchLength = MatchLength / 16
+	                                LastLengthHalfByte = 0
+	                            If MatchLength == 15
+	                                MatchLength = read 1 byte from InputPosition
+	                                InputPosition += 1
+	                                If MatchLength == 255
+	                                    MatchLength = read 2 bytes from InputPosition
+	                                    InputPosition += 2
+	                                    If MatchLength == 0
+	                                        MatchLength = read 4 bytes from InputPosition
+	                                        InputPosition += 4 bytes
+	                                    If MatchLength < 15 + 7
+	                                       Return error.
+	                                    MatchLength -= (15 + 7)
+	                                MatchLength += 15
+	                            MatchLength += 7
+	                        MatchLength += 3
+	                        For i = 0 to MatchLength – 1
+	                            Copy 1 byte from OutputBuffer[OutputPosition – MatchOffset]
+	                            OutputPosition += 1
              */
 
 
@@ -130,6 +133,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress
                                 MatchLength = inputReader.ReadBytes(InputPosition, 2);
 
                                 InputPosition += 2;
+
+                                if (MatchLength == 0)
+                                {
+                                    MatchLength = inputReader.ReadBytes(InputPosition, 4);
+
+                                    InputPosition += 4;
+                                }
+
                                 if (MatchLength < 15 + 7)
                                 {
                                     throw new XcaException("[Data error]: Match length is invalid!");
