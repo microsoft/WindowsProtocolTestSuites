@@ -1591,7 +1591,10 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 ADImplementations.AD_DS,
                 adLdapModelAdapter.PDCNetbiosName);
 
-            adLdapModelAdapter.NewTestComputer1();
+            // Recreate TestComputer1 computer account object.
+            // It was deleted in the TestCleanup method.
+            // It should be recreated, because it will be used further in this case.
+            adLdapModelAdapter.NewComputer(adLdapModelAdapter.testComputer1Name);
 
             string dn = "cn=" + adLdapModelAdapter.testComputer1Name + ",cn=computers," + adLdapModelAdapter.rootDomainNC;
 

@@ -271,13 +271,14 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
         }
 
         /// <summary>
-        /// Create a new TestComputer1 computer account object.
+        /// Create a new computer account object.
         /// </summary>
-        public void NewTestComputer1()
+        /// <param name="computerName">The name of the new computer account object.</param>
+        public void NewComputer(string computerName)
         {
             string PdcFqdn = string.Format("{0}.{1}", PDCNetbiosName, PrimaryDomainDnsName);
             var parentDN = string.Format("CN=Computers,{0}", rootDomainNCForDs);
-            Utilities.NewComputer(PdcFqdn, ADDSPortNum, parentDN, testComputer1Name);
+            Utilities.NewComputer(PdcFqdn, ADDSPortNum, parentDN, computerName);
         }
 
         /// <summary>
