@@ -4835,7 +4835,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// <summary>
         /// Not a real compression algorithm value, SHOULD be unsupported
         /// </summary>
-        Unsupported = 0x0004,
+        Unsupported = 0x00FF,
     }
 
     /// <summary>
