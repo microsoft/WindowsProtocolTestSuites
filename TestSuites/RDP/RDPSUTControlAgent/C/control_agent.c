@@ -11,9 +11,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#define TCP_PORT 4488
-#define MAX_CONNECTIONS 10
-#define BUFFER_SIZE 1024
+#include "config.h"
 
 enum message_type {
   SUT_CONTROL_REQUEST = 0x0000,
@@ -190,13 +188,11 @@ const void *read_str(const void *buffer, char **value, size_t len) {
 const void *read_touch_event_single_payload(const void *buffer,
                                             touch_event_single *event) {
   buffer = read_uint32(buffer, &event->touch_event_times);
-  /* buffer = read_uint16(buffer, &event->positions); */
 }
 
 const void *read_touch_event_multiple_payload(const void *buffer,
                                               touch_event_multiple *event) {
   buffer = read_uint32(buffer, &event->touch_position_count);
-  /* buffer = read_uint16(buffer, &event->positions); */
 }
 
 const void *
@@ -306,21 +302,16 @@ int decode_request_msg(const void *buffer, request_msg *msg) {
     buffer = read_uint32(buffer, &msg->basic_input);
     break;
   case TOUCH_EVENT_SINGLE:
-    printf("TOUCH_EVENT_SINGLE\n");
-    // read_touch_event_single_payload(buffer, &msg->event_single);
+    printf("TOUCH_EVENT_SINGLE (not implelented)\n");
     break;
   case TOUCH_EVENT_MULTIPLE:
-    printf("TOUCH_EVENT_MULTIPLE\n");
-    // read_touch_event_multiple_payload(buffer, &msg->event_multiple);
+    printf("TOUCH_EVENT_MULTIPLE (not implelented)\n");
     break;
   case DISPLAY_UPDATE_RESOLUTION:
-    printf("DISPLAY_UPDATE_RESOLUTION\n");
-    // read_display_update_resolution_payload(buffer,
-    // &msg->display_update_resolution);
+    printf("DISPLAY_UPDATE_RESOLUTION (not implelented)\n");
     break;
   case DISPLAY_UPDATE_MONITORS:
-    printf("DISPLAY_UPDATE_MONITORS\n");
-    // buffer = read_uint32(buffer, &msg->display_update_monitors);
+    printf("DISPLAY_UPDATE_MONITORS (not implelented)\n");
     break;
   default:
     printf("unknown command_id\n");
@@ -365,16 +356,15 @@ void *encode_response_msg(response_msg *msg, size_t *sz) {
     size += strlen(msg->error_message);
   }
   size += sizeof(msg->payload_len);
-  /* size += sizeof(msg->payload); */
+  /* TODO: size += sizeof(msg->payload); */
 
   void *pa = NULL;
   printf("allocate response buffer %ld\n", size);
-  pa = malloc(size);
+  pa = calloc(1, size);
   if (!pa) {
-    perror("malloc");
+    perror("calloc");
     return NULL;
   }
-  /* memset(pa, 0, size); */
   explicit_bzero(pa, size);
 
   size_t offset = 0;
@@ -462,17 +452,14 @@ int main(int argc, char *argv[]) {
     switch (request_msg.command_id) {
     case START_RDP_CONNECTION:
       printf("%s START_RDP_CONNECTION\n", __func__);
-      printf("killall -9 xfreerdp\n");
-      system("killall -9 xfreerdp");
-      printf("start xfreerdp\n");
-      rc = system("/usr/bin/xfreerdp /u:Administrator /p:Password01 "
-                  "/v:10.16.170.5:3389 &");
-      printf("xfreerdp connect result = %d\n", rc);
+      system(CMD_CLOSE_CLIENT);
+      rc = system(CMD_CONNECT_CLIENT);
+      printf("connect result = %d\n", rc);
       break;
     case CLOSE_RDP_CONNECTION:
       printf("%s CLOSE_RDP_CONNECTION\n", __func__);
-      rc = system("killall -9 xfreerdp");
-      printf("xfreerdp killall result = %d", rc);
+      rc = system(CMD_CLOSE_CLIENT);
+      printf("close connection result = %d", rc);
       break;
     case AUTO_RECONNECT:
       printf("%s AUTO_RECONNECT\n", __func__);
@@ -523,15 +510,11 @@ int main(int argc, char *argv[]) {
       continue;
     }
 
-    /* print_request_msg(&request_msg); */
-    /* print_response_msg(&response_msg); */
-
     ssize_t err;
     err = send(client_fd, response, response_sz, 0);
     if (err < 0) {
       perror("send");
     }
-    printf("Line %d\n", __LINE__);
     free(response);
     free_request_msg(&request_msg);
     free_response_msg(&response_msg);

@@ -33,7 +33,7 @@ Or
 
 ```
 cd Python
-./python RDPSUTControlAgent.py
+python ./RDPSUTControlAgent.py
 ```
 
 Or
