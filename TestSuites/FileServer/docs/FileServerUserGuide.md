@@ -107,10 +107,10 @@ The **Test Suite** examines protocol implementation behaviors that are observed 
 
 To learn more about File Server Test Suite design, see the following documentation:
   
-* [File Server Protocol Family Test Design Specification](https://github.com/Microsoft/WindowsProtocolTestSuites/blob/staging/TestSuites/FileServer/docs/FileServerTestDesignSpecification.md)
-* [Authentication Protocol Server Test Design Specification](https://github.com/Microsoft/WindowsProtocolTestSuites/blob/staging/TestSuites/FileServer/docs/Auth_ServerTestDesignSpecification.md)
-* [MS-FSA Protocol Server Test Design Specification](https://github.com/Microsoft/WindowsProtocolTestSuites/blob/staging/TestSuites/FileServer/docs/MS-FSA_ServerTestDesignSpecification.md)
-* [MS-SQOS Protocol Server Test Design Specification](https://github.com/Microsoft/WindowsProtocolTestSuites/blob/staging/TestSuites/FileServer/docs/MS-SQOS_ServerTestDesignSpecification.md)
+* [File Server Protocol Family Test Design Specification](./FileServerTestDesignSpecification.md)
+* [Authentication Protocol Server Test Design Specification](./Auth_ServerTestDesignSpecification.md)
+* [MS-FSA Protocol Server Test Design Specification](./MS-FSA_ServerTestDesignSpecification.md)
+* [MS-SQOS Protocol Server Test Design Specification](./MS-SQOS_ServerTestDesignSpecification.md)
 
 ![](./image/FileServerUserGuide/image1.png)**Tip**
 
@@ -213,7 +213,7 @@ You can execute the Test Suite test cases in either a **WORKGROUP** or **DOMAIN*
 
 **More Information**
 
-To learn more about Failover Cluster scenarios, see the **Test Suite Design** section in the [File Server Protocol Family Test Design Specification](https://github.com/Microsoft/WindowsProtocolTestSuites/blob/staging/TestSuites/FileServer/docs/FileServerTestDesignSpecification.md).
+To learn more about Failover Cluster scenarios, see the **Test Suite Design** section in the [File Server Protocol Family Test Design Specification](./FileServerTestDesignSpecification.md).
 
 ### <a name="3.3"/> 3.3 Hardware
 
@@ -3646,7 +3646,7 @@ If you want to create a Test Suite to customize a testing environment and test c
 
 ## <a name="9"/> 9 Debugging Test Cases
 
-You can use the Visual Studio solution (.sln) file included with the  **File Server Protocol Family Test Suite** to debug the test cases that you run against your own protocol implementations. The **FileServer.sln** file is located [here](https://github.com/Microsoft/WindowsProtocolTestSuites/blob/staging/TestSuites/FileServer/src/).
+You can use the Visual Studio solution (.sln) file included with the  **File Server Protocol Family Test Suite** to debug the test cases that you run against your own protocol implementations. The **FileServer.sln** file is located [here](../../src/).
 
 ![](./image/FileServerUserGuide/image1.png)**Note**
 
@@ -3660,7 +3660,7 @@ Figure 196. Microsoft Visual Studio: Correcting the exception **Cannot get test 
 
 To debug a test case, perform the steps that follow.
 
-1. On the Driver computer, use Microsoft® Visual Studio® to open the following solution file: [FileServer.sln](https://github.com/Microsoft/WindowsProtocolTestSuites/blob/staging/TestSuites/FileServer/src/).
+1. On the Driver computer, use Microsoft® Visual Studio® to open the following solution file: [FileServer.sln](../../src/).
 
 2. In Visual Studio, in the Solution Explorer window, right-click the **Solution** **FileServer**, and then select **Build Solution**.
 

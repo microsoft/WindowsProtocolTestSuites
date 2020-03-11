@@ -39,7 +39,7 @@
 This guide provides information about how to install, configure, and run MS-SMB Test Suite and its environment. This suite of tools is designed to test implementations of Server Message Block protocol, 
 as specified in the Microsoft document [MS-SMB]: Server Message Block Protocol Specification. This guide provides information about using this test suite on the Microsoft? Windows? operating system and on operating systems that are not Windows based. 
 This suite of tools tests only the protocol implementation behaviors that are observed on the wire. 
-For detailed information about the design of this test suite, see [MS-SMB_ServerTestDesignSpecification](https://github.com/Microsoft/WindowsProtocolTestSuites/blob/master/TestSuites/MS-SMB/docs/MS-SMB_ServerTestDesignSpecification.md). 
+For detailed information about the design of this test suite, see [MS-SMB_ServerTestDesignSpecification](./MS-SMB_ServerTestDesignSpecification.md). 
  
 ## <a name="3"/>Quick Start Checklist
 The following checklist summarizes the steps you need to complete to get the test suite up and running. The checklist also provides references to documentation that can help you get started. 
