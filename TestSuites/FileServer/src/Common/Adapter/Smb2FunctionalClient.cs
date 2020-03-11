@@ -473,7 +473,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             Guid? clientGuid = null,
             ResponseChecker<NEGOTIATE_Response> checker = null,
             bool ifHandleRejectUnencryptedAccessSeparately = false,
-            bool ifAddGLOBAL_CAP_ENCRYPTION = true,
+            bool? ifAddGLOBAL_CAP_ENCRYPTION = null,
             bool addDefaultEncryption = false,
             bool addNetNameConetxtID = false
             )
@@ -545,6 +545,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 }
             }
 
+            if (ifAddGLOBAL_CAP_ENCRYPTION == null)
+            {
+                // Assign default value to ifAddGLOBAL_CAP_ENCRYPTION according to server's configuration.
+                ifAddGLOBAL_CAP_ENCRYPTION = testConfig.IsGlobalEncryptDataEnabled;
+            }
+
             return Negotiate(
                     Packet_Header_Flags_Values.NONE,
                     dialects,
@@ -553,7 +559,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                     clientGuid,
                     checker: checker,
                     ifHandleRejectUnencryptedAccessSeparately: ifHandleRejectUnencryptedAccessSeparately,
-                    ifAddGLOBAL_CAP_ENCRYPTION: ifAddGLOBAL_CAP_ENCRYPTION,
+                    ifAddGLOBAL_CAP_ENCRYPTION: ifAddGLOBAL_CAP_ENCRYPTION.Value,
                     addDefaultEncryption: addDefaultEncryption,
                     addNetNameConetxtID: addNetNameConetxtID
                     );
@@ -580,14 +586,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             if (Array.IndexOf(dialects, DialectRevision.Smb311) >= 0)
             {
                 preauthHashAlgs = new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 };
-                encryptionAlgs = (capabilityValue & Capabilities_Values.GLOBAL_CAP_ENCRYPTION) > 0 ?
+                encryptionAlgs = ((capabilityValue != null && capabilityValue.Value.HasFlag(Capabilities_Values.GLOBAL_CAP_ENCRYPTION)) || ifAddGLOBAL_CAP_ENCRYPTION) ?
                     new EncryptionAlgorithm[]
                     {
                         EncryptionAlgorithm.ENCRYPTION_AES128_GCM,
                         EncryptionAlgorithm.ENCRYPTION_AES128_CCM
                     }
                     : null;
-                if(addNetNameConetxtID)
+                if (addNetNameConetxtID)
                 {
                     netNameContext.Header.ContextType = SMB2_NEGOTIATE_CONTEXT_Type_Values.SMB2_NETNAME_NEGOTIATE_CONTEXT_ID;
                     netNameContext.Header.Reserved = 0;
@@ -698,7 +704,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 }
             }
 
-            maxBufferSize = negotiateResponse.PayLoad.MaxReadSize <negotiateResponse.PayLoad.MaxWriteSize ?
+            maxBufferSize = negotiateResponse.PayLoad.MaxReadSize < negotiateResponse.PayLoad.MaxWriteSize ?
                 negotiateResponse.PayLoad.MaxReadSize : negotiateResponse.PayLoad.MaxWriteSize;
 
             maxTransactSize = negotiateResponse.PayLoad.MaxTransactSize;
