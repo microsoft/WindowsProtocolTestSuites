@@ -50,11 +50,11 @@
       <Choice>true, false</Choice>
       <Description>Indicates if SUT drops the connection when an invalid request received.</Description>
     </Property>
-    <!--The version of the RDP intends to test. It should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6-->
+    <!--The version of the RDP intends to test. It should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.7, 10.8-->
     <!--The seperator between the RDP.Version is required to be ".".-->
     <Property name="RDP.Version" value="10.6">
-      <Choice>7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6</Choice>
-      <Description>The version of the RDP intends to test, it should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6</Description>
+      <Choice>7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.7, 10.8</Choice>
+      <Description>The version of the RDP intends to test, it should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.7, 10.8</Description>
     </Property>
     <!-- Block End -->
 
