@@ -63,8 +63,8 @@
 
     <!--The seperator between the RDP.Version is required to be ".".-->
     <Property name="RDP.Version" value="8.1">
-      <Choice>7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.7</Choice>
-      <Description>The version of the RDP intends to test, it should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.7</Description>
+      <Choice>7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.7, 10.8</Choice>
+      <Description>The version of the RDP intends to test, it should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.7, 10.8</Description>
     </Property>
 
     <!-- Whether the SUT supports RDPEDYC. The value should be true or false.-->
