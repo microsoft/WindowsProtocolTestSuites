@@ -1314,7 +1314,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                                 "IDL_DRSVerifyNames: Checking GUIDs - got: {0}, expect: {1}, GUIDs of the DSNames should be the same.",
                                 actualGuid, guid
                                 );
-                            goto default;
+                            // We didn't set the SID for the object.
+                            break;
                         }
                     case DRS_MSG_VERIFYREQ_V1_dwFlags_Values.DRS_VERIFY_FPOS:
                         goto default;
