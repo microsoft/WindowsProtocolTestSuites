@@ -787,7 +787,7 @@ The following table describes the required properties for all the test cases.
 | | Default value: **True**|
 |  **DropConnectionForInvalidRequest**| Indicates if SUT drops the connection when an invalid request received. The possible values are **True** and **False**.|
 | | Default value: **True**|
-|  **RDP.Version**| The version of the RDP intends to test, it should be one of **7.0**, **7.1**, **8.0**, **8.1**, **10.0**, **10.1**, **10.2**, **10.3**.|
+|  **RDP.Version**| The version of the RDP intends to test, it should be one of **7.0**, **7.1**, **8.0**, **8.1**, **10.0**, **10.1**, **10.2**, **10.3 or later**.|
 | | Default value: **8.1**|
 |  **CertificatePath**| The Personal Information Exchange (.pfx) certificate used to secure TLS or CrepSSP transports. If the **RDP.Security.Protocol** value is set to **TLS** or **CrepSSP**, this property must be set.|
 | | Default value: **C:\DriverComputer.pfx**|
