@@ -281,6 +281,7 @@ Function Config-Phase2()
 
     # Set password change, netlogon, rights in registry key and group policy
     Write-ConfigLog "Setting password change, netlogon, create object rights in registry key and group policy..." -ForegroundColor Yellow
+    Copy-Item .\Scripts\GptTmpl.txt .\ -Force
     .\Set-NetlogonRegKeyAndPolicy.ps1 -IsDc -EnableGpConfig
 
     # Get OS Version and Forest Functional Level
