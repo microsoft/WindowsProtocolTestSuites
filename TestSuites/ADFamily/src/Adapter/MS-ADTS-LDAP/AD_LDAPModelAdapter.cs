@@ -176,7 +176,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             RecycleBinEnabled = GetBoolProperty(propertyGroup + "isRecycleBinEnabled");
             transportBufferSize = GetIntProperty(propertyGroup + "AdtsLdapStack.TransportBufferSize");
             timeout = TimeSpan.FromMilliseconds(GetIntProperty(propertyGroup + "AdtsLdapStack.TimeoutMillisec"));
-            
+
             Site.Log.Add(LogEntryKind.Debug, "Read MS-ADTS-LDAP group properties from PTF configure files completed.");
 
             #endregion
@@ -193,7 +193,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             // primary domain
             // assume dc is operating with the highest domain functional level it supports
             dcFunctionality = ((uint)DomainFunctionLevel).ToString();
-            Microsoft.Protocols.TestSuites.ActiveDirectory.Common.Domain rootDomain = 
+            Microsoft.Protocols.TestSuites.ActiveDirectory.Common.Domain rootDomain =
                 domains.SingleOrDefault(x => x.FQDN.Equals(PrimaryDomainDnsName, StringComparison.InvariantCultureIgnoreCase));
             rootDomainNCForDs = rootDomain.DomainNC;
             rootDomainAdminsGroup = string.Format("{0}\\Domain Admins", rootDomain.NetbiosName);
@@ -252,15 +252,15 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             #region Clean up Environment
 
             CleanUpEnvironment();
-            
+
             //clear the added list
             List<string> addedList = Utilities.getAddedList();
             addedList.Clear();
-            
+
             #endregion
 
             #region Initialize Environment
-            
+
             string parentDN = string.Format("CN=Users,{0}", rootDomainNCForDs);
             Utilities.NewUser(PdcFqdn, ADDSPortNum, parentDN, testUser7Name, testUser7Pwd);
 
@@ -268,6 +268,17 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             Utilities.NewComputer(PdcFqdn, ADDSPortNum, parentDN, testComputer1Name);
 
             #endregion
+        }
+
+        /// <summary>
+        /// Create a new computer account object.
+        /// </summary>
+        /// <param name="computerName">The name of the new computer account object.</param>
+        public void NewComputer(string computerName)
+        {
+            string PdcFqdn = string.Format("{0}.{1}", PDCNetbiosName, PrimaryDomainDnsName);
+            var parentDN = string.Format("CN=Computers,{0}", rootDomainNCForDs);
+            Utilities.NewComputer(PdcFqdn, ADDSPortNum, parentDN, computerName);
         }
 
         /// <summary>
@@ -321,11 +332,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             //Set the access rights of Schema
             Utilities.SetAccessRights(
-				schemaNC,
-				testUserName,
-				currentWorkingDC.Domain.NetbiosName,
-				ActiveDirectoryRights.GenericAll,
-				AccessControlType.Allow);
+                schemaNC,
+                testUserName,
+                currentWorkingDC.Domain.NetbiosName,
+                ActiveDirectoryRights.GenericAll,
+                AccessControlType.Allow);
 
             File.WriteAllLines(objectsChangedByModelAdapter, adLdapClient.testedObjects);
             File.WriteAllLines(objectsChangedByUtilites, Utilities.testObjects);
@@ -354,13 +365,13 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             string password = null)
         {
             Site.Log.Add(LogEntryKind.Debug, "[SetConnectAndBind]: Entering...");
-            Site.Log.Add(LogEntryKind.Debug, 
+            Site.Log.Add(LogEntryKind.Debug,
                 "Attempting to connect and bind to LDAP server: {0} for service: {1}",
                 serverHostName,
                 Enum.GetName(typeof(ADImplementations), service));
 
             currentWorkingDC = GetDomainController(serverHostName);
-            Site.Assume.IsNotNull(currentWorkingDC, 
+            Site.Assume.IsNotNull(currentWorkingDC,
                 "LDAP server should be configured in ptfconfig with hostname: {0}",
                 serverHostName);
 
@@ -629,7 +640,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             foreach (string attrib in attribnVals)
             {
                 string item = attrib;
-                
+
                 switch (service)
                 {
                     case ADImplementations.AD_LDS:
@@ -684,7 +695,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
                     Site.Log.Add(LogEntryKind.Debug, string.Format("[MS-ADTS] section 3.1.1.5.2.2 Constraints (Add Opertaion)"));
                     // (1) The fSpecifyGUIDOnAdd heuristic is true in the dSHeuristics attribute (see section 6.1.1.2.4.1.2).
-                    Site.Log.Add(LogEntryKind.Debug, 
+                    Site.Log.Add(LogEntryKind.Debug,
                         string.Format("(1) The fSpecifyGUIDOnAdd heuristic is true in the dSHeuristics attribute (see section 6.1.1.2.4.1.2)"));
                     List<DirectoryAttributeModification> attribstoModify = new List<DirectoryAttributeModification>();
                     DirectoryAttributeModification attribs = new DirectoryAttributeModification();
@@ -711,9 +722,9 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     // (2) The requester has the Add-GUID control access right (section 5.1.3.2.1) on the NC root of 
                     //     the NC where the object is being added.
                     // This is checked in the next phase
-                    Site.Log.Add(LogEntryKind.Debug, 
+                    Site.Log.Add(LogEntryKind.Debug,
                         string.Format("(2) The requester has the Add-GUID control access right (section 5.1.3.2.1) on the NC root of the NC where the object is being added."));
-                    
+
                     // (3) The requester-specified objectGUID is not currently in use in the forest.
                     try
                     {
@@ -735,13 +746,13 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                         result = string.Empty;
                         Site.Log.Add(LogEntryKind.Warning, ex.Message);
                     }
-   
+
                     // (4) Active Directory is operating as AD DS.
-                    Site.Assert.AreEqual(ADImplementations.AD_DS, service, 
+                    Site.Assert.AreEqual(ADImplementations.AD_DS, service,
                         string.Format("(4) Active Directory is operating as AD DS."));
 
                     // (5) The requester-specified objectGUID is not the NULL GUID.
-                    Site.Assert.IsNotNull(newObjGuid, 
+                    Site.Assert.IsNotNull(newObjGuid,
                         string.Format("(5) The requester-specified objectGUID is not the NULL GUID."));
                 }
 
@@ -761,7 +772,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             #region Control Access Rights
 
             if (currentService.Equals(ADImplementations.AD_DS))
-            {   
+            {
                 //considering default NcRight as RIGHT_DS_ADD_GUID
                 if (NCRights == NCRight.RIGHT_DS_ADD_GUID)
                 {
@@ -990,7 +1001,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                             errorStatus = ConstrOnAddOpErrs.unSpecifiedError;
                             break;
                     }
-                    
+
                     #endregion
                 }
             }
@@ -1660,7 +1671,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             RightsOnObjects objectRights,
             string control,
             ADImplementations service,
-            ServerVersion dcLevel, 
+            ServerVersion dcLevel,
             bool isRODC,
             out ConstrOnDelOpErr errorStatus)
         {
@@ -1783,7 +1794,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             {
                 Site.Log.Add(LogEntryKind.Debug, string.Format("The object to be deleted {0} exists in regular state.", delObjDn));
                 isEntryExist = true;
-                
+
                 foreach (AdtsSearchResultEntryPacket entrypacket in searchResponse)
                 {
                     searchAttrVals = adLdapClient.GetAttributeValuesInString(entrypacket, "objectSid");
@@ -1876,7 +1887,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             }
 
             #endregion
-            
+
             #region Delete the tombstone-object
 
             if (!isEntryExist
@@ -1932,7 +1943,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     }
                     else
                     {
-                        Site.Log.Add(LogEntryKind.Debug, 
+                        Site.Log.Add(LogEntryKind.Debug,
                             string.Format("Attribute LastKnownParent is not found in tombStoneResult for {0}.", delObjDn));
 
                         if (tombStoneSearchResultEntry == null)
@@ -2090,7 +2101,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     case "Success":
 
                         #region Searching for Deleted Object in Tombstones
-                        
+
                         tombStoneSearchResultEntry = Utilities.GetDeletedObject(guidHashTable[delObjDn].ToString(), defaultNC, currentWorkingDC.FQDN, currentPort);
                         if (tombStoneSearchResultEntry != null)
                         {
@@ -2751,13 +2762,13 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             DirectoryAttributeModification modifyAttr = new DirectoryAttributeModification();
             List<DirectoryAttributeModification> attrValsToBeModified = new List<DirectoryAttributeModification>();
-            
+
             string serverName = string.Empty;
             string attrToModify = string.Empty;
             string attrToGetObject = string.Empty;
             string objectClass = string.Empty;
             string objectDN = string.Empty;
-            
+
             ICollection<AdtsSearchResultEntryPacket> searchResponse;
             string[] searchAttrVals = null;
 
@@ -3079,7 +3090,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     Site.Log.Add(LogEntryKind.Debug, "Modify attribute value: {0}", value);
                 }
                 attrValsToBeModified.Add(modifyAttr);
-                
+
                 #endregion
 
                 #region Get the attributes that are used to find the object to be modified from parameter [attribVal]
@@ -3175,7 +3186,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 // objectDN = "CN=user6751,CN=Users,DC=contoso,DC=com"
                 if (objectDN != null)
                 {
-                    if(objectDN.Equals(testUser0DNForDs, StringComparison.InvariantCultureIgnoreCase) 
+                    if(objectDN.Equals(testUser0DNForDs, StringComparison.InvariantCultureIgnoreCase)
                         || objectDN.Equals(testUser1DNForDs, StringComparison.InvariantCultureIgnoreCase))
                     {
                         // the entry is deleted
@@ -3526,7 +3537,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 #endregion
 
                 // runSamUpgradeTasks, in RootDseModifyOperations Test Case
-                
+
                 // sqmRunOnce, in RootDSELds Test Case
 
                 // runProtectAdminGroupsTask
@@ -3739,7 +3750,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 }
 
                 #endregion
-                
+
                 #region Requirements on Modify Operations
 
                 if (errorStatus.Equals(ConstrOnModOpErrs.success))
@@ -4019,15 +4030,15 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     #region Verify RootDSE Modify Errors
 
                     #region MS-AD_LDAP 1192
-					
-					if (currentWorkingDC.OSVersion >= ServerVersion.Win2003
+
+                    if (currentWorkingDC.OSVersion >= ServerVersion.Win2003
                         && attrToModify.ToLower(CultureInfo.InvariantCulture).Contains("replicateSingleObject".ToLower(CultureInfo.InvariantCulture))
                         && errorStatus.Equals(ConstrOnModOpErrs.OperationsError_ERROR_DS_GENERIC_ERROR))
                     {
-						Site.CaptureRequirement(1192, "If the DN specified in replicateSingleObject operation is not in the specified format, the server rejects the request with the error operationsError.");
+                        Site.CaptureRequirement(1192, "If the DN specified in replicateSingleObject operation is not in the specified format, the server rejects the request with the error operationsError.");
                     }
-					
-                	#endregion
+
+                    #endregion
 
                     #region MS-AD_LDAP 344
 
@@ -4151,7 +4162,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             #endregion
 
             #region Modify Recycle Bin Operation
-            
+
             foreach (string key in attribVal.Keys)
             {
                 #region Finialize the attribute to be modified
@@ -4215,7 +4226,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     partitionsEntry.CommitChanges();
                     partitionsEntry.Close();
                 }
-                catch (DirectoryServicesCOMException comExeception)                
+                catch (DirectoryServicesCOMException comExeception)
                 {
                     Site.Log.Add(LogEntryKind.Debug, "Modify msDS-Behavior-Version on {0} failed: {1}", partitionsEntry.Path, comExeception.ExtendedErrorMessage.ToString());
                 }
@@ -4276,7 +4287,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 #region Modify Operational Feature: recycle bin
 
                 else if (key.Equals("enableRecycleBin: true") || key.Equals("disableRecycleBin: true"))
-                {   
+                {
                     modifyAttr.Name = attrToModify;
                     modifyAttr.Add("CN=Partitions," + configurationNC + ":" + RECYCLE_BIN_GUID);
                     modifyAttr.Operation = DirectoryAttributeOperation.Add;
@@ -4296,134 +4307,134 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             {
                 #region Switch ErrorStatus Non-Windows
 
-                    switch (result)
-                    {
-                        case "UnwillingToPerform":
-                            errorStatus = ConstrOnModOpErrs.UnwillingToPerform_UnKnownError;
-                            break;
-                        case "Referral":
-                            errorStatus = ConstrOnModOpErrs.referral_UnKnownError;
-                            break;
-                        case "NotAllowedOnRDN":
-                            errorStatus = ConstrOnModOpErrs.NotAllowedOnRdn_UnKnownError;
-                            break;
-                        case "NoSuchObject":
-                            errorStatus = ConstrOnModOpErrs.NoSuchObject_UnKnownError;
-                            break;
-                        case "ConstraintViolation":
-                            errorStatus = ConstrOnModOpErrs.ConstraintViolation_UnKnownError;
-                            break;
-                        case "NoSuchAttribute":
-                            errorStatus = ConstrOnModOpErrs.NoSuchAttribute_UnKnownError;
-                            break;
-                        case "ObjectClassViolation":
-                            errorStatus = ConstrOnModOpErrs.ObjectClassViolation_UnKnownError;
-                            break;
-                        case "AttributeOrValueExists":
-                            errorStatus = ConstrOnModOpErrs.AttributeOrValueExists_UnKnownError;
-                            break;
-                        case "UndefinedAttributeType":
-                            errorStatus = ConstrOnModOpErrs.UndefinedAttributeType_UnKnownError;
-                            break;
-                        case "Success":
-                            errorStatus = ConstrOnModOpErrs.success;
-                            break;
-                        default:
-                            errorStatus = ConstrOnModOpErrs.UnspecifiedError;
-                            break;
-                    }
+                switch (result)
+                {
+                    case "UnwillingToPerform":
+                        errorStatus = ConstrOnModOpErrs.UnwillingToPerform_UnKnownError;
+                        break;
+                    case "Referral":
+                        errorStatus = ConstrOnModOpErrs.referral_UnKnownError;
+                        break;
+                    case "NotAllowedOnRDN":
+                        errorStatus = ConstrOnModOpErrs.NotAllowedOnRdn_UnKnownError;
+                        break;
+                    case "NoSuchObject":
+                        errorStatus = ConstrOnModOpErrs.NoSuchObject_UnKnownError;
+                        break;
+                    case "ConstraintViolation":
+                        errorStatus = ConstrOnModOpErrs.ConstraintViolation_UnKnownError;
+                        break;
+                    case "NoSuchAttribute":
+                        errorStatus = ConstrOnModOpErrs.NoSuchAttribute_UnKnownError;
+                        break;
+                    case "ObjectClassViolation":
+                        errorStatus = ConstrOnModOpErrs.ObjectClassViolation_UnKnownError;
+                        break;
+                    case "AttributeOrValueExists":
+                        errorStatus = ConstrOnModOpErrs.AttributeOrValueExists_UnKnownError;
+                        break;
+                    case "UndefinedAttributeType":
+                        errorStatus = ConstrOnModOpErrs.UndefinedAttributeType_UnKnownError;
+                        break;
+                    case "Success":
+                        errorStatus = ConstrOnModOpErrs.success;
+                        break;
+                    default:
+                        errorStatus = ConstrOnModOpErrs.UnspecifiedError;
+                        break;
+                }
 
-                    #endregion
+                #endregion
             }
             else
             {
                 #region Switch ErrorStatus Windows
 
-                    switch (result)
-                    {
-                        case "UnwillingToPerform_ERROR_DS_ILLEGAL_MOD_OPERATION":
-                            errorStatus = ConstrOnModOpErrs.UnwillingToPerform_ERROR_DS_ILLEGAL_MOD_OPERATION;
-                            break;
-                        case "UnwillingToPerform_ERROR_DS_SECURITY_ILLEGAL_MODIFY":
-                            errorStatus = ConstrOnModOpErrs.UnwillingToPerform_ERROR_DS_SECURITY_ILLEGAL_MODIFY;
-                            break;
-                        case "UnwillingToPerform_ERROR_DS_CONSTRUCTED_ATT_MOD":
-                            errorStatus = ConstrOnModOpErrs.UnwillingToPerform_ERROR_DS_CONSTRUCTED_ATT_MOD;
-                            break;
-                        case "UnwillingToPerform_ERROR_DS_INVALID_ROLE_OWNER":
-                            errorStatus = ConstrOnModOpErrs.UnwillingToPerform_ERROR_DS_INVALID_ROLE_OWNER;
-                            break;
-                        case "UnwillingToPerform_ERROR_DS_ILLEGAL_BASE_SCHEMA_MOD":
-                            errorStatus = ConstrOnModOpErrs.UnwillingToPerform_ERROR_DS_ILLEGAL_BASE_SCHEMA_MOD;
-                            break;
-                        case "Referral_ERROR_DS_REFERRAL":
-                            errorStatus = ConstrOnModOpErrs.referral_ERROR_DS_REFERRAL;
-                            break;
-                        case "NotAllowedOnRdn_UnKnownError":
-                            errorStatus = ConstrOnModOpErrs.NotAllowedOnRdn_UnKnownError;
-                            break;
-                        case "UndefinedAttributeType_ERROR_DS_ATT_NOT_DEF_IN_SCHEMA":
-                            errorStatus = ConstrOnModOpErrs.UndefinedAttributeType_ERROR_DS_ATT_NOT_DEF_IN_SCHEMA;
-                            break;
-                        case "NotAllowedOnRdn_ERROR_DS_CANT_MOD_SYSTEM_ONLY":
-                            errorStatus = ConstrOnModOpErrs.NotAllowedOnRDN_ERROR_DS_CANT_MOD_SYSTEM_ONLY;
-                            break;
-                        case "NoSuchObject_UnKnownError":
-                            errorStatus = ConstrOnModOpErrs.NoSuchObject_UnKnownError;
-                            break;
-                        case "NoSuchAttribute_ERROR_DS_CANT_REM_MISSING_ATT_VAL":
-                            errorStatus = ConstrOnModOpErrs.NoSuchAttribute_ERROR_DS_CANT_REM_MISSING_ATT_VAL;
-                            break;
-                        case "UnwillingToPerform_ERROR_DS_NOT_SUPPORTED":
-                            errorStatus = ConstrOnModOpErrs.UnwillingToPerform_ERROR_DS_NOT_SUPPORTED;
-                            break;
-                        case "NoSuchAttribute_ERROR_DS_ATT_IS_NOT_ON_OBJ":
-                            errorStatus = ConstrOnModOpErrs.NoSuchAttribute_ERROR_DS_ATT_IS_NOT_ON_OBJ;
-                            break;
-                        case "ConstraintViolation_ERROR_DS_OBJ_CLASS_VIOLATION":
-                            errorStatus = ConstrOnModOpErrs.ConstraintViolation_ERROR_DS_OBJ_CLASS_VIOLATION;
-                            break;
-                        case "UnwillingToPerform_UnKnownError":
-                            errorStatus = ConstrOnModOpErrs.UnwillingToPerform_UnKnownError;
-                            break;
-                        case "ObjectClassViolation_ERROR_DS_OBJECT_CLASS_REQUIRED":
-                            errorStatus = ConstrOnModOpErrs.ObjectClassViolation_ERROR_DS_OBJECT_CLASS_REQUIRED;
-                            break;
-                        case "ConstraintViolation_ERROR_DS_NAME_NOT_UNIQUE":
-                            errorStatus = ConstrOnModOpErrs.ConstraintViolation_ERROR_DS_NAME_NOT_UNIQUE;
-                            break;
-                        case "ConstraintViolation_ERROR_INVALID_PARAMETER":
-                            errorStatus = ConstrOnModOpErrs.ConstraintViolation_ERROR_INVALID_PARAMETER;
-                            break;
-                        case "ConstraintViolation_ERROR_DS_CONSTRAINT_VIOLATION":
-                            errorStatus = ConstrOnModOpErrs.ConstraintViolation_ERROR_DS_CONSTRAINT_VIOLATION;
-                            break;
-                        case "ConstraintViolation_ERROR_DS_CANT_MOD_SYSTEM_ONLY":
-                            errorStatus = ConstrOnModOpErrs.ConstraintViolation_ERROR_DS_CANT_MOD_SYSTEM_ONLY;
-                            break;
-                        case "AttributeOrValueExists_ERROR_DS_ATT_VAL_ALREADY_EXISTS":
-                            errorStatus = ConstrOnModOpErrs.AttributeOrValueExists_ERROR_DS_ATT_VAL_ALREADY_EXISTS;
-                            break;
-                        case "NoSuchAttribute_ERROR_INVALID_PARAMETER":
-                            errorStatus = ConstrOnModOpErrs.NoSuchAttribute_ERROR_INVALID_PARAMETER;
-                            break;
-                        case "UnwillingToPerform_ERROR_INVALID_PARAMETER":
-                            errorStatus = ConstrOnModOpErrs.UnwillingToPerform_ERROR_INVALID_PARAMETER;
-                            break;
-                        case "OperationsError_ERROR_DS_OBJ_NOT_FOUND":
-                            errorStatus = ConstrOnModOpErrs.OperationsError_ERROR_DS_OBJ_NOT_FOUND;
-                            break;
-                        case "Success_STATUS_SUCCESS":
-                            errorStatus = ConstrOnModOpErrs.success;
-                            break;
-                        default:
-                            errorStatus = ConstrOnModOpErrs.UnspecifiedError;
-                            break;
-                    }
+                switch (result)
+                {
+                    case "UnwillingToPerform_ERROR_DS_ILLEGAL_MOD_OPERATION":
+                        errorStatus = ConstrOnModOpErrs.UnwillingToPerform_ERROR_DS_ILLEGAL_MOD_OPERATION;
+                        break;
+                    case "UnwillingToPerform_ERROR_DS_SECURITY_ILLEGAL_MODIFY":
+                        errorStatus = ConstrOnModOpErrs.UnwillingToPerform_ERROR_DS_SECURITY_ILLEGAL_MODIFY;
+                        break;
+                    case "UnwillingToPerform_ERROR_DS_CONSTRUCTED_ATT_MOD":
+                        errorStatus = ConstrOnModOpErrs.UnwillingToPerform_ERROR_DS_CONSTRUCTED_ATT_MOD;
+                        break;
+                    case "UnwillingToPerform_ERROR_DS_INVALID_ROLE_OWNER":
+                        errorStatus = ConstrOnModOpErrs.UnwillingToPerform_ERROR_DS_INVALID_ROLE_OWNER;
+                        break;
+                    case "UnwillingToPerform_ERROR_DS_ILLEGAL_BASE_SCHEMA_MOD":
+                        errorStatus = ConstrOnModOpErrs.UnwillingToPerform_ERROR_DS_ILLEGAL_BASE_SCHEMA_MOD;
+                        break;
+                    case "Referral_ERROR_DS_REFERRAL":
+                        errorStatus = ConstrOnModOpErrs.referral_ERROR_DS_REFERRAL;
+                        break;
+                    case "NotAllowedOnRdn_UnKnownError":
+                        errorStatus = ConstrOnModOpErrs.NotAllowedOnRdn_UnKnownError;
+                        break;
+                    case "UndefinedAttributeType_ERROR_DS_ATT_NOT_DEF_IN_SCHEMA":
+                        errorStatus = ConstrOnModOpErrs.UndefinedAttributeType_ERROR_DS_ATT_NOT_DEF_IN_SCHEMA;
+                        break;
+                    case "NotAllowedOnRdn_ERROR_DS_CANT_MOD_SYSTEM_ONLY":
+                        errorStatus = ConstrOnModOpErrs.NotAllowedOnRDN_ERROR_DS_CANT_MOD_SYSTEM_ONLY;
+                        break;
+                    case "NoSuchObject_UnKnownError":
+                        errorStatus = ConstrOnModOpErrs.NoSuchObject_UnKnownError;
+                        break;
+                    case "NoSuchAttribute_ERROR_DS_CANT_REM_MISSING_ATT_VAL":
+                        errorStatus = ConstrOnModOpErrs.NoSuchAttribute_ERROR_DS_CANT_REM_MISSING_ATT_VAL;
+                        break;
+                    case "UnwillingToPerform_ERROR_DS_NOT_SUPPORTED":
+                        errorStatus = ConstrOnModOpErrs.UnwillingToPerform_ERROR_DS_NOT_SUPPORTED;
+                        break;
+                    case "NoSuchAttribute_ERROR_DS_ATT_IS_NOT_ON_OBJ":
+                        errorStatus = ConstrOnModOpErrs.NoSuchAttribute_ERROR_DS_ATT_IS_NOT_ON_OBJ;
+                        break;
+                    case "ConstraintViolation_ERROR_DS_OBJ_CLASS_VIOLATION":
+                        errorStatus = ConstrOnModOpErrs.ConstraintViolation_ERROR_DS_OBJ_CLASS_VIOLATION;
+                        break;
+                    case "UnwillingToPerform_UnKnownError":
+                        errorStatus = ConstrOnModOpErrs.UnwillingToPerform_UnKnownError;
+                        break;
+                    case "ObjectClassViolation_ERROR_DS_OBJECT_CLASS_REQUIRED":
+                        errorStatus = ConstrOnModOpErrs.ObjectClassViolation_ERROR_DS_OBJECT_CLASS_REQUIRED;
+                        break;
+                    case "ConstraintViolation_ERROR_DS_NAME_NOT_UNIQUE":
+                        errorStatus = ConstrOnModOpErrs.ConstraintViolation_ERROR_DS_NAME_NOT_UNIQUE;
+                        break;
+                    case "ConstraintViolation_ERROR_INVALID_PARAMETER":
+                        errorStatus = ConstrOnModOpErrs.ConstraintViolation_ERROR_INVALID_PARAMETER;
+                        break;
+                    case "ConstraintViolation_ERROR_DS_CONSTRAINT_VIOLATION":
+                        errorStatus = ConstrOnModOpErrs.ConstraintViolation_ERROR_DS_CONSTRAINT_VIOLATION;
+                        break;
+                    case "ConstraintViolation_ERROR_DS_CANT_MOD_SYSTEM_ONLY":
+                        errorStatus = ConstrOnModOpErrs.ConstraintViolation_ERROR_DS_CANT_MOD_SYSTEM_ONLY;
+                        break;
+                    case "AttributeOrValueExists_ERROR_DS_ATT_VAL_ALREADY_EXISTS":
+                        errorStatus = ConstrOnModOpErrs.AttributeOrValueExists_ERROR_DS_ATT_VAL_ALREADY_EXISTS;
+                        break;
+                    case "NoSuchAttribute_ERROR_INVALID_PARAMETER":
+                        errorStatus = ConstrOnModOpErrs.NoSuchAttribute_ERROR_INVALID_PARAMETER;
+                        break;
+                    case "UnwillingToPerform_ERROR_INVALID_PARAMETER":
+                        errorStatus = ConstrOnModOpErrs.UnwillingToPerform_ERROR_INVALID_PARAMETER;
+                        break;
+                    case "OperationsError_ERROR_DS_OBJ_NOT_FOUND":
+                        errorStatus = ConstrOnModOpErrs.OperationsError_ERROR_DS_OBJ_NOT_FOUND;
+                        break;
+                    case "Success_STATUS_SUCCESS":
+                        errorStatus = ConstrOnModOpErrs.success;
+                        break;
+                    default:
+                        errorStatus = ConstrOnModOpErrs.UnspecifiedError;
+                        break;
+                }
 
-                    #endregion
+                #endregion
             }
-            
+
 
             #endregion
 
@@ -5119,7 +5130,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             string oldObjectDN = string.Empty;
             SecurityIdentifier oldObjectSid = null;
             string oldObjectParentDn = string.Empty;
-            
+
             string newObjectDN = string.Empty;
             SecurityIdentifier newObjectSid = null;
             string newObjectRDN = string.Empty;
@@ -5372,7 +5383,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 {
                     #region Remove rights of the requester for the old object DN, will add these rights back after object move
 
-                    if ((rightsOnOldObject == RightsOnObjects.RIGHT_DS_WRITE_PROPERTYWithOutRIGHT_DELETE) 
+                    if ((rightsOnOldObject == RightsOnObjects.RIGHT_DS_WRITE_PROPERTYWithOutRIGHT_DELETE)
                         || (rightsOnOldObject == RightsOnObjects.INVALID_RIGHT))
                     {
                         // Both IntraDomainModifyDN and CrossDomainModifyDN
@@ -5394,7 +5405,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                 AccessControlType.Deny);
                         }
                     }
-                    
+
                     #endregion
 
                     #region Remove rights of the requester for the old object parent DN and new object parent DN
@@ -5403,7 +5414,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     if (string.IsNullOrEmpty(control))
                     {
                         if (!((rightsOnNewObjectParent == RightsOnParentObjects.RIGHT_DS_CREATE_CHILD)
-                            && (rightsOnOldObjectParent == RightOnOldParentObject.RIGHT_DS_DELETE_CHILD)) 
+                            && (rightsOnOldObjectParent == RightOnOldParentObject.RIGHT_DS_DELETE_CHILD))
                             && (oldObjectParentDn.ToLower(CultureInfo.InvariantCulture) != newObjectParentDN.ToLower(CultureInfo.InvariantCulture))
                             && !newObjectParentDN.ToLower(CultureInfo.InvariantCulture).Contains("NonExistingParent".ToLower(CultureInfo.InvariantCulture)))
                         {
@@ -5550,7 +5561,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     null,
                     isWindows);
             }
-            
+
             #endregion
 
             if (!isWindows)
@@ -5681,14 +5692,14 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             {
                 errorStatus = ConstrOnModDNOpErrs.NoSuchObject_UnKnownError;
             }
-            if ((errorStatus != ConstrOnModDNOpErrs.Success) 
-                && (oldDN_newDN_deleteOldRDN.Contains("CN=BCKUPKEY_P Secret,CN=System,DC=adts88") 
-                || oldDN_newDN_deleteOldRDN.Contains("CN=LostAndFound,DC=adts88") 
+            if ((errorStatus != ConstrOnModDNOpErrs.Success)
+                && (oldDN_newDN_deleteOldRDN.Contains("CN=BCKUPKEY_P Secret,CN=System,DC=adts88")
+                || oldDN_newDN_deleteOldRDN.Contains("CN=LostAndFound,DC=adts88")
                 || oldDN_newDN_deleteOldRDN.Contains("CN=TestContainerWithoutSysFlags,CN=DisplaySpecifiers,CN=Configuration,DC=adts88")))
             {
                 errorStatus = ConstrOnModDNOpErrs.UnwillingToPerform_UnKnownError;
             }
-            if ((errorStatus != ConstrOnModDNOpErrs.Success) 
+            if ((errorStatus != ConstrOnModDNOpErrs.Success)
                 && (oldDN_newDN_deleteOldRDN.Contains("CN=TestUser4,CN=Computers,DC=adts88")))
             {
                 errorStatus = ConstrOnModDNOpErrs.EntryAlreadyExists_UnKnownError;
@@ -6093,7 +6104,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             {
                 case ExtendedControl.LDAP_PAGED_RESULT_OID_STRING:
                     #region LDAP_PAGED_RESULT_OID_STRING Search Operation
-                    
+
                     result = adLdapClient.PageRequestControl(
                         2,
                         baseObjectDN,
@@ -6110,7 +6121,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 case ExtendedControl.LDAP_SERVER_DOMAIN_SCOPE_OID: //nothing new
                     #region LDAP_SERVER_DOMAIN_SCOPE_OID
 
-                    controls = new DirectoryControl[] { 
+                    controls = new DirectoryControl[] {
                         new DirectoryControl(control, null, true, true)
                     };
                     result = adLdapClient.SearchObject(
@@ -6133,7 +6144,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                         for (int flag = 0; flag < 2; flag++)
                         {
                             hexFormatValue = BerConverter.Encode("{i}", flag);
-                            controls = new DirectoryControl[] { 
+                            controls = new DirectoryControl[] {
                                 new DirectoryControl(ExtendedControl.LDAP_SERVER_EXTENDED_DN_OID, hexFormatValue, true, true)
                             };
                             result = adLdapClient.SearchObject(
@@ -6198,7 +6209,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     break;
                 case ExtendedControl.LDAP_SERVER_RANGE_OPTION_OID:
                     #region LDAP_SERVER_RANGE_OPTION_OID Search Operation
-                    
+
                     if (attributesToBeReturned.Contains("member;range=10-0"))
                     {
                         if (currentWorkingDC.OSVersion >= ServerVersion.Win2003)
@@ -6270,7 +6281,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     break;
                 case ExtendedControl.LDAP_SERVER_SEARCH_OPTIONS_OID:
                     #region LDAP_SERVER_SEARCH_OPTIONS_OID Search operation
-                    
+
                     if (currentWorkingDC.OSVersion >= ServerVersion.Win2003)
                     {
                         byte[] searchOptionVal = null;
@@ -6278,7 +6289,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                         {
                             searchOptionVal = BerConverter.Encode("{i}", k);
                             hexFormatValue = BerConverter.Encode("{i}", k);
-                            controls = new DirectoryControl[] { 
+                            controls = new DirectoryControl[] {
                                 new DirectoryControl(ExtendedControl.LDAP_SERVER_SEARCH_OPTIONS_OID, searchOptionVal, true, true)
                             };
                             result = adLdapClient.SearchObject(
@@ -6289,7 +6300,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                 controls,
                                 out searchResponse,
                                 isWindows);
-                            
+
                             #region DomainScope
 
                             if ((searchResponse != null) && (k == 1))
@@ -6308,9 +6319,9 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                 }
                                 Site.CaptureRequirementIfIsTrue((searchResponse.Count > 0), 401, "When LDAP_SERVER_SEARCH_OPTIONS_OID is used with an LDAP Search request, if the flag field of controlValue structure is set to SERVER_SEARCH_FLAG_DOMAIN_SCOPE (SSFDS) that is 1, the control prevents continuation references from being generated when the search results are returned.");
                             }
-                            
+
                             #endregion
-                            
+
                             #region PhantomRoot
 
                             if ((searchResponse != null) && (k == 2))
@@ -6331,7 +6342,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                 }
                                 Site.CaptureRequirementIfIsTrue((searchResponse.Count > 0), 402, "When LDAP_SERVER_SEARCH_OPTIONS_OID is used with an LDAP Search request, if the flag field of controlValue structure is set to SERVER_SEARCH_FLAG_PHANTOM_ROOT (SSFPR) that is 2, the control instructs the server to search all NC replicas that are subordinate to the search base, even if the search base is not instantiated on the server. This will cause the search to be executed over all NC replicas held on the DC that are subordinate to the search base. This enables search bases such as the empty string, which would cause the server to search all of the NC replicas that it holds.");
                             }
-                            
+
                             #endregion
                         }
                         Site.CaptureRequirement(1216, "The LDAP extended control LDAP_SERVER_SEARCH_OPTIONS_OID is supported in Windows 2000, Windows Server 2003, Windows Server 2003 SP1 and Windows Server 2008, Windows Server 2008 R2.");
@@ -6349,7 +6360,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 case ExtendedControl.LDAP_CONTROL_VLVREQUEST:
                 case ExtendedControl.LDAP_SERVER_SORT_OID:
                     #region LDAP_CONTROL_VLVREQUEST,LDAP_CONTROL_VLVRESPONSE,LDAP_SERVER_SORT_OID,LDAP_SERVER_RESP_SORT_OID
-                    
+
                     if (currentWorkingDC.OSVersion >= ServerVersion.Win2003)
                     {
                         #region SucessCase(Return SearchResponse instead of string)
@@ -6399,17 +6410,17 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
                         #endregion
                     }
-                    
+
                     #endregion
                     break;
                 case ExtendedControl.LDAP_SERVER_SHOW_DELETED_OID:
                     #region LDAP_SERVER_SHOW_DELETED_OID Search operation
-                    
+
                     if (currentWorkingDC.OSVersion >= ServerVersion.Win2003)
                     {
                         Site.Log.Add(LogEntryKind.Debug, "Deleted Objects");
                         string dnOfDeletedObject = string.Empty;
-                        controls = new DirectoryControl[] { 
+                        controls = new DirectoryControl[] {
                             new DirectoryControl(ExtendedControl.LDAP_SERVER_SHOW_DELETED_OID, null, true, true)
                         };
                         result = adLdapClient.SearchObject(
@@ -6621,7 +6632,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                         if (currentWorkingDC.OSVersion >= ServerVersion.Win2008)
                         {
                             // Ensure that low > high i.e member;range=1-0
-                        
+
                             controls = new DirectoryControl[]{
                                 new DirectoryControl(control, null, true, true)
                             };
@@ -6715,13 +6726,13 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                         }
                         Site.CaptureRequirement(1229, "The LDAP extended control LDAP_SERVER_INPUT_DN_OID is supported in Windows Server 2008, Windows Server 2008 R2.");
                     }
-                    
+
                     #endregion
                     break;
                 case ExtendedControl.LDAP_SERVER_SHOW_DEACTIVATED_LINK_OID:
                     #region LDAP_SERVER_SHOW_DEACTIVATED_LINK_OID
-                                    
-                    controls = new DirectoryControl[] { 
+
+                    controls = new DirectoryControl[] {
                         new DirectoryControl(control, null, false, true)};
                     result = adLdapClient.SearchObject(
                         baseObjectDN,
@@ -6732,7 +6743,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                         out searchResponse,
                         isWindows);
 
-                    controls = new DirectoryControl[] { 
+                    controls = new DirectoryControl[] {
                         new DirectoryControl(ExtendedControl.LDAP_SERVER_SHOW_DEACTIVATED_LINK_OID, new byte[1] { 1 }, false, true)};
                     result = adLdapClient.SearchObject(
                         baseObjectDN,
@@ -6742,7 +6753,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                         controls,
                         out searchResponse,
                         isWindows);
-                    
+
                     #endregion
                     break;
                 case ExtendedControl.LDAP_SERVER_SHOW_RECYCLED_OID:
@@ -6752,7 +6763,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     {
                         Site.Log.Add(LogEntryKind.Debug, "Deleted Objects");
                         string dnOfDeletedObject = string.Empty;
-                        controls = new DirectoryControl[] { 
+                        controls = new DirectoryControl[] {
                             new DirectoryControl(ExtendedControl.LDAP_SERVER_SHOW_RECYCLED_OID, null, true, true)
                         };
                         result = adLdapClient.SearchObject(
@@ -7916,9 +7927,9 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                 @"An LDAP Request to configurationNamingContext rootDSE attribute returns the DN of the root
                             of the config NC on the DC.");
                         }
-                        
+
                         #endregion
-                     
+
                         #region MS-AD_LDAP_R211, 1020
 
                         if (attrsToReturn.Exists(x => x.Equals(RootDSEAttribute.currentTime, StringComparison.InvariantCultureIgnoreCase)))
@@ -7957,7 +7968,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                         }
 
                         #endregion
-                        
+
                         #region MS-AD_LDAP_R212, 1021
 
                         if (attrsToReturn.Exists(x => x.Equals(RootDSEAttribute.defaultNamingContext, StringComparison.InvariantCultureIgnoreCase)))
@@ -8057,7 +8068,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
                         if (attrsToReturn.Exists(x => x.Equals(RootDSEAttribute.dsServiceName, StringComparison.InvariantCultureIgnoreCase)))
                         {
-                            searchAttrVals = adLdapClient.GetAttributeValuesInString(entrypacket, RootDSEAttribute.dsServiceName);                        
+                            searchAttrVals = adLdapClient.GetAttributeValuesInString(entrypacket, RootDSEAttribute.dsServiceName);
                             Site.CaptureRequirementIfIsNotNull(
                                 searchAttrVals,
                                 1026,
@@ -8628,7 +8639,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                                 // Connection also need to be taken care here to which dc you need to connect
                                 searchAttrVals = adLdapClient.GetAttributeValuesInString(entrypacket, RootDSEAttribute.msDS_ReplAllOutboundNeighbors);
                                 if (searchAttrVals != null)
-                                {   
+                                {
                                     Site.CaptureRequirementIfIsNotNull(
                                         searchAttrVals,
                                         1055,
@@ -8646,7 +8657,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                             }
 
                             #endregion
-                            
+
                             #region MS-AD_LDAP_R245,1063
 
                             if (attrsToReturn.Exists(x => x.Equals(RootDSEAttribute.msDS_ReplQueueStatistics, StringComparison.InvariantCultureIgnoreCase)))
@@ -9067,7 +9078,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                             #endregion
                         }
                     }
-                    
+
                     #endregion
                 }
                 SearchOpResponse(SearchResp.retrievalSuccessful);
@@ -9082,7 +9093,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
         /// Event triggered when the search response is returned.
         /// </summary>
         public event ResponseHandler SearchOpResponse;
-        
+
         /// <summary>
         /// Performs Search related extended operations.
         /// </summary>
@@ -9672,7 +9683,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 adLdapClient.DeleteTreeControl("cn=testuser4,cn=computers," + rootDomainNC);
                 adLdapClient.DeleteTreeControl("cn=testuser5,cn=users," + rootDomainNC);
                 adLdapClient.DeleteTreeControl("cn=testuserobject,cn=users," + rootDomainNC);
-				adLdapClient.DeleteTreeControl("cn=adts_user10,cn=users," + rootDomainNC);
+                adLdapClient.DeleteTreeControl("cn=adts_user10,cn=users," + rootDomainNC);
                 adLdapClient.DeleteTreeControl("cn=user6745,cn=users," + rootDomainNC);
                 adLdapClient.DeleteTreeControl("cn=user6745,cn=usertreedel,cn=users," + rootDomainNC);
                 adLdapClient.DeleteTreeControl("cn=user6746," + configurationNC);
@@ -9745,5 +9756,5 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
         }
 
         #endregion
-    }   
+    }
 }
