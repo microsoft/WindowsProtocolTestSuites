@@ -16,12 +16,12 @@ Function CheckAndModify-VS2017OrLater {
 	if ([IntPtr]::Size -eq 4)  # 32-bit
 	{
 		$VSWherePath = "${env:ProgramFiles}\Microsoft Visual Studio\Installer\vswhere.exe"
-		$VsInstallerPath = "${env:ProgramFiles}\Microsoft Visual Studio\Installer\vs_installer.exe"
+		$VsInstallerPath = "${env:ProgramFiles}\Microsoft Visual Studio\Installer\vs_installershell.exe"
 	}
 	else # 64-bit
 	{
 		$VSWherePath = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
-		$VsInstallerPath = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vs_installer.exe"
+		$VsInstallerPath = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vs_installershell.exe"
 	}
 
 	$VSWherePathExisted = Test-Path -Path $VSWherePath
