@@ -5,6 +5,28 @@
 
   <Properties>
 
+    <Group name="PTF">
+      <Group name="NetworkCapture">
+        <Property name="Enabled" value="false">
+          <Choice>true,false</Choice>
+          <Description>
+            If it is true, enable the auto-capture feature.
+          </Description>
+        </Property>
+        <Property name="CaptureFileFolder" value="C:\RDPServer_CaptureFileDirectory">
+          <Description>
+            The path to put the capture files. Old files will be overwritten.
+          </Description>
+        </Property>
+        <Property name="StopRunningOnError" value="false">
+          <Choice>true,false</Choice>
+          <Description>
+            If it is true, fail the test case when error happens in running network capture commands. Otherwise, ignore the error.
+          </Description>
+        </Property>
+      </Group>
+    </Group>
+
     <!--Block Begin: Properties that required to be set ***-->
 
     <Property name="RDP.Security.Negotiation" value="True">
