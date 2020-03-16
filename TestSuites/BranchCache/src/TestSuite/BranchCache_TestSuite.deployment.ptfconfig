@@ -4,7 +4,27 @@
           xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
 
   <Properties>
-
+    <Group name="PTF">
+      <Group name="NetworkCapture">
+        <Property name="Enabled" value="false">
+          <Choice>true,false</Choice>
+          <Description>
+            If it is true, enable the auto-capture feature.
+          </Description>
+        </Property>
+        <Property name="CaptureFileFolder" value="C:\BranchCache_CaptureFileDirectory">
+          <Description>
+            The path to put the capture files. Old files will be overwritten.
+          </Description>
+        </Property>
+        <Property name="StopRunningOnError" value="false">
+          <Choice>true,false</Choice>
+          <Description>
+            If it is true, fail the test case when error happens in running network capture commands. Otherwise, ignore the error.
+          </Description>
+        </Property>
+      </Group>
+    </Group>
     <!--
         Please edit the following settings according to your test environment
     -->
