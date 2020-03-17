@@ -390,7 +390,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                     confirmPdu.x224Ccf.lengthIndicator--;
                     break;
                 case NegativeType.InvalidRdpNegData:
-                    confirmPdu.rdpNegData.type = RDP_NEG_RSP_type_Values.None;
+                    confirmPdu.rdpNegData.type = RDP_NEG_RSP_type_Values.Invalid;
                     break;
             }
             if (!setRdpNegData)
@@ -1462,7 +1462,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 TS_LOGON_INFO_FIELD logonField = new TS_LOGON_INFO_FIELD();
 
                 ARC_SC_PRIVATE_PACKET autoReconnectPacket = new ARC_SC_PRIVATE_PACKET();
-                autoReconnectPacket.cbLen = cbLen_Values.V1;
+                autoReconnectPacket.cbLen = (UInt32)ARC_SC_PRIVATE_PACKET_cbLen_Values.Valid;
                 autoReconnectPacket.Version = Version_Values.AUTO_RECONNECT_VERSION_1;
                 autoReconnectPacket.LogonId = RdpbcgrTestData.Test_LogonId;
                 autoReconnectPacket.ArcRandomBits = RdpbcgrTestData.Test_ArcRadndomBits;
@@ -1993,7 +1993,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         public void CreateMultitransportChannelConnection(Multitransport_Protocol_value requestedProtocol, TimeSpan timeout)
         {
             if (rdpeudpServer == null)
-            { 
+            {
                 rdpeudpServer = new RdpeudpServer((IPEndPoint)this.SessionContext.LocalIdentity);
 
                 rdpeudpServer.UnhandledExceptionReceived += (ex) =>

@@ -2242,7 +2242,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             pdu.shareDataHeader = ParseTsShareDataHeader(data, ref currentIndex);
 
             // TS_SYNCHRONIZE_PDU: messageType 
-            pdu.messageType = (messageType_Values)ParseUInt16(data, ref currentIndex, false);
+            pdu.messageType = (TS_SYNCHRONIZE_PDU_messageType_Values)ParseUInt16(data, ref currentIndex, false);
 
             // TS_SYNCHRONIZE_PDU: targetUser
             pdu.targetUser = ParseUInt16(data, ref currentIndex, false);

@@ -470,13 +470,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             RDP_NEG_RSP rdpNegData = x224Confirm.rdpNegData;
             if (rdpNegData != null)
             {
-                Site.Assert.AreEqual<RDP_NEG_RSP_type_Values>(RDP_NEG_RSP_type_Values.V1, rdpNegData.type, "The type field of RDP_NEG_RSP MUST be set to 0x02 (TYPE_RDP_NEG_RSP).");
+                Site.Assert.AreEqual(RDP_NEG_RSP_type_Values.TYPE_RDP_NEG_RSP, rdpNegData.type, "The type field of RDP_NEG_RSP MUST be set to 0x02 (TYPE_RDP_NEG_RSP).");
 
                 var validFlags = Enum.GetValues(typeof(RDP_NEG_RSP_flags_Values)).Cast<RDP_NEG_RSP_flags_Values>().Where(flag => flag != RDP_NEG_RSP_flags_Values.None);
 
                 CheckUndefinedFlagValue("flags", "RDP_NEG_RSP", validFlags, rdpNegData.flags);
 
-                Site.Assert.AreEqual<RDP_NEG_RSP_length_Values>(RDP_NEG_RSP_length_Values.V1, rdpNegData.length, "The length field of RDP_NEG_RSP MUST be set to 0x0008 (8 bytes)");
+                Site.Assert.AreEqual((ushort)RDP_NEG_RSP_length_Values.Valid, rdpNegData.length, "The length field of RDP_NEG_RSP MUST be set to 0x0008 (8 bytes)");
 
                 Site.Assert.IsTrue(rdpNegData.selectedProtocol == selectedProtocols_Values.PROTOCOL_RDP_FLAG
                     || rdpNegData.selectedProtocol == selectedProtocols_Values.PROTOCOL_SSL_FLAG
@@ -500,9 +500,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             RDP_NEG_FAILURE rdpNegData = x224Failure.rdpNegFailure;
             if (rdpNegData != null)
             {
-                Site.Assert.AreEqual<RDP_NEG_FAILURE_type_Values>(RDP_NEG_FAILURE_type_Values.V1, rdpNegData.type, "In RDP Negotiation Failure, the type field MUST be set to 0x03 (TYPE_RDP_NEG_FAILURE).");
-                Site.Assert.AreEqual<RDP_NEG_FAILURE_flags_Values>(RDP_NEG_FAILURE_flags_Values.V1, rdpNegData.flags, "In RDP Negotiation Failure, the flags field MUST be set to 0x00.");
-                Site.Assert.AreEqual<RDP_NEG_FAILURE_length_Values>(RDP_NEG_FAILURE_length_Values.V1, rdpNegData.length, "In RDP Negotiation Failure, the length field MUST be set to 0x0008 (8 bytes).");
+                Site.Assert.AreEqual(RDP_NEG_FAILURE_type_Values.TYPE_RDP_NEG_FAILURE, rdpNegData.type, "In RDP Negotiation Failure, the type field MUST be set to 0x03 (TYPE_RDP_NEG_FAILURE).");
+                Site.Assert.AreEqual(RDP_NEG_FAILURE_flags_Values.Unused, rdpNegData.flags, "In RDP Negotiation Failure, the flags field MUST be set to 0x00.");
+                Site.Assert.AreEqual((ushort)RDP_NEG_FAILURE_length_Values.Valid, rdpNegData.length, "In RDP Negotiation Failure, the length field MUST be set to 0x0008 (8 bytes).");
 
                 var validFailureCodeValues = Enum.GetValues(typeof(failureCode_Values)).Cast<failureCode_Values>().Where(value => value != failureCode_Values.NO_FAILURE);
 
@@ -660,7 +660,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 Site.Assert.IsNull(synchronizePdu.commonHeader.securityHeader, "In Server_Synchronize_Pdu, If the Encryption Level selected by the server is ENCRYPTION_LEVEL_NONE (0) and the Encryption Method selected by the server is ENCRYPTION_METHOD_NONE (0), then the security header MUST NOT be included in the PDU.");
             }
 
-            Site.Assert.AreEqual<messageType_Values>(messageType_Values.V1, synchronizePdu.synchronizePduData.messageType, "In Server_Synchronize_Pdu, the messageType field of the synchronizePduData field MUST be set to SYNCMSGTYPE_SYNC (1).");
+            Site.Assert.AreEqual(TS_SYNCHRONIZE_PDU_messageType_Values.SYNCMSGTYPE_SYNC, synchronizePdu.synchronizePduData.messageType, "In Server_Synchronize_Pdu, the messageType field of the synchronizePduData field MUST be set to SYNCMSGTYPE_SYNC (1).");
         }
 
         /// <summary>
@@ -1033,7 +1033,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                             Site.Assert.IsTrue(logInfoExtend.FieldsPresent.HasFlag(FieldsPresent_Values.LOGON_EX_AUTORECONNECTCOOKIE), "In TS_LOGON_INFO_EXTENDED, if the LogonFields field contains a ARC_SC_PRIVATE_PACKET, the FieldsPresent field MUST contain LOGON_EX_AUTORECONNECTCOOKIE flag.");
                             expectedFlag |= FieldsPresent_Values.LOGON_EX_AUTORECONNECTCOOKIE;
                             ARC_SC_PRIVATE_PACKET cookiePacket = (ARC_SC_PRIVATE_PACKET)field.FieldData;
-                            Site.Assert.AreEqual<cbLen_Values>(cbLen_Values.V1, cookiePacket.cbLen, "In ARC_SC_PRIVATE_PACKET structure, the cbLen field MUST be set to 0x0000001C (28 bytes).");
+                            Site.Assert.AreEqual((UInt32)ARC_SC_PRIVATE_PACKET_cbLen_Values.Valid, cookiePacket.cbLen, "In ARC_SC_PRIVATE_PACKET structure, the cbLen field MUST be set to 0x0000001C (28 bytes).");
                             Site.Assert.AreEqual<Version_Values>(Version_Values.AUTO_RECONNECT_VERSION_1, cookiePacket.Version, "In ARC_SC_PRIVATE_PACKET structure, the version field MUST be set to AUTO_RECONNECT_VERSION_1 (0x00000001).");
                         }
                         if (field.FieldData.GetType() == typeof(TS_LOGON_ERRORS_INFO))

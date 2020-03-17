@@ -299,7 +299,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             site.Assert.AreEqual<pduType2_Values>(pduType2_Values.PDUTYPE2_SYNCHRONIZE, clientSyncPdu.synchronizePduData.shareDataHeader.pduType2,
                 @"In TS_SYNCHONIZE_PDU the type subfield of the pduType2 field of the Share Data Header MUST"
                 + @" be set to PDUTYPE2_SYNCHRONIZE (31).");
-            site.Assert.AreEqual<messageType_Values>(messageType_Values.V1, clientSyncPdu.synchronizePduData.messageType,
+            site.Assert.AreEqual(TS_SYNCHRONIZE_PDU_messageType_Values.SYNCMSGTYPE_SYNC, clientSyncPdu.synchronizePduData.messageType,
                 @"In TS_SYNCHONIZE_PDU, the messageType field MUST be set to SYNCMSGTYPE_SYNC (1).");
         }
 

@@ -900,7 +900,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             rdpNegRsp.flags = (RDP_NEG_RSP_flags_Values)ParseByte(data, ref currentIndex);
 
             // RDP_NEG_RSP: length
-            rdpNegRsp.length = (RDP_NEG_RSP_length_Values)ParseUInt16(data, ref currentIndex, false);
+            rdpNegRsp.length = ParseUInt16(data, ref currentIndex, false);
 
             // RDP_NEG_RSP: selectedProtocol
             rdpNegRsp.selectedProtocol = (selectedProtocols_Values)ParseUInt32(data, ref currentIndex, false);
@@ -927,7 +927,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             rdpNegFailure.flags = (RDP_NEG_FAILURE_flags_Values)ParseByte(data, ref currentIndex);
 
             // RDP_NEG_FAILURE: length
-            rdpNegFailure.length = (RDP_NEG_FAILURE_length_Values)ParseUInt16(data, ref currentIndex, false);
+            rdpNegFailure.length = ParseUInt16(data, ref currentIndex, false);
 
             // RDP_NEG_FAILURE: failureCode 
             rdpNegFailure.failureCode = (failureCode_Values)ParseUInt32(data, ref currentIndex, false);
@@ -2055,7 +2055,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             pdu.shareDataHeader = ParseTsShareDataHeader(data, ref currentIndex);
 
             // TS_SYNCHRONIZE_PDU: messageType 
-            pdu.messageType = (messageType_Values)ParseUInt16(data, ref currentIndex, false);
+            pdu.messageType = (TS_SYNCHRONIZE_PDU_messageType_Values)ParseUInt16(data, ref currentIndex, false);
 
             // TS_SYNCHRONIZE_PDU: targetUser
             pdu.targetUser = ParseUInt16(data, ref currentIndex, false);
@@ -2519,7 +2519,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             ARC_SC_PRIVATE_PACKET packet = new ARC_SC_PRIVATE_PACKET();
 
             // ARC_SC_PRIVATE_PACKET: cbLen
-            packet.cbLen = (cbLen_Values)ParseUInt32(data, ref currentIndex, false);
+            packet.cbLen = ParseUInt32(data, ref currentIndex, false);
 
             // ARC_SC_PRIVATE_PACKET: Version
             packet.Version = (Version_Values)ParseUInt32(data, ref currentIndex, false);
@@ -4708,7 +4708,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 // check type
                 byte pduType = data[currentIndex];
-                if (pduType == (byte)RDP_NEG_RSP_type_Values.V1)
+                if (pduType == (byte)RDP_NEG_RSP_type_Values.TYPE_RDP_NEG_RSP)
                 {
                     // X224 Connection Confirm PDU
                     Server_X_224_Connection_Confirm_Pdu confirmPdu = new Server_X_224_Connection_Confirm_Pdu();
@@ -4722,7 +4722,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
                     pdu = confirmPdu;
                 }
-                else if (pduType == (byte)RDP_NEG_FAILURE_type_Values.V1)
+                else if (pduType == (byte)RDP_NEG_FAILURE_type_Values.TYPE_RDP_NEG_FAILURE)
                 {
                     // X224 Negotiate Failure PDU
                     Server_X_224_Negotiate_Failure_Pdu failurePdu = new Server_X_224_Negotiate_Failure_Pdu();
