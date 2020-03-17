@@ -664,6 +664,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Smb30)]
         [TestCategory(TestCategories.Compatibility)]
+        [TestCategory(TestCategories.PersistentHandle)]
         [Description("Verify that whether opening a file will fail if a previous client already had the persistent handle to this file.")]
         public void PersistentHandle_ReOpenFromDiffClient()
         {
