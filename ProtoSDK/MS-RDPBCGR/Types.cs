@@ -4942,7 +4942,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  A 16-bit unsigned integer. The message type. This field
         ///  MUST be set to SYNCMSGTYPE_SYNC (1).
         /// </summary>
-        public messageType_Values messageType;
+        public TS_SYNCHRONIZE_PDU_messageType_Values messageType;
 
         /// <summary>
         ///  A 16-bit unsigned integer. The MCS channel ID of the
@@ -4952,19 +4952,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     }
 
     /// <summary>
-    /// The type of messageType.
+    /// The type of messageType field in TS_SYNCHRONIZE_PDU.
     /// </summary>
-    public enum messageType_Values : ushort
+    public enum TS_SYNCHRONIZE_PDU_messageType_Values : ushort
     {
         /// <summary>
-        /// None.
+        /// SYNCMSGTYPE_SYNC.
         /// </summary>
-        None = 0,
-
-        /// <summary>
-        ///  Possible value.
-        /// </summary>
-        V1 = 1,
+        SYNCMSGTYPE_SYNC = 1,
     }
 
     /// <summary>
@@ -6326,7 +6321,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  A 16-bit unsigned integer. Indicates the packet size.
         ///  This field MUST be set to 0x0008 (8 bytes)
         /// </summary>
-        public RDP_NEG_RSP_length_Values length;
+        public UInt16 length;
 
         /// <summary>
         ///  A 32-bit unsigned integer. Field indicating the selected
@@ -6336,19 +6331,19 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     }
 
     /// <summary>
-    /// The type of type.
+    /// The type of type field in RDP_NEG_RSP.
     /// </summary>
     public enum RDP_NEG_RSP_type_Values : byte
     {
         /// <summary>
-        /// None.
+        /// An invalid value for negative test.
         /// </summary>
-        None = 0,
+        Invalid = 0,
 
         /// <summary>
-        ///  Possible value.
+        /// TYPE_RDP_NEG_RSP.
         /// </summary>
-        V1 = 0x02,
+        TYPE_RDP_NEG_RSP = 0x02,
     }
 
     /// <summary>
@@ -6393,19 +6388,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     }
 
     /// <summary>
-    /// The type of length.
+    /// The values of length field in RDP_NEG_RSP.
     /// </summary>
     public enum RDP_NEG_RSP_length_Values : ushort
     {
         /// <summary>
-        /// None.
+        /// The valid value.
         /// </summary>
-        None = 0,
-
-        /// <summary>
-        ///  Possible value.
-        /// </summary>
-        V1 = 0x0008,
+        Valid = 0x0008,
     }
 
     /// <summary>
@@ -6438,7 +6428,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  A 16-bit unsigned integer. Indicates the packet size.
         ///  This field MUST be set to 0x0008 (8 bytes).
         /// </summary>
-        public RDP_NEG_FAILURE_length_Values length;
+        public UInt16 length;
 
         /// <summary>
         ///  A 32-bit unsigned integer. Field containing the failure
@@ -6448,48 +6438,38 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     }
 
     /// <summary>
-    /// The type of type.
+    /// The type of type field in RDP_NEG_FAILURE.
     /// </summary>
     public enum RDP_NEG_FAILURE_type_Values : byte
     {
         /// <summary>
-        /// None.
+        /// TYPE_RDP_NEG_FAILURE.
         /// </summary>
-        None = 0,
-
-        /// <summary>
-        ///  Possible value.
-        /// </summary>
-        V1 = 0x03,
+        TYPE_RDP_NEG_FAILURE = 0x03,
     }
 
     /// <summary>
-    /// The type of flags.
+    /// The type of flags field in RDP_NEG_FAILURE.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     public enum RDP_NEG_FAILURE_flags_Values : byte
     {
 
         /// <summary>
-        ///  Possible value.
+        /// Unused.
         /// </summary>
-        V1 = 0x00,
+        Unused = 0x00,
     }
 
     /// <summary>
-    /// The type of length.
+    /// The values of length field in RDP_NEG_FAILURE.
     /// </summary>
     public enum RDP_NEG_FAILURE_length_Values : ushort
     {
         /// <summary>
-        /// None.
+        /// The valid value.
         /// </summary>
-        None = 0,
-
-        /// <summary>
-        ///  Possible value.
-        /// </summary>
-        V1 = 0x0008,
+        Valid = 0x0008,
     }
 
     /// <summary>
@@ -9080,7 +9060,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  Server Auto-Reconnect packet. This field MUST be set
         ///  to 0x0000001C (28 bytes).
         /// </summary>
-        public cbLen_Values cbLen;
+        public UInt32 cbLen;
 
         /// <summary>
         ///  A 32-bit unsigned integer. The value representing the
@@ -9103,19 +9083,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     }
 
     /// <summary>
-    /// The type of cbLen.
+    /// The values of cbLen field in ARC_SC_PRIVATE_PACKET.
     /// </summary>
-    public enum cbLen_Values : uint
+    public enum ARC_SC_PRIVATE_PACKET_cbLen_Values : uint
     {
         /// <summary>
-        /// None.
+        /// The valid value.
         /// </summary>
-        None = 0,
-
-        /// <summary>
-        ///  Possible value.
-        /// </summary>
-        V1 = 0x0000001C,
+        Valid = 0x0000001C,
     }
 
     /// <summary>

@@ -2086,7 +2086,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                                      | TS_SECURITY_HEADER_flags_Values.SEC_RESET_SEQNO);
 
             TS_SYNCHRONIZE_PDU synchronizePduData = new TS_SYNCHRONIZE_PDU();
-            synchronizePduData.messageType = messageType_Values.V1;
+            synchronizePduData.messageType = TS_SYNCHRONIZE_PDU_messageType_Values.SYNCMSGTYPE_SYNC ;
             synchronizePduData.targetUser = (ushort)context.ServerChannelId;
             RdpbcgrUtility.FillShareDataHeader(ref synchronizePduData.shareDataHeader,
                 (ushort)(Marshal.SizeOf(synchronizePduData) - Marshal.SizeOf(synchronizePduData.shareDataHeader)),
