@@ -1214,9 +1214,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             x224.x224Ccf.classOptions = 0;
 
             RDP_NEG_RSP pdu = new RDP_NEG_RSP();
-            pdu.type = RDP_NEG_RSP_type_Values.V1;
+            pdu.type = RDP_NEG_RSP_type_Values.TYPE_RDP_NEG_RSP;
             pdu.flags = flags;
-            pdu.length = RDP_NEG_RSP_length_Values.V1;
+            pdu.length = (ushort)RDP_NEG_RSP_length_Values.Valid;
             pdu.selectedProtocol = selectedProtocols;
 
             x224.rdpNegData = pdu;
@@ -1260,9 +1260,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             x224.x224Ccf.classOptions = 0;
 
             RDP_NEG_FAILURE pdu = new RDP_NEG_FAILURE();
-            pdu.type = RDP_NEG_FAILURE_type_Values.V1;
-            pdu.flags = RDP_NEG_FAILURE_flags_Values.V1;
-            pdu.length = RDP_NEG_FAILURE_length_Values.V1;
+            pdu.type = RDP_NEG_FAILURE_type_Values.TYPE_RDP_NEG_FAILURE;
+            pdu.flags = RDP_NEG_FAILURE_flags_Values.Unused;
+            pdu.length = (UInt16)RDP_NEG_FAILURE_length_Values.Valid;
             pdu.failureCode = failureReason;
 
             x224.rdpNegFailure = pdu;
@@ -1731,7 +1731,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                                      defaultSecurityHeaderFlag);
 
             TS_SYNCHRONIZE_PDU synchronizePduData = new TS_SYNCHRONIZE_PDU();
-            synchronizePduData.messageType = messageType_Values.V1;
+            synchronizePduData.messageType = TS_SYNCHRONIZE_PDU_messageType_Values.SYNCMSGTYPE_SYNC ;
             synchronizePduData.targetUser = (ushort)sessionContext.IOChannelId;
 
             RdpbcgrUtility.FillShareDataHeader(ref synchronizePduData.shareDataHeader,
