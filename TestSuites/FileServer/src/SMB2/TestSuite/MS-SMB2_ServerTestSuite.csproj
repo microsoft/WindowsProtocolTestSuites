@@ -160,7 +160,6 @@
     <Compile Include="Replay\Replay.cs" />
     <Compile Include="ResilientHandle\ResilientHandle.cs" />
     <Compile Include="ResilientHandle\ResilientOpenScavengerTimer.cs" />
-    <Compile Include="ResilientHandle\ResilientWithPersistentHandle.cs" />
     <Compile Include="SessionMgmt\SessionMgmt.cs" />
     <Compile Include="SMB2CreateContextResponseChecker.cs" />
     <Compile Include="TreeMgmt\TreeMgmt.cs" />

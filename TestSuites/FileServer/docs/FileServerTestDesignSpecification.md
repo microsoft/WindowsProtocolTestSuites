@@ -4239,7 +4239,7 @@ If the server disconnect the connection, the reconnect will be successful.
 
 |||
 |---|---|
-|**Test ID**|DurableHandleV2_Reconnection_WithDifferentDurableOwner|
+|**Test ID**|DurableHandleV2_Reconnect_WithDifferentDurableOwner|
 |**Description**|Test reconnect with different durable owner will fail with STATUS_ACCESS_DENIED|
 |**Message Sequence**|**Open a file and request durable handle v2 then write content to file**|
 ||NEGOTIATE|
@@ -4253,27 +4253,6 @@ If the server disconnect the connection, the reconnect will be successful.
 ||SESSION_SETUP (Reconnect using different account credential)|
 ||TREE_CONNECT|
 ||CREATE (with CREATE_DURABLE_HANDLE_RECONNECT_V2) |
-||CLOSE|
-||TREE_DISCONNECT|
-||LOGOFF|
-|**Cluster Involved Scenario**|**NO**|
-
-
-|||
-|---|---|
-|**Test ID**|DurableHandleV1_Reconnect_WithoutLogoffOrDisconnect_WithPreviousSessionIdSet|
-|**Description**|Test reconnect with DurableHandleV1, without log off or disconnect but with previous session id.|
-|**Message Sequence**|**Open a file and request durable handle v1 then write content to file**|
-||NEGOTIATE|
-||SESSION_SETUP|
-||TREE_CONNECT|
-||CREATE (with CREATE_DURABLE_HANDLE_REQUEST_V1)|
-||WRITE|
-||**Reconnect previous durable handle v2 and read content from file**|
-||NEGOTIATE|
-||SESSION_SETUP (Reconnect using SessionId in above step as PreviousSessionId)|
-||TREE_CONNECT|
-||CREATE (with CREATE_DURABLE_HANDLE_RECONNECT_V1) |
 ||CLOSE|
 ||TREE_DISCONNECT|
 ||LOGOFF|
@@ -4342,7 +4321,7 @@ If the server disconnect the connection, the reconnect will be successful.
 
 |||
 |---|---|
-|**Test ID**|DurableHandleV2_Reconnection_WithoutPersistence|
+|**Test ID**|DurableHandleV2_Reconnect_WithoutPersistence|
 |**Description**|Test durable handle V2 without persistence could be reconnected|
 |**Prerequisites**||
 |**Test Execution Steps**|Client sends NEGOTIATE request|
@@ -4376,6 +4355,23 @@ If the server disconnect the connection, the reconnect will be successful.
 ||Client sends LOGOFF request|
 ||Server sends LOGOFF response|
 |**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|PersistentHandle_ReOpenFromDiffClient|
+|**Description**|Verify that whether opening a file will fail if a previous client already had the persistent handle to this file.|
+|**Prerequisites**||
+|**Test Execution Steps**|SMB2 Negotiate with SUT|
+||SMB2 Session Setup|
+||SMB2 Tree Connect to Share|
+||SMB2 Create with CREATE_DURABLE_HANDLE_REQUEST_V2 context (Persistent Flag is set)|
+||Disconnect|
+||SMB2 Negotiate with SUT using new Client Guid|
+||SMB2 Session Setup|
+||SMB2 Tree Connect to the same Share|
+||SMB2 Create with same file name|
+||Verify the Create Response with Status STATUS_FILE_NOT_AVAILABLE |
 
 
 #### <a name="3.2.8">Leasing
@@ -5459,51 +5455,9 @@ This model has 6 scenarios.
 
 ##### <a name="3.2.12.2"> Traditional Case
 
-The traditional case is used to cover the below statement in section 3.3.5.9:
-
-The server MUST verify the request size. If the size of the SMB2 CREATE Request (excluding the SMB2 header) is less than specified in the StructureSize field, then the request MUST be failed with STATUS\_ INVALID\_PARAMETER.
-
-###### <a name="3.2.12.2.1"> Resilient Handle with Persistent Handle
+###### <a name="3.2.12.2.1"> Resilient Open Scavenger Timer
 
 ####### <a name="3.2.12.2.1.1"> Scenario
-
-|||
-|---|---|
-|**Description**|Request Resilient Handle on Persistent Handle.|
-||It covers the below statement in section 3.3.5.9:|
-||If Connection.Dialect is "3.000" and the request does not contain SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context |
-||or SMB2_CREATE_DURABLE_HANDLE_RECONNECT_V2 Create Context, the server MUST look up an existing open in the GlobalOpenTable where Open.FileName matches the file name in the Buffer field of the request. If an Open entry is found, if Open.IsPersistent is TRUE, *Open.IsResilient is TRUE* and if Open.Connection is NULL, the server MUST fail the request with STATUS_FILE_NOT_AVAILABLE.|
-|**Message Sequence**|Open Persistent Handle with lease|
-||Send Resiliency Request|
-||Disconnect|
-||Open the same file from different client (Different client guid)|
-||Verify the OPEN is created successfully|
-|**Cluster Involved Scenario**|**NO**|
-
-
-####### <a name="3.2.12.2.1.2"> Test Case
-
-|||
-|---|---|
-|**Test ID**|ResilientWithPersistentHandle_OpenFromDiffClient|
-|**Description**|Verify that whether Open.IsResilient will impact persistent handle.|
-|**Prerequisites**||
-|**Test Execution Steps**|SMB2 Negotiate with SUT|
-||SMB2 Session Setup|
-||SMB2 Tree Connect to Share|
-||SMB2 Create with no create context|
-||SMB2 Resiliency Request|
-||Disconnect|
-||SMB2 Negotiate with SUT using new Client Guid|
-||SMB2 Session Setup|
-||SMB2 Tree Connect to the same Share|
-||SMB2 Create with same file name|
-||Verify the Create Response with Status STATUS_FILE_NOT_AVAILABLE |
-
-
-###### <a name="3.2.12.2.2"> Resilient Open Scavenger Timer
-
-####### <a name="3.2.12.2.2.1"> Scenario
 
 |||
 |---|---|
@@ -5516,7 +5470,7 @@ The server MUST verify the request size. If the size of the SMB2 CREATE Request 
 |**Cluster Involved Scenario**|**NO**|
 
 
-####### <a name="3.2.12.2.2.2"> Test Case 
+####### <a name="3.2.12.2.1.2"> Test Case 
 
 |||
 |---|---|
