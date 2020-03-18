@@ -102,7 +102,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 out fileIdBeforeDisconnection,
                 out serverCreateContexts,
                 RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
-                new Smb2CreateContextRequest[] { 
+                new Smb2CreateContextRequest[] {
                     new Smb2CreateDurableHandleRequestV2
                     {
                          CreateGuid = createGuid,
@@ -144,7 +144,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 out fileIdAfterDisconnection,
                 out serverCreateContexts,
                 RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
-                new Smb2CreateContextRequest[] { 
+                new Smb2CreateContextRequest[] {
                     new Smb2CreateDurableHandleReconnectV2
                     {
                          CreateGuid = createGuid,
@@ -210,7 +210,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 out fileIdBeforeDisconnection,
                 out serverCreateContexts,
                 RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE,
-                new Smb2CreateContextRequest[] { 
+                new Smb2CreateContextRequest[] {
                     new Smb2CreateDurableHandleRequestV2
                     {
                          CreateGuid = createGuid,
@@ -279,7 +279,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 out fileIdBeforeDisconnection,
                 out serverCreateContexts,
                 RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
-                new Smb2CreateContextRequest[] { 
+                new Smb2CreateContextRequest[] {
                     new Smb2CreateDurableHandleRequestV2
                     {
                          CreateGuid = createGuid,
@@ -321,7 +321,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 out fileIdAfterDisconnection,
                 out serverCreateContexts,
                 RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
-                new Smb2CreateContextRequest[] { 
+                new Smb2CreateContextRequest[] {
                     new Smb2CreateDurableHandleReconnectV2
                     {
                          CreateGuid = createGuid,
@@ -393,7 +393,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 out fileIdBeforeDisconnection,
                 out serverCreateContexts,
                 RequestedOplockLevel_Values.OPLOCK_LEVEL_BATCH,
-                new Smb2CreateContextRequest[] { 
+                new Smb2CreateContextRequest[] {
                     new Smb2CreateDurableHandleRequestV2
                     {
                          CreateGuid = createGuid,
@@ -430,7 +430,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 out fileIdAfterDisconnection,
                 out serverCreateContexts,
                 RequestedOplockLevel_Values.OPLOCK_LEVEL_BATCH,
-                new Smb2CreateContextRequest[] { 
+                new Smb2CreateContextRequest[] {
                     new Smb2CreateDurableHandleReconnectV2
                     {
                          CreateGuid = createGuid,
@@ -464,7 +464,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             /// 2. Client disconnects from the server
             /// 3. Client reconnects the durable handle V2 with LeaseV1 context, and expects success.
 
-            DurableHandleV2_Reconnect_WithLeaseV1(sameFileName:true);
+            DurableHandleV2_Reconnect_WithLeaseV1(sameFileName: true);
         }
 
         [TestMethod]
@@ -478,7 +478,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             /// 2. Client disconnects from the server
             /// 3. Client reconnects the durable handle V2 with LeaseV1 context, but the file name is different, and expects STATUS_INVALID_PARAMETER.
 
-            DurableHandleV2_Reconnect_WithLeaseV1(sameFileName:false);
+            DurableHandleV2_Reconnect_WithLeaseV1(sameFileName: false);
         }
 
         [TestMethod]
@@ -525,7 +525,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 out fileIdBeforeDisconnection,
                 out serverCreateContexts,
                 RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
-                new Smb2CreateContextRequest[] { 
+                new Smb2CreateContextRequest[] {
                     new Smb2CreateDurableHandleRequestV2
                     {
                          CreateGuid = createGuid,
@@ -599,7 +599,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 out fileIdBeforeDisconnection,
                 out serverCreateContexts,
                 RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE,
-                new Smb2CreateContextRequest[] { 
+                new Smb2CreateContextRequest[] {
                     new Smb2CreateDurableHandleRequestV2
                     {
                          CreateGuid = createGuid,
@@ -637,7 +637,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 out fileIdAfterDisconnection,
                 out serverCreateContexts,
                 RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE,
-                new Smb2CreateContextRequest[] { 
+                new Smb2CreateContextRequest[] {
                     new Smb2CreateDurableHandleReconnectV2
                     {
                          CreateGuid = createGuid,
@@ -660,6 +660,106 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             clientAfterDisconnection.LogOff();
             clientAfterDisconnection.Disconnect();
         }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb30)]
+        [TestCategory(TestCategories.Compatibility)]
+        [TestCategory(TestCategories.PersistentHandle)]
+        [Description("Verify that whether opening a file will fail if a previous client already had the persistent handle to this file.")]
+        public void PersistentHandle_ReOpenFromDiffClient()
+        {
+            /// 1. A client requests a persistent handle and succeeds
+            /// 2. The client disconnects from the server
+            /// 3. Another client (different client guid) opens the same file
+            /// 4. The expected result of the second OPEN is STATUS_FILE_NOT_AVAILABLE according to section 3.3.5.9:
+            ///    If Connection.Dialect belongs to the SMB 3.x dialect family and the request does not contain SMB2_CREATE_DURABLE_HANDLE_RECONNECT 
+            ///    Create Context or SMB2_CREATE_DURABLE_HANDLE_RECONNECT_V2 Create Context, the server MUST look up an existing open in the GlobalOpenTable 
+            ///    where Open.FileName matches the file name in the Buffer field of the request. 
+            ///    If an Open entry is found, and if all the following conditions are satisfied, the server SHOULD fail the request with STATUS_FILE_NOT_AVAILABLE.
+            ///       Open.IsPersistent is TRUE
+            ///       Open.Connection is NULL
+
+            #region Check Applicability
+            TestConfig.CheckDialect(DialectRevision.Smb30);
+            TestConfig.CheckCapabilities(NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES);
+            #endregion
+
+            Smb2FunctionalClient clientBeforeDisconnection = new Smb2FunctionalClient(testConfig.Timeout, testConfig, this.Site);
+            durableHandleUncSharePath = Smb2Utility.GetUncPath(testConfig.CAShareServerName, testConfig.CAShareName);
+
+            // It will cost 3 minutes to delete this file, so do not add it to testFiles to skip auto-clean.
+            string fileName = CurrentTestCaseName + "_" + Guid.NewGuid().ToString();
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "1. A client requests a persistent handle and succeeds");
+            uint treeIdBeforeDisconnection;
+            Connect(DialectRevision.Smb30, clientBeforeDisconnection, Guid.NewGuid(), testConfig.AccountCredential, ConnectShareType.CAShare, out treeIdBeforeDisconnection, null);
+
+            FILEID fileIdBeforeDisconnection;
+            Smb2CreateContextResponse[] serverCreateContexts = null;
+            status = clientBeforeDisconnection.Create(
+                treeIdBeforeDisconnection,
+                fileName,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out fileIdBeforeDisconnection,
+                out serverCreateContexts,
+                RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE,
+                new Smb2CreateContextRequest[] {
+                    new Smb2CreateDurableHandleRequestV2
+                    {
+                         CreateGuid = Guid.NewGuid(),
+                         Flags = CREATE_DURABLE_HANDLE_REQUEST_V2_Flags.DHANDLE_FLAG_PERSISTENT,
+                    }
+                },
+                shareAccess: ShareAccess_Values.NONE,
+                checker: (header, response) =>
+                {
+                    BaseTestSite.Assert.AreEqual(
+                        Smb2Status.STATUS_SUCCESS,
+                        header.Status,
+                        "{0} should be successful, actually server returns {1}.", header.Command, Smb2Status.GetStatusCode(header.Status));
+                    CheckCreateContextResponses(serverCreateContexts, new DefaultDurableHandleV2ResponseChecker(BaseTestSite, CREATE_DURABLE_HANDLE_RESPONSE_V2_Flags.DHANDLE_FLAG_PERSISTENT, uint.MaxValue));
+                });
+
+
+            // Disconnect
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "2. The client disconnects from the server");
+            clientBeforeDisconnection.Disconnect();
+
+            // Open from another client
+            Smb2FunctionalClient anotherClient = new Smb2FunctionalClient(testConfig.Timeout, testConfig, this.Site);
+            BaseTestSite.Log.Add(
+                LogEntryKind.TestStep,
+                "3. Open the same file from different client (different client guid), the expected result of OPEN is STATUS_FILE_NOT_AVAILABLE");
+            uint treeIdAfterDisconnection;
+            Connect(DialectRevision.Smb30, anotherClient, Guid.NewGuid(), testConfig.AccountCredential, ConnectShareType.CAShare, out treeIdAfterDisconnection, null);
+
+            FILEID fileIdAfterDisconnection;
+            status = anotherClient.Create(
+                treeIdAfterDisconnection,
+                fileName,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out fileIdAfterDisconnection,
+                out serverCreateContexts,
+                RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE,
+                new Smb2CreateContextRequest[] {
+                    new Smb2CreateDurableHandleRequestV2
+                    {
+                         CreateGuid = Guid.NewGuid(),
+                         Flags = CREATE_DURABLE_HANDLE_REQUEST_V2_Flags.DHANDLE_FLAG_PERSISTENT,
+                    }
+                },
+                shareAccess: ShareAccess_Values.NONE,
+                checker: (header, response) =>
+                {
+                    BaseTestSite.Assert.AreEqual(
+                        Smb2Status.STATUS_FILE_NOT_AVAILABLE,
+                        header.Status,
+                        "The server MUST fail the request with STATUS_FILE_NOT_AVAILABLE.");
+                });
+        }
+
         #endregion
 
         #region private method
@@ -668,15 +768,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             #region Check Applicability
             TestConfig.CheckDialect(DialectRevision.Smb30);
             TestConfig.CheckCapabilities(
-                persistent ? 
-                NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_LEASING | NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES:
+                persistent ?
+                NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_LEASING | NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES :
                 NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_LEASING);
             TestConfig.CheckCreateContext(CreateContextTypeValue.SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2, CreateContextTypeValue.SMB2_CREATE_DURABLE_HANDLE_RECONNECT_V2, CreateContextTypeValue.SMB2_CREATE_REQUEST_LEASE);
             #endregion
 
             string content = Smb2Utility.CreateRandomString(testConfig.WriteBufferLengthInKb);
             Guid clientGuid = Guid.NewGuid();
-            durableHandleUncSharePath = 
+            durableHandleUncSharePath =
                 persistent ? Smb2Utility.GetUncPath(testConfig.CAShareServerName, testConfig.CAShareName) : Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare);
             string fileName = GetTestFileName(durableHandleUncSharePath);
 
@@ -687,12 +787,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             uint treeIdBeforeDisconnection;
             Connect(
-                DialectRevision.Smb30, 
-                clientBeforeDisconnection, 
-                clientGuid, 
-                testConfig.AccountCredential, 
-                persistent ? ConnectShareType.CAShare : ConnectShareType.BasicShareWithoutAssert, 
-                out treeIdBeforeDisconnection, 
+                DialectRevision.Smb30,
+                clientBeforeDisconnection,
+                clientGuid,
+                testConfig.AccountCredential,
+                persistent ? ConnectShareType.CAShare : ConnectShareType.BasicShareWithoutAssert,
+                out treeIdBeforeDisconnection,
                 null);
 
             Guid createGuid = Guid.NewGuid();
@@ -707,7 +807,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 out fileIdBeforeDisconnection,
                 out serverCreateContexts,
                 RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
-                new Smb2CreateContextRequest[] { 
+                new Smb2CreateContextRequest[] {
                     new Smb2CreateDurableHandleRequestV2
                     {
                          CreateGuid = createGuid,
@@ -727,10 +827,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                         header.Status,
                         "{0} should be successful, actually server returns {1}.", header.Command, Smb2Status.GetStatusCode(header.Status));
                     CheckCreateContextResponses(
-                        serverCreateContexts, 
+                        serverCreateContexts,
                         new DefaultDurableHandleV2ResponseChecker(
-                            BaseTestSite, 
-                            persistent ? CREATE_DURABLE_HANDLE_RESPONSE_V2_Flags.DHANDLE_FLAG_PERSISTENT : 0, 
+                            BaseTestSite,
+                            persistent ? CREATE_DURABLE_HANDLE_RESPONSE_V2_Flags.DHANDLE_FLAG_PERSISTENT : 0,
                             uint.MaxValue));
                 });
 
@@ -746,12 +846,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             uint treeIdAfterDisconnection;
             Connect(
-                DialectRevision.Smb30, 
-                clientAfterDisconnection, 
-                clientGuid, 
+                DialectRevision.Smb30,
+                clientAfterDisconnection,
+                clientGuid,
                 testConfig.AccountCredential,
-                persistent ? ConnectShareType.CAShare : ConnectShareType.BasicShareWithoutAssert, 
-                out treeIdAfterDisconnection, 
+                persistent ? ConnectShareType.CAShare : ConnectShareType.BasicShareWithoutAssert,
+                out treeIdAfterDisconnection,
                 clientBeforeDisconnection);
 
             FILEID fileIdAfterDisconnection;
@@ -762,7 +862,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 out fileIdAfterDisconnection,
                 out serverCreateContexts,
                 RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
-                new Smb2CreateContextRequest[] { 
+                new Smb2CreateContextRequest[] {
                     new Smb2CreateDurableHandleReconnectV2
                     {
                          CreateGuid = createGuid,
