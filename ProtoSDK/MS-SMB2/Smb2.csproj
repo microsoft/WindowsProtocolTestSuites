@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2</RootNamespace>
   </PropertyGroup>
