@@ -140,6 +140,7 @@ Add-WindowsFeature FS-VSS-Agent
 Add-WindowsFeature BranchCache
 Add-WindowsFeature RSAT-Clustering
 Add-WindowsFeature RSAT-File-Services
+Add-WindowsFeature RSAT-AD-PowerShell
 
 #----------------------------------------------------------------------------
 # Get disk ready for cluster
@@ -182,6 +183,21 @@ for($i=0; $i -lt 3;$i++)
         
         $diskpartscript | diskpart.exe
     }
+}
+
+#----------------------------------------------------------------------------
+# Clean Cluster
+#----------------------------------------------------------------------------
+.\Write-Info.ps1 "Clean Cluster"
+try {
+     .\Write-Info.ps1 "Clean cluster env in single-domain environment."
+    $domainAdminPwd = ConvertTo-SecureString $config.lab.core.password -AsPlainText -force
+    $creds = New-Object System.Management.Automation.PSCredential($domainAdmin,$domainAdminPwd)
+    $filterStr = 'Name -like "'+$clusterName+'" -or Name -like "+'$config.lab.ha.generalfs.name'+" -or Name -like "+'$config.lab.ha.scaleoutfs.name'+"'
+    Get-ADComputer -Filter $filterStr -Credential $creds | Remove-ADComputer -Credential $creds -Confirm:$false
+}
+catch {
+    Write-Warning "Clean Cluster failed"
 }
 
 #----------------------------------------------------------------------------
