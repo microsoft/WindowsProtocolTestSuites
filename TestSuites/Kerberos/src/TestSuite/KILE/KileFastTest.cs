@@ -915,7 +915,7 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.TestSuite
             BaseTestSite.Log.Add(LogEntryKind.Comment, "Create and send unarmored TGS request with AD-fx-fast-used.");
             AdFxFastUsed adFxFastUsed = new AdFxFastUsed();
             AuthorizationData authData = new AuthorizationData(new AuthorizationDataElement[] { adFxFastUsed.AuthDataElement });
-            client.SendTgsRequest(testConfig.LocalRealm.ClientComputer.DefaultServiceName, options, null, null, authData);
+            client.SendTgsRequest(testConfig.LocalRealm.ClientComputer.DefaultServiceName, options, null, authData);
             BaseTestSite.Log.Add(LogEntryKind.Comment, "Receive TGS Error, KDC MUST reject the request.");
             KerberosKrbError krbError = client.ExpectKrbError();
         }
@@ -977,7 +977,7 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.TestSuite
 
             AdFxFastArmor adFxFastArmor = new AdFxFastArmor();
             AuthorizationData authData = new AuthorizationData(new AuthorizationDataElement[] { adFxFastArmor.AuthDataElement });
-            client.SendTgsRequest(testConfig.LocalRealm.ClientComputer.DefaultServiceName, options, null, null, authData);
+            client.SendTgsRequest(testConfig.LocalRealm.ClientComputer.DefaultServiceName, options, null, authData);
             BaseTestSite.Log.Add(LogEntryKind.Comment, "Receive TGS Error, KDC MUST reject the request.");
             KerberosKrbError krbError = client.ExpectKrbError();
 
