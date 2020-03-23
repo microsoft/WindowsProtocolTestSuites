@@ -60,6 +60,22 @@ if($config -eq $null)
 $sut = $config.lab.servers.vm | Where {$_.role -match "SUT" -or $_.role -match "Node01"}
 $sutComputerName = $sut.name
 
+# When the SUT is Linux OS, update the hosts file and get the ip address instead of computer name.
+if( $null -ne $sut.os  -and $sut.os -eq "Linux"){
+    $sutHostString = "$ip $sutComputerName"
+    $sutHostString | Out-File -FilePath "$env:windir\System32\drivers\etc\hosts" -Append -encoding ascii
+
+    $ip = $Vm.ip
+    
+    if(($Vm.ip | Measure-Object ).Count -gt 1){
+        $ip = $Vm.ip[0]
+    }else{
+        $ip = $Vm.ip
+    }
+
+    $sutComputerName = $ip
+}
+
 $endPointPath = "$env:SystemDrive\MicrosoftProtocolTests\FileServer\Server-Endpoint"
 $version = Get-ChildItem $endPointPath | where {$_.Attributes -match "Directory" -and $_.Name -match "\d+\.\d+\.\d+\.\d+"} | Sort-Object Name -descending | Select-Object -first 1
 $binDir = "$endPointPath\$version\bin"
