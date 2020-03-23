@@ -63,10 +63,10 @@ $sutComputerName = $sut.name
 # When the SUT is Linux OS, update the hosts file and get the ip address instead of computer name.
 if( $null -ne $sut.os  -and $sut.os -eq "Linux"){
 
-    $ip = $Vm.ip
+    $ip = $sut.ip
 
-    if(($Vm.ip | Measure-Object ).Count -gt 1){
-        $ip = $Vm.ip[0]
+    if(($sut.ip | Measure-Object ).Count -gt 1){
+        $ip = $sut.ip[0]
     }
 
     $sutHostString = "$ip $sutComputerName"
