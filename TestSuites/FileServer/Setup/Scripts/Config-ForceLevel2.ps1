@@ -62,16 +62,15 @@ $sutComputerName = $sut.name
 
 # When the SUT is Linux OS, update the hosts file and get the ip address instead of computer name.
 if( $null -ne $sut.os  -and $sut.os -eq "Linux"){
-    $sutHostString = "$ip $sutComputerName"
-    $sutHostString | Out-File -FilePath "$env:windir\System32\drivers\etc\hosts" -Append -encoding ascii
 
     $ip = $Vm.ip
-    
+
     if(($Vm.ip | Measure-Object ).Count -gt 1){
         $ip = $Vm.ip[0]
-    }else{
-        $ip = $Vm.ip
     }
+
+    $sutHostString = "$ip $sutComputerName"
+    $sutHostString | Out-File -FilePath "$env:windir\System32\drivers\etc\hosts" -Append -encoding ascii
 
     $sutComputerName = $ip
 }
