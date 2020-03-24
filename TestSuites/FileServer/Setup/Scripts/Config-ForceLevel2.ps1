@@ -73,6 +73,10 @@ if( $null -ne $sut.os  -and $sut.os -eq "Linux"){
     $sutHostString | Out-File -FilePath "$env:windir\System32\drivers\etc\hosts" -Append -encoding ascii
 
     $sutComputerName = $ip
+
+    # TODO: Ignore Forcelevel when the SUT is Linux as this tool does not support yet in Linux now.
+    # After update the tool, below exit code will be removed.
+    exit 0
 }
 
 $endPointPath = "$env:SystemDrive\MicrosoftProtocolTests\FileServer\Server-Endpoint"
