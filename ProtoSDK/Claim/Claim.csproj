@@ -68,6 +68,10 @@
       <Project>{75544419-3F4E-4308-A676-165F45C1462E}</Project>
       <Name>Messages</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MS-XCA\Xca.csproj">
+      <Project>{55f86fdf-e929-4aa6-901b-4e0be8b9b633}</Project>
+      <Name>Xca</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
