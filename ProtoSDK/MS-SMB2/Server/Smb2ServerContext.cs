@@ -1287,7 +1287,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
 
         /// <summary>
-        /// Deconstructor
+        /// Destructor
         /// </summary>
         ~Smb2ServerContext()
         {

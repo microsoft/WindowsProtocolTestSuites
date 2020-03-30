@@ -171,7 +171,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic
         }
 
         /// <summary>
-        /// Deconstructor
+        /// Destructor
         /// </summary>
         ~RC4CryptoTransform()
         {

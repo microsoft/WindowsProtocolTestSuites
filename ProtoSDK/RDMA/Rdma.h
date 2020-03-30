@@ -109,7 +109,7 @@ public ref class RdmaMemoryWindow
 {
 public:
 	/// <summary>
-	/// Deconstructor
+	/// Destructor
 	/// </summary>
 	~RdmaMemoryWindow();
 internal:
@@ -126,7 +126,7 @@ public ref class RdmaEndpoint
 {
 public:
 	/// <summary>
-	/// Deconstructor
+	/// Destructor
 	/// </summary>
 	~RdmaEndpoint();
 
@@ -467,7 +467,7 @@ public:
 	static HRESULT LoadRdmaProvider(System::Guid providerId, String^ path, [Out]RdmaProviderInfo^% provider);
 
 	/// <summary>
-	/// Deconstructor, release library resource and provider
+	/// Destructor, release library resource and provider
 	/// </summary>
 	~RdmaProvider();
 
