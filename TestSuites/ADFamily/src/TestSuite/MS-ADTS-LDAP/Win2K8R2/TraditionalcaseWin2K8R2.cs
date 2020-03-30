@@ -3120,7 +3120,12 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.Asn1CodecV3.SearchResultEntry searchResultEntry =
                         (Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.Asn1CodecV3.SearchResultEntry)
                         entrypacket.GetInnerRequestOrResponse();
-                    Site.CaptureRequirementIfAreEqual(0, searchResultEntry.attributes.Elements.Length, 248,
+
+                    var resultCount = searchResultEntry.attributes.Elements.Length != 0 ?
+                        searchResultEntry.attributes.Elements[0].vals.Elements.Length :
+                        0;
+
+                    Site.CaptureRequirementIfAreEqual(0, resultCount, 248,
                     @"While making LDAP request to msDs-TopQuotaUsage rootDSE attribute, if the caller does not have the 
                     RIGHT_DS_READ_PROPERTY access right on the Quotas container the search operation will succeed but no results will be returned.");
                 }
