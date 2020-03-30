@@ -9,6 +9,7 @@ using System.Net;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Text;
+using Microsoft.Protocols.TestTools.StackSdk.Dtyp;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 {
@@ -714,9 +715,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 {
                     name = CreateContextNames.SMB2_CREATE_SD_BUFFER;
 
-                    var sid = new SecurityIdentifier(createSdBuffer.SID);
-                    dataBuffer = new byte[sid.BinaryLength];
-                    sid.GetBinaryForm(dataBuffer, 0);
+                    _SID sid = DtypUtility.ToSid(createSdBuffer.SID);
+                    dataBuffer = TypeMarshal.ToBytes(sid);
 
                     goto encapsulateCreateContextStruct;
                 }
