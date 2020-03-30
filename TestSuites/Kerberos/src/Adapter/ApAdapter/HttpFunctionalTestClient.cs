@@ -174,7 +174,7 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
         }
 
         /// <summary>
-        /// Deconstructor
+        /// Destructor
         /// </summary>
         ~HttpFunctionalTestClient()
         {

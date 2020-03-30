@@ -164,10 +164,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 initialClientEncryptKey = currentClientEncryptKey;
                 initialServerEncryptKey = currentServerEncryptKey;
                 initialServerDecryptKey = currentServerDecryptKey;
-                RC4CryptoServiceProvider rc4Enc = new RC4CryptoServiceProvider();
+                RC4 rc4Enc = RC4.Create();
                 rc4Encrypt = rc4Enc.CreateEncryptor(currentClientEncryptKey, null);
                 rc4EncryptServer = rc4Enc.CreateEncryptor(currentServerEncryptKey, null);
-                RC4CryptoServiceProvider rc4Dec = new RC4CryptoServiceProvider();
+                RC4 rc4Dec = RC4.Create();
                 rc4Decrypt = rc4Dec.CreateDecryptor(currentClientDecryptKey, null);
                 rc4DecryptServer = rc4Dec.CreateDecryptor(currentServerDecryptKey, null);
             }
@@ -255,11 +255,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                                                     currentServerDecryptKey,
                                                     encryptionMethod);
 
-                RC4CryptoServiceProvider rc4Enc = new RC4CryptoServiceProvider();
+                RC4 rc4Enc = RC4.Create();
                 rc4Encrypt = rc4Enc.CreateEncryptor(currentClientEncryptKey, null);
                 rc4EncryptServer = rc4Enc.CreateEncryptor(currentServerEncryptKey, null);
 
-                RC4CryptoServiceProvider rc4Dec = new RC4CryptoServiceProvider();
+                RC4 rc4Dec = RC4.Create();
                 rc4Decrypt = rc4Dec.CreateDecryptor(currentClientDecryptKey, null);
                 rc4DecryptServer = rc4Dec.CreateDecryptor(currentServerDecryptKey, null);
             }
@@ -976,7 +976,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             if (encryptionMethod == EncryptionMethods.ENCRYPTION_METHOD_128BIT)
             {
                 // S-TableEncrypt = InitRC4(TempKey128)
-                RC4CryptoServiceProvider rc4 = new RC4CryptoServiceProvider();
+                RC4 rc4 = RC4.Create();
                 ICryptoTransform ict = rc4.CreateEncryptor(tempKey128, null);
 
                 // NewEncryptKey128 = RC4(TempKey128, S-TableEncrypt)
@@ -989,7 +989,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 byte[] tempKey64 = GetFirstNBits(64, tempKey128);
 
                 // S-TableEncrypt = InitRC4(TempKey64)
-                RC4CryptoServiceProvider rc4 = new RC4CryptoServiceProvider();
+                RC4 rc4 = RC4.Create();
                 ICryptoTransform ict = rc4.CreateEncryptor(tempKey64, null);
 
                 // PreSaltKey = RC4(TempKey64, S-TableEncrypt)

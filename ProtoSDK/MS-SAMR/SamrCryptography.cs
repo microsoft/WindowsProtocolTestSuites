@@ -220,7 +220,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
         /// <param name="key">The encryption key</param>
         private static byte[] RC4Encrypt(byte[] input, int inputOffset, int inputLength, byte[] key)
         {
-            RC4CryptoServiceProvider rc4 = new RC4CryptoServiceProvider();
+            RC4 rc4 = RC4.Create();
             ICryptoTransform crypto = rc4.CreateEncryptor(key, null);
             byte[] output = crypto.TransformFinalBlock(input, inputOffset, inputLength);
 
@@ -579,14 +579,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
                 throw new ArgumentNullException("password");
             }
 
-            // Get MD4 CSP
-            MD4 md4 = MD4CryptoServiceProvider.Create();
-            md4.Initialize();
+            byte[] hash;
 
-            // Get password byte array
-            byte[] passwordBuffer = Encoding.Unicode.GetBytes(password);
+            using (MD4 md4 = MD4.Create())
+            {
+                // Get password byte array
+                byte[] passwordBuffer = Encoding.Unicode.GetBytes(password);
+                hash = md4.ComputeHash(passwordBuffer);
+            }
 
-            return md4.ComputeHash(passwordBuffer);
+            return hash;
         }
 
 

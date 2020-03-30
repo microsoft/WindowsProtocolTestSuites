@@ -627,7 +627,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <returns>The computed result.</returns>
         internal static byte[] RC4(byte[] key, byte[] data)
         {
-            var rc4Enc = new RC4CryptoServiceProvider();
+            RC4 rc4Enc = Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic.RC4.Create();
             var result = new byte[data.Length];
             ICryptoTransform rc4Encrypt = rc4Enc.CreateEncryptor(key, null);
             rc4Encrypt.TransformBlock(data, 0, data.Length, result, 0);

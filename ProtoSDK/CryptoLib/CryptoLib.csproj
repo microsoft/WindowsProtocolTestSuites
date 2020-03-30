@@ -138,7 +138,7 @@
     <Compile Include="LMHash.cs" />
     <Compile Include="LMHashManaged.cs" />
     <Compile Include="MD4.cs" />
-    <Compile Include="MD4CryptoServiceProvider.cs" />
+    <Compile Include="MD4Managed.cs" />
     <Compile Include="Mppc\SlidingWindowSize.cs" />
     <Compile Include="Mppc\EncodeConst.cs" />
     <Compile Include="Mppc\HashTable.cs" />
@@ -149,9 +149,9 @@
     <Compile Include="NativeMethods.cs" />
     <Compile Include="Oakley.cs" />
     <Compile Include="RC4.cs" />
-    <Compile Include="RC4CryptoServiceProvider.cs" />
     <Compile Include="RC4CryptoTransform.cs" />
     <Compile Include="CertificateSigner.cs" />
+    <Compile Include="RC4Managed.cs" />
     <Compile Include="Types.cs" />
     <Compile Include="Utility.cs" />
   </ItemGroup>

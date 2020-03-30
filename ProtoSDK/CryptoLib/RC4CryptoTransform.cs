@@ -4,21 +4,30 @@
 using System;
 using System.Security.Cryptography;
 
-
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic
 {
     /// <summary>
-    /// implement RC4 cryptographic transformations.
+    /// Implement RC4 cryptographic transformations.
     /// </summary>
     internal class RC4CryptoTransform : ICryptoTransform
     {
-        internal IntPtr keyHandle;
+        private const int VectorSize = 256;
+        private byte[] s;
+        private int a;
+        private int b;
         private bool disposed;
+
+        public RC4CryptoTransform(byte[] key)
+        {
+            a = 0;
+            b = 0;
+            Initialize(key);
+        }
 
         /// <summary>
         /// Gets a value indicating whether the current transform can be reused.
         /// </summary>
-        public bool CanReuseTransform 
+        public bool CanReuseTransform
         {
             get
             {
@@ -26,11 +35,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic
             }
         }
 
-
         /// <summary>
         /// Gets a value indicating whether multiple blocks can be transformed.
         /// </summary>
-        public bool CanTransformMultipleBlocks 
+        public bool CanTransformMultipleBlocks
         {
             get
             {
@@ -38,34 +46,31 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic
             }
         }
 
-
         /// <summary>
         /// Gets the input block size.
         /// </summary>
-        public int InputBlockSize 
+        public int InputBlockSize
         {
             get
             {
-                //rc4's input type is byte[].
-                //the minus unit involved in the transform is 1 byte
+                // RC4's input type is byte[].
+                // The minimum unit involved in the transform is 1 byte.
                 return 1;
             }
         }
-
 
         /// <summary>
         /// Gets the output block size.
         /// </summary>
-        public int OutputBlockSize 
+        public int OutputBlockSize
         {
             get
             {
-                //rc4's out type is byte[].
-                //the minus unit involved in the transform is 1 byte
+                // RC4's out type is byte[].
+                // the minimum unit involved in the transform is 1 byte.
                 return 1;
             }
         }
-
 
         /// <summary>
         /// Transforms the specified region of the input byte array and copies the resulting
@@ -104,23 +109,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic
             {
                 throw new ArgumentOutOfRangeException("outputOffset");
             }
-            
 
-            byte[] inputTransformData = new byte[inputCount];
-            Array.Copy(inputBuffer, inputOffset, inputTransformData, 0, inputCount);
-            int outputTransformDataCount = inputCount;
-
-            bool status = NativeMethods.CryptEncrypt(keyHandle, IntPtr.Zero, 0, 0,
-                inputTransformData, ref outputTransformDataCount, inputCount);
-            if (!status)
-            {
-                throw new CryptographicException("CryptEncrypt fails:" + Helper.GetLastErrorCodeString());
-            }
-
-            Array.Copy(inputTransformData, 0, outputBuffer, outputOffset, outputTransformDataCount);
-            return outputTransformDataCount;
+            byte[] output = Transform(inputBuffer, inputOffset, inputCount);
+            Array.Copy(output, 0, outputBuffer, outputOffset, output.Length);
+            return output.Length;
         }
-
 
         /// <summary>
         /// Transforms the specified region of the specified byte array.
@@ -146,24 +139,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic
                 throw new ArgumentOutOfRangeException("inputCount");
             }
 
-            byte[] inputTransformData = new byte[inputCount];
-            Array.Copy(inputBuffer, inputOffset, inputTransformData, 0, inputCount);
-            int outputTransformDataCount = inputCount;
-
-            bool status = NativeMethods.CryptEncrypt(keyHandle, IntPtr.Zero, 0, 0, 
-                inputTransformData, ref outputTransformDataCount, inputCount);
-
-            if (!status)
-            {
-                throw new CryptographicException("CryptEncrypt fails:" + Helper.GetLastErrorCodeString());
-            }
-
-            byte[] outputTransformData = new byte[outputTransformDataCount];
-            Array.Copy(inputTransformData, 0, outputTransformData, 0, outputTransformDataCount);
-
-            return outputTransformData;
+            return Transform(inputBuffer, inputOffset, inputCount);
         }
-
 
         /// <summary>
         /// Release all resources
@@ -174,9 +151,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic
             GC.SuppressFinalize(this);
         }
 
-
         /// <summary>
-        /// release all resources
+        /// Release all resources
         /// </summary>
         /// <param name="disposing">Indicates GC or user calling this function</param>
         protected virtual void Dispose(bool disposing)
@@ -188,26 +164,57 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic
                 if (disposing)
                 {
                     // Free managed resources & other reference types
-                }
-
-                // Call the appropriate methods to clean up unmanaged resources.
-                // If disposing is false, only the following code is executed.
-                if (keyHandle != IntPtr.Zero)
-                {
-                    NativeMethods.CryptDestroyKey(keyHandle);
-                    keyHandle = IntPtr.Zero;
+                    Array.Clear(s, 0, s.Length);
                 }
             }
             disposed = true;
         }
 
-
         /// <summary>
-        /// deconstructor
+        /// Destructor
         /// </summary>
         ~RC4CryptoTransform()
         {
             Dispose(false);
+        }
+
+        private void Initialize(byte[] key)
+        {
+            s = new byte[VectorSize];
+            for (int i = 0; i < VectorSize; ++i)
+            {
+                s[i] = (byte)i;
+            }
+
+            for (int i = 0, j = 0; i < VectorSize; ++i)
+            {
+                j = (j + s[i] + key[i % key.Length]) % VectorSize;
+                Swap(s, i, j);
+            }
+        }
+
+        private void Swap(byte[] arr, int i, int j)
+        {
+            byte tmp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = tmp;
+        }
+
+        private byte[] Transform(byte[] inputBuffer, int inputOffset, int inputCount)
+        {
+            byte[] output = new byte[inputCount];
+            inputBuffer.CopyTo(output, inputOffset);
+
+            for (int i = inputOffset; i < inputCount; ++i)
+            {
+                a = (a + 1) % VectorSize;
+                b = (b + s[a]) % VectorSize;
+                Swap(s, a, b);
+                int t = (s[a] + s[b]) % VectorSize;
+                byte k = s[t];
+                output[i] = (byte)(output[i] ^ k);
+            }
+            return output;
         }
     }
 }

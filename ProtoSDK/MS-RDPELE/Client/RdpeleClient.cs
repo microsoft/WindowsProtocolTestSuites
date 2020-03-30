@@ -301,7 +301,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele
         /// </summary>
         private byte[] RC4(byte[] input)
         {
-            RC4CryptoServiceProvider rc4Enc = new RC4CryptoServiceProvider();
+            RC4 rc4Enc = Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic.RC4.Create();
             ICryptoTransform rc4Encrypt = rc4Enc.CreateEncryptor(licensingEncryptionKey, null);
             byte[] output = new byte[input.Length];
             rc4Encrypt.TransformBlock(input, 0, input.Length, output, 0);

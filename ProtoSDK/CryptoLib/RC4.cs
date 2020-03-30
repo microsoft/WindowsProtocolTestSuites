@@ -17,7 +17,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic
         /// <returns>default RC4 instance</returns>
         public new static RC4 Create()
         {
-            return new RC4CryptoServiceProvider();
+            return new RC4Managed();
         }
     }
 }

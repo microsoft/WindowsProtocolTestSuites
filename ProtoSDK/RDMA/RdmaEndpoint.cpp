@@ -10,7 +10,7 @@ using namespace System::Runtime::InteropServices;
 // Begin SMBD client Namespace
 BEGIN_RDMA_NAMESPACE
 /// <summary>
-/// Deconstructor
+/// Destructor
 /// </summary>
 RdmaEndpoint::~RdmaEndpoint()
 {
