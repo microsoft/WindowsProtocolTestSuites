@@ -726,7 +726,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Compression.Mppc
 
 
         /// <summary>
-        /// Deconstructor
+        /// Destructor
         /// </summary>
         ~Decompressor()
         {

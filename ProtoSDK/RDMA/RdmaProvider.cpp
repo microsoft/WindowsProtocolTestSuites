@@ -184,7 +184,7 @@ HRESULT RdmaProvider::LoadRdmaProvider(System::Guid providerId, String^ path, [O
 }
 
 /// <summary>
-/// Deconstructor, release library resource and provider
+/// Destructor, release library resource and provider
 /// </summary>
 RdmaProvider::~RdmaProvider()
 {
