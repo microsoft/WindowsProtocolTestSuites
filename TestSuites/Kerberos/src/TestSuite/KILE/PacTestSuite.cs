@@ -124,16 +124,14 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.TestSuite
         [TestCategory(TestCategories.KilePac)]
         [Feature(Feature.Kile | Feature.Pac)]
         [ApplicationServer(ApplicationServer.All)]
-        [Description("This test case is designed to verify that KDC returns no PAC when pa-pac-request is false. " +
-                     "This test case requires KDC's password, which will change when KDC restarts. " +
-                     "The changed password will cause this case fail when decrypting TGS response.")]       
+        [Description("This test case is designed to verify that KDC returns no PAC when pa-pac-request is false. ")]       
         public void Request_no_PAC_TGT()
         {
             base.Logging();
 
             //Create kerberos test client and connect
-            client = new KerberosTestClient(this.testConfig.LocalRealm.RealmName, this.testConfig.LocalRealm.User[1].Username,
-                this.testConfig.LocalRealm.User[1].Password, KerberosAccountType.User, testConfig.LocalRealm.KDC[0].IPAddress, testConfig.LocalRealm.KDC[0].Port, testConfig.TransportType,
+            client = new KerberosTestClient(this.testConfig.LocalRealm.RealmName, this.testConfig.LocalRealm.User[4].Username,
+                this.testConfig.LocalRealm.User[4].Password, KerberosAccountType.User, testConfig.LocalRealm.KDC[0].IPAddress, testConfig.LocalRealm.KDC[0].Port, testConfig.TransportType,
                 testConfig.SupportedOid);
 
             // Kerberos Proxy Service is used
@@ -165,25 +163,23 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.TestSuite
             BaseTestSite.Assert.IsNotNull(asResponse.Response.ticket, "AS response should contain a TGT.");
 
             //Create and send TGS request
-
-            client.SendTgsRequest(this.testConfig.LocalRealm.LdapServer[0].LdapServiceName, options);
+            client.SendTgsRequest(this.testConfig.LocalRealm.User[4].ServiceName, options);
             KerberosTgsResponse tgsResponse = client.ExpectTgsResponse();
 
             BaseTestSite.Assert.AreEqual(this.testConfig.LocalRealm.RealmName.ToLower(),
                 tgsResponse.Response.ticket.realm.Value.ToLower(),
                 "The realm in ticket should match expected.");
-            BaseTestSite.Assert.AreEqual(this.testConfig.LocalRealm.LdapServer[0].LdapServiceName,
+            BaseTestSite.Assert.AreEqual(this.testConfig.LocalRealm.User[4].ServiceName,
                KerberosUtility.PrincipalName2String(tgsResponse.Response.ticket.sname),
                "The Service principal name in ticket should match expected.");
 
-            EncryptionKey key = testConfig.QueryKey(this.testConfig.LocalRealm.LdapServer[0].LdapServiceName, this.testConfig.LocalRealm.RealmName, this.client.Context.SelectedEType);
-            tgsResponse.DecryptTicket(key);
-            
-            //tgsResponse.DecryptTicket(this.testConfig.LocalRealm.ClientComputer.Password, this.testConfig.LocalRealm.ClientComputer.ServiceSalt);
+            string serviceSalt = this.testConfig.LocalRealm.RealmName.ToUpper() + this.testConfig.LocalRealm.User[4].ServiceName.Replace("\\", "").ToLower();
+            tgsResponse.DecryptTicket(this.testConfig.LocalRealm.User[4].Password, serviceSalt);
+
             BaseTestSite.Assert.AreEqual(this.testConfig.LocalRealm.RealmName.ToLower(),
                tgsResponse.TicketEncPart.crealm.Value.ToLower(),
                "The realm in ticket encrypted part should match expected.");
-            BaseTestSite.Assert.AreEqual(this.testConfig.LocalRealm.User[1].Username.ToLower(),
+            BaseTestSite.Assert.AreEqual(this.testConfig.LocalRealm.User[4].Username.ToLower(),
                 KerberosUtility.PrincipalName2String(tgsResponse.TicketEncPart.cname).ToLower(),
                 "The client principal name in ticket encrypted part should match expected.");
             //Verify PAC
