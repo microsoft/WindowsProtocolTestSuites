@@ -6,7 +6,7 @@
 #############################################################################
 ##
 ## Microsoft Windows Powershell Scripting
-## File:           Get-OSVersion.ps1
+## File:           Get-OSVersionForADTests.ps1
 ## Purpose:        Get version of current operating system.
 ## Version:        1.1 (4 Aug, 2008)
 ##
@@ -22,7 +22,7 @@ param(
 #----------------------------------------------------------------------------
 # Print execution information
 #----------------------------------------------------------------------------
-Write-Host "EXECUTING [Get-OsVersion.ps1] ..." -foregroundcolor cyan
+Write-Host "EXECUTING [Get-OsVersionForADTests.ps1] ..." -foregroundcolor cyan
 Write-Host "`$computerName = $computerName"
 Write-Host "`$userName     = $userName"
 Write-Host "`$password     = $password"
@@ -36,9 +36,9 @@ function Show-ScriptUsage
     Write-host 
     Write-host "Usage: Get version of current operating system."
     Write-host "       Return value will be one of the following:"
-    Write-host "       `"XP`", `"VISTA`", `"W2K3`", `"W2K8`", `"W2K8R2`", `"W2K12`", `"W2K12R2`", `$NULL if fail to get OS version."
+    Write-host "       `"XP`", `"W2K3`", `"VISTA`", `"Win2008`", `"Win7`", `"Win2008R2`", `"Win7SP1`", `"Win2008R2SP1`", `"Win8`", `"Win2012`", `"Win8.1`", `"Win2012R2`", `"Win10`", `"Winv1803`", `"Win2016`", `$NULL if fail to get OS version."
     Write-host
-    Write-host "Example: $osVer = Get-OSVersion.ps1 SUT01 Contoso.com\administrator Password01!"
+    Write-host "Example: $osVer = Get-OSVersionForADTests.ps1 SUT01 Contoso.com\administrator Password01!"
     Write-host
 }
 
@@ -259,7 +259,7 @@ if($result -eq $null)
 # Print exit information
 #----------------------------------------------------------------------------
 Write-Host "OS version is: $result" -foregroundcolor Green
-Write-Host "EXECUTE [Get-OSVersion.ps1] SUCCEED." -foregroundcolor Green
+Write-Host "EXECUTE [Get-OSVersionForADTests.ps1] SUCCEED." -foregroundcolor Green
 
 if($log)
 {

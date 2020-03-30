@@ -284,7 +284,7 @@ Function Config-Phase2()
 
     # Get OS Version
     Write-ConfigLog "Getting Operating System Version..." -ForegroundColor Yellow
-    $OsVersion = .\Get-OsVersion.ps1 -log
+    $OsVersion = .\Get-OSVersionForADTests.ps1 -log
 
     # Get and log netbiosName from Domain Service domain object <DomainNc>
     Write-ConfigLog "Getting Domain Netbios name..." -ForegroundColor Yellow

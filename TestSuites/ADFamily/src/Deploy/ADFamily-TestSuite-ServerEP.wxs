@@ -40,6 +40,7 @@
     <WixVariable Id="WIN2016_TD_DIR" Value="$(env.TestSuiteRoot)\TestSuites\ADFamily\Setup\Data\Win2016-TD-XML" />
     <WixVariable Id="WIN8_TD_DIR" Value="$(env.TestSuiteRoot)\TestSuites\ADFamily\Setup\Data\Win8-TD-XML" />
     <WixVariable Id="WINBLUE_TD_DIR" Value="$(env.TestSuiteRoot)\TestSuites\ADFamily\Setup\Data\WinBlue-TD-XML" />
+    <WixVariable Id="WINV1803_TD_DIR" Value="$(env.TestSuiteRoot)\TestSuites\ADFamily\Setup\Data\Winv1803-TD-XML" />
 
     <WixVariable Id="TESTSUITE_COMMON_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\common" />
 
