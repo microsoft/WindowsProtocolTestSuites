@@ -47,6 +47,7 @@
     <Compile Include="WIN2016_TD_FILES.wxs" />
     <Compile Include="WIN8_TD_FILES.wxs" />
     <Compile Include="WINBLUE_TD_FILES.wxs" />
+    <Compile Include="WINV1803_TD_FILES.wxs" />
 
     <Compile Include="DependencyCheckWarningDlg.wxs" />
     <Compile Include="EndpointDlg.wxs" />
@@ -346,6 +347,7 @@
     <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\TestSuites\ADFamily\Setup\Data\Win2016-TD-XML&quot; -out WIN2016_TD_FILES.wxs -template fragment -gg -cg WIN2016_TD_FILES -dr WIN2016_TD_DIR -var wix.WIN2016_TD_DIR -sreg -sfrag -srd" />
     <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\TestSuites\ADFamily\Setup\Data\Win8-TD-XML&quot; -out WIN8_TD_FILES.wxs -template fragment -gg -cg WIN8_TD_FILES -dr WIN8_TD_DIR -var wix.WIN8_TD_DIR -sreg -sfrag -srd" />
     <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\TestSuites\ADFamily\Setup\Data\WinBlue-TD-XML&quot; -out WINBLUE_TD_FILES.wxs -template fragment -gg -cg WINBLUE_TD_FILES -dr WINBLUE_TD_DIR -var wix.WINBLUE_TD_DIR -sreg -sfrag -srd" />
+    <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\TestSuites\ADFamily\Setup\Data\Winv1803-TD-XML&quot; -out WINV1803_TD_FILES.wxs -template fragment -gg -cg WINV1803_TD_FILES -dr WINV1803_TD_DIR -var wix.WINV1803_TD_DIR -sreg -sfrag -srd" />
     <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\common&quot; -out CommonBatch.wxs -template fragment -gg -cg COMMON_BATCH_FILES -dr TESTSUITE_COMMON_SCRIPTS_DIR -var wix.TESTSUITE_COMMON_SCRIPTS_DIR -sreg -sfrag -srd" />
   </Target>
   <ItemGroup>

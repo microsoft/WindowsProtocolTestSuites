@@ -286,7 +286,7 @@ Function Config-Phase2()
 
     # Get OS Version and Forest Functional Level
     Write-ConfigLog "Getting Operating System Version..." -ForegroundColor Yellow
-    $OsVersion = .\Get-OsVersion.ps1 -log
+    $OsVersion = .\Get-OSVersionForADTests.ps1 -log
     Write-ConfigLog "Getting Forest Functional Level..." -ForegroundColor Yellow
     $ForestFuncLvl = .\Get-ForestFuncLvl.ps1 -log
 
