@@ -193,7 +193,7 @@ try {
      .\Write-Info.ps1 "Clean cluster env in single-domain environment."
     $domainAdminPwd = ConvertTo-SecureString $config.lab.core.password -AsPlainText -force
     $creds = New-Object System.Management.Automation.PSCredential($domainAdmin,$domainAdminPwd)
-    $filterStr = 'Name -like "'+$clusterName+'" -or Name -like "+'$config.lab.ha.generalfs.name'+" -or Name -like "+'$config.lab.ha.scaleoutfs.name'+"'
+    $filterStr = 'Name -like "'+$clusterName+'" -or Name -like "+$config.lab.ha.generalfs.name+" -or Name -like "+$config.lab.ha.scaleoutfs.name+"'
     Get-ADComputer -Filter $filterStr -Credential $creds | Remove-ADComputer -Credential $creds -Confirm:$false
 }
 catch {
