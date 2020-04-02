@@ -3,11 +3,11 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 8.00.0595 */
-/* at Tue May 15 11:07:02 2018
+ /* File created by MIDL compiler version 8.01.0622 */
+/* at Thu Apr 2 13:14:07 2020
  */
 /* Compiler settings for ms-drsr.idl:
-    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 8.00.0595 
+    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 8.01.0622 
     protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
@@ -29,7 +29,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif /* __RPCNDR_H_VERSION__ */
 
 
 #ifndef __ms2Ddrsr_h__
@@ -885,7 +885,7 @@ typedef /* [public][public][public] */ struct __MIDL_drsuapi_0083
 typedef /* [public][public][public] */ struct __MIDL_drsuapi_0084
     {
     /* [ref] */ DSNAME *pNC;
-    /* [string][ref] */ unsigned char *pszDsaSrcpszDsaDest;
+    /* [string][ref] */ unsigned char *pszDsaDest;
     UUID uuidDsaObjDest;
     ULONG ulOptions;
     GUID correlationID;

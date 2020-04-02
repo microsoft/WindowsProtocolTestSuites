@@ -4182,7 +4182,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
         /// A pointer to a VAR_SIZE_BUFFER_WITH_VERSION structure (section 5.219).
         /// MUST be a null pointer.
         /// </summary>
-        public VAR_SIZE_BUFFER_WITH_VERSION pReservedBuffer;
+        [Indirect()]
+        public VAR_SIZE_BUFFER_WITH_VERSION? pReservedBuffer;
     }
 
     /// <summary>
@@ -5769,7 +5770,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
         /// A pointer to a VAR_SIZE_BUFFER_WITH_VERSION structure (section 5.219).
         /// MUST be a null pointer.
         /// </summary>
-        public VAR_SIZE_BUFFER_WITH_VERSION pReservedBuffer;
+        [Indirect()]
+        public VAR_SIZE_BUFFER_WITH_VERSION? pReservedBuffer;
     }
     /// <summary>
     ///  The UPTODATE_CURSOR_V2 structure defines a concrete
@@ -6114,7 +6116,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
         /// A pointer to a VAR_SIZE_BUFFER_WITH_VERSION structure (section 5.219).
         /// MUST be a null pointer.
         /// </summary>
-        public VAR_SIZE_BUFFER_WITH_VERSION pReservedBuffer;
+        [Indirect()]
+        public VAR_SIZE_BUFFER_WITH_VERSION? pReservedBuffer;
     }
 
     /// <summary>
@@ -6425,20 +6428,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     //  <remarks>
     //   .\TD\MS-DRSR\2ad0252a-d028-412b-89c9-2fcb7123817e.xml
     //  </remarks>
-    [StructLayout(LayoutKind.Explicit)]
+    [Union("System.Int32")]
     public partial struct DRS_MSG_UPDREFS
     {
 
         /// <summary>
         ///  The version 1 request.
         /// </summary>
-        [FieldOffset(0)]
+        [Case("1")]
         public DRS_MSG_UPDREFS_V1 V1;
 
         /// <summary>
         ///  The version 2 request.
         /// </summary>
-        [FieldOffset(0)]
+        [Case("2")]
         public DRS_MSG_UPDREFS_V2 V2;
     }
 
@@ -7463,20 +7466,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
     //  <remarks>
     //   .\TD\MS-DRSR\d1ed3b4e-6964-468e-9ef1-f9a6f25cde0e.xml
     //  </remarks>
-    [StructLayout(LayoutKind.Explicit)]
+    [Union("System.Int32")]
     public partial struct DRS_MSG_REPSYNC
     {
 
         /// <summary>
         ///  The version 1 request.
         /// </summary>
-        [FieldOffset(0)]
+        [Case("1")]
         public DRS_MSG_REPSYNC_V1 V1;
 
         /// <summary>
         ///  The version 2 request.
         /// </summary>
-        [FieldOffset(0)]
+        [Case("2")]
         public DRS_MSG_REPSYNC_V2 V2;
     }
 
@@ -8385,7 +8388,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
         /// A pointer to a VAR_SIZE_BUFFER_WITH_VERSION structure (section 5.219).
         /// MUST be a null pointer.
         /// </summary>
-        public VAR_SIZE_BUFFER_WITH_VERSION pReservedBuffer;
+        [Indirect()]
+        public VAR_SIZE_BUFFER_WITH_VERSION? pReservedBuffer;
     }
 
     /// <summary>
