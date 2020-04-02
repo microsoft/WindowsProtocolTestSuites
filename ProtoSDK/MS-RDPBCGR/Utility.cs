@@ -1165,8 +1165,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 fpUpdate = pdu.fpOutputUpdates[i];
                 pduSize += 1; // fpUpdate.updateHeader
-                byte comp = (byte)((fpUpdate.updateHeader & 0xc0) >> 6);
-                if ((compression_Values)comp == compression_Values.FASTPATH_OUTPUT_COMPRESSION_USED)
+
+                if (fpUpdate.updateHeader.compression == compression_Values.FASTPATH_OUTPUT_COMPRESSION_USED)
                 {
                     pduSize += 1; //Optional: fpUpdate.compressionFlags 
                 }
