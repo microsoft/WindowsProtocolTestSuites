@@ -1249,9 +1249,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             frameMakerCmd.frameId = frameId;
 
             TS_FP_SURFCMDS surfCmds = new TS_FP_SURFCMDS();
-            surfCmds.updateHeader = (byte)(((int)updateCode_Values.FASTPATH_UPDATETYPE_SURFCMDS & 0x0f)
-            | (((int)fragmentation_Value.FASTPATH_FRAGMENT_SINGLE) << 4)
-            | ((int)compressedType_Values.None << 6));
+
+            surfCmds.updateHeader = new nested_TS_FP_UPDATE_updateHeader(updateCode_Values.FASTPATH_UPDATETYPE_SURFCMDS);
+
             surfCmds.compressionFlags = compressedType_Values.None;
             surfCmds.size = 8; //size of TS_FRAME_MARKER;
             surfCmds.surfaceCommands = new TS_SURFCMD[1];
@@ -1268,9 +1268,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         public void SendStreamSurfaceBitsCommand(TS_SURFCMD_STREAM_SURF_BITS streamCmd)
         {
             TS_FP_SURFCMDS surfCmds = new TS_FP_SURFCMDS();
-            surfCmds.updateHeader = (byte)(((int)updateCode_Values.FASTPATH_UPDATETYPE_SURFCMDS & 0x0f)
-            | (((int)fragmentation_Value.FASTPATH_FRAGMENT_SINGLE) << 4)
-            | ((int)compressedType_Values.None << 6));
+
+            surfCmds.updateHeader = new nested_TS_FP_UPDATE_updateHeader(updateCode_Values.FASTPATH_UPDATETYPE_SURFCMDS);
+
             surfCmds.compressionFlags = compressedType_Values.None;
             // size of cmdType + destLeft + destTop + destRight + destBottom = 10
             // size of bpp + flags + reserved + codecId + width + height + bitmapDataLength = 12

@@ -783,9 +783,9 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
                 //frameMakerCmdEnd.frameId = frameIndex++;
 
                 TS_FP_SURFCMDS surfCmds = new TS_FP_SURFCMDS();
-                surfCmds.updateHeader = (byte)(((int)updateCode_Values.FASTPATH_UPDATETYPE_SURFCMDS & 0x0f)
-                | (((int)fragmentation_Value.FASTPATH_FRAGMENT_SINGLE) << 4)
-                | ((int)compressedType_Values.None << 6));
+
+                surfCmds.updateHeader = new nested_TS_FP_UPDATE_updateHeader(updateCode_Values.FASTPATH_UPDATETYPE_SURFCMDS);
+
                 surfCmds.compressionFlags = compressedType_Values.None;
                 int subLength = 8 + 8 + 22;
                 if(surfStreamCmd.bitmapData.exBitmapDataHeader != null)

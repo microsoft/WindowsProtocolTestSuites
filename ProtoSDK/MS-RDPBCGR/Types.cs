@@ -16249,6 +16249,119 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     }
 
     /// <summary>
+    /// Type of fpOutputHeader in TS_FP_UPDATE_PDU.
+    /// </summary>
+    [StructLayout(LayoutKind.Explicit, Size = 1)]
+    public class nested_TS_FP_UPDATE_PDU_fpOutputHeader
+    {
+        /// <summary>
+        /// Construct nested_TS_FP_UPDATE_PDU_fpOutputHeader from a packed byte.
+        /// </summary>
+        /// <param name="data">The packed byte.</param>
+        public nested_TS_FP_UPDATE_PDU_fpOutputHeader(byte data)
+        {
+            fpOutputHeader = data;
+        }
+
+        /// <summary>
+        /// Construct nested_TS_FP_UPDATE_PDU_fpOutputHeader by each field.
+        /// </summary>
+        /// <param name="action">The action field.</param>
+        /// <param name="reserved">The reserved field.</param>
+        /// <param name="flags">The flags field.</param>
+        public nested_TS_FP_UPDATE_PDU_fpOutputHeader(
+            nested_TS_FP_UPDATE_PDU_fpOutputHeader_actionCode_Values action = nested_TS_FP_UPDATE_PDU_fpOutputHeader_actionCode_Values.FASTPATH_OUTPUT_ACTION_FASTPATH,
+            reserved_Values reserved = reserved_Values.V1,
+            encryptionFlagsChgd_Values flags = encryptionFlagsChgd_Values.None)
+        {
+            var vector = new BitVector32();
+
+            vector[actionField] = (int)action;
+
+            vector[reservedField] = (int)reserved;
+
+            vector[flagsField] = (int)flags;
+
+            fpOutputHeader = (byte)vector.Data;
+        }
+
+        [FieldOffset(0)]
+        private byte fpOutputHeader;
+
+        private static BitVector32.Section actionField = BitVector32.CreateSection(0x3);
+
+        private static BitVector32.Section reservedField = BitVector32.CreateSection(0xF, actionField);
+
+        private static BitVector32.Section flagsField = BitVector32.CreateSection(0x3, reservedField);
+
+        /// <summary>
+        /// A 2-bit, unsigned integer that indicates whether the PDU is in fast-path or slow-path format.
+        /// </summary>
+        public nested_TS_FP_UPDATE_PDU_fpOutputHeader_actionCode_Values action
+        {
+            get
+            {
+                var vector = new BitVector32(fpOutputHeader);
+
+                return (nested_TS_FP_UPDATE_PDU_fpOutputHeader_actionCode_Values)vector[actionField];
+            }
+
+            set
+            {
+                var vector = new BitVector32(fpOutputHeader);
+
+                vector[actionField] = (int)value;
+
+                fpOutputHeader = (byte)vector.Data;
+            }
+        }
+
+        /// <summary>
+        /// A 4-bit, unsigned integer that is unused and reserved for future use. This field MUST be set to zero.
+        /// </summary>
+        public reserved_Values reserved
+        {
+            get
+            {
+                var vector = new BitVector32(fpOutputHeader);
+
+                return (reserved_Values)vector[reservedField];
+            }
+
+            set
+            {
+                var vector = new BitVector32(fpOutputHeader);
+
+                vector[reservedField] = (int)value;
+
+                fpOutputHeader = (byte)vector.Data;
+            }
+        }
+
+        /// <summary>
+        /// A 2-bit, unsigned integer that contains flags describing the cryptographic parameters of the PDU.
+        /// </summary>
+        public encryptionFlagsChgd_Values flags
+        {
+            get
+            {
+                var vector = new BitVector32(fpOutputHeader);
+
+                return (encryptionFlagsChgd_Values)vector[flagsField];
+            }
+
+            set
+            {
+                var vector = new BitVector32(fpOutputHeader);
+
+                vector[flagsField] = (int)value;
+
+                fpOutputHeader = (byte)vector.Data;
+            }
+        }
+    }
+
+    /// <summary>
     ///  Fast-path revises server output packets from the first
     ///  byte with the goal of improving bandwidth. The TPKT
     ///  (see [T123]), X.224 (see [X224]) and MCS SDin (see
@@ -16275,7 +16388,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  dataAction code The format of the fpOutputHeader byte
         ///  is described by the following bitmask diagram:
         /// </summary>
-        public byte fpOutputHeader;
+        public nested_TS_FP_UPDATE_PDU_fpOutputHeader fpOutputHeader;
 
         /// <summary>
         ///  An 8-bit unsigned integer. If the most significant bit
@@ -16368,11 +16481,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                                            - (fpOutputdata.Length % ConstValue.TRIPLE_DES_PAD));
                 }
 
-                // encryptionFlags (2 bits): A higher 2-bit field containing the flags 
-                // that describe the cryptographic parameters of the PDU.
-                bool isSalted = ((fpOutputHeader >> 6) &
-                                 (int)encryptionFlags_Values.FASTPATH_INPUT_SECURE_CHECKSUM)
-                                 == (int)encryptionFlags_Values.FASTPATH_INPUT_SECURE_CHECKSUM;
+                bool isSalted = fpOutputHeader.flags.HasFlag(encryptionFlagsChgd_Values.FASTPATH_OUTPUT_SECURE_CHECKSUM);
+
                 serverSessionContext.ServerEncrypt(fpOutputdata, isSalted, out encryptedData, out signature);
                 if (dataSignature == null)
                 {
@@ -16449,10 +16559,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 RdpbcgrEncoder.EncodeStructure(fpHeaderData, fipsInformation);
             }
 
-            // encryptionFlags (2 bits): A higher 2-bit field containing the flags 
-            // that describe the cryptographic parameters of the PDU.
-            if (((fpOutputHeader >> 6) & (int)encryptionFlags_Values.FASTPATH_INPUT_ENCRYPTED)
-                == (int)encryptionFlags_Values.FASTPATH_INPUT_ENCRYPTED)
+            bool isEncrypted = fpOutputHeader.flags.HasFlag(encryptionFlagsChgd_Values.FASTPATH_OUTPUT_SECURE_CHECKSUM);
+
+            if (isEncrypted)
             {
                 RdpbcgrEncoder.EncodeBytes(fpHeaderData, dataSignature);
             }
@@ -16470,7 +16579,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     if (fpOutputUpdates[i].GetType() == typeof(TS_FP_UPDATE_PALETTE))
                     {
                         RdpbcgrEncoder.EncodeStructure(fastpathOutputData, fpOutputUpdates[i].updateHeader);
-                        if ((int)fpOutputUpdates[i].updateHeader >> 6 == 2)
+                        if (fpOutputUpdates[i].updateHeader.compression == compression_Values.FASTPATH_OUTPUT_COMPRESSION_USED)
                         {
                             RdpbcgrEncoder.EncodeStructure(fastpathOutputData, (byte)fpOutputUpdates[i].compressionFlags);
                         }
@@ -16482,7 +16591,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     else if (fpOutputUpdates[i].GetType() == typeof(TS_FP_UPDATE_BITMAP))
                     {
                         RdpbcgrEncoder.EncodeStructure(fastpathOutputData, fpOutputUpdates[i].updateHeader);
-                        if ((int)fpOutputUpdates[i].updateHeader >> 6 == 2)
+
+                        if (fpOutputUpdates[i].updateHeader.compression == compression_Values.FASTPATH_OUTPUT_COMPRESSION_USED)
                         {
                             RdpbcgrEncoder.EncodeStructure(fastpathOutputData, (byte)fpOutputUpdates[i].compressionFlags);
                         }
@@ -16494,7 +16604,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     else if (fpOutputUpdates[i].GetType() == typeof(TS_FP_UPDATE_SYNCHRONIZE))
                     {
                         RdpbcgrEncoder.EncodeStructure(fastpathOutputData, fpOutputUpdates[i].updateHeader);
-                        if ((int)fpOutputUpdates[i].updateHeader >> 6 == 2)
+
+                        if (fpOutputUpdates[i].updateHeader.compression == compression_Values.FASTPATH_OUTPUT_COMPRESSION_USED)
                         {
                             RdpbcgrEncoder.EncodeStructure(fastpathOutputData, (byte)fpOutputUpdates[i].compressionFlags);
                         }
@@ -16504,7 +16615,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     else if (fpOutputUpdates[i].GetType() == typeof(TS_FP_POINTERPOSATTRIBUTE))
                     {
                         RdpbcgrEncoder.EncodeStructure(fastpathOutputData, fpOutputUpdates[i].updateHeader);
-                        if ((int)fpOutputUpdates[i].updateHeader >> 6 == 2)
+                        if (fpOutputUpdates[i].updateHeader.compression == compression_Values.FASTPATH_OUTPUT_COMPRESSION_USED)
                         {
                             RdpbcgrEncoder.EncodeStructure(fastpathOutputData, (byte)fpOutputUpdates[i].compressionFlags);
                         }
@@ -16516,7 +16627,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     else if (fpOutputUpdates[i].GetType() == typeof(TS_FP_SYSTEMPOINTERHIDDENATTRIBUTE))
                     {
                         RdpbcgrEncoder.EncodeStructure(fastpathOutputData, fpOutputUpdates[i].updateHeader);
-                        if ((int)fpOutputUpdates[i].updateHeader >> 6 == 2)
+
+                        if (fpOutputUpdates[i].updateHeader.compression == compression_Values.FASTPATH_OUTPUT_COMPRESSION_USED)
                         {
                             RdpbcgrEncoder.EncodeStructure(fastpathOutputData, (byte)fpOutputUpdates[i].compressionFlags);
                         }
@@ -16526,7 +16638,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     else if (fpOutputUpdates[i].GetType() == typeof(TS_FP_SYSTEMPOINTERDEFAULTATTRIBUTE))
                     {
                         RdpbcgrEncoder.EncodeStructure(fastpathOutputData, fpOutputUpdates[i].updateHeader);
-                        if ((int)fpOutputUpdates[i].updateHeader >> 6 == 2)
+
+                        if (fpOutputUpdates[i].updateHeader.compression == compression_Values.FASTPATH_OUTPUT_COMPRESSION_USED)
                         {
                             RdpbcgrEncoder.EncodeStructure(fastpathOutputData, (byte)fpOutputUpdates[i].compressionFlags);
                         }
@@ -16536,7 +16649,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     else if (fpOutputUpdates[i].GetType() == typeof(TS_FP_COLORPOINTERATTRIBUTE))
                     {
                         RdpbcgrEncoder.EncodeStructure(fastpathOutputData, fpOutputUpdates[i].updateHeader);
-                        if ((int)fpOutputUpdates[i].updateHeader >> 6 == 2)
+
+                        if (fpOutputUpdates[i].updateHeader.compression == compression_Values.FASTPATH_OUTPUT_COMPRESSION_USED)
                         {
                             RdpbcgrEncoder.EncodeStructure(fastpathOutputData, (byte)fpOutputUpdates[i].compressionFlags);
                         }
@@ -16548,7 +16662,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     else if (fpOutputUpdates[i].GetType() == typeof(TS_FP_POINTERATTRIBUTE))
                     {
                         RdpbcgrEncoder.EncodeStructure(fastpathOutputData, fpOutputUpdates[i].updateHeader);
-                        if ((int)fpOutputUpdates[i].updateHeader >> 6 == 2)
+
+                        if (fpOutputUpdates[i].updateHeader.compression == compression_Values.FASTPATH_OUTPUT_COMPRESSION_USED)
                         {
                             RdpbcgrEncoder.EncodeStructure(fastpathOutputData, (byte)fpOutputUpdates[i].compressionFlags);
                         }
@@ -16560,7 +16675,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     else if (fpOutputUpdates[i].GetType() == typeof(TS_FP_CACHEDPOINTERATTRIBUTE))
                     {
                         RdpbcgrEncoder.EncodeStructure(fastpathOutputData, fpOutputUpdates[i].updateHeader);
-                        if ((int)fpOutputUpdates[i].updateHeader >> 6 == 2)
+
+                        if (fpOutputUpdates[i].updateHeader.compression == compression_Values.FASTPATH_OUTPUT_COMPRESSION_USED)
                         {
                             RdpbcgrEncoder.EncodeStructure(fastpathOutputData, (byte)fpOutputUpdates[i].compressionFlags);
                         }
@@ -16573,8 +16689,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     {
                         RdpbcgrEncoder.EncodeStructure(fastpathOutputData, fpOutputUpdates[i].updateHeader);
 
-                        // The two bit compression flag in updateHeader indicates if the compressionFlags field is present
-                        if ((int)fpOutputUpdates[i].updateHeader >> 6 == 2)
+                        if (fpOutputUpdates[i].updateHeader.compression == compression_Values.FASTPATH_OUTPUT_COMPRESSION_USED)
                         {
                             RdpbcgrEncoder.EncodeStructure(fastpathOutputData, (byte)fpOutputUpdates[i].compressionFlags);
                         }
@@ -16966,6 +17081,117 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     }
 
     /// <summary>
+    /// Type of updateHeader in TS_FP_UPDATE.
+    /// </summary>
+    [StructLayout(LayoutKind.Explicit, Size = 1)]
+    public class nested_TS_FP_UPDATE_updateHeader
+    {
+        /// <summary>
+        /// Construct nested_TS_FP_UPDATE_updateHeader from a packed byte.
+        /// </summary>
+        /// <param name="data">The packed byte.</param>
+        public nested_TS_FP_UPDATE_updateHeader(byte data)
+        {
+            updateHeader = data;
+        }
+
+        /// <summary>
+        /// Construct nested_TS_FP_UPDATE_updateHeader by each field.
+        /// </summary>
+        /// <param name="updateCode">The updateCode field.</param>
+        /// <param name="fragmentation">The fragmentation field.</param
+        /// <param name="compression">The compression field.</param>
+        public nested_TS_FP_UPDATE_updateHeader(updateCode_Values updateCode, fragmentation_Value fragmentation = fragmentation_Value.FASTPATH_FRAGMENT_SINGLE, compression_Values compression = compression_Values.None)
+        {
+            var vector = new BitVector32();
+
+            vector[updateCodeField] = (int)updateCode;
+
+            vector[fragmentationField] = (int)fragmentation;
+
+            vector[compressionField] = (int)compression;
+
+            updateHeader = (byte)vector.Data;
+        }
+
+        [FieldOffset(0)]
+        private byte updateHeader;
+
+        private static BitVector32.Section updateCodeField = BitVector32.CreateSection(0xF);
+
+        private static BitVector32.Section fragmentationField = BitVector32.CreateSection(0x3, updateCodeField);
+
+        private static BitVector32.Section compressionField = BitVector32.CreateSection(0x3, fragmentationField);
+
+        /// <summary>
+        /// A 4-bit, unsigned integer that specifies the type code of the update.
+        /// </summary>
+        public updateCode_Values updateCode
+        {
+            get
+            {
+                var vector = new BitVector32(updateHeader);
+
+                return (updateCode_Values)vector[updateCodeField];
+            }
+
+            set
+            {
+                var vector = new BitVector32(updateHeader);
+
+                vector[updateCodeField] = (int)value;
+
+                updateHeader = (byte)vector.Data;
+            }
+        }
+
+        /// <summary>
+        /// A 2-bit, unsigned integer that specifies the fast-path fragment sequencing information. 
+        /// Support for fast-path fragmentation is specified in the Multifragment Update Capability Set.
+        /// </summary>
+        public fragmentation_Value fragmentation
+        {
+            get
+            {
+                var vector = new BitVector32(updateHeader);
+
+                return (fragmentation_Value)vector[fragmentationField];
+            }
+
+            set
+            {
+                var vector = new BitVector32(updateHeader);
+
+                vector[fragmentationField] = (int)value;
+
+                updateHeader = (byte)vector.Data;
+            }
+        }
+
+        /// <summary>
+        /// A 2-bit, unsigned integer that specifies compression parameters.
+        /// </summary>
+        public compression_Values compression
+        {
+            get
+            {
+                var vector = new BitVector32(updateHeader);
+
+                return (compression_Values)vector[compressionField];
+            }
+
+            set
+            {
+                var vector = new BitVector32(updateHeader);
+
+                vector[compressionField] = (int)value;
+
+                updateHeader = (byte)vector.Data;
+            }
+        }
+    }
+
+    /// <summary>
     ///  The TS_FP_UPDATE structure is used to describe and encapsulate
     ///  the data for a fast-path update sent from server to
     ///  client. All fast-path updates conform to this basic
@@ -16985,7 +17211,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  Fast-path fragment sequencing
         ///  Compression usage indication
         /// </summary>
-        public byte updateHeader;
+        public nested_TS_FP_UPDATE_updateHeader updateHeader;
 
         /// <summary>
         ///  An 8-bit unsigned integer. Optional compression flags.
@@ -17000,6 +17226,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  data in the updateData field.
         /// </summary>
         public ushort size;
+
+        /// <summary>
+        /// Optional and variable-length data specific to the update.
+        /// </summary>
+        public byte[] updateData;
     }
 
     /// <summary>

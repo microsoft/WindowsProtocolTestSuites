@@ -1,19 +1,14 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.IO;
-using System.Text;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Collections.ObjectModel;
-using System.Security.Cryptography.X509Certificates;
-
-using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk;
-
 using Microsoft.Protocols.TestTools.StackSdk.Asn1;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.Gcc;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.Mcs;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 {
@@ -3245,13 +3240,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 TS_FP_UPDATE update = null;
 
                 // Update header
-                byte updateHeader = ParseByte(data, ref currentIndex);
+                byte updateHeaderByte = ParseByte(data, ref currentIndex);
+
+                var updateHeader = new nested_TS_FP_UPDATE_updateHeader(updateHeaderByte);
 
                 // Get infomation from updateHeader
-                updateCode_Values updateCode;
-                fragmentation_Value fragmentation;
-                compression_Values compression;
-                GetFpUpdateHeaderInfo(updateHeader, out updateCode, out fragmentation, out compression);
+                var updateCode = updateHeader.updateCode;
+
+                var fragmentation = updateHeader.fragmentation;
+
+                var compression = updateHeader.compression;
 
                 // Get compressionFlags (optional)
                 compressedType_Values compressionFlags = 0;
@@ -3362,7 +3360,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="updateData">update data(decompressed)</param>
         /// <returns>TS_FP_UPDATE_ORDERS</returns>
         private TS_FP_UPDATE_ORDERS ParseTsFpUpdateOrders(
-            byte updateHeader,
+            nested_TS_FP_UPDATE_updateHeader updateHeader,
             compressedType_Values compressionFlags,
             UInt16 size,
             byte[] updateData)
@@ -3394,7 +3392,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="updateData">update data(decompressed)</param>
         /// <returns>TS_FP_UPDATE_BITMAP</returns>
         private TS_FP_UPDATE_BITMAP ParseTsFpUpdateBitmap(
-            byte updateHeader,
+            nested_TS_FP_UPDATE_updateHeader updateHeader,
             compressedType_Values compressionFlags,
             UInt16 size,
             byte[] updateData)
@@ -3429,7 +3427,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="updateData">update data(decompressed)</param>
         /// <returns>TS_FP_UPDATE_PALETTE</returns>
         private TS_FP_UPDATE_PALETTE ParseTsFpUpdatePalette(
-            byte updateHeader,
+            nested_TS_FP_UPDATE_updateHeader updateHeader,
             compressedType_Values compressionFlags,
             UInt16 size,
             byte[] updateData)
@@ -3463,7 +3461,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="size">update data size(before decompression)</param>
         /// <returns>TS_FP_UPDATE_SYNCHRONIZE</returns>
         private TS_FP_UPDATE_SYNCHRONIZE ParseTsFpUpdateSynchronize(
-            byte updateHeader,
+            nested_TS_FP_UPDATE_updateHeader updateHeader,
             compressedType_Values compressionFlags,
             UInt16 size)
         {
@@ -3491,7 +3489,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="updateData">update data(decompressed)</param>
         /// <returns>TS_FP_SURFCMDS</returns>
         private TS_FP_SURFCMDS ParseTsFpSurfCmds(
-            byte updateHeader,
+            nested_TS_FP_UPDATE_updateHeader updateHeader,
             compressedType_Values compressionFlags,
             UInt16 size,
             byte[] updateData)
@@ -3649,7 +3647,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="size">update data size(before decompression)</param>
         /// <returns>TS_FP_SYSTEMPOINTERHIDDENATTRIBUTE</returns>
         private TS_FP_SYSTEMPOINTERHIDDENATTRIBUTE ParseTsFpSystemPointerHiddenAttribute(
-            byte updateHeader,
+            nested_TS_FP_UPDATE_updateHeader updateHeader,
             compressedType_Values compressionFlags,
             UInt16 size)
         {
@@ -3676,7 +3674,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="size">update data size(before decompression)</param>
         /// <returns>TS_FP_SYSTEMPOINTERDEFAULTATTRIBUTE</returns>
         private TS_FP_SYSTEMPOINTERDEFAULTATTRIBUTE ParseTsFpSystemPointerDefaultAttribute(
-            byte updateHeader,
+            nested_TS_FP_UPDATE_updateHeader updateHeader,
             compressedType_Values compressionFlags,
             UInt16 size)
         {
@@ -3704,7 +3702,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="updateData">update data(decompressed)</param>
         /// <returns>TS_FP_POINTERPOSATTRIBUTE</returns>
         private TS_FP_POINTERPOSATTRIBUTE ParseTsFpPointerPosAttribute(
-            byte updateHeader,
+            nested_TS_FP_UPDATE_updateHeader updateHeader,
             compressedType_Values compressionFlags,
             UInt16 size,
             byte[] updateData)
@@ -3778,7 +3776,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="updateData">update data(decompressed)</param>
         /// <returns>TS_FP_COLORPOINTERATTRIBUTE</returns>
         private TS_FP_COLORPOINTERATTRIBUTE ParseTsFpColorPointerAttribute(
-            byte updateHeader,
+            nested_TS_FP_UPDATE_updateHeader updateHeader,
             compressedType_Values compressionFlags,
             UInt16 size,
             byte[] updateData)
@@ -3858,7 +3856,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="updateData">update data(decompressed)</param>
         /// <returns>TS_FP_CACHEDPOINTERATTRIBUTE</returns>
         private TS_FP_CACHEDPOINTERATTRIBUTE ParseTsFpCachedPointerAttribute(
-            byte updateHeader,
+            nested_TS_FP_UPDATE_updateHeader updateHeader,
             compressedType_Values compressionFlags,
             UInt16 size,
             byte[] updateData)
@@ -3911,7 +3909,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="updateData">update data(decompressed)</param>
         /// <returns>TS_FP_POINTERATTRIBUTE</returns>
         private TS_FP_POINTERATTRIBUTE ParseTsFpPointerAttribute(
-            byte updateHeader,
+            nested_TS_FP_UPDATE_updateHeader updateHeader,
             compressedType_Values compressionFlags,
             UInt16 size,
             byte[] updateData)
@@ -3986,66 +3984,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 }
                 return decryptedData;
             }
-        }
-
-
-        /// <summary>
-        /// Get information from Fast-path Output Header
-        /// </summary>
-        /// <param name="fpOutputHeader">fast-path output header</param>
-        /// <param name="actionCode">action code</param>
-        /// <param name="encryptionFlags">encryption flags</param>
-        private void GetFpOutputHeaderInfo(
-            byte fpOutputHeader,
-            out nested_TS_FP_UPDATE_PDU_fpOutputHeader_actionCode_Values actionCode,
-            out encryptionFlagsChgd_Values encryptionFlags)
-        {
-            // The following logic is derived from TD section [2.2.9.1.2]
-            // fpOutputHeader is a 1-byte, bit-packed field formed by:
-            // actionCode(2 bits) + reserved(4 bits) + encryptionFlags(2 bits)
-
-            // action code
-            byte code = (byte)(fpOutputHeader & 0x03);
-            actionCode = (nested_TS_FP_UPDATE_PDU_fpOutputHeader_actionCode_Values)code;
-
-            // encryption flags
-            byte flags = (byte)((fpOutputHeader & 0xc0) >> 6);
-            encryptionFlags = (encryptionFlagsChgd_Values)flags;
-
-            return;
-        }
-
-
-        /// <summary>
-        /// Get information from Fast-path Update Header
-        /// </summary>
-        /// <param name="updateHeader">update header</param>
-        /// <param name="updateCode">update code</param>
-        /// <param name="fragmentation">fragmentation</param>
-        /// <param name="compression">compression</param>
-        private void GetFpUpdateHeaderInfo(
-          byte updateHeader,
-          out updateCode_Values updateCode,
-          out fragmentation_Value fragmentation,
-          out compression_Values compression)
-        {
-            // The following logic is derived from TD section [2.2.9.1.2.1]
-            // updateHeader is a 1-byte, bit-packed field formed by:
-            // updateCode(4 bits) + fragmentation(2 bits) + compression(2 bits)
-
-            // updateCode
-            byte code = (byte)(updateHeader & 0x0f);
-            updateCode = (updateCode_Values)code;
-
-            // fragmentation
-            byte frag = (byte)((updateHeader & 0x30) >> 4);
-            fragmentation = (fragmentation_Value)frag;
-
-            // compression
-            byte comp = (byte)((updateHeader & 0xc0) >> 6);
-            compression = (compression_Values)comp;
-
-            return;
         }
         #endregion Fast-Path Update Parsers' helper functions
         #endregion Sub Field Parsers: Fast-Path Update PDU
@@ -5478,12 +5416,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             TS_FP_UPDATE_PDU pdu = new TS_FP_UPDATE_PDU();
 
             // TS_FP_UPDATE_PDU: fpOutputHeader
-            pdu.fpOutputHeader = ParseByte(data, ref currentIndex);
+            byte fpOutputHeader = ParseByte(data, ref currentIndex);
+            pdu.fpOutputHeader = new nested_TS_FP_UPDATE_PDU_fpOutputHeader(fpOutputHeader);
 
             // Get infomation from fpOutputHeader
-            nested_TS_FP_UPDATE_PDU_fpOutputHeader_actionCode_Values actionCode;
-            encryptionFlagsChgd_Values encryptionFlags;
-            GetFpOutputHeaderInfo(pdu.fpOutputHeader, out actionCode, out encryptionFlags);
+            var actionCode = pdu.fpOutputHeader.action;
+
+            var encryptionFlags = pdu.fpOutputHeader.flags;
 
             // TS_FP_UPDATE_PDU: length1
             pdu.length1 = ParseByte(data, ref currentIndex);
