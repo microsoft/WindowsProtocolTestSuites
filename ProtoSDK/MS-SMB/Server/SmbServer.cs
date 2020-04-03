@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.InteropServices;
 
 using Microsoft.Protocols.TestTools.StackSdk.Transport;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
@@ -761,9 +762,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
                 smbData.Pad = new byte[0];
             }
             smbData.NativeOS = CifsMessageUtils.ToSmbStringBytes(
-                Environment.OSVersion.VersionString, connection.Capability.IsUnicode);
+                RuntimeInformation.OSDescription, connection.Capability.IsUnicode);
             smbData.NativeLanMan = CifsMessageUtils.ToSmbStringBytes(
-                Environment.OSVersion.VersionString, connection.Capability.IsUnicode);
+                RuntimeInformation.OSDescription, connection.Capability.IsUnicode);
             smbData.PrimaryDomain = CifsMessageUtils.ToSmbStringBytes(
                 Environment.UserDomainName, connection.Capability.IsUnicode);
 
@@ -833,9 +834,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
                 smbData.Pad = new byte[0];
             }
             smbData.NativeOS = CifsMessageUtils.ToSmbStringBytes(
-                Environment.OSVersion.VersionString, connection.Capability.IsUnicode);
+                RuntimeInformation.OSDescription, connection.Capability.IsUnicode);
             smbData.NativeLanMan = CifsMessageUtils.ToSmbStringBytes(
-                Environment.OSVersion.VersionString, connection.Capability.IsUnicode);
+                RuntimeInformation.OSDescription, connection.Capability.IsUnicode);
             smbData.PrimaryDomain = CifsMessageUtils.ToSmbStringBytes(
                 Environment.UserDomainName, connection.Capability.IsUnicode);
 
