@@ -28,14 +28,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Pac
             int decompressedLen = -1;
             if (NativeClaimsSetMetadata.Claims.usCompressionFormat != CLAIMS_COMPRESSION_FORMAT.COMPRESSION_FORMAT_NONE)
             {
-                uint err = ClaimsCompression.Decompress(NativeClaimsSetMetadata.Claims.usCompressionFormat,
+                decompressed = ClaimsCompression.Decompress(NativeClaimsSetMetadata.Claims.usCompressionFormat,
                     NativeClaimsSetMetadata.Claims.ClaimsSet,
-                    (int)NativeClaimsSetMetadata.Claims.ulUncompressedClaimsSetSize,
-                    out decompressed);
-                if (err != 0)
-                {
-                    throw new Exception("Failed to decompress CLAIMS_SET data, error code is :" + err);
-                }
+                    (int)NativeClaimsSetMetadata.Claims.ulUncompressedClaimsSetSize);
                 decompressedLen = decompressed.Length;
             }
             else
