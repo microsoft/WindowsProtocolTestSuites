@@ -4,6 +4,8 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Net.Http;
+using System.Text;
 using Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.Types;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
@@ -72,51 +74,54 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <param name="message"></param>
         public void SendProxyRequest(KDCProxyMessage message)
         {
-            //create web request
-            HttpWebRequest webRequest = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(new Uri(config.KKDCPServerURL));
-            webRequest.KeepAlive = config.HttpKeepAlive;
-            webRequest.Method = "POST";
-            webRequest.ProtocolVersion = config.HttpVersion;
-            webRequest.CachePolicy = config.HttpCachePolicy;
-            webRequest.UserAgent = config.HttpUserAgent;
-            webRequest.Timeout = config.HttpRequestTimeout;
-
-            if (config.TlsClientCertificate != null)
-            {
-                webRequest.ClientCertificates.Add(config.TlsClientCertificate);
-            }
-            //send message
-            byte[] data = message.ToBytes();
-            webRequest.ContentLength = data.Length;
-            Stream postData = webRequest.GetRequestStream();
-            postData.Write(data, 0, data.Length);
-            postData.Close();
-
-            //get response
             try
             {
-                HttpWebResponse response = (System.Net.HttpWebResponse)webRequest.GetResponse();
+                //create web request
+                HttpRequestMessage request = new HttpRequestMessage()
+                {
+                    RequestUri = new Uri(config.KKDCPServerURL),
+                    Method = HttpMethod.Post,
+                    Version = HttpVersion.Version11,
+                    Content = new ByteArrayContent(message.ToBytes())
+                };
+                request.Headers.Connection.Add("keep-alive");
+                request.Headers.UserAgent.ParseAdd("Kerberos/1.0");
+
+                var clientHandler = new HttpClientHandler();
+                if (config.TlsClientCertificate != null)
+                {
+                    clientHandler.ClientCertificates.Add(config.TlsClientCertificate);
+                }
+
+                HttpClient client = new HttpClient(clientHandler);
+
+                //send message
+                HttpResponseMessage response = client.SendAsync(request).Result;
+
+                //get response
                 if (response.StatusCode == HttpStatusCode.Forbidden)
                 {
                     //HTTP 403 error received, set ERROR to STATUS_AUTHENTICATION_FIREWALL_FAILED.
                     Error = KKDCPError.STATUS_AUTHENTICATION_FIREWALL_FAILED;
                     return;
                 }
-                using (Stream responseDataSteam = response.GetResponseStream())
+                responseBytes = response.Content.ReadAsByteArrayAsync().Result;
+            }
+            catch (AggregateException ex)
+            {
+                foreach (var e in ex.Flatten().InnerExceptions)
                 {
-                    using (MemoryStream ms = new MemoryStream())
+                    if (e is HttpRequestException)
                     {
-                        responseDataSteam.CopyTo(ms);
-                        responseBytes = ms.ToArray();
+                        //server dropped the TCP connection
+                        //set Error to STATUS_NO_LOGON_SERVERS
+                        Error = KKDCPError.STATUS_NO_LOGON_SERVERS;
+                    }
+                    else
+                    {
+                        throw;
                     }
                 }
-                response.Close();
-            }
-            catch (WebException)
-            {
-                //server dropped the TCP connection
-                //set Error to STATUS_NO_LOGON_SERVERS
-                Error = KKDCPError.STATUS_NO_LOGON_SERVERS;
             }
         }
 
