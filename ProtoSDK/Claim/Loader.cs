@@ -3,9 +3,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.DirectoryServices;
-using System.DirectoryServices.Protocols;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory
 {
