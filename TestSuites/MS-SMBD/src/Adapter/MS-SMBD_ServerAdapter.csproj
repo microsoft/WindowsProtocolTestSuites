@@ -59,9 +59,6 @@
     <Reference Include="Microsoft.Protocols.TestTools.VSTS">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="Microsoft.Xrt.Runtime, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>True</SpecificVersion>
-    </Reference>
     <Reference Include="Microsoft.SpecExplorer.Runtime, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>True</SpecificVersion>
     </Reference>
