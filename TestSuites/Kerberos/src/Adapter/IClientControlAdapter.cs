@@ -18,5 +18,17 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
         /// </summary>
         [MethodHelp("This method is to recheck \"The other domain supports Kerberos AES Encryption\" option on local realm.")]
         void SetTrustRealmEncTypeAsAes();
+
+        /// <summary>
+        /// This method is to set the SupportedEncryptionTypes of the remote computer to use RC4-HMAC.
+        /// </summary>
+        [MethodHelp("This method is to set the SupportedEncryptionTypes of the remote computer to use RC4-HMAC.")]
+        void SetSupportedEncryptionTypesAsRc4(string remoteComputerName, string remoteUsername, string remotePassword);
+       
+        /// <summary>
+        /// This method is to restore the SupportedEncryptionTypes settings of the remote computer.
+        /// </summary>
+        [MethodHelp("This method is to restore the SupportedEncryptionTypes settings of the remote computer.")]
+        void RestoreSupportedEncryptionTypes(string remoteComputerName, string remoteUsername, string remotePassword);
     }
 }

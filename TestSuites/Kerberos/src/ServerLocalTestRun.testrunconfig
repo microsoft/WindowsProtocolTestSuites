@@ -1,11 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <TestSettings name="local" id="6f34cecb-9a0b-4979-b94f-187ae43011d5" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
   <Description>This is a default test run configuration for a local test run.</Description>
-  <Deployment>
+  <Deployment>   
     <DeploymentItem filename="TestSuite\Kerberos_ServerTestSuite.deployment.ptfconfig" />
     <DeploymentItem filename="TestSuite\Kerberos_ServerTestSuite.ptfconfig" />
     <DeploymentItem filename="Adapter\IClientControlAdapter\SetTrustRealmEncTypeAsAes.ps1" />
     <DeploymentItem filename="Adapter\IClientControlAdapter\ClearTrustRealmEncType.ps1" />
+    <DeploymentItem filename="Adapter\IClientControlAdapter\SetSupportedEncryptionTypesAsRc4.ps1" />
+    <DeploymentItem filename="Adapter\IClientControlAdapter\RestoreSupportedEncryptionTypes.ps1" />
   </Deployment>
   <Execution>
     <Hosts skipUnhostableTests="false" />
