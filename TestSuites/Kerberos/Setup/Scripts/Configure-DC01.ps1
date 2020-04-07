@@ -624,13 +624,13 @@ Function Config-DC01()
 	$password = $KrbParams.Parameters.LocalRealm.Administrator.Password
 	$computerName = $user
 
-	# Get variables of the file
-	#.\Get-IADSearchRoot.ps1
-	$root = Get-IADSearchRoot.ps1 -ServerName $serverName -objectDN $objectDN -Username $userName -Password $password
-	#. Get-IADComputer.ps1
-	$computer = Get-IADComputer -Name $computerName -SearchRoot $root
-	#. Set-IADComputer.ps1
-	$null = $computer|Set-IADComputer -PreAuthenticationNotRequired
+	#. Set PRE_AUTHENTICATION_NOT_REQUIRED = 0x2000000 		
+    $resolve = "(|(cn=$computerName)(displayName=$computerName)(name=$computerName))"
+    $filter = "(&(objectCategory=Computer)$resolve)"
+    $searcher = New-Object System.DirectoryServices.DirectorySearcher $filter
+    $computer = $searcher.FindOne().GetDirectoryEntry()
+    $computer.userAccountControl[0] = $Computer.userAccountControl[0] -bor 0x2000000
+    $computer.CommitChanges()
 
 	$userNetBiosName = $KrbParams.Parameters.LocalRealm.LocalResource01.NetBiosName
 	$userFQDN = $KrbParams.Parameters.LocalRealm.LocalResource01.FQDN
