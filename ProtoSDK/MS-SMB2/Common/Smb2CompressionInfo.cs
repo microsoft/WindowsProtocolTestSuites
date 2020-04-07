@@ -35,5 +35,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
         /// Indicating the preferred compression algorithm to be used.
         /// </summary>
         public CompressionAlgorithm PreferredCompressionAlgorithm { get; set; }
+
+        /// <summary>
+        /// Indicating whether chained compression is supported or not.
+        /// </summary>
+        public bool SupportChainedCompression { get; set; }
     }
 }
