@@ -4833,9 +4833,31 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         LZ77Huffman = 0x0003,
 
         /// <summary>
+        /// Pattern Scanning algorithm
+        /// </summary>
+        Pattern_V1 = 0x0004,
+
+        /// <summary>
         /// Not a real compression algorithm value, SHOULD be unsupported
         /// </summary>
         Unsupported = 0x00FF,
+    }
+
+    /// <summary>
+    /// Possible values of Flags in SMB2_COMPRESSION_CAPABILITIES.
+    /// </summary>
+    [Flags]
+    public enum SMB2_COMPRESSION_CAPABILITIES_Flags : UInt32
+    {
+        /// <summary>
+        /// Chained compression is not supported.
+        /// </summary>
+        SMB2_COMPRESSION_CAPABILITIES_FLAG_NONE = 0x00000000,
+
+        /// <summary>
+        /// Chained compression is supported on this connection.
+        /// </summary>
+        SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED = 0x00000001,
     }
 
     /// <summary>
@@ -4860,10 +4882,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         public ushort Padding;
 
         /// <summary>
-        /// This field MUST NOT be used and MUST be reserved.
-        /// The sender MUST set this to 0, and the receiver MUST ignore it on receipt.
+        /// This field MUST be set to one of the values defined by SMB2_COMPRESSION_CAPABILITIES_Flags.
         /// </summary>
-        public uint Reserved;
+        public SMB2_COMPRESSION_CAPABILITIES_Flags Flags;
 
         /// <summary>
         /// An array of 16-bit integer IDs specifying the supported compression algorithms.
@@ -4874,7 +4895,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
         public int GetDataLength()
         {
-            int dataLength = Marshal.SizeOf(CompressionAlgorithmCount) + Marshal.SizeOf(Padding) + Marshal.SizeOf(Reserved);
+            int dataLength = Marshal.SizeOf(CompressionAlgorithmCount) + Marshal.SizeOf(Padding) + sizeof(SMB2_COMPRESSION_CAPABILITIES_Flags);
             if (CompressionAlgorithms != null)
             {
                 dataLength += CompressionAlgorithms.Length * sizeof(CompressionAlgorithm);
@@ -4945,7 +4966,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// </summary>
         /// <returns>The data length of this context.</returns>
         public ushort GetDataLength()
-        {            
+        {
             return (ushort)NetName.Length;
         }
     }

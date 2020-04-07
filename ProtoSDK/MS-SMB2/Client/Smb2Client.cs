@@ -1064,6 +1064,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
              PreauthIntegrityHashID[] preauthHashAlgs = null,
              EncryptionAlgorithm[] encryptionAlgs = null,
              CompressionAlgorithm[] compressionAlgorithms = null,
+             SMB2_COMPRESSION_CAPABILITIES_Flags compressionFlags = SMB2_COMPRESSION_CAPABILITIES_Flags.SMB2_COMPRESSION_CAPABILITIES_FLAG_NONE,
              SMB2_NETNAME_NEGOTIATE_CONTEXT_ID netNameContext = null,
              bool addDefaultEncryption = false
          )
@@ -1119,7 +1120,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 compresssionCapbilities.Header.ContextType = SMB2_NEGOTIATE_CONTEXT_Type_Values.SMB2_COMPRESSION_CAPABILITIES;
                 compresssionCapbilities.CompressionAlgorithmCount = (ushort)compressionAlgorithms.Length;
                 compresssionCapbilities.Padding = 0;
-                compresssionCapbilities.Reserved = 0;
+                compresssionCapbilities.Flags = compressionFlags;
                 compresssionCapbilities.CompressionAlgorithms = compressionAlgorithms;
                 compresssionCapbilities.Header.DataLength = (ushort)(compresssionCapbilities.GetDataLength());
                 request.NegotiateContext_COMPRESSION = compresssionCapbilities;
@@ -1199,6 +1200,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
              PreauthIntegrityHashID[] preauthHashAlgs = null,
              EncryptionAlgorithm[] encryptionAlgs = null,
              CompressionAlgorithm[] compressionAlgorithms = null,
+             SMB2_COMPRESSION_CAPABILITIES_Flags compressionFlags = SMB2_COMPRESSION_CAPABILITIES_Flags.SMB2_COMPRESSION_CAPABILITIES_FLAG_NONE,
              SMB2_NETNAME_NEGOTIATE_CONTEXT_ID netNameContext = null,
              bool addDefaultEncryption = false
          )
@@ -1206,7 +1208,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             Smb2NegotiateRequestPacket request;
             Smb2NegotiateResponsePacket response;
             Negotiate(creditCharge, creditRequest, flags, messageId, dialects, securityMode, capabilities, clientGuid, out selectedDialect, out gssToken, out request, out response,
-                channelSequence, preauthHashAlgs, encryptionAlgs, compressionAlgorithms, netNameContext, addDefaultEncryption);
+                channelSequence, preauthHashAlgs, encryptionAlgs, compressionAlgorithms, compressionFlags, netNameContext, addDefaultEncryption);
 
             responseHeader = response.Header;
             responsePayload = response.PayLoad;
@@ -1261,6 +1263,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 // Set CompressionAlgorithms to Connection.CompressionIds.
                 this.CompressionInfo.CompressionIds = response.NegotiateContext_COMPRESSION.Value.CompressionAlgorithms;
             }
+
+            // If SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED bit is set in Flags field and IsChainedCompressionSupported is TRUE, Connection.SupportsChainedCompression MUST be set to TRUE.
+            this.compressionInfo.SupportChainedCompression = response.NegotiateContext_COMPRESSION.Value.Flags.HasFlag(SMB2_COMPRESSION_CAPABILITIES_Flags.SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED);
         }
 
         #endregion
