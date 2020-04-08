@@ -965,12 +965,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// <summary>
         /// The major version of the Windows operating system is 0x05.
         /// </summary>
-        WINDOWS_MAJOR_VERSION_5 = 0x05,
+        MAJOR_VERSION_5 = 0x05,
 
         /// <summary>
         /// The major version of the Windows operating system is 0x06.
         /// </summary>
-        WINDOWS_MAJOR_VERSION_6 = 0x06,
+        MAJOR_VERSION_6 = 0x06,
+
+        /// <summary>
+        /// The major version of the Windows operating system is 0x0A.
+        /// </summary>
+        MAJOR_VERSION_10 = 0x0A,
     }
 
     /// <summary>
@@ -986,22 +991,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// <summary>
         /// The minor version of the Windows operating system is 0x00.
         /// </summary>
-        WINDOWS_MINOR_VERSION_0 = 0x00,
+        MINOR_VERSION_0 = 0x00,
 
         /// <summary>
         /// The minor version of the Windows operating system is 0x01.
         /// </summary>
-        WINDOWS_MINOR_VERSION_1 = 0x01,
+        MINOR_VERSION_1 = 0x01,
 
         /// <summary>
         /// The minor version of the Windows operating system is 0x02.
         /// </summary>
-        WINDOWS_MINOR_VERSION_2 = 0x02,
+        MINOR_VERSION_2 = 0x02,
 
         /// <summary>
         /// The minor version of the Windows operating system is 0x03.
         /// </summary>
-        WINDOWS_MINOR_VERSION_3 = 0x03,
+        MINOR_VERSION_3 = 0x03,
     }
 
     /// <summary>

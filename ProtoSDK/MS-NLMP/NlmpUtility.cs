@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
 {
@@ -384,49 +385,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
             )]
         public static VERSION GetVersion()
         {
-            VERSION version = new VERSION();
-
-            // For Windows XP SP2 and Windows Server 2003, 
-            // the value of this field is WINDOWS_MAJOR_VERSION_5.
-            if (Environment.OSVersion.Version.Major <= 5)
+            VERSION version = new VERSION()
             {
-                version.ProductMajorVersion = VERSION_MAJOR.WINDOWS_MAJOR_VERSION_5;
-            }
-            // For Windows Vista, Windows Server 2008, Windows 7, and Windows Server 2008 R2, 
-            // the value of this field is WINDOWS_MAJOR_VERSION_6.
-            else
-            {
-                version.ProductMajorVersion = VERSION_MAJOR.WINDOWS_MAJOR_VERSION_6;
-            }
-
-            // For Windows XP SP2 and Windows Server 2003, 
-            // the value of this field is WINDOWS_MAJOR_VERSION_5.
-            if (Environment.OSVersion.Version.Major == 5)
-            {
-                // For Windows XP SP2, the value of this field is WINDOWS_MINOR_VERSION_1.
-                if (Environment.OSVersion.Version.Minor == 1)
-                {
-                    version.ProductMinorVersion = VERSION_MINOR.WINDOWS_MINOR_VERSION_1;
-                }
-                // For Windows Server 2003, the value of this field is WINDOWS_MINOR_VERSION_2.
-                else
-                {
-                    version.ProductMinorVersion = VERSION_MINOR.WINDOWS_MINOR_VERSION_2;
-                }
-            }
-            // For Windows Vista, Windows Server 2008, Windows 7, and Windows Server 2008 R2, 
-            // the value of this field is WINDOWS_MINOR_VERSION_0.
-            else
-            {
-                version.ProductMinorVersion = VERSION_MINOR.WINDOWS_MINOR_VERSION_0;
-            }
-
-            version.ProductBuild = (ushort)Environment.OSVersion.Version.Build;
-
-            // For Windows XP SP2, Windows Server 2003, Windows Vista, Windows Server 2008, 
-            // Windows 7, and Windows Server 2008 R2 the value of this field is NTLMSSP_REVISION_W2K3.
-            // NTLMSSP_REVISION_W2K3 = 0x0F
-            version.NTLMRevisionCurrent = VERSION_REVERSION.NTLMSSP_REVISION_W2K3;
+                NTLMRevisionCurrent = VERSION_REVERSION.NTLMSSP_REVISION_W2K3,
+                ProductMajorVersion = VERSION_MAJOR.MAJOR_VERSION_10,
+                ProductMinorVersion = VERSION_MINOR.MINOR_VERSION_0
+            };
 
             return version;
         }
