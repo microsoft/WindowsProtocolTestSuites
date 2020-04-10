@@ -4916,7 +4916,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         public SMB2_NEGOTIATE_CONTEXT_Header Header;
 
         /// <summary>
-        /// A null-terminated Unicode string containing the server name and specified by the client application.
+        /// A Unicode string containing the server name and specified by the client application.
         /// </summary>
         public char[] NetName;
 
