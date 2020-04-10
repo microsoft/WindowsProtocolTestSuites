@@ -78,7 +78,15 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         /// </summary>
         WindowsServerV1903 = 0x1000000C,
 
+        /// <summary>
+        /// Windows Server v1909
+        /// </summary>
+        WindowsServerV1909 = 0x1000000D,
 
+        /// <summary>
+        /// Windows Server v2004
+        /// </summary>
+        WindowsServerV2004 = 0x1000000E,
     }
 
     /// <summary>
@@ -194,8 +202,8 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             F_Leasing_V1 = DetectResult.UnSupported;
             F_Leasing_V2 = DetectResult.UnSupported;
             RsvdVersion = 0;
-            SqosVersion = 0;            
-    }
+            SqosVersion = 0;
+        }
 
         public bool CheckHigherDialect(DialectRevision MaxSupported, DialectRevision ComTarget)
         {
