@@ -1,11 +1,12 @@
-﻿// Copyright (c) Microsoft. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
+namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib
 {
     /// <summary>
     /// The CERT_CONTEXT structure contains both the encoded and decoded representations of a certificate. A 
@@ -42,7 +43,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// Constructor
         /// </summary>
         /// <param name="certContext">Cert context</param>    
-        internal CertContext(SspiCertContext certContext)
+        public CertContext(SspiCertContext certContext)
         {
             this.CertEncodingType = certContext.dwCertEncodingType;
             this.CertEncoded = new byte[certContext.cbCertEncoded];

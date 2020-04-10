@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 using System.Net.Sockets;
 
 using Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fsrvp
 {

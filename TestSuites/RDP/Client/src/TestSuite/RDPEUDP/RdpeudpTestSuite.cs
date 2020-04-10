@@ -11,7 +11,6 @@ using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
 using System.Security.Cryptography.X509Certificates;
 using System.Linq;
 

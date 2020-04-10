@@ -14,7 +14,6 @@ using Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts;
 using System.DirectoryServices.Protocols;
 using Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Samr;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
 using Microsoft.Modeling;
 using System.Security.AccessControl;
 

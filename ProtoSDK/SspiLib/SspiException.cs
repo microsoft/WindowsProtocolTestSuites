@@ -1,13 +1,9 @@
-﻿// Copyright (c) Microsoft. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
-using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System;
 using System.Globalization;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
+namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib
 {
     /// <summary>
     /// SspiException is used as specified exception in SSPI library.
@@ -81,7 +77,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <param name="info">Serialization information</param>
         /// <param name="context">Streaming context</param>
         /// <exception cref="ArgumentNullException">If info is null, this exception will be thrown.</exception>
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]        
+        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null)
@@ -113,9 +109,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         {
             get
             {
-                string message = string.Format(CultureInfo.InvariantCulture, 
-                    "{0}. Error Code = '{1:X}'.", 
-                    base.Message, 
+                string message = string.Format(CultureInfo.InvariantCulture,
+                    "{0}. Error Code = '{1:X}'.",
+                    base.Message,
                     this.ErrorCode);
                 return message;
             }

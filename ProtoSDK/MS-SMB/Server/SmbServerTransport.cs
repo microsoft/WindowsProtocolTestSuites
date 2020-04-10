@@ -9,7 +9,7 @@ using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
 {

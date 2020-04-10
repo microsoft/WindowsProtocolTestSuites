@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -13,7 +14,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
     /// Security context, which used by DTLS server.
     /// Accept client token to get server token.
     /// </summary>
-    public class DtlsServerSecurityContext : SspiServerSecurityContext
+    public class DtlsServerSecurityContext : SspiServerSecurityContext, IDtlsServerSecurityContext
     {
         bool bStreamSizes;
         SecurityPackageContextStreamSizes dtlsStreamSizes;

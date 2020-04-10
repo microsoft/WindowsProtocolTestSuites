@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2036
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDP_ClientAdapter", "Adapter\RDP_ClientAdapter.csproj", "{407A6664-47AB-44DA-9917-ECB50F879772}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -52,6 +52,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asn1Base", "..\..\..\..\ProtoSDK\Asn1Base\Asn1Base.csproj", "{DEDA188C-C97E-4968-BC31-594925631E9F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rdpefs", "..\..\..\..\ProtoSDK\MS-RDPEFS\Rdpefs.csproj", "{E5A90E66-44B4-4F13-B2A6-F7990770A977}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SspiLib", "..\..\..\..\ProtoSDK\SspiLib\SspiLib.csproj", "{E64BF20F-11D2-49F6-A25B-F4378AB38180}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SspiService", "..\..\..\..\ProtoSDK\SspiService\SspiService.csproj", "{1FC8C336-EF82-4F7C-9532-AB8AB268916E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -139,6 +143,14 @@ Global
 		{E5A90E66-44B4-4F13-B2A6-F7990770A977}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5A90E66-44B4-4F13-B2A6-F7990770A977}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5A90E66-44B4-4F13-B2A6-F7990770A977}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FC8C336-EF82-4F7C-9532-AB8AB268916E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FC8C336-EF82-4F7C-9532-AB8AB268916E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FC8C336-EF82-4F7C-9532-AB8AB268916E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FC8C336-EF82-4F7C-9532-AB8AB268916E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -162,6 +174,8 @@ Global
 		{9DD86DE1-3231-4713-9B45-493F4FE4199C} = {1A351693-124D-47D0-A001-818FDCB04F59}
 		{DEDA188C-C97E-4968-BC31-594925631E9F} = {1A351693-124D-47D0-A001-818FDCB04F59}
 		{E5A90E66-44B4-4F13-B2A6-F7990770A977} = {1A351693-124D-47D0-A001-818FDCB04F59}
+		{E64BF20F-11D2-49F6-A25B-F4378AB38180} = {1A351693-124D-47D0-A001-818FDCB04F59}
+		{1FC8C336-EF82-4F7C-9532-AB8AB268916E} = {1A351693-124D-47D0-A001-818FDCB04F59}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {83CCCDCF-EA66-4D85-86FC-093D6C98AD7F}

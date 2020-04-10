@@ -3,7 +3,7 @@
 
 using System;
 
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr

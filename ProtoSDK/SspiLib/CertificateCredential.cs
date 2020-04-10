@@ -1,10 +1,6 @@
-﻿// Copyright (c) Microsoft. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+﻿using System.Security.Cryptography.X509Certificates;
 
-using System;
-using System.Security.Cryptography.X509Certificates;
-
-namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
+namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib
 {
     /// <summary>
     /// User Credential with a certificate.
@@ -29,8 +25,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
             X509Store store = new X509Store(storeName, storeLocation);
 
             store.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
-            X509Certificate2Collection certificates = store.Certificates.Find(X509FindType.FindBySubjectName, 
-                certificateName, 
+            X509Certificate2Collection certificates = store.Certificates.Find(X509FindType.FindBySubjectName,
+                certificateName,
                 false);
 
             if (certificates.Count > 0)

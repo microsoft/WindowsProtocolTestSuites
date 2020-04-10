@@ -1,10 +1,7 @@
-﻿// Copyright (c) Microsoft. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
+namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib
 {
     /// <summary>
     /// The CRYPT_INTEGER_BLOB structure contains an arbitrary array of bytes. The structure definition includes 
@@ -22,7 +19,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// Constructor
         /// </summary>
         /// <param name="issuerList">issuer list</param>
-        internal SecurityPackageContextIssuerListInfo(SspiSecurityPackageContextIssuerListInfo issuerList)
+        public SecurityPackageContextIssuerListInfo(SspiSecurityPackageContextIssuerListInfo issuerList)
         {
             List<byte[]> issuers = new List<byte[]>();
 

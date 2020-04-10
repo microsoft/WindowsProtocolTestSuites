@@ -1,10 +1,11 @@
-﻿// Copyright (c) Microsoft. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
+namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib
 {
     /// <summary>
     /// Enums defined by SSP
@@ -241,7 +242,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// Schannel does not support this flag.
         /// </summary>
         Integrity = 0x00020000,
-        
+
         /// <summary>
         /// This flag allows the client to indicate to the server that it should only allow the server application
         /// to identify the client by name and ID, but not to impersonate the client.
@@ -258,7 +259,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
     /// The data representation, such as byte ordering, on the target. 
     /// This parameter can be either SECURITY_NATIVE_DREP or SECURITY_NETWORK_DREP.
     /// </summary>
-    [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32"), 
+    [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32"),
     SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]
     public enum SecurityTargetDataRepresentation : uint
     {
@@ -306,7 +307,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// The pvBuffer member is ignored in this type.
         /// </summary>
         Missing = 0x4,
-        
+
         /// <summary>
         /// The security package uses this value to indicate the number of extra or unprocessed bytes in a message.
         /// </summary>
@@ -372,7 +373,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         AttrMask = 0xF0000000,
     }
 
-    
+
     /// <summary>
     /// FQOP parameter type of EncryptMessage method
     /// </summary>

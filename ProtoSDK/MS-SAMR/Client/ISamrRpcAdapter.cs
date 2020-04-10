@@ -9,7 +9,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
     using Microsoft.Protocols.TestTools.StackSdk.Dtyp;
     using Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling;
     using Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce;
-    using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+    using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 
     /// <summary>
     /// An enumeration to specify security group membership attributes

@@ -74,9 +74,9 @@
       <Project>{C7F08825-D3C9-4DDD-9BA3-06733B1ABE36}</Project>
       <Name>Smb2</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Sspi\Sspi.csproj">
-      <Project>{D0CB354B-2CD3-49C1-8ECA-2F6EBADBCCEE}</Project>
-      <Name>Sspi</Name>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\SspiLib\SspiLib.csproj">
+      <Project>{e64bf20f-11d2-49f6-a25b-f4378ab38180}</Project>
+      <Name>SspiLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Common\Adapter\CommonAdapter.csproj">
       <Project>{3FD566BA-E398-461E-B1B6-464B117ED422}</Project>

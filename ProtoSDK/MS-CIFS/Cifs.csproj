@@ -434,9 +434,9 @@
       <Project>{5E53E71E-52D1-4BF0-99C0-608437EC446C}</Project>
       <Name>Nlmp</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Sspi\Sspi.csproj">
-      <Project>{D0CB354B-2CD3-49C1-8ECA-2F6EBADBCCEE}</Project>
-      <Name>Sspi</Name>
+    <ProjectReference Include="..\SspiLib\SspiLib.csproj">
+      <Project>{e64bf20f-11d2-49f6-a25b-f4378ab38180}</Project>
+      <Name>SspiLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\TransportStack\TransportStack.csproj">
       <Project>{F8CDC462-0754-4BEA-B048-33AC1A5855C4}</Project>

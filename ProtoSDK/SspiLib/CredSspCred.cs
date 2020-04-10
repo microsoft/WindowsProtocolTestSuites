@@ -1,15 +1,16 @@
-﻿// Copyright (c) Microsoft. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-using System;
-
-namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
+namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib
 {
     /// <summary>
     /// The CREDSSP_SUBMIT_TYPE enumeration specifies the type of credentials specified by a CREDSSP_CRED structure.
     /// http://msdn.microsoft.com/en-us/library/aa965488(v=VS.85).aspx
     /// </summary>
-    internal enum CredSspSubmitType
+    public enum CredSspSubmitType
     {
         /// <summary>
         /// The credentials are a user name and password.
@@ -41,22 +42,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
     /// The CREDSSP_CRED structure specifies authentication data for both Schannel and Negotiate security packages.
     /// http://msdn.microsoft.com/en-us/library/aa965581(VS.85).aspx
     /// </summary>
-    internal struct CredSspCred
+    public struct CredSspCred
     {
         /// <summary>
         /// The CREDSPP_SUBMIT_TYPE enumeration value that specifies the type of credentials contained in this 
         /// structure.
         /// </summary>
-        internal CredSspSubmitType Type;
+        public CredSspSubmitType Type;
 
         /// <summary>
         /// A pointer to a set of Schannel credentials.
         /// </summary>
-        internal IntPtr pSchannelCred;
+        public IntPtr pSchannelCred;
 
         /// <summary>
         /// A pointer to a set of Negotiate credentials.
         /// </summary>
-        internal IntPtr pSpnegoCred;
+        public IntPtr pSpnegoCred;
     }
 }

@@ -10,7 +10,7 @@ using System.Text;
 
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib;
 using Microsoft.Protocols.TestTools.StackSdk.Asn1;
 

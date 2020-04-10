@@ -1,10 +1,4 @@
-﻿// Copyright (c) Microsoft. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
-using System;
-using System.Diagnostics.CodeAnalysis;
-
-namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
+﻿namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib
 {
     /// <summary>
     /// Abstract base class for server SecurityContext, SecurityContext used by the server must be derived from this class.

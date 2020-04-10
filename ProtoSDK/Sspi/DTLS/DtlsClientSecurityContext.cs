@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -13,7 +14,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
     /// Supports DTLS 1.0
     /// Invokes InitializeSecurityContext function of SSPI
     /// </summary>
-    public class DtlsClientSecurityContext : SspiClientSecurityContext
+    public class DtlsClientSecurityContext : SspiClientSecurityContext, IDtlsClientSecurityContext
     {
         bool bStreamSizes;
         SecurityPackageContextStreamSizes dtlsStreamSizes;
@@ -211,6 +212,5 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
             }
             outBufferDescWrapper.FreeSecurityBufferDesc();
         }
-
     }
 }
