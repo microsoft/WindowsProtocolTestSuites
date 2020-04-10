@@ -38,6 +38,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
         private void QueryFileRegions(bool withInputData)
         {
+            if (fsaAdapter.FileSystem == FileSystem.FAT)
+            {
+                BaseTestSite.Assert.Inconclusive("<97> Section 2.1.5.9.21:  This operation is only supported by the NTFS and ReFS file systems.");
+            }
             BaseTestSite.Assume.AreNotEqual(Transport.SMB, fsaAdapter.Transport, "The case is not applicable when the transport is SMB1.");
             BaseTestSite.Assume.AreNotEqual(FileSystem.FAT32, fsaAdapter.FileSystem, "The case is not applicable when the file system is FAT32.");
             if (fsaAdapter.FileSystem == FileSystem.REFS)
