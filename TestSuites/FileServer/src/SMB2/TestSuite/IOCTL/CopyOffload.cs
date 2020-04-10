@@ -51,7 +51,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
         protected override void TestCleanup()
         {
-            client.Disconnect();
+            client?.Disconnect();
             base.TestCleanup();
         }
 
