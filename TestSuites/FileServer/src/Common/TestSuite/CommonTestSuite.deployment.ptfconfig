@@ -315,12 +315,19 @@
         </Description>
       </Property>
 
-      <Property name="SupportedCompressionAlgorithms" value="LZ77;LZ77Huffman;LZNT1">
+      <Property name="SupportedCompressionAlgorithms" value="">
         <Description>
           List all supported compression algorithms in order of preference from most to least.
-          Possible values: NONE, LZNT1, LZ77, LZ77Huffman.
+          Possible values: NONE, LZNT1, LZ77, LZ77Huffman, Pattern_V1.
           Multiple values should be separated by semicolons.
           If it is not applicable, leave it as blank or "NONE".
+        </Description>
+      </Property>
+
+      <Property name="IsChainedCompressionSupported" value="false">
+        <Choice>true,false</Choice>
+        <Description>
+          Set to true if SUT supports chained compression, otherwise set it to false.
         </Description>
       </Property>
     </Group>
