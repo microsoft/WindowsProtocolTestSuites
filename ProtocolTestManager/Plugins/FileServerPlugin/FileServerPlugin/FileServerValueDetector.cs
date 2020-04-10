@@ -328,6 +328,8 @@ namespace Microsoft.Protocols.TestManager.Detector
 
             propertiesDic.Add("Common.SupportedCompressionAlgorithms", new List<string>() { String.Join(";", detectionInfo.smb2Info.SupportedCompressionAlgorithms.Select(compressionAlgorithm => compressionAlgorithm.ToString())) });
 
+            propertiesDic.Add("Common.IsChainedCompressionSupported", new List<string>() { detectionInfo.smb2Info.IsChainedCompressionSupported.ToString().ToLower() });
+
             #endregion
 
             #region DFSC

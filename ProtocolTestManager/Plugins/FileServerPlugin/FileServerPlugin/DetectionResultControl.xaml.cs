@@ -245,7 +245,13 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
         private void AddCompressionCapabilities(DetectionInfo info)
         {
-            var possibleCompressionAlogrithms = new CompressionAlgorithm[] { CompressionAlgorithm.LZ77, CompressionAlgorithm.LZ77Huffman, CompressionAlgorithm.LZNT1 };
+            var excludedCompressionAlogrithms = new CompressionAlgorithm[]
+            {
+                CompressionAlgorithm.NONE,
+                CompressionAlgorithm.Unsupported,
+            };
+
+            var possibleCompressionAlogrithms = Enum.GetValues(typeof(CompressionAlgorithm)).Cast<CompressionAlgorithm>().Except(excludedCompressionAlogrithms);
 
             foreach (var compressionAlgorithm in possibleCompressionAlogrithms)
             {
@@ -258,6 +264,10 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     AddResultItem(ref this.compressionItems, compressionAlgorithm.ToString(), DetectResult.UnSupported);
                 }
             }
+
+            var chainedCompressionResult = info.smb2Info.IsChainedCompressionSupported ? DetectResult.Supported : DetectResult.UnSupported;
+
+            AddResultItem(ref this.compressionItems, "Chained compression", chainedCompressionResult);
         }
         #endregion
 
