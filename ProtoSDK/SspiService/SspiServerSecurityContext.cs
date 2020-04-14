@@ -24,11 +24,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
         private SECQOP_WRAP qualityOfProtection;
 
         /// <summary>
-        /// Token.
-        /// </summary>
-        protected byte[] token;
-
-        /// <summary>
         /// Bit flags that indicate requests for the context.
         /// </summary>
         protected ServerSecurityContextAttribute securityContextAttributes;
@@ -108,7 +103,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
         {
             get
             {
-                return this.token;
+                return this.Context.Token;
             }
         }
 
