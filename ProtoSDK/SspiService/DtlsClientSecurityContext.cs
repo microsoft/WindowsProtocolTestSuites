@@ -9,9 +9,29 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
     /// Supports DTLS 1.0
     /// Invokes InitializeSecurityContext function of SSPI
     /// </summary>
-    public class DtlsClientSecurityContext : SspiClientSecurityContext
+    public class DtlsClientSecurityContext : IDisposable
     {
-        protected new IDtlsClientSecurityContext Context;
+        protected IDtlsClientSecurityContext Context;
+
+        /// <summary>
+        /// Security package type.
+        /// </summary>
+        protected SecurityPackageType packageType;
+
+        /// <summary>
+        /// Server's principal name.
+        /// </summary>
+        protected string serverPrincipalName;
+
+        /// <summary>
+        /// Bit flags that indicate requests for the context.
+        /// </summary>
+        protected ClientSecurityContextAttribute securityContextAttributes;
+
+        /// <summary>
+        /// The data representation, such as byte ordering, on the target.
+        /// </summary>
+        protected SecurityTargetDataRepresentation targetDataRepresentaion;
 
         /// <summary>
         /// Indicates if more fragments need to be output
@@ -30,6 +50,66 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
             get
             {
                 return this.Context.StreamSizes;
+            }
+        }
+
+        /// <summary>
+        /// Whether to continue process.
+        /// </summary>
+        public bool NeedContinueProcessing
+        {
+            get
+            {
+                return this.Context.NeedContinueProcessing;
+            }
+        }
+
+
+        /// <summary>
+        /// Gets or sets sequence number for Verify, Encrypt and Decrypt message.
+        /// For Digest SSP, it must be 0.
+        /// </summary>
+        public uint SequenceNumber
+        {
+            get
+            {
+                return this.Context.SequenceNumber;
+            }
+        }
+
+
+        /// <summary>
+        /// The session Key
+        /// </summary>
+        public byte[] SessionKey
+        {
+            get
+            {
+                return this.Context.SessionKey;
+            }
+        }
+
+
+        /// <summary>
+        /// The token returned by Sspi.
+        /// </summary>
+        public byte[] Token
+        {
+            get
+            {
+                return this.Context.Token;
+            }
+        }
+
+
+        /// <summary>
+        /// Queries the sizes of the structures used in the per-message functions.
+        /// </summary>
+        public SecurityPackageContextSizes ContextSizes
+        {
+            get
+            {
+                return this.Context.ContextSizes;
             }
         }
 
@@ -66,9 +146,65 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
         /// <param name="serverToken">Server Token</param>
         /// <exception cref="SspiException">If Initialize fail, this exception will be thrown.</exception>
         [SecurityPermission(SecurityAction.Demand)]
-        public override void Initialize(byte[] serverToken)
+        public void Initialize(byte[] serverToken)
         {
             this.Context.Initialize(serverToken);
+        }
+
+        /// <summary>
+        /// Sign data according SecBuffers.
+        /// </summary>
+        /// <param name="securityBuffers">SecurityBuffer array</param>
+        /// <exception cref="SspiException">If sign fail, this exception will be thrown.</exception>
+        [SecurityPermission(SecurityAction.Demand)]
+        public void Sign(params SecurityBuffer[] securityBuffers)
+        {
+            this.Context.Sign(securityBuffers);
+        }
+
+
+        /// <summary>
+        /// Encrypts Message. User decides what SecBuffers are used.
+        /// </summary>
+        /// <param name="securityBuffers">SecBuffers.</param>
+        /// <exception cref="SspiException">If encrypt fail, this exception will be thrown.</exception>
+        [SecurityPermission(SecurityAction.Demand)]
+        public bool Verify(params SecurityBuffer[] securityBuffers)
+        {
+            return this.Context.Verify(securityBuffers);
+        }
+
+
+        /// <summary>
+        /// Encrypts Message. User decides what SecBuffers are used.
+        /// </summary>
+        /// <param name="securityBuffers">SecBuffers.</param>
+        /// <exception cref="SspiException">If encrypt fail, this exception will be thrown.</exception>
+        [SecurityPermission(SecurityAction.Demand)]
+        public void Encrypt(params SecurityBuffer[] securityBuffers)
+        {
+            this.Context.Encrypt(securityBuffers);
+        }
+
+
+        /// <summary>
+        /// This takes the given SecBuffers, which are used by SSPI method DecryptMessage.
+        /// </summary>
+        /// <param name="securityBuffers">SecBuffer.Encrypted data will be filled in SecBuffers.</param>
+        /// <returns>If successful, returns true, otherwise false.</returns>
+        /// <exception cref="SspiException">If sign fail, this exception will be thrown.</exception>
+        [SecurityPermission(SecurityAction.Demand)]
+        public bool Decrypt(params SecurityBuffer[] securityBuffers)
+        {
+            return this.Context.Decrypt(securityBuffers);
+        }
+
+        public void Dispose()
+        {
+            if (this.Context != null)
+            {
+                this.Context.Dispose();
+            }
         }
     }
 }
