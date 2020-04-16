@@ -136,6 +136,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
 
         #endregion
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         protected SspiClientSecurityContext()
         {
 
@@ -200,34 +203,82 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
         /// <returns>Security Context</returns>
         protected void AcquireCredentialsHandle<T>(T accountCredential)
         {
+            //switch (packageType)
+            //{
+            //    case SecurityPackageType.Ntlm:
+            //        throw new NotImplementedException();
+            //    case SecurityPackageType.Kerberos:
+            //        throw new NotImplementedException();
+            //    case SecurityPackageType.Negotiate:
+            //        throw new NotImplementedException();
+            //    case SecurityPackageType.Schannel:
+            //        throw new NotImplementedException();
+            //    case SecurityPackageType.CredSsp:
+            //        throw new NotImplementedException();
+            //    default:
+            //        throw new NotImplementedException();
+            //}
+
             this.UseNativeSSP(accountCredential);
         }
 
+        /// <summary>
+        /// This takes the given SecBuffers, which are used by SSPI method DecryptMessage.
+        /// </summary>
+        /// <param name="securityBuffers">SecBuffer.Encrypted data will be filled in SecBuffers.</param>
+        /// <returns>If successful, returns true, otherwise false.</returns>
+        /// <exception cref="SspiException">If sign fail, this exception will be thrown.</exception>
         public override bool Decrypt(params SecurityBuffer[] securityBuffers)
         {
             return this.Context.Decrypt(securityBuffers);
         }
 
+        /// <summary>
+        /// Encrypts Message. User decides what SecBuffers are used.
+        /// </summary>
+        /// <param name="securityBuffers">SecBuffers.</param>
+        /// <exception cref="SspiException">If encrypt fail, this exception will be thrown.</exception>
         public override void Encrypt(params SecurityBuffer[] securityBuffers)
         {
             this.Context.Encrypt(securityBuffers);
         }
 
+        /// <summary>
+        /// Initialize SecurityContext with a server token.
+        /// </summary>
+        /// <param name="serverToken">Server Token</param>
+        /// <exception cref="SspiException">If Initialize fail, this exception will be thrown.</exception>
         public override void Initialize(byte[] token)
         {
             this.Context.Initialize(token);
         }
 
+        /// <summary>
+        /// Sign data according SecBuffers.
+        /// </summary>
+        /// <param name="securityBuffers">SecurityBuffer array</param>
         public override void Sign(params SecurityBuffer[] securityBuffers)
         {
             this.Context.Sign(securityBuffers);
         }
 
+        /// <summary>
+        /// Verify Data according SecBuffers.
+        /// </summary>
+        /// <param name="securityBuffers">SecBuffer array</param>
+        /// <returns>True if the signature matches the signed 
         public override bool Verify(params SecurityBuffer[] securityBuffers)
         {
             return this.Context.Verify(securityBuffers);
         }
 
+        /// <summary>
+        /// Query context attribute by Sspi QueryContextAttributes method.
+        /// </summary>
+        /// <param name="contextAttribute">Attribute name same as msdn: 
+        /// http://msdn.microsoft.com/en-us/library/aa379326(VS.85).aspx</param>
+        /// <returns>The attribute value</returns>
+        /// <exception cref="SspiException">If QueryContextAttributes fail, this exception will be thrown.</exception>
         public override object QueryContextAttributes(string contextAttribute)
         {
             return this.Context.QueryContextAttributes(contextAttribute);
@@ -237,6 +288,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
 
         #region
 
+        /// <summary>
+        /// Use Native SSP to do auth
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="accountCredential"></param>
         private void UseNativeSSP<T>(T accountCredential)
         {
             if (accountCredential is AccountCredential)

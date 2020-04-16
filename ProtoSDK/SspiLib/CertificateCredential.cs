@@ -36,7 +36,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib
             store.Close();
         }
 
-
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -45,7 +44,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib
         {
             this.certificate = certificate;
         }
-
 
         /// <summary>
         /// Gets stored X509Certificate.

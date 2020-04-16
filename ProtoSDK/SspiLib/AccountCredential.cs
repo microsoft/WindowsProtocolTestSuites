@@ -1,5 +1,9 @@
 ﻿namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib
 {
+    /// <summary>
+    /// Encapsulates SSPI CredentialHandle.
+    /// Get handle by AcquireCredentialsHandle.
+    /// </summary>
     public interface ICredential
     {
 

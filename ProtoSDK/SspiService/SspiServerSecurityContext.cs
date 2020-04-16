@@ -136,6 +136,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
 
         #endregion
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         protected SspiServerSecurityContext()
         {
 
@@ -199,9 +202,30 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
         /// <returns>Security Context</returns>
         protected void AcquireCredentialsHandle<T>(T accountCredential)
         {
+            //switch (packageType)
+            //{
+            //    case SecurityPackageType.Ntlm:
+            //        throw new NotImplementedException();
+            //    case SecurityPackageType.Kerberos:
+            //        throw new NotImplementedException();
+            //    case SecurityPackageType.Negotiate:
+            //        throw new NotImplementedException();
+            //    case SecurityPackageType.Schannel:
+            //        throw new NotImplementedException();
+            //    case SecurityPackageType.CredSsp:
+            //        throw new NotImplementedException();
+            //    default:
+            //        throw new NotImplementedException();
+            //}
+
             this.UseNativeSSP(accountCredential);
         }
 
+        /// <summary>
+        /// Use Native SSP to do auth
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="accountCredential"></param>
         private void UseNativeSSP<T>(T accountCredential)
         {
             if (accountCredential is AccountCredential)

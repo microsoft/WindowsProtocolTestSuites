@@ -63,7 +63,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
             }
         }
 
-
         /// <summary>
         /// Gets or sets sequence number for Verify, Encrypt and Decrypt message.
         /// For Digest SSP, it must be 0.
@@ -76,7 +75,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
             }
         }
 
-
         /// <summary>
         /// The session Key
         /// </summary>
@@ -87,7 +85,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
                 return this.Context.SessionKey;
             }
         }
-
 
         /// <summary>
         /// The token returned by Sspi.
@@ -100,7 +97,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
             }
         }
 
-
         /// <summary>
         /// Queries the sizes of the structures used in the per-message functions.
         /// </summary>
@@ -111,7 +107,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
                 return this.Context.ContextSizes;
             }
         }
-
 
         /// <summary>
         /// Package-specific flags that indicate the quality of protection. A security package can use this parameter
@@ -174,7 +169,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
             this.Context.Sign(securityBuffers);
         }
 
-
         /// <summary>
         /// Encrypts Message. User decides what SecBuffers are used.
         /// </summary>
@@ -186,7 +180,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
             return this.Context.Verify(securityBuffers);
         }
 
-
         /// <summary>
         /// Encrypts Message. User decides what SecBuffers are used.
         /// </summary>
@@ -197,7 +190,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
         {
             this.Context.Encrypt(securityBuffers);
         }
-
 
         /// <summary>
         /// This takes the given SecBuffers, which are used by SSPI method DecryptMessage.

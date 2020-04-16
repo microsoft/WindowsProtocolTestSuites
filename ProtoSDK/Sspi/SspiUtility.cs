@@ -742,7 +742,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
             SecurityWinntAuthIdentity authIdentity = new SecurityWinntAuthIdentity(accountCredential);
             IntPtr pAuthData = IntPtr.Zero;
             SchannelCred schannelCred = new SchannelCred();
-            schannelCred.dwVersion = NativeMethods.SCHANNEL_CRED_VERSION;
+            schannelCred.dwVersion = Consts.SCHANNEL_CRED_VERSION;
             schannelCred.cCreds = 0;
             schannelCred.paCred = IntPtr.Zero;
             CredSspCred credSsp = new CredSspCred();

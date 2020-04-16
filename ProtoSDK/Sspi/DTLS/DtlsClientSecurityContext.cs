@@ -106,14 +106,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
             {
                 //First Initialize, only token
                 outSecurityBuffers = new SecurityBuffer[1];
-                outSecurityBuffers[0] = new SecurityBuffer(SecurityBufferType.Token, new byte[NativeMethods.MAX_TOKEN_SIZE]);
+                outSecurityBuffers[0] = new SecurityBuffer(SecurityBufferType.Token, new byte[Consts.MAX_TOKEN_SIZE]);
             }
             else
             { 
                 //Token and Ablert
                 outSecurityBuffers = new SecurityBuffer[2];
-                outSecurityBuffers[0] = new SecurityBuffer(SecurityBufferType.Token, new byte[NativeMethods.MAX_TOKEN_SIZE]);
-                outSecurityBuffers[1] = new SecurityBuffer(SecurityBufferType.Alert, new byte[NativeMethods.MAX_TOKEN_SIZE]);
+                outSecurityBuffers[0] = new SecurityBuffer(SecurityBufferType.Token, new byte[Consts.MAX_TOKEN_SIZE]);
+                outSecurityBuffers[1] = new SecurityBuffer(SecurityBufferType.Alert, new byte[Consts.MAX_TOKEN_SIZE]);
             }
             SecurityBufferDescWrapper outBufferDescWrapper = new SecurityBufferDescWrapper(outSecurityBuffers);
             

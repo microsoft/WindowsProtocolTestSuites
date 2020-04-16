@@ -64,7 +64,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
             }
         }
 
-
         /// <summary>
         /// Gets or sets sequence number for Verify, Encrypt and Decrypt message.
         /// For Digest SSP, it must be 0.
@@ -77,7 +76,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
             }
         }
 
-
         /// <summary>
         /// The session Key
         /// </summary>
@@ -89,7 +87,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
             }
         }
 
-
         /// <summary>
         /// The token returned by Sspi.
         /// </summary>
@@ -100,7 +97,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
                 return this.Context.Token;
             }
         }
-
 
         /// <summary>
         /// Queries the sizes of the structures used in the per-message functions.

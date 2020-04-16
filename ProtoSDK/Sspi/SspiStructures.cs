@@ -235,7 +235,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
             //There is 1 structures in the paCred array.
             const uint CountOfCred = 1;
 
-            this.dwVersion = NativeMethods.SCHANNEL_CRED_VERSION;
+            this.dwVersion = Consts.SCHANNEL_CRED_VERSION;
             if (credential != null && credential.Certificate != null)
             {
                 this.cCreds = CountOfCred;
@@ -258,7 +258,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
             this.dwSessionLifespan = 0;
             if (credential == null || credential.Certificate == null)
             {
-                this.dwFlags = NativeMethods.SCH_CRED_MANUAL_CRED_VALIDATION | NativeMethods.SCH_CRED_NO_DEFAULT_CREDS;
+                this.dwFlags = Consts.SCH_CRED_MANUAL_CRED_VALIDATION | Consts.SCH_CRED_NO_DEFAULT_CREDS;
             }
             else
             {
@@ -298,7 +298,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <param name="secBuffers">SecBuffer array</param>
         internal SecurityBufferDesc(params SecurityBuffer[] secBuffers)
         {
-            this.ulVersion = NativeMethods.SECBUFFER_VERSION;
+            this.ulVersion = Consts.SECBUFFER_VERSION;
             this.cBuffers = 0;
             this.pBuffers = IntPtr.Zero;
 

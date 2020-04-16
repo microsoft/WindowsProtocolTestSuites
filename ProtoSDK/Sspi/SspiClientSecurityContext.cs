@@ -234,7 +234,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
 
             SecurityBuffer outTokenBuffer = new SecurityBuffer(
                 SecurityBufferType.Token,
-                new byte[NativeMethods.MAX_TOKEN_SIZE]);
+                new byte[Consts.MAX_TOKEN_SIZE]);
 
             SecurityBufferDescWrapper serverTokenDescWrapper = new SecurityBufferDescWrapper(securityBuffers);
             SecurityBufferDescWrapper outBufferDescWrapper = new SecurityBufferDescWrapper(outTokenBuffer);

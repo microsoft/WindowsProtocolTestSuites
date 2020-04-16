@@ -233,7 +233,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
             SecurityBufferDescWrapper inputBufferDescWrapper = new SecurityBufferDescWrapper(securityBuffers);
             SecurityBuffer serverTokenBuffer = new SecurityBuffer(
                 SecurityBufferType.Token,
-                new byte[NativeMethods.MAX_TOKEN_SIZE]);
+                new byte[Consts.MAX_TOKEN_SIZE]);
             SecurityBufferDescWrapper outputBufferDescWrapper = new SecurityBufferDescWrapper(serverTokenBuffer);
             SecurityInteger timeStamp;
             uint contextAttribute;

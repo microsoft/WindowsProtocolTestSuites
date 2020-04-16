@@ -105,9 +105,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
             SecurityBuffer[] outSecurityBuffers;
             outSecurityBuffers = new SecurityBuffer[2];
             //1 token
-            outSecurityBuffers[0] = new SecurityBuffer(SecurityBufferType.Token, new byte[NativeMethods.MAX_TOKEN_SIZE]);
+            outSecurityBuffers[0] = new SecurityBuffer(SecurityBufferType.Token, new byte[Consts.MAX_TOKEN_SIZE]);
             //2 alert
-            outSecurityBuffers[1] = new SecurityBuffer(SecurityBufferType.Alert, new byte[NativeMethods.MAX_TOKEN_SIZE]);
+            outSecurityBuffers[1] = new SecurityBuffer(SecurityBufferType.Alert, new byte[Consts.MAX_TOKEN_SIZE]);
             SecurityBufferDescWrapper outputBufferDescWrapper = new SecurityBufferDescWrapper(outSecurityBuffers);
 
             SecurityInteger timeStamp;
