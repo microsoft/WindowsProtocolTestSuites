@@ -123,7 +123,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
 
             LogEvent("Loading the providers of registered network drivers.");
             initializeStatus = (NtStatus)RdmaProvider.LoadRdmaProviders(out rdmaProvidersList);
-            
+
             this.inboundEntries = inboundEntries;
             this.outboundEntries = outboundEntries;
             this.inboundSegment = inboundSegment;
@@ -196,7 +196,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
                 return initializeStatus;
             }
 
-            rdmaAdapter = OpenAdapter(rdmaProvidersList, localIpAddress, ipFamily, logEndpointEvent);
+            rdmaAdapter = OpenAdapter(rdmaProvidersList, localIpAddress, ipFamily);
             if (rdmaAdapter == null)
             {
                 // this is the return code of NDSPI
@@ -210,6 +210,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
                 );
             if (status != NtStatus.STATUS_SUCCESS)
             {
+                LogEvent($"CreateCompletionQueue failed with {status}.");
+
                 return status;
             }
 
@@ -217,6 +219,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
             status = (NtStatus)rdmaAdapter.CreateConnector(out this.rdmaConnector);
             if (status != NtStatus.STATUS_SUCCESS)
             {
+                LogEvent($"CreateConnector failed with {status}.");
+
                 return status;
             }
 
@@ -233,6 +237,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
                 out rdmaEndpoint);
             if (status != NtStatus.STATUS_SUCCESS)
             {
+                LogEvent($"CreateEndpoint failed with {status}.");
+
                 return status;
             }
 
@@ -240,6 +246,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
             status = (NtStatus)rdmaConnector.Connect(rdmaEndpoint, remoteIpAddress, port, 6 /* for tcp */);
             if (status != NtStatus.STATUS_SUCCESS)
             {
+                LogEvent($"Connect failed with {status}.");
+
                 return status;
             }
 
@@ -247,6 +255,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
             status = (NtStatus)rdmaConnector.CompleteConnect();
             if (status != NtStatus.STATUS_SUCCESS)
             {
+                LogEvent($"CompleteConnect failed with {status}.");
+
                 return status;
             }
 
@@ -268,7 +278,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
                 return initializeStatus;
             }
 
-            rdmaAdapter = OpenAdapter(rdmaProvidersList, localIpAddress, ipFamily, logEndpointEvent);
+            rdmaAdapter = OpenAdapter(rdmaProvidersList, localIpAddress, ipFamily);
             if (rdmaAdapter == null)
             {
                 // this is the return code of NDSPI
@@ -420,7 +430,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
             this.LogEvent(string.Format("Receive {0} bytes from entry 0x{1:X}",
                 item.ResultInfo.BytesTransferred,
                 item.EntryIndex));
-            
+
             data = new byte[item.ResultInfo.BytesTransferred];
             status = (NtStatus)RdmaEndpoint.ReadFromMemory(
                 this.receiveEntries[item.EntryIndex].Segment.MemoryHandler,
@@ -545,7 +555,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
                 flag,
                 reversed,
                 out memoryWindow.BufferDescriptor, out resultId);
- 
+
             if (status != NtStatus.STATUS_SUCCESS)
             {
                 return status;
@@ -686,20 +696,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
         /// <param name="localIpAddress"></param>
         /// <param name="ipFamily">IP Family, IPv4 or IPv6</param>
         /// <returns></returns>
-        private static RdmaAdapter OpenAdapter(
+        private RdmaAdapter OpenAdapter(
             RdmaProviderInfo[] providers,
             string localIpAddress,
-            AddressFamily ipFamily,
-            SmbdLogEvent logEvent)
+            AddressFamily ipFamily)
         {
             RdmaAdapter adapter;
 
             if (providers == null)
             {
-                if (logEvent != null)
-                {
-                    logEvent("Providers list is null. Open adapter failed.");
-                }
+                LogEvent("Providers list is null. Open adapter failed.");
+
                 return null;
             }
             foreach (RdmaProviderInfo providerInfo in providers)
@@ -709,55 +716,41 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
                     continue;
                 }
 
-                if (logEvent != null)
-                {
-                    logEvent(string.Format("Try to open adapter from provider \"{0}\" with specific IP Address: \"{1}\"",
+                LogEvent(string.Format("Try to open adapter from provider \"{0}\" with specific IP Address: \"{1}\"",
                         providerInfo.Path,
                         localIpAddress));
-                }
 
-                OutputAddressInfoSupportedByProvider(providerInfo, logEvent);
+                OutputAddressInfoSupportedByProvider(providerInfo);
 
                 NtStatus status = (NtStatus)providerInfo.Provider.OpenAdapter(localIpAddress, (short)ipFamily, out adapter);
                 if (status != NtStatus.STATUS_SUCCESS)
                 {
-                    if (logEvent != null)
-                    {
-                        logEvent(string.Format("Provider '{0}' does not support IP address \"{1}\".",
+                    LogEvent(string.Format("Provider '{0}' does not support IP address \"{1}\".",
                             providerInfo.Path,
                             localIpAddress));
-                    }
-                    continue; 
+
+                    continue;
                 }
-                if (logEvent != null)
-                {
-                    logEvent(string.Format("Adapter on IP address \"{0}\" is open via provider '{1}'.",
+                LogEvent(string.Format("Adapter on IP address \"{0}\" is open via provider '{1}'.",
                         localIpAddress,
                         providerInfo.Path));
-                }
+
                 return adapter;
             }
 
-            if (logEvent != null)
-            {
-                logEvent(string.Format("IP address \"{0}\" is not supported by all providers. Open adapter failed.", localIpAddress));
-            }
+            LogEvent(string.Format("IP address \"{0}\" is not supported by all providers. Open adapter failed.", localIpAddress));
+
             return null;
         }
 
         /// <summary>
         /// output all addresses which are supported by the provider
         /// </summary>
-        private static void OutputAddressInfoSupportedByProvider(RdmaProviderInfo providerInfo, SmbdLogEvent logEvent)
+        private void OutputAddressInfoSupportedByProvider(RdmaProviderInfo providerInfo)
         {
-            if (logEvent == null)
+            if (providerInfo == null)
             {
-                return;
-            }
-
-            if(providerInfo == null)
-            {
-                logEvent("ProviderInfo is null.");
+                LogEvent("ProviderInfo is null.");
                 return;
             }
 
@@ -766,23 +759,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
 
             if (status != NtStatus.STATUS_SUCCESS)
             {
-                logEvent(string.Format("Return code of Provider.QueryAddressList is {0}", status));
+                LogEvent(string.Format("Return code of Provider.QueryAddressList is {0}", status));
                 return;
             }
 
             if (addressList == null)
             {
-                logEvent("The address list returned from Provider.QueryAddressList is null.");
+                LogEvent("The address list returned from Provider.QueryAddressList is null.");
                 return;
             }
 
             if (addressList.Length == 0)
             {
-                logEvent(string.Format("No address supported by provider \"{0}\".", providerInfo.Path));
+                LogEvent(string.Format("No address supported by provider \"{0}\".", providerInfo.Path));
                 return;
             }
 
-            logEvent(string.Format("Total {0} addresses supported by the provider \"{1}\":\n",
+            LogEvent(string.Format("Total {0} addresses supported by the provider \"{1}\":\n",
                 addressList.Length,
                 providerInfo.Path));
             int addressIndex = 0;
@@ -795,7 +788,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
 
                 if ((AddressFamily)address.Family == AddressFamily.InterNetwork)
                 { // IPv4
-                    logEvent(string.Format("{0}. {1}: {2}.{3}.{4}.{5}\n",
+                    LogEvent(string.Format("{0}. {1}: {2}.{3}.{4}.{5}\n",
                         ++addressIndex,
                         AddressFamily.InterNetwork,
                         (byte)address.Data[0],
@@ -805,7 +798,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
                 }
                 else
                 {
-                    logEvent(string.Format("{0}. {1}", ++addressIndex, (AddressFamily)address.Family));
+                    LogEvent(string.Format("{0}. {1}", ++addressIndex, (AddressFamily)address.Family));
                 }
             }
         }
@@ -965,7 +958,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
                     return;
                 }
             }
-            
+
         }
         #endregion
         /// <summary>
