@@ -22,7 +22,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
         protected SecurityPackageType packageType;
 
         /// <summary>
-        /// Qulity of protection
+        /// Quality of protection
         /// </summary>
         private SECQOP_WRAP qualityOfProtection;
 
@@ -62,7 +62,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
         }
 
         /// <summary>
-        /// Whether to continue process.
+        /// Whether need continue processing.
         /// </summary>
         public override bool NeedContinueProcessing
         {
@@ -230,7 +230,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
         /// </summary>
         /// <param name="securityBuffers">SecBuffer.Encrypted data will be filled in SecBuffers.</param>
         /// <returns>If successful, returns true, otherwise false.</returns>
-        /// <exception cref="SspiException">If sign fail, this exception will be thrown.</exception>
+        /// <exception cref="SspiException">If decrypt fail, this exception will be thrown.</exception>
         public override bool Decrypt(params SecurityBuffer[] securityBuffers)
         {
             return this.Context.Decrypt(securityBuffers);
@@ -266,7 +266,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
         }
 
         /// <summary>
-        /// Verify Data according SecBuffers.
+        /// Verify Data according to SecBuffers.
         /// </summary>
         /// <param name="securityBuffers">SecBuffer array</param>
         /// <returns>True if the signature matches the signed 
@@ -320,6 +320,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
             }
         }
 
+        /// <summary>
+        /// Dispose Client Security Context
+        /// </summary>
         public void Dispose()
         {
             this.Context = null;

@@ -233,7 +233,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib
         public uint grbitEnabledProtocols;
 
         /// <summary>
-        /// nimum bulk encryption cipher strength, in bits, allowed for connections.
+        /// Minimum bulk encryption cipher strength, in bits, allowed for connections.
         /// </summary>
         public uint dwMinimumCipherStrength;
 

@@ -198,6 +198,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
             return this.Context.Decrypt(securityBuffers);
         }
 
+        /// <summary>
+        /// Dispose Dtls Client Security Context
+        /// </summary>
         public void Dispose()
         {
             if (this.Context != null)

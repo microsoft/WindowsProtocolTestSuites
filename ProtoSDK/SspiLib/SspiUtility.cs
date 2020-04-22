@@ -7,6 +7,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib
 {
     public class SspiUtility
     {
+        /// <summary>
+        /// Verify Message Header
+        /// </summary>
+        /// <param name="message">Signed message to be verified</param>
+        /// <returns>If true, verify successful, otherwise failed.</returns>
         public static bool VerifyMessageHeader(byte[] message)
         {
             if (message == null)
@@ -31,6 +36,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib
             return true;
         }
 
+        /// <summary>
+        /// Concatenate Read or Write SecurityBuffers
+        /// </summary>
+        /// <param name="securityBuffers">
+        /// the security buffer array to decrypt.<para/>
+        /// it can contain none or some data security buffer, that are combine to one message to decrypt.<para/>
+        /// it can contain none or some token security buffer, in which the signature is stored.
+        /// </param>
+        /// <param name="targetTypes">flags that indicate the type of buffer.</param>
+        /// <returns>Concatenate SecurityBuffers</returns>
         public static byte[] ConcatenateReadWriteSecurityBuffers(
             SecurityBuffer[] securityBuffers,
             params SecurityBufferType[] targetTypes)

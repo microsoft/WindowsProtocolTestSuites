@@ -404,7 +404,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
 
 
         /// <summary>
-        /// Encrypts Message. User decides what SecBuffers are used.
+        /// Verify Message
         /// </summary>
         /// <param name="securityBuffers">
         /// the security buffer array to verify.<para/>

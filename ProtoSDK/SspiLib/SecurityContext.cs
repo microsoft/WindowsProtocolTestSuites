@@ -191,7 +191,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib
         /// </summary>
         /// <param name="securityBuffers">SecBuffer.Encrypted data will be filled in SecBuffers.</param>
         /// <returns>If successful, returns true, otherwise false.</returns>
-        /// <exception cref="SspiException">If sign fail, this exception will be thrown.</exception>
+        /// <exception cref="SspiException">If decrypt fail, this exception will be thrown.</exception>
         public abstract bool Decrypt(params SecurityBuffer[] securityBuffers);
 
 
@@ -249,7 +249,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib
 
 
         /// <summary>
-        /// Whether to continue process.
+        /// Whether to continue processing.
         /// </summary>
         public abstract bool NeedContinueProcessing
         {

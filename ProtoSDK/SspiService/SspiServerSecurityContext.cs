@@ -22,7 +22,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
         protected SecurityPackageType packageType;
 
         /// <summary>
-        /// Qulity of protection
+        /// Quality of protection
         /// </summary>
         private SECQOP_WRAP qualityOfProtection;
 
@@ -314,6 +314,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
             this.Context.Accept(clientToken);
         }
 
+        /// <summary>
+        /// Dispose Server Security Context
+        /// </summary>
         public void Dispose()
         {
             this.Context = null;

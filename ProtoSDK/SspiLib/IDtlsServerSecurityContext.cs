@@ -40,14 +40,58 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib
         /// </summary>
         SECQOP_WRAP QualityOfProtection { get; }
 
+        /// <summary>
+        /// The function enables the server component of a transport application to establish a security context
+        /// between the server and a remote client.
+        /// </summary>
+        /// <param name="clientToken">The token to be used in context.</param>
         void Accept(byte[] clientToken);
 
+        /// <summary>
+        /// Sign data according SecBuffers.
+        /// </summary>
+        /// <param name="securityBuffers">
+        /// the security buffer array to sign.<para/>
+        /// it can contain none or some data security buffer, that are combine to one message to sign.<para/>
+        /// it must contain token security buffer, in which the signature will be stored.
+        /// </param>
+        /// <exception cref="ArgumentNullException">the securityBuffers must not be null</exception>
+        /// <exception cref="ArgumentException">securityBuffers must contain signature to store signature</exception>
         void Sign(params SecurityBuffer[] securityBuffers);
 
+        /// <summary>
+        /// Verify Message.
+        /// </summary>
+        /// <param name="securityBuffers">
+        /// the security buffer array to verify.<para/>
+        /// it can contain none or some data security buffer, that are combine to one message to verify.<para/>
+        /// it must contain token security buffer, in which the signature is stored.
+        /// </param>
+        /// <exception cref="ArgumentNullException">the securityBuffers must not be null</exception>
+        /// <exception cref="ArgumentException">securityBuffers must contain signature to verify</exception>
         bool Verify(params SecurityBuffer[] securityBuffers);
 
+        /// <summary>
+        /// Encrypts Message. User decides what SecBuffers are used.
+        /// </summary>
+        /// <param name="securityBuffers">
+        /// the security buffer array to encrypt.<para/>
+        /// it can contain none or some data security buffer, that are combine to one message to encrypt.<para/>
+        /// it can contain none or some token security buffer, in which the signature will be stored.
+        /// </param>
+        /// <exception cref="ArgumentNullException">the securityBuffers must not be null</exception>
         void Encrypt(params SecurityBuffer[] securityBuffers);
 
+        /// <summary>
+        /// This takes the given SecBuffers, which are used by SSPI method DecryptMessage.
+        /// </summary>
+        /// <param name="securityBuffers">
+        /// the security buffer array to decrypt.<para/>
+        /// it can contain none or some data security buffer, that are combine to one message to decrypt.<para/>
+        /// it can contain none or some token security buffer, in which the signature is stored.
+        /// </param>
+        /// <returns>the encrypt result, if verify, it's the verify result.</returns>
+        /// <exception cref="ArgumentNullException">the securityBuffers must not be null</exception>
         bool Decrypt(params SecurityBuffer[] securityBuffers);
     }
 }
