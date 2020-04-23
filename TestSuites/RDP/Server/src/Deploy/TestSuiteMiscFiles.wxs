@@ -24,6 +24,7 @@
 	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpeudp.dll" />
 	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdprfx.dll" />
 	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_CryptoLib.dll" />
+    <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.dll" />
 	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_Sspi.dll" />
     <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_SspiLib.dll"/>
     <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_SspiService.dll"/>
@@ -41,6 +42,7 @@
 	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpeudp.pdb" />
 	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdprfx.pdb" />
 	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_CryptoLib.pdb" />
+    <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.pdb" />
 	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_Sspi.pdb" />
     <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_SspiLib.pdb"/>
     <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_SspiService.pdb"/>
@@ -104,6 +106,11 @@
       <Component Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdprfx.dll" Guid="{C0700484-8C00-4F55-9B9E-0738151AEC3E}">
         <File Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdprfx.dll"
               Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx.dll" />
+      </Component>
+
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.dll" Guid="{58B3D860-053F-4624-9E36-9879C1E25D34}">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.dll" 
+              Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.dll" />
       </Component>
 
       <Component Id="Microsoft_Protocols_TestTools_StackSdk_Security_Sspi.dll" Guid="{A4DCD01B-138F-4708-9B57-EFEDBEE21EDF}">
@@ -184,6 +191,11 @@
       <Component Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdprfx.pdb" Guid="{4A2BCD69-677F-422C-A791-EBD2E7134140}">
         <File Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdprfx.pdb"
               Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx.pdb" />
+      </Component>
+
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.pdb" Guid="{BD158C52-F6BA-4544-ABBB-D4F1FB6F8EC6}">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.pdb" 
+              Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.pdb" />
       </Component>
 
       <Component Id="Microsoft_Protocols_TestTools_StackSdk_Security_Sspi.pdb" Guid="{73988523-325C-4893-B707-4FE5427171CC}">
