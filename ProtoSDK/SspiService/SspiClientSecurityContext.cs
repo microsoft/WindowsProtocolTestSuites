@@ -204,7 +204,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
         /// AcquireCredentialsHandle
         /// </summary>
         /// <param name="accountCredential"></param>
-        /// <returns>Security Context</returns>
         protected void AcquireCredentialsHandle<T>(T accountCredential)
         {
             switch (packageType)

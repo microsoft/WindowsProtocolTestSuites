@@ -24,7 +24,7 @@
 	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpeudp.dll" />
 	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdprfx.dll" />
 	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_CryptoLib.dll" />
-    <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.dll" />
+    <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_Nlmp.dll" />
 	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_Sspi.dll" />
     <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_SspiLib.dll"/>
     <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_SspiService.dll"/>
@@ -42,7 +42,7 @@
 	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpeudp.pdb" />
 	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdprfx.pdb" />
 	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_CryptoLib.pdb" />
-    <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.pdb" />
+    <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_Nlmp.pdb" />
 	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_Sspi.pdb" />
     <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_SspiLib.pdb"/>
     <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_SspiService.pdb"/>
@@ -108,8 +108,8 @@
               Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx.dll" />
       </Component>
 
-      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.dll" Guid="{58B3D860-053F-4624-9E36-9879C1E25D34}">
-        <File Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.dll" 
+      <Component Id="Microsoft_Protocols_TestTools_StackSdk_Security_Nlmp.dll" Guid="{58B3D860-053F-4624-9E36-9879C1E25D34}">
+        <File Id="Microsoft_Protocols_TestTools_StackSdk_Security_Nlmp.dll" 
               Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.dll" />
       </Component>
 
@@ -193,8 +193,8 @@
               Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx.pdb" />
       </Component>
 
-      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.pdb" Guid="{BD158C52-F6BA-4544-ABBB-D4F1FB6F8EC6}">
-        <File Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.pdb" 
+      <Component Id="Microsoft_Protocols_TestTools_StackSdk_Security_Nlmp.pdb" Guid="{BD158C52-F6BA-4544-ABBB-D4F1FB6F8EC6}">
+        <File Id="Microsoft_Protocols_TestTools_StackSdk_Security_Nlmp.pdb" 
               Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.pdb" />
       </Component>
 
