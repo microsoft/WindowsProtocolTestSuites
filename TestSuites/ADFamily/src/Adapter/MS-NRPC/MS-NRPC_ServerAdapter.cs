@@ -20,11 +20,12 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
     using Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp;
     using Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc;
     using Microsoft.Protocols.TestTools.StackSdk.Security.Samr;
-    using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+    using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
     using Microsoft.Protocols.TestSuites.ActiveDirectory.Common;
     using System.DirectoryServices.Protocols;
     using System.Threading;
     using System.Security.Principal;
+    using Microsoft.Protocols.TestTools.StackSdk.Security.SspiService;
 
     /// <summary>
     /// Implementation class of Protocol Adapter methods.

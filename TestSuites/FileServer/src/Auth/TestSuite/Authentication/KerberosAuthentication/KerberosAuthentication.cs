@@ -10,6 +10,7 @@ using Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic;
 using Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Spng;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -104,10 +105,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
 
             switch (TestConfig.DefaultSecurityPackage)
             {
-                case TestTools.StackSdk.Security.Sspi.SecurityPackageType.Negotiate:
+                case SecurityPackageType.Negotiate:
                     GssToken = KerberosConstValue.GSSToken.GSSSPNG;
                     break;
-                case TestTools.StackSdk.Security.Sspi.SecurityPackageType.Kerberos:
+                case SecurityPackageType.Kerberos:
                     GssToken = KerberosConstValue.GSSToken.GSSAPI;
                     break;
                 default:

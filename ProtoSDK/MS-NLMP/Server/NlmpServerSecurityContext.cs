@@ -6,7 +6,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
 {
@@ -404,7 +404,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
 
 
         /// <summary>
-        /// Encrypts Message. User decides what SecBuffers are used.
+        /// Verify Message
         /// </summary>
         /// <param name="securityBuffers">
         /// the security buffer array to verify.<para/>
@@ -977,6 +977,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
             // initialize handles
             NlmpUtility.RC4Init(this.nlmpServer.Context.ClientHandle, this.nlmpServer.Context.ClientSealingKey);
             NlmpUtility.RC4Init(this.nlmpServer.Context.ServerHandle, this.nlmpServer.Context.ServerSealingKey);
+        }
+
+        public override object QueryContextAttributes(string contextAttribute)
+        {
+            throw new NotImplementedException();
         }
 
 

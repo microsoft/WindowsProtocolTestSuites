@@ -83,9 +83,9 @@
       <Project>{A5814E1E-D79C-49A9-A8EA-BA8ED6E0EB39}</Project>
       <Name>Rpce</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Sspi\Sspi.csproj">
-      <Project>{D0CB354B-2CD3-49C1-8ECA-2F6EBADBCCEE}</Project>
-      <Name>Sspi</Name>
+    <ProjectReference Include="..\SspiLib\SspiLib.csproj">
+      <Project>{e64bf20f-11d2-49f6-a25b-f4378ab38180}</Project>
+      <Name>SspiLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

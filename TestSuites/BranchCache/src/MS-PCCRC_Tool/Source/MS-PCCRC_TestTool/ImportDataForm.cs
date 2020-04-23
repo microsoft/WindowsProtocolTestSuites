@@ -20,7 +20,7 @@ namespace MS_PCCRC_TestTool
     using Microsoft.Protocols.TestTools.StackSdk.CommonStack.Enum;
     using Microsoft.Protocols.TestTools.StackSdk.CommonStack;
     using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
-    using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+    using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 
     public partial class ImportDataForm : Form
     {

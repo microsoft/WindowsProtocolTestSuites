@@ -7,6 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 using Microsoft.Protocols.TestTools.StackSdk.Dtyp;
 using Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
 {

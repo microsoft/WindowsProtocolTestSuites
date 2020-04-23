@@ -4,7 +4,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
 {
@@ -513,6 +513,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
             }
 
             // Release unmanaged resources.
+        }
+
+        public override object QueryContextAttributes(string contextAttribute)
+        {
+            throw new NotImplementedException();
         }
 
 

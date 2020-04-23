@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -13,7 +14,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
     /// Supports DTLS 1.0
     /// Invokes InitializeSecurityContext function of SSPI
     /// </summary>
-    public class DtlsClientSecurityContext : SspiClientSecurityContext
+    public class DtlsClientSecurityContext : SspiClientSecurityContext, IDtlsClientSecurityContext
     {
         bool bStreamSizes;
         SecurityPackageContextStreamSizes dtlsStreamSizes;
@@ -105,14 +106,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
             {
                 //First Initialize, only token
                 outSecurityBuffers = new SecurityBuffer[1];
-                outSecurityBuffers[0] = new SecurityBuffer(SecurityBufferType.Token, new byte[NativeMethods.MAX_TOKEN_SIZE]);
+                outSecurityBuffers[0] = new SecurityBuffer(SecurityBufferType.Token, new byte[Consts.MAX_TOKEN_SIZE]);
             }
             else
             { 
                 //Token and Ablert
                 outSecurityBuffers = new SecurityBuffer[2];
-                outSecurityBuffers[0] = new SecurityBuffer(SecurityBufferType.Token, new byte[NativeMethods.MAX_TOKEN_SIZE]);
-                outSecurityBuffers[1] = new SecurityBuffer(SecurityBufferType.Alert, new byte[NativeMethods.MAX_TOKEN_SIZE]);
+                outSecurityBuffers[0] = new SecurityBuffer(SecurityBufferType.Token, new byte[Consts.MAX_TOKEN_SIZE]);
+                outSecurityBuffers[1] = new SecurityBuffer(SecurityBufferType.Alert, new byte[Consts.MAX_TOKEN_SIZE]);
             }
             SecurityBufferDescWrapper outBufferDescWrapper = new SecurityBufferDescWrapper(outSecurityBuffers);
             
@@ -211,6 +212,5 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
             }
             outBufferDescWrapper.FreeSecurityBufferDesc();
         }
-
     }
 }

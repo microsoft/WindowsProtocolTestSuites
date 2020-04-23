@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using Microsoft.Protocols.TestManager.BranchCachePlugin;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 
 namespace Microsoft.Protocols.TestManager.Detector
 {

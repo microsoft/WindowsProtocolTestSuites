@@ -5,7 +5,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
+namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib
 {
     /// <summary>
     /// The CERT_CONTEXT structure contains both the encoded and decoded representations of a certificate. A 
@@ -42,7 +42,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// Constructor
         /// </summary>
         /// <param name="certContext">Cert context</param>    
-        internal CertContext(SspiCertContext certContext)
+        public CertContext(SspiCertContext certContext)
         {
             this.CertEncodingType = certContext.dwCertEncodingType;
             this.CertEncoded = new byte[certContext.cbCertEncoded];

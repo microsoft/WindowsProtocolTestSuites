@@ -9,7 +9,8 @@ using System.Net;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiService;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 {

@@ -108,32 +108,13 @@
     <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="CertContext.cs" />
-    <Compile Include="CertificateCredential.cs" />
-    <Compile Include="ClientSecurityContext.cs" />
-    <Compile Include="CredSspCred.cs" />
     <Compile Include="DTLS\DtlsClientSecurityContext.cs" />
     <Compile Include="DTLS\DtlsServerSecurityContext.cs" />
-    <Compile Include="MachineAccountCredential.cs" />
-    <Compile Include="SecurityConfig.cs" />
-    <Compile Include="SecurityPackageContextIssuerListInfo.cs" />
-    <Compile Include="SecurityPackageContextKeyInfo.cs" />
     <Compile Include="SecurityPackageContextNativeNames.cs" />
     <Compile Include="SecurityPackageContextNegotiationInfo.cs" />
-    <Compile Include="SecurityPackageContextSizes.cs" />
-    <Compile Include="SecurityPackageInformation.cs" />
-    <Compile Include="ServerSecurityContext.cs" />
-    <Compile Include="SspiClientSecurityConfig.cs" />
     <Compile Include="SspiClientSecurityContext.cs" />
-    <Compile Include="ICredential.cs" />
-    <Compile Include="Enums.cs" />
     <Compile Include="NativeMethods.cs" />
-    <Compile Include="SspiException.cs" />
-    <Compile Include="SecurityBuffer.cs" />
-    <Compile Include="SecurityContext.cs" />
-    <Compile Include="SspiServerSecurityConfig.cs" />
     <Compile Include="SspiServerSecurityContext.cs" />
-    <Compile Include="AccountCredential.cs" />
     <Compile Include="SspiStructures.cs" />
     <Compile Include="SspiUtility.cs" />
   </ItemGroup>
@@ -141,6 +122,10 @@
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{FE653643-6342-4300-871E-683C7BA31494}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SspiLib\SspiLib.csproj">
+      <Project>{e64bf20f-11d2-49f6-a25b-f4378ab38180}</Project>
+      <Name>SspiLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -141,9 +141,9 @@
       <Project>{c7f08825-d3c9-4ddd-9ba3-06733b1abe36}</Project>
       <Name>Smb2</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\ProtoSDK\Sspi\Sspi.csproj">
-      <Project>{d0cb354b-2cd3-49c1-8eca-2f6ebadbccee}</Project>
-      <Name>Sspi</Name>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\SspiLib\SspiLib.csproj">
+      <Project>{e64bf20f-11d2-49f6-a25b-f4378ab38180}</Project>
+      <Name>SspiLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\ProtoSDK\TransportStack\TransportStack.csproj">
       <Project>{967d976a-c792-4893-9235-14615ae1ff58}</Project>

@@ -13,7 +13,7 @@ using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.Transport;
 using Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts;
 using Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.Asn1CodecV3;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using Microsoft.Protocols.TestSuites.ActiveDirectory.Common;
 using Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr;
 

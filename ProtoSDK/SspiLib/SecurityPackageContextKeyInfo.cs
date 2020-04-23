@@ -1,10 +1,9 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
 using System.Runtime.InteropServices;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
+namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib
 {
     /// <summary>
     /// The SecPkgContext_KeyInfo structure contains information about the session keys used in a security context.
@@ -43,7 +42,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// Constructor. Convert SspiSecurityPackageContextKeyInfo to SecurityPackageContextKeyInfo.
         /// </summary>
         /// <param name="contextKeyInfo"></param>
-        internal SecurityPackageContextKeyInfo(SspiSecurityPackageContextKeyInfo contextKeyInfo)
+        public SecurityPackageContextKeyInfo(SspiSecurityPackageContextKeyInfo contextKeyInfo)
         {
             this.SignatureAlgorithmName = Marshal.PtrToStringUni(contextKeyInfo.sEncryptAlgorithmName);
             this.EncryptAlgorithmName = Marshal.PtrToStringUni(contextKeyInfo.sSignatureAlgorithmName);

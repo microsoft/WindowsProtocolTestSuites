@@ -89,6 +89,10 @@
       <Project>{e471f558-bb6d-4317-81f8-8fd755afefdc}</Project>
       <Name>Srvs</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\SspiLib\SspiLib.csproj">
+      <Project>{E64BF20F-11D2-49F6-A25B-F4378AB38180}</Project>
+      <Name>SspiLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\Sspi\Sspi.csproj">
       <Project>{d0cb354b-2cd3-49c1-8eca-2f6ebadbccee}</Project>
       <Name>Sspi</Name>

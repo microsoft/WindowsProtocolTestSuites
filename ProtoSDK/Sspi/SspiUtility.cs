@@ -7,6 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using System.Globalization;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
 {
@@ -741,7 +742,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
             SecurityWinntAuthIdentity authIdentity = new SecurityWinntAuthIdentity(accountCredential);
             IntPtr pAuthData = IntPtr.Zero;
             SchannelCred schannelCred = new SchannelCred();
-            schannelCred.dwVersion = NativeMethods.SCHANNEL_CRED_VERSION;
+            schannelCred.dwVersion = Consts.SCHANNEL_CRED_VERSION;
             schannelCred.cCreds = 0;
             schannelCred.paCred = IntPtr.Zero;
             CredSspCred credSsp = new CredSspCred();

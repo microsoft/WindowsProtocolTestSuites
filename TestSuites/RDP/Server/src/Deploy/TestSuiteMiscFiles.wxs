@@ -10,41 +10,45 @@
     <!-- Files to be installed to test suite. -->
     <!-- Source code and files in drop folder are automatically installed. -->
     <ComponentGroup Id="TESTSUITE_MISC_FILES">      
-      <ComponentRef Id="ServerLocal_testsettings"/>
+	  <ComponentRef Id="ServerLocal_testsettings"/>
 	  
 	  <ComponentRef Id="RDP_ServerAdapter.dll" />
 	  <ComponentRef Id="RDP_ServerTestSuite.dll" />
-      <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Asn1Base.dll" />
-      <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk.dll" />
-      <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Messages.dll" />
-      <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpbcgr.dll" />
-      <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpedyc.dll" />
-      <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpele.dll" />
-      <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpemt.dll" />
-      <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpeudp.dll" />
-      <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdprfx.dll" />
-      <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_CryptoLib.dll" />
+	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Asn1Base.dll" />
+	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk.dll" />
+	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Messages.dll" />
+	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpbcgr.dll" />
+	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpedyc.dll" />
+	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpele.dll" />
+	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpemt.dll" />
+	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpeudp.dll" />
+	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdprfx.dll" />
+	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_CryptoLib.dll" />
 	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_Sspi.dll" />
-      <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Transport.dll" />
+    <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_SspiLib.dll"/>
+    <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_SspiService.dll"/>
+	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Transport.dll" />
 
 	  <ComponentRef Id="RDP_ServerAdapter.pdb" />
 	  <ComponentRef Id="RDP_ServerTestSuite.pdb" />
-      <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Asn1Base.pdb" />
-      <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk.pdb" />
-      <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Messages.pdb" />
-      <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpbcgr.pdb" />
-      <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpedyc.pdb" />
-      <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpele.pdb" />
-      <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpemt.pdb" />
-      <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpeudp.pdb" />
-      <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdprfx.pdb" />
-      <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_CryptoLib.pdb" />
+	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Asn1Base.pdb" />
+	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk.pdb" />
+	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Messages.pdb" />
+	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpbcgr.pdb" />
+	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpedyc.pdb" />
+	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpele.pdb" />
+	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpemt.pdb" />
+	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpeudp.pdb" />
+	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdprfx.pdb" />
+	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_CryptoLib.pdb" />
 	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_Sspi.pdb" />
-      <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Transport.pdb" />
+    <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_SspiLib.pdb"/>
+    <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_SspiService.pdb"/>
+	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Transport.pdb" />
 	  
 	  <ComponentRef Id="RDP_ServerTestSuite.deployment.ptfconfig" />
 	  <ComponentRef Id="RDP_ServerTestSuite.ptfconfig" />
-    </ComponentGroup>
+	  </ComponentGroup>
 
     <DirectoryRef Id="TESTSUITE_BIN_DIR">      
       <Component Id="ServerLocal_testsettings" Guid="{8936CECF-BA09-4FBE-8851-47E3C25EC49E}">
@@ -105,6 +109,16 @@
       <Component Id="Microsoft_Protocols_TestTools_StackSdk_Security_Sspi.dll" Guid="{A4DCD01B-138F-4708-9B57-EFEDBEE21EDF}">
         <File Id="Microsoft_Protocols_TestTools_StackSdk_Security_Sspi.dll"
               Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Sspi.dll" />
+      </Component>
+
+      <Component Id="Microsoft_Protocols_TestTools_StackSdk_Security_SspiLib.dll" Guid="{8C1711D1-6C08-410D-A905-BAD4340DA6EA}">
+        <File Id="Microsoft_Protocols_TestTools_StackSdk_Security_SspiLib.dll" 
+              Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib.dll" />
+      </Component>
+
+      <Component Id="Microsoft_Protocols_TestTools_StackSdk_Security_SspiService.dll" Guid="{8D9344FE-24C3-4D29-95E6-24EBBB8D628E}">
+        <File Id="Microsoft_Protocols_TestTools_StackSdk_Security_SspiService.dll" 
+              Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.SspiService.dll" />
       </Component>
 
       <Component Id="Microsoft_Protocols_TestTools_StackSdk_Transport.dll" Guid="{A2DF0DB7-0CF8-4814-866F-3AB37358A7A3}">
@@ -175,6 +189,16 @@
       <Component Id="Microsoft_Protocols_TestTools_StackSdk_Security_Sspi.pdb" Guid="{73988523-325C-4893-B707-4FE5427171CC}">
         <File Id="Microsoft_Protocols_TestTools_StackSdk_Security_Sspi.pdb"
               Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Sspi.pdb" />
+      </Component>
+
+      <Component Id="Microsoft_Protocols_TestTools_StackSdk_Security_SspiLib.pdb" Guid="{601D331B-F03F-4801-A3B5-1511B0E0CDD2}">
+        <File Id="Microsoft_Protocols_TestTools_StackSdk_Security_SspiLib.pdb" 
+              Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib.pdb" />
+      </Component>
+
+      <Component Id="Microsoft_Protocols_TestTools_StackSdk_Security_SspiService.pdb" Guid="{CA72E5B7-F287-4968-88F1-C9AFF7721468}">
+        <File Id="Microsoft_Protocols_TestTools_StackSdk_Security_SspiService.pdb" 
+              Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.SspiService.pdb" />
       </Component>
 
       <Component Id="Microsoft_Protocols_TestTools_StackSdk_Transport.pdb" Guid="{39CF96E4-EA7E-45B1-86D4-C669BFB3C6BE}">

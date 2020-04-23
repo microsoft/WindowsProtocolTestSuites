@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
 {
@@ -470,6 +470,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc
             nlAuthMessage.Buffer = BitConverter.GetBytes(NULL);
 
             return nlAuthMessage;
+        }
+
+        public override object QueryContextAttributes(string contextAttribute)
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

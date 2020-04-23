@@ -194,9 +194,9 @@
       <Project>{9dd86de1-3231-4713-9b45-493f4fe4199c}</Project>
       <Name>Rdprfx</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Sspi\Sspi.csproj">
-      <Project>{D0CB354B-2CD3-49C1-8ECA-2F6EBADBCCEE}</Project>
-      <Name>Sspi</Name>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\SspiLib\SspiLib.csproj">
+      <Project>{e64bf20f-11d2-49f6-a25b-f4378ab38180}</Project>
+      <Name>SspiLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\Adapter\RDP_ClientAdapter.csproj">
       <Project>{407A6664-47AB-44DA-9917-ECB50F879772}</Project>
