@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Reflection;
 
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using Microsoft.Protocols.TestTools.StackSdk.Transport;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs

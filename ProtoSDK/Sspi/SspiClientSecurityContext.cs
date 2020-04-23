@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
@@ -233,7 +234,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
 
             SecurityBuffer outTokenBuffer = new SecurityBuffer(
                 SecurityBufferType.Token,
-                new byte[NativeMethods.MAX_TOKEN_SIZE]);
+                new byte[Consts.MAX_TOKEN_SIZE]);
 
             SecurityBufferDescWrapper serverTokenDescWrapper = new SecurityBufferDescWrapper(securityBuffers);
             SecurityBufferDescWrapper outBufferDescWrapper = new SecurityBufferDescWrapper(outTokenBuffer);
@@ -376,7 +377,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <returns>The attribute value</returns>
         /// <exception cref="SspiException">If QueryContextAttributes fail, this exception will be thrown.</exception>
         [SecurityPermission(SecurityAction.Demand)]
-        public object QueryContextAttributes(string contextAttribute)
+        public override object QueryContextAttributes(string contextAttribute)
         {
             return SspiUtility.QueryContextAttributes(ref this.contextHandle, contextAttribute);
         }

@@ -8,7 +8,7 @@ using System.Net.Sockets;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Microsoft.Protocols.TestTools.StackSdk;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Swn

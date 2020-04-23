@@ -90,9 +90,13 @@
       <Project>{a8243614-5c27-4115-a150-582b411011dc}</Project>
       <Name>Rdpeudp</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Sspi\Sspi.csproj">
-      <Project>{d0cb354b-2cd3-49c1-8eca-2f6ebadbccee}</Project>
-      <Name>Sspi</Name>
+    <ProjectReference Include="..\SspiLib\SspiLib.csproj">
+      <Project>{E64BF20F-11D2-49F6-A25B-F4378AB38180}</Project>
+      <Name>SspiLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SspiService\SspiService.csproj">
+      <Project>{1FC8C336-EF82-4F7C-9532-AB8AB268916E}</Project>
+      <Name>SspiService</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

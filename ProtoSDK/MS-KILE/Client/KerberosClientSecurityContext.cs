@@ -8,7 +8,7 @@ using System.Net;
 using System.Net.Sockets;
 
 using Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using Microsoft.Protocols.TestTools.StackSdk.Asn1;
 using Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib;
 
@@ -497,6 +497,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
 
             // Take this object out of the finalization queue of the GC:
             GC.SuppressFinalize(this);
+        }
+
+        public override object QueryContextAttributes(string contextAttribute)
+        {
+            throw new NotImplementedException();
         }
 
 

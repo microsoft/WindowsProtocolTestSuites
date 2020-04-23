@@ -2,11 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 
-using Microsoft.Protocols.TestTools.StackSdk;
-
-namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
+namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib
 {
     /// <summary>
     /// An abstract class to store security context used in SSPI.
@@ -26,8 +23,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         {
             SecurityBuffer messageBuffer = new SecurityBuffer(SecurityBufferType.Data, messageToBeSigned);
             SecurityBuffer tokenBuffer = new SecurityBuffer(
-                SecurityBufferType.Token, 
-                new byte[NativeMethods.MAX_TOKEN_SIZE]);
+                SecurityBufferType.Token,
+                new byte[Consts.MAX_TOKEN_SIZE]);
 
             Sign(messageBuffer, tokenBuffer);
             return tokenBuffer.Buffer;
@@ -53,8 +50,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         {
             SecurityBuffer messageBuffer = new SecurityBuffer(SecurityBufferType.Data, messageToBeSigned);
             SecurityBuffer signatureBuffer = new SecurityBuffer(
-                SecurityBufferType.Token, 
-                new byte[NativeMethods.MAX_TOKEN_SIZE]);
+                SecurityBufferType.Token,
+                new byte[Consts.MAX_TOKEN_SIZE]);
 
             Sign(messageBuffer, signatureBuffer);
 
@@ -111,7 +108,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
                     "Value of message header is not consistent with the actual length of message.",
                     "messageToBeVerified");
             }
-            
+
             //Remove header.
             byte[] messageBody = new byte[messageToBeVerified.Length - sizeof(int)];
 
@@ -131,8 +128,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         {
             SecurityBuffer messageBuffer = new SecurityBuffer(SecurityBufferType.Data, messageToBeEncrypted);
             SecurityBuffer tokenBuffer = new SecurityBuffer(
-                SecurityBufferType.Token, 
-                new byte[NativeMethods.MAX_TOKEN_SIZE]);
+                SecurityBufferType.Token,
+                new byte[Consts.MAX_TOKEN_SIZE]);
 
             Encrypt(messageBuffer, tokenBuffer);
             signature = tokenBuffer.Buffer;
@@ -167,7 +164,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
                 BitConverter.GetBytes(messageLength),
                 encryptedMessage,
                 signature);
-            
+
             return message;
         }
 
@@ -194,7 +191,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// </summary>
         /// <param name="securityBuffers">SecBuffer.Encrypted data will be filled in SecBuffers.</param>
         /// <returns>If successful, returns true, otherwise false.</returns>
-        /// <exception cref="SspiException">If sign fail, this exception will be thrown.</exception>
+        /// <exception cref="SspiException">If decrypt fail, this exception will be thrown.</exception>
         public abstract bool Decrypt(params SecurityBuffer[] securityBuffers);
 
 
@@ -215,7 +212,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
             if (!SspiUtility.VerifyMessageHeader(messageToBeDecrypted))
             {
                 throw new ArgumentException(
-                    "Value of message header is not consistent with the actual length of message.", 
+                    "Value of message header is not consistent with the actual length of message.",
                     "messageToBeDecrypted");
             }
 
@@ -226,6 +223,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
 
             return Decrypt(message, signature);
         }
+
+        public abstract object QueryContextAttributes(string contextAttribute);
 
         #endregion
 
@@ -250,7 +249,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
 
 
         /// <summary>
-        /// Whether to continue process.
+        /// Whether to continue processing.
         /// </summary>
         public abstract bool NeedContinueProcessing
         {

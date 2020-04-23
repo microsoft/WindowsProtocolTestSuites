@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
+namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib
 {
     /// <summary>
     /// MachineAccountCredential contains credential (DomainName, MachineName, AccountName, Password) 
@@ -75,8 +75,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// Thrown when domainName, machineName, accountName or accountPassword is null.
         /// </exception>
         public MachineAccountCredential(
-            string domainName, 
-            string machineName, 
+            string domainName,
+            string machineName,
             string accountName,
             string accountPassword) :
             base(domainName, accountName, accountPassword)

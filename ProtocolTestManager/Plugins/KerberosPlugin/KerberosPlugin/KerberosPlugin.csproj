@@ -131,6 +131,10 @@
       <Project>{F1EDA208-50B6-4501-A9D8-D18D3434D587}</Project>
       <Name>KerberosLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\SspiLib\SspiLib.csproj">
+      <Project>{e64bf20f-11d2-49f6-a25b-f4378ab38180}</Project>
+      <Name>SspiLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\PropertyValueDetector\PropertyValueDetector.csproj">
       <Project>{7982acf0-f1a4-4996-a339-641cafa093ce}</Project>
       <Name>PropertyValueDetector</Name>
@@ -162,10 +166,6 @@
     <ProjectReference Include="..\..\..\..\ProtoSDK\MS-SMB2\Smb2.csproj">
       <Project>{c7f08825-d3c9-4ddd-9ba3-06733b1abe36}</Project>
       <Name>Smb2</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\ProtoSDK\Sspi\Sspi.csproj">
-      <Project>{d0cb354b-2cd3-49c1-8eca-2f6ebadbccee}</Project>
-      <Name>Sspi</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\ProtoSDK\TransportStack\TransportStack.csproj">
       <Project>{967d976a-c792-4893-9235-14615ae1ff58}</Project>

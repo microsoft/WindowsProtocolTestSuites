@@ -122,6 +122,10 @@
       <Project>{C3C96860-5D29-4797-A311-CC568CC8B699}</Project>
       <Name>Smb</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SspiLib\SspiLib.csproj">
+      <Project>{E64BF20F-11D2-49F6-A25B-F4378AB38180}</Project>
+      <Name>SspiLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Sspi\Sspi.csproj">
       <Project>{D0CB354B-2CD3-49C1-8ECA-2F6EBADBCCEE}</Project>
       <Name>Sspi</Name>

@@ -267,9 +267,9 @@
       <Project>{FE653643-6342-4300-871E-683C7BA31494}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Sspi\Sspi.csproj">
-      <Project>{d0cb354b-2cd3-49c1-8eca-2f6ebadbccee}</Project>
-      <Name>Sspi</Name>
+    <ProjectReference Include="..\SspiLib\SspiLib.csproj">
+      <Project>{E64BF20F-11D2-49F6-A25B-F4378AB38180}</Project>
+      <Name>SspiLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\TransportStack\TransportStack.csproj">
       <Project>{F8CDC462-0754-4BEA-B048-33AC1A5855C4}</Project>

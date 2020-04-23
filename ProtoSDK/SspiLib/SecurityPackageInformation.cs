@@ -1,11 +1,9 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
 using System.Runtime.InteropServices;
-using System.Security.Permissions;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
+namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib
 {
     /// <summary>
     /// The SecPkgInfo structure provides general information about a security package, such as its name 
@@ -49,7 +47,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// Constructor. Convert SspiSecurityPackageInformation to SecurityPackageInformation.
         /// </summary>
         /// <param name="securityPackageInfo">Security package info</param>
-        internal SecurityPackageInformation(SspiSecurityPackageInformation securityPackageInfo)
+        public SecurityPackageInformation(SspiSecurityPackageInformation securityPackageInfo)
         {
             this.Capabilities = securityPackageInfo.fCapabilities;
             this.Version = securityPackageInfo.wVersion;

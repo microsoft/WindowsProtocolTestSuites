@@ -12,7 +12,7 @@ using System.Text;
 
 using Microsoft.Protocols.TestTools.StackSdk.Messages;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
 {

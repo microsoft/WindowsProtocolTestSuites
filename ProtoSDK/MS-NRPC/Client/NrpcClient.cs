@@ -17,7 +17,7 @@ using Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Pac;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Samr;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;

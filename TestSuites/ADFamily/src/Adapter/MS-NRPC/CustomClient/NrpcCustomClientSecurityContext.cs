@@ -6,7 +6,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
     using System;
     using Microsoft.Protocols.TestTools.StackSdk;
     using Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc;
-    using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+    using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 
     /// <summary>
     ///  NRPC client Security Support Provider Interface (SSPI).

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -53,41 +54,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// Time at which the context will expire.
         /// </summary>
         public SecurityInteger tsExpiry;
-    }
-
-    /// <summary>
-    /// The SecPkgContext_StreamSizes structure indicates the sizes of the various stream components for use with the 
-    /// message support functions. 
-    /// http://msdn.microsoft.com/en-us/library/aa380098(v=VS.85).aspx
-    /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
-    public struct SecurityPackageContextStreamSizes
-    {
-        /// <summary>
-        /// Specifies the size, in bytes, of the header portion. If zero, no header is used.
-        /// </summary>
-        public uint Header;
-
-        /// <summary>
-        /// Specifies the maximum size, in bytes, of the trailer portion. If zero, no trailer is used.
-        /// </summary>
-        public uint Trailer;
-
-        /// <summary>
-        /// Specifies the size, in bytes, of the largest message that can be encapsulated.
-        /// </summary>
-        public uint MaximumMessage;
-
-        /// <summary>
-        /// Specifies the number of buffers to pass.
-        /// </summary>
-        public uint Buffers;
-
-        /// <summary>
-        /// Specifies the preferred integral size of the messages. For example, eight indicates that messages should be
-        /// of size zero mod eight for optimal performance. Messages other than this block size can be padded.
-        /// </summary>
-        public uint BlockSize;
     }
 
     /// <summary>
@@ -269,7 +235,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
             //There is 1 structures in the paCred array.
             const uint CountOfCred = 1;
 
-            this.dwVersion = NativeMethods.SCHANNEL_CRED_VERSION;
+            this.dwVersion = Consts.SCHANNEL_CRED_VERSION;
             if (credential != null && credential.Certificate != null)
             {
                 this.cCreds = CountOfCred;
@@ -292,7 +258,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
             this.dwSessionLifespan = 0;
             if (credential == null || credential.Certificate == null)
             {
-                this.dwFlags = NativeMethods.SCH_CRED_MANUAL_CRED_VALIDATION | NativeMethods.SCH_CRED_NO_DEFAULT_CREDS;
+                this.dwFlags = Consts.SCH_CRED_MANUAL_CRED_VALIDATION | Consts.SCH_CRED_NO_DEFAULT_CREDS;
             }
             else
             {
@@ -332,7 +298,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// <param name="secBuffers">SecBuffer array</param>
         internal SecurityBufferDesc(params SecurityBuffer[] secBuffers)
         {
-            this.ulVersion = NativeMethods.SECBUFFER_VERSION;
+            this.ulVersion = Consts.SECBUFFER_VERSION;
             this.cBuffers = 0;
             this.pBuffers = IntPtr.Zero;
 
@@ -588,41 +554,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
     }
 
     /// <summary>
-    /// The SecPkgContext_KeyInfo structure contains information about the session keys used in a security context.
-    /// http://msdn.microsoft.com/en-us/library/aa380086(v=VS.85).aspx
-    /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct SspiSecurityPackageContextKeyInfo
-    {
-        /// <summary>
-        /// Pointer to a null-terminated string that contains the name, if available, of the algorithm used for 
-        /// generating signatures, for example "MD5" or "SHA-2".
-        /// </summary>
-        internal IntPtr sSignatureAlgorithmName;
-
-        /// <summary>
-        /// Pointer to a null-terminated string that contains the name, if available, of the algorithm used for 
-        /// encrypting messages. Reserved for future use.
-        /// </summary>
-        internal IntPtr sEncryptAlgorithmName;
-
-        /// <summary>
-        /// Specifies the effective key length, in bits, for the session key. This is typically 40, 56, or 128 bits.
-        /// </summary>
-        internal uint KeySize;
-
-        /// <summary>
-        /// Specifies the algorithm identifier (ALG_ID) used for generating signatures, if available.
-        /// </summary>
-        internal uint SignatureAlgorithm;
-
-        /// <summary>
-        /// Specifies the algorithm identifier (ALG_ID) used for encrypting messages. Reserved for future use.
-        /// </summary>
-        internal uint EncryptAlgorithm;
-    }
-
-    /// <summary>
     /// The SecPkgContext_Authority structure contains the name of the authenticating authority if one is available.
     /// It can be a certification authority (CA) or the name of a server or domain that authenticated the connection. 
     /// http://msdn.microsoft.com/en-us/library/aa379818(v=VS.85).aspx
@@ -634,46 +565,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         /// Pointer to a null-terminated string containing the name of the authenticating authority, if available.
         /// </summary>
         internal IntPtr sAuthorityName;
-    }
-
-    /// <summary>
-    /// The SecPkgInfo structure provides general information about a security package, such as its name 
-    /// and capabilities.
-    /// http://msdn.microsoft.com/en-us/library/aa380104(v=VS.85).aspx
-    /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct SspiSecurityPackageInformation
-    {
-        /// <summary>
-        /// Set of bit flags that describes the capabilities of the security package. 
-        /// </summary>
-        internal uint fCapabilities;
-
-        /// <summary>
-        /// Specifies the version of the package protocol. Must be 1.
-        /// </summary>
-        internal ushort wVersion;
-
-        /// <summary>
-        /// Specifies a DCE RPC identifier, if appropriate. If the package does not implement one of the DCE registered
-        /// security systems, the reserved value SECPKG_ID_NONE is used.
-        /// </summary>
-        internal ushort wRpcId;
-
-        /// <summary>
-        /// Specifies the maximum size, in bytes, of the token.
-        /// </summary>
-        internal uint cbMaxToken;
-
-        /// <summary>
-        /// Pointer to a null-terminated string that contains the name of the security package.
-        /// </summary>
-        internal IntPtr Name;
-
-        /// <summary>
-        /// Pointer to a null-terminated string. This can be any additional string passed back by the package.
-        /// </summary>
-        internal IntPtr Comment;
     }
 
     /// <summary>
@@ -764,63 +655,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
             }
             return targetInfo;
         }
-    }
-
-    /// <summary>
-    /// The CERT_CONTEXT structure contains both the encoded and decoded representations of a certificate. A 
-    /// certificate context returned by one of the functions defined in Wincrypt.h must be freed by calling the 
-    /// CertFreeCertificateContext function. 
-    /// http://msdn.microsoft.com/en-us/library/aa377189(v=VS.85).aspx
-    /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct SspiCertContext
-    {
-        /// <summary>
-        /// Type of encoding used. It is always acceptable to specify both the certificate and message encoding 
-        /// types by combining them with a bitwise-OR operation.
-        /// </summary>
-        internal uint dwCertEncodingType;
-
-        /// <summary>
-        /// A pointer to a buffer that contains the encoded certificate.
-        /// </summary>
-        internal IntPtr pbCertEncoded;
-
-        /// <summary>
-        /// The size, in bytes, of the encoded certificate.
-        /// </summary>
-        internal uint cbCertEncoded;
-
-        /// <summary>
-        /// The address of a CERT_INFO structure that contains the certificate information.
-        /// </summary>
-        internal IntPtr pCertInfo;
-
-        /// <summary>
-        /// A handle to the certificate store that contains the certificate context.
-        /// </summary>
-        internal IntPtr hCertStore;
-    }
-
-    /// <summary>
-    /// The SecPkgContext_IssuerListInfoEx structure holds a list of trusted certification authorities (CAs).
-    /// This structure is used by the Schannel security package InitializeSecurityContext (Schannel) function.
-    /// This attribute is supported only by the Schannel security support provider (SSP).
-    /// http://msdn.microsoft.com/en-us/library/aa380078(v=VS.85).aspx
-    /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct SspiSecurityPackageContextIssuerListInfo
-    {
-        /// <summary>
-        /// A pointer to an array of CERT_NAME_BLOB structures that contains a list of the names of CAs that the server
-        /// trusts.
-        /// </summary>
-        internal IntPtr aIssuers;
-
-        /// <summary>
-        /// The number of names in aIssuers.
-        /// </summary>
-        internal uint cIssuers;
     }
 
     /// <summary>

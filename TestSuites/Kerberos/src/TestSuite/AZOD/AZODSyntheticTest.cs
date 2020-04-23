@@ -8,7 +8,7 @@ using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.Asn1;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Microsoft.Protocol.TestSuites.Kerberos.TestSuite.AZOD

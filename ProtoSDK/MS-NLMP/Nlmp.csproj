@@ -135,9 +135,9 @@
       <Project>{BF6AFAF0-7592-467F-AD5C-18429D854057}</Project>
       <Name>CryptoLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Sspi\Sspi.csproj">
-      <Project>{D0CB354B-2CD3-49C1-8ECA-2F6EBADBCCEE}</Project>
-      <Name>Sspi</Name>
+    <ProjectReference Include="..\SspiLib\SspiLib.csproj">
+      <Project>{e64bf20f-11d2-49f6-a25b-f4378ab38180}</Project>
+      <Name>SspiLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

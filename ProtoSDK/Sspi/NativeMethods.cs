@@ -12,8 +12,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
     /// </summary>
     internal static class NativeMethods
     {
-        internal const int MAX_TOKEN_SIZE = 12288;
-
         internal const uint SEC_E_OK = 0;
         internal const uint SEC_I_CONTINUE_NEEDED = 0x00090312;
         internal const uint SEC_I_COMPLETE_NEEDED = 0x00090313;
@@ -59,11 +57,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         internal const uint SECPKG_ATTR_EAP_KEY_BLOCK = 0x5b;   // returns SecPkgContext_EapKeyBlock
         internal const uint SECPKG_ATTR_APP_DATA = 0x5e;  // sets/returns SecPkgContext_SessionAppData
 
-        // Specifies the version number of SecBufferDesc.
-        internal const int SECBUFFER_VERSION = 0;
-        //Schannel version
-        internal const uint SCHANNEL_CRED_VERSION = 0x00000004;
-
         //identifiers for schannel, defined in Schannel.h please see 
         //http://msdn.microsoft.com/en-us/library/aa379810(VS.85).aspx
         //Private Communications Technology 1.0 server side. (Obsolete.)
@@ -99,9 +92,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         //DTLS 1.0 client side
         internal const uint SP_PROT_DTLS_CLIENT = 0x00020000;
 
-        //dwFlag values of Schannel_Cred.
-        internal const uint SCH_CRED_MANUAL_CRED_VALIDATION = 0x00000008;
-        internal const uint SCH_CRED_NO_DEFAULT_CREDS = 0x00000010;
         //Identity of Unicode in SEC_WINNT_AUTH_IDENTITY.
         internal const int SEC_WINNT_AUTH_IDENTITY_UNICODE = 0x2;
 
