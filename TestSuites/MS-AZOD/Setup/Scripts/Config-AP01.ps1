@@ -62,6 +62,29 @@ Function ConfigFileServer
     {
 	    .\Write-Info.ps1 "$dataFile not found. Will keep the default setting of all the test context info..."
     }
+    Install-WindowsFeature RSAT-AD-PowerShell
+    Import-Module ActiveDirectory
+    
+    $domainName = (Get-WmiObject win32_computersystem).Domain
+    # Retry to wait until the ADWS can respond to PowerShell commands correctly
+    $retryTimes = 0
+    $domain = $null
+    while ($retryTimes -lt 30) {
+        $domain = Get-ADDomain $domainName
+        if ($domain -ne $null) {
+            break;
+        }
+        else {
+            Start-Sleep 10
+            $retryTimes += 1
+        }
+    }
+    if ($domain -eq $null) {
+        .\Write-Error.ps1 "Failed to get correct responses from the ADWS service after strating it for 5 minutes."
+    }
+    
+    # This ensures that your Group Policy changes take effect on your server.
+    gpupdate /force
 
     Update-FSRMClassificationpropertyDefinition
 
@@ -136,7 +159,7 @@ Function ConfigFileServer
                             .\Write-Info.ps1 "GetAccessControl for $sharePath."
                             $acl = (Get-Item $sharePath).GetAccessControl("Access")
                             .\Write-Info.ps1 "Set-Acl $sharePath $policy."
-                            Set-Acl $sharePath $acl $policy
+                            Set-Acl $sharePath $acl $policy -ErrorAction Stop
                             $isApplied = $true
                         }
                         catch
@@ -153,7 +176,9 @@ Function ConfigFileServer
 
         }
     }
-      
+
+    # the Group Policy changes take effect on your server
+    gpupdate /force
 
     #-----------------------------------------------------------------------------------------------
     # Enable Claims for this Realm
