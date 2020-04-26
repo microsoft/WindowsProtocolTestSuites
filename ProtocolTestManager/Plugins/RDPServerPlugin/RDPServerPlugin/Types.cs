@@ -20,7 +20,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         public string SUTName;
         public string DomainName;
         public string UserName;
-        public string Port;     
+        public string Port;
 
         // Detect Result
         public TS_UD_SC_CORE_version_Values Version;
