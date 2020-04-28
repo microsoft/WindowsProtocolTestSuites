@@ -98,6 +98,10 @@
     <Compile Include="SspiServerSecurityContext.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MS-NLMP\Nlmp.csproj">
+      <Project>{5E53E71E-52D1-4BF0-99C0-608437EC446C}</Project>
+      <Name>Nlmp</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SspiLib\SspiLib.csproj">
       <Project>{E64BF20F-11D2-49F6-A25B-F4378AB38180}</Project>
       <Name>SspiLib</Name>

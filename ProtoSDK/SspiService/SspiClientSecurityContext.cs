@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp;
 using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using System;
 
@@ -203,24 +204,40 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
         /// AcquireCredentialsHandle
         /// </summary>
         /// <param name="accountCredential"></param>
-        /// <returns>Security Context</returns>
         protected void AcquireCredentialsHandle<T>(T accountCredential)
         {
-            //switch (packageType)
-            //{
-            //    case SecurityPackageType.Ntlm:
-            //        throw new NotImplementedException();
-            //    case SecurityPackageType.Kerberos:
-            //        throw new NotImplementedException();
-            //    case SecurityPackageType.Negotiate:
-            //        throw new NotImplementedException();
-            //    case SecurityPackageType.Schannel:
-            //        throw new NotImplementedException();
-            //    case SecurityPackageType.CredSsp:
-            //        throw new NotImplementedException();
-            //    default:
-            //        throw new NotImplementedException();
-            //}
+            switch (packageType)
+            {
+                case SecurityPackageType.Ntlm:
+                    {
+                        if (accountCredential is AccountCredential)
+                        {
+                            var credential = accountCredential as AccountCredential;
+                            this.Context = new NlmpClientSecurityContext(
+                                new NlmpClientCredential(
+                                    this.serverPrincipalName,
+                                    credential.DomainName,
+                                    credential.AccountName,
+                                    credential.Password)
+                           );
+                        }
+                        else
+                        {
+                            throw new NotSupportedException("NTLM only support AccountCredential, Please provide an AccountCredential and try again.");
+                        }
+                        return;
+                    }
+                    //case SecurityPackageType.Kerberos:
+                    //    throw new NotImplementedException();
+                    //case SecurityPackageType.Negotiate:
+                    //    throw new NotImplementedException();
+                    //case SecurityPackageType.Schannel:
+                    //    throw new NotImplementedException();
+                    //case SecurityPackageType.CredSsp:
+                    //    throw new NotImplementedException();
+                    //default:
+                    //    throw new NotImplementedException();
+            }
 
             this.UseNativeSSP(accountCredential);
         }
