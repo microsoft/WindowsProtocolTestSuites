@@ -71,6 +71,11 @@
     <DeploymentItem filename="Adapter\SUTControlAdapter\Run-TaskWithPSRemoting.ps1" />
     <DeploymentItem filename="Adapter\SUTControlAdapter\RDPConnectWithNegotiationApproach.ps1" />
     <DeploymentItem filename="Adapter\ShellSUTControlAdapter\RDPConnectWithNegotiationApproach.sh" />
+    <DeploymentItem filename="TestSuite\RDPEGFX\H264TestData\BaseImage\BaseImage_AVC444v2_1.bmp" />
+    <DeploymentItem filename="TestSuite\RDPEGFX\H264TestData\BaseImage\BaseImage_AVC444v2_2.bmp" />
+    <DeploymentItem filename="TestSuite\RDPEGFX\H264TestData\BaseImage\BaseImage_AVC444v2_3.bmp" />
+    <DeploymentItem filename="TestSuite\RDPEGFX\H264TestData\BaseImage\BaseImage_AVC444v2_4.bmp" />
+    <DeploymentItem filename="TestSuite\RDPEGFX\H264TestData\BaseImage\BaseImage_AVC444v2_5.bmp" />
   </Deployment>
   <Execution>
     <TestTypeSpecific>
