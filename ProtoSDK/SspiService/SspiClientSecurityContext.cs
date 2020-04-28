@@ -223,7 +223,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
                         }
                         else
                         {
-                            throw new NotSupportedException("NTLM not support CertificateCrednetial, Please use AccountCredential instead.");
+                            throw new NotSupportedException("NTLM only support AccountCredential, Please provide an AccountCredential and try again.");
                         }
                         return;
                     }
