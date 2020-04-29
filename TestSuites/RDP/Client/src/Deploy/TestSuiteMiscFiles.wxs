@@ -54,6 +54,38 @@
       <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Transport.pdb" />
       <ComponentRef Id="RDP_ClientAdapter.pdb" /> 
       <ComponentRef Id="RDP_ClientTestSuite.pdb" />
+      <ComponentRef Id="BaseImage_AVC444v2_1.bmp" />
+      <ComponentRef Id="BaseImage_AVC444v2_2.bmp" />
+      <ComponentRef Id="BaseImage_AVC444v2_3.bmp" />
+      <ComponentRef Id="BaseImage_AVC444v2_4.bmp" />
+      <ComponentRef Id="BaseImage_AVC444v2_5.bmp" />
+      <ComponentRef Id="OriginalPic_1.png" />
+      <ComponentRef Id="OriginalPic_2.png" />
+      <ComponentRef Id="OriginalPic_3.png" />
+      <ComponentRef Id="OriginalPic_4.png" />
+      <ComponentRef Id="OriginalPic_5.png" />
+      <ComponentRef Id="OriginalPic_6.png" />
+      <ComponentRef Id="OriginalPic_7.png" />
+      <ComponentRef Id="OriginalPic_8.png" />
+      <ComponentRef Id="OriginalPic_9.png" />
+      <ComponentRef Id="OriginalPic_10.png" />
+      <ComponentRef Id="OriginalPic_Large_1.png" />
+      <ComponentRef Id="OriginalPic_Large_2.png" />
+      <ComponentRef Id="OriginalPic_Large_3.png" />
+      <ComponentRef Id="OriginalPic_Large_4.png" />
+      <ComponentRef Id="OriginalPic_Large_5.png" />
+      <ComponentRef Id="End.png" />
+      <ComponentRef Id="MonitorAdd.png" />    
+      <ComponentRef Id="MonitorRemove.png" />
+      <ComponentRef Id="OrientationChange1.png" />
+      <ComponentRef Id="OrientationChange2.png" />
+      <ComponentRef Id="OrientationChange3.png" />
+      <ComponentRef Id="OrientationChange4.png" />
+      <ComponentRef Id="RdpedispTestImage.bmp" /> 
+      <ComponentRef Id="RdpegfxClearCodecTestImage.bmp" /> 
+      <ComponentRef Id="RdpegfxRfxProgressiveCodecTestImage.bmp" /> 
+      <ComponentRef Id="Rdprfx.bmp" /> 
+      <ComponentRef Id="RdprfxVideoMode.bmp" /> 
     </ComponentGroup>
 
 
@@ -291,6 +323,166 @@
       <Component Id="RDP_ClientTestSuite.pdb" Guid="{740F77DD-CD0A-427C-A3F9-D3674A622CF8}">
         <File Id="RDP_ClientTestSuite.pdb"
               Source="$(var.SYMBOLS_DIR)\RDP_ClientTestSuite.pdb" />
+      </Component>
+
+      <Component Id="BaseImage_AVC444v2_1.bmp" Guid="{D90D07BB-454F-4EF3-92FB-AD0F995125E2}">
+        <File Id="BaseImage_AVC444v2_1.bmp"
+              Source="$(var.SYMBOLS_DIR)\BaseImage_AVC444v2_1.bmp" />
+      </Component>
+
+      <Component Id="BaseImage_AVC444v2_2.bmp" Guid="{3656F8AA-6014-4AE8-A11F-B0C881BCE668}">
+        <File Id="BaseImage_AVC444v2_2.bmp"
+              Source="$(var.SYMBOLS_DIR)\BaseImage_AVC444v2_2.bmp" />
+      </Component>
+
+      <Component Id="BaseImage_AVC444v2_3.bmp" Guid="{F24BB505-2A8E-4FED-B6EC-908F9F8186B1}">
+        <File Id="BaseImage_AVC444v2_3.bmp"
+              Source="$(var.SYMBOLS_DIR)\BaseImage_AVC444v2_3.bmp" />
+      </Component>
+
+      <Component Id="BaseImage_AVC444v2_4.bmp" Guid="{9035B1B6-EDA7-4D5F-8267-BADDB633AA59}">
+        <File Id="BaseImage_AVC444v2_4.bmp"
+              Source="$(var.SYMBOLS_DIR)\BaseImage_AVC444v2_4.bmp" />
+      </Component>
+
+       <Component Id="BaseImage_AVC444v2_5.bmp" Guid="{69A5D8C4-B132-4344-ACBD-74D72D4218ED}">
+        <File Id="BaseImage_AVC444v2_5.bmp"
+              Source="$(var.SYMBOLS_DIR)\BaseImage_AVC444v2_5.bmp" />
+      </Component>
+
+      <Component Id="OriginalPic_1.png" Guid="{3C4A73B7-508B-47C8-B898-02AA6B71EB1E}">
+        <File Id="OriginalPic_1.png"
+              Source="$(var.SYMBOLS_DIR)\OriginalPic_1.png" />
+      </Component>
+
+      <Component Id="OriginalPic_2.png" Guid="{F14D7BC7-36F5-4AB2-B62F-D4927C58379D}">
+        <File Id="OriginalPic_2.png"
+              Source="$(var.SYMBOLS_DIR)\OriginalPic_2.png" />
+      </Component>
+
+      <Component Id="OriginalPic_3.png" Guid="{DE1D6EF2-9A66-4B52-A7B0-AE03B39F5300}">
+        <File Id="OriginalPic_3.png"
+              Source="$(var.SYMBOLS_DIR)\OriginalPic_3.png" />
+      </Component>
+
+      <Component Id="OriginalPic_4.png" Guid="{F67C1228-923E-4F79-9628-CC0DE5A8714E}">
+        <File Id="OriginalPic_4.png"
+              Source="$(var.SYMBOLS_DIR)\OriginalPic_4.png" />
+      </Component>
+
+      <Component Id="OriginalPic_5.png" Guid="{FBCBBA30-DBC1-4C28-AF19-372630C0FB4F}">
+        <File Id="OriginalPic_5.png"
+              Source="$(var.SYMBOLS_DIR)\OriginalPic_5.png" />
+      </Component>
+
+      <Component Id="OriginalPic_6.png" Guid="{469A956C-D2BC-4E5A-801B-4572EAC9F914}">
+        <File Id="OriginalPic_6.png"
+              Source="$(var.SYMBOLS_DIR)\OriginalPic_6.png" />
+      </Component>
+
+      <Component Id="OriginalPic_7.png" Guid="{C7EB082C-C29A-4AE4-9BA9-60EEBF4DBE1D}">
+        <File Id="OriginalPic_7.png"
+              Source="$(var.SYMBOLS_DIR)\OriginalPic_7.png" />
+      </Component>
+
+      <Component Id="OriginalPic_8.png" Guid="{7E2D49F1-4AD9-457E-A433-6E3AFA2A0657}">
+        <File Id="OriginalPic_8.png"
+              Source="$(var.SYMBOLS_DIR)\OriginalPic_8.png" />
+      </Component>
+
+      <Component Id="OriginalPic_9.png" Guid="{24F1923D-64E9-4A4C-8533-88CD472A96BF}">
+        <File Id="OriginalPic_9.png"
+              Source="$(var.SYMBOLS_DIR)\OriginalPic_9.png" />
+      </Component>
+
+      <Component Id="OriginalPic_10.png" Guid="{DA089C9A-59A4-44E2-A643-6BB3D65DC5F7}">
+        <File Id="OriginalPic_10.png"
+              Source="$(var.SYMBOLS_DIR)\OriginalPic_10.png" />
+      </Component>
+
+      <Component Id="OriginalPic_Large_1.png" Guid="{88E195F2-0A39-4AFA-A65F-57FFDAC56DC4}">
+        <File Id="OriginalPic_Large_1.png"
+              Source="$(var.SYMBOLS_DIR)\OriginalPic_Large_1.png" />
+      </Component>
+
+      <Component Id="OriginalPic_Large_2.png" Guid="{D9F95B47-D8E1-4C2F-979C-9EA72674A18A}">
+        <File Id="OriginalPic_Large_2.png"
+              Source="$(var.SYMBOLS_DIR)\OriginalPic_Large_2.png" />
+      </Component>
+
+      <Component Id="OriginalPic_Large_3.png" Guid="{97C6CD51-DA92-4B92-8A7D-D18360E74FFF}">
+        <File Id="OriginalPic_Large_3.png"
+              Source="$(var.SYMBOLS_DIR)\OriginalPic_Large_3.png" />
+      </Component>
+
+      <Component Id="OriginalPic_Large_4.png" Guid="{06EF514B-17DC-4C8F-9D0B-8FE60FEED78C}">
+        <File Id="OriginalPic_Large_4.png"
+              Source="$(var.SYMBOLS_DIR)\OriginalPic_Large_4.png" />
+      </Component>
+
+      <Component Id="OriginalPic_Large_5.png" Guid="{4C9DBA11-0312-4899-9669-3E9DDA7A7B37}">
+        <File Id="OriginalPic_Large_5.png"
+              Source="$(var.SYMBOLS_DIR)\OriginalPic_Large_5.png" />
+      </Component>
+
+      <Component Id="End.png" Guid="{0D86047F-D34E-41F8-9A2D-5C3251E91D1B}">
+        <File Id="End.png"
+              Source="$(var.SYMBOLS_DIR)\End.png" />
+      </Component>
+
+      <Component Id="MonitorAdd.png" Guid="{11CCB995-F41B-40FF-93FC-39A71AFBD6C1}">
+        <File Id="MonitorAdd.png"
+              Source="$(var.SYMBOLS_DIR)\MonitorAdd.png" />
+      </Component>
+
+      <Component Id="MonitorRemove.png" Guid="{38FA06C7-8210-40ED-BB7E-686D39E0DC9B}">
+        <File Id="MonitorRemove.png"
+              Source="$(var.SYMBOLS_DIR)\MonitorRemove.png" />
+      </Component>
+
+      <Component Id="OrientationChange1.png" Guid="{59FC4E70-74CE-41CA-A566-D3569872BEF5}">
+        <File Id="OrientationChange1.png"
+              Source="$(var.SYMBOLS_DIR)\OrientationChange1.png" />
+      </Component>
+
+      <Component Id="OrientationChange2.png" Guid="{2B345F46-9F1E-490C-A903-09F521B174CE}">
+        <File Id="OrientationChange2.png"
+              Source="$(var.SYMBOLS_DIR)\OrientationChange2.png" />
+      </Component>
+
+      <Component Id="OrientationChange3.png" Guid="{578B9AE5-37DC-4897-B7AE-B80825FD5312}">
+        <File Id="OrientationChange3.png"
+              Source="$(var.SYMBOLS_DIR)\OrientationChange3.png" />
+      </Component>
+
+      <Component Id="OrientationChange4.png" Guid="{D22270CE-FFEE-4CA6-866C-6D0C90F7229A}">
+        <File Id="OrientationChange4.png"
+              Source="$(var.SYMBOLS_DIR)\OrientationChange4.png" />
+      </Component>
+
+      <Component Id="RdpedispTestImage.bmp" Guid="{5B96441C-9260-4C18-A315-005983DD5444}">
+        <File Id="RdpedispTestImage.bmp"
+              Source="$(var.SYMBOLS_DIR)\RdpedispTestImage.bmp" />
+      </Component>
+
+      <Component Id="RdpegfxClearCodecTestImage.bmp" Guid="{CF18FFF6-16F5-483D-9497-AD91CD15D57D}">
+        <File Id="RdpegfxClearCodecTestImage.bmp"
+              Source="$(var.SYMBOLS_DIR)\RdpegfxClearCodecTestImage.bmp" />
+      </Component>
+
+      <Component Id="RdpegfxRfxProgressiveCodecTestImage.bmp" Guid="{46456B85-F4CE-4877-A21A-26441EA9EC1B}">
+        <File Id="RdpegfxRfxProgressiveCodecTestImage.bmp"
+              Source="$(var.SYMBOLS_DIR)\RdpegfxRfxProgressiveCodecTestImage.bmp" />
+      </Component>
+
+      <Component Id="Rdprfx.bmp" Guid="{EA5F289C-DE6E-4C4A-941F-EFF2EA6A393A}">
+        <File Id="Rdprfx.bmp"
+              Source="$(var.SYMBOLS_DIR)\Rdprfx.bmp" />
+      </Component>
+
+      <Component Id="RdprfxVideoMode.bmp" Guid="{1961CA53-BF0F-41D5-9CDE-C8392FAF820B}">
+        <File Id="RdprfxVideoMode.bmp"
+              Source="$(var.SYMBOLS_DIR)\RdprfxVideoMode.bmp" />
       </Component>
     </DirectoryRef>
     <DirectoryRef Id="TESTSUITE_DATA_DIR">
