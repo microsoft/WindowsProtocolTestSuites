@@ -60,6 +60,25 @@ if($config -eq $null)
 $sut = $config.lab.servers.vm | Where {$_.role -match "SUT" -or $_.role -match "Node01"}
 $sutComputerName = $sut.name
 
+# When the SUT is Linux OS, update the hosts file and get the ip address instead of computer name.
+if( $null -ne $sut.os  -and $sut.os -eq "Linux"){
+
+    $ip = $sut.ip
+
+    if(($sut.ip | Measure-Object ).Count -gt 1){
+        $ip = $sut.ip[0]
+    }
+
+    $sutHostString = "$ip $sutComputerName"
+    $sutHostString | Out-File -FilePath "$env:windir\System32\drivers\etc\hosts" -Append -encoding ascii
+
+    $sutComputerName = $ip
+
+    # TODO: Ignore Forcelevel when the SUT is Linux as this tool does not support yet in Linux now.
+    # After update the tool, below exit code will be removed.
+    exit 0
+}
+
 $endPointPath = "$env:SystemDrive\MicrosoftProtocolTests\FileServer\Server-Endpoint"
 $version = Get-ChildItem $endPointPath | where {$_.Attributes -match "Directory" -and $_.Name -match "\d+\.\d+\.\d+\.\d+"} | Sort-Object Name -descending | Select-Object -first 1
 $binDir = "$endPointPath\$version\bin"
