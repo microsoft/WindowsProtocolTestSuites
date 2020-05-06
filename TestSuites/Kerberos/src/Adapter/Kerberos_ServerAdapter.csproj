@@ -64,6 +64,7 @@
     <Compile Include="ClaimHelper.cs" />
     <Compile Include="IClientControlAdapter.cs" />
     <Compile Include="ISutControlAdapter.cs" />
+    <Compile Include="KerberosAuthData.cs" />
     <Compile Include="KeyManager.cs" />
     <Compile Include="PacHelper.cs" />
     <Compile Include="ProtocolAdapter\KerberosTestClient.cs" />

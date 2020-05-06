@@ -49,6 +49,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             get;
             set;
         }
+
+        /// <summary>
+        /// Whether the sender is the security context initiator.
+        /// </summary>
+        public bool IsInitiator
+        {
+            get; set;
+        }
         #endregion
 
         #region Common Context
@@ -152,15 +160,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             get;
             set;
         }
+
+        public uint CurrentLocalSequenceNumber
+        {
+            get; set;
+        }
+
+        public uint CurrentRemoteSequenceNumber
+        {
+            get;
+            set;
+        }
         #endregion
 
         #region Constructor
         /// <summary>
         /// Create context
         /// </summary>
-        public KerberosContext()
+        public KerberosContext(bool isInitiator = true)
         {
             Pvno = KerberosConstValue.KERBEROSV5;
+            IsInitiator = isInitiator;
         }
 
         /// <summary>
@@ -170,8 +190,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <param name="cName">Principal name</param>
         /// <param name="password">Password of principal</param>
         /// <param name="accountType">Accoundtype, user or device</param>
-        public KerberosContext(string domain, string cName, string password, KerberosAccountType accountType, string salt = null)
-            : this()
+        public KerberosContext(string domain, string cName, string password, KerberosAccountType accountType, bool isInitiator, string salt = null)
+            : this(isInitiator)
         {
             if (domain == null)
             {
@@ -214,8 +234,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <param name="accountType">Accoundtype, user or device</param>
         /// <param name="armorTicket">Computer TGT as armor ticket</param>
         /// <param name="armorSessionKey">Computer TGS session key as armor session key</param>
-        public KerberosContext(string domain, string cName, string password, KerberosAccountType accountType, string salt, KerberosTicket armorTicket, EncryptionKey armorSessionKey)
-            : this(domain, cName, password, accountType, salt)
+        public KerberosContext(string domain, string cName, string password, KerberosAccountType accountType, string salt, KerberosTicket armorTicket, EncryptionKey armorSessionKey, bool isInitiator)
+            : this(domain, cName, password, accountType, isInitiator, salt)
         {
             this.ArmorTicket = armorTicket;
             this.ArmorSessionKey = armorSessionKey;
