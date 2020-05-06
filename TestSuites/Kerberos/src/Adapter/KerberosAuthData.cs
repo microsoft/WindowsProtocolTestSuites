@@ -1,19 +1,20 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestTools.StackSdk.Asn1;
+using Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib;
+using Microsoft.Protocols.TestTools.StackSdk.Security.Pac;
 using System;
 using System.Text;
-using Microsoft.Protocols.TestTools.StackSdk.Asn1;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Pac;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
+namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
 {
     public interface IAuthDataElement
     {
-        AuthorizationDataElement AuthDataElement{get;}
+        AuthorizationDataElement AuthDataElement { get; }
     }
 
-    public class KerbAuthDataTokenRestrictions : IAuthDataElement 
+    public class KerbAuthDataTokenRestrictions : IAuthDataElement
     {
         /// <summary>
         /// restriction_type of KERB_AD_RESTRICTION_ENTRY.
@@ -112,10 +113,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
                 machineId = value;
             }
         }
-        
+
         public AuthorizationDataElement AuthDataElement
         {
-            get {
+            get
+            {
                 var machineID = new Asn1OctetString(machineId);
                 KerbUInt32 _flags = new KerbUInt32(flags);
                 KerbUInt32 _tokenIL = new KerbUInt32(tokenIL);
@@ -137,7 +139,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
                 throw new Exception();
             var entry = new KERB_AD_RESTRICTION_ENTRY();
             entry.BerDecode(new Asn1DecodingBuffer(element.ad_data.ByteArrayValue));
-            
+
             LSAP_TOKEN_INFO_INTEGRITY ltii = new LSAP_TOKEN_INFO_INTEGRITY();
             ltii.GetElements(entry.restriction);
 
@@ -149,28 +151,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         }
     }
 
-    public class AdWin2KPac : IAuthDataElement
-    {
-        public AuthorizationDataElement AuthDataElement
-        {
-            get { return new AuthorizationDataElement(
-                new KerbInt32((int)AuthorizationData_elementType.AD_WIN2K_PAC),
-                new Asn1OctetString(Pac.ToBytes())); }
-        }
-
-        public PacType Pac { get; private set; }
-
-        public static AdWin2KPac Parse(AuthorizationDataElement element)
-        {
-            if (element.ad_type.Value != (int)AuthorizationData_elementType.AD_WIN2K_PAC)
-                throw new Exception();
-            var adWin2KPac = new AdWin2KPac();
-            adWin2KPac.Pac = PacUtility.DecodePacType(element.ad_data.ByteArrayValue);
-            return adWin2KPac;
-        }
-    }
-
-    public class AdIfRelevent : IAuthDataElement 
+    public class AdIfRelevent : IAuthDataElement
     {
         public AD_IF_RELEVANT adIfRelevant { get; set; }
 
@@ -181,7 +162,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             this.adIfRelevant = adIfRelevant;
             int len = adIfRelevant.Elements.Length;
             Elements = new IAuthDataElement[len];
-            for(int i =0;i<len;i++)
+            for (int i = 0; i < len; i++)
             {
                 Elements[i] = AuthDataElementParser.ParseAuthDataElement(adIfRelevant.Elements[i]);
             }
@@ -189,7 +170,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
 
         public AuthorizationDataElement AuthDataElement
         {
-            get {
+            get
+            {
                 var dataBuffer = new Asn1BerEncodingBuffer();
                 adIfRelevant.BerEncode(dataBuffer);
 
@@ -238,7 +220,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
 
         public AuthorizationDataElement AuthDataElement
         {
-            get {
+            get
+            {
                 var apOptions = new APOptions(KerberosUtility.ConvertInt2Flags((int)options));
                 var dataBuffer = new Asn1BerEncodingBuffer();
                 apOptions.BerEncode(dataBuffer);
@@ -255,6 +238,30 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             var apOptions = new APOptions();
             apOptions.BerDecode(new Asn1DecodingBuffer(element.ad_data.ByteArrayValue));
             throw new NotImplementedException();
+        }
+    }
+
+    public class AdWin2KPac : IAuthDataElement
+    {
+        public AuthorizationDataElement AuthDataElement
+        {
+            get
+            {
+                return new AuthorizationDataElement(
+              new KerbInt32((int)AuthorizationData_elementType.AD_WIN2K_PAC),
+              new Asn1OctetString(Pac.ToBytes()));
+            }
+        }
+
+        public PacType Pac { get; private set; }
+
+        public static AdWin2KPac Parse(AuthorizationDataElement element)
+        {
+            if (element.ad_type.Value != (int)AuthorizationData_elementType.AD_WIN2K_PAC)
+                throw new Exception();
+            var adWin2KPac = new AdWin2KPac();
+            adWin2KPac.Pac = PacUtility.DecodePacType(element.ad_data.ByteArrayValue);
+            return adWin2KPac;
         }
     }
 
@@ -295,8 +302,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             get
             {
                 return new AuthorizationDataElement(
-                    new KerbInt32((int) AuthorizationData_elementType.AD_FX_FAST_ARMOR),
-                    new Asn1OctetString((byte[]) null));
+                    new KerbInt32((int)AuthorizationData_elementType.AD_FX_FAST_ARMOR),
+                    new Asn1OctetString((byte[])null));
             }
         }
         public static AdFxFastArmor Parse(AuthorizationDataElement element)
@@ -318,8 +325,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
                     authDataElement = AdIfRelevent.Parse(element);
                     break;
                 case AuthorizationData_elementType.AD_WIN2K_PAC:
-                    authDataElement = AdWin2KPac.Parse(element);
-                    break;
+                    //authDataElement = AdWin2KPac.Parse(element);
+                    throw new NotImplementedException();
                 case AuthorizationData_elementType.AD_FX_FAST_USED:
                     authDataElement = AdFxFastUsed.Parse(element);
                     break;

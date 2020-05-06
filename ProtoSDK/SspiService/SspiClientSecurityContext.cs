@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp;
 using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using System;
@@ -227,8 +228,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
                         }
                         return;
                     }
-                    //case SecurityPackageType.Kerberos:
-                    //    throw new NotImplementedException();
+                case SecurityPackageType.Kerberos:
+                    {
+                        if (accountCredential is AccountCredential)
+                        {
+                            var credential = accountCredential as AccountCredential;
+                            this.Context = KerberosClientSecurityContext.CreateClientSecurityContext(
+                                this.ServerPrincipalName,
+                                credential
+                            );
+                        }
+                        else
+                        {
+                            throw new NotSupportedException("Kerberos only support AccountCredential, Please provide an AccountCredential and try again.");
+                        }
+                        return;
+                    }
                     //case SecurityPackageType.Negotiate:
                     //    throw new NotImplementedException();
                     //case SecurityPackageType.Schannel:

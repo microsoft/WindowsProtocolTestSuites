@@ -75,6 +75,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             get;
             set;
         }
+
+        public KerberosConstValue.OidPkt OidPkt
+        {
+            get { return this.oidPkt; }
+        }
         #endregion properties
 
         #region constructor
@@ -94,7 +99,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         public KerberosClient(string domain, string cName, string password, KerberosAccountType accountType, string kdcAddress, int kdcPort, TransportType transportType, KerberosConstValue.OidPkt oidPkt = KerberosConstValue.OidPkt.KerberosToken, string salt = null)
         {
             TransportBufferSize = KerberosConstValue.TRANSPORT_BUFFER_SIZE;
-            this.Context = new KerberosContext(domain, cName, password, accountType, salt);
+            this.Context = new KerberosContext(domain, cName, password, accountType, true, salt);
             this.kdcAddress = kdcAddress;
             this.kdcPort = kdcPort;
             this.transportType = transportType;
@@ -118,7 +123,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         public KerberosClient(string domain, string cName, string password, KerberosAccountType accountType, KerberosTicket armorTicket, EncryptionKey armorSessionKey, string kdcAddress, int kdcPort, TransportType transportType, KerberosConstValue.OidPkt oidPkt = KerberosConstValue.OidPkt.KerberosToken, string salt = null)
         {
             TransportBufferSize = KerberosConstValue.TRANSPORT_BUFFER_SIZE;
-            this.Context = new KerberosContext(domain, cName, password, accountType, salt, armorTicket, armorSessionKey);
+            this.Context = new KerberosContext(domain, cName, password, accountType, salt, armorTicket, armorSessionKey, true);
             this.kdcAddress = kdcAddress;
             this.kdcPort = kdcPort;
             this.transportType = transportType;
@@ -139,7 +144,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             transportConfig.MaxConnections = 1;
             transportConfig.BufferSize = TransportBufferSize;
             transportConfig.RemoteIpPort = kdcPort;
-            transportConfig.RemoteIpAddress = IPAddress.Parse(kdcAddress);
+            transportConfig.RemoteIpAddress = kdcAddress.ParseIPAddress();
 
             // For UDP bind
             if (transportConfig.RemoteIpAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
@@ -422,6 +427,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
                 UpdateContext(response);
             }
 
+            if (pdu is KerberosApResponse)
+            {
+                KerberosApResponse response = pdu as KerberosApResponse;
+                UpdateContext(response);
+            }
+
             this.expectedPduType = null;
         }
 
@@ -617,6 +628,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
                 //Fix me: when hide-client-names is set to true, response.Response.cname is not the real CName.
                 Context.Ticket = new KerberosTicket(response.Response.ticket, response.Response.cname, response.EncPart.key);
                 Context.SelectedEType = (EncryptionType)Context.Ticket.Ticket.enc_part.etype.Value;
+            }
+        }
+
+        private void UpdateContext(KerberosApResponse response)
+        {
+            if (response.Response != null)
+            {
+                this.Context.SessionKey = response.ApEncPart.subkey;
             }
         }
 
