@@ -325,8 +325,8 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
                     authDataElement = AdIfRelevent.Parse(element);
                     break;
                 case AuthorizationData_elementType.AD_WIN2K_PAC:
-                    //authDataElement = AdWin2KPac.Parse(element);
-                    throw new NotImplementedException();
+                    authDataElement = AdWin2KPac.Parse(element);
+                    break;
                 case AuthorizationData_elementType.AD_FX_FAST_USED:
                     authDataElement = AdFxFastUsed.Parse(element);
                     break;

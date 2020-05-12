@@ -40,7 +40,7 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
                                     cName, domain);
             }
             EncryptionType[] encryptionTypes = new EncryptionType[]
-            { 
+            {
                 EncryptionType.AES256_CTS_HMAC_SHA1_96,
                 EncryptionType.AES128_CTS_HMAC_SHA1_96,
                 EncryptionType.RC4_HMAC,
@@ -86,7 +86,7 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
                                     cName, domain);
             }
             EncryptionType[] encryptionTypes = new EncryptionType[]
-            { 
+            {
                 EncryptionType.AES256_CTS_HMAC_SHA1_96,
                 EncryptionType.AES128_CTS_HMAC_SHA1_96,
                 EncryptionType.RC4_HMAC,
@@ -839,67 +839,18 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
 
         #region FAST
         public PaFxFastReq CreateAsPaFxFast(
-            EncryptionKey subKey,
-            FastOptions fastOptions,
-            ApOptions apOptions,
-            Asn1SequenceOf<PA_DATA> seqPaData,
-            string sName,
-            KDC_REQ_BODY kdcReqBody
-            )
-        {
-            string domain = this.Context.Realm.Value;
-            PrincipalName sname =
-                new PrincipalName(new KerbInt32((int)PrincipalType.NT_SRV_INST), KerberosUtility.String2SeqKerbString(sName, domain));
-
-            var armorKey = KerberosUtility.MakeArmorKey(
-                Context.SelectedEType,
-                subKey.keyvalue.ByteArrayValue,
-                Context.ArmorSessionKey.keyvalue.ByteArrayValue);
-            Context.FastArmorkey = new EncryptionKey(new KerbInt32((long)Context.SelectedEType), new Asn1OctetString(armorKey));
-
-
-            Asn1BerEncodingBuffer encodebuf = new Asn1BerEncodingBuffer();
-            kdcReqBody.BerEncode(encodebuf);
-            var checksumType = KerberosUtility.GetChecksumType(Context.SelectedEType);
-            var chksum = KerberosUtility.GetChecksum(
-                armorKey,
-                encodebuf.Data,
-                (int)KeyUsageNumber.FAST_REQ_CHECKSUM,
-                checksumType);
-            Checksum checkSum = new Checksum(new KerbInt32((int)checksumType), new Asn1OctetString(chksum));
-
-            Authenticator plaintextAuthenticator = CreateAuthenticator(Context.ArmorTicket, null, subKey);
-
-            KerberosApRequest apReq = new KerberosApRequest(Context.Pvno,
-                new APOptions(KerberosUtility.ConvertInt2Flags((int)apOptions)),
-                Context.ArmorTicket,
-                plaintextAuthenticator,
-                KeyUsageNumber.AP_REQ_Authenticator);
-
-            KDC_REQ_BODY innerKdcReqBody = CreateKdcRequestBody(KdcOptions.CANONICALIZE | KdcOptions.FORWARDABLE | KdcOptions.RENEWABLE, sname);
-            KerberosFastRequest fastReq = new KerberosFastRequest(fastOptions, seqPaData, innerKdcReqBody);
-            FastArmorApRequest fastArmor = new FastArmorApRequest(apReq.Request);
-            KerberosArmoredRequest armoredReq
-                = new KerberosArmoredRequest(fastArmor, checkSum, (long)Context.SelectedEType, armorKey, fastReq);
-            PA_FX_FAST_REQUEST paFxFastReq = new PA_FX_FAST_REQUEST();
-            paFxFastReq.SetData(PA_FX_FAST_REQUEST.armored_data, armoredReq.FastArmoredReq);
-            PaFxFastReq paFxfast = new PaFxFastReq(paFxFastReq);
-            return paFxfast;
-        }
-
-        public PaFxFastReq CreateAsPaFxFast(
         EncryptionKey subKey,
         FastOptions fastOptions,
         ApOptions apOptions,
         Asn1SequenceOf<PA_DATA> seqPaData,
         string sName,
         KDC_REQ_BODY kdcReqBody,
-        KrbFastArmorType armorType
+        KrbFastArmorType? armorType = null
         )
         {
             string domain = this.Context.Realm.Value;
-            PrincipalName sname =
-                new PrincipalName(new KerbInt32((int)PrincipalType.NT_SRV_INST), KerberosUtility.String2SeqKerbString(sName, domain));
+            PrincipalName sname = new PrincipalName(new KerbInt32((int)PrincipalType.NT_SRV_INST), 
+                KerberosUtility.String2SeqKerbString(sName, domain));
 
             var armorKey = KerberosUtility.MakeArmorKey(
                 Context.SelectedEType,
@@ -929,7 +880,10 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
             KDC_REQ_BODY innerKdcReqBody = CreateKdcRequestBody(KdcOptions.CANONICALIZE | KdcOptions.FORWARDABLE | KdcOptions.RENEWABLE, sname);
             KerberosFastRequest fastReq = new KerberosFastRequest(fastOptions, seqPaData, innerKdcReqBody);
             FastArmorApRequest fastArmor = new FastArmorApRequest(apReq.Request);
-            fastArmor.armorType = armorType;
+            if (armorType != null)
+            {
+                fastArmor.armorType = armorType.Value;
+            }
             KerberosArmoredRequest armoredReq
                 = new KerberosArmoredRequest(fastArmor, checkSum, (long)Context.SelectedEType, armorKey, fastReq);
             PA_FX_FAST_REQUEST paFxFastReq = new PA_FX_FAST_REQUEST();

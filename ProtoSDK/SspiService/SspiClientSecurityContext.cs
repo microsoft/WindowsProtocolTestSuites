@@ -233,10 +233,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
                         if (accountCredential is AccountCredential)
                         {
                             var credential = accountCredential as AccountCredential;
-                            this.Context = KerberosClientSecurityContext.CreateClientSecurityContext(
-                                this.ServerPrincipalName,
-                                credential
-                            );
+                            this.Context = KerberosClientSecurityContext.CreateClientSecurityContext(this.serverPrincipalName, credential, this.securityContextAttributes);
                         }
                         else
                         {

@@ -176,8 +176,6 @@
     <Compile Include="Types\KerberosTgsRequest.cs" />
     <Compile Include="Types\KpasswordRequest.cs" />
     <Compile Include="Types\KpasswordResponse.cs" />
-    <Compile Include="Types\Token4121.cs" />
-    <Compile Include="Types\TokenHeader1964_4757.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

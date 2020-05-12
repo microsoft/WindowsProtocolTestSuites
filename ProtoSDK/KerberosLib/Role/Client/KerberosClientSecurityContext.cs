@@ -5,10 +5,7 @@ using Microsoft.Protocols.TestTools.StackSdk.Asn1;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic;
 using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
 {
@@ -32,25 +29,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         private byte[] token;
 
         /// <summary>
+        /// Context attribute flags.
+        /// </summary>
+        private ClientSecurityContextAttribute contextAttribute;
+
+        /// <summary>
         /// Whether to continue process.
         /// </summary>
         private bool needContinueProcessing;
-
-        /// <summary>
-        /// the sequence number of client.<para/>
-        /// it's used for client to sign/encrypt message<para/>
-        /// In the case of connection-oriented authentication, the SeqNum parameter MUST start at 0 and is incremented
-        /// by one for each message sent.
-        /// </summary>
-        private uint clientSequenceNumber;
-
-        /// <summary>
-        /// the sequence number of server.<para/>
-        /// it's used for client to verify/decrypt message from server<para/>
-        /// The receiver expects the first received message to have SeqNum equal to 0, and to be one greater for each
-        /// subsequent message received.
-        /// </summary>
-        private uint serverSequenceNumber;
 
         private string serverName;
 
@@ -137,11 +123,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         {
             get
             {
-                return this.clientSequenceNumber;
+                return this.Context.CurrentLocalSequenceNumber;
             }
             set
             {
-                this.clientSequenceNumber = value;
+                this.Context.currentLocalSequenceNumber = value;
             }
         }
 
@@ -186,34 +172,32 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <param name="kdcPort">The port of the KDC.</param>
         /// <param name="transportType">Whether the transport is TCP or UDP transport.</param>
         /// <exception cref="System.ArgumentNullException">Thrown when the input parameter is null.</exception>
-        public KerberosClientSecurityContext(string serverName, AccountCredential credential, KerberosAccountType accountType, string kdcAddress, int kdcPort, TransportType transportType, KerberosConstValue.OidPkt oidPkt = KerberosConstValue.OidPkt.KerberosToken, string salt = null)
+        public KerberosClientSecurityContext(
+            string serverName,
+            AccountCredential credential,
+            KerberosAccountType accountType,
+            string kdcAddress,
+            int kdcPort,
+            TransportType transportType,
+            ClientSecurityContextAttribute contextAttribute,
+            KerberosConstValue.OidPkt oidPkt = KerberosConstValue.OidPkt.KerberosToken,
+            string salt = null
+            )
         {
             this.credential = credential;
             this.serverName = serverName;
+            this.contextAttribute = contextAttribute;
             this.client = new KerberosClient(this.credential.DomainName, this.credential.AccountName, this.credential.Password, accountType, kdcAddress, kdcPort, transportType, oidPkt, salt);
             this.UpdateDefaultSettings();
         }
 
-        /// <summary>
-        /// Create a KerberosClientSecurityContext instance.
-        /// </summary>
-        /// <param name="domain" cref="KerberosClientCredential">Login user Credential</param>
-        /// <param name="accountType">The type of the logon account. User or Computer</param>
-        /// <param name="kdcAddress">The IP address of the KDC.</param>
-        /// <param name="kdcPort">The port of the KDC.</param>
-        /// <param name="transportType">Whether the transport is TCP or UDP transport.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown when the input parameter is null.</exception>
-        public KerberosClientSecurityContext(AccountCredential credential, KerberosAccountType accountType, KerberosTicket armorTicket, EncryptionKey armorSessionKey, string kdcAddress, int kdcPort, TransportType transportType, KerberosConstValue.OidPkt oidPkt = KerberosConstValue.OidPkt.KerberosToken, string salt = null)
+        public static ClientSecurityContext CreateClientSecurityContext(
+            string serverName, 
+            AccountCredential credential, 
+            ClientSecurityContextAttribute contextAttribute
+            )
         {
-            this.credential = credential;
-
-            this.client = new KerberosClient(this.credential.DomainName, this.credential.AccountName, this.credential.Password, accountType, armorTicket, armorSessionKey, kdcAddress, kdcPort, transportType, oidPkt, salt);
-            this.UpdateDefaultSettings();
-        }
-
-        public static ClientSecurityContext CreateClientSecurityContext(string serverName, AccountCredential credential)
-        {
-            return CreateClientSecurityContext(serverName, credential, KerberosAccountType.User, credential.DomainName, 88, TransportType.TCP);
+            return CreateClientSecurityContext(serverName, credential, KerberosAccountType.User, credential.DomainName, 88, TransportType.TCP, contextAttribute);
         }
 
         /// <summary>
@@ -225,9 +209,19 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <param name="kdcPort">The port of the KDC.</param>
         /// <param name="transportType">Whether the transport is TCP or UDP transport.</param>
         /// <returns></returns>
-        public static ClientSecurityContext CreateClientSecurityContext(string serverName, AccountCredential credential, KerberosAccountType accountType, string kdcAddress, int kdcPort, TransportType transportType, KerberosConstValue.OidPkt oidPkt = KerberosConstValue.OidPkt.KerberosToken, string salt = null)
+        public static ClientSecurityContext CreateClientSecurityContext(
+            string serverName, 
+            AccountCredential credential, 
+            KerberosAccountType accountType, 
+            string kdcAddress, 
+            int kdcPort, 
+            TransportType transportType, 
+            ClientSecurityContextAttribute contextAttribute, 
+            KerberosConstValue.OidPkt oidPkt = KerberosConstValue.OidPkt.KerberosToken, 
+            string salt = null
+            )
         {
-            return new KerberosClientSecurityContext(serverName, credential, accountType, kdcAddress, kdcPort, transportType, oidPkt, salt);
+            return new KerberosClientSecurityContext(serverName, credential, accountType, kdcAddress, kdcPort, transportType, contextAttribute, oidPkt, salt);
         }
 
         #endregion
@@ -275,22 +269,82 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
                 // Expect TGS Response from KDC
                 KerberosTgsResponse tgsResponse = this.ExpectTgsResponse();
 
+                ApOptions apOption;
+                GetFlagsByContextAttribute(out apOption);
+
                 AuthorizationData data = null;
-                EncryptionKey subkey = KerberosUtility.GenerateKey(this.client.Context.SessionKey);
+                EncryptionKey subkey = KerberosUtility.GenerateKey(this.client.Context.ContextKey);
+
                 this.token = this.CreateGssApiToken(ApOptions.MutualRequired,
                     data,
                     subkey,
-                    ChecksumFlags.GSS_C_MUTUAL_FLAG | ChecksumFlags.GSS_C_INTEG_FLAG);
+                    this.Context.ChecksumFlag,
+                    KerberosConstValue.GSSToken.GSSAPI);
 
-                this.needContinueProcessing = true;
+                bool isMutualAuth = (contextAttribute & ClientSecurityContextAttribute.MutualAuth)
+                    == ClientSecurityContextAttribute.MutualAuth;
+                bool isDceStyle = (contextAttribute & ClientSecurityContextAttribute.DceStyle)
+                    == ClientSecurityContextAttribute.DceStyle;
+
+                if (isMutualAuth || isDceStyle)
+                {
+                    this.needContinueProcessing = true;
+                }
+                else
+                {
+                    this.needContinueProcessing = false;
+                }
             }
             else
             {
-                KerberosApResponse apRep = this.GetApResponseFromToken(serverToken);
-                // Get subkey from AP response, which used for signing
-                apRep.Decrypt(this.Context.SessionKey.keyvalue.ByteArrayValue);
-                this.client.UpdateContext(apRep);
-                this.needContinueProcessing = false;
+                KerberosApResponse apRep = this.GetApResponseFromToken(serverToken, KerberosConstValue.GSSToken.GSSAPI);
+                token = null;
+                if ((contextAttribute & ClientSecurityContextAttribute.DceStyle) == ClientSecurityContextAttribute.DceStyle)
+                {
+                    KerberosApResponse apResponse = this.CreateApResponse(null);
+
+                    var apBerBuffer = new Asn1BerEncodingBuffer();
+
+                    if (apResponse.ApEncPart != null)
+                    {
+                        // Encode enc_part
+                        apResponse.ApEncPart.BerEncode(apBerBuffer, true);
+                        
+                        EncryptionKey key = this.Context.ApSessionKey;
+
+                        if (key == null || key.keytype == null || key.keyvalue == null || key.keyvalue.Value == null)
+                        {
+                            throw new ArgumentException("Ap session key is not valid");
+                        }
+
+                        // Encrypt enc_part
+                        EncryptionType eType = (EncryptionType)key.keytype.Value;
+                        byte[] cipherData = KerberosUtility.Encrypt(
+                            eType,
+                            key.keyvalue.ByteArrayValue,
+                            apBerBuffer.Data,
+                            (int)KeyUsageNumber.AP_REP_EncAPRepPart);
+                        apResponse.Response.enc_part = new EncryptedData(new KerbInt32((int)eType), null, new Asn1OctetString(cipherData));
+                    }
+
+                    // Encode AP Response
+                    apResponse.Response.BerEncode(apBerBuffer, true);
+
+                    if ((this.Context.ChecksumFlag & ChecksumFlags.GSS_C_DCE_STYLE) == ChecksumFlags.GSS_C_DCE_STYLE)
+                    {
+                        // In DCE mode, the AP-REP message MUST NOT have GSS-API wrapping. 
+                        // It is sent as is without encapsulating it in a header ([RFC2743] section 3.1).
+                        this.token = apBerBuffer.Data;
+                    }
+                    else
+                    {
+                        this.token = KerberosUtility.AddGssApiTokenHeader(ArrayUtility.ConcatenateArrays(
+                            BitConverter.GetBytes(KerberosUtility.ConvertEndian((ushort)TOK_ID.KRB_AP_REP)),
+                            apBerBuffer.Data));
+                    }
+                }
+
+                this.needContinueProcessing = false;      // SEC_E_OK;
             }
         }
 
@@ -528,7 +582,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
                 authenticator,
                 KeyUsageNumber.AP_REQ_Authenticator
                 );
-
+            this.client.UpdateContext(request);
             return KerberosUtility.AddGssApiTokenHeader(request, this.client.OidPkt, gssToken);
         }
 
@@ -539,7 +593,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <returns></returns>
         private KerberosApResponse GetApResponseFromToken(byte[] token, KerberosConstValue.GSSToken gssToken = KerberosConstValue.GSSToken.GSSSPNG)
         {
-
+            
             if (gssToken == KerberosConstValue.GSSToken.GSSSPNG)
                 token = KerberosUtility.DecodeNegotiationToken(token);
 
@@ -568,9 +622,42 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
                 token = ArrayUtility.SubArray(apData, sizeof(TOK_ID));
             }
 
-            KerberosApResponse response = new KerberosApResponse();
-            response.FromBytes(token);
+            KerberosApResponse apRep = new KerberosApResponse();
+            apRep.FromBytes(token);
 
+            // Get the current encryption type, cipher data
+            EncryptionType encryptType = (EncryptionType)apRep.Response.enc_part.etype.Value;
+            byte[] cipherData = apRep.Response.enc_part.cipher.ByteArrayValue;
+            byte[] sessionKey = this.Context.ApSessionKey.keyvalue.ByteArrayValue;
+
+            // decrypt enc_part to clear text
+            byte[] clearText = KerberosUtility.Decrypt(encryptType, sessionKey, cipherData, (int)KeyUsageNumber.AP_REP_EncAPRepPart);
+
+            // decode enc_part
+            Asn1DecodingBuffer decodeBuffer = new Asn1DecodingBuffer(clearText);
+            apRep.ApEncPart = new EncAPRepPart();
+            apRep.ApEncPart.BerDecode(decodeBuffer);
+
+            this.client.UpdateContext(apRep);
+
+            return apRep;
+        }
+
+        public KerberosApResponse CreateApResponse(EncryptionKey subkey)
+        {
+            var response = new KerberosApResponse();
+            response.Response.msg_type = new Asn1Integer((int)MsgType.KRB_AP_RESP);
+            response.Response.pvno = new Asn1Integer(KerberosConstValue.KERBEROSV5);
+
+            // Set EncAPRepPart
+            var apEncPart = new EncAPRepPart();
+            apEncPart.ctime = Context.Time;
+            apEncPart.cusec = Context.Cusec;
+            apEncPart.subkey = null;
+            apEncPart.seq_number = new KerbUInt32((long)Context.currentRemoteSequenceNumber);
+            response.ApEncPart = apEncPart;
+
+            this.client.UpdateContext(response);
             return response;
         }
 
@@ -691,7 +778,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
                 EncryptionType.AES128_CTS_HMAC_SHA1_96,
                 EncryptionType.RC4_HMAC,
                 EncryptionType.RC4_HMAC_EXP,
-                EncryptionType.DES_CBC_CRC,
+                EncryptionType.UnusedValue_135,
                 EncryptionType.DES_CBC_MD5,
             };
 
@@ -711,6 +798,68 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             contextSizes.MaxSignatureSize = KerberosConstValue.MAX_SIGNATURE_SIZE;
             contextSizes.BlockSize = KerberosConstValue.BLOCK_SIZE;
             contextSizes.SecurityTrailerSize = KerberosConstValue.SECURITY_TRAILER_SIZE;
+        }
+
+        /// <summary>
+        /// Get the ApOptions flag and Checksum flag by the context attribute
+        /// </summary>
+        /// <param name="apOption">The apOptions flag</param>
+        /// <param name="checksumFlags">The checksum flag</param>
+        private void GetFlagsByContextAttribute(out ApOptions apOptions)
+        {
+            apOptions = ApOptions.None;
+            var checksumFlags = ChecksumFlags.None;
+
+            if ((contextAttribute & ClientSecurityContextAttribute.Delegate) == ClientSecurityContextAttribute.Delegate)
+            {
+                throw new NotSupportedException("ContextAttribute.Delegate is not supported currently!");
+            }
+            if ((contextAttribute & ClientSecurityContextAttribute.UseSessionKey)
+                == ClientSecurityContextAttribute.UseSessionKey)
+            {
+                //throw new NotSupportedException("ContextAttribute.UseSessionKey is not supported currently!");
+            }
+            if ((contextAttribute & ClientSecurityContextAttribute.MutualAuth)
+                == ClientSecurityContextAttribute.MutualAuth)
+            {
+                checksumFlags |= ChecksumFlags.GSS_C_MUTUAL_FLAG;
+                apOptions |= ApOptions.MutualRequired;
+            }
+            if ((contextAttribute & ClientSecurityContextAttribute.ReplayDetect)
+                == ClientSecurityContextAttribute.ReplayDetect)
+            {
+                checksumFlags |= ChecksumFlags.GSS_C_REPLAY_FLAG;
+            }
+            if ((contextAttribute & ClientSecurityContextAttribute.SequenceDetect)
+                == ClientSecurityContextAttribute.SequenceDetect)
+            {
+                checksumFlags |= ChecksumFlags.GSS_C_SEQUENCE_FLAG;
+            }
+            if ((contextAttribute & ClientSecurityContextAttribute.Confidentiality)
+                == ClientSecurityContextAttribute.Confidentiality)
+            {
+                checksumFlags |= ChecksumFlags.GSS_C_CONF_FLAG;
+            }
+            if ((contextAttribute & ClientSecurityContextAttribute.DceStyle) == ClientSecurityContextAttribute.DceStyle)
+            {
+                checksumFlags |= ChecksumFlags.GSS_C_DCE_STYLE;
+            }
+            if ((contextAttribute & ClientSecurityContextAttribute.ExtendedError)
+                == ClientSecurityContextAttribute.ExtendedError)
+            {
+                checksumFlags |= ChecksumFlags.GSS_C_EXTENDED_ERROR_FLAG;
+            }
+            if ((contextAttribute & ClientSecurityContextAttribute.Integrity)
+                == ClientSecurityContextAttribute.Integrity)
+            {
+                checksumFlags |= ChecksumFlags.GSS_C_INTEG_FLAG;
+            }
+            if ((contextAttribute & ClientSecurityContextAttribute.Identify) == ClientSecurityContextAttribute.Identify)
+            {
+                checksumFlags |= ChecksumFlags.GSS_C_IDENTIFY_FLAG;
+            }
+
+            this.Context.ChecksumFlag = checksumFlags;
         }
         #endregion
     }

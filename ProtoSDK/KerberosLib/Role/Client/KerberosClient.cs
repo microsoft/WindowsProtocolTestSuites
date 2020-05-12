@@ -427,6 +427,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
                 UpdateContext(response);
             }
 
+            if(pdu is KerberosApRequest)
+            {
+                KerberosApRequest request = pdu as KerberosApRequest;
+                UpdateContext(request);
+            }
+
             if (pdu is KerberosApResponse)
             {
                 KerberosApResponse response = pdu as KerberosApResponse;
@@ -440,6 +446,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         {
             if (request.Request != null && request.Request.req_body != null)
             {
+                Context.CName.Name = request.Request.req_body.cname;
+                Context.Realm = request.Request.req_body.realm;
                 Context.Addresses = request.Request.req_body.addresses;
                 Context.Nonce = request.Request.req_body.nonce;
             }
@@ -508,6 +516,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             if (response.EncPart != null)
             {
                 Context.SessionKey = response.EncPart.key;
+                Context.TgsSessionKey = response.EncPart.key;
             }
 
             if (response.Response != null)
@@ -601,6 +610,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             {
                 Context.ReplyKey = Context.Subkey;
             }
+            Context.ApSubKey = Context.ReplyKey;
         }
 
         private void UpdateContext(KerberosTgsResponse response)
@@ -625,6 +635,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
                     Context.Subkey == null ? KeyUsageNumber.TGS_REP_encrypted_part : KeyUsageNumber.TGS_REP_encrypted_part_subkey;
                 response.DecryptTgsResponse(Context.ReplyKey.keyvalue.ByteArrayValue, usage);
                 Context.SessionKey = response.EncPart.key;
+                Context.ApSessionKey = response.EncPart.key;
                 //Fix me: when hide-client-names is set to true, response.Response.cname is not the real CName.
                 Context.Ticket = new KerberosTicket(response.Response.ticket, response.Response.cname, response.EncPart.key);
                 Context.SelectedEType = (EncryptionType)Context.Ticket.Ticket.enc_part.etype.Value;
@@ -633,9 +644,38 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
 
         private void UpdateContext(KerberosApResponse response)
         {
-            if (response.Response != null)
+            if (response.ApEncPart != null)
             {
-                this.Context.SessionKey = response.ApEncPart.subkey;
+                if (response.ApEncPart.seq_number != null)
+                {
+                    this.Context.CurrentRemoteSequenceNumber = (uint)response.ApEncPart.seq_number.Value;
+                }
+
+                if (response.ApEncPart.subkey != null)
+                {
+                    this.Context.AcceptorSubKey = response.ApEncPart.subkey;
+                    this.Context.SessionKey = response.ApEncPart.subkey;
+                }
+            }
+        }
+
+        private void UpdateContext(KerberosApRequest request)
+        {
+            this.Context.Time = request.Authenticator.ctime;
+            this.Context.Cusec = request.Authenticator.cusec;
+
+            if (request.Authenticator.cksum != null)
+            {
+                int flag = BitConverter.ToInt32(request.Authenticator.cksum.checksum.ByteArrayValue,
+                    KerberosConstValue.AUTHENTICATOR_CHECKSUM_LENGTH + sizeof(ChecksumFlags));
+                this.Context.ChecksumFlag = (ChecksumFlags)flag;
+            }
+            this.Context.ApSubKey = request.Authenticator.subkey;
+            
+            if (request.Authenticator.seq_number != null)
+            {
+                this.Context.currentLocalSequenceNumber = (uint)request.Authenticator.seq_number.Value;
+                this.Context.CurrentRemoteSequenceNumber = this.Context.currentLocalSequenceNumber;
             }
         }
 
