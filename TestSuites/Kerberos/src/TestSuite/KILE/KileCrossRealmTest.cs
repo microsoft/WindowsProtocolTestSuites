@@ -117,7 +117,7 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.TestSuite.KILE
             if (testConfig.IsKileImplemented)
             {
                 EncTicketFlags ticketFlags = (EncTicketFlags)KerberosUtility.ConvertFlags2Int(refTgsResponse.EncPart.flags.ByteArrayValue);
-                BaseTestSite.Assert.IsFalse(ticketFlags.HasFlag(EncTicketFlags.TRANSITED_POLICY_CHECKED),
+                BaseTestSite.Assert.IsFalse(ticketFlags.HasFlag(EncTicketFlags.TRANSITEDPOLICYCHECKED),
                     "KILE MUST NOT check for transited domains on servers or a KDC.");
             }
         }
@@ -3045,7 +3045,7 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.TestSuite.KILE
 
             int flags = KerberosUtility.ConvertFlags2Int(refTgsResponse.EncPart.flags.ByteArrayValue);
             BaseTestSite.Assert.AreEqual((EncTicketFlags)0,
-                EncTicketFlags.OK_AS_DELEGATE & (EncTicketFlags)flags,
+                EncTicketFlags.OKASDELEGATE & (EncTicketFlags)flags,
                 "If the TRUST_ATTRIBUTE_CROSS_ORGANIZATION_NO_TGT_DELEGATION flag is set in the trustAttributes field ([MS-ADTS] section 6.1.6.7.9)," +
                 "the KDC MUST return a ticket with the ok-as-delegate flag not set in TicketFlags.");
 

@@ -1064,13 +1064,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         #endregion
 
         #region Security Context Methods
+
         /// <summary>
         /// This takes the given SecurityBuffer array, signs data part, and updates signature into token part
         /// </summary>
         /// <param name="kerberosRole">Represents client or server</param>
         /// <param name="securityBuffers">Data to sign and token to update.</param>
         /// <exception cref="System.ArgumentException">Thrown when the data or token is not valid.</exception>
-        public static void Sign(KerberosRole kerberosRole, params SecurityBuffer[] securityBuffers)
+        internal static void Sign(KerberosRole kerberosRole, params SecurityBuffer[] securityBuffers)
         {
             byte[] token = SspiUtility.ConcatenateReadWriteSecurityBuffers(securityBuffers, SecurityBufferType.Token);
 
@@ -1086,6 +1087,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             SspiUtility.UpdateSecurityBuffers(securityBuffers, SecurityBufferType.Token, signature);
         }
 
+
         /// <summary>
         /// This takes the given byte array and verifies it using the SSPI VerifySignature method.
         /// </summary>
@@ -1093,7 +1095,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <param name="securityBuffers">Data and token to verify</param>
         /// <returns>Success if true, Fail if false</returns>
         /// <exception cref="System.ArgumentException">Thrown when the data or token is not valid.</exception>
-        public static bool Verify(KerberosRole kerberosRole, params SecurityBuffer[] securityBuffers)
+        internal static bool Verify(KerberosRole kerberosRole, params SecurityBuffer[] securityBuffers)
         {
             KerberosPdu pdu;
             return kerberosRole.GssVerifyMicEx(securityBuffers, out pdu);
@@ -1105,7 +1107,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <param name="kerberosRole">Represents client or server</param>
         /// <param name="securityBuffers">The security buffers to encrypt.</param>
         /// <exception cref="System.ArgumentException">Thrown when the data or token is not valid.</exception>
-        public static void Encrypt(KerberosRole kerberosRole, params SecurityBuffer[] securityBuffers)
+        internal static void Encrypt(KerberosRole kerberosRole, params SecurityBuffer[] securityBuffers)
         {
             byte[] message = SspiUtility.ConcatenateReadWriteSecurityBuffers(securityBuffers, SecurityBufferType.Data);
             byte[] token = SspiUtility.ConcatenateSecurityBuffers(securityBuffers, SecurityBufferType.Token);
@@ -1145,7 +1147,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <param name="kileRole">Represents client or server</param>
         /// <param name="securityBuffers">The security buffers to decrypt.</param>
         /// <exception cref="System.ArgumentException">Thrown when the data or token is not valid.</exception>
-        public static bool Decrypt(KerberosRole kerberosRole, params SecurityBuffer[] securityBuffers)
+        internal static bool Decrypt(KerberosRole kerberosRole, params SecurityBuffer[] securityBuffers)
         {
             KerberosPdu pdu = kerberosRole.GssUnWrapEx(securityBuffers);
             byte[] decryptedMessage = null;
@@ -1163,6 +1165,32 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             // else do nothing
 
             return true;
+        }
+
+        #endregion
+
+        #region private
+        /// <summary>
+        /// Get SGN_ALG for encryption and sign.
+        /// </summary>
+        /// <returns>The SGN_ALG got from context.</returns>
+        /// <exception cref="System.FormatException">Thrown when the key is not valid.</exception>
+        internal static SGN_ALG GetSgnAlg(EncryptionKey contextKey)
+        {
+            if (contextKey == null || contextKey.keytype == null || contextKey.keyvalue == null || contextKey.keyvalue.Value == null)
+            {
+                throw new FormatException("Initialization is not complete successfully!");
+            }
+
+            SGN_ALG sgnAlg = SGN_ALG.HMAC;
+            EncryptionType type = (EncryptionType)contextKey.keytype.Value;
+
+            if (type == EncryptionType.DES_CBC_MD5 || type == EncryptionType.DES_CBC_CRC)
+            {
+                sgnAlg = SGN_ALG.DES_MAC_MD5;
+            }
+
+            return sgnAlg;
         }
 
         /// <summary>
@@ -1199,30 +1227,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
 
             return message;
         }
-
-        /// <summary>
-        /// Get SGN_ALG for encryption and sign.
-        /// </summary>
-        /// <returns>The SGN_ALG got from context.</returns>
-        /// <exception cref="System.FormatException">Thrown when the key is not valid.</exception>
-        private static SGN_ALG GetSgnAlg(EncryptionKey contextKey)
-        {
-            if (contextKey == null || contextKey.keytype == null || contextKey.keyvalue == null || contextKey.keyvalue.Value == null)
-            {
-                throw new FormatException("Initialization is not complete successfully!");
-            }
-
-            SGN_ALG sgnAlg = SGN_ALG.HMAC;
-            EncryptionType type = (EncryptionType)contextKey.keytype.Value;
-
-            if (type == EncryptionType.DES_CBC_MD5 || type == EncryptionType.DES_CBC_CRC)
-            {
-                sgnAlg = SGN_ALG.DES_MAC_MD5;
-            }
-
-            return sgnAlg;
-        }
         #endregion
     }
-
 }
