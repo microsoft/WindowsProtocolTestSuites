@@ -1,16 +1,13 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestTools.StackSdk.Asn1;
+using Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic;
+using Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
-using System.Net.Sockets;
-
-using Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic;
-using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
-using Microsoft.Protocols.TestTools.StackSdk.Asn1;
-using Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
 {

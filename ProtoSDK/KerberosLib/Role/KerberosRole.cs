@@ -207,6 +207,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             tokenHeader.filler = KerberosConstValue.TOKEN_FILLER_1_BYTE;
             tokenHeader.ec = KerberosConstValue.TOKEN_FILLER_2_BYTE;
             tokenHeader.rrc = KerberosConstValue.TOKEN_FILLER_2_BYTE;
+            tokenHeader.snd_seq = Context.CurrentLocalSequenceNumber;
 
             token.TokenHeader = tokenHeader;
             token.Data = message;

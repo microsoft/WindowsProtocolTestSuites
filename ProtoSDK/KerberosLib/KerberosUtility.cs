@@ -1080,7 +1080,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
                 throw new ArgumentException("No token can be updated for signature.");
             }
             byte[] message = GetToBeSignedDataFromSecurityBuffers(securityBuffers);
-            SGN_ALG sgnAlg = GetSgnAlg(kerberosRole.Context.SessionKey);
+            SGN_ALG sgnAlg = GetSgnAlg(kerberosRole.Context.ContextKey);
             KerberosPdu pdu = kerberosRole.GssGetMic(sgnAlg, message);
             byte[] signature = pdu.ToBytes();
 
