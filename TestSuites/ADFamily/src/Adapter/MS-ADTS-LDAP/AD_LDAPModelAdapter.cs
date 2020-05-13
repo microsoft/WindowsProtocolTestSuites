@@ -445,7 +445,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 int.Parse(currentPort),
                 userName,
                 password,
-                currentWorkingDC.Domain.NetbiosName,
+                currentWorkingDC.Domain.FQDN,
                 authenticationType,
                 isWindows);
             Site.Assert.IsTrue(result.ToLower().Contains("success"),
