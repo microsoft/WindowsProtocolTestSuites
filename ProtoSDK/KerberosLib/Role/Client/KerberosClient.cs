@@ -446,8 +446,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         {
             if (request.Request != null && request.Request.req_body != null)
             {
-                Context.CName.Name = request.Request.req_body.cname;
-                Context.Realm = request.Request.req_body.realm;
                 Context.Addresses = request.Request.req_body.addresses;
                 Context.Nonce = request.Request.req_body.nonce;
             }
