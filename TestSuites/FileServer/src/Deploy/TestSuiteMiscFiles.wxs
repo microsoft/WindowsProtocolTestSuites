@@ -72,8 +72,9 @@
       <ComponentRef Id="MS_SMB2Model_ServerModel.pdb"/>
       <ComponentRef Id="MS_SMB2Model_ServerTestSuite.pdb"/>
       <ComponentRef Id="MS_FSA_ServerAdapter.pdb"/>
-      <ComponentRef Id="MS_FSA_ServerModel.pdb"/>
       <ComponentRef Id="MS_FSA_ServerTestSuite.pdb"/>
+      <ComponentRef Id="MS_FSAModel_ServerModel.pdb"/>
+      <ComponentRef Id="MS_FSAModel_ServerTestSuite.pdb"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.dll"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.pdb"/>
     </ComponentGroup>
@@ -122,18 +123,19 @@
       <Component Id="MS_FSA_ServerAdapter.pdb" Guid="{FA12B3D3-5B53-474E-A997-AF10C07B2FA9}">
         <File Id="fil3D7FAF9F6804D19280253F565FD4CFA9" Source="$(var.TESTSUITE_SYMBOLS_DIR)\MS-FSA_ServerAdapter.pdb" />
       </Component>
-      <Component Id="MS_FSA_ServerModel.pdb" Guid="{FA12B3D3-5B53-474E-A997-FA10C07B2F20}">
-        <File Id="fil3D7FAF9F6804D19280253F565FD4CFA0" Source="$(var.TESTSUITE_SYMBOLS_DIR)\MS-FSA_ServerModel.pdb" />
-      </Component>
       <Component Id="MS_FSA_ServerTestSuite.pdb" Guid="{FA12B3D3-5B53-474E-A997-FA10C07B2F21}">
         <File Id="fil3D7FAF9F6804D19280253F565FD4CFA1" Source="$(var.TESTSUITE_SYMBOLS_DIR)\MS-FSA_ServerTestSuite.pdb" />
+      </Component>
+      <Component Id="MS_FSAModel_ServerModel.pdb" Guid="{FA12B3D3-5B53-474E-A997-FA10C07B2F23}">
+        <File Id="fil3D7FAF9F6804D19280253F565FD4CF23" Source="$(var.TESTSUITE_SYMBOLS_DIR)\MS-FSAModel_ServerModel.pdb" />
+      </Component>
+      <Component Id="MS_FSAModel_ServerTestSuite.pdb" Guid="{FA12B3D3-5B53-474E-A997-FA10C07B2F24}">
+        <File Id="fil3D7FAF9F6804D19280253F565FD4CF24" Source="$(var.TESTSUITE_SYMBOLS_DIR)\MS-FSAModel_ServerTestSuite.pdb" />
       </Component>
       <Component Id="Auth_ServerTestSuite.pdb" Guid="{181074AA-0FEA-4AD6-A7AA-C945131E69F0}">
         <File Id="filF1AB0A5E20BD4F3C9BCDC1EB9EB81D32" Source="$(var.TESTSUITE_SYMBOLS_DIR)\Auth_ServerTestSuite.pdb" />
       </Component>
-
     </DirectoryRef>
-
 
     <DirectoryRef Id="PROTOCOLSDK_BIN_DIR">
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs.dll" Guid="{A5504F47-2F4F-46DF-AD44-7BF34C9F90A0}">
@@ -190,14 +192,12 @@
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fsrvp.pdb" Guid="{1DFD8521-1615-4EF0-97D0-F149F169E3BB}">
         <File Id="fil2E41892F6A874D0BCA9E20DC5B43FDDC" Source="$(var.PROTOSDK_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fsrvp.pdb" />
       </Component>
-
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc.dll" Guid="{7335231E-7CBB-4B1C-9E60-960FCC7D100F}">
         <File Id="fil23566227C0C568E7E1DF2F52FCC47FB5" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc.dll" />
       </Component>
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc.pdb" Guid="{1DFD8521-1615-4EF0-97D0-F149FCC9E3BB}">
         <File Id="fil2E41892F6A874D0BCA9E20DC5B43FCCC" Source="$(var.PROTOSDK_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc.pdb" />
       </Component>
-
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.dll" Guid="{5CDC9868-37C2-48E6-A320-C82633EAB265}">
         <File Id="fil5CDC986837C248E6A320C82633EAB265" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.dll" />
       </Component>
@@ -288,7 +288,6 @@
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.pdb" Guid="{44D187D1-3B66-4B81-AAFD-F633818B193F}">
         <File Id="filE46572A239C24010955556CC3DB2E5A2" Source="$(var.PROTOSDK_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.pdb" />
       </Component>
-
     </DirectoryRef>
   </Fragment>
 </Wix>

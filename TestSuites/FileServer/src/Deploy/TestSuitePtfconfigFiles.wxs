@@ -17,6 +17,8 @@
       <ComponentRef Id="CMP_MS_DFSC_ServerTestSuite.ptfconfig"/>
       <ComponentRef Id="CMP_MS_FSA_ServerTestSuite.deployment.ptfconfig"/>
       <ComponentRef Id="CMP_MS_FSA_ServerTestSuite.ptfconfig"/>
+      <ComponentRef Id="CMP_MS_FSAModel_ServerTestSuite.deployment.ptfconfig"/>
+      <ComponentRef Id="CMP_MS_FSAModel_ServerTestSuite.ptfconfig"/>
       <ComponentRef Id="CMP_MS_FSRVP_ServerTestSuite.deployment.ptfconfig"/>
       <ComponentRef Id="CMP_MS_FSRVP_ServerTestSuite.ptfconfig"/>
       <ComponentRef Id="CMP_MS_RSVD_ServerTestSuite.deployment.ptfconfig"/>
@@ -71,6 +73,16 @@
       </Component>
       <Component Id="CMP_MS_FSA_ServerTestSuite.ptfconfig" Guid="{17E25956-282A-4E06-9EB8-2EEA7E44CB6B}">
         <File Id="FILE_MS_FSA_ServerTestSuite.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\MS-FSA_ServerTestSuite.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_MS_FSAModel_ServerTestSuite.deployment.ptfconfig" Guid="{C7F45CF0-6ADB-4DB0-8ED9-2B0860EC4707}">
+        <File Id="FILE_MS_FSAModel_ServerTestSuite.deployment.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\MS-FSAModel_ServerTestSuite.deployment.ptfconfig">
+          <util:PermissionEx User="Users" GenericAll="yes" />
+        </File>
+      </Component>
+      <Component Id="CMP_MS_FSAModel_ServerTestSuite.ptfconfig" Guid="{E1878560-4D15-41DD-8AAA-1B3914CB17B1}">
+        <File Id="FILE_MS_FSAModel_ServerTestSuite.ptfconfig" Source="$(var.TESTSUITE_PTFCONFIG_DIR)\MS-FSAModel_ServerTestSuite.ptfconfig">
           <util:PermissionEx User="Users" GenericAll="yes" />
         </File>
       </Component>

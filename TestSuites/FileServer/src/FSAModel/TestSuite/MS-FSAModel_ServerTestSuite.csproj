@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{3A6DFF03-804A-4040-8AC6-3CC97989F950}</ProjectGuid>
+    <ProjectGuid>{B42A8A9A-2301-4BD0-AACF-BEEC73871899}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite</RootNamespace>
-    <AssemblyName>MS-FSA_ServerTestSuite</AssemblyName>
+    <AssemblyName>MS-FSAModel_ServerTestSuite</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <FileUpgradeFlags>
@@ -90,79 +90,43 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="MS-FSA_ServerTestSuite.deployment.ptfconfig">
+    <Content Include="MS-FSAModel_ServerTestSuite.deployment.ptfconfig">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="MS-FSA_ServerTestSuite.ptfconfig" />
+    <Content Include="MS-FSAModel_ServerTestSuite.ptfconfig" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AlternateDataStream\AlternateDataStreamTestCases.cs" />
-    <Compile Include="AlternateDataStream\AlternateDataStream_CreateStream.cs" />
-    <Compile Include="AlternateDataStream\AlternateDataStream_DeleteStream.cs" />
-    <Compile Include="AlternateDataStream\AlternateDataStream_FileInfo_Query_FileAccessInformation.cs" />
-    <Compile Include="AlternateDataStream\AlternateDataStream_FileInfo_Query_FileCompressionInformation.cs" />
-    <Compile Include="AlternateDataStream\AlternateDataStream_FileInfo_Query_FileNetworkOpenInformation.cs" />
-    <Compile Include="AlternateDataStream\AlternateDataStream_FileInfo_Query_FileStandardInformation.cs" />
-    <Compile Include="AlternateDataStream\AlternateDataStream_FileInfo_Set_FileEaInformation.cs" />
-    <Compile Include="AlternateDataStream\AlternateDataStream_FileInfo_Set_FileShortNameInformation.cs" />
-    <Compile Include="AlternateDataStream\AlternateDataStream_FSCTL_GET_COMPRESSION.cs" />
-    <Compile Include="AlternateDataStream\AlternateDataStream_FSCTL_GET_INTEGRITY_INFORMATION.cs" />
-    <Compile Include="AlternateDataStream\AlternateDataStream_FSCTL_QUERY_ALLOCATED_RANGES.cs" />
-    <Compile Include="AlternateDataStream\AlternateDataStream_FSCTL_SET_COMPRESSION.cs" />
-    <Compile Include="AlternateDataStream\AlternateDataStream_FSCTL_SET_ZERO_DATA.cs" />
-    <Compile Include="AlternateDataStream\AlternateDataStream_ListStreams.cs" />
-    <Compile Include="AlternateDataStream\AlternateDataStream_FileInfo_Query_FileBasicInformation.cs" />
-    <Compile Include="AlternateDataStream\AlternateDataStream_LockAndUnlock.cs" />
-    <Compile Include="AlternateDataStream\AlternateDataStream_RenameStream.cs" />
-    <Compile Include="AlternateDataStream\AlternateDataStream_FileInfo_Set_FileValidDataLengthInformation.cs" />
-    <Compile Include="AlternateDataStream\AlternateDataStream_ShareAccess.cs" />
-    <Compile Include="AlternateDataStream\AlternateDataStream_WriteAndRead.cs" />
-    <Compile Include="CreateFile\CreateFileTestCases.cs" />
-    <Compile Include="CreateFile\CreateFile_InvalidStreamName.cs" />
-    <Compile Include="FileAccess\FileAccessTestCases.cs" />
-    <Compile Include="FileAccess\FileAccess_OpenExistingFile.cs" />
-    <Compile Include="FileInformation\FileInfoTestCases.cs" />
-    <Compile Include="FileInformation\FileInfo_Query_FileAccessInformation.cs" />
-    <Compile Include="FileInformation\FileInfo_Query_FileAttributeTagInformation.cs" />
-    <Compile Include="FileInformation\FileInfo_Query_FileBasicInformation.cs" />
-    <Compile Include="FileInformation\FileInfo_Query_FileCompressionInformation.cs" />
-    <Compile Include="FileInformation\FileInfo_Query_FileEaInformation.cs" />
-    <Compile Include="FileInformation\FileInfo_Query_FileFullEaInformation.cs" />
-    <Compile Include="FileInformation\FileInfo_Query_FileIdInformation.cs" />
-    <Compile Include="FileInformation\FileInfo_Query_FileNetworkOpenInformation.cs" />
-    <Compile Include="FileInformation\FileInfo_Query_FileNormalizedNameInformation.cs" />
-    <Compile Include="FileInformation\FileInfo_Set_FileLinkInformation.cs" />
-    <Compile Include="FileInformation\FileInfo_Set_FileEaInformation.cs" />
-    <Compile Include="FileInformation\FileInfo_Set_FileFullEaInformation.cs" />
-    <Compile Include="FileInformation\FileInfo_Set_FileShortNameInformation.cs" />
-    <Compile Include="FileInformation\FileInfo_Set_FileValidDataLengthInformation.cs" />
-    <Compile Include="FileSystemInformation\FsInfoTestCases.cs" />
-    <Compile Include="FileSystemInformation\FsInfo_Query_FileFsAttributeInformation.cs" />
-    <Compile Include="FileSystemInformation\FsInfo_Query_FileFsObjectIdInformation.cs" />
-    <Compile Include="FileSystemInformation\FsInfo_Query_FileFsSectorSizeInformation.cs" />
-    <Compile Include="FileSystemInformation\FsInfo_Query_FileFsSizeInformation.cs" />
-    <Compile Include="FileSystemInformation\FsInfo_Set_FileFsSectorSizeInformation.cs" />
-    <Compile Include="FsControlRequest\FSCTL_DUPLICATE_EXTENTS_TO_FILE_EX.cs" />
-    <Compile Include="FsControlRequest\FsCtlTestCases.cs" />
-    <Compile Include="FsControlRequest\FSCTL_GET_COMPRESSION.cs" />
-    <Compile Include="FsControlRequest\FSCTL_GET_INTEGRITY_INFORMATION.cs" />
-    <Compile Include="FsControlRequest\FSCTL_Get_Volume_Data.cs" />
-    <Compile Include="FsControlRequest\FSCTL_QUERY_ALLOCATED_RANGES.cs" />
-    <Compile Include="FsControlRequest\FSCTL_OFFLOAD_READ.cs" />
-    <Compile Include="FsControlRequest\FSCTL_OFFLOAD_WRITE.cs" />
-    <Compile Include="FsControlRequest\FSCTL_QUERY_FILE_REGIONS.cs" />
-    <Compile Include="FsControlRequest\FSCTL_SET_COMPRESSION.cs" />
-    <Compile Include="FsControlRequest\FSCTL_SET_INTEGRITY_INFORMATION.cs" />
-    <Compile Include="FsControlRequest\FSCTL_GET_REPARSE_POINT.cs" />
-    <Compile Include="FsControlRequest\FSCTL_SET_SPARSE.cs" />
-    <Compile Include="FsControlRequest\FSCTL_SET_ZERO_DATA.cs" />
-    <Compile Include="QueryDirectory\QueryDirectoryTestCases.cs" />
-    <Compile Include="QuotaInformation\QuotaInfoTestCases.cs" />
-    <Compile Include="QuotaInformation\QuotaInfo_Query_QuotaInformation.cs" />
-    <Compile Include="QuotaInformation\QuotaInfo_Set_QuotaInformation.cs" />
+    <Compile Include="ChangeNotificationTestCase.cs" />
+    <Compile Include="CloseFileTestCase.cs" />
+    <Compile Include="CreateFileTestCase.cs" />
+    <Compile Include="FlushCachedDataTestCase.cs" />
+    <Compile Include="IoCtlRequestTestCase.cs" />
+    <Compile Include="LockAndUnlockTestCase.cs" />
+    <Compile Include="OpenFileTestCase.cs" />
+    <Compile Include="QueryDirectoryTestCase.cs" />
+    <Compile Include="QueryFileInformationTestCase.cs" />
+    <Compile Include="QueryFileSystemInformationTestCase.cs" />
+    <Compile Include="QuerySecurityInformationTestCase.cs" />
+    <Compile Include="ReadFileTestCase.cs" />
+    <Compile Include="SetFileAllocOrObjIdInformationTestCase.cs" />
+    <Compile Include="SetFileBasicInformationTestCase.cs" />
+    <Compile Include="SetFileDispositionInformationTestCase.cs" />
+    <Compile Include="SetFileEndOfFileInformationTestCase.cs" />
+    <Compile Include="SetFileFullEaInformationTestCase.cs" />
+    <Compile Include="SetFileLinkInformationTestCase.cs" />
+    <Compile Include="SetFileModeInformationTestCase.cs" />
+    <Compile Include="SetFilePositionInformationTestCase.cs" />
+    <Compile Include="SetFileRenameInformationTestCase.cs" />
+    <Compile Include="SetFileShortNameInformationTestCase.cs" />
+    <Compile Include="SetFileStreamRenameInformationTestCase.cs" />
+    <Compile Include="SetFileValidDataLengthInformationTestCase.cs" />
+    <Compile Include="SetSecurityInformationTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WriteFileTestCase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\Common\Common.csproj">
@@ -181,7 +145,7 @@
       <Project>{3fd566ba-e398-461e-b1b6-464b117ed422}</Project>
       <Name>CommonAdapter</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Adapter\MS-FSA_ServerAdapter.csproj">
+    <ProjectReference Include="..\..\FSA\Adapter\MS-FSA_ServerAdapter.csproj">
       <Project>{98A76DE1-2D66-476B-9222-F15FFDFA8C81}</Project>
       <Name>MS-FSA_ServerAdapter</Name>
     </ProjectReference>

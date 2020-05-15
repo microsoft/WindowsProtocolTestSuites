@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+
+  <Include>
+    <File name="CommonTestSuite.deployment.ptfconfig"/>
+  </Include>
+
+  <Properties>
+    <Group name="FSA">
+      <Property name="Transport" value="SMB3">
+        <Choice>SMB3, SMB2, SMB</Choice>
+        <Description>
+          The underlying SMB transport of FSA protocol.
+        </Description>
+      </Property>
+
+      <Property name="FileSystem" value="NTFS">
+        <Choice>NTFS, REFS, FAT32, OTHERFS</Choice>
+        <Description>
+          File System Under Test.
+        </Description>
+      </Property>
+      
+      <Property name="ReFSVersion" value="1">
+        <Choice>1, 2</Choice>
+        <Description>
+          The highest version of ReFS supported by the server.
+        </Description>
+      </Property>      
+
+      <Property name="NTFS_ShareFolder" value="FileShare">
+        <Description>
+          Share folder in the NTFS system volume.
+        </Description>
+      </Property>
+
+      <Property name="REFS_ShareFolder" value="SMBReFSShare">
+        <Description>
+          Share folder in the REFS system volume.
+        </Description>
+      </Property>
+
+      <Property name="FAT32_ShareFolder" value="SMBFAT32Share">
+        <Description>
+          Share folder in the FAT32 system volume.
+        </Description>
+      </Property>
+        
+      <Property name="OTHERFS_ShareFolder" value="FileShare">
+        <Description>
+          Share folder in the volume of other file system (Not any of the FAT32, NTFS or REFS).
+        </Description>
+      </Property>
+      
+      <!--RootDirectory where Share folder exist. -->
+      <Property name="NTFS_RootDirectory" value="C$">
+        <Description>
+          RootDirectory where Share folder existed in the NTFS system volume.
+        </Description>
+      </Property>
+
+      <Property name="REFS_RootDirectory" value="K$">
+        <Description>
+          RootDirectory where Share folder existed in the REFS system volume.
+        </Description>
+      </Property>
+
+      <Property name="FAT32_RootDirectory" value="J$">
+        <Description>
+          RootDirectory where Share folder existed in the FAT32 system volume.
+        </Description>
+      </Property>
+        
+      <Property name="OTHERFS_RootDirectory" value="K$">
+        <Description>
+          RootDirectory where Share folder existed in the volume of other file system (Neither NTFS or REFS).
+        </Description>
+      </Property>      
+
+      <Property name="ExistingFolder" value="ExistingFolder">
+        <Description>
+          A folder named as ExistingFolder in the share folder.
+        </Description>
+      </Property>
+
+      <Property name="ExistingFile" value="ExistingFile.txt">
+        <Description>
+          A file named as ExistingFile.txt in the share folder.
+        </Description>
+      </Property>
+
+      <Property name="SymbolicLinkFile" value="link.txt">
+        <Description>
+          A SymbolicLinkFile named as link.txt in the share folder.
+        </Description>
+      </Property>
+
+      <Property name="QuotaFile" value="$Extend\$Quota:$Q:$INDEX_ALLOCATION">
+        <Description>
+          The name of the quota file in the file system.
+          In Windows environment, it is: $Extend\$Quota:$Q:$INDEX_ALLOCATION.
+        </Description>
+      </Property>
+
+      <Property name="ReparsePointFile" value="MountPoint">
+        <Description>
+          A volume mount point named as MountPoint in the share folder.
+        </Description>
+      </Property>
+
+      <Property name="WhichFileSystemSupport_Integrity" value="REFS" />
+      <Property name="WhichFileSystemSupport_Quota" value="NTFS" />
+      <Property name="WhichFileSystemSupport_ReparsePoint" value="NTFS;REFS" />
+      <Property name="WhichFileSystemSupport_ObjectID" value="NTFS" />
+      <Property name="WhichFileSystemSupport_Offload" value="NTFS" />
+      <Property name="WhichFileSystemSupport_Compression" value="NTFS" />
+      <Property name="WhichFileSystemSupport_Encryption" value="NTFS;FAT32" />
+      <Property name="WhichFileSystemSupport_ExtendedAttribute" value="NTFS" />
+      <Property name="WhichFileSystemSupport_SparseFile" value="NTFS;REFS" />
+      <Property name="WhichFileSystemSupport_QueryAllocatedRanges" value="NTFS;REFS" />
+      <Property name="WhichFileSystemSupport_SetZeroData" value="NTFS;REFS" />
+      <Property name="WhichFileSystemSupport_FileLinkInfo" value="NTFS" />
+      <Property name="WhichFileSystemSupport_ShortName" value="NTFS" />
+      <Property name="WhichFileSystemSupport_QueryFileFsControlInformation" value="NTFS" />
+      <Property name="WhichFileSystemSupport_QueryFileFsObjectIdInformation" value="NTFS" />
+      <Property name="WhichFileSystemSupport_QueryFileObjectIdInformation" value="NTFS" />
+      <Property name="WhichFileSystemSupport_QueryFileReparsePointInformation" value="NTFS" />
+      <Property name="WhichFileSystemSupport_QueryFileQuotaInformation" value="NTFS" />
+      <Property name="WhichFileSystemSupport_ObjectIdIoCtlRequest" value="NTFS" />
+      <Property name="WhichFileSystemSupport_OpenHasManageVolumeAccess" value="NTFS;REFS" />
+      <Property name="WhichFileSystemSupport_StreamRename" value="NTFS;" />
+
+
+      <Property name="NTFS_ClusterSizeInKB" value="4">
+        <Description>
+          NTFS uses a default cluster size of 4 KB, a maximum cluster size of 64 KB, and a minimum cluster size of 512 bytes.
+        </Description>
+      </Property>
+
+      <Property name="REFS_ClusterSizeInKB" value="64">
+        <Description>
+          ReFS uses a default cluster size of 64 KB, a maximum cluster size of 128k, and a minimum cluster size of 4 KB.
+        </Description>
+      </Property>
+      
+      <Property name="FAT32_ClusterSizeInKB" value="4">
+        <Description>
+          FAT32 uses a default cluster size of 4 KB, a maximum cluster size of 32 KB, and a minimum cluster size of 2 KB.
+        </Description>
+      </Property>
+
+      <Property name="OTHERFS_ClusterSizeInKB" value="4">
+        <Description>
+          The cluster size of other file system, in KB
+        </Description>
+      </Property>      
+
+      <Property name="SystemPageSizeInKB" value="4">
+        <Description>
+          For AMD64, x86, and ARM systems, this value is 4 KB. For ia64 systems, this value is 8 KB.
+        </Description>
+      </Property>
+
+      <Property name="IsVolumeReadonly" value="false">
+        <Description>
+          Indicate if the test volume is read-only.
+        </Description>
+      </Property>
+
+      <Property name="IsErrorCodeMappingRequired" value="true">
+        <Description>
+          Indicate if check the exact error code return by server.
+        </Description>
+      </Property>
+
+      <Property name="InvalidName" value="12345678">
+        <Description>
+          This property is used to construct an invalid file name.
+        </Description>
+      </Property>
+
+      <Property name="BufferSize" value="4096">
+        <Description>
+          Define the size of the client buffer in bytes.
+        </Description>
+      </Property>
+
+      <Property name="BufferSizeNotEqualReparseDataLengthPlus24" value="70">
+        <Description>
+          Define the size of the client buffer not equal reparse data length plus 24.
+        </Description>
+      </Property>
+
+      <Property name="BufferSizeNotEqualReparseDataLengthPlus8" value="70">
+        <Description>
+          Define the size of the client buffer not equal reparse data length plus 8.
+        </Description>
+      </Property>
+
+      <Property name="InBufferSize" value="64">
+        <Description>
+          Define the size of the input buffer in bytes
+        </Description>
+      </Property>
+
+      <Property name="MinBufferSize" value="1">
+        <Description>
+          Define the minimum size of the client buffer in bytes.
+        </Description>
+      </Property>
+
+      <Property name="IsLinkFound" value="true">
+        <Description>
+          To specify whether the link, through which file is opened, is found.
+        </Description>
+      </Property>
+
+      <Property name="SDOwner" value="s-1-5-21-111">
+        <Description>
+          To specify the SecurityDescriptor.Owner of the object associated with the system access control.
+        </Description>
+      </Property>
+
+      <Property name="OpenFileVolumeSize" value="4096">
+        <Description>
+          Define the size of the volume of the file to be opened.
+        </Description>
+      </Property>
+
+      <Property name="IsOpenHasManageVolPrivilege" value="true">
+        <Description>
+          To specify whether the request to open has manage.vol.privilege.
+        </Description>
+      </Property>
+
+      <Property name="IsMoreThanOneOpenContained" value="true">
+        <Description>
+          To specify whether Open.File.OpenList contains more than one Open on open stream.
+        </Description>
+      </Property>
+
+      <Property name="IsRestoreAccess" value="true">
+        <Description>
+          To specify whether has access to restore.
+        </Description>
+      </Property>
+
+      <Property name="IsAdministrator" value="true">
+        <Description>
+          To specify whether the Open was performed by a user who is a member of the ADMINISTRATORS group.
+        </Description>
+      </Property>
+
+      <Property name="FsaActiveTDIs" value=";">
+        <Description>
+          Active TDIs for MS-FSA test suite.
+        </Description>
+      </Property>
+
+      <Property name="Testing_DisabledRequirements_Adapter" value="663">
+        <Description>
+          To specify which requirements checking will be disabled in adapter.
+        </Description>
+      </Property>
+
+      <Property name="Testing_DisabledRequirements_Testcase" value="366,369,371,373,375,376,377,380,507,669,692,693,715,742,830,849,865,881,883,904,910,919,942,943,984,989,990,1068,1080,1083,1091,1103,1112,1121,1124,1136,1176,1178,1187,1206,1231,1237,1238,1246,1257,1274,1277,1307,1309,1316,1388,1399,1421,1445,1489,1585,1591,1593,2373,2437,2524,2558,2657,2674,2675,2719,2734,2749,2764,2799,2853,2859,2869,2875,2913,2927,2941,2954,2974,3004,3007,3025,3143,3146,3148,3166,3173,3176,3180,3203,3232,3239,3778,3851,3856,3873,3891,3899,3900,3901,3919,3960,3966,3992,3994,4038,4331,4335,4721,4732,4734,4755,4773,4812,4836,5001,5018,5041,5509,5522,5803,7803">
+        <Description>
+          To specify which requirements checking will be disabled in test case.
+        </Description>
+      </Property>
+
+      <Property name="Is64bitFileIdSupported" value="true">
+        <Choice>true, false</Choice>
+        <Description>
+          To specify whether 64-bit FileId is supported or not.
+        </Description>
+      </Property>
+      
+      <Property name="IsChangeTimeSupported" value="true">
+        <Choice>true, false</Choice>
+        <Description>
+          To specify whether ChangeTime is supported or not.
+        </Description>
+      </Property>
+
+      <Property name="FSCC_UnSupportedFSCTL" value="">
+        <Description>
+          To specify the FSCTL (defined in [MS-FSCC] section 2.3) that the SUT does not support.
+        </Description>
+      </Property>
+    </Group>
+  </Properties>
+</TestSite>
