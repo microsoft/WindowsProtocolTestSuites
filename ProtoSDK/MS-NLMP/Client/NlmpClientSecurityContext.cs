@@ -227,9 +227,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
             this.client.Context.ClientConfigFlags |= NegotiateTypes.NTLMSSP_NEGOTIATE_128;
             this.client.Context.ClientConfigFlags |= NegotiateTypes.NTLMSSP_NEGOTIATE_56;
             this.client.Context.ClientConfigFlags |= NegotiateTypes.NTLMSSP_NEGOTIATE_UNICODE;
+            this.client.Context.ClientConfigFlags |= NegotiateTypes.NTLM_NEGOTIATE_OEM;
             // turn on seal and sign
-            this.client.Context.ClientConfigFlags |= NegotiateTypes.NTLMSSP_NEGOTIATE_SEAL;
-            this.client.Context.ClientConfigFlags |= NegotiateTypes.NTLMSSP_NEGOTIATE_SIGN;
+            // this.client.Context.ClientConfigFlags |= NegotiateTypes.NTLMSSP_NEGOTIATE_SEAL;
+            // this.client.Context.ClientConfigFlags |= NegotiateTypes.NTLMSSP_NEGOTIATE_SIGN;
         }
 
 

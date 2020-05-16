@@ -9301,7 +9301,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                         int.Parse(currentPort),
                         childAdminName,
                         childAdminPwd,
-                        currentWorkingDC.Domain.NetbiosName,
+                        currentWorkingDC.Domain.FQDN,
                         AuthType.Basic | AuthType.Kerberos);
                 }
                 adLdapClient.DeleteObject("CN=CrossDomainUser1,CN=Users," + currentWorkingDC.Domain.DomainNC, null);
@@ -9328,7 +9328,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     int.Parse(currentPort),
                     testUserName,
                     testUserPwd,
-                    currentWorkingDC.Domain.NetbiosName,
+                    currentWorkingDC.Domain.FQDN,
                     AuthType.Basic | AuthType.Kerberos);
             }
             adLdapClient.DeleteObject("CN=CrossDomainUser1,CN=Users," + rootDomainNC, null);
