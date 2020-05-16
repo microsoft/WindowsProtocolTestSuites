@@ -22,6 +22,8 @@
   <DeploymentItem filename="SMB2Model\TestSuite\MS-SMB2Model_ServerTestSuite.deployment.ptfconfig" />
   <DeploymentItem filename="FSA\TestSuite\MS-FSA_ServerTestSuite.ptfconfig" />
   <DeploymentItem filename="FSA\TestSuite\MS-FSA_ServerTestSuite.deployment.ptfconfig" />
+  <DeploymentItem filename="FSAModel\TestSuite\MS-FSAModel_ServerTestSuite.ptfconfig" />
+  <DeploymentItem filename="FSAModel\TestSuite\MS-FSAModel_ServerTestSuite.deployment.ptfconfig" />
   <DeploymentItem filename="SQOS\TestSuite\MS-SQOS_ServerTestSuite.deployment.ptfconfig" />
   <DeploymentItem filename="SQOS\TestSuite\MS-SQOS_ServerTestSuite.ptfconfig" />
   <DeploymentItem filename="Auth\TestSuite\Auth_ServerTestSuite.deployment.ptfconfig" />

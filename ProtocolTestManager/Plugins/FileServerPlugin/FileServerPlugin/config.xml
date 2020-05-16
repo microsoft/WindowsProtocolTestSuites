@@ -7,6 +7,7 @@
     <PtfFileName>Bin\ServerFailoverTestSuite.ptfconfig</PtfFileName>
     <PtfFileName>Bin\MS-DFSC_ServerTestSuite.deployment.ptfconfig</PtfFileName>
     <PtfFileName>Bin\MS-FSA_ServerTestSuite.deployment.ptfconfig</PtfFileName>
+    <PtfFileName>Bin\MS-FSAModel_ServerTestSuite.deployment.ptfconfig</PtfFileName>
     <PtfFileName>Bin\MS-FSRVP_ServerTestSuite.deployment.ptfconfig</PtfFileName>
     <PtfFileName>Bin\MS-RSVD_ServerTestSuite.deployment.ptfconfig</PtfFileName>
     <PtfFileName>Bin\MS-SQOS_ServerTestSuite.deployment.ptfconfig</PtfFileName>
@@ -32,6 +33,7 @@
     <PtfFileName>ServerFailoverTestSuite.ptfconfig</PtfFileName>
     <PtfFileName>MS-DFSC_ServerTestSuite.deployment.ptfconfig</PtfFileName>
     <PtfFileName>MS-FSA_ServerTestSuite.deployment.ptfconfig</PtfFileName>
+    <PtfFileName>MS-FSAModel_ServerTestSuite.deployment.ptfconfig</PtfFileName>
     <PtfFileName>MS-FSRVP_ServerTestSuite.deployment.ptfconfig</PtfFileName>
     <PtfFileName>MS-RSVD_ServerTestSuite.deployment.ptfconfig</PtfFileName>
     <PtfFileName>MS-SQOS_ServerTestSuite.deployment.ptfconfig</PtfFileName>
@@ -44,6 +46,7 @@
     <DllFileName>Bin\ServerFailoverTestSuite.dll</DllFileName>
     <DllFileName>Bin\MS-DFSC_ServerTestSuite.dll</DllFileName>
     <DllFileName>Bin\MS-FSA_ServerTestSuite.dll</DllFileName>
+    <DllFileName>Bin\MS-FSAModel_ServerTestSuite.dll</DllFileName>
     <DllFileName>Bin\MS-FSRVP_ServerTestSuite.dll</DllFileName>
     <DllFileName>Bin\MS-RSVD_ServerTestSuite.dll</DllFileName>
     <DllFileName>Bin\MS-SQOS_ServerTestSuite.dll</DllFileName>

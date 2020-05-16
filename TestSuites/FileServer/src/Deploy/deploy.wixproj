@@ -359,17 +359,25 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLLOCATION</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\FSA\Model\MS-FSA_ServerModel.csproj">
-      <Name>MS-FSA_ServerModel</Name>
-      <Project>{BBC6AD3A-649C-4702-A4F0-FC33DBE59CD6}</Project>
+    <ProjectReference Include="..\FSA\TestSuite\MS-FSA_ServerTestSuite.csproj">
+      <Name>MS-FSA_ServerTestSuite</Name>
+      <Project>{3A6DFF03-804A-4040-8AC6-3CC97989F950}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLLOCATION</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\FSA\TestSuite\MS-FSA_ServerTestSuite.csproj">
-      <Name>MS-FSA_ServerTestSuite</Name>
-      <Project>{3A6DFF03-804A-4040-8AC6-3CC97989F950}</Project>
+    <ProjectReference Include="..\FSAModel\Model\MS-FSAModel_ServerModel.csproj">
+      <Name>MS-FSAModel_ServerModel</Name>
+      <Project>{FA704BDE-2102-448A-80C3-025B9DAD7A43}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\FSAModel\TestSuite\MS-FSAModel_ServerTestSuite.csproj">
+      <Name>MS-FSAModel_ServerTestSuite</Name>
+      <Project>{B42A8A9A-2301-4BD0-AACF-BEEC73871899}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
@@ -415,6 +423,8 @@
 	<Copy SourceFiles="..\DFSC\TestSuite\MS-DFSC_ServerTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
 	<Copy SourceFiles="..\FSA\TestSuite\MS-FSA_ServerTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
 	<Copy SourceFiles="..\FSA\TestSuite\MS-FSA_ServerTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
+  <Copy SourceFiles="..\FSAModel\TestSuite\MS-FSAModel_ServerTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
+	<Copy SourceFiles="..\FSAModel\TestSuite\MS-FSAModel_ServerTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
 	<Copy SourceFiles="..\FSRVP\TestSuite\MS-FSRVP_ServerTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
 	<Copy SourceFiles="..\FSRVP\TestSuite\MS-FSRVP_ServerTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
 	<Copy SourceFiles="..\RSVD\TestSuite\MS-RSVD_ServerTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />

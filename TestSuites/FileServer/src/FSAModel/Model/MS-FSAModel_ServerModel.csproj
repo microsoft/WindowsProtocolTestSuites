@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{BBC6AD3A-649C-4702-A4F0-FC33DBE59CD6}</ProjectGuid>
+    <ProjectGuid>{FA704BDE-2102-448A-80C3-025B9DAD7A43}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.Protocols.TestSuites.FileSharing.FSA.Model</RootNamespace>
-    <AssemblyName>MS-FSA_ServerModel</AssemblyName>
+    <AssemblyName>MS-FSAModel_ServerModel</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -123,7 +123,7 @@
       <Project>{124e0f6d-57d7-4582-af9a-3de11b358e76}</Project>
       <Name>Fscc</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Adapter\MS-FSA_ServerAdapter.csproj">
+    <ProjectReference Include="..\..\FSA\Adapter\MS-FSA_ServerAdapter.csproj">
       <Project>{98A76DE1-2D66-476B-9222-F15FFDFA8C81}</Project>
       <Name>MS-FSA_ServerAdapter</Name>
     </ProjectReference>
