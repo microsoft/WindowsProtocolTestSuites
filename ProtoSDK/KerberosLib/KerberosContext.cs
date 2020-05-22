@@ -300,10 +300,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <summary>
         /// Create context
         /// </summary>
-        public KerberosContext()
+        public KerberosContext(KerberosContextType contextType)
         {
             Pvno = KerberosConstValue.KERBEROSV5;
-            IsInitiator = true;
+            IsInitiator = contextType.Equals(KerberosContextType.Client);
         }
 
         /// <summary>
@@ -313,8 +313,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <param name="cName">Principal name</param>
         /// <param name="password">Password of principal</param>
         /// <param name="accountType">Accoundtype, user or device</param>
-        public KerberosContext(string domain, string cName, string password, KerberosAccountType accountType, bool isInitiator, string salt = null)
-            : this()
+        public KerberosContext(string domain, string cName, string password, KerberosAccountType accountType, KerberosContextType contextType, string salt = null)
+            : this(contextType)
         {
             if (domain == null)
             {
@@ -344,7 +344,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
                     throw new ArgumentOutOfRangeException("Account type not support");
                 }
             }
-
+            
             this.CName = new Principal(accountType, this.Realm, name, password, salt);
         }
 
@@ -357,8 +357,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <param name="accountType">Accoundtype, user or device</param>
         /// <param name="armorTicket">Computer TGT as armor ticket</param>
         /// <param name="armorSessionKey">Computer TGS session key as armor session key</param>
-        public KerberosContext(string domain, string cName, string password, KerberosAccountType accountType, string salt, KerberosTicket armorTicket, EncryptionKey armorSessionKey, bool isInitiator)
-            : this(domain, cName, password, accountType, isInitiator, salt)
+        public KerberosContext(string domain, string cName, string password, KerberosAccountType accountType, string salt, KerberosTicket armorTicket, EncryptionKey armorSessionKey, KerberosContextType contextType)
+            : this(domain, cName, password, accountType, contextType, salt)
         {
             this.ArmorTicket = armorTicket;
             this.ArmorSessionKey = armorSessionKey;

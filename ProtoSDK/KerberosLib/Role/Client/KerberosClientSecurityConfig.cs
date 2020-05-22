@@ -9,6 +9,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
 {
     public class KerberosClientSecurityConfig : SecurityConfig
     {
+        private int kdcPort = 88;
+
         /// <summary>
         /// Client account credential
         /// </summary>
@@ -84,6 +86,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             }
         }
 
+        public int KdcPort
+        {
+            get
+            {
+                return this.kdcPort;
+            }
+        }
+
         /// <summary>
         /// Client security context attributes.
         /// </summary>
@@ -130,6 +140,29 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             this.kdcIpAddress = kdcIpAddress;
             this.securityAttributes = attributes;
             this.transportType = transportType;
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="account">Account credential.</param>
+        /// <param name="logonName">Logon name.</param>
+        /// <param name="serviceName">Service name.</param>
+        /// <param name="kdcIpAddress">KDC IP address</param>
+        /// <param name="attributes">Client security attributes.</param>
+        /// <param name="connectionType">Connection type.</param>
+        public KerberosClientSecurityConfig(
+                AccountCredential account,
+                string serviceName,
+                ClientSecurityContextAttribute attributes)
+            : base(SecurityPackageType.Kerberos)
+        {
+            this.clientCredential = account;
+            this.logonName = account.AccountName;
+            this.serviceName = serviceName;
+            this.kdcIpAddress = account.DomainName.ParseIPAddress();
+            this.securityAttributes = attributes;
+            this.transportType = TransportType.TCP;
         }
     }
 }

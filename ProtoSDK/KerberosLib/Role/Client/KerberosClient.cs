@@ -99,7 +99,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         public KerberosClient(string domain, string cName, string password, KerberosAccountType accountType, string kdcAddress, int kdcPort, TransportType transportType, KerberosConstValue.OidPkt oidPkt = KerberosConstValue.OidPkt.KerberosToken, string salt = null)
         {
             TransportBufferSize = KerberosConstValue.TRANSPORT_BUFFER_SIZE;
-            this.Context = new KerberosContext(domain, cName, password, accountType, true, salt);
+            this.Context = new KerberosContext(domain, cName, password, accountType, KerberosContextType.Client, salt);
             this.kdcAddress = kdcAddress;
             this.kdcPort = kdcPort;
             this.transportType = transportType;
@@ -123,7 +123,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         public KerberosClient(string domain, string cName, string password, KerberosAccountType accountType, KerberosTicket armorTicket, EncryptionKey armorSessionKey, string kdcAddress, int kdcPort, TransportType transportType, KerberosConstValue.OidPkt oidPkt = KerberosConstValue.OidPkt.KerberosToken, string salt = null)
         {
             TransportBufferSize = KerberosConstValue.TRANSPORT_BUFFER_SIZE;
-            this.Context = new KerberosContext(domain, cName, password, accountType, salt, armorTicket, armorSessionKey, true);
+            this.Context = new KerberosContext(domain, cName, password, accountType, salt, armorTicket, armorSessionKey, KerberosContextType.Client);
             this.kdcAddress = kdcAddress;
             this.kdcPort = kdcPort;
             this.transportType = transportType;
