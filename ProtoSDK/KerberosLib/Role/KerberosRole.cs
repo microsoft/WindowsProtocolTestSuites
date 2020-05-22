@@ -35,14 +35,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         #endregion
 
         /// <summary>
-        /// Decode KILE PDUs from received message bytes
+        /// Decode Kerberos PDUs from received message bytes
         /// </summary>
         /// <param name="endPoint">An endpoint from which the message bytes are received</param>
         /// <param name="receivedBytes">The received bytes to be decoded</param>
         /// <param name="consumedLength">Length of message bytes consumed by decoder</param>
         /// <param name="expectedLength">Length of message bytes the decoder expects to receive</param>
-        /// <returns>The decoded KILE PDUs</returns>
-        /// <exception cref="System.FormatException">thrown when a kile message type is unsupported</exception>
+        /// <returns>The decoded Kerberos PDUs</returns>
+        /// <exception cref="System.FormatException">thrown when a Kerberos message type is unsupported</exception>
         public abstract KerberosPdu[] DecodePacketCallback(object endPoint,
                                                 byte[] receivedBytes,
                                                 out int consumedLength,
@@ -223,17 +223,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <returns>The created Gss_GetMic token.</returns>
         private Token1964_4757 GssGetMic1964_4757(SGN_ALG signAlgorithm, byte[] message)
         {
-            var token = new Token1964_4757(Context);
-            var tokenHeader = new TokenHeader1964_4757();
-            tokenHeader.tok_id = TOK_ID.Mic1964_4757;
-            tokenHeader.sng_alg = signAlgorithm;
-            tokenHeader.seal_alg = SEAL_ALG.NONE;
-            tokenHeader.filler = KerberosConstValue.TOKEN_FILLER_2_BYTE;
-
-            token.TokenHeader = tokenHeader;
-            token.Data = message;
-
-            return token;
+            return WrapToken1964_4757(GssTokenType.Mic1964_4757, message, false, signAlgorithm);
         }
 
         internal static bool GssVerifyMicEx(KerberosContext context, SecurityBuffer[] securityBuffers, out KerberosPdu pdu)
@@ -327,17 +317,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <returns>The created Gss_Wrap token.</returns>
         private Token1964_4757 GssWrap1964(bool isEncrypted, SGN_ALG signAlgorithm, byte[] message)
         {
-            var token = new Token1964_4757(Context);
-            var tokenHeader = new TokenHeader1964_4757();
-            tokenHeader.tok_id = TOK_ID.Wrap1964_4757;
-            tokenHeader.sng_alg = signAlgorithm;
-            tokenHeader.seal_alg = isEncrypted ? SEAL_ALG.DES : SEAL_ALG.NONE;
-            tokenHeader.filler = KerberosConstValue.TOKEN_FILLER_2_BYTE;
-
-            token.TokenHeader = tokenHeader;
-            token.Data = message;
-
-            return token;
+            return WrapToken1964_4757(GssTokenType.Wrap1964, message, isEncrypted, signAlgorithm);
         }
 
         /// <summary>
@@ -349,13 +329,34 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <returns>The created Gss_Wrap token.</returns>
         private Token1964_4757 GssWrap4757(bool isEncrypted, SGN_ALG signAlgorithm, byte[] message)
         {
-            var token = new Token1964_4757(Context);
-            var tokenHeader = new TokenHeader1964_4757();
-            tokenHeader.tok_id = TOK_ID.Wrap1964_4757;
-            tokenHeader.sng_alg = signAlgorithm;
-            tokenHeader.seal_alg = isEncrypted ? SEAL_ALG.RC4 : SEAL_ALG.NONE;
-            tokenHeader.filler = KerberosConstValue.TOKEN_FILLER_2_BYTE;
+            return WrapToken1964_4757(GssTokenType.Wrap4757, message, isEncrypted, signAlgorithm);
+        }
 
+        private Token1964_4757 WrapToken1964_4757(GssTokenType tokenType, byte[] message, bool isEncrypted, SGN_ALG signAlgorithm)
+        {
+            var token = new Token1964_4757(Context);
+            TokenHeader1964_4757 tokenHeader = new TokenHeader1964_4757();
+            tokenHeader.filler = KerberosConstValue.TOKEN_FILLER_2_BYTE;
+            tokenHeader.sng_alg = signAlgorithm;
+
+            switch (tokenType)
+            {
+                case GssTokenType.Wrap4757:
+                    {
+                        tokenHeader.tok_id = TOK_ID.Wrap1964_4757;
+                        tokenHeader.seal_alg = isEncrypted ? SEAL_ALG.RC4 : SEAL_ALG.NONE;
+                    }break;
+                case GssTokenType.Wrap1964:
+                    {
+                        tokenHeader.tok_id = TOK_ID.Wrap1964_4757;
+                        tokenHeader.seal_alg = isEncrypted ? SEAL_ALG.DES : SEAL_ALG.NONE;
+                    }break;
+                case GssTokenType.Mic1964_4757:
+                    {
+                        tokenHeader.tok_id = TOK_ID.Mic1964_4757;
+                        tokenHeader.seal_alg = SEAL_ALG.NONE;
+                    }break;
+            }
             token.TokenHeader = tokenHeader;
             token.Data = message;
 
@@ -403,5 +404,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             Dispose(false);
         }
         #endregion
+    }
+
+    internal enum GssTokenType
+    {
+        Wrap4757,
+        Wrap1964,
+        Mic1964_4757
     }
 }

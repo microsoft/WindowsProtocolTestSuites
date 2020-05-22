@@ -14,7 +14,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         #region Fields
 
         /// <summary>
-        /// the nlmp client to create the nlmp packet and holds the context and config.
+        /// the Kerberos client to create the Kerberos packet and holds the context and config.
         /// </summary>
         private KerberosClient client;
 
@@ -259,8 +259,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
 
                 // Expect TGT(AS) Response from KDC
                 KerberosAsResponse asResponse = this.ExpectAsResponse();
-                // store ticket, session key, start and expiration times (Done in UpdateContext)
-                this.CheckAsResponse(asRequest, asResponse);
 
                 // Create and send TGS request
                 Asn1SequenceOf<PA_DATA> seqOfPaData_TGS = new Asn1SequenceOf<PA_DATA>(new PA_DATA[] { paPacRequest.Data, paPacOptions.Data });
@@ -440,67 +438,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             KerberosAsResponse response = responsePdu as KerberosAsResponse;
             response.Decrypt(this.Context.ReplyKey.keyvalue.ByteArrayValue);
             return response;
-        }
-
-        private void CheckAsResponse(KerberosAsRequest asRequest, KerberosAsResponse asResponse)
-        {
-            // Check if TGT ticket exist
-            if (asResponse.Response.ticket == null)
-            {
-                throw new Exception("AS Response should contain a TGT");
-            }
-
-            // Check nonce
-            if (!asResponse.EncPart.nonce.Equals(asRequest.Request.req_body.nonce))
-            {
-                throw new Exception("nonce in AS Request not match with AS Response");
-            }
-
-            // Check sName
-            bool sNameMatched = true;
-            if (asRequest.Request.req_body.sname.name_string.Elements.Length != asResponse.EncPart.sname.name_string.Elements.Length)
-            {
-                sNameMatched = false;
-            }
-
-            if (sNameMatched)
-            {
-                for (int i = 0; i < asRequest.Request.req_body.sname.name_string.Elements.Length; i++)
-                {
-                    sNameMatched = sNameMatched && (asRequest.Request.req_body.sname.name_string.Elements[i].Value.ToLower().Equals(asResponse.EncPart.sname.name_string.Elements[i].Value.ToLower()));
-                }
-            }
-
-            if (!sNameMatched)
-            {
-                throw new Exception("sName in AS Request not match with AS Response");
-            }
-
-            // Check sRealm
-            if (!asResponse.EncPart.srealm.Value.ToLower().Equals(asRequest.Request.req_body.realm.Value.ToLower()))
-            {
-                throw new Exception("sRealm in AS Request not match with AS Response");
-            }
-
-            // Check Address
-            bool addressMatched = true;
-            if (asRequest.Request.req_body.addresses.Elements.Length != asResponse.EncPart.caddr.Elements.Length)
-            {
-                addressMatched = false;
-            }
-
-            if (addressMatched)
-            {
-                for (int i = 0; i < asRequest.Request.req_body.addresses.Elements.Length; i++)
-                {
-                    addressMatched = addressMatched && (asRequest.Request.req_body.addresses.Elements[i].address.Value.ToLower().Equals(asResponse.EncPart.caddr.Elements[i].address.Value.ToLower()));
-                }
-            }
-
-            if (!addressMatched)
-            {
-                throw new Exception("Address in AS Request not match with AS Response");
-            }
         }
         #endregion
 
@@ -807,17 +744,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <param name="checksumFlags">The checksum flag</param>
         private void GetFlagsByContextAttribute(out ApOptions apOptions)
         {
-            apOptions = ApOptions.None;
+            apOptions = ApOptions.MutualRequired;
             var checksumFlags = ChecksumFlags.None;
 
             if ((contextAttribute & ClientSecurityContextAttribute.Delegate) == ClientSecurityContextAttribute.Delegate)
             {
-                throw new NotSupportedException("ContextAttribute.Delegate is not supported currently!");
-            }
-            if ((contextAttribute & ClientSecurityContextAttribute.UseSessionKey)
-                == ClientSecurityContextAttribute.UseSessionKey)
-            {
-                //throw new NotSupportedException("ContextAttribute.UseSessionKey is not supported currently!");
+                checksumFlags |= ChecksumFlags.GSS_C_DELEG_FLAG;
             }
             if ((contextAttribute & ClientSecurityContextAttribute.MutualAuth)
                 == ClientSecurityContextAttribute.MutualAuth)

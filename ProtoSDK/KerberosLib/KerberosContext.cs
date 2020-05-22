@@ -9,7 +9,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
 {
     /// <summary>
     /// Base class of KileClientContext and KileServerContext
-    /// Maintain the important parameters during KILE transport.
+    /// Maintain the important parameters during Kerberos transport.
     /// </summary>
     public class KerberosContext
     {
@@ -197,6 +197,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             }
         }
 
+        /// <summary>
+        /// Checksum flags
+        /// </summary>
         public ChecksumFlags ChecksumFlag
         { 
             get; 

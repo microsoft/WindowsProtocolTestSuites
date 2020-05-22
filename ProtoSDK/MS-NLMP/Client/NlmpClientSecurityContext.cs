@@ -230,7 +230,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
             this.client.Context.ClientConfigFlags |= NegotiateTypes.NTLM_NEGOTIATE_OEM;
         }
 
-
         #endregion
 
         #region Gss Api
