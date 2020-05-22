@@ -264,7 +264,7 @@
         </Description>
       </Property>
 
-      <Property name="SupportedSecurityPackage" value="Kerberos">
+      <Property name="SupportedSecurityPackage" value="Negotiate">
         <Choice>Negotiate,Kerberos,Ntlm</Choice>
         <Description>
           Supported security packages, should be one of them

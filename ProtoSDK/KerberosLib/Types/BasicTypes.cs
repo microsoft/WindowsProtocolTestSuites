@@ -25,6 +25,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         Device = 1,
     }
 
+    /// <summary>
+    /// Specify the type of the Context
+    /// </summary>
+    public enum KerberosContextType : byte
+    {
+        /// <summary>
+        /// Kerberos Client
+        /// </summary>
+        Client = 0,
+
+        /// <summary>
+        /// Kerberos Server
+        /// </summary>
+        Server = 1,
+    }
 
     /// <summary>
     /// The padata type represent which padata value will be contained in request.

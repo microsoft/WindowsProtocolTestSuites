@@ -14,7 +14,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         #region Fields
 
         /// <summary>
-        /// the nlmp client to create the nlmp packet and holds the context and config.
+        /// the Kerberos client to create the Kerberos packet and holds the context and config.
         /// </summary>
         private KerberosClient client;
 
@@ -744,18 +744,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <param name="checksumFlags">The checksum flag</param>
         private void GetFlagsByContextAttribute(out ApOptions apOptions)
         {
-            apOptions = ApOptions.None;
+            apOptions = ApOptions.MutualRequired;
             var checksumFlags = ChecksumFlags.None;
 
-            if ((contextAttribute & ClientSecurityContextAttribute.Delegate) == ClientSecurityContextAttribute.Delegate)
-            {
-                throw new NotSupportedException("ContextAttribute.Delegate is not supported currently!");
-            }
-            if ((contextAttribute & ClientSecurityContextAttribute.UseSessionKey)
-                == ClientSecurityContextAttribute.UseSessionKey)
-            {
-                //throw new NotSupportedException("ContextAttribute.UseSessionKey is not supported currently!");
-            }
+            //if ((contextAttribute & ClientSecurityContextAttribute.Delegate) == ClientSecurityContextAttribute.Delegate)
+            //{
+            //    throw new NotSupportedException("ContextAttribute.Delegate is not supported currently!");
+            //}
+            //if ((contextAttribute & ClientSecurityContextAttribute.UseSessionKey)
+            //    == ClientSecurityContextAttribute.UseSessionKey)
+            //{
+            //    throw new NotSupportedException("ContextAttribute.UseSessionKey is not supported currently!");
+            //}
             if ((contextAttribute & ClientSecurityContextAttribute.MutualAuth)
                 == ClientSecurityContextAttribute.MutualAuth)
             {

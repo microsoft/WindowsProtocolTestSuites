@@ -12,7 +12,7 @@ using Microsoft.Protocols.TestTools.StackSdk.Transport;
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
 {
     /// <summary>
-    /// The KILE client, receives server PDUs and sends client PDUs.
+    /// The Kerberos Client, receives server PDUs and sends client PDUs.
     /// It is called by test cases to create, send or receive PDUs.
     /// </summary>
     public class KerberosClient : KerberosRole
@@ -76,6 +76,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             set;
         }
 
+        /// <summary>
+        /// MsKerberosOidInt(1, 2, 840, 48018, 1, 2, 2) or KerberosOid(1, 2, 840, 113554, 1, 2, 2)
+        /// </summary>
         public KerberosConstValue.OidPkt OidPkt
         {
             get { return this.oidPkt; }
@@ -84,7 +87,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
 
         #region constructor
         /// <summary>
-        /// Create a KileClient instance.
+        /// Create a KerberosClient instance.
         /// </summary>
         /// <param name="domain">The realm part of the client's principal identifier.
         /// This argument cannot be null.</param>
@@ -99,7 +102,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         public KerberosClient(string domain, string cName, string password, KerberosAccountType accountType, string kdcAddress, int kdcPort, TransportType transportType, KerberosConstValue.OidPkt oidPkt = KerberosConstValue.OidPkt.KerberosToken, string salt = null)
         {
             TransportBufferSize = KerberosConstValue.TRANSPORT_BUFFER_SIZE;
-            this.Context = new KerberosContext(domain, cName, password, accountType, true, salt);
+            this.Context = new KerberosContext(domain, cName, password, accountType, KerberosContextType.Client, salt);
             this.kdcAddress = kdcAddress;
             this.kdcPort = kdcPort;
             this.transportType = transportType;
@@ -123,7 +126,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         public KerberosClient(string domain, string cName, string password, KerberosAccountType accountType, KerberosTicket armorTicket, EncryptionKey armorSessionKey, string kdcAddress, int kdcPort, TransportType transportType, KerberosConstValue.OidPkt oidPkt = KerberosConstValue.OidPkt.KerberosToken, string salt = null)
         {
             TransportBufferSize = KerberosConstValue.TRANSPORT_BUFFER_SIZE;
-            this.Context = new KerberosContext(domain, cName, password, accountType, salt, armorTicket, armorSessionKey, true);
+            this.Context = new KerberosContext(domain, cName, password, accountType, salt, armorTicket, armorSessionKey, KerberosContextType.Client);
             this.kdcAddress = kdcAddress;
             this.kdcPort = kdcPort;
             this.transportType = transportType;
@@ -282,14 +285,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
 
         #region Decoder
         /// <summary>
-        /// Decode KILE PDUs from received message bytes
+        /// Decode Kerberos PDUs from received message bytes
         /// </summary>
         /// <param name="endPoint">An endpoint from which the message bytes are received</param>
         /// <param name="receivedBytes">The received bytes to be decoded</param>
         /// <param name="consumedLength">Length of message bytes consumed by decoder</param>
         /// <param name="expectedLength">Length of message bytes the decoder expects to receive</param>
-        /// <returns>The decoded KILE PDUs</returns>
-        /// <exception cref="System.FormatException">thrown when a kile message type is unsupported</exception>
+        /// <returns>The decoded Kerberos PDUs</returns>
+        /// <exception cref="System.FormatException">thrown when a Kerberos message type is unsupported</exception>
         public override KerberosPdu[] DecodePacketCallback(object endPoint,
                                                 byte[] receivedBytes,
                                                 out int consumedLength,
@@ -354,7 +357,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             consumedLength = expectedLength;
 
             // get message type
-            // (the lower 5 bits indicates its kile message type)
+            // (the lower 5 bits indicates its Kerberos message type)
             MsgType kileMessageType = (MsgType)(pduBytes[0] & 0x1f);
             KerberosPdu pdu = null;
 

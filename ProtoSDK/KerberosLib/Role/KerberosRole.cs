@@ -35,14 +35,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         #endregion
 
         /// <summary>
-        /// Decode KILE PDUs from received message bytes
+        /// Decode Kerberos PDUs from received message bytes
         /// </summary>
         /// <param name="endPoint">An endpoint from which the message bytes are received</param>
         /// <param name="receivedBytes">The received bytes to be decoded</param>
         /// <param name="consumedLength">Length of message bytes consumed by decoder</param>
         /// <param name="expectedLength">Length of message bytes the decoder expects to receive</param>
-        /// <returns>The decoded KILE PDUs</returns>
-        /// <exception cref="System.FormatException">thrown when a kile message type is unsupported</exception>
+        /// <returns>The decoded Kerberos PDUs</returns>
+        /// <exception cref="System.FormatException">thrown when a Kerberos message type is unsupported</exception>
         public abstract KerberosPdu[] DecodePacketCallback(object endPoint,
                                                 byte[] receivedBytes,
                                                 out int consumedLength,

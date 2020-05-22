@@ -837,7 +837,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             }
             else
             {
-                throw new NotSupportedException("Kile only support user or computer account.");
+                throw new NotSupportedException("Kerberos only support user or computer account.");
             }
 
             return salt;
