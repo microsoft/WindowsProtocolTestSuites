@@ -411,10 +411,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
                 {
                     Marshal.FreeHGlobal(mem.pointer);
                 }
-                catch (Exception e) //Catch Exception instead of COMException 
+                //catch (Exception e) //Catch Exception instead of COMException 
+                catch (COMException e)
                 {
                     // Catch this exception in case the mem.pointer is an invalid handler
-                    throw new InvalidOperationException ("Unable to free allocated memory with Marshal.FreeHGlobal: " + e.Message);                    
+                    // throw new InvalidOperationException ("Unable to free allocated memory with Marshal.FreeHGlobal: " + e.Message);                    
                 }
             }
 
