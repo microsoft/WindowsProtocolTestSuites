@@ -14,6 +14,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.0.0" />
+    <PackageReference Include="ProtocolTestFramework" Version="2.0.0-preview" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,12 +24,6 @@
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SWN\Swn.csproj" />
     <ProjectReference Include="..\..\Common\TestSuite\CommonTestSuite.csproj" />
     <ProjectReference Include="..\Adapter\MS-SMB2_ServerAdapter.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="*.ptfconfig">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>

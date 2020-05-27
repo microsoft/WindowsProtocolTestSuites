@@ -11,16 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="*.ptfconfig">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="ProtocolTestFramework" Version="2.0.0-preview" />
   </ItemGroup>
 
 </Project>
