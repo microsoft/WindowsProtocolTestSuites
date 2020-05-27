@@ -12,6 +12,7 @@
     <ComponentGroup Id="TESTSUITE_MISC_FILES">
       <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk.dll" />
       <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_CryptoLib.dll" />
+      <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_Cssp.dll" />
       <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Messages.dll" />
       <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpbcgr.dll" />
       <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Asn1Base.dll"/>
@@ -34,6 +35,7 @@
       <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Asn1Base.pdb"/>
       <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk.pdb" />
       <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_CryptoLib.pdb" />
+      <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_Cssp.pdb" />
       <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Messages.pdb" />
       <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpbcgr.pdb" />
       <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_RemoteDesktop_Rdpedyc.pdb" />
@@ -113,6 +115,11 @@
       <Component Id="Microsoft_Protocols_TestTools_StackSdk_Security_CryptoLib.dll" Guid="{A4143D23-D77A-4085-9AA9-6FE248F39899}">
         <File Id="Microsoft_Protocols_TestTools_StackSdk_Security_CryptoLib.dll"
               Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.CryptoLib.dll" />
+      </Component>
+
+      <Component Id="Microsoft_Protocols_TestTools_StackSdk_Security_Cssp.dll" Guid="{B26CA8D0-D7C2-457E-B7C0-2CEAA03B1111}">
+        <File Id="Microsoft_Protocols_TestTools_StackSdk_Security_Cssp.dll"
+              Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Cssp.dll" />
       </Component>
 
       <Component Id="Microsoft_Protocols_TestTools_StackSdk_Messages.dll" Guid="{ADCDBA45-85BE-4E2D-B0A5-F78A98E133D9}">
@@ -218,6 +225,11 @@
       <Component Id="Microsoft_Protocols_TestTools_StackSdk_Security_CryptoLib.pdb" Guid="{546963B0-4B56-4BEB-8E2A-9A632CB35515}">
         <File Id="Microsoft_Protocols_TestTools_StackSdk_Security_CryptoLib.pdb"
               Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.CryptoLib.pdb" />
+      </Component>
+
+      <Component Id="Microsoft_Protocols_TestTools_StackSdk_Security_Cssp.pdb" Guid="{F551608B-B330-4367-9DB2-A1C754F63F09}">
+        <File Id="Microsoft_Protocols_TestTools_StackSdk_Security_Cssp.pdb"
+              Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Cssp.pdb" />
       </Component>
 
       <Component Id="Microsoft_Protocols_TestTools_StackSdk_Messages.pdb" Guid="{2DCF69AF-BB42-4C45-83F0-17439DCFA9C8}">
