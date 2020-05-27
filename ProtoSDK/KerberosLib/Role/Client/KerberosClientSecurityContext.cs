@@ -45,6 +45,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// </summary>
         private SecurityPackageContextSizes contextSizes;
 
+        /// <summary>
+        /// KRB_AP_REQ Authenticator
+        /// </summary>
+        private Authenticator ApRequestAuthenticator;
         #endregion
 
         #region Properties
@@ -236,6 +240,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         {
             if (serverToken == null)
             {
+                this.ApRequestAuthenticator = null;
                 // Create and send AS request for pre-authentication
                 KdcOptions options = KdcOptions.FORWARDABLE | KdcOptions.CANONICALIZE | KdcOptions.RENEWABLE;
                 this.SendAsRequest(options, null);
@@ -296,6 +301,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             else
             {
                 KerberosApResponse apRep = this.GetApResponseFromToken(serverToken, KerberosConstValue.GSSToken.GSSAPI);
+                this.VerifyApResponse(apRep);
+
                 token = null;
                 if ((contextAttribute & ClientSecurityContextAttribute.DceStyle) == ClientSecurityContextAttribute.DceStyle)
                 {
@@ -511,7 +518,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             APOptions options = new APOptions(KerberosUtility.ConvertInt2Flags((int)apOptions));
 
             Authenticator authenticator = CreateAuthenticator(Context.Ticket, data, subkey, checksumFlags);
-
+            this.ApRequestAuthenticator = authenticator;
             KerberosApRequest request = new KerberosApRequest(
                 Context.Pvno,
                 options,
@@ -530,7 +537,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <returns></returns>
         private KerberosApResponse GetApResponseFromToken(byte[] token, KerberosConstValue.GSSToken gssToken = KerberosConstValue.GSSToken.GSSSPNG)
         {
-            
             if (gssToken == KerberosConstValue.GSSToken.GSSSPNG)
                 token = KerberosUtility.DecodeNegotiationToken(token);
 
@@ -598,6 +604,29 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             return response;
         }
 
+        private void VerifyApResponse(KerberosApResponse apRep)
+        {
+            apRep.Decrypt(this.Context.ApSessionKey.keyvalue.ByteArrayValue);
+            if (apRep.ApEncPart != null)
+            {
+                if (apRep.ApEncPart.ctime.Value != this.ApRequestAuthenticator.ctime.Value)
+                {
+                    throw new NotSupportedException("ctime is not match with KRB_AP_REQ ctime");
+                }
+                if (apRep.ApEncPart.cusec.Value != this.ApRequestAuthenticator.cusec.Value)
+                {
+                    throw new NotSupportedException("cusec is not match with KRB_AP_REQ cusec");
+                }
+                if (apRep.ApEncPart.seq_number.Value == null || apRep.ApEncPart.seq_number.Value <= 0)
+                {
+                    throw new NotSupportedException("seq_number should be a valid value");
+                }
+            }
+            else
+            {
+                throw new NotSupportedException("KRB_AP_REP decrypt failed");
+            }
+        }
         #endregion
 
         #region Utility Methods

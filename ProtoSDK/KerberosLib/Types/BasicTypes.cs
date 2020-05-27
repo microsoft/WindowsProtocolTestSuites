@@ -2735,7 +2735,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <summary>
         /// Identification field.
         /// </summary>
-        [CLSCompliant(false)]
         public TOK_ID tok_id;
 
         /// <summary>
@@ -2751,19 +2750,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <summary>
         /// Contains the "extra count" field.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort ec;
 
         /// <summary>
         /// Contains the "right rotation count".
         /// </summary>
-        [CLSCompliant(false)]
         public ushort rrc;
 
         /// <summary>
         /// Sequence number field in clear text.
         /// </summary>
-        [CLSCompliant(false)]
         public UInt64 snd_seq;
     }
 
@@ -2802,7 +2798,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <summary>
         /// Identification field.
         /// </summary>
-        [CLSCompliant(false)]
         public TOK_ID tok_id;
 
         /// <summary>
@@ -2811,20 +2806,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         ///  01 00 - MD2.5
         ///  02 00 - DES MAC
         /// </summary>
-        [CLSCompliant(false)]
         public SGN_ALG sng_alg;
 
         /// <summary>
         /// ff ff - none
         /// 00 00 - DES
         /// </summary>
-        [CLSCompliant(false)]
         public SEAL_ALG seal_alg;
 
         /// <summary>
         /// Contains ff ff.
         /// </summary>
-        [CLSCompliant(false)]
         public ushort filler;
 
         /// <summary>
