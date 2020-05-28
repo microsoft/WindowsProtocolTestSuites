@@ -149,6 +149,8 @@
     <Compile Include="Asn1Code\Spng\NegTokenResp.cs" />
     <Compile Include="Asn1Code\Spng\SavedMechTypeList.cs" />
     <Compile Include="KerberosContext.cs" />
+    <Compile Include="Role\Client\KerberosClientSecurityConfig.cs" />
+    <Compile Include="Role\Client\KerberosClientSecurityContext.cs" />
     <Compile Include="Role\Client\KKDCPClient.cs" />
     <Compile Include="Role\Client\KKDCPClientConfig.cs" />
     <Compile Include="Role\Client\KpasswdClient.cs" />
@@ -164,7 +166,6 @@
     <Compile Include="Types\KerberosArmoredResponse.cs" />
     <Compile Include="Types\KerberosAsRequest.cs" />
     <Compile Include="Types\KerberosAsResponse.cs" />
-    <Compile Include="Types\KerberosAuthData.cs" />
     <Compile Include="Types\KerberosFastArmor.cs" />
     <Compile Include="Types\KerberosFastRequest.cs" />
     <Compile Include="Types\KerberosFastResponse.cs" />
@@ -196,9 +197,9 @@
       <Project>{75544419-3F4E-4308-A676-165F45C1462E}</Project>
       <Name>Messages</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MS-PAC\Pac.csproj">
-      <Project>{AEFAF10D-D1BF-44C4-BD9F-5CFF2AFA432F}</Project>
-      <Name>Pac</Name>
+    <ProjectReference Include="..\SspiLib\SspiLib.csproj">
+      <Project>{E64BF20F-11D2-49F6-A25B-F4378AB38180}</Project>
+      <Name>SspiLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\TransportStack\TransportStack.csproj">
       <Project>{967D976A-C792-4893-9235-14615AE1FF58}</Project>

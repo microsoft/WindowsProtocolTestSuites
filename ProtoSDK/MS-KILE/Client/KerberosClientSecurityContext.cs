@@ -1,16 +1,13 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestTools.StackSdk.Asn1;
+using Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic;
+using Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
-using System.Net.Sockets;
-
-using Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic;
-using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
-using Microsoft.Protocols.TestTools.StackSdk.Asn1;
-using Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
 {
@@ -37,7 +34,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <summary>
         /// The service to request.
         /// </summary>
-        private string service;
+        private string serverName;
 
         /// <summary>
         /// The realm part of the client's principal identifier.
@@ -71,8 +68,36 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
 
         #endregion private members
 
-
         #region constructor
+        public KerberosClientSecurityContext(AccountCredential clientCredential, string serviceName, ClientSecurityContextAttribute contextAttributes)
+        {
+            if (clientCredential.DomainName == null)
+            {
+                throw new ArgumentNullException(nameof(clientCredential.DomainName));
+            }
+            if (clientCredential.AccountName == null)
+            {
+                throw new ArgumentNullException(nameof(clientCredential.AccountName));
+            }
+            if (clientCredential.Password == null)
+            {
+                throw new ArgumentNullException(nameof(clientCredential.Password));
+            }
+            if (serviceName == null)
+            {
+                throw new ArgumentNullException(nameof(serviceName));
+            }
+
+            this.contextAttribute = contextAttributes;
+            client = new KileClient(clientCredential.DomainName, clientCredential.AccountName, clientCredential.Password,
+                KileAccountType.User);
+            this.serverName = serviceName;
+            domain = clientCredential.DomainName;
+            userLogonName = clientCredential.AccountName;
+            client.Connect(clientCredential.DomainName, ConstValue.KDC_PORT, KileConnectionType.TCP);
+            InitContextSize();
+        }
+
         /// <summary>
         /// Construct an instance of Kerberos Client Context to do Kerberos Authentication.
         /// </summary>
@@ -121,16 +146,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
 
             client = new KileClient(clientCredential.DomainName, clientCredential.AccountName, clientCredential.Password,
                 KileAccountType.User);
-            service = serviceName;
+            this.serverName = serviceName;
             domain = clientCredential.DomainName;
             userLogonName = logonName;
             contextAttribute = contextAttributes;
             client.Connect(kdcIpAddress.ToString(), ConstValue.KDC_PORT, transportType);
-            contextSizes = new SecurityPackageContextSizes();
-            contextSizes.MaxTokenSize = ConstValue.MAX_TOKEN_SIZE;
-            contextSizes.MaxSignatureSize = ConstValue.MAX_SIGNATURE_SIZE;
-            contextSizes.BlockSize = ConstValue.BLOCK_SIZE;
-            contextSizes.SecurityTrailerSize = ConstValue.SECURITY_TRAILER_SIZE;
+            InitContextSize();
         }
 
         #endregion constructor
@@ -149,22 +170,35 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             if (inToken == null || inToken.Length == 0)
             {
-                // a new connection
                 KilePdu response = null;
                 string sname = ConstValue.KERBEROS_SNAME;
-                KRBFlags flags = KRBFlags.FORWARDABLE | KRBFlags.RENEWABLE
-                               | KRBFlags.CANONICALIZE | KRBFlags.RENEWABLEOK;
-                PaEncTimeStamp timestamp = client.ConstructPaEncTimeStamp(EncryptionType.RC4_HMAC);
-                PaPacRequest pacRequest = client.ConstructPaPacRequest(true);
-                Asn1SequenceOf<PA_DATA> paData = client.ConstructPaData(timestamp, pacRequest);
                 KileAsRequest asRequest;
                 EncryptionKey subkey = null;
 
-                if ((contextAttribute & ClientSecurityContextAttribute.DceStyle)
-                    == ClientSecurityContextAttribute.DceStyle)
+                // Create and send AS request for pre-authentication
+                KdcOptions options = KdcOptions.FORWARDABLE | KdcOptions.RENEWABLE
+                               | KdcOptions.CANONICALIZE | KdcOptions.RENEWABLEOK;
+                KDCOptions flags = new KDCOptions(KerberosUtility.ConvertInt2Flags((int)options));
+
+                // Create and send AS request for pre-authentication
+                asRequest = client.CreateAsRequest(sname, flags, null, this.GetClientSupportedEtype());
+                client.SendPdu(asRequest);
+                response = client.ExpectPdu(ConstValue.TIMEOUT_DEFAULT);
+                KileKrbError preAuthError = response as KileKrbError;
+                if ((preAuthError == null) || (!preAuthError.ErrorCode.Equals(KRB_ERROR_CODE.KDC_ERR_PREAUTH_REQUIRED)))
                 {
-                    asRequest = client.CreateAsRequest(sname, flags, paData, EncryptionType.AES256_CTS_HMAC_SHA1_96,
-                        EncryptionType.RC4_HMAC);
+                    throw new InvalidOperationException("The Error code should be KDC_ERR_PREAUTH_REQUIRED");
+                }
+
+                // Create and send AS request for TGT
+                var defualtEncryptType = (client.ClientContext.TgsSessionKey == null) ? EncryptionType.RC4_HMAC : (EncryptionType)client.ClientContext.TgsSessionKey.keytype.Value;
+                PaEncTimeStamp timestamp = client.ConstructPaEncTimeStamp(defualtEncryptType);
+                PaPacRequest pacRequest = client.ConstructPaPacRequest(true);
+                Asn1SequenceOf<PA_DATA> paData = client.ConstructPaData(timestamp, pacRequest);
+
+                if ((contextAttribute & ClientSecurityContextAttribute.DceStyle) == ClientSecurityContextAttribute.DceStyle)
+                {
+                    asRequest = client.CreateAsRequest(sname, flags, paData, this.GetClientSupportedEtype());
                     //subkey = new EncryptionKey((int)EncryptionType.AES256_CTS_HMAC_SHA1_96,
                     //    KileUtility.GenerateRandomBytes(ConstValue.AES_KEY_LENGTH));
 
@@ -173,7 +207,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 }
                 else
                 {
-                    asRequest = client.CreateAsRequest(sname, flags, paData, EncryptionType.RC4_HMAC);
+                    asRequest = client.CreateAsRequest(sname, flags, paData, this.GetClientSupportedEtype());
                 }
                 client.SendPdu(asRequest);
                 response = client.ExpectPdu(ConstValue.TIMEOUT_DEFAULT);
@@ -183,7 +217,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                     throw new InvalidOperationException("Received Kerberos Error response: " + ((KileKrbError)response).ErrorCode);
                 }
                 KileAsResponse asResponse = (KileAsResponse)response;
-                sname = service;
+
+                // Create and send TGS request
+                
                 // for example: "KERB.COMldapsut02.kerb.com"
                 client.ClientContext.Salt = domain.ToUpper();
                 string[] nameList = userLogonName.Split('/');
@@ -191,9 +227,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 {
                     client.ClientContext.Salt += name;
                 }
-                KileTgsRequest tgsRequest = client.CreateTgsRequest(sname,
+                KileTgsRequest tgsRequest = client.CreateTgsRequest(this.serverName,
                                                               flags,
-                                                              new KerbUInt32((long)Math.Abs((long)DateTime.Now.Ticks)),
                                                               null,
                                                               ChecksumType.hmac_md5_string,
                                                               null,
@@ -205,7 +240,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 {
                     throw new InvalidOperationException("Received Kerberos Error response: " + ((KileKrbError)response).ErrorCode);
                 }
+
                 KileTgsResponse tgsResponse = (KileTgsResponse)response;
+
                 ApOptions apOption;
                 ChecksumFlags checksumFlag;
                 GetFlagsByContextAttribute(out apOption, out checksumFlag);
@@ -224,6 +261,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                                                              subkey,
                                                              authData);
                 token = apRequest.ToBytes();
+
                 bool isMutualAuth = (contextAttribute & ClientSecurityContextAttribute.MutualAuth)
                     == ClientSecurityContextAttribute.MutualAuth;
                 bool isDceStyle = (contextAttribute & ClientSecurityContextAttribute.DceStyle)
@@ -237,6 +275,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 {
                     continueProcess = false;  // SEC_E_OK;
                 }
+
             }
             else  // mutual authentication
             {
@@ -250,7 +289,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                     token = apResponseSend.ToBytes();
                 }
 
-                continueProcess = false;      // SEC_E_OK;
+                this.continueProcess = false;      // SEC_E_OK;
             }
         }
 
@@ -380,7 +419,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             }
         }
 
-
         /// <summary>
         /// Queries the sizes of the structures used in the per-message functions.
         /// </summary>
@@ -393,6 +431,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             }
         }
 
+        public string ServerName
+        {
+            get { return this.serverName; }
+        }
         #endregion
 
 
@@ -458,6 +500,29 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             }
         }
 
+        private EncryptionType[] GetClientSupportedEtype()
+        {
+            EncryptionType[] encryptionTypes = new EncryptionType[]
+            {
+                EncryptionType.AES256_CTS_HMAC_SHA1_96,
+                EncryptionType.AES128_CTS_HMAC_SHA1_96,
+                EncryptionType.RC4_HMAC,
+                EncryptionType.RC4_HMAC_EXP,
+                EncryptionType.DES_CBC_CRC,
+                EncryptionType.DES_CBC_MD5,
+            };
+
+            return encryptionTypes;
+        }
+
+        private void InitContextSize()
+        {
+            contextSizes = new SecurityPackageContextSizes();
+            contextSizes.MaxTokenSize = ConstValue.MAX_TOKEN_SIZE;
+            contextSizes.MaxSignatureSize = ConstValue.MAX_SIGNATURE_SIZE;
+            contextSizes.BlockSize = ConstValue.BLOCK_SIZE;
+            contextSizes.SecurityTrailerSize = ConstValue.SECURITY_TRAILER_SIZE;
+        }
         #endregion
 
 

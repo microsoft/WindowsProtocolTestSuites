@@ -1,7 +1,11 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using System;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
 {
@@ -21,6 +25,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         Device = 1,
     }
 
+    /// <summary>
+    /// Specify the type of the Context
+    /// </summary>
+    public enum KerberosContextType : byte
+    {
+        /// <summary>
+        /// Kerberos Client
+        /// </summary>
+        Client = 0,
+
+        /// <summary>
+        /// Kerberos Server
+        /// </summary>
+        Server = 1,
+    }
 
     /// <summary>
     /// The padata type represent which padata value will be contained in request.
@@ -385,91 +404,80 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <summary>
         /// Reserved for future expansion of this field.
         /// </summary>
-        RESERVED = (uint)1 << 31,
+        RESERVED = 0x80000000,
 
         /// <summary>
-        /// The FORWARDABLE flag is normally only interpreted by the TGS, and can be ignored by end servers.
-        /// When set, this flag tells the ticket-granting server that it is OK to issue a new TGT 
-        /// with a different network address based on the presented ticket.
+        /// this flag tells the ticket-granting server that it is OK to issue a new TGT with a different
+        /// network address based on the presented ticket.
         /// </summary>
-        FORWARDABLE = (uint)1 << 30,
+        FORWARDABLE = 0x40000000,
 
         /// <summary>
-        /// When set, this flag indicates that the ticket has either been forwarded TGT.
+        /// When set, this flag indicates that the ticket has either been forwarded or was issued based on
+        /// authentication involving a forwarded TGT.
         /// </summary>
-        FORWARDED =  (uint)1 << 29,
+        FORWARDED = 0x20000000,
 
         /// <summary>
-        /// The PROXIABLE flag is normally only interpreted by the TGS, and can be ignored by end servers. 
-        /// The PROXIABLE flag has an interpretation identical to that of the FORWARDABLE flag, 
-        /// except that the PROXIABLE flag tells the ticket-granting server that only non-TGTs may be issued with different network addresses.
+        /// The PROXIABLE flag has an interpretation identical to that of the FORWARDABLE flag, except that the
+        /// PROXIABLE flag tells the ticket-granting server that only non-TGTs may be issued with different network addresses.
+        /// </summary> 
+        PROXIABLE = 0x10000000,
+
+        /// <summary>
+        /// indicates that a ticket is a proxy.
         /// </summary>
-        PROXIABLE = (uint)1 << 28,
+        PROXY = 0x08000000,
 
         /// <summary>
-        /// When set, this flag indicates that a ticket is a proxy.
-        /// </summary>
-        PROXY = (uint)1 << 27,
-
-        /// <summary>
-        /// The MAY-POSTDATE flag is normally only interpreted by the TGS, and can be ignored by end servers. 
         /// This flag tells the ticket-granting server that a post-dated ticket MAY be issued based on this TGT.
         /// </summary>
-        MAY_POSTDATE = (uint)1 << 26,
+        MAYPOSTDATE = 0x04000000,
 
         /// <summary>
-        /// This flag indicates that this ticket has been postdated. 
-        /// The end-service can check the authtime field to see when the original authentication occurred.
+        /// This flag indicates that this ticket has been postdated.
         /// </summary>
-        POSTDATED = (uint)1 << 25,
+        POSTDATED = 0x02000000,
 
         /// <summary>
-        /// This flag indicates that a ticket is invalid, and it must be validated by the KDC before use. 
-        /// Application servers must reject tickets which have this flag set.
+        /// This flag indicates that a ticket is invalid
         /// </summary>
-        INVALID = (uint)1 << 24,
+        INVALID = 0x01000000,
 
         /// <summary>
-        /// The RENEWABLE flag is normally only interpreted by the TGS, and can usually be ignored by end servers 
-        /// (some particularly careful servers MAY disallow renewable tickets). A renewable ticket can be used 
-        /// to obtain a replacement ticket that expires at a later date.
+        /// The RENEWABLE flag is normally only interpreted by the TGS.
+        /// A renewable ticket can be used to obtain a replacement ticket that expires at a later date.
         /// </summary>
-        RENEWABLE = (uint)1 << 23,
+        RENEWABLE = 0x00800000,
 
         /// <summary>
         /// This flag indicates that this ticket was issued using the AS protocol, and not issued based on a TGT.
         /// </summary>
-        INITIAL = (uint)1 << 22,
+        INITIAL = 0x00400000,
 
         /// <summary>
-        /// This flag indicates that during initial authentication, the client was authenticated by the KDC before a ticket was issued. 
-        /// The strength of the pre-authentication method is not indicated, but is acceptable to the KDC.
+        /// This flag indicates that during initial authentication, the client was authenticated by the KDC before
+        /// a ticket was issued.
         /// </summary>
-        PRE_AUTHENT = (uint)1 << 21,
+        PREAUTHENT = 0x00200000,
 
         /// <summary>
-        /// This flag indicates that the protocol employed for initial authentication required the use of hardware expected to 
-        /// be possessed solely by the named client. The hardware authentication method is and the strength of the method is not indicated.
+        /// This flag indicates that the protocol employed for initial authentication required the use of hardware
+        /// expected to be possessed solely by the named client.
         /// </summary>
-        HW_AUTHENT = (uint)1 << 20,
+        HWAUTHENT = 0x00100000,
 
         /// <summary>
-        /// This flag indicates that the KDC for policy-checked the realm has checked the transited field against a realm-defined policy for trusted certifiers. 
-        /// If this flag is reset (0), then the application server must check the transited field itself, and if unable to do so, it must reject the authentication.
-        /// If the flag is set (1), then the application server MAY skip its own validation of the transited field, relying on the validation performed by the KDC. 
-        /// At its option the application server MAY still apply its own validation based on a separate policy for acceptance.
-        /// This flag is new since RFC 1510.
+        /// This flag indicates that the KDC for the realm has checked the transited field against a realm-defined
+        /// policy for trusted certifiers.
         /// </summary>
-        TRANSITED_POLICY_CHECKED = (uint)1 << 19,
+        TRANSITEDPOLICYCHECKED = 0x00080000,
 
         /// <summary>
-        /// This flag indicates that the server (not the client) specified in the ticket has been determined by policy of the realm to be a suitable recipient of delegation.
-        /// A client can use the presence of this flag to help it decide whether to delegate credentials (either grant a proxy or a forwarded TGT) to this server.
-        /// The client is free to ignore the value of this flag. When setting this flag, an administrator should consider the security and placement of the server
-        /// on which the service will run, as well as whether the service requires the use of delegated credentials. 
-        /// This flag is new since RFC 1510.
+        /// This flag indicates that the server (not the client) specified in the ticket has been determined by policy
+        /// of the realm to be a suitable recipient of delegation.
         /// </summary>
-        OK_AS_DELEGATE = (uint)1 << 18
+        OKASDELEGATE = 0x00040000,
     }
 
 
@@ -1619,4 +1627,1207 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// </summary>
         KRB5_KPASSWD_OTHER_ERRORS = 0xFFFF
     }
+
+    #region Token
+    /// <summary>
+    /// Wrap token in rfc[4121].
+    /// </summary>
+    public class Token4121 : KerberosPdu
+    {
+        private KerberosContext context;
+
+        /// <summary>
+        /// The token header.
+        /// </summary>
+        private TokenHeader4121 tokenHeader;
+
+        /// <summary>
+        /// The orignial data.
+        /// </summary>
+        private byte[] data;
+
+        /// <summary>
+        /// The token header.
+        /// </summary>
+        public TokenHeader4121 TokenHeader
+        {
+            get
+            {
+                return tokenHeader;
+            }
+            set
+            {
+                tokenHeader = value;
+            }
+        }
+
+        /// <summary>
+        /// The orignial data.
+        /// </summary>
+        public byte[] Data
+        {
+            get
+            {
+                return data;
+            }
+            set
+            {
+                data = value;
+            }
+        }
+
+        /// <summary>
+        /// Create an instance.
+        /// </summary>
+        /// <param name="context">The context of the client.</param>
+        public Token4121(KerberosContext context)
+        {
+            this.context = context;
+        }
+
+
+        /// <summary>
+        /// Decode the KILE PDU from the message bytes.
+        /// </summary>
+        /// <param name="buffer">The byte array to be decoded.</param>
+        /// <exception cref="System.FormatException">Thrown when the format of input parameter is not correct.
+        /// </exception>
+        public override void FromBytes(byte[] buffer)
+        {
+            if (buffer == null || buffer.Length < Marshal.SizeOf(typeof(TokenHeader4121)))
+            {
+                throw new FormatException("The token body is incomplete!");
+            }
+
+            byte[] tokenBody = buffer;
+            if (buffer[0] == KerberosConstValue.KERBEROS_TAG)
+            {
+                tokenBody = KerberosUtility.VerifyGssApiTokenHeader(buffer);
+            }
+
+            tokenHeader = KerberosUtility.ToStruct<TokenHeader4121>(tokenBody);
+            ushort ec = KerberosUtility.ConvertEndian(tokenHeader.ec);
+            TOK_ID tokId = (TOK_ID)KerberosUtility.ConvertEndian((ushort)tokenHeader.tok_id);
+
+            if (tokId == TOK_ID.Wrap4121)
+            {
+                int tokenSize = buffer.Length - tokenBody.Length;
+                tokenSize += Marshal.SizeOf(typeof(TokenHeader4121)); //clearhdr
+                if ((tokenHeader.flags & WrapFlag.Sealed) != 0)
+                {
+                    tokenSize += Marshal.SizeOf(typeof(TokenHeader4121)); //enchdr
+                    tokenSize += Cryptographic.ConstValue.HMAC_HASH_OUTPUT_SIZE; //checksum
+                    tokenSize += Cryptographic.ConstValue.AES_BLOCK_SIZE; // confounder
+                    tokenSize += ec; //EC bytes of padding
+                }
+                else
+                {
+                    tokenSize += ec; //checksum
+                }
+
+                if (buffer.Length < tokenSize)
+                {
+                    throw new FormatException("The token body is incomplete!");
+                }
+
+                FromSecurityBuffers(
+                    new SecurityBuffer(SecurityBufferType.Token, ArrayUtility.SubArray(buffer, 0, tokenSize)),
+                    new SecurityBuffer(SecurityBufferType.Data, ArrayUtility.SubArray(buffer, tokenSize)));
+            }
+            else if (tokId == TOK_ID.Mic4121)
+            {
+                FromSecurityBuffers(
+                    new SecurityBuffer(SecurityBufferType.Token, buffer),
+                    new SecurityBuffer(SecurityBufferType.Data, data));
+            }
+            else
+            {
+                throw new FormatException("Other tok_id is not supported.");
+            }
+        }
+
+
+        /// <summary>
+        /// Decode the KILE PDU from security buffers.
+        /// </summary>
+        /// <param name="securityBuffers">Security buffers</param>
+        public void FromSecurityBuffers(params SecurityBuffer[] securityBuffers)
+        {
+            byte[] tokenBody = SspiUtility.ConcatenateSecurityBuffers(securityBuffers, SecurityBufferType.Token);
+            if (tokenBody[0] == KerberosConstValue.KERBEROS_TAG)
+            {
+                tokenBody = KerberosUtility.VerifyGssApiTokenHeader(tokenBody);
+            }
+
+            if (tokenBody.Length < Marshal.SizeOf(typeof(TokenHeader4121)))
+            {
+                throw new FormatException("The token body is incomplete!");
+            }
+
+            tokenHeader = KerberosUtility.ToStruct<TokenHeader4121>(tokenBody);
+            ushort rrc = KerberosUtility.ConvertEndian(tokenHeader.rrc);
+            ushort ec = KerberosUtility.ConvertEndian(tokenHeader.ec);
+            TOK_ID tokId = (TOK_ID)KerberosUtility.ConvertEndian((ushort)tokenHeader.tok_id);
+
+            byte[] cipher;
+            if (tokId == TOK_ID.Wrap4121)
+            {
+                cipher = ArrayUtility.ConcatenateArrays(
+                    ArrayUtility.SubArray(tokenBody, Marshal.SizeOf(typeof(TokenHeader4121))),
+                    SspiUtility.ConcatenateReadWriteSecurityBuffers(securityBuffers, SecurityBufferType.Data, SecurityBufferType.Padding));
+            }
+            else
+            {
+                cipher = ArrayUtility.SubArray(tokenBody, Marshal.SizeOf(typeof(TokenHeader4121)));
+            }
+
+            #region set keyusage
+            TokenKeyUsage keyUsage;
+            if (tokId == TOK_ID.Wrap4121)  // wrap token
+            {
+                if ((tokenHeader.flags & WrapFlag.SentByAcceptor) == WrapFlag.SentByAcceptor)
+                {
+                    keyUsage = TokenKeyUsage.KG_USAGE_ACCEPTOR_SEAL;
+                }
+                else
+                {
+                    keyUsage = TokenKeyUsage.KG_USAGE_INITIATOR_SEAL;
+                }
+
+                if ((tokenHeader.flags & WrapFlag.Sealed) == WrapFlag.None)
+                {
+                    tokenHeader.ec = 0;
+                }
+
+                tokenHeader.rrc = 0;
+            }
+            else  // mic token
+            {
+                if ((tokenHeader.flags & WrapFlag.SentByAcceptor) == WrapFlag.SentByAcceptor)
+                {
+                    keyUsage = TokenKeyUsage.KG_USAGE_ACCEPTOR_SIGN;
+                }
+                else
+                {
+                    keyUsage = TokenKeyUsage.KG_USAGE_INITIATOR_SIGN;
+                }
+            }
+            #endregion set keyusage
+
+            byte[] header = KerberosUtility.StructToBytes(tokenHeader);
+
+            #region convert big-endian
+            tokenHeader.tok_id = (TOK_ID)KerberosUtility.ConvertEndian((ushort)tokenHeader.tok_id);
+            tokenHeader.snd_seq = KerberosUtility.ConvertEndian(tokenHeader.snd_seq);
+            tokenHeader.ec = ec;
+            tokenHeader.rrc = rrc;
+            #endregion convert big-endian
+
+            #region verify header
+            if (tokenHeader.tok_id != TOK_ID.Wrap4121 && tokenHeader.tok_id != TOK_ID.Mic4121)
+            {
+                throw new FormatException("The token ID is incorrect! tok_id = " + (ushort)tokenHeader.tok_id);
+            }
+
+            if (tokenHeader.filler != KerberosConstValue.TOKEN_FILLER_1_BYTE)
+            {
+                throw new FormatException("The token filler is incorrect! filler = " + tokenHeader.filler);
+            }
+
+            if (tokenHeader.snd_seq != context.CurrentRemoteSequenceNumber)
+            {
+                throw new FormatException("The token sequence number is incorrect! snd_seq = " + tokenHeader.snd_seq);
+            }
+
+            if (tokId == TOK_ID.Mic4121)
+            {
+                if (tokenHeader.ec != KerberosConstValue.TOKEN_FILLER_2_BYTE)
+                {
+                    throw new FormatException("The token ec is incorrect! ec = " + (ushort)tokenHeader.ec);
+                }
+
+                if (tokenHeader.rrc != KerberosConstValue.TOKEN_FILLER_2_BYTE)
+                {
+                    throw new FormatException("The token rrc is incorrect! rrc = " + (ushort)tokenHeader.rrc);
+                }
+            }
+            #endregion verify header
+
+            #region set context key
+            EncryptionKey key;
+            if ((tokenHeader.flags & WrapFlag.AcceptorSubkey) == WrapFlag.AcceptorSubkey)
+            {
+                key = context.AcceptorSubKey;
+                if (key == null)
+                {
+                    throw new FormatException("Acceptor SubKey does not exist!");
+                }
+            }
+            else
+            {
+                if (context.ApSubKey != null)
+                {
+                    key = context.ApSubKey;
+                }
+                else
+                {
+                    key = context.ApSessionKey;
+                }
+            }
+            #endregion
+
+            if (tokId == TOK_ID.Wrap4121)
+            {
+                //The RRC field ([RFC4121] section 4.2.5) is 12 if no encryption is requested or 28 if encryption is requested. 
+                //The RRC field is chosen such that all the data can be encrypted in place. 
+                //The trailing meta-data H1 is rotated by RRC+EC bytes, 
+                //which is different from RRC alone ([RFC4121] section 4.2.5).
+                if ((tokenHeader.flags & WrapFlag.Sealed) != 0)
+                {
+                    rrc += ec;
+                }
+                KerberosUtility.RotateRight(cipher, cipher.Length - rrc);
+            }
+
+            if (tokId == TOK_ID.Wrap4121 && (tokenHeader.flags & WrapFlag.Sealed) == WrapFlag.Sealed)
+            {
+                GetToBeSignedDataFunc getToBeSignedDataCallback = delegate (byte[] decryptedData)
+                {
+                    //Coding according to MS-KILE section 4.3 GSS_WrapEx with AES128-CTS-HMAC-SHA1-96
+                    //And Figure 4: Example of RRC with output message with 4 buffers
+
+                    //cipher block size, c
+                    //This is the block size of the block cipher underlying the
+                    //encryption and decryption functions indicated above, used for key
+                    //derivation and for the size of the message confounder and initial
+                    //vector.  (If a block cipher is not in use, some comparable
+                    //parameter should be determined.)  It must be at least 5 octets.
+                    int cipherBlockSize;
+                    EncryptionType eType = (EncryptionType)key.keytype.Value;
+                    if (eType != EncryptionType.AES256_CTS_HMAC_SHA1_96 && eType != EncryptionType.AES128_CTS_HMAC_SHA1_96)
+                    {
+                        //etype other than AES is not supported.
+                        return decryptedData;
+                    }
+                    cipherBlockSize = Cryptographic.ConstValue.AES_BLOCK_SIZE;
+                    cipherBlockSize = Math.Max(cipherBlockSize, 5);
+                    int dataLength = SspiUtility.ConcatenateReadWriteSecurityBuffers(securityBuffers, SecurityBufferType.Data, SecurityBufferType.Padding).Length;
+                    int hdrSize = Marshal.SizeOf(typeof(TokenHeader4121));
+
+                    byte[] confounder = ArrayUtility.SubArray(decryptedData, 0, cipherBlockSize);
+                    byte[] plainText = ArrayUtility.SubArray(decryptedData, cipherBlockSize, dataLength);
+                    byte[] filler = ArrayUtility.SubArray(decryptedData, confounder.Length + dataLength, ec);
+                    byte[] enchdr = ArrayUtility.SubArray(decryptedData, decryptedData.Length - hdrSize);
+                    SspiUtility.UpdateSecurityBuffers(
+                        securityBuffers,
+                        new SecurityBufferType[] { SecurityBufferType.Data, SecurityBufferType.Padding },
+                        plainText);
+
+                    byte[] toBeSignedData = KerberosUtility.GetToBeSignedDataFromSecurityBuffers(securityBuffers);
+                    toBeSignedData = ArrayUtility.ConcatenateArrays(
+                        confounder,
+                        toBeSignedData,
+                        filler,
+                        enchdr);
+                    return toBeSignedData;
+                };
+
+                // wrap & confidentiality is provided
+                // {"header" | encrypt(plaintext-data | filler | "header")}
+                byte[] plainBuffer = KerberosUtility.Decrypt((EncryptionType)key.keytype.Value,
+                                                       key.keyvalue.ByteArrayValue,
+                                                       cipher,
+                                                       (int)keyUsage,
+                                                       getToBeSignedDataCallback);
+                if (plainBuffer.Length < Marshal.SizeOf(typeof(TokenHeader4121)) + ec)
+                {
+                    throw new FormatException("The encrypted data is incomplete!");
+                }
+
+                byte[] headerBuffer = ArrayUtility.SubArray(plainBuffer,
+                                                            plainBuffer.Length - Marshal.SizeOf(typeof(TokenHeader4121)));
+                if (!ArrayUtility.CompareArrays(header, headerBuffer))
+                {
+                    throw new FormatException("The encrypted data is incorrect!");
+                }
+
+                data = ArrayUtility.SubArray(plainBuffer,
+                                             0,
+                                             plainBuffer.Length - Marshal.SizeOf(typeof(TokenHeader4121)) - ec);
+            }
+            else   // no confidentiality is provided
+            {
+                byte[] check = cipher;
+                if (tokId == TOK_ID.Wrap4121)
+                {
+                    // {"header" | plaintext-data | get_mic(plaintext-data | "header")}
+                    data = ArrayUtility.SubArray(cipher, 0, cipher.Length - ec);
+                    check = ArrayUtility.SubArray(cipher, cipher.Length - ec);
+                }
+                else
+                {
+                    data = KerberosUtility.GetToBeSignedDataFromSecurityBuffers(securityBuffers);
+                }
+
+                ChecksumType checksumType = ChecksumType.hmac_sha1_96_aes256;
+                if ((EncryptionType)key.keytype.Value == EncryptionType.AES128_CTS_HMAC_SHA1_96)
+                {
+                    checksumType = ChecksumType.hmac_sha1_96_aes128;
+                }
+
+                byte[] checksum = KerberosUtility.GetChecksum(
+                    key.keyvalue.ByteArrayValue,
+                    ArrayUtility.ConcatenateArrays(data, header),
+                    (int)keyUsage,
+                    checksumType);
+
+                if (!ArrayUtility.CompareArrays(check, checksum))
+                {
+                    throw new FormatException("The checksum is incorrect!");
+                }
+            }
+
+            #region update sequence number
+            context.IncreaseRemoteSequenceNumber();
+            #endregion
+        }
+
+
+        /// <summary>
+        /// Encode this class into byte array.
+        /// </summary>
+        /// <returns>The byte array of the class.</returns>
+        /// <exception cref="System.NotSupportedException">Thrown when the type of tok_id is not supported.</exception>
+        public override byte[] ToBytes()
+        {
+            if (data == null)
+            {
+                return null;
+            }
+
+            if (tokenHeader.tok_id != TOK_ID.Wrap4121 && tokenHeader.tok_id != TOK_ID.Mic4121)
+            {
+                throw new NotSupportedException("tok_id = " + (ushort)tokenHeader.tok_id);
+            }
+
+            #region convert big-endian
+            TokenHeader4121 header4121 = tokenHeader;
+            header4121.tok_id = (TOK_ID)KerberosUtility.ConvertEndian((ushort)tokenHeader.tok_id);
+            header4121.snd_seq = KerberosUtility.ConvertEndian(tokenHeader.snd_seq);
+            header4121.ec = KerberosUtility.ConvertEndian(tokenHeader.ec);
+            #endregion convert big-endian
+
+            #region set keyusage
+            TokenKeyUsage keyUsage;
+            if (tokenHeader.tok_id == TOK_ID.Wrap4121)  // wrap token
+            {
+                if ((tokenHeader.flags & WrapFlag.SentByAcceptor) == WrapFlag.SentByAcceptor)
+                {
+                    keyUsage = TokenKeyUsage.KG_USAGE_ACCEPTOR_SEAL;
+                }
+                else
+                {
+                    keyUsage = TokenKeyUsage.KG_USAGE_INITIATOR_SEAL;
+                }
+
+                if ((tokenHeader.flags & WrapFlag.Sealed) == WrapFlag.None)
+                {
+                    header4121.ec = 0;
+                }
+
+                header4121.rrc = 0;
+            }
+            else  // mic token
+            {
+                if ((tokenHeader.flags & WrapFlag.SentByAcceptor) == WrapFlag.SentByAcceptor)
+                {
+                    keyUsage = TokenKeyUsage.KG_USAGE_ACCEPTOR_SIGN;
+                }
+                else
+                {
+                    keyUsage = TokenKeyUsage.KG_USAGE_INITIATOR_SIGN;
+                }
+            }
+            #endregion set keyusage
+
+            #region set context key
+            EncryptionKey key;
+            if ((tokenHeader.flags & WrapFlag.AcceptorSubkey) == WrapFlag.AcceptorSubkey)
+            {
+                key = context.AcceptorSubKey;
+                if (key == null)
+                {
+                    throw new FormatException("Acceptor SubKey does not exist!");
+                }
+            }
+            else
+            {
+                if (context.ApSubKey != null)
+                {
+                    key = context.ApSubKey;
+                }
+                else
+                {
+                    key = context.ApSessionKey;
+                }
+            }
+            #endregion set context key
+
+            // plainBuf = plaintext-data | "header"
+            byte[] headerBuf = KerberosUtility.StructToBytes(header4121);
+            byte[] plainBuf = ArrayUtility.ConcatenateArrays(data, headerBuf);
+
+            byte[] cipher = null;
+            if (tokenHeader.tok_id == TOK_ID.Wrap4121 && (tokenHeader.flags & WrapFlag.Sealed) == WrapFlag.Sealed)
+            {
+                // wrap & confidentiality is provided
+                // {"header" | encrypt(plaintext-data | filler | "header")}
+                if (tokenHeader.ec != 0)
+                {
+                    byte[] filler = new byte[tokenHeader.ec];
+                    plainBuf = ArrayUtility.ConcatenateArrays(data, filler, headerBuf);
+                }
+
+                cipher = KerberosUtility.Encrypt((EncryptionType)key.keytype.Value,
+                                             key.keyvalue.ByteArrayValue,
+                                             plainBuf,
+                                             (int)keyUsage);
+            }
+            else   // no confidentiality is provided or mic token
+            {
+                // {"header" | plaintext-data | get_mic(plaintext-data | "header")}
+                ChecksumType checksumType = ChecksumType.hmac_sha1_96_aes256;
+                if ((EncryptionType)key.keytype.Value == EncryptionType.AES128_CTS_HMAC_SHA1_96)
+                {
+                    checksumType = ChecksumType.hmac_sha1_96_aes128;
+                }
+
+                cipher = KerberosUtility.GetChecksum(key.keyvalue.ByteArrayValue, plainBuf, (int)keyUsage, checksumType);
+                if (tokenHeader.tok_id == TOK_ID.Wrap4121)
+                {
+                    header4121.ec = KerberosUtility.ConvertEndian((ushort)cipher.Length);
+                    cipher = ArrayUtility.ConcatenateArrays(data, cipher);
+                }
+            }
+
+            #region set rrc
+            if (tokenHeader.tok_id == TOK_ID.Wrap4121)
+            {
+                KerberosUtility.RotateRight(cipher, tokenHeader.rrc);
+                header4121.rrc = KerberosUtility.ConvertEndian(tokenHeader.rrc);
+                headerBuf = KerberosUtility.StructToBytes(header4121);
+            }
+            #endregion set rrc
+
+            #region update sequence number
+            context.IncreaseLocalSequenceNumber();
+            #endregion
+
+            return ArrayUtility.ConcatenateArrays(headerBuf, cipher);
+        }
+    }
+
+    /// <summary>
+    /// Wrap token in rfc[1964].
+    /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security.Cryptography", "CA5350:MD5CannotBeUsed")]
+    public class Token1964_4757 : KerberosPdu
+    {
+        private KerberosContext context;
+        /// <summary>
+        /// The token header.
+        /// </summary>
+        private TokenHeader1964_4757 tokenHeader;
+
+        /// <summary>
+        /// The orignial data.
+        /// </summary>
+        private byte[] data;
+
+        /// <summary>
+        /// Padding data
+        /// </summary>
+        internal byte[] paddingData;
+
+        /// <summary>
+        /// The token header.
+        /// </summary>
+        public TokenHeader1964_4757 TokenHeader
+        {
+            get
+            {
+                return tokenHeader;
+            }
+            set
+            {
+                tokenHeader = value;
+            }
+        }
+
+        /// <summary>
+        /// The orignial data.
+        /// </summary>
+        public byte[] Data
+        {
+            get
+            {
+                return data;
+            }
+            set
+            {
+                data = value;
+            }
+        }
+
+        /// <summary>
+        /// Create an instance.
+        /// </summary>
+        /// <param name="kileContext">The context of the client or server.</param>
+        public Token1964_4757(KerberosContext context)
+        {
+            this.context = context;
+        }
+
+
+        /// <summary>
+        /// Decode the KILE PDU from the message bytes.
+        /// </summary>
+        /// <param name="buffer">The byte array to be decoded.</param>
+        /// <exception cref="System.FormatException">thrown when the format of input buffer is not correct</exception>
+        public override void FromBytes(byte[] buffer)
+        {
+            byte[] tokenBody = KerberosUtility.VerifyGssApiTokenHeader(buffer);
+            if (tokenBody == null || tokenBody.Length < KerberosConstValue.HEADER_FIRST_8_BYTE_SIZE)
+            {
+                throw new FormatException("The token body is incomplete!");
+            }
+
+            TOK_ID tokId = (TOK_ID)KerberosUtility.ConvertEndian(BitConverter.ToUInt16(tokenBody, 0));
+
+            if (tokId == TOK_ID.Wrap1964_4757)
+            {
+                int tokenSize = buffer.Length - tokenBody.Length;
+                tokenSize += KerberosConstValue.HEADER_FIRST_8_BYTE_SIZE + KerberosConstValue.CHECKSUM_SIZE_RFC1964 + KerberosConstValue.SEQUENCE_NUMBER_SIZE;
+                if (tokId == TOK_ID.Wrap1964_4757)
+                {
+                    tokenSize += KerberosConstValue.CONFOUNDER_SIZE;
+                }
+
+                if (buffer.Length < tokenSize)
+                {
+                    throw new FormatException("The token body is incomplete!");
+                }
+
+                FromSecurityBuffers(
+                    new SecurityBuffer(SecurityBufferType.Token, ArrayUtility.SubArray(buffer, 0, tokenSize)),
+                    new SecurityBuffer(SecurityBufferType.Data, ArrayUtility.SubArray(buffer, tokenSize)));
+            }
+            else if (tokId == TOK_ID.Mic1964_4757)
+            {
+                FromSecurityBuffers(
+                    new SecurityBuffer(SecurityBufferType.Token, buffer),
+                    new SecurityBuffer(SecurityBufferType.Data, data));
+            }
+            else
+            {
+                throw new FormatException("Other tok_id is not supported.");
+            }
+        }
+
+
+        /// <summary>
+        /// Decode the KILE PDU from the security buffers.
+        /// </summary>
+        /// <param name="securityBuffers">Security buffers</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security.Cryptography", "CA5350:MD5CannotBeUsed")]
+        public void FromSecurityBuffers(params SecurityBuffer[] securityBuffers)
+        {
+            byte[] tokenBody = SspiUtility.ConcatenateSecurityBuffers(securityBuffers, SecurityBufferType.Token);
+            tokenBody = KerberosUtility.VerifyGssApiTokenHeader(tokenBody);
+            if (tokenBody == null
+                || tokenBody.Length <
+                (KerberosConstValue.HEADER_FIRST_8_BYTE_SIZE + KerberosConstValue.CHECKSUM_SIZE_RFC1964 + KerberosConstValue.SEQUENCE_NUMBER_SIZE))
+            {
+                throw new FormatException("The token body is incomplete!");
+            }
+
+            byte[] header = ArrayUtility.SubArray(tokenBody, 0, KerberosConstValue.HEADER_FIRST_8_BYTE_SIZE);
+            byte[] sequence = ArrayUtility.SubArray(tokenBody,
+                                                    KerberosConstValue.HEADER_FIRST_8_BYTE_SIZE,
+                                                    KerberosConstValue.SEQUENCE_NUMBER_SIZE);
+            byte[] checksum = ArrayUtility.SubArray(tokenBody,
+                KerberosConstValue.HEADER_FIRST_8_BYTE_SIZE + KerberosConstValue.SEQUENCE_NUMBER_SIZE,
+                KerberosConstValue.CHECKSUM_SIZE_RFC1964);
+            byte[] confounder = new byte[0];
+
+            // Get fields from byte array. The numbers below are the offset of these fields.
+            tokenHeader = new TokenHeader1964_4757();
+            tokenHeader.tok_id = (TOK_ID)KerberosUtility.ConvertEndian(BitConverter.ToUInt16(header, 0));
+            tokenHeader.sng_alg = (SGN_ALG)KerberosUtility.ConvertEndian(BitConverter.ToUInt16(header, 2));
+            tokenHeader.seal_alg = (SEAL_ALG)KerberosUtility.ConvertEndian(BitConverter.ToUInt16(header, 4));
+            tokenHeader.filler = KerberosUtility.ConvertEndian(BitConverter.ToUInt16(header, 6));
+
+            #region verify header
+            if (tokenHeader.tok_id != TOK_ID.Wrap1964_4757 && tokenHeader.tok_id != TOK_ID.Mic1964_4757)
+            {
+                throw new FormatException("The token ID is incorrect! tok_id = " + (ushort)tokenHeader.tok_id);
+            }
+
+            if (tokenHeader.sng_alg != SGN_ALG.DES_MAC && tokenHeader.sng_alg != SGN_ALG.DES_MAC_MD5
+                && tokenHeader.sng_alg != SGN_ALG.MD2_5 && tokenHeader.sng_alg != SGN_ALG.HMAC)
+            {
+                throw new FormatException("The token sng_alg is incorrect! sng_alg = " + (ushort)tokenHeader.sng_alg);
+            }
+
+            if (tokenHeader.seal_alg != SEAL_ALG.DES && tokenHeader.seal_alg != SEAL_ALG.RC4
+                && tokenHeader.seal_alg != SEAL_ALG.NONE)
+            {
+                throw new FormatException("The token seal_alg is incorrect! seal_alg = "
+                    + (ushort)tokenHeader.seal_alg);
+            }
+
+            if (tokenHeader.filler != KerberosConstValue.TOKEN_FILLER_2_BYTE)
+            {
+                throw new FormatException("The token filler is incorrect! filler = " + tokenHeader.filler);
+            }
+            #endregion verify header
+
+            byte[] cipher = null;
+            if (tokenHeader.tok_id == TOK_ID.Wrap1964_4757)   // wrap token
+            {
+                // the tokenBody must >= header + sequnce number + checksum + confounder
+                if (tokenBody.Length !=
+                (KerberosConstValue.HEADER_FIRST_8_BYTE_SIZE + KerberosConstValue.CHECKSUM_SIZE_RFC1964 + KerberosConstValue.SEQUENCE_NUMBER_SIZE
+                 + KerberosConstValue.CONFOUNDER_SIZE))
+                {
+                    throw new FormatException("The token body is incomplete!");
+                }
+                confounder = ArrayUtility.SubArray(
+                    tokenBody,
+                    KerberosConstValue.HEADER_FIRST_8_BYTE_SIZE + KerberosConstValue.CHECKSUM_SIZE_RFC1964 + KerberosConstValue.SEQUENCE_NUMBER_SIZE);
+                cipher = ArrayUtility.ConcatenateArrays(
+                    confounder,
+                    SspiUtility.ConcatenateReadWriteSecurityBuffers(securityBuffers, SecurityBufferType.Data, SecurityBufferType.Padding));
+            }
+            else  // mic token, the data is given by user
+            {
+                if (tokenBody.Length !=
+                (KerberosConstValue.HEADER_FIRST_8_BYTE_SIZE + KerberosConstValue.CHECKSUM_SIZE_RFC1964 + KerberosConstValue.SEQUENCE_NUMBER_SIZE))
+                {
+                    throw new FormatException("The token body is incomplete!");
+                }
+            }
+
+            #region decrypt data
+            EncryptionKey key = context.ContextKey;
+            bool isExport = (EncryptionType)key.keytype.Value == EncryptionType.RC4_HMAC_EXP;
+            byte[] plainText = data;
+            if (tokenHeader.seal_alg == SEAL_ALG.DES)
+            {
+                // The key used is derived from the established context key by XOR-ing the context key 
+                // with the hexadecimal constant f0f0f0f0f0f0f0f0.
+                byte[] Klocal = new byte[8];
+                for (int i = 0; i < 8; i++)
+                {
+                    Klocal[i] = (byte)(key.keyvalue.Value[i] ^ 0xF0);
+                }
+                // The data is encrypted using DES-CBC, with an IV of zero.
+                plainText = KerberosUtility.DesCbcDecrypt(Klocal, new byte[8], cipher);
+            }
+            else if (tokenHeader.seal_alg == SEAL_ALG.RC4)
+            {
+                // for (i = 0; i < 16; i++) Klocal[i] = Kss[i] ^ 0xF0;
+                byte[] Klocal = new byte[16];
+                for (int i = 0; i < 16; i++)
+                {
+                    Klocal[i] = (byte)(key.keyvalue.Value[i] ^ 0xF0);
+                }
+                byte[] seqBuffer = BitConverter.GetBytes((uint)context.CurrentRemoteSequenceNumber);
+                Array.Reverse(seqBuffer);
+                plainText = KerberosUtility.RC4HMAC(Klocal, seqBuffer, cipher, isExport);
+            }
+            else
+            {
+                if (tokenHeader.tok_id == TOK_ID.Wrap1964_4757)
+                {
+                    plainText = cipher;
+                }
+            }
+
+            if (tokenHeader.tok_id == TOK_ID.Wrap1964_4757)
+            {
+                // The plaintext data is padded to the next highest multiple of 8 bytes, 
+                // by appending between 1 and 8 bytes, the value of each such byte being
+                // the total number of pad bytes.  For example, given data of length 20
+                // bytes, four pad bytes will be appended, and each byte will contain
+                // the hex value 04.  
+                // no padding is possible.
+                byte pad = plainText[plainText.Length - 1];
+                if (pad > 8 || pad < 1)
+                {
+                    pad = 0;
+                }
+                for (int i = 1; i < pad; ++i)
+                {
+                    if (plainText[plainText.Length - i - 1] != pad)
+                    {
+                        pad = 0;
+                    }
+                }
+                paddingData = new byte[pad];
+
+                for (int i = 0; i < paddingData.Length; i++)
+                {
+                    paddingData[i] = pad;
+                }
+
+                confounder = ArrayUtility.SubArray(plainText, 0, KerberosConstValue.CONFOUNDER_SIZE);
+
+                plainText = ArrayUtility.SubArray(plainText,
+                                             KerberosConstValue.CONFOUNDER_SIZE,
+                                             plainText.Length - KerberosConstValue.CONFOUNDER_SIZE);
+                SspiUtility.UpdateSecurityBuffers(
+                    securityBuffers,
+                    new SecurityBufferType[] { SecurityBufferType.Data, SecurityBufferType.Padding },
+                    plainText);
+
+                data = ArrayUtility.SubArray(plainText, 0, plainText.Length - pad);
+            }
+            #endregion decrypt data
+
+            #region verify checksum
+            byte[] check = null;
+            byte[] toChecksumText = KerberosUtility.GetToBeSignedDataFromSecurityBuffers(securityBuffers);
+            toChecksumText = ArrayUtility.ConcatenateArrays(header, confounder, toChecksumText);
+            if ((EncryptionType)key.keytype.Value == EncryptionType.RC4_HMAC
+                || (EncryptionType)key.keytype.Value == EncryptionType.RC4_HMAC_EXP)
+            {
+                TokenKeyUsage usage = TokenKeyUsage.USAGE_WRAP;
+                if (tokenHeader.tok_id == TOK_ID.Mic1964_4757)
+                {
+                    usage = TokenKeyUsage.USAGE_MIC;
+                }
+                toChecksumText = ArrayUtility.ConcatenateArrays(BitConverter.GetBytes((int)usage), toChecksumText);
+            }
+
+            var md5CryptoServiceProvider = new MD5CryptoServiceProvider();
+            byte[] md5 = md5CryptoServiceProvider.ComputeHash(toChecksumText);
+
+            switch (tokenHeader.sng_alg)
+            {
+                case SGN_ALG.DES_MAC_MD5:
+                    check = KerberosUtility.DesCbcMac(key.keyvalue.ByteArrayValue, new byte[KerberosConstValue.DES_BLOCK_SIZE], md5);
+                    break;
+
+                case SGN_ALG.MD2_5:
+                    check = KerberosUtility.MD2_5(key.keyvalue.ByteArrayValue, toChecksumText);
+                    break;
+
+                case SGN_ALG.DES_MAC:
+                    throw new NotSupportedException("DES_MAC is not supported currently.");
+
+                case SGN_ALG.HMAC:
+                    byte[] keySign = KerberosUtility.HMAC(key.keyvalue.ByteArrayValue, KerberosConstValue.SIGNATURE_KEY);
+                    check = KerberosUtility.HMAC(keySign, md5);
+                    break;
+
+                default:
+                    break;
+            }
+            tokenHeader.sng_cksum = ArrayUtility.SubArray(check, 0, KerberosConstValue.CHECKSUM_SIZE_RFC1964);
+            if (!ArrayUtility.CompareArrays(tokenHeader.sng_cksum, checksum))
+            {
+                throw new FormatException("The checksum is incorrect!");
+            }
+            #endregion verify checksum
+
+            #region verify sequence number
+            byte[] seqBuf = null;
+            switch ((EncryptionType)key.keytype.Value)
+            {
+                case EncryptionType.DES_CBC_CRC:
+                case EncryptionType.DES_CBC_MD5:
+                    uint seqNumber = KerberosUtility.ConvertEndian((uint)context.CurrentRemoteSequenceNumber);
+                    seqBuf = SetSequenceBuffer(seqNumber, !context.IsInitiator);
+                    tokenHeader.snd_seq = KerberosUtility.DesCbcDecrypt(key.keyvalue.ByteArrayValue,
+                                                                    tokenHeader.sng_cksum,
+                                                                    sequence);
+                    break;
+
+                case EncryptionType.RC4_HMAC:
+                case EncryptionType.RC4_HMAC_EXP:
+                    seqBuf = SetSequenceBuffer((uint)context.CurrentRemoteSequenceNumber, !context.IsInitiator);
+                    tokenHeader.snd_seq = KerberosUtility.RC4HMAC(key.keyvalue.ByteArrayValue,
+                                                              tokenHeader.sng_cksum,
+                                                              sequence,
+                                                              isExport);
+                    break;
+
+                default:
+                    throw new NotSupportedException("RFC 1964 and 4757 only support encryption algorithm " +
+                        "DES_CBC_CRC, DES_CBC_MD5, RC4_HMAC and RC4_HMAC_EXP!");
+            }
+
+            if (!ArrayUtility.CompareArrays(tokenHeader.snd_seq, seqBuf))
+            {
+                throw new FormatException("The sequence number is incorrect!");
+            }
+            #endregion verify sequence number
+
+            #region update sequence number
+            context.IncreaseRemoteSequenceNumber();
+            #endregion update sequence number
+        }
+
+
+        /// <summary>
+        /// Encode this class into byte array.
+        /// </summary>
+        /// <returns>The byte array of the class.</returns>
+        /// <exception cref="System.NotSupportedException">thrown when any type of tok_id, sng_alg or seal_alg is
+        /// not supported.</exception>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security.Cryptography", "CA5350:MD5CannotBeUsed")]
+        public override byte[] ToBytes()
+        {
+            if (data == null)
+            {
+                return null;
+            }
+
+            TokenHeader1964_4757 header1964_4757 = tokenHeader;
+            TOK_ID tokId = tokenHeader.tok_id;
+            if (tokId != TOK_ID.Wrap1964_4757 && tokId != TOK_ID.Mic1964_4757)
+            {
+                throw new NotSupportedException("tok_id = " + (ushort)tokenHeader.tok_id);
+            }
+
+            SGN_ALG sngAlg = tokenHeader.sng_alg;
+            if (sngAlg != SGN_ALG.DES_MAC && sngAlg != SGN_ALG.DES_MAC_MD5
+                && sngAlg != SGN_ALG.MD2_5 && sngAlg != SGN_ALG.HMAC)
+            {
+                throw new NotSupportedException("sng_alg = " + tokenHeader.sng_alg);
+            }
+
+            SEAL_ALG sealAlg = tokenHeader.seal_alg;
+            if (sealAlg != SEAL_ALG.DES && sealAlg != SEAL_ALG.RC4 && sealAlg != SEAL_ALG.NONE)
+            {
+                throw new NotSupportedException("seal_alg = " + tokenHeader.seal_alg);
+            }
+
+            #region convert big-endian
+            header1964_4757.tok_id = (TOK_ID)KerberosUtility.ConvertEndian((ushort)tokenHeader.tok_id);
+            header1964_4757.sng_alg = (SGN_ALG)KerberosUtility.ConvertEndian((ushort)tokenHeader.sng_alg);
+            header1964_4757.seal_alg = (SEAL_ALG)KerberosUtility.ConvertEndian((ushort)tokenHeader.seal_alg);
+            byte[] headercheck = ArrayUtility.SubArray(KerberosUtility.StructToBytes(header1964_4757),
+                                                       0,
+                                                       KerberosConstValue.HEADER_FIRST_8_BYTE_SIZE);
+            #endregion convert big-endian
+
+            #region create plainText
+            EncryptionKey key = context.ContextKey;
+            byte[] plainText = data;
+            byte paddingLength = 0;
+
+            if (tokId == TOK_ID.Wrap1964_4757)  // wrap token
+            {
+                #region compute pad
+                byte[] pad = null;
+                switch ((EncryptionType)key.keytype.Value)
+                {
+                    case EncryptionType.DES_CBC_CRC:
+                    case EncryptionType.DES_CBC_MD5:
+                        // The plaintext data is padded to the next highest multiple of 8 bytes, 
+                        // by appending between 1 and 8 bytes, the value of each such byte being
+                        // the total number of pad bytes.  For example, given data of length 20
+                        // bytes, four pad bytes will be appended, and each byte will contain
+                        // the hex value 04.  
+                        int padLength = 8 - (data.Length % 8);
+                        pad = new byte[padLength];
+                        for (int i = 0; i < padLength; ++i)
+                        {
+                            pad[i] = (byte)padLength;
+                        }
+                        break;
+
+                    case EncryptionType.RC4_HMAC:
+                    case EncryptionType.RC4_HMAC_EXP:
+                        // All padding is rounded up to 1 byte.
+                        pad = new byte[] { 1 };
+                        break;
+
+                    default:
+                        throw new NotSupportedException("RFC 1964 and 4757 only support encryption algorithm " +
+                        "DES_CBC_CRC, DES_CBC_MD5, RC4_HMAC and RC4_HMAC_EXP!");
+                }
+                paddingLength = (byte)pad.Length;
+                #endregion compute pad
+
+                byte[] confounder = KerberosUtility.GenerateRandomBytes(KerberosConstValue.CONFOUNDER_SIZE);
+                plainText = ArrayUtility.ConcatenateArrays(confounder, data, pad);
+            }
+            #endregion create plainText
+
+            #region compute checksum
+            byte[] check = null;
+            byte[] toChecksumText = ArrayUtility.ConcatenateArrays(headercheck,
+                                                                  plainText);
+            if ((EncryptionType)key.keytype.Value == EncryptionType.RC4_HMAC
+                || (EncryptionType)key.keytype.Value == EncryptionType.RC4_HMAC_EXP)
+            {
+                TokenKeyUsage usage = TokenKeyUsage.USAGE_WRAP;
+                if (tokId == TOK_ID.Mic1964_4757)
+                {
+                    usage = TokenKeyUsage.USAGE_MIC;
+                }
+                toChecksumText = ArrayUtility.ConcatenateArrays(BitConverter.GetBytes((int)usage), toChecksumText);
+            }
+
+            var md5CryptoServiceProvider = new MD5CryptoServiceProvider();
+            byte[] md5 = md5CryptoServiceProvider.ComputeHash(toChecksumText);
+
+            switch (sngAlg)
+            {
+                case SGN_ALG.DES_MAC_MD5:
+                    check = KerberosUtility.DesCbcMac(key.keyvalue.ByteArrayValue, new byte[KerberosConstValue.DES_BLOCK_SIZE], md5);
+                    break;
+
+                case SGN_ALG.MD2_5:
+                    check = KerberosUtility.MD2_5(key.keyvalue.ByteArrayValue, toChecksumText);
+                    break;
+
+                case SGN_ALG.DES_MAC:
+                    throw new NotSupportedException("DES_MAC is not supported currently.");
+
+                case SGN_ALG.HMAC:
+                    byte[] keySign = KerberosUtility.HMAC(key.keyvalue.ByteArrayValue, KerberosConstValue.SIGNATURE_KEY);
+                    check = KerberosUtility.HMAC(keySign, md5);
+                    break;
+
+                default:
+                    break;
+            }
+            tokenHeader.sng_cksum = ArrayUtility.SubArray(check, 0, KerberosConstValue.CHECKSUM_SIZE_RFC1964);
+            #endregion compute checksum
+
+            #region compute sequence number
+            byte[] seqBuf = null;
+            bool isExport = (EncryptionType)key.keytype.Value == EncryptionType.RC4_HMAC_EXP;
+            switch ((EncryptionType)key.keytype.Value)
+            {
+                case EncryptionType.DES_CBC_CRC:
+                case EncryptionType.DES_CBC_MD5:
+                    uint seqNumber = KerberosUtility.ConvertEndian((uint)context.CurrentLocalSequenceNumber);
+                    seqBuf = SetSequenceBuffer(seqNumber, context.IsInitiator);
+                    tokenHeader.snd_seq = KerberosUtility.DesCbcEncrypt(key.keyvalue.ByteArrayValue,
+                                                                    tokenHeader.sng_cksum,
+                                                                    seqBuf);
+                    break;
+
+                case EncryptionType.RC4_HMAC:
+                case EncryptionType.RC4_HMAC_EXP:
+                    seqBuf = SetSequenceBuffer((uint)context.CurrentLocalSequenceNumber, context.IsInitiator);
+                    tokenHeader.snd_seq = KerberosUtility.RC4HMAC(key.keyvalue.ByteArrayValue,
+                                                              tokenHeader.sng_cksum,
+                                                              seqBuf,
+                                                              isExport);
+                    break;
+
+                default:
+                    tokenHeader.snd_seq = seqBuf;
+                    break;
+            }
+            #endregion compute sequence number
+
+            #region compute encrypted data
+            byte[] encData = null;
+            if (sealAlg == SEAL_ALG.DES)
+            {
+                // The key used is derived from the established context key by XOR-ing the context key 
+                // with the hexadecimal constant f0f0f0f0f0f0f0f0.
+                byte[] Klocal = new byte[8];
+                for (int i = 0; i < 8; i++)
+                {
+                    Klocal[i] = (byte)(key.keyvalue.Value[i] ^ 0xF0);
+                }
+                // The data is encrypted using DES-CBC, with an IV of zero.
+                encData = KerberosUtility.DesCbcEncrypt(Klocal, new byte[8], plainText);
+            }
+            else if (sealAlg == SEAL_ALG.RC4)
+            {
+                // for (i = 0; i < 16; i++) Klocal[i] = Kss[i] ^ 0xF0;
+                byte[] Klocal = new byte[16];
+                for (int i = 0; i < 16; i++)
+                {
+                    Klocal[i] = (byte)(key.keyvalue.Value[i] ^ 0xF0);
+                }
+                byte[] seqBuffer = BitConverter.GetBytes((uint)context.CurrentLocalSequenceNumber);
+                Array.Reverse(seqBuffer);
+                encData = KerberosUtility.RC4HMAC(Klocal, seqBuffer, plainText, isExport);
+            }
+            else
+            {
+                if (tokId == TOK_ID.Wrap1964_4757)
+                {
+                    encData = plainText;
+                }
+            }
+            #endregion compute encrypted data
+
+            byte[] allData = ArrayUtility.ConcatenateArrays(headercheck,
+                                                            tokenHeader.snd_seq,
+                                                            tokenHeader.sng_cksum,
+                                                            encData);
+
+            #region update sequence number
+            context.IncreaseLocalSequenceNumber();
+            #endregion
+
+            paddingData = ArrayUtility.SubArray(allData, allData.Length - paddingLength);
+
+            return KerberosUtility.AddGssApiTokenHeader(allData);
+        }
+
+
+        /// <summary>
+        /// Set sequence buffer with the given sequence number.
+        /// </summary>
+        /// <param name="sequenceNumber">The specified sequence number.</param>
+        /// <param name="isInitiator">If the sender is the initiator.</param>
+        /// <returns>The sequence buffer.</returns>
+        private byte[] SetSequenceBuffer(uint sequenceNumber, bool isInitiator)
+        {
+            /* From [RFC 4757]
+             * if (direction == sender_is_initiator)
+            {
+                memset(&Token.SEND_SEQ[4], 0xff, 4)
+            }
+            else if (direction == sender_is_acceptor)
+            {
+                memset(&Token.SEND_SEQ[4], 0, 4)
+            }
+            Token.SEND_SEQ[0] = (seq_num & 0xff000000) >> 24;
+            Token.SEND_SEQ[1] = (seq_num & 0x00ff0000) >> 16;
+            Token.SEND_SEQ[2] = (seq_num & 0x0000ff00) >> 8;
+            Token.SEND_SEQ[3] = (seq_num & 0x000000ff);
+             * */
+
+            byte[] seqBuffer = new byte[KerberosConstValue.SEQUENCE_NUMBER_SIZE];
+            if (!isInitiator)  // sender_is_acceptor
+            {
+                seqBuffer[4] = KerberosConstValue.TOKEN_FILLER_1_BYTE;
+                seqBuffer[5] = KerberosConstValue.TOKEN_FILLER_1_BYTE;
+                seqBuffer[6] = KerberosConstValue.TOKEN_FILLER_1_BYTE;
+                seqBuffer[7] = KerberosConstValue.TOKEN_FILLER_1_BYTE;
+            }
+            seqBuffer[0] = (byte)((sequenceNumber & 0xff000000) >> 24);
+            seqBuffer[1] = (byte)((sequenceNumber & 0x00ff0000) >> 16);
+            seqBuffer[2] = (byte)((sequenceNumber & 0x0000ff00) >> 8);
+            seqBuffer[3] = (byte)(sequenceNumber & 0x000000ff);
+            return seqBuffer;
+        }
+    }
+
+    /// <summary>
+    /// Token header of rfc[4121].
+    /// </summary>
+    public struct TokenHeader4121
+    {
+        /// <summary>
+        /// Identification field.
+        /// </summary>
+        public TOK_ID tok_id;
+
+        /// <summary>
+        /// Attributes field.
+        /// </summary>
+        public WrapFlag flags;
+
+        /// <summary>
+        /// Contains the hex value FF.
+        /// </summary>
+        public byte filler;
+
+        /// <summary>
+        /// Contains the "extra count" field.
+        /// </summary>
+        public ushort ec;
+
+        /// <summary>
+        /// Contains the "right rotation count".
+        /// </summary>
+        public ushort rrc;
+
+        /// <summary>
+        /// Sequence number field in clear text.
+        /// </summary>
+        public UInt64 snd_seq;
+    }
+
+    /// <summary>
+    /// The Attribute of flag.
+    /// </summary>
+    [Flags]
+    public enum WrapFlag : byte
+    {
+        /// <summary>
+        /// None.
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        /// Indicate the sender is the context acceptor.
+        /// </summary>
+        SentByAcceptor = 0x01,
+
+        /// <summary>
+        /// Indicate confidentiality is provided for. It SHALL NOT be set in MIC tokens.
+        /// </summary>
+        Sealed = 0x02,
+
+        /// <summary>
+        /// A subkey asserted by the context acceptor is used to protect the message.
+        /// </summary>
+        AcceptorSubkey = 0x04,
+    }
+
+    /// <summary>
+    /// Token header of rfc[1964] and rfc[4757].
+    /// </summary>
+    public struct TokenHeader1964_4757
+    {
+        /// <summary>
+        /// Identification field.
+        /// </summary>
+        public TOK_ID tok_id;
+
+        /// <summary>
+        /// Checksum algorithm indicator.
+        ///  00 00 - DES MAC MD5
+        ///  01 00 - MD2.5
+        ///  02 00 - DES MAC
+        /// </summary>
+        public SGN_ALG sng_alg;
+
+        /// <summary>
+        /// ff ff - none
+        /// 00 00 - DES
+        /// </summary>
+        public SEAL_ALG seal_alg;
+
+        /// <summary>
+        /// Contains ff ff.
+        /// </summary>
+        public ushort filler;
+
+        /// <summary>
+        /// Encrypted sequence number field. 8 bytes.
+        /// </summary>
+        public byte[] snd_seq;
+
+        /// <summary>
+        /// Checksum of plaintext padded data, calculated according to algorithm specified in SGN_ALG field.8 bytes.
+        /// </summary>
+        public byte[] sng_cksum;
+    }
+    #endregion Token
 }

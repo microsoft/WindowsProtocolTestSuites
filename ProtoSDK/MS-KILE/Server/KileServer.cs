@@ -184,12 +184,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             EncryptionType encryptionType = (EncryptionType)serverContext.EncryptType.Elements[0].Value;
 
             encTicketPart.key = new EncryptionKey(new KerbInt32((int)encryptionType), new Asn1OctetString(GetEncryptionKeyByType(encryptionType)));
-            encTicketPart.flags = new TicketFlags(KileUtility.ConvertInt2Flags((int)encTicketFlags));
+            encTicketPart.flags = new TicketFlags(KerberosUtility.ConvertInt2Flags((int)encTicketFlags));
             encTicketPart.crealm = serverContext.UserRealm;
             encTicketPart.cname = serverContext.UserName;
             encTicketPart.transited = new TransitedEncoding(new KerbInt32(4), null);
-            encTicketPart.authtime = KileUtility.CurrentKerberosTime;
-            encTicketPart.starttime = KileUtility.CurrentKerberosTime;
+            encTicketPart.authtime = KerberosUtility.CurrentKerberosTime;
+            encTicketPart.starttime = KerberosUtility.CurrentKerberosTime;
             encTicketPart.endtime = serverContext.endTime;
             encTicketPart.renew_till = serverContext.rtime ?? encTicketPart.endtime;
             encTicketPart.caddr = serverContext.Addresses;
@@ -207,7 +207,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             // Set EncASRepPart
             var encASRepPart = new EncASRepPart();
             encASRepPart.key = encTicketPart.key;
-            var element = new LastReqElement(new KerbInt32(0), KileUtility.CurrentKerberosTime);
+            var element = new LastReqElement(new KerbInt32(0), KerberosUtility.CurrentKerberosTime);
             encASRepPart.last_req = new LastReq(new LastReqElement[] { element });
             encASRepPart.nonce = serverContext.Nonce;
             encASRepPart.flags = encTicketPart.flags;
@@ -297,12 +297,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             var encTicketPart = new EncTicketPart();
             EncryptionType encryptionType = (EncryptionType)serverContext.EncryptType.Elements[0].Value;
             encTicketPart.key = new EncryptionKey(new KerbInt32((int)encryptionType), new Asn1OctetString(GetEncryptionKeyByType(encryptionType)));
-            encTicketPart.flags = new TicketFlags(KileUtility.ConvertInt2Flags((int)encTicketFlags));
+            encTicketPart.flags = new TicketFlags(KerberosUtility.ConvertInt2Flags((int)encTicketFlags));
             encTicketPart.crealm = serverContext.TgsTicket.crealm;
             encTicketPart.cname = serverContext.TgsTicket.cname;
             encTicketPart.transited = serverContext.TgsTicket.transited;
-            encTicketPart.authtime = KileUtility.CurrentKerberosTime;
-            encTicketPart.starttime = KileUtility.CurrentKerberosTime;
+            encTicketPart.authtime = KerberosUtility.CurrentKerberosTime;
+            encTicketPart.starttime = KerberosUtility.CurrentKerberosTime;
             encTicketPart.endtime = serverContext.TgsTicket.endtime;
             encTicketPart.renew_till = serverContext.TgsTicket.renew_till;
             encTicketPart.caddr = serverContext.Addresses;
@@ -320,7 +320,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             // Set EncASRepPart
             var encTGSRepPart = new EncTGSRepPart();
             encTGSRepPart.key = encTicketPart.key;
-            var element = new LastReqElement(new KerbInt32(0), KileUtility.CurrentKerberosTime);
+            var element = new LastReqElement(new KerbInt32(0), KerberosUtility.CurrentKerberosTime);
             encTGSRepPart.last_req = new LastReq(new LastReqElement[] { element });
             encTGSRepPart.nonce = serverContext.Nonce;
             encTGSRepPart.flags = encTicketPart.flags;
@@ -417,7 +417,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             // Set KRB_ERROR
             response.KerberosError.pvno = new Asn1Integer(ConstValue.KERBEROSV5);
             response.KerberosError.msg_type = new Asn1Integer((int)MsgType.KRB_ERROR);
-            response.KerberosError.stime = KileUtility.CurrentKerberosTime;
+            response.KerberosError.stime = KerberosUtility.CurrentKerberosTime;
             response.KerberosError.susec = new Microseconds(0);
             response.KerberosError.sname = serverContext.SName;
             response.KerberosError.realm = new Realm(domain);
