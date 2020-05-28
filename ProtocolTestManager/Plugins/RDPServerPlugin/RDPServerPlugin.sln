@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30002.166
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1062
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProtocolSDK", "ProtocolSDK", "{EF0AC845-FE1F-4CF3-8D0A-9F457721E4FA}"
 EndProject
@@ -38,6 +38,7 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SspiService", "..\..\..\ProtoSDK\SspiService\SspiService.csproj", "{1FC8C336-EF82-4F7C-9532-AB8AB268916E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KerberosLib", "..\..\..\ProtoSDK\KerberosLib\KerberosLib.csproj", "{F1EDA208-50B6-4501-A9D8-D18D3434D587}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cssp", "..\..\..\ProtoSDK\MS-CSSP\Cssp.csproj", "{EADACA3F-9082-43E1-9864-755CEAB4C942}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -253,6 +254,18 @@ Global
 		{F1EDA208-50B6-4501-A9D8-D18D3434D587}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F1EDA208-50B6-4501-A9D8-D18D3434D587}.Release|x64.ActiveCfg = Release|Any CPU
 		{F1EDA208-50B6-4501-A9D8-D18D3434D587}.Release|x64.Build.0 = Release|Any CPU
+		{EADACA3F-9082-43E1-9864-755CEAB4C942}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EADACA3F-9082-43E1-9864-755CEAB4C942}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EADACA3F-9082-43E1-9864-755CEAB4C942}.Debug|x64.ActiveCfg = Debug|x64
+		{EADACA3F-9082-43E1-9864-755CEAB4C942}.Debug|x64.Build.0 = Debug|x64
+		{EADACA3F-9082-43E1-9864-755CEAB4C942}.Fxcop|Any CPU.ActiveCfg = Release|Any CPU
+		{EADACA3F-9082-43E1-9864-755CEAB4C942}.Fxcop|Any CPU.Build.0 = Release|Any CPU
+		{EADACA3F-9082-43E1-9864-755CEAB4C942}.Fxcop|x64.ActiveCfg = Release|x64
+		{EADACA3F-9082-43E1-9864-755CEAB4C942}.Fxcop|x64.Build.0 = Release|x64
+		{EADACA3F-9082-43E1-9864-755CEAB4C942}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EADACA3F-9082-43E1-9864-755CEAB4C942}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EADACA3F-9082-43E1-9864-755CEAB4C942}.Release|x64.ActiveCfg = Release|x64
+		{EADACA3F-9082-43E1-9864-755CEAB4C942}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -273,6 +286,7 @@ Global
 		{E64BF20F-11D2-49F6-A25B-F4378AB38180} = {EF0AC845-FE1F-4CF3-8D0A-9F457721E4FA}
 		{1FC8C336-EF82-4F7C-9532-AB8AB268916E} = {EF0AC845-FE1F-4CF3-8D0A-9F457721E4FA}
 		{F1EDA208-50B6-4501-A9D8-D18D3434D587} = {EF0AC845-FE1F-4CF3-8D0A-9F457721E4FA}
+		{EADACA3F-9082-43E1-9864-755CEAB4C942} = {EF0AC845-FE1F-4CF3-8D0A-9F457721E4FA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4496F307-DA42-40BA-ACEE-0ED540797203}

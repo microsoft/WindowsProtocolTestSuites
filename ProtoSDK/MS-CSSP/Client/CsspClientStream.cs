@@ -1,19 +1,18 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography.X509Certificates;
 
 using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using Microsoft.Protocols.TestTools.StackSdk.Security.SspiService;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
+namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cssp
 {
     /// <summary>
-    /// Performs enhanced RDP security transport. The External Security Protocol is CredSSP.
+    /// Performs enhanced RDP security transport. The External Security Protocol is CredSSP. This class is NOT
+    /// guaranteed to be thread safe.
     /// </summary>
-    internal class RdpbcgrServerCredSspStream : Stream
+    internal class CsspClientStream : Stream
     {
         #region Member variables
         /// <summary>
@@ -29,13 +28,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// A read block size 
         /// </summary>
-        //private const int BlockSize = 1500;
-        private const int BlockSize = 5500;
+        private const int BlockSize = 102400;
+
+        byte[] recvBuffer = new byte[BlockSize];
 
         /// <summary>
         /// Underlying network stream
         /// </summary>
-        private Stream serverStream;
+        private Stream clientStream;
 
         /// <summary>
         /// The buffer that contains decrypted data 
@@ -66,29 +66,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// Client credential for authentication
         /// </summary>
-        private CertificateCredential credential;
+        private AccountCredential credential;
 
         /// <summary>
         /// Client context for authentication
         /// </summary>
-        private SspiServerSecurityContext context;
+        private SspiClientSecurityContext context;
 
         /// <summary>
         /// Context attribute used for CredSsp
         /// </summary>
-        private const ServerSecurityContextAttribute attribute =
-            ServerSecurityContextAttribute.Delegate
-            | ServerSecurityContextAttribute.ReplayDetect
-            | ServerSecurityContextAttribute.SequenceDetect
-            | ServerSecurityContextAttribute.Confidentiality
-            | ServerSecurityContextAttribute.AllocMemory
-            | ServerSecurityContextAttribute.ExtendedError
-            | ServerSecurityContextAttribute.Stream;
+        private const ClientSecurityContextAttribute attribute =
+            ClientSecurityContextAttribute.Delegate
+            | ClientSecurityContextAttribute.ReplayDetect
+            | ClientSecurityContextAttribute.SequenceDetect
+            | ClientSecurityContextAttribute.Confidentiality
+            | ClientSecurityContextAttribute.AllocMemory
+            | ClientSecurityContextAttribute.ExtendedError
+            | ClientSecurityContextAttribute.Stream;
 
-        /// <summary>
-        /// Server principal to be logged on
-        /// </summary>
-        private string serverPrincipal;
         #endregion Member variables
 
         #region Helper methods
@@ -116,12 +112,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// Closes the underlying network stream
         /// </summary>
-        private void CloseServerStream()
+        private void CloseClientStream()
         {
-            if (this.serverStream != null)
+            if (this.clientStream != null)
             {
-                serverStream.Close();
-                serverStream = null;
+                clientStream.Close();
+                clientStream = null;
             }
         }
         #endregion Helper methods
@@ -134,10 +130,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         {
             get
             {
-                return serverStream.CanRead;
+                return clientStream.CanRead;
             }
         }
-
 
         /// <summary>
         /// Indicates whether the current stream supports seeking.
@@ -147,10 +142,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         {
             get
             {
-                return serverStream.CanSeek;
+                return clientStream.CanSeek;
             }
         }
-
 
         /// <summary>
         /// Indicates whether the current stream supports writing.
@@ -159,10 +153,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         {
             get
             {
-                return serverStream.CanWrite;
+                return clientStream.CanWrite;
             }
         }
-
 
         /// <summary>
         /// Length of bytes in stream.
@@ -171,10 +164,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         {
             get
             {
-                return serverStream.Length;
+                return clientStream.Length;
             }
         }
-
 
         /// <summary>
         /// The current position within the stream.
@@ -183,11 +175,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         {
             get
             {
-                return serverStream.Position;
+                return clientStream.Position;
             }
             set
             {
-                serverStream.Position = value;
+                clientStream.Position = value;
             }
         }
         #endregion Overriden properties
@@ -196,22 +188,19 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="server">The underlying network stream</param>
+        /// <param name="client">The underlying network stream</param>
+        /// <param name="domain">Domain name</param>
         /// <param name="principal">Server principal to be logged on, prefixed with "TERMSRV/"</param>
-        public RdpbcgrServerCredSspStream(Stream server, string principal)
+        /// <param name="userName">Username used for authentication, doesn't contain the domain prefix</param>
+        /// <param name="password">Password used for authentication</param>
+        public CsspClientStream(Stream client)
         {
-            if (server == null)
+            if (client == null)
             {
-                throw new ArgumentNullException("server");
+                throw new ArgumentNullException("client");
             }
 
-            if (principal == null)
-            {
-                throw new ArgumentNullException("principal");
-            }
-
-            this.serverStream = server;
-            this.serverPrincipal = principal;
+            this.clientStream = client;
 
             this.decryptedBuffer = new byte[MaxBufferSize];
             this.pooledBuffer = null;
@@ -224,12 +213,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// Performs CredSSP authentication.
         /// </summary>
-        /// <param name="x509Cert">The certificate used by TLS.</param>
         /// <exception cref="IOException">Raised when attempting to read from/write to the remote connection which
         /// has been closed</exception>
         /// <exception cref="EndOfStreamException">Raised when the username or password doesn't match or authentication
         /// fails</exception>
-        public void Authenticate(X509Certificate x509Cert)
+        public void Authenticate(string domain, string principal, string userName, string password)
         {
             // Authenticated already, do nothing
             if (isAuthenticated)
@@ -237,7 +225,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 return;
             }
 
-            credential = new CertificateCredential(x509Cert);
+            if (domain == null)
+            {
+                throw new ArgumentNullException("domain");
+            }
+
+            if (principal == null)
+            {
+                throw new ArgumentNullException("principal");
+            }
+
+            if (userName == null)
+            {
+                throw new ArgumentNullException("userName");
+            }
+
+            if (password == null)
+            {
+                throw new ArgumentNullException("password");
+            }
+
+            credential = new AccountCredential(domain, userName, password);
 
             byte[] receivedBuffer = new byte[MaxBufferSize];
             int bytesReceived = 0;
@@ -247,21 +255,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 context.Dispose();
             }
-
-            context = new SspiServerSecurityContext(
+            context = new SspiClientSecurityContext(
                 SecurityPackageType.CredSsp,
                 credential,
-                serverPrincipal,
+                principal,
                 attribute,
                 SecurityTargetDataRepresentation.SecurityNativeDrep);
 
+            context.Initialize(null);
             // Get first token
             byte[] token = context.Token;
-            // Credssp handshake
+            // SSL handshake
             while (context.NeedContinueProcessing)
             {
+                // Send handshake request
+                clientStream.Write(token, 0, token.Length);
                 // Get handshake resopnse
-                bytesReceived = serverStream.Read(receivedBuffer, 0, receivedBuffer.Length);
+                bytesReceived = clientStream.Read(receivedBuffer, 0, receivedBuffer.Length);
                 // The remote connection has been closed
                 if (bytesReceived == 0)
                 {
@@ -271,16 +281,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 byte[] inToken = new byte[bytesReceived];
                 Array.Copy(receivedBuffer, inToken, bytesReceived);
                 // Get next token from response
-                context.Accept(inToken);
+                context.Initialize(inToken);
                 token = context.Token;
-
-                if (token != null)
-                {
-                    // Send handshake request
-                    serverStream.Write(token, 0, token.Length);
-                } 
             }
-
+            // Send the last token, handshake over, CredSSP is established
+            // Note if there're errors during authentication, an SSPIException will be raised
+            // and isAuthentication will not be true.
+            clientStream.Write(token, 0, token.Length);
             isAuthenticated = true;
         }
 
@@ -330,52 +337,39 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 }
             }
 
-            // The buffer is empty, read data from network stream
-            byte[] recvBuffer = new byte[BlockSize];
             byte[] encryptedMsg = null;
             int bytesReceived = 0;
             byte[] decryptedMsg = null;
-            bool triedPooledBuffer = false;
 
             while (decryptedMsg == null)
             {
-                if (!triedPooledBuffer && this.pooledBuffer != null && this.pooledBuffer.Length > 0)
-                {// try to decrypte the data in this.pooledBuffer firstly.
-                    encryptedMsg = new byte[this.pooledBuffer.Length];
-                    Array.Copy(this.pooledBuffer, encryptedMsg, encryptedMsg.Length);
+                // decryptedMsg being null indicates incomplete data, so we continue reading and decrypting.
+                bytesReceived = ReceivePacket();
+
+                // The connection has been closed by remote server
+                if (bytesReceived == 0)
+                {
+                    return 0;
+                }
+
+                // There's pooled data, concatenate the buffer together for decryption
+                if (this.pooledBuffer != null && this.pooledBuffer.Length > 0)
+                {
+                    encryptedMsg = new byte[this.pooledBuffer.Length + bytesReceived];
+                    Array.Copy(this.pooledBuffer, encryptedMsg, this.pooledBuffer.Length);
+                    Array.Copy(recvBuffer, 0, encryptedMsg, this.pooledBuffer.Length, bytesReceived);
+
                     this.pooledBuffer = null;
-                    triedPooledBuffer = true;
                 }
                 else
                 {
-                    // decryptedMsg being null indicates incomplete data, so we continue reading and decrypting.
-                    bytesReceived = serverStream.Read(recvBuffer, 0, recvBuffer.Length);
-
-                    // The connection has been closed by remote server
-                    if (bytesReceived == 0)
-                    {
-                        return 0;
-                    }
-
-                    // There's pooled data, concatenate the buffer together for decryption
-                    if (this.pooledBuffer != null && this.pooledBuffer.Length > 0)
-                    {
-                        encryptedMsg = new byte[this.pooledBuffer.Length + bytesReceived];
-                        Array.Copy(this.pooledBuffer, encryptedMsg, this.pooledBuffer.Length);
-                        Array.Copy(recvBuffer, 0, encryptedMsg, this.pooledBuffer.Length, bytesReceived);
-
-                        this.pooledBuffer = null;
-                    }
-                    else
-                    {
-                        encryptedMsg = new byte[bytesReceived];
-                        Array.Copy(recvBuffer, encryptedMsg, bytesReceived);
-                    }
+                    encryptedMsg = new byte[bytesReceived];
+                    Array.Copy(recvBuffer, encryptedMsg, bytesReceived);
                 }
 
                 byte[] extraData = null;
                 // Do decryption
-                SecurityBuffer[] securityBuffers = new SecurityBuffer[] 
+                SecurityBuffer[] securityBuffers = new SecurityBuffer[]
                 {
                     new SecurityBuffer(SecurityBufferType.Data, encryptedMsg),
                     new SecurityBuffer(SecurityBufferType.Empty, null),
@@ -408,6 +402,65 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             return Read(buffer, offset, count);
         }
 
+        private struct TLSHeader
+        {
+            public byte type;
+            public byte version_major;
+            public byte version_minor;
+            public byte length_hi;
+            public byte length_lo;
+        }
+
+        private int ReceivePacket()
+        {
+            // Receive TLS header first.
+            var header = new TLSHeader();
+
+            var headerBuffer = TypeMarshal.ToBytes(header);
+
+            int headerLength = TypeMarshal.ToBytes(header).Length;
+
+            int reveivedLength = 0;
+
+            while (reveivedLength < headerLength)
+            {
+                int lenth = clientStream.Read(headerBuffer, reveivedLength, headerLength - reveivedLength);
+
+                if (lenth == 0)
+                {
+                    return 0;
+                }
+
+                reveivedLength += lenth;
+            }
+
+            Array.Copy(headerBuffer, 0, recvBuffer, 0, headerLength);
+
+            // Calculate the body Length.
+            header = TypeMarshal.ToStruct<TLSHeader>(headerBuffer);
+
+            int bodyLength = (header.length_hi << 8) + header.length_lo;
+
+            // Receive body.
+            int bodyReceivedLength = 0;
+
+            while (bodyReceivedLength < bodyLength)
+            {
+                int lenth = clientStream.Read(recvBuffer, headerLength + bodyReceivedLength, bodyLength - bodyReceivedLength);
+
+                if (lenth == 0)
+                {
+                    return 0;
+                }
+
+                bodyReceivedLength += lenth;
+            }
+
+            int totalLength = headerLength + bodyLength;
+
+            return totalLength;
+        }
+
 
         /// <summary>
         /// Writes a sequence of bytes to the current stream. The data is encrypted first before sending out.
@@ -431,46 +484,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 throw new ArgumentOutOfRangeException("count");
             }
 
-            // Get stream attribute
+            byte[] outBuffer = new byte[count];
+            Array.Copy(buffer, offset, outBuffer, 0, count);
+
+            // Encrypt message
             SecurityPackageContextStreamSizes streamSizes =
                 (SecurityPackageContextStreamSizes)context.QueryContextAttributes("SECPKG_ATTR_STREAM_SIZES");
+            SecurityBuffer messageBuffer = new SecurityBuffer(SecurityBufferType.Data, buffer);
+            SecurityBuffer headerBuffer = new SecurityBuffer(
+                SecurityBufferType.StreamHeader,
+                new byte[streamSizes.Header]);
+            SecurityBuffer trailerBuffer = new SecurityBuffer(
+                SecurityBufferType.StreamTrailer,
+                new byte[streamSizes.Trailer]);
+            SecurityBuffer emptyBuffer = new SecurityBuffer(SecurityBufferType.Empty, null);
 
-            int chunckSize = (int)streamSizes.MaximumMessage;
-            List<byte> byteList = new List<byte>();
-
-            while (count > 0)
-            {
-                int bufferSize = count;
-                if(bufferSize > chunckSize)
-                {
-                    bufferSize = chunckSize;
-                }
-
-                byte[] outBuffer = new byte[bufferSize];
-                Array.Copy(buffer, offset, outBuffer, 0, bufferSize);
-                count -= bufferSize;
-                offset += bufferSize;
-
-                // Encrypt Chunck
-                SecurityBuffer messageBuffer = new SecurityBuffer(SecurityBufferType.Data, outBuffer);
-                SecurityBuffer headerBuffer = new SecurityBuffer(
-                    SecurityBufferType.StreamHeader,
-                    new byte[streamSizes.Header]);
-                SecurityBuffer trailerBuffer = new SecurityBuffer(
-                    SecurityBufferType.StreamTrailer,
-                    new byte[streamSizes.Trailer]);
-                SecurityBuffer emptyBuffer = new SecurityBuffer(SecurityBufferType.Empty, null);
-
-                context.Encrypt(headerBuffer, messageBuffer, trailerBuffer, emptyBuffer);
-                byte[] encryptedChunck = ArrayUtility.ConcatenateArrays(
-                    headerBuffer.Buffer,
-                    messageBuffer.Buffer,
-                    trailerBuffer.Buffer);
-                byteList.AddRange(encryptedChunck);
-            }
-
-            byte[] encryptedMsg = byteList.ToArray();
-            serverStream.Write(encryptedMsg, 0, encryptedMsg.Length);
+            context.Encrypt(headerBuffer, messageBuffer, trailerBuffer, emptyBuffer);
+            byte[] encryptedMsg = ArrayUtility.ConcatenateArrays(
+                headerBuffer.Buffer,
+                messageBuffer.Buffer,
+                trailerBuffer.Buffer);
+            clientStream.Write(encryptedMsg, 0, encryptedMsg.Length);
         }
 
 
@@ -480,7 +514,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <returns></returns>
         public override void Flush()
         {
-            serverStream.Flush();
+            clientStream.Flush();
         }
 
 
@@ -497,7 +531,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             throw new NotSupportedException("This is not supported for CredSspStream.");
         }
 
-         
+
         /// <summary>
         /// Sets the length of the current stream.
         /// </summary>
@@ -522,7 +556,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 if (disposing)
                 {
                     // Clean managed resource
-                    CloseServerStream();
+                    CloseClientStream();
 
                     if (context != null)
                     {
@@ -543,14 +577,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// </summary>
         public override void Close()
         {
-            CloseServerStream();
+            CloseClientStream();
         }
 
 
         /// <summary>
         /// Finalizer, cleans up unmanaged resources
         /// </summary>
-        ~RdpbcgrServerCredSspStream()
+        ~CsspClientStream()
         {
             this.Dispose(false);
         }

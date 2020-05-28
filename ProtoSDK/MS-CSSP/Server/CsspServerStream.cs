@@ -1,18 +1,18 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.IO;
-
 using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using Microsoft.Protocols.TestTools.StackSdk.Security.SspiService;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Security.Cryptography.X509Certificates;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.Security
+namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cssp
 {
     /// <summary>
-    /// Performs enhanced RDP security transport. The External Security Protocol is CredSSP. This class is NOT
-    /// guaranteed to be thread safe.
+    /// Performs enhanced RDP security transport. The External Security Protocol is CredSSP.
     /// </summary>
-    internal class CredSspStream : Stream
+    internal class CsspServerStream : Stream
     {
         #region Member variables
         /// <summary>
@@ -28,14 +28,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security
         /// <summary>
         /// A read block size 
         /// </summary>
-        private const int BlockSize = 102400;
-
-        byte[] recvBuffer = new byte[BlockSize];
+        //private const int BlockSize = 1500;
+        private const int BlockSize = 5500;
 
         /// <summary>
         /// Underlying network stream
         /// </summary>
-        private Stream clientStream;
+        private Stream serverStream;
 
         /// <summary>
         /// The buffer that contains decrypted data 
@@ -66,44 +65,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security
         /// <summary>
         /// Client credential for authentication
         /// </summary>
-        private AccountCredential credential;
+        private CertificateCredential credential;
 
         /// <summary>
         /// Client context for authentication
         /// </summary>
-        private SspiClientSecurityContext context;
+        private SspiServerSecurityContext context;
 
         /// <summary>
         /// Context attribute used for CredSsp
         /// </summary>
-        private const ClientSecurityContextAttribute attribute =
-            ClientSecurityContextAttribute.Delegate
-            | ClientSecurityContextAttribute.ReplayDetect
-            | ClientSecurityContextAttribute.SequenceDetect
-            | ClientSecurityContextAttribute.Confidentiality
-            | ClientSecurityContextAttribute.AllocMemory
-            | ClientSecurityContextAttribute.ExtendedError
-            | ClientSecurityContextAttribute.Stream;
+        private const ServerSecurityContextAttribute attribute =
+            ServerSecurityContextAttribute.Delegate
+            | ServerSecurityContextAttribute.ReplayDetect
+            | ServerSecurityContextAttribute.SequenceDetect
+            | ServerSecurityContextAttribute.Confidentiality
+            | ServerSecurityContextAttribute.AllocMemory
+            | ServerSecurityContextAttribute.ExtendedError
+            | ServerSecurityContextAttribute.Stream;
 
-        /// <summary>
-        ///  Domain name used for authentication, if the authentication doesn't contain a domain, use ""
-        /// </summary>
-        private string domain;
-
-        /// <summary>
-        /// User name used for authentication, if the authentication doesn't require it, use ""
-        /// </summary>
-        private string userName;
-
-        /// <summary>
-        /// Password used for authentication, if the authentication doesn't require it, use ""
-        /// </summary>
-        private string password;
-
-        /// <summary>
-        /// Server principal to be logged on
-        /// </summary>
-        private string serverPrincipal;
         #endregion Member variables
 
         #region Helper methods
@@ -131,12 +111,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security
         /// <summary>
         /// Closes the underlying network stream
         /// </summary>
-        private void CloseClientStream()
+        private void CloseServerStream()
         {
-            if (this.clientStream != null)
+            if (this.serverStream != null)
             {
-                clientStream.Close();
-                clientStream = null;
+                serverStream.Close();
+                serverStream = null;
             }
         }
         #endregion Helper methods
@@ -149,9 +129,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security
         {
             get
             {
-                return clientStream.CanRead;
+                return serverStream.CanRead;
             }
         }
+
 
         /// <summary>
         /// Indicates whether the current stream supports seeking.
@@ -161,9 +142,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security
         {
             get
             {
-                return clientStream.CanSeek;
+                return serverStream.CanSeek;
             }
         }
+
 
         /// <summary>
         /// Indicates whether the current stream supports writing.
@@ -172,9 +154,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security
         {
             get
             {
-                return clientStream.CanWrite;
+                return serverStream.CanWrite;
             }
         }
+
 
         /// <summary>
         /// Length of bytes in stream.
@@ -183,9 +166,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security
         {
             get
             {
-                return clientStream.Length;
+                return serverStream.Length;
             }
         }
+
 
         /// <summary>
         /// The current position within the stream.
@@ -194,11 +178,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security
         {
             get
             {
-                return clientStream.Position;
+                return serverStream.Position;
             }
             set
             {
-                clientStream.Position = value;
+                serverStream.Position = value;
             }
         }
         #endregion Overriden properties
@@ -207,43 +191,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="client">The underlying network stream</param>
-        /// <param name="domain">Domain name</param>
+        /// <param name="server">The underlying network stream</param>
         /// <param name="principal">Server principal to be logged on, prefixed with "TERMSRV/"</param>
-        /// <param name="userName">Username used for authentication, doesn't contain the domain prefix</param>
-        /// <param name="password">Password used for authentication</param>
-        public CredSspStream(Stream client, string domain, string principal, string userName, string password)
+        public CsspServerStream(Stream server)
         {
-            if (client == null)
+            if (server == null)
             {
-                throw new ArgumentNullException("client");
+                throw new ArgumentNullException("server");
             }
 
-            if (domain == null)
-            {
-                throw new ArgumentNullException("domain");
-            }
-
-            if (principal == null)
-            {
-                throw new ArgumentNullException("principal");
-            }
-
-            if (userName == null)
-            {
-                throw new ArgumentNullException("userName");
-            }
-
-            if (password == null)
-            {
-                throw new ArgumentNullException("password");
-            }
-
-            this.clientStream = client;
-            this.domain = domain;
-            this.serverPrincipal = principal;
-            this.userName = userName;
-            this.password = password;
+            this.serverStream = server;
 
             this.decryptedBuffer = new byte[MaxBufferSize];
             this.pooledBuffer = null;
@@ -256,19 +213,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security
         /// <summary>
         /// Performs CredSSP authentication.
         /// </summary>
+        /// <param name="x509Cert">The certificate used by TLS.</param>
         /// <exception cref="IOException">Raised when attempting to read from/write to the remote connection which
         /// has been closed</exception>
         /// <exception cref="EndOfStreamException">Raised when the username or password doesn't match or authentication
         /// fails</exception>
-        public void Authenticate()
+        public void Authenticate(X509Certificate x509Cert, string principal)
         {
+            if (principal == null)
+            {
+                throw new ArgumentNullException("principal");
+            }
+
             // Authenticated already, do nothing
             if (isAuthenticated)
             {
                 return;
             }
 
-            credential = new AccountCredential(domain, userName, password);
+            credential = new CertificateCredential(x509Cert);
 
             byte[] receivedBuffer = new byte[MaxBufferSize];
             int bytesReceived = 0;
@@ -278,23 +241,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security
             {
                 context.Dispose();
             }
-            context = new SspiClientSecurityContext(
+
+            context = new SspiServerSecurityContext(
                 SecurityPackageType.CredSsp,
                 credential,
-                serverPrincipal,
+                principal,
                 attribute,
                 SecurityTargetDataRepresentation.SecurityNativeDrep);
 
-            context.Initialize(null);
             // Get first token
             byte[] token = context.Token;
-            // SSL handshake
+            // Credssp handshake
             while (context.NeedContinueProcessing)
             {
-                // Send handshake request
-                clientStream.Write(token, 0, token.Length);
                 // Get handshake resopnse
-                bytesReceived = clientStream.Read(receivedBuffer, 0, receivedBuffer.Length);
+                bytesReceived = serverStream.Read(receivedBuffer, 0, receivedBuffer.Length);
                 // The remote connection has been closed
                 if (bytesReceived == 0)
                 {
@@ -304,13 +265,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security
                 byte[] inToken = new byte[bytesReceived];
                 Array.Copy(receivedBuffer, inToken, bytesReceived);
                 // Get next token from response
-                context.Initialize(inToken);
+                context.Accept(inToken);
                 token = context.Token;
+
+                if (token != null)
+                {
+                    // Send handshake request
+                    serverStream.Write(token, 0, token.Length);
+                }
             }
-            // Send the last token, handshake over, CredSSP is established
-            // Note if there're errors during authentication, an SSPIException will be raised
-            // and isAuthentication will not be true.
-            clientStream.Write(token, 0, token.Length);
+
             isAuthenticated = true;
         }
 
@@ -360,34 +324,47 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security
                 }
             }
 
+            // The buffer is empty, read data from network stream
+            byte[] recvBuffer = new byte[BlockSize];
             byte[] encryptedMsg = null;
             int bytesReceived = 0;
             byte[] decryptedMsg = null;
+            bool triedPooledBuffer = false;
 
             while (decryptedMsg == null)
             {
-                // decryptedMsg being null indicates incomplete data, so we continue reading and decrypting.
-                bytesReceived = ReceivePacket();
-
-                // The connection has been closed by remote server
-                if (bytesReceived == 0)
-                {
-                    return 0;
-                }
-
-                // There's pooled data, concatenate the buffer together for decryption
-                if (this.pooledBuffer != null && this.pooledBuffer.Length > 0)
-                {
-                    encryptedMsg = new byte[this.pooledBuffer.Length + bytesReceived];
-                    Array.Copy(this.pooledBuffer, encryptedMsg, this.pooledBuffer.Length);
-                    Array.Copy(recvBuffer, 0, encryptedMsg, this.pooledBuffer.Length, bytesReceived);
-
+                if (!triedPooledBuffer && this.pooledBuffer != null && this.pooledBuffer.Length > 0)
+                {// try to decrypte the data in this.pooledBuffer firstly.
+                    encryptedMsg = new byte[this.pooledBuffer.Length];
+                    Array.Copy(this.pooledBuffer, encryptedMsg, encryptedMsg.Length);
                     this.pooledBuffer = null;
+                    triedPooledBuffer = true;
                 }
                 else
                 {
-                    encryptedMsg = new byte[bytesReceived];
-                    Array.Copy(recvBuffer, encryptedMsg, bytesReceived);
+                    // decryptedMsg being null indicates incomplete data, so we continue reading and decrypting.
+                    bytesReceived = serverStream.Read(recvBuffer, 0, recvBuffer.Length);
+
+                    // The connection has been closed by remote server
+                    if (bytesReceived == 0)
+                    {
+                        return 0;
+                    }
+
+                    // There's pooled data, concatenate the buffer together for decryption
+                    if (this.pooledBuffer != null && this.pooledBuffer.Length > 0)
+                    {
+                        encryptedMsg = new byte[this.pooledBuffer.Length + bytesReceived];
+                        Array.Copy(this.pooledBuffer, encryptedMsg, this.pooledBuffer.Length);
+                        Array.Copy(recvBuffer, 0, encryptedMsg, this.pooledBuffer.Length, bytesReceived);
+
+                        this.pooledBuffer = null;
+                    }
+                    else
+                    {
+                        encryptedMsg = new byte[bytesReceived];
+                        Array.Copy(recvBuffer, encryptedMsg, bytesReceived);
+                    }
                 }
 
                 byte[] extraData = null;
@@ -425,65 +402,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security
             return Read(buffer, offset, count);
         }
 
-        private struct TLSHeader
-        {
-            public byte type;
-            public byte version_major;
-            public byte version_minor;
-            public byte length_hi;
-            public byte length_lo;
-        }
-
-        private int ReceivePacket()
-        {
-            // Receive TLS header first.
-            var header = new TLSHeader();
-
-            var headerBuffer = TypeMarshal.ToBytes(header);
-
-            int headerLength = TypeMarshal.ToBytes(header).Length;
-
-            int reveivedLength = 0;
-
-            while (reveivedLength < headerLength)
-            {
-                int lenth = clientStream.Read(headerBuffer, reveivedLength, headerLength - reveivedLength);
-
-                if (lenth == 0)
-                {
-                    return 0;
-                }
-
-                reveivedLength += lenth;
-            }
-
-            Array.Copy(headerBuffer, 0, recvBuffer, 0, headerLength);
-
-            // Calculate the body Length.
-            header = TypeMarshal.ToStruct<TLSHeader>(headerBuffer);
-
-            int bodyLength = (header.length_hi << 8) + header.length_lo;
-
-            // Receive body.
-            int bodyReceivedLength = 0;
-
-            while (bodyReceivedLength < bodyLength)
-            {
-                int lenth = clientStream.Read(recvBuffer, headerLength + bodyReceivedLength, bodyLength - bodyReceivedLength);
-
-                if (lenth == 0)
-                {
-                    return 0;
-                }
-
-                bodyReceivedLength += lenth;
-            }
-
-            int totalLength = headerLength + bodyLength;
-
-            return totalLength;
-        }
-
 
         /// <summary>
         /// Writes a sequence of bytes to the current stream. The data is encrypted first before sending out.
@@ -507,27 +425,46 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security
                 throw new ArgumentOutOfRangeException("count");
             }
 
-            byte[] outBuffer = new byte[count];
-            Array.Copy(buffer, offset, outBuffer, 0, count);
-
-            // Encrypt message
+            // Get stream attribute
             SecurityPackageContextStreamSizes streamSizes =
                 (SecurityPackageContextStreamSizes)context.QueryContextAttributes("SECPKG_ATTR_STREAM_SIZES");
-            SecurityBuffer messageBuffer = new SecurityBuffer(SecurityBufferType.Data, buffer);
-            SecurityBuffer headerBuffer = new SecurityBuffer(
-                SecurityBufferType.StreamHeader,
-                new byte[streamSizes.Header]);
-            SecurityBuffer trailerBuffer = new SecurityBuffer(
-                SecurityBufferType.StreamTrailer,
-                new byte[streamSizes.Trailer]);
-            SecurityBuffer emptyBuffer = new SecurityBuffer(SecurityBufferType.Empty, null);
 
-            context.Encrypt(headerBuffer, messageBuffer, trailerBuffer, emptyBuffer);
-            byte[] encryptedMsg = ArrayUtility.ConcatenateArrays(
-                headerBuffer.Buffer,
-                messageBuffer.Buffer,
-                trailerBuffer.Buffer);
-            clientStream.Write(encryptedMsg, 0, encryptedMsg.Length);
+            int chunckSize = (int)streamSizes.MaximumMessage;
+            List<byte> byteList = new List<byte>();
+
+            while (count > 0)
+            {
+                int bufferSize = count;
+                if (bufferSize > chunckSize)
+                {
+                    bufferSize = chunckSize;
+                }
+
+                byte[] outBuffer = new byte[bufferSize];
+                Array.Copy(buffer, offset, outBuffer, 0, bufferSize);
+                count -= bufferSize;
+                offset += bufferSize;
+
+                // Encrypt Chunck
+                SecurityBuffer messageBuffer = new SecurityBuffer(SecurityBufferType.Data, outBuffer);
+                SecurityBuffer headerBuffer = new SecurityBuffer(
+                    SecurityBufferType.StreamHeader,
+                    new byte[streamSizes.Header]);
+                SecurityBuffer trailerBuffer = new SecurityBuffer(
+                    SecurityBufferType.StreamTrailer,
+                    new byte[streamSizes.Trailer]);
+                SecurityBuffer emptyBuffer = new SecurityBuffer(SecurityBufferType.Empty, null);
+
+                context.Encrypt(headerBuffer, messageBuffer, trailerBuffer, emptyBuffer);
+                byte[] encryptedChunck = ArrayUtility.ConcatenateArrays(
+                    headerBuffer.Buffer,
+                    messageBuffer.Buffer,
+                    trailerBuffer.Buffer);
+                byteList.AddRange(encryptedChunck);
+            }
+
+            byte[] encryptedMsg = byteList.ToArray();
+            serverStream.Write(encryptedMsg, 0, encryptedMsg.Length);
         }
 
 
@@ -537,7 +474,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security
         /// <returns></returns>
         public override void Flush()
         {
-            clientStream.Flush();
+            serverStream.Flush();
         }
 
 
@@ -579,7 +516,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security
                 if (disposing)
                 {
                     // Clean managed resource
-                    CloseClientStream();
+                    CloseServerStream();
 
                     if (context != null)
                     {
@@ -600,14 +537,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security
         /// </summary>
         public override void Close()
         {
-            CloseClientStream();
+            CloseServerStream();
         }
 
 
         /// <summary>
         /// Finalizer, cleans up unmanaged resources
         /// </summary>
-        ~CredSspStream()
+        ~CsspServerStream()
         {
             this.Dispose(false);
         }

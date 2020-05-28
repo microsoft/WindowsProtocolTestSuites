@@ -137,7 +137,6 @@
     <Compile Include="Client\RdpbcgrClientTransportStack.cs" />
     <Compile Include="Server\RdpbcgrServer.cs" />
     <Compile Include="Server\RdpbcgrServerContext.cs" />
-    <Compile Include="Server\RdpbcgrServerCredSspStream.cs" />
     <Compile Include="Server\RdpbcgrServerDecoder.cs" />
     <Compile Include="Server\RdpbcgrServerSessionContext.cs" />
     <Compile Include="Server\RdpbcgrServerTransportStack.cs" />
@@ -148,7 +147,6 @@
     <Compile Include="Client\RdpbcgrClient.cs" />
     <Compile Include="Client\RdpbcgrClientContext.cs" />
     <Compile Include="ConstValue.cs" />
-    <Compile Include="CredSspStream.cs" />
     <Compile Include="EncryptionAlgorithm.cs" />
     <Compile Include="Client\RdpbcgrClientDecoder.cs" />
     <Compile Include="RdpbcgrEncoder.cs" />
@@ -173,13 +171,9 @@
       <Project>{75544419-3f4e-4308-a676-165f45c1462e}</Project>
       <Name>Messages</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SspiLib\SspiLib.csproj">
-      <Project>{e64bf20f-11d2-49f6-a25b-f4378ab38180}</Project>
-      <Name>SspiLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SspiService\SspiService.csproj">
-      <Project>{1FC8C336-EF82-4F7C-9532-AB8AB268916E}</Project>
-      <Name>SspiService</Name>
+    <ProjectReference Include="..\MS-CSSP\Cssp.csproj">
+      <Project>{EADACA3F-9082-43E1-9864-755CEAB4C942}</Project>
+      <Name>Cssp</Name>
     </ProjectReference>
     <ProjectReference Include="..\TransportStack\TransportStack.csproj">
       <Project>{F8CDC462-0754-4BEA-B048-33AC1A5855C4}</Project>

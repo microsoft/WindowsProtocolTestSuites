@@ -1,5 +1,8 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.Mcs;
+using Microsoft.Protocols.TestTools.StackSdk.Security.Cssp;
+using Microsoft.Protocols.TestTools.StackSdk.Transport;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,18 +10,12 @@ using System.IO;
 using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Security.Authentication;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
-using System.Security.Authentication;
-
-using Microsoft.Protocols.TestTools.StackSdk;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.Mcs;
-using Microsoft.Protocols.TestTools.StackSdk.Security;
-using Microsoft.Protocols.TestTools.StackSdk.Transport;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 {
@@ -616,12 +613,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 {
                     // the server name should start with "TERMSRV/"
                     string targetSPN = ConstValue.CREDSSP_SERVER_NAME_PREFIX + serverName;
-                    clientStream = new CredSspStream(clientStream,
-                                                     serverDomain,
-                                                     targetSPN,
-                                                     logonName,
-                                                     logonPassword);
-                    ((CredSspStream)clientStream).Authenticate();
+
+                    var csspClient = new CsspClient(clientStream);
+
+                    clientStream = csspClient.GetStream();
+
+                    csspClient.Authenticate(serverDomain, targetSPN, logonName, logonPassword);
                 }
             }
             else
@@ -685,11 +682,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                         target = ConstValue.CREDSSP_SERVER_NAME_PREFIX + serverName;
                     }
 
-                    clientStream = new CredSspStream(clientStream,
-                                                     serverDomain,
-                                                     target,
-                                                     logonName,
-                                                     logonPassword);
+                    var csspClient = new CsspClient(clientStream);
+
+                    clientStream = csspClient.GetStream();
+
                     transportConfig.Stream = clientStream;
                     transportStack.UpdateConfig(transportConfig, () =>
                     {
@@ -697,7 +693,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                         tcpClient.Client.Blocking = true;
                         tcpClient.Client.ReceiveTimeout = 0;
 
-                        ((CredSspStream)clientStream).Authenticate();
+                        csspClient.Authenticate(serverDomain, target, logonName, logonPassword);
 
                         if (Context.ServerSelectedProtocol == (uint)selectedProtocols_Values.PROTOCOL_HYBRID_EX)
                         {
@@ -2086,7 +2082,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                                      | TS_SECURITY_HEADER_flags_Values.SEC_RESET_SEQNO);
 
             TS_SYNCHRONIZE_PDU synchronizePduData = new TS_SYNCHRONIZE_PDU();
-            synchronizePduData.messageType = TS_SYNCHRONIZE_PDU_messageType_Values.SYNCMSGTYPE_SYNC ;
+            synchronizePduData.messageType = TS_SYNCHRONIZE_PDU_messageType_Values.SYNCMSGTYPE_SYNC;
             synchronizePduData.targetUser = (ushort)context.ServerChannelId;
             RdpbcgrUtility.FillShareDataHeader(ref synchronizePduData.shareDataHeader,
                 (ushort)(Marshal.SizeOf(synchronizePduData) - Marshal.SizeOf(synchronizePduData.shareDataHeader)),

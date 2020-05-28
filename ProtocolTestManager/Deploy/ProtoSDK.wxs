@@ -59,6 +59,10 @@
         <File Id="Microsoft.Protocols.TestTools.StackSdk.Security.CryptoLib.pdb"
               Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Security.CryptoLib.pdb" />
       </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Cssp.pdb" Guid="*" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.Security.Cssp.pdb"
+              Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Cssp.pdb" />
+      </Component>
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.pdb" Guid="*" Feature="PTM_Feature">
         <File Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.pdb"
               Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.pdb" />
@@ -191,6 +195,10 @@
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.CryptoLib.dll" Guid="{51936C08-EE59-48BD-A075-129B0576D63E}" Feature="PTM_Feature">
         <File Id="Microsoft.Protocols.TestTools.StackSdk.Security.CryptoLib.dll"
               Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Security.CryptoLib.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Cssp.dll" Guid="{B886BD85-9430-4C25-B9B6-549EDC4E15F5}" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.Security.Cssp.dll"
+              Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Cssp.dll" />
       </Component>
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.dll" Guid="{A28F2FAA-84FE-4B0B-85CC-963841C80A48}" Feature="PTM_Feature">
         <File Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.dll"
