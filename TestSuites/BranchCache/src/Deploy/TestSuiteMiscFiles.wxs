@@ -14,11 +14,12 @@
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.dll" />
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.dll" />
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.CryptoLib.dll" />
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.dll"/>
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.dll"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Sspi.dll" />
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib.dll" />
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.SspiService.dll"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Transport.dll" />
-      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.dll" />
       <ComponentRef Id="BranchCache_Adapter.dll" />
       <ComponentRef Id="BranchCache_TestSuite.dll" />
       <ComponentRef Id="Common_Stack.dll" />
@@ -37,11 +38,12 @@
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.pdb" />
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.pdb" />
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.CryptoLib.pdb" />
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.pdb"/>
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.pdb"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Sspi.pdb" />
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib.pdb" />
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.SspiService.pdb"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Transport.pdb" />
-      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.pdb" />
       <ComponentRef Id="BranchCache_Adapter.pdb" />
       <ComponentRef Id="BranchCache_TestSuite.pdb" />
       <ComponentRef Id="Common_Stack.pdb" />
@@ -194,6 +196,12 @@
       </Component>
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.pdb" Guid="{BD158C52-F6BA-4544-ABBB-D4F1FB6F8EC6}">
         <File Id="filAF778764E3399A4AD04C8E1D3D6298B3" Source="$(var.PROTOSDK_TESTSUITE_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.pdb" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.dll" Guid="{4DF086DD-FD9C-409F-A5CB-FA0E49437455}">
+        <File Id="fil52065ECB0D63C680D7D0FE78BD0D82AC" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.pdb" Guid="{EB220694-EECB-4AC4-91B6-D7C752FFCA84}">
+        <File Id="fil2584C2CF3AFCBB20EA10FE5D8FFD7580" Source="$(var.PROTOSDK_TESTSUITE_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.pdb" />
       </Component>
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Sspi.dll" Guid="{7A8F1368-AF7E-4619-A61E-9F0D9CBA208D}">
         <File Id="Microsoft.Protocols.TestTools.StackSdk.Security.Sspi.dll" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Sspi.dll" />

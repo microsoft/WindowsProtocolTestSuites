@@ -411,10 +411,6 @@
       <Project>{7a782c66-1c4a-4f9e-92bd-d326b5a63601}</Project>
       <Name>Drsr</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-KILE\Kile.csproj">
-      <Project>{fe2070de-70d1-4e65-9ee6-9d28b5903ac6}</Project>
-      <Name>Kile</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\ProtoSDK\MS-NLMP\Nlmp.csproj">
       <Project>{5e53e71e-52d1-4bf0-99c0-608437ec446c}</Project>
       <Name>Nlmp</Name>

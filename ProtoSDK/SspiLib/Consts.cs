@@ -18,5 +18,35 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib
 
         // Specifies the version number of SecBufferDesc.
         public const int SECBUFFER_VERSION = 0;
+
+        /// <summary>
+        /// Unknown OID Int Array
+        /// </summary>
+        public static int[] UnknownOidInt = { 1, 2, 841, 48018, 1, 2, 2 };
+
+        /// <summary>
+        /// MsKerberos OID Int Array
+        /// </summary>
+        public static int[] MsKerbOidInt = { 1, 2, 840, 48018, 1, 2, 2 };
+
+        /// <summary>
+        /// Kerberos OID Int Array
+        /// </summary>
+        public static int[] KerbOidInt = { 1, 2, 840, 113554, 1, 2, 2 };
+
+        /// <summary>
+        /// Nlmp OID Int Array
+        /// </summary>
+        public static int[] NlmpOidInt = { 1, 3, 6, 1, 4, 1, 311, 2, 2, 10 };
+
+        /// <summary>
+        /// NegoEx OID Int Array
+        /// </summary>
+        public static int[] NegoExOidInt = { 1, 3, 6, 1, 4, 1, 311, 2, 2, 30 };
+
+        /// <summary>
+        /// SPNG OID Int Array
+        /// </summary>
+        public static int[] SpngOidInt = { 1, 3, 6, 1, 5, 5, 2 };
     }
 }
