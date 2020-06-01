@@ -410,7 +410,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                 TestConfig.RequestDialects,
                 TestConfig.IsSMB1NegotiateEnabled,
                 capabilityValue: Capabilities_Values.GLOBAL_CAP_DFS | Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING | Capabilities_Values.GLOBAL_CAP_LARGE_MTU | Capabilities_Values.GLOBAL_CAP_LEASING | Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL | Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES,
-                clientGuid: clientGuid,
+                clientGuid: Guid.NewGuid(),
                 checker: (Packet_Header header, NEGOTIATE_Response response) =>
                 {
                     BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, header.Status, "Negotiate should succeed.");
