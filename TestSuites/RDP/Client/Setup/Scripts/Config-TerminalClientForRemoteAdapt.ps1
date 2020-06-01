@@ -15,7 +15,7 @@ $settingFile = "$scriptsPath\ParamConfig.xml"
 if(Test-Path -Path $settingFile)
 {    
     $logPath            = .\Get-Parameter.ps1 $settingFile logPath
-    $logFile            = $logPath + "\Config-TerminalClient.ps1.log"
+    $logFile            = $logPath + "\Config-TerminalClientForRemoteAdapt.ps1.log"
     $userNameInTC       = .\Get-Parameter.ps1 $settingFile userNameInTC
     $userPwdInTC        = .\Get-Parameter.ps1 $settingFile userPwdInTC
 	$credSSPUser        = .\Get-Parameter.ps1 $settingFile CredSSPUser
@@ -56,7 +56,7 @@ Start-Transcript $logFile -Append
 #-----------------------------------------------------
 # Write value for all the parameters
 #-----------------------------------------------------
-Write-Host "EXECUTING [Config-TerminalClient.ps1] ..." -foregroundcolor cyan
+Write-Host "EXECUTING [Config-TerminalClientForRemoteAdapt.ps1] ..." -foregroundcolor cyan
 Write-Host "`$scriptsPath        = $scriptsPath"
 Write-Host "`$logPath            = $logPath"       
 Write-Host "`$logFile            = $logFile"
@@ -83,6 +83,12 @@ Write-Host "`$compressionInTC    = $compressionInTC"
 #-------------------------------------
 Write-Host "Turn off firewall"
 cmd /c netsh advfirewall set allprofile state off 2>&1 | Write-Host
+
+#-----------------------------------------------------
+# Install JinJa2 for python agent
+#-----------------------------------------------------
+pip install Jinja2
+Get-NetAdapter -physical | where name -match 'External' | Disable-NetAdapter -Confirm:$false
 
 #-----------------------------------------------------
 # Get IP address of the SUT computer
@@ -123,81 +129,12 @@ if ($workgroupDomain.ToUpper() -eq "DOMAIN")
     $taskUser = "$domainName\$taskUser"
 }
 
-if ($compressionInTC.ToUpper() -eq "YES")
-{
-   $compressionStr = "compression:i:1"
-}else
-{
-   $compressionStr = "compression:i:0"
-}
-
-Write-Host "Modifying target IP address and compression of RDP files..."
-if(!(Test-Path -Path "$dataPath\Base"))
-{
-    New-Item -Path "$dataPath\Base" -ItemType directory
-}
-
-if (Test-Path -Path "$dataPath\Base\Negotiate.RDP")
-{
-    Copy-Item $dataPath\Base\Negotiate.RDP $dataPath\Negotiate.RDP -Force
-}else
-{
-    Copy-Item $dataPath\Negotiate.RDP $dataPath\Base\Negotiate.RDP -Force
-}
-
-if (Test-Path -Path "$dataPath\Base\NegotiateFullScreen.RDP")
-{
-    Copy-Item $dataPath\Base\NegotiateFullScreen.RDP $dataPath\NegotiateFullScreen.RDP -Force
-}else
-{
-    Copy-Item $dataPath\NegotiateFullScreen.RDP $dataPath\Base\NegotiateFullScreen.RDP -Force
-}
-
-if (Test-Path -Path "$dataPath\Base\DirectCredSSP.RDP")
-{
-    Copy-Item $dataPath\Base\DirectCredSSP.RDP $dataPath\DirectCredSSP.RDP -Force
-}else
-{
-    Copy-Item $dataPath\DirectCredSSP.RDP $dataPath\Base\DirectCredSSP.RDP -Force
-}
-
-if (Test-Path -Path "$dataPath\Base\DirectCredSSPFullScreen.RDP")
-{
-    Copy-Item $dataPath\Base\DirectCredSSPFullScreen.RDP $dataPath\DirectCredSSPFullScreen.RDP -Force
-}else
-{
-    Copy-Item $dataPath\DirectCredSSPFullScreen.RDP $dataPath\Base\DirectCredSSPFullScreen.RDP -Force
-}
-
-"`nfull address:s:${driverComputerName}:${listeningPort}" | out-file "$dataPath\Negotiate.RDP" -Append -Encoding Unicode
-"`nfull address:s:${driverComputerName}:${listeningPort}" | out-file "$dataPath\DirectCredSSP.RDP" -Append -Encoding Unicode
-"`nfull address:s:${driverComputerName}:${listeningPort}" | out-file "$dataPath\NegotiateFullScreen.RDP" -Append -Encoding Unicode
-"`nfull address:s:${driverComputerName}:${listeningPort}" | out-file "$dataPath\DirectCredSSPFullScreen.RDP" -Append -Encoding Unicode
-
-"`n$compressionStr" | out-file "$dataPath\Negotiate.RDP" -Append -Encoding Unicode
-"`n$compressionStr" | out-file "$dataPath\DirectCredSSP.RDP" -Append -Encoding Unicode
-"`n$compressionStr" | out-file "$dataPath\NegotiateFullScreen.RDP" -Append -Encoding Unicode
-"`n$compressionStr" | out-file "$dataPath\DirectCredSSPFullScreen.RDP" -Append -Encoding Unicode
-
-"`nusbdevicestoredirect:s:*" | out-file "$dataPath\Negotiate.RDP" -Append -Encoding Unicode
-"`nusbdevicestoredirect:s:*" | out-file "$dataPath\DirectCredSSP.RDP" -Append -Encoding Unicode
-"`nusbdevicestoredirect:s:*" | out-file "$dataPath\NegotiateFullScreen.RDP" -Append -Encoding Unicode
-"`nusbdevicestoredirect:s:*" | out-file "$dataPath\DirectCredSSPFullScreen.RDP" -Append -Encoding Unicode
-
 Write-Host "Allow RDP connecting to unkown publisher for $driverComputerName..."
-cmd /c reg add "HKCU\Software\Microsoft\Terminal Server Client\LocalDevices" /v $driverComputerName /t REG_DWORD /d 68 /F
+cmd /c reg add "HKCU\Software\Microsoft\Terminal Server Client" /v "AuthenticationLevelOverride" /t "REG_DWORD" /d 0 /f
+cmd /c reg add "HKCU\Software\Microsoft\Terminal Server Client\LocalDevices" /v $driverComputerIP /t REG_DWORD /d 76 /F
 
 Write-Host "Creating task to trigger client to initiate a RDP connection with Negotiation Approach..."
 cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN Negotiate_RDPConnect /TR "$dataPath\Negotiate.RDP" /IT /F
-
-Write-Host "Creating task to trigger client to initiate a RDP connection using CredSSP security protocol with Direct Approach..."
-cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN DirectCredSSP_RDPConnect /TR "$dataPath\DirectCredSSP.RDP" /IT /F
-
-Write-Host "Creating task to trigger client to initiate a full screen RDP connection with Negotiation Approach..."
-cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN Negotiate_FullScreen_RDPConnect /TR "$dataPath\NegotiateFullScreen.RDP" /IT /F
-
-Write-Host "Creating task to trigger client to initiate a full screen RDP connection using CredSSP security protocol with Direct Approach..."
-cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN DirectCredSSP_FullScreen_RDPConnect /TR "$dataPath\DirectCredSSPFullScreen.RDP" /IT /F
 
 Write-Host "Creating task to maximize mstsc window..."
 cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN MaximizeMstsc /TR "powershell $scriptsPath\MaximizeMstsc.ps1" /IT /F
@@ -207,6 +144,7 @@ cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN TriggerNetworkFailure /TR "
 
 Write-Host "Creating task to close all RDP connections of terminal client..."
 cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN DisconnectAll /TR "$dataPath\DisconnectAll.bat" /IT /F
+cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN DisconnectAllAgents /TR "$dataPath\DisconnectAllAgents.bat" /IT /F
 
 #-----------------------------------------------------
 # Edit registery.
@@ -256,6 +194,8 @@ if($driverComputerIP -ne $driverComputerName)
 	cmd /c cmdkey /add:"Domain:target=TERMSRV/$driverComputerIP" /user:"$driverComputerName\$credSSPUser" /pass:$credSSPPwd
 }
 
+
+
 #-----------------------------------------------------
 # Finished to config Terminal Client
 #-----------------------------------------------------
@@ -267,7 +207,7 @@ cmd /C ECHO CONFIG FINISHED>$env:HOMEDRIVE\configTC.finished.signal
 # Ending script
 #----------------------------------------------------------------------------
 Write-Host "Config finished."
-Write-Host "EXECUTE [Config-TerminalClient.ps1] FINISHED (NOT VERIFIED)."
+Write-Host "EXECUTE [Config-TerminalClientForRemoteAdapt.ps1] FINISHED (NOT VERIFIED)."
 
 # cmd /C Pause
 

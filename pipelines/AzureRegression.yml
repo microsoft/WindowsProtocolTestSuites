@@ -25,3 +25,4 @@ jobs:
       TestSuiteName: $(test.testSuiteName)
       EnvironmentName: $(test.environmentName)
       HelperBranch: $(test.helperBranch)
+      FilterSuffix: $(test.FilterSuffix)
