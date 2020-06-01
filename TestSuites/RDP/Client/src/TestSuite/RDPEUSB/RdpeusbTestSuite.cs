@@ -56,7 +56,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
                 context = new EusbTestContext();
             }
 
-            this.rdpbcgrAdapter.TurnVerificationOff(true);
+            this.rdpbcgrAdapter.TurnVerificationOff(TurnOffRDPEUSBVerification);
 
             //Start RDP listening.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Starting RDP listening with transport protocol: {0}", transportProtocol.ToString());

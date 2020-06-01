@@ -72,7 +72,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             base.TestInitialize();
 
             // Turn on verification
-            this.rdpbcgrAdapter.TurnVerificationOff(false);
+            this.rdpbcgrAdapter.TurnVerificationOff(TurnOffRDPBCGRVerification);
         }
 
         protected override void TestCleanup()
