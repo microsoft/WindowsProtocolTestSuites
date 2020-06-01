@@ -4,7 +4,6 @@
           xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
   <Properties>
     <!-- Test suite properties which value not changed when running in different test environments -->
-    <!--<Property name="BeaconLogTargetServer" value="Xiaotian-Think" />-->
     <Property name="TestName" value="RDP Client Endpoint Test">
       <Description>The name of test suite.</Description>
     </Property>
