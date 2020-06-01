@@ -5,13 +5,14 @@ using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.Dtyp;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Security.Principal;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiService;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 {

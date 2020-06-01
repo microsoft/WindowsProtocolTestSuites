@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

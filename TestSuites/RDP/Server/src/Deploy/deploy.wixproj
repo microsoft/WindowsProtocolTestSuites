@@ -79,6 +79,14 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLLOCATION</RefTargetDir>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-CSSP\Cssp.csproj">
+      <Name>Cssp</Name>
+      <Project>{EADACA3F-9082-43E1-9864-755CEAB4C942}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\Messages\Messages.csproj">
       <Name>Messages</Name>
       <Project>{75544419-3f4e-4308-a676-165f45c1462e}</Project>
@@ -194,5 +202,8 @@
     <Copy SourceFiles="..\TestSuite\RDP_ServerTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Bin" />    
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Disable_Firewall.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Scripts" />
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Enable-WinRM.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Set-AutoLogon.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\RestartAndRunFinish.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\RestartAndRun.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Server\Scripts" />
   </Target>
 </Project>

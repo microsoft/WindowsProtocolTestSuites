@@ -9,7 +9,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
     using Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa;
     using Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce;
     using Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc;
-    using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+    using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 
     /// <summary>
     /// The implementation of INrpcRpcAdapter.

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Data;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd;
 using System.Net;
@@ -438,7 +438,8 @@ namespace Microsoft.Protocols.TestManager.Detector
                                  "ServerFailoverTestSuite.deployment.ptfconfig",
                                  "MS-DFSC_ServerTestSuite.deployment.ptfconfig",
                                  "MS-RSVD_ServerTestSuite.deployment.ptfconfig",
-                                 "MS-FSA_ServerTestSuite.deployment.ptfconfig"};
+                                 "MS-FSA_ServerTestSuite.deployment.ptfconfig",
+                                 "MS-FSAModel_ServerTestSuite.deployment.ptfconfig"};
             foreach (string cfgFile in cfgFiles)
             {
                 foreach (string property in DetectorUtil.GetPropertiesByFile(cfgFile))
@@ -760,6 +761,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             if (!isFsaSelected)
             {
                 hiddenPropertiesList.AddRange(DetectorUtil.GetPropertiesByFile("MS-FSA_ServerTestSuite.deployment.ptfconfig"));
+                hiddenPropertiesList.AddRange(DetectorUtil.GetPropertiesByFile("MS-FSAModel_ServerTestSuite.deployment.ptfconfig"));
             }
 
             if (!isAuthSelected)

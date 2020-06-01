@@ -5,7 +5,7 @@ using System;
 using Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using Microsoft.Protocols.TestTools.StackSdk.Messages;
 using Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling;
 using System.Runtime.Serialization;

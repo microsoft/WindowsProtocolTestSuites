@@ -12,7 +12,7 @@ using Microsoft.Protocols.TestTools.StackSdk.Security.Apds;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Dpsp;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using Microsoft.Protocols.TestSuites.ActiveDirectory.Common;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Pac;
 

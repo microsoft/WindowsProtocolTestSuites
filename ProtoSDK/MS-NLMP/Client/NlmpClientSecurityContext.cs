@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
 {
@@ -227,11 +227,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
             this.client.Context.ClientConfigFlags |= NegotiateTypes.NTLMSSP_NEGOTIATE_128;
             this.client.Context.ClientConfigFlags |= NegotiateTypes.NTLMSSP_NEGOTIATE_56;
             this.client.Context.ClientConfigFlags |= NegotiateTypes.NTLMSSP_NEGOTIATE_UNICODE;
-            // turn on seal and sign
-            this.client.Context.ClientConfigFlags |= NegotiateTypes.NTLMSSP_NEGOTIATE_SEAL;
-            this.client.Context.ClientConfigFlags |= NegotiateTypes.NTLMSSP_NEGOTIATE_SIGN;
+            this.client.Context.ClientConfigFlags |= NegotiateTypes.NTLM_NEGOTIATE_OEM;
         }
-
 
         #endregion
 
@@ -834,6 +831,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
             InitializeChallengeMIC(exportedSessionKey, targetInfo, packet, challenge);
 
             return packet.ToBytes();
+        }
+
+        public override object QueryContextAttributes(string contextAttribute)
+        {
+            throw new NotImplementedException();
         }
 
 

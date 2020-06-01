@@ -11,6 +11,8 @@ using Microsoft.Protocols.TestTools.StackSdk.Dtyp;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiService;
 using NamespaceSmb = Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb;
 using Smb2 = Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 
@@ -330,15 +332,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             if (!isWindows)
             {
                 SmbClientConnection connection = this.smbClient.Context.Connection;
-                connection.GssApi = new Microsoft.Protocols.TestTools.StackSdk.Security.Sspi.SspiClientSecurityContext(
-                    Microsoft.Protocols.TestTools.StackSdk.Security.Sspi.SecurityPackageType.Ntlm,
-                    new Microsoft.Protocols.TestTools.StackSdk.Security.Sspi.AccountCredential(
+                connection.GssApi = new SspiClientSecurityContext(
+                    SecurityPackageType.Ntlm,
+                    new AccountCredential(
                         this.domainName,
                         this.userName,
                         this.password),
                     "cifs/" + this.serverName,
-                    Microsoft.Protocols.TestTools.StackSdk.Security.Sspi.ClientSecurityContextAttribute.Connection,
-                    Microsoft.Protocols.TestTools.StackSdk.Security.Sspi.SecurityTargetDataRepresentation.SecurityNetworkDrep);
+                    ClientSecurityContextAttribute.Connection,
+                    SecurityTargetDataRepresentation.SecurityNetworkDrep);
                 this.smbClient.Context.AddOrUpdateConnection(connection);
             }
             packet = this.smbClient.CreateSecondSessionSetupRequest((ushort)this.sessionId, SmbSecurityPackage.NTLM);

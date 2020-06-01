@@ -10,6 +10,7 @@ using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa
 {

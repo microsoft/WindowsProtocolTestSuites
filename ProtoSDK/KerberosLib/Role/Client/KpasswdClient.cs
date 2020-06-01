@@ -58,7 +58,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <param name="transportType">Whether the transport is TCP or UDP transport.</param>
         public KpasswdClient(string kdcAddress, int kdcPort, TransportType transportType)
         {
-            this.Context = new KerberosContext();
+            this.Context = new KerberosContext(KerberosContextType.Client);
             this.kdcAddress = kdcAddress;
             this.kdcPort = kdcPort;
             this.transportType = transportType;

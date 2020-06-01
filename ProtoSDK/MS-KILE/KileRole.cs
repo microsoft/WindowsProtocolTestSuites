@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 using System.Text;
 
 using Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using Microsoft.Protocols.TestTools.StackSdk.Asn1;
 using Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib;
 
@@ -305,7 +305,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
 
                             // encrypt the timestamp
                             byte[] key = KeyGenerator.MakeKey(paTimeStamp.Type, password, salt);
-                            byte[] encTimeStamp = KileUtility.Encrypt(paTimeStamp.Type,
+                            byte[] encTimeStamp = KerberosUtility.Encrypt(paTimeStamp.Type,
                                                                       key,
                                                                       currTimeStampBuffer.Data,
                                                                       (int)KeyUsageNumber.PA_ENC_TIMESTAMP);
@@ -386,7 +386,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                             if (paReferral.PrincipalName != null)
                             {
                                 principalName = new PrincipalName(new KerbInt32((int)paReferral.PrincipalType),
-                                    KileUtility.String2SeqKerbString(paReferral.PrincipalName));
+                                    KerberosUtility.String2SeqKerbString(paReferral.PrincipalName));
                             }
 
                             var svrData = new PA_SVR_REFERRAL_DATA(principalName, new Realm(paReferral.Realm));
@@ -465,7 +465,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                         byte[] key = KeyGenerator.MakeKey((EncryptionType)paEncTimeStamp.etype.Value, password, salt);
 
                         // Decrypt the PA_ENC_TS_ENC
-                        byte[] encTimeStamp = KileUtility.Decrypt(
+                        byte[] encTimeStamp = KerberosUtility.Decrypt(
                             (EncryptionType)paEncTimeStamp.etype.Value,
                             key,
                             paEncTimeStamp.cipher.ByteArrayValue,
@@ -635,7 +635,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             var paData = new PaEncTimeStamp();
             paData.PaType = PaDataType.PA_ENC_TIMESTAMP;
             paData.Type = encryptionType;
-            paData.TimeStamp = KileUtility.CurrentKerberosTime.Value;
+            paData.TimeStamp = KerberosUtility.CurrentKerberosTime.Value;
             paData.Usec = 0;
             return paData;
         }

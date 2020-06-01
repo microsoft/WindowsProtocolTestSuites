@@ -8,8 +8,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FileAccessService\FileAccessService.csproj" />
-    <ProjectReference Include="..\MS-NLMP\Nlmp.csproj" />
     <ProjectReference Include="..\MS-XCA\Xca.csproj" />
+    <ProjectReference Include="..\SspiService\SspiService.csproj" />
     <ProjectReference Include="..\TransportStack\TransportStack.csproj" />
   </ItemGroup>
 

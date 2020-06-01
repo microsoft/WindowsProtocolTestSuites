@@ -8,7 +8,7 @@ using System.Text;
 using System.DirectoryServices.Protocols;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr;
 
 namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr

@@ -9,9 +9,10 @@ using System.Runtime.InteropServices;
 using System.DirectoryServices.Protocols;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic;
 using Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiService;
 
 namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 {

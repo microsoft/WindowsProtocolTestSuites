@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B42A8A9A-2301-4BD0-AACF-BEEC73871899}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite</RootNamespace>
+    <AssemblyName>MS-FSAModel_ServerTestSuite</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <!--For CoReXT bcz fxcop settings-->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'fxcop|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\fxcop\</OutputPath>
+    <DefineConstants>FXCOP;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Protocols.TestTools">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.Protocols.TestTools.Extension">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.Protocols.TestTools.VSTS">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.SpecExplorer.Runtime, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>True</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.Xrt.Runtime, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>True</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>4</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceModel" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MS-FSAModel_ServerTestSuite.deployment.ptfconfig">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="MS-FSAModel_ServerTestSuite.ptfconfig" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="ChangeNotificationTestCase.cs" />
+    <Compile Include="CloseFileTestCase.cs" />
+    <Compile Include="CreateFileTestCase.cs" />
+    <Compile Include="FlushCachedDataTestCase.cs" />
+    <Compile Include="IoCtlRequestTestCase.cs" />
+    <Compile Include="LockAndUnlockTestCase.cs" />
+    <Compile Include="OpenFileTestCase.cs" />
+    <Compile Include="QueryDirectoryTestCase.cs" />
+    <Compile Include="QueryFileInformationTestCase.cs" />
+    <Compile Include="QueryFileSystemInformationTestCase.cs" />
+    <Compile Include="QuerySecurityInformationTestCase.cs" />
+    <Compile Include="ReadFileTestCase.cs" />
+    <Compile Include="SetFileAllocOrObjIdInformationTestCase.cs" />
+    <Compile Include="SetFileBasicInformationTestCase.cs" />
+    <Compile Include="SetFileDispositionInformationTestCase.cs" />
+    <Compile Include="SetFileEndOfFileInformationTestCase.cs" />
+    <Compile Include="SetFileFullEaInformationTestCase.cs" />
+    <Compile Include="SetFileLinkInformationTestCase.cs" />
+    <Compile Include="SetFileModeInformationTestCase.cs" />
+    <Compile Include="SetFilePositionInformationTestCase.cs" />
+    <Compile Include="SetFileRenameInformationTestCase.cs" />
+    <Compile Include="SetFileShortNameInformationTestCase.cs" />
+    <Compile Include="SetFileStreamRenameInformationTestCase.cs" />
+    <Compile Include="SetFileValidDataLengthInformationTestCase.cs" />
+    <Compile Include="SetSecurityInformationTestCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WriteFileTestCase.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Common\Common.csproj">
+      <Project>{FE653643-6342-4300-871E-683C7BA31494}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-FSCC\Fscc.csproj">
+      <Project>{124E0F6D-57D7-4582-AF9A-3DE11B358E76}</Project>
+      <Name>Fscc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SMB2\Smb2.csproj">
+      <Project>{C7F08825-D3C9-4DDD-9BA3-06733B1ABE36}</Project>
+      <Name>Smb2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\Adapter\CommonAdapter.csproj">
+      <Project>{3fd566ba-e398-461e-b1b6-464b117ed422}</Project>
+      <Name>CommonAdapter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\FSA\Adapter\MS-FSA_ServerAdapter.csproj">
+      <Project>{98A76DE1-2D66-476B-9222-F15FFDFA8C81}</Project>
+      <Name>MS-FSA_ServerAdapter</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\" />
+  </Target>
+</Project>

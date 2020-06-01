@@ -15,7 +15,7 @@ using Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Samr;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using System.Globalization;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc

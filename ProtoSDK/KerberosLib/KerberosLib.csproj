@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MS-PAC\Pac.csproj" />
+    <ProjectReference Include="..\CryptoLib\CryptoLib.csproj" />
+    <ProjectReference Include="..\SspiLib\SspiLib.csproj" />
+    <ProjectReference Include="..\TransportStack\TransportStack.csproj" />
   </ItemGroup>
 
   <ItemGroup>

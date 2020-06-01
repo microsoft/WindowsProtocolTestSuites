@@ -17,7 +17,7 @@ using System.Security.AccessControl;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts;
 using Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.Asn1CodecV3;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using Microsoft.Protocols.TestTools.StackSdk.Transport;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -445,7 +445,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 int.Parse(currentPort),
                 userName,
                 password,
-                currentWorkingDC.Domain.NetbiosName,
+                currentWorkingDC.Domain.FQDN,
                 authenticationType,
                 isWindows);
             Site.Assert.IsTrue(result.ToLower().Contains("success"),
@@ -9301,7 +9301,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                         int.Parse(currentPort),
                         childAdminName,
                         childAdminPwd,
-                        currentWorkingDC.Domain.NetbiosName,
+                        currentWorkingDC.Domain.FQDN,
                         AuthType.Basic | AuthType.Kerberos);
                 }
                 adLdapClient.DeleteObject("CN=CrossDomainUser1,CN=Users," + currentWorkingDC.Domain.DomainNC, null);
@@ -9328,7 +9328,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     int.Parse(currentPort),
                     testUserName,
                     testUserPwd,
-                    currentWorkingDC.Domain.NetbiosName,
+                    currentWorkingDC.Domain.FQDN,
                     AuthType.Basic | AuthType.Kerberos);
             }
             adLdapClient.DeleteObject("CN=CrossDomainUser1,CN=Users," + rootDomainNC, null);

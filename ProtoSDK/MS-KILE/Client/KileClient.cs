@@ -158,7 +158,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             transportConfig.MaxConnections = 1;
             transportConfig.BufferSize = transportBufferSize;
             transportConfig.RemoteIpPort = kdcPort;
-            transportConfig.RemoteIpAddress = IPAddress.Parse(kdcAddress);
+            transportConfig.RemoteIpAddress = kdcAddress.ParseIPAddress();
 
             // For UDP bind
             if (transportConfig.RemoteIpAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
@@ -209,7 +209,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <returns>The created AS request.</returns>
         [CLSCompliant(false)]
         public KileAsRequest CreateAsRequest(string sName,
-                                         KRBFlags kdcOptions,
+                                         KDCOptions kdcOptions,
                                          Asn1SequenceOf<PA_DATA> paData,
                                          params EncryptionType[] encryptionTypes)
         {
@@ -219,7 +219,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             request.Request.padata = paData;
 
             request.Request.req_body = new KDC_REQ_BODY();
-            request.Request.req_body.kdc_options = new KDCOptions(KileUtility.ConvertInt2Flags((int)kdcOptions));
+            request.Request.req_body.kdc_options = kdcOptions;
             request.Request.req_body.nonce = new KerbUInt32((uint)Math.Abs((int)DateTime.Now.Ticks));
             request.Request.req_body.till = new KerberosTime(ConstValue.TGT_TILL_TIME);
             request.Request.req_body.rtime = new KerberosTime(ConstValue.TGT_RTIME);
@@ -241,7 +241,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             if (sName != null)
             {
                 request.Request.req_body.sname =
-                    new PrincipalName(new KerbInt32((int)PrincipalType.NT_SRV_INST), KileUtility.String2SeqKerbString(sName, domain));
+                    new PrincipalName(new KerbInt32((int)PrincipalType.NT_SRV_INST), KerberosUtility.String2SeqKerbString(sName, domain));
             }
 
             if (encryptionTypes != null)
@@ -276,8 +276,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <exception cref="System.ArgumentNullException">Thrown when the input parameter is null.</exception>
         [CLSCompliant(false)]
         public KileTgsRequest CreateTgsRequest(string sName,
-                                           KRBFlags kdcOptions,
-                                           KerbUInt32 nonce,
+                                           KDCOptions kdcOptions,
                                            Asn1SequenceOf<PA_DATA> paData,
                                            ChecksumType checksumType,
                                            Ticket additionalTicket,
@@ -288,8 +287,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 throw new ArgumentNullException(nameof(sName));
             }
             var sname = new PrincipalName(new KerbInt32((int)PrincipalType.NT_SRV_INST),
-                KileUtility.String2SeqKerbString(sName.Split('/')));
-            return CreateTgsRequest(context.UserRealm, context.UserName, sname, kdcOptions, nonce, context.UserRealm, paData,
+                KerberosUtility.String2SeqKerbString(sName.Split('/')));
+            return CreateTgsRequest(sname, kdcOptions, new KerbUInt32((uint)Math.Abs((uint)DateTime.Now.Ticks)), context.UserRealm, paData,
                 checksumType, additionalTicket, authorizationData);
         }
 
@@ -316,10 +315,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <exception cref="System.ArgumentNullException">Thrown when the input parameter is null.</exception>
         [CLSCompliant(false)]
         public KileTgsRequest CreateTgsRequest(
-            Realm cRealm,
-            PrincipalName cName,
             PrincipalName sName,
-            KRBFlags kdcOptions,
+            KDCOptions kdcOptions,
             KerbUInt32 nonce,
             Realm realm,
             Asn1SequenceOf<PA_DATA> paData,
@@ -327,14 +324,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             Ticket additionalTicket,
             AuthorizationData authorizationData)
         {
-            if (cRealm == null)
-            {
-                throw new ArgumentNullException(nameof(cRealm));
-            }
-            if (cName == null)
-            {
-                throw new ArgumentNullException(nameof(cName));
-            }
             if (sName == null)
             {
                 throw new ArgumentNullException(nameof(sName));
@@ -350,7 +339,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
 
             #region construct req_body
             request.Request.req_body = new KDC_REQ_BODY();
-            request.Request.req_body.kdc_options = new KDCOptions(KileUtility.ConvertInt2Flags((int)kdcOptions));
+            request.Request.req_body.kdc_options = kdcOptions;
             request.Request.req_body.nonce = nonce;
             request.Request.req_body.till = new KerberosTime(ConstValue.TGT_TILL_TIME);
             request.Request.req_body.etype = context.ClientEncryptionTypes;
@@ -374,7 +363,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 if (context.TgsSessionKey != null && context.TgsSessionKey.keytype != null
                     && context.TgsSessionKey.keyvalue != null && context.TgsSessionKey.keyvalue.Value != null)
                 {
-                    encAsnEncoded = KileUtility.Encrypt((EncryptionType)context.TgsSessionKey.keytype.Value,
+                    encAsnEncoded = KerberosUtility.Encrypt((EncryptionType)context.TgsSessionKey.keytype.Value,
                                                         context.TgsSessionKey.keyvalue.ByteArrayValue,
                                                         asnBuffer.Data,
                                                         (int)KeyUsageNumber.TGS_REQ_KDC_REQ_BODY_AuthorizationData);
@@ -389,7 +378,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             #region construct PA_DATA
             var bodyBuffer = new Asn1BerEncodingBuffer();
             request.Request.req_body.BerEncode(bodyBuffer);
-            PA_DATA tgsPaData = ConstructTgsPaData(cRealm, cName, checksumType, bodyBuffer.Data);
+            PA_DATA tgsPaData = ConstructTgsPaData(checksumType, bodyBuffer.Data);
 
             request.Request.padata = new Asn1SequenceOf<PA_DATA>();
             if (paData == null || paData.Elements == null || paData.Elements.Length == 0)
@@ -406,35 +395,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
 
             return request;
         }
-
-
-        /// <summary>
-        /// Create AP request. Then use KilePdu.ToBytes() to get the byte array.
-        /// </summary>
-        /// <param name="apOptions">The AP options in AP request.</param>
-        /// <param name="checksumType">The checksum type selected.
-        /// It should be ChecksumType.ap_authenticator_8003.</param>
-        /// <param name="seqNumber">The current local sequence number.</param>
-        /// <param name="flag">The flag set in checksum field of Authenticator.</param>
-        /// <param name="subkey">Specify the new subkey used in the following exchange.
-        /// This argument can be got with method GenerateKey(ApSessionKey).
-        /// If this argument is null, no subkey will be sent.</param>
-        /// <param name="authorizationData">The authentication data of authenticator.
-        /// This argument can be generated by method ConstructAuthorizationData.
-        /// If this argument is null, no Authorization Data will be sent.</param>
-        /// <returns>The created AP request.</returns>
-        [CLSCompliant(false)]
-        public KileApRequest CreateApRequest(ApOptions apOptions,
-                                         ChecksumType checksumType,
-                                         int seqNumber,
-                                         ChecksumFlags flag,
-                                         EncryptionKey subkey,
-                                         AuthorizationData authorizationData)
-        {
-            return CreateApRequest(context.UserRealm, context.UserName, apOptions, checksumType, seqNumber, flag,
-                subkey, authorizationData);
-        }
-
 
         /// <summary>
         /// Create AP request. Then use KilePdu.ToBytes() to get the byte array.
@@ -458,8 +418,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <exception cref="System.ArgumentNullException">Thrown when the input parameter is null.</exception>
         [CLSCompliant(false)]
         public KileApRequest CreateApRequest(
-            Realm cRealm,
-            PrincipalName cName,
             ApOptions apOptions,
             ChecksumType checksumType,
             int seqNumber,
@@ -467,17 +425,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             EncryptionKey subkey,
             AuthorizationData authorizationData)
         {
-            if (cRealm == null)
-            {
-                throw new ArgumentNullException(nameof(cRealm));
-            }
-            if (cName == null)
-            {
-                throw new ArgumentNullException(nameof(cName));
-            }
             var request = new KileApRequest(context);
-            request.Authenticator = CreateAuthenticator(cRealm,
-                                                        cName,
+            request.Authenticator = CreateAuthenticator(
                                                         checksumType,
                                                         seqNumber,
                                                         flag,
@@ -486,11 +435,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                                                         context.ApSessionKey,
                                                         null);
 
-            request.Request.ap_options = new APOptions(KileUtility.ConvertInt2Flags((int)apOptions));
+            request.Request.ap_options = new APOptions(KerberosUtility.ConvertInt2Flags((int)apOptions));
             request.Request.msg_type = new Asn1Integer((int)MsgType.KRB_AP_REQ);
             request.Request.pvno = new Asn1Integer(ConstValue.KERBEROSV5);
             request.Request.ticket = context.ApTicket;
-
+            
             return request;
         }
 
@@ -567,7 +516,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 throw new ArgumentNullException(nameof(errorToken));
             }
 
-            byte[] errorBody = KileUtility.VerifyGssApiTokenHeader(errorToken);
+            byte[] errorBody = KerberosUtility.VerifyGssApiTokenHeader(errorToken);
 
             // Check if it has a two-byte tok_id
             if (errorBody == null || errorBody.Length <= sizeof(TOK_ID))
@@ -575,7 +524,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 throw new FormatException("Not a valid KRB_ERROR token!");
             }
 
-            TOK_ID id = (TOK_ID)KileUtility.ConvertEndian(BitConverter.ToUInt16(errorBody, 0));
+            TOK_ID id = (TOK_ID)KerberosUtility.ConvertEndian(BitConverter.ToUInt16(errorBody, 0));
             if (id != TOK_ID.KRB_ERROR)
             {
                 throw new FormatException("Not a valid KRB_ERROR token!");
@@ -626,7 +575,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                 return null;
             }
 
-            byte[] keyBuffer = KileUtility.GenerateRandomBytes((uint)baseKey.keyvalue.ByteArrayValue.Length);
+            byte[] keyBuffer = KerberosUtility.GenerateRandomBytes((uint)baseKey.keyvalue.ByteArrayValue.Length);
             var newKey = new EncryptionKey(new KerbInt32(baseKey.keytype.Value), new Asn1OctetString(keyBuffer));
             return newKey;
         }
@@ -710,8 +659,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <param name="key">The key to do checksum.</param>
         /// <param name="checksumBody">The data to compute checksum.</param>
         /// <returns>The created authenticator.</returns>
-        private Authenticator CreateAuthenticator(Realm cRealm,
-                                                  PrincipalName cName,
+        private Authenticator CreateAuthenticator(
                                                   ChecksumType checksumType,
                                                   int seqNumber,
                                                   ChecksumFlags flag,
@@ -720,15 +668,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
                                                   EncryptionKey key,
                                                   byte[] checksumBody)
         {
-            var plaintextAuthenticator = new Authenticator();
-            plaintextAuthenticator.authenticator_vno = new Asn1Integer(ConstValue.KERBEROSV5);
-            plaintextAuthenticator.crealm = cRealm;
-            plaintextAuthenticator.cname = cName;
-            plaintextAuthenticator.cusec = new Microseconds(0);
-            plaintextAuthenticator.ctime = KileUtility.CurrentKerberosTime;
-            plaintextAuthenticator.seq_number = new KerbUInt32(seqNumber);
-            plaintextAuthenticator.subkey = subkey;
-            plaintextAuthenticator.authorization_data = authorizationData;
+            var plaintextAuthenticator = CreateAuthenticator(authorizationData, subkey, seqNumber);
 
             if (checksumType == ChecksumType.ap_authenticator_8003)
             {
@@ -746,7 +686,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             else
             {
                 // in TGS PA data
-                byte[] checkData = KileUtility.GetChecksum(
+                byte[] checkData = KerberosUtility.GetChecksum(
                     key.keyvalue.ByteArrayValue,
                     checksumBody,
                     (int)KeyUsageNumber.TGS_REQ_PA_TGS_REQ_adataOR_AP_REQ_Authenticator_cksum,
@@ -759,6 +699,19 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             return plaintextAuthenticator;
         }
 
+        private Authenticator CreateAuthenticator(AuthorizationData data, EncryptionKey subkey, int seqNumber)
+        {
+            Authenticator plaintextAuthenticator = new Authenticator();
+            plaintextAuthenticator.authenticator_vno = new Asn1Integer(KerberosConstValue.KERBEROSV5);
+            plaintextAuthenticator.crealm = context.UserRealm;
+            plaintextAuthenticator.cusec = new Microseconds(DateTime.UtcNow.Millisecond);
+            plaintextAuthenticator.ctime = KerberosUtility.CurrentKerberosTime;
+            plaintextAuthenticator.seq_number = new KerbUInt32(seqNumber);
+            plaintextAuthenticator.cname = context.UserName;
+            plaintextAuthenticator.subkey = subkey;
+            plaintextAuthenticator.authorization_data = data;
+            return plaintextAuthenticator;
+        }
 
         /// <summary>
         /// Construct PA_TGS_REQ for TGS request.
@@ -769,7 +722,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         /// <param name="checksumType">The checksum type in Authenticator.</param>
         /// <param name="checksumBody">The data to compute checksum.</param>
         /// <returns>The constructed PaData.</returns>
-        private PA_DATA ConstructTgsPaData(Realm cRealm, PrincipalName cName, ChecksumType checksumType, byte[] checksumBody)
+        private PA_DATA ConstructTgsPaData(ChecksumType checksumType, byte[] checksumBody)
         {
             var request = new AP_REQ();
 
@@ -781,8 +734,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             AuthorizationData authData = ConstructAuthorizationData(adRestriction);
 
             // create and encrypt authenticator
-            Authenticator authenticator = CreateAuthenticator(cRealm,
-                                                              cName,
+            Authenticator authenticator = CreateAuthenticator(
                                                               checksumType,
                                                               0,
                                                               0,
@@ -793,7 +745,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             var asnBuffPlainAuthenticator = new Asn1BerEncodingBuffer();
             authenticator.BerEncode(asnBuffPlainAuthenticator, true);
             byte[] encAsnEncodedAuth =
-                KileUtility.Encrypt((EncryptionType)context.TgsSessionKey.keytype.Value,
+                KerberosUtility.Encrypt((EncryptionType)context.TgsSessionKey.keytype.Value,
                                     context.TgsSessionKey.keyvalue.ByteArrayValue,
                                     asnBuffPlainAuthenticator.Data,
                                     (int)KeyUsageNumber.TG_REQ_PA_TGS_REQ_padataOR_AP_REQ_Authenticator);
@@ -802,7 +754,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             request.authenticator.cipher = new Asn1OctetString(encAsnEncodedAuth);
 
             // create AP request
-            request.ap_options = new APOptions(KileUtility.ConvertInt2Flags((int)ApOptions.None));
+            request.ap_options = new APOptions(KerberosUtility.ConvertInt2Flags((int)ApOptions.None));
             request.msg_type = new Asn1Integer((int)MsgType.KRB_AP_REQ);
             request.pvno = new Asn1Integer(ConstValue.KERBEROSV5);
             request.ticket = context.TgsTicket;
@@ -822,7 +774,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
         {
             var encKrbCred = new EncKrbCredPart();
             encKrbCred.nonce = new KerbUInt32((uint)Math.Abs((int)DateTime.Now.Ticks));
-            encKrbCred.timestamp = new KerberosTime(KileUtility.GetCurrentUTCTime());
+            encKrbCred.timestamp = new KerberosTime(KerberosUtility.GetCurrentUTCTime());
             encKrbCred.usec = new Microseconds(0);
             encKrbCred.s_address = new HostAddress(new KerbInt32((int)AddressType.NetBios),
                                                    new Asn1OctetString(Dns.GetHostName()));
@@ -858,7 +810,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Kile
             else
             {
                 encKrbPriv.seq_number = null;
-                encKrbPriv.timestamp = new KerberosTime(KileUtility.GetCurrentUTCTime());
+                encKrbPriv.timestamp = new KerberosTime(KerberosUtility.GetCurrentUTCTime());
             }
 
             return encKrbPriv;

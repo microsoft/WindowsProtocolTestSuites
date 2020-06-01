@@ -7,7 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Security;
 using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;

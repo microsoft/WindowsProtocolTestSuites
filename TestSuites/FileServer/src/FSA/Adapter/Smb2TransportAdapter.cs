@@ -9,7 +9,8 @@ using System.Net;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiService;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 {
@@ -371,15 +372,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             uint status;
             SESSION_SETUP_Response sessionSetupResponse;
 
+            SecurityPackageType securityPackage = this.testConfig.DefaultSecurityPackage;
+
             SspiClientSecurityContext sspiClientGss =
                 new SspiClientSecurityContext(
-                    SecurityPackageType.Negotiate,
+                    securityPackage,
                     new AccountCredential(this.domainName, this.userName, this.password),
                     Smb2Utility.GetCifsServicePrincipalName(this.serverName),
                     ClientSecurityContextAttribute.None,
                     SecurityTargetDataRepresentation.SecurityNativeDrep);
 
-            sspiClientGss.Initialize(this.gssToken);
+            if (securityPackage == SecurityPackageType.Negotiate)
+                sspiClientGss.Initialize(this.gssToken);
+            else
+                sspiClientGss.Initialize(null);
+
             this.sessionId = 0;
 
             do

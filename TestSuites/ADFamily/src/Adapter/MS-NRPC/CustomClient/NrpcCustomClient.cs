@@ -9,7 +9,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
     using Microsoft.Protocols.TestTools.StackSdk;
     using Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce;
     using Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc;
-    using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+    using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 
     /// <summary>
     /// Nrpc Client.

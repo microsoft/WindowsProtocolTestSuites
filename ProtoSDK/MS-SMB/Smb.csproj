@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MS-CIFS\Cifs.csproj" />
+    <ProjectReference Include="..\SspiService\SspiService.csproj" />
   </ItemGroup>
 
   <ItemGroup>

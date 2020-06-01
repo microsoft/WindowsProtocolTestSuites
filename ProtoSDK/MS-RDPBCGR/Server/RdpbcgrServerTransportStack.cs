@@ -1,18 +1,16 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// using Microsoft.Protocols.TestTools.ExtendedLogging;
+using Microsoft.Protocols.TestTools.StackSdk.Security.Cssp;
+using Microsoft.Protocols.TestTools.StackSdk.Transport;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
-using System.IO;
-using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
-
-using Microsoft.Protocols.TestTools.StackSdk;
-using Microsoft.Protocols.TestTools.StackSdk.Transport;
-// using Microsoft.Protocols.TestTools.ExtendedLogging;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 {
@@ -408,7 +406,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 throw new System.InvalidCastException("TcpServerTransport needs SocketTransportConfig.");
             }
-            
+
             this.decoder = decodePacketCallback;
             this.packetQueue = new QueueManager();
             this.listenSock = new Socket(transportConfig.LocalIpAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
@@ -452,7 +450,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             this.cert = certificate;
         }
 
-        
+
         /// <summary>
         /// Close specific end point stream.
         /// </summary>
@@ -700,7 +698,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     (Exception)eventPacket.EventObject);
             }
 
-            return eventPacket;       
+            return eventPacket;
         }
 
 
@@ -712,7 +710,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         {
             foreach (Socket sock in this.receivingStreams.Keys)
             {
-                if (receivingStreams[sock].ReceiveStream is SslStream || receivingStreams[sock].ReceiveStream is RdpbcgrServerCredSspStream)
+                if (!(receivingStreams[sock].ReceiveStream is NetworkStream))
                 {
                     //Skip the connections which already were updated to SSL or CredSSP.
                     continue;
@@ -731,9 +729,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     else if (type == SecurityStreamType.CredSsp)
                     {
                         string targetSPN = ConstValue.CREDSSP_SERVER_NAME_PREFIX + config.LocalIpAddress;
-                        RdpbcgrServerCredSspStream credSspStream = new RdpbcgrServerCredSspStream(new ETWStream(netStream), targetSPN);
+
+                        var csspServer = new CsspServer(new ETWStream(netStream));
+
+                        var credSspStream = csspServer.GetStream();
+
                         receivingStreams[sock].ReceiveStream = credSspStream;
-                        credSspStream.Authenticate(cert);
+
+                        csspServer.Authenticate(cert, targetSPN);
                     }
                 }
             }
@@ -796,8 +799,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                         break;
                     case SecurityStreamType.CredSsp:
                         string targetSPN = ConstValue.CREDSSP_SERVER_NAME_PREFIX + config.LocalIpAddress;
-                        RdpbcgrServerCredSspStream credSspStream = new RdpbcgrServerCredSspStream(new ETWStream(baseStream), targetSPN);
-                        credSspStream.Authenticate(cert);
+
+                        var csspServer = new CsspServer(new ETWStream(baseStream));
+
+                        var credSspStream = csspServer.GetStream();
+
+                        csspServer.Authenticate(cert, targetSPN);
+
                         receiveStream = credSspStream;
                         break;
                     default:
@@ -812,7 +820,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     receiveStream,
                     this.config.BufferSize,
                     this.rdpbcgrServer);
-                
+
                 connectEvent = new TransportEvent(EventType.Connected, socket.RemoteEndPoint, null);
 
                 RdpbcgrServerSessionContext session = new RdpbcgrServerSessionContext();
@@ -1073,7 +1081,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 this.receivingThread.Join();
             }
         }
-        
+
 
         /// <summary>
         /// Receive data, decode Packet and add them to QueueManager in the loop.
@@ -1152,7 +1160,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     {
                         int consumedLength;
 
-                        try 
+                        try
                         {
                             packets = this.decoder(this.endPointIdentity, data, out consumedLength, out expectedLength);
                         }
@@ -1171,7 +1179,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                             //add packet to queue
                             if (packets != null && packets.Length > 0)
                             {
-                                AddPacketToQueueManager(this.endPointIdentity, packets);                                
+                                AddPacketToQueueManager(this.endPointIdentity, packets);
                                 bytesRecv = 0;
                                 foreach (StackPacket pdu in packets)
                                 {

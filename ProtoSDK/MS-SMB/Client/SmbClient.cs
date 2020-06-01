@@ -7,9 +7,10 @@ using System.Net.Sockets;
 using System.Security.AccessControl;
 
 using Microsoft.Protocols.TestTools.StackSdk.Transport;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiService;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
 {
