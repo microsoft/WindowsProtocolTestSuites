@@ -138,7 +138,7 @@ MS-RDPEMT has two scenarios:
 |  **Scenario**|  **Description**|  **Test Cases**|  **BVTs**| 
 | -------------| -------------| -------------| ------------- |
 | S1_Connection| Verify the RDPEMT connection phase.| 4| 2| 
-| S2_AutoDetection| Verify auto detection over RDPEMT tunnel.| 4| 0| 
+| S2_AutoDetection| Verify auto detection over RDPEMT tunnel.| 5| 0| 
 
 For more details about MS-RDPEMT scenarios design, please refer to sections 2.2 and 2.3 of **MS-RDPEMT_ClientTestDesignSpecification.md**.
 
