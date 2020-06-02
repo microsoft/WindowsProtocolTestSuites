@@ -26,6 +26,12 @@
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.pdb"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Sspi.dll"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Sspi.pdb"/>
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib.dll"/>
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib.pdb"/>
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.SspiService.dll"/>
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.SspiService.pdb"/>
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.dll"/>
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.pdb"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Transport.dll"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Transport.pdb"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.dll"/>
@@ -133,7 +139,25 @@
       </Component>
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Sspi.pdb" Guid="{514E9607-4302-4F72-A458-876CD7E44024}">
         <File Id="filA167A924CD3EC7665DEFDD34DDDBF574" Source="$(var.PROTOSDK_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Sspi.pdb" />
-      </Component>      
+      </Component>     
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib.dll" Guid="{8C1711D1-6C08-410D-A905-BAD4340DA6EA}">
+        <File Id="filDDC6FE2092E34514A0414EBB94C27EC9" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib.pdb" Guid="{601D331B-F03F-4801-A3B5-1511B0E0CDD2}">
+        <File Id="filF8E59E2A4EAE40AE87DE61F16EBF9044" Source="$(var.PROTOSDK_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib.pdb" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.SspiService.dll" Guid="{8D9344FE-24C3-4D29-95E6-24EBBB8D628E}">
+        <File Id="filD22B8D594C534B789768B1D46A064870" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.SspiService.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.SspiService.pdb" Guid="{CA72E5B7-F287-4968-88F1-C9AFF7721468}">
+        <File Id="fil74F224B0085F4B719CA6AE2A63C248DA" Source="$(var.PROTOSDK_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.SspiService.pdb" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.dll" Guid="{5CDC9868-37C2-48E6-A320-C82633EAB265}">
+        <File Id="fil5CDC986837C248E6A320C82633EAB265" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.pdb" Guid="{F1E4B363-7D3E-416C-92EE-B964F30861FE}">
+        <File Id="filF1E4B3637D3E416C92EEB964F30861FE" Source="$(var.PROTOSDK_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.pdb" />
+      </Component>
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.Transport.dll" Guid="{A94E2BAF-C495-4D5C-BC89-54853EC418E1}">
         <File Id="filFFD4EA5E8E1224E1A49A8648E3B56B21" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Transport.dll" />
       </Component>
