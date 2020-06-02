@@ -568,9 +568,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
                     if (TestConfig.IsWindowsPlatform)
                     {
-                        bool isExpectedWindowsCompressionContext = client.Smb2Client.CompressionInfo.CompressionIds.Length == 1 && client.Smb2Client.CompressionInfo.CompressionIds[0] == compressionAlgorithms[0];
-
-                        BaseTestSite.Assert.IsTrue(isExpectedWindowsCompressionContext, "Windows 10 v1903 and later and Windows Server v1903 and later only set CompressionAlgorithms to the first common algorithm supported by the client and server.");
+                        CheckCompressionAlgorithmsForWindowsImplementation(compressionAlgorithms);
                     }
                     else
                     {
@@ -606,6 +604,27 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 out serverCreateContexts,
                 accessMask: AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE
                 );
+        }
+
+        private void CheckCompressionAlgorithmsForWindowsImplementation(CompressionAlgorithm[] compressionAlgorithms)
+        {
+            if (TestConfig.Platform <= Platform.WindowsServerV1909)
+            {
+                bool isExpectedWindowsCompressionContext = client.Smb2Client.CompressionInfo.CompressionIds.Length == 1 && client.Smb2Client.CompressionInfo.CompressionIds[0] == compressionAlgorithms[0];
+                BaseTestSite.Assert.IsTrue(isExpectedWindowsCompressionContext, "Windows 10 v1903, Windows 10 v1909, Windows Server v1903, and Windows Server v1909 only set CompressionAlgorithms to the first common algorithm supported by the client and server.");
+            }
+            else
+            {
+                var firstSupportedCompressionAlgorithm = Smb2Utility.GetSupportedCompressionAlgorithms(compressionAlgorithms.ToArray()).Take(1);
+
+                var firstSupportedPatternScanningAlgorithm = Smb2Utility.GetSupportedPatternScanningAlgorithms(compressionAlgorithms.ToArray()).Take(1);
+
+                var expectedCompressionAlgorithms = firstSupportedCompressionAlgorithm.Concat(firstSupportedPatternScanningAlgorithm);
+
+                bool isExpectedWindowsCompressionContext = Enumerable.SequenceEqual(client.Smb2Client.CompressionInfo.CompressionIds.OrderBy(compressionAlgorithm => compressionAlgorithm), expectedCompressionAlgorithms.OrderBy(compressionAlgorithm => compressionAlgorithm));
+
+                BaseTestSite.Assert.IsTrue(isExpectedWindowsCompressionContext, "Windows 10 v2004 and Windows Server v2004 select a common pattern scanning algorithm and the first common compression algorithm, specified in section 2.2.3.1.3, supported by the client and server.");
+            }
         }
 
         private void CheckCompressionAndEncryptionApplicability(CompressionAlgorithm? compressionAlgorithm = null, bool needEncryption = false)

@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
-using Microsoft.Protocols.TestSuites.FileSharing.Common.TestSuite;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -544,8 +543,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
                     if (TestConfig.IsWindowsPlatform)
                     {
-                        bool isExpectedWindowsCompressionContext = client.Smb2Client.CompressionInfo.CompressionIds.Length == 1 && client.Smb2Client.CompressionInfo.CompressionIds[0] == TestConfig.SupportedCompressionAlgorithmList[0];
-                        BaseTestSite.Assert.IsTrue(isExpectedWindowsCompressionContext, "Windows 10 v1903 and later and Windows Server v1903 and later only set CompressionAlgorithms to the first common algorithm supported by the client and server.");
+                        CheckCompressionAlgorithmsForWindowsImplementation();
                     }
                     else
                     {
@@ -556,8 +554,44 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Smb311)]
         [TestCategory(TestCategories.Negotiate)]
+        [Description("This test case is designed to test whether server can handle NEGOTIATE with SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED set in Flags field of SMB2_COMPRESSION_CAPABILITIES context when chained compression is supported.")]
+        public void BVT_Negotiate_SMB311_Compression_IsChainedCompressionSupported()
+        {
+            CheckCompressionApplicability(true);
+
+            var compressionAlgorithms = TestConfig.SupportedCompressionAlgorithmList.ToArray();
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Send NEGOTIATE request with SUT supported compression algorithms and Flags field set to SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED.");
+            NegotiateWithNegotiateContexts(
+                DialectRevision.Smb311,
+                new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 },
+                compressionAlgorithms: compressionAlgorithms,
+                compressionFlags: SMB2_COMPRESSION_CAPABILITIES_Flags.SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED,
+                checker: (Packet_Header header, NEGOTIATE_Response response) =>
+                {
+                    BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, header.Status, "SUT MUST return STATUS_SUCCESS if the negotiation finished successfully.");
+
+                    if (TestConfig.IsWindowsPlatform)
+                    {
+                        CheckCompressionAlgorithmsForWindowsImplementation();
+                    }
+                    else
+                    {
+                        bool isExpectedNonWindowsCompressionContext = Enumerable.SequenceEqual(client.Smb2Client.CompressionInfo.CompressionIds, TestConfig.SupportedCompressionAlgorithmList);
+                        BaseTestSite.Assert.IsTrue(isExpectedNonWindowsCompressionContext, "[MS-SMB2] section 3.3.5.4: Non-Windows implementation MUST set CompressionAlgorithms to the CompressionIds in request if they are all supported by SUT.");
+                    }
+
+                    BaseTestSite.Assert.IsTrue(client.Smb2Client.CompressionInfo.SupportChainedCompression, "[MS-SMB2] section 3.3.5.4: If SUT supports chained compression and SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED bit is set in Flags field of negotiate request context, SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED bit MUST be set in Flags field.");
+                });
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Negotiate)]
+        [TestCategory(TestCategories.Compatibility)]
         [Description("This test case is designed to test whether server can handle NEGOTIATE with unsupported compression algorithms in SMB2_COMPRESSION_CAPABILITIES context.")]
         public void Negotiate_SMB311_Compression_CompressionAlgorithmNotSupported()
         {
@@ -717,6 +751,78 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                       }
                 );
         }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Negotiate)]
+        [TestCategory(TestCategories.Compatibility)]
+        [Description("This test case is designed to test whether server can handle NEGOTIATE with SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED not set in Flags field of SMB2_COMPRESSION_CAPABILITIES context.")]
+        public void Negotiate_SMB311_Compression_FlagChainedNotSet()
+        {
+            CheckCompressionApplicability();
+
+            var compressionAlgorithms = TestConfig.SupportedCompressionAlgorithmList.ToArray();
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Send NEGOTIATE request with SUT supported compression algorithms and Flags field set to SMB2_COMPRESSION_CAPABILITIES_FLAG_NONE.");
+            NegotiateWithNegotiateContexts(
+                DialectRevision.Smb311,
+                new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 },
+                compressionAlgorithms: compressionAlgorithms,
+                compressionFlags: SMB2_COMPRESSION_CAPABILITIES_Flags.SMB2_COMPRESSION_CAPABILITIES_FLAG_NONE,
+                checker: (Packet_Header header, NEGOTIATE_Response response) =>
+                {
+                    BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, header.Status, "SUT MUST return STATUS_SUCCESS if the negotiation finished successfully.");
+
+                    if (TestConfig.IsWindowsPlatform)
+                    {
+                        CheckCompressionAlgorithmsForWindowsImplementation();
+                    }
+                    else
+                    {
+                        bool isExpectedNonWindowsCompressionContext = Enumerable.SequenceEqual(client.Smb2Client.CompressionInfo.CompressionIds, TestConfig.SupportedCompressionAlgorithmList);
+                        BaseTestSite.Assert.IsTrue(isExpectedNonWindowsCompressionContext, "[MS-SMB2] section 3.3.5.4: Non-Windows implementation MUST set CompressionAlgorithms to the CompressionIds in request if they are all supported by SUT.");
+                    }
+
+                    BaseTestSite.Assert.IsFalse(client.Smb2Client.CompressionInfo.SupportChainedCompression, "If SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED bit is not set in Flags field of negotiate request context, SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED bit MUST NOT be set in Flags field.");
+                });
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Negotiate)]
+        [TestCategory(TestCategories.Compatibility)]
+        [Description("This test case is designed to test whether server can handle NEGOTIATE with SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED set in Flags field of SMB2_COMPRESSION_CAPABILITIES context when chained compression is not supported.")]
+        public void Negotiate_SMB311_Compression_ChainedCompressionNotSupported()
+        {
+            CheckCompressionApplicability();
+
+            BaseTestSite.Assume.IsFalse(TestConfig.IsChainedCompressionSupported, "This test case is only applicable when SUT does not support chained compression.");
+
+            var compressionAlgorithms = TestConfig.SupportedCompressionAlgorithmList.ToArray();
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Send NEGOTIATE request with SUT supported compression algorithms and Flags field set to SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED.");
+            NegotiateWithNegotiateContexts(
+                DialectRevision.Smb311,
+                new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 },
+                compressionAlgorithms: compressionAlgorithms,
+                compressionFlags: SMB2_COMPRESSION_CAPABILITIES_Flags.SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED,
+                checker: (Packet_Header header, NEGOTIATE_Response response) =>
+                {
+                    BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, header.Status, "SUT MUST return STATUS_SUCCESS if the negotiation finished successfully.");
+
+                    if (TestConfig.IsWindowsPlatform)
+                    {
+                        CheckCompressionAlgorithmsForWindowsImplementation();
+                    }
+                    else
+                    {
+                        bool isExpectedNonWindowsCompressionContext = Enumerable.SequenceEqual(client.Smb2Client.CompressionInfo.CompressionIds, TestConfig.SupportedCompressionAlgorithmList);
+                        BaseTestSite.Assert.IsTrue(isExpectedNonWindowsCompressionContext, "[MS-SMB2] section 3.3.5.4: Non-Windows implementation MUST set CompressionAlgorithms to the CompressionIds in request if they are all supported by SUT.");
+                    }
+
+                    BaseTestSite.Assert.IsFalse(client.Smb2Client.CompressionInfo.SupportChainedCompression, "If SUT does not support chained compression and SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED bit is set in Flags field of negotiate request context, SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED bit MUST NOT be set in Flags field.");
+                });
+        }
         #endregion
 
         #region private methods
@@ -757,6 +863,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             PreauthIntegrityHashID[] preauthHashAlgs,
             EncryptionAlgorithm[] encryptionAlgs = null,
             CompressionAlgorithm[] compressionAlgorithms = null,
+            SMB2_COMPRESSION_CAPABILITIES_Flags compressionFlags = SMB2_COMPRESSION_CAPABILITIES_Flags.SMB2_COMPRESSION_CAPABILITIES_FLAG_NONE,
             bool addNetNameContextId = false,
             ResponseChecker<NEGOTIATE_Response> checker = null)
         {
@@ -777,6 +884,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 preauthHashAlgs: preauthHashAlgs,
                 encryptionAlgs: encryptionAlgs,
                 compressionAlgorithms: compressionAlgorithms,
+                compressionFlags: compressionFlags,
                 addNetNameContextId: addNetNameContextId,
                 checker: checker);
         }
@@ -825,8 +933,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 {
                     if (TestConfig.IsWindowsPlatform)
                     {
-                        bool isExpectedWindowsCompressionContext = client.Smb2Client.CompressionInfo.CompressionIds.Length == 1 && client.Smb2Client.CompressionInfo.CompressionIds[0] == TestConfig.SupportedCompressionAlgorithmList[0];
-                        BaseTestSite.Assert.IsTrue(isExpectedWindowsCompressionContext, "Windows 10 v1903 and later and Windows Server v1903 and later only set CompressionAlgorithms to the first common algorithm supported by the client and server.");
+                        CheckCompressionAlgorithmsForWindowsImplementation();
                     }
                     else
                     {
@@ -918,12 +1025,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             }
         }
 
-        private void CheckCompressionApplicability()
+        private void CheckCompressionApplicability(bool isChainedCompressionRequired = false)
         {
             // Check platform
             if (TestConfig.IsWindowsPlatform)
             {
                 BaseTestSite.Assume.IsFalse(TestConfig.Platform < Platform.WindowsServerV1903, "Windows 10 v1809 operating system and prior, Windows Server v1809 operating system and prior, and Windows Server 2019 and prior do not support compression.");
+
+                if (isChainedCompressionRequired)
+                {
+                    BaseTestSite.Assume.IsTrue(TestConfig.Platform >= Platform.WindowsServerV2004, "Only Windows 10 v2004 operating system and later and Windows Server v2004 operating system and later operating systems support chained compression.");
+                }
             }
 
             // Check dialect
@@ -931,6 +1043,32 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             // Check SUT supported compression algorithms
             TestConfig.CheckCompressionAlgorithm();
+
+            if (isChainedCompressionRequired)
+            {
+                BaseTestSite.Assume.IsTrue(TestConfig.IsChainedCompressionSupported, "This test case is only applicable when SUT supports chained compression.");
+            }
+        }
+
+        private void CheckCompressionAlgorithmsForWindowsImplementation()
+        {
+            if (TestConfig.Platform <= Platform.WindowsServerV1909)
+            {
+                bool isExpectedWindowsCompressionContext = client.Smb2Client.CompressionInfo.CompressionIds.Length == 1 && client.Smb2Client.CompressionInfo.CompressionIds[0] == TestConfig.SupportedCompressionAlgorithmList[0];
+                BaseTestSite.Assert.IsTrue(isExpectedWindowsCompressionContext, "Windows 10 v1903, Windows 10 v1909, Windows Server v1903, and Windows Server v1909 only set CompressionAlgorithms to the first common algorithm supported by the client and server.");
+            }
+            else
+            {
+                var firstSupportedCompressionAlgorithm = Smb2Utility.GetSupportedCompressionAlgorithms(TestConfig.SupportedCompressionAlgorithmList.ToArray()).Take(1);
+
+                var firstSupportedPatternScanningAlgorithm = Smb2Utility.GetSupportedPatternScanningAlgorithms(TestConfig.SupportedCompressionAlgorithmList.ToArray()).Take(1);
+
+                var expectedCompressionAlgorithms = firstSupportedCompressionAlgorithm.Concat(firstSupportedPatternScanningAlgorithm);
+
+                bool isExpectedWindowsCompressionContext = Enumerable.SequenceEqual(client.Smb2Client.CompressionInfo.CompressionIds.OrderBy(compressionAlgorithm => compressionAlgorithm), expectedCompressionAlgorithms.OrderBy(compressionAlgorithm => compressionAlgorithm));
+
+                BaseTestSite.Assert.IsTrue(isExpectedWindowsCompressionContext, "Windows 10 v2004 and Windows Server v2004 select a common pattern scanning algorithm and the first common compression algorithm, specified in section 2.2.3.1.3, supported by the client and server.");
+            }
         }
         #endregion
     }

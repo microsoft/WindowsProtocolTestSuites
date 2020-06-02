@@ -215,8 +215,8 @@ Test scenarios are categorized as below table and will be described in following
 
 | Category                 | Test Cases | Comments                                                                                                          |
 |--------------------------|------------|-------------------------------------------------------------------------------------------------------------------|
-| SMB2 BVT                 | 87         | SMB2 common scenarios.                                                                                            |
-| SMB2 Feature Test        | 2609       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
+| SMB2 BVT                 | 88         | SMB2 common scenarios.                                                                                            |
+| SMB2 Feature Test        | 2612       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
 | SMB2 Feature Combination | 12         | Extended test with more complex message sequence for new features in SMB 3.0 dialect and later.                   |
 | FSRVP Test               | 14         | Test for MS-FSRVP                                                                                                 |
 | Server Failover Test     | 48         | Test server failover for MS-SMB2, MS-SWN and MS-FSRVP                                                             |
@@ -557,9 +557,23 @@ This is used to test SMB2 common user scenarios.
 | **Prerequisites**        | The server implements dialect 3.11 and compression feature. |
 | **Test Execution Steps** | 1.  Client sends Negotiate request with dialect SMB 3.11, SMB2_PREAUTH_INTEGRITY_CAPABILITIES context and SMB2_COMPRESSION_CAPABILITIES context with all supported compression algorithms. |
 |                          | 2.  Server returns SMB2 NEGOTIATE response with the expected SMB2_COMPRESSION_CAPABILITIES, if it supports the compression feature, as below: |
-|                          |     a.  If server is Windows, CompressionAlgorithms is set to the first common algorithm supported by the client and server. |
+|                          |     a.  If server is Windows, CompressionAlgorithms is set to the first common compression algorithm and the first common pattern scanning algorithm supported by the client and server. |
 |                          |     b.  If server is non-Windows, CompressionAlgorithms is set to all the algorithms in the CompressionAlgorithms field of Negotiate request, in the order they are received. |
 | **Cleanup**              |                                                                                                                                                                                           |
+
+
+|                          |                                                                                                                                                       |
+|--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Test ID**              | BVT_Negotiate_SMB311_Compression_IsChainedCompressionSupported |
+| **Description**          | This test case is designed to test whether server can handle NEGOTIATE with SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED set in Flags field of SMB2_COMPRESSION_CAPABILITIES context when chained compression is supported. |
+| **Prerequisites**        | The server implements dialect 3.11, compression and chained compression feature. |
+| **Test Execution Steps** | 1.  Client sends Negotiate request with dialect SMB 3.11, SMB2_PREAUTH_INTEGRITY_CAPABILITIES context and SMB2_COMPRESSION_CAPABILITIES context with all supported compression algorithms and SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED set in Flags field. |
+|                          | 2.  Server returns SMB2 NEGOTIATE response with the expected SMB2_COMPRESSION_CAPABILITIES, if it supports the compression feature, as below: |
+|                          |     a.  If server is Windows, CompressionAlgorithms is set to the first common compression algorithm and the first common pattern scanning algorithm supported by the client and server. |
+|                          |     b.  If server is non-Windows, CompressionAlgorithms is set to all the algorithms in the CompressionAlgorithms field of Negotiate request, in the order they are received. |
+|                          |     c.  SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED set in Flags field. |
+| **Cleanup**              |                                                                                                                                                                                           |
+
 
 
 #### <a name="3.1.7"> MultipleChannel
@@ -5145,6 +5159,34 @@ Scenario see section [Scenario](#3.1.6.1).
 |**Test Execution Steps**|Client sends Negotiate request with dialect SMB 3.11, SMB2_PREAUTH_INTEGRITY_CAPABILITIES context, SMB2_ENCRYPTION_CAPABILITIES context and SMB2_NETNAME_NEGOTIATE_CONTEXT_ID context.|
 ||Verify that server returns a Negotiate response with Status set to STATUS_SUCCESS and ignore the SMB2_NETNAME_NEGOTIATE_CONTEXT_ID.|
 |**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|Negotiate_SMB311_Compression_FlagChainedNotSet|
+|**Description**|This test case is designed to test whether server can handle NEGOTIATE with SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED not set in Flags field of SMB2_COMPRESSION_CAPABILITIES context.|
+|**Prerequisites**|The server implements dialect 3.11 and compression feature.|
+|**Test Execution Steps**|Client sends Negotiate request with dialect SMB 3.11, SMB2_COMPRESSION_CAPABILITIES context and set Flags field to SMB2_COMPRESSION_CAPABILITIES_FLAG_NONE.|
+||Verify that server returns a Negotiate response with Status set to STATUS_SUCCESS as below,|
+|                          |     a.  If server is Windows, CompressionAlgorithms is set to the first common algorithm and the first common pattern scanning algorithm supported by the client and server. |
+|                          |     b.  If server is non-Windows, CompressionAlgorithms is set to all the algorithms in the CompressionAlgorithms field of Negotiate request, in the order they are received. |
+|                          |     c.  SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED is not set in Flags field. |
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|Negotiate_SMB311_Compression_ChainedCompressionNotSupported|
+|**Description**|This test case is designed to test whether server can handle NEGOTIATE with SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED set in Flags field of SMB2_COMPRESSION_CAPABILITIES context when chained compression is not supported.|
+|**Prerequisites**|The server implements dialect 3.11 and compression feature.|
+|**Test Execution Steps**|Client sends Negotiate request with dialect SMB 3.11, SMB2_COMPRESSION_CAPABILITIES context and set Flags field to SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED.|
+||Verify that server returns a Negotiate response with Status set to STATUS_SUCCESS as below,|
+|                          |     a.  If server is Windows, CompressionAlgorithms is set to the first common algorithm and the first common pattern scanning algorithm supported by the client and server. |
+|                          |     b.  If server is non-Windows, CompressionAlgorithms is set to all the algorithms in the CompressionAlgorithms field of Negotiate request, in the order they are received. |
+|                          |     c.  SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED is not set in Flags field. |
+|**Cleanup**||
+
+
 
 #### <a name="3.2.10">Oplock
 
