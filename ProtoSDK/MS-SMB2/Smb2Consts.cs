@@ -251,5 +251,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// The ProtocolId used in SMB2 Compression Transform Header.
         /// </summary>
         public const uint ProtocolIdInCompressionTransformHeader = 0x424D53FC;
+
+        /// <summary>
+        /// All SMB2 compression algorithms.
+        /// </summary>
+        public static readonly CompressionAlgorithm[] AllCompressionAlgorithms = new CompressionAlgorithm[] { CompressionAlgorithm.LZNT1, CompressionAlgorithm.LZ77, CompressionAlgorithm.LZ77Huffman };
+
+        /// <summary>
+        /// All SMB2 pattern scanning algorithms.
+        /// </summary>
+        public static readonly CompressionAlgorithm[] AllPatternScanningAlgorithms = new CompressionAlgorithm[] { CompressionAlgorithm.Pattern_V1 };
     }
 }
