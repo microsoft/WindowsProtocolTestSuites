@@ -474,7 +474,12 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             #region add an entry to the directory using extended control
             ManagedAddRequest addreq = new ManagedAddRequest(treeEntry1, "user");
             PrincipalContext ctx = new PrincipalContext(ContextType.Domain);
-            UserPrincipal user = UserPrincipal.FindByIdentity(ctx, AD_LDAPModelAdapter.Instance(Site).testUser7Name);
+            UserPrincipal user = null;
+            Utilities.RetryAction(5, () => {
+                BaseTestSite.Log.Add(LogEntryKind.Debug, "Try to find adts_user10 on the SDC");
+                user = UserPrincipal.FindByIdentity(ctx, AD_LDAPModelAdapter.Instance(Site).testUser7Name);
+                return (user == null);
+            });
             BaseTestSite.Assert.IsNotNull(user, "The owner for the new added object MUST exist!");
             byte[] userSid = Encoding.UTF8.GetBytes(user.Sid.Value);
 
@@ -761,7 +766,12 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             #region Attach Set Owner extended control to this add request
             // Set Owner as CONTOSO\adts_user10
             PrincipalContext ctx = new PrincipalContext(ContextType.Domain);
-            UserPrincipal user = UserPrincipal.FindByIdentity(ctx, AD_LDAPModelAdapter.Instance(Site).testUser7Name);
+            UserPrincipal user = null;
+            Utilities.RetryAction(5, () => {
+                BaseTestSite.Log.Add(LogEntryKind.Debug, "Try to find adts_user10 on the SDC");
+                user = UserPrincipal.FindByIdentity(ctx, AD_LDAPModelAdapter.Instance(Site).testUser7Name);
+                return (user == null);
+            });
             BaseTestSite.Assert.IsNotNull(user, "The owner for the new added object MUST exist!");
             byte[] userSid = Encoding.UTF8.GetBytes(user.Sid.Value);
             // This is a critical control only
