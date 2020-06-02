@@ -8,9 +8,7 @@ echo          Start to build MS-WSP test suite
 echo ==================================================
 
 set CurrentPath=%~dp0
-if not defined TestSuiteRoot (
-	set TestSuiteRoot=%CurrentPath%..\..\..\
-)
+set TestSuiteRoot=%CurrentPath%..\..\..\
 
 call "%CurrentPath%..\..\..\common\setBuildTool.cmd"
 if ErrorLevel 1 (
