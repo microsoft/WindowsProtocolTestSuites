@@ -128,6 +128,30 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLLOCATION</RefTargetDir>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\SspiLib\SspiLib.csproj">
+      <Name>SspiLib</Name>
+      <Project>{E64BF20F-11D2-49F6-A25B-F4378AB38180}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\SspiService\SspiService.csproj">
+      <Name>SspiService</Name>
+      <Project>{1FC8C336-EF82-4F7C-9532-AB8AB268916E}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\KerberosLib\KerberosLib.csproj">
+      <Name>KerberosLib</Name>
+      <Project>{F1EDA208-50B6-4501-A9D8-D18D3434D587}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\ProtoSDK\TransportStack\TransportStack.csproj">
       <Name>TransportStack</Name>
       <Project>{967d976a-c792-4893-9235-14615ae1ff58}</Project>
