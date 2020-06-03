@@ -274,13 +274,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
 
             uint treeId = 0;
             Share_Capabilities_Values shareCapabilities = Share_Capabilities_Values.NONE;
-            status = DoUntilSucceed(
-                () => beforeFailover.TreeConnect(uncSharePath, out treeId, (header, response) =>
-                {
-                    shareCapabilities = response.Capabilities;
-                }),
-                TestConfig.FailoverTimeout,
-                "Retry TreeConnect until succeed within timeout span");
+            status = beforeFailover.TreeConnect(uncSharePath, out treeId, (header, response) =>
+            {
+                shareCapabilities = response.Capabilities;
+            });
 
             if (status != Smb2Status.STATUS_SUCCESS)
             {
