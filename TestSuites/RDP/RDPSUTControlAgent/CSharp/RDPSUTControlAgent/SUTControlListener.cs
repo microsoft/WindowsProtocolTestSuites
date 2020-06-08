@@ -15,12 +15,12 @@ namespace RDPSUTControlAgent
     public class SUTControlListener
     {
         int bufferLength = 2000;
-        ushort listenPort = 4488;
+        
         TcpListener listenServer;
         Thread processThread;
         bool processThreadRuning;
         TimeSpan timeout = new TimeSpan(0, 0, 10);
-        public SUTControlListener()
+        public SUTControlListener(ushort listenPort)
         {
             listenServer = new TcpListener(GetLocalIP(), listenPort);
             processThread = new Thread(new ThreadStart(ProcessControlCommandThread));
