@@ -198,7 +198,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             uncSharePath = Smb2Utility.GetUncPath(serverName, shareName);
             string content = Smb2Utility.CreateRandomString(TestConfig.WriteBufferLengthInKb);
             testDirectory = CreateTestDirectory(uncSharePath);
-            string file = Path.Combine(testDirectory, Guid.NewGuid().ToString());
+            string file = string.Format(@"{0}\{1}", testDirectory, Guid.NewGuid().ToString());
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start the client by sending the following requests: NEGOTIATE; SESSION_SETUP");
             smb2Client = new Smb2FunctionalClient(TestConfig.FailoverTimeout, TestConfig, BaseTestSite);
