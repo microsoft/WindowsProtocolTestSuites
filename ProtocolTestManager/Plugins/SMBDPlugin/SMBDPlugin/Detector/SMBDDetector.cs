@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rdma;
 
 namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 {
@@ -79,9 +79,19 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 DetectionInfo.RDMATransportSupported = true;
             }
 
+            RdmaAdapterInfo rdmaAdapterInfo;
+
             bool rdmaChannelV1Supported;
             bool rdmaChannelV1InvalidateSupported;
-            result = CheckSMBDCapability(out rdmaChannelV1Supported, out rdmaChannelV1InvalidateSupported);
+
+            result = CheckSMBDCapability(out rdmaAdapterInfo, out rdmaChannelV1Supported, out rdmaChannelV1InvalidateSupported);
+
+            DetectionInfo.InboundEntries = rdmaAdapterInfo.MaxInboundRequests;
+
+            DetectionInfo.OutboundEntries = rdmaAdapterInfo.MaxOutboundRequests;
+
+            DetectionInfo.InboundReadLimit = rdmaAdapterInfo.MaxInboundReadLimit;
+
             DetectionInfo.RDMAChannelV1Supported = rdmaChannelV1Supported;
             DetectionInfo.RDMAChannelV1InvalidateSupported = rdmaChannelV1InvalidateSupported;
 
