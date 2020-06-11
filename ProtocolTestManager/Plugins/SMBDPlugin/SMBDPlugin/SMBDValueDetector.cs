@@ -45,6 +45,9 @@ namespace Microsoft.Protocols.TestManager.Detector
         public const string MAXRECEIVESIZE = "MaxReceiveSize";
         public const string SMB2CONNECTIONTIMEOUTINSECONDS = "Smb2ConnectionTimeoutInSeconds";
         public const string ENDIANOFBUFFERDESCRIPTOR = "EndianOfBufferDescriptor";
+        public const string INBOUNDENTRIES = "InboundEntries";
+        public const string OUTBOUNDENTRIES = "OutboundEntries";
+        public const string INBOUNDREADLIMIT = "InboundReadLimit";
     }
 
     public class SMBDValueDetector : IValueDetector
@@ -115,6 +118,12 @@ namespace Microsoft.Protocols.TestManager.Detector
             propertiesDic[DeploymentPtfConfigConstant.DOMAINNAME] = new List<string> { detectionInfo.DomainName };
             propertiesDic[PtfConfigConstant.SMBDTCPPORT] = new List<string> { detectionInfo.SMBDPort.ToString() };
             propertiesDic[PtfConfigConstant.SMB2CONNECTIONTIMEOUTINSECONDS] = new List<string> { detectionInfo.ConnectionTimeout.TotalSeconds.ToString() };
+
+            propertiesDic[PtfConfigConstant.INBOUNDENTRIES] = new List<string> { detectionInfo.InboundEntries.ToString(), };
+
+            propertiesDic[PtfConfigConstant.OUTBOUNDENTRIES] = new List<string> { detectionInfo.OutboundEntries.ToString(), };
+
+            propertiesDic[PtfConfigConstant.INBOUNDREADLIMIT] = new List<string> { detectionInfo.InboundReadLimit.ToString(), };
 
             return true;
         }

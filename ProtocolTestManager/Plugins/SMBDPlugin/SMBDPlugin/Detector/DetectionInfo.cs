@@ -3,9 +3,6 @@
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 {
@@ -161,6 +158,13 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         public bool OSDetected { get; set; }
         public bool NonRDMATransportSupported { get; set; }
         public bool RDMATransportSupported { get; set; }
+
+        public uint InboundEntries { get; set; }
+
+        public uint OutboundEntries { get; set; }
+
+        public uint InboundReadLimit { get; set; }
+
         public bool RDMAChannelV1Supported { get; set; }
         public bool RDMAChannelV1InvalidateSupported { get; set; }
         #endregion
