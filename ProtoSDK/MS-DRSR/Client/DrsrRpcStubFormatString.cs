@@ -117,31 +117,31 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 /* 24 */	NdrFcShort( 0x1 ),	/* 1 */
 /* 26 */	NdrFcShort( 0x0 ),	/* 0 */
 
-	/* Parameter rpc_handle */
+	/* Parameter puuidClientDsa */
 
 /* 28 */	NdrFcShort( 0xa ),	/* Flags:  must free, in, */
 /* 30 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
 /* 32 */	NdrFcShort( 0x2 ),	/* Type Offset=2 */
 
-	/* Parameter puuidClientDsa */
+	/* Parameter pextClient */
 
 /* 34 */	NdrFcShort( 0xb ),	/* Flags:  must size, must free, in, */
 /* 36 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
 /* 38 */	NdrFcShort( 0x18 ),	/* Type Offset=24 */
 
-	/* Parameter pextClient */
+	/* Parameter ppextServer */
 
 /* 40 */	NdrFcShort( 0x2013 ),	/* Flags:  must size, must free, out, srv alloc size=8 */
 /* 42 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
 /* 44 */	NdrFcShort( 0x4a ),	/* Type Offset=74 */
 
-	/* Parameter ppextServer */
+	/* Parameter phDrs */
 
 /* 46 */	NdrFcShort( 0x110 ),	/* Flags:  out, simple ref, */
 /* 48 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
 /* 50 */	NdrFcShort( 0x52 ),	/* Type Offset=82 */
 
-	/* Parameter phDrs */
+	/* Return value */
 
 /* 52 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
 /* 54 */	NdrFcShort( 0x14 ),	/* x86 Stack size/offset = 20 */
@@ -149,9 +149,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 			0x0,		/* 0 */
 
 	/* Procedure IDL_DRSUnbind */
-
-
-	/* Return value */
 
 /* 58 */	0x0,		/* 0 */
 			0x48,		/* Old Flags:  */
@@ -273,7 +270,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 196 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 198 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 200 */	NdrFcShort( 0xe6 ),	/* Type Offset=230 */
+/* 200 */	NdrFcShort( 0x13e ),	/* Type Offset=318 */
 
 	/* Parameter pdwOutVersion */
 
@@ -286,7 +283,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 208 */	NdrFcShort( 0x113 ),	/* Flags:  must size, must free, out, simple ref, */
 /* 210 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 212 */	NdrFcShort( 0x348 ),	/* Type Offset=840 */
+/* 212 */	NdrFcShort( 0x3e8 ),	/* Type Offset=1000 */
 
 	/* Return value */
 
@@ -334,7 +331,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 262 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 264 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 266 */	NdrFcShort( 0x6a8 ),	/* Type Offset=1704 */
+/* 266 */	NdrFcShort( 0x748 ),	/* Type Offset=1864 */
 
 	/* Return value */
 
@@ -382,7 +379,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 316 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 318 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 320 */	NdrFcShort( 0x6f0 ),	/* Type Offset=1776 */
+/* 320 */	NdrFcShort( 0x7c8 ),	/* Type Offset=1992 */
 
 	/* Return value */
 
@@ -430,7 +427,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 370 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 372 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 374 */	NdrFcShort( 0x788 ),	/* Type Offset=1928 */
+/* 374 */	NdrFcShort( 0x8ae ),	/* Type Offset=2222 */
 
 	/* Return value */
 
@@ -478,7 +475,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 424 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 426 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 428 */	NdrFcShort( 0x7cc ),	/* Type Offset=1996 */
+/* 428 */	NdrFcShort( 0x8f2 ),	/* Type Offset=2290 */
 
 	/* Return value */
 
@@ -526,7 +523,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 478 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 480 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 482 */	NdrFcShort( 0x81a ),	/* Type Offset=2074 */
+/* 482 */	NdrFcShort( 0x940 ),	/* Type Offset=2368 */
 
 	/* Parameter pdwOutVersion */
 
@@ -539,7 +536,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 490 */	NdrFcShort( 0x6113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=24 */
 /* 492 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 494 */	NdrFcShort( 0x88e ),	/* Type Offset=2190 */
+/* 494 */	NdrFcShort( 0x9b4 ),	/* Type Offset=2484 */
 
 	/* Return value */
 
@@ -587,7 +584,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 544 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 546 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 548 */	NdrFcShort( 0x8fe ),	/* Type Offset=2302 */
+/* 548 */	NdrFcShort( 0xa24 ),	/* Type Offset=2596 */
 
 	/* Parameter pdwOutVersion */
 
@@ -600,7 +597,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 556 */	NdrFcShort( 0x6113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=24 */
 /* 558 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 560 */	NdrFcShort( 0x97c ),	/* Type Offset=2428 */
+/* 560 */	NdrFcShort( 0xaa2 ),	/* Type Offset=2722 */
 
 	/* Return value */
 
@@ -648,7 +645,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 610 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 612 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 614 */	NdrFcShort( 0xa16 ),	/* Type Offset=2582 */
+/* 614 */	NdrFcShort( 0xb3c ),	/* Type Offset=2876 */
 
 	/* Parameter pdwOutVersion */
 
@@ -661,7 +658,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 622 */	NdrFcShort( 0x4113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=16 */
 /* 624 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 626 */	NdrFcShort( 0xaec ),	/* Type Offset=2796 */
+/* 626 */	NdrFcShort( 0xc12 ),	/* Type Offset=3090 */
 
 	/* Return value */
 
@@ -709,7 +706,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 676 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 678 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 680 */	NdrFcShort( 0xb46 ),	/* Type Offset=2886 */
+/* 680 */	NdrFcShort( 0xc6c ),	/* Type Offset=3180 */
 
 	/* Parameter pdwOutVersion */
 
@@ -722,7 +719,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 688 */	NdrFcShort( 0x113 ),	/* Flags:  must size, must free, out, simple ref, */
 /* 690 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 692 */	NdrFcShort( 0xb9e ),	/* Type Offset=2974 */
+/* 692 */	NdrFcShort( 0xcc4 ),	/* Type Offset=3268 */
 
 	/* Return value */
 
@@ -770,7 +767,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 742 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 744 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 746 */	NdrFcShort( 0xc16 ),	/* Type Offset=3094 */
+/* 746 */	NdrFcShort( 0xd3c ),	/* Type Offset=3388 */
 
 	/* Parameter pdwOutVersion */
 
@@ -783,7 +780,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 754 */	NdrFcShort( 0x2113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=8 */
 /* 756 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 758 */	NdrFcShort( 0xc86 ),	/* Type Offset=3206 */
+/* 758 */	NdrFcShort( 0xdac ),	/* Type Offset=3500 */
 
 	/* Return value */
 
@@ -831,7 +828,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 808 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 810 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 812 */	NdrFcShort( 0xd26 ),	/* Type Offset=3366 */
+/* 812 */	NdrFcShort( 0xe4c ),	/* Type Offset=3660 */
 
 	/* Parameter pdwOutVersion */
 
@@ -844,7 +841,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 820 */	NdrFcShort( 0x2113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=8 */
 /* 822 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 824 */	NdrFcShort( 0xd98 ),	/* Type Offset=3480 */
+/* 824 */	NdrFcShort( 0xebe ),	/* Type Offset=3774 */
 
 	/* Return value */
 
@@ -892,7 +889,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 874 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 876 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 878 */	NdrFcShort( 0xdc2 ),	/* Type Offset=3522 */
+/* 878 */	NdrFcShort( 0xee8 ),	/* Type Offset=3816 */
 
 	/* Parameter pdwOutVersion */
 
@@ -905,7 +902,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 886 */	NdrFcShort( 0x2113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=8 */
 /* 888 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 890 */	NdrFcShort( 0xe06 ),	/* Type Offset=3590 */
+/* 890 */	NdrFcShort( 0xf2c ),	/* Type Offset=3884 */
 
 	/* Return value */
 
@@ -953,7 +950,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 940 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 942 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 944 */	NdrFcShort( 0xe2a ),	/* Type Offset=3626 */
+/* 944 */	NdrFcShort( 0xf50 ),	/* Type Offset=3920 */
 
 	/* Parameter pdwOutVersion */
 
@@ -966,7 +963,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 952 */	NdrFcShort( 0x2113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=8 */
 /* 954 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 956 */	NdrFcShort( 0xe62 ),	/* Type Offset=3682 */
+/* 956 */	NdrFcShort( 0xf88 ),	/* Type Offset=3976 */
 
 	/* Return value */
 
@@ -1014,7 +1011,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1006 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1008 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 1010 */	NdrFcShort( 0xe86 ),	/* Type Offset=3718 */
+/* 1010 */	NdrFcShort( 0xfac ),	/* Type Offset=4012 */
 
 	/* Parameter pdwOutVersion */
 
@@ -1027,7 +1024,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1018 */	NdrFcShort( 0x2113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=8 */
 /* 1020 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 1022 */	NdrFcShort( 0xebe ),	/* Type Offset=3774 */
+/* 1022 */	NdrFcShort( 0xfe4 ),	/* Type Offset=4068 */
 
 	/* Return value */
 
@@ -1075,7 +1072,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1072 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1074 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 1076 */	NdrFcShort( 0x11c2 ),	/* Type Offset=4546 */
+/* 1076 */	NdrFcShort( 0x12e8 ),	/* Type Offset=4840 */
 
 	/* Parameter pdwOutVersion */
 
@@ -1088,7 +1085,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1084 */	NdrFcShort( 0x113 ),	/* Flags:  must size, must free, out, simple ref, */
 /* 1086 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 1088 */	NdrFcShort( 0x1236 ),	/* Type Offset=4662 */
+/* 1088 */	NdrFcShort( 0x135c ),	/* Type Offset=4956 */
 
 	/* Return value */
 
@@ -1136,7 +1133,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1138 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1140 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 1142 */	NdrFcShort( 0x147c ),	/* Type Offset=5244 */
+/* 1142 */	NdrFcShort( 0x15a2 ),	/* Type Offset=5538 */
 
 	/* Return value */
 
@@ -1184,7 +1181,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1192 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1194 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 1196 */	NdrFcShort( 0x14a8 ),	/* Type Offset=5288 */
+/* 1196 */	NdrFcShort( 0x15ce ),	/* Type Offset=5582 */
 
 	/* Parameter pdwOutVersion */
 
@@ -1197,7 +1194,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1204 */	NdrFcShort( 0x2113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=8 */
 /* 1206 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 1208 */	NdrFcShort( 0x151a ),	/* Type Offset=5402 */
+/* 1208 */	NdrFcShort( 0x1640 ),	/* Type Offset=5696 */
 
 	/* Return value */
 
@@ -1245,7 +1242,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1258 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1260 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 1262 */	NdrFcShort( 0x19b6 ),	/* Type Offset=6582 */
+/* 1262 */	NdrFcShort( 0x1adc ),	/* Type Offset=6876 */
 
 	/* Parameter pdwOutVersion */
 
@@ -1258,7 +1255,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1270 */	NdrFcShort( 0x2113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=8 */
 /* 1272 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 1274 */	NdrFcShort( 0x1a78 ),	/* Type Offset=6776 */
+/* 1274 */	NdrFcShort( 0x1b9e ),	/* Type Offset=7070 */
 
 	/* Return value */
 
@@ -1306,7 +1303,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1324 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1326 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 1328 */	NdrFcShort( 0x1a9c ),	/* Type Offset=6812 */
+/* 1328 */	NdrFcShort( 0x1bc2 ),	/* Type Offset=7106 */
 
 	/* Parameter pdwOutVersion */
 
@@ -1319,7 +1316,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1336 */	NdrFcShort( 0x2113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=8 */
 /* 1338 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 1340 */	NdrFcShort( 0x1b06 ),	/* Type Offset=6918 */
+/* 1340 */	NdrFcShort( 0x1c2c ),	/* Type Offset=7212 */
 
 	/* Return value */
 
@@ -1367,7 +1364,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1390 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1392 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 1394 */	NdrFcShort( 0x1b70 ),	/* Type Offset=7024 */
+/* 1394 */	NdrFcShort( 0x1c96 ),	/* Type Offset=7318 */
 
 	/* Return value */
 
@@ -1415,7 +1412,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1444 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1446 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 1448 */	NdrFcShort( 0x1bac ),	/* Type Offset=7084 */
+/* 1448 */	NdrFcShort( 0x1cd2 ),	/* Type Offset=7378 */
 
 	/* Parameter pdwOutVersion */
 
@@ -1428,7 +1425,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1456 */	NdrFcShort( 0x4113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=16 */
 /* 1458 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 1460 */	NdrFcShort( 0x1bfe ),	/* Type Offset=7166 */
+/* 1460 */	NdrFcShort( 0x1d24 ),	/* Type Offset=7460 */
 
 	/* Return value */
 
@@ -1476,7 +1473,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1510 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1512 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 1514 */	NdrFcShort( 0x1c5a ),	/* Type Offset=7258 */
+/* 1514 */	NdrFcShort( 0x1d80 ),	/* Type Offset=7552 */
 
 	/* Parameter pdwOutVersion */
 
@@ -1489,7 +1486,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1522 */	NdrFcShort( 0x4113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=16 */
 /* 1524 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 1526 */	NdrFcShort( 0x1cca ),	/* Type Offset=7370 */
+/* 1526 */	NdrFcShort( 0x1df0 ),	/* Type Offset=7664 */
 
 	/* Return value */
 
@@ -1537,7 +1534,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1576 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1578 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 1580 */	NdrFcShort( 0x1d26 ),	/* Type Offset=7462 */
+/* 1580 */	NdrFcShort( 0x1e4c ),	/* Type Offset=7756 */
 
 	/* Parameter pdwOutVersion */
 
@@ -1550,7 +1547,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1588 */	NdrFcShort( 0x2113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=8 */
 /* 1590 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 1592 */	NdrFcShort( 0x1d4a ),	/* Type Offset=7498 */
+/* 1592 */	NdrFcShort( 0x1e70 ),	/* Type Offset=7792 */
 
 	/* Return value */
 
@@ -1598,7 +1595,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1642 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1644 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 1646 */	NdrFcShort( 0x1d6e ),	/* Type Offset=7534 */
+/* 1646 */	NdrFcShort( 0x1e94 ),	/* Type Offset=7828 */
 
 	/* Parameter pdwOutVersion */
 
@@ -1611,7 +1608,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1654 */	NdrFcShort( 0x2113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=8 */
 /* 1656 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 1658 */	NdrFcShort( 0x1daa ),	/* Type Offset=7594 */
+/* 1658 */	NdrFcShort( 0x1ed0 ),	/* Type Offset=7888 */
 
 	/* Return value */
 
@@ -1659,7 +1656,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1708 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1710 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 1712 */	NdrFcShort( 0x1dce ),	/* Type Offset=7630 */
+/* 1712 */	NdrFcShort( 0x1ef4 ),	/* Type Offset=7924 */
 
 	/* Parameter pdwOutVersion */
 
@@ -1672,7 +1669,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1720 */	NdrFcShort( 0x4113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=16 */
 /* 1722 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 1724 */	NdrFcShort( 0x1e0a ),	/* Type Offset=7690 */
+/* 1724 */	NdrFcShort( 0x1f30 ),	/* Type Offset=7984 */
 
 	/* Return value */
 
@@ -1720,7 +1717,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1774 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1776 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 1778 */	NdrFcShort( 0x1e36 ),	/* Type Offset=7734 */
+/* 1778 */	NdrFcShort( 0x1f5c ),	/* Type Offset=8028 */
 
 	/* Parameter pdwOutVersion */
 
@@ -1733,7 +1730,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1786 */	NdrFcShort( 0x4113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=16 */
 /* 1788 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 1790 */	NdrFcShort( 0x1e78 ),	/* Type Offset=7800 */
+/* 1790 */	NdrFcShort( 0x1f9e ),	/* Type Offset=8094 */
 
 	/* Return value */
 
@@ -1781,7 +1778,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1840 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1842 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 1844 */	NdrFcShort( 0x1ed8 ),	/* Type Offset=7896 */
+/* 1844 */	NdrFcShort( 0x1ffe ),	/* Type Offset=8190 */
 
 	/* Parameter pdwOutVersion */
 
@@ -1794,7 +1791,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1852 */	NdrFcShort( 0x2113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=8 */
 /* 1854 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 1856 */	NdrFcShort( 0x1f1e ),	/* Type Offset=7966 */
+/* 1856 */	NdrFcShort( 0x2044 ),	/* Type Offset=8260 */
 
 	/* Return value */
 
@@ -1842,7 +1839,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1906 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1908 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 1910 */	NdrFcShort( 0x1f42 ),	/* Type Offset=8002 */
+/* 1910 */	NdrFcShort( 0x2068 ),	/* Type Offset=8296 */
 
 	/* Parameter pdwOutVersion */
 
@@ -1855,7 +1852,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1918 */	NdrFcShort( 0x4113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=16 */
 /* 1920 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 1922 */	NdrFcShort( 0x1f66 ),	/* Type Offset=8038 */
+/* 1922 */	NdrFcShort( 0x208c ),	/* Type Offset=8332 */
 
 	/* Return value */
 
@@ -1884,33 +1881,33 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 /* 1954 */	NdrFcShort( 0x1 ),	/* 1 */
 /* 1956 */	NdrFcShort( 0x0 ),	/* 0 */
 
-	/* Parameter hRpc */
+	/* Parameter dwInVersion */
 
 /* 1958 */	NdrFcShort( 0x48 ),	/* Flags:  in, base type, */
 /* 1960 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
 /* 1962 */	0x8,		/* FC_LONG */
 			0x0,		/* 0 */
 
-	/* Parameter dwInVersion */
+	/* Parameter pmsgIn */
 
 /* 1964 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1966 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 1968 */	NdrFcShort( 0x1fa8 ),	/* Type Offset=8104 */
+/* 1968 */	NdrFcShort( 0x20ce ),	/* Type Offset=8398 */
 
-	/* Parameter pmsgIn */
+	/* Parameter pdwOutVersion */
 
 /* 1970 */	NdrFcShort( 0x2150 ),	/* Flags:  out, base type, simple ref, srv alloc size=8 */
 /* 1972 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
 /* 1974 */	0x8,		/* FC_LONG */
 			0x0,		/* 0 */
 
-	/* Parameter pdwOutVersion */
+	/* Parameter pmsgOut */
 
 /* 1976 */	NdrFcShort( 0x8113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=32 */
 /* 1978 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 1980 */	NdrFcShort( 0x1fcc ),	/* Type Offset=8140 */
+/* 1980 */	NdrFcShort( 0x20f2 ),	/* Type Offset=8434 */
 
-	/* Parameter pmsgOut */
+	/* Return value */
 
 /* 1982 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
 /* 1984 */	NdrFcShort( 0x14 ),	/* x86 Stack size/offset = 20 */
@@ -1918,9 +1915,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 			0x0,		/* 0 */
 
 	/* Procedure IDL_DSAExecuteScript */
-
-
-	/* Return value */
 
 /* 1988 */	0x0,		/* 0 */
 			0x48,		/* Old Flags:  */
@@ -1940,33 +1934,33 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 /* 2012 */	NdrFcShort( 0x1 ),	/* 1 */
 /* 2014 */	NdrFcShort( 0x0 ),	/* 0 */
 
-	/* Parameter hRpc */
+	/* Parameter dwInVersion */
 
 /* 2016 */	NdrFcShort( 0x48 ),	/* Flags:  in, base type, */
 /* 2018 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
 /* 2020 */	0x8,		/* FC_LONG */
 			0x0,		/* 0 */
 
-	/* Parameter dwInVersion */
+	/* Parameter pmsgIn */
 
 /* 2022 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 2024 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
-/* 2026 */	NdrFcShort( 0x2064 ),	/* Type Offset=8292 */
+/* 2026 */	NdrFcShort( 0x218a ),	/* Type Offset=8586 */
 
-	/* Parameter pmsgIn */
+	/* Parameter pdwOutVersion */
 
 /* 2028 */	NdrFcShort( 0x2150 ),	/* Flags:  out, base type, simple ref, srv alloc size=8 */
 /* 2030 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
 /* 2032 */	0x8,		/* FC_LONG */
 			0x0,		/* 0 */
 
-	/* Parameter pdwOutVersion */
+	/* Parameter pmsgOut */
 
 /* 2034 */	NdrFcShort( 0x2113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=8 */
 /* 2036 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
-/* 2038 */	NdrFcShort( 0x20a6 ),	/* Type Offset=8358 */
+/* 2038 */	NdrFcShort( 0x21cc ),	/* Type Offset=8652 */
 
-	/* Parameter pmsgOut */
+	/* Return value */
 
 /* 2040 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
 /* 2042 */	NdrFcShort( 0x14 ),	/* x86 Stack size/offset = 20 */
@@ -2066,2517 +2060,2545 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 /* 112 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 116 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 120 */	NdrFcShort( 0x2 ),	/* Offset= 2 (122) */
-/* 122 */	NdrFcShort( 0x1c ),	/* 28 */
-/* 124 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 122 */	NdrFcShort( 0x30 ),	/* 48 */
+/* 124 */	NdrFcShort( 0x2 ),	/* 2 */
 /* 126 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 130 */	NdrFcShort( 0x3c ),	/* Offset= 60 (190) */
-/* 132 */	NdrFcShort( 0xffff ),	/* Offset= -1 (131) */
-/* 134 */	
+/* 130 */	NdrFcShort( 0x42 ),	/* Offset= 66 (196) */
+/* 132 */	NdrFcLong( 0x2 ),	/* 2 */
+/* 136 */	NdrFcShort( 0x80 ),	/* Offset= 128 (264) */
+/* 138 */	NdrFcShort( 0xffff ),	/* Offset= -1 (137) */
+/* 140 */	
 			0x1d,		/* FC_SMFARRAY */
 			0x0,		/* 0 */
-/* 136 */	NdrFcShort( 0x1c ),	/* 28 */
-/* 138 */	0x2,		/* FC_CHAR */
+/* 142 */	NdrFcShort( 0x1c ),	/* 28 */
+/* 144 */	0x2,		/* FC_CHAR */
 			0x5b,		/* FC_END */
-/* 140 */	
+/* 146 */	
 			0x15,		/* FC_STRUCT */
 			0x0,		/* 0 */
-/* 142 */	NdrFcShort( 0x1c ),	/* 28 */
-/* 144 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 148 */	NdrFcShort( 0x1c ),	/* 28 */
+/* 150 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 146 */	NdrFcShort( 0xfff4 ),	/* Offset= -12 (134) */
-/* 148 */	0x5c,		/* FC_PAD */
+/* 152 */	NdrFcShort( 0xfff4 ),	/* Offset= -12 (140) */
+/* 154 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 150 */	
+/* 156 */	
 			0x1b,		/* FC_CARRAY */
 			0x1,		/* 1 */
-/* 152 */	NdrFcShort( 0x2 ),	/* 2 */
-/* 154 */	0x9,		/* Corr desc: FC_ULONG */
+/* 158 */	NdrFcShort( 0x2 ),	/* 2 */
+/* 160 */	0x9,		/* Corr desc: FC_ULONG */
 			0x57,		/* FC_ADD_1 */
-/* 156 */	NdrFcShort( 0xfffc ),	/* -4 */
-/* 158 */	NdrFcShort( 0x11 ),	/* Corr flags:  early, */
-/* 160 */	0x1 , /* correlation range */
+/* 162 */	NdrFcShort( 0xfffc ),	/* -4 */
+/* 164 */	NdrFcShort( 0x11 ),	/* Corr flags:  early, */
+/* 166 */	0x1 , /* correlation range */
 			0x0,		/* 0 */
-/* 162 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 166 */	NdrFcLong( 0xa00001 ),	/* 10485761 */
-/* 170 */	0x5,		/* FC_WCHAR */
+/* 168 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 172 */	NdrFcLong( 0xa00001 ),	/* 10485761 */
+/* 176 */	0x5,		/* FC_WCHAR */
 			0x5b,		/* FC_END */
-/* 172 */	
+/* 178 */	
 			0x17,		/* FC_CSTRUCT */
 			0x3,		/* 3 */
-/* 174 */	NdrFcShort( 0x38 ),	/* 56 */
-/* 176 */	NdrFcShort( 0xffe6 ),	/* Offset= -26 (150) */
-/* 178 */	0x8,		/* FC_LONG */
+/* 180 */	NdrFcShort( 0x38 ),	/* 56 */
+/* 182 */	NdrFcShort( 0xffe6 ),	/* Offset= -26 (156) */
+/* 184 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 180 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 186 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 182 */	NdrFcShort( 0xff56 ),	/* Offset= -170 (12) */
-/* 184 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 188 */	NdrFcShort( 0xff50 ),	/* Offset= -176 (12) */
+/* 190 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 186 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (140) */
-/* 188 */	0x8,		/* FC_LONG */
+/* 192 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (146) */
+/* 194 */	0x8,		/* FC_LONG */
 			0x5b,		/* FC_END */
-/* 190 */	
+/* 196 */	
 			0x16,		/* FC_PSTRUCT */
 			0x3,		/* 3 */
-/* 192 */	NdrFcShort( 0x1c ),	/* 28 */
-/* 194 */	
+/* 198 */	NdrFcShort( 0x1c ),	/* 28 */
+/* 200 */	
 			0x4b,		/* FC_PP */
 			0x5c,		/* FC_PAD */
-/* 196 */	
+/* 202 */	
 			0x46,		/* FC_NO_REPEAT */
 			0x5c,		/* FC_PAD */
-/* 198 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 200 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 202 */	0x11, 0x0,	/* FC_RP */
-/* 204 */	NdrFcShort( 0xffe0 ),	/* Offset= -32 (172) */
-/* 206 */	
+/* 204 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 206 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 208 */	0x11, 0x0,	/* FC_RP */
+/* 210 */	NdrFcShort( 0xffe0 ),	/* Offset= -32 (178) */
+/* 212 */	
 			0x46,		/* FC_NO_REPEAT */
 			0x5c,		/* FC_PAD */
-/* 208 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 210 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 212 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 214 */	
+/* 214 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 216 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 218 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 220 */	
 			0x22,		/* FC_C_CSTRING */
 			0x5c,		/* FC_PAD */
-/* 216 */	
+/* 222 */	
 			0x5b,		/* FC_END */
 
 			0x8,		/* FC_LONG */
-/* 218 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 224 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 220 */	NdrFcShort( 0xff30 ),	/* Offset= -208 (12) */
-/* 222 */	0x8,		/* FC_LONG */
+/* 226 */	NdrFcShort( 0xff2a ),	/* Offset= -214 (12) */
+/* 228 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 224 */	0x5c,		/* FC_PAD */
+/* 230 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 226 */	
+/* 232 */	
+			0x1b,		/* FC_CARRAY */
+			0x0,		/* 0 */
+/* 234 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 236 */	0x9,		/* Corr desc: FC_ULONG */
+			0x0,		/*  */
+/* 238 */	NdrFcShort( 0xfff4 ),	/* -12 */
+/* 240 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 242 */	0x0 , 
+			0x0,		/* 0 */
+/* 244 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 248 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 252 */	0x2,		/* FC_CHAR */
+			0x5b,		/* FC_END */
+/* 254 */	
+			0x17,		/* FC_CSTRUCT */
+			0x7,		/* 7 */
+/* 256 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 258 */	NdrFcShort( 0xffe6 ),	/* Offset= -26 (232) */
+/* 260 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 262 */	0xb,		/* FC_HYPER */
+			0x5b,		/* FC_END */
+/* 264 */	
+			0x16,		/* FC_PSTRUCT */
+			0x3,		/* 3 */
+/* 266 */	NdrFcShort( 0x30 ),	/* 48 */
+/* 268 */	
+			0x4b,		/* FC_PP */
+			0x5c,		/* FC_PAD */
+/* 270 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 272 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 274 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 276 */	0x11, 0x0,	/* FC_RP */
+/* 278 */	NdrFcShort( 0xff9c ),	/* Offset= -100 (178) */
+/* 280 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 282 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 284 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 286 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 288 */	
+			0x22,		/* FC_C_CSTRING */
+			0x5c,		/* FC_PAD */
+/* 290 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 292 */	NdrFcShort( 0x2c ),	/* 44 */
+/* 294 */	NdrFcShort( 0x2c ),	/* 44 */
+/* 296 */	0x12, 0x0,	/* FC_UP */
+/* 298 */	NdrFcShort( 0xffd4 ),	/* Offset= -44 (254) */
+/* 300 */	
+			0x5b,		/* FC_END */
+
+			0x8,		/* FC_LONG */
+/* 302 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 304 */	NdrFcShort( 0xfedc ),	/* Offset= -292 (12) */
+/* 306 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 308 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 310 */	NdrFcShort( 0xfed6 ),	/* Offset= -298 (12) */
+/* 312 */	0x8,		/* FC_LONG */
+			0x5b,		/* FC_END */
+/* 314 */	
 			0x11, 0x0,	/* FC_RP */
-/* 228 */	NdrFcShort( 0x2 ),	/* Offset= 2 (230) */
-/* 230 */	
+/* 316 */	NdrFcShort( 0x2 ),	/* Offset= 2 (318) */
+/* 318 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 232 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 320 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x0,		/*  */
-/* 234 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 236 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 238 */	0x0 , 
+/* 322 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 324 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 326 */	0x0 , 
 			0x0,		/* 0 */
-/* 240 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 244 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 248 */	NdrFcShort( 0x2 ),	/* Offset= 2 (250) */
-/* 250 */	NdrFcShort( 0x88 ),	/* 136 */
-/* 252 */	NdrFcShort( 0x5 ),	/* 5 */
-/* 254 */	NdrFcLong( 0x4 ),	/* 4 */
-/* 258 */	NdrFcShort( 0x15e ),	/* Offset= 350 (608) */
-/* 260 */	NdrFcLong( 0x5 ),	/* 5 */
-/* 264 */	NdrFcShort( 0x176 ),	/* Offset= 374 (638) */
-/* 266 */	NdrFcLong( 0x7 ),	/* 7 */
-/* 270 */	NdrFcShort( 0x19a ),	/* Offset= 410 (680) */
-/* 272 */	NdrFcLong( 0x8 ),	/* 8 */
-/* 276 */	NdrFcShort( 0x1ba ),	/* Offset= 442 (718) */
-/* 278 */	NdrFcLong( 0xa ),	/* 10 */
-/* 282 */	NdrFcShort( 0x1ec ),	/* Offset= 492 (774) */
-/* 284 */	NdrFcShort( 0xffff ),	/* Offset= -1 (283) */
-/* 286 */	
+/* 328 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 332 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 336 */	NdrFcShort( 0x2 ),	/* Offset= 2 (338) */
+/* 338 */	NdrFcShort( 0x88 ),	/* 136 */
+/* 340 */	NdrFcShort( 0x6 ),	/* 6 */
+/* 342 */	NdrFcLong( 0x4 ),	/* 4 */
+/* 346 */	NdrFcShort( 0x164 ),	/* Offset= 356 (702) */
+/* 348 */	NdrFcLong( 0x5 ),	/* 5 */
+/* 352 */	NdrFcShort( 0x17c ),	/* Offset= 380 (732) */
+/* 354 */	NdrFcLong( 0x7 ),	/* 7 */
+/* 358 */	NdrFcShort( 0x1a0 ),	/* Offset= 416 (774) */
+/* 360 */	NdrFcLong( 0x8 ),	/* 8 */
+/* 364 */	NdrFcShort( 0x1c0 ),	/* Offset= 448 (812) */
+/* 366 */	NdrFcLong( 0xa ),	/* 10 */
+/* 370 */	NdrFcShort( 0x1f2 ),	/* Offset= 498 (868) */
+/* 372 */	NdrFcLong( 0xb ),	/* 11 */
+/* 376 */	NdrFcShort( 0x226 ),	/* Offset= 550 (926) */
+/* 378 */	NdrFcShort( 0xffff ),	/* Offset= -1 (377) */
+/* 380 */	
 			0x15,		/* FC_STRUCT */
 			0x7,		/* 7 */
-/* 288 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 290 */	0xb,		/* FC_HYPER */
+/* 382 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 384 */	0xb,		/* FC_HYPER */
 			0xb,		/* FC_HYPER */
-/* 292 */	0xb,		/* FC_HYPER */
+/* 386 */	0xb,		/* FC_HYPER */
 			0x5b,		/* FC_END */
-/* 294 */	0xb7,		/* FC_RANGE */
+/* 388 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 296 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 300 */	NdrFcLong( 0x100000 ),	/* 1048576 */
-/* 304 */	0xb7,		/* FC_RANGE */
+/* 390 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 394 */	NdrFcLong( 0x100000 ),	/* 1048576 */
+/* 398 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 306 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 310 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 314 */	
+/* 400 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 404 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 408 */	
 			0x1b,		/* FC_CARRAY */
 			0x0,		/* 0 */
-/* 316 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 318 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 410 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 412 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 320 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 322 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 324 */	0x0 , 
+/* 414 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 416 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 418 */	0x0 , 
 			0x0,		/* 0 */
-/* 326 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 330 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 334 */	0x2,		/* FC_CHAR */
+/* 420 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 424 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 428 */	0x2,		/* FC_CHAR */
 			0x5b,		/* FC_END */
-/* 336 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+/* 430 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 338 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 340 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 342 */	NdrFcShort( 0x8 ),	/* Offset= 8 (350) */
-/* 344 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 432 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 434 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 436 */	NdrFcShort( 0x8 ),	/* Offset= 8 (444) */
+/* 438 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 346 */	NdrFcShort( 0xffd6 ),	/* Offset= -42 (304) */
-/* 348 */	0x36,		/* FC_POINTER */
+/* 440 */	NdrFcShort( 0xffd6 ),	/* Offset= -42 (398) */
+/* 442 */	0x36,		/* FC_POINTER */
 			0x5b,		/* FC_END */
-/* 350 */	
+/* 444 */	
 			0x12, 0x0,	/* FC_UP */
-/* 352 */	NdrFcShort( 0xffda ),	/* Offset= -38 (314) */
-/* 354 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+/* 446 */	NdrFcShort( 0xffda ),	/* Offset= -38 (408) */
+/* 448 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 356 */	NdrFcShort( 0xc ),	/* 12 */
-/* 358 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 360 */	NdrFcShort( 0x0 ),	/* Offset= 0 (360) */
-/* 362 */	0x8,		/* FC_LONG */
+/* 450 */	NdrFcShort( 0xc ),	/* 12 */
+/* 452 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 454 */	NdrFcShort( 0x0 ),	/* Offset= 0 (454) */
+/* 456 */	0x8,		/* FC_LONG */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 364 */	0x0,		/* 0 */
-			NdrFcShort( 0xffe3 ),	/* Offset= -29 (336) */
+/* 458 */	0x0,		/* 0 */
+			NdrFcShort( 0xffe3 ),	/* Offset= -29 (430) */
 			0x5b,		/* FC_END */
-/* 368 */	
+/* 462 */	
 			0x21,		/* FC_BOGUS_ARRAY */
 			0x3,		/* 3 */
-/* 370 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 372 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 464 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 466 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 374 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 376 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 378 */	0x0 , 
+/* 468 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 470 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 472 */	0x0 , 
 			0x0,		/* 0 */
-/* 380 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 384 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 388 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 392 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 394 */	0x0 , 
+/* 474 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 478 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 482 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 486 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 488 */	0x0 , 
 			0x0,		/* 0 */
-/* 396 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 400 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 404 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 490 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 494 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 498 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 406 */	NdrFcShort( 0xffcc ),	/* Offset= -52 (354) */
-/* 408 */	0x5c,		/* FC_PAD */
+/* 500 */	NdrFcShort( 0xffcc ),	/* Offset= -52 (448) */
+/* 502 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 410 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+/* 504 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 412 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 414 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 416 */	NdrFcShort( 0x8 ),	/* Offset= 8 (424) */
-/* 418 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 506 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 508 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 510 */	NdrFcShort( 0x8 ),	/* Offset= 8 (518) */
+/* 512 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 420 */	NdrFcShort( 0xff82 ),	/* Offset= -126 (294) */
-/* 422 */	0x36,		/* FC_POINTER */
+/* 514 */	NdrFcShort( 0xff82 ),	/* Offset= -126 (388) */
+/* 516 */	0x36,		/* FC_POINTER */
 			0x5b,		/* FC_END */
-/* 424 */	
+/* 518 */	
 			0x12, 0x0,	/* FC_UP */
-/* 426 */	NdrFcShort( 0xffc6 ),	/* Offset= -58 (368) */
-/* 428 */	0xb7,		/* FC_RANGE */
+/* 520 */	NdrFcShort( 0xffc6 ),	/* Offset= -58 (462) */
+/* 522 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 430 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 434 */	NdrFcLong( 0x100000 ),	/* 1048576 */
-/* 438 */	
+/* 524 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 528 */	NdrFcLong( 0x100000 ),	/* 1048576 */
+/* 532 */	
 			0x15,		/* FC_STRUCT */
 			0x7,		/* 7 */
-/* 440 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 442 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 534 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 536 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 444 */	NdrFcShort( 0xfe50 ),	/* Offset= -432 (12) */
-/* 446 */	0xb,		/* FC_HYPER */
+/* 538 */	NdrFcShort( 0xfdf2 ),	/* Offset= -526 (12) */
+/* 540 */	0xb,		/* FC_HYPER */
 			0x5b,		/* FC_END */
-/* 448 */	
+/* 542 */	
 			0x1b,		/* FC_CARRAY */
 			0x7,		/* 7 */
-/* 450 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 452 */	0x9,		/* Corr desc: FC_ULONG */
+/* 544 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 546 */	0x9,		/* Corr desc: FC_ULONG */
 			0x0,		/*  */
-/* 454 */	NdrFcShort( 0xfff8 ),	/* -8 */
-/* 456 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 458 */	0x0 , 
+/* 548 */	NdrFcShort( 0xfff8 ),	/* -8 */
+/* 550 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 552 */	0x0 , 
 			0x0,		/* 0 */
-/* 460 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 464 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 468 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 470 */	NdrFcShort( 0xffe0 ),	/* Offset= -32 (438) */
-/* 472 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 474 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 476 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 478 */	NdrFcShort( 0xffe2 ),	/* Offset= -30 (448) */
-/* 480 */	NdrFcShort( 0x0 ),	/* Offset= 0 (480) */
-/* 482 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 484 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 486 */	NdrFcShort( 0xffc6 ),	/* Offset= -58 (428) */
-/* 488 */	0x8,		/* FC_LONG */
-			0x5b,		/* FC_END */
-/* 490 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 492 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 496 */	NdrFcLong( 0x100000 ),	/* 1048576 */
-/* 500 */	
-			0x1b,		/* FC_CARRAY */
-			0x3,		/* 3 */
-/* 502 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 504 */	0x9,		/* Corr desc: FC_ULONG */
-			0x0,		/*  */
-/* 506 */	NdrFcShort( 0xfffc ),	/* -4 */
-/* 508 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 510 */	0x0 , 
-			0x0,		/* 0 */
-/* 512 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 516 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 520 */	0x8,		/* FC_LONG */
-			0x5b,		/* FC_END */
-/* 522 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 524 */	NdrFcShort( 0xc ),	/* 12 */
-/* 526 */	NdrFcShort( 0xffe6 ),	/* Offset= -26 (500) */
-/* 528 */	NdrFcShort( 0x0 ),	/* Offset= 0 (528) */
-/* 530 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 532 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 534 */	NdrFcShort( 0xffd4 ),	/* Offset= -44 (490) */
-/* 536 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 538 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 540 */	NdrFcShort( 0x60 ),	/* 96 */
-/* 542 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 544 */	NdrFcShort( 0x1c ),	/* Offset= 28 (572) */
-/* 546 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 548 */	NdrFcShort( 0xfde8 ),	/* Offset= -536 (12) */
-/* 550 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 552 */	NdrFcShort( 0xfde4 ),	/* Offset= -540 (12) */
-/* 554 */	0x36,		/* FC_POINTER */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 556 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 558 */	NdrFcShort( 0xfef0 ),	/* Offset= -272 (286) */
-/* 560 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
+/* 554 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 558 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 562 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 564 */	NdrFcShort( 0xff66 ),	/* Offset= -154 (410) */
-/* 566 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 568 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 570 */	0x5c,		/* FC_PAD */
+/* 564 */	NdrFcShort( 0xffe0 ),	/* Offset= -32 (532) */
+/* 566 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 572 */	
-			0x11, 0x0,	/* FC_RP */
-/* 574 */	NdrFcShort( 0xfe6e ),	/* Offset= -402 (172) */
-/* 576 */	
-			0x12, 0x0,	/* FC_UP */
-/* 578 */	NdrFcShort( 0xff98 ),	/* Offset= -104 (474) */
-/* 580 */	
-			0x12, 0x0,	/* FC_UP */
-/* 582 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (522) */
+/* 568 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 570 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 572 */	NdrFcShort( 0xffe2 ),	/* Offset= -30 (542) */
+/* 574 */	NdrFcShort( 0x0 ),	/* Offset= 0 (574) */
+/* 576 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 578 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 580 */	NdrFcShort( 0xffc6 ),	/* Offset= -58 (522) */
+/* 582 */	0x8,		/* FC_LONG */
+			0x5b,		/* FC_END */
 /* 584 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
 /* 586 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 590 */	NdrFcLong( 0x100 ),	/* 256 */
-/* 594 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+/* 590 */	NdrFcLong( 0x100000 ),	/* 1048576 */
+/* 594 */	
+			0x1b,		/* FC_CARRAY */
 			0x3,		/* 3 */
 /* 596 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 598 */	NdrFcShort( 0xfdd0 ),	/* Offset= -560 (38) */
-/* 600 */	NdrFcShort( 0x0 ),	/* Offset= 0 (600) */
-/* 602 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 598 */	0x9,		/* Corr desc: FC_ULONG */
+			0x0,		/*  */
+/* 600 */	NdrFcShort( 0xfffc ),	/* -4 */
+/* 602 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 604 */	0x0 , 
 			0x0,		/* 0 */
-/* 604 */	NdrFcShort( 0xffec ),	/* Offset= -20 (584) */
-/* 606 */	0x5c,		/* FC_PAD */
+/* 606 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 610 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 614 */	0x8,		/* FC_LONG */
 			0x5b,		/* FC_END */
-/* 608 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 610 */	NdrFcShort( 0x78 ),	/* 120 */
-/* 612 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 614 */	NdrFcShort( 0xe ),	/* Offset= 14 (628) */
-/* 616 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 616 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 618 */	NdrFcShort( 0xc ),	/* 12 */
+/* 620 */	NdrFcShort( 0xffe6 ),	/* Offset= -26 (594) */
+/* 622 */	NdrFcShort( 0x0 ),	/* Offset= 0 (622) */
+/* 624 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 626 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 618 */	NdrFcShort( 0xfda2 ),	/* Offset= -606 (12) */
-/* 620 */	0x36,		/* FC_POINTER */
+/* 628 */	NdrFcShort( 0xffd4 ),	/* Offset= -44 (584) */
+/* 630 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 632 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 634 */	NdrFcShort( 0x60 ),	/* 96 */
+/* 636 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 638 */	NdrFcShort( 0x1c ),	/* Offset= 28 (666) */
+/* 640 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 642 */	NdrFcShort( 0xfd8a ),	/* Offset= -630 (12) */
+/* 644 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 646 */	NdrFcShort( 0xfd86 ),	/* Offset= -634 (12) */
+/* 648 */	0x36,		/* FC_POINTER */
 			0x40,		/* FC_STRUCTPAD4 */
-/* 622 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 624 */	NdrFcShort( 0xffaa ),	/* Offset= -86 (538) */
-/* 626 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 628 */	
-			0x11, 0x0,	/* FC_RP */
-/* 630 */	NdrFcShort( 0xffdc ),	/* Offset= -36 (594) */
-/* 632 */	
-			0x15,		/* FC_STRUCT */
-			0x7,		/* 7 */
-/* 634 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 636 */	0xb,		/* FC_HYPER */
-			0x5b,		/* FC_END */
-/* 638 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 640 */	NdrFcShort( 0x60 ),	/* 96 */
-/* 642 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 644 */	NdrFcShort( 0x1c ),	/* Offset= 28 (672) */
-/* 646 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 648 */	NdrFcShort( 0xfd84 ),	/* Offset= -636 (12) */
 /* 650 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 652 */	NdrFcShort( 0xfd80 ),	/* Offset= -640 (12) */
+/* 652 */	NdrFcShort( 0xfef0 ),	/* Offset= -272 (380) */
 /* 654 */	0x36,		/* FC_POINTER */
-			0x40,		/* FC_STRUCTPAD4 */
+			0x36,		/* FC_POINTER */
 /* 656 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 658 */	NdrFcShort( 0xfe8c ),	/* Offset= -372 (286) */
-/* 660 */	0x36,		/* FC_POINTER */
+/* 658 */	NdrFcShort( 0xff66 ),	/* Offset= -154 (504) */
+/* 660 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
 /* 662 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 664 */	0x8,		/* FC_LONG */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 666 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 668 */	NdrFcShort( 0xffdc ),	/* Offset= -36 (632) */
-/* 670 */	0x5c,		/* FC_PAD */
+/* 664 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 672 */	
+/* 666 */	
 			0x11, 0x0,	/* FC_RP */
-/* 674 */	NdrFcShort( 0xfe0a ),	/* Offset= -502 (172) */
-/* 676 */	
+/* 668 */	NdrFcShort( 0xfe16 ),	/* Offset= -490 (178) */
+/* 670 */	
 			0x12, 0x0,	/* FC_UP */
-/* 678 */	NdrFcShort( 0xff34 ),	/* Offset= -204 (474) */
-/* 680 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+/* 672 */	NdrFcShort( 0xff98 ),	/* Offset= -104 (568) */
+/* 674 */	
+			0x12, 0x0,	/* FC_UP */
+/* 676 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (616) */
+/* 678 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 680 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 684 */	NdrFcLong( 0x100 ),	/* 256 */
+/* 688 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 690 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 692 */	NdrFcShort( 0xfd72 ),	/* Offset= -654 (38) */
+/* 694 */	NdrFcShort( 0x0 ),	/* Offset= 0 (694) */
+/* 696 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 698 */	NdrFcShort( 0xffec ),	/* Offset= -20 (678) */
+/* 700 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 702 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
 			0x7,		/* 7 */
-/* 682 */	NdrFcShort( 0x88 ),	/* 136 */
-/* 684 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 686 */	NdrFcShort( 0x14 ),	/* Offset= 20 (706) */
-/* 688 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 704 */	NdrFcShort( 0x78 ),	/* 120 */
+/* 706 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 708 */	NdrFcShort( 0xe ),	/* Offset= 14 (722) */
+/* 710 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 690 */	NdrFcShort( 0xfd5a ),	/* Offset= -678 (12) */
-/* 692 */	0x36,		/* FC_POINTER */
+/* 712 */	NdrFcShort( 0xfd44 ),	/* Offset= -700 (12) */
+/* 714 */	0x36,		/* FC_POINTER */
 			0x40,		/* FC_STRUCTPAD4 */
-/* 694 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 716 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 696 */	NdrFcShort( 0xff62 ),	/* Offset= -158 (538) */
-/* 698 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 700 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 702 */	NdrFcShort( 0xfedc ),	/* Offset= -292 (410) */
-/* 704 */	0x5c,		/* FC_PAD */
+/* 718 */	NdrFcShort( 0xffaa ),	/* Offset= -86 (632) */
+/* 720 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 706 */	
+/* 722 */	
 			0x11, 0x0,	/* FC_RP */
-/* 708 */	NdrFcShort( 0xff8e ),	/* Offset= -114 (594) */
-/* 710 */	
-			0x12, 0x0,	/* FC_UP */
-/* 712 */	NdrFcShort( 0xff42 ),	/* Offset= -190 (522) */
-/* 714 */	
-			0x12, 0x0,	/* FC_UP */
-/* 716 */	NdrFcShort( 0xff3e ),	/* Offset= -194 (522) */
-/* 718 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+/* 724 */	NdrFcShort( 0xffdc ),	/* Offset= -36 (688) */
+/* 726 */	
+			0x15,		/* FC_STRUCT */
 			0x7,		/* 7 */
-/* 720 */	NdrFcShort( 0x70 ),	/* 112 */
-/* 722 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 724 */	NdrFcShort( 0x22 ),	/* Offset= 34 (758) */
-/* 726 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 728 */	NdrFcShort( 0xfd34 ),	/* Offset= -716 (12) */
-/* 730 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 732 */	NdrFcShort( 0xfd30 ),	/* Offset= -720 (12) */
-/* 734 */	0x36,		/* FC_POINTER */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 736 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 738 */	NdrFcShort( 0xfe3c ),	/* Offset= -452 (286) */
-/* 740 */	0x36,		/* FC_POINTER */
-			0x8,		/* FC_LONG */
-/* 742 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 744 */	0x8,		/* FC_LONG */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 746 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 748 */	NdrFcShort( 0xff8c ),	/* Offset= -116 (632) */
-/* 750 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 752 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 754 */	NdrFcShort( 0xfea8 ),	/* Offset= -344 (410) */
-/* 756 */	0x5c,		/* FC_PAD */
+/* 728 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 730 */	0xb,		/* FC_HYPER */
 			0x5b,		/* FC_END */
-/* 758 */	
-			0x11, 0x0,	/* FC_RP */
-/* 760 */	NdrFcShort( 0xfdb4 ),	/* Offset= -588 (172) */
-/* 762 */	
-			0x12, 0x0,	/* FC_UP */
-/* 764 */	NdrFcShort( 0xfede ),	/* Offset= -290 (474) */
+/* 732 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 734 */	NdrFcShort( 0x60 ),	/* 96 */
+/* 736 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 738 */	NdrFcShort( 0x1c ),	/* Offset= 28 (766) */
+/* 740 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 742 */	NdrFcShort( 0xfd26 ),	/* Offset= -730 (12) */
+/* 744 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 746 */	NdrFcShort( 0xfd22 ),	/* Offset= -734 (12) */
+/* 748 */	0x36,		/* FC_POINTER */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 750 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 752 */	NdrFcShort( 0xfe8c ),	/* Offset= -372 (380) */
+/* 754 */	0x36,		/* FC_POINTER */
+			0x8,		/* FC_LONG */
+/* 756 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 758 */	0x8,		/* FC_LONG */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 760 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 762 */	NdrFcShort( 0xffdc ),	/* Offset= -36 (726) */
+/* 764 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
 /* 766 */	
-			0x12, 0x0,	/* FC_UP */
-/* 768 */	NdrFcShort( 0xff0a ),	/* Offset= -246 (522) */
+			0x11, 0x0,	/* FC_RP */
+/* 768 */	NdrFcShort( 0xfdb2 ),	/* Offset= -590 (178) */
 /* 770 */	
 			0x12, 0x0,	/* FC_UP */
-/* 772 */	NdrFcShort( 0xff06 ),	/* Offset= -250 (522) */
-/* 774 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
+/* 772 */	NdrFcShort( 0xff34 ),	/* Offset= -204 (568) */
+/* 774 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
 			0x7,		/* 7 */
-/* 776 */	NdrFcShort( 0x78 ),	/* 120 */
+/* 776 */	NdrFcShort( 0x88 ),	/* 136 */
 /* 778 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 780 */	NdrFcShort( 0x24 ),	/* Offset= 36 (816) */
+/* 780 */	NdrFcShort( 0x14 ),	/* Offset= 20 (800) */
 /* 782 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
 /* 784 */	NdrFcShort( 0xfcfc ),	/* Offset= -772 (12) */
-/* 786 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 788 */	NdrFcShort( 0xfcf8 ),	/* Offset= -776 (12) */
-/* 790 */	0x36,		/* FC_POINTER */
+/* 786 */	0x36,		/* FC_POINTER */
 			0x40,		/* FC_STRUCTPAD4 */
-/* 792 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 788 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 794 */	NdrFcShort( 0xfe04 ),	/* Offset= -508 (286) */
-/* 796 */	0x36,		/* FC_POINTER */
-			0x8,		/* FC_LONG */
-/* 798 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 800 */	0x8,		/* FC_LONG */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 802 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 804 */	NdrFcShort( 0xff54 ),	/* Offset= -172 (632) */
-/* 806 */	0x36,		/* FC_POINTER */
+/* 790 */	NdrFcShort( 0xff62 ),	/* Offset= -158 (632) */
+/* 792 */	0x36,		/* FC_POINTER */
 			0x36,		/* FC_POINTER */
-/* 808 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 794 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 810 */	NdrFcShort( 0xfe70 ),	/* Offset= -400 (410) */
-/* 812 */	0x8,		/* FC_LONG */
+/* 796 */	NdrFcShort( 0xfedc ),	/* Offset= -292 (504) */
+/* 798 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 800 */	
+			0x11, 0x0,	/* FC_RP */
+/* 802 */	NdrFcShort( 0xff8e ),	/* Offset= -114 (688) */
+/* 804 */	
+			0x12, 0x0,	/* FC_UP */
+/* 806 */	NdrFcShort( 0xff42 ),	/* Offset= -190 (616) */
+/* 808 */	
+			0x12, 0x0,	/* FC_UP */
+/* 810 */	NdrFcShort( 0xff3e ),	/* Offset= -194 (616) */
+/* 812 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 814 */	NdrFcShort( 0x70 ),	/* 112 */
+/* 816 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 818 */	NdrFcShort( 0x22 ),	/* Offset= 34 (852) */
+/* 820 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 822 */	NdrFcShort( 0xfcd6 ),	/* Offset= -810 (12) */
+/* 824 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 826 */	NdrFcShort( 0xfcd2 ),	/* Offset= -814 (12) */
+/* 828 */	0x36,		/* FC_POINTER */
 			0x40,		/* FC_STRUCTPAD4 */
-/* 814 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 816 */	
-			0x11, 0x0,	/* FC_RP */
-/* 818 */	NdrFcShort( 0xfd7a ),	/* Offset= -646 (172) */
-/* 820 */	
-			0x12, 0x0,	/* FC_UP */
-/* 822 */	NdrFcShort( 0xfea4 ),	/* Offset= -348 (474) */
-/* 824 */	
-			0x12, 0x0,	/* FC_UP */
-/* 826 */	NdrFcShort( 0xfed0 ),	/* Offset= -304 (522) */
-/* 828 */	
-			0x12, 0x0,	/* FC_UP */
-/* 830 */	NdrFcShort( 0xfecc ),	/* Offset= -308 (522) */
-/* 832 */	
-			0x11, 0xc,	/* FC_RP [alloced_on_stack] [simple_pointer] */
-/* 834 */	0x8,		/* FC_LONG */
-			0x5c,		/* FC_PAD */
-/* 836 */	
-			0x11, 0x0,	/* FC_RP */
-/* 838 */	NdrFcShort( 0x2 ),	/* Offset= 2 (840) */
-/* 840 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 842 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x54,		/* FC_DEREFERENCE */
-/* 844 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 846 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 848 */	0x0 , 
+/* 830 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 850 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 854 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 858 */	NdrFcShort( 0x2 ),	/* Offset= 2 (860) */
-/* 860 */	NdrFcShort( 0x90 ),	/* 144 */
-/* 862 */	NdrFcShort( 0x5 ),	/* 5 */
-/* 864 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 868 */	NdrFcShort( 0x158 ),	/* Offset= 344 (1212) */
-/* 870 */	NdrFcLong( 0x2 ),	/* 2 */
-/* 874 */	NdrFcShort( 0x19a ),	/* Offset= 410 (1284) */
-/* 876 */	NdrFcLong( 0x6 ),	/* 6 */
-/* 880 */	NdrFcShort( 0x246 ),	/* Offset= 582 (1462) */
-/* 882 */	NdrFcLong( 0x7 ),	/* 7 */
-/* 886 */	NdrFcShort( 0x27e ),	/* Offset= 638 (1524) */
-/* 888 */	NdrFcLong( 0x9 ),	/* 9 */
-/* 892 */	NdrFcShort( 0x2ea ),	/* Offset= 746 (1638) */
-/* 894 */	NdrFcShort( 0xffff ),	/* Offset= -1 (893) */
-/* 896 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 898 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 902 */	NdrFcLong( 0x100000 ),	/* 1048576 */
-/* 906 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 908 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 912 */	NdrFcLong( 0xa00000 ),	/* 10485760 */
-/* 916 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 918 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 922 */	NdrFcLong( 0x1900000 ),	/* 26214400 */
-/* 926 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 928 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 930 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 932 */	NdrFcShort( 0x8 ),	/* Offset= 8 (940) */
-/* 934 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 936 */	NdrFcShort( 0xffec ),	/* Offset= -20 (916) */
-/* 938 */	0x36,		/* FC_POINTER */
-			0x5b,		/* FC_END */
-/* 940 */	
-			0x12, 0x0,	/* FC_UP */
-/* 942 */	NdrFcShort( 0xfd8c ),	/* Offset= -628 (314) */
-/* 944 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x3,		/* 3 */
-/* 946 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 948 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 950 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 952 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 954 */	0x0 , 
-			0x0,		/* 0 */
-/* 956 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 960 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 964 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 968 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 970 */	0x0 , 
-			0x0,		/* 0 */
-/* 972 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 976 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 980 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 982 */	NdrFcShort( 0xffc8 ),	/* Offset= -56 (926) */
-/* 984 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 986 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 988 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 990 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 992 */	NdrFcShort( 0x8 ),	/* Offset= 8 (1000) */
-/* 994 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 996 */	NdrFcShort( 0xffa6 ),	/* Offset= -90 (906) */
-/* 998 */	0x36,		/* FC_POINTER */
-			0x5b,		/* FC_END */
-/* 1000 */	
-			0x12, 0x0,	/* FC_UP */
-/* 1002 */	NdrFcShort( 0xffc6 ),	/* Offset= -58 (944) */
-/* 1004 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 1006 */	NdrFcShort( 0xc ),	/* 12 */
-/* 1008 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1010 */	NdrFcShort( 0x0 ),	/* Offset= 0 (1010) */
-/* 1012 */	0x8,		/* FC_LONG */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 1014 */	0x0,		/* 0 */
-			NdrFcShort( 0xffe3 ),	/* Offset= -29 (986) */
-			0x5b,		/* FC_END */
-/* 1018 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x3,		/* 3 */
-/* 1020 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1022 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 1024 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1026 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 1028 */	0x0 , 
-			0x0,		/* 0 */
-/* 1030 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1034 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1038 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 1042 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 1044 */	0x0 , 
-			0x0,		/* 0 */
-/* 1046 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1050 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1054 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 1056 */	NdrFcShort( 0xffcc ),	/* Offset= -52 (1004) */
-/* 1058 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 1060 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 1062 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 1064 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1066 */	NdrFcShort( 0x8 ),	/* Offset= 8 (1074) */
-/* 1068 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 1070 */	NdrFcShort( 0xff52 ),	/* Offset= -174 (896) */
-/* 1072 */	0x36,		/* FC_POINTER */
-			0x5b,		/* FC_END */
-/* 1074 */	
-			0x12, 0x0,	/* FC_UP */
-/* 1076 */	NdrFcShort( 0xffc6 ),	/* Offset= -58 (1018) */
-/* 1078 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 1080 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 1082 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1084 */	NdrFcShort( 0xa ),	/* Offset= 10 (1094) */
-/* 1086 */	0x36,		/* FC_POINTER */
+/* 832 */	NdrFcShort( 0xfe3c ),	/* Offset= -452 (380) */
+/* 834 */	0x36,		/* FC_POINTER */
 			0x8,		/* FC_LONG */
-/* 1088 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 1090 */	NdrFcShort( 0xffe2 ),	/* Offset= -30 (1060) */
-/* 1092 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 1094 */	
-			0x12, 0x0,	/* FC_UP */
-/* 1096 */	NdrFcShort( 0xfc64 ),	/* Offset= -924 (172) */
-/* 1098 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 1100 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1104 */	NdrFcLong( 0x100000 ),	/* 1048576 */
-/* 1108 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 1110 */	NdrFcShort( 0x28 ),	/* 40 */
-/* 1112 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1114 */	NdrFcShort( 0x0 ),	/* Offset= 0 (1114) */
-/* 1116 */	0x8,		/* FC_LONG */
+/* 836 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 838 */	0x8,		/* FC_LONG */
 			0x40,		/* FC_STRUCTPAD4 */
-/* 1118 */	0xb,		/* FC_HYPER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 1120 */	0x0,		/* 0 */
-			NdrFcShort( 0xfbab ),	/* Offset= -1109 (12) */
-			0xb,		/* FC_HYPER */
-/* 1124 */	0x5c,		/* FC_PAD */
+/* 840 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 842 */	NdrFcShort( 0xff8c ),	/* Offset= -116 (726) */
+/* 844 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 846 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 848 */	NdrFcShort( 0xfea8 ),	/* Offset= -344 (504) */
+/* 850 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 1126 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x7,		/* 7 */
-/* 1128 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1130 */	0x9,		/* Corr desc: FC_ULONG */
-			0x0,		/*  */
-/* 1132 */	NdrFcShort( 0xfff8 ),	/* -8 */
-/* 1134 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 1136 */	0x0 , 
-			0x0,		/* 0 */
-/* 1138 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1142 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1146 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 1150 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 1152 */	0x0 , 
-			0x0,		/* 0 */
-/* 1154 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1158 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1162 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 1164 */	NdrFcShort( 0xffc8 ),	/* Offset= -56 (1108) */
-/* 1166 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 1168 */	
+/* 852 */	
+			0x11, 0x0,	/* FC_RP */
+/* 854 */	NdrFcShort( 0xfd5c ),	/* Offset= -676 (178) */
+/* 856 */	
+			0x12, 0x0,	/* FC_UP */
+/* 858 */	NdrFcShort( 0xfede ),	/* Offset= -290 (568) */
+/* 860 */	
+			0x12, 0x0,	/* FC_UP */
+/* 862 */	NdrFcShort( 0xff0a ),	/* Offset= -246 (616) */
+/* 864 */	
+			0x12, 0x0,	/* FC_UP */
+/* 866 */	NdrFcShort( 0xff06 ),	/* Offset= -250 (616) */
+/* 868 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x7,		/* 7 */
-/* 1170 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 1172 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (1126) */
-/* 1174 */	NdrFcShort( 0x0 ),	/* Offset= 0 (1174) */
-/* 1176 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 870 */	NdrFcShort( 0x78 ),	/* 120 */
+/* 872 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 874 */	NdrFcShort( 0x24 ),	/* Offset= 36 (910) */
+/* 876 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 1178 */	NdrFcShort( 0xffb0 ),	/* Offset= -80 (1098) */
-/* 1180 */	0x40,		/* FC_STRUCTPAD4 */
-			0x5b,		/* FC_END */
-/* 1182 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 1184 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 1186 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1188 */	NdrFcShort( 0xc ),	/* Offset= 12 (1200) */
-/* 1190 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 1192 */	0x0,		/* 0 */
-			NdrFcShort( 0xff8d ),	/* Offset= -115 (1078) */
-			0x8,		/* FC_LONG */
-/* 1196 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 1198 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 1200 */	
-			0x12, 0x0,	/* FC_UP */
-/* 1202 */	NdrFcShort( 0xffec ),	/* Offset= -20 (1182) */
-/* 1204 */	
-			0x12, 0x0,	/* FC_UP */
-/* 1206 */	NdrFcShort( 0xfb56 ),	/* Offset= -1194 (12) */
-/* 1208 */	
-			0x12, 0x0,	/* FC_UP */
-/* 1210 */	NdrFcShort( 0xffd6 ),	/* Offset= -42 (1168) */
-/* 1212 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 1214 */	NdrFcShort( 0x78 ),	/* 120 */
-/* 1216 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1218 */	NdrFcShort( 0x20 ),	/* Offset= 32 (1250) */
-/* 1220 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 878 */	NdrFcShort( 0xfc9e ),	/* Offset= -866 (12) */
+/* 880 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 1222 */	NdrFcShort( 0xfb46 ),	/* Offset= -1210 (12) */
-/* 1224 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 1226 */	NdrFcShort( 0xfb42 ),	/* Offset= -1214 (12) */
-/* 1228 */	0x36,		/* FC_POINTER */
+/* 882 */	NdrFcShort( 0xfc9a ),	/* Offset= -870 (12) */
+/* 884 */	0x36,		/* FC_POINTER */
 			0x40,		/* FC_STRUCTPAD4 */
-/* 1230 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 886 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 1232 */	NdrFcShort( 0xfc4e ),	/* Offset= -946 (286) */
-/* 1234 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 888 */	NdrFcShort( 0xfe04 ),	/* Offset= -508 (380) */
+/* 890 */	0x36,		/* FC_POINTER */
+			0x8,		/* FC_LONG */
+/* 892 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 894 */	0x8,		/* FC_LONG */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 896 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 1236 */	NdrFcShort( 0xfc4a ),	/* Offset= -950 (286) */
-/* 1238 */	0x36,		/* FC_POINTER */
+/* 898 */	NdrFcShort( 0xff54 ),	/* Offset= -172 (726) */
+/* 900 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 902 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 904 */	NdrFcShort( 0xfe70 ),	/* Offset= -400 (504) */
+/* 906 */	0x8,		/* FC_LONG */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 908 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 910 */	
+			0x11, 0x0,	/* FC_RP */
+/* 912 */	NdrFcShort( 0xfd22 ),	/* Offset= -734 (178) */
+/* 914 */	
+			0x12, 0x0,	/* FC_UP */
+/* 916 */	NdrFcShort( 0xfea4 ),	/* Offset= -348 (568) */
+/* 918 */	
+			0x12, 0x0,	/* FC_UP */
+/* 920 */	NdrFcShort( 0xfed0 ),	/* Offset= -304 (616) */
+/* 922 */	
+			0x12, 0x0,	/* FC_UP */
+/* 924 */	NdrFcShort( 0xfecc ),	/* Offset= -308 (616) */
+/* 926 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 928 */	NdrFcShort( 0x88 ),	/* 136 */
+/* 930 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 932 */	NdrFcShort( 0x28 ),	/* Offset= 40 (972) */
+/* 934 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 936 */	NdrFcShort( 0xfc64 ),	/* Offset= -924 (12) */
+/* 938 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 940 */	NdrFcShort( 0xfc60 ),	/* Offset= -928 (12) */
+/* 942 */	0x36,		/* FC_POINTER */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 944 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 946 */	NdrFcShort( 0xfdca ),	/* Offset= -566 (380) */
+/* 948 */	0x36,		/* FC_POINTER */
+			0x8,		/* FC_LONG */
+/* 950 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 952 */	0x8,		/* FC_LONG */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 954 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 956 */	NdrFcShort( 0xff1a ),	/* Offset= -230 (726) */
+/* 958 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 960 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 962 */	NdrFcShort( 0xfe36 ),	/* Offset= -458 (504) */
+/* 964 */	0x8,		/* FC_LONG */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 1240 */	0x0,		/* 0 */
-			NdrFcShort( 0xfcc1 ),	/* Offset= -831 (410) */
-			0x8,		/* FC_LONG */
-/* 1244 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
+/* 966 */	0x0,		/* 0 */
+			NdrFcShort( 0xfc45 ),	/* Offset= -955 (12) */
+			0x36,		/* FC_POINTER */
+/* 970 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 972 */	
+			0x11, 0x0,	/* FC_RP */
+/* 974 */	NdrFcShort( 0xfce4 ),	/* Offset= -796 (178) */
+/* 976 */	
+			0x12, 0x0,	/* FC_UP */
+/* 978 */	NdrFcShort( 0xfe66 ),	/* Offset= -410 (568) */
+/* 980 */	
+			0x12, 0x0,	/* FC_UP */
+/* 982 */	NdrFcShort( 0xfe92 ),	/* Offset= -366 (616) */
+/* 984 */	
+			0x12, 0x0,	/* FC_UP */
+/* 986 */	NdrFcShort( 0xfe8e ),	/* Offset= -370 (616) */
+/* 988 */	
+			0x12, 0x0,	/* FC_UP */
+/* 990 */	NdrFcShort( 0xfd20 ),	/* Offset= -736 (254) */
+/* 992 */	
+			0x11, 0xc,	/* FC_RP [alloced_on_stack] [simple_pointer] */
+/* 994 */	0x8,		/* FC_LONG */
+			0x5c,		/* FC_PAD */
+/* 996 */	
+			0x11, 0x0,	/* FC_RP */
+/* 998 */	NdrFcShort( 0x2 ),	/* Offset= 2 (1000) */
+/* 1000 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 1002 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x54,		/* FC_DEREFERENCE */
+/* 1004 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
+/* 1006 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 1008 */	0x0 , 
+			0x0,		/* 0 */
+/* 1010 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1014 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1018 */	NdrFcShort( 0x2 ),	/* Offset= 2 (1020) */
+/* 1020 */	NdrFcShort( 0x90 ),	/* 144 */
+/* 1022 */	NdrFcShort( 0x5 ),	/* 5 */
+/* 1024 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 1028 */	NdrFcShort( 0x158 ),	/* Offset= 344 (1372) */
+/* 1030 */	NdrFcLong( 0x2 ),	/* 2 */
+/* 1034 */	NdrFcShort( 0x19a ),	/* Offset= 410 (1444) */
+/* 1036 */	NdrFcLong( 0x6 ),	/* 6 */
+/* 1040 */	NdrFcShort( 0x246 ),	/* Offset= 582 (1622) */
+/* 1042 */	NdrFcLong( 0x7 ),	/* 7 */
+/* 1046 */	NdrFcShort( 0x27e ),	/* Offset= 638 (1684) */
+/* 1048 */	NdrFcLong( 0x9 ),	/* 9 */
+/* 1052 */	NdrFcShort( 0x2ea ),	/* Offset= 746 (1798) */
+/* 1054 */	NdrFcShort( 0xffff ),	/* Offset= -1 (1053) */
+/* 1056 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 1058 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1062 */	NdrFcLong( 0x100000 ),	/* 1048576 */
+/* 1066 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 1068 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1072 */	NdrFcLong( 0xa00000 ),	/* 10485760 */
+/* 1076 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 1078 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1082 */	NdrFcLong( 0x1900000 ),	/* 26214400 */
+/* 1086 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 1088 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 1090 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1092 */	NdrFcShort( 0x8 ),	/* Offset= 8 (1100) */
+/* 1094 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1096 */	NdrFcShort( 0xffec ),	/* Offset= -20 (1076) */
+/* 1098 */	0x36,		/* FC_POINTER */
+			0x5b,		/* FC_END */
+/* 1100 */	
+			0x12, 0x0,	/* FC_UP */
+/* 1102 */	NdrFcShort( 0xfd4a ),	/* Offset= -694 (408) */
+/* 1104 */	
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x3,		/* 3 */
+/* 1106 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1108 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 1110 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1112 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 1114 */	0x0 , 
+			0x0,		/* 0 */
+/* 1116 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1120 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1124 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 1128 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 1130 */	0x0 , 
+			0x0,		/* 0 */
+/* 1132 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1136 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1140 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1142 */	NdrFcShort( 0xffc8 ),	/* Offset= -56 (1086) */
+/* 1144 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 1146 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 1148 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 1150 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1152 */	NdrFcShort( 0x8 ),	/* Offset= 8 (1160) */
+/* 1154 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1156 */	NdrFcShort( 0xffa6 ),	/* Offset= -90 (1066) */
+/* 1158 */	0x36,		/* FC_POINTER */
+			0x5b,		/* FC_END */
+/* 1160 */	
+			0x12, 0x0,	/* FC_UP */
+/* 1162 */	NdrFcShort( 0xffc6 ),	/* Offset= -58 (1104) */
+/* 1164 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 1166 */	NdrFcShort( 0xc ),	/* 12 */
+/* 1168 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1170 */	NdrFcShort( 0x0 ),	/* Offset= 0 (1170) */
+/* 1172 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1174 */	0x0,		/* 0 */
+			NdrFcShort( 0xffe3 ),	/* Offset= -29 (1146) */
+			0x5b,		/* FC_END */
+/* 1178 */	
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x3,		/* 3 */
+/* 1180 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1182 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 1184 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1186 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 1188 */	0x0 , 
+			0x0,		/* 0 */
+/* 1190 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1194 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1198 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 1202 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 1204 */	0x0 , 
+			0x0,		/* 0 */
+/* 1206 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1210 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1214 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1216 */	NdrFcShort( 0xffcc ),	/* Offset= -52 (1164) */
+/* 1218 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 1220 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 1222 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 1224 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1226 */	NdrFcShort( 0x8 ),	/* Offset= 8 (1234) */
+/* 1228 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1230 */	NdrFcShort( 0xff52 ),	/* Offset= -174 (1056) */
+/* 1232 */	0x36,		/* FC_POINTER */
+			0x5b,		/* FC_END */
+/* 1234 */	
+			0x12, 0x0,	/* FC_UP */
+/* 1236 */	NdrFcShort( 0xffc6 ),	/* Offset= -58 (1178) */
+/* 1238 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 1240 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 1242 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1244 */	NdrFcShort( 0xa ),	/* Offset= 10 (1254) */
 /* 1246 */	0x36,		/* FC_POINTER */
 			0x8,		/* FC_LONG */
-/* 1248 */	0x5c,		/* FC_PAD */
+/* 1248 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1250 */	NdrFcShort( 0xffe2 ),	/* Offset= -30 (1220) */
+/* 1252 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 1250 */	
-			0x12, 0x0,	/* FC_UP */
-/* 1252 */	NdrFcShort( 0xfbc8 ),	/* Offset= -1080 (172) */
 /* 1254 */	
 			0x12, 0x0,	/* FC_UP */
-/* 1256 */	NdrFcShort( 0xfcf2 ),	/* Offset= -782 (474) */
-/* 1258 */	
+/* 1256 */	NdrFcShort( 0xfbca ),	/* Offset= -1078 (178) */
+/* 1258 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 1260 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1264 */	NdrFcLong( 0x100000 ),	/* 1048576 */
+/* 1268 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 1270 */	NdrFcShort( 0x28 ),	/* 40 */
+/* 1272 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1274 */	NdrFcShort( 0x0 ),	/* Offset= 0 (1274) */
+/* 1276 */	0x8,		/* FC_LONG */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 1278 */	0xb,		/* FC_HYPER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1280 */	0x0,		/* 0 */
+			NdrFcShort( 0xfb0b ),	/* Offset= -1269 (12) */
+			0xb,		/* FC_HYPER */
+/* 1284 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 1286 */	
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x7,		/* 7 */
+/* 1288 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1290 */	0x9,		/* Corr desc: FC_ULONG */
+			0x0,		/*  */
+/* 1292 */	NdrFcShort( 0xfff8 ),	/* -8 */
+/* 1294 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 1296 */	0x0 , 
+			0x0,		/* 0 */
+/* 1298 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1302 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1306 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 1310 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 1312 */	0x0 , 
+			0x0,		/* 0 */
+/* 1314 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1318 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1322 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1324 */	NdrFcShort( 0xffc8 ),	/* Offset= -56 (1268) */
+/* 1326 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 1328 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 1330 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 1332 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (1286) */
+/* 1334 */	NdrFcShort( 0x0 ),	/* Offset= 0 (1334) */
+/* 1336 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1338 */	NdrFcShort( 0xffb0 ),	/* Offset= -80 (1258) */
+/* 1340 */	0x40,		/* FC_STRUCTPAD4 */
+			0x5b,		/* FC_END */
+/* 1342 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 1344 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 1346 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1348 */	NdrFcShort( 0xc ),	/* Offset= 12 (1360) */
+/* 1350 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1352 */	0x0,		/* 0 */
+			NdrFcShort( 0xff8d ),	/* Offset= -115 (1238) */
+			0x8,		/* FC_LONG */
+/* 1356 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 1358 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 1360 */	
 			0x12, 0x0,	/* FC_UP */
-/* 1260 */	NdrFcShort( 0xffb2 ),	/* Offset= -78 (1182) */
-/* 1262 */	
+/* 1362 */	NdrFcShort( 0xffec ),	/* Offset= -20 (1342) */
+/* 1364 */	
+			0x12, 0x0,	/* FC_UP */
+/* 1366 */	NdrFcShort( 0xfab6 ),	/* Offset= -1354 (12) */
+/* 1368 */	
+			0x12, 0x0,	/* FC_UP */
+/* 1370 */	NdrFcShort( 0xffd6 ),	/* Offset= -42 (1328) */
+/* 1372 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 1374 */	NdrFcShort( 0x78 ),	/* 120 */
+/* 1376 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1378 */	NdrFcShort( 0x20 ),	/* Offset= 32 (1410) */
+/* 1380 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1382 */	NdrFcShort( 0xfaa6 ),	/* Offset= -1370 (12) */
+/* 1384 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1386 */	NdrFcShort( 0xfaa2 ),	/* Offset= -1374 (12) */
+/* 1388 */	0x36,		/* FC_POINTER */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 1390 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1392 */	NdrFcShort( 0xfc0c ),	/* Offset= -1012 (380) */
+/* 1394 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1396 */	NdrFcShort( 0xfc08 ),	/* Offset= -1016 (380) */
+/* 1398 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1400 */	0x0,		/* 0 */
+			NdrFcShort( 0xfc7f ),	/* Offset= -897 (504) */
+			0x8,		/* FC_LONG */
+/* 1404 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 1406 */	0x36,		/* FC_POINTER */
+			0x8,		/* FC_LONG */
+/* 1408 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 1410 */	
+			0x12, 0x0,	/* FC_UP */
+/* 1412 */	NdrFcShort( 0xfb2e ),	/* Offset= -1234 (178) */
+/* 1414 */	
+			0x12, 0x0,	/* FC_UP */
+/* 1416 */	NdrFcShort( 0xfcb0 ),	/* Offset= -848 (568) */
+/* 1418 */	
+			0x12, 0x0,	/* FC_UP */
+/* 1420 */	NdrFcShort( 0xffb2 ),	/* Offset= -78 (1342) */
+/* 1422 */	
 			0x1b,		/* FC_CARRAY */
 			0x0,		/* 0 */
-/* 1264 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 1266 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 1424 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 1426 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 1268 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 1270 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 1272 */	0x0 , 
+/* 1428 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 1430 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 1432 */	0x0 , 
 			0x0,		/* 0 */
-/* 1274 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1278 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1282 */	0x2,		/* FC_CHAR */
+/* 1434 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1438 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1442 */	0x2,		/* FC_CHAR */
 			0x5b,		/* FC_END */
-/* 1284 */	
+/* 1444 */	
 			0x16,		/* FC_PSTRUCT */
 			0x3,		/* 3 */
-/* 1286 */	NdrFcShort( 0xc ),	/* 12 */
-/* 1288 */	
+/* 1446 */	NdrFcShort( 0xc ),	/* 12 */
+/* 1448 */	
 			0x4b,		/* FC_PP */
 			0x5c,		/* FC_PAD */
-/* 1290 */	
+/* 1450 */	
 			0x46,		/* FC_NO_REPEAT */
 			0x5c,		/* FC_PAD */
-/* 1292 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 1294 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 1296 */	0x12, 0x0,	/* FC_UP */
-/* 1298 */	NdrFcShort( 0xffdc ),	/* Offset= -36 (1262) */
-/* 1300 */	
+/* 1452 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 1454 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 1456 */	0x12, 0x0,	/* FC_UP */
+/* 1458 */	NdrFcShort( 0xffdc ),	/* Offset= -36 (1422) */
+/* 1460 */	
 			0x5b,		/* FC_END */
 
 			0x8,		/* FC_LONG */
-/* 1302 */	0x8,		/* FC_LONG */
+/* 1462 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 1304 */	0x5c,		/* FC_PAD */
+/* 1464 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 1306 */	0xb7,		/* FC_RANGE */
+/* 1466 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 1308 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1312 */	NdrFcLong( 0x100000 ),	/* 1048576 */
-/* 1316 */	0xb7,		/* FC_RANGE */
+/* 1468 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1472 */	NdrFcLong( 0x100000 ),	/* 1048576 */
+/* 1476 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 1318 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1322 */	NdrFcLong( 0x100000 ),	/* 1048576 */
-/* 1326 */	
+/* 1478 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1482 */	NdrFcLong( 0x100000 ),	/* 1048576 */
+/* 1486 */	
 			0x15,		/* FC_STRUCT */
 			0x7,		/* 7 */
-/* 1328 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 1330 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1488 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 1490 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 1332 */	NdrFcShort( 0xfad8 ),	/* Offset= -1320 (12) */
-/* 1334 */	0xb,		/* FC_HYPER */
+/* 1492 */	NdrFcShort( 0xfa38 ),	/* Offset= -1480 (12) */
+/* 1494 */	0xb,		/* FC_HYPER */
 			0xb,		/* FC_HYPER */
-/* 1336 */	0x5c,		/* FC_PAD */
+/* 1496 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 1338 */	
+/* 1498 */	
 			0x1b,		/* FC_CARRAY */
 			0x7,		/* 7 */
-/* 1340 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 1342 */	0x9,		/* Corr desc: FC_ULONG */
+/* 1500 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 1502 */	0x9,		/* Corr desc: FC_ULONG */
 			0x0,		/*  */
-/* 1344 */	NdrFcShort( 0xfff8 ),	/* -8 */
-/* 1346 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 1348 */	0x0 , 
+/* 1504 */	NdrFcShort( 0xfff8 ),	/* -8 */
+/* 1506 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 1508 */	0x0 , 
 			0x0,		/* 0 */
-/* 1350 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1354 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1358 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1510 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1514 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1518 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 1360 */	NdrFcShort( 0xffde ),	/* Offset= -34 (1326) */
-/* 1362 */	0x5c,		/* FC_PAD */
+/* 1520 */	NdrFcShort( 0xffde ),	/* Offset= -34 (1486) */
+/* 1522 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 1364 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+/* 1524 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
 			0x7,		/* 7 */
-/* 1366 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 1368 */	NdrFcShort( 0xffe2 ),	/* Offset= -30 (1338) */
-/* 1370 */	NdrFcShort( 0x0 ),	/* Offset= 0 (1370) */
-/* 1372 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 1374 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 1376 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (1316) */
-/* 1378 */	0x8,		/* FC_LONG */
-			0x5b,		/* FC_END */
-/* 1380 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 1382 */	NdrFcShort( 0x30 ),	/* 48 */
-/* 1384 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1386 */	NdrFcShort( 0x0 ),	/* Offset= 0 (1386) */
-/* 1388 */	0xb,		/* FC_HYPER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 1390 */	0x0,		/* 0 */
-			NdrFcShort( 0xfee5 ),	/* Offset= -283 (1108) */
-			0x5b,		/* FC_END */
-/* 1394 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 1396 */	NdrFcShort( 0x48 ),	/* 72 */
-/* 1398 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1400 */	NdrFcShort( 0x10 ),	/* Offset= 16 (1416) */
-/* 1402 */	0x36,		/* FC_POINTER */
-			0x8,		/* FC_LONG */
-/* 1404 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 1406 */	NdrFcShort( 0xfe20 ),	/* Offset= -480 (926) */
-/* 1408 */	0x8,		/* FC_LONG */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 1410 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 1412 */	NdrFcShort( 0xffe0 ),	/* Offset= -32 (1380) */
-/* 1414 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 1416 */	
-			0x12, 0x0,	/* FC_UP */
-/* 1418 */	NdrFcShort( 0xfb22 ),	/* Offset= -1246 (172) */
-/* 1420 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x7,		/* 7 */
-/* 1422 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1424 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 1426 */	NdrFcShort( 0x80 ),	/* 128 */
-/* 1428 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 1430 */	0x0 , 
-			0x0,		/* 0 */
-/* 1432 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1436 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1440 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 1444 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 1446 */	0x0 , 
-			0x0,		/* 0 */
-/* 1448 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1452 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1456 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 1458 */	NdrFcShort( 0xffc0 ),	/* Offset= -64 (1394) */
-/* 1460 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 1462 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 1464 */	NdrFcShort( 0x90 ),	/* 144 */
-/* 1466 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1468 */	NdrFcShort( 0x28 ),	/* Offset= 40 (1508) */
-/* 1470 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 1472 */	NdrFcShort( 0xfa4c ),	/* Offset= -1460 (12) */
-/* 1474 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 1476 */	NdrFcShort( 0xfa48 ),	/* Offset= -1464 (12) */
-/* 1478 */	0x36,		/* FC_POINTER */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 1480 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 1482 */	NdrFcShort( 0xfb54 ),	/* Offset= -1196 (286) */
-/* 1484 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 1486 */	NdrFcShort( 0xfb50 ),	/* Offset= -1200 (286) */
-/* 1488 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 1490 */	0x0,		/* 0 */
-			NdrFcShort( 0xfbc7 ),	/* Offset= -1081 (410) */
-			0x8,		/* FC_LONG */
-/* 1494 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 1496 */	0x36,		/* FC_POINTER */
-			0x8,		/* FC_LONG */
-/* 1498 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 1500 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 1502 */	NdrFcShort( 0xff3c ),	/* Offset= -196 (1306) */
-/* 1504 */	0x36,		/* FC_POINTER */
-			0x8,		/* FC_LONG */
-/* 1506 */	0x40,		/* FC_STRUCTPAD4 */
-			0x5b,		/* FC_END */
-/* 1508 */	
-			0x12, 0x0,	/* FC_UP */
-/* 1510 */	NdrFcShort( 0xfac6 ),	/* Offset= -1338 (172) */
-/* 1512 */	
-			0x12, 0x0,	/* FC_UP */
-/* 1514 */	NdrFcShort( 0xff6a ),	/* Offset= -150 (1364) */
-/* 1516 */	
-			0x12, 0x0,	/* FC_UP */
-/* 1518 */	NdrFcShort( 0xfeb0 ),	/* Offset= -336 (1182) */
-/* 1520 */	
-			0x12, 0x0,	/* FC_UP */
-/* 1522 */	NdrFcShort( 0xff9a ),	/* Offset= -102 (1420) */
-/* 1524 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 1526 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 1528 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1526 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 1528 */	NdrFcShort( 0xffe2 ),	/* Offset= -30 (1498) */
 /* 1530 */	NdrFcShort( 0x0 ),	/* Offset= 0 (1530) */
 /* 1532 */	0x8,		/* FC_LONG */
-			0xd,		/* FC_ENUM16 */
+			0x8,		/* FC_LONG */
 /* 1534 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 1536 */	NdrFcShort( 0xff04 ),	/* Offset= -252 (1284) */
-/* 1538 */	0x5c,		/* FC_PAD */
+/* 1536 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (1476) */
+/* 1538 */	0x8,		/* FC_LONG */
 			0x5b,		/* FC_END */
-/* 1540 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 1542 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1546 */	NdrFcLong( 0x100000 ),	/* 1048576 */
-/* 1550 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+/* 1540 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
 			0x7,		/* 7 */
-/* 1552 */	NdrFcShort( 0x48 ),	/* 72 */
-/* 1554 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1556 */	NdrFcShort( 0x0 ),	/* Offset= 0 (1556) */
-/* 1558 */	0xb,		/* FC_HYPER */
+/* 1542 */	NdrFcShort( 0x30 ),	/* 48 */
+/* 1544 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1546 */	NdrFcShort( 0x0 ),	/* Offset= 0 (1546) */
+/* 1548 */	0xb,		/* FC_HYPER */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 1560 */	0x0,		/* 0 */
-			NdrFcShort( 0xfe3b ),	/* Offset= -453 (1108) */
-			0x8,		/* FC_LONG */
-/* 1564 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 1566 */	0x40,		/* FC_STRUCTPAD4 */
-			0xb,		/* FC_HYPER */
-/* 1568 */	0x5c,		/* FC_PAD */
+/* 1550 */	0x0,		/* 0 */
+			NdrFcShort( 0xfee5 ),	/* Offset= -283 (1268) */
 			0x5b,		/* FC_END */
-/* 1570 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+/* 1554 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
 			0x7,		/* 7 */
-/* 1572 */	NdrFcShort( 0x60 ),	/* 96 */
-/* 1574 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1576 */	NdrFcShort( 0x10 ),	/* Offset= 16 (1592) */
-/* 1578 */	0x36,		/* FC_POINTER */
+/* 1556 */	NdrFcShort( 0x48 ),	/* 72 */
+/* 1558 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1560 */	NdrFcShort( 0x10 ),	/* Offset= 16 (1576) */
+/* 1562 */	0x36,		/* FC_POINTER */
 			0x8,		/* FC_LONG */
-/* 1580 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1564 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 1582 */	NdrFcShort( 0xfd70 ),	/* Offset= -656 (926) */
-/* 1584 */	0x8,		/* FC_LONG */
+/* 1566 */	NdrFcShort( 0xfe20 ),	/* Offset= -480 (1086) */
+/* 1568 */	0x8,		/* FC_LONG */
 			0x40,		/* FC_STRUCTPAD4 */
-/* 1586 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1570 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 1588 */	NdrFcShort( 0xffda ),	/* Offset= -38 (1550) */
-/* 1590 */	0x5c,		/* FC_PAD */
+/* 1572 */	NdrFcShort( 0xffe0 ),	/* Offset= -32 (1540) */
+/* 1574 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 1592 */	
+/* 1576 */	
 			0x12, 0x0,	/* FC_UP */
-/* 1594 */	NdrFcShort( 0xfa72 ),	/* Offset= -1422 (172) */
-/* 1596 */	
+/* 1578 */	NdrFcShort( 0xfa88 ),	/* Offset= -1400 (178) */
+/* 1580 */	
 			0x21,		/* FC_BOGUS_ARRAY */
 			0x7,		/* 7 */
-/* 1598 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1600 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 1582 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1584 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 1602 */	NdrFcShort( 0x80 ),	/* 128 */
-/* 1604 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 1586 */	NdrFcShort( 0x80 ),	/* 128 */
+/* 1588 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 1590 */	0x0 , 
+			0x0,		/* 0 */
+/* 1592 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1596 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1600 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 1604 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
 /* 1606 */	0x0 , 
 			0x0,		/* 0 */
 /* 1608 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 1612 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1616 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 1620 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 1622 */	0x0 , 
+/* 1616 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 1624 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1628 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1632 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 1634 */	NdrFcShort( 0xffc0 ),	/* Offset= -64 (1570) */
-/* 1636 */	0x5c,		/* FC_PAD */
+/* 1618 */	NdrFcShort( 0xffc0 ),	/* Offset= -64 (1554) */
+/* 1620 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 1638 */	
+/* 1622 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x7,		/* 7 */
-/* 1640 */	NdrFcShort( 0x90 ),	/* 144 */
-/* 1642 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1644 */	NdrFcShort( 0x28 ),	/* Offset= 40 (1684) */
-/* 1646 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1624 */	NdrFcShort( 0x90 ),	/* 144 */
+/* 1626 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1628 */	NdrFcShort( 0x28 ),	/* Offset= 40 (1668) */
+/* 1630 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 1648 */	NdrFcShort( 0xf99c ),	/* Offset= -1636 (12) */
-/* 1650 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1632 */	NdrFcShort( 0xf9ac ),	/* Offset= -1620 (12) */
+/* 1634 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 1652 */	NdrFcShort( 0xf998 ),	/* Offset= -1640 (12) */
-/* 1654 */	0x36,		/* FC_POINTER */
+/* 1636 */	NdrFcShort( 0xf9a8 ),	/* Offset= -1624 (12) */
+/* 1638 */	0x36,		/* FC_POINTER */
 			0x40,		/* FC_STRUCTPAD4 */
-/* 1656 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1640 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 1658 */	NdrFcShort( 0xfaa4 ),	/* Offset= -1372 (286) */
+/* 1642 */	NdrFcShort( 0xfb12 ),	/* Offset= -1262 (380) */
+/* 1644 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1646 */	NdrFcShort( 0xfb0e ),	/* Offset= -1266 (380) */
+/* 1648 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1650 */	0x0,		/* 0 */
+			NdrFcShort( 0xfb85 ),	/* Offset= -1147 (504) */
+			0x8,		/* FC_LONG */
+/* 1654 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 1656 */	0x36,		/* FC_POINTER */
+			0x8,		/* FC_LONG */
+/* 1658 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
 /* 1660 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 1662 */	NdrFcShort( 0xfaa0 ),	/* Offset= -1376 (286) */
+/* 1662 */	NdrFcShort( 0xff3c ),	/* Offset= -196 (1466) */
 /* 1664 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 1666 */	0x0,		/* 0 */
-			NdrFcShort( 0xfb17 ),	/* Offset= -1257 (410) */
 			0x8,		/* FC_LONG */
-/* 1670 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 1672 */	0x36,		/* FC_POINTER */
-			0x8,		/* FC_LONG */
-/* 1674 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 1676 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 1678 */	NdrFcShort( 0xff76 ),	/* Offset= -138 (1540) */
-/* 1680 */	0x36,		/* FC_POINTER */
-			0x8,		/* FC_LONG */
-/* 1682 */	0x40,		/* FC_STRUCTPAD4 */
+/* 1666 */	0x40,		/* FC_STRUCTPAD4 */
 			0x5b,		/* FC_END */
+/* 1668 */	
+			0x12, 0x0,	/* FC_UP */
+/* 1670 */	NdrFcShort( 0xfa2c ),	/* Offset= -1492 (178) */
+/* 1672 */	
+			0x12, 0x0,	/* FC_UP */
+/* 1674 */	NdrFcShort( 0xff6a ),	/* Offset= -150 (1524) */
+/* 1676 */	
+			0x12, 0x0,	/* FC_UP */
+/* 1678 */	NdrFcShort( 0xfeb0 ),	/* Offset= -336 (1342) */
+/* 1680 */	
+			0x12, 0x0,	/* FC_UP */
+/* 1682 */	NdrFcShort( 0xff9a ),	/* Offset= -102 (1580) */
 /* 1684 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 1686 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 1688 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1690 */	NdrFcShort( 0x0 ),	/* Offset= 0 (1690) */
+/* 1692 */	0x8,		/* FC_LONG */
+			0xd,		/* FC_ENUM16 */
+/* 1694 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1696 */	NdrFcShort( 0xff04 ),	/* Offset= -252 (1444) */
+/* 1698 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 1700 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 1702 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1706 */	NdrFcLong( 0x100000 ),	/* 1048576 */
+/* 1710 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 1712 */	NdrFcShort( 0x48 ),	/* 72 */
+/* 1714 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1716 */	NdrFcShort( 0x0 ),	/* Offset= 0 (1716) */
+/* 1718 */	0xb,		/* FC_HYPER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1720 */	0x0,		/* 0 */
+			NdrFcShort( 0xfe3b ),	/* Offset= -453 (1268) */
+			0x8,		/* FC_LONG */
+/* 1724 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 1726 */	0x40,		/* FC_STRUCTPAD4 */
+			0xb,		/* FC_HYPER */
+/* 1728 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 1730 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 1732 */	NdrFcShort( 0x60 ),	/* 96 */
+/* 1734 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1736 */	NdrFcShort( 0x10 ),	/* Offset= 16 (1752) */
+/* 1738 */	0x36,		/* FC_POINTER */
+			0x8,		/* FC_LONG */
+/* 1740 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1742 */	NdrFcShort( 0xfd70 ),	/* Offset= -656 (1086) */
+/* 1744 */	0x8,		/* FC_LONG */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 1746 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1748 */	NdrFcShort( 0xffda ),	/* Offset= -38 (1710) */
+/* 1750 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 1752 */	
 			0x12, 0x0,	/* FC_UP */
-/* 1686 */	NdrFcShort( 0xfa16 ),	/* Offset= -1514 (172) */
-/* 1688 */	
+/* 1754 */	NdrFcShort( 0xf9d8 ),	/* Offset= -1576 (178) */
+/* 1756 */	
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x7,		/* 7 */
+/* 1758 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1760 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 1762 */	NdrFcShort( 0x80 ),	/* 128 */
+/* 1764 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 1766 */	0x0 , 
+			0x0,		/* 0 */
+/* 1768 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1772 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1776 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 1780 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 1782 */	0x0 , 
+			0x0,		/* 0 */
+/* 1784 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1788 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1792 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1794 */	NdrFcShort( 0xffc0 ),	/* Offset= -64 (1730) */
+/* 1796 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 1798 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 1800 */	NdrFcShort( 0x90 ),	/* 144 */
+/* 1802 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1804 */	NdrFcShort( 0x28 ),	/* Offset= 40 (1844) */
+/* 1806 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1808 */	NdrFcShort( 0xf8fc ),	/* Offset= -1796 (12) */
+/* 1810 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1812 */	NdrFcShort( 0xf8f8 ),	/* Offset= -1800 (12) */
+/* 1814 */	0x36,		/* FC_POINTER */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 1816 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1818 */	NdrFcShort( 0xfa62 ),	/* Offset= -1438 (380) */
+/* 1820 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1822 */	NdrFcShort( 0xfa5e ),	/* Offset= -1442 (380) */
+/* 1824 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1826 */	0x0,		/* 0 */
+			NdrFcShort( 0xfad5 ),	/* Offset= -1323 (504) */
+			0x8,		/* FC_LONG */
+/* 1830 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 1832 */	0x36,		/* FC_POINTER */
+			0x8,		/* FC_LONG */
+/* 1834 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 1836 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1838 */	NdrFcShort( 0xff76 ),	/* Offset= -138 (1700) */
+/* 1840 */	0x36,		/* FC_POINTER */
+			0x8,		/* FC_LONG */
+/* 1842 */	0x40,		/* FC_STRUCTPAD4 */
+			0x5b,		/* FC_END */
+/* 1844 */	
 			0x12, 0x0,	/* FC_UP */
-/* 1690 */	NdrFcShort( 0xfeba ),	/* Offset= -326 (1364) */
-/* 1692 */	
+/* 1846 */	NdrFcShort( 0xf97c ),	/* Offset= -1668 (178) */
+/* 1848 */	
 			0x12, 0x0,	/* FC_UP */
-/* 1694 */	NdrFcShort( 0xfe00 ),	/* Offset= -512 (1182) */
-/* 1696 */	
+/* 1850 */	NdrFcShort( 0xfeba ),	/* Offset= -326 (1524) */
+/* 1852 */	
 			0x12, 0x0,	/* FC_UP */
-/* 1698 */	NdrFcShort( 0xff9a ),	/* Offset= -102 (1596) */
-/* 1700 */	
+/* 1854 */	NdrFcShort( 0xfe00 ),	/* Offset= -512 (1342) */
+/* 1856 */	
+			0x12, 0x0,	/* FC_UP */
+/* 1858 */	NdrFcShort( 0xff9a ),	/* Offset= -102 (1756) */
+/* 1860 */	
 			0x11, 0x0,	/* FC_RP */
-/* 1702 */	NdrFcShort( 0x2 ),	/* Offset= 2 (1704) */
-/* 1704 */	
+/* 1862 */	NdrFcShort( 0x2 ),	/* Offset= 2 (1864) */
+/* 1864 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 1706 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 1866 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x0,		/*  */
-/* 1708 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 1710 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 1712 */	0x0 , 
+/* 1868 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 1870 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 1872 */	0x0 , 
 			0x0,		/* 0 */
-/* 1714 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1718 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1722 */	NdrFcShort( 0x2 ),	/* Offset= 2 (1724) */
-/* 1724 */	NdrFcShort( 0x1c ),	/* 28 */
-/* 1726 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 1728 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 1732 */	NdrFcShort( 0x4 ),	/* Offset= 4 (1736) */
-/* 1734 */	NdrFcShort( 0xffff ),	/* Offset= -1 (1733) */
-/* 1736 */	
+/* 1874 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1878 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1882 */	NdrFcShort( 0x2 ),	/* Offset= 2 (1884) */
+/* 1884 */	NdrFcShort( 0x30 ),	/* 48 */
+/* 1886 */	NdrFcShort( 0x2 ),	/* 2 */
+/* 1888 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 1892 */	NdrFcShort( 0xa ),	/* Offset= 10 (1902) */
+/* 1894 */	NdrFcLong( 0x2 ),	/* 2 */
+/* 1898 */	NdrFcShort( 0x28 ),	/* Offset= 40 (1938) */
+/* 1900 */	NdrFcShort( 0xffff ),	/* Offset= -1 (1899) */
+/* 1902 */	
 			0x16,		/* FC_PSTRUCT */
 			0x3,		/* 3 */
-/* 1738 */	NdrFcShort( 0x1c ),	/* 28 */
-/* 1740 */	
+/* 1904 */	NdrFcShort( 0x1c ),	/* 28 */
+/* 1906 */	
 			0x4b,		/* FC_PP */
 			0x5c,		/* FC_PAD */
-/* 1742 */	
+/* 1908 */	
 			0x46,		/* FC_NO_REPEAT */
 			0x5c,		/* FC_PAD */
-/* 1744 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1746 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1748 */	0x11, 0x0,	/* FC_RP */
-/* 1750 */	NdrFcShort( 0xf9d6 ),	/* Offset= -1578 (172) */
-/* 1752 */	
+/* 1910 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1912 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1914 */	0x11, 0x0,	/* FC_RP */
+/* 1916 */	NdrFcShort( 0xf936 ),	/* Offset= -1738 (178) */
+/* 1918 */	
 			0x46,		/* FC_NO_REPEAT */
 			0x5c,		/* FC_PAD */
-/* 1754 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 1756 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 1758 */	0x11, 0x8,	/* FC_RP [simple_pointer] */
-/* 1760 */	
+/* 1920 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 1922 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 1924 */	0x11, 0x8,	/* FC_RP [simple_pointer] */
+/* 1926 */	
 			0x22,		/* FC_C_CSTRING */
 			0x5c,		/* FC_PAD */
-/* 1762 */	
+/* 1928 */	
 			0x5b,		/* FC_END */
 
 			0x8,		/* FC_LONG */
-/* 1764 */	0x8,		/* FC_LONG */
+/* 1930 */	0x8,		/* FC_LONG */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 1766 */	0x0,		/* 0 */
-			NdrFcShort( 0xf925 ),	/* Offset= -1755 (12) */
+/* 1932 */	0x0,		/* 0 */
+			NdrFcShort( 0xf87f ),	/* Offset= -1921 (12) */
 			0x8,		/* FC_LONG */
-/* 1770 */	0x5c,		/* FC_PAD */
+/* 1936 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 1772 */	
+/* 1938 */	
+			0x16,		/* FC_PSTRUCT */
+			0x3,		/* 3 */
+/* 1940 */	NdrFcShort( 0x30 ),	/* 48 */
+/* 1942 */	
+			0x4b,		/* FC_PP */
+			0x5c,		/* FC_PAD */
+/* 1944 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 1946 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1948 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1950 */	0x11, 0x0,	/* FC_RP */
+/* 1952 */	NdrFcShort( 0xf912 ),	/* Offset= -1774 (178) */
+/* 1954 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 1956 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 1958 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 1960 */	0x11, 0x8,	/* FC_RP [simple_pointer] */
+/* 1962 */	
+			0x22,		/* FC_C_CSTRING */
+			0x5c,		/* FC_PAD */
+/* 1964 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 1966 */	NdrFcShort( 0x2c ),	/* 44 */
+/* 1968 */	NdrFcShort( 0x2c ),	/* 44 */
+/* 1970 */	0x12, 0x0,	/* FC_UP */
+/* 1972 */	NdrFcShort( 0xf94a ),	/* Offset= -1718 (254) */
+/* 1974 */	
+			0x5b,		/* FC_END */
+
+			0x8,		/* FC_LONG */
+/* 1976 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1978 */	0x0,		/* 0 */
+			NdrFcShort( 0xf851 ),	/* Offset= -1967 (12) */
+			0x8,		/* FC_LONG */
+/* 1982 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1984 */	NdrFcShort( 0xf84c ),	/* Offset= -1972 (12) */
+/* 1986 */	0x8,		/* FC_LONG */
+			0x5b,		/* FC_END */
+/* 1988 */	
 			0x11, 0x0,	/* FC_RP */
-/* 1774 */	NdrFcShort( 0x2 ),	/* Offset= 2 (1776) */
-/* 1776 */	
+/* 1990 */	NdrFcShort( 0x2 ),	/* Offset= 2 (1992) */
+/* 1992 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 1778 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 1994 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x0,		/*  */
-/* 1780 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 1782 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 1784 */	0x0 , 
+/* 1996 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 1998 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 2000 */	0x0 , 
 			0x0,		/* 0 */
-/* 1786 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1790 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1794 */	NdrFcShort( 0x2 ),	/* Offset= 2 (1796) */
-/* 1796 */	NdrFcShort( 0x68 ),	/* 104 */
-/* 1798 */	NdrFcShort( 0x2 ),	/* 2 */
-/* 1800 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 1804 */	NdrFcShort( 0x1a ),	/* Offset= 26 (1830) */
-/* 1806 */	NdrFcLong( 0x2 ),	/* 2 */
-/* 1810 */	NdrFcShort( 0x38 ),	/* Offset= 56 (1866) */
-/* 1812 */	NdrFcShort( 0xffff ),	/* Offset= -1 (1811) */
-/* 1814 */	
+/* 2002 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2006 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2010 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2012) */
+/* 2012 */	NdrFcShort( 0x7c ),	/* 124 */
+/* 2014 */	NdrFcShort( 0x3 ),	/* 3 */
+/* 2016 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 2020 */	NdrFcShort( 0x20 ),	/* Offset= 32 (2052) */
+/* 2022 */	NdrFcLong( 0x2 ),	/* 2 */
+/* 2026 */	NdrFcShort( 0x3e ),	/* Offset= 62 (2088) */
+/* 2028 */	NdrFcLong( 0x3 ),	/* 3 */
+/* 2032 */	NdrFcShort( 0x72 ),	/* Offset= 114 (2146) */
+/* 2034 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2033) */
+/* 2036 */	
 			0x1d,		/* FC_SMFARRAY */
 			0x0,		/* 0 */
-/* 1816 */	NdrFcShort( 0x54 ),	/* 84 */
-/* 1818 */	0x2,		/* FC_CHAR */
+/* 2038 */	NdrFcShort( 0x54 ),	/* 84 */
+/* 2040 */	0x2,		/* FC_CHAR */
 			0x5b,		/* FC_END */
-/* 1820 */	
+/* 2042 */	
 			0x15,		/* FC_STRUCT */
 			0x0,		/* 0 */
-/* 1822 */	NdrFcShort( 0x54 ),	/* 84 */
-/* 1824 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 2044 */	NdrFcShort( 0x54 ),	/* 84 */
+/* 2046 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 1826 */	NdrFcShort( 0xfff4 ),	/* Offset= -12 (1814) */
-/* 1828 */	0x5c,		/* FC_PAD */
+/* 2048 */	NdrFcShort( 0xfff4 ),	/* Offset= -12 (2036) */
+/* 2050 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 1830 */	
-			0x16,		/* FC_PSTRUCT */
-			0x3,		/* 3 */
-/* 1832 */	NdrFcShort( 0x60 ),	/* 96 */
-/* 1834 */	
-			0x4b,		/* FC_PP */
-			0x5c,		/* FC_PAD */
-/* 1836 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 1838 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1840 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1842 */	0x11, 0x0,	/* FC_RP */
-/* 1844 */	NdrFcShort( 0xf978 ),	/* Offset= -1672 (172) */
-/* 1846 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 1848 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 1850 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 1852 */	0x11, 0x8,	/* FC_RP [simple_pointer] */
-/* 1854 */	
-			0x22,		/* FC_C_CSTRING */
-			0x5c,		/* FC_PAD */
-/* 1856 */	
-			0x5b,		/* FC_END */
-
-			0x8,		/* FC_LONG */
-/* 1858 */	0x8,		/* FC_LONG */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 1860 */	0x0,		/* 0 */
-			NdrFcShort( 0xffd7 ),	/* Offset= -41 (1820) */
-			0x8,		/* FC_LONG */
-/* 1864 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 1866 */	
-			0x16,		/* FC_PSTRUCT */
-			0x3,		/* 3 */
-/* 1868 */	NdrFcShort( 0x68 ),	/* 104 */
-/* 1870 */	
-			0x4b,		/* FC_PP */
-			0x5c,		/* FC_PAD */
-/* 1872 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 1874 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1876 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1878 */	0x11, 0x0,	/* FC_RP */
-/* 1880 */	NdrFcShort( 0xf954 ),	/* Offset= -1708 (172) */
-/* 1882 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 1884 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 1886 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 1888 */	0x12, 0x0,	/* FC_UP */
-/* 1890 */	NdrFcShort( 0xf94a ),	/* Offset= -1718 (172) */
-/* 1892 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 1894 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 1896 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 1898 */	0x12, 0x0,	/* FC_UP */
-/* 1900 */	NdrFcShort( 0xf940 ),	/* Offset= -1728 (172) */
-/* 1902 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 1904 */	NdrFcShort( 0xc ),	/* 12 */
-/* 1906 */	NdrFcShort( 0xc ),	/* 12 */
-/* 1908 */	0x11, 0x8,	/* FC_RP [simple_pointer] */
-/* 1910 */	
-			0x22,		/* FC_C_CSTRING */
-			0x5c,		/* FC_PAD */
-/* 1912 */	
-			0x5b,		/* FC_END */
-
-			0x8,		/* FC_LONG */
-/* 1914 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 1916 */	0x8,		/* FC_LONG */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 1918 */	0x0,		/* 0 */
-			NdrFcShort( 0xff9d ),	/* Offset= -99 (1820) */
-			0x8,		/* FC_LONG */
-/* 1922 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 1924 */	
-			0x11, 0x0,	/* FC_RP */
-/* 1926 */	NdrFcShort( 0x2 ),	/* Offset= 2 (1928) */
-/* 1928 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 1930 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 1932 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 1934 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 1936 */	0x0 , 
-			0x0,		/* 0 */
-/* 1938 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1942 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1946 */	NdrFcShort( 0x2 ),	/* Offset= 2 (1948) */
-/* 1948 */	NdrFcShort( 0xc ),	/* 12 */
-/* 1950 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 1952 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 1956 */	NdrFcShort( 0x4 ),	/* Offset= 4 (1960) */
-/* 1958 */	NdrFcShort( 0xffff ),	/* Offset= -1 (1957) */
-/* 1960 */	
-			0x16,		/* FC_PSTRUCT */
-			0x3,		/* 3 */
-/* 1962 */	NdrFcShort( 0xc ),	/* 12 */
-/* 1964 */	
-			0x4b,		/* FC_PP */
-			0x5c,		/* FC_PAD */
-/* 1966 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 1968 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1970 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1972 */	0x11, 0x0,	/* FC_RP */
-/* 1974 */	NdrFcShort( 0xf8f6 ),	/* Offset= -1802 (172) */
-/* 1976 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 1978 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 1980 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 1982 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 1984 */	
-			0x22,		/* FC_C_CSTRING */
-			0x5c,		/* FC_PAD */
-/* 1986 */	
-			0x5b,		/* FC_END */
-
-			0x8,		/* FC_LONG */
-/* 1988 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 1990 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 1992 */	
-			0x11, 0x0,	/* FC_RP */
-/* 1994 */	NdrFcShort( 0x2 ),	/* Offset= 2 (1996) */
-/* 1996 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 1998 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 2000 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 2002 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2004 */	0x0 , 
-			0x0,		/* 0 */
-/* 2006 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2010 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2014 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2016) */
-/* 2016 */	NdrFcShort( 0x78 ),	/* 120 */
-/* 2018 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 2020 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 2024 */	NdrFcShort( 0x4 ),	/* Offset= 4 (2028) */
-/* 2026 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2025) */
-/* 2028 */	
-			0x16,		/* FC_PSTRUCT */
-			0x3,		/* 3 */
-/* 2030 */	NdrFcShort( 0x78 ),	/* 120 */
-/* 2032 */	
-			0x4b,		/* FC_PP */
-			0x5c,		/* FC_PAD */
-/* 2034 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 2036 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2038 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2040 */	0x11, 0x0,	/* FC_RP */
-/* 2042 */	NdrFcShort( 0xf8b2 ),	/* Offset= -1870 (172) */
-/* 2044 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 2046 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 2048 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 2050 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
 /* 2052 */	
+			0x16,		/* FC_PSTRUCT */
+			0x3,		/* 3 */
+/* 2054 */	NdrFcShort( 0x60 ),	/* 96 */
+/* 2056 */	
+			0x4b,		/* FC_PP */
+			0x5c,		/* FC_PAD */
+/* 2058 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 2060 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2062 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2064 */	0x11, 0x0,	/* FC_RP */
+/* 2066 */	NdrFcShort( 0xf8a0 ),	/* Offset= -1888 (178) */
+/* 2068 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 2070 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 2072 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 2074 */	0x11, 0x8,	/* FC_RP [simple_pointer] */
+/* 2076 */	
 			0x22,		/* FC_C_CSTRING */
 			0x5c,		/* FC_PAD */
-/* 2054 */	
+/* 2078 */	
 			0x5b,		/* FC_END */
 
 			0x8,		/* FC_LONG */
-/* 2056 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 2058 */	NdrFcShort( 0xf802 ),	/* Offset= -2046 (12) */
-/* 2060 */	0x8,		/* FC_LONG */
+/* 2080 */	0x8,		/* FC_LONG */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 2062 */	0x0,		/* 0 */
-			NdrFcShort( 0xff0d ),	/* Offset= -243 (1820) */
+/* 2082 */	0x0,		/* 0 */
+			NdrFcShort( 0xffd7 ),	/* Offset= -41 (2042) */
 			0x8,		/* FC_LONG */
-/* 2066 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 2068 */	0x5c,		/* FC_PAD */
+/* 2086 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 2070 */	
+/* 2088 */	
+			0x16,		/* FC_PSTRUCT */
+			0x3,		/* 3 */
+/* 2090 */	NdrFcShort( 0x68 ),	/* 104 */
+/* 2092 */	
+			0x4b,		/* FC_PP */
+			0x5c,		/* FC_PAD */
+/* 2094 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 2096 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2098 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2100 */	0x11, 0x0,	/* FC_RP */
+/* 2102 */	NdrFcShort( 0xf87c ),	/* Offset= -1924 (178) */
+/* 2104 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 2106 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 2108 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 2110 */	0x12, 0x0,	/* FC_UP */
+/* 2112 */	NdrFcShort( 0xf872 ),	/* Offset= -1934 (178) */
+/* 2114 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 2116 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 2118 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 2120 */	0x12, 0x0,	/* FC_UP */
+/* 2122 */	NdrFcShort( 0xf868 ),	/* Offset= -1944 (178) */
+/* 2124 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 2126 */	NdrFcShort( 0xc ),	/* 12 */
+/* 2128 */	NdrFcShort( 0xc ),	/* 12 */
+/* 2130 */	0x11, 0x8,	/* FC_RP [simple_pointer] */
+/* 2132 */	
+			0x22,		/* FC_C_CSTRING */
+			0x5c,		/* FC_PAD */
+/* 2134 */	
+			0x5b,		/* FC_END */
+
+			0x8,		/* FC_LONG */
+/* 2136 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 2138 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 2140 */	0x0,		/* 0 */
+			NdrFcShort( 0xff9d ),	/* Offset= -99 (2042) */
+			0x8,		/* FC_LONG */
+/* 2144 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 2146 */	
+			0x16,		/* FC_PSTRUCT */
+			0x3,		/* 3 */
+/* 2148 */	NdrFcShort( 0x7c ),	/* 124 */
+/* 2150 */	
+			0x4b,		/* FC_PP */
+			0x5c,		/* FC_PAD */
+/* 2152 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 2154 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2156 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2158 */	0x11, 0x0,	/* FC_RP */
+/* 2160 */	NdrFcShort( 0xf842 ),	/* Offset= -1982 (178) */
+/* 2162 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 2164 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 2166 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 2168 */	0x12, 0x0,	/* FC_UP */
+/* 2170 */	NdrFcShort( 0xf838 ),	/* Offset= -1992 (178) */
+/* 2172 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 2174 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 2176 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 2178 */	0x12, 0x0,	/* FC_UP */
+/* 2180 */	NdrFcShort( 0xf82e ),	/* Offset= -2002 (178) */
+/* 2182 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 2184 */	NdrFcShort( 0xc ),	/* 12 */
+/* 2186 */	NdrFcShort( 0xc ),	/* 12 */
+/* 2188 */	0x11, 0x8,	/* FC_RP [simple_pointer] */
+/* 2190 */	
+			0x22,		/* FC_C_CSTRING */
+			0x5c,		/* FC_PAD */
+/* 2192 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 2194 */	NdrFcShort( 0x78 ),	/* 120 */
+/* 2196 */	NdrFcShort( 0x78 ),	/* 120 */
+/* 2198 */	0x12, 0x0,	/* FC_UP */
+/* 2200 */	NdrFcShort( 0xf866 ),	/* Offset= -1946 (254) */
+/* 2202 */	
+			0x5b,		/* FC_END */
+
+			0x8,		/* FC_LONG */
+/* 2204 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 2206 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 2208 */	0x0,		/* 0 */
+			NdrFcShort( 0xff59 ),	/* Offset= -167 (2042) */
+			0x8,		/* FC_LONG */
+/* 2212 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 2214 */	NdrFcShort( 0xf766 ),	/* Offset= -2202 (12) */
+/* 2216 */	0x8,		/* FC_LONG */
+			0x5b,		/* FC_END */
+/* 2218 */	
 			0x11, 0x0,	/* FC_RP */
-/* 2072 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2074) */
-/* 2074 */	
+/* 2220 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2222) */
+/* 2222 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 2076 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 2224 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x0,		/*  */
-/* 2078 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 2080 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2082 */	0x0 , 
+/* 2226 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 2228 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 2230 */	0x0 , 
 			0x0,		/* 0 */
-/* 2084 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2088 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2092 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2094) */
-/* 2094 */	NdrFcShort( 0x1c ),	/* 28 */
-/* 2096 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 2098 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 2102 */	NdrFcShort( 0x38 ),	/* Offset= 56 (2158) */
-/* 2104 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2103) */
-/* 2106 */	0xb7,		/* FC_RANGE */
+/* 2232 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2236 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2240 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2242) */
+/* 2242 */	NdrFcShort( 0xc ),	/* 12 */
+/* 2244 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 2246 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 2250 */	NdrFcShort( 0x4 ),	/* Offset= 4 (2254) */
+/* 2252 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2251) */
+/* 2254 */	
+			0x16,		/* FC_PSTRUCT */
+			0x3,		/* 3 */
+/* 2256 */	NdrFcShort( 0xc ),	/* 12 */
+/* 2258 */	
+			0x4b,		/* FC_PP */
+			0x5c,		/* FC_PAD */
+/* 2260 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 2262 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2264 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2266 */	0x11, 0x0,	/* FC_RP */
+/* 2268 */	NdrFcShort( 0xf7d6 ),	/* Offset= -2090 (178) */
+/* 2270 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 2272 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 2274 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 2276 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 2278 */	
+			0x22,		/* FC_C_CSTRING */
+			0x5c,		/* FC_PAD */
+/* 2280 */	
+			0x5b,		/* FC_END */
+
+			0x8,		/* FC_LONG */
+/* 2282 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 2284 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 2286 */	
+			0x11, 0x0,	/* FC_RP */
+/* 2288 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2290) */
+/* 2290 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 2292 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 2294 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 2296 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 2298 */	0x0 , 
+			0x0,		/* 0 */
+/* 2300 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2304 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2308 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2310) */
+/* 2310 */	NdrFcShort( 0x78 ),	/* 120 */
+/* 2312 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 2314 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 2318 */	NdrFcShort( 0x4 ),	/* Offset= 4 (2322) */
+/* 2320 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2319) */
+/* 2322 */	
+			0x16,		/* FC_PSTRUCT */
+			0x3,		/* 3 */
+/* 2324 */	NdrFcShort( 0x78 ),	/* 120 */
+/* 2326 */	
+			0x4b,		/* FC_PP */
+			0x5c,		/* FC_PAD */
+/* 2328 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 2330 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2332 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2334 */	0x11, 0x0,	/* FC_RP */
+/* 2336 */	NdrFcShort( 0xf792 ),	/* Offset= -2158 (178) */
+/* 2338 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 2340 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 2342 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 2344 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 2346 */	
+			0x22,		/* FC_C_CSTRING */
+			0x5c,		/* FC_PAD */
+/* 2348 */	
+			0x5b,		/* FC_END */
+
+			0x8,		/* FC_LONG */
+/* 2350 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 2352 */	NdrFcShort( 0xf6dc ),	/* Offset= -2340 (12) */
+/* 2354 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 2356 */	0x0,		/* 0 */
+			NdrFcShort( 0xfec5 ),	/* Offset= -315 (2042) */
+			0x8,		/* FC_LONG */
+/* 2360 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 2362 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 2364 */	
+			0x11, 0x0,	/* FC_RP */
+/* 2366 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2368) */
+/* 2368 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 2370 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 2372 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 2374 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 2376 */	0x0 , 
+			0x0,		/* 0 */
+/* 2378 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2382 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2386 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2388) */
+/* 2388 */	NdrFcShort( 0x1c ),	/* 28 */
+/* 2390 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 2392 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 2396 */	NdrFcShort( 0x38 ),	/* Offset= 56 (2452) */
+/* 2398 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2397) */
+/* 2400 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 2108 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 2112 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 2116 */	
+/* 2402 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 2406 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 2410 */	
 			0x1b,		/* FC_CARRAY */
 			0x3,		/* 3 */
-/* 2118 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 2120 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 2412 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 2414 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 2122 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 2124 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2126 */	0x0 , 
+/* 2416 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 2418 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 2420 */	0x0 , 
 			0x0,		/* 0 */
-/* 2128 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2132 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2136 */	
+/* 2422 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2426 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2430 */	
 			0x4b,		/* FC_PP */
 			0x5c,		/* FC_PAD */
-/* 2138 */	
+/* 2432 */	
 			0x48,		/* FC_VARIABLE_REPEAT */
 			0x49,		/* FC_FIXED_OFFSET */
-/* 2140 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 2142 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2144 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 2146 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2148 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2150 */	0x12, 0x0,	/* FC_UP */
-/* 2152 */	NdrFcShort( 0xf844 ),	/* Offset= -1980 (172) */
-/* 2154 */	
+/* 2434 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 2436 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2438 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 2440 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2442 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2444 */	0x12, 0x0,	/* FC_UP */
+/* 2446 */	NdrFcShort( 0xf724 ),	/* Offset= -2268 (178) */
+/* 2448 */	
 			0x5b,		/* FC_END */
 
 			0x8,		/* FC_LONG */
-/* 2156 */	0x5c,		/* FC_PAD */
+/* 2450 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 2158 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+/* 2452 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 2160 */	NdrFcShort( 0x1c ),	/* 28 */
-/* 2162 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2164 */	NdrFcShort( 0x12 ),	/* Offset= 18 (2182) */
-/* 2166 */	0x8,		/* FC_LONG */
+/* 2454 */	NdrFcShort( 0x1c ),	/* 28 */
+/* 2456 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2458 */	NdrFcShort( 0x12 ),	/* Offset= 18 (2476) */
+/* 2460 */	0x8,		/* FC_LONG */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 2168 */	0x0,		/* 0 */
-			NdrFcShort( 0xffc1 ),	/* Offset= -63 (2106) */
+/* 2462 */	0x0,		/* 0 */
+			NdrFcShort( 0xffc1 ),	/* Offset= -63 (2400) */
 			0x36,		/* FC_POINTER */
-/* 2172 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 2466 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 2174 */	NdrFcShort( 0xfba6 ),	/* Offset= -1114 (1060) */
-/* 2176 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 2468 */	NdrFcShort( 0xfb20 ),	/* Offset= -1248 (1220) */
+/* 2470 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 2178 */	NdrFcShort( 0xf918 ),	/* Offset= -1768 (410) */
-/* 2180 */	0x5c,		/* FC_PAD */
+/* 2472 */	NdrFcShort( 0xf850 ),	/* Offset= -1968 (504) */
+/* 2474 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 2182 */	
+/* 2476 */	
 			0x12, 0x0,	/* FC_UP */
-/* 2184 */	NdrFcShort( 0xffbc ),	/* Offset= -68 (2116) */
-/* 2186 */	
+/* 2478 */	NdrFcShort( 0xffbc ),	/* Offset= -68 (2410) */
+/* 2480 */	
 			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 2188 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2190) */
-/* 2190 */	
+/* 2482 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2484) */
+/* 2484 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 2192 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 2486 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x54,		/* FC_DEREFERENCE */
-/* 2194 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 2196 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2198 */	0x0 , 
+/* 2488 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
+/* 2490 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 2492 */	0x0 , 
 			0x0,		/* 0 */
-/* 2200 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2204 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2208 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2210) */
-/* 2210 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 2212 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 2214 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 2218 */	NdrFcShort( 0x38 ),	/* Offset= 56 (2274) */
-/* 2220 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2219) */
-/* 2222 */	0xb7,		/* FC_RANGE */
+/* 2494 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2498 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2502 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2504) */
+/* 2504 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 2506 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 2508 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 2512 */	NdrFcShort( 0x38 ),	/* Offset= 56 (2568) */
+/* 2514 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2513) */
+/* 2516 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 2224 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2228 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 2232 */	
+/* 2518 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2522 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 2526 */	
 			0x21,		/* FC_BOGUS_ARRAY */
 			0x3,		/* 3 */
-/* 2234 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2236 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 2528 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2530 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 2238 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 2240 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2242 */	0x0 , 
+/* 2532 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 2534 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 2536 */	0x0 , 
 			0x0,		/* 0 */
-/* 2244 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2248 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2252 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 2256 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 2258 */	0x0 , 
+/* 2538 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2542 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2546 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 2550 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 2552 */	0x0 , 
 			0x0,		/* 0 */
-/* 2260 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2264 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2268 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 2554 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2558 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2562 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 2270 */	NdrFcShort( 0xfb58 ),	/* Offset= -1192 (1078) */
-/* 2272 */	0x5c,		/* FC_PAD */
+/* 2564 */	NdrFcShort( 0xfad2 ),	/* Offset= -1326 (1238) */
+/* 2566 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 2274 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+/* 2568 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 2276 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 2278 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2280 */	NdrFcShort( 0xe ),	/* Offset= 14 (2294) */
-/* 2282 */	0x8,		/* FC_LONG */
+/* 2570 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 2572 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2574 */	NdrFcShort( 0xe ),	/* Offset= 14 (2588) */
+/* 2576 */	0x8,		/* FC_LONG */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 2284 */	0x0,		/* 0 */
-			NdrFcShort( 0xffc1 ),	/* Offset= -63 (2222) */
+/* 2578 */	0x0,		/* 0 */
+			NdrFcShort( 0xffc1 ),	/* Offset= -63 (2516) */
 			0x36,		/* FC_POINTER */
-/* 2288 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 2582 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 2290 */	NdrFcShort( 0xf8a8 ),	/* Offset= -1880 (410) */
-/* 2292 */	0x5c,		/* FC_PAD */
+/* 2584 */	NdrFcShort( 0xf7e0 ),	/* Offset= -2080 (504) */
+/* 2586 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 2294 */	
+/* 2588 */	
 			0x12, 0x0,	/* FC_UP */
-/* 2296 */	NdrFcShort( 0xffc0 ),	/* Offset= -64 (2232) */
-/* 2298 */	
+/* 2590 */	NdrFcShort( 0xffc0 ),	/* Offset= -64 (2526) */
+/* 2592 */	
 			0x11, 0x0,	/* FC_RP */
-/* 2300 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2302) */
-/* 2302 */	
+/* 2594 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2596) */
+/* 2596 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 2304 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 2598 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x0,		/*  */
-/* 2306 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 2308 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2310 */	0x0 , 
+/* 2600 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 2602 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 2604 */	0x0 , 
 			0x0,		/* 0 */
-/* 2312 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2316 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2320 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2322) */
-/* 2322 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 2324 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 2326 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 2330 */	NdrFcShort( 0x42 ),	/* Offset= 66 (2396) */
-/* 2332 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2331) */
-/* 2334 */	0xb7,		/* FC_RANGE */
+/* 2606 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2610 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2614 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2616) */
+/* 2616 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 2618 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 2620 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 2624 */	NdrFcShort( 0x42 ),	/* Offset= 66 (2690) */
+/* 2626 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2625) */
+/* 2628 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 2336 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 2340 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 2344 */	0xb7,		/* FC_RANGE */
+/* 2630 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 2634 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 2638 */	0xb7,		/* FC_RANGE */
 			0xd,		/* 13 */
-/* 2346 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 2350 */	NdrFcLong( 0x7 ),	/* 7 */
-/* 2354 */	
+/* 2640 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 2644 */	NdrFcLong( 0x7 ),	/* 7 */
+/* 2648 */	
 			0x1b,		/* FC_CARRAY */
 			0x3,		/* 3 */
-/* 2356 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 2358 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 2650 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 2652 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 2360 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2362 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2364 */	0x0 , 
+/* 2654 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2656 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 2658 */	0x0 , 
 			0x0,		/* 0 */
-/* 2366 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2370 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2374 */	
+/* 2660 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2664 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2668 */	
 			0x4b,		/* FC_PP */
 			0x5c,		/* FC_PAD */
-/* 2376 */	
+/* 2670 */	
 			0x48,		/* FC_VARIABLE_REPEAT */
 			0x49,		/* FC_FIXED_OFFSET */
-/* 2378 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 2380 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2382 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 2384 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2386 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2388 */	0x12, 0x0,	/* FC_UP */
-/* 2390 */	NdrFcShort( 0xf756 ),	/* Offset= -2218 (172) */
-/* 2392 */	
+/* 2672 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 2674 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2676 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 2678 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2680 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2682 */	0x12, 0x0,	/* FC_UP */
+/* 2684 */	NdrFcShort( 0xf636 ),	/* Offset= -2506 (178) */
+/* 2686 */	
 			0x5b,		/* FC_END */
 
 			0x8,		/* FC_LONG */
-/* 2394 */	0x5c,		/* FC_PAD */
+/* 2688 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 2396 */	
+/* 2690 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 2398 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 2400 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2402 */	NdrFcShort( 0xe ),	/* Offset= 14 (2416) */
-/* 2404 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 2692 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 2694 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2696 */	NdrFcShort( 0xe ),	/* Offset= 14 (2710) */
+/* 2698 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 2406 */	NdrFcShort( 0xffb8 ),	/* Offset= -72 (2334) */
-/* 2408 */	0x36,		/* FC_POINTER */
+/* 2700 */	NdrFcShort( 0xffb8 ),	/* Offset= -72 (2628) */
+/* 2702 */	0x36,		/* FC_POINTER */
 			0x8,		/* FC_LONG */
-/* 2410 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 2704 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 2412 */	NdrFcShort( 0xffbc ),	/* Offset= -68 (2344) */
-/* 2414 */	0x36,		/* FC_POINTER */
+/* 2706 */	NdrFcShort( 0xffbc ),	/* Offset= -68 (2638) */
+/* 2708 */	0x36,		/* FC_POINTER */
 			0x5b,		/* FC_END */
-/* 2416 */	
+/* 2710 */	
 			0x12, 0x0,	/* FC_UP */
-/* 2418 */	NdrFcShort( 0xffc0 ),	/* Offset= -64 (2354) */
-/* 2420 */	
+/* 2712 */	NdrFcShort( 0xffc0 ),	/* Offset= -64 (2648) */
+/* 2714 */	
 			0x12, 0x0,	/* FC_UP */
-/* 2422 */	NdrFcShort( 0xf736 ),	/* Offset= -2250 (172) */
-/* 2424 */	
+/* 2716 */	NdrFcShort( 0xf616 ),	/* Offset= -2538 (178) */
+/* 2718 */	
 			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 2426 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2428) */
-/* 2428 */	
+/* 2720 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2722) */
+/* 2722 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 2430 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 2724 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x54,		/* FC_DEREFERENCE */
-/* 2432 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 2434 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2436 */	0x0 , 
+/* 2726 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
+/* 2728 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 2730 */	0x0 , 
 			0x0,		/* 0 */
-/* 2438 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2442 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2446 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2448) */
-/* 2448 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 2450 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 2452 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 2456 */	NdrFcShort( 0x58 ),	/* Offset= 88 (2544) */
-/* 2458 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2457) */
-/* 2460 */	0xb7,		/* FC_RANGE */
+/* 2732 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2736 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2740 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2742) */
+/* 2742 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 2744 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 2746 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 2750 */	NdrFcShort( 0x58 ),	/* Offset= 88 (2838) */
+/* 2752 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2751) */
+/* 2754 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 2462 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2466 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 2470 */	0xb7,		/* FC_RANGE */
+/* 2756 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2760 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 2764 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 2472 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2476 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 2480 */	
+/* 2766 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2770 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 2774 */	
 			0x1b,		/* FC_CARRAY */
 			0x3,		/* 3 */
-/* 2482 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 2484 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 2776 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 2778 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 2486 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 2488 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2490 */	0x0 , 
+/* 2780 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 2782 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 2784 */	0x0 , 
 			0x0,		/* 0 */
-/* 2492 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2496 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2500 */	0x8,		/* FC_LONG */
+/* 2786 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2790 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2794 */	0x8,		/* FC_LONG */
 			0x5b,		/* FC_END */
-/* 2502 */	
+/* 2796 */	
 			0x1b,		/* FC_CARRAY */
 			0x3,		/* 3 */
-/* 2504 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 2506 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 2798 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 2800 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 2508 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 2510 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2512 */	0x0 , 
+/* 2802 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 2804 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 2806 */	0x0 , 
 			0x0,		/* 0 */
-/* 2514 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2518 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2522 */	
+/* 2808 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2812 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2816 */	
 			0x4b,		/* FC_PP */
 			0x5c,		/* FC_PAD */
-/* 2524 */	
+/* 2818 */	
 			0x48,		/* FC_VARIABLE_REPEAT */
 			0x49,		/* FC_FIXED_OFFSET */
-/* 2526 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 2528 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2530 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 2532 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2534 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2536 */	0x12, 0x0,	/* FC_UP */
-/* 2538 */	NdrFcShort( 0xf6a2 ),	/* Offset= -2398 (140) */
-/* 2540 */	
+/* 2820 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 2822 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2824 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 2826 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2828 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2830 */	0x12, 0x0,	/* FC_UP */
+/* 2832 */	NdrFcShort( 0xf582 ),	/* Offset= -2686 (146) */
+/* 2834 */	
 			0x5b,		/* FC_END */
 
 			0x8,		/* FC_LONG */
-/* 2542 */	0x5c,		/* FC_PAD */
+/* 2836 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 2544 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 2546 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 2548 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2550 */	NdrFcShort( 0x10 ),	/* Offset= 16 (2566) */
-/* 2552 */	0x8,		/* FC_LONG */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 2554 */	0x0,		/* 0 */
-			NdrFcShort( 0xffa1 ),	/* Offset= -95 (2460) */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 2558 */	0x0,		/* 0 */
-			NdrFcShort( 0xffa7 ),	/* Offset= -89 (2470) */
-			0x36,		/* FC_POINTER */
-/* 2562 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 2564 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 2566 */	
-			0x12, 0x0,	/* FC_UP */
-/* 2568 */	NdrFcShort( 0xfe3c ),	/* Offset= -452 (2116) */
-/* 2570 */	
-			0x12, 0x0,	/* FC_UP */
-/* 2572 */	NdrFcShort( 0xffa4 ),	/* Offset= -92 (2480) */
-/* 2574 */	
-			0x12, 0x0,	/* FC_UP */
-/* 2576 */	NdrFcShort( 0xffb6 ),	/* Offset= -74 (2502) */
-/* 2578 */	
-			0x11, 0x0,	/* FC_RP */
-/* 2580 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2582) */
-/* 2582 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 2584 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 2586 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 2588 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2590 */	0x0 , 
-			0x0,		/* 0 */
-/* 2592 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2596 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2600 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2602) */
-/* 2602 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 2604 */	NdrFcShort( 0x2 ),	/* 2 */
-/* 2606 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 2610 */	NdrFcShort( 0xa ),	/* Offset= 10 (2620) */
-/* 2612 */	NdrFcLong( 0x2 ),	/* 2 */
-/* 2616 */	NdrFcShort( 0x88 ),	/* Offset= 136 (2752) */
-/* 2618 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2617) */
-/* 2620 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 2622 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 2624 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2626 */	NdrFcShort( 0xc ),	/* Offset= 12 (2638) */
-/* 2628 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 2630 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 2632 */	0x0,		/* 0 */
-			NdrFcShort( 0xf751 ),	/* Offset= -2223 (410) */
-			0x8,		/* FC_LONG */
-/* 2636 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 2638 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 2640 */	0x2,		/* FC_CHAR */
-			0x5c,		/* FC_PAD */
-/* 2642 */	
-			0x12, 0x0,	/* FC_UP */
-/* 2644 */	NdrFcShort( 0xf9e2 ),	/* Offset= -1566 (1078) */
-/* 2646 */	
-			0x12, 0x0,	/* FC_UP */
-/* 2648 */	NdrFcShort( 0xf5b4 ),	/* Offset= -2636 (12) */
-/* 2650 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 2652 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2656 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 2660 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 2662 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2666 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 2670 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 2672 */	NdrFcShort( 0xc ),	/* 12 */
-/* 2674 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2676 */	NdrFcShort( 0xa ),	/* Offset= 10 (2686) */
-/* 2678 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 2680 */	NdrFcShort( 0xffec ),	/* Offset= -20 (2660) */
-/* 2682 */	0x8,		/* FC_LONG */
-			0x36,		/* FC_POINTER */
-/* 2684 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 2686 */	
-			0x12, 0x0,	/* FC_UP */
-/* 2688 */	NdrFcShort( 0xf6ba ),	/* Offset= -2374 (314) */
-/* 2690 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x3,		/* 3 */
-/* 2692 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2694 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 2696 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 2698 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2700 */	0x0 , 
-			0x0,		/* 0 */
-/* 2702 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2706 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2710 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 2714 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 2716 */	0x0 , 
-			0x0,		/* 0 */
-/* 2718 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2722 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2726 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 2728 */	NdrFcShort( 0xffc6 ),	/* Offset= -58 (2670) */
-/* 2730 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 2732 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 2734 */	NdrFcShort( 0xc ),	/* 12 */
-/* 2736 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2738 */	NdrFcShort( 0xa ),	/* Offset= 10 (2748) */
-/* 2740 */	0x8,		/* FC_LONG */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 2742 */	0x0,		/* 0 */
-			NdrFcShort( 0xffa3 ),	/* Offset= -93 (2650) */
-			0x36,		/* FC_POINTER */
-/* 2746 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 2748 */	
-			0x12, 0x0,	/* FC_UP */
-/* 2750 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (2690) */
-/* 2752 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 2754 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 2756 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2758 */	NdrFcShort( 0xe ),	/* Offset= 14 (2772) */
-/* 2760 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 2762 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 2764 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 2766 */	0x0,		/* 0 */
-			NdrFcShort( 0xf6cb ),	/* Offset= -2357 (410) */
-			0x8,		/* FC_LONG */
-/* 2770 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 2772 */	
-			0x12, 0x0,	/* FC_UP */
-/* 2774 */	NdrFcShort( 0xf5d6 ),	/* Offset= -2602 (172) */
-/* 2776 */	
-			0x12, 0x0,	/* FC_UP */
-/* 2778 */	NdrFcShort( 0xf95c ),	/* Offset= -1700 (1078) */
-/* 2780 */	
-			0x12, 0x0,	/* FC_UP */
-/* 2782 */	NdrFcShort( 0xf5ce ),	/* Offset= -2610 (172) */
-/* 2784 */	
-			0x12, 0x0,	/* FC_UP */
-/* 2786 */	NdrFcShort( 0xf5ca ),	/* Offset= -2614 (172) */
-/* 2788 */	
-			0x12, 0x0,	/* FC_UP */
-/* 2790 */	NdrFcShort( 0xffc6 ),	/* Offset= -58 (2732) */
-/* 2792 */	
-			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 2794 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2796) */
-/* 2796 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 2798 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x54,		/* FC_DEREFERENCE */
-/* 2800 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 2802 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2804 */	0x0 , 
-			0x0,		/* 0 */
-/* 2806 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2810 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2814 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2816) */
-/* 2816 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 2818 */	NdrFcShort( 0x2 ),	/* 2 */
-/* 2820 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 2824 */	NdrFcShort( 0xe ),	/* Offset= 14 (2838) */
-/* 2826 */	NdrFcLong( 0x2 ),	/* 2 */
-/* 2830 */	NdrFcShort( 0x20 ),	/* Offset= 32 (2862) */
-/* 2832 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2831) */
-/* 2834 */	
-			0x12, 0x0,	/* FC_UP */
-/* 2836 */	NdrFcShort( 0xf922 ),	/* Offset= -1758 (1078) */
 /* 2838 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 2840 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 2840 */	NdrFcShort( 0x18 ),	/* 24 */
 /* 2842 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2844 */	NdrFcShort( 0xa ),	/* Offset= 10 (2854) */
-/* 2846 */	0x36,		/* FC_POINTER */
+/* 2844 */	NdrFcShort( 0x10 ),	/* Offset= 16 (2860) */
+/* 2846 */	0x8,		/* FC_LONG */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
 /* 2848 */	0x0,		/* 0 */
-			NdrFcShort( 0xf679 ),	/* Offset= -2439 (410) */
+			NdrFcShort( 0xffa1 ),	/* Offset= -95 (2754) */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 2852 */	0x0,		/* 0 */
+			NdrFcShort( 0xffa7 ),	/* Offset= -89 (2764) */
 			0x36,		/* FC_POINTER */
-/* 2852 */	0x5c,		/* FC_PAD */
+/* 2856 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 2858 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 2854 */	
-			0x12, 0x10,	/* FC_UP [pointer_deref] */
-/* 2856 */	NdrFcShort( 0xffea ),	/* Offset= -22 (2834) */
-/* 2858 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 2860 */	0x8,		/* FC_LONG */
-			0x5c,		/* FC_PAD */
-/* 2862 */	
-			0x16,		/* FC_PSTRUCT */
-			0x3,		/* 3 */
-/* 2864 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 2866 */	
-			0x4b,		/* FC_PP */
-			0x5c,		/* FC_PAD */
-/* 2868 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 2870 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 2872 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 2874 */	0x12, 0x0,	/* FC_UP */
-/* 2876 */	NdrFcShort( 0xf570 ),	/* Offset= -2704 (172) */
-/* 2878 */	
-			0x5b,		/* FC_END */
-
-			0x8,		/* FC_LONG */
-/* 2880 */	0x8,		/* FC_LONG */
-			0x5b,		/* FC_END */
-/* 2882 */	
-			0x11, 0x0,	/* FC_RP */
-/* 2884 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2886) */
-/* 2886 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 2888 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 2890 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 2892 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2894 */	0x0 , 
-			0x0,		/* 0 */
-/* 2896 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2900 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2904 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2906) */
-/* 2906 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 2908 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 2910 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 2914 */	NdrFcShort( 0x24 ),	/* Offset= 36 (2950) */
-/* 2916 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2915) */
-/* 2918 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 2920 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2924 */	NdrFcLong( 0xa00000 ),	/* 10485760 */
-/* 2928 */	
-			0x1b,		/* FC_CARRAY */
-			0x0,		/* 0 */
-/* 2930 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 2932 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 2934 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 2936 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2938 */	0x0 , 
-			0x0,		/* 0 */
-/* 2940 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2944 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2948 */	0x2,		/* FC_CHAR */
-			0x5b,		/* FC_END */
-/* 2950 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 2952 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 2954 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2956 */	NdrFcShort( 0xa ),	/* Offset= 10 (2966) */
-/* 2958 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 2960 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 2962 */	NdrFcShort( 0xffd4 ),	/* Offset= -44 (2918) */
-/* 2964 */	0x36,		/* FC_POINTER */
-			0x5b,		/* FC_END */
-/* 2966 */	
+/* 2860 */	
 			0x12, 0x0,	/* FC_UP */
-/* 2968 */	NdrFcShort( 0xffd8 ),	/* Offset= -40 (2928) */
-/* 2970 */	
+/* 2862 */	NdrFcShort( 0xfe3c ),	/* Offset= -452 (2410) */
+/* 2864 */	
+			0x12, 0x0,	/* FC_UP */
+/* 2866 */	NdrFcShort( 0xffa4 ),	/* Offset= -92 (2774) */
+/* 2868 */	
+			0x12, 0x0,	/* FC_UP */
+/* 2870 */	NdrFcShort( 0xffb6 ),	/* Offset= -74 (2796) */
+/* 2872 */	
 			0x11, 0x0,	/* FC_RP */
-/* 2972 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2974) */
-/* 2974 */	
+/* 2874 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2876) */
+/* 2876 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 2976 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x54,		/* FC_DEREFERENCE */
-/* 2978 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 2980 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2982 */	0x0 , 
+/* 2878 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 2880 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 2882 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 2884 */	0x0 , 
 			0x0,		/* 0 */
-/* 2984 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2988 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2992 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2994) */
-/* 2994 */	NdrFcShort( 0x48 ),	/* 72 */
-/* 2996 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 2998 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 3002 */	NdrFcShort( 0x36 ),	/* Offset= 54 (3056) */
-/* 3004 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3003) */
-/* 3006 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 3008 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3012 */	NdrFcLong( 0xa00000 ),	/* 10485760 */
-/* 3016 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 3018 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3022 */	NdrFcLong( 0xa00000 ),	/* 10485760 */
-/* 3026 */	
-			0x15,		/* FC_STRUCT */
-			0x7,		/* 7 */
-/* 3028 */	NdrFcShort( 0x30 ),	/* 48 */
-/* 3030 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 3032 */	NdrFcShort( 0xf6a0 ),	/* Offset= -2400 (632) */
-/* 3034 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 3036 */	NdrFcShort( 0xf69c ),	/* Offset= -2404 (632) */
-/* 3038 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 3040 */	NdrFcShort( 0xf698 ),	/* Offset= -2408 (632) */
-/* 3042 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 3044 */	NdrFcShort( 0xf694 ),	/* Offset= -2412 (632) */
-/* 3046 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 3048 */	NdrFcShort( 0xf690 ),	/* Offset= -2416 (632) */
-/* 3050 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 3052 */	NdrFcShort( 0xf68c ),	/* Offset= -2420 (632) */
-/* 3054 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 3056 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 3058 */	NdrFcShort( 0x48 ),	/* 72 */
-/* 3060 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3062 */	NdrFcShort( 0x14 ),	/* Offset= 20 (3082) */
-/* 3064 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 3066 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (3006) */
-/* 3068 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 3070 */	NdrFcShort( 0xffca ),	/* Offset= -54 (3016) */
-/* 3072 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 3074 */	NdrFcShort( 0xffd0 ),	/* Offset= -48 (3026) */
-/* 3076 */	0x8,		/* FC_LONG */
+/* 2886 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2890 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2894 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2896) */
+/* 2896 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 2898 */	NdrFcShort( 0x2 ),	/* 2 */
+/* 2900 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 2904 */	NdrFcShort( 0xa ),	/* Offset= 10 (2914) */
+/* 2906 */	NdrFcLong( 0x2 ),	/* 2 */
+/* 2910 */	NdrFcShort( 0x88 ),	/* Offset= 136 (3046) */
+/* 2912 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2911) */
+/* 2914 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 2916 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 2918 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2920 */	NdrFcShort( 0xc ),	/* Offset= 12 (2932) */
+/* 2922 */	0x36,		/* FC_POINTER */
 			0x36,		/* FC_POINTER */
-/* 3078 */	0x36,		/* FC_POINTER */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 3080 */	0x5c,		/* FC_PAD */
+/* 2924 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 2926 */	0x0,		/* 0 */
+			NdrFcShort( 0xf689 ),	/* Offset= -2423 (504) */
+			0x8,		/* FC_LONG */
+/* 2930 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
+/* 2932 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 2934 */	0x2,		/* FC_CHAR */
+			0x5c,		/* FC_PAD */
+/* 2936 */	
+			0x12, 0x0,	/* FC_UP */
+/* 2938 */	NdrFcShort( 0xf95c ),	/* Offset= -1700 (1238) */
+/* 2940 */	
+			0x12, 0x0,	/* FC_UP */
+/* 2942 */	NdrFcShort( 0xf48e ),	/* Offset= -2930 (12) */
+/* 2944 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 2946 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2950 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 2954 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 2956 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2960 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 2964 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 2966 */	NdrFcShort( 0xc ),	/* 12 */
+/* 2968 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2970 */	NdrFcShort( 0xa ),	/* Offset= 10 (2980) */
+/* 2972 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 2974 */	NdrFcShort( 0xffec ),	/* Offset= -20 (2954) */
+/* 2976 */	0x8,		/* FC_LONG */
+			0x36,		/* FC_POINTER */
+/* 2978 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 2980 */	
+			0x12, 0x0,	/* FC_UP */
+/* 2982 */	NdrFcShort( 0xf5f2 ),	/* Offset= -2574 (408) */
+/* 2984 */	
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x3,		/* 3 */
+/* 2986 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2988 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 2990 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 2992 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 2994 */	0x0 , 
+			0x0,		/* 0 */
+/* 2996 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3000 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3004 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 3008 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 3010 */	0x0 , 
+			0x0,		/* 0 */
+/* 3012 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3016 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3020 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 3022 */	NdrFcShort( 0xffc6 ),	/* Offset= -58 (2964) */
+/* 3024 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 3026 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 3028 */	NdrFcShort( 0xc ),	/* 12 */
+/* 3030 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3032 */	NdrFcShort( 0xa ),	/* Offset= 10 (3042) */
+/* 3034 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 3036 */	0x0,		/* 0 */
+			NdrFcShort( 0xffa3 ),	/* Offset= -93 (2944) */
+			0x36,		/* FC_POINTER */
+/* 3040 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 3042 */	
+			0x12, 0x0,	/* FC_UP */
+/* 3044 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (2984) */
+/* 3046 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 3048 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 3050 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3052 */	NdrFcShort( 0xe ),	/* Offset= 14 (3066) */
+/* 3054 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 3056 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 3058 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 3060 */	0x0,		/* 0 */
+			NdrFcShort( 0xf603 ),	/* Offset= -2557 (504) */
+			0x8,		/* FC_LONG */
+/* 3064 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 3066 */	
+			0x12, 0x0,	/* FC_UP */
+/* 3068 */	NdrFcShort( 0xf4b6 ),	/* Offset= -2890 (178) */
+/* 3070 */	
+			0x12, 0x0,	/* FC_UP */
+/* 3072 */	NdrFcShort( 0xf8d6 ),	/* Offset= -1834 (1238) */
+/* 3074 */	
+			0x12, 0x0,	/* FC_UP */
+/* 3076 */	NdrFcShort( 0xf4ae ),	/* Offset= -2898 (178) */
+/* 3078 */	
+			0x12, 0x0,	/* FC_UP */
+/* 3080 */	NdrFcShort( 0xf4aa ),	/* Offset= -2902 (178) */
 /* 3082 */	
 			0x12, 0x0,	/* FC_UP */
-/* 3084 */	NdrFcShort( 0xf52e ),	/* Offset= -2770 (314) */
+/* 3084 */	NdrFcShort( 0xffc6 ),	/* Offset= -58 (3026) */
 /* 3086 */	
-			0x12, 0x0,	/* FC_UP */
-/* 3088 */	NdrFcShort( 0xf8de ),	/* Offset= -1826 (1262) */
+			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
+/* 3088 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3090) */
 /* 3090 */	
-			0x11, 0x0,	/* FC_RP */
-/* 3092 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3094) */
-/* 3094 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 3096 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 3098 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 3100 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 3102 */	0x0 , 
+/* 3092 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x54,		/* FC_DEREFERENCE */
+/* 3094 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
+/* 3096 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 3098 */	0x0 , 
 			0x0,		/* 0 */
+/* 3100 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 3104 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3108 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3112 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3114) */
-/* 3114 */	NdrFcShort( 0x1c ),	/* 28 */
-/* 3116 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 3118 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 3122 */	NdrFcShort( 0x38 ),	/* Offset= 56 (3178) */
-/* 3124 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3123) */
-/* 3126 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 3128 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 3132 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 3136 */	
-			0x1b,		/* FC_CARRAY */
-			0x3,		/* 3 */
-/* 3138 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 3140 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 3142 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 3144 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 3146 */	0x0 , 
-			0x0,		/* 0 */
-/* 3148 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3152 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3156 */	
-			0x4b,		/* FC_PP */
-			0x5c,		/* FC_PAD */
-/* 3158 */	
-			0x48,		/* FC_VARIABLE_REPEAT */
-			0x49,		/* FC_FIXED_OFFSET */
-/* 3160 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 3162 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3164 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 3166 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3168 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3170 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3172 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 3174 */	
-			0x5b,		/* FC_END */
-
-			0x8,		/* FC_LONG */
-/* 3176 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 3178 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 3180 */	NdrFcShort( 0x1c ),	/* 28 */
-/* 3182 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3184 */	NdrFcShort( 0xe ),	/* Offset= 14 (3198) */
-/* 3186 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 3188 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 3190 */	0x8,		/* FC_LONG */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 3192 */	0x0,		/* 0 */
-			NdrFcShort( 0xffbd ),	/* Offset= -67 (3126) */
-			0x36,		/* FC_POINTER */
-/* 3196 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 3198 */	
+/* 3108 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3110) */
+/* 3110 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 3112 */	NdrFcShort( 0x2 ),	/* 2 */
+/* 3114 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 3118 */	NdrFcShort( 0xe ),	/* Offset= 14 (3132) */
+/* 3120 */	NdrFcLong( 0x2 ),	/* 2 */
+/* 3124 */	NdrFcShort( 0x20 ),	/* Offset= 32 (3156) */
+/* 3126 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3125) */
+/* 3128 */	
 			0x12, 0x0,	/* FC_UP */
-/* 3200 */	NdrFcShort( 0xffc0 ),	/* Offset= -64 (3136) */
-/* 3202 */	
-			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 3204 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3206) */
-/* 3206 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 3208 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x54,		/* FC_DEREFERENCE */
-/* 3210 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 3212 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 3214 */	0x0 , 
-			0x0,		/* 0 */
-/* 3216 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3220 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3224 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3226) */
-/* 3226 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 3228 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 3230 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 3234 */	NdrFcShort( 0x6c ),	/* Offset= 108 (3342) */
-/* 3236 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3235) */
-/* 3238 */	
-			0x16,		/* FC_PSTRUCT */
+/* 3130 */	NdrFcShort( 0xf89c ),	/* Offset= -1892 (1238) */
+/* 3132 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 3240 */	NdrFcShort( 0xc ),	/* 12 */
-/* 3242 */	
-			0x4b,		/* FC_PP */
-			0x5c,		/* FC_PAD */
-/* 3244 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 3246 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 3248 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 3250 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3252 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 3254 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 3256 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 3258 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 3260 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3262 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 3264 */	
-			0x5b,		/* FC_END */
-
-			0x8,		/* FC_LONG */
-/* 3266 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 3268 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 3270 */	
-			0x1b,		/* FC_CARRAY */
-			0x3,		/* 3 */
-/* 3272 */	NdrFcShort( 0xc ),	/* 12 */
-/* 3274 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 3276 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3278 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 3280 */	0x0 , 
-			0x0,		/* 0 */
-/* 3282 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3286 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3290 */	
-			0x4b,		/* FC_PP */
-			0x5c,		/* FC_PAD */
-/* 3292 */	
-			0x48,		/* FC_VARIABLE_REPEAT */
-			0x49,		/* FC_FIXED_OFFSET */
-/* 3294 */	NdrFcShort( 0xc ),	/* 12 */
-/* 3296 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3298 */	NdrFcShort( 0x2 ),	/* 2 */
-/* 3300 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 3302 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 3304 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3306 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 3308 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 3310 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 3312 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3314 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 3316 */	
-			0x5b,		/* FC_END */
-
+/* 3134 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 3136 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3138 */	NdrFcShort( 0xa ),	/* Offset= 10 (3148) */
+/* 3140 */	0x36,		/* FC_POINTER */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 3318 */	0x0,		/* 0 */
-			NdrFcShort( 0xffaf ),	/* Offset= -81 (3238) */
-			0x5b,		/* FC_END */
-/* 3322 */	
-			0x16,		/* FC_PSTRUCT */
-			0x3,		/* 3 */
-/* 3324 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 3326 */	
-			0x4b,		/* FC_PP */
-			0x5c,		/* FC_PAD */
-/* 3328 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 3330 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 3332 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 3334 */	0x12, 0x0,	/* FC_UP */
-/* 3336 */	NdrFcShort( 0xffbe ),	/* Offset= -66 (3270) */
-/* 3338 */	
-			0x5b,		/* FC_END */
-
-			0x8,		/* FC_LONG */
-/* 3340 */	0x8,		/* FC_LONG */
-			0x5b,		/* FC_END */
-/* 3342 */	
-			0x16,		/* FC_PSTRUCT */
-			0x3,		/* 3 */
-/* 3344 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 3346 */	
-			0x4b,		/* FC_PP */
-			0x5c,		/* FC_PAD */
-/* 3348 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 3350 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3352 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3354 */	0x12, 0x0,	/* FC_UP */
-/* 3356 */	NdrFcShort( 0xffde ),	/* Offset= -34 (3322) */
-/* 3358 */	
-			0x5b,		/* FC_END */
-
-			0x8,		/* FC_LONG */
-/* 3360 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 3362 */	
-			0x11, 0x0,	/* FC_RP */
-/* 3364 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3366) */
-/* 3366 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 3368 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 3370 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 3372 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 3374 */	0x0 , 
-			0x0,		/* 0 */
-/* 3376 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3380 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3384 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3386) */
-/* 3386 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 3388 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 3390 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 3394 */	NdrFcShort( 0x38 ),	/* Offset= 56 (3450) */
-/* 3396 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3395) */
-/* 3398 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 3400 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3404 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 3408 */	
-			0x1b,		/* FC_CARRAY */
-			0x3,		/* 3 */
-/* 3410 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 3412 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 3414 */	NdrFcShort( 0xc ),	/* 12 */
-/* 3416 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 3418 */	0x0 , 
-			0x0,		/* 0 */
-/* 3420 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3424 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3428 */	
-			0x4b,		/* FC_PP */
-			0x5c,		/* FC_PAD */
-/* 3430 */	
-			0x48,		/* FC_VARIABLE_REPEAT */
-			0x49,		/* FC_FIXED_OFFSET */
-/* 3432 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 3434 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3436 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 3438 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3440 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3442 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3444 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 3446 */	
-			0x5b,		/* FC_END */
-
-			0x8,		/* FC_LONG */
-/* 3448 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 3450 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 3452 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 3454 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3456 */	NdrFcShort( 0xc ),	/* Offset= 12 (3468) */
-/* 3458 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 3460 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 3462 */	0x0,		/* 0 */
-			NdrFcShort( 0xffbf ),	/* Offset= -65 (3398) */
+/* 3142 */	0x0,		/* 0 */
+			NdrFcShort( 0xf5b1 ),	/* Offset= -2639 (504) */
 			0x36,		/* FC_POINTER */
-/* 3466 */	0x5c,		/* FC_PAD */
+/* 3146 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 3468 */	
+/* 3148 */	
+			0x12, 0x10,	/* FC_UP [pointer_deref] */
+/* 3150 */	NdrFcShort( 0xffea ),	/* Offset= -22 (3128) */
+/* 3152 */	
 			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3470 */	
-			0x25,		/* FC_C_WSTRING */
+/* 3154 */	0x8,		/* FC_LONG */
 			0x5c,		/* FC_PAD */
-/* 3472 */	
+/* 3156 */	
+			0x16,		/* FC_PSTRUCT */
+			0x3,		/* 3 */
+/* 3158 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 3160 */	
+			0x4b,		/* FC_PP */
+			0x5c,		/* FC_PAD */
+/* 3162 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 3164 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 3166 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 3168 */	0x12, 0x0,	/* FC_UP */
+/* 3170 */	NdrFcShort( 0xf450 ),	/* Offset= -2992 (178) */
+/* 3172 */	
+			0x5b,		/* FC_END */
+
+			0x8,		/* FC_LONG */
+/* 3174 */	0x8,		/* FC_LONG */
+			0x5b,		/* FC_END */
+/* 3176 */	
+			0x11, 0x0,	/* FC_RP */
+/* 3178 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3180) */
+/* 3180 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 3182 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 3184 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 3186 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 3188 */	0x0 , 
+			0x0,		/* 0 */
+/* 3190 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3194 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3198 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3200) */
+/* 3200 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 3202 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 3204 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 3208 */	NdrFcShort( 0x24 ),	/* Offset= 36 (3244) */
+/* 3210 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3209) */
+/* 3212 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 3214 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3218 */	NdrFcLong( 0xa00000 ),	/* 10485760 */
+/* 3222 */	
+			0x1b,		/* FC_CARRAY */
+			0x0,		/* 0 */
+/* 3224 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 3226 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 3228 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 3230 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 3232 */	0x0 , 
+			0x0,		/* 0 */
+/* 3234 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3238 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3242 */	0x2,		/* FC_CHAR */
+			0x5b,		/* FC_END */
+/* 3244 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 3246 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 3248 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3250 */	NdrFcShort( 0xa ),	/* Offset= 10 (3260) */
+/* 3252 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 3254 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 3256 */	NdrFcShort( 0xffd4 ),	/* Offset= -44 (3212) */
+/* 3258 */	0x36,		/* FC_POINTER */
+			0x5b,		/* FC_END */
+/* 3260 */	
 			0x12, 0x0,	/* FC_UP */
-/* 3474 */	NdrFcShort( 0xffbe ),	/* Offset= -66 (3408) */
-/* 3476 */	
-			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 3478 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3480) */
-/* 3480 */	
+/* 3262 */	NdrFcShort( 0xffd8 ),	/* Offset= -40 (3222) */
+/* 3264 */	
+			0x11, 0x0,	/* FC_RP */
+/* 3266 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3268) */
+/* 3268 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 3482 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 3270 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x54,		/* FC_DEREFERENCE */
-/* 3484 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 3486 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 3488 */	0x0 , 
+/* 3272 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
+/* 3274 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 3276 */	0x0 , 
 			0x0,		/* 0 */
-/* 3490 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3494 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3498 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3500) */
-/* 3500 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 3502 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 3504 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 3508 */	NdrFcShort( 0x4 ),	/* Offset= 4 (3512) */
-/* 3510 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3509) */
-/* 3512 */	
+/* 3278 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3282 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3286 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3288) */
+/* 3288 */	NdrFcShort( 0x48 ),	/* 72 */
+/* 3290 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 3292 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 3296 */	NdrFcShort( 0x36 ),	/* Offset= 54 (3350) */
+/* 3298 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3297) */
+/* 3300 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 3302 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3306 */	NdrFcLong( 0xa00000 ),	/* 10485760 */
+/* 3310 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 3312 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3316 */	NdrFcLong( 0xa00000 ),	/* 10485760 */
+/* 3320 */	
 			0x15,		/* FC_STRUCT */
-			0x3,		/* 3 */
-/* 3514 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 3516 */	0x8,		/* FC_LONG */
+			0x7,		/* 7 */
+/* 3322 */	NdrFcShort( 0x30 ),	/* 48 */
+/* 3324 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 3326 */	NdrFcShort( 0xf5d8 ),	/* Offset= -2600 (726) */
+/* 3328 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 3330 */	NdrFcShort( 0xf5d4 ),	/* Offset= -2604 (726) */
+/* 3332 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 3334 */	NdrFcShort( 0xf5d0 ),	/* Offset= -2608 (726) */
+/* 3336 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 3338 */	NdrFcShort( 0xf5cc ),	/* Offset= -2612 (726) */
+/* 3340 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 3342 */	NdrFcShort( 0xf5c8 ),	/* Offset= -2616 (726) */
+/* 3344 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 3346 */	NdrFcShort( 0xf5c4 ),	/* Offset= -2620 (726) */
+/* 3348 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 3518 */	
+/* 3350 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 3352 */	NdrFcShort( 0x48 ),	/* 72 */
+/* 3354 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3356 */	NdrFcShort( 0x14 ),	/* Offset= 20 (3376) */
+/* 3358 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 3360 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (3300) */
+/* 3362 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 3364 */	NdrFcShort( 0xffca ),	/* Offset= -54 (3310) */
+/* 3366 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 3368 */	NdrFcShort( 0xffd0 ),	/* Offset= -48 (3320) */
+/* 3370 */	0x8,		/* FC_LONG */
+			0x36,		/* FC_POINTER */
+/* 3372 */	0x36,		/* FC_POINTER */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 3374 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 3376 */	
+			0x12, 0x0,	/* FC_UP */
+/* 3378 */	NdrFcShort( 0xf466 ),	/* Offset= -2970 (408) */
+/* 3380 */	
+			0x12, 0x0,	/* FC_UP */
+/* 3382 */	NdrFcShort( 0xf858 ),	/* Offset= -1960 (1422) */
+/* 3384 */	
 			0x11, 0x0,	/* FC_RP */
-/* 3520 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3522) */
-/* 3522 */	
+/* 3386 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3388) */
+/* 3388 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 3524 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 3390 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x0,		/*  */
-/* 3526 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 3528 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 3530 */	0x0 , 
+/* 3392 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 3394 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 3396 */	0x0 , 
 			0x0,		/* 0 */
-/* 3532 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3536 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3540 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3542) */
-/* 3542 */	NdrFcShort( 0xc ),	/* 12 */
-/* 3544 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 3546 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 3550 */	NdrFcShort( 0x4 ),	/* Offset= 4 (3554) */
-/* 3552 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3551) */
-/* 3554 */	
+/* 3398 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3402 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3406 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3408) */
+/* 3408 */	NdrFcShort( 0x1c ),	/* 28 */
+/* 3410 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 3412 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 3416 */	NdrFcShort( 0x38 ),	/* Offset= 56 (3472) */
+/* 3418 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3417) */
+/* 3420 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 3422 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 3426 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 3430 */	
+			0x1b,		/* FC_CARRAY */
+			0x3,		/* 3 */
+/* 3432 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 3434 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 3436 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 3438 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 3440 */	0x0 , 
+			0x0,		/* 0 */
+/* 3442 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3446 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3450 */	
+			0x4b,		/* FC_PP */
+			0x5c,		/* FC_PAD */
+/* 3452 */	
+			0x48,		/* FC_VARIABLE_REPEAT */
+			0x49,		/* FC_FIXED_OFFSET */
+/* 3454 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 3456 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3458 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 3460 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3462 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3464 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 3466 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 3468 */	
+			0x5b,		/* FC_END */
+
+			0x8,		/* FC_LONG */
+/* 3470 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 3472 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 3474 */	NdrFcShort( 0x1c ),	/* 28 */
+/* 3476 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3478 */	NdrFcShort( 0xe ),	/* Offset= 14 (3492) */
+/* 3480 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 3482 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 3484 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 3486 */	0x0,		/* 0 */
+			NdrFcShort( 0xffbd ),	/* Offset= -67 (3420) */
+			0x36,		/* FC_POINTER */
+/* 3490 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 3492 */	
+			0x12, 0x0,	/* FC_UP */
+/* 3494 */	NdrFcShort( 0xffc0 ),	/* Offset= -64 (3430) */
+/* 3496 */	
+			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
+/* 3498 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3500) */
+/* 3500 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 3502 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x54,		/* FC_DEREFERENCE */
+/* 3504 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
+/* 3506 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 3508 */	0x0 , 
+			0x0,		/* 0 */
+/* 3510 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3514 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3518 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3520) */
+/* 3520 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 3522 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 3524 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 3528 */	NdrFcShort( 0x6c ),	/* Offset= 108 (3636) */
+/* 3530 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3529) */
+/* 3532 */	
 			0x16,		/* FC_PSTRUCT */
 			0x3,		/* 3 */
-/* 3556 */	NdrFcShort( 0xc ),	/* 12 */
+/* 3534 */	NdrFcShort( 0xc ),	/* 12 */
+/* 3536 */	
+			0x4b,		/* FC_PP */
+			0x5c,		/* FC_PAD */
+/* 3538 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 3540 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 3542 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 3544 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 3546 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 3548 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 3550 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 3552 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 3554 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 3556 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
 /* 3558 */	
-			0x4b,		/* FC_PP */
-			0x5c,		/* FC_PAD */
-/* 3560 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 3562 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3564 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3566 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3568 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 3570 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 3572 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 3574 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 3576 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3578 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 3580 */	
 			0x5b,		/* FC_END */
 
 			0x8,		/* FC_LONG */
-/* 3582 */	0x8,		/* FC_LONG */
+/* 3560 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 3584 */	0x5c,		/* FC_PAD */
+/* 3562 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
+/* 3564 */	
+			0x1b,		/* FC_CARRAY */
+			0x3,		/* 3 */
+/* 3566 */	NdrFcShort( 0xc ),	/* 12 */
+/* 3568 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 3570 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3572 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 3574 */	0x0 , 
+			0x0,		/* 0 */
+/* 3576 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3580 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3584 */	
+			0x4b,		/* FC_PP */
+			0x5c,		/* FC_PAD */
 /* 3586 */	
-			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 3588 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3590) */
-/* 3590 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 3592 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x54,		/* FC_DEREFERENCE */
-/* 3594 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 3596 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 3598 */	0x0 , 
-			0x0,		/* 0 */
-/* 3600 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3604 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3608 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3610) */
-/* 3610 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 3612 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 3614 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 3618 */	NdrFcShort( 0xff96 ),	/* Offset= -106 (3512) */
-/* 3620 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3619) */
-/* 3622 */	
-			0x11, 0x0,	/* FC_RP */
-/* 3624 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3626) */
-/* 3626 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 3628 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 3630 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 3632 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 3634 */	0x0 , 
-			0x0,		/* 0 */
-/* 3636 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3640 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3644 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3646) */
-/* 3646 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 3648 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 3650 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 3654 */	NdrFcShort( 0x4 ),	/* Offset= 4 (3658) */
-/* 3656 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3655) */
-/* 3658 */	
-			0x16,		/* FC_PSTRUCT */
-			0x3,		/* 3 */
-/* 3660 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 3662 */	
-			0x4b,		/* FC_PP */
-			0x5c,		/* FC_PAD */
-/* 3664 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 3666 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3668 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3670 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3672 */	
+			0x48,		/* FC_VARIABLE_REPEAT */
+			0x49,		/* FC_FIXED_OFFSET */
+/* 3588 */	NdrFcShort( 0xc ),	/* 12 */
+/* 3590 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3592 */	NdrFcShort( 0x2 ),	/* 2 */
+/* 3594 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 3596 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 3598 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 3600 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 3674 */	
+/* 3602 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 3604 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 3606 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 3608 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 3610 */	
+			0x5b,		/* FC_END */
+
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 3612 */	0x0,		/* 0 */
+			NdrFcShort( 0xffaf ),	/* Offset= -81 (3532) */
+			0x5b,		/* FC_END */
+/* 3616 */	
+			0x16,		/* FC_PSTRUCT */
+			0x3,		/* 3 */
+/* 3618 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 3620 */	
+			0x4b,		/* FC_PP */
+			0x5c,		/* FC_PAD */
+/* 3622 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 3624 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 3626 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 3628 */	0x12, 0x0,	/* FC_UP */
+/* 3630 */	NdrFcShort( 0xffbe ),	/* Offset= -66 (3564) */
+/* 3632 */	
 			0x5b,		/* FC_END */
 
 			0x8,		/* FC_LONG */
-/* 3676 */	0x5c,		/* FC_PAD */
+/* 3634 */	0x8,		/* FC_LONG */
 			0x5b,		/* FC_END */
-/* 3678 */	
-			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 3680 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3682) */
-/* 3682 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 3684 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x54,		/* FC_DEREFERENCE */
-/* 3686 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 3688 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 3690 */	0x0 , 
-			0x0,		/* 0 */
-/* 3692 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3696 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3700 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3702) */
-/* 3702 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 3704 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 3706 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 3710 */	NdrFcShort( 0xff3a ),	/* Offset= -198 (3512) */
-/* 3712 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3711) */
-/* 3714 */	
-			0x11, 0x0,	/* FC_RP */
-/* 3716 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3718) */
-/* 3718 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 3720 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 3722 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 3724 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 3726 */	0x0 , 
-			0x0,		/* 0 */
-/* 3728 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3732 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3736 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3738) */
-/* 3738 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 3740 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 3742 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 3746 */	NdrFcShort( 0x4 ),	/* Offset= 4 (3750) */
-/* 3748 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3747) */
-/* 3750 */	
+/* 3636 */	
 			0x16,		/* FC_PSTRUCT */
 			0x3,		/* 3 */
-/* 3752 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 3754 */	
+/* 3638 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 3640 */	
 			0x4b,		/* FC_PP */
 			0x5c,		/* FC_PAD */
-/* 3756 */	
+/* 3642 */	
 			0x46,		/* FC_NO_REPEAT */
 			0x5c,		/* FC_PAD */
-/* 3758 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3760 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3762 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 3644 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3646 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3648 */	0x12, 0x0,	/* FC_UP */
+/* 3650 */	NdrFcShort( 0xffde ),	/* Offset= -34 (3616) */
+/* 3652 */	
+			0x5b,		/* FC_END */
+
+			0x8,		/* FC_LONG */
+/* 3654 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 3656 */	
+			0x11, 0x0,	/* FC_RP */
+/* 3658 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3660) */
+/* 3660 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 3662 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 3664 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 3666 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 3668 */	0x0 , 
+			0x0,		/* 0 */
+/* 3670 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3674 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3678 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3680) */
+/* 3680 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 3682 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 3684 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 3688 */	NdrFcShort( 0x38 ),	/* Offset= 56 (3744) */
+/* 3690 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3689) */
+/* 3692 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 3694 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3698 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 3702 */	
+			0x1b,		/* FC_CARRAY */
+			0x3,		/* 3 */
+/* 3704 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 3706 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 3708 */	NdrFcShort( 0xc ),	/* 12 */
+/* 3710 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 3712 */	0x0 , 
+			0x0,		/* 0 */
+/* 3714 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3718 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3722 */	
+			0x4b,		/* FC_PP */
+			0x5c,		/* FC_PAD */
+/* 3724 */	
+			0x48,		/* FC_VARIABLE_REPEAT */
+			0x49,		/* FC_FIXED_OFFSET */
+/* 3726 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 3728 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3730 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 3732 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3734 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3736 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 3738 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 3740 */	
+			0x5b,		/* FC_END */
+
+			0x8,		/* FC_LONG */
+/* 3742 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 3744 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 3746 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 3748 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3750 */	NdrFcShort( 0xc ),	/* Offset= 12 (3762) */
+/* 3752 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 3754 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 3756 */	0x0,		/* 0 */
+			NdrFcShort( 0xffbf ),	/* Offset= -65 (3692) */
+			0x36,		/* FC_POINTER */
+/* 3760 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 3762 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
 /* 3764 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
 /* 3766 */	
-			0x5b,		/* FC_END */
-
-			0x8,		/* FC_LONG */
-/* 3768 */	0x8,		/* FC_LONG */
-			0x5b,		/* FC_END */
+			0x12, 0x0,	/* FC_UP */
+/* 3768 */	NdrFcShort( 0xffbe ),	/* Offset= -66 (3702) */
 /* 3770 */	
 			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
 /* 3772 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3774) */
@@ -4592,282 +4614,242 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 /* 3784 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 3788 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 3792 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3794) */
-/* 3794 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 3796 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 3794 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 3796 */	NdrFcShort( 0x1 ),	/* 1 */
 /* 3798 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 3802 */	NdrFcShort( 0xae ),	/* Offset= 174 (3976) */
-/* 3804 */	NdrFcLong( 0x2 ),	/* 2 */
-/* 3808 */	NdrFcShort( 0x188 ),	/* Offset= 392 (4200) */
-/* 3810 */	NdrFcLong( 0x3 ),	/* 3 */
-/* 3814 */	NdrFcShort( 0x264 ),	/* Offset= 612 (4426) */
-/* 3816 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 3820 */	NdrFcShort( 0x2c0 ),	/* Offset= 704 (4524) */
-/* 3822 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3821) */
-/* 3824 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 3826 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3830 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 3834 */	
-			0x16,		/* FC_PSTRUCT */
+/* 3802 */	NdrFcShort( 0x4 ),	/* Offset= 4 (3806) */
+/* 3804 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3803) */
+/* 3806 */	
+			0x15,		/* FC_STRUCT */
 			0x3,		/* 3 */
-/* 3836 */	NdrFcShort( 0x1c ),	/* 28 */
-/* 3838 */	
-			0x4b,		/* FC_PP */
-			0x5c,		/* FC_PAD */
-/* 3840 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 3842 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3844 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3846 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3848 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 3850 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 3852 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 3854 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 3856 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3858 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 3860 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 3862 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 3864 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 3866 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3868 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 3870 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 3872 */	NdrFcShort( 0xc ),	/* 12 */
-/* 3874 */	NdrFcShort( 0xc ),	/* 12 */
-/* 3876 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3878 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 3880 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 3882 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 3884 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 3886 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3888 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 3890 */	
+/* 3808 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 3810 */	0x8,		/* FC_LONG */
 			0x5b,		/* FC_END */
-
-			0x8,		/* FC_LONG */
-/* 3892 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 3894 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 3896 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 3898 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 3900 */	
-			0x1b,		/* FC_CARRAY */
-			0x3,		/* 3 */
-/* 3902 */	NdrFcShort( 0x1c ),	/* 28 */
-/* 3904 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 3812 */	
+			0x11, 0x0,	/* FC_RP */
+/* 3814 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3816) */
+/* 3816 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 3818 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x0,		/*  */
-/* 3906 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3908 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 3910 */	0x0 , 
+/* 3820 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 3822 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 3824 */	0x0 , 
 			0x0,		/* 0 */
-/* 3912 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3916 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3920 */	
-			0x4b,		/* FC_PP */
-			0x5c,		/* FC_PAD */
-/* 3922 */	
-			0x48,		/* FC_VARIABLE_REPEAT */
-			0x49,		/* FC_FIXED_OFFSET */
-/* 3924 */	NdrFcShort( 0x1c ),	/* 28 */
-/* 3926 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3928 */	NdrFcShort( 0x5 ),	/* 5 */
-/* 3930 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3932 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3934 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3936 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 3938 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 3940 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 3942 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3944 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 3946 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 3948 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 3950 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3952 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 3954 */	NdrFcShort( 0xc ),	/* 12 */
-/* 3956 */	NdrFcShort( 0xc ),	/* 12 */
-/* 3958 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3960 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 3962 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 3964 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 3966 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3968 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 3970 */	
-			0x5b,		/* FC_END */
-
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 3972 */	0x0,		/* 0 */
-			NdrFcShort( 0xff75 ),	/* Offset= -139 (3834) */
-			0x5b,		/* FC_END */
-/* 3976 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 3978 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 3980 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3982 */	NdrFcShort( 0x8 ),	/* Offset= 8 (3990) */
-/* 3984 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 3986 */	NdrFcShort( 0xff5e ),	/* Offset= -162 (3824) */
-/* 3988 */	0x36,		/* FC_POINTER */
-			0x5b,		/* FC_END */
-/* 3990 */	
-			0x12, 0x0,	/* FC_UP */
-/* 3992 */	NdrFcShort( 0xffa4 ),	/* Offset= -92 (3900) */
-/* 3994 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 3996 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4000 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 4004 */	
+/* 3826 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3830 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3834 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3836) */
+/* 3836 */	NdrFcShort( 0xc ),	/* 12 */
+/* 3838 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 3840 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 3844 */	NdrFcShort( 0x4 ),	/* Offset= 4 (3848) */
+/* 3846 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3845) */
+/* 3848 */	
 			0x16,		/* FC_PSTRUCT */
 			0x3,		/* 3 */
-/* 4006 */	NdrFcShort( 0x68 ),	/* 104 */
-/* 4008 */	
+/* 3850 */	NdrFcShort( 0xc ),	/* 12 */
+/* 3852 */	
 			0x4b,		/* FC_PP */
 			0x5c,		/* FC_PAD */
-/* 4010 */	
+/* 3854 */	
 			0x46,		/* FC_NO_REPEAT */
 			0x5c,		/* FC_PAD */
-/* 4012 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4014 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4016 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4018 */	
+/* 3856 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3858 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3860 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 3862 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 4020 */	
+/* 3864 */	
 			0x46,		/* FC_NO_REPEAT */
 			0x5c,		/* FC_PAD */
-/* 4022 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 4024 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 4026 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4028 */	
+/* 3866 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 3868 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 3870 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 3872 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 4030 */	
+/* 3874 */	
+			0x5b,		/* FC_END */
+
+			0x8,		/* FC_LONG */
+/* 3876 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 3878 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 3880 */	
+			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
+/* 3882 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3884) */
+/* 3884 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 3886 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x54,		/* FC_DEREFERENCE */
+/* 3888 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
+/* 3890 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 3892 */	0x0 , 
+			0x0,		/* 0 */
+/* 3894 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3898 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3902 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3904) */
+/* 3904 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 3906 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 3908 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 3912 */	NdrFcShort( 0xff96 ),	/* Offset= -106 (3806) */
+/* 3914 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3913) */
+/* 3916 */	
+			0x11, 0x0,	/* FC_RP */
+/* 3918 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3920) */
+/* 3920 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 3922 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 3924 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 3926 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 3928 */	0x0 , 
+			0x0,		/* 0 */
+/* 3930 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3934 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3938 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3940) */
+/* 3940 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 3942 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 3944 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 3948 */	NdrFcShort( 0x4 ),	/* Offset= 4 (3952) */
+/* 3950 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3949) */
+/* 3952 */	
+			0x16,		/* FC_PSTRUCT */
+			0x3,		/* 3 */
+/* 3954 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 3956 */	
+			0x4b,		/* FC_PP */
+			0x5c,		/* FC_PAD */
+/* 3958 */	
 			0x46,		/* FC_NO_REPEAT */
 			0x5c,		/* FC_PAD */
+/* 3960 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3962 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3964 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 3966 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 3968 */	
+			0x5b,		/* FC_END */
+
+			0x8,		/* FC_LONG */
+/* 3970 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 3972 */	
+			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
+/* 3974 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3976) */
+/* 3976 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 3978 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x54,		/* FC_DEREFERENCE */
+/* 3980 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
+/* 3982 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 3984 */	0x0 , 
+			0x0,		/* 0 */
+/* 3986 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3990 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3994 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3996) */
+/* 3996 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 3998 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 4000 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 4004 */	NdrFcShort( 0xff3a ),	/* Offset= -198 (3806) */
+/* 4006 */	NdrFcShort( 0xffff ),	/* Offset= -1 (4005) */
+/* 4008 */	
+			0x11, 0x0,	/* FC_RP */
+/* 4010 */	NdrFcShort( 0x2 ),	/* Offset= 2 (4012) */
+/* 4012 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 4014 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 4016 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 4018 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 4020 */	0x0 , 
+			0x0,		/* 0 */
+/* 4022 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4026 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4030 */	NdrFcShort( 0x2 ),	/* Offset= 2 (4032) */
 /* 4032 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 4034 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 4036 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4038 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 4040 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 4042 */	NdrFcShort( 0xc ),	/* 12 */
-/* 4044 */	NdrFcShort( 0xc ),	/* 12 */
-/* 4046 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4034 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 4036 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 4040 */	NdrFcShort( 0x4 ),	/* Offset= 4 (4044) */
+/* 4042 */	NdrFcShort( 0xffff ),	/* Offset= -1 (4041) */
+/* 4044 */	
+			0x16,		/* FC_PSTRUCT */
+			0x3,		/* 3 */
+/* 4046 */	NdrFcShort( 0x8 ),	/* 8 */
 /* 4048 */	
-			0x25,		/* FC_C_WSTRING */
+			0x4b,		/* FC_PP */
 			0x5c,		/* FC_PAD */
 /* 4050 */	
 			0x46,		/* FC_NO_REPEAT */
 			0x5c,		/* FC_PAD */
-/* 4052 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 4054 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 4052 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4054 */	NdrFcShort( 0x0 ),	/* 0 */
 /* 4056 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
 /* 4058 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
 /* 4060 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 4062 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 4064 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 4066 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4068 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 4070 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 4072 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 4074 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 4076 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4078 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 4080 */	
 			0x5b,		/* FC_END */
 
 			0x8,		/* FC_LONG */
-/* 4082 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 4084 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 4086 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 4088 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 4090 */	0x8,		/* FC_LONG */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 4092 */	0x0,		/* 0 */
-			NdrFcShort( 0xf00f ),	/* Offset= -4081 (12) */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 4096 */	0x0,		/* 0 */
-			NdrFcShort( 0xf00b ),	/* Offset= -4085 (12) */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 4100 */	0x0,		/* 0 */
-			NdrFcShort( 0xf007 ),	/* Offset= -4089 (12) */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 4104 */	0x0,		/* 0 */
-			NdrFcShort( 0xf003 ),	/* Offset= -4093 (12) */
+/* 4062 */	0x8,		/* FC_LONG */
 			0x5b,		/* FC_END */
-/* 4108 */	
-			0x1b,		/* FC_CARRAY */
-			0x3,		/* 3 */
-/* 4110 */	NdrFcShort( 0x68 ),	/* 104 */
-/* 4112 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 4114 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4116 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 4118 */	0x0 , 
+/* 4064 */	
+			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
+/* 4066 */	NdrFcShort( 0x2 ),	/* Offset= 2 (4068) */
+/* 4068 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 4070 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x54,		/* FC_DEREFERENCE */
+/* 4072 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
+/* 4074 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 4076 */	0x0 , 
 			0x0,		/* 0 */
+/* 4078 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4082 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4086 */	NdrFcShort( 0x2 ),	/* Offset= 2 (4088) */
+/* 4088 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 4090 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 4092 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 4096 */	NdrFcShort( 0xae ),	/* Offset= 174 (4270) */
+/* 4098 */	NdrFcLong( 0x2 ),	/* 2 */
+/* 4102 */	NdrFcShort( 0x188 ),	/* Offset= 392 (4494) */
+/* 4104 */	NdrFcLong( 0x3 ),	/* 3 */
+/* 4108 */	NdrFcShort( 0x264 ),	/* Offset= 612 (4720) */
+/* 4110 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 4114 */	NdrFcShort( 0x2c0 ),	/* Offset= 704 (4818) */
+/* 4116 */	NdrFcShort( 0xffff ),	/* Offset= -1 (4115) */
+/* 4118 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
 /* 4120 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4124 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4124 */	NdrFcLong( 0x2710 ),	/* 10000 */
 /* 4128 */	
+			0x16,		/* FC_PSTRUCT */
+			0x3,		/* 3 */
+/* 4130 */	NdrFcShort( 0x1c ),	/* 28 */
+/* 4132 */	
 			0x4b,		/* FC_PP */
 			0x5c,		/* FC_PAD */
-/* 4130 */	
-			0x48,		/* FC_VARIABLE_REPEAT */
-			0x49,		/* FC_FIXED_OFFSET */
-/* 4132 */	NdrFcShort( 0x68 ),	/* 104 */
-/* 4134 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4136 */	NdrFcShort( 0x7 ),	/* 7 */
+/* 4134 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 4136 */	NdrFcShort( 0x0 ),	/* 0 */
 /* 4138 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4140 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4142 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4144 */	
+/* 4140 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4142 */	
 			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4144 */	
+			0x46,		/* FC_NO_REPEAT */
 			0x5c,		/* FC_PAD */
 /* 4146 */	NdrFcShort( 0x4 ),	/* 4 */
 /* 4148 */	NdrFcShort( 0x4 ),	/* 4 */
@@ -4875,2958 +4857,3201 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 /* 4152 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 4154 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 4154 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
 /* 4156 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 4158 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4160 */	
+/* 4158 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 4160 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4162 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 4162 */	NdrFcShort( 0xc ),	/* 12 */
-/* 4164 */	NdrFcShort( 0xc ),	/* 12 */
-/* 4166 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4168 */	
+/* 4164 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 4166 */	NdrFcShort( 0xc ),	/* 12 */
+/* 4168 */	NdrFcShort( 0xc ),	/* 12 */
+/* 4170 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4172 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 4170 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 4172 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 4174 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4176 */	
+/* 4174 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 4176 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 4178 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 4180 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4182 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 4178 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 4180 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 4182 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
 /* 4184 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 4186 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 4188 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 4190 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4192 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 4194 */	
 			0x5b,		/* FC_END */
 
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 4196 */	0x0,		/* 0 */
-			NdrFcShort( 0xff3f ),	/* Offset= -193 (4004) */
+			0x8,		/* FC_LONG */
+/* 4186 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 4188 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 4190 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 4192 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 4200 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+/* 4194 */	
+			0x1b,		/* FC_CARRAY */
 			0x3,		/* 3 */
-/* 4202 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 4204 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4206 */	NdrFcShort( 0x8 ),	/* Offset= 8 (4214) */
-/* 4208 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 4196 */	NdrFcShort( 0x1c ),	/* 28 */
+/* 4198 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 4200 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4202 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 4204 */	0x0 , 
 			0x0,		/* 0 */
-/* 4210 */	NdrFcShort( 0xff28 ),	/* Offset= -216 (3994) */
-/* 4212 */	0x36,		/* FC_POINTER */
-			0x5b,		/* FC_END */
+/* 4206 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4210 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 4214 */	
-			0x12, 0x0,	/* FC_UP */
-/* 4216 */	NdrFcShort( 0xff94 ),	/* Offset= -108 (4108) */
-/* 4218 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 4220 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4224 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 4228 */	
-			0x16,		/* FC_PSTRUCT */
-			0x3,		/* 3 */
-/* 4230 */	NdrFcShort( 0x6c ),	/* 108 */
-/* 4232 */	
 			0x4b,		/* FC_PP */
 			0x5c,		/* FC_PAD */
-/* 4234 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 4236 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4238 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4240 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4242 */	
+/* 4216 */	
+			0x48,		/* FC_VARIABLE_REPEAT */
+			0x49,		/* FC_FIXED_OFFSET */
+/* 4218 */	NdrFcShort( 0x1c ),	/* 28 */
+/* 4220 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4222 */	NdrFcShort( 0x5 ),	/* 5 */
+/* 4224 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4226 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4228 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4230 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 4244 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 4246 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 4248 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 4250 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4252 */	
+/* 4232 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 4234 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 4236 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4238 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
+/* 4240 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 4242 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 4244 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4246 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4248 */	NdrFcShort( 0xc ),	/* 12 */
+/* 4250 */	NdrFcShort( 0xc ),	/* 12 */
+/* 4252 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
 /* 4254 */	
-			0x46,		/* FC_NO_REPEAT */
+			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 4256 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 4258 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 4256 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 4258 */	NdrFcShort( 0x10 ),	/* 16 */
 /* 4260 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
 /* 4262 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
 /* 4264 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 4266 */	NdrFcShort( 0xc ),	/* 12 */
-/* 4268 */	NdrFcShort( 0xc ),	/* 12 */
-/* 4270 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4272 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 4274 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 4276 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 4278 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 4280 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4282 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 4266 */	0x0,		/* 0 */
+			NdrFcShort( 0xff75 ),	/* Offset= -139 (4128) */
+			0x5b,		/* FC_END */
+/* 4270 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 4272 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 4274 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4276 */	NdrFcShort( 0x8 ),	/* Offset= 8 (4284) */
+/* 4278 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 4280 */	NdrFcShort( 0xff5e ),	/* Offset= -162 (4118) */
+/* 4282 */	0x36,		/* FC_POINTER */
+			0x5b,		/* FC_END */
 /* 4284 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 4286 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 4288 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 4290 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4292 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 4294 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 4296 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 4298 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 4300 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+			0x12, 0x0,	/* FC_UP */
+/* 4286 */	NdrFcShort( 0xffa4 ),	/* Offset= -92 (4194) */
+/* 4288 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 4290 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4294 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 4298 */	
+			0x16,		/* FC_PSTRUCT */
+			0x3,		/* 3 */
+/* 4300 */	NdrFcShort( 0x68 ),	/* 104 */
 /* 4302 */	
-			0x25,		/* FC_C_WSTRING */
+			0x4b,		/* FC_PP */
 			0x5c,		/* FC_PAD */
 /* 4304 */	
-			0x5b,		/* FC_END */
-
-			0x8,		/* FC_LONG */
-/* 4306 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 4308 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 4310 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 4312 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 4314 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 4316 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 4318 */	NdrFcShort( 0xef2e ),	/* Offset= -4306 (12) */
-/* 4320 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 4322 */	NdrFcShort( 0xef2a ),	/* Offset= -4310 (12) */
-/* 4324 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 4326 */	NdrFcShort( 0xef26 ),	/* Offset= -4314 (12) */
-/* 4328 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 4330 */	NdrFcShort( 0xef22 ),	/* Offset= -4318 (12) */
-/* 4332 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 4334 */	
-			0x1b,		/* FC_CARRAY */
-			0x3,		/* 3 */
-/* 4336 */	NdrFcShort( 0x6c ),	/* 108 */
-/* 4338 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 4340 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4342 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 4344 */	0x0 , 
-			0x0,		/* 0 */
-/* 4346 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4350 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4354 */	
-			0x4b,		/* FC_PP */
-			0x5c,		/* FC_PAD */
-/* 4356 */	
-			0x48,		/* FC_VARIABLE_REPEAT */
-			0x49,		/* FC_FIXED_OFFSET */
-/* 4358 */	NdrFcShort( 0x6c ),	/* 108 */
-/* 4360 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4362 */	NdrFcShort( 0x7 ),	/* 7 */
-/* 4364 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4366 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4368 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4370 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 4372 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 4374 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 4376 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4378 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 4380 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 4382 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 4384 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4386 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 4388 */	NdrFcShort( 0xc ),	/* 12 */
-/* 4390 */	NdrFcShort( 0xc ),	/* 12 */
-/* 4392 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4394 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 4396 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 4398 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 4400 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4402 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 4404 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 4406 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 4408 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4410 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 4412 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 4414 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 4416 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4418 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 4420 */	
-			0x5b,		/* FC_END */
-
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 4422 */	0x0,		/* 0 */
-			NdrFcShort( 0xff3d ),	/* Offset= -195 (4228) */
-			0x5b,		/* FC_END */
-/* 4426 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 4428 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 4430 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4432 */	NdrFcShort( 0x8 ),	/* Offset= 8 (4440) */
-/* 4434 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 4436 */	NdrFcShort( 0xff26 ),	/* Offset= -218 (4218) */
-/* 4438 */	0x36,		/* FC_POINTER */
-			0x5b,		/* FC_END */
-/* 4440 */	
-			0x12, 0x0,	/* FC_UP */
-/* 4442 */	NdrFcShort( 0xff94 ),	/* Offset= -108 (4334) */
-/* 4444 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 4446 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4450 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 4454 */	
-			0x16,		/* FC_PSTRUCT */
-			0x3,		/* 3 */
-/* 4456 */	NdrFcShort( 0x1c ),	/* 28 */
-/* 4458 */	
-			0x4b,		/* FC_PP */
-			0x5c,		/* FC_PAD */
-/* 4460 */	
 			0x46,		/* FC_NO_REPEAT */
 			0x5c,		/* FC_PAD */
-/* 4462 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 4464 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 4466 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4468 */	
+/* 4306 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4308 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4310 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4312 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 4470 */	
+/* 4314 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 4316 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 4318 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 4320 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4322 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4324 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 4326 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 4328 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 4330 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4332 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4334 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 4336 */	NdrFcShort( 0xc ),	/* 12 */
+/* 4338 */	NdrFcShort( 0xc ),	/* 12 */
+/* 4340 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4342 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4344 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 4346 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 4348 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 4350 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4352 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4354 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 4356 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 4358 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 4360 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4362 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4364 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 4366 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 4368 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 4370 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4372 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4374 */	
 			0x5b,		/* FC_END */
 
 			0x8,		/* FC_LONG */
-/* 4472 */	0x8,		/* FC_LONG */
+/* 4376 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 4474 */	0x8,		/* FC_LONG */
+/* 4378 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 4476 */	0x8,		/* FC_LONG */
+/* 4380 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 4478 */	0x5c,		/* FC_PAD */
+/* 4382 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 4384 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 4386 */	0x0,		/* 0 */
+			NdrFcShort( 0xeee9 ),	/* Offset= -4375 (12) */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 4390 */	0x0,		/* 0 */
+			NdrFcShort( 0xeee5 ),	/* Offset= -4379 (12) */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 4394 */	0x0,		/* 0 */
+			NdrFcShort( 0xeee1 ),	/* Offset= -4383 (12) */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 4398 */	0x0,		/* 0 */
+			NdrFcShort( 0xeedd ),	/* Offset= -4387 (12) */
 			0x5b,		/* FC_END */
-/* 4480 */	
+/* 4402 */	
 			0x1b,		/* FC_CARRAY */
 			0x3,		/* 3 */
-/* 4482 */	NdrFcShort( 0x1c ),	/* 28 */
-/* 4484 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 4404 */	NdrFcShort( 0x68 ),	/* 104 */
+/* 4406 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 4486 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4488 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 4490 */	0x0 , 
+/* 4408 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4410 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 4412 */	0x0 , 
 			0x0,		/* 0 */
-/* 4492 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4496 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4500 */	
+/* 4414 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4418 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4422 */	
 			0x4b,		/* FC_PP */
 			0x5c,		/* FC_PAD */
-/* 4502 */	
+/* 4424 */	
 			0x48,		/* FC_VARIABLE_REPEAT */
 			0x49,		/* FC_FIXED_OFFSET */
-/* 4504 */	NdrFcShort( 0x1c ),	/* 28 */
-/* 4506 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4508 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 4510 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 4512 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 4514 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4516 */	
+/* 4426 */	NdrFcShort( 0x68 ),	/* 104 */
+/* 4428 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4430 */	NdrFcShort( 0x7 ),	/* 7 */
+/* 4432 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4434 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4436 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4438 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 4518 */	
+/* 4440 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 4442 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 4444 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4446 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4448 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 4450 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 4452 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4454 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4456 */	NdrFcShort( 0xc ),	/* 12 */
+/* 4458 */	NdrFcShort( 0xc ),	/* 12 */
+/* 4460 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4462 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4464 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 4466 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 4468 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4470 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4472 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 4474 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 4476 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4478 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4480 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 4482 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 4484 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4486 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4488 */	
 			0x5b,		/* FC_END */
 
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 4520 */	0x0,		/* 0 */
-			NdrFcShort( 0xffbd ),	/* Offset= -67 (4454) */
+/* 4490 */	0x0,		/* 0 */
+			NdrFcShort( 0xff3f ),	/* Offset= -193 (4298) */
 			0x5b,		/* FC_END */
-/* 4524 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+/* 4494 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 4526 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 4528 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4530 */	NdrFcShort( 0x8 ),	/* Offset= 8 (4538) */
-/* 4532 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 4496 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 4498 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4500 */	NdrFcShort( 0x8 ),	/* Offset= 8 (4508) */
+/* 4502 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 4534 */	NdrFcShort( 0xffa6 ),	/* Offset= -90 (4444) */
-/* 4536 */	0x36,		/* FC_POINTER */
+/* 4504 */	NdrFcShort( 0xff28 ),	/* Offset= -216 (4288) */
+/* 4506 */	0x36,		/* FC_POINTER */
 			0x5b,		/* FC_END */
-/* 4538 */	
+/* 4508 */	
 			0x12, 0x0,	/* FC_UP */
-/* 4540 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (4480) */
-/* 4542 */	
-			0x11, 0x0,	/* FC_RP */
-/* 4544 */	NdrFcShort( 0x2 ),	/* Offset= 2 (4546) */
-/* 4546 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 4548 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 4550 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 4552 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 4554 */	0x0 , 
-			0x0,		/* 0 */
-/* 4556 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4560 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4564 */	NdrFcShort( 0x2 ),	/* Offset= 2 (4566) */
-/* 4566 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 4568 */	NdrFcShort( 0x3 ),	/* 3 */
-/* 4570 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 4574 */	NdrFcShort( 0x10 ),	/* Offset= 16 (4590) */
-/* 4576 */	NdrFcLong( 0x2 ),	/* 2 */
-/* 4580 */	NdrFcShort( 0x2e ),	/* Offset= 46 (4626) */
-/* 4582 */	NdrFcLong( 0x3 ),	/* 3 */
-/* 4586 */	NdrFcShort( 0x36 ),	/* Offset= 54 (4640) */
-/* 4588 */	NdrFcShort( 0xffff ),	/* Offset= -1 (4587) */
-/* 4590 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 4592 */	NdrFcShort( 0xc ),	/* 12 */
-/* 4594 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4596 */	NdrFcShort( 0x8 ),	/* Offset= 8 (4604) */
-/* 4598 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 4600 */	0x0,		/* 0 */
-			NdrFcShort( 0xf22b ),	/* Offset= -3541 (1060) */
-			0x5b,		/* FC_END */
-/* 4604 */	
-			0x11, 0x0,	/* FC_RP */
-/* 4606 */	NdrFcShort( 0xeeae ),	/* Offset= -4434 (172) */
-/* 4608 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 4610 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 4612 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4614 */	NdrFcShort( 0x8 ),	/* Offset= 8 (4622) */
-/* 4616 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 4618 */	0x0,		/* 0 */
-			NdrFcShort( 0xf22b ),	/* Offset= -3541 (1078) */
-			0x5b,		/* FC_END */
-/* 4622 */	
-			0x12, 0x0,	/* FC_UP */
-/* 4624 */	NdrFcShort( 0xfff0 ),	/* Offset= -16 (4608) */
-/* 4626 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 4628 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 4630 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4632 */	NdrFcShort( 0x0 ),	/* Offset= 0 (4632) */
-/* 4634 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 4636 */	NdrFcShort( 0xffe4 ),	/* Offset= -28 (4608) */
-/* 4638 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 4640 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 4642 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 4644 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4646 */	NdrFcShort( 0x8 ),	/* Offset= 8 (4654) */
-/* 4648 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 4650 */	NdrFcShort( 0xffd6 ),	/* Offset= -42 (4608) */
-/* 4652 */	0x36,		/* FC_POINTER */
-			0x5b,		/* FC_END */
-/* 4654 */	
-			0x12, 0x0,	/* FC_UP */
-/* 4656 */	NdrFcShort( 0xf87c ),	/* Offset= -1924 (2732) */
-/* 4658 */	
-			0x11, 0x0,	/* FC_RP */
-/* 4660 */	NdrFcShort( 0x2 ),	/* Offset= 2 (4662) */
-/* 4662 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 4664 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x54,		/* FC_DEREFERENCE */
-/* 4666 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 4668 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 4670 */	0x0 , 
-			0x0,		/* 0 */
-/* 4672 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4676 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4680 */	NdrFcShort( 0x2 ),	/* Offset= 2 (4682) */
-/* 4682 */	NdrFcShort( 0x40 ),	/* 64 */
-/* 4684 */	NdrFcShort( 0x3 ),	/* 3 */
-/* 4686 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 4690 */	NdrFcShort( 0x10 ),	/* Offset= 16 (4706) */
-/* 4692 */	NdrFcLong( 0x2 ),	/* 2 */
-/* 4696 */	NdrFcShort( 0x54 ),	/* Offset= 84 (4780) */
-/* 4698 */	NdrFcLong( 0x3 ),	/* 3 */
-/* 4702 */	NdrFcShort( 0x1fc ),	/* Offset= 508 (5210) */
-/* 4704 */	NdrFcShort( 0xffff ),	/* Offset= -1 (4703) */
-/* 4706 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 4708 */	NdrFcShort( 0x40 ),	/* 64 */
-/* 4710 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4712 */	NdrFcShort( 0x0 ),	/* Offset= 0 (4712) */
-/* 4714 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 4716 */	NdrFcShort( 0xeda0 ),	/* Offset= -4704 (12) */
-/* 4718 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 4720 */	NdrFcShort( 0xee1c ),	/* Offset= -4580 (140) */
-/* 4722 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 4724 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 4726 */	0x6,		/* FC_SHORT */
-			0x3e,		/* FC_STRUCTPAD2 */
-/* 4728 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 4730 */	0xb7,		/* FC_RANGE */
+/* 4510 */	NdrFcShort( 0xff94 ),	/* Offset= -108 (4402) */
+/* 4512 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 4732 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4736 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 4740 */	
-			0x15,		/* FC_STRUCT */
+/* 4514 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4518 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 4522 */	
+			0x16,		/* FC_PSTRUCT */
 			0x3,		/* 3 */
-/* 4742 */	NdrFcShort( 0x2c ),	/* 44 */
-/* 4744 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 4746 */	NdrFcShort( 0xed82 ),	/* Offset= -4734 (12) */
-/* 4748 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 4750 */	NdrFcShort( 0xedfe ),	/* Offset= -4610 (140) */
-/* 4752 */	0x5c,		/* FC_PAD */
+/* 4524 */	NdrFcShort( 0x6c ),	/* 108 */
+/* 4526 */	
+			0x4b,		/* FC_PP */
+			0x5c,		/* FC_PAD */
+/* 4528 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 4530 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4532 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4534 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4536 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4538 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 4540 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 4542 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 4544 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4546 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4548 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 4550 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 4552 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 4554 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4556 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4558 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 4560 */	NdrFcShort( 0xc ),	/* 12 */
+/* 4562 */	NdrFcShort( 0xc ),	/* 12 */
+/* 4564 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4566 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4568 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 4570 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 4572 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 4574 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4576 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4578 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 4580 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 4582 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 4584 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4586 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4588 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 4590 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 4592 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 4594 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4596 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4598 */	
 			0x5b,		/* FC_END */
-/* 4754 */	
+
+			0x8,		/* FC_LONG */
+/* 4600 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 4602 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 4604 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 4606 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 4608 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 4610 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 4612 */	NdrFcShort( 0xee08 ),	/* Offset= -4600 (12) */
+/* 4614 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 4616 */	NdrFcShort( 0xee04 ),	/* Offset= -4604 (12) */
+/* 4618 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 4620 */	NdrFcShort( 0xee00 ),	/* Offset= -4608 (12) */
+/* 4622 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 4624 */	NdrFcShort( 0xedfc ),	/* Offset= -4612 (12) */
+/* 4626 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 4628 */	
 			0x1b,		/* FC_CARRAY */
 			0x3,		/* 3 */
-/* 4756 */	NdrFcShort( 0x2c ),	/* 44 */
-/* 4758 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 4630 */	NdrFcShort( 0x6c ),	/* 108 */
+/* 4632 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 4760 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 4762 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 4764 */	0x0 , 
+/* 4634 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4636 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 4638 */	0x0 , 
 			0x0,		/* 0 */
-/* 4766 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4770 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4774 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 4776 */	NdrFcShort( 0xffdc ),	/* Offset= -36 (4740) */
-/* 4778 */	0x5c,		/* FC_PAD */
+/* 4640 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4644 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4648 */	
+			0x4b,		/* FC_PP */
+			0x5c,		/* FC_PAD */
+/* 4650 */	
+			0x48,		/* FC_VARIABLE_REPEAT */
+			0x49,		/* FC_FIXED_OFFSET */
+/* 4652 */	NdrFcShort( 0x6c ),	/* 108 */
+/* 4654 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4656 */	NdrFcShort( 0x7 ),	/* 7 */
+/* 4658 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4660 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4662 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4664 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4666 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 4668 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 4670 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4672 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4674 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 4676 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 4678 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4680 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4682 */	NdrFcShort( 0xc ),	/* 12 */
+/* 4684 */	NdrFcShort( 0xc ),	/* 12 */
+/* 4686 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4688 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4690 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 4692 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 4694 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4696 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4698 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 4700 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 4702 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4704 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4706 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 4708 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 4710 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4712 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4714 */	
 			0x5b,		/* FC_END */
-/* 4780 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 4782 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 4784 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4786 */	NdrFcShort( 0x10 ),	/* Offset= 16 (4802) */
-/* 4788 */	0x36,		/* FC_POINTER */
-			0x8,		/* FC_LONG */
-/* 4790 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 4792 */	0x8,		/* FC_LONG */
-			0x6,		/* FC_SHORT */
-/* 4794 */	0x3e,		/* FC_STRUCTPAD2 */
+
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 4796 */	0x0,		/* 0 */
-			NdrFcShort( 0xffbd ),	/* Offset= -67 (4730) */
-			0x36,		/* FC_POINTER */
-/* 4800 */	0x5c,		/* FC_PAD */
+/* 4716 */	0x0,		/* 0 */
+			NdrFcShort( 0xff3d ),	/* Offset= -195 (4522) */
 			0x5b,		/* FC_END */
-/* 4802 */	
+/* 4720 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 4722 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 4724 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4726 */	NdrFcShort( 0x8 ),	/* Offset= 8 (4734) */
+/* 4728 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 4730 */	NdrFcShort( 0xff26 ),	/* Offset= -218 (4512) */
+/* 4732 */	0x36,		/* FC_POINTER */
+			0x5b,		/* FC_END */
+/* 4734 */	
 			0x12, 0x0,	/* FC_UP */
-/* 4804 */	NdrFcShort( 0xede8 ),	/* Offset= -4632 (172) */
-/* 4806 */	
-			0x12, 0x0,	/* FC_UP */
-/* 4808 */	NdrFcShort( 0xffca ),	/* Offset= -54 (4754) */
-/* 4810 */	0xb7,		/* FC_RANGE */
+/* 4736 */	NdrFcShort( 0xff94 ),	/* Offset= -108 (4628) */
+/* 4738 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 4812 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4816 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 4820 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 4822 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 4740 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4744 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 4748 */	
+			0x16,		/* FC_PSTRUCT */
+			0x3,		/* 3 */
+/* 4750 */	NdrFcShort( 0x1c ),	/* 28 */
+/* 4752 */	
+			0x4b,		/* FC_PP */
+			0x5c,		/* FC_PAD */
+/* 4754 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 4756 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 4758 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 4760 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4762 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4764 */	
+			0x5b,		/* FC_END */
+
+			0x8,		/* FC_LONG */
+/* 4766 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 4768 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 4770 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 4772 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 4774 */	
+			0x1b,		/* FC_CARRAY */
+			0x3,		/* 3 */
+/* 4776 */	NdrFcShort( 0x1c ),	/* 28 */
+/* 4778 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 4824 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 4826 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 4828 */	0x0 , 
+/* 4780 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4782 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 4784 */	0x0 , 
 			0x0,		/* 0 */
-/* 4830 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4834 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4786 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4790 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4794 */	
+			0x4b,		/* FC_PP */
+			0x5c,		/* FC_PAD */
+/* 4796 */	
+			0x48,		/* FC_VARIABLE_REPEAT */
+			0x49,		/* FC_FIXED_OFFSET */
+/* 4798 */	NdrFcShort( 0x1c ),	/* 28 */
+/* 4800 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4802 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 4804 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 4806 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 4808 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4810 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4812 */	
+			0x5b,		/* FC_END */
+
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 4814 */	0x0,		/* 0 */
+			NdrFcShort( 0xffbd ),	/* Offset= -67 (4748) */
+			0x5b,		/* FC_END */
+/* 4818 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 4820 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 4822 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4824 */	NdrFcShort( 0x8 ),	/* Offset= 8 (4832) */
+/* 4826 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 4828 */	NdrFcShort( 0xffa6 ),	/* Offset= -90 (4738) */
+/* 4830 */	0x36,		/* FC_POINTER */
+			0x5b,		/* FC_END */
+/* 4832 */	
+			0x12, 0x0,	/* FC_UP */
+/* 4834 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (4774) */
+/* 4836 */	
+			0x11, 0x0,	/* FC_RP */
 /* 4838 */	NdrFcShort( 0x2 ),	/* Offset= 2 (4840) */
-/* 4840 */	NdrFcShort( 0xc ),	/* 12 */
-/* 4842 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 4844 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 4848 */	NdrFcShort( 0x13a ),	/* Offset= 314 (5162) */
-/* 4850 */	NdrFcShort( 0xffff ),	/* Offset= -1 (4849) */
-/* 4852 */	
+/* 4840 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 4854 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 4842 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x0,		/*  */
-/* 4856 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 4858 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 4860 */	0x0 , 
+/* 4844 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 4846 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 4848 */	0x0 , 
 			0x0,		/* 0 */
-/* 4862 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4866 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4870 */	NdrFcShort( 0x2 ),	/* Offset= 2 (4872) */
-/* 4872 */	NdrFcShort( 0x2c ),	/* 44 */
-/* 4874 */	NdrFcShort( 0x7 ),	/* 7 */
-/* 4876 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 4880 */	NdrFcShort( 0x4e ),	/* Offset= 78 (4958) */
-/* 4882 */	NdrFcLong( 0x2 ),	/* 2 */
-/* 4886 */	NdrFcShort( 0x5c ),	/* Offset= 92 (4978) */
-/* 4888 */	NdrFcLong( 0x3 ),	/* 3 */
-/* 4892 */	NdrFcShort( 0xf0 ),	/* Offset= 240 (5132) */
-/* 4894 */	NdrFcLong( 0x4 ),	/* 4 */
-/* 4898 */	NdrFcShort( 0xfa ),	/* Offset= 250 (5148) */
-/* 4900 */	NdrFcLong( 0x5 ),	/* 5 */
-/* 4904 */	NdrFcShort( 0xf4 ),	/* Offset= 244 (5148) */
-/* 4906 */	NdrFcLong( 0x6 ),	/* 6 */
-/* 4910 */	NdrFcShort( 0xee ),	/* Offset= 238 (5148) */
-/* 4912 */	NdrFcLong( 0x7 ),	/* 7 */
-/* 4916 */	NdrFcShort( 0xe8 ),	/* Offset= 232 (5148) */
-/* 4918 */	NdrFcShort( 0xffff ),	/* Offset= -1 (4917) */
+/* 4850 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4854 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4858 */	NdrFcShort( 0x2 ),	/* Offset= 2 (4860) */
+/* 4860 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 4862 */	NdrFcShort( 0x3 ),	/* 3 */
+/* 4864 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 4868 */	NdrFcShort( 0x10 ),	/* Offset= 16 (4884) */
+/* 4870 */	NdrFcLong( 0x2 ),	/* 2 */
+/* 4874 */	NdrFcShort( 0x2e ),	/* Offset= 46 (4920) */
+/* 4876 */	NdrFcLong( 0x3 ),	/* 3 */
+/* 4880 */	NdrFcShort( 0x36 ),	/* Offset= 54 (4934) */
+/* 4882 */	NdrFcShort( 0xffff ),	/* Offset= -1 (4881) */
+/* 4884 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 4886 */	NdrFcShort( 0xc ),	/* 12 */
+/* 4888 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4890 */	NdrFcShort( 0x8 ),	/* Offset= 8 (4898) */
+/* 4892 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 4894 */	0x0,		/* 0 */
+			NdrFcShort( 0xf1a5 ),	/* Offset= -3675 (1220) */
+			0x5b,		/* FC_END */
+/* 4898 */	
+			0x11, 0x0,	/* FC_RP */
+/* 4900 */	NdrFcShort( 0xed8e ),	/* Offset= -4722 (178) */
+/* 4902 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 4904 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 4906 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4908 */	NdrFcShort( 0x8 ),	/* Offset= 8 (4916) */
+/* 4910 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 4912 */	0x0,		/* 0 */
+			NdrFcShort( 0xf1a5 ),	/* Offset= -3675 (1238) */
+			0x5b,		/* FC_END */
+/* 4916 */	
+			0x12, 0x0,	/* FC_UP */
+/* 4918 */	NdrFcShort( 0xfff0 ),	/* Offset= -16 (4902) */
 /* 4920 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 4922 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 4922 */	NdrFcShort( 0x14 ),	/* 20 */
 /* 4924 */	NdrFcShort( 0x0 ),	/* 0 */
 /* 4926 */	NdrFcShort( 0x0 ),	/* Offset= 0 (4926) */
-/* 4928 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 4930 */	0x8,		/* FC_LONG */
-			0x6,		/* FC_SHORT */
-/* 4932 */	0x3e,		/* FC_STRUCTPAD2 */
-			0x8,		/* FC_LONG */
-/* 4934 */	0x8,		/* FC_LONG */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 4936 */	0x0,		/* 0 */
-			NdrFcShort( 0xf055 ),	/* Offset= -4011 (926) */
-			0x5b,		/* FC_END */
-/* 4940 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 4942 */	NdrFcShort( 0x24 ),	/* 36 */
-/* 4944 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4946 */	NdrFcShort( 0x8 ),	/* Offset= 8 (4954) */
-/* 4948 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 4950 */	0x0,		/* 0 */
-			NdrFcShort( 0xffe1 ),	/* Offset= -31 (4920) */
-			0x5b,		/* FC_END */
-/* 4954 */	
-			0x12, 0x0,	/* FC_UP */
-/* 4956 */	NdrFcShort( 0xfff0 ),	/* Offset= -16 (4940) */
-/* 4958 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 4960 */	NdrFcShort( 0x2c ),	/* 44 */
-/* 4962 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4964 */	NdrFcShort( 0xa ),	/* Offset= 10 (4974) */
-/* 4966 */	0x36,		/* FC_POINTER */
-			0x8,		/* FC_LONG */
-/* 4968 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 4928 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 4970 */	NdrFcShort( 0xffe2 ),	/* Offset= -30 (4940) */
-/* 4972 */	0x5c,		/* FC_PAD */
+/* 4930 */	NdrFcShort( 0xffe4 ),	/* Offset= -28 (4902) */
+/* 4932 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 4974 */	
-			0x12, 0x0,	/* FC_UP */
-/* 4976 */	NdrFcShort( 0xed3c ),	/* Offset= -4804 (172) */
-/* 4978 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+/* 4934 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 4980 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 4982 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4984 */	NdrFcShort( 0xa ),	/* Offset= 10 (4994) */
-/* 4986 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 4988 */	0x8,		/* FC_LONG */
-			0x6,		/* FC_SHORT */
-/* 4990 */	0x3e,		/* FC_STRUCTPAD2 */
-			0x36,		/* FC_POINTER */
-/* 4992 */	0x5c,		/* FC_PAD */
+/* 4936 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 4938 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4940 */	NdrFcShort( 0x8 ),	/* Offset= 8 (4948) */
+/* 4942 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 4944 */	NdrFcShort( 0xffd6 ),	/* Offset= -42 (4902) */
+/* 4946 */	0x36,		/* FC_POINTER */
 			0x5b,		/* FC_END */
-/* 4994 */	
+/* 4948 */	
 			0x12, 0x0,	/* FC_UP */
-/* 4996 */	NdrFcShort( 0xed28 ),	/* Offset= -4824 (172) */
-/* 4998 */	
+/* 4950 */	NdrFcShort( 0xf87c ),	/* Offset= -1924 (3026) */
+/* 4952 */	
+			0x11, 0x0,	/* FC_RP */
+/* 4954 */	NdrFcShort( 0x2 ),	/* Offset= 2 (4956) */
+/* 4956 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 4958 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x54,		/* FC_DEREFERENCE */
+/* 4960 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
+/* 4962 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 4964 */	0x0 , 
+			0x0,		/* 0 */
+/* 4966 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4970 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4974 */	NdrFcShort( 0x2 ),	/* Offset= 2 (4976) */
+/* 4976 */	NdrFcShort( 0x40 ),	/* 64 */
+/* 4978 */	NdrFcShort( 0x3 ),	/* 3 */
+/* 4980 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 4984 */	NdrFcShort( 0x10 ),	/* Offset= 16 (5000) */
+/* 4986 */	NdrFcLong( 0x2 ),	/* 2 */
+/* 4990 */	NdrFcShort( 0x54 ),	/* Offset= 84 (5074) */
+/* 4992 */	NdrFcLong( 0x3 ),	/* 3 */
+/* 4996 */	NdrFcShort( 0x1fc ),	/* Offset= 508 (5504) */
+/* 4998 */	NdrFcShort( 0xffff ),	/* Offset= -1 (4997) */
+/* 5000 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 5002 */	NdrFcShort( 0x40 ),	/* 64 */
+/* 5004 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5006 */	NdrFcShort( 0x0 ),	/* Offset= 0 (5006) */
+/* 5008 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 5010 */	NdrFcShort( 0xec7a ),	/* Offset= -4998 (12) */
+/* 5012 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 5014 */	NdrFcShort( 0xecfc ),	/* Offset= -4868 (146) */
+/* 5016 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 5018 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 5020 */	0x6,		/* FC_SHORT */
+			0x3e,		/* FC_STRUCTPAD2 */
+/* 5022 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 5024 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 5026 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5030 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 5034 */	
 			0x15,		/* FC_STRUCT */
-			0x1,		/* 1 */
-/* 5000 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 5002 */	0x2,		/* FC_CHAR */
-			0x2,		/* FC_CHAR */
-/* 5004 */	0x6,		/* FC_SHORT */
-			0x5b,		/* FC_END */
-/* 5006 */	
-			0x1c,		/* FC_CVARRAY */
-			0x1,		/* 1 */
-/* 5008 */	NdrFcShort( 0x2 ),	/* 2 */
-/* 5010 */	0x17,		/* Corr desc:  field pointer, FC_USHORT */
-			0x55,		/* FC_DIV_2 */
-/* 5012 */	NdrFcShort( 0x2 ),	/* 2 */
-/* 5014 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 5016 */	0x0 , 
-			0x0,		/* 0 */
-/* 5018 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5022 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5026 */	0x17,		/* Corr desc:  field pointer, FC_USHORT */
-			0x55,		/* FC_DIV_2 */
-/* 5028 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5030 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 5032 */	0x0 , 
-			0x0,		/* 0 */
-/* 5034 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5038 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5042 */	0x5,		/* FC_WCHAR */
-			0x5b,		/* FC_END */
-/* 5044 */	
-			0x16,		/* FC_PSTRUCT */
 			0x3,		/* 3 */
-/* 5046 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 5036 */	NdrFcShort( 0x2c ),	/* 44 */
+/* 5038 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 5040 */	NdrFcShort( 0xec5c ),	/* Offset= -5028 (12) */
+/* 5042 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 5044 */	NdrFcShort( 0xecde ),	/* Offset= -4898 (146) */
+/* 5046 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
 /* 5048 */	
-			0x4b,		/* FC_PP */
-			0x5c,		/* FC_PAD */
-/* 5050 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 5052 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 5054 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 5056 */	0x12, 0x0,	/* FC_UP */
-/* 5058 */	NdrFcShort( 0xffcc ),	/* Offset= -52 (5006) */
-/* 5060 */	
-			0x5b,		/* FC_END */
-
-			0x6,		/* FC_SHORT */
-/* 5062 */	0x6,		/* FC_SHORT */
-			0x8,		/* FC_LONG */
-/* 5064 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 5066 */	
-			0x16,		/* FC_PSTRUCT */
-			0x3,		/* 3 */
-/* 5068 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 5070 */	
-			0x4b,		/* FC_PP */
-			0x5c,		/* FC_PAD */
-/* 5072 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 5074 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5076 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5078 */	0x12, 0x0,	/* FC_UP */
-/* 5080 */	NdrFcShort( 0xfff2 ),	/* Offset= -14 (5066) */
-/* 5082 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 5084 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 5086 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 5088 */	0x12, 0x0,	/* FC_UP */
-/* 5090 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (5044) */
-/* 5092 */	
-			0x5b,		/* FC_END */
-
-			0x8,		/* FC_LONG */
-/* 5094 */	0x8,		/* FC_LONG */
-			0x5b,		/* FC_END */
-/* 5096 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 5098 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 5100 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5102 */	NdrFcShort( 0x12 ),	/* Offset= 18 (5120) */
-/* 5104 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 5106 */	0x0,		/* 0 */
-			NdrFcShort( 0xff93 ),	/* Offset= -109 (4998) */
-			0x6,		/* FC_SHORT */
-/* 5110 */	0x6,		/* FC_SHORT */
-			0x6,		/* FC_SHORT */
-/* 5112 */	0x6,		/* FC_SHORT */
-			0x36,		/* FC_POINTER */
-/* 5114 */	0x36,		/* FC_POINTER */
-			0x8,		/* FC_LONG */
-/* 5116 */	0x2,		/* FC_CHAR */
-			0x3f,		/* FC_STRUCTPAD3 */
-/* 5118 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 5120 */	
-			0x12, 0x0,	/* FC_UP */
-/* 5122 */	NdrFcShort( 0xecaa ),	/* Offset= -4950 (172) */
-/* 5124 */	
-			0x12, 0x0,	/* FC_UP */
-/* 5126 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (5066) */
-/* 5128 */	
-			0x12, 0x0,	/* FC_UP */
-/* 5130 */	NdrFcShort( 0xffde ),	/* Offset= -34 (5096) */
-/* 5132 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 5134 */	NdrFcShort( 0x2c ),	/* 44 */
-/* 5136 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5138 */	NdrFcShort( 0x0 ),	/* Offset= 0 (5138) */
-/* 5140 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 5142 */	0x8,		/* FC_LONG */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 5144 */	0x0,		/* 0 */
-			NdrFcShort( 0xffcf ),	/* Offset= -49 (5096) */
-			0x5b,		/* FC_END */
-/* 5148 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 5150 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 5152 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5154 */	NdrFcShort( 0x0 ),	/* Offset= 0 (5154) */
-/* 5156 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 5158 */	0x8,		/* FC_LONG */
-			0x6,		/* FC_SHORT */
-/* 5160 */	0x3e,		/* FC_STRUCTPAD2 */
-			0x5b,		/* FC_END */
-/* 5162 */	
-			0x16,		/* FC_PSTRUCT */
-			0x3,		/* 3 */
-/* 5164 */	NdrFcShort( 0xc ),	/* 12 */
-/* 5166 */	
-			0x4b,		/* FC_PP */
-			0x5c,		/* FC_PAD */
-/* 5168 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 5170 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 5172 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 5174 */	0x12, 0x0,	/* FC_UP */
-/* 5176 */	NdrFcShort( 0xfebc ),	/* Offset= -324 (4852) */
-/* 5178 */	
-			0x5b,		/* FC_END */
-
-			0x8,		/* FC_LONG */
-/* 5180 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 5182 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 5184 */	
 			0x1b,		/* FC_CARRAY */
 			0x3,		/* 3 */
-/* 5186 */	NdrFcShort( 0x2c ),	/* 44 */
-/* 5188 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 5050 */	NdrFcShort( 0x2c ),	/* 44 */
+/* 5052 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 5190 */	NdrFcShort( 0xc ),	/* 12 */
-/* 5192 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 5194 */	0x0 , 
+/* 5054 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 5056 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 5058 */	0x0 , 
 			0x0,		/* 0 */
-/* 5196 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5200 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5204 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 5060 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5064 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5068 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 5206 */	NdrFcShort( 0xfe2e ),	/* Offset= -466 (4740) */
-/* 5208 */	0x5c,		/* FC_PAD */
+/* 5070 */	NdrFcShort( 0xffdc ),	/* Offset= -36 (5034) */
+/* 5072 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 5210 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+/* 5074 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 5212 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 5214 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5216 */	NdrFcShort( 0xc ),	/* Offset= 12 (5228) */
-/* 5218 */	0x36,		/* FC_POINTER */
+/* 5076 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 5078 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5080 */	NdrFcShort( 0x10 ),	/* Offset= 16 (5096) */
+/* 5082 */	0x36,		/* FC_POINTER */
 			0x8,		/* FC_LONG */
-/* 5220 */	0x36,		/* FC_POINTER */
+/* 5084 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 5086 */	0x8,		/* FC_LONG */
+			0x6,		/* FC_SHORT */
+/* 5088 */	0x3e,		/* FC_STRUCTPAD2 */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 5222 */	0x0,		/* 0 */
-			NdrFcShort( 0xfe63 ),	/* Offset= -413 (4810) */
+/* 5090 */	0x0,		/* 0 */
+			NdrFcShort( 0xffbd ),	/* Offset= -67 (5024) */
 			0x36,		/* FC_POINTER */
-/* 5226 */	0x5c,		/* FC_PAD */
+/* 5094 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 5228 */	
+/* 5096 */	
 			0x12, 0x0,	/* FC_UP */
-/* 5230 */	NdrFcShort( 0xec3e ),	/* Offset= -5058 (172) */
-/* 5232 */	
+/* 5098 */	NdrFcShort( 0xecc8 ),	/* Offset= -4920 (178) */
+/* 5100 */	
 			0x12, 0x0,	/* FC_UP */
-/* 5234 */	NdrFcShort( 0xfe62 ),	/* Offset= -414 (4820) */
-/* 5236 */	
-			0x12, 0x0,	/* FC_UP */
-/* 5238 */	NdrFcShort( 0xffca ),	/* Offset= -54 (5184) */
-/* 5240 */	
-			0x11, 0x0,	/* FC_RP */
-/* 5242 */	NdrFcShort( 0x2 ),	/* Offset= 2 (5244) */
-/* 5244 */	
+/* 5102 */	NdrFcShort( 0xffca ),	/* Offset= -54 (5048) */
+/* 5104 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 5106 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5110 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 5114 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 5246 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 5116 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 5248 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 5250 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 5252 */	0x0 , 
+/* 5118 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 5120 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 5122 */	0x0 , 
 			0x0,		/* 0 */
-/* 5254 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5258 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5262 */	NdrFcShort( 0x2 ),	/* Offset= 2 (5264) */
-/* 5264 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 5266 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 5268 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 5272 */	NdrFcShort( 0x4 ),	/* Offset= 4 (5276) */
-/* 5274 */	NdrFcShort( 0xffff ),	/* Offset= -1 (5273) */
-/* 5276 */	
-			0x15,		/* FC_STRUCT */
+/* 5124 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5128 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5132 */	NdrFcShort( 0x2 ),	/* Offset= 2 (5134) */
+/* 5134 */	NdrFcShort( 0xc ),	/* 12 */
+/* 5136 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 5138 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 5142 */	NdrFcShort( 0x13a ),	/* Offset= 314 (5456) */
+/* 5144 */	NdrFcShort( 0xffff ),	/* Offset= -1 (5143) */
+/* 5146 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 5148 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 5150 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 5152 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 5154 */	0x0 , 
+			0x0,		/* 0 */
+/* 5156 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5160 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5164 */	NdrFcShort( 0x2 ),	/* Offset= 2 (5166) */
+/* 5166 */	NdrFcShort( 0x2c ),	/* 44 */
+/* 5168 */	NdrFcShort( 0x7 ),	/* 7 */
+/* 5170 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 5174 */	NdrFcShort( 0x4e ),	/* Offset= 78 (5252) */
+/* 5176 */	NdrFcLong( 0x2 ),	/* 2 */
+/* 5180 */	NdrFcShort( 0x5c ),	/* Offset= 92 (5272) */
+/* 5182 */	NdrFcLong( 0x3 ),	/* 3 */
+/* 5186 */	NdrFcShort( 0xf0 ),	/* Offset= 240 (5426) */
+/* 5188 */	NdrFcLong( 0x4 ),	/* 4 */
+/* 5192 */	NdrFcShort( 0xfa ),	/* Offset= 250 (5442) */
+/* 5194 */	NdrFcLong( 0x5 ),	/* 5 */
+/* 5198 */	NdrFcShort( 0xf4 ),	/* Offset= 244 (5442) */
+/* 5200 */	NdrFcLong( 0x6 ),	/* 6 */
+/* 5204 */	NdrFcShort( 0xee ),	/* Offset= 238 (5442) */
+/* 5206 */	NdrFcLong( 0x7 ),	/* 7 */
+/* 5210 */	NdrFcShort( 0xe8 ),	/* Offset= 232 (5442) */
+/* 5212 */	NdrFcShort( 0xffff ),	/* Offset= -1 (5211) */
+/* 5214 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 5278 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 5216 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 5218 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5220 */	NdrFcShort( 0x0 ),	/* Offset= 0 (5220) */
+/* 5222 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 5224 */	0x8,		/* FC_LONG */
+			0x6,		/* FC_SHORT */
+/* 5226 */	0x3e,		/* FC_STRUCTPAD2 */
+			0x8,		/* FC_LONG */
+/* 5228 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 5230 */	0x0,		/* 0 */
+			NdrFcShort( 0xefcf ),	/* Offset= -4145 (1086) */
+			0x5b,		/* FC_END */
+/* 5234 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 5236 */	NdrFcShort( 0x24 ),	/* 36 */
+/* 5238 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5240 */	NdrFcShort( 0x8 ),	/* Offset= 8 (5248) */
+/* 5242 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 5244 */	0x0,		/* 0 */
+			NdrFcShort( 0xffe1 ),	/* Offset= -31 (5214) */
+			0x5b,		/* FC_END */
+/* 5248 */	
+			0x12, 0x0,	/* FC_UP */
+/* 5250 */	NdrFcShort( 0xfff0 ),	/* Offset= -16 (5234) */
+/* 5252 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 5254 */	NdrFcShort( 0x2c ),	/* 44 */
+/* 5256 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5258 */	NdrFcShort( 0xa ),	/* Offset= 10 (5268) */
+/* 5260 */	0x36,		/* FC_POINTER */
+			0x8,		/* FC_LONG */
+/* 5262 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 5264 */	NdrFcShort( 0xffe2 ),	/* Offset= -30 (5234) */
+/* 5266 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 5268 */	
+			0x12, 0x0,	/* FC_UP */
+/* 5270 */	NdrFcShort( 0xec1c ),	/* Offset= -5092 (178) */
+/* 5272 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 5274 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 5276 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5278 */	NdrFcShort( 0xa ),	/* Offset= 10 (5288) */
 /* 5280 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 5282 */	0x5c,		/* FC_PAD */
+/* 5282 */	0x8,		/* FC_LONG */
+			0x6,		/* FC_SHORT */
+/* 5284 */	0x3e,		/* FC_STRUCTPAD2 */
+			0x36,		/* FC_POINTER */
+/* 5286 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 5284 */	
-			0x11, 0x0,	/* FC_RP */
-/* 5286 */	NdrFcShort( 0x2 ),	/* Offset= 2 (5288) */
 /* 5288 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 5290 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 5292 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 5294 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 5296 */	0x0 , 
+			0x12, 0x0,	/* FC_UP */
+/* 5290 */	NdrFcShort( 0xec08 ),	/* Offset= -5112 (178) */
+/* 5292 */	
+			0x15,		/* FC_STRUCT */
+			0x1,		/* 1 */
+/* 5294 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 5296 */	0x2,		/* FC_CHAR */
+			0x2,		/* FC_CHAR */
+/* 5298 */	0x6,		/* FC_SHORT */
+			0x5b,		/* FC_END */
+/* 5300 */	
+			0x1c,		/* FC_CVARRAY */
+			0x1,		/* 1 */
+/* 5302 */	NdrFcShort( 0x2 ),	/* 2 */
+/* 5304 */	0x17,		/* Corr desc:  field pointer, FC_USHORT */
+			0x55,		/* FC_DIV_2 */
+/* 5306 */	NdrFcShort( 0x2 ),	/* 2 */
+/* 5308 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 5310 */	0x0 , 
 			0x0,		/* 0 */
-/* 5298 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5302 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5306 */	NdrFcShort( 0x2 ),	/* Offset= 2 (5308) */
-/* 5308 */	NdrFcShort( 0x28 ),	/* 40 */
-/* 5310 */	NdrFcShort( 0x2 ),	/* 2 */
-/* 5312 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 5316 */	NdrFcShort( 0xa ),	/* Offset= 10 (5326) */
-/* 5318 */	NdrFcLong( 0x2 ),	/* 2 */
-/* 5322 */	NdrFcShort( 0x1c ),	/* Offset= 28 (5350) */
-/* 5324 */	NdrFcShort( 0xffff ),	/* Offset= -1 (5323) */
-/* 5326 */	
+/* 5312 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5316 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5320 */	0x17,		/* Corr desc:  field pointer, FC_USHORT */
+			0x55,		/* FC_DIV_2 */
+/* 5322 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5324 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 5326 */	0x0 , 
+			0x0,		/* 0 */
+/* 5328 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5332 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5336 */	0x5,		/* FC_WCHAR */
+			0x5b,		/* FC_END */
+/* 5338 */	
 			0x16,		/* FC_PSTRUCT */
 			0x3,		/* 3 */
-/* 5328 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 5330 */	
+/* 5340 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 5342 */	
 			0x4b,		/* FC_PP */
 			0x5c,		/* FC_PAD */
-/* 5332 */	
+/* 5344 */	
 			0x46,		/* FC_NO_REPEAT */
 			0x5c,		/* FC_PAD */
-/* 5334 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 5336 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 5338 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5340 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 5342 */	
+/* 5346 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 5348 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 5350 */	0x12, 0x0,	/* FC_UP */
+/* 5352 */	NdrFcShort( 0xffcc ),	/* Offset= -52 (5300) */
+/* 5354 */	
 			0x5b,		/* FC_END */
 
+			0x6,		/* FC_SHORT */
+/* 5356 */	0x6,		/* FC_SHORT */
 			0x8,		/* FC_LONG */
-/* 5344 */	0x8,		/* FC_LONG */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 5346 */	0x0,		/* 0 */
-			NdrFcShort( 0xeb29 ),	/* Offset= -5335 (12) */
+/* 5358 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 5350 */	
+/* 5360 */	
 			0x16,		/* FC_PSTRUCT */
 			0x3,		/* 3 */
-/* 5352 */	NdrFcShort( 0x28 ),	/* 40 */
-/* 5354 */	
-			0x4b,		/* FC_PP */
-			0x5c,		/* FC_PAD */
-/* 5356 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 5358 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 5360 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 5362 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 5362 */	NdrFcShort( 0x8 ),	/* 8 */
 /* 5364 */	
-			0x25,		/* FC_C_WSTRING */
+			0x4b,		/* FC_PP */
 			0x5c,		/* FC_PAD */
 /* 5366 */	
 			0x46,		/* FC_NO_REPEAT */
 			0x5c,		/* FC_PAD */
-/* 5368 */	NdrFcShort( 0x1c ),	/* 28 */
-/* 5370 */	NdrFcShort( 0x1c ),	/* 28 */
-/* 5372 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5374 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
+/* 5368 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5370 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5372 */	0x12, 0x0,	/* FC_UP */
+/* 5374 */	NdrFcShort( 0xfff2 ),	/* Offset= -14 (5360) */
 /* 5376 */	
 			0x46,		/* FC_NO_REPEAT */
 			0x5c,		/* FC_PAD */
-/* 5378 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 5380 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 5382 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5384 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
+/* 5378 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 5380 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 5382 */	0x12, 0x0,	/* FC_UP */
+/* 5384 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (5338) */
 /* 5386 */	
 			0x5b,		/* FC_END */
 
 			0x8,		/* FC_LONG */
 /* 5388 */	0x8,		/* FC_LONG */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 5390 */	0x0,		/* 0 */
-			NdrFcShort( 0xeafd ),	/* Offset= -5379 (12) */
-			0x8,		/* FC_LONG */
-/* 5394 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 5396 */	0x8,		/* FC_LONG */
 			0x5b,		/* FC_END */
-/* 5398 */	
-			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 5400 */	NdrFcShort( 0x2 ),	/* Offset= 2 (5402) */
-/* 5402 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 5404 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x54,		/* FC_DEREFERENCE */
-/* 5406 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 5408 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 5410 */	0x0 , 
-			0x0,		/* 0 */
-/* 5412 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5416 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5420 */	NdrFcShort( 0x2 ),	/* Offset= 2 (5422) */
-/* 5422 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 5424 */	NdrFcShort( 0xf ),	/* 15 */
-/* 5426 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5430 */	NdrFcShort( 0x58 ),	/* Offset= 88 (5518) */
-/* 5432 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 5436 */	NdrFcShort( 0xf6 ),	/* Offset= 246 (5682) */
-/* 5438 */	NdrFcLong( 0x2 ),	/* 2 */
-/* 5442 */	NdrFcShort( 0xfe ),	/* Offset= 254 (5696) */
-/* 5444 */	NdrFcLong( 0x3 ),	/* 3 */
-/* 5448 */	NdrFcShort( 0x150 ),	/* Offset= 336 (5784) */
-/* 5450 */	NdrFcLong( 0x4 ),	/* 4 */
-/* 5454 */	NdrFcShort( 0x14a ),	/* Offset= 330 (5784) */
-/* 5456 */	NdrFcLong( 0x5 ),	/* 5 */
-/* 5460 */	NdrFcShort( 0x19c ),	/* Offset= 412 (5872) */
-/* 5462 */	NdrFcLong( 0x6 ),	/* 6 */
-/* 5466 */	NdrFcShort( 0x1fa ),	/* Offset= 506 (5972) */
-/* 5468 */	NdrFcLong( 0x7 ),	/* 7 */
-/* 5472 */	NdrFcShort( 0x25c ),	/* Offset= 604 (6076) */
-/* 5474 */	NdrFcLong( 0x8 ),	/* 8 */
-/* 5478 */	NdrFcShort( 0x28c ),	/* Offset= 652 (6130) */
-/* 5480 */	NdrFcLong( 0x9 ),	/* 9 */
-/* 5484 */	NdrFcShort( 0x2d8 ),	/* Offset= 728 (6212) */
-/* 5486 */	NdrFcLong( 0xa ),	/* 10 */
-/* 5490 */	NdrFcShort( 0x32c ),	/* Offset= 812 (6302) */
-/* 5492 */	NdrFcLong( 0xfffffffa ),	/* -6 */
-/* 5496 */	NdrFcShort( 0x394 ),	/* Offset= 916 (6412) */
-/* 5498 */	NdrFcLong( 0xfffffffb ),	/* -5 */
-/* 5502 */	NdrFcShort( 0x3ea ),	/* Offset= 1002 (6504) */
-/* 5504 */	NdrFcLong( 0xfffffffc ),	/* -4 */
-/* 5508 */	NdrFcShort( 0x3e8 ),	/* Offset= 1000 (6508) */
-/* 5510 */	NdrFcLong( 0xfffffffe ),	/* -2 */
-/* 5514 */	NdrFcShort( 0x4 ),	/* Offset= 4 (5518) */
-/* 5516 */	NdrFcShort( 0xffff ),	/* Offset= -1 (5515) */
-/* 5518 */	
+/* 5390 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 5392 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 5394 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5396 */	NdrFcShort( 0x12 ),	/* Offset= 18 (5414) */
+/* 5398 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 5400 */	0x0,		/* 0 */
+			NdrFcShort( 0xff93 ),	/* Offset= -109 (5292) */
+			0x6,		/* FC_SHORT */
+/* 5404 */	0x6,		/* FC_SHORT */
+			0x6,		/* FC_SHORT */
+/* 5406 */	0x6,		/* FC_SHORT */
+			0x36,		/* FC_POINTER */
+/* 5408 */	0x36,		/* FC_POINTER */
+			0x8,		/* FC_LONG */
+/* 5410 */	0x2,		/* FC_CHAR */
+			0x3f,		/* FC_STRUCTPAD3 */
+/* 5412 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 5414 */	
 			0x12, 0x0,	/* FC_UP */
-/* 5520 */	NdrFcShort( 0x6e ),	/* Offset= 110 (5630) */
-/* 5522 */	
+/* 5416 */	NdrFcShort( 0xeb8a ),	/* Offset= -5238 (178) */
+/* 5418 */	
+			0x12, 0x0,	/* FC_UP */
+/* 5420 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (5360) */
+/* 5422 */	
+			0x12, 0x0,	/* FC_UP */
+/* 5424 */	NdrFcShort( 0xffde ),	/* Offset= -34 (5390) */
+/* 5426 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 5428 */	NdrFcShort( 0x2c ),	/* 44 */
+/* 5430 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5432 */	NdrFcShort( 0x0 ),	/* Offset= 0 (5432) */
+/* 5434 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 5436 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 5438 */	0x0,		/* 0 */
+			NdrFcShort( 0xffcf ),	/* Offset= -49 (5390) */
+			0x5b,		/* FC_END */
+/* 5442 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 5444 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 5446 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5448 */	NdrFcShort( 0x0 ),	/* Offset= 0 (5448) */
+/* 5450 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 5452 */	0x8,		/* FC_LONG */
+			0x6,		/* FC_SHORT */
+/* 5454 */	0x3e,		/* FC_STRUCTPAD2 */
+			0x5b,		/* FC_END */
+/* 5456 */	
 			0x16,		/* FC_PSTRUCT */
-			0x7,		/* 7 */
-/* 5524 */	NdrFcShort( 0x80 ),	/* 128 */
-/* 5526 */	
+			0x3,		/* 3 */
+/* 5458 */	NdrFcShort( 0xc ),	/* 12 */
+/* 5460 */	
 			0x4b,		/* FC_PP */
 			0x5c,		/* FC_PAD */
-/* 5528 */	
+/* 5462 */	
 			0x46,		/* FC_NO_REPEAT */
 			0x5c,		/* FC_PAD */
-/* 5530 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5532 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5534 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5536 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 5538 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 5540 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 5542 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 5544 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5546 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 5548 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 5550 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 5552 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 5554 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5556 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 5558 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 5560 */	NdrFcShort( 0xc ),	/* 12 */
-/* 5562 */	NdrFcShort( 0xc ),	/* 12 */
-/* 5564 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5566 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 5568 */	
+/* 5464 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 5466 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 5468 */	0x12, 0x0,	/* FC_UP */
+/* 5470 */	NdrFcShort( 0xfebc ),	/* Offset= -324 (5146) */
+/* 5472 */	
 			0x5b,		/* FC_END */
 
 			0x8,		/* FC_LONG */
-/* 5570 */	0x8,		/* FC_LONG */
+/* 5474 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 5572 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 5574 */	0x8,		/* FC_LONG */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 5576 */	0x0,		/* 0 */
-			NdrFcShort( 0xea43 ),	/* Offset= -5565 (12) */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 5580 */	0x0,		/* 0 */
-			NdrFcShort( 0xea3f ),	/* Offset= -5569 (12) */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 5584 */	0x0,		/* 0 */
-			NdrFcShort( 0xea3b ),	/* Offset= -5573 (12) */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 5588 */	0x0,		/* 0 */
-			NdrFcShort( 0xea37 ),	/* Offset= -5577 (12) */
-			0xb,		/* FC_HYPER */
-/* 5592 */	0xb,		/* FC_HYPER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 5594 */	0x0,		/* 0 */
-			NdrFcShort( 0xfec1 ),	/* Offset= -319 (5276) */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 5598 */	0x0,		/* 0 */
-			NdrFcShort( 0xfebd ),	/* Offset= -323 (5276) */
-			0x8,		/* FC_LONG */
-/* 5602 */	0x8,		/* FC_LONG */
+/* 5476 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 5604 */	
+/* 5478 */	
 			0x1b,		/* FC_CARRAY */
-			0x7,		/* 7 */
-/* 5606 */	NdrFcShort( 0x80 ),	/* 128 */
-/* 5608 */	0x9,		/* Corr desc: FC_ULONG */
+			0x3,		/* 3 */
+/* 5480 */	NdrFcShort( 0x2c ),	/* 44 */
+/* 5482 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 5610 */	NdrFcShort( 0xfff8 ),	/* -8 */
-/* 5612 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 5614 */	0x0 , 
+/* 5484 */	NdrFcShort( 0xc ),	/* 12 */
+/* 5486 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 5488 */	0x0 , 
 			0x0,		/* 0 */
-/* 5616 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5620 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5624 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 5490 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5494 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5498 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 5626 */	NdrFcShort( 0xff98 ),	/* Offset= -104 (5522) */
-/* 5628 */	0x5c,		/* FC_PAD */
+/* 5500 */	NdrFcShort( 0xfe2e ),	/* Offset= -466 (5034) */
+/* 5502 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 5630 */	
-			0x18,		/* FC_CPSTRUCT */
-			0x7,		/* 7 */
-/* 5632 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 5634 */	NdrFcShort( 0xffe2 ),	/* Offset= -30 (5604) */
-/* 5636 */	
+/* 5504 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 5506 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 5508 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5510 */	NdrFcShort( 0xc ),	/* Offset= 12 (5522) */
+/* 5512 */	0x36,		/* FC_POINTER */
+			0x8,		/* FC_LONG */
+/* 5514 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 5516 */	0x0,		/* 0 */
+			NdrFcShort( 0xfe63 ),	/* Offset= -413 (5104) */
+			0x36,		/* FC_POINTER */
+/* 5520 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 5522 */	
+			0x12, 0x0,	/* FC_UP */
+/* 5524 */	NdrFcShort( 0xeb1e ),	/* Offset= -5346 (178) */
+/* 5526 */	
+			0x12, 0x0,	/* FC_UP */
+/* 5528 */	NdrFcShort( 0xfe62 ),	/* Offset= -414 (5114) */
+/* 5530 */	
+			0x12, 0x0,	/* FC_UP */
+/* 5532 */	NdrFcShort( 0xffca ),	/* Offset= -54 (5478) */
+/* 5534 */	
+			0x11, 0x0,	/* FC_RP */
+/* 5536 */	NdrFcShort( 0x2 ),	/* Offset= 2 (5538) */
+/* 5538 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 5540 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 5542 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 5544 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 5546 */	0x0 , 
+			0x0,		/* 0 */
+/* 5548 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5552 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5556 */	NdrFcShort( 0x2 ),	/* Offset= 2 (5558) */
+/* 5558 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 5560 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 5562 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 5566 */	NdrFcShort( 0x4 ),	/* Offset= 4 (5570) */
+/* 5568 */	NdrFcShort( 0xffff ),	/* Offset= -1 (5567) */
+/* 5570 */	
+			0x15,		/* FC_STRUCT */
+			0x3,		/* 3 */
+/* 5572 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 5574 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 5576 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 5578 */	
+			0x11, 0x0,	/* FC_RP */
+/* 5580 */	NdrFcShort( 0x2 ),	/* Offset= 2 (5582) */
+/* 5582 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 5584 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 5586 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 5588 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 5590 */	0x0 , 
+			0x0,		/* 0 */
+/* 5592 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5596 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5600 */	NdrFcShort( 0x2 ),	/* Offset= 2 (5602) */
+/* 5602 */	NdrFcShort( 0x28 ),	/* 40 */
+/* 5604 */	NdrFcShort( 0x2 ),	/* 2 */
+/* 5606 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 5610 */	NdrFcShort( 0xa ),	/* Offset= 10 (5620) */
+/* 5612 */	NdrFcLong( 0x2 ),	/* 2 */
+/* 5616 */	NdrFcShort( 0x1c ),	/* Offset= 28 (5644) */
+/* 5618 */	NdrFcShort( 0xffff ),	/* Offset= -1 (5617) */
+/* 5620 */	
+			0x16,		/* FC_PSTRUCT */
+			0x3,		/* 3 */
+/* 5622 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 5624 */	
 			0x4b,		/* FC_PP */
 			0x5c,		/* FC_PAD */
-/* 5638 */	
-			0x48,		/* FC_VARIABLE_REPEAT */
-			0x49,		/* FC_FIXED_OFFSET */
-/* 5640 */	NdrFcShort( 0x80 ),	/* 128 */
-/* 5642 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 5644 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 5646 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 5648 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 5650 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5652 */	
+/* 5626 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 5628 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 5630 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 5632 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 5634 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 5654 */	NdrFcShort( 0xc ),	/* 12 */
-/* 5656 */	NdrFcShort( 0xc ),	/* 12 */
-/* 5658 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 5636 */	
+			0x5b,		/* FC_END */
+
+			0x8,		/* FC_LONG */
+/* 5638 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 5640 */	0x0,		/* 0 */
+			NdrFcShort( 0xea03 ),	/* Offset= -5629 (12) */
+			0x5b,		/* FC_END */
+/* 5644 */	
+			0x16,		/* FC_PSTRUCT */
+			0x3,		/* 3 */
+/* 5646 */	NdrFcShort( 0x28 ),	/* 40 */
+/* 5648 */	
+			0x4b,		/* FC_PP */
+			0x5c,		/* FC_PAD */
+/* 5650 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 5652 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 5654 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 5656 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 5658 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
 /* 5660 */	
-			0x25,		/* FC_C_WSTRING */
+			0x46,		/* FC_NO_REPEAT */
 			0x5c,		/* FC_PAD */
-/* 5662 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 5664 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 5662 */	NdrFcShort( 0x1c ),	/* 28 */
+/* 5664 */	NdrFcShort( 0x1c ),	/* 28 */
 /* 5666 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
 /* 5668 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 5670 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 5672 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 5674 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5676 */	
-			0x25,		/* FC_C_WSTRING */
+/* 5670 */	
+			0x46,		/* FC_NO_REPEAT */
 			0x5c,		/* FC_PAD */
+/* 5672 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 5674 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 5676 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
 /* 5678 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 5680 */	
 			0x5b,		/* FC_END */
 
 			0x8,		/* FC_LONG */
-/* 5680 */	0x8,		/* FC_LONG */
-			0x5b,		/* FC_END */
-/* 5682 */	
-			0x12, 0x0,	/* FC_UP */
-/* 5684 */	NdrFcShort( 0x2 ),	/* Offset= 2 (5686) */
-/* 5686 */	
-			0x17,		/* FC_CSTRUCT */
-			0x7,		/* 7 */
-/* 5688 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 5690 */	NdrFcShort( 0xeb86 ),	/* Offset= -5242 (448) */
-/* 5692 */	0x8,		/* FC_LONG */
+/* 5682 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 5684 */	0x0,		/* 0 */
+			NdrFcShort( 0xe9d7 ),	/* Offset= -5673 (12) */
 			0x8,		/* FC_LONG */
-/* 5694 */	0x5c,		/* FC_PAD */
+/* 5688 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 5690 */	0x8,		/* FC_LONG */
 			0x5b,		/* FC_END */
+/* 5692 */	
+			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
+/* 5694 */	NdrFcShort( 0x2 ),	/* Offset= 2 (5696) */
 /* 5696 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 5698 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x54,		/* FC_DEREFERENCE */
+/* 5700 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
+/* 5702 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 5704 */	0x0 , 
+			0x0,		/* 0 */
+/* 5706 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5710 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5714 */	NdrFcShort( 0x2 ),	/* Offset= 2 (5716) */
+/* 5716 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 5718 */	NdrFcShort( 0xf ),	/* 15 */
+/* 5720 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5724 */	NdrFcShort( 0x58 ),	/* Offset= 88 (5812) */
+/* 5726 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 5730 */	NdrFcShort( 0xf6 ),	/* Offset= 246 (5976) */
+/* 5732 */	NdrFcLong( 0x2 ),	/* 2 */
+/* 5736 */	NdrFcShort( 0xfe ),	/* Offset= 254 (5990) */
+/* 5738 */	NdrFcLong( 0x3 ),	/* 3 */
+/* 5742 */	NdrFcShort( 0x150 ),	/* Offset= 336 (6078) */
+/* 5744 */	NdrFcLong( 0x4 ),	/* 4 */
+/* 5748 */	NdrFcShort( 0x14a ),	/* Offset= 330 (6078) */
+/* 5750 */	NdrFcLong( 0x5 ),	/* 5 */
+/* 5754 */	NdrFcShort( 0x19c ),	/* Offset= 412 (6166) */
+/* 5756 */	NdrFcLong( 0x6 ),	/* 6 */
+/* 5760 */	NdrFcShort( 0x1fa ),	/* Offset= 506 (6266) */
+/* 5762 */	NdrFcLong( 0x7 ),	/* 7 */
+/* 5766 */	NdrFcShort( 0x25c ),	/* Offset= 604 (6370) */
+/* 5768 */	NdrFcLong( 0x8 ),	/* 8 */
+/* 5772 */	NdrFcShort( 0x28c ),	/* Offset= 652 (6424) */
+/* 5774 */	NdrFcLong( 0x9 ),	/* 9 */
+/* 5778 */	NdrFcShort( 0x2d8 ),	/* Offset= 728 (6506) */
+/* 5780 */	NdrFcLong( 0xa ),	/* 10 */
+/* 5784 */	NdrFcShort( 0x32c ),	/* Offset= 812 (6596) */
+/* 5786 */	NdrFcLong( 0xfffffffa ),	/* -6 */
+/* 5790 */	NdrFcShort( 0x394 ),	/* Offset= 916 (6706) */
+/* 5792 */	NdrFcLong( 0xfffffffb ),	/* -5 */
+/* 5796 */	NdrFcShort( 0x3ea ),	/* Offset= 1002 (6798) */
+/* 5798 */	NdrFcLong( 0xfffffffc ),	/* -4 */
+/* 5802 */	NdrFcShort( 0x3e8 ),	/* Offset= 1000 (6802) */
+/* 5804 */	NdrFcLong( 0xfffffffe ),	/* -2 */
+/* 5808 */	NdrFcShort( 0x4 ),	/* Offset= 4 (5812) */
+/* 5810 */	NdrFcShort( 0xffff ),	/* Offset= -1 (5809) */
+/* 5812 */	
 			0x12, 0x0,	/* FC_UP */
-/* 5698 */	NdrFcShort( 0x3a ),	/* Offset= 58 (5756) */
-/* 5700 */	
+/* 5814 */	NdrFcShort( 0x6e ),	/* Offset= 110 (5924) */
+/* 5816 */	
 			0x16,		/* FC_PSTRUCT */
 			0x7,		/* 7 */
-/* 5702 */	NdrFcShort( 0x30 ),	/* 48 */
-/* 5704 */	
+/* 5818 */	NdrFcShort( 0x80 ),	/* 128 */
+/* 5820 */	
 			0x4b,		/* FC_PP */
 			0x5c,		/* FC_PAD */
-/* 5706 */	
+/* 5822 */	
 			0x46,		/* FC_NO_REPEAT */
 			0x5c,		/* FC_PAD */
-/* 5708 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5710 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5712 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5714 */	
+/* 5824 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5826 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5828 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 5830 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 5716 */	
-			0x5b,		/* FC_END */
-
-			0x8,		/* FC_LONG */
-/* 5718 */	0x8,		/* FC_LONG */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 5720 */	0x0,		/* 0 */
-			NdrFcShort( 0xfe43 ),	/* Offset= -445 (5276) */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 5724 */	0x0,		/* 0 */
-			NdrFcShort( 0xe9af ),	/* Offset= -5713 (12) */
-			0xb,		/* FC_HYPER */
-/* 5728 */	0xb,		/* FC_HYPER */
-			0x5b,		/* FC_END */
-/* 5730 */	
-			0x1b,		/* FC_CARRAY */
-			0x7,		/* 7 */
-/* 5732 */	NdrFcShort( 0x30 ),	/* 48 */
-/* 5734 */	0x9,		/* Corr desc: FC_ULONG */
-			0x0,		/*  */
-/* 5736 */	NdrFcShort( 0xfff8 ),	/* -8 */
-/* 5738 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 5740 */	0x0 , 
-			0x0,		/* 0 */
-/* 5742 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5746 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5750 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 5752 */	NdrFcShort( 0xffcc ),	/* Offset= -52 (5700) */
-/* 5754 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 5756 */	
-			0x18,		/* FC_CPSTRUCT */
-			0x7,		/* 7 */
-/* 5758 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 5760 */	NdrFcShort( 0xffe2 ),	/* Offset= -30 (5730) */
-/* 5762 */	
-			0x4b,		/* FC_PP */
-			0x5c,		/* FC_PAD */
-/* 5764 */	
-			0x48,		/* FC_VARIABLE_REPEAT */
-			0x49,		/* FC_FIXED_OFFSET */
-/* 5766 */	NdrFcShort( 0x30 ),	/* 48 */
-/* 5768 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 5770 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 5772 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 5774 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 5776 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5778 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 5780 */	
-			0x5b,		/* FC_END */
-
-			0x8,		/* FC_LONG */
-/* 5782 */	0x8,		/* FC_LONG */
-			0x5b,		/* FC_END */
-/* 5784 */	
-			0x12, 0x0,	/* FC_UP */
-/* 5786 */	NdrFcShort( 0x3a ),	/* Offset= 58 (5844) */
-/* 5788 */	
-			0x16,		/* FC_PSTRUCT */
-			0x3,		/* 3 */
-/* 5790 */	NdrFcShort( 0x24 ),	/* 36 */
-/* 5792 */	
-			0x4b,		/* FC_PP */
-			0x5c,		/* FC_PAD */
-/* 5794 */	
+/* 5832 */	
 			0x46,		/* FC_NO_REPEAT */
 			0x5c,		/* FC_PAD */
-/* 5796 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5798 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5800 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5802 */	
+/* 5834 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 5836 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 5838 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 5840 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 5804 */	
-			0x5b,		/* FC_END */
-
-			0x8,		/* FC_LONG */
-/* 5806 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 5808 */	NdrFcShort( 0xe95c ),	/* Offset= -5796 (12) */
-/* 5810 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 5812 */	NdrFcShort( 0xfde8 ),	/* Offset= -536 (5276) */
-/* 5814 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 5816 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 5818 */	
-			0x1b,		/* FC_CARRAY */
-			0x3,		/* 3 */
-/* 5820 */	NdrFcShort( 0x24 ),	/* 36 */
-/* 5822 */	0x9,		/* Corr desc: FC_ULONG */
-			0x0,		/*  */
-/* 5824 */	NdrFcShort( 0xfff8 ),	/* -8 */
-/* 5826 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 5828 */	0x0 , 
-			0x0,		/* 0 */
-/* 5830 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5834 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5838 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 5840 */	NdrFcShort( 0xffcc ),	/* Offset= -52 (5788) */
-/* 5842 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 5844 */	
-			0x18,		/* FC_CPSTRUCT */
-			0x3,		/* 3 */
+/* 5842 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 5844 */	NdrFcShort( 0x8 ),	/* 8 */
 /* 5846 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 5848 */	NdrFcShort( 0xffe2 ),	/* Offset= -30 (5818) */
+/* 5848 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
 /* 5850 */	
-			0x4b,		/* FC_PP */
+			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
 /* 5852 */	
-			0x48,		/* FC_VARIABLE_REPEAT */
-			0x49,		/* FC_FIXED_OFFSET */
-/* 5854 */	NdrFcShort( 0x24 ),	/* 36 */
-/* 5856 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 5858 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 5860 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 5862 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 5864 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5866 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 5854 */	NdrFcShort( 0xc ),	/* 12 */
+/* 5856 */	NdrFcShort( 0xc ),	/* 12 */
+/* 5858 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 5860 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 5868 */	
+/* 5862 */	
 			0x5b,		/* FC_END */
 
 			0x8,		/* FC_LONG */
-/* 5870 */	0x8,		/* FC_LONG */
-			0x5b,		/* FC_END */
-/* 5872 */	
-			0x12, 0x0,	/* FC_UP */
-/* 5874 */	NdrFcShort( 0x54 ),	/* Offset= 84 (5958) */
-/* 5876 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 5878 */	NdrFcShort( 0x44 ),	/* 68 */
-/* 5880 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5882 */	NdrFcShort( 0x16 ),	/* Offset= 22 (5904) */
-/* 5884 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 5886 */	NdrFcShort( 0xfd9e ),	/* Offset= -610 (5276) */
-/* 5888 */	0x8,		/* FC_LONG */
+/* 5864 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 5890 */	0xd,		/* FC_ENUM16 */
+/* 5866 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 5892 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 5894 */	0x36,		/* FC_POINTER */
+/* 5868 */	0x8,		/* FC_LONG */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 5896 */	0x0,		/* 0 */
-			NdrFcShort( 0xe903 ),	/* Offset= -5885 (12) */
+/* 5870 */	0x0,		/* 0 */
+			NdrFcShort( 0xe91d ),	/* Offset= -5859 (12) */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 5900 */	0x0,		/* 0 */
-			NdrFcShort( 0xe8ff ),	/* Offset= -5889 (12) */
-			0x5b,		/* FC_END */
-/* 5904 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5906 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 5908 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5910 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 5912 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5914 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 5916 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x3,		/* 3 */
-/* 5918 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5920 */	0x9,		/* Corr desc: FC_ULONG */
-			0x0,		/*  */
-/* 5922 */	NdrFcShort( 0xfffc ),	/* -4 */
-/* 5924 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 5926 */	0x0 , 
-			0x0,		/* 0 */
-/* 5928 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5932 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5936 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 5940 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 5942 */	0x0 , 
-			0x0,		/* 0 */
-/* 5944 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5948 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5952 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 5954 */	NdrFcShort( 0xffb2 ),	/* Offset= -78 (5876) */
-/* 5956 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 5958 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 5960 */	NdrFcShort( 0xc ),	/* 12 */
-/* 5962 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (5916) */
-/* 5964 */	NdrFcShort( 0x0 ),	/* Offset= 0 (5964) */
-/* 5966 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 5968 */	NdrFcShort( 0xfd4c ),	/* Offset= -692 (5276) */
-/* 5970 */	0x8,		/* FC_LONG */
-			0x5b,		/* FC_END */
-/* 5972 */	
-			0x12, 0x0,	/* FC_UP */
-/* 5974 */	NdrFcShort( 0x5a ),	/* Offset= 90 (6064) */
-/* 5976 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 5978 */	NdrFcShort( 0x50 ),	/* 80 */
-/* 5980 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5982 */	NdrFcShort( 0x1c ),	/* Offset= 28 (6010) */
-/* 5984 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 5986 */	0x8,		/* FC_LONG */
-			0x36,		/* FC_POINTER */
-/* 5988 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 5990 */	NdrFcShort( 0xfd36 ),	/* Offset= -714 (5276) */
-/* 5992 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 5994 */	NdrFcShort( 0xfd32 ),	/* Offset= -718 (5276) */
-/* 5996 */	0x8,		/* FC_LONG */
+/* 5874 */	0x0,		/* 0 */
+			NdrFcShort( 0xe919 ),	/* Offset= -5863 (12) */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 5998 */	0x0,		/* 0 */
-			NdrFcShort( 0xfd2d ),	/* Offset= -723 (5276) */
+/* 5878 */	0x0,		/* 0 */
+			NdrFcShort( 0xe915 ),	/* Offset= -5867 (12) */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 6002 */	0x0,		/* 0 */
-			NdrFcShort( 0xe899 ),	/* Offset= -5991 (12) */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 6006 */	0xb,		/* FC_HYPER */
+/* 5882 */	0x0,		/* 0 */
+			NdrFcShort( 0xe911 ),	/* Offset= -5871 (12) */
 			0xb,		/* FC_HYPER */
-/* 6008 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 6010 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 6012 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 6014 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 6016 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 6018 */	
-			0x14, 0x0,	/* FC_FP */
-/* 6020 */	NdrFcShort( 0xf3ec ),	/* Offset= -3092 (2928) */
-/* 6022 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x7,		/* 7 */
-/* 6024 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 6026 */	0x9,		/* Corr desc: FC_ULONG */
-			0x0,		/*  */
-/* 6028 */	NdrFcShort( 0xfff8 ),	/* -8 */
-/* 6030 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6032 */	0x0 , 
-			0x0,		/* 0 */
-/* 6034 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6038 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6042 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 6046 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 6048 */	0x0 , 
-			0x0,		/* 0 */
-/* 6050 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6054 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6058 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 6060 */	NdrFcShort( 0xffac ),	/* Offset= -84 (5976) */
-/* 6062 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 6064 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 6066 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 6068 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (6022) */
-/* 6070 */	NdrFcShort( 0x0 ),	/* Offset= 0 (6070) */
-/* 6072 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 6074 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 6076 */	
-			0x12, 0x0,	/* FC_UP */
-/* 6078 */	NdrFcShort( 0x2a ),	/* Offset= 42 (6120) */
-/* 6080 */	
-			0x15,		/* FC_STRUCT */
-			0x7,		/* 7 */
-/* 6082 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 6084 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 6086 */	NdrFcShort( 0xe846 ),	/* Offset= -6074 (12) */
-/* 6088 */	0xb,		/* FC_HYPER */
+/* 5886 */	0xb,		/* FC_HYPER */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 6090 */	0x0,		/* 0 */
-			NdrFcShort( 0xfcd1 ),	/* Offset= -815 (5276) */
+/* 5888 */	0x0,		/* 0 */
+			NdrFcShort( 0xfec1 ),	/* Offset= -319 (5570) */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 5892 */	0x0,		/* 0 */
+			NdrFcShort( 0xfebd ),	/* Offset= -323 (5570) */
+			0x8,		/* FC_LONG */
+/* 5896 */	0x8,		/* FC_LONG */
 			0x5b,		/* FC_END */
-/* 6094 */	
+/* 5898 */	
 			0x1b,		/* FC_CARRAY */
 			0x7,		/* 7 */
-/* 6096 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 6098 */	0x9,		/* Corr desc: FC_ULONG */
+/* 5900 */	NdrFcShort( 0x80 ),	/* 128 */
+/* 5902 */	0x9,		/* Corr desc: FC_ULONG */
 			0x0,		/*  */
-/* 6100 */	NdrFcShort( 0xfff8 ),	/* -8 */
-/* 6102 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6104 */	0x0 , 
+/* 5904 */	NdrFcShort( 0xfff8 ),	/* -8 */
+/* 5906 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 5908 */	0x0 , 
 			0x0,		/* 0 */
-/* 6106 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6110 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6114 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 5910 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5914 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5918 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 6116 */	NdrFcShort( 0xffdc ),	/* Offset= -36 (6080) */
-/* 6118 */	0x5c,		/* FC_PAD */
+/* 5920 */	NdrFcShort( 0xff98 ),	/* Offset= -104 (5816) */
+/* 5922 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 6120 */	
+/* 5924 */	
+			0x18,		/* FC_CPSTRUCT */
+			0x7,		/* 7 */
+/* 5926 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 5928 */	NdrFcShort( 0xffe2 ),	/* Offset= -30 (5898) */
+/* 5930 */	
+			0x4b,		/* FC_PP */
+			0x5c,		/* FC_PAD */
+/* 5932 */	
+			0x48,		/* FC_VARIABLE_REPEAT */
+			0x49,		/* FC_FIXED_OFFSET */
+/* 5934 */	NdrFcShort( 0x80 ),	/* 128 */
+/* 5936 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 5938 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 5940 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 5942 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 5944 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 5946 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 5948 */	NdrFcShort( 0xc ),	/* 12 */
+/* 5950 */	NdrFcShort( 0xc ),	/* 12 */
+/* 5952 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 5954 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 5956 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 5958 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 5960 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 5962 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 5964 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 5966 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 5968 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 5970 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 5972 */	
+			0x5b,		/* FC_END */
+
+			0x8,		/* FC_LONG */
+/* 5974 */	0x8,		/* FC_LONG */
+			0x5b,		/* FC_END */
+/* 5976 */	
+			0x12, 0x0,	/* FC_UP */
+/* 5978 */	NdrFcShort( 0x2 ),	/* Offset= 2 (5980) */
+/* 5980 */	
 			0x17,		/* FC_CSTRUCT */
 			0x7,		/* 7 */
-/* 6122 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 6124 */	NdrFcShort( 0xffe2 ),	/* Offset= -30 (6094) */
-/* 6126 */	0x8,		/* FC_LONG */
+/* 5982 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 5984 */	NdrFcShort( 0xeabe ),	/* Offset= -5442 (542) */
+/* 5986 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 6128 */	0x5c,		/* FC_PAD */
+/* 5988 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 6130 */	
+/* 5990 */	
 			0x12, 0x0,	/* FC_UP */
-/* 6132 */	NdrFcShort( 0x44 ),	/* Offset= 68 (6200) */
-/* 6134 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
+/* 5992 */	NdrFcShort( 0x3a ),	/* Offset= 58 (6050) */
+/* 5994 */	
+			0x16,		/* FC_PSTRUCT */
 			0x7,		/* 7 */
-/* 6136 */	NdrFcShort( 0x28 ),	/* 40 */
-/* 6138 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 6140 */	NdrFcShort( 0xe ),	/* Offset= 14 (6154) */
-/* 6142 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 6144 */	NdrFcShort( 0xe80c ),	/* Offset= -6132 (12) */
-/* 6146 */	0xb,		/* FC_HYPER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 6148 */	0x0,		/* 0 */
-			NdrFcShort( 0xfc97 ),	/* Offset= -873 (5276) */
-			0x36,		/* FC_POINTER */
-/* 6152 */	0x40,		/* FC_STRUCTPAD4 */
-			0x5b,		/* FC_END */
-/* 6154 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 6156 */	
+/* 5996 */	NdrFcShort( 0x30 ),	/* 48 */
+/* 5998 */	
+			0x4b,		/* FC_PP */
+			0x5c,		/* FC_PAD */
+/* 6000 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 6002 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6004 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6006 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 6008 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 6158 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x7,		/* 7 */
-/* 6160 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 6162 */	0x9,		/* Corr desc: FC_ULONG */
-			0x0,		/*  */
-/* 6164 */	NdrFcShort( 0xfff8 ),	/* -8 */
-/* 6166 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6168 */	0x0 , 
-			0x0,		/* 0 */
-/* 6170 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6174 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6178 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 6182 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 6184 */	0x0 , 
-			0x0,		/* 0 */
-/* 6186 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6190 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6194 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 6196 */	NdrFcShort( 0xffc2 ),	/* Offset= -62 (6134) */
-/* 6198 */	0x5c,		/* FC_PAD */
+/* 6010 */	
 			0x5b,		/* FC_END */
+
+			0x8,		/* FC_LONG */
+/* 6012 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 6014 */	0x0,		/* 0 */
+			NdrFcShort( 0xfe43 ),	/* Offset= -445 (5570) */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 6018 */	0x0,		/* 0 */
+			NdrFcShort( 0xe889 ),	/* Offset= -6007 (12) */
+			0xb,		/* FC_HYPER */
+/* 6022 */	0xb,		/* FC_HYPER */
+			0x5b,		/* FC_END */
+/* 6024 */	
+			0x1b,		/* FC_CARRAY */
+			0x7,		/* 7 */
+/* 6026 */	NdrFcShort( 0x30 ),	/* 48 */
+/* 6028 */	0x9,		/* Corr desc: FC_ULONG */
+			0x0,		/*  */
+/* 6030 */	NdrFcShort( 0xfff8 ),	/* -8 */
+/* 6032 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 6034 */	0x0 , 
+			0x0,		/* 0 */
+/* 6036 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6040 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6044 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6046 */	NdrFcShort( 0xffcc ),	/* Offset= -52 (5994) */
+/* 6048 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 6050 */	
+			0x18,		/* FC_CPSTRUCT */
+			0x7,		/* 7 */
+/* 6052 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 6054 */	NdrFcShort( 0xffe2 ),	/* Offset= -30 (6024) */
+/* 6056 */	
+			0x4b,		/* FC_PP */
+			0x5c,		/* FC_PAD */
+/* 6058 */	
+			0x48,		/* FC_VARIABLE_REPEAT */
+			0x49,		/* FC_FIXED_OFFSET */
+/* 6060 */	NdrFcShort( 0x30 ),	/* 48 */
+/* 6062 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 6064 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 6066 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 6068 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 6070 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 6072 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 6074 */	
+			0x5b,		/* FC_END */
+
+			0x8,		/* FC_LONG */
+/* 6076 */	0x8,		/* FC_LONG */
+			0x5b,		/* FC_END */
+/* 6078 */	
+			0x12, 0x0,	/* FC_UP */
+/* 6080 */	NdrFcShort( 0x3a ),	/* Offset= 58 (6138) */
+/* 6082 */	
+			0x16,		/* FC_PSTRUCT */
+			0x3,		/* 3 */
+/* 6084 */	NdrFcShort( 0x24 ),	/* 36 */
+/* 6086 */	
+			0x4b,		/* FC_PP */
+			0x5c,		/* FC_PAD */
+/* 6088 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 6090 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6092 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6094 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 6096 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 6098 */	
+			0x5b,		/* FC_END */
+
+			0x8,		/* FC_LONG */
+/* 6100 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6102 */	NdrFcShort( 0xe836 ),	/* Offset= -6090 (12) */
+/* 6104 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6106 */	NdrFcShort( 0xfde8 ),	/* Offset= -536 (5570) */
+/* 6108 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 6110 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 6112 */	
+			0x1b,		/* FC_CARRAY */
+			0x3,		/* 3 */
+/* 6114 */	NdrFcShort( 0x24 ),	/* 36 */
+/* 6116 */	0x9,		/* Corr desc: FC_ULONG */
+			0x0,		/*  */
+/* 6118 */	NdrFcShort( 0xfff8 ),	/* -8 */
+/* 6120 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 6122 */	0x0 , 
+			0x0,		/* 0 */
+/* 6124 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6128 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6132 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6134 */	NdrFcShort( 0xffcc ),	/* Offset= -52 (6082) */
+/* 6136 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 6138 */	
+			0x18,		/* FC_CPSTRUCT */
+			0x3,		/* 3 */
+/* 6140 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 6142 */	NdrFcShort( 0xffe2 ),	/* Offset= -30 (6112) */
+/* 6144 */	
+			0x4b,		/* FC_PP */
+			0x5c,		/* FC_PAD */
+/* 6146 */	
+			0x48,		/* FC_VARIABLE_REPEAT */
+			0x49,		/* FC_FIXED_OFFSET */
+/* 6148 */	NdrFcShort( 0x24 ),	/* 36 */
+/* 6150 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 6152 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 6154 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 6156 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 6158 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 6160 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 6162 */	
+			0x5b,		/* FC_END */
+
+			0x8,		/* FC_LONG */
+/* 6164 */	0x8,		/* FC_LONG */
+			0x5b,		/* FC_END */
+/* 6166 */	
+			0x12, 0x0,	/* FC_UP */
+/* 6168 */	NdrFcShort( 0x54 ),	/* Offset= 84 (6252) */
+/* 6170 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 6172 */	NdrFcShort( 0x44 ),	/* 68 */
+/* 6174 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6176 */	NdrFcShort( 0x16 ),	/* Offset= 22 (6198) */
+/* 6178 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6180 */	NdrFcShort( 0xfd9e ),	/* Offset= -610 (5570) */
+/* 6182 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 6184 */	0xd,		/* FC_ENUM16 */
+			0x8,		/* FC_LONG */
+/* 6186 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 6188 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 6190 */	0x0,		/* 0 */
+			NdrFcShort( 0xe7dd ),	/* Offset= -6179 (12) */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 6194 */	0x0,		/* 0 */
+			NdrFcShort( 0xe7d9 ),	/* Offset= -6183 (12) */
+			0x5b,		/* FC_END */
+/* 6198 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
 /* 6200 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 6202 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 6204 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (6158) */
-/* 6206 */	NdrFcShort( 0x0 ),	/* Offset= 0 (6206) */
-/* 6208 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 6210 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 6212 */	
-			0x12, 0x0,	/* FC_UP */
-/* 6214 */	NdrFcShort( 0x4c ),	/* Offset= 76 (6290) */
-/* 6216 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 6218 */	NdrFcShort( 0x38 ),	/* 56 */
-/* 6220 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 6222 */	NdrFcShort( 0x12 ),	/* Offset= 18 (6240) */
-/* 6224 */	0x36,		/* FC_POINTER */
-			0x8,		/* FC_LONG */
-/* 6226 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 6228 */	NdrFcShort( 0xfc48 ),	/* Offset= -952 (5276) */
-/* 6230 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 6232 */	NdrFcShort( 0xe7b4 ),	/* Offset= -6220 (12) */
-/* 6234 */	0xb,		/* FC_HYPER */
-			0xb,		/* FC_HYPER */
-/* 6236 */	0x36,		/* FC_POINTER */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 6238 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 6240 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 6242 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 6244 */	
+/* 6202 */	
 			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 6246 */	
+/* 6204 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 6248 */	
+/* 6206 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 6208 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 6210 */	
 			0x21,		/* FC_BOGUS_ARRAY */
-			0x7,		/* 7 */
-/* 6250 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 6252 */	0x9,		/* Corr desc: FC_ULONG */
+			0x3,		/* 3 */
+/* 6212 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6214 */	0x9,		/* Corr desc: FC_ULONG */
 			0x0,		/*  */
-/* 6254 */	NdrFcShort( 0xfff8 ),	/* -8 */
-/* 6256 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6258 */	0x0 , 
+/* 6216 */	NdrFcShort( 0xfffc ),	/* -4 */
+/* 6218 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 6220 */	0x0 , 
 			0x0,		/* 0 */
-/* 6260 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6264 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6268 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 6272 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 6274 */	0x0 , 
+/* 6222 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6226 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6230 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 6234 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 6236 */	0x0 , 
 			0x0,		/* 0 */
-/* 6276 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6280 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6284 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 6238 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6242 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6246 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 6286 */	NdrFcShort( 0xffba ),	/* Offset= -70 (6216) */
-/* 6288 */	0x5c,		/* FC_PAD */
+/* 6248 */	NdrFcShort( 0xffb2 ),	/* Offset= -78 (6170) */
+/* 6250 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 6290 */	
+/* 6252 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 6292 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 6294 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (6248) */
-/* 6296 */	NdrFcShort( 0x0 ),	/* Offset= 0 (6296) */
-/* 6298 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 6300 */	0x5c,		/* FC_PAD */
+			0x3,		/* 3 */
+/* 6254 */	NdrFcShort( 0xc ),	/* 12 */
+/* 6256 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (6210) */
+/* 6258 */	NdrFcShort( 0x0 ),	/* Offset= 0 (6258) */
+/* 6260 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6262 */	NdrFcShort( 0xfd4c ),	/* Offset= -692 (5570) */
+/* 6264 */	0x8,		/* FC_LONG */
 			0x5b,		/* FC_END */
-/* 6302 */	
+/* 6266 */	
 			0x12, 0x0,	/* FC_UP */
-/* 6304 */	NdrFcShort( 0x60 ),	/* Offset= 96 (6400) */
+/* 6268 */	NdrFcShort( 0x5a ),	/* Offset= 90 (6358) */
+/* 6270 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 6272 */	NdrFcShort( 0x50 ),	/* 80 */
+/* 6274 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6276 */	NdrFcShort( 0x1c ),	/* Offset= 28 (6304) */
+/* 6278 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 6280 */	0x8,		/* FC_LONG */
+			0x36,		/* FC_POINTER */
+/* 6282 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6284 */	NdrFcShort( 0xfd36 ),	/* Offset= -714 (5570) */
+/* 6286 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6288 */	NdrFcShort( 0xfd32 ),	/* Offset= -718 (5570) */
+/* 6290 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 6292 */	0x0,		/* 0 */
+			NdrFcShort( 0xfd2d ),	/* Offset= -723 (5570) */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 6296 */	0x0,		/* 0 */
+			NdrFcShort( 0xe773 ),	/* Offset= -6285 (12) */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 6300 */	0xb,		/* FC_HYPER */
+			0xb,		/* FC_HYPER */
+/* 6302 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 6304 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
 /* 6306 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 6308 */	NdrFcShort( 0x58 ),	/* 88 */
-/* 6310 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 6312 */	NdrFcShort( 0x1e ),	/* Offset= 30 (6342) */
-/* 6314 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 6316 */	0x8,		/* FC_LONG */
-			0x36,		/* FC_POINTER */
-/* 6318 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 6320 */	NdrFcShort( 0xfbec ),	/* Offset= -1044 (5276) */
-/* 6322 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 6324 */	NdrFcShort( 0xfbe8 ),	/* Offset= -1048 (5276) */
-/* 6326 */	0x8,		/* FC_LONG */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 6328 */	0x0,		/* 0 */
-			NdrFcShort( 0xfbe3 ),	/* Offset= -1053 (5276) */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 6332 */	0x0,		/* 0 */
-			NdrFcShort( 0xe74f ),	/* Offset= -6321 (12) */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 6336 */	0xb,		/* FC_HYPER */
-			0xb,		/* FC_HYPER */
-/* 6338 */	0x36,		/* FC_POINTER */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 6340 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 6342 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 6344 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 6346 */	
+/* 6308 */	
 			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 6348 */	
+/* 6310 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 6350 */	
+/* 6312 */	
 			0x14, 0x0,	/* FC_FP */
-/* 6352 */	NdrFcShort( 0xf2a0 ),	/* Offset= -3424 (2928) */
-/* 6354 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 6356 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
+/* 6314 */	NdrFcShort( 0xf3ec ),	/* Offset= -3092 (3222) */
+/* 6316 */	
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x7,		/* 7 */
+/* 6318 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6320 */	0x9,		/* Corr desc: FC_ULONG */
+			0x0,		/*  */
+/* 6322 */	NdrFcShort( 0xfff8 ),	/* -8 */
+/* 6324 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 6326 */	0x0 , 
+			0x0,		/* 0 */
+/* 6328 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6332 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6336 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 6340 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 6342 */	0x0 , 
+			0x0,		/* 0 */
+/* 6344 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6348 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6352 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6354 */	NdrFcShort( 0xffac ),	/* Offset= -84 (6270) */
+/* 6356 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
 /* 6358 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x7,		/* 7 */
-/* 6360 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 6362 */	0x9,		/* Corr desc: FC_ULONG */
-			0x0,		/*  */
-/* 6364 */	NdrFcShort( 0xfff8 ),	/* -8 */
-/* 6366 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6368 */	0x0 , 
-			0x0,		/* 0 */
-/* 6370 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6374 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6378 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 6382 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 6384 */	0x0 , 
-			0x0,		/* 0 */
-/* 6386 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6390 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6394 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 6396 */	NdrFcShort( 0xffa6 ),	/* Offset= -90 (6306) */
-/* 6398 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 6400 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x7,		/* 7 */
-/* 6402 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 6404 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (6358) */
-/* 6406 */	NdrFcShort( 0x0 ),	/* Offset= 0 (6406) */
-/* 6408 */	0x8,		/* FC_LONG */
+/* 6360 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 6362 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (6316) */
+/* 6364 */	NdrFcShort( 0x0 ),	/* Offset= 0 (6364) */
+/* 6366 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 6410 */	0x5c,		/* FC_PAD */
+/* 6368 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 6412 */	
+/* 6370 */	
 			0x12, 0x0,	/* FC_UP */
-/* 6414 */	NdrFcShort( 0x4c ),	/* Offset= 76 (6490) */
-/* 6416 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 6418 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6422 */	NdrFcLong( 0x100 ),	/* 256 */
-/* 6426 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 6428 */	NdrFcShort( 0x28 ),	/* 40 */
-/* 6430 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 6432 */	NdrFcShort( 0xc ),	/* Offset= 12 (6444) */
-/* 6434 */	0x36,		/* FC_POINTER */
-			0x8,		/* FC_LONG */
-/* 6436 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 6438 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 6440 */	0xb,		/* FC_HYPER */
-			0x8,		/* FC_LONG */
-/* 6442 */	0x40,		/* FC_STRUCTPAD4 */
-			0x5b,		/* FC_END */
-/* 6444 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 6446 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 6448 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x7,		/* 7 */
-/* 6450 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 6452 */	0x9,		/* Corr desc: FC_ULONG */
-			0x0,		/*  */
-/* 6454 */	NdrFcShort( 0xfff8 ),	/* -8 */
-/* 6456 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6458 */	0x0 , 
-			0x0,		/* 0 */
-/* 6460 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6464 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6468 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 6472 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 6474 */	0x0 , 
-			0x0,		/* 0 */
-/* 6476 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6480 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6484 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 6486 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (6426) */
-/* 6488 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 6490 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 6492 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 6494 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (6448) */
-/* 6496 */	NdrFcShort( 0x0 ),	/* Offset= 0 (6496) */
-/* 6498 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 6500 */	NdrFcShort( 0xffac ),	/* Offset= -84 (6416) */
-/* 6502 */	0x8,		/* FC_LONG */
-			0x5b,		/* FC_END */
-/* 6504 */	
-			0x12, 0x0,	/* FC_UP */
-/* 6506 */	NdrFcShort( 0xe870 ),	/* Offset= -6032 (474) */
-/* 6508 */	
-			0x12, 0x0,	/* FC_UP */
-/* 6510 */	NdrFcShort( 0x36 ),	/* Offset= 54 (6564) */
-/* 6512 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 6514 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6518 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 6522 */	
+/* 6372 */	NdrFcShort( 0x2a ),	/* Offset= 42 (6414) */
+/* 6374 */	
 			0x15,		/* FC_STRUCT */
 			0x7,		/* 7 */
-/* 6524 */	NdrFcShort( 0x30 ),	/* 48 */
-/* 6526 */	0xb,		/* FC_HYPER */
-			0x8,		/* FC_LONG */
-/* 6528 */	0x8,		/* FC_LONG */
+/* 6376 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 6378 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6380 */	NdrFcShort( 0xe720 ),	/* Offset= -6368 (12) */
+/* 6382 */	0xb,		/* FC_HYPER */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 6530 */	0x0,		/* 0 */
-			NdrFcShort( 0xe689 ),	/* Offset= -6519 (12) */
+/* 6384 */	0x0,		/* 0 */
+			NdrFcShort( 0xfcd1 ),	/* Offset= -815 (5570) */
+			0x5b,		/* FC_END */
+/* 6388 */	
+			0x1b,		/* FC_CARRAY */
+			0x7,		/* 7 */
+/* 6390 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 6392 */	0x9,		/* Corr desc: FC_ULONG */
+			0x0,		/*  */
+/* 6394 */	NdrFcShort( 0xfff8 ),	/* -8 */
+/* 6396 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 6398 */	0x0 , 
+			0x0,		/* 0 */
+/* 6400 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6404 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6408 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6410 */	NdrFcShort( 0xffdc ),	/* Offset= -36 (6374) */
+/* 6412 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 6414 */	
+			0x17,		/* FC_CSTRUCT */
+			0x7,		/* 7 */
+/* 6416 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 6418 */	NdrFcShort( 0xffe2 ),	/* Offset= -30 (6388) */
+/* 6420 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 6422 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 6424 */	
+			0x12, 0x0,	/* FC_UP */
+/* 6426 */	NdrFcShort( 0x44 ),	/* Offset= 68 (6494) */
+/* 6428 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 6430 */	NdrFcShort( 0x28 ),	/* 40 */
+/* 6432 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6434 */	NdrFcShort( 0xe ),	/* Offset= 14 (6448) */
+/* 6436 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6438 */	NdrFcShort( 0xe6e6 ),	/* Offset= -6426 (12) */
+/* 6440 */	0xb,		/* FC_HYPER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 6442 */	0x0,		/* 0 */
+			NdrFcShort( 0xfc97 ),	/* Offset= -873 (5570) */
+			0x36,		/* FC_POINTER */
+/* 6446 */	0x40,		/* FC_STRUCTPAD4 */
+			0x5b,		/* FC_END */
+/* 6448 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 6450 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 6452 */	
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x7,		/* 7 */
+/* 6454 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6456 */	0x9,		/* Corr desc: FC_ULONG */
+			0x0,		/*  */
+/* 6458 */	NdrFcShort( 0xfff8 ),	/* -8 */
+/* 6460 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 6462 */	0x0 , 
+			0x0,		/* 0 */
+/* 6464 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6468 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6472 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 6476 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 6478 */	0x0 , 
+			0x0,		/* 0 */
+/* 6480 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6484 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6488 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6490 */	NdrFcShort( 0xffc2 ),	/* Offset= -62 (6428) */
+/* 6492 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 6494 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 6496 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 6498 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (6452) */
+/* 6500 */	NdrFcShort( 0x0 ),	/* Offset= 0 (6500) */
+/* 6502 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 6504 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 6506 */	
+			0x12, 0x0,	/* FC_UP */
+/* 6508 */	NdrFcShort( 0x4c ),	/* Offset= 76 (6584) */
+/* 6510 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 6512 */	NdrFcShort( 0x38 ),	/* 56 */
+/* 6514 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6516 */	NdrFcShort( 0x12 ),	/* Offset= 18 (6534) */
+/* 6518 */	0x36,		/* FC_POINTER */
+			0x8,		/* FC_LONG */
+/* 6520 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6522 */	NdrFcShort( 0xfc48 ),	/* Offset= -952 (5570) */
+/* 6524 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6526 */	NdrFcShort( 0xe68e ),	/* Offset= -6514 (12) */
+/* 6528 */	0xb,		/* FC_HYPER */
 			0xb,		/* FC_HYPER */
-/* 6534 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 6536 */	0x5c,		/* FC_PAD */
+/* 6530 */	0x36,		/* FC_POINTER */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 6532 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
+/* 6534 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 6536 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
 /* 6538 */	
-			0x1b,		/* FC_CARRAY */
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 6540 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 6542 */	
+			0x21,		/* FC_BOGUS_ARRAY */
 			0x7,		/* 7 */
-/* 6540 */	NdrFcShort( 0x30 ),	/* 48 */
-/* 6542 */	0x9,		/* Corr desc: FC_ULONG */
+/* 6544 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6546 */	0x9,		/* Corr desc: FC_ULONG */
 			0x0,		/*  */
-/* 6544 */	NdrFcShort( 0xfff8 ),	/* -8 */
-/* 6546 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6548 */	0x0 , 
+/* 6548 */	NdrFcShort( 0xfff8 ),	/* -8 */
+/* 6550 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 6552 */	0x0 , 
 			0x0,		/* 0 */
-/* 6550 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 6554 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6558 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 6558 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6562 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 6566 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 6568 */	0x0 , 
 			0x0,		/* 0 */
-/* 6560 */	NdrFcShort( 0xffda ),	/* Offset= -38 (6522) */
-/* 6562 */	0x5c,		/* FC_PAD */
+/* 6570 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6574 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6578 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6580 */	NdrFcShort( 0xffba ),	/* Offset= -70 (6510) */
+/* 6582 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 6564 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+/* 6584 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
 			0x7,		/* 7 */
-/* 6566 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 6568 */	NdrFcShort( 0xffe2 ),	/* Offset= -30 (6538) */
-/* 6570 */	NdrFcShort( 0x0 ),	/* Offset= 0 (6570) */
-/* 6572 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 6574 */	NdrFcShort( 0xffc2 ),	/* Offset= -62 (6512) */
-/* 6576 */	0x8,		/* FC_LONG */
+/* 6586 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 6588 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (6542) */
+/* 6590 */	NdrFcShort( 0x0 ),	/* Offset= 0 (6590) */
+/* 6592 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 6594 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 6578 */	
-			0x11, 0x0,	/* FC_RP */
-/* 6580 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6582) */
-/* 6582 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 6584 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 6586 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 6588 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6590 */	0x0 , 
-			0x0,		/* 0 */
-/* 6592 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6596 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6600 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6602) */
-/* 6602 */	NdrFcShort( 0x30 ),	/* 48 */
-/* 6604 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 6606 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 6610 */	NdrFcShort( 0x64 ),	/* Offset= 100 (6710) */
-/* 6612 */	NdrFcShort( 0xffff ),	/* Offset= -1 (6611) */
-/* 6614 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 6616 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6620 */	NdrFcLong( 0x100 ),	/* 256 */
-/* 6624 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 6626 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6630 */	NdrFcLong( 0x100 ),	/* 256 */
-/* 6634 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 6636 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6640 */	NdrFcLong( 0x100 ),	/* 256 */
-/* 6644 */	
-			0x1b,		/* FC_CARRAY */
-			0x1,		/* 1 */
-/* 6646 */	NdrFcShort( 0x2 ),	/* 2 */
-/* 6648 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 6650 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 6652 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6654 */	0x0 , 
-			0x0,		/* 0 */
-/* 6656 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6660 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6664 */	0x5,		/* FC_WCHAR */
-			0x5b,		/* FC_END */
-/* 6666 */	
-			0x1b,		/* FC_CARRAY */
-			0x1,		/* 1 */
-/* 6668 */	NdrFcShort( 0x2 ),	/* 2 */
-/* 6670 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 6672 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 6674 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6676 */	0x0 , 
-			0x0,		/* 0 */
-/* 6678 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6682 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6686 */	0x5,		/* FC_WCHAR */
-			0x5b,		/* FC_END */
-/* 6688 */	
-			0x1b,		/* FC_CARRAY */
-			0x1,		/* 1 */
-/* 6690 */	NdrFcShort( 0x2 ),	/* 2 */
-/* 6692 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 6694 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 6696 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6698 */	0x0 , 
-			0x0,		/* 0 */
-/* 6700 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6704 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6708 */	0x5,		/* FC_WCHAR */
-			0x5b,		/* FC_END */
-/* 6710 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 6712 */	NdrFcShort( 0x30 ),	/* 48 */
-/* 6714 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 6716 */	NdrFcShort( 0x18 ),	/* Offset= 24 (6740) */
-/* 6718 */	0x8,		/* FC_LONG */
+/* 6596 */	
+			0x12, 0x0,	/* FC_UP */
+/* 6598 */	NdrFcShort( 0x60 ),	/* Offset= 96 (6694) */
+/* 6600 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 6602 */	NdrFcShort( 0x58 ),	/* 88 */
+/* 6604 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6606 */	NdrFcShort( 0x1e ),	/* Offset= 30 (6636) */
+/* 6608 */	0x36,		/* FC_POINTER */
 			0x36,		/* FC_POINTER */
-/* 6720 */	0x36,		/* FC_POINTER */
+/* 6610 */	0x8,		/* FC_LONG */
 			0x36,		/* FC_POINTER */
-/* 6722 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 6612 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 6724 */	NdrFcShort( 0xff92 ),	/* Offset= -110 (6614) */
-/* 6726 */	0x36,		/* FC_POINTER */
+/* 6614 */	NdrFcShort( 0xfbec ),	/* Offset= -1044 (5570) */
+/* 6616 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6618 */	NdrFcShort( 0xfbe8 ),	/* Offset= -1048 (5570) */
+/* 6620 */	0x8,		/* FC_LONG */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 6728 */	0x0,		/* 0 */
-			NdrFcShort( 0xff97 ),	/* Offset= -105 (6624) */
-			0x36,		/* FC_POINTER */
-/* 6732 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 6734 */	NdrFcShort( 0xff9c ),	/* Offset= -100 (6634) */
-/* 6736 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 6738 */	0x36,		/* FC_POINTER */
+/* 6622 */	0x0,		/* 0 */
+			NdrFcShort( 0xfbe3 ),	/* Offset= -1053 (5570) */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 6626 */	0x0,		/* 0 */
+			NdrFcShort( 0xe629 ),	/* Offset= -6615 (12) */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 6630 */	0xb,		/* FC_HYPER */
+			0xb,		/* FC_HYPER */
+/* 6632 */	0x36,		/* FC_POINTER */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 6634 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
+/* 6636 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 6638 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 6640 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 6642 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 6644 */	
+			0x14, 0x0,	/* FC_FP */
+/* 6646 */	NdrFcShort( 0xf2a0 ),	/* Offset= -3424 (3222) */
+/* 6648 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 6650 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 6652 */	
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x7,		/* 7 */
+/* 6654 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6656 */	0x9,		/* Corr desc: FC_ULONG */
+			0x0,		/*  */
+/* 6658 */	NdrFcShort( 0xfff8 ),	/* -8 */
+/* 6660 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 6662 */	0x0 , 
+			0x0,		/* 0 */
+/* 6664 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6668 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6672 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 6676 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 6678 */	0x0 , 
+			0x0,		/* 0 */
+/* 6680 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6684 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6688 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6690 */	NdrFcShort( 0xffa6 ),	/* Offset= -90 (6600) */
+/* 6692 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 6694 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 6696 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 6698 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (6652) */
+/* 6700 */	NdrFcShort( 0x0 ),	/* Offset= 0 (6700) */
+/* 6702 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 6704 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 6706 */	
+			0x12, 0x0,	/* FC_UP */
+/* 6708 */	NdrFcShort( 0x4c ),	/* Offset= 76 (6784) */
+/* 6710 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 6712 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6716 */	NdrFcLong( 0x100 ),	/* 256 */
+/* 6720 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 6722 */	NdrFcShort( 0x28 ),	/* 40 */
+/* 6724 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6726 */	NdrFcShort( 0xc ),	/* Offset= 12 (6738) */
+/* 6728 */	0x36,		/* FC_POINTER */
+			0x8,		/* FC_LONG */
+/* 6730 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 6732 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 6734 */	0xb,		/* FC_HYPER */
+			0x8,		/* FC_LONG */
+/* 6736 */	0x40,		/* FC_STRUCTPAD4 */
+			0x5b,		/* FC_END */
+/* 6738 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
 /* 6740 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
 /* 6742 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 6744 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 6746 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 6748 */	
-			0x14, 0x8,	/* FC_FP [simple_pointer] */
-/* 6750 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 6752 */	
-			0x12, 0x0,	/* FC_UP */
-/* 6754 */	NdrFcShort( 0xff92 ),	/* Offset= -110 (6644) */
-/* 6756 */	
-			0x12, 0x0,	/* FC_UP */
-/* 6758 */	NdrFcShort( 0xffa4 ),	/* Offset= -92 (6666) */
-/* 6760 */	
-			0x12, 0x0,	/* FC_UP */
-/* 6762 */	NdrFcShort( 0xffb6 ),	/* Offset= -74 (6688) */
-/* 6764 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 6766 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 6768 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 6770 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 6772 */	
-			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 6774 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6776) */
-/* 6776 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 6778 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x54,		/* FC_DEREFERENCE */
-/* 6780 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 6782 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6784 */	0x0 , 
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x7,		/* 7 */
+/* 6744 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6746 */	0x9,		/* Corr desc: FC_ULONG */
+			0x0,		/*  */
+/* 6748 */	NdrFcShort( 0xfff8 ),	/* -8 */
+/* 6750 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 6752 */	0x0 , 
 			0x0,		/* 0 */
-/* 6786 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6790 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6794 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6796) */
-/* 6796 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 6798 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 6800 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 6804 */	NdrFcShort( 0xf324 ),	/* Offset= -3292 (3512) */
-/* 6806 */	NdrFcShort( 0xffff ),	/* Offset= -1 (6805) */
-/* 6808 */	
+/* 6754 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6758 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6762 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 6766 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 6768 */	0x0 , 
+			0x0,		/* 0 */
+/* 6770 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6774 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6778 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6780 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (6720) */
+/* 6782 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 6784 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 6786 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 6788 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (6742) */
+/* 6790 */	NdrFcShort( 0x0 ),	/* Offset= 0 (6790) */
+/* 6792 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6794 */	NdrFcShort( 0xffac ),	/* Offset= -84 (6710) */
+/* 6796 */	0x8,		/* FC_LONG */
+			0x5b,		/* FC_END */
+/* 6798 */	
+			0x12, 0x0,	/* FC_UP */
+/* 6800 */	NdrFcShort( 0xe7a8 ),	/* Offset= -6232 (568) */
+/* 6802 */	
+			0x12, 0x0,	/* FC_UP */
+/* 6804 */	NdrFcShort( 0x36 ),	/* Offset= 54 (6858) */
+/* 6806 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 6808 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6812 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 6816 */	
+			0x15,		/* FC_STRUCT */
+			0x7,		/* 7 */
+/* 6818 */	NdrFcShort( 0x30 ),	/* 48 */
+/* 6820 */	0xb,		/* FC_HYPER */
+			0x8,		/* FC_LONG */
+/* 6822 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 6824 */	0x0,		/* 0 */
+			NdrFcShort( 0xe563 ),	/* Offset= -6813 (12) */
+			0xb,		/* FC_HYPER */
+/* 6828 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 6830 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 6832 */	
+			0x1b,		/* FC_CARRAY */
+			0x7,		/* 7 */
+/* 6834 */	NdrFcShort( 0x30 ),	/* 48 */
+/* 6836 */	0x9,		/* Corr desc: FC_ULONG */
+			0x0,		/*  */
+/* 6838 */	NdrFcShort( 0xfff8 ),	/* -8 */
+/* 6840 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 6842 */	0x0 , 
+			0x0,		/* 0 */
+/* 6844 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6848 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6852 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6854 */	NdrFcShort( 0xffda ),	/* Offset= -38 (6816) */
+/* 6856 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 6858 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 6860 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 6862 */	NdrFcShort( 0xffe2 ),	/* Offset= -30 (6832) */
+/* 6864 */	NdrFcShort( 0x0 ),	/* Offset= 0 (6864) */
+/* 6866 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6868 */	NdrFcShort( 0xffc2 ),	/* Offset= -62 (6806) */
+/* 6870 */	0x8,		/* FC_LONG */
+			0x5b,		/* FC_END */
+/* 6872 */	
 			0x11, 0x0,	/* FC_RP */
-/* 6810 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6812) */
-/* 6812 */	
+/* 6874 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6876) */
+/* 6876 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 6814 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 6878 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x0,		/*  */
-/* 6816 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 6818 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6820 */	0x0 , 
+/* 6880 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 6882 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 6884 */	0x0 , 
 			0x0,		/* 0 */
-/* 6822 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6826 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6830 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6832) */
-/* 6832 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 6834 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 6836 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 6840 */	NdrFcShort( 0x38 ),	/* Offset= 56 (6896) */
-/* 6842 */	NdrFcShort( 0xffff ),	/* Offset= -1 (6841) */
-/* 6844 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 6846 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 6850 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 6854 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x3,		/* 3 */
-/* 6856 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 6858 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 6860 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 6862 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6864 */	0x0 , 
-			0x0,		/* 0 */
-/* 6866 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6870 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6874 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 6878 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 6880 */	0x0 , 
-			0x0,		/* 0 */
-/* 6882 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 6886 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6890 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 6892 */	NdrFcShort( 0xee70 ),	/* Offset= -4496 (2396) */
-/* 6894 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 6896 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 6898 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 6900 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 6902 */	NdrFcShort( 0x8 ),	/* Offset= 8 (6910) */
-/* 6904 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 6906 */	NdrFcShort( 0xffc2 ),	/* Offset= -62 (6844) */
-/* 6908 */	0x36,		/* FC_POINTER */
-			0x5b,		/* FC_END */
-/* 6910 */	
-			0x12, 0x0,	/* FC_UP */
-/* 6912 */	NdrFcShort( 0xffc6 ),	/* Offset= -58 (6854) */
-/* 6914 */	
-			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 6916 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6918) */
-/* 6918 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 6920 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x54,		/* FC_DEREFERENCE */
-/* 6922 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 6924 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6926 */	0x0 , 
-			0x0,		/* 0 */
-/* 6928 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6932 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6936 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6938) */
-/* 6938 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 6940 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 6942 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 6946 */	NdrFcShort( 0x38 ),	/* Offset= 56 (7002) */
-/* 6948 */	NdrFcShort( 0xffff ),	/* Offset= -1 (6947) */
-/* 6950 */	0xb7,		/* FC_RANGE */
+/* 6890 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6894 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6896) */
+/* 6896 */	NdrFcShort( 0x30 ),	/* 48 */
+/* 6898 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 6900 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 6904 */	NdrFcShort( 0x64 ),	/* Offset= 100 (7004) */
+/* 6906 */	NdrFcShort( 0xffff ),	/* Offset= -1 (6905) */
+/* 6908 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 6952 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6956 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 6910 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6914 */	NdrFcLong( 0x100 ),	/* 256 */
+/* 6918 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 6920 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6924 */	NdrFcLong( 0x100 ),	/* 256 */
+/* 6928 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 6930 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6934 */	NdrFcLong( 0x100 ),	/* 256 */
+/* 6938 */	
+			0x1b,		/* FC_CARRAY */
+			0x1,		/* 1 */
+/* 6940 */	NdrFcShort( 0x2 ),	/* 2 */
+/* 6942 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 6944 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 6946 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 6948 */	0x0 , 
+			0x0,		/* 0 */
+/* 6950 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6954 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6958 */	0x5,		/* FC_WCHAR */
+			0x5b,		/* FC_END */
 /* 6960 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x3,		/* 3 */
-/* 6962 */	NdrFcShort( 0x0 ),	/* 0 */
+			0x1b,		/* FC_CARRAY */
+			0x1,		/* 1 */
+/* 6962 */	NdrFcShort( 0x2 ),	/* 2 */
 /* 6964 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 6966 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6966 */	NdrFcShort( 0x18 ),	/* 24 */
 /* 6968 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
 /* 6970 */	0x0 , 
 			0x0,		/* 0 */
 /* 6972 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 6976 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6980 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 6984 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 6986 */	0x0 , 
-			0x0,		/* 0 */
-/* 6988 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6992 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6996 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 6998 */	NdrFcShort( 0xee9a ),	/* Offset= -4454 (2544) */
-/* 7000 */	0x5c,		/* FC_PAD */
+/* 6980 */	0x5,		/* FC_WCHAR */
 			0x5b,		/* FC_END */
-/* 7002 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 7004 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 7006 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 7008 */	NdrFcShort( 0x8 ),	/* Offset= 8 (7016) */
-/* 7010 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 7012 */	NdrFcShort( 0xffc2 ),	/* Offset= -62 (6950) */
-/* 7014 */	0x36,		/* FC_POINTER */
-			0x5b,		/* FC_END */
-/* 7016 */	
-			0x12, 0x0,	/* FC_UP */
-/* 7018 */	NdrFcShort( 0xffc6 ),	/* Offset= -58 (6960) */
-/* 7020 */	
-			0x11, 0x0,	/* FC_RP */
-/* 7022 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7024) */
-/* 7024 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 7026 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 6982 */	
+			0x1b,		/* FC_CARRAY */
+			0x1,		/* 1 */
+/* 6984 */	NdrFcShort( 0x2 ),	/* 2 */
+/* 6986 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 7028 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 7030 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7032 */	0x0 , 
+/* 6988 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 6990 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 6992 */	0x0 , 
 			0x0,		/* 0 */
-/* 7034 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7038 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7042 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7044) */
-/* 7044 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 7046 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7048 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7052 */	NdrFcShort( 0x4 ),	/* Offset= 4 (7056) */
-/* 7054 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7053) */
-/* 7056 */	
-			0x16,		/* FC_PSTRUCT */
+/* 6994 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6998 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7002 */	0x5,		/* FC_WCHAR */
+			0x5b,		/* FC_END */
+/* 7004 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 7058 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 7006 */	NdrFcShort( 0x30 ),	/* 48 */
+/* 7008 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 7010 */	NdrFcShort( 0x18 ),	/* Offset= 24 (7034) */
+/* 7012 */	0x8,		/* FC_LONG */
+			0x36,		/* FC_POINTER */
+/* 7014 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 7016 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 7018 */	NdrFcShort( 0xff92 ),	/* Offset= -110 (6908) */
+/* 7020 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 7022 */	0x0,		/* 0 */
+			NdrFcShort( 0xff97 ),	/* Offset= -105 (6918) */
+			0x36,		/* FC_POINTER */
+/* 7026 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 7028 */	NdrFcShort( 0xff9c ),	/* Offset= -100 (6928) */
+/* 7030 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 7032 */	0x36,		/* FC_POINTER */
+			0x5b,		/* FC_END */
+/* 7034 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 7036 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 7038 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 7040 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 7042 */	
+			0x14, 0x8,	/* FC_FP [simple_pointer] */
+/* 7044 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 7046 */	
+			0x12, 0x0,	/* FC_UP */
+/* 7048 */	NdrFcShort( 0xff92 ),	/* Offset= -110 (6938) */
+/* 7050 */	
+			0x12, 0x0,	/* FC_UP */
+/* 7052 */	NdrFcShort( 0xffa4 ),	/* Offset= -92 (6960) */
+/* 7054 */	
+			0x12, 0x0,	/* FC_UP */
+/* 7056 */	NdrFcShort( 0xffb6 ),	/* Offset= -74 (6982) */
+/* 7058 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
 /* 7060 */	
-			0x4b,		/* FC_PP */
+			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
 /* 7062 */	
-			0x46,		/* FC_NO_REPEAT */
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 7064 */	
+			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 7064 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 7066 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 7068 */	0x11, 0x0,	/* FC_RP */
-/* 7070 */	NdrFcShort( 0xe50e ),	/* Offset= -6898 (172) */
-/* 7072 */	
-			0x5b,		/* FC_END */
-
-			0x8,		/* FC_LONG */
-/* 7074 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 7076 */	NdrFcShort( 0xe468 ),	/* Offset= -7064 (12) */
-/* 7078 */	0x8,		/* FC_LONG */
-			0x5b,		/* FC_END */
-/* 7080 */	
-			0x11, 0x0,	/* FC_RP */
-/* 7082 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7084) */
-/* 7084 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 7086 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 7088 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 7090 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7092 */	0x0 , 
-			0x0,		/* 0 */
-/* 7094 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7098 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7102 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7104) */
-/* 7104 */	NdrFcShort( 0x2c ),	/* 44 */
-/* 7106 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7108 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7112 */	NdrFcShort( 0xa ),	/* Offset= 10 (7122) */
-/* 7114 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7113) */
-/* 7116 */	
-			0x1d,		/* FC_SMFARRAY */
-			0x0,		/* 0 */
-/* 7118 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 7120 */	0x2,		/* FC_CHAR */
-			0x5b,		/* FC_END */
-/* 7122 */	
-			0x16,		/* FC_PSTRUCT */
-			0x3,		/* 3 */
-/* 7124 */	NdrFcShort( 0x2c ),	/* 44 */
-/* 7126 */	
-			0x4b,		/* FC_PP */
-			0x5c,		/* FC_PAD */
-/* 7128 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 7130 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 7132 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 7134 */	0x12, 0x0,	/* FC_UP */
-/* 7136 */	NdrFcShort( 0xe4cc ),	/* Offset= -6964 (172) */
-/* 7138 */	
-			0x46,		/* FC_NO_REPEAT */
-			0x5c,		/* FC_PAD */
-/* 7140 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 7142 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 7144 */	0x12, 0x0,	/* FC_UP */
-/* 7146 */	NdrFcShort( 0xe5f0 ),	/* Offset= -6672 (474) */
-/* 7148 */	
-			0x5b,		/* FC_END */
-
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 7150 */	0x0,		/* 0 */
-			NdrFcShort( 0xe41d ),	/* Offset= -7139 (12) */
-			0x8,		/* FC_LONG */
-/* 7154 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 7156 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 7158 */	NdrFcShort( 0xffd6 ),	/* Offset= -42 (7116) */
-/* 7160 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 7162 */	
+/* 7066 */	
 			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 7164 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7166) */
-/* 7166 */	
+/* 7068 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7070) */
+/* 7070 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 7168 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 7072 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x54,		/* FC_DEREFERENCE */
-/* 7170 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 7172 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7074 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
+/* 7076 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7078 */	0x0 , 
+			0x0,		/* 0 */
+/* 7080 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7084 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7088 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7090) */
+/* 7090 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 7092 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 7094 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7098 */	NdrFcShort( 0xf324 ),	/* Offset= -3292 (3806) */
+/* 7100 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7099) */
+/* 7102 */	
+			0x11, 0x0,	/* FC_RP */
+/* 7104 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7106) */
+/* 7106 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 7108 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 7110 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 7112 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7114 */	0x0 , 
+			0x0,		/* 0 */
+/* 7116 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7120 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7124 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7126) */
+/* 7126 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 7128 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 7130 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7134 */	NdrFcShort( 0x38 ),	/* Offset= 56 (7190) */
+/* 7136 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7135) */
+/* 7138 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 7140 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7144 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 7148 */	
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x3,		/* 3 */
+/* 7150 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 7152 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 7154 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 7156 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7158 */	0x0 , 
+			0x0,		/* 0 */
+/* 7160 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7164 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7168 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 7172 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
 /* 7174 */	0x0 , 
 			0x0,		/* 0 */
 /* 7176 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 7180 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7184 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7186) */
-/* 7186 */	NdrFcShort( 0xc ),	/* 12 */
-/* 7188 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7190 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7194 */	NdrFcShort( 0x28 ),	/* Offset= 40 (7234) */
-/* 7196 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7195) */
-/* 7198 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 7200 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7204 */	NdrFcLong( 0xa00000 ),	/* 10485760 */
-/* 7208 */	
-			0x1b,		/* FC_CARRAY */
-			0x3,		/* 3 */
-/* 7210 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 7212 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 7214 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 7216 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7218 */	0x0 , 
+/* 7184 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 7220 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7224 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7228 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 7230 */	NdrFcShort( 0xe3ce ),	/* Offset= -7218 (12) */
-/* 7232 */	0x5c,		/* FC_PAD */
+/* 7186 */	NdrFcShort( 0xee70 ),	/* Offset= -4496 (2690) */
+/* 7188 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 7234 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+/* 7190 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 7236 */	NdrFcShort( 0xc ),	/* 12 */
-/* 7238 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 7240 */	NdrFcShort( 0xa ),	/* Offset= 10 (7250) */
-/* 7242 */	0x8,		/* FC_LONG */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 7244 */	0x0,		/* 0 */
-			NdrFcShort( 0xffd1 ),	/* Offset= -47 (7198) */
-			0x36,		/* FC_POINTER */
-/* 7248 */	0x5c,		/* FC_PAD */
+/* 7192 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 7194 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 7196 */	NdrFcShort( 0x8 ),	/* Offset= 8 (7204) */
+/* 7198 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 7200 */	NdrFcShort( 0xffc2 ),	/* Offset= -62 (7138) */
+/* 7202 */	0x36,		/* FC_POINTER */
 			0x5b,		/* FC_END */
-/* 7250 */	
+/* 7204 */	
 			0x12, 0x0,	/* FC_UP */
-/* 7252 */	NdrFcShort( 0xffd4 ),	/* Offset= -44 (7208) */
-/* 7254 */	
-			0x11, 0x0,	/* FC_RP */
-/* 7256 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7258) */
-/* 7258 */	
+/* 7206 */	NdrFcShort( 0xffc6 ),	/* Offset= -58 (7148) */
+/* 7208 */	
+			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
+/* 7210 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7212) */
+/* 7212 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 7260 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 7262 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 7264 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7266 */	0x0 , 
+/* 7214 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x54,		/* FC_DEREFERENCE */
+/* 7216 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
+/* 7218 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7220 */	0x0 , 
 			0x0,		/* 0 */
-/* 7268 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7272 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7276 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7278) */
-/* 7278 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 7280 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7282 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7286 */	NdrFcShort( 0x38 ),	/* Offset= 56 (7342) */
-/* 7288 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7287) */
-/* 7290 */	0xb7,		/* FC_RANGE */
+/* 7222 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7226 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7230 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7232) */
+/* 7232 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 7234 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 7236 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7240 */	NdrFcShort( 0x38 ),	/* Offset= 56 (7296) */
+/* 7242 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7241) */
+/* 7244 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 7292 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7296 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 7300 */	
-			0x1b,		/* FC_CARRAY */
+/* 7246 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7250 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 7254 */	
+			0x21,		/* FC_BOGUS_ARRAY */
 			0x3,		/* 3 */
-/* 7302 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 7304 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 7256 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 7258 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 7306 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 7308 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7310 */	0x0 , 
+/* 7260 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 7262 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7264 */	0x0 , 
 			0x0,		/* 0 */
-/* 7312 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7316 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7320 */	
+/* 7266 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7270 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7274 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 7278 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 7280 */	0x0 , 
+			0x0,		/* 0 */
+/* 7282 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7286 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7290 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 7292 */	NdrFcShort( 0xee9a ),	/* Offset= -4454 (2838) */
+/* 7294 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 7296 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 7298 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 7300 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 7302 */	NdrFcShort( 0x8 ),	/* Offset= 8 (7310) */
+/* 7304 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 7306 */	NdrFcShort( 0xffc2 ),	/* Offset= -62 (7244) */
+/* 7308 */	0x36,		/* FC_POINTER */
+			0x5b,		/* FC_END */
+/* 7310 */	
+			0x12, 0x0,	/* FC_UP */
+/* 7312 */	NdrFcShort( 0xffc6 ),	/* Offset= -58 (7254) */
+/* 7314 */	
+			0x11, 0x0,	/* FC_RP */
+/* 7316 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7318) */
+/* 7318 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 7320 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 7322 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 7324 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7326 */	0x0 , 
+			0x0,		/* 0 */
+/* 7328 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7332 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7336 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7338) */
+/* 7338 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 7340 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 7342 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7346 */	NdrFcShort( 0x4 ),	/* Offset= 4 (7350) */
+/* 7348 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7347) */
+/* 7350 */	
+			0x16,		/* FC_PSTRUCT */
+			0x3,		/* 3 */
+/* 7352 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 7354 */	
 			0x4b,		/* FC_PP */
 			0x5c,		/* FC_PAD */
-/* 7322 */	
+/* 7356 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 7358 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 7360 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 7362 */	0x11, 0x0,	/* FC_RP */
+/* 7364 */	NdrFcShort( 0xe3ee ),	/* Offset= -7186 (178) */
+/* 7366 */	
+			0x5b,		/* FC_END */
+
+			0x8,		/* FC_LONG */
+/* 7368 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 7370 */	NdrFcShort( 0xe342 ),	/* Offset= -7358 (12) */
+/* 7372 */	0x8,		/* FC_LONG */
+			0x5b,		/* FC_END */
+/* 7374 */	
+			0x11, 0x0,	/* FC_RP */
+/* 7376 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7378) */
+/* 7378 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 7380 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 7382 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 7384 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7386 */	0x0 , 
+			0x0,		/* 0 */
+/* 7388 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7392 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7396 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7398) */
+/* 7398 */	NdrFcShort( 0x2c ),	/* 44 */
+/* 7400 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 7402 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7406 */	NdrFcShort( 0xa ),	/* Offset= 10 (7416) */
+/* 7408 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7407) */
+/* 7410 */	
+			0x1d,		/* FC_SMFARRAY */
+			0x0,		/* 0 */
+/* 7412 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 7414 */	0x2,		/* FC_CHAR */
+			0x5b,		/* FC_END */
+/* 7416 */	
+			0x16,		/* FC_PSTRUCT */
+			0x3,		/* 3 */
+/* 7418 */	NdrFcShort( 0x2c ),	/* 44 */
+/* 7420 */	
+			0x4b,		/* FC_PP */
+			0x5c,		/* FC_PAD */
+/* 7422 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 7424 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 7426 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 7428 */	0x12, 0x0,	/* FC_UP */
+/* 7430 */	NdrFcShort( 0xe3ac ),	/* Offset= -7252 (178) */
+/* 7432 */	
+			0x46,		/* FC_NO_REPEAT */
+			0x5c,		/* FC_PAD */
+/* 7434 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 7436 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 7438 */	0x12, 0x0,	/* FC_UP */
+/* 7440 */	NdrFcShort( 0xe528 ),	/* Offset= -6872 (568) */
+/* 7442 */	
+			0x5b,		/* FC_END */
+
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 7444 */	0x0,		/* 0 */
+			NdrFcShort( 0xe2f7 ),	/* Offset= -7433 (12) */
+			0x8,		/* FC_LONG */
+/* 7448 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 7450 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 7452 */	NdrFcShort( 0xffd6 ),	/* Offset= -42 (7410) */
+/* 7454 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 7456 */	
+			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
+/* 7458 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7460) */
+/* 7460 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 7462 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x54,		/* FC_DEREFERENCE */
+/* 7464 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
+/* 7466 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7468 */	0x0 , 
+			0x0,		/* 0 */
+/* 7470 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7474 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7478 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7480) */
+/* 7480 */	NdrFcShort( 0xc ),	/* 12 */
+/* 7482 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 7484 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7488 */	NdrFcShort( 0x28 ),	/* Offset= 40 (7528) */
+/* 7490 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7489) */
+/* 7492 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 7494 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7498 */	NdrFcLong( 0xa00000 ),	/* 10485760 */
+/* 7502 */	
+			0x1b,		/* FC_CARRAY */
+			0x3,		/* 3 */
+/* 7504 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 7506 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 7508 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 7510 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7512 */	0x0 , 
+			0x0,		/* 0 */
+/* 7514 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7518 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7522 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 7524 */	NdrFcShort( 0xe2a8 ),	/* Offset= -7512 (12) */
+/* 7526 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 7528 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 7530 */	NdrFcShort( 0xc ),	/* 12 */
+/* 7532 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 7534 */	NdrFcShort( 0xa ),	/* Offset= 10 (7544) */
+/* 7536 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 7538 */	0x0,		/* 0 */
+			NdrFcShort( 0xffd1 ),	/* Offset= -47 (7492) */
+			0x36,		/* FC_POINTER */
+/* 7542 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 7544 */	
+			0x12, 0x0,	/* FC_UP */
+/* 7546 */	NdrFcShort( 0xffd4 ),	/* Offset= -44 (7502) */
+/* 7548 */	
+			0x11, 0x0,	/* FC_RP */
+/* 7550 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7552) */
+/* 7552 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 7554 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 7556 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 7558 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7560 */	0x0 , 
+			0x0,		/* 0 */
+/* 7562 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7566 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7570 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7572) */
+/* 7572 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 7574 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 7576 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7580 */	NdrFcShort( 0x38 ),	/* Offset= 56 (7636) */
+/* 7582 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7581) */
+/* 7584 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 7586 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7590 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 7594 */	
+			0x1b,		/* FC_CARRAY */
+			0x3,		/* 3 */
+/* 7596 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 7598 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 7600 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 7602 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7604 */	0x0 , 
+			0x0,		/* 0 */
+/* 7606 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7610 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7614 */	
+			0x4b,		/* FC_PP */
+			0x5c,		/* FC_PAD */
+/* 7616 */	
 			0x48,		/* FC_VARIABLE_REPEAT */
 			0x49,		/* FC_FIXED_OFFSET */
-/* 7324 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 7326 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 7328 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7330 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 7332 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 7334 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 7336 */	
+/* 7618 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 7620 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 7622 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 7624 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 7626 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 7628 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 7630 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 7338 */	
+/* 7632 */	
 			0x5b,		/* FC_END */
 
 			0x8,		/* FC_LONG */
-/* 7340 */	0x5c,		/* FC_PAD */
+/* 7634 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 7342 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+/* 7636 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 7344 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 7346 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 7348 */	NdrFcShort( 0xa ),	/* Offset= 10 (7358) */
-/* 7350 */	0x36,		/* FC_POINTER */
+/* 7638 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 7640 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 7642 */	NdrFcShort( 0xa ),	/* Offset= 10 (7652) */
+/* 7644 */	0x36,		/* FC_POINTER */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 7352 */	0x0,		/* 0 */
-			NdrFcShort( 0xffc1 ),	/* Offset= -63 (7290) */
+/* 7646 */	0x0,		/* 0 */
+			NdrFcShort( 0xffc1 ),	/* Offset= -63 (7584) */
 			0x36,		/* FC_POINTER */
-/* 7356 */	0x8,		/* FC_LONG */
+/* 7650 */	0x8,		/* FC_LONG */
 			0x5b,		/* FC_END */
-/* 7358 */	
+/* 7652 */	
 			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 7360 */	
+/* 7654 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 7362 */	
+/* 7656 */	
 			0x12, 0x0,	/* FC_UP */
-/* 7364 */	NdrFcShort( 0xffc0 ),	/* Offset= -64 (7300) */
-/* 7366 */	
+/* 7658 */	NdrFcShort( 0xffc0 ),	/* Offset= -64 (7594) */
+/* 7660 */	
 			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 7368 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7370) */
-/* 7370 */	
+/* 7662 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7664) */
+/* 7664 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 7372 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 7666 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x54,		/* FC_DEREFERENCE */
-/* 7374 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 7376 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7378 */	0x0 , 
+/* 7668 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
+/* 7670 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7672 */	0x0 , 
 			0x0,		/* 0 */
-/* 7380 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7384 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7388 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7390) */
-/* 7390 */	NdrFcShort( 0xc ),	/* 12 */
-/* 7392 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7394 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7398 */	NdrFcShort( 0x28 ),	/* Offset= 40 (7438) */
-/* 7400 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7399) */
-/* 7402 */	0xb7,		/* FC_RANGE */
+/* 7674 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7678 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7682 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7684) */
+/* 7684 */	NdrFcShort( 0xc ),	/* 12 */
+/* 7686 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 7688 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7692 */	NdrFcShort( 0x28 ),	/* Offset= 40 (7732) */
+/* 7694 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7693) */
+/* 7696 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 7404 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7408 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 7412 */	
+/* 7698 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7702 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 7706 */	
 			0x1b,		/* FC_CARRAY */
 			0x3,		/* 3 */
-/* 7414 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 7416 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 7708 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 7710 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 7418 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 7420 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7422 */	0x0 , 
+/* 7712 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 7714 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7716 */	0x0 , 
 			0x0,		/* 0 */
-/* 7424 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7428 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7432 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 7718 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7722 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7726 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 7434 */	NdrFcShort( 0xf792 ),	/* Offset= -2158 (5276) */
-/* 7436 */	0x5c,		/* FC_PAD */
+/* 7728 */	NdrFcShort( 0xf792 ),	/* Offset= -2158 (5570) */
+/* 7730 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 7438 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+/* 7732 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 7440 */	NdrFcShort( 0xc ),	/* 12 */
-/* 7442 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 7444 */	NdrFcShort( 0xa ),	/* Offset= 10 (7454) */
-/* 7446 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 7734 */	NdrFcShort( 0xc ),	/* 12 */
+/* 7736 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 7738 */	NdrFcShort( 0xa ),	/* Offset= 10 (7748) */
+/* 7740 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 7448 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (7402) */
-/* 7450 */	0x36,		/* FC_POINTER */
+/* 7742 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (7696) */
+/* 7744 */	0x36,		/* FC_POINTER */
 			0x8,		/* FC_LONG */
-/* 7452 */	0x5c,		/* FC_PAD */
+/* 7746 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 7454 */	
+/* 7748 */	
 			0x12, 0x0,	/* FC_UP */
-/* 7456 */	NdrFcShort( 0xffd4 ),	/* Offset= -44 (7412) */
-/* 7458 */	
+/* 7750 */	NdrFcShort( 0xffd4 ),	/* Offset= -44 (7706) */
+/* 7752 */	
 			0x11, 0x0,	/* FC_RP */
-/* 7460 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7462) */
-/* 7462 */	
+/* 7754 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7756) */
+/* 7756 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 7464 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 7758 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x0,		/*  */
-/* 7466 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 7468 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7470 */	0x0 , 
+/* 7760 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 7762 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7764 */	0x0 , 
 			0x0,		/* 0 */
-/* 7472 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7476 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7480 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7482) */
-/* 7482 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 7484 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7486 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7490 */	NdrFcShort( 0xf076 ),	/* Offset= -3978 (3512) */
-/* 7492 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7491) */
-/* 7494 */	
+/* 7766 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7770 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7774 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7776) */
+/* 7776 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 7778 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 7780 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7784 */	NdrFcShort( 0xf076 ),	/* Offset= -3978 (3806) */
+/* 7786 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7785) */
+/* 7788 */	
 			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 7496 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7498) */
-/* 7498 */	
+/* 7790 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7792) */
+/* 7792 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 7500 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 7794 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x54,		/* FC_DEREFERENCE */
-/* 7502 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 7504 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7506 */	0x0 , 
+/* 7796 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
+/* 7798 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7800 */	0x0 , 
 			0x0,		/* 0 */
-/* 7508 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7512 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7516 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7518) */
-/* 7518 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 7520 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7522 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7526 */	NdrFcShort( 0xf052 ),	/* Offset= -4014 (3512) */
-/* 7528 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7527) */
-/* 7530 */	
+/* 7802 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7806 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7810 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7812) */
+/* 7812 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 7814 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 7816 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7820 */	NdrFcShort( 0xf052 ),	/* Offset= -4014 (3806) */
+/* 7822 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7821) */
+/* 7824 */	
 			0x11, 0x0,	/* FC_RP */
-/* 7532 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7534) */
-/* 7534 */	
+/* 7826 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7828) */
+/* 7828 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 7536 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 7830 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x0,		/*  */
-/* 7538 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 7540 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7542 */	0x0 , 
+/* 7832 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 7834 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7836 */	0x0 , 
 			0x0,		/* 0 */
-/* 7544 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7548 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7552 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7554) */
-/* 7554 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 7556 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7558 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7562 */	NdrFcShort( 0x4 ),	/* Offset= 4 (7566) */
-/* 7564 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7563) */
-/* 7566 */	
+/* 7838 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7842 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7846 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7848) */
+/* 7848 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 7850 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 7852 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7856 */	NdrFcShort( 0x4 ),	/* Offset= 4 (7860) */
+/* 7858 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7857) */
+/* 7860 */	
 			0x16,		/* FC_PSTRUCT */
 			0x3,		/* 3 */
-/* 7568 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 7570 */	
+/* 7862 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 7864 */	
 			0x4b,		/* FC_PP */
 			0x5c,		/* FC_PAD */
-/* 7572 */	
+/* 7866 */	
 			0x46,		/* FC_NO_REPEAT */
 			0x5c,		/* FC_PAD */
-/* 7574 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 7576 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 7578 */	0x11, 0x0,	/* FC_RP */
-/* 7580 */	NdrFcShort( 0xe310 ),	/* Offset= -7408 (172) */
-/* 7582 */	
+/* 7868 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 7870 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 7872 */	0x11, 0x0,	/* FC_RP */
+/* 7874 */	NdrFcShort( 0xe1f0 ),	/* Offset= -7696 (178) */
+/* 7876 */	
 			0x5b,		/* FC_END */
 
 			0x8,		/* FC_LONG */
-/* 7584 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 7878 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 7586 */	NdrFcShort( 0xe26a ),	/* Offset= -7574 (12) */
-/* 7588 */	0x8,		/* FC_LONG */
+/* 7880 */	NdrFcShort( 0xe144 ),	/* Offset= -7868 (12) */
+/* 7882 */	0x8,		/* FC_LONG */
 			0x5b,		/* FC_END */
-/* 7590 */	
+/* 7884 */	
 			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 7592 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7594) */
-/* 7594 */	
+/* 7886 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7888) */
+/* 7888 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 7596 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 7890 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x54,		/* FC_DEREFERENCE */
-/* 7598 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 7600 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7602 */	0x0 , 
+/* 7892 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
+/* 7894 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7896 */	0x0 , 
 			0x0,		/* 0 */
-/* 7604 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7608 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7612 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7614) */
-/* 7614 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 7616 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7618 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7622 */	NdrFcShort( 0xeff2 ),	/* Offset= -4110 (3512) */
-/* 7624 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7623) */
-/* 7626 */	
+/* 7898 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7902 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7906 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7908) */
+/* 7908 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 7910 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 7912 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7916 */	NdrFcShort( 0xeff2 ),	/* Offset= -4110 (3806) */
+/* 7918 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7917) */
+/* 7920 */	
 			0x11, 0x0,	/* FC_RP */
-/* 7628 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7630) */
-/* 7630 */	
+/* 7922 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7924) */
+/* 7924 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 7632 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 7926 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x0,		/*  */
-/* 7634 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 7636 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7638 */	0x0 , 
+/* 7928 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 7930 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7932 */	0x0 , 
 			0x0,		/* 0 */
-/* 7640 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7644 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7648 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7650) */
-/* 7650 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 7652 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7654 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7658 */	NdrFcShort( 0x4 ),	/* Offset= 4 (7662) */
-/* 7660 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7659) */
-/* 7662 */	
+/* 7934 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7938 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7942 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7944) */
+/* 7944 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 7946 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 7948 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7952 */	NdrFcShort( 0x4 ),	/* Offset= 4 (7956) */
+/* 7954 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7953) */
+/* 7956 */	
 			0x16,		/* FC_PSTRUCT */
 			0x3,		/* 3 */
-/* 7664 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 7666 */	
+/* 7958 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 7960 */	
 			0x4b,		/* FC_PP */
 			0x5c,		/* FC_PAD */
-/* 7668 */	
+/* 7962 */	
 			0x46,		/* FC_NO_REPEAT */
 			0x5c,		/* FC_PAD */
-/* 7670 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 7672 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 7674 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 7676 */	
+/* 7964 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 7966 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 7968 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 7970 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 7678 */	
+/* 7972 */	
 			0x5b,		/* FC_END */
 
 			0x8,		/* FC_LONG */
-/* 7680 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 7974 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 7682 */	NdrFcShort( 0xe20a ),	/* Offset= -7670 (12) */
-/* 7684 */	0x8,		/* FC_LONG */
+/* 7976 */	NdrFcShort( 0xe0e4 ),	/* Offset= -7964 (12) */
+/* 7978 */	0x8,		/* FC_LONG */
 			0x5b,		/* FC_END */
-/* 7686 */	
+/* 7980 */	
 			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 7688 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7690) */
-/* 7690 */	
+/* 7982 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7984) */
+/* 7984 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 7692 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 7986 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x54,		/* FC_DEREFERENCE */
-/* 7694 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 7696 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7698 */	0x0 , 
+/* 7988 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
+/* 7990 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7992 */	0x0 , 
 			0x0,		/* 0 */
-/* 7700 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7704 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7708 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7710) */
-/* 7710 */	NdrFcShort( 0xc ),	/* 12 */
-/* 7712 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7714 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7718 */	NdrFcShort( 0x4 ),	/* Offset= 4 (7722) */
-/* 7720 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7719) */
-/* 7722 */	
+/* 7994 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7998 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8002 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8004) */
+/* 8004 */	NdrFcShort( 0xc ),	/* 12 */
+/* 8006 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 8008 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 8012 */	NdrFcShort( 0x4 ),	/* Offset= 4 (8016) */
+/* 8014 */	NdrFcShort( 0xffff ),	/* Offset= -1 (8013) */
+/* 8016 */	
 			0x15,		/* FC_STRUCT */
 			0x3,		/* 3 */
-/* 7724 */	NdrFcShort( 0xc ),	/* 12 */
-/* 7726 */	0x8,		/* FC_LONG */
+/* 8018 */	NdrFcShort( 0xc ),	/* 12 */
+/* 8020 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 7728 */	0x8,		/* FC_LONG */
+/* 8022 */	0x8,		/* FC_LONG */
 			0x5b,		/* FC_END */
-/* 7730 */	
+/* 8024 */	
 			0x11, 0x0,	/* FC_RP */
-/* 7732 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7734) */
-/* 7734 */	
+/* 8026 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8028) */
+/* 8028 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 7736 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 8030 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x0,		/*  */
-/* 7738 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 7740 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7742 */	0x0 , 
+/* 8032 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 8034 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 8036 */	0x0 , 
 			0x0,		/* 0 */
-/* 7744 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7748 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7752 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7754) */
-/* 7754 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 7756 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7758 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7762 */	NdrFcShort( 0x4 ),	/* Offset= 4 (7766) */
-/* 7764 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7763) */
-/* 7766 */	
+/* 8038 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8042 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8046 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8048) */
+/* 8048 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 8050 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 8052 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 8056 */	NdrFcShort( 0x4 ),	/* Offset= 4 (8060) */
+/* 8058 */	NdrFcShort( 0xffff ),	/* Offset= -1 (8057) */
+/* 8060 */	
 			0x16,		/* FC_PSTRUCT */
 			0x3,		/* 3 */
-/* 7768 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 7770 */	
+/* 8062 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 8064 */	
 			0x4b,		/* FC_PP */
 			0x5c,		/* FC_PAD */
-/* 7772 */	
+/* 8066 */	
 			0x46,		/* FC_NO_REPEAT */
 			0x5c,		/* FC_PAD */
-/* 7774 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 7776 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 7778 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 7780 */	
+/* 8068 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 8070 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 8072 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 8074 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 7782 */	
+/* 8076 */	
 			0x46,		/* FC_NO_REPEAT */
 			0x5c,		/* FC_PAD */
-/* 7784 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 7786 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 7788 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 7790 */	
+/* 8078 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 8080 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 8082 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 8084 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 7792 */	
+/* 8086 */	
 			0x5b,		/* FC_END */
 
 			0x8,		/* FC_LONG */
-/* 7794 */	0x8,		/* FC_LONG */
+/* 8088 */	0x8,		/* FC_LONG */
 			0x5b,		/* FC_END */
-/* 7796 */	
+/* 8090 */	
 			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 7798 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7800) */
-/* 7800 */	
+/* 8092 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8094) */
+/* 8094 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 7802 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 8096 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x54,		/* FC_DEREFERENCE */
-/* 7804 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 7806 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7808 */	0x0 , 
+/* 8098 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
+/* 8100 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 8102 */	0x0 , 
 			0x0,		/* 0 */
-/* 7810 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7814 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7818 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7820) */
-/* 7820 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 7822 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7824 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7828 */	NdrFcShort( 0x24 ),	/* Offset= 36 (7864) */
-/* 7830 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7829) */
-/* 7832 */	0xb7,		/* FC_RANGE */
+/* 8104 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8108 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8112 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8114) */
+/* 8114 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 8116 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 8118 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 8122 */	NdrFcShort( 0x24 ),	/* Offset= 36 (8158) */
+/* 8124 */	NdrFcShort( 0xffff ),	/* Offset= -1 (8123) */
+/* 8126 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 7834 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7838 */	NdrFcLong( 0x400 ),	/* 1024 */
-/* 7842 */	
+/* 8128 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8132 */	NdrFcLong( 0x400 ),	/* 1024 */
+/* 8136 */	
 			0x1b,		/* FC_CARRAY */
 			0x1,		/* 1 */
-/* 7844 */	NdrFcShort( 0x2 ),	/* 2 */
-/* 7846 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 8138 */	NdrFcShort( 0x2 ),	/* 2 */
+/* 8140 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 7848 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 7850 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7852 */	0x0 , 
+/* 8142 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 8144 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 8146 */	0x0 , 
 			0x0,		/* 0 */
-/* 7854 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7858 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7862 */	0x5,		/* FC_WCHAR */
+/* 8148 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8152 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8156 */	0x5,		/* FC_WCHAR */
 			0x5b,		/* FC_END */
-/* 7864 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+/* 8158 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 7866 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 7868 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 7870 */	NdrFcShort( 0xa ),	/* Offset= 10 (7880) */
-/* 7872 */	0x36,		/* FC_POINTER */
+/* 8160 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 8162 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 8164 */	NdrFcShort( 0xa ),	/* Offset= 10 (8174) */
+/* 8166 */	0x36,		/* FC_POINTER */
 			0x36,		/* FC_POINTER */
-/* 7874 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 8168 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 7876 */	NdrFcShort( 0xffd4 ),	/* Offset= -44 (7832) */
-/* 7878 */	0x36,		/* FC_POINTER */
+/* 8170 */	NdrFcShort( 0xffd4 ),	/* Offset= -44 (8126) */
+/* 8172 */	0x36,		/* FC_POINTER */
 			0x5b,		/* FC_END */
-/* 7880 */	
+/* 8174 */	
 			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 7882 */	
+/* 8176 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 7884 */	
+/* 8178 */	
 			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 7886 */	
+/* 8180 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 7888 */	
+/* 8182 */	
 			0x12, 0x0,	/* FC_UP */
-/* 7890 */	NdrFcShort( 0xffd0 ),	/* Offset= -48 (7842) */
-/* 7892 */	
+/* 8184 */	NdrFcShort( 0xffd0 ),	/* Offset= -48 (8136) */
+/* 8186 */	
 			0x11, 0x0,	/* FC_RP */
-/* 7894 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7896) */
-/* 7896 */	
+/* 8188 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8190) */
+/* 8190 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 7898 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 8192 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x0,		/*  */
-/* 7900 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 7902 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7904 */	0x0 , 
+/* 8194 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 8196 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 8198 */	0x0 , 
 			0x0,		/* 0 */
-/* 7906 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7910 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7914 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7916) */
-/* 7916 */	NdrFcShort( 0xc ),	/* 12 */
-/* 7918 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7920 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7924 */	NdrFcShort( 0xe ),	/* Offset= 14 (7938) */
-/* 7926 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7925) */
-/* 7928 */	0xb7,		/* FC_RANGE */
+/* 8200 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8204 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8208 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8210) */
+/* 8210 */	NdrFcShort( 0xc ),	/* 12 */
+/* 8212 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 8214 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 8218 */	NdrFcShort( 0xe ),	/* Offset= 14 (8232) */
+/* 8220 */	NdrFcShort( 0xffff ),	/* Offset= -1 (8219) */
+/* 8222 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 7930 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7934 */	NdrFcLong( 0xffff ),	/* 65535 */
-/* 7938 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+/* 8224 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8228 */	NdrFcLong( 0xffff ),	/* 65535 */
+/* 8232 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 7940 */	NdrFcShort( 0xc ),	/* 12 */
-/* 7942 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 7944 */	NdrFcShort( 0xa ),	/* Offset= 10 (7954) */
-/* 7946 */	0x36,		/* FC_POINTER */
+/* 8234 */	NdrFcShort( 0xc ),	/* 12 */
+/* 8236 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 8238 */	NdrFcShort( 0xa ),	/* Offset= 10 (8248) */
+/* 8240 */	0x36,		/* FC_POINTER */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 7948 */	0x0,		/* 0 */
-			NdrFcShort( 0xffeb ),	/* Offset= -21 (7928) */
+/* 8242 */	0x0,		/* 0 */
+			NdrFcShort( 0xffeb ),	/* Offset= -21 (8222) */
 			0x36,		/* FC_POINTER */
-/* 7952 */	0x5c,		/* FC_PAD */
+/* 8246 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 7954 */	
+/* 8248 */	
 			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 7956 */	
+/* 8250 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 7958 */	
+/* 8252 */	
 			0x12, 0x0,	/* FC_UP */
-/* 7960 */	NdrFcShort( 0xe5d6 ),	/* Offset= -6698 (1262) */
-/* 7962 */	
+/* 8254 */	NdrFcShort( 0xe550 ),	/* Offset= -6832 (1422) */
+/* 8256 */	
 			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 7964 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7966) */
-/* 7966 */	
+/* 8258 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8260) */
+/* 8260 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 7968 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 8262 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x54,		/* FC_DEREFERENCE */
-/* 7970 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 7972 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7974 */	0x0 , 
+/* 8264 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
+/* 8266 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 8268 */	0x0 , 
 			0x0,		/* 0 */
-/* 7976 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7980 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7984 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7986) */
-/* 7986 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 7988 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7990 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7994 */	NdrFcShort( 0xee7e ),	/* Offset= -4482 (3512) */
-/* 7996 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7995) */
-/* 7998 */	
-			0x11, 0x0,	/* FC_RP */
-/* 8000 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8002) */
-/* 8002 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 8004 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 8006 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 8008 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 8010 */	0x0 , 
-			0x0,		/* 0 */
-/* 8012 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 8016 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 8020 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8022) */
-/* 8022 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 8024 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 8026 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 8030 */	NdrFcShort( 0xeeec ),	/* Offset= -4372 (3658) */
-/* 8032 */	NdrFcShort( 0xffff ),	/* Offset= -1 (8031) */
-/* 8034 */	
-			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 8036 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8038) */
-/* 8038 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 8040 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x54,		/* FC_DEREFERENCE */
-/* 8042 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 8044 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 8046 */	0x0 , 
-			0x0,		/* 0 */
-/* 8048 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 8052 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 8056 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8058) */
-/* 8058 */	NdrFcShort( 0xc ),	/* 12 */
-/* 8060 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 8062 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 8066 */	NdrFcShort( 0xe ),	/* Offset= 14 (8080) */
-/* 8068 */	NdrFcShort( 0xffff ),	/* Offset= -1 (8067) */
-/* 8070 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 8072 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 8076 */	NdrFcLong( 0xffff ),	/* 65535 */
-/* 8080 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 8082 */	NdrFcShort( 0xc ),	/* 12 */
-/* 8084 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 8086 */	NdrFcShort( 0xa ),	/* Offset= 10 (8096) */
-/* 8088 */	0x8,		/* FC_LONG */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 8090 */	0x0,		/* 0 */
-			NdrFcShort( 0xffeb ),	/* Offset= -21 (8070) */
-			0x36,		/* FC_POINTER */
-/* 8094 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 8096 */	
-			0x12, 0x0,	/* FC_UP */
-/* 8098 */	NdrFcShort( 0xe54c ),	/* Offset= -6836 (1262) */
-/* 8100 */	
-			0x11, 0x0,	/* FC_RP */
-/* 8102 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8104) */
-/* 8104 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 8106 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 8108 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 8110 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 8112 */	0x0 , 
-			0x0,		/* 0 */
-/* 8114 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 8118 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 8122 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8124) */
-/* 8124 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 8126 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 8128 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 8132 */	NdrFcShort( 0xedf4 ),	/* Offset= -4620 (3512) */
-/* 8134 */	NdrFcShort( 0xffff ),	/* Offset= -1 (8133) */
-/* 8136 */	
-			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 8138 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8140) */
-/* 8140 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 8142 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x54,		/* FC_DEREFERENCE */
-/* 8144 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 8146 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 8148 */	0x0 , 
-			0x0,		/* 0 */
-/* 8150 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 8154 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 8158 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8160) */
-/* 8160 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 8162 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 8164 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 8168 */	NdrFcShort( 0x4e ),	/* Offset= 78 (8246) */
-/* 8170 */	NdrFcShort( 0xffff ),	/* Offset= -1 (8169) */
-/* 8172 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 8174 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 8178 */	NdrFcLong( 0x400 ),	/* 1024 */
-/* 8182 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 8184 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 8188 */	NdrFcLong( 0xa00000 ),	/* 10485760 */
-/* 8192 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 8194 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 8198 */	NdrFcLong( 0xa00000 ),	/* 10485760 */
-/* 8202 */	
-			0x1b,		/* FC_CARRAY */
-			0x0,		/* 0 */
-/* 8204 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 8206 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 8208 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 8210 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 8212 */	0x0 , 
-			0x0,		/* 0 */
-/* 8214 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 8218 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 8222 */	0x2,		/* FC_CHAR */
-			0x5b,		/* FC_END */
-/* 8224 */	
-			0x1b,		/* FC_CARRAY */
-			0x0,		/* 0 */
-/* 8226 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 8228 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 8230 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 8232 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 8234 */	0x0 , 
-			0x0,		/* 0 */
-/* 8236 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 8240 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 8244 */	0x2,		/* FC_CHAR */
-			0x5b,		/* FC_END */
-/* 8246 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 8248 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 8250 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 8252 */	NdrFcShort( 0x14 ),	/* Offset= 20 (8272) */
-/* 8254 */	0x8,		/* FC_LONG */
-			0x36,		/* FC_POINTER */
-/* 8256 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 8258 */	NdrFcShort( 0xffaa ),	/* Offset= -86 (8172) */
-/* 8260 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 8262 */	0x0,		/* 0 */
-			NdrFcShort( 0xffaf ),	/* Offset= -81 (8182) */
-			0x36,		/* FC_POINTER */
-/* 8266 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 8268 */	NdrFcShort( 0xffb4 ),	/* Offset= -76 (8192) */
-/* 8270 */	0x36,		/* FC_POINTER */
-			0x5b,		/* FC_END */
-/* 8272 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 8274 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 8276 */	
-			0x12, 0x0,	/* FC_UP */
-/* 8278 */	NdrFcShort( 0xeb1a ),	/* Offset= -5350 (2928) */
-/* 8280 */	
-			0x12, 0x0,	/* FC_UP */
-/* 8282 */	NdrFcShort( 0xffb0 ),	/* Offset= -80 (8202) */
-/* 8284 */	
-			0x12, 0x0,	/* FC_UP */
-/* 8286 */	NdrFcShort( 0xffc2 ),	/* Offset= -62 (8224) */
-/* 8288 */	
-			0x11, 0x0,	/* FC_RP */
-/* 8290 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8292) */
+/* 8270 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8274 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8278 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8280) */
+/* 8280 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 8282 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 8284 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 8288 */	NdrFcShort( 0xee7e ),	/* Offset= -4482 (3806) */
+/* 8290 */	NdrFcShort( 0xffff ),	/* Offset= -1 (8289) */
 /* 8292 */	
+			0x11, 0x0,	/* FC_RP */
+/* 8294 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8296) */
+/* 8296 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 8294 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 8298 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x0,		/*  */
-/* 8296 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 8298 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 8300 */	0x0 , 
+/* 8300 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 8302 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 8304 */	0x0 , 
 			0x0,		/* 0 */
-/* 8302 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 8306 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 8310 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8312) */
-/* 8312 */	NdrFcShort( 0xc ),	/* 12 */
-/* 8314 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 8316 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 8320 */	NdrFcShort( 0xe ),	/* Offset= 14 (8334) */
-/* 8322 */	NdrFcShort( 0xffff ),	/* Offset= -1 (8321) */
-/* 8324 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 8326 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 8330 */	NdrFcLong( 0x400 ),	/* 1024 */
-/* 8334 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 8336 */	NdrFcShort( 0xc ),	/* 12 */
-/* 8338 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 8340 */	NdrFcShort( 0xa ),	/* Offset= 10 (8350) */
-/* 8342 */	0x8,		/* FC_LONG */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 8344 */	0x0,		/* 0 */
-			NdrFcShort( 0xffeb ),	/* Offset= -21 (8324) */
-			0x36,		/* FC_POINTER */
-/* 8348 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 8350 */	
-			0x12, 0x0,	/* FC_UP */
-/* 8352 */	NdrFcShort( 0xe44e ),	/* Offset= -7090 (1262) */
-/* 8354 */	
+/* 8310 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8314 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8316) */
+/* 8316 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 8318 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 8320 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 8324 */	NdrFcShort( 0xeeec ),	/* Offset= -4372 (3952) */
+/* 8326 */	NdrFcShort( 0xffff ),	/* Offset= -1 (8325) */
+/* 8328 */	
 			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 8356 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8358) */
-/* 8358 */	
+/* 8330 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8332) */
+/* 8332 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 8360 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 8334 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x54,		/* FC_DEREFERENCE */
-/* 8362 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
-/* 8364 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 8366 */	0x0 , 
+/* 8336 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
+/* 8338 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 8340 */	0x0 , 
 			0x0,		/* 0 */
-/* 8368 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 8372 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 8376 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8378) */
-/* 8378 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 8380 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 8382 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 8386 */	NdrFcShort( 0x4 ),	/* Offset= 4 (8390) */
-/* 8388 */	NdrFcShort( 0xffff ),	/* Offset= -1 (8387) */
+/* 8342 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8346 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8350 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8352) */
+/* 8352 */	NdrFcShort( 0xc ),	/* 12 */
+/* 8354 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 8356 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 8360 */	NdrFcShort( 0xe ),	/* Offset= 14 (8374) */
+/* 8362 */	NdrFcShort( 0xffff ),	/* Offset= -1 (8361) */
+/* 8364 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 8366 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8370 */	NdrFcLong( 0xffff ),	/* 65535 */
+/* 8374 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 8376 */	NdrFcShort( 0xc ),	/* 12 */
+/* 8378 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 8380 */	NdrFcShort( 0xa ),	/* Offset= 10 (8390) */
+/* 8382 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 8384 */	0x0,		/* 0 */
+			NdrFcShort( 0xffeb ),	/* Offset= -21 (8364) */
+			0x36,		/* FC_POINTER */
+/* 8388 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
 /* 8390 */	
+			0x12, 0x0,	/* FC_UP */
+/* 8392 */	NdrFcShort( 0xe4c6 ),	/* Offset= -6970 (1422) */
+/* 8394 */	
+			0x11, 0x0,	/* FC_RP */
+/* 8396 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8398) */
+/* 8398 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 8400 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 8402 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 8404 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 8406 */	0x0 , 
+			0x0,		/* 0 */
+/* 8408 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8412 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8416 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8418) */
+/* 8418 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 8420 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 8422 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 8426 */	NdrFcShort( 0xedf4 ),	/* Offset= -4620 (3806) */
+/* 8428 */	NdrFcShort( 0xffff ),	/* Offset= -1 (8427) */
+/* 8430 */	
+			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
+/* 8432 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8434) */
+/* 8434 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 8436 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x54,		/* FC_DEREFERENCE */
+/* 8438 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
+/* 8440 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 8442 */	0x0 , 
+			0x0,		/* 0 */
+/* 8444 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8448 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8452 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8454) */
+/* 8454 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 8456 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 8458 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 8462 */	NdrFcShort( 0x4e ),	/* Offset= 78 (8540) */
+/* 8464 */	NdrFcShort( 0xffff ),	/* Offset= -1 (8463) */
+/* 8466 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 8468 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8472 */	NdrFcLong( 0x400 ),	/* 1024 */
+/* 8476 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 8478 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8482 */	NdrFcLong( 0xa00000 ),	/* 10485760 */
+/* 8486 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 8488 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8492 */	NdrFcLong( 0xa00000 ),	/* 10485760 */
+/* 8496 */	
+			0x1b,		/* FC_CARRAY */
+			0x0,		/* 0 */
+/* 8498 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 8500 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 8502 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 8504 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 8506 */	0x0 , 
+			0x0,		/* 0 */
+/* 8508 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8512 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8516 */	0x2,		/* FC_CHAR */
+			0x5b,		/* FC_END */
+/* 8518 */	
+			0x1b,		/* FC_CARRAY */
+			0x0,		/* 0 */
+/* 8520 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 8522 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 8524 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 8526 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 8528 */	0x0 , 
+			0x0,		/* 0 */
+/* 8530 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8534 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8538 */	0x2,		/* FC_CHAR */
+			0x5b,		/* FC_END */
+/* 8540 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 8542 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 8544 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 8546 */	NdrFcShort( 0x14 ),	/* Offset= 20 (8566) */
+/* 8548 */	0x8,		/* FC_LONG */
+			0x36,		/* FC_POINTER */
+/* 8550 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 8552 */	NdrFcShort( 0xffaa ),	/* Offset= -86 (8466) */
+/* 8554 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 8556 */	0x0,		/* 0 */
+			NdrFcShort( 0xffaf ),	/* Offset= -81 (8476) */
+			0x36,		/* FC_POINTER */
+/* 8560 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 8562 */	NdrFcShort( 0xffb4 ),	/* Offset= -76 (8486) */
+/* 8564 */	0x36,		/* FC_POINTER */
+			0x5b,		/* FC_END */
+/* 8566 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 8568 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 8570 */	
+			0x12, 0x0,	/* FC_UP */
+/* 8572 */	NdrFcShort( 0xeb1a ),	/* Offset= -5350 (3222) */
+/* 8574 */	
+			0x12, 0x0,	/* FC_UP */
+/* 8576 */	NdrFcShort( 0xffb0 ),	/* Offset= -80 (8496) */
+/* 8578 */	
+			0x12, 0x0,	/* FC_UP */
+/* 8580 */	NdrFcShort( 0xffc2 ),	/* Offset= -62 (8518) */
+/* 8582 */	
+			0x11, 0x0,	/* FC_RP */
+/* 8584 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8586) */
+/* 8586 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 8588 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 8590 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 8592 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 8594 */	0x0 , 
+			0x0,		/* 0 */
+/* 8596 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8600 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8604 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8606) */
+/* 8606 */	NdrFcShort( 0xc ),	/* 12 */
+/* 8608 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 8610 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 8614 */	NdrFcShort( 0xe ),	/* Offset= 14 (8628) */
+/* 8616 */	NdrFcShort( 0xffff ),	/* Offset= -1 (8615) */
+/* 8618 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 8620 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 8624 */	NdrFcLong( 0x400 ),	/* 1024 */
+/* 8628 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 8630 */	NdrFcShort( 0xc ),	/* 12 */
+/* 8632 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 8634 */	NdrFcShort( 0xa ),	/* Offset= 10 (8644) */
+/* 8636 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 8638 */	0x0,		/* 0 */
+			NdrFcShort( 0xffeb ),	/* Offset= -21 (8618) */
+			0x36,		/* FC_POINTER */
+/* 8642 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 8644 */	
+			0x12, 0x0,	/* FC_UP */
+/* 8646 */	NdrFcShort( 0xe3c8 ),	/* Offset= -7224 (1422) */
+/* 8648 */	
+			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
+/* 8650 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8652) */
+/* 8652 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 8654 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x54,		/* FC_DEREFERENCE */
+/* 8656 */	NdrFcShort( 0xc ),	/* x86 Stack size/offset = 12 */
+/* 8658 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 8660 */	0x0 , 
+			0x0,		/* 0 */
+/* 8662 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8666 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8670 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8672) */
+/* 8672 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 8674 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 8676 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 8680 */	NdrFcShort( 0x4 ),	/* Offset= 4 (8684) */
+/* 8682 */	NdrFcShort( 0xffff ),	/* Offset= -1 (8681) */
+/* 8684 */	
 			0x16,		/* FC_PSTRUCT */
 			0x3,		/* 3 */
-/* 8392 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 8394 */	
+/* 8686 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 8688 */	
 			0x4b,		/* FC_PP */
 			0x5c,		/* FC_PAD */
-/* 8396 */	
+/* 8690 */	
 			0x46,		/* FC_NO_REPEAT */
 			0x5c,		/* FC_PAD */
-/* 8398 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 8400 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 8402 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 8404 */	
+/* 8692 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 8694 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 8696 */	0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 8698 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 8406 */	
+/* 8700 */	
 			0x5b,		/* FC_END */
 
 			0x8,		/* FC_LONG */
-/* 8408 */	0x8,		/* FC_LONG */
+/* 8702 */	0x8,		/* FC_LONG */
 			0x5b,		/* FC_END */
 
 			0x0
@@ -7900,31 +8125,31 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 /* 26 */	NdrFcShort( 0x0 ),	/* 0 */
 /* 28 */	NdrFcShort( 0x0 ),	/* 0 */
 
-	/* Parameter rpc_handle */
+	/* Parameter puuidClientDsa */
 
 /* 30 */	NdrFcShort( 0xa ),	/* Flags:  must free, in, */
 /* 32 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
 /* 34 */	NdrFcShort( 0x2 ),	/* Type Offset=2 */
 
-	/* Parameter puuidClientDsa */
+	/* Parameter pextClient */
 
 /* 36 */	NdrFcShort( 0xb ),	/* Flags:  must size, must free, in, */
 /* 38 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
 /* 40 */	NdrFcShort( 0x18 ),	/* Type Offset=24 */
 
-	/* Parameter pextClient */
+	/* Parameter ppextServer */
 
 /* 42 */	NdrFcShort( 0x2013 ),	/* Flags:  must size, must free, out, srv alloc size=8 */
 /* 44 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
 /* 46 */	NdrFcShort( 0x4a ),	/* Type Offset=74 */
 
-	/* Parameter ppextServer */
+	/* Parameter phDrs */
 
 /* 48 */	NdrFcShort( 0x110 ),	/* Flags:  out, simple ref, */
 /* 50 */	NdrFcShort( 0x20 ),	/* X64 Stack size/offset = 32 */
 /* 52 */	NdrFcShort( 0x52 ),	/* Type Offset=82 */
 
-	/* Parameter phDrs */
+	/* Return value */
 
 /* 54 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
 /* 56 */	NdrFcShort( 0x28 ),	/* X64 Stack size/offset = 40 */
@@ -7932,9 +8157,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 			0x0,		/* 0 */
 
 	/* Procedure IDL_DRSUnbind */
-
-
-	/* Return value */
 
 /* 60 */	0x0,		/* 0 */
 			0x48,		/* Old Flags:  */
@@ -8059,7 +8281,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 204 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 206 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 208 */	NdrFcShort( 0xdc ),	/* Type Offset=220 */
+/* 208 */	NdrFcShort( 0x124 ),	/* Type Offset=292 */
 
 	/* Parameter pdwOutVersion */
 
@@ -8072,7 +8294,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 216 */	NdrFcShort( 0x113 ),	/* Flags:  must size, must free, out, simple ref, */
 /* 218 */	NdrFcShort( 0x20 ),	/* X64 Stack size/offset = 32 */
-/* 220 */	NdrFcShort( 0x338 ),	/* Type Offset=824 */
+/* 220 */	NdrFcShort( 0x3c6 ),	/* Type Offset=966 */
 
 	/* Return value */
 
@@ -8121,7 +8343,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 272 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 274 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 276 */	NdrFcShort( 0x6a8 ),	/* Type Offset=1704 */
+/* 276 */	NdrFcShort( 0x736 ),	/* Type Offset=1846 */
 
 	/* Return value */
 
@@ -8170,7 +8392,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 328 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 330 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 332 */	NdrFcShort( 0x6e6 ),	/* Type Offset=1766 */
+/* 332 */	NdrFcShort( 0x79c ),	/* Type Offset=1948 */
 
 	/* Return value */
 
@@ -8219,7 +8441,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 384 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 386 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 388 */	NdrFcShort( 0x75a ),	/* Type Offset=1882 */
+/* 388 */	NdrFcShort( 0x842 ),	/* Type Offset=2114 */
 
 	/* Return value */
 
@@ -8268,7 +8490,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 440 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 442 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 444 */	NdrFcShort( 0x794 ),	/* Type Offset=1940 */
+/* 444 */	NdrFcShort( 0x87c ),	/* Type Offset=2172 */
 
 	/* Return value */
 
@@ -8317,7 +8539,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 496 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 498 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 500 */	NdrFcShort( 0x7d6 ),	/* Type Offset=2006 */
+/* 500 */	NdrFcShort( 0x8be ),	/* Type Offset=2238 */
 
 	/* Parameter pdwOutVersion */
 
@@ -8330,7 +8552,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 508 */	NdrFcShort( 0x8113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=32 */
 /* 510 */	NdrFcShort( 0x20 ),	/* X64 Stack size/offset = 32 */
-/* 512 */	NdrFcShort( 0x84a ),	/* Type Offset=2122 */
+/* 512 */	NdrFcShort( 0x932 ),	/* Type Offset=2354 */
 
 	/* Return value */
 
@@ -8379,7 +8601,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 564 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 566 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 568 */	NdrFcShort( 0x8ba ),	/* Type Offset=2234 */
+/* 568 */	NdrFcShort( 0x9a2 ),	/* Type Offset=2466 */
 
 	/* Parameter pdwOutVersion */
 
@@ -8392,7 +8614,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 576 */	NdrFcShort( 0xa113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=40 */
 /* 578 */	NdrFcShort( 0x20 ),	/* X64 Stack size/offset = 32 */
-/* 580 */	NdrFcShort( 0x93a ),	/* Type Offset=2362 */
+/* 580 */	NdrFcShort( 0xa22 ),	/* Type Offset=2594 */
 
 	/* Return value */
 
@@ -8441,7 +8663,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 632 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 634 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 636 */	NdrFcShort( 0x9d4 ),	/* Type Offset=2516 */
+/* 636 */	NdrFcShort( 0xabc ),	/* Type Offset=2748 */
 
 	/* Parameter pdwOutVersion */
 
@@ -8454,7 +8676,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 644 */	NdrFcShort( 0x8113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=32 */
 /* 646 */	NdrFcShort( 0x20 ),	/* X64 Stack size/offset = 32 */
-/* 648 */	NdrFcShort( 0xaaa ),	/* Type Offset=2730 */
+/* 648 */	NdrFcShort( 0xb92 ),	/* Type Offset=2962 */
 
 	/* Return value */
 
@@ -8503,7 +8725,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 700 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 702 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 704 */	NdrFcShort( 0xb00 ),	/* Type Offset=2816 */
+/* 704 */	NdrFcShort( 0xbe8 ),	/* Type Offset=3048 */
 
 	/* Parameter pdwOutVersion */
 
@@ -8516,7 +8738,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 712 */	NdrFcShort( 0x113 ),	/* Flags:  must size, must free, out, simple ref, */
 /* 714 */	NdrFcShort( 0x20 ),	/* X64 Stack size/offset = 32 */
-/* 716 */	NdrFcShort( 0xb5a ),	/* Type Offset=2906 */
+/* 716 */	NdrFcShort( 0xc42 ),	/* Type Offset=3138 */
 
 	/* Return value */
 
@@ -8565,7 +8787,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 768 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 770 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 772 */	NdrFcShort( 0xbd2 ),	/* Type Offset=3026 */
+/* 772 */	NdrFcShort( 0xcba ),	/* Type Offset=3258 */
 
 	/* Parameter pdwOutVersion */
 
@@ -8578,7 +8800,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 780 */	NdrFcShort( 0x2113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=8 */
 /* 782 */	NdrFcShort( 0x20 ),	/* X64 Stack size/offset = 32 */
-/* 784 */	NdrFcShort( 0xc42 ),	/* Type Offset=3138 */
+/* 784 */	NdrFcShort( 0xd2a ),	/* Type Offset=3370 */
 
 	/* Return value */
 
@@ -8627,7 +8849,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 836 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 838 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 840 */	NdrFcShort( 0xcc4 ),	/* Type Offset=3268 */
+/* 840 */	NdrFcShort( 0xdac ),	/* Type Offset=3500 */
 
 	/* Parameter pdwOutVersion */
 
@@ -8640,7 +8862,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 848 */	NdrFcShort( 0x2113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=8 */
 /* 850 */	NdrFcShort( 0x20 ),	/* X64 Stack size/offset = 32 */
-/* 852 */	NdrFcShort( 0xd36 ),	/* Type Offset=3382 */
+/* 852 */	NdrFcShort( 0xe1e ),	/* Type Offset=3614 */
 
 	/* Return value */
 
@@ -8689,7 +8911,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 904 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 906 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 908 */	NdrFcShort( 0xd60 ),	/* Type Offset=3424 */
+/* 908 */	NdrFcShort( 0xe48 ),	/* Type Offset=3656 */
 
 	/* Parameter pdwOutVersion */
 
@@ -8702,7 +8924,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 916 */	NdrFcShort( 0x2113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=8 */
 /* 918 */	NdrFcShort( 0x20 ),	/* X64 Stack size/offset = 32 */
-/* 920 */	NdrFcShort( 0xd9a ),	/* Type Offset=3482 */
+/* 920 */	NdrFcShort( 0xe82 ),	/* Type Offset=3714 */
 
 	/* Return value */
 
@@ -8751,7 +8973,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 972 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 974 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 976 */	NdrFcShort( 0xdbe ),	/* Type Offset=3518 */
+/* 976 */	NdrFcShort( 0xea6 ),	/* Type Offset=3750 */
 
 	/* Parameter pdwOutVersion */
 
@@ -8764,7 +8986,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 984 */	NdrFcShort( 0x2113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=8 */
 /* 986 */	NdrFcShort( 0x20 ),	/* X64 Stack size/offset = 32 */
-/* 988 */	NdrFcShort( 0xdf0 ),	/* Type Offset=3568 */
+/* 988 */	NdrFcShort( 0xed8 ),	/* Type Offset=3800 */
 
 	/* Return value */
 
@@ -8813,7 +9035,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1040 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1042 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 1044 */	NdrFcShort( 0xe14 ),	/* Type Offset=3604 */
+/* 1044 */	NdrFcShort( 0xefc ),	/* Type Offset=3836 */
 
 	/* Parameter pdwOutVersion */
 
@@ -8826,7 +9048,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1052 */	NdrFcShort( 0x4113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=16 */
 /* 1054 */	NdrFcShort( 0x20 ),	/* X64 Stack size/offset = 32 */
-/* 1056 */	NdrFcShort( 0xe48 ),	/* Type Offset=3656 */
+/* 1056 */	NdrFcShort( 0xf30 ),	/* Type Offset=3888 */
 
 	/* Return value */
 
@@ -8875,7 +9097,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1108 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1110 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 1112 */	NdrFcShort( 0x1056 ),	/* Type Offset=4182 */
+/* 1112 */	NdrFcShort( 0x113e ),	/* Type Offset=4414 */
 
 	/* Parameter pdwOutVersion */
 
@@ -8888,7 +9110,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1120 */	NdrFcShort( 0x113 ),	/* Flags:  must size, must free, out, simple ref, */
 /* 1122 */	NdrFcShort( 0x20 ),	/* X64 Stack size/offset = 32 */
-/* 1124 */	NdrFcShort( 0x10ca ),	/* Type Offset=4298 */
+/* 1124 */	NdrFcShort( 0x11b2 ),	/* Type Offset=4530 */
 
 	/* Return value */
 
@@ -8937,7 +9159,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1176 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1178 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 1180 */	NdrFcShort( 0x1320 ),	/* Type Offset=4896 */
+/* 1180 */	NdrFcShort( 0x1408 ),	/* Type Offset=5128 */
 
 	/* Return value */
 
@@ -8986,7 +9208,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1232 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1234 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 1236 */	NdrFcShort( 0x134c ),	/* Type Offset=4940 */
+/* 1236 */	NdrFcShort( 0x1434 ),	/* Type Offset=5172 */
 
 	/* Parameter pdwOutVersion */
 
@@ -8999,7 +9221,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1244 */	NdrFcShort( 0x2113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=8 */
 /* 1246 */	NdrFcShort( 0x20 ),	/* X64 Stack size/offset = 32 */
-/* 1248 */	NdrFcShort( 0x13ac ),	/* Type Offset=5036 */
+/* 1248 */	NdrFcShort( 0x1494 ),	/* Type Offset=5268 */
 
 	/* Return value */
 
@@ -9048,7 +9270,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1300 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1302 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 1304 */	NdrFcShort( 0x182a ),	/* Type Offset=6186 */
+/* 1304 */	NdrFcShort( 0x1912 ),	/* Type Offset=6418 */
 
 	/* Parameter pdwOutVersion */
 
@@ -9061,7 +9283,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1312 */	NdrFcShort( 0x2113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=8 */
 /* 1314 */	NdrFcShort( 0x20 ),	/* X64 Stack size/offset = 32 */
-/* 1316 */	NdrFcShort( 0x18f0 ),	/* Type Offset=6384 */
+/* 1316 */	NdrFcShort( 0x19d8 ),	/* Type Offset=6616 */
 
 	/* Return value */
 
@@ -9110,7 +9332,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1368 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1370 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 1372 */	NdrFcShort( 0x1914 ),	/* Type Offset=6420 */
+/* 1372 */	NdrFcShort( 0x19fc ),	/* Type Offset=6652 */
 
 	/* Parameter pdwOutVersion */
 
@@ -9123,7 +9345,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1380 */	NdrFcShort( 0x4113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=16 */
 /* 1382 */	NdrFcShort( 0x20 ),	/* X64 Stack size/offset = 32 */
-/* 1384 */	NdrFcShort( 0x1980 ),	/* Type Offset=6528 */
+/* 1384 */	NdrFcShort( 0x1a68 ),	/* Type Offset=6760 */
 
 	/* Return value */
 
@@ -9172,7 +9394,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1436 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1438 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 1440 */	NdrFcShort( 0x19ec ),	/* Type Offset=6636 */
+/* 1440 */	NdrFcShort( 0x1ad4 ),	/* Type Offset=6868 */
 
 	/* Return value */
 
@@ -9221,7 +9443,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1492 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1494 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 1496 */	NdrFcShort( 0x1a24 ),	/* Type Offset=6692 */
+/* 1496 */	NdrFcShort( 0x1b0c ),	/* Type Offset=6924 */
 
 	/* Parameter pdwOutVersion */
 
@@ -9234,7 +9456,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1504 */	NdrFcShort( 0x4113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=16 */
 /* 1506 */	NdrFcShort( 0x20 ),	/* X64 Stack size/offset = 32 */
-/* 1508 */	NdrFcShort( 0x1a6c ),	/* Type Offset=6764 */
+/* 1508 */	NdrFcShort( 0x1b54 ),	/* Type Offset=6996 */
 
 	/* Return value */
 
@@ -9283,7 +9505,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1560 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1562 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 1564 */	NdrFcShort( 0x1ad8 ),	/* Type Offset=6872 */
+/* 1564 */	NdrFcShort( 0x1bc0 ),	/* Type Offset=7104 */
 
 	/* Parameter pdwOutVersion */
 
@@ -9296,7 +9518,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1572 */	NdrFcShort( 0x6113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=24 */
 /* 1574 */	NdrFcShort( 0x20 ),	/* X64 Stack size/offset = 32 */
-/* 1576 */	NdrFcShort( 0x1b4a ),	/* Type Offset=6986 */
+/* 1576 */	NdrFcShort( 0x1c32 ),	/* Type Offset=7218 */
 
 	/* Return value */
 
@@ -9345,7 +9567,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1628 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1630 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 1632 */	NdrFcShort( 0x1bb8 ),	/* Type Offset=7096 */
+/* 1632 */	NdrFcShort( 0x1ca0 ),	/* Type Offset=7328 */
 
 	/* Parameter pdwOutVersion */
 
@@ -9358,7 +9580,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1640 */	NdrFcShort( 0x2113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=8 */
 /* 1642 */	NdrFcShort( 0x20 ),	/* X64 Stack size/offset = 32 */
-/* 1644 */	NdrFcShort( 0x1bdc ),	/* Type Offset=7132 */
+/* 1644 */	NdrFcShort( 0x1cc4 ),	/* Type Offset=7364 */
 
 	/* Return value */
 
@@ -9407,7 +9629,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1696 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1698 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 1700 */	NdrFcShort( 0x1c00 ),	/* Type Offset=7168 */
+/* 1700 */	NdrFcShort( 0x1ce8 ),	/* Type Offset=7400 */
 
 	/* Parameter pdwOutVersion */
 
@@ -9420,7 +9642,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1708 */	NdrFcShort( 0x2113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=8 */
 /* 1710 */	NdrFcShort( 0x20 ),	/* X64 Stack size/offset = 32 */
-/* 1712 */	NdrFcShort( 0x1c38 ),	/* Type Offset=7224 */
+/* 1712 */	NdrFcShort( 0x1d20 ),	/* Type Offset=7456 */
 
 	/* Return value */
 
@@ -9469,7 +9691,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1764 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1766 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 1768 */	NdrFcShort( 0x1c5c ),	/* Type Offset=7260 */
+/* 1768 */	NdrFcShort( 0x1d44 ),	/* Type Offset=7492 */
 
 	/* Parameter pdwOutVersion */
 
@@ -9482,7 +9704,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1776 */	NdrFcShort( 0x4113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=16 */
 /* 1778 */	NdrFcShort( 0x20 ),	/* X64 Stack size/offset = 32 */
-/* 1780 */	NdrFcShort( 0x1c94 ),	/* Type Offset=7316 */
+/* 1780 */	NdrFcShort( 0x1d7c ),	/* Type Offset=7548 */
 
 	/* Return value */
 
@@ -9531,7 +9753,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1832 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1834 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 1836 */	NdrFcShort( 0x1cc0 ),	/* Type Offset=7360 */
+/* 1836 */	NdrFcShort( 0x1da8 ),	/* Type Offset=7592 */
 
 	/* Parameter pdwOutVersion */
 
@@ -9544,7 +9766,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1844 */	NdrFcShort( 0x8113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=32 */
 /* 1846 */	NdrFcShort( 0x20 ),	/* X64 Stack size/offset = 32 */
-/* 1848 */	NdrFcShort( 0x1cf8 ),	/* Type Offset=7416 */
+/* 1848 */	NdrFcShort( 0x1de0 ),	/* Type Offset=7648 */
 
 	/* Return value */
 
@@ -9593,7 +9815,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1900 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1902 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 1904 */	NdrFcShort( 0x1d5a ),	/* Type Offset=7514 */
+/* 1904 */	NdrFcShort( 0x1e42 ),	/* Type Offset=7746 */
 
 	/* Parameter pdwOutVersion */
 
@@ -9606,7 +9828,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1912 */	NdrFcShort( 0x2113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=8 */
 /* 1914 */	NdrFcShort( 0x20 ),	/* X64 Stack size/offset = 32 */
-/* 1916 */	NdrFcShort( 0x1da0 ),	/* Type Offset=7584 */
+/* 1916 */	NdrFcShort( 0x1e88 ),	/* Type Offset=7816 */
 
 	/* Return value */
 
@@ -9655,7 +9877,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1968 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 1970 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 1972 */	NdrFcShort( 0x1dc4 ),	/* Type Offset=7620 */
+/* 1972 */	NdrFcShort( 0x1eac ),	/* Type Offset=7852 */
 
 	/* Parameter pdwOutVersion */
 
@@ -9668,7 +9890,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 
 /* 1980 */	NdrFcShort( 0x4113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=16 */
 /* 1982 */	NdrFcShort( 0x20 ),	/* X64 Stack size/offset = 32 */
-/* 1984 */	NdrFcShort( 0x1df6 ),	/* Type Offset=7670 */
+/* 1984 */	NdrFcShort( 0x1ede ),	/* Type Offset=7902 */
 
 	/* Return value */
 
@@ -9698,33 +9920,33 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 /* 2018 */	NdrFcShort( 0x0 ),	/* 0 */
 /* 2020 */	NdrFcShort( 0x0 ),	/* 0 */
 
-	/* Parameter hRpc */
+	/* Parameter dwInVersion */
 
 /* 2022 */	NdrFcShort( 0x48 ),	/* Flags:  in, base type, */
 /* 2024 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
 /* 2026 */	0x8,		/* FC_LONG */
 			0x0,		/* 0 */
 
-	/* Parameter dwInVersion */
+	/* Parameter pmsgIn */
 
 /* 2028 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 2030 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 2032 */	NdrFcShort( 0x1e38 ),	/* Type Offset=7736 */
+/* 2032 */	NdrFcShort( 0x1f20 ),	/* Type Offset=7968 */
 
-	/* Parameter pmsgIn */
+	/* Parameter pdwOutVersion */
 
 /* 2034 */	NdrFcShort( 0x2150 ),	/* Flags:  out, base type, simple ref, srv alloc size=8 */
 /* 2036 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
 /* 2038 */	0x8,		/* FC_LONG */
 			0x0,		/* 0 */
 
-	/* Parameter pdwOutVersion */
+	/* Parameter pmsgOut */
 
 /* 2040 */	NdrFcShort( 0x113 ),	/* Flags:  must size, must free, out, simple ref, */
 /* 2042 */	NdrFcShort( 0x20 ),	/* X64 Stack size/offset = 32 */
-/* 2044 */	NdrFcShort( 0x1e5c ),	/* Type Offset=7772 */
+/* 2044 */	NdrFcShort( 0x1f44 ),	/* Type Offset=8004 */
 
-	/* Parameter pmsgOut */
+	/* Return value */
 
 /* 2046 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
 /* 2048 */	NdrFcShort( 0x28 ),	/* X64 Stack size/offset = 40 */
@@ -9732,9 +9954,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 			0x0,		/* 0 */
 
 	/* Procedure IDL_DSAExecuteScript */
-
-
-	/* Return value */
 
 /* 2052 */	0x0,		/* 0 */
 			0x48,		/* Old Flags:  */
@@ -9755,33 +9974,33 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 /* 2078 */	NdrFcShort( 0x0 ),	/* 0 */
 /* 2080 */	NdrFcShort( 0x0 ),	/* 0 */
 
-	/* Parameter hRpc */
+	/* Parameter dwInVersion */
 
 /* 2082 */	NdrFcShort( 0x48 ),	/* Flags:  in, base type, */
 /* 2084 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
 /* 2086 */	0x8,		/* FC_LONG */
 			0x0,		/* 0 */
 
-	/* Parameter dwInVersion */
+	/* Parameter pmsgIn */
 
 /* 2088 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 2090 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
-/* 2092 */	NdrFcShort( 0x1ef8 ),	/* Type Offset=7928 */
+/* 2092 */	NdrFcShort( 0x1fe0 ),	/* Type Offset=8160 */
 
-	/* Parameter pmsgIn */
+	/* Parameter pdwOutVersion */
 
 /* 2094 */	NdrFcShort( 0x2150 ),	/* Flags:  out, base type, simple ref, srv alloc size=8 */
 /* 2096 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
 /* 2098 */	0x8,		/* FC_LONG */
 			0x0,		/* 0 */
 
-	/* Parameter pdwOutVersion */
+	/* Parameter pmsgOut */
 
 /* 2100 */	NdrFcShort( 0x4113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=16 */
 /* 2102 */	NdrFcShort( 0x20 ),	/* X64 Stack size/offset = 32 */
-/* 2104 */	NdrFcShort( 0x1f3a ),	/* Type Offset=7994 */
+/* 2104 */	NdrFcShort( 0x2022 ),	/* Type Offset=8226 */
 
-	/* Parameter pmsgOut */
+	/* Return value */
 
 /* 2106 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
 /* 2108 */	NdrFcShort( 0x28 ),	/* X64 Stack size/offset = 40 */
@@ -9881,187 +10100,191 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 /* 112 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 116 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 120 */	NdrFcShort( 0x2 ),	/* Offset= 2 (122) */
-/* 122 */	NdrFcShort( 0x28 ),	/* 40 */
-/* 124 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 122 */	NdrFcShort( 0x40 ),	/* 64 */
+/* 124 */	NdrFcShort( 0x2 ),	/* 2 */
 /* 126 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 130 */	NdrFcShort( 0x3c ),	/* Offset= 60 (190) */
-/* 132 */	NdrFcShort( 0xffff ),	/* Offset= -1 (131) */
-/* 134 */	
+/* 130 */	NdrFcShort( 0x42 ),	/* Offset= 66 (196) */
+/* 132 */	NdrFcLong( 0x2 ),	/* 2 */
+/* 136 */	NdrFcShort( 0x76 ),	/* Offset= 118 (254) */
+/* 138 */	NdrFcShort( 0xffff ),	/* Offset= -1 (137) */
+/* 140 */	
 			0x1d,		/* FC_SMFARRAY */
 			0x0,		/* 0 */
-/* 136 */	NdrFcShort( 0x1c ),	/* 28 */
-/* 138 */	0x2,		/* FC_CHAR */
+/* 142 */	NdrFcShort( 0x1c ),	/* 28 */
+/* 144 */	0x2,		/* FC_CHAR */
 			0x5b,		/* FC_END */
-/* 140 */	
+/* 146 */	
 			0x15,		/* FC_STRUCT */
 			0x0,		/* 0 */
-/* 142 */	NdrFcShort( 0x1c ),	/* 28 */
-/* 144 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 148 */	NdrFcShort( 0x1c ),	/* 28 */
+/* 150 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 146 */	NdrFcShort( 0xfff4 ),	/* Offset= -12 (134) */
-/* 148 */	0x5c,		/* FC_PAD */
+/* 152 */	NdrFcShort( 0xfff4 ),	/* Offset= -12 (140) */
+/* 154 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 150 */	
+/* 156 */	
 			0x1b,		/* FC_CARRAY */
 			0x1,		/* 1 */
-/* 152 */	NdrFcShort( 0x2 ),	/* 2 */
-/* 154 */	0x9,		/* Corr desc: FC_ULONG */
+/* 158 */	NdrFcShort( 0x2 ),	/* 2 */
+/* 160 */	0x9,		/* Corr desc: FC_ULONG */
 			0x57,		/* FC_ADD_1 */
-/* 156 */	NdrFcShort( 0xfffc ),	/* -4 */
-/* 158 */	NdrFcShort( 0x11 ),	/* Corr flags:  early, */
-/* 160 */	0x1 , /* correlation range */
+/* 162 */	NdrFcShort( 0xfffc ),	/* -4 */
+/* 164 */	NdrFcShort( 0x11 ),	/* Corr flags:  early, */
+/* 166 */	0x1 , /* correlation range */
 			0x0,		/* 0 */
-/* 162 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 166 */	NdrFcLong( 0xa00001 ),	/* 10485761 */
-/* 170 */	0x5,		/* FC_WCHAR */
+/* 168 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 172 */	NdrFcLong( 0xa00001 ),	/* 10485761 */
+/* 176 */	0x5,		/* FC_WCHAR */
 			0x5b,		/* FC_END */
-/* 172 */	
+/* 178 */	
 			0x17,		/* FC_CSTRUCT */
 			0x3,		/* 3 */
-/* 174 */	NdrFcShort( 0x38 ),	/* 56 */
-/* 176 */	NdrFcShort( 0xffe6 ),	/* Offset= -26 (150) */
-/* 178 */	0x8,		/* FC_LONG */
+/* 180 */	NdrFcShort( 0x38 ),	/* 56 */
+/* 182 */	NdrFcShort( 0xffe6 ),	/* Offset= -26 (156) */
+/* 184 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 180 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 186 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 182 */	NdrFcShort( 0xff56 ),	/* Offset= -170 (12) */
-/* 184 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 188 */	NdrFcShort( 0xff50 ),	/* Offset= -176 (12) */
+/* 190 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 186 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (140) */
-/* 188 */	0x8,		/* FC_LONG */
+/* 192 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (146) */
+/* 194 */	0x8,		/* FC_LONG */
 			0x5b,		/* FC_END */
-/* 190 */	
+/* 196 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 192 */	NdrFcShort( 0x28 ),	/* 40 */
-/* 194 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 196 */	NdrFcShort( 0xc ),	/* Offset= 12 (208) */
-/* 198 */	0x36,		/* FC_POINTER */
+/* 198 */	NdrFcShort( 0x28 ),	/* 40 */
+/* 200 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 202 */	NdrFcShort( 0xc ),	/* Offset= 12 (214) */
+/* 204 */	0x36,		/* FC_POINTER */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 200 */	0x0,		/* 0 */
-			NdrFcShort( 0xff43 ),	/* Offset= -189 (12) */
+/* 206 */	0x0,		/* 0 */
+			NdrFcShort( 0xff3d ),	/* Offset= -195 (12) */
 			0x36,		/* FC_POINTER */
-/* 204 */	0x8,		/* FC_LONG */
+/* 210 */	0x8,		/* FC_LONG */
 			0x40,		/* FC_STRUCTPAD4 */
-/* 206 */	0x5c,		/* FC_PAD */
+/* 212 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 208 */	
-			0x11, 0x0,	/* FC_RP */
-/* 210 */	NdrFcShort( 0xffda ),	/* Offset= -38 (172) */
-/* 212 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
 /* 214 */	
+			0x11, 0x0,	/* FC_RP */
+/* 216 */	NdrFcShort( 0xffda ),	/* Offset= -38 (178) */
+/* 218 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 220 */	
 			0x22,		/* FC_C_CSTRING */
 			0x5c,		/* FC_PAD */
-/* 216 */	
-			0x11, 0x0,	/* FC_RP */
-/* 218 */	NdrFcShort( 0x2 ),	/* Offset= 2 (220) */
-/* 220 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 222 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 224 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 226 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 228 */	0x0 , 
-			0x0,		/* 0 */
-/* 230 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 234 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 238 */	NdrFcShort( 0x2 ),	/* Offset= 2 (240) */
-/* 240 */	NdrFcShort( 0xa8 ),	/* 168 */
-/* 242 */	NdrFcShort( 0x5 ),	/* 5 */
-/* 244 */	NdrFcLong( 0x4 ),	/* 4 */
-/* 248 */	NdrFcShort( 0x162 ),	/* Offset= 354 (602) */
-/* 250 */	NdrFcLong( 0x5 ),	/* 5 */
-/* 254 */	NdrFcShort( 0x178 ),	/* Offset= 376 (630) */
-/* 256 */	NdrFcLong( 0x7 ),	/* 7 */
-/* 260 */	NdrFcShort( 0x19a ),	/* Offset= 410 (670) */
-/* 262 */	NdrFcLong( 0x8 ),	/* 8 */
-/* 266 */	NdrFcShort( 0x1b8 ),	/* Offset= 440 (706) */
-/* 268 */	NdrFcLong( 0xa ),	/* 10 */
-/* 272 */	NdrFcShort( 0x1e8 ),	/* Offset= 488 (760) */
-/* 274 */	NdrFcShort( 0xffff ),	/* Offset= -1 (273) */
-/* 276 */	
-			0x15,		/* FC_STRUCT */
-			0x7,		/* 7 */
-/* 278 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 280 */	0xb,		/* FC_HYPER */
-			0xb,		/* FC_HYPER */
-/* 282 */	0xb,		/* FC_HYPER */
-			0x5b,		/* FC_END */
-/* 284 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 286 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 290 */	NdrFcLong( 0x100000 ),	/* 1048576 */
-/* 294 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 296 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 300 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 304 */	
+/* 222 */	
 			0x1b,		/* FC_CARRAY */
 			0x0,		/* 0 */
-/* 306 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 308 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 224 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 226 */	0x9,		/* Corr desc: FC_ULONG */
 			0x0,		/*  */
-/* 310 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 312 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 314 */	0x0 , 
+/* 228 */	NdrFcShort( 0xfff4 ),	/* -12 */
+/* 230 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 232 */	0x0 , 
 			0x0,		/* 0 */
-/* 316 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 320 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 324 */	0x2,		/* FC_CHAR */
+/* 234 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 238 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 242 */	0x2,		/* FC_CHAR */
 			0x5b,		/* FC_END */
-/* 326 */	
+/* 244 */	
+			0x17,		/* FC_CSTRUCT */
+			0x7,		/* 7 */
+/* 246 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 248 */	NdrFcShort( 0xffe6 ),	/* Offset= -26 (222) */
+/* 250 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 252 */	0xb,		/* FC_HYPER */
+			0x5b,		/* FC_END */
+/* 254 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 328 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 330 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 332 */	NdrFcShort( 0xa ),	/* Offset= 10 (342) */
-/* 334 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 336 */	NdrFcShort( 0xffd6 ),	/* Offset= -42 (294) */
-/* 338 */	0x40,		/* FC_STRUCTPAD4 */
+/* 256 */	NdrFcShort( 0x40 ),	/* 64 */
+/* 258 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 260 */	NdrFcShort( 0x10 ),	/* Offset= 16 (276) */
+/* 262 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 264 */	0x0,		/* 0 */
+			NdrFcShort( 0xff03 ),	/* Offset= -253 (12) */
 			0x36,		/* FC_POINTER */
-/* 340 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 342 */	
-			0x12, 0x0,	/* FC_UP */
-/* 344 */	NdrFcShort( 0xffd8 ),	/* Offset= -40 (304) */
-/* 346 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 348 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 350 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 352 */	NdrFcShort( 0x0 ),	/* Offset= 0 (352) */
-/* 354 */	0x8,		/* FC_LONG */
+/* 268 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 270 */	0x0,		/* 0 */
+			NdrFcShort( 0xfefd ),	/* Offset= -259 (12) */
 			0x40,		/* FC_STRUCTPAD4 */
-/* 356 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 358 */	NdrFcShort( 0xffe0 ),	/* Offset= -32 (326) */
-/* 360 */	0x5c,		/* FC_PAD */
+/* 274 */	0x36,		/* FC_POINTER */
 			0x5b,		/* FC_END */
-/* 362 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x3,		/* 3 */
-/* 364 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 366 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 276 */	
+			0x11, 0x0,	/* FC_RP */
+/* 278 */	NdrFcShort( 0xff9c ),	/* Offset= -100 (178) */
+/* 280 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 282 */	
+			0x22,		/* FC_C_CSTRING */
+			0x5c,		/* FC_PAD */
+/* 284 */	
+			0x12, 0x0,	/* FC_UP */
+/* 286 */	NdrFcShort( 0xffd6 ),	/* Offset= -42 (244) */
+/* 288 */	
+			0x11, 0x0,	/* FC_RP */
+/* 290 */	NdrFcShort( 0x2 ),	/* Offset= 2 (292) */
+/* 292 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 294 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x0,		/*  */
-/* 368 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 370 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 372 */	0x0 , 
+/* 296 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 298 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 300 */	0x0 , 
 			0x0,		/* 0 */
+/* 302 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 306 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 310 */	NdrFcShort( 0x2 ),	/* Offset= 2 (312) */
+/* 312 */	NdrFcShort( 0xa8 ),	/* 168 */
+/* 314 */	NdrFcShort( 0x6 ),	/* 6 */
+/* 316 */	NdrFcLong( 0x4 ),	/* 4 */
+/* 320 */	NdrFcShort( 0x168 ),	/* Offset= 360 (680) */
+/* 322 */	NdrFcLong( 0x5 ),	/* 5 */
+/* 326 */	NdrFcShort( 0x17e ),	/* Offset= 382 (708) */
+/* 328 */	NdrFcLong( 0x7 ),	/* 7 */
+/* 332 */	NdrFcShort( 0x1a0 ),	/* Offset= 416 (748) */
+/* 334 */	NdrFcLong( 0x8 ),	/* 8 */
+/* 338 */	NdrFcShort( 0x1be ),	/* Offset= 446 (784) */
+/* 340 */	NdrFcLong( 0xa ),	/* 10 */
+/* 344 */	NdrFcShort( 0x1ee ),	/* Offset= 494 (838) */
+/* 346 */	NdrFcLong( 0xb ),	/* 11 */
+/* 350 */	NdrFcShort( 0x220 ),	/* Offset= 544 (894) */
+/* 352 */	NdrFcShort( 0xffff ),	/* Offset= -1 (351) */
+/* 354 */	
+			0x15,		/* FC_STRUCT */
+			0x7,		/* 7 */
+/* 356 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 358 */	0xb,		/* FC_HYPER */
+			0xb,		/* FC_HYPER */
+/* 360 */	0xb,		/* FC_HYPER */
+			0x5b,		/* FC_END */
+/* 362 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 364 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 368 */	NdrFcLong( 0x100000 ),	/* 1048576 */
+/* 372 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
 /* 374 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 378 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 382 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 386 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 388 */	0x0 , 
+/* 378 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 382 */	
+			0x1b,		/* FC_CARRAY */
 			0x0,		/* 0 */
-/* 390 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 384 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 386 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 388 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 390 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 392 */	0x0 , 
+			0x0,		/* 0 */
 /* 394 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 398 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 400 */	NdrFcShort( 0xffca ),	/* Offset= -54 (346) */
-/* 402 */	0x5c,		/* FC_PAD */
+/* 398 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 402 */	0x2,		/* FC_CHAR */
 			0x5b,		/* FC_END */
 /* 404 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
@@ -10071,1830 +10294,1855 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 /* 410 */	NdrFcShort( 0xa ),	/* Offset= 10 (420) */
 /* 412 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 414 */	NdrFcShort( 0xff7e ),	/* Offset= -130 (284) */
+/* 414 */	NdrFcShort( 0xffd6 ),	/* Offset= -42 (372) */
 /* 416 */	0x40,		/* FC_STRUCTPAD4 */
 			0x36,		/* FC_POINTER */
 /* 418 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
 /* 420 */	
 			0x12, 0x0,	/* FC_UP */
-/* 422 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (362) */
-/* 424 */	0xb7,		/* FC_RANGE */
+/* 422 */	NdrFcShort( 0xffd8 ),	/* Offset= -40 (382) */
+/* 424 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 426 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 428 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 430 */	NdrFcShort( 0x0 ),	/* Offset= 0 (430) */
+/* 432 */	0x8,		/* FC_LONG */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 434 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 436 */	NdrFcShort( 0xffe0 ),	/* Offset= -32 (404) */
+/* 438 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 440 */	
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x3,		/* 3 */
+/* 442 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 444 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 446 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 448 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 450 */	0x0 , 
+			0x0,		/* 0 */
+/* 452 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 456 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 460 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 464 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 466 */	0x0 , 
+			0x0,		/* 0 */
+/* 468 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 472 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 476 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 478 */	NdrFcShort( 0xffca ),	/* Offset= -54 (424) */
+/* 480 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 482 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 484 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 486 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 488 */	NdrFcShort( 0xa ),	/* Offset= 10 (498) */
+/* 490 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 492 */	NdrFcShort( 0xff7e ),	/* Offset= -130 (362) */
+/* 494 */	0x40,		/* FC_STRUCTPAD4 */
+			0x36,		/* FC_POINTER */
+/* 496 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 498 */	
+			0x12, 0x0,	/* FC_UP */
+/* 500 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (440) */
+/* 502 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 426 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 430 */	NdrFcLong( 0x100000 ),	/* 1048576 */
-/* 434 */	
+/* 504 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 508 */	NdrFcLong( 0x100000 ),	/* 1048576 */
+/* 512 */	
 			0x15,		/* FC_STRUCT */
 			0x7,		/* 7 */
-/* 436 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 438 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 514 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 516 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 440 */	NdrFcShort( 0xfe54 ),	/* Offset= -428 (12) */
-/* 442 */	0xb,		/* FC_HYPER */
+/* 518 */	NdrFcShort( 0xfe06 ),	/* Offset= -506 (12) */
+/* 520 */	0xb,		/* FC_HYPER */
 			0x5b,		/* FC_END */
-/* 444 */	
+/* 522 */	
 			0x1b,		/* FC_CARRAY */
 			0x7,		/* 7 */
-/* 446 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 448 */	0x9,		/* Corr desc: FC_ULONG */
+/* 524 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 526 */	0x9,		/* Corr desc: FC_ULONG */
 			0x0,		/*  */
-/* 450 */	NdrFcShort( 0xfff8 ),	/* -8 */
-/* 452 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 454 */	0x0 , 
+/* 528 */	NdrFcShort( 0xfff8 ),	/* -8 */
+/* 530 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 532 */	0x0 , 
 			0x0,		/* 0 */
-/* 456 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 460 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 464 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 466 */	NdrFcShort( 0xffe0 ),	/* Offset= -32 (434) */
-/* 468 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 470 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 472 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 474 */	NdrFcShort( 0xffe2 ),	/* Offset= -30 (444) */
-/* 476 */	NdrFcShort( 0x0 ),	/* Offset= 0 (476) */
-/* 478 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 480 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 482 */	NdrFcShort( 0xffc6 ),	/* Offset= -58 (424) */
-/* 484 */	0x8,		/* FC_LONG */
-			0x5b,		/* FC_END */
-/* 486 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 488 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 492 */	NdrFcLong( 0x100000 ),	/* 1048576 */
-/* 496 */	
-			0x1b,		/* FC_CARRAY */
-			0x3,		/* 3 */
-/* 498 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 500 */	0x9,		/* Corr desc: FC_ULONG */
-			0x0,		/*  */
-/* 502 */	NdrFcShort( 0xfffc ),	/* -4 */
-/* 504 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 506 */	0x0 , 
-			0x0,		/* 0 */
-/* 508 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 512 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 516 */	0x8,		/* FC_LONG */
-			0x5b,		/* FC_END */
-/* 518 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 520 */	NdrFcShort( 0xc ),	/* 12 */
-/* 522 */	NdrFcShort( 0xffe6 ),	/* Offset= -26 (496) */
-/* 524 */	NdrFcShort( 0x0 ),	/* Offset= 0 (524) */
-/* 526 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 528 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 530 */	NdrFcShort( 0xffd4 ),	/* Offset= -44 (486) */
-/* 532 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 534 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 536 */	NdrFcShort( 0x70 ),	/* 112 */
-/* 538 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 540 */	NdrFcShort( 0x1a ),	/* Offset= 26 (566) */
+/* 534 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 538 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 542 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 544 */	NdrFcShort( 0xfdec ),	/* Offset= -532 (12) */
-/* 546 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 548 */	NdrFcShort( 0xfde8 ),	/* Offset= -536 (12) */
-/* 550 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 552 */	0x0,		/* 0 */
-			NdrFcShort( 0xfeeb ),	/* Offset= -277 (276) */
-			0x36,		/* FC_POINTER */
-/* 556 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 558 */	0x0,		/* 0 */
-			NdrFcShort( 0xff65 ),	/* Offset= -155 (404) */
+/* 544 */	NdrFcShort( 0xffe0 ),	/* Offset= -32 (512) */
+/* 546 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 548 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 550 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 552 */	NdrFcShort( 0xffe2 ),	/* Offset= -30 (522) */
+/* 554 */	NdrFcShort( 0x0 ),	/* Offset= 0 (554) */
+/* 556 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
+/* 558 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 560 */	NdrFcShort( 0xffc6 ),	/* Offset= -58 (502) */
 /* 562 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 564 */	0x8,		/* FC_LONG */
 			0x5b,		/* FC_END */
-/* 566 */	
-			0x11, 0x0,	/* FC_RP */
-/* 568 */	NdrFcShort( 0xfe74 ),	/* Offset= -396 (172) */
-/* 570 */	
-			0x12, 0x0,	/* FC_UP */
-/* 572 */	NdrFcShort( 0xff9a ),	/* Offset= -102 (470) */
-/* 574 */	
-			0x12, 0x0,	/* FC_UP */
-/* 576 */	NdrFcShort( 0xffc6 ),	/* Offset= -58 (518) */
-/* 578 */	0xb7,		/* FC_RANGE */
+/* 564 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 580 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 584 */	NdrFcLong( 0x100 ),	/* 256 */
-/* 588 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+/* 566 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 570 */	NdrFcLong( 0x100000 ),	/* 1048576 */
+/* 574 */	
+			0x1b,		/* FC_CARRAY */
 			0x3,		/* 3 */
-/* 590 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 592 */	NdrFcShort( 0xfdd6 ),	/* Offset= -554 (38) */
-/* 594 */	NdrFcShort( 0x0 ),	/* Offset= 0 (594) */
-/* 596 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 576 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 578 */	0x9,		/* Corr desc: FC_ULONG */
+			0x0,		/*  */
+/* 580 */	NdrFcShort( 0xfffc ),	/* -4 */
+/* 582 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 584 */	0x0 , 
 			0x0,		/* 0 */
-/* 598 */	NdrFcShort( 0xffec ),	/* Offset= -20 (578) */
-/* 600 */	0x5c,		/* FC_PAD */
+/* 586 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 590 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 594 */	0x8,		/* FC_LONG */
 			0x5b,		/* FC_END */
-/* 602 */	
+/* 596 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 598 */	NdrFcShort( 0xc ),	/* 12 */
+/* 600 */	NdrFcShort( 0xffe6 ),	/* Offset= -26 (574) */
+/* 602 */	NdrFcShort( 0x0 ),	/* Offset= 0 (602) */
+/* 604 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 606 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 608 */	NdrFcShort( 0xffd4 ),	/* Offset= -44 (564) */
+/* 610 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 612 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x7,		/* 7 */
-/* 604 */	NdrFcShort( 0x88 ),	/* 136 */
-/* 606 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 608 */	NdrFcShort( 0xc ),	/* Offset= 12 (620) */
-/* 610 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 614 */	NdrFcShort( 0x70 ),	/* 112 */
+/* 616 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 618 */	NdrFcShort( 0x1a ),	/* Offset= 26 (644) */
+/* 620 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 612 */	NdrFcShort( 0xfda8 ),	/* Offset= -600 (12) */
-/* 614 */	0x36,		/* FC_POINTER */
+/* 622 */	NdrFcShort( 0xfd9e ),	/* Offset= -610 (12) */
+/* 624 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 626 */	NdrFcShort( 0xfd9a ),	/* Offset= -614 (12) */
+/* 628 */	0x36,		/* FC_POINTER */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 616 */	0x0,		/* 0 */
-			NdrFcShort( 0xffad ),	/* Offset= -83 (534) */
+/* 630 */	0x0,		/* 0 */
+			NdrFcShort( 0xfeeb ),	/* Offset= -277 (354) */
+			0x36,		/* FC_POINTER */
+/* 634 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 636 */	0x0,		/* 0 */
+			NdrFcShort( 0xff65 ),	/* Offset= -155 (482) */
+			0x8,		/* FC_LONG */
+/* 640 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 642 */	0x8,		/* FC_LONG */
 			0x5b,		/* FC_END */
-/* 620 */	
+/* 644 */	
 			0x11, 0x0,	/* FC_RP */
-/* 622 */	NdrFcShort( 0xffde ),	/* Offset= -34 (588) */
-/* 624 */	
+/* 646 */	NdrFcShort( 0xfe2c ),	/* Offset= -468 (178) */
+/* 648 */	
+			0x12, 0x0,	/* FC_UP */
+/* 650 */	NdrFcShort( 0xff9a ),	/* Offset= -102 (548) */
+/* 652 */	
+			0x12, 0x0,	/* FC_UP */
+/* 654 */	NdrFcShort( 0xffc6 ),	/* Offset= -58 (596) */
+/* 656 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 658 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 662 */	NdrFcLong( 0x100 ),	/* 256 */
+/* 666 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 668 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 670 */	NdrFcShort( 0xfd88 ),	/* Offset= -632 (38) */
+/* 672 */	NdrFcShort( 0x0 ),	/* Offset= 0 (672) */
+/* 674 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 676 */	NdrFcShort( 0xffec ),	/* Offset= -20 (656) */
+/* 678 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 680 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 682 */	NdrFcShort( 0x88 ),	/* 136 */
+/* 684 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 686 */	NdrFcShort( 0xc ),	/* Offset= 12 (698) */
+/* 688 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 690 */	NdrFcShort( 0xfd5a ),	/* Offset= -678 (12) */
+/* 692 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 694 */	0x0,		/* 0 */
+			NdrFcShort( 0xffad ),	/* Offset= -83 (612) */
+			0x5b,		/* FC_END */
+/* 698 */	
+			0x11, 0x0,	/* FC_RP */
+/* 700 */	NdrFcShort( 0xffde ),	/* Offset= -34 (666) */
+/* 702 */	
 			0x15,		/* FC_STRUCT */
 			0x7,		/* 7 */
-/* 626 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 628 */	0xb,		/* FC_HYPER */
+/* 704 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 706 */	0xb,		/* FC_HYPER */
 			0x5b,		/* FC_END */
-/* 630 */	
+/* 708 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x7,		/* 7 */
-/* 632 */	NdrFcShort( 0x60 ),	/* 96 */
-/* 634 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 636 */	NdrFcShort( 0x1a ),	/* Offset= 26 (662) */
-/* 638 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 710 */	NdrFcShort( 0x60 ),	/* 96 */
+/* 712 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 714 */	NdrFcShort( 0x1a ),	/* Offset= 26 (740) */
+/* 716 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 640 */	NdrFcShort( 0xfd8c ),	/* Offset= -628 (12) */
-/* 642 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 718 */	NdrFcShort( 0xfd3e ),	/* Offset= -706 (12) */
+/* 720 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 644 */	NdrFcShort( 0xfd88 ),	/* Offset= -632 (12) */
-/* 646 */	0x36,		/* FC_POINTER */
+/* 722 */	NdrFcShort( 0xfd3a ),	/* Offset= -710 (12) */
+/* 724 */	0x36,		/* FC_POINTER */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 648 */	0x0,		/* 0 */
-			NdrFcShort( 0xfe8b ),	/* Offset= -373 (276) */
+/* 726 */	0x0,		/* 0 */
+			NdrFcShort( 0xfe8b ),	/* Offset= -373 (354) */
 			0x36,		/* FC_POINTER */
-/* 652 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 654 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 656 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 658 */	NdrFcShort( 0xffde ),	/* Offset= -34 (624) */
-/* 660 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 662 */	
-			0x11, 0x0,	/* FC_RP */
-/* 664 */	NdrFcShort( 0xfe14 ),	/* Offset= -492 (172) */
-/* 666 */	
-			0x12, 0x0,	/* FC_UP */
-/* 668 */	NdrFcShort( 0xff3a ),	/* Offset= -198 (470) */
-/* 670 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 672 */	NdrFcShort( 0xa8 ),	/* 168 */
-/* 674 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 676 */	NdrFcShort( 0x12 ),	/* Offset= 18 (694) */
-/* 678 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 680 */	NdrFcShort( 0xfd64 ),	/* Offset= -668 (12) */
-/* 682 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 684 */	0x0,		/* 0 */
-			NdrFcShort( 0xff69 ),	/* Offset= -151 (534) */
-			0x36,		/* FC_POINTER */
-/* 688 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 690 */	0x0,		/* 0 */
-			NdrFcShort( 0xfee1 ),	/* Offset= -287 (404) */
-			0x5b,		/* FC_END */
-/* 694 */	
-			0x11, 0x0,	/* FC_RP */
-/* 696 */	NdrFcShort( 0xff94 ),	/* Offset= -108 (588) */
-/* 698 */	
-			0x12, 0x0,	/* FC_UP */
-/* 700 */	NdrFcShort( 0xff4a ),	/* Offset= -182 (518) */
-/* 702 */	
-			0x12, 0x0,	/* FC_UP */
-/* 704 */	NdrFcShort( 0xff46 ),	/* Offset= -186 (518) */
-/* 706 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 708 */	NdrFcShort( 0x80 ),	/* 128 */
-/* 710 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 712 */	NdrFcShort( 0x20 ),	/* Offset= 32 (744) */
-/* 714 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 716 */	NdrFcShort( 0xfd40 ),	/* Offset= -704 (12) */
-/* 718 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 720 */	NdrFcShort( 0xfd3c ),	/* Offset= -708 (12) */
-/* 722 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 724 */	0x0,		/* 0 */
-			NdrFcShort( 0xfe3f ),	/* Offset= -449 (276) */
-			0x36,		/* FC_POINTER */
-/* 728 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
 /* 730 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 732 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 732 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 734 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 734 */	NdrFcShort( 0xff92 ),	/* Offset= -110 (624) */
-/* 736 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 738 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 740 */	NdrFcShort( 0xfeb0 ),	/* Offset= -336 (404) */
-/* 742 */	0x5c,		/* FC_PAD */
+/* 736 */	NdrFcShort( 0xffde ),	/* Offset= -34 (702) */
+/* 738 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 744 */	
+/* 740 */	
 			0x11, 0x0,	/* FC_RP */
-/* 746 */	NdrFcShort( 0xfdc2 ),	/* Offset= -574 (172) */
+/* 742 */	NdrFcShort( 0xfdcc ),	/* Offset= -564 (178) */
+/* 744 */	
+			0x12, 0x0,	/* FC_UP */
+/* 746 */	NdrFcShort( 0xff3a ),	/* Offset= -198 (548) */
 /* 748 */	
-			0x12, 0x0,	/* FC_UP */
-/* 750 */	NdrFcShort( 0xfee8 ),	/* Offset= -280 (470) */
-/* 752 */	
-			0x12, 0x0,	/* FC_UP */
-/* 754 */	NdrFcShort( 0xff14 ),	/* Offset= -236 (518) */
-/* 756 */	
-			0x12, 0x0,	/* FC_UP */
-/* 758 */	NdrFcShort( 0xff10 ),	/* Offset= -240 (518) */
-/* 760 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x7,		/* 7 */
-/* 762 */	NdrFcShort( 0x88 ),	/* 136 */
-/* 764 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 766 */	NdrFcShort( 0x22 ),	/* Offset= 34 (800) */
-/* 768 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 750 */	NdrFcShort( 0xa8 ),	/* 168 */
+/* 752 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 754 */	NdrFcShort( 0x12 ),	/* Offset= 18 (772) */
+/* 756 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 770 */	NdrFcShort( 0xfd0a ),	/* Offset= -758 (12) */
-/* 772 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 774 */	NdrFcShort( 0xfd06 ),	/* Offset= -762 (12) */
-/* 776 */	0x36,		/* FC_POINTER */
+/* 758 */	NdrFcShort( 0xfd16 ),	/* Offset= -746 (12) */
+/* 760 */	0x36,		/* FC_POINTER */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 778 */	0x0,		/* 0 */
-			NdrFcShort( 0xfe09 ),	/* Offset= -503 (276) */
+/* 762 */	0x0,		/* 0 */
+			NdrFcShort( 0xff69 ),	/* Offset= -151 (612) */
 			0x36,		/* FC_POINTER */
-/* 782 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 784 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 786 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 788 */	NdrFcShort( 0xff5c ),	/* Offset= -164 (624) */
-/* 790 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
+/* 766 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 768 */	0x0,		/* 0 */
+			NdrFcShort( 0xfee1 ),	/* Offset= -287 (482) */
+			0x5b,		/* FC_END */
+/* 772 */	
+			0x11, 0x0,	/* FC_RP */
+/* 774 */	NdrFcShort( 0xff94 ),	/* Offset= -108 (666) */
+/* 776 */	
+			0x12, 0x0,	/* FC_UP */
+/* 778 */	NdrFcShort( 0xff4a ),	/* Offset= -182 (596) */
+/* 780 */	
+			0x12, 0x0,	/* FC_UP */
+/* 782 */	NdrFcShort( 0xff46 ),	/* Offset= -186 (596) */
+/* 784 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 786 */	NdrFcShort( 0x80 ),	/* 128 */
+/* 788 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 790 */	NdrFcShort( 0x20 ),	/* Offset= 32 (822) */
 /* 792 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 794 */	NdrFcShort( 0xfe7a ),	/* Offset= -390 (404) */
-/* 796 */	0x8,		/* FC_LONG */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 798 */	0x5c,		/* FC_PAD */
+/* 794 */	NdrFcShort( 0xfcf2 ),	/* Offset= -782 (12) */
+/* 796 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 798 */	NdrFcShort( 0xfcee ),	/* Offset= -786 (12) */
+/* 800 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 802 */	0x0,		/* 0 */
+			NdrFcShort( 0xfe3f ),	/* Offset= -449 (354) */
+			0x36,		/* FC_POINTER */
+/* 806 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 808 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 810 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 812 */	NdrFcShort( 0xff92 ),	/* Offset= -110 (702) */
+/* 814 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 816 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 818 */	NdrFcShort( 0xfeb0 ),	/* Offset= -336 (482) */
+/* 820 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 800 */	
+/* 822 */	
 			0x11, 0x0,	/* FC_RP */
-/* 802 */	NdrFcShort( 0xfd8a ),	/* Offset= -630 (172) */
-/* 804 */	
+/* 824 */	NdrFcShort( 0xfd7a ),	/* Offset= -646 (178) */
+/* 826 */	
 			0x12, 0x0,	/* FC_UP */
-/* 806 */	NdrFcShort( 0xfeb0 ),	/* Offset= -336 (470) */
-/* 808 */	
+/* 828 */	NdrFcShort( 0xfee8 ),	/* Offset= -280 (548) */
+/* 830 */	
 			0x12, 0x0,	/* FC_UP */
-/* 810 */	NdrFcShort( 0xfedc ),	/* Offset= -292 (518) */
-/* 812 */	
+/* 832 */	NdrFcShort( 0xff14 ),	/* Offset= -236 (596) */
+/* 834 */	
 			0x12, 0x0,	/* FC_UP */
-/* 814 */	NdrFcShort( 0xfed8 ),	/* Offset= -296 (518) */
-/* 816 */	
+/* 836 */	NdrFcShort( 0xff10 ),	/* Offset= -240 (596) */
+/* 838 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 840 */	NdrFcShort( 0x88 ),	/* 136 */
+/* 842 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 844 */	NdrFcShort( 0x22 ),	/* Offset= 34 (878) */
+/* 846 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 848 */	NdrFcShort( 0xfcbc ),	/* Offset= -836 (12) */
+/* 850 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 852 */	NdrFcShort( 0xfcb8 ),	/* Offset= -840 (12) */
+/* 854 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 856 */	0x0,		/* 0 */
+			NdrFcShort( 0xfe09 ),	/* Offset= -503 (354) */
+			0x36,		/* FC_POINTER */
+/* 860 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 862 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 864 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 866 */	NdrFcShort( 0xff5c ),	/* Offset= -164 (702) */
+/* 868 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 870 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 872 */	NdrFcShort( 0xfe7a ),	/* Offset= -390 (482) */
+/* 874 */	0x8,		/* FC_LONG */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 876 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 878 */	
+			0x11, 0x0,	/* FC_RP */
+/* 880 */	NdrFcShort( 0xfd42 ),	/* Offset= -702 (178) */
+/* 882 */	
+			0x12, 0x0,	/* FC_UP */
+/* 884 */	NdrFcShort( 0xfeb0 ),	/* Offset= -336 (548) */
+/* 886 */	
+			0x12, 0x0,	/* FC_UP */
+/* 888 */	NdrFcShort( 0xfedc ),	/* Offset= -292 (596) */
+/* 890 */	
+			0x12, 0x0,	/* FC_UP */
+/* 892 */	NdrFcShort( 0xfed8 ),	/* Offset= -296 (596) */
+/* 894 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 896 */	NdrFcShort( 0xa0 ),	/* 160 */
+/* 898 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 900 */	NdrFcShort( 0x26 ),	/* Offset= 38 (938) */
+/* 902 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 904 */	NdrFcShort( 0xfc84 ),	/* Offset= -892 (12) */
+/* 906 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 908 */	NdrFcShort( 0xfc80 ),	/* Offset= -896 (12) */
+/* 910 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 912 */	0x0,		/* 0 */
+			NdrFcShort( 0xfdd1 ),	/* Offset= -559 (354) */
+			0x36,		/* FC_POINTER */
+/* 916 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 918 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 920 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 922 */	NdrFcShort( 0xff24 ),	/* Offset= -220 (702) */
+/* 924 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 926 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 928 */	NdrFcShort( 0xfe42 ),	/* Offset= -446 (482) */
+/* 930 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 932 */	0x0,		/* 0 */
+			NdrFcShort( 0xfc67 ),	/* Offset= -921 (12) */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 936 */	0x36,		/* FC_POINTER */
+			0x5b,		/* FC_END */
+/* 938 */	
+			0x11, 0x0,	/* FC_RP */
+/* 940 */	NdrFcShort( 0xfd06 ),	/* Offset= -762 (178) */
+/* 942 */	
+			0x12, 0x0,	/* FC_UP */
+/* 944 */	NdrFcShort( 0xfe74 ),	/* Offset= -396 (548) */
+/* 946 */	
+			0x12, 0x0,	/* FC_UP */
+/* 948 */	NdrFcShort( 0xfea0 ),	/* Offset= -352 (596) */
+/* 950 */	
+			0x12, 0x0,	/* FC_UP */
+/* 952 */	NdrFcShort( 0xfe9c ),	/* Offset= -356 (596) */
+/* 954 */	
+			0x12, 0x0,	/* FC_UP */
+/* 956 */	NdrFcShort( 0xfd38 ),	/* Offset= -712 (244) */
+/* 958 */	
 			0x11, 0xc,	/* FC_RP [alloced_on_stack] [simple_pointer] */
-/* 818 */	0x8,		/* FC_LONG */
+/* 960 */	0x8,		/* FC_LONG */
 			0x5c,		/* FC_PAD */
-/* 820 */	
+/* 962 */	
 			0x11, 0x0,	/* FC_RP */
-/* 822 */	NdrFcShort( 0x2 ),	/* Offset= 2 (824) */
-/* 824 */	
+/* 964 */	NdrFcShort( 0x2 ),	/* Offset= 2 (966) */
+/* 966 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 826 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 968 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x54,		/* FC_DEREFERENCE */
-/* 828 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
-/* 830 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 832 */	0x0 , 
+/* 970 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 972 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 974 */	0x0 , 
 			0x0,		/* 0 */
-/* 834 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 838 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 842 */	NdrFcShort( 0x2 ),	/* Offset= 2 (844) */
-/* 844 */	NdrFcShort( 0xa8 ),	/* 168 */
-/* 846 */	NdrFcShort( 0x5 ),	/* 5 */
-/* 848 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 852 */	NdrFcShort( 0x160 ),	/* Offset= 352 (1204) */
-/* 854 */	NdrFcLong( 0x2 ),	/* 2 */
-/* 858 */	NdrFcShort( 0x1b2 ),	/* Offset= 434 (1292) */
-/* 860 */	NdrFcLong( 0x6 ),	/* 6 */
-/* 864 */	NdrFcShort( 0x256 ),	/* Offset= 598 (1462) */
-/* 866 */	NdrFcLong( 0x7 ),	/* 7 */
-/* 870 */	NdrFcShort( 0x28e ),	/* Offset= 654 (1524) */
-/* 872 */	NdrFcLong( 0x9 ),	/* 9 */
-/* 876 */	NdrFcShort( 0x2fa ),	/* Offset= 762 (1638) */
-/* 878 */	NdrFcShort( 0xffff ),	/* Offset= -1 (877) */
-/* 880 */	0xb7,		/* FC_RANGE */
+/* 976 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 980 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 984 */	NdrFcShort( 0x2 ),	/* Offset= 2 (986) */
+/* 986 */	NdrFcShort( 0xa8 ),	/* 168 */
+/* 988 */	NdrFcShort( 0x5 ),	/* 5 */
+/* 990 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 994 */	NdrFcShort( 0x160 ),	/* Offset= 352 (1346) */
+/* 996 */	NdrFcLong( 0x2 ),	/* 2 */
+/* 1000 */	NdrFcShort( 0x1b2 ),	/* Offset= 434 (1434) */
+/* 1002 */	NdrFcLong( 0x6 ),	/* 6 */
+/* 1006 */	NdrFcShort( 0x256 ),	/* Offset= 598 (1604) */
+/* 1008 */	NdrFcLong( 0x7 ),	/* 7 */
+/* 1012 */	NdrFcShort( 0x28e ),	/* Offset= 654 (1666) */
+/* 1014 */	NdrFcLong( 0x9 ),	/* 9 */
+/* 1018 */	NdrFcShort( 0x2fa ),	/* Offset= 762 (1780) */
+/* 1020 */	NdrFcShort( 0xffff ),	/* Offset= -1 (1019) */
+/* 1022 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 882 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 886 */	NdrFcLong( 0x100000 ),	/* 1048576 */
-/* 890 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 892 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 896 */	NdrFcLong( 0xa00000 ),	/* 10485760 */
-/* 900 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 902 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 906 */	NdrFcLong( 0x1900000 ),	/* 26214400 */
-/* 910 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 912 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 914 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 916 */	NdrFcShort( 0xa ),	/* Offset= 10 (926) */
-/* 918 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 920 */	NdrFcShort( 0xffec ),	/* Offset= -20 (900) */
-/* 922 */	0x40,		/* FC_STRUCTPAD4 */
-			0x36,		/* FC_POINTER */
-/* 924 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 926 */	
-			0x12, 0x0,	/* FC_UP */
-/* 928 */	NdrFcShort( 0xfd90 ),	/* Offset= -624 (304) */
-/* 930 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x3,		/* 3 */
-/* 932 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 934 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 936 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 938 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 940 */	0x0 , 
-			0x0,		/* 0 */
-/* 942 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 946 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 950 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 954 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 956 */	0x0 , 
-			0x0,		/* 0 */
-/* 958 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 962 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 966 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 968 */	NdrFcShort( 0xffc6 ),	/* Offset= -58 (910) */
-/* 970 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 972 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 974 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 976 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 978 */	NdrFcShort( 0xa ),	/* Offset= 10 (988) */
-/* 980 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 982 */	NdrFcShort( 0xffa4 ),	/* Offset= -92 (890) */
-/* 984 */	0x40,		/* FC_STRUCTPAD4 */
-			0x36,		/* FC_POINTER */
-/* 986 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 988 */	
-			0x12, 0x0,	/* FC_UP */
-/* 990 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (930) */
-/* 992 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 994 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 996 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 998 */	NdrFcShort( 0x0 ),	/* Offset= 0 (998) */
-/* 1000 */	0x8,		/* FC_LONG */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 1002 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 1004 */	NdrFcShort( 0xffe0 ),	/* Offset= -32 (972) */
-/* 1006 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 1008 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x3,		/* 3 */
-/* 1010 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1012 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 1014 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1016 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 1018 */	0x0 , 
-			0x0,		/* 0 */
-/* 1020 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 1024 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1028 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 1032 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 1034 */	0x0 , 
-			0x0,		/* 0 */
-/* 1036 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1040 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1044 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 1046 */	NdrFcShort( 0xffca ),	/* Offset= -54 (992) */
-/* 1048 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 1050 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 1052 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 1054 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1056 */	NdrFcShort( 0xa ),	/* Offset= 10 (1066) */
-/* 1058 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 1060 */	NdrFcShort( 0xff4c ),	/* Offset= -180 (880) */
-/* 1062 */	0x40,		/* FC_STRUCTPAD4 */
-			0x36,		/* FC_POINTER */
-/* 1064 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 1066 */	
-			0x12, 0x0,	/* FC_UP */
-/* 1068 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (1008) */
-/* 1070 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 1072 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 1074 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1076 */	NdrFcShort( 0xa ),	/* Offset= 10 (1086) */
-/* 1078 */	0x36,		/* FC_POINTER */
-			0x8,		/* FC_LONG */
-/* 1080 */	0x40,		/* FC_STRUCTPAD4 */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 1082 */	0x0,		/* 0 */
-			NdrFcShort( 0xffdf ),	/* Offset= -33 (1050) */
-			0x5b,		/* FC_END */
-/* 1086 */	
-			0x12, 0x0,	/* FC_UP */
-/* 1088 */	NdrFcShort( 0xfc6c ),	/* Offset= -916 (172) */
-/* 1090 */	0xb7,		/* FC_RANGE */
+/* 1028 */	NdrFcLong( 0x100000 ),	/* 1048576 */
+/* 1032 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 1092 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1096 */	NdrFcLong( 0x100000 ),	/* 1048576 */
-/* 1100 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 1102 */	NdrFcShort( 0x28 ),	/* 40 */
-/* 1104 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1106 */	NdrFcShort( 0x0 ),	/* Offset= 0 (1106) */
-/* 1108 */	0x8,		/* FC_LONG */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 1110 */	0xb,		/* FC_HYPER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 1112 */	0x0,		/* 0 */
-			NdrFcShort( 0xfbb3 ),	/* Offset= -1101 (12) */
-			0xb,		/* FC_HYPER */
-/* 1116 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 1118 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x7,		/* 7 */
-/* 1120 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1122 */	0x9,		/* Corr desc: FC_ULONG */
-			0x0,		/*  */
-/* 1124 */	NdrFcShort( 0xfff8 ),	/* -8 */
-/* 1126 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 1128 */	0x0 , 
-			0x0,		/* 0 */
-/* 1130 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1134 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1138 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 1142 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 1144 */	0x0 , 
-			0x0,		/* 0 */
-/* 1146 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1150 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1154 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 1156 */	NdrFcShort( 0xffc8 ),	/* Offset= -56 (1100) */
-/* 1158 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 1160 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 1162 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 1164 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (1118) */
-/* 1166 */	NdrFcShort( 0x0 ),	/* Offset= 0 (1166) */
-/* 1168 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 1170 */	NdrFcShort( 0xffb0 ),	/* Offset= -80 (1090) */
-/* 1172 */	0x40,		/* FC_STRUCTPAD4 */
-			0x5b,		/* FC_END */
-/* 1174 */	
+/* 1034 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1038 */	NdrFcLong( 0xa00000 ),	/* 10485760 */
+/* 1042 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 1044 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1048 */	NdrFcLong( 0x1900000 ),	/* 26214400 */
+/* 1052 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 1176 */	NdrFcShort( 0x40 ),	/* 64 */
-/* 1178 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1180 */	NdrFcShort( 0xc ),	/* Offset= 12 (1192) */
-/* 1182 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 1184 */	0x0,		/* 0 */
-			NdrFcShort( 0xff8d ),	/* Offset= -115 (1070) */
-			0x8,		/* FC_LONG */
-/* 1188 */	0x40,		/* FC_STRUCTPAD4 */
+/* 1054 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 1056 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1058 */	NdrFcShort( 0xa ),	/* Offset= 10 (1068) */
+/* 1060 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1062 */	NdrFcShort( 0xffec ),	/* Offset= -20 (1042) */
+/* 1064 */	0x40,		/* FC_STRUCTPAD4 */
 			0x36,		/* FC_POINTER */
-/* 1190 */	0x36,		/* FC_POINTER */
+/* 1066 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 1068 */	
+			0x12, 0x0,	/* FC_UP */
+/* 1070 */	NdrFcShort( 0xfd50 ),	/* Offset= -688 (382) */
+/* 1072 */	
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x3,		/* 3 */
+/* 1074 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1076 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 1078 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1080 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 1082 */	0x0 , 
+			0x0,		/* 0 */
+/* 1084 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1088 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1092 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 1096 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 1098 */	0x0 , 
+			0x0,		/* 0 */
+/* 1100 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1104 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1108 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1110 */	NdrFcShort( 0xffc6 ),	/* Offset= -58 (1052) */
+/* 1112 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 1114 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 1116 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 1118 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1120 */	NdrFcShort( 0xa ),	/* Offset= 10 (1130) */
+/* 1122 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1124 */	NdrFcShort( 0xffa4 ),	/* Offset= -92 (1032) */
+/* 1126 */	0x40,		/* FC_STRUCTPAD4 */
+			0x36,		/* FC_POINTER */
+/* 1128 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 1130 */	
+			0x12, 0x0,	/* FC_UP */
+/* 1132 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (1072) */
+/* 1134 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 1136 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 1138 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1140 */	NdrFcShort( 0x0 ),	/* Offset= 0 (1140) */
+/* 1142 */	0x8,		/* FC_LONG */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 1144 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1146 */	NdrFcShort( 0xffe0 ),	/* Offset= -32 (1114) */
+/* 1148 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 1150 */	
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x3,		/* 3 */
+/* 1152 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1154 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 1156 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1158 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 1160 */	0x0 , 
+			0x0,		/* 0 */
+/* 1162 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1166 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1170 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 1174 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 1176 */	0x0 , 
+			0x0,		/* 0 */
+/* 1178 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1182 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1186 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1188 */	NdrFcShort( 0xffca ),	/* Offset= -54 (1134) */
+/* 1190 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
 /* 1192 */	
-			0x12, 0x0,	/* FC_UP */
-/* 1194 */	NdrFcShort( 0xffec ),	/* Offset= -20 (1174) */
-/* 1196 */	
-			0x12, 0x0,	/* FC_UP */
-/* 1198 */	NdrFcShort( 0xfb5e ),	/* Offset= -1186 (12) */
-/* 1200 */	
-			0x12, 0x0,	/* FC_UP */
-/* 1202 */	NdrFcShort( 0xffd6 ),	/* Offset= -42 (1160) */
-/* 1204 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 1206 */	NdrFcShort( 0x90 ),	/* 144 */
-/* 1208 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1210 */	NdrFcShort( 0x20 ),	/* Offset= 32 (1242) */
-/* 1212 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x3,		/* 3 */
+/* 1194 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 1196 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1198 */	NdrFcShort( 0xa ),	/* Offset= 10 (1208) */
+/* 1200 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 1214 */	NdrFcShort( 0xfb4e ),	/* Offset= -1202 (12) */
-/* 1216 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 1218 */	NdrFcShort( 0xfb4a ),	/* Offset= -1206 (12) */
-/* 1220 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 1222 */	0x0,		/* 0 */
-			NdrFcShort( 0xfc4d ),	/* Offset= -947 (276) */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 1226 */	0x0,		/* 0 */
-			NdrFcShort( 0xfc49 ),	/* Offset= -951 (276) */
+/* 1202 */	NdrFcShort( 0xff4c ),	/* Offset= -180 (1022) */
+/* 1204 */	0x40,		/* FC_STRUCTPAD4 */
 			0x36,		/* FC_POINTER */
-/* 1230 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 1232 */	NdrFcShort( 0xfcc4 ),	/* Offset= -828 (404) */
-/* 1234 */	0x8,		/* FC_LONG */
+/* 1206 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 1208 */	
+			0x12, 0x0,	/* FC_UP */
+/* 1210 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (1150) */
+/* 1212 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 1214 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 1216 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1218 */	NdrFcShort( 0xa ),	/* Offset= 10 (1228) */
+/* 1220 */	0x36,		/* FC_POINTER */
 			0x8,		/* FC_LONG */
-/* 1236 */	0x8,		/* FC_LONG */
+/* 1222 */	0x40,		/* FC_STRUCTPAD4 */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1224 */	0x0,		/* 0 */
+			NdrFcShort( 0xffdf ),	/* Offset= -33 (1192) */
+			0x5b,		/* FC_END */
+/* 1228 */	
+			0x12, 0x0,	/* FC_UP */
+/* 1230 */	NdrFcShort( 0xfbe4 ),	/* Offset= -1052 (178) */
+/* 1232 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 1234 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1238 */	NdrFcLong( 0x100000 ),	/* 1048576 */
+/* 1242 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 1244 */	NdrFcShort( 0x28 ),	/* 40 */
+/* 1246 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1248 */	NdrFcShort( 0x0 ),	/* Offset= 0 (1248) */
+/* 1250 */	0x8,		/* FC_LONG */
 			0x40,		/* FC_STRUCTPAD4 */
-/* 1238 */	0x36,		/* FC_POINTER */
-			0x8,		/* FC_LONG */
-/* 1240 */	0x40,		/* FC_STRUCTPAD4 */
-			0x5b,		/* FC_END */
-/* 1242 */	
-			0x12, 0x0,	/* FC_UP */
-/* 1244 */	NdrFcShort( 0xfbd0 ),	/* Offset= -1072 (172) */
-/* 1246 */	
-			0x12, 0x0,	/* FC_UP */
-/* 1248 */	NdrFcShort( 0xfcf6 ),	/* Offset= -778 (470) */
-/* 1250 */	
-			0x12, 0x0,	/* FC_UP */
-/* 1252 */	NdrFcShort( 0xffb2 ),	/* Offset= -78 (1174) */
-/* 1254 */	
-			0x1b,		/* FC_CARRAY */
-			0x0,		/* 0 */
-/* 1256 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 1258 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 1260 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 1262 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 1264 */	0x0 , 
-			0x0,		/* 0 */
-/* 1266 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1270 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1274 */	0x2,		/* FC_CHAR */
-			0x5b,		/* FC_END */
-/* 1276 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 1278 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 1280 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1282 */	NdrFcShort( 0x6 ),	/* Offset= 6 (1288) */
-/* 1284 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 1286 */	0x36,		/* FC_POINTER */
-			0x5b,		/* FC_END */
-/* 1288 */	
-			0x12, 0x0,	/* FC_UP */
-/* 1290 */	NdrFcShort( 0xffdc ),	/* Offset= -36 (1254) */
-/* 1292 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 1294 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 1296 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1298 */	NdrFcShort( 0x0 ),	/* Offset= 0 (1298) */
-/* 1300 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 1302 */	NdrFcShort( 0xffe6 ),	/* Offset= -26 (1276) */
-/* 1304 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 1306 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 1308 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1312 */	NdrFcLong( 0x100000 ),	/* 1048576 */
-/* 1316 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 1318 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1322 */	NdrFcLong( 0x100000 ),	/* 1048576 */
-/* 1326 */	
-			0x15,		/* FC_STRUCT */
-			0x7,		/* 7 */
-/* 1328 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 1330 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 1332 */	NdrFcShort( 0xfad8 ),	/* Offset= -1320 (12) */
-/* 1334 */	0xb,		/* FC_HYPER */
+/* 1252 */	0xb,		/* FC_HYPER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1254 */	0x0,		/* 0 */
+			NdrFcShort( 0xfb25 ),	/* Offset= -1243 (12) */
 			0xb,		/* FC_HYPER */
-/* 1336 */	0x5c,		/* FC_PAD */
+/* 1258 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 1338 */	
-			0x1b,		/* FC_CARRAY */
+/* 1260 */	
+			0x21,		/* FC_BOGUS_ARRAY */
 			0x7,		/* 7 */
-/* 1340 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 1342 */	0x9,		/* Corr desc: FC_ULONG */
+/* 1262 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1264 */	0x9,		/* Corr desc: FC_ULONG */
 			0x0,		/*  */
-/* 1344 */	NdrFcShort( 0xfff8 ),	/* -8 */
-/* 1346 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 1348 */	0x0 , 
+/* 1266 */	NdrFcShort( 0xfff8 ),	/* -8 */
+/* 1268 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 1270 */	0x0 , 
 			0x0,		/* 0 */
-/* 1350 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1354 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1272 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1276 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1280 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 1284 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 1286 */	0x0 , 
+			0x0,		/* 0 */
+/* 1288 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1292 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1296 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1298 */	NdrFcShort( 0xffc8 ),	/* Offset= -56 (1242) */
+/* 1300 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 1302 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 1304 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 1306 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (1260) */
+/* 1308 */	NdrFcShort( 0x0 ),	/* Offset= 0 (1308) */
+/* 1310 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1312 */	NdrFcShort( 0xffb0 ),	/* Offset= -80 (1232) */
+/* 1314 */	0x40,		/* FC_STRUCTPAD4 */
+			0x5b,		/* FC_END */
+/* 1316 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 1318 */	NdrFcShort( 0x40 ),	/* 64 */
+/* 1320 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1322 */	NdrFcShort( 0xc ),	/* Offset= 12 (1334) */
+/* 1324 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1326 */	0x0,		/* 0 */
+			NdrFcShort( 0xff8d ),	/* Offset= -115 (1212) */
+			0x8,		/* FC_LONG */
+/* 1330 */	0x40,		/* FC_STRUCTPAD4 */
+			0x36,		/* FC_POINTER */
+/* 1332 */	0x36,		/* FC_POINTER */
+			0x5b,		/* FC_END */
+/* 1334 */	
+			0x12, 0x0,	/* FC_UP */
+/* 1336 */	NdrFcShort( 0xffec ),	/* Offset= -20 (1316) */
+/* 1338 */	
+			0x12, 0x0,	/* FC_UP */
+/* 1340 */	NdrFcShort( 0xfad0 ),	/* Offset= -1328 (12) */
+/* 1342 */	
+			0x12, 0x0,	/* FC_UP */
+/* 1344 */	NdrFcShort( 0xffd6 ),	/* Offset= -42 (1302) */
+/* 1346 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 1348 */	NdrFcShort( 0x90 ),	/* 144 */
+/* 1350 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1352 */	NdrFcShort( 0x20 ),	/* Offset= 32 (1384) */
+/* 1354 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1356 */	NdrFcShort( 0xfac0 ),	/* Offset= -1344 (12) */
 /* 1358 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 1360 */	NdrFcShort( 0xffde ),	/* Offset= -34 (1326) */
-/* 1362 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 1364 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 1366 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 1368 */	NdrFcShort( 0xffe2 ),	/* Offset= -30 (1338) */
-/* 1370 */	NdrFcShort( 0x0 ),	/* Offset= 0 (1370) */
-/* 1372 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 1374 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 1376 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (1316) */
-/* 1378 */	0x8,		/* FC_LONG */
-			0x5b,		/* FC_END */
-/* 1380 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 1382 */	NdrFcShort( 0x30 ),	/* 48 */
-/* 1384 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1386 */	NdrFcShort( 0x0 ),	/* Offset= 0 (1386) */
-/* 1388 */	0xb,		/* FC_HYPER */
+/* 1360 */	NdrFcShort( 0xfabc ),	/* Offset= -1348 (12) */
+/* 1362 */	0x36,		/* FC_POINTER */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 1390 */	0x0,		/* 0 */
-			NdrFcShort( 0xfedd ),	/* Offset= -291 (1100) */
-			0x5b,		/* FC_END */
-/* 1394 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 1396 */	NdrFcShort( 0x58 ),	/* 88 */
-/* 1398 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1400 */	NdrFcShort( 0x10 ),	/* Offset= 16 (1416) */
-/* 1402 */	0x36,		/* FC_POINTER */
-			0x8,		/* FC_LONG */
-/* 1404 */	0x40,		/* FC_STRUCTPAD4 */
+/* 1364 */	0x0,		/* 0 */
+			NdrFcShort( 0xfc0d ),	/* Offset= -1011 (354) */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 1406 */	0x0,		/* 0 */
-			NdrFcShort( 0xfe0f ),	/* Offset= -497 (910) */
-			0x8,		/* FC_LONG */
-/* 1410 */	0x40,		/* FC_STRUCTPAD4 */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 1412 */	0x0,		/* 0 */
-			NdrFcShort( 0xffdf ),	/* Offset= -33 (1380) */
-			0x5b,		/* FC_END */
-/* 1416 */	
-			0x12, 0x0,	/* FC_UP */
-/* 1418 */	NdrFcShort( 0xfb22 ),	/* Offset= -1246 (172) */
-/* 1420 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x7,		/* 7 */
-/* 1422 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1424 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 1426 */	NdrFcShort( 0x94 ),	/* 148 */
-/* 1428 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 1430 */	0x0 , 
-			0x0,		/* 0 */
-/* 1432 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1436 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1440 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 1444 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 1446 */	0x0 , 
-			0x0,		/* 0 */
-/* 1448 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1452 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1456 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 1458 */	NdrFcShort( 0xffc0 ),	/* Offset= -64 (1394) */
-/* 1460 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 1462 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 1464 */	NdrFcShort( 0xa8 ),	/* 168 */
-/* 1466 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1468 */	NdrFcShort( 0x28 ),	/* Offset= 40 (1508) */
-/* 1470 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 1472 */	NdrFcShort( 0xfa4c ),	/* Offset= -1460 (12) */
-/* 1474 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 1476 */	NdrFcShort( 0xfa48 ),	/* Offset= -1464 (12) */
-/* 1478 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 1480 */	0x0,		/* 0 */
-			NdrFcShort( 0xfb4b ),	/* Offset= -1205 (276) */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 1484 */	0x0,		/* 0 */
-			NdrFcShort( 0xfb47 ),	/* Offset= -1209 (276) */
+/* 1368 */	0x0,		/* 0 */
+			NdrFcShort( 0xfc09 ),	/* Offset= -1015 (354) */
 			0x36,		/* FC_POINTER */
-/* 1488 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1372 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 1490 */	NdrFcShort( 0xfbc2 ),	/* Offset= -1086 (404) */
-/* 1492 */	0x8,		/* FC_LONG */
+/* 1374 */	NdrFcShort( 0xfc84 ),	/* Offset= -892 (482) */
+/* 1376 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 1494 */	0x8,		/* FC_LONG */
+/* 1378 */	0x8,		/* FC_LONG */
 			0x40,		/* FC_STRUCTPAD4 */
-/* 1496 */	0x36,		/* FC_POINTER */
+/* 1380 */	0x36,		/* FC_POINTER */
 			0x8,		/* FC_LONG */
-/* 1498 */	0x8,		/* FC_LONG */
+/* 1382 */	0x40,		/* FC_STRUCTPAD4 */
+			0x5b,		/* FC_END */
+/* 1384 */	
+			0x12, 0x0,	/* FC_UP */
+/* 1386 */	NdrFcShort( 0xfb48 ),	/* Offset= -1208 (178) */
+/* 1388 */	
+			0x12, 0x0,	/* FC_UP */
+/* 1390 */	NdrFcShort( 0xfcb6 ),	/* Offset= -842 (548) */
+/* 1392 */	
+			0x12, 0x0,	/* FC_UP */
+/* 1394 */	NdrFcShort( 0xffb2 ),	/* Offset= -78 (1316) */
+/* 1396 */	
+			0x1b,		/* FC_CARRAY */
+			0x0,		/* 0 */
+/* 1398 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 1400 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 1402 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 1404 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 1406 */	0x0 , 
+			0x0,		/* 0 */
+/* 1408 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1412 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1416 */	0x2,		/* FC_CHAR */
+			0x5b,		/* FC_END */
+/* 1418 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 1420 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 1422 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1424 */	NdrFcShort( 0x6 ),	/* Offset= 6 (1430) */
+/* 1426 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
+/* 1428 */	0x36,		/* FC_POINTER */
+			0x5b,		/* FC_END */
+/* 1430 */	
+			0x12, 0x0,	/* FC_UP */
+/* 1432 */	NdrFcShort( 0xffdc ),	/* Offset= -36 (1396) */
+/* 1434 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 1436 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 1438 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1440 */	NdrFcShort( 0x0 ),	/* Offset= 0 (1440) */
+/* 1442 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1444 */	NdrFcShort( 0xffe6 ),	/* Offset= -26 (1418) */
+/* 1446 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 1448 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 1450 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1454 */	NdrFcLong( 0x100000 ),	/* 1048576 */
+/* 1458 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 1460 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1464 */	NdrFcLong( 0x100000 ),	/* 1048576 */
+/* 1468 */	
+			0x15,		/* FC_STRUCT */
+			0x7,		/* 7 */
+/* 1470 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 1472 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1474 */	NdrFcShort( 0xfa4a ),	/* Offset= -1462 (12) */
+/* 1476 */	0xb,		/* FC_HYPER */
+			0xb,		/* FC_HYPER */
+/* 1478 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 1480 */	
+			0x1b,		/* FC_CARRAY */
+			0x7,		/* 7 */
+/* 1482 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 1484 */	0x9,		/* Corr desc: FC_ULONG */
+			0x0,		/*  */
+/* 1486 */	NdrFcShort( 0xfff8 ),	/* -8 */
+/* 1488 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 1490 */	0x0 , 
+			0x0,		/* 0 */
+/* 1492 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1496 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 1500 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 1502 */	NdrFcShort( 0xff3c ),	/* Offset= -196 (1306) */
-/* 1504 */	0x36,		/* FC_POINTER */
-			0x8,		/* FC_LONG */
-/* 1506 */	0x40,		/* FC_STRUCTPAD4 */
+/* 1502 */	NdrFcShort( 0xffde ),	/* Offset= -34 (1468) */
+/* 1504 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 1508 */	
-			0x12, 0x0,	/* FC_UP */
-/* 1510 */	NdrFcShort( 0xfac6 ),	/* Offset= -1338 (172) */
-/* 1512 */	
-			0x12, 0x0,	/* FC_UP */
-/* 1514 */	NdrFcShort( 0xff6a ),	/* Offset= -150 (1364) */
-/* 1516 */	
-			0x12, 0x0,	/* FC_UP */
-/* 1518 */	NdrFcShort( 0xfea8 ),	/* Offset= -344 (1174) */
-/* 1520 */	
-			0x12, 0x0,	/* FC_UP */
-/* 1522 */	NdrFcShort( 0xff9a ),	/* Offset= -102 (1420) */
-/* 1524 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 1526 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 1528 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1530 */	NdrFcShort( 0x0 ),	/* Offset= 0 (1530) */
-/* 1532 */	0x8,		/* FC_LONG */
-			0xd,		/* FC_ENUM16 */
-/* 1534 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1506 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 1508 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 1510 */	NdrFcShort( 0xffe2 ),	/* Offset= -30 (1480) */
+/* 1512 */	NdrFcShort( 0x0 ),	/* Offset= 0 (1512) */
+/* 1514 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 1516 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 1536 */	NdrFcShort( 0xfefc ),	/* Offset= -260 (1276) */
-/* 1538 */	0x5c,		/* FC_PAD */
+/* 1518 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (1458) */
+/* 1520 */	0x8,		/* FC_LONG */
 			0x5b,		/* FC_END */
-/* 1540 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 1542 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1546 */	NdrFcLong( 0x100000 ),	/* 1048576 */
-/* 1550 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+/* 1522 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
 			0x7,		/* 7 */
-/* 1552 */	NdrFcShort( 0x48 ),	/* 72 */
-/* 1554 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1556 */	NdrFcShort( 0x0 ),	/* Offset= 0 (1556) */
-/* 1558 */	0xb,		/* FC_HYPER */
+/* 1524 */	NdrFcShort( 0x30 ),	/* 48 */
+/* 1526 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1528 */	NdrFcShort( 0x0 ),	/* Offset= 0 (1528) */
+/* 1530 */	0xb,		/* FC_HYPER */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 1560 */	0x0,		/* 0 */
-			NdrFcShort( 0xfe33 ),	/* Offset= -461 (1100) */
-			0x8,		/* FC_LONG */
-/* 1564 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 1566 */	0x40,		/* FC_STRUCTPAD4 */
-			0xb,		/* FC_HYPER */
-/* 1568 */	0x5c,		/* FC_PAD */
+/* 1532 */	0x0,		/* 0 */
+			NdrFcShort( 0xfedd ),	/* Offset= -291 (1242) */
 			0x5b,		/* FC_END */
-/* 1570 */	
+/* 1536 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x7,		/* 7 */
-/* 1572 */	NdrFcShort( 0x70 ),	/* 112 */
-/* 1574 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1576 */	NdrFcShort( 0x10 ),	/* Offset= 16 (1592) */
-/* 1578 */	0x36,		/* FC_POINTER */
+/* 1538 */	NdrFcShort( 0x58 ),	/* 88 */
+/* 1540 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1542 */	NdrFcShort( 0x10 ),	/* Offset= 16 (1558) */
+/* 1544 */	0x36,		/* FC_POINTER */
 			0x8,		/* FC_LONG */
-/* 1580 */	0x40,		/* FC_STRUCTPAD4 */
+/* 1546 */	0x40,		/* FC_STRUCTPAD4 */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 1582 */	0x0,		/* 0 */
-			NdrFcShort( 0xfd5f ),	/* Offset= -673 (910) */
+/* 1548 */	0x0,		/* 0 */
+			NdrFcShort( 0xfe0f ),	/* Offset= -497 (1052) */
 			0x8,		/* FC_LONG */
-/* 1586 */	0x40,		/* FC_STRUCTPAD4 */
+/* 1552 */	0x40,		/* FC_STRUCTPAD4 */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 1588 */	0x0,		/* 0 */
-			NdrFcShort( 0xffd9 ),	/* Offset= -39 (1550) */
+/* 1554 */	0x0,		/* 0 */
+			NdrFcShort( 0xffdf ),	/* Offset= -33 (1522) */
 			0x5b,		/* FC_END */
-/* 1592 */	
+/* 1558 */	
 			0x12, 0x0,	/* FC_UP */
-/* 1594 */	NdrFcShort( 0xfa72 ),	/* Offset= -1422 (172) */
-/* 1596 */	
+/* 1560 */	NdrFcShort( 0xfa9a ),	/* Offset= -1382 (178) */
+/* 1562 */	
 			0x21,		/* FC_BOGUS_ARRAY */
 			0x7,		/* 7 */
-/* 1598 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1600 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 1564 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1566 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 1602 */	NdrFcShort( 0x94 ),	/* 148 */
-/* 1604 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 1606 */	0x0 , 
+/* 1568 */	NdrFcShort( 0x94 ),	/* 148 */
+/* 1570 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 1572 */	0x0 , 
 			0x0,		/* 0 */
-/* 1608 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1612 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1616 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 1620 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 1622 */	0x0 , 
+/* 1574 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1578 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1582 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 1586 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 1588 */	0x0 , 
 			0x0,		/* 0 */
-/* 1624 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1628 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1632 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1590 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1594 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1598 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 1634 */	NdrFcShort( 0xffc0 ),	/* Offset= -64 (1570) */
-/* 1636 */	0x5c,		/* FC_PAD */
+/* 1600 */	NdrFcShort( 0xffc0 ),	/* Offset= -64 (1536) */
+/* 1602 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 1638 */	
+/* 1604 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x7,		/* 7 */
-/* 1640 */	NdrFcShort( 0xa8 ),	/* 168 */
-/* 1642 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1644 */	NdrFcShort( 0x28 ),	/* Offset= 40 (1684) */
-/* 1646 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1606 */	NdrFcShort( 0xa8 ),	/* 168 */
+/* 1608 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1610 */	NdrFcShort( 0x28 ),	/* Offset= 40 (1650) */
+/* 1612 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 1648 */	NdrFcShort( 0xf99c ),	/* Offset= -1636 (12) */
-/* 1650 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1614 */	NdrFcShort( 0xf9be ),	/* Offset= -1602 (12) */
+/* 1616 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 1652 */	NdrFcShort( 0xf998 ),	/* Offset= -1640 (12) */
-/* 1654 */	0x36,		/* FC_POINTER */
+/* 1618 */	NdrFcShort( 0xf9ba ),	/* Offset= -1606 (12) */
+/* 1620 */	0x36,		/* FC_POINTER */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 1656 */	0x0,		/* 0 */
-			NdrFcShort( 0xfa9b ),	/* Offset= -1381 (276) */
+/* 1622 */	0x0,		/* 0 */
+			NdrFcShort( 0xfb0b ),	/* Offset= -1269 (354) */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 1660 */	0x0,		/* 0 */
-			NdrFcShort( 0xfa97 ),	/* Offset= -1385 (276) */
+/* 1626 */	0x0,		/* 0 */
+			NdrFcShort( 0xfb07 ),	/* Offset= -1273 (354) */
 			0x36,		/* FC_POINTER */
-/* 1664 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1630 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 1666 */	NdrFcShort( 0xfb12 ),	/* Offset= -1262 (404) */
-/* 1668 */	0x8,		/* FC_LONG */
+/* 1632 */	NdrFcShort( 0xfb82 ),	/* Offset= -1150 (482) */
+/* 1634 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 1670 */	0x8,		/* FC_LONG */
+/* 1636 */	0x8,		/* FC_LONG */
 			0x40,		/* FC_STRUCTPAD4 */
-/* 1672 */	0x36,		/* FC_POINTER */
+/* 1638 */	0x36,		/* FC_POINTER */
 			0x8,		/* FC_LONG */
+/* 1640 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 1642 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1644 */	NdrFcShort( 0xff3c ),	/* Offset= -196 (1448) */
+/* 1646 */	0x36,		/* FC_POINTER */
+			0x8,		/* FC_LONG */
+/* 1648 */	0x40,		/* FC_STRUCTPAD4 */
+			0x5b,		/* FC_END */
+/* 1650 */	
+			0x12, 0x0,	/* FC_UP */
+/* 1652 */	NdrFcShort( 0xfa3e ),	/* Offset= -1474 (178) */
+/* 1654 */	
+			0x12, 0x0,	/* FC_UP */
+/* 1656 */	NdrFcShort( 0xff6a ),	/* Offset= -150 (1506) */
+/* 1658 */	
+			0x12, 0x0,	/* FC_UP */
+/* 1660 */	NdrFcShort( 0xfea8 ),	/* Offset= -344 (1316) */
+/* 1662 */	
+			0x12, 0x0,	/* FC_UP */
+/* 1664 */	NdrFcShort( 0xff9a ),	/* Offset= -102 (1562) */
+/* 1666 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 1668 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 1670 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1672 */	NdrFcShort( 0x0 ),	/* Offset= 0 (1672) */
 /* 1674 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
+			0xd,		/* FC_ENUM16 */
 /* 1676 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 1678 */	NdrFcShort( 0xff76 ),	/* Offset= -138 (1540) */
-/* 1680 */	0x36,		/* FC_POINTER */
-			0x8,		/* FC_LONG */
-/* 1682 */	0x40,		/* FC_STRUCTPAD4 */
+/* 1678 */	NdrFcShort( 0xfefc ),	/* Offset= -260 (1418) */
+/* 1680 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 1684 */	
+/* 1682 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 1684 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1688 */	NdrFcLong( 0x100000 ),	/* 1048576 */
+/* 1692 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 1694 */	NdrFcShort( 0x48 ),	/* 72 */
+/* 1696 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1698 */	NdrFcShort( 0x0 ),	/* Offset= 0 (1698) */
+/* 1700 */	0xb,		/* FC_HYPER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1702 */	0x0,		/* 0 */
+			NdrFcShort( 0xfe33 ),	/* Offset= -461 (1242) */
+			0x8,		/* FC_LONG */
+/* 1706 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 1708 */	0x40,		/* FC_STRUCTPAD4 */
+			0xb,		/* FC_HYPER */
+/* 1710 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 1712 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 1714 */	NdrFcShort( 0x70 ),	/* 112 */
+/* 1716 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1718 */	NdrFcShort( 0x10 ),	/* Offset= 16 (1734) */
+/* 1720 */	0x36,		/* FC_POINTER */
+			0x8,		/* FC_LONG */
+/* 1722 */	0x40,		/* FC_STRUCTPAD4 */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1724 */	0x0,		/* 0 */
+			NdrFcShort( 0xfd5f ),	/* Offset= -673 (1052) */
+			0x8,		/* FC_LONG */
+/* 1728 */	0x40,		/* FC_STRUCTPAD4 */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1730 */	0x0,		/* 0 */
+			NdrFcShort( 0xffd9 ),	/* Offset= -39 (1692) */
+			0x5b,		/* FC_END */
+/* 1734 */	
 			0x12, 0x0,	/* FC_UP */
-/* 1686 */	NdrFcShort( 0xfa16 ),	/* Offset= -1514 (172) */
-/* 1688 */	
+/* 1736 */	NdrFcShort( 0xf9ea ),	/* Offset= -1558 (178) */
+/* 1738 */	
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x7,		/* 7 */
+/* 1740 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1742 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 1744 */	NdrFcShort( 0x94 ),	/* 148 */
+/* 1746 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 1748 */	0x0 , 
+			0x0,		/* 0 */
+/* 1750 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1754 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1758 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 1762 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 1764 */	0x0 , 
+			0x0,		/* 0 */
+/* 1766 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1770 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1774 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1776 */	NdrFcShort( 0xffc0 ),	/* Offset= -64 (1712) */
+/* 1778 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 1780 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 1782 */	NdrFcShort( 0xa8 ),	/* 168 */
+/* 1784 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1786 */	NdrFcShort( 0x28 ),	/* Offset= 40 (1826) */
+/* 1788 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1790 */	NdrFcShort( 0xf90e ),	/* Offset= -1778 (12) */
+/* 1792 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1794 */	NdrFcShort( 0xf90a ),	/* Offset= -1782 (12) */
+/* 1796 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1798 */	0x0,		/* 0 */
+			NdrFcShort( 0xfa5b ),	/* Offset= -1445 (354) */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1802 */	0x0,		/* 0 */
+			NdrFcShort( 0xfa57 ),	/* Offset= -1449 (354) */
+			0x36,		/* FC_POINTER */
+/* 1806 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1808 */	NdrFcShort( 0xfad2 ),	/* Offset= -1326 (482) */
+/* 1810 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 1812 */	0x8,		/* FC_LONG */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 1814 */	0x36,		/* FC_POINTER */
+			0x8,		/* FC_LONG */
+/* 1816 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 1818 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1820 */	NdrFcShort( 0xff76 ),	/* Offset= -138 (1682) */
+/* 1822 */	0x36,		/* FC_POINTER */
+			0x8,		/* FC_LONG */
+/* 1824 */	0x40,		/* FC_STRUCTPAD4 */
+			0x5b,		/* FC_END */
+/* 1826 */	
 			0x12, 0x0,	/* FC_UP */
-/* 1690 */	NdrFcShort( 0xfeba ),	/* Offset= -326 (1364) */
-/* 1692 */	
+/* 1828 */	NdrFcShort( 0xf98e ),	/* Offset= -1650 (178) */
+/* 1830 */	
 			0x12, 0x0,	/* FC_UP */
-/* 1694 */	NdrFcShort( 0xfdf8 ),	/* Offset= -520 (1174) */
-/* 1696 */	
+/* 1832 */	NdrFcShort( 0xfeba ),	/* Offset= -326 (1506) */
+/* 1834 */	
 			0x12, 0x0,	/* FC_UP */
-/* 1698 */	NdrFcShort( 0xff9a ),	/* Offset= -102 (1596) */
-/* 1700 */	
+/* 1836 */	NdrFcShort( 0xfdf8 ),	/* Offset= -520 (1316) */
+/* 1838 */	
+			0x12, 0x0,	/* FC_UP */
+/* 1840 */	NdrFcShort( 0xff9a ),	/* Offset= -102 (1738) */
+/* 1842 */	
 			0x11, 0x0,	/* FC_RP */
-/* 1702 */	NdrFcShort( 0x2 ),	/* Offset= 2 (1704) */
-/* 1704 */	
+/* 1844 */	NdrFcShort( 0x2 ),	/* Offset= 2 (1846) */
+/* 1846 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 1706 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 1848 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x0,		/*  */
-/* 1708 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 1710 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 1712 */	0x0 , 
+/* 1850 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 1852 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 1854 */	0x0 , 
 			0x0,		/* 0 */
-/* 1714 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1718 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1722 */	NdrFcShort( 0x2 ),	/* Offset= 2 (1724) */
-/* 1724 */	NdrFcShort( 0x28 ),	/* 40 */
-/* 1726 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 1728 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 1732 */	NdrFcShort( 0x4 ),	/* Offset= 4 (1736) */
-/* 1734 */	NdrFcShort( 0xffff ),	/* Offset= -1 (1733) */
-/* 1736 */	
+/* 1856 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1860 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1864 */	NdrFcShort( 0x2 ),	/* Offset= 2 (1866) */
+/* 1866 */	NdrFcShort( 0x40 ),	/* 64 */
+/* 1868 */	NdrFcShort( 0x2 ),	/* 2 */
+/* 1870 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 1874 */	NdrFcShort( 0xa ),	/* Offset= 10 (1884) */
+/* 1876 */	NdrFcLong( 0x2 ),	/* 2 */
+/* 1880 */	NdrFcShort( 0x1e ),	/* Offset= 30 (1910) */
+/* 1882 */	NdrFcShort( 0xffff ),	/* Offset= -1 (1881) */
+/* 1884 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 1738 */	NdrFcShort( 0x28 ),	/* 40 */
-/* 1740 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1742 */	NdrFcShort( 0xc ),	/* Offset= 12 (1754) */
-/* 1744 */	0x36,		/* FC_POINTER */
+/* 1886 */	NdrFcShort( 0x28 ),	/* 40 */
+/* 1888 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1890 */	NdrFcShort( 0xc ),	/* Offset= 12 (1902) */
+/* 1892 */	0x36,		/* FC_POINTER */
 			0x36,		/* FC_POINTER */
-/* 1746 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1894 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 1748 */	NdrFcShort( 0xf938 ),	/* Offset= -1736 (12) */
-/* 1750 */	0x8,		/* FC_LONG */
+/* 1896 */	NdrFcShort( 0xf8a4 ),	/* Offset= -1884 (12) */
+/* 1898 */	0x8,		/* FC_LONG */
 			0x40,		/* FC_STRUCTPAD4 */
-/* 1752 */	0x5c,		/* FC_PAD */
+/* 1900 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 1754 */	
+/* 1902 */	
 			0x11, 0x0,	/* FC_RP */
-/* 1756 */	NdrFcShort( 0xf9d0 ),	/* Offset= -1584 (172) */
-/* 1758 */	
+/* 1904 */	NdrFcShort( 0xf942 ),	/* Offset= -1726 (178) */
+/* 1906 */	
 			0x11, 0x8,	/* FC_RP [simple_pointer] */
-/* 1760 */	
+/* 1908 */	
 			0x22,		/* FC_C_CSTRING */
 			0x5c,		/* FC_PAD */
-/* 1762 */	
+/* 1910 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 1912 */	NdrFcShort( 0x40 ),	/* 64 */
+/* 1914 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 1916 */	NdrFcShort( 0x10 ),	/* Offset= 16 (1932) */
+/* 1918 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 1920 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 1922 */	NdrFcShort( 0xf88a ),	/* Offset= -1910 (12) */
+/* 1924 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 1926 */	0x0,		/* 0 */
+			NdrFcShort( 0xf885 ),	/* Offset= -1915 (12) */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 1930 */	0x36,		/* FC_POINTER */
+			0x5b,		/* FC_END */
+/* 1932 */	
 			0x11, 0x0,	/* FC_RP */
-/* 1764 */	NdrFcShort( 0x2 ),	/* Offset= 2 (1766) */
-/* 1766 */	
+/* 1934 */	NdrFcShort( 0xf924 ),	/* Offset= -1756 (178) */
+/* 1936 */	
+			0x11, 0x8,	/* FC_RP [simple_pointer] */
+/* 1938 */	
+			0x22,		/* FC_C_CSTRING */
+			0x5c,		/* FC_PAD */
+/* 1940 */	
+			0x12, 0x0,	/* FC_UP */
+/* 1942 */	NdrFcShort( 0xf95e ),	/* Offset= -1698 (244) */
+/* 1944 */	
+			0x11, 0x0,	/* FC_RP */
+/* 1946 */	NdrFcShort( 0x2 ),	/* Offset= 2 (1948) */
+/* 1948 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 1768 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 1950 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x0,		/*  */
-/* 1770 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 1772 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 1774 */	0x0 , 
+/* 1952 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 1954 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 1956 */	0x0 , 
 			0x0,		/* 0 */
-/* 1776 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1780 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1784 */	NdrFcShort( 0x2 ),	/* Offset= 2 (1786) */
-/* 1786 */	NdrFcShort( 0x78 ),	/* 120 */
-/* 1788 */	NdrFcShort( 0x2 ),	/* 2 */
-/* 1790 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 1794 */	NdrFcShort( 0x1a ),	/* Offset= 26 (1820) */
-/* 1796 */	NdrFcLong( 0x2 ),	/* 2 */
-/* 1800 */	NdrFcShort( 0x2c ),	/* Offset= 44 (1844) */
-/* 1802 */	NdrFcShort( 0xffff ),	/* Offset= -1 (1801) */
-/* 1804 */	
+/* 1958 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1962 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 1966 */	NdrFcShort( 0x2 ),	/* Offset= 2 (1968) */
+/* 1968 */	NdrFcShort( 0x90 ),	/* 144 */
+/* 1970 */	NdrFcShort( 0x3 ),	/* 3 */
+/* 1972 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 1976 */	NdrFcShort( 0x20 ),	/* Offset= 32 (2008) */
+/* 1978 */	NdrFcLong( 0x2 ),	/* 2 */
+/* 1982 */	NdrFcShort( 0x32 ),	/* Offset= 50 (2032) */
+/* 1984 */	NdrFcLong( 0x3 ),	/* 3 */
+/* 1988 */	NdrFcShort( 0x4e ),	/* Offset= 78 (2066) */
+/* 1990 */	NdrFcShort( 0xffff ),	/* Offset= -1 (1989) */
+/* 1992 */	
 			0x1d,		/* FC_SMFARRAY */
 			0x0,		/* 0 */
-/* 1806 */	NdrFcShort( 0x54 ),	/* 84 */
-/* 1808 */	0x2,		/* FC_CHAR */
+/* 1994 */	NdrFcShort( 0x54 ),	/* 84 */
+/* 1996 */	0x2,		/* FC_CHAR */
 			0x5b,		/* FC_END */
-/* 1810 */	
+/* 1998 */	
 			0x15,		/* FC_STRUCT */
 			0x0,		/* 0 */
-/* 1812 */	NdrFcShort( 0x54 ),	/* 84 */
-/* 1814 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 2000 */	NdrFcShort( 0x54 ),	/* 84 */
+/* 2002 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 1816 */	NdrFcShort( 0xfff4 ),	/* Offset= -12 (1804) */
-/* 1818 */	0x5c,		/* FC_PAD */
+/* 2004 */	NdrFcShort( 0xfff4 ),	/* Offset= -12 (1992) */
+/* 2006 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 1820 */	
+/* 2008 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 1822 */	NdrFcShort( 0x68 ),	/* 104 */
-/* 1824 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1826 */	NdrFcShort( 0xa ),	/* Offset= 10 (1836) */
-/* 1828 */	0x36,		/* FC_POINTER */
+/* 2010 */	NdrFcShort( 0x68 ),	/* 104 */
+/* 2012 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2014 */	NdrFcShort( 0xa ),	/* Offset= 10 (2024) */
+/* 2016 */	0x36,		/* FC_POINTER */
 			0x36,		/* FC_POINTER */
-/* 1830 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 2018 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 1832 */	NdrFcShort( 0xffea ),	/* Offset= -22 (1810) */
-/* 1834 */	0x8,		/* FC_LONG */
+/* 2020 */	NdrFcShort( 0xffea ),	/* Offset= -22 (1998) */
+/* 2022 */	0x8,		/* FC_LONG */
 			0x5b,		/* FC_END */
-/* 1836 */	
+/* 2024 */	
 			0x11, 0x0,	/* FC_RP */
-/* 1838 */	NdrFcShort( 0xf97e ),	/* Offset= -1666 (172) */
-/* 1840 */	
+/* 2026 */	NdrFcShort( 0xf8c8 ),	/* Offset= -1848 (178) */
+/* 2028 */	
 			0x11, 0x8,	/* FC_RP [simple_pointer] */
-/* 1842 */	
+/* 2030 */	
 			0x22,		/* FC_C_CSTRING */
 			0x5c,		/* FC_PAD */
-/* 1844 */	
+/* 2032 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 1846 */	NdrFcShort( 0x78 ),	/* 120 */
-/* 1848 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1850 */	NdrFcShort( 0xc ),	/* Offset= 12 (1862) */
-/* 1852 */	0x36,		/* FC_POINTER */
+/* 2034 */	NdrFcShort( 0x78 ),	/* 120 */
+/* 2036 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2038 */	NdrFcShort( 0xc ),	/* Offset= 12 (2050) */
+/* 2040 */	0x36,		/* FC_POINTER */
 			0x36,		/* FC_POINTER */
-/* 1854 */	0x36,		/* FC_POINTER */
+/* 2042 */	0x36,		/* FC_POINTER */
 			0x36,		/* FC_POINTER */
-/* 1856 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 2044 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 1858 */	NdrFcShort( 0xffd0 ),	/* Offset= -48 (1810) */
-/* 1860 */	0x8,		/* FC_LONG */
+/* 2046 */	NdrFcShort( 0xffd0 ),	/* Offset= -48 (1998) */
+/* 2048 */	0x8,		/* FC_LONG */
 			0x5b,		/* FC_END */
-/* 1862 */	
+/* 2050 */	
 			0x11, 0x0,	/* FC_RP */
-/* 1864 */	NdrFcShort( 0xf964 ),	/* Offset= -1692 (172) */
-/* 1866 */	
+/* 2052 */	NdrFcShort( 0xf8ae ),	/* Offset= -1874 (178) */
+/* 2054 */	
 			0x12, 0x0,	/* FC_UP */
-/* 1868 */	NdrFcShort( 0xf960 ),	/* Offset= -1696 (172) */
-/* 1870 */	
+/* 2056 */	NdrFcShort( 0xf8aa ),	/* Offset= -1878 (178) */
+/* 2058 */	
 			0x12, 0x0,	/* FC_UP */
-/* 1872 */	NdrFcShort( 0xf95c ),	/* Offset= -1700 (172) */
-/* 1874 */	
+/* 2060 */	NdrFcShort( 0xf8a6 ),	/* Offset= -1882 (178) */
+/* 2062 */	
 			0x11, 0x8,	/* FC_RP [simple_pointer] */
-/* 1876 */	
+/* 2064 */	
 			0x22,		/* FC_C_CSTRING */
 			0x5c,		/* FC_PAD */
-/* 1878 */	
-			0x11, 0x0,	/* FC_RP */
-/* 1880 */	NdrFcShort( 0x2 ),	/* Offset= 2 (1882) */
-/* 1882 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 1884 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 1886 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 1888 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 1890 */	0x0 , 
-			0x0,		/* 0 */
-/* 1892 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1896 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1900 */	NdrFcShort( 0x2 ),	/* Offset= 2 (1902) */
-/* 1902 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 1904 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 1906 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 1910 */	NdrFcShort( 0x4 ),	/* Offset= 4 (1914) */
-/* 1912 */	NdrFcShort( 0xffff ),	/* Offset= -1 (1911) */
-/* 1914 */	
+/* 2066 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 1916 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 1918 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1920 */	NdrFcShort( 0x8 ),	/* Offset= 8 (1928) */
-/* 1922 */	0x36,		/* FC_POINTER */
+/* 2068 */	NdrFcShort( 0x90 ),	/* 144 */
+/* 2070 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2072 */	NdrFcShort( 0x12 ),	/* Offset= 18 (2090) */
+/* 2074 */	0x36,		/* FC_POINTER */
 			0x36,		/* FC_POINTER */
-/* 1924 */	0x8,		/* FC_LONG */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 1926 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 1928 */	
-			0x11, 0x0,	/* FC_RP */
-/* 1930 */	NdrFcShort( 0xf922 ),	/* Offset= -1758 (172) */
-/* 1932 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 1934 */	
-			0x22,		/* FC_C_CSTRING */
-			0x5c,		/* FC_PAD */
-/* 1936 */	
-			0x11, 0x0,	/* FC_RP */
-/* 1938 */	NdrFcShort( 0x2 ),	/* Offset= 2 (1940) */
-/* 1940 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 1942 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 1944 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 1946 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 1948 */	0x0 , 
+/* 2076 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 2078 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 1950 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1954 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 1958 */	NdrFcShort( 0x2 ),	/* Offset= 2 (1960) */
-/* 1960 */	NdrFcShort( 0x80 ),	/* 128 */
-/* 1962 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 1964 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 1968 */	NdrFcShort( 0x4 ),	/* Offset= 4 (1972) */
-/* 1970 */	NdrFcShort( 0xffff ),	/* Offset= -1 (1969) */
-/* 1972 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 1974 */	NdrFcShort( 0x80 ),	/* 128 */
-/* 1976 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 1978 */	NdrFcShort( 0x10 ),	/* Offset= 16 (1994) */
-/* 1980 */	0x36,		/* FC_POINTER */
+/* 2080 */	NdrFcShort( 0xffae ),	/* Offset= -82 (1998) */
+/* 2082 */	0x8,		/* FC_LONG */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 1982 */	0x0,		/* 0 */
-			NdrFcShort( 0xf84d ),	/* Offset= -1971 (12) */
+/* 2084 */	0x0,		/* 0 */
+			NdrFcShort( 0xf7e7 ),	/* Offset= -2073 (12) */
 			0x36,		/* FC_POINTER */
-/* 1986 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 1988 */	NdrFcShort( 0xff4e ),	/* Offset= -178 (1810) */
-/* 1990 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 1992 */	0x8,		/* FC_LONG */
-			0x5b,		/* FC_END */
-/* 1994 */	
-			0x11, 0x0,	/* FC_RP */
-/* 1996 */	NdrFcShort( 0xf8e0 ),	/* Offset= -1824 (172) */
-/* 1998 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 2000 */	
-			0x22,		/* FC_C_CSTRING */
-			0x5c,		/* FC_PAD */
-/* 2002 */	
-			0x11, 0x0,	/* FC_RP */
-/* 2004 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2006) */
-/* 2006 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 2008 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 2010 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 2012 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2014 */	0x0 , 
-			0x0,		/* 0 */
-/* 2016 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2020 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2024 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2026) */
-/* 2026 */	NdrFcShort( 0x30 ),	/* 48 */
-/* 2028 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 2030 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 2034 */	NdrFcShort( 0x38 ),	/* Offset= 56 (2090) */
-/* 2036 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2035) */
-/* 2038 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 2040 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 2044 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 2048 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x3,		/* 3 */
-/* 2050 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2052 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 2054 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 2056 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2058 */	0x0 , 
-			0x0,		/* 0 */
-/* 2060 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2064 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2068 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 2072 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 2074 */	0x0 , 
-			0x0,		/* 0 */
-/* 2076 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2080 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2084 */	
-			0x12, 0x0,	/* FC_UP */
-/* 2086 */	NdrFcShort( 0xf886 ),	/* Offset= -1914 (172) */
 /* 2088 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
 /* 2090 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 2092 */	NdrFcShort( 0x30 ),	/* 48 */
-/* 2094 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2096 */	NdrFcShort( 0x12 ),	/* Offset= 18 (2114) */
-/* 2098 */	0x8,		/* FC_LONG */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 2100 */	0x0,		/* 0 */
-			NdrFcShort( 0xffc1 ),	/* Offset= -63 (2038) */
-			0x36,		/* FC_POINTER */
-/* 2104 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 2106 */	NdrFcShort( 0xfbe0 ),	/* Offset= -1056 (1050) */
-/* 2108 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 2110 */	NdrFcShort( 0xf956 ),	/* Offset= -1706 (404) */
-/* 2112 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 2114 */	
+			0x11, 0x0,	/* FC_RP */
+/* 2092 */	NdrFcShort( 0xf886 ),	/* Offset= -1914 (178) */
+/* 2094 */	
 			0x12, 0x0,	/* FC_UP */
-/* 2116 */	NdrFcShort( 0xffbc ),	/* Offset= -68 (2048) */
-/* 2118 */	
-			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 2120 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2122) */
-/* 2122 */	
+/* 2096 */	NdrFcShort( 0xf882 ),	/* Offset= -1918 (178) */
+/* 2098 */	
+			0x12, 0x0,	/* FC_UP */
+/* 2100 */	NdrFcShort( 0xf87e ),	/* Offset= -1922 (178) */
+/* 2102 */	
+			0x11, 0x8,	/* FC_RP [simple_pointer] */
+/* 2104 */	
+			0x22,		/* FC_C_CSTRING */
+			0x5c,		/* FC_PAD */
+/* 2106 */	
+			0x12, 0x0,	/* FC_UP */
+/* 2108 */	NdrFcShort( 0xf8b8 ),	/* Offset= -1864 (244) */
+/* 2110 */	
+			0x11, 0x0,	/* FC_RP */
+/* 2112 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2114) */
+/* 2114 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 2124 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x54,		/* FC_DEREFERENCE */
-/* 2126 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
-/* 2128 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2130 */	0x0 , 
-			0x0,		/* 0 */
-/* 2132 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2136 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2140 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2142) */
-/* 2142 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 2144 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 2146 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 2150 */	NdrFcShort( 0x38 ),	/* Offset= 56 (2206) */
-/* 2152 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2151) */
-/* 2154 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 2156 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2160 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 2164 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x3,		/* 3 */
-/* 2166 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2168 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 2116 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x0,		/*  */
-/* 2170 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 2172 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2174 */	0x0 , 
+/* 2118 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 2120 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 2122 */	0x0 , 
 			0x0,		/* 0 */
-/* 2176 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2180 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2184 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 2188 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 2190 */	0x0 , 
-			0x0,		/* 0 */
-/* 2192 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2196 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2200 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 2202 */	NdrFcShort( 0xfb94 ),	/* Offset= -1132 (1070) */
-/* 2204 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 2206 */	
+/* 2124 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2128 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2132 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2134) */
+/* 2134 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 2136 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 2138 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 2142 */	NdrFcShort( 0x4 ),	/* Offset= 4 (2146) */
+/* 2144 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2143) */
+/* 2146 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 2208 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 2210 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2212 */	NdrFcShort( 0xe ),	/* Offset= 14 (2226) */
-/* 2214 */	0x8,		/* FC_LONG */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 2216 */	0x0,		/* 0 */
-			NdrFcShort( 0xffc1 ),	/* Offset= -63 (2154) */
+/* 2148 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 2150 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2152 */	NdrFcShort( 0x8 ),	/* Offset= 8 (2160) */
+/* 2154 */	0x36,		/* FC_POINTER */
 			0x36,		/* FC_POINTER */
-/* 2220 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 2156 */	0x8,		/* FC_LONG */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 2158 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 2160 */	
+			0x11, 0x0,	/* FC_RP */
+/* 2162 */	NdrFcShort( 0xf840 ),	/* Offset= -1984 (178) */
+/* 2164 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 2166 */	
+			0x22,		/* FC_C_CSTRING */
+			0x5c,		/* FC_PAD */
+/* 2168 */	
+			0x11, 0x0,	/* FC_RP */
+/* 2170 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2172) */
+/* 2172 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 2174 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 2176 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 2178 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 2180 */	0x0 , 
 			0x0,		/* 0 */
-/* 2222 */	NdrFcShort( 0xf8e6 ),	/* Offset= -1818 (404) */
-/* 2224 */	0x5c,		/* FC_PAD */
+/* 2182 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2186 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2190 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2192) */
+/* 2192 */	NdrFcShort( 0x80 ),	/* 128 */
+/* 2194 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 2196 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 2200 */	NdrFcShort( 0x4 ),	/* Offset= 4 (2204) */
+/* 2202 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2201) */
+/* 2204 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 2206 */	NdrFcShort( 0x80 ),	/* 128 */
+/* 2208 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2210 */	NdrFcShort( 0x10 ),	/* Offset= 16 (2226) */
+/* 2212 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 2214 */	0x0,		/* 0 */
+			NdrFcShort( 0xf765 ),	/* Offset= -2203 (12) */
+			0x36,		/* FC_POINTER */
+/* 2218 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 2220 */	NdrFcShort( 0xff22 ),	/* Offset= -222 (1998) */
+/* 2222 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 2224 */	0x8,		/* FC_LONG */
 			0x5b,		/* FC_END */
 /* 2226 */	
-			0x12, 0x0,	/* FC_UP */
-/* 2228 */	NdrFcShort( 0xffc0 ),	/* Offset= -64 (2164) */
-/* 2230 */	
 			0x11, 0x0,	/* FC_RP */
-/* 2232 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2234) */
+/* 2228 */	NdrFcShort( 0xf7fe ),	/* Offset= -2050 (178) */
+/* 2230 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 2232 */	
+			0x22,		/* FC_C_CSTRING */
+			0x5c,		/* FC_PAD */
 /* 2234 */	
+			0x11, 0x0,	/* FC_RP */
+/* 2236 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2238) */
+/* 2238 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 2236 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 2240 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x0,		/*  */
-/* 2238 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 2240 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2242 */	0x0 , 
+/* 2242 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 2244 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 2246 */	0x0 , 
 			0x0,		/* 0 */
-/* 2244 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 2248 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2252 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2254) */
-/* 2254 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 2256 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 2258 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 2262 */	NdrFcShort( 0x42 ),	/* Offset= 66 (2328) */
-/* 2264 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2263) */
-/* 2266 */	0xb7,		/* FC_RANGE */
+/* 2252 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2256 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2258) */
+/* 2258 */	NdrFcShort( 0x30 ),	/* 48 */
+/* 2260 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 2262 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 2266 */	NdrFcShort( 0x38 ),	/* Offset= 56 (2322) */
+/* 2268 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2267) */
+/* 2270 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 2268 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 2272 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 2276 */	0xb7,		/* FC_RANGE */
-			0xd,		/* 13 */
-/* 2278 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 2282 */	NdrFcLong( 0x7 ),	/* 7 */
-/* 2286 */	
+/* 2272 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 2276 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 2280 */	
 			0x21,		/* FC_BOGUS_ARRAY */
 			0x3,		/* 3 */
-/* 2288 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2290 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 2282 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2284 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 2292 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2294 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2296 */	0x0 , 
+/* 2286 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 2288 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 2290 */	0x0 , 
 			0x0,		/* 0 */
-/* 2298 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2302 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2306 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 2310 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 2312 */	0x0 , 
+/* 2292 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2296 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2300 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 2304 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 2306 */	0x0 , 
 			0x0,		/* 0 */
-/* 2314 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2318 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2322 */	
+/* 2308 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2312 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2316 */	
 			0x12, 0x0,	/* FC_UP */
-/* 2324 */	NdrFcShort( 0xf798 ),	/* Offset= -2152 (172) */
-/* 2326 */	0x5c,		/* FC_PAD */
+/* 2318 */	NdrFcShort( 0xf7a4 ),	/* Offset= -2140 (178) */
+/* 2320 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 2328 */	
+/* 2322 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 2330 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 2332 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2334 */	NdrFcShort( 0x10 ),	/* Offset= 16 (2350) */
+/* 2324 */	NdrFcShort( 0x30 ),	/* 48 */
+/* 2326 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2328 */	NdrFcShort( 0x12 ),	/* Offset= 18 (2346) */
+/* 2330 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 2332 */	0x0,		/* 0 */
+			NdrFcShort( 0xffc1 ),	/* Offset= -63 (2270) */
+			0x36,		/* FC_POINTER */
 /* 2336 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 2338 */	NdrFcShort( 0xffb8 ),	/* Offset= -72 (2266) */
-/* 2340 */	0x40,		/* FC_STRUCTPAD4 */
-			0x36,		/* FC_POINTER */
-/* 2342 */	0x8,		/* FC_LONG */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 2344 */	0x0,		/* 0 */
-			NdrFcShort( 0xffbb ),	/* Offset= -69 (2276) */
-			0x36,		/* FC_POINTER */
-/* 2348 */	0x5c,		/* FC_PAD */
+/* 2338 */	NdrFcShort( 0xfb86 ),	/* Offset= -1146 (1192) */
+/* 2340 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 2342 */	NdrFcShort( 0xf8bc ),	/* Offset= -1860 (482) */
+/* 2344 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
+/* 2346 */	
+			0x12, 0x0,	/* FC_UP */
+/* 2348 */	NdrFcShort( 0xffbc ),	/* Offset= -68 (2280) */
 /* 2350 */	
-			0x12, 0x0,	/* FC_UP */
-/* 2352 */	NdrFcShort( 0xffbe ),	/* Offset= -66 (2286) */
-/* 2354 */	
-			0x12, 0x0,	/* FC_UP */
-/* 2356 */	NdrFcShort( 0xf778 ),	/* Offset= -2184 (172) */
-/* 2358 */	
 			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 2360 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2362) */
-/* 2362 */	
+/* 2352 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2354) */
+/* 2354 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 2364 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 2356 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x54,		/* FC_DEREFERENCE */
-/* 2366 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
-/* 2368 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2370 */	0x0 , 
+/* 2358 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 2360 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 2362 */	0x0 , 
 			0x0,		/* 0 */
-/* 2372 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2376 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2380 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2382) */
-/* 2382 */	NdrFcShort( 0x28 ),	/* 40 */
-/* 2384 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 2386 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 2390 */	NdrFcShort( 0x58 ),	/* Offset= 88 (2478) */
-/* 2392 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2391) */
-/* 2394 */	0xb7,		/* FC_RANGE */
+/* 2364 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2368 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2372 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2374) */
+/* 2374 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 2376 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 2378 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 2382 */	NdrFcShort( 0x38 ),	/* Offset= 56 (2438) */
+/* 2384 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2383) */
+/* 2386 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 2396 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2400 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 2404 */	0xb7,		/* FC_RANGE */
+/* 2388 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2392 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 2396 */	
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x3,		/* 3 */
+/* 2398 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2400 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 2402 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 2404 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 2406 */	0x0 , 
+			0x0,		/* 0 */
+/* 2408 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2412 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2416 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 2420 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 2422 */	0x0 , 
+			0x0,		/* 0 */
+/* 2424 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2428 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2432 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 2434 */	NdrFcShort( 0xfb3a ),	/* Offset= -1222 (1212) */
+/* 2436 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 2438 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 2440 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 2442 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2444 */	NdrFcShort( 0xe ),	/* Offset= 14 (2458) */
+/* 2446 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 2448 */	0x0,		/* 0 */
+			NdrFcShort( 0xffc1 ),	/* Offset= -63 (2386) */
+			0x36,		/* FC_POINTER */
+/* 2452 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 2454 */	NdrFcShort( 0xf84c ),	/* Offset= -1972 (482) */
+/* 2456 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 2458 */	
+			0x12, 0x0,	/* FC_UP */
+/* 2460 */	NdrFcShort( 0xffc0 ),	/* Offset= -64 (2396) */
+/* 2462 */	
+			0x11, 0x0,	/* FC_RP */
+/* 2464 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2466) */
+/* 2466 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 2468 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 2470 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 2472 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 2474 */	0x0 , 
+			0x0,		/* 0 */
+/* 2476 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2480 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2484 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2486) */
+/* 2486 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 2488 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 2490 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 2494 */	NdrFcShort( 0x42 ),	/* Offset= 66 (2560) */
+/* 2496 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2495) */
+/* 2498 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 2406 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2410 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 2414 */	
+/* 2500 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 2504 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 2508 */	0xb7,		/* FC_RANGE */
+			0xd,		/* 13 */
+/* 2510 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 2514 */	NdrFcLong( 0x7 ),	/* 7 */
+/* 2518 */	
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x3,		/* 3 */
+/* 2520 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2522 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 2524 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2526 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 2528 */	0x0 , 
+			0x0,		/* 0 */
+/* 2530 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2534 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2538 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 2542 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 2544 */	0x0 , 
+			0x0,		/* 0 */
+/* 2546 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2550 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2554 */	
+			0x12, 0x0,	/* FC_UP */
+/* 2556 */	NdrFcShort( 0xf6b6 ),	/* Offset= -2378 (178) */
+/* 2558 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 2560 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 2562 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 2564 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2566 */	NdrFcShort( 0x10 ),	/* Offset= 16 (2582) */
+/* 2568 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 2570 */	NdrFcShort( 0xffb8 ),	/* Offset= -72 (2498) */
+/* 2572 */	0x40,		/* FC_STRUCTPAD4 */
+			0x36,		/* FC_POINTER */
+/* 2574 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 2576 */	0x0,		/* 0 */
+			NdrFcShort( 0xffbb ),	/* Offset= -69 (2508) */
+			0x36,		/* FC_POINTER */
+/* 2580 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 2582 */	
+			0x12, 0x0,	/* FC_UP */
+/* 2584 */	NdrFcShort( 0xffbe ),	/* Offset= -66 (2518) */
+/* 2586 */	
+			0x12, 0x0,	/* FC_UP */
+/* 2588 */	NdrFcShort( 0xf696 ),	/* Offset= -2410 (178) */
+/* 2590 */	
+			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
+/* 2592 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2594) */
+/* 2594 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 2596 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x54,		/* FC_DEREFERENCE */
+/* 2598 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 2600 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 2602 */	0x0 , 
+			0x0,		/* 0 */
+/* 2604 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2608 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2612 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2614) */
+/* 2614 */	NdrFcShort( 0x28 ),	/* 40 */
+/* 2616 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 2618 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 2622 */	NdrFcShort( 0x58 ),	/* Offset= 88 (2710) */
+/* 2624 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2623) */
+/* 2626 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 2628 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2632 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 2636 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 2638 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2642 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 2646 */	
 			0x1b,		/* FC_CARRAY */
 			0x3,		/* 3 */
-/* 2416 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 2418 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 2648 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 2650 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 2420 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 2422 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2424 */	0x0 , 
+/* 2652 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 2654 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 2656 */	0x0 , 
 			0x0,		/* 0 */
-/* 2426 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2430 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2434 */	0x8,		/* FC_LONG */
+/* 2658 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2662 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2666 */	0x8,		/* FC_LONG */
 			0x5b,		/* FC_END */
-/* 2436 */	
+/* 2668 */	
 			0x21,		/* FC_BOGUS_ARRAY */
 			0x3,		/* 3 */
-/* 2438 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2440 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 2442 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 2444 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2446 */	0x0 , 
-			0x0,		/* 0 */
-/* 2448 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2452 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2456 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 2460 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 2462 */	0x0 , 
-			0x0,		/* 0 */
-/* 2464 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2468 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2472 */	
-			0x12, 0x0,	/* FC_UP */
-/* 2474 */	NdrFcShort( 0xf6e2 ),	/* Offset= -2334 (140) */
-/* 2476 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 2478 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 2480 */	NdrFcShort( 0x28 ),	/* 40 */
-/* 2482 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2484 */	NdrFcShort( 0x10 ),	/* Offset= 16 (2500) */
-/* 2486 */	0x8,		/* FC_LONG */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 2488 */	0x0,		/* 0 */
-			NdrFcShort( 0xffa1 ),	/* Offset= -95 (2394) */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 2492 */	0x0,		/* 0 */
-			NdrFcShort( 0xffa7 ),	/* Offset= -89 (2404) */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 2496 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 2498 */	0x36,		/* FC_POINTER */
-			0x5b,		/* FC_END */
-/* 2500 */	
-			0x12, 0x0,	/* FC_UP */
-/* 2502 */	NdrFcShort( 0xfe3a ),	/* Offset= -454 (2048) */
-/* 2504 */	
-			0x12, 0x0,	/* FC_UP */
-/* 2506 */	NdrFcShort( 0xffa4 ),	/* Offset= -92 (2414) */
-/* 2508 */	
-			0x12, 0x0,	/* FC_UP */
-/* 2510 */	NdrFcShort( 0xffb6 ),	/* Offset= -74 (2436) */
-/* 2512 */	
-			0x11, 0x0,	/* FC_RP */
-/* 2514 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2516) */
-/* 2516 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 2518 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 2520 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 2522 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2524 */	0x0 , 
-			0x0,		/* 0 */
-/* 2526 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2530 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2534 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2536) */
-/* 2536 */	NdrFcShort( 0x40 ),	/* 64 */
-/* 2538 */	NdrFcShort( 0x2 ),	/* 2 */
-/* 2540 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 2544 */	NdrFcShort( 0xa ),	/* Offset= 10 (2554) */
-/* 2546 */	NdrFcLong( 0x2 ),	/* 2 */
-/* 2550 */	NdrFcShort( 0x88 ),	/* Offset= 136 (2686) */
-/* 2552 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2551) */
-/* 2554 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 2556 */	NdrFcShort( 0x30 ),	/* 48 */
-/* 2558 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2560 */	NdrFcShort( 0xc ),	/* Offset= 12 (2572) */
-/* 2562 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 2564 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 2566 */	0x0,		/* 0 */
-			NdrFcShort( 0xf78d ),	/* Offset= -2163 (404) */
-			0x8,		/* FC_LONG */
-/* 2570 */	0x40,		/* FC_STRUCTPAD4 */
-			0x5b,		/* FC_END */
-/* 2572 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 2574 */	0x2,		/* FC_CHAR */
-			0x5c,		/* FC_PAD */
-/* 2576 */	
-			0x12, 0x0,	/* FC_UP */
-/* 2578 */	NdrFcShort( 0xfa1c ),	/* Offset= -1508 (1070) */
-/* 2580 */	
-			0x12, 0x0,	/* FC_UP */
-/* 2582 */	NdrFcShort( 0xf5f6 ),	/* Offset= -2570 (12) */
-/* 2584 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 2586 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2590 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 2594 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 2596 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2600 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 2604 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 2606 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 2608 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2610 */	NdrFcShort( 0xa ),	/* Offset= 10 (2620) */
-/* 2612 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 2614 */	NdrFcShort( 0xffec ),	/* Offset= -20 (2594) */
-/* 2616 */	0x8,		/* FC_LONG */
-			0x36,		/* FC_POINTER */
-/* 2618 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 2620 */	
-			0x12, 0x0,	/* FC_UP */
-/* 2622 */	NdrFcShort( 0xf6f2 ),	/* Offset= -2318 (304) */
-/* 2624 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x3,		/* 3 */
-/* 2626 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2628 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 2630 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 2632 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2634 */	0x0 , 
-			0x0,		/* 0 */
-/* 2636 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2640 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2644 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 2648 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 2650 */	0x0 , 
-			0x0,		/* 0 */
-/* 2652 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2656 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2660 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 2662 */	NdrFcShort( 0xffc6 ),	/* Offset= -58 (2604) */
-/* 2664 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 2666 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 2668 */	NdrFcShort( 0x10 ),	/* 16 */
 /* 2670 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2672 */	NdrFcShort( 0xa ),	/* Offset= 10 (2682) */
-/* 2674 */	0x8,		/* FC_LONG */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 2676 */	0x0,		/* 0 */
-			NdrFcShort( 0xffa3 ),	/* Offset= -93 (2584) */
-			0x36,		/* FC_POINTER */
-/* 2680 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 2682 */	
+/* 2672 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 2674 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 2676 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 2678 */	0x0 , 
+			0x0,		/* 0 */
+/* 2680 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2684 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2688 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 2692 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 2694 */	0x0 , 
+			0x0,		/* 0 */
+/* 2696 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2700 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2704 */	
 			0x12, 0x0,	/* FC_UP */
-/* 2684 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (2624) */
-/* 2686 */	
+/* 2706 */	NdrFcShort( 0xf600 ),	/* Offset= -2560 (146) */
+/* 2708 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 2710 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 2688 */	NdrFcShort( 0x40 ),	/* 64 */
-/* 2690 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2692 */	NdrFcShort( 0xe ),	/* Offset= 14 (2706) */
-/* 2694 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 2696 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 2698 */	0x36,		/* FC_POINTER */
+/* 2712 */	NdrFcShort( 0x28 ),	/* 40 */
+/* 2714 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2716 */	NdrFcShort( 0x10 ),	/* Offset= 16 (2732) */
+/* 2718 */	0x8,		/* FC_LONG */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 2700 */	0x0,		/* 0 */
-			NdrFcShort( 0xf707 ),	/* Offset= -2297 (404) */
-			0x8,		/* FC_LONG */
-/* 2704 */	0x40,		/* FC_STRUCTPAD4 */
+/* 2720 */	0x0,		/* 0 */
+			NdrFcShort( 0xffa1 ),	/* Offset= -95 (2626) */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 2724 */	0x0,		/* 0 */
+			NdrFcShort( 0xffa7 ),	/* Offset= -89 (2636) */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 2728 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 2730 */	0x36,		/* FC_POINTER */
 			0x5b,		/* FC_END */
-/* 2706 */	
+/* 2732 */	
 			0x12, 0x0,	/* FC_UP */
-/* 2708 */	NdrFcShort( 0xf618 ),	/* Offset= -2536 (172) */
-/* 2710 */	
+/* 2734 */	NdrFcShort( 0xfe3a ),	/* Offset= -454 (2280) */
+/* 2736 */	
 			0x12, 0x0,	/* FC_UP */
-/* 2712 */	NdrFcShort( 0xf996 ),	/* Offset= -1642 (1070) */
-/* 2714 */	
+/* 2738 */	NdrFcShort( 0xffa4 ),	/* Offset= -92 (2646) */
+/* 2740 */	
 			0x12, 0x0,	/* FC_UP */
-/* 2716 */	NdrFcShort( 0xf610 ),	/* Offset= -2544 (172) */
-/* 2718 */	
-			0x12, 0x0,	/* FC_UP */
-/* 2720 */	NdrFcShort( 0xf60c ),	/* Offset= -2548 (172) */
-/* 2722 */	
-			0x12, 0x0,	/* FC_UP */
-/* 2724 */	NdrFcShort( 0xffc6 ),	/* Offset= -58 (2666) */
-/* 2726 */	
-			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 2728 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2730) */
-/* 2730 */	
+/* 2742 */	NdrFcShort( 0xffb6 ),	/* Offset= -74 (2668) */
+/* 2744 */	
+			0x11, 0x0,	/* FC_RP */
+/* 2746 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2748) */
+/* 2748 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 2732 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x54,		/* FC_DEREFERENCE */
-/* 2734 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
-/* 2736 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2738 */	0x0 , 
+/* 2750 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 2752 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 2754 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 2756 */	0x0 , 
 			0x0,		/* 0 */
-/* 2740 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2744 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2748 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2750) */
-/* 2750 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 2752 */	NdrFcShort( 0x2 ),	/* 2 */
-/* 2754 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 2758 */	NdrFcShort( 0xe ),	/* Offset= 14 (2772) */
-/* 2760 */	NdrFcLong( 0x2 ),	/* 2 */
-/* 2764 */	NdrFcShort( 0x20 ),	/* Offset= 32 (2796) */
-/* 2766 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2765) */
-/* 2768 */	
-			0x12, 0x0,	/* FC_UP */
-/* 2770 */	NdrFcShort( 0xf95c ),	/* Offset= -1700 (1070) */
-/* 2772 */	
+/* 2758 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2762 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2766 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2768) */
+/* 2768 */	NdrFcShort( 0x40 ),	/* 64 */
+/* 2770 */	NdrFcShort( 0x2 ),	/* 2 */
+/* 2772 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 2776 */	NdrFcShort( 0xa ),	/* Offset= 10 (2786) */
+/* 2778 */	NdrFcLong( 0x2 ),	/* 2 */
+/* 2782 */	NdrFcShort( 0x88 ),	/* Offset= 136 (2918) */
+/* 2784 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2783) */
+/* 2786 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 2774 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 2776 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2778 */	NdrFcShort( 0xa ),	/* Offset= 10 (2788) */
-/* 2780 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 2782 */	0x0,		/* 0 */
-			NdrFcShort( 0xf6b5 ),	/* Offset= -2379 (404) */
+/* 2788 */	NdrFcShort( 0x30 ),	/* 48 */
+/* 2790 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2792 */	NdrFcShort( 0xc ),	/* Offset= 12 (2804) */
+/* 2794 */	0x36,		/* FC_POINTER */
 			0x36,		/* FC_POINTER */
-/* 2786 */	0x5c,		/* FC_PAD */
+/* 2796 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 2798 */	0x0,		/* 0 */
+			NdrFcShort( 0xf6f3 ),	/* Offset= -2317 (482) */
+			0x8,		/* FC_LONG */
+/* 2802 */	0x40,		/* FC_STRUCTPAD4 */
 			0x5b,		/* FC_END */
-/* 2788 */	
-			0x12, 0x10,	/* FC_UP [pointer_deref] */
-/* 2790 */	NdrFcShort( 0xffea ),	/* Offset= -22 (2768) */
-/* 2792 */	
+/* 2804 */	
 			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 2794 */	0x8,		/* FC_LONG */
+/* 2806 */	0x2,		/* FC_CHAR */
 			0x5c,		/* FC_PAD */
-/* 2796 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 2798 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 2800 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2802 */	NdrFcShort( 0x6 ),	/* Offset= 6 (2808) */
-/* 2804 */	0x8,		/* FC_LONG */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 2806 */	0x36,		/* FC_POINTER */
-			0x5b,		/* FC_END */
 /* 2808 */	
 			0x12, 0x0,	/* FC_UP */
-/* 2810 */	NdrFcShort( 0xf5b2 ),	/* Offset= -2638 (172) */
+/* 2810 */	NdrFcShort( 0xf9c2 ),	/* Offset= -1598 (1212) */
 /* 2812 */	
-			0x11, 0x0,	/* FC_RP */
-/* 2814 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2816) */
-/* 2816 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 2818 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 2820 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 2822 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2824 */	0x0 , 
-			0x0,		/* 0 */
-/* 2826 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2830 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2834 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2836) */
-/* 2836 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 2838 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 2840 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 2844 */	NdrFcShort( 0x24 ),	/* Offset= 36 (2880) */
-/* 2846 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2845) */
-/* 2848 */	0xb7,		/* FC_RANGE */
+			0x12, 0x0,	/* FC_UP */
+/* 2814 */	NdrFcShort( 0xf50e ),	/* Offset= -2802 (12) */
+/* 2816 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 2850 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2854 */	NdrFcLong( 0xa00000 ),	/* 10485760 */
-/* 2858 */	
-			0x1b,		/* FC_CARRAY */
-			0x0,		/* 0 */
-/* 2860 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 2862 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 2864 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 2866 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2868 */	0x0 , 
-			0x0,		/* 0 */
-/* 2870 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2874 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2878 */	0x2,		/* FC_CHAR */
-			0x5b,		/* FC_END */
-/* 2880 */	
+/* 2818 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2822 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 2826 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 2828 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2832 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 2836 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 2882 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 2884 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2886 */	NdrFcShort( 0xc ),	/* Offset= 12 (2898) */
-/* 2888 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 2890 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 2838 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 2840 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2842 */	NdrFcShort( 0xa ),	/* Offset= 10 (2852) */
+/* 2844 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 2892 */	NdrFcShort( 0xffd4 ),	/* Offset= -44 (2848) */
-/* 2894 */	0x40,		/* FC_STRUCTPAD4 */
+/* 2846 */	NdrFcShort( 0xffec ),	/* Offset= -20 (2826) */
+/* 2848 */	0x8,		/* FC_LONG */
 			0x36,		/* FC_POINTER */
+/* 2850 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 2852 */	
+			0x12, 0x0,	/* FC_UP */
+/* 2854 */	NdrFcShort( 0xf658 ),	/* Offset= -2472 (382) */
+/* 2856 */	
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x3,		/* 3 */
+/* 2858 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2860 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 2862 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 2864 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 2866 */	0x0 , 
+			0x0,		/* 0 */
+/* 2868 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2872 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2876 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 2880 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 2882 */	0x0 , 
+			0x0,		/* 0 */
+/* 2884 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2888 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2892 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 2894 */	NdrFcShort( 0xffc6 ),	/* Offset= -58 (2836) */
 /* 2896 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
 /* 2898 */	
-			0x12, 0x0,	/* FC_UP */
-/* 2900 */	NdrFcShort( 0xffd6 ),	/* Offset= -42 (2858) */
-/* 2902 */	
-			0x11, 0x0,	/* FC_RP */
-/* 2904 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2906) */
-/* 2906 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 2908 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x54,		/* FC_DEREFERENCE */
-/* 2910 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
-/* 2912 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 2914 */	0x0 , 
-			0x0,		/* 0 */
-/* 2916 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2920 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2924 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2926) */
-/* 2926 */	NdrFcShort( 0x50 ),	/* 80 */
-/* 2928 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 2930 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 2934 */	NdrFcShort( 0x36 ),	/* Offset= 54 (2988) */
-/* 2936 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2935) */
-/* 2938 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 2940 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2944 */	NdrFcLong( 0xa00000 ),	/* 10485760 */
-/* 2948 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 2950 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 2954 */	NdrFcLong( 0xa00000 ),	/* 10485760 */
-/* 2958 */	
-			0x15,		/* FC_STRUCT */
-			0x7,		/* 7 */
-/* 2960 */	NdrFcShort( 0x30 ),	/* 48 */
-/* 2962 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 2964 */	NdrFcShort( 0xf6dc ),	/* Offset= -2340 (624) */
-/* 2966 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 2968 */	NdrFcShort( 0xf6d8 ),	/* Offset= -2344 (624) */
-/* 2970 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 2972 */	NdrFcShort( 0xf6d4 ),	/* Offset= -2348 (624) */
-/* 2974 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 2976 */	NdrFcShort( 0xf6d0 ),	/* Offset= -2352 (624) */
-/* 2978 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 2980 */	NdrFcShort( 0xf6cc ),	/* Offset= -2356 (624) */
-/* 2982 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 2984 */	NdrFcShort( 0xf6c8 ),	/* Offset= -2360 (624) */
-/* 2986 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 2988 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 2990 */	NdrFcShort( 0x50 ),	/* 80 */
-/* 2992 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 2994 */	NdrFcShort( 0x14 ),	/* Offset= 20 (3014) */
-/* 2996 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 2998 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (2938) */
-/* 3000 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 3002 */	NdrFcShort( 0xffca ),	/* Offset= -54 (2948) */
-/* 3004 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 3006 */	NdrFcShort( 0xffd0 ),	/* Offset= -48 (2958) */
-/* 3008 */	0x8,		/* FC_LONG */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 3010 */	0x36,		/* FC_POINTER */
+			0x3,		/* 3 */
+/* 2900 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 2902 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2904 */	NdrFcShort( 0xa ),	/* Offset= 10 (2914) */
+/* 2906 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 2908 */	0x0,		/* 0 */
+			NdrFcShort( 0xffa3 ),	/* Offset= -93 (2816) */
 			0x36,		/* FC_POINTER */
-/* 3012 */	0x5c,		/* FC_PAD */
+/* 2912 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 3014 */	
+/* 2914 */	
 			0x12, 0x0,	/* FC_UP */
-/* 3016 */	NdrFcShort( 0xf568 ),	/* Offset= -2712 (304) */
-/* 3018 */	
-			0x12, 0x0,	/* FC_UP */
-/* 3020 */	NdrFcShort( 0xf91a ),	/* Offset= -1766 (1254) */
-/* 3022 */	
-			0x11, 0x0,	/* FC_RP */
-/* 3024 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3026) */
-/* 3026 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 3028 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 3030 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 3032 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 3034 */	0x0 , 
-			0x0,		/* 0 */
-/* 3036 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3040 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3044 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3046) */
-/* 3046 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 3048 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 3050 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 3054 */	NdrFcShort( 0x38 ),	/* Offset= 56 (3110) */
-/* 3056 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3055) */
-/* 3058 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 3060 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 3064 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 3068 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x3,		/* 3 */
-/* 3070 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3072 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 3074 */	NdrFcShort( 0x14 ),	/* 20 */
-/* 3076 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 3078 */	0x0 , 
-			0x0,		/* 0 */
-/* 3080 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3084 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3088 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 3092 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 3094 */	0x0 , 
-			0x0,		/* 0 */
-/* 3096 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3100 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3104 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3106 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 3108 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 3110 */	
+/* 2916 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (2856) */
+/* 2918 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 3112 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 3114 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3116 */	NdrFcShort( 0xe ),	/* Offset= 14 (3130) */
-/* 3118 */	0x8,		/* FC_LONG */
+/* 2920 */	NdrFcShort( 0x40 ),	/* 64 */
+/* 2922 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 2924 */	NdrFcShort( 0xe ),	/* Offset= 14 (2938) */
+/* 2926 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 2928 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 2930 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 2932 */	0x0,		/* 0 */
+			NdrFcShort( 0xf66d ),	/* Offset= -2451 (482) */
 			0x8,		/* FC_LONG */
+/* 2936 */	0x40,		/* FC_STRUCTPAD4 */
+			0x5b,		/* FC_END */
+/* 2938 */	
+			0x12, 0x0,	/* FC_UP */
+/* 2940 */	NdrFcShort( 0xf536 ),	/* Offset= -2762 (178) */
+/* 2942 */	
+			0x12, 0x0,	/* FC_UP */
+/* 2944 */	NdrFcShort( 0xf93c ),	/* Offset= -1732 (1212) */
+/* 2946 */	
+			0x12, 0x0,	/* FC_UP */
+/* 2948 */	NdrFcShort( 0xf52e ),	/* Offset= -2770 (178) */
+/* 2950 */	
+			0x12, 0x0,	/* FC_UP */
+/* 2952 */	NdrFcShort( 0xf52a ),	/* Offset= -2774 (178) */
+/* 2954 */	
+			0x12, 0x0,	/* FC_UP */
+/* 2956 */	NdrFcShort( 0xffc6 ),	/* Offset= -58 (2898) */
+/* 2958 */	
+			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
+/* 2960 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2962) */
+/* 2962 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 2964 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x54,		/* FC_DEREFERENCE */
+/* 2966 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 2968 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 2970 */	0x0 , 
+			0x0,		/* 0 */
+/* 2972 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2976 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 2980 */	NdrFcShort( 0x2 ),	/* Offset= 2 (2982) */
+/* 2982 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 2984 */	NdrFcShort( 0x2 ),	/* 2 */
+/* 2986 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 2990 */	NdrFcShort( 0xe ),	/* Offset= 14 (3004) */
+/* 2992 */	NdrFcLong( 0x2 ),	/* 2 */
+/* 2996 */	NdrFcShort( 0x20 ),	/* Offset= 32 (3028) */
+/* 2998 */	NdrFcShort( 0xffff ),	/* Offset= -1 (2997) */
+/* 3000 */	
+			0x12, 0x0,	/* FC_UP */
+/* 3002 */	NdrFcShort( 0xf902 ),	/* Offset= -1790 (1212) */
+/* 3004 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 3006 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 3008 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3010 */	NdrFcShort( 0xa ),	/* Offset= 10 (3020) */
+/* 3012 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 3014 */	0x0,		/* 0 */
+			NdrFcShort( 0xf61b ),	/* Offset= -2533 (482) */
+			0x36,		/* FC_POINTER */
+/* 3018 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 3020 */	
+			0x12, 0x10,	/* FC_UP [pointer_deref] */
+/* 3022 */	NdrFcShort( 0xffea ),	/* Offset= -22 (3000) */
+/* 3024 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 3026 */	0x8,		/* FC_LONG */
+			0x5c,		/* FC_PAD */
+/* 3028 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 3030 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 3032 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3034 */	NdrFcShort( 0x6 ),	/* Offset= 6 (3040) */
+/* 3036 */	0x8,		/* FC_LONG */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 3038 */	0x36,		/* FC_POINTER */
+			0x5b,		/* FC_END */
+/* 3040 */	
+			0x12, 0x0,	/* FC_UP */
+/* 3042 */	NdrFcShort( 0xf4d0 ),	/* Offset= -2864 (178) */
+/* 3044 */	
+			0x11, 0x0,	/* FC_RP */
+/* 3046 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3048) */
+/* 3048 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 3050 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 3052 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 3054 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 3056 */	0x0 , 
+			0x0,		/* 0 */
+/* 3058 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3062 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3066 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3068) */
+/* 3068 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 3070 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 3072 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 3076 */	NdrFcShort( 0x24 ),	/* Offset= 36 (3112) */
+/* 3078 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3077) */
+/* 3080 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 3082 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3086 */	NdrFcLong( 0xa00000 ),	/* 10485760 */
+/* 3090 */	
+			0x1b,		/* FC_CARRAY */
+			0x0,		/* 0 */
+/* 3092 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 3094 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 3096 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 3098 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 3100 */	0x0 , 
+			0x0,		/* 0 */
+/* 3102 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3106 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3110 */	0x2,		/* FC_CHAR */
+			0x5b,		/* FC_END */
+/* 3112 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 3114 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 3116 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3118 */	NdrFcShort( 0xc ),	/* Offset= 12 (3130) */
 /* 3120 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 3122 */	0x8,		/* FC_LONG */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 3124 */	0x0,		/* 0 */
-			NdrFcShort( 0xffbd ),	/* Offset= -67 (3058) */
+/* 3122 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 3124 */	NdrFcShort( 0xffd4 ),	/* Offset= -44 (3080) */
+/* 3126 */	0x40,		/* FC_STRUCTPAD4 */
 			0x36,		/* FC_POINTER */
 /* 3128 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
 /* 3130 */	
 			0x12, 0x0,	/* FC_UP */
-/* 3132 */	NdrFcShort( 0xffc0 ),	/* Offset= -64 (3068) */
+/* 3132 */	NdrFcShort( 0xffd6 ),	/* Offset= -42 (3090) */
 /* 3134 */	
-			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
+			0x11, 0x0,	/* FC_RP */
 /* 3136 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3138) */
 /* 3138 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
@@ -11908,3262 +12156,3410 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr
 /* 3148 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 3152 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 3156 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3158) */
-/* 3158 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 3158 */	NdrFcShort( 0x50 ),	/* 80 */
 /* 3160 */	NdrFcShort( 0x1 ),	/* 1 */
 /* 3162 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 3166 */	NdrFcShort( 0x54 ),	/* Offset= 84 (3250) */
+/* 3166 */	NdrFcShort( 0x36 ),	/* Offset= 54 (3220) */
 /* 3168 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3167) */
-/* 3170 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 3172 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 3174 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3176 */	NdrFcShort( 0x8 ),	/* Offset= 8 (3184) */
-/* 3178 */	0x8,		/* FC_LONG */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 3180 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 3182 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 3184 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3186 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 3188 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 3170 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 3172 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3176 */	NdrFcLong( 0xa00000 ),	/* 10485760 */
+/* 3180 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 3182 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3186 */	NdrFcLong( 0xa00000 ),	/* 10485760 */
 /* 3190 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 3192 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x3,		/* 3 */
-/* 3194 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3196 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 3198 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3200 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 3202 */	0x0 , 
+			0x15,		/* FC_STRUCT */
+			0x7,		/* 7 */
+/* 3192 */	NdrFcShort( 0x30 ),	/* 48 */
+/* 3194 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 3204 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3208 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3212 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 3216 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 3218 */	0x0 , 
+/* 3196 */	NdrFcShort( 0xf642 ),	/* Offset= -2494 (702) */
+/* 3198 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 3220 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3224 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3200 */	NdrFcShort( 0xf63e ),	/* Offset= -2498 (702) */
+/* 3202 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 3204 */	NdrFcShort( 0xf63a ),	/* Offset= -2502 (702) */
+/* 3206 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 3208 */	NdrFcShort( 0xf636 ),	/* Offset= -2506 (702) */
+/* 3210 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 3212 */	NdrFcShort( 0xf632 ),	/* Offset= -2510 (702) */
+/* 3214 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 3216 */	NdrFcShort( 0xf62e ),	/* Offset= -2514 (702) */
+/* 3218 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 3220 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 3222 */	NdrFcShort( 0x50 ),	/* 80 */
+/* 3224 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3226 */	NdrFcShort( 0x14 ),	/* Offset= 20 (3246) */
 /* 3228 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
 /* 3230 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (3170) */
-/* 3232 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 3234 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 3236 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 3238 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3240 */	NdrFcShort( 0x6 ),	/* Offset= 6 (3246) */
-/* 3242 */	0x8,		/* FC_LONG */
+/* 3232 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 3234 */	NdrFcShort( 0xffca ),	/* Offset= -54 (3180) */
+/* 3236 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 3238 */	NdrFcShort( 0xffd0 ),	/* Offset= -48 (3190) */
+/* 3240 */	0x8,		/* FC_LONG */
 			0x40,		/* FC_STRUCTPAD4 */
-/* 3244 */	0x36,		/* FC_POINTER */
+/* 3242 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 3244 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
 /* 3246 */	
 			0x12, 0x0,	/* FC_UP */
-/* 3248 */	NdrFcShort( 0xffc8 ),	/* Offset= -56 (3192) */
+/* 3248 */	NdrFcShort( 0xf4ce ),	/* Offset= -2866 (382) */
 /* 3250 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 3252 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 3254 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3256 */	NdrFcShort( 0x4 ),	/* Offset= 4 (3260) */
-/* 3258 */	0x36,		/* FC_POINTER */
-			0x5b,		/* FC_END */
-/* 3260 */	
 			0x12, 0x0,	/* FC_UP */
-/* 3262 */	NdrFcShort( 0xffe4 ),	/* Offset= -28 (3234) */
-/* 3264 */	
+/* 3252 */	NdrFcShort( 0xf8c0 ),	/* Offset= -1856 (1396) */
+/* 3254 */	
 			0x11, 0x0,	/* FC_RP */
-/* 3266 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3268) */
-/* 3268 */	
+/* 3256 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3258) */
+/* 3258 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 3270 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 3260 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x0,		/*  */
-/* 3272 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 3274 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 3276 */	0x0 , 
+/* 3262 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 3264 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 3266 */	0x0 , 
 			0x0,		/* 0 */
-/* 3278 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3282 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3286 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3288) */
-/* 3288 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 3290 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 3292 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 3296 */	NdrFcShort( 0x38 ),	/* Offset= 56 (3352) */
-/* 3298 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3297) */
-/* 3300 */	0xb7,		/* FC_RANGE */
+/* 3268 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3272 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3276 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3278) */
+/* 3278 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 3280 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 3282 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 3286 */	NdrFcShort( 0x38 ),	/* Offset= 56 (3342) */
+/* 3288 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3287) */
+/* 3290 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 3302 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3306 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 3310 */	
+/* 3292 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 3296 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 3300 */	
 			0x21,		/* FC_BOGUS_ARRAY */
 			0x3,		/* 3 */
-/* 3312 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3314 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 3302 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3304 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 3316 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 3318 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 3320 */	0x0 , 
+/* 3306 */	NdrFcShort( 0x14 ),	/* 20 */
+/* 3308 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 3310 */	0x0 , 
 			0x0,		/* 0 */
-/* 3322 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3326 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3330 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 3334 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 3336 */	0x0 , 
+/* 3312 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3316 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3320 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 3324 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 3326 */	0x0 , 
 			0x0,		/* 0 */
-/* 3338 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3342 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3346 */	
+/* 3328 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3332 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3336 */	
 			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3348 */	
+/* 3338 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 3350 */	0x5c,		/* FC_PAD */
+/* 3340 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 3352 */	
+/* 3342 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 3354 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 3356 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3358 */	NdrFcShort( 0xc ),	/* Offset= 12 (3370) */
-/* 3360 */	0x8,		/* FC_LONG */
+/* 3344 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 3346 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3348 */	NdrFcShort( 0xe ),	/* Offset= 14 (3362) */
+/* 3350 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 3362 */	0x36,		/* FC_POINTER */
+/* 3352 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 3354 */	0x8,		/* FC_LONG */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 3364 */	0x0,		/* 0 */
-			NdrFcShort( 0xffbf ),	/* Offset= -65 (3300) */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 3368 */	0x36,		/* FC_POINTER */
+/* 3356 */	0x0,		/* 0 */
+			NdrFcShort( 0xffbd ),	/* Offset= -67 (3290) */
+			0x36,		/* FC_POINTER */
+/* 3360 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 3370 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3372 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 3374 */	
+/* 3362 */	
 			0x12, 0x0,	/* FC_UP */
-/* 3376 */	NdrFcShort( 0xffbe ),	/* Offset= -66 (3310) */
-/* 3378 */	
+/* 3364 */	NdrFcShort( 0xffc0 ),	/* Offset= -64 (3300) */
+/* 3366 */	
 			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 3380 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3382) */
-/* 3382 */	
+/* 3368 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3370) */
+/* 3370 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 3384 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 3372 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x54,		/* FC_DEREFERENCE */
-/* 3386 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
-/* 3388 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 3390 */	0x0 , 
+/* 3374 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 3376 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 3378 */	0x0 , 
 			0x0,		/* 0 */
-/* 3392 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3396 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3400 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3402) */
-/* 3402 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 3404 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 3406 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 3410 */	NdrFcShort( 0x4 ),	/* Offset= 4 (3414) */
-/* 3412 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3411) */
-/* 3414 */	
+/* 3380 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3384 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3388 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3390) */
+/* 3390 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 3392 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 3394 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 3398 */	NdrFcShort( 0x54 ),	/* Offset= 84 (3482) */
+/* 3400 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3399) */
+/* 3402 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 3404 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 3406 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3408 */	NdrFcShort( 0x8 ),	/* Offset= 8 (3416) */
+/* 3410 */	0x8,		/* FC_LONG */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 3412 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 3414 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 3416 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 3418 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 3420 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 3422 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 3424 */	
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x3,		/* 3 */
+/* 3426 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3428 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 3430 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3432 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 3434 */	0x0 , 
+			0x0,		/* 0 */
+/* 3436 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3440 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3444 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 3448 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 3450 */	0x0 , 
+			0x0,		/* 0 */
+/* 3452 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3456 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3460 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 3462 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (3402) */
+/* 3464 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 3466 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 3468 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 3470 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3472 */	NdrFcShort( 0x6 ),	/* Offset= 6 (3478) */
+/* 3474 */	0x8,		/* FC_LONG */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 3476 */	0x36,		/* FC_POINTER */
+			0x5b,		/* FC_END */
+/* 3478 */	
+			0x12, 0x0,	/* FC_UP */
+/* 3480 */	NdrFcShort( 0xffc8 ),	/* Offset= -56 (3424) */
+/* 3482 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 3484 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 3486 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3488 */	NdrFcShort( 0x4 ),	/* Offset= 4 (3492) */
+/* 3490 */	0x36,		/* FC_POINTER */
+			0x5b,		/* FC_END */
+/* 3492 */	
+			0x12, 0x0,	/* FC_UP */
+/* 3494 */	NdrFcShort( 0xffe4 ),	/* Offset= -28 (3466) */
+/* 3496 */	
+			0x11, 0x0,	/* FC_RP */
+/* 3498 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3500) */
+/* 3500 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 3502 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 3504 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 3506 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 3508 */	0x0 , 
+			0x0,		/* 0 */
+/* 3510 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3514 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3518 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3520) */
+/* 3520 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 3522 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 3524 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 3528 */	NdrFcShort( 0x38 ),	/* Offset= 56 (3584) */
+/* 3530 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3529) */
+/* 3532 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 3534 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3538 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 3542 */	
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x3,		/* 3 */
+/* 3544 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3546 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 3548 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 3550 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 3552 */	0x0 , 
+			0x0,		/* 0 */
+/* 3554 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3558 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3562 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 3566 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 3568 */	0x0 , 
+			0x0,		/* 0 */
+/* 3570 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3574 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3578 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 3580 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 3582 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 3584 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 3586 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 3588 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3590 */	NdrFcShort( 0xc ),	/* Offset= 12 (3602) */
+/* 3592 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 3594 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 3596 */	0x0,		/* 0 */
+			NdrFcShort( 0xffbf ),	/* Offset= -65 (3532) */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 3600 */	0x36,		/* FC_POINTER */
+			0x5b,		/* FC_END */
+/* 3602 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 3604 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 3606 */	
+			0x12, 0x0,	/* FC_UP */
+/* 3608 */	NdrFcShort( 0xffbe ),	/* Offset= -66 (3542) */
+/* 3610 */	
+			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
+/* 3612 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3614) */
+/* 3614 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 3616 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x54,		/* FC_DEREFERENCE */
+/* 3618 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 3620 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 3622 */	0x0 , 
+			0x0,		/* 0 */
+/* 3624 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3628 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3632 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3634) */
+/* 3634 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 3636 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 3638 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 3642 */	NdrFcShort( 0x4 ),	/* Offset= 4 (3646) */
+/* 3644 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3643) */
+/* 3646 */	
 			0x15,		/* FC_STRUCT */
 			0x3,		/* 3 */
-/* 3416 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 3418 */	0x8,		/* FC_LONG */
+/* 3648 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 3650 */	0x8,		/* FC_LONG */
 			0x5b,		/* FC_END */
-/* 3420 */	
-			0x11, 0x0,	/* FC_RP */
-/* 3422 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3424) */
-/* 3424 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 3426 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 3428 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 3430 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 3432 */	0x0 , 
-			0x0,		/* 0 */
-/* 3434 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3438 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3442 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3444) */
-/* 3444 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 3446 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 3448 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 3452 */	NdrFcShort( 0x4 ),	/* Offset= 4 (3456) */
-/* 3454 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3453) */
-/* 3456 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 3458 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 3460 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3462 */	NdrFcShort( 0x8 ),	/* Offset= 8 (3470) */
-/* 3464 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 3466 */	0x8,		/* FC_LONG */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 3468 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 3470 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3472 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 3474 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3476 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 3478 */	
-			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 3480 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3482) */
-/* 3482 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 3484 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x54,		/* FC_DEREFERENCE */
-/* 3486 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
-/* 3488 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 3490 */	0x0 , 
-			0x0,		/* 0 */
-/* 3492 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3496 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3500 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3502) */
-/* 3502 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 3504 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 3506 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 3510 */	NdrFcShort( 0xffa0 ),	/* Offset= -96 (3414) */
-/* 3512 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3511) */
-/* 3514 */	
-			0x11, 0x0,	/* FC_RP */
-/* 3516 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3518) */
-/* 3518 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 3520 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 3522 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 3524 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 3526 */	0x0 , 
-			0x0,		/* 0 */
-/* 3528 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3532 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3536 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3538) */
-/* 3538 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 3540 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 3542 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 3546 */	NdrFcShort( 0x4 ),	/* Offset= 4 (3550) */
-/* 3548 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3547) */
-/* 3550 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 3552 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 3554 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3556 */	NdrFcShort( 0x4 ),	/* Offset= 4 (3560) */
-/* 3558 */	0x36,		/* FC_POINTER */
-			0x5b,		/* FC_END */
-/* 3560 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3562 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 3564 */	
-			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 3566 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3568) */
-/* 3568 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 3570 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x54,		/* FC_DEREFERENCE */
-/* 3572 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
-/* 3574 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 3576 */	0x0 , 
-			0x0,		/* 0 */
-/* 3578 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3582 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3586 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3588) */
-/* 3588 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 3590 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 3592 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 3596 */	NdrFcShort( 0xff4a ),	/* Offset= -182 (3414) */
-/* 3598 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3597) */
-/* 3600 */	
-			0x11, 0x0,	/* FC_RP */
-/* 3602 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3604) */
-/* 3604 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 3606 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 3608 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 3610 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 3612 */	0x0 , 
-			0x0,		/* 0 */
-/* 3614 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3618 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3622 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3624) */
-/* 3624 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 3626 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 3628 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 3632 */	NdrFcShort( 0x4 ),	/* Offset= 4 (3636) */
-/* 3634 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3633) */
-/* 3636 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 3638 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 3640 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3642 */	NdrFcShort( 0x6 ),	/* Offset= 6 (3648) */
-/* 3644 */	0x36,		/* FC_POINTER */
-			0x8,		/* FC_LONG */
-/* 3646 */	0x40,		/* FC_STRUCTPAD4 */
-			0x5b,		/* FC_END */
-/* 3648 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3650 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
 /* 3652 */	
-			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
+			0x11, 0x0,	/* FC_RP */
 /* 3654 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3656) */
 /* 3656 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
 /* 3658 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x54,		/* FC_DEREFERENCE */
-/* 3660 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+			0x0,		/*  */
+/* 3660 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
 /* 3662 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
 /* 3664 */	0x0 , 
 			0x0,		/* 0 */
 /* 3666 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 3670 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 3674 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3676) */
-/* 3676 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 3678 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 3676 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 3678 */	NdrFcShort( 0x1 ),	/* 1 */
 /* 3680 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 3684 */	NdrFcShort( 0x6e ),	/* Offset= 110 (3794) */
-/* 3686 */	NdrFcLong( 0x2 ),	/* 2 */
-/* 3690 */	NdrFcShort( 0xf0 ),	/* Offset= 240 (3930) */
-/* 3692 */	NdrFcLong( 0x3 ),	/* 3 */
-/* 3696 */	NdrFcShort( 0x172 ),	/* Offset= 370 (4066) */
-/* 3698 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 3702 */	NdrFcShort( 0x1c8 ),	/* Offset= 456 (4158) */
-/* 3704 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3703) */
-/* 3706 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 3708 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3712 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 3716 */	
+/* 3684 */	NdrFcShort( 0x4 ),	/* Offset= 4 (3688) */
+/* 3686 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3685) */
+/* 3688 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 3718 */	NdrFcShort( 0x30 ),	/* 48 */
-/* 3720 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3722 */	NdrFcShort( 0xa ),	/* Offset= 10 (3732) */
-/* 3724 */	0x36,		/* FC_POINTER */
+/* 3690 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 3692 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3694 */	NdrFcShort( 0x8 ),	/* Offset= 8 (3702) */
+/* 3696 */	0x36,		/* FC_POINTER */
 			0x36,		/* FC_POINTER */
-/* 3726 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 3728 */	0x36,		/* FC_POINTER */
-			0x8,		/* FC_LONG */
-/* 3730 */	0x8,		/* FC_LONG */
+/* 3698 */	0x8,		/* FC_LONG */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 3700 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 3732 */	
+/* 3702 */	
 			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3734 */	
+/* 3704 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 3736 */	
+/* 3706 */	
 			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3738 */	
+/* 3708 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 3740 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3742 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 3744 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 3710 */	
+			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
+/* 3712 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3714) */
+/* 3714 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 3716 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x54,		/* FC_DEREFERENCE */
+/* 3718 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 3720 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 3722 */	0x0 , 
+			0x0,		/* 0 */
+/* 3724 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3728 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3732 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3734) */
+/* 3734 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 3736 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 3738 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 3742 */	NdrFcShort( 0xffa0 ),	/* Offset= -96 (3646) */
+/* 3744 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3743) */
 /* 3746 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 3748 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
+			0x11, 0x0,	/* FC_RP */
+/* 3748 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3750) */
 /* 3750 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 3752 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x3,		/* 3 */
-/* 3754 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3756 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 3752 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x0,		/*  */
-/* 3758 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3760 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 3762 */	0x0 , 
+/* 3754 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 3756 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 3758 */	0x0 , 
 			0x0,		/* 0 */
+/* 3760 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 3764 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3768 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3772 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 3776 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 3778 */	0x0 , 
-			0x0,		/* 0 */
-/* 3780 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3784 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3788 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 3790 */	NdrFcShort( 0xffb6 ),	/* Offset= -74 (3716) */
-/* 3792 */	0x5c,		/* FC_PAD */
+/* 3768 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3770) */
+/* 3770 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 3772 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 3774 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 3778 */	NdrFcShort( 0x4 ),	/* Offset= 4 (3782) */
+/* 3780 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3779) */
+/* 3782 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 3784 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 3786 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3788 */	NdrFcShort( 0x4 ),	/* Offset= 4 (3792) */
+/* 3790 */	0x36,		/* FC_POINTER */
 			0x5b,		/* FC_END */
+/* 3792 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
 /* 3794 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 3796 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 3798 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3800 */	NdrFcShort( 0xa ),	/* Offset= 10 (3810) */
-/* 3802 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 3804 */	NdrFcShort( 0xff9e ),	/* Offset= -98 (3706) */
-/* 3806 */	0x40,		/* FC_STRUCTPAD4 */
-			0x36,		/* FC_POINTER */
-/* 3808 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 3810 */	
-			0x12, 0x0,	/* FC_UP */
-/* 3812 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (3752) */
-/* 3814 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 3816 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3820 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 3824 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 3826 */	NdrFcShort( 0x88 ),	/* 136 */
-/* 3828 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3830 */	NdrFcShort( 0x1e ),	/* Offset= 30 (3860) */
-/* 3832 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 3834 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 3836 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 3838 */	0x36,		/* FC_POINTER */
-			0x8,		/* FC_LONG */
-/* 3840 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 3842 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 3844 */	NdrFcShort( 0xf108 ),	/* Offset= -3832 (12) */
-/* 3846 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 3848 */	NdrFcShort( 0xf104 ),	/* Offset= -3836 (12) */
-/* 3850 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 3852 */	NdrFcShort( 0xf100 ),	/* Offset= -3840 (12) */
-/* 3854 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 3856 */	NdrFcShort( 0xf0fc ),	/* Offset= -3844 (12) */
-/* 3858 */	0x40,		/* FC_STRUCTPAD4 */
-			0x5b,		/* FC_END */
-/* 3860 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3862 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 3864 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3866 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
+/* 3796 */	
+			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
+/* 3798 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3800) */
+/* 3800 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 3802 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x54,		/* FC_DEREFERENCE */
+/* 3804 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 3806 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 3808 */	0x0 , 
+			0x0,		/* 0 */
+/* 3810 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3814 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3818 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3820) */
+/* 3820 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 3822 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 3824 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 3828 */	NdrFcShort( 0xff4a ),	/* Offset= -182 (3646) */
+/* 3830 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3829) */
+/* 3832 */	
+			0x11, 0x0,	/* FC_RP */
+/* 3834 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3836) */
+/* 3836 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 3838 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 3840 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 3842 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 3844 */	0x0 , 
+			0x0,		/* 0 */
+/* 3846 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3850 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3854 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3856) */
+/* 3856 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 3858 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 3860 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 3864 */	NdrFcShort( 0x4 ),	/* Offset= 4 (3868) */
+/* 3866 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3865) */
 /* 3868 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3870 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 3872 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3874 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 3876 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3878 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 3870 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 3872 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3874 */	NdrFcShort( 0x6 ),	/* Offset= 6 (3880) */
+/* 3876 */	0x36,		/* FC_POINTER */
+			0x8,		/* FC_LONG */
+/* 3878 */	0x40,		/* FC_STRUCTPAD4 */
+			0x5b,		/* FC_END */
 /* 3880 */	
 			0x12, 0x8,	/* FC_UP [simple_pointer] */
 /* 3882 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
 /* 3884 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3886 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
+			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
+/* 3886 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3888) */
 /* 3888 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x3,		/* 3 */
-/* 3890 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3892 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 3894 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3896 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 3898 */	0x0 , 
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 3890 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x54,		/* FC_DEREFERENCE */
+/* 3892 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 3894 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 3896 */	0x0 , 
 			0x0,		/* 0 */
-/* 3900 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3904 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3908 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 3912 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 3914 */	0x0 , 
-			0x0,		/* 0 */
-/* 3916 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3920 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3924 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 3926 */	NdrFcShort( 0xff9a ),	/* Offset= -102 (3824) */
-/* 3928 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 3930 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 3932 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 3934 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3936 */	NdrFcShort( 0xa ),	/* Offset= 10 (3946) */
-/* 3938 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 3940 */	NdrFcShort( 0xff82 ),	/* Offset= -126 (3814) */
-/* 3942 */	0x40,		/* FC_STRUCTPAD4 */
-			0x36,		/* FC_POINTER */
-/* 3944 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 3946 */	
-			0x12, 0x0,	/* FC_UP */
-/* 3948 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (3888) */
-/* 3950 */	0xb7,		/* FC_RANGE */
+/* 3898 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3902 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3906 */	NdrFcShort( 0x2 ),	/* Offset= 2 (3908) */
+/* 3908 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 3910 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 3912 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 3916 */	NdrFcShort( 0x6e ),	/* Offset= 110 (4026) */
+/* 3918 */	NdrFcLong( 0x2 ),	/* 2 */
+/* 3922 */	NdrFcShort( 0xf0 ),	/* Offset= 240 (4162) */
+/* 3924 */	NdrFcLong( 0x3 ),	/* 3 */
+/* 3928 */	NdrFcShort( 0x172 ),	/* Offset= 370 (4298) */
+/* 3930 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 3934 */	NdrFcShort( 0x1c8 ),	/* Offset= 456 (4390) */
+/* 3936 */	NdrFcShort( 0xffff ),	/* Offset= -1 (3935) */
+/* 3938 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 3952 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 3956 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 3960 */	
+/* 3940 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 3944 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 3948 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 3962 */	NdrFcShort( 0x88 ),	/* 136 */
-/* 3964 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 3966 */	NdrFcShort( 0x1e ),	/* Offset= 30 (3996) */
-/* 3968 */	0x36,		/* FC_POINTER */
+/* 3950 */	NdrFcShort( 0x30 ),	/* 48 */
+/* 3952 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3954 */	NdrFcShort( 0xa ),	/* Offset= 10 (3964) */
+/* 3956 */	0x36,		/* FC_POINTER */
 			0x36,		/* FC_POINTER */
-/* 3970 */	0x36,		/* FC_POINTER */
+/* 3958 */	0x36,		/* FC_POINTER */
 			0x36,		/* FC_POINTER */
-/* 3972 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 3974 */	0x36,		/* FC_POINTER */
+/* 3960 */	0x36,		/* FC_POINTER */
 			0x8,		/* FC_LONG */
-/* 3976 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 3978 */	0x8,		/* FC_LONG */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 3980 */	0x0,		/* 0 */
-			NdrFcShort( 0xf07f ),	/* Offset= -3969 (12) */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 3984 */	0x0,		/* 0 */
-			NdrFcShort( 0xf07b ),	/* Offset= -3973 (12) */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 3988 */	0x0,		/* 0 */
-			NdrFcShort( 0xf077 ),	/* Offset= -3977 (12) */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 3992 */	0x0,		/* 0 */
-			NdrFcShort( 0xf073 ),	/* Offset= -3981 (12) */
+/* 3962 */	0x8,		/* FC_LONG */
 			0x5b,		/* FC_END */
-/* 3996 */	
+/* 3964 */	
 			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 3998 */	
+/* 3966 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 4000 */	
+/* 3968 */	
 			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4002 */	
+/* 3970 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 4004 */	
+/* 3972 */	
 			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4006 */	
+/* 3974 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 4008 */	
+/* 3976 */	
 			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4010 */	
+/* 3978 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 4012 */	
+/* 3980 */	
 			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4014 */	
+/* 3982 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 4016 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4018 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 4020 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4022 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 4024 */	
+/* 3984 */	
 			0x21,		/* FC_BOGUS_ARRAY */
 			0x3,		/* 3 */
-/* 4026 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4028 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 3986 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3988 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 4030 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4032 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 4034 */	0x0 , 
+/* 3990 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 3992 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 3994 */	0x0 , 
 			0x0,		/* 0 */
-/* 4036 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4040 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4044 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 4048 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 4050 */	0x0 , 
+/* 3996 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4000 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4004 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 4008 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 4010 */	0x0 , 
 			0x0,		/* 0 */
-/* 4052 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4056 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4060 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 4012 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4016 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4020 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 4062 */	NdrFcShort( 0xff9a ),	/* Offset= -102 (3960) */
-/* 4064 */	0x5c,		/* FC_PAD */
+/* 4022 */	NdrFcShort( 0xffb6 ),	/* Offset= -74 (3948) */
+/* 4024 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 4066 */	
+/* 4026 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 4068 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 4070 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4072 */	NdrFcShort( 0xa ),	/* Offset= 10 (4082) */
+/* 4028 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 4030 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4032 */	NdrFcShort( 0xa ),	/* Offset= 10 (4042) */
+/* 4034 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 4036 */	NdrFcShort( 0xff9e ),	/* Offset= -98 (3938) */
+/* 4038 */	0x40,		/* FC_STRUCTPAD4 */
+			0x36,		/* FC_POINTER */
+/* 4040 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 4042 */	
+			0x12, 0x0,	/* FC_UP */
+/* 4044 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (3984) */
+/* 4046 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 4048 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4052 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 4056 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 4058 */	NdrFcShort( 0x88 ),	/* 136 */
+/* 4060 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4062 */	NdrFcShort( 0x1e ),	/* Offset= 30 (4092) */
+/* 4064 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 4066 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 4068 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 4070 */	0x36,		/* FC_POINTER */
+			0x8,		/* FC_LONG */
+/* 4072 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
 /* 4074 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 4076 */	NdrFcShort( 0xff82 ),	/* Offset= -126 (3950) */
-/* 4078 */	0x40,		/* FC_STRUCTPAD4 */
-			0x36,		/* FC_POINTER */
-/* 4080 */	0x5c,		/* FC_PAD */
+/* 4076 */	NdrFcShort( 0xf020 ),	/* Offset= -4064 (12) */
+/* 4078 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 4080 */	NdrFcShort( 0xf01c ),	/* Offset= -4068 (12) */
+/* 4082 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 4084 */	NdrFcShort( 0xf018 ),	/* Offset= -4072 (12) */
+/* 4086 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 4088 */	NdrFcShort( 0xf014 ),	/* Offset= -4076 (12) */
+/* 4090 */	0x40,		/* FC_STRUCTPAD4 */
 			0x5b,		/* FC_END */
-/* 4082 */	
-			0x12, 0x0,	/* FC_UP */
-/* 4084 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (4024) */
-/* 4086 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 4088 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4092 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 4092 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4094 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
 /* 4096 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 4098 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 4100 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4102 */	NdrFcShort( 0xa ),	/* Offset= 10 (4112) */
-/* 4104 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 4106 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 4108 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 4110 */	0x36,		/* FC_POINTER */
-			0x5b,		/* FC_END */
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4098 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4100 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4102 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4104 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4106 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4108 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4110 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
 /* 4112 */	
 			0x12, 0x8,	/* FC_UP [simple_pointer] */
 /* 4114 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
 /* 4116 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4118 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4120 */	
 			0x21,		/* FC_BOGUS_ARRAY */
 			0x3,		/* 3 */
-/* 4118 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4120 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
 /* 4122 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4124 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 4126 */	0x0 , 
-			0x0,		/* 0 */
-/* 4128 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4132 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4136 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 4140 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 4142 */	0x0 , 
-			0x0,		/* 0 */
-/* 4144 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4148 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4152 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 4154 */	NdrFcShort( 0xffc6 ),	/* Offset= -58 (4096) */
-/* 4156 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 4158 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 4160 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 4162 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4164 */	NdrFcShort( 0xa ),	/* Offset= 10 (4174) */
-/* 4166 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 4168 */	NdrFcShort( 0xffae ),	/* Offset= -82 (4086) */
-/* 4170 */	0x40,		/* FC_STRUCTPAD4 */
-			0x36,		/* FC_POINTER */
-/* 4172 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 4174 */	
-			0x12, 0x0,	/* FC_UP */
-/* 4176 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (4116) */
-/* 4178 */	
-			0x11, 0x0,	/* FC_RP */
-/* 4180 */	NdrFcShort( 0x2 ),	/* Offset= 2 (4182) */
-/* 4182 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 4184 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 4124 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 4186 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 4188 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 4190 */	0x0 , 
+/* 4126 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4128 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 4130 */	0x0 , 
 			0x0,		/* 0 */
-/* 4192 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4196 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4200 */	NdrFcShort( 0x2 ),	/* Offset= 2 (4202) */
-/* 4202 */	NdrFcShort( 0x30 ),	/* 48 */
-/* 4204 */	NdrFcShort( 0x3 ),	/* 3 */
-/* 4206 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 4210 */	NdrFcShort( 0x10 ),	/* Offset= 16 (4226) */
-/* 4212 */	NdrFcLong( 0x2 ),	/* 2 */
-/* 4216 */	NdrFcShort( 0x2e ),	/* Offset= 46 (4262) */
-/* 4218 */	NdrFcLong( 0x3 ),	/* 3 */
-/* 4222 */	NdrFcShort( 0x36 ),	/* Offset= 54 (4276) */
-/* 4224 */	NdrFcShort( 0xffff ),	/* Offset= -1 (4223) */
-/* 4226 */	
+/* 4132 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4136 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4140 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 4144 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 4146 */	0x0 , 
+			0x0,		/* 0 */
+/* 4148 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4152 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4156 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 4158 */	NdrFcShort( 0xff9a ),	/* Offset= -102 (4056) */
+/* 4160 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 4162 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 4228 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 4230 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4232 */	NdrFcShort( 0x8 ),	/* Offset= 8 (4240) */
-/* 4234 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 4236 */	0x0,		/* 0 */
-			NdrFcShort( 0xf38d ),	/* Offset= -3187 (1050) */
+/* 4164 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 4166 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4168 */	NdrFcShort( 0xa ),	/* Offset= 10 (4178) */
+/* 4170 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 4172 */	NdrFcShort( 0xff82 ),	/* Offset= -126 (4046) */
+/* 4174 */	0x40,		/* FC_STRUCTPAD4 */
+			0x36,		/* FC_POINTER */
+/* 4176 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 4240 */	
-			0x11, 0x0,	/* FC_RP */
-/* 4242 */	NdrFcShort( 0xf01a ),	/* Offset= -4070 (172) */
-/* 4244 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 4246 */	NdrFcShort( 0x28 ),	/* 40 */
-/* 4248 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4250 */	NdrFcShort( 0x8 ),	/* Offset= 8 (4258) */
-/* 4252 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 4254 */	0x0,		/* 0 */
-			NdrFcShort( 0xf38f ),	/* Offset= -3185 (1070) */
-			0x5b,		/* FC_END */
-/* 4258 */	
+/* 4178 */	
 			0x12, 0x0,	/* FC_UP */
-/* 4260 */	NdrFcShort( 0xfff0 ),	/* Offset= -16 (4244) */
-/* 4262 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 4264 */	NdrFcShort( 0x28 ),	/* 40 */
-/* 4266 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4268 */	NdrFcShort( 0x0 ),	/* Offset= 0 (4268) */
-/* 4270 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 4272 */	NdrFcShort( 0xffe4 ),	/* Offset= -28 (4244) */
-/* 4274 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 4276 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 4278 */	NdrFcShort( 0x30 ),	/* 48 */
-/* 4280 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4282 */	NdrFcShort( 0x8 ),	/* Offset= 8 (4290) */
-/* 4284 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 4286 */	NdrFcShort( 0xffd6 ),	/* Offset= -42 (4244) */
-/* 4288 */	0x36,		/* FC_POINTER */
-			0x5b,		/* FC_END */
-/* 4290 */	
-			0x12, 0x0,	/* FC_UP */
-/* 4292 */	NdrFcShort( 0xf9a6 ),	/* Offset= -1626 (2666) */
-/* 4294 */	
-			0x11, 0x0,	/* FC_RP */
-/* 4296 */	NdrFcShort( 0x2 ),	/* Offset= 2 (4298) */
-/* 4298 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 4300 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x54,		/* FC_DEREFERENCE */
-/* 4302 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
-/* 4304 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 4306 */	0x0 , 
-			0x0,		/* 0 */
-/* 4308 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4312 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4316 */	NdrFcShort( 0x2 ),	/* Offset= 2 (4318) */
-/* 4318 */	NdrFcShort( 0x40 ),	/* 64 */
-/* 4320 */	NdrFcShort( 0x3 ),	/* 3 */
-/* 4322 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 4326 */	NdrFcShort( 0x10 ),	/* Offset= 16 (4342) */
-/* 4328 */	NdrFcLong( 0x2 ),	/* 2 */
-/* 4332 */	NdrFcShort( 0x64 ),	/* Offset= 100 (4432) */
-/* 4334 */	NdrFcLong( 0x3 ),	/* 3 */
-/* 4338 */	NdrFcShort( 0x20a ),	/* Offset= 522 (4860) */
-/* 4340 */	NdrFcShort( 0xffff ),	/* Offset= -1 (4339) */
-/* 4342 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 4344 */	NdrFcShort( 0x40 ),	/* 64 */
-/* 4346 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4348 */	NdrFcShort( 0x0 ),	/* Offset= 0 (4348) */
-/* 4350 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 4352 */	NdrFcShort( 0xef0c ),	/* Offset= -4340 (12) */
-/* 4354 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 4356 */	NdrFcShort( 0xef88 ),	/* Offset= -4216 (140) */
-/* 4358 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 4360 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 4362 */	0x6,		/* FC_SHORT */
-			0x3e,		/* FC_STRUCTPAD2 */
-/* 4364 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 4366 */	0xb7,		/* FC_RANGE */
+/* 4180 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (4120) */
+/* 4182 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 4368 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4372 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 4376 */	
-			0x15,		/* FC_STRUCT */
+/* 4184 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4188 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 4192 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 4378 */	NdrFcShort( 0x2c ),	/* 44 */
-/* 4380 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 4194 */	NdrFcShort( 0x88 ),	/* 136 */
+/* 4196 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4198 */	NdrFcShort( 0x1e ),	/* Offset= 30 (4228) */
+/* 4200 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 4202 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 4204 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 4206 */	0x36,		/* FC_POINTER */
+			0x8,		/* FC_LONG */
+/* 4208 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 4210 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 4212 */	0x0,		/* 0 */
+			NdrFcShort( 0xef97 ),	/* Offset= -4201 (12) */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 4216 */	0x0,		/* 0 */
+			NdrFcShort( 0xef93 ),	/* Offset= -4205 (12) */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 4220 */	0x0,		/* 0 */
+			NdrFcShort( 0xef8f ),	/* Offset= -4209 (12) */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 4224 */	0x0,		/* 0 */
+			NdrFcShort( 0xef8b ),	/* Offset= -4213 (12) */
+			0x5b,		/* FC_END */
+/* 4228 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4230 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4232 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4234 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4236 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4238 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4240 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4242 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4244 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4246 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4248 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4250 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4252 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4254 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4256 */	
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x3,		/* 3 */
+/* 4258 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4260 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 4262 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4264 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 4266 */	0x0 , 
 			0x0,		/* 0 */
-/* 4382 */	NdrFcShort( 0xeeee ),	/* Offset= -4370 (12) */
+/* 4268 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4272 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4276 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 4280 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 4282 */	0x0 , 
+			0x0,		/* 0 */
+/* 4284 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4288 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4292 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 4294 */	NdrFcShort( 0xff9a ),	/* Offset= -102 (4192) */
+/* 4296 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 4298 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 4300 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 4302 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4304 */	NdrFcShort( 0xa ),	/* Offset= 10 (4314) */
+/* 4306 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 4308 */	NdrFcShort( 0xff82 ),	/* Offset= -126 (4182) */
+/* 4310 */	0x40,		/* FC_STRUCTPAD4 */
+			0x36,		/* FC_POINTER */
+/* 4312 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 4314 */	
+			0x12, 0x0,	/* FC_UP */
+/* 4316 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (4256) */
+/* 4318 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 4320 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4324 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 4328 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 4330 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 4332 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4334 */	NdrFcShort( 0xa ),	/* Offset= 10 (4344) */
+/* 4336 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 4338 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 4340 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 4342 */	0x36,		/* FC_POINTER */
+			0x5b,		/* FC_END */
+/* 4344 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 4346 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 4348 */	
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x3,		/* 3 */
+/* 4350 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4352 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 4354 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4356 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 4358 */	0x0 , 
+			0x0,		/* 0 */
+/* 4360 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4364 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4368 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 4372 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 4374 */	0x0 , 
+			0x0,		/* 0 */
+/* 4376 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4380 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 4384 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 4386 */	NdrFcShort( 0xef6a ),	/* Offset= -4246 (140) */
+/* 4386 */	NdrFcShort( 0xffc6 ),	/* Offset= -58 (4328) */
 /* 4388 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
 /* 4390 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 4392 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 4394 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4396 */	NdrFcShort( 0xa ),	/* Offset= 10 (4406) */
+/* 4398 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 4400 */	NdrFcShort( 0xffae ),	/* Offset= -82 (4318) */
+/* 4402 */	0x40,		/* FC_STRUCTPAD4 */
+			0x36,		/* FC_POINTER */
+/* 4404 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 4406 */	
+			0x12, 0x0,	/* FC_UP */
+/* 4408 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (4348) */
+/* 4410 */	
+			0x11, 0x0,	/* FC_RP */
+/* 4412 */	NdrFcShort( 0x2 ),	/* Offset= 2 (4414) */
+/* 4414 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 4416 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 4418 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 4420 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 4422 */	0x0 , 
+			0x0,		/* 0 */
+/* 4424 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4428 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4432 */	NdrFcShort( 0x2 ),	/* Offset= 2 (4434) */
+/* 4434 */	NdrFcShort( 0x30 ),	/* 48 */
+/* 4436 */	NdrFcShort( 0x3 ),	/* 3 */
+/* 4438 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 4442 */	NdrFcShort( 0x10 ),	/* Offset= 16 (4458) */
+/* 4444 */	NdrFcLong( 0x2 ),	/* 2 */
+/* 4448 */	NdrFcShort( 0x2e ),	/* Offset= 46 (4494) */
+/* 4450 */	NdrFcLong( 0x3 ),	/* 3 */
+/* 4454 */	NdrFcShort( 0x36 ),	/* Offset= 54 (4508) */
+/* 4456 */	NdrFcShort( 0xffff ),	/* Offset= -1 (4455) */
+/* 4458 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 4460 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 4462 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4464 */	NdrFcShort( 0x8 ),	/* Offset= 8 (4472) */
+/* 4466 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 4468 */	0x0,		/* 0 */
+			NdrFcShort( 0xf333 ),	/* Offset= -3277 (1192) */
+			0x5b,		/* FC_END */
+/* 4472 */	
+			0x11, 0x0,	/* FC_RP */
+/* 4474 */	NdrFcShort( 0xef38 ),	/* Offset= -4296 (178) */
+/* 4476 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 4478 */	NdrFcShort( 0x28 ),	/* 40 */
+/* 4480 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4482 */	NdrFcShort( 0x8 ),	/* Offset= 8 (4490) */
+/* 4484 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 4486 */	0x0,		/* 0 */
+			NdrFcShort( 0xf335 ),	/* Offset= -3275 (1212) */
+			0x5b,		/* FC_END */
+/* 4490 */	
+			0x12, 0x0,	/* FC_UP */
+/* 4492 */	NdrFcShort( 0xfff0 ),	/* Offset= -16 (4476) */
+/* 4494 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 4496 */	NdrFcShort( 0x28 ),	/* 40 */
+/* 4498 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4500 */	NdrFcShort( 0x0 ),	/* Offset= 0 (4500) */
+/* 4502 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 4504 */	NdrFcShort( 0xffe4 ),	/* Offset= -28 (4476) */
+/* 4506 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 4508 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 4510 */	NdrFcShort( 0x30 ),	/* 48 */
+/* 4512 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4514 */	NdrFcShort( 0x8 ),	/* Offset= 8 (4522) */
+/* 4516 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 4518 */	NdrFcShort( 0xffd6 ),	/* Offset= -42 (4476) */
+/* 4520 */	0x36,		/* FC_POINTER */
+			0x5b,		/* FC_END */
+/* 4522 */	
+			0x12, 0x0,	/* FC_UP */
+/* 4524 */	NdrFcShort( 0xf9a6 ),	/* Offset= -1626 (2898) */
+/* 4526 */	
+			0x11, 0x0,	/* FC_RP */
+/* 4528 */	NdrFcShort( 0x2 ),	/* Offset= 2 (4530) */
+/* 4530 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 4532 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x54,		/* FC_DEREFERENCE */
+/* 4534 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 4536 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 4538 */	0x0 , 
+			0x0,		/* 0 */
+/* 4540 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4544 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4548 */	NdrFcShort( 0x2 ),	/* Offset= 2 (4550) */
+/* 4550 */	NdrFcShort( 0x40 ),	/* 64 */
+/* 4552 */	NdrFcShort( 0x3 ),	/* 3 */
+/* 4554 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 4558 */	NdrFcShort( 0x10 ),	/* Offset= 16 (4574) */
+/* 4560 */	NdrFcLong( 0x2 ),	/* 2 */
+/* 4564 */	NdrFcShort( 0x64 ),	/* Offset= 100 (4664) */
+/* 4566 */	NdrFcLong( 0x3 ),	/* 3 */
+/* 4570 */	NdrFcShort( 0x20a ),	/* Offset= 522 (5092) */
+/* 4572 */	NdrFcShort( 0xffff ),	/* Offset= -1 (4571) */
+/* 4574 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 4576 */	NdrFcShort( 0x40 ),	/* 64 */
+/* 4578 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4580 */	NdrFcShort( 0x0 ),	/* Offset= 0 (4580) */
+/* 4582 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 4584 */	NdrFcShort( 0xee24 ),	/* Offset= -4572 (12) */
+/* 4586 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 4588 */	NdrFcShort( 0xeea6 ),	/* Offset= -4442 (146) */
+/* 4590 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 4592 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 4594 */	0x6,		/* FC_SHORT */
+			0x3e,		/* FC_STRUCTPAD2 */
+/* 4596 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 4598 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 4600 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4604 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 4608 */	
+			0x15,		/* FC_STRUCT */
+			0x3,		/* 3 */
+/* 4610 */	NdrFcShort( 0x2c ),	/* 44 */
+/* 4612 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 4614 */	NdrFcShort( 0xee06 ),	/* Offset= -4602 (12) */
+/* 4616 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 4618 */	NdrFcShort( 0xee88 ),	/* Offset= -4472 (146) */
+/* 4620 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 4622 */	
 			0x21,		/* FC_BOGUS_ARRAY */
 			0x3,		/* 3 */
-/* 4392 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4394 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 4624 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4626 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 4396 */	NdrFcShort( 0x1c ),	/* 28 */
-/* 4398 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 4400 */	0x0 , 
+/* 4628 */	NdrFcShort( 0x1c ),	/* 28 */
+/* 4630 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 4632 */	0x0 , 
 			0x0,		/* 0 */
-/* 4402 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4406 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4410 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 4414 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 4416 */	0x0 , 
+/* 4634 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4638 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4642 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 4646 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 4648 */	0x0 , 
 			0x0,		/* 0 */
-/* 4418 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4422 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4426 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 4650 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4654 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4658 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 4428 */	NdrFcShort( 0xffcc ),	/* Offset= -52 (4376) */
-/* 4430 */	0x5c,		/* FC_PAD */
+/* 4660 */	NdrFcShort( 0xffcc ),	/* Offset= -52 (4608) */
+/* 4662 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 4432 */	
+/* 4664 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 4434 */	NdrFcShort( 0x28 ),	/* 40 */
-/* 4436 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4438 */	NdrFcShort( 0x10 ),	/* Offset= 16 (4454) */
-/* 4440 */	0x36,		/* FC_POINTER */
+/* 4666 */	NdrFcShort( 0x28 ),	/* 40 */
+/* 4668 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4670 */	NdrFcShort( 0x10 ),	/* Offset= 16 (4686) */
+/* 4672 */	0x36,		/* FC_POINTER */
 			0x8,		/* FC_LONG */
-/* 4442 */	0x8,		/* FC_LONG */
+/* 4674 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 4444 */	0x8,		/* FC_LONG */
+/* 4676 */	0x8,		/* FC_LONG */
 			0x6,		/* FC_SHORT */
-/* 4446 */	0x3e,		/* FC_STRUCTPAD2 */
+/* 4678 */	0x3e,		/* FC_STRUCTPAD2 */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 4448 */	0x0,		/* 0 */
-			NdrFcShort( 0xffad ),	/* Offset= -83 (4366) */
+/* 4680 */	0x0,		/* 0 */
+			NdrFcShort( 0xffad ),	/* Offset= -83 (4598) */
 			0x36,		/* FC_POINTER */
-/* 4452 */	0x5c,		/* FC_PAD */
+/* 4684 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 4454 */	
+/* 4686 */	
 			0x12, 0x0,	/* FC_UP */
-/* 4456 */	NdrFcShort( 0xef44 ),	/* Offset= -4284 (172) */
-/* 4458 */	
+/* 4688 */	NdrFcShort( 0xee62 ),	/* Offset= -4510 (178) */
+/* 4690 */	
 			0x12, 0x0,	/* FC_UP */
-/* 4460 */	NdrFcShort( 0xffba ),	/* Offset= -70 (4390) */
-/* 4462 */	0xb7,		/* FC_RANGE */
+/* 4692 */	NdrFcShort( 0xffba ),	/* Offset= -70 (4622) */
+/* 4694 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 4464 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4468 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 4472 */	
+/* 4696 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4700 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 4704 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 4474 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 4706 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 4476 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 4478 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 4480 */	0x0 , 
+/* 4708 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 4710 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 4712 */	0x0 , 
 			0x0,		/* 0 */
-/* 4482 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4486 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4490 */	NdrFcShort( 0x2 ),	/* Offset= 2 (4492) */
-/* 4492 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 4494 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 4496 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 4500 */	NdrFcShort( 0x12e ),	/* Offset= 302 (4802) */
-/* 4502 */	NdrFcShort( 0xffff ),	/* Offset= -1 (4501) */
-/* 4504 */	
+/* 4714 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4718 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4722 */	NdrFcShort( 0x2 ),	/* Offset= 2 (4724) */
+/* 4724 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 4726 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 4728 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 4732 */	NdrFcShort( 0x12e ),	/* Offset= 302 (5034) */
+/* 4734 */	NdrFcShort( 0xffff ),	/* Offset= -1 (4733) */
+/* 4736 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 4506 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 4738 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 4508 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 4510 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 4512 */	0x0 , 
+/* 4740 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 4742 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 4744 */	0x0 , 
 			0x0,		/* 0 */
-/* 4514 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4518 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4522 */	NdrFcShort( 0x2 ),	/* Offset= 2 (4524) */
-/* 4524 */	NdrFcShort( 0x40 ),	/* 64 */
-/* 4526 */	NdrFcShort( 0x7 ),	/* 7 */
-/* 4528 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 4532 */	NdrFcShort( 0x4e ),	/* Offset= 78 (4610) */
-/* 4534 */	NdrFcLong( 0x2 ),	/* 2 */
-/* 4538 */	NdrFcShort( 0x5c ),	/* Offset= 92 (4630) */
-/* 4540 */	NdrFcLong( 0x3 ),	/* 3 */
-/* 4544 */	NdrFcShort( 0xe2 ),	/* Offset= 226 (4770) */
-/* 4546 */	NdrFcLong( 0x4 ),	/* 4 */
-/* 4550 */	NdrFcShort( 0xee ),	/* Offset= 238 (4788) */
-/* 4552 */	NdrFcLong( 0x5 ),	/* 5 */
-/* 4556 */	NdrFcShort( 0xe8 ),	/* Offset= 232 (4788) */
-/* 4558 */	NdrFcLong( 0x6 ),	/* 6 */
-/* 4562 */	NdrFcShort( 0xe2 ),	/* Offset= 226 (4788) */
-/* 4564 */	NdrFcLong( 0x7 ),	/* 7 */
-/* 4568 */	NdrFcShort( 0xdc ),	/* Offset= 220 (4788) */
-/* 4570 */	NdrFcShort( 0xffff ),	/* Offset= -1 (4569) */
-/* 4572 */	
+/* 4746 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4750 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4754 */	NdrFcShort( 0x2 ),	/* Offset= 2 (4756) */
+/* 4756 */	NdrFcShort( 0x40 ),	/* 64 */
+/* 4758 */	NdrFcShort( 0x7 ),	/* 7 */
+/* 4760 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 4764 */	NdrFcShort( 0x4e ),	/* Offset= 78 (4842) */
+/* 4766 */	NdrFcLong( 0x2 ),	/* 2 */
+/* 4770 */	NdrFcShort( 0x5c ),	/* Offset= 92 (4862) */
+/* 4772 */	NdrFcLong( 0x3 ),	/* 3 */
+/* 4776 */	NdrFcShort( 0xe2 ),	/* Offset= 226 (5002) */
+/* 4778 */	NdrFcLong( 0x4 ),	/* 4 */
+/* 4782 */	NdrFcShort( 0xee ),	/* Offset= 238 (5020) */
+/* 4784 */	NdrFcLong( 0x5 ),	/* 5 */
+/* 4788 */	NdrFcShort( 0xe8 ),	/* Offset= 232 (5020) */
+/* 4790 */	NdrFcLong( 0x6 ),	/* 6 */
+/* 4794 */	NdrFcShort( 0xe2 ),	/* Offset= 226 (5020) */
+/* 4796 */	NdrFcLong( 0x7 ),	/* 7 */
+/* 4800 */	NdrFcShort( 0xdc ),	/* Offset= 220 (5020) */
+/* 4802 */	NdrFcShort( 0xffff ),	/* Offset= -1 (4801) */
+/* 4804 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 4574 */	NdrFcShort( 0x28 ),	/* 40 */
-/* 4576 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4578 */	NdrFcShort( 0x0 ),	/* Offset= 0 (4578) */
-/* 4580 */	0x8,		/* FC_LONG */
+/* 4806 */	NdrFcShort( 0x28 ),	/* 40 */
+/* 4808 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4810 */	NdrFcShort( 0x0 ),	/* Offset= 0 (4810) */
+/* 4812 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 4582 */	0x8,		/* FC_LONG */
+/* 4814 */	0x8,		/* FC_LONG */
 			0x6,		/* FC_SHORT */
-/* 4584 */	0x3e,		/* FC_STRUCTPAD2 */
+/* 4816 */	0x3e,		/* FC_STRUCTPAD2 */
 			0x8,		/* FC_LONG */
-/* 4586 */	0x8,		/* FC_LONG */
+/* 4818 */	0x8,		/* FC_LONG */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 4588 */	0x0,		/* 0 */
-			NdrFcShort( 0xf1a1 ),	/* Offset= -3679 (910) */
+/* 4820 */	0x0,		/* 0 */
+			NdrFcShort( 0xf147 ),	/* Offset= -3769 (1052) */
 			0x5b,		/* FC_END */
-/* 4592 */	
+/* 4824 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 4594 */	NdrFcShort( 0x30 ),	/* 48 */
-/* 4596 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4598 */	NdrFcShort( 0x8 ),	/* Offset= 8 (4606) */
-/* 4600 */	0x36,		/* FC_POINTER */
+/* 4826 */	NdrFcShort( 0x30 ),	/* 48 */
+/* 4828 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4830 */	NdrFcShort( 0x8 ),	/* Offset= 8 (4838) */
+/* 4832 */	0x36,		/* FC_POINTER */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 4602 */	0x0,		/* 0 */
-			NdrFcShort( 0xffe1 ),	/* Offset= -31 (4572) */
+/* 4834 */	0x0,		/* 0 */
+			NdrFcShort( 0xffe1 ),	/* Offset= -31 (4804) */
 			0x5b,		/* FC_END */
-/* 4606 */	
+/* 4838 */	
 			0x12, 0x0,	/* FC_UP */
-/* 4608 */	NdrFcShort( 0xfff0 ),	/* Offset= -16 (4592) */
-/* 4610 */	
+/* 4840 */	NdrFcShort( 0xfff0 ),	/* Offset= -16 (4824) */
+/* 4842 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 4612 */	NdrFcShort( 0x40 ),	/* 64 */
-/* 4614 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4616 */	NdrFcShort( 0xa ),	/* Offset= 10 (4626) */
-/* 4618 */	0x36,		/* FC_POINTER */
+/* 4844 */	NdrFcShort( 0x40 ),	/* 64 */
+/* 4846 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4848 */	NdrFcShort( 0xa ),	/* Offset= 10 (4858) */
+/* 4850 */	0x36,		/* FC_POINTER */
 			0x8,		/* FC_LONG */
-/* 4620 */	0x40,		/* FC_STRUCTPAD4 */
+/* 4852 */	0x40,		/* FC_STRUCTPAD4 */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 4622 */	0x0,		/* 0 */
-			NdrFcShort( 0xffe1 ),	/* Offset= -31 (4592) */
+/* 4854 */	0x0,		/* 0 */
+			NdrFcShort( 0xffe1 ),	/* Offset= -31 (4824) */
 			0x5b,		/* FC_END */
-/* 4626 */	
+/* 4858 */	
 			0x12, 0x0,	/* FC_UP */
-/* 4628 */	NdrFcShort( 0xee98 ),	/* Offset= -4456 (172) */
-/* 4630 */	
+/* 4860 */	NdrFcShort( 0xedb6 ),	/* Offset= -4682 (178) */
+/* 4862 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 4632 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 4634 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4636 */	NdrFcShort( 0xa ),	/* Offset= 10 (4646) */
-/* 4638 */	0x8,		/* FC_LONG */
+/* 4864 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 4866 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4868 */	NdrFcShort( 0xa ),	/* Offset= 10 (4878) */
+/* 4870 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 4640 */	0x8,		/* FC_LONG */
+/* 4872 */	0x8,		/* FC_LONG */
 			0x6,		/* FC_SHORT */
-/* 4642 */	0x3e,		/* FC_STRUCTPAD2 */
+/* 4874 */	0x3e,		/* FC_STRUCTPAD2 */
 			0x36,		/* FC_POINTER */
-/* 4644 */	0x5c,		/* FC_PAD */
+/* 4876 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 4646 */	
+/* 4878 */	
 			0x12, 0x0,	/* FC_UP */
-/* 4648 */	NdrFcShort( 0xee84 ),	/* Offset= -4476 (172) */
-/* 4650 */	
+/* 4880 */	NdrFcShort( 0xeda2 ),	/* Offset= -4702 (178) */
+/* 4882 */	
 			0x15,		/* FC_STRUCT */
 			0x1,		/* 1 */
-/* 4652 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 4654 */	0x2,		/* FC_CHAR */
+/* 4884 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 4886 */	0x2,		/* FC_CHAR */
 			0x2,		/* FC_CHAR */
-/* 4656 */	0x6,		/* FC_SHORT */
+/* 4888 */	0x6,		/* FC_SHORT */
 			0x5b,		/* FC_END */
-/* 4658 */	
+/* 4890 */	
 			0x1c,		/* FC_CVARRAY */
 			0x1,		/* 1 */
-/* 4660 */	NdrFcShort( 0x2 ),	/* 2 */
-/* 4662 */	0x17,		/* Corr desc:  field pointer, FC_USHORT */
+/* 4892 */	NdrFcShort( 0x2 ),	/* 2 */
+/* 4894 */	0x17,		/* Corr desc:  field pointer, FC_USHORT */
 			0x55,		/* FC_DIV_2 */
-/* 4664 */	NdrFcShort( 0x2 ),	/* 2 */
-/* 4666 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 4668 */	0x0 , 
+/* 4896 */	NdrFcShort( 0x2 ),	/* 2 */
+/* 4898 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 4900 */	0x0 , 
 			0x0,		/* 0 */
-/* 4670 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4674 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4678 */	0x17,		/* Corr desc:  field pointer, FC_USHORT */
-			0x55,		/* FC_DIV_2 */
-/* 4680 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4682 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 4684 */	0x0 , 
-			0x0,		/* 0 */
-/* 4686 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4690 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4694 */	0x5,		/* FC_WCHAR */
-			0x5b,		/* FC_END */
-/* 4696 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 4698 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 4700 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4702 */	NdrFcShort( 0x8 ),	/* Offset= 8 (4710) */
-/* 4704 */	0x6,		/* FC_SHORT */
-			0x6,		/* FC_SHORT */
-/* 4706 */	0x40,		/* FC_STRUCTPAD4 */
-			0x36,		/* FC_POINTER */
-/* 4708 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 4710 */	
-			0x12, 0x0,	/* FC_UP */
-/* 4712 */	NdrFcShort( 0xffca ),	/* Offset= -54 (4658) */
-/* 4714 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 4716 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 4718 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4720 */	NdrFcShort( 0x6 ),	/* Offset= 6 (4726) */
-/* 4722 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 4724 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 4726 */	
-			0x12, 0x0,	/* FC_UP */
-/* 4728 */	NdrFcShort( 0xfff2 ),	/* Offset= -14 (4714) */
-/* 4730 */	
-			0x12, 0x0,	/* FC_UP */
-/* 4732 */	NdrFcShort( 0xffdc ),	/* Offset= -36 (4696) */
-/* 4734 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 4736 */	NdrFcShort( 0x30 ),	/* 48 */
-/* 4738 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4740 */	NdrFcShort( 0x12 ),	/* Offset= 18 (4758) */
-/* 4742 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 4744 */	0x0,		/* 0 */
-			NdrFcShort( 0xffa1 ),	/* Offset= -95 (4650) */
-			0x6,		/* FC_SHORT */
-/* 4748 */	0x6,		/* FC_SHORT */
-			0x6,		/* FC_SHORT */
-/* 4750 */	0x6,		/* FC_SHORT */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 4752 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 4754 */	0x8,		/* FC_LONG */
-			0x2,		/* FC_CHAR */
-/* 4756 */	0x3f,		/* FC_STRUCTPAD3 */
-			0x5b,		/* FC_END */
-/* 4758 */	
-			0x12, 0x0,	/* FC_UP */
-/* 4760 */	NdrFcShort( 0xee14 ),	/* Offset= -4588 (172) */
-/* 4762 */	
-			0x12, 0x0,	/* FC_UP */
-/* 4764 */	NdrFcShort( 0xffce ),	/* Offset= -50 (4714) */
-/* 4766 */	
-			0x12, 0x0,	/* FC_UP */
-/* 4768 */	NdrFcShort( 0xffde ),	/* Offset= -34 (4734) */
-/* 4770 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 4772 */	NdrFcShort( 0x40 ),	/* 64 */
-/* 4774 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4776 */	NdrFcShort( 0x0 ),	/* Offset= 0 (4776) */
-/* 4778 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 4780 */	0x8,		/* FC_LONG */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 4782 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 4784 */	NdrFcShort( 0xffce ),	/* Offset= -50 (4734) */
-/* 4786 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 4788 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 4790 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 4792 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4794 */	NdrFcShort( 0x0 ),	/* Offset= 0 (4794) */
-/* 4796 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 4798 */	0x8,		/* FC_LONG */
-			0x6,		/* FC_SHORT */
-/* 4800 */	0x3e,		/* FC_STRUCTPAD2 */
-			0x5b,		/* FC_END */
-/* 4802 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 4804 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 4806 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4808 */	NdrFcShort( 0x6 ),	/* Offset= 6 (4814) */
-/* 4810 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 4812 */	0x36,		/* FC_POINTER */
-			0x5b,		/* FC_END */
-/* 4814 */	
-			0x12, 0x0,	/* FC_UP */
-/* 4816 */	NdrFcShort( 0xfec8 ),	/* Offset= -312 (4504) */
-/* 4818 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x3,		/* 3 */
-/* 4820 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4822 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 4824 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 4826 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 4828 */	0x0 , 
-			0x0,		/* 0 */
-/* 4830 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4834 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4838 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 4842 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 4844 */	0x0 , 
-			0x0,		/* 0 */
-/* 4846 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4850 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4854 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 4856 */	NdrFcShort( 0xfe20 ),	/* Offset= -480 (4376) */
-/* 4858 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 4860 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 4862 */	NdrFcShort( 0x28 ),	/* 40 */
-/* 4864 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4866 */	NdrFcShort( 0xe ),	/* Offset= 14 (4880) */
-/* 4868 */	0x36,		/* FC_POINTER */
-			0x8,		/* FC_LONG */
-/* 4870 */	0x40,		/* FC_STRUCTPAD4 */
-			0x36,		/* FC_POINTER */
-/* 4872 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 4874 */	NdrFcShort( 0xfe64 ),	/* Offset= -412 (4462) */
-/* 4876 */	0x40,		/* FC_STRUCTPAD4 */
-			0x36,		/* FC_POINTER */
-/* 4878 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 4880 */	
-			0x12, 0x0,	/* FC_UP */
-/* 4882 */	NdrFcShort( 0xed9a ),	/* Offset= -4710 (172) */
-/* 4884 */	
-			0x12, 0x0,	/* FC_UP */
-/* 4886 */	NdrFcShort( 0xfe62 ),	/* Offset= -414 (4472) */
-/* 4888 */	
-			0x12, 0x0,	/* FC_UP */
-/* 4890 */	NdrFcShort( 0xffb8 ),	/* Offset= -72 (4818) */
-/* 4892 */	
-			0x11, 0x0,	/* FC_RP */
-/* 4894 */	NdrFcShort( 0x2 ),	/* Offset= 2 (4896) */
-/* 4896 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 4898 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 4900 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 4902 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 4904 */	0x0 , 
-			0x0,		/* 0 */
+/* 4902 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 4906 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4910 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4914 */	NdrFcShort( 0x2 ),	/* Offset= 2 (4916) */
-/* 4916 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 4918 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 4920 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 4924 */	NdrFcShort( 0x4 ),	/* Offset= 4 (4928) */
-/* 4926 */	NdrFcShort( 0xffff ),	/* Offset= -1 (4925) */
-/* 4928 */	
-			0x15,		/* FC_STRUCT */
-			0x3,		/* 3 */
-/* 4930 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 4932 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 4934 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 4936 */	
-			0x11, 0x0,	/* FC_RP */
-/* 4938 */	NdrFcShort( 0x2 ),	/* Offset= 2 (4940) */
-/* 4940 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 4942 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 4944 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 4946 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 4948 */	0x0 , 
+/* 4910 */	0x17,		/* Corr desc:  field pointer, FC_USHORT */
+			0x55,		/* FC_DIV_2 */
+/* 4912 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4914 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 4916 */	0x0 , 
 			0x0,		/* 0 */
-/* 4950 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4954 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 4958 */	NdrFcShort( 0x2 ),	/* Offset= 2 (4960) */
-/* 4960 */	NdrFcShort( 0x40 ),	/* 64 */
-/* 4962 */	NdrFcShort( 0x2 ),	/* 2 */
-/* 4964 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 4968 */	NdrFcShort( 0xa ),	/* Offset= 10 (4978) */
-/* 4970 */	NdrFcLong( 0x2 ),	/* 2 */
-/* 4974 */	NdrFcShort( 0x18 ),	/* Offset= 24 (4998) */
-/* 4976 */	NdrFcShort( 0xffff ),	/* Offset= -1 (4975) */
-/* 4978 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 4980 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 4982 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 4984 */	NdrFcShort( 0xa ),	/* Offset= 10 (4994) */
-/* 4986 */	0x8,		/* FC_LONG */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 4988 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 4990 */	0x0,		/* 0 */
-			NdrFcShort( 0xec8d ),	/* Offset= -4979 (12) */
+/* 4918 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4922 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 4926 */	0x5,		/* FC_WCHAR */
 			0x5b,		/* FC_END */
-/* 4994 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 4996 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 4998 */	
+/* 4928 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 5000 */	NdrFcShort( 0x40 ),	/* 64 */
-/* 5002 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5004 */	NdrFcShort( 0x10 ),	/* Offset= 16 (5020) */
-/* 5006 */	0x8,		/* FC_LONG */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 5008 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 5010 */	0x0,		/* 0 */
-			NdrFcShort( 0xec79 ),	/* Offset= -4999 (12) */
-			0x8,		/* FC_LONG */
-/* 5014 */	0x40,		/* FC_STRUCTPAD4 */
+/* 4930 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 4932 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4934 */	NdrFcShort( 0x8 ),	/* Offset= 8 (4942) */
+/* 4936 */	0x6,		/* FC_SHORT */
+			0x6,		/* FC_SHORT */
+/* 4938 */	0x40,		/* FC_STRUCTPAD4 */
 			0x36,		/* FC_POINTER */
-/* 5016 */	0x36,		/* FC_POINTER */
+/* 4940 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 4942 */	
+			0x12, 0x0,	/* FC_UP */
+/* 4944 */	NdrFcShort( 0xffca ),	/* Offset= -54 (4890) */
+/* 4946 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 4948 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 4950 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4952 */	NdrFcShort( 0x6 ),	/* Offset= 6 (4958) */
+/* 4954 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 4956 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 4958 */	
+			0x12, 0x0,	/* FC_UP */
+/* 4960 */	NdrFcShort( 0xfff2 ),	/* Offset= -14 (4946) */
+/* 4962 */	
+			0x12, 0x0,	/* FC_UP */
+/* 4964 */	NdrFcShort( 0xffdc ),	/* Offset= -36 (4928) */
+/* 4966 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 4968 */	NdrFcShort( 0x30 ),	/* 48 */
+/* 4970 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 4972 */	NdrFcShort( 0x12 ),	/* Offset= 18 (4990) */
+/* 4974 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 4976 */	0x0,		/* 0 */
+			NdrFcShort( 0xffa1 ),	/* Offset= -95 (4882) */
+			0x6,		/* FC_SHORT */
+/* 4980 */	0x6,		/* FC_SHORT */
+			0x6,		/* FC_SHORT */
+/* 4982 */	0x6,		/* FC_SHORT */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 4984 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 4986 */	0x8,		/* FC_LONG */
+			0x2,		/* FC_CHAR */
+/* 4988 */	0x3f,		/* FC_STRUCTPAD3 */
+			0x5b,		/* FC_END */
+/* 4990 */	
+			0x12, 0x0,	/* FC_UP */
+/* 4992 */	NdrFcShort( 0xed32 ),	/* Offset= -4814 (178) */
+/* 4994 */	
+			0x12, 0x0,	/* FC_UP */
+/* 4996 */	NdrFcShort( 0xffce ),	/* Offset= -50 (4946) */
+/* 4998 */	
+			0x12, 0x0,	/* FC_UP */
+/* 5000 */	NdrFcShort( 0xffde ),	/* Offset= -34 (4966) */
+/* 5002 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 5004 */	NdrFcShort( 0x40 ),	/* 64 */
+/* 5006 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5008 */	NdrFcShort( 0x0 ),	/* Offset= 0 (5008) */
+/* 5010 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 5018 */	0x40,		/* FC_STRUCTPAD4 */
+/* 5012 */	0x8,		/* FC_LONG */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 5014 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 5016 */	NdrFcShort( 0xffce ),	/* Offset= -50 (4966) */
+/* 5018 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
 /* 5020 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5022 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 5024 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5026 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 5028 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5030 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 5032 */	
-			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 5034 */	NdrFcShort( 0x2 ),	/* Offset= 2 (5036) */
-/* 5036 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 5022 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 5024 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5026 */	NdrFcShort( 0x0 ),	/* Offset= 0 (5026) */
+/* 5028 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 5030 */	0x8,		/* FC_LONG */
+			0x6,		/* FC_SHORT */
+/* 5032 */	0x3e,		/* FC_STRUCTPAD2 */
+			0x5b,		/* FC_END */
+/* 5034 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 5036 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 5038 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5040 */	NdrFcShort( 0x6 ),	/* Offset= 6 (5046) */
+/* 5042 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 5044 */	0x36,		/* FC_POINTER */
+			0x5b,		/* FC_END */
+/* 5046 */	
+			0x12, 0x0,	/* FC_UP */
+/* 5048 */	NdrFcShort( 0xfec8 ),	/* Offset= -312 (4736) */
+/* 5050 */	
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x3,		/* 3 */
+/* 5052 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5054 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 5056 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 5058 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 5060 */	0x0 , 
+			0x0,		/* 0 */
+/* 5062 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5066 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5070 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 5074 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 5076 */	0x0 , 
+			0x0,		/* 0 */
+/* 5078 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5082 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5086 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 5088 */	NdrFcShort( 0xfe20 ),	/* Offset= -480 (4608) */
+/* 5090 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 5092 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 5094 */	NdrFcShort( 0x28 ),	/* 40 */
+/* 5096 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5098 */	NdrFcShort( 0xe ),	/* Offset= 14 (5112) */
+/* 5100 */	0x36,		/* FC_POINTER */
+			0x8,		/* FC_LONG */
+/* 5102 */	0x40,		/* FC_STRUCTPAD4 */
+			0x36,		/* FC_POINTER */
+/* 5104 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 5106 */	NdrFcShort( 0xfe64 ),	/* Offset= -412 (4694) */
+/* 5108 */	0x40,		/* FC_STRUCTPAD4 */
+			0x36,		/* FC_POINTER */
+/* 5110 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 5112 */	
+			0x12, 0x0,	/* FC_UP */
+/* 5114 */	NdrFcShort( 0xecb8 ),	/* Offset= -4936 (178) */
+/* 5116 */	
+			0x12, 0x0,	/* FC_UP */
+/* 5118 */	NdrFcShort( 0xfe62 ),	/* Offset= -414 (4704) */
+/* 5120 */	
+			0x12, 0x0,	/* FC_UP */
+/* 5122 */	NdrFcShort( 0xffb8 ),	/* Offset= -72 (5050) */
+/* 5124 */	
+			0x11, 0x0,	/* FC_RP */
+/* 5126 */	NdrFcShort( 0x2 ),	/* Offset= 2 (5128) */
+/* 5128 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 5038 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x54,		/* FC_DEREFERENCE */
-/* 5040 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
-/* 5042 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 5044 */	0x0 , 
+/* 5130 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 5132 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 5134 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 5136 */	0x0 , 
 			0x0,		/* 0 */
-/* 5046 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5050 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5054 */	NdrFcShort( 0x2 ),	/* Offset= 2 (5056) */
-/* 5056 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 5058 */	NdrFcShort( 0xf ),	/* 15 */
-/* 5060 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5064 */	NdrFcShort( 0x58 ),	/* Offset= 88 (5152) */
-/* 5066 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 5070 */	NdrFcShort( 0xc8 ),	/* Offset= 200 (5270) */
-/* 5072 */	NdrFcLong( 0x2 ),	/* 2 */
-/* 5076 */	NdrFcShort( 0xd0 ),	/* Offset= 208 (5284) */
-/* 5078 */	NdrFcLong( 0x3 ),	/* 3 */
-/* 5082 */	NdrFcShort( 0x11e ),	/* Offset= 286 (5368) */
-/* 5084 */	NdrFcLong( 0x4 ),	/* 4 */
-/* 5088 */	NdrFcShort( 0x118 ),	/* Offset= 280 (5368) */
-/* 5090 */	NdrFcLong( 0x5 ),	/* 5 */
-/* 5094 */	NdrFcShort( 0x164 ),	/* Offset= 356 (5450) */
-/* 5096 */	NdrFcLong( 0x6 ),	/* 6 */
-/* 5100 */	NdrFcShort( 0x1c4 ),	/* Offset= 452 (5552) */
-/* 5102 */	NdrFcLong( 0x7 ),	/* 7 */
-/* 5106 */	NdrFcShort( 0x23c ),	/* Offset= 572 (5678) */
-/* 5108 */	NdrFcLong( 0x8 ),	/* 8 */
-/* 5112 */	NdrFcShort( 0x26c ),	/* Offset= 620 (5732) */
-/* 5114 */	NdrFcLong( 0x9 ),	/* 9 */
-/* 5118 */	NdrFcShort( 0x2b8 ),	/* Offset= 696 (5814) */
-/* 5120 */	NdrFcLong( 0xa ),	/* 10 */
-/* 5124 */	NdrFcShort( 0x30c ),	/* Offset= 780 (5904) */
-/* 5126 */	NdrFcLong( 0xfffffffa ),	/* -6 */
-/* 5130 */	NdrFcShort( 0x374 ),	/* Offset= 884 (6014) */
-/* 5132 */	NdrFcLong( 0xfffffffb ),	/* -5 */
-/* 5136 */	NdrFcShort( 0x3cc ),	/* Offset= 972 (6108) */
-/* 5138 */	NdrFcLong( 0xfffffffc ),	/* -4 */
-/* 5142 */	NdrFcShort( 0x3ca ),	/* Offset= 970 (6112) */
-/* 5144 */	NdrFcLong( 0xfffffffe ),	/* -2 */
-/* 5148 */	NdrFcShort( 0x4 ),	/* Offset= 4 (5152) */
-/* 5150 */	NdrFcShort( 0xffff ),	/* Offset= -1 (5149) */
-/* 5152 */	
+/* 5138 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5142 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5146 */	NdrFcShort( 0x2 ),	/* Offset= 2 (5148) */
+/* 5148 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 5150 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 5152 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 5156 */	NdrFcShort( 0x4 ),	/* Offset= 4 (5160) */
+/* 5158 */	NdrFcShort( 0xffff ),	/* Offset= -1 (5157) */
+/* 5160 */	
+			0x15,		/* FC_STRUCT */
+			0x3,		/* 3 */
+/* 5162 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 5164 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 5166 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 5168 */	
+			0x11, 0x0,	/* FC_RP */
+/* 5170 */	NdrFcShort( 0x2 ),	/* Offset= 2 (5172) */
+/* 5172 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 5174 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 5176 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 5178 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 5180 */	0x0 , 
+			0x0,		/* 0 */
+/* 5182 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5186 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5190 */	NdrFcShort( 0x2 ),	/* Offset= 2 (5192) */
+/* 5192 */	NdrFcShort( 0x40 ),	/* 64 */
+/* 5194 */	NdrFcShort( 0x2 ),	/* 2 */
+/* 5196 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 5200 */	NdrFcShort( 0xa ),	/* Offset= 10 (5210) */
+/* 5202 */	NdrFcLong( 0x2 ),	/* 2 */
+/* 5206 */	NdrFcShort( 0x18 ),	/* Offset= 24 (5230) */
+/* 5208 */	NdrFcShort( 0xffff ),	/* Offset= -1 (5207) */
+/* 5210 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 5212 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 5214 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5216 */	NdrFcShort( 0xa ),	/* Offset= 10 (5226) */
+/* 5218 */	0x8,		/* FC_LONG */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 5220 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 5222 */	0x0,		/* 0 */
+			NdrFcShort( 0xeba5 ),	/* Offset= -5211 (12) */
+			0x5b,		/* FC_END */
+/* 5226 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 5228 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 5230 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 5232 */	NdrFcShort( 0x40 ),	/* 64 */
+/* 5234 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5236 */	NdrFcShort( 0x10 ),	/* Offset= 16 (5252) */
+/* 5238 */	0x8,		/* FC_LONG */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 5240 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 5242 */	0x0,		/* 0 */
+			NdrFcShort( 0xeb91 ),	/* Offset= -5231 (12) */
+			0x8,		/* FC_LONG */
+/* 5246 */	0x40,		/* FC_STRUCTPAD4 */
+			0x36,		/* FC_POINTER */
+/* 5248 */	0x36,		/* FC_POINTER */
+			0x8,		/* FC_LONG */
+/* 5250 */	0x40,		/* FC_STRUCTPAD4 */
+			0x5b,		/* FC_END */
+/* 5252 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 5254 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 5256 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 5258 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 5260 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 5262 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 5264 */	
+			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
+/* 5266 */	NdrFcShort( 0x2 ),	/* Offset= 2 (5268) */
+/* 5268 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 5270 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x54,		/* FC_DEREFERENCE */
+/* 5272 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 5274 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 5276 */	0x0 , 
+			0x0,		/* 0 */
+/* 5278 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5282 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5286 */	NdrFcShort( 0x2 ),	/* Offset= 2 (5288) */
+/* 5288 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 5290 */	NdrFcShort( 0xf ),	/* 15 */
+/* 5292 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5296 */	NdrFcShort( 0x58 ),	/* Offset= 88 (5384) */
+/* 5298 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 5302 */	NdrFcShort( 0xc8 ),	/* Offset= 200 (5502) */
+/* 5304 */	NdrFcLong( 0x2 ),	/* 2 */
+/* 5308 */	NdrFcShort( 0xd0 ),	/* Offset= 208 (5516) */
+/* 5310 */	NdrFcLong( 0x3 ),	/* 3 */
+/* 5314 */	NdrFcShort( 0x11e ),	/* Offset= 286 (5600) */
+/* 5316 */	NdrFcLong( 0x4 ),	/* 4 */
+/* 5320 */	NdrFcShort( 0x118 ),	/* Offset= 280 (5600) */
+/* 5322 */	NdrFcLong( 0x5 ),	/* 5 */
+/* 5326 */	NdrFcShort( 0x164 ),	/* Offset= 356 (5682) */
+/* 5328 */	NdrFcLong( 0x6 ),	/* 6 */
+/* 5332 */	NdrFcShort( 0x1c4 ),	/* Offset= 452 (5784) */
+/* 5334 */	NdrFcLong( 0x7 ),	/* 7 */
+/* 5338 */	NdrFcShort( 0x23c ),	/* Offset= 572 (5910) */
+/* 5340 */	NdrFcLong( 0x8 ),	/* 8 */
+/* 5344 */	NdrFcShort( 0x26c ),	/* Offset= 620 (5964) */
+/* 5346 */	NdrFcLong( 0x9 ),	/* 9 */
+/* 5350 */	NdrFcShort( 0x2b8 ),	/* Offset= 696 (6046) */
+/* 5352 */	NdrFcLong( 0xa ),	/* 10 */
+/* 5356 */	NdrFcShort( 0x30c ),	/* Offset= 780 (6136) */
+/* 5358 */	NdrFcLong( 0xfffffffa ),	/* -6 */
+/* 5362 */	NdrFcShort( 0x374 ),	/* Offset= 884 (6246) */
+/* 5364 */	NdrFcLong( 0xfffffffb ),	/* -5 */
+/* 5368 */	NdrFcShort( 0x3cc ),	/* Offset= 972 (6340) */
+/* 5370 */	NdrFcLong( 0xfffffffc ),	/* -4 */
+/* 5374 */	NdrFcShort( 0x3ca ),	/* Offset= 970 (6344) */
+/* 5376 */	NdrFcLong( 0xfffffffe ),	/* -2 */
+/* 5380 */	NdrFcShort( 0x4 ),	/* Offset= 4 (5384) */
+/* 5382 */	NdrFcShort( 0xffff ),	/* Offset= -1 (5381) */
+/* 5384 */	
 			0x12, 0x0,	/* FC_UP */
-/* 5154 */	NdrFcShort( 0x68 ),	/* Offset= 104 (5258) */
-/* 5156 */	
+/* 5386 */	NdrFcShort( 0x68 ),	/* Offset= 104 (5490) */
+/* 5388 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x7,		/* 7 */
-/* 5158 */	NdrFcShort( 0x90 ),	/* 144 */
-/* 5160 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5162 */	NdrFcShort( 0x26 ),	/* Offset= 38 (5200) */
-/* 5164 */	0x36,		/* FC_POINTER */
+/* 5390 */	NdrFcShort( 0x90 ),	/* 144 */
+/* 5392 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5394 */	NdrFcShort( 0x26 ),	/* Offset= 38 (5432) */
+/* 5396 */	0x36,		/* FC_POINTER */
 			0x36,		/* FC_POINTER */
-/* 5166 */	0x36,		/* FC_POINTER */
+/* 5398 */	0x36,		/* FC_POINTER */
 			0x36,		/* FC_POINTER */
-/* 5168 */	0x8,		/* FC_LONG */
+/* 5400 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 5170 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 5402 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 5172 */	NdrFcShort( 0xebd8 ),	/* Offset= -5160 (12) */
-/* 5174 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 5404 */	NdrFcShort( 0xeaf0 ),	/* Offset= -5392 (12) */
+/* 5406 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 5176 */	NdrFcShort( 0xebd4 ),	/* Offset= -5164 (12) */
-/* 5178 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 5408 */	NdrFcShort( 0xeaec ),	/* Offset= -5396 (12) */
+/* 5410 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 5180 */	NdrFcShort( 0xebd0 ),	/* Offset= -5168 (12) */
-/* 5182 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 5412 */	NdrFcShort( 0xeae8 ),	/* Offset= -5400 (12) */
+/* 5414 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 5184 */	NdrFcShort( 0xebcc ),	/* Offset= -5172 (12) */
-/* 5186 */	0xb,		/* FC_HYPER */
+/* 5416 */	NdrFcShort( 0xeae4 ),	/* Offset= -5404 (12) */
+/* 5418 */	0xb,		/* FC_HYPER */
 			0xb,		/* FC_HYPER */
-/* 5188 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 5420 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 5190 */	NdrFcShort( 0xfefa ),	/* Offset= -262 (4928) */
-/* 5192 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 5422 */	NdrFcShort( 0xfefa ),	/* Offset= -262 (5160) */
+/* 5424 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 5194 */	NdrFcShort( 0xfef6 ),	/* Offset= -266 (4928) */
-/* 5196 */	0x8,		/* FC_LONG */
+/* 5426 */	NdrFcShort( 0xfef6 ),	/* Offset= -266 (5160) */
+/* 5428 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 5198 */	0x5c,		/* FC_PAD */
+/* 5430 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 5200 */	
+/* 5432 */	
 			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5202 */	
+/* 5434 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 5204 */	
+/* 5436 */	
 			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5206 */	
+/* 5438 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 5208 */	
+/* 5440 */	
 			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5210 */	
+/* 5442 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 5212 */	
+/* 5444 */	
 			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5214 */	
+/* 5446 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 5216 */	
+/* 5448 */	
 			0x21,		/* FC_BOGUS_ARRAY */
 			0x7,		/* 7 */
-/* 5218 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5220 */	0x9,		/* Corr desc: FC_ULONG */
+/* 5450 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5452 */	0x9,		/* Corr desc: FC_ULONG */
 			0x0,		/*  */
-/* 5222 */	NdrFcShort( 0xfff8 ),	/* -8 */
-/* 5224 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 5226 */	0x0 , 
+/* 5454 */	NdrFcShort( 0xfff8 ),	/* -8 */
+/* 5456 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 5458 */	0x0 , 
 			0x0,		/* 0 */
-/* 5228 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5232 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5236 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 5240 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 5242 */	0x0 , 
+/* 5460 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5464 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5468 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 5472 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 5474 */	0x0 , 
 			0x0,		/* 0 */
-/* 5244 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5248 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5252 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 5476 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5480 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5484 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 5254 */	NdrFcShort( 0xff9e ),	/* Offset= -98 (5156) */
-/* 5256 */	0x5c,		/* FC_PAD */
+/* 5486 */	NdrFcShort( 0xff9e ),	/* Offset= -98 (5388) */
+/* 5488 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 5258 */	
+/* 5490 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x7,		/* 7 */
-/* 5260 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 5262 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (5216) */
-/* 5264 */	NdrFcShort( 0x0 ),	/* Offset= 0 (5264) */
-/* 5266 */	0x8,		/* FC_LONG */
+/* 5492 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 5494 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (5448) */
+/* 5496 */	NdrFcShort( 0x0 ),	/* Offset= 0 (5496) */
+/* 5498 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 5268 */	0x5c,		/* FC_PAD */
+/* 5500 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 5270 */	
+/* 5502 */	
 			0x12, 0x0,	/* FC_UP */
-/* 5272 */	NdrFcShort( 0x2 ),	/* Offset= 2 (5274) */
-/* 5274 */	
+/* 5504 */	NdrFcShort( 0x2 ),	/* Offset= 2 (5506) */
+/* 5506 */	
 			0x17,		/* FC_CSTRUCT */
 			0x7,		/* 7 */
-/* 5276 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 5278 */	NdrFcShort( 0xed1e ),	/* Offset= -4834 (444) */
-/* 5280 */	0x8,		/* FC_LONG */
+/* 5508 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 5510 */	NdrFcShort( 0xec84 ),	/* Offset= -4988 (522) */
+/* 5512 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 5282 */	0x5c,		/* FC_PAD */
+/* 5514 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 5284 */	
+/* 5516 */	
 			0x12, 0x0,	/* FC_UP */
-/* 5286 */	NdrFcShort( 0x46 ),	/* Offset= 70 (5356) */
-/* 5288 */	
+/* 5518 */	NdrFcShort( 0x46 ),	/* Offset= 70 (5588) */
+/* 5520 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x7,		/* 7 */
-/* 5290 */	NdrFcShort( 0x38 ),	/* 56 */
-/* 5292 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5294 */	NdrFcShort( 0x10 ),	/* Offset= 16 (5310) */
-/* 5296 */	0x36,		/* FC_POINTER */
+/* 5522 */	NdrFcShort( 0x38 ),	/* 56 */
+/* 5524 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5526 */	NdrFcShort( 0x10 ),	/* Offset= 16 (5542) */
+/* 5528 */	0x36,		/* FC_POINTER */
 			0x8,		/* FC_LONG */
-/* 5298 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 5300 */	NdrFcShort( 0xfe8c ),	/* Offset= -372 (4928) */
-/* 5302 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 5304 */	NdrFcShort( 0xeb54 ),	/* Offset= -5292 (12) */
-/* 5306 */	0x40,		/* FC_STRUCTPAD4 */
-			0xb,		/* FC_HYPER */
-/* 5308 */	0xb,		/* FC_HYPER */
-			0x5b,		/* FC_END */
-/* 5310 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5312 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 5314 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x7,		/* 7 */
-/* 5316 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5318 */	0x9,		/* Corr desc: FC_ULONG */
-			0x0,		/*  */
-/* 5320 */	NdrFcShort( 0xfff8 ),	/* -8 */
-/* 5322 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 5324 */	0x0 , 
-			0x0,		/* 0 */
-/* 5326 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5330 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5334 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 5338 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 5340 */	0x0 , 
-			0x0,		/* 0 */
-/* 5342 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5346 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5350 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 5352 */	NdrFcShort( 0xffc0 ),	/* Offset= -64 (5288) */
-/* 5354 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 5356 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 5358 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 5360 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (5314) */
-/* 5362 */	NdrFcShort( 0x0 ),	/* Offset= 0 (5362) */
-/* 5364 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 5366 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 5368 */	
-			0x12, 0x0,	/* FC_UP */
-/* 5370 */	NdrFcShort( 0x44 ),	/* Offset= 68 (5438) */
-/* 5372 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 5374 */	NdrFcShort( 0x28 ),	/* 40 */
-/* 5376 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5378 */	NdrFcShort( 0xe ),	/* Offset= 14 (5392) */
-/* 5380 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 5382 */	0x0,		/* 0 */
-			NdrFcShort( 0xeb05 ),	/* Offset= -5371 (12) */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 5386 */	0x0,		/* 0 */
-			NdrFcShort( 0xfe35 ),	/* Offset= -459 (4928) */
-			0x8,		/* FC_LONG */
-/* 5390 */	0x8,		/* FC_LONG */
-			0x5b,		/* FC_END */
-/* 5392 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5394 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 5396 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x3,		/* 3 */
-/* 5398 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5400 */	0x9,		/* Corr desc: FC_ULONG */
-			0x0,		/*  */
-/* 5402 */	NdrFcShort( 0xfff8 ),	/* -8 */
-/* 5404 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 5406 */	0x0 , 
-			0x0,		/* 0 */
-/* 5408 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5412 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5416 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 5420 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 5422 */	0x0 , 
-			0x0,		/* 0 */
-/* 5424 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5428 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5432 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 5434 */	NdrFcShort( 0xffc2 ),	/* Offset= -62 (5372) */
-/* 5436 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 5438 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 5440 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 5442 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (5396) */
-/* 5444 */	NdrFcShort( 0x0 ),	/* Offset= 0 (5444) */
-/* 5446 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 5448 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 5450 */	
-			0x12, 0x0,	/* FC_UP */
-/* 5452 */	NdrFcShort( 0x54 ),	/* Offset= 84 (5536) */
-/* 5454 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 5456 */	NdrFcShort( 0x50 ),	/* 80 */
-/* 5458 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5460 */	NdrFcShort( 0x16 ),	/* Offset= 22 (5482) */
-/* 5462 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 5464 */	NdrFcShort( 0xfde8 ),	/* Offset= -536 (4928) */
-/* 5466 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 5468 */	0xd,		/* FC_ENUM16 */
-			0x8,		/* FC_LONG */
-/* 5470 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 5472 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 5474 */	0x0,		/* 0 */
-			NdrFcShort( 0xeaa9 ),	/* Offset= -5463 (12) */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 5478 */	0x0,		/* 0 */
-			NdrFcShort( 0xeaa5 ),	/* Offset= -5467 (12) */
-			0x5b,		/* FC_END */
-/* 5482 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5484 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 5486 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5488 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 5490 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5492 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 5494 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x3,		/* 3 */
-/* 5496 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5498 */	0x9,		/* Corr desc: FC_ULONG */
-			0x0,		/*  */
-/* 5500 */	NdrFcShort( 0xfff8 ),	/* -8 */
-/* 5502 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 5504 */	0x0 , 
-			0x0,		/* 0 */
-/* 5506 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5510 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5514 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 5518 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 5520 */	0x0 , 
-			0x0,		/* 0 */
-/* 5522 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5526 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 5530 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 5532 */	NdrFcShort( 0xffb2 ),	/* Offset= -78 (5454) */
-/* 5534 */	0x5c,		/* FC_PAD */
+/* 5532 */	NdrFcShort( 0xfe8c ),	/* Offset= -372 (5160) */
+/* 5534 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 5536 */	NdrFcShort( 0xea6c ),	/* Offset= -5524 (12) */
+/* 5538 */	0x40,		/* FC_STRUCTPAD4 */
+			0xb,		/* FC_HYPER */
+/* 5540 */	0xb,		/* FC_HYPER */
 			0x5b,		/* FC_END */
-/* 5536 */	
+/* 5542 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 5544 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 5546 */	
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x7,		/* 7 */
+/* 5548 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5550 */	0x9,		/* Corr desc: FC_ULONG */
+			0x0,		/*  */
+/* 5552 */	NdrFcShort( 0xfff8 ),	/* -8 */
+/* 5554 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 5556 */	0x0 , 
+			0x0,		/* 0 */
+/* 5558 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5562 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5566 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 5570 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 5572 */	0x0 , 
+			0x0,		/* 0 */
+/* 5574 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5578 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5582 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 5584 */	NdrFcShort( 0xffc0 ),	/* Offset= -64 (5520) */
+/* 5586 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 5588 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 5590 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 5592 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (5546) */
+/* 5594 */	NdrFcShort( 0x0 ),	/* Offset= 0 (5594) */
+/* 5596 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 5598 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 5600 */	
+			0x12, 0x0,	/* FC_UP */
+/* 5602 */	NdrFcShort( 0x44 ),	/* Offset= 68 (5670) */
+/* 5604 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 5538 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 5540 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (5494) */
-/* 5542 */	NdrFcShort( 0x0 ),	/* Offset= 0 (5542) */
-/* 5544 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 5546 */	NdrFcShort( 0xfd96 ),	/* Offset= -618 (4928) */
-/* 5548 */	0x8,		/* FC_LONG */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 5550 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 5552 */	
-			0x12, 0x0,	/* FC_UP */
-/* 5554 */	NdrFcShort( 0x70 ),	/* Offset= 112 (5666) */
-/* 5556 */	
-			0x1b,		/* FC_CARRAY */
-			0x0,		/* 0 */
-/* 5558 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 5560 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 5562 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 5564 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 5566 */	0x0 , 
-			0x0,		/* 0 */
-/* 5568 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5572 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5576 */	0x2,		/* FC_CHAR */
-			0x5b,		/* FC_END */
-/* 5578 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 5580 */	NdrFcShort( 0x60 ),	/* 96 */
-/* 5582 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5584 */	NdrFcShort( 0x1c ),	/* Offset= 28 (5612) */
-/* 5586 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 5588 */	0x8,		/* FC_LONG */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 5590 */	0x36,		/* FC_POINTER */
+/* 5606 */	NdrFcShort( 0x28 ),	/* 40 */
+/* 5608 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5610 */	NdrFcShort( 0xe ),	/* Offset= 14 (5624) */
+/* 5612 */	0x36,		/* FC_POINTER */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 5592 */	0x0,		/* 0 */
-			NdrFcShort( 0xfd67 ),	/* Offset= -665 (4928) */
+/* 5614 */	0x0,		/* 0 */
+			NdrFcShort( 0xea1d ),	/* Offset= -5603 (12) */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 5596 */	0x0,		/* 0 */
-			NdrFcShort( 0xfd63 ),	/* Offset= -669 (4928) */
+/* 5618 */	0x0,		/* 0 */
+			NdrFcShort( 0xfe35 ),	/* Offset= -459 (5160) */
 			0x8,		/* FC_LONG */
-/* 5600 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 5602 */	NdrFcShort( 0xfd5e ),	/* Offset= -674 (4928) */
-/* 5604 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 5606 */	NdrFcShort( 0xea26 ),	/* Offset= -5594 (12) */
-/* 5608 */	0x40,		/* FC_STRUCTPAD4 */
-			0xb,		/* FC_HYPER */
-/* 5610 */	0xb,		/* FC_HYPER */
+/* 5622 */	0x8,		/* FC_LONG */
 			0x5b,		/* FC_END */
-/* 5612 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5614 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 5616 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5618 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 5620 */	
-			0x14, 0x0,	/* FC_FP */
-/* 5622 */	NdrFcShort( 0xffbe ),	/* Offset= -66 (5556) */
 /* 5624 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x7,		/* 7 */
-/* 5626 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5628 */	0x9,		/* Corr desc: FC_ULONG */
-			0x0,		/*  */
-/* 5630 */	NdrFcShort( 0xfff8 ),	/* -8 */
-/* 5632 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 5634 */	0x0 , 
-			0x0,		/* 0 */
-/* 5636 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5640 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5644 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 5648 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 5650 */	0x0 , 
-			0x0,		/* 0 */
-/* 5652 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5656 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5660 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 5662 */	NdrFcShort( 0xffac ),	/* Offset= -84 (5578) */
-/* 5664 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 5666 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 5668 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 5670 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (5624) */
-/* 5672 */	NdrFcShort( 0x0 ),	/* Offset= 0 (5672) */
-/* 5674 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 5676 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 5678 */	
-			0x12, 0x0,	/* FC_UP */
-/* 5680 */	NdrFcShort( 0x2a ),	/* Offset= 42 (5722) */
-/* 5682 */	
-			0x15,		/* FC_STRUCT */
-			0x7,		/* 7 */
-/* 5684 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 5686 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 5688 */	NdrFcShort( 0xe9d4 ),	/* Offset= -5676 (12) */
-/* 5690 */	0xb,		/* FC_HYPER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 5692 */	0x0,		/* 0 */
-			NdrFcShort( 0xfd03 ),	/* Offset= -765 (4928) */
-			0x5b,		/* FC_END */
-/* 5696 */	
-			0x1b,		/* FC_CARRAY */
-			0x7,		/* 7 */
-/* 5698 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 5700 */	0x9,		/* Corr desc: FC_ULONG */
-			0x0,		/*  */
-/* 5702 */	NdrFcShort( 0xfff8 ),	/* -8 */
-/* 5704 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 5706 */	0x0 , 
-			0x0,		/* 0 */
-/* 5708 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5712 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5716 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 5718 */	NdrFcShort( 0xffdc ),	/* Offset= -36 (5682) */
-/* 5720 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 5722 */	
-			0x17,		/* FC_CSTRUCT */
-			0x7,		/* 7 */
-/* 5724 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 5726 */	NdrFcShort( 0xffe2 ),	/* Offset= -30 (5696) */
-/* 5728 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 5730 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 5732 */	
-			0x12, 0x0,	/* FC_UP */
-/* 5734 */	NdrFcShort( 0x44 ),	/* Offset= 68 (5802) */
-/* 5736 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 5738 */	NdrFcShort( 0x28 ),	/* 40 */
-/* 5740 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5742 */	NdrFcShort( 0xe ),	/* Offset= 14 (5756) */
-/* 5744 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 5746 */	NdrFcShort( 0xe99a ),	/* Offset= -5734 (12) */
-/* 5748 */	0xb,		/* FC_HYPER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 5750 */	0x0,		/* 0 */
-			NdrFcShort( 0xfcc9 ),	/* Offset= -823 (4928) */
-			0x36,		/* FC_POINTER */
-/* 5754 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 5756 */	
 			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5758 */	
+/* 5626 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 5760 */	
+/* 5628 */	
 			0x21,		/* FC_BOGUS_ARRAY */
-			0x7,		/* 7 */
-/* 5762 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5764 */	0x9,		/* Corr desc: FC_ULONG */
+			0x3,		/* 3 */
+/* 5630 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5632 */	0x9,		/* Corr desc: FC_ULONG */
 			0x0,		/*  */
-/* 5766 */	NdrFcShort( 0xfff8 ),	/* -8 */
-/* 5768 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 5770 */	0x0 , 
+/* 5634 */	NdrFcShort( 0xfff8 ),	/* -8 */
+/* 5636 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 5638 */	0x0 , 
 			0x0,		/* 0 */
-/* 5772 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5776 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5780 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 5784 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 5786 */	0x0 , 
+/* 5640 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5644 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5648 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 5652 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 5654 */	0x0 , 
 			0x0,		/* 0 */
-/* 5788 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5792 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5796 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 5656 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5660 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5664 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 5798 */	NdrFcShort( 0xffc2 ),	/* Offset= -62 (5736) */
-/* 5800 */	0x5c,		/* FC_PAD */
+/* 5666 */	NdrFcShort( 0xffc2 ),	/* Offset= -62 (5604) */
+/* 5668 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 5802 */	
+/* 5670 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 5804 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 5806 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (5760) */
-/* 5808 */	NdrFcShort( 0x0 ),	/* Offset= 0 (5808) */
-/* 5810 */	0x8,		/* FC_LONG */
+			0x3,		/* 3 */
+/* 5672 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 5674 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (5628) */
+/* 5676 */	NdrFcShort( 0x0 ),	/* Offset= 0 (5676) */
+/* 5678 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 5812 */	0x5c,		/* FC_PAD */
+/* 5680 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 5814 */	
+/* 5682 */	
 			0x12, 0x0,	/* FC_UP */
-/* 5816 */	NdrFcShort( 0x4c ),	/* Offset= 76 (5892) */
-/* 5818 */	
+/* 5684 */	NdrFcShort( 0x54 ),	/* Offset= 84 (5768) */
+/* 5686 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 5688 */	NdrFcShort( 0x50 ),	/* 80 */
+/* 5690 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5692 */	NdrFcShort( 0x16 ),	/* Offset= 22 (5714) */
+/* 5694 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 5696 */	NdrFcShort( 0xfde8 ),	/* Offset= -536 (5160) */
+/* 5698 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 5700 */	0xd,		/* FC_ENUM16 */
+			0x8,		/* FC_LONG */
+/* 5702 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 5704 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 5706 */	0x0,		/* 0 */
+			NdrFcShort( 0xe9c1 ),	/* Offset= -5695 (12) */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 5710 */	0x0,		/* 0 */
+			NdrFcShort( 0xe9bd ),	/* Offset= -5699 (12) */
+			0x5b,		/* FC_END */
+/* 5714 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 5716 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 5718 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 5720 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 5722 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 5724 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 5726 */	
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x3,		/* 3 */
+/* 5728 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5730 */	0x9,		/* Corr desc: FC_ULONG */
+			0x0,		/*  */
+/* 5732 */	NdrFcShort( 0xfff8 ),	/* -8 */
+/* 5734 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 5736 */	0x0 , 
+			0x0,		/* 0 */
+/* 5738 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5742 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5746 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 5750 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 5752 */	0x0 , 
+			0x0,		/* 0 */
+/* 5754 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5758 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5762 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 5764 */	NdrFcShort( 0xffb2 ),	/* Offset= -78 (5686) */
+/* 5766 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 5768 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 5770 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 5772 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (5726) */
+/* 5774 */	NdrFcShort( 0x0 ),	/* Offset= 0 (5774) */
+/* 5776 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 5778 */	NdrFcShort( 0xfd96 ),	/* Offset= -618 (5160) */
+/* 5780 */	0x8,		/* FC_LONG */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 5782 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 5784 */	
+			0x12, 0x0,	/* FC_UP */
+/* 5786 */	NdrFcShort( 0x70 ),	/* Offset= 112 (5898) */
+/* 5788 */	
+			0x1b,		/* FC_CARRAY */
+			0x0,		/* 0 */
+/* 5790 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 5792 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 5794 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 5796 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 5798 */	0x0 , 
+			0x0,		/* 0 */
+/* 5800 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5804 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5808 */	0x2,		/* FC_CHAR */
+			0x5b,		/* FC_END */
+/* 5810 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x7,		/* 7 */
-/* 5820 */	NdrFcShort( 0x40 ),	/* 64 */
-/* 5822 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5824 */	NdrFcShort( 0x12 ),	/* Offset= 18 (5842) */
-/* 5826 */	0x36,		/* FC_POINTER */
+/* 5812 */	NdrFcShort( 0x60 ),	/* 96 */
+/* 5814 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5816 */	NdrFcShort( 0x1c ),	/* Offset= 28 (5844) */
+/* 5818 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 5820 */	0x8,		/* FC_LONG */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 5822 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 5824 */	0x0,		/* 0 */
+			NdrFcShort( 0xfd67 ),	/* Offset= -665 (5160) */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 5828 */	0x0,		/* 0 */
+			NdrFcShort( 0xfd63 ),	/* Offset= -669 (5160) */
 			0x8,		/* FC_LONG */
-/* 5828 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 5830 */	NdrFcShort( 0xfc7a ),	/* Offset= -902 (4928) */
 /* 5832 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 5834 */	NdrFcShort( 0xe942 ),	/* Offset= -5822 (12) */
-/* 5836 */	0x40,		/* FC_STRUCTPAD4 */
+/* 5834 */	NdrFcShort( 0xfd5e ),	/* Offset= -674 (5160) */
+/* 5836 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 5838 */	NdrFcShort( 0xe93e ),	/* Offset= -5826 (12) */
+/* 5840 */	0x40,		/* FC_STRUCTPAD4 */
 			0xb,		/* FC_HYPER */
-/* 5838 */	0xb,		/* FC_HYPER */
-			0x36,		/* FC_POINTER */
-/* 5840 */	0x5c,		/* FC_PAD */
+/* 5842 */	0xb,		/* FC_HYPER */
 			0x5b,		/* FC_END */
-/* 5842 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
 /* 5844 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
 /* 5846 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
 /* 5848 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
 /* 5850 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x7,		/* 7 */
-/* 5852 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5854 */	0x9,		/* Corr desc: FC_ULONG */
-			0x0,		/*  */
-/* 5856 */	NdrFcShort( 0xfff8 ),	/* -8 */
-/* 5858 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 5860 */	0x0 , 
-			0x0,		/* 0 */
-/* 5862 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5866 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5870 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 5874 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 5876 */	0x0 , 
-			0x0,		/* 0 */
-/* 5878 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5882 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5886 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 5888 */	NdrFcShort( 0xffba ),	/* Offset= -70 (5818) */
-/* 5890 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 5892 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 5894 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 5896 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (5850) */
-/* 5898 */	NdrFcShort( 0x0 ),	/* Offset= 0 (5898) */
-/* 5900 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 5902 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 5904 */	
-			0x12, 0x0,	/* FC_UP */
-/* 5906 */	NdrFcShort( 0x60 ),	/* Offset= 96 (6002) */
-/* 5908 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 5910 */	NdrFcShort( 0x68 ),	/* 104 */
-/* 5912 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5914 */	NdrFcShort( 0x1e ),	/* Offset= 30 (5944) */
-/* 5916 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 5918 */	0x8,		/* FC_LONG */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 5920 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 5922 */	0x0,		/* 0 */
-			NdrFcShort( 0xfc1d ),	/* Offset= -995 (4928) */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 5926 */	0x0,		/* 0 */
-			NdrFcShort( 0xfc19 ),	/* Offset= -999 (4928) */
-			0x8,		/* FC_LONG */
-/* 5930 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 5932 */	NdrFcShort( 0xfc14 ),	/* Offset= -1004 (4928) */
-/* 5934 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 5936 */	NdrFcShort( 0xe8dc ),	/* Offset= -5924 (12) */
-/* 5938 */	0x40,		/* FC_STRUCTPAD4 */
-			0xb,		/* FC_HYPER */
-/* 5940 */	0xb,		/* FC_HYPER */
-			0x36,		/* FC_POINTER */
-/* 5942 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 5944 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5946 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 5948 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5950 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 5952 */	
+/* 5852 */	
 			0x14, 0x0,	/* FC_FP */
-/* 5954 */	NdrFcShort( 0xfe72 ),	/* Offset= -398 (5556) */
-/* 5956 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 5958 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 5960 */	
+/* 5854 */	NdrFcShort( 0xffbe ),	/* Offset= -66 (5788) */
+/* 5856 */	
 			0x21,		/* FC_BOGUS_ARRAY */
 			0x7,		/* 7 */
-/* 5962 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 5964 */	0x9,		/* Corr desc: FC_ULONG */
+/* 5858 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5860 */	0x9,		/* Corr desc: FC_ULONG */
 			0x0,		/*  */
-/* 5966 */	NdrFcShort( 0xfff8 ),	/* -8 */
-/* 5968 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 5970 */	0x0 , 
+/* 5862 */	NdrFcShort( 0xfff8 ),	/* -8 */
+/* 5864 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 5866 */	0x0 , 
 			0x0,		/* 0 */
-/* 5972 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5976 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5980 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 5984 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 5986 */	0x0 , 
+/* 5868 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5872 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5876 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 5880 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 5882 */	0x0 , 
 			0x0,		/* 0 */
-/* 5988 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5992 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 5996 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 5884 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5888 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5892 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 5998 */	NdrFcShort( 0xffa6 ),	/* Offset= -90 (5908) */
-/* 6000 */	0x5c,		/* FC_PAD */
+/* 5894 */	NdrFcShort( 0xffac ),	/* Offset= -84 (5810) */
+/* 5896 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 6002 */	
+/* 5898 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x7,		/* 7 */
-/* 6004 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 6006 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (5960) */
-/* 6008 */	NdrFcShort( 0x0 ),	/* Offset= 0 (6008) */
-/* 6010 */	0x8,		/* FC_LONG */
+/* 5900 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 5902 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (5856) */
+/* 5904 */	NdrFcShort( 0x0 ),	/* Offset= 0 (5904) */
+/* 5906 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 6012 */	0x5c,		/* FC_PAD */
+/* 5908 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 6014 */	
+/* 5910 */	
 			0x12, 0x0,	/* FC_UP */
-/* 6016 */	NdrFcShort( 0x4e ),	/* Offset= 78 (6094) */
-/* 6018 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 6020 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6024 */	NdrFcLong( 0x100 ),	/* 256 */
-/* 6028 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 6030 */	NdrFcShort( 0x30 ),	/* 48 */
-/* 6032 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 6034 */	NdrFcShort( 0xe ),	/* Offset= 14 (6048) */
-/* 6036 */	0x36,		/* FC_POINTER */
-			0x8,		/* FC_LONG */
-/* 6038 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 6040 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 6042 */	0x40,		/* FC_STRUCTPAD4 */
-			0xb,		/* FC_HYPER */
-/* 6044 */	0x8,		/* FC_LONG */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 6046 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 6048 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 6050 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 6052 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x7,		/* 7 */
-/* 6054 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 6056 */	0x9,		/* Corr desc: FC_ULONG */
-			0x0,		/*  */
-/* 6058 */	NdrFcShort( 0xfff8 ),	/* -8 */
-/* 6060 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6062 */	0x0 , 
-			0x0,		/* 0 */
-/* 6064 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6068 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6072 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 6076 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 6078 */	0x0 , 
-			0x0,		/* 0 */
-/* 6080 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6084 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6088 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 6090 */	NdrFcShort( 0xffc2 ),	/* Offset= -62 (6028) */
-/* 6092 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 6094 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 6096 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 6098 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (6052) */
-/* 6100 */	NdrFcShort( 0x0 ),	/* Offset= 0 (6100) */
-/* 6102 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 6104 */	NdrFcShort( 0xffaa ),	/* Offset= -86 (6018) */
-/* 6106 */	0x8,		/* FC_LONG */
-			0x5b,		/* FC_END */
-/* 6108 */	
-			0x12, 0x0,	/* FC_UP */
-/* 6110 */	NdrFcShort( 0xe9f8 ),	/* Offset= -5640 (470) */
-/* 6112 */	
-			0x12, 0x0,	/* FC_UP */
-/* 6114 */	NdrFcShort( 0x36 ),	/* Offset= 54 (6168) */
-/* 6116 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 6118 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6122 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 6126 */	
+/* 5912 */	NdrFcShort( 0x2a ),	/* Offset= 42 (5954) */
+/* 5914 */	
 			0x15,		/* FC_STRUCT */
 			0x7,		/* 7 */
-/* 6128 */	NdrFcShort( 0x30 ),	/* 48 */
-/* 6130 */	0xb,		/* FC_HYPER */
-			0x8,		/* FC_LONG */
-/* 6132 */	0x8,		/* FC_LONG */
+/* 5916 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 5918 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 5920 */	NdrFcShort( 0xe8ec ),	/* Offset= -5908 (12) */
+/* 5922 */	0xb,		/* FC_HYPER */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 6134 */	0x0,		/* 0 */
-			NdrFcShort( 0xe815 ),	/* Offset= -6123 (12) */
-			0xb,		/* FC_HYPER */
-/* 6138 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 6140 */	0x5c,		/* FC_PAD */
+/* 5924 */	0x0,		/* 0 */
+			NdrFcShort( 0xfd03 ),	/* Offset= -765 (5160) */
 			0x5b,		/* FC_END */
-/* 6142 */	
+/* 5928 */	
 			0x1b,		/* FC_CARRAY */
 			0x7,		/* 7 */
-/* 6144 */	NdrFcShort( 0x30 ),	/* 48 */
-/* 6146 */	0x9,		/* Corr desc: FC_ULONG */
+/* 5930 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 5932 */	0x9,		/* Corr desc: FC_ULONG */
 			0x0,		/*  */
-/* 6148 */	NdrFcShort( 0xfff8 ),	/* -8 */
-/* 6150 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6152 */	0x0 , 
+/* 5934 */	NdrFcShort( 0xfff8 ),	/* -8 */
+/* 5936 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 5938 */	0x0 , 
 			0x0,		/* 0 */
-/* 6154 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6158 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5940 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5944 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 5948 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 5950 */	NdrFcShort( 0xffdc ),	/* Offset= -36 (5914) */
+/* 5952 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 5954 */	
+			0x17,		/* FC_CSTRUCT */
+			0x7,		/* 7 */
+/* 5956 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 5958 */	NdrFcShort( 0xffe2 ),	/* Offset= -30 (5928) */
+/* 5960 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 5962 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 5964 */	
+			0x12, 0x0,	/* FC_UP */
+/* 5966 */	NdrFcShort( 0x44 ),	/* Offset= 68 (6034) */
+/* 5968 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 5970 */	NdrFcShort( 0x28 ),	/* 40 */
+/* 5972 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5974 */	NdrFcShort( 0xe ),	/* Offset= 14 (5988) */
+/* 5976 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 5978 */	NdrFcShort( 0xe8b2 ),	/* Offset= -5966 (12) */
+/* 5980 */	0xb,		/* FC_HYPER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 5982 */	0x0,		/* 0 */
+			NdrFcShort( 0xfcc9 ),	/* Offset= -823 (5160) */
+			0x36,		/* FC_POINTER */
+/* 5986 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 5988 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 5990 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 5992 */	
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x7,		/* 7 */
+/* 5994 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 5996 */	0x9,		/* Corr desc: FC_ULONG */
+			0x0,		/*  */
+/* 5998 */	NdrFcShort( 0xfff8 ),	/* -8 */
+/* 6000 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 6002 */	0x0 , 
+			0x0,		/* 0 */
+/* 6004 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6008 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6012 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 6016 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 6018 */	0x0 , 
+			0x0,		/* 0 */
+/* 6020 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6024 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6028 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6030 */	NdrFcShort( 0xffc2 ),	/* Offset= -62 (5968) */
+/* 6032 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 6034 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 6036 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 6038 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (5992) */
+/* 6040 */	NdrFcShort( 0x0 ),	/* Offset= 0 (6040) */
+/* 6042 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 6044 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 6046 */	
+			0x12, 0x0,	/* FC_UP */
+/* 6048 */	NdrFcShort( 0x4c ),	/* Offset= 76 (6124) */
+/* 6050 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 6052 */	NdrFcShort( 0x40 ),	/* 64 */
+/* 6054 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6056 */	NdrFcShort( 0x12 ),	/* Offset= 18 (6074) */
+/* 6058 */	0x36,		/* FC_POINTER */
+			0x8,		/* FC_LONG */
+/* 6060 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6062 */	NdrFcShort( 0xfc7a ),	/* Offset= -902 (5160) */
+/* 6064 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6066 */	NdrFcShort( 0xe85a ),	/* Offset= -6054 (12) */
+/* 6068 */	0x40,		/* FC_STRUCTPAD4 */
+			0xb,		/* FC_HYPER */
+/* 6070 */	0xb,		/* FC_HYPER */
+			0x36,		/* FC_POINTER */
+/* 6072 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 6074 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 6076 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 6078 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 6080 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 6082 */	
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x7,		/* 7 */
+/* 6084 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6086 */	0x9,		/* Corr desc: FC_ULONG */
+			0x0,		/*  */
+/* 6088 */	NdrFcShort( 0xfff8 ),	/* -8 */
+/* 6090 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 6092 */	0x0 , 
+			0x0,		/* 0 */
+/* 6094 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6098 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6102 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 6106 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 6108 */	0x0 , 
+			0x0,		/* 0 */
+/* 6110 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6114 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6118 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6120 */	NdrFcShort( 0xffba ),	/* Offset= -70 (6050) */
+/* 6122 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 6124 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 6126 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 6128 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (6082) */
+/* 6130 */	NdrFcShort( 0x0 ),	/* Offset= 0 (6130) */
+/* 6132 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 6134 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 6136 */	
+			0x12, 0x0,	/* FC_UP */
+/* 6138 */	NdrFcShort( 0x60 ),	/* Offset= 96 (6234) */
+/* 6140 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 6142 */	NdrFcShort( 0x68 ),	/* 104 */
+/* 6144 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6146 */	NdrFcShort( 0x1e ),	/* Offset= 30 (6176) */
+/* 6148 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 6150 */	0x8,		/* FC_LONG */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 6152 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 6154 */	0x0,		/* 0 */
+			NdrFcShort( 0xfc1d ),	/* Offset= -995 (5160) */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 6158 */	0x0,		/* 0 */
+			NdrFcShort( 0xfc19 ),	/* Offset= -999 (5160) */
+			0x8,		/* FC_LONG */
 /* 6162 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 6164 */	NdrFcShort( 0xffda ),	/* Offset= -38 (6126) */
-/* 6166 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 6168 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
-			0x7,		/* 7 */
-/* 6170 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 6172 */	NdrFcShort( 0xffe2 ),	/* Offset= -30 (6142) */
-/* 6174 */	NdrFcShort( 0x0 ),	/* Offset= 0 (6174) */
-/* 6176 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 6164 */	NdrFcShort( 0xfc14 ),	/* Offset= -1004 (5160) */
+/* 6166 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 6178 */	NdrFcShort( 0xffc2 ),	/* Offset= -62 (6116) */
-/* 6180 */	0x8,		/* FC_LONG */
+/* 6168 */	NdrFcShort( 0xe7f4 ),	/* Offset= -6156 (12) */
+/* 6170 */	0x40,		/* FC_STRUCTPAD4 */
+			0xb,		/* FC_HYPER */
+/* 6172 */	0xb,		/* FC_HYPER */
+			0x36,		/* FC_POINTER */
+/* 6174 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
+/* 6176 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 6178 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 6180 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
 /* 6182 */	
-			0x11, 0x0,	/* FC_RP */
-/* 6184 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6186) */
-/* 6186 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 6188 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 6184 */	
+			0x14, 0x0,	/* FC_FP */
+/* 6186 */	NdrFcShort( 0xfe72 ),	/* Offset= -398 (5788) */
+/* 6188 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 6190 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 6192 */	
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x7,		/* 7 */
+/* 6194 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6196 */	0x9,		/* Corr desc: FC_ULONG */
 			0x0,		/*  */
-/* 6190 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 6192 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6194 */	0x0 , 
+/* 6198 */	NdrFcShort( 0xfff8 ),	/* -8 */
+/* 6200 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 6202 */	0x0 , 
 			0x0,		/* 0 */
-/* 6196 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6200 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6204 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6206) */
-/* 6206 */	NdrFcShort( 0x60 ),	/* 96 */
-/* 6208 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 6210 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 6214 */	NdrFcShort( 0x64 ),	/* Offset= 100 (6314) */
-/* 6216 */	NdrFcShort( 0xffff ),	/* Offset= -1 (6215) */
-/* 6218 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
+/* 6204 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6208 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6212 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 6216 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 6218 */	0x0 , 
+			0x0,		/* 0 */
 /* 6220 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6224 */	NdrFcLong( 0x100 ),	/* 256 */
-/* 6228 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 6230 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6234 */	NdrFcLong( 0x100 ),	/* 256 */
-/* 6238 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 6240 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6244 */	NdrFcLong( 0x100 ),	/* 256 */
-/* 6248 */	
-			0x1b,		/* FC_CARRAY */
-			0x1,		/* 1 */
-/* 6250 */	NdrFcShort( 0x2 ),	/* 2 */
-/* 6252 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 6254 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 6256 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6258 */	0x0 , 
+/* 6224 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6228 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 6260 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6264 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6268 */	0x5,		/* FC_WCHAR */
+/* 6230 */	NdrFcShort( 0xffa6 ),	/* Offset= -90 (6140) */
+/* 6232 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 6270 */	
-			0x1b,		/* FC_CARRAY */
-			0x1,		/* 1 */
-/* 6272 */	NdrFcShort( 0x2 ),	/* 2 */
-/* 6274 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 6276 */	NdrFcShort( 0x30 ),	/* 48 */
-/* 6278 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6280 */	0x0 , 
-			0x0,		/* 0 */
-/* 6282 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6286 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6290 */	0x5,		/* FC_WCHAR */
-			0x5b,		/* FC_END */
-/* 6292 */	
-			0x1b,		/* FC_CARRAY */
-			0x1,		/* 1 */
-/* 6294 */	NdrFcShort( 0x2 ),	/* 2 */
-/* 6296 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 6298 */	NdrFcShort( 0x40 ),	/* 64 */
-/* 6300 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6302 */	0x0 , 
-			0x0,		/* 0 */
-/* 6304 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6308 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6312 */	0x5,		/* FC_WCHAR */
-			0x5b,		/* FC_END */
-/* 6314 */	
+/* 6234 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 6316 */	NdrFcShort( 0x60 ),	/* 96 */
-/* 6318 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 6320 */	NdrFcShort( 0x1c ),	/* Offset= 28 (6348) */
-/* 6322 */	0x8,		/* FC_LONG */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 6324 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 6326 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 6328 */	0x0,		/* 0 */
-			NdrFcShort( 0xff91 ),	/* Offset= -111 (6218) */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 6332 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 6334 */	0x0,		/* 0 */
-			NdrFcShort( 0xff95 ),	/* Offset= -107 (6228) */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 6338 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 6340 */	0x0,		/* 0 */
-			NdrFcShort( 0xff99 ),	/* Offset= -103 (6238) */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 6344 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 6346 */	0x36,		/* FC_POINTER */
-			0x5b,		/* FC_END */
-/* 6348 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 6350 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 6352 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 6354 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 6356 */	
-			0x14, 0x8,	/* FC_FP [simple_pointer] */
-/* 6358 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 6360 */	
-			0x12, 0x0,	/* FC_UP */
-/* 6362 */	NdrFcShort( 0xff8e ),	/* Offset= -114 (6248) */
-/* 6364 */	
-			0x12, 0x0,	/* FC_UP */
-/* 6366 */	NdrFcShort( 0xffa0 ),	/* Offset= -96 (6270) */
-/* 6368 */	
-			0x12, 0x0,	/* FC_UP */
-/* 6370 */	NdrFcShort( 0xffb2 ),	/* Offset= -78 (6292) */
-/* 6372 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 6374 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 6376 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 6378 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 6380 */	
-			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 6382 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6384) */
-/* 6384 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 6386 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x54,		/* FC_DEREFERENCE */
-/* 6388 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
-/* 6390 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6392 */	0x0 , 
-			0x0,		/* 0 */
-/* 6394 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6398 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6402 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6404) */
-/* 6404 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 6406 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 6408 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 6412 */	NdrFcShort( 0xf44a ),	/* Offset= -2998 (3414) */
-/* 6414 */	NdrFcShort( 0xffff ),	/* Offset= -1 (6413) */
-/* 6416 */	
-			0x11, 0x0,	/* FC_RP */
-/* 6418 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6420) */
-/* 6420 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 6422 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 6424 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 6426 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6428 */	0x0 , 
-			0x0,		/* 0 */
-/* 6430 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6434 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6438 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6440) */
-/* 6440 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 6442 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 6444 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 6448 */	NdrFcShort( 0x38 ),	/* Offset= 56 (6504) */
-/* 6450 */	NdrFcShort( 0xffff ),	/* Offset= -1 (6449) */
-/* 6452 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 6454 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 6458 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 6462 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x3,		/* 3 */
-/* 6464 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 6466 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 6468 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 6470 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6472 */	0x0 , 
-			0x0,		/* 0 */
-/* 6474 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6478 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6482 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 6486 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 6488 */	0x0 , 
-			0x0,		/* 0 */
-/* 6490 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6494 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6498 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 6500 */	NdrFcShort( 0xefb4 ),	/* Offset= -4172 (2328) */
-/* 6502 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 6504 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 6506 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 6508 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 6510 */	NdrFcShort( 0xa ),	/* Offset= 10 (6520) */
-/* 6512 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 6514 */	NdrFcShort( 0xffc2 ),	/* Offset= -62 (6452) */
-/* 6516 */	0x40,		/* FC_STRUCTPAD4 */
-			0x36,		/* FC_POINTER */
-/* 6518 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 6520 */	
-			0x12, 0x0,	/* FC_UP */
-/* 6522 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (6462) */
-/* 6524 */	
-			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 6526 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6528) */
-/* 6528 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 6530 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x54,		/* FC_DEREFERENCE */
-/* 6532 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
-/* 6534 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6536 */	0x0 , 
-			0x0,		/* 0 */
-/* 6538 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6542 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6546 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6548) */
-/* 6548 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 6550 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 6552 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 6556 */	NdrFcShort( 0x38 ),	/* Offset= 56 (6612) */
-/* 6558 */	NdrFcShort( 0xffff ),	/* Offset= -1 (6557) */
-/* 6560 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 6562 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6566 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 6570 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x3,		/* 3 */
-/* 6572 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 6574 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 6576 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 6578 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6580 */	0x0 , 
-			0x0,		/* 0 */
-/* 6582 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6586 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6590 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 6594 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 6596 */	0x0 , 
-			0x0,		/* 0 */
-/* 6598 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6602 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6606 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 6608 */	NdrFcShort( 0xefde ),	/* Offset= -4130 (2478) */
-/* 6610 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 6612 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 6614 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 6616 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 6618 */	NdrFcShort( 0xa ),	/* Offset= 10 (6628) */
-/* 6620 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 6622 */	NdrFcShort( 0xffc2 ),	/* Offset= -62 (6560) */
-/* 6624 */	0x40,		/* FC_STRUCTPAD4 */
-			0x36,		/* FC_POINTER */
-/* 6626 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 6628 */	
-			0x12, 0x0,	/* FC_UP */
-/* 6630 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (6570) */
-/* 6632 */	
-			0x11, 0x0,	/* FC_RP */
-/* 6634 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6636) */
-/* 6636 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 6638 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 6640 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 6642 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6644 */	0x0 , 
-			0x0,		/* 0 */
-/* 6646 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6650 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6654 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6656) */
-/* 6656 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 6658 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 6660 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 6664 */	NdrFcShort( 0x4 ),	/* Offset= 4 (6668) */
-/* 6666 */	NdrFcShort( 0xffff ),	/* Offset= -1 (6665) */
-/* 6668 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 6670 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 6672 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 6674 */	NdrFcShort( 0xa ),	/* Offset= 10 (6684) */
-/* 6676 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 6678 */	0x0,		/* 0 */
-			NdrFcShort( 0xe5f5 ),	/* Offset= -6667 (12) */
+			0x7,		/* 7 */
+/* 6236 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 6238 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (6192) */
+/* 6240 */	NdrFcShort( 0x0 ),	/* Offset= 0 (6240) */
+/* 6242 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 6682 */	0x40,		/* FC_STRUCTPAD4 */
+/* 6244 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 6684 */	
+/* 6246 */	
+			0x12, 0x0,	/* FC_UP */
+/* 6248 */	NdrFcShort( 0x4e ),	/* Offset= 78 (6326) */
+/* 6250 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 6252 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6256 */	NdrFcLong( 0x100 ),	/* 256 */
+/* 6260 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 6262 */	NdrFcShort( 0x30 ),	/* 48 */
+/* 6264 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6266 */	NdrFcShort( 0xe ),	/* Offset= 14 (6280) */
+/* 6268 */	0x36,		/* FC_POINTER */
+			0x8,		/* FC_LONG */
+/* 6270 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 6272 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 6274 */	0x40,		/* FC_STRUCTPAD4 */
+			0xb,		/* FC_HYPER */
+/* 6276 */	0x8,		/* FC_LONG */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 6278 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 6280 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 6282 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 6284 */	
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x7,		/* 7 */
+/* 6286 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6288 */	0x9,		/* Corr desc: FC_ULONG */
+			0x0,		/*  */
+/* 6290 */	NdrFcShort( 0xfff8 ),	/* -8 */
+/* 6292 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 6294 */	0x0 , 
+			0x0,		/* 0 */
+/* 6296 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6300 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6304 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 6308 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 6310 */	0x0 , 
+			0x0,		/* 0 */
+/* 6312 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6316 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6320 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6322 */	NdrFcShort( 0xffc2 ),	/* Offset= -62 (6260) */
+/* 6324 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 6326 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 6328 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 6330 */	NdrFcShort( 0xffd2 ),	/* Offset= -46 (6284) */
+/* 6332 */	NdrFcShort( 0x0 ),	/* Offset= 0 (6332) */
+/* 6334 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6336 */	NdrFcShort( 0xffaa ),	/* Offset= -86 (6250) */
+/* 6338 */	0x8,		/* FC_LONG */
+			0x5b,		/* FC_END */
+/* 6340 */	
+			0x12, 0x0,	/* FC_UP */
+/* 6342 */	NdrFcShort( 0xe95e ),	/* Offset= -5794 (548) */
+/* 6344 */	
+			0x12, 0x0,	/* FC_UP */
+/* 6346 */	NdrFcShort( 0x36 ),	/* Offset= 54 (6400) */
+/* 6348 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 6350 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6354 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 6358 */	
+			0x15,		/* FC_STRUCT */
+			0x7,		/* 7 */
+/* 6360 */	NdrFcShort( 0x30 ),	/* 48 */
+/* 6362 */	0xb,		/* FC_HYPER */
+			0x8,		/* FC_LONG */
+/* 6364 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 6366 */	0x0,		/* 0 */
+			NdrFcShort( 0xe72d ),	/* Offset= -6355 (12) */
+			0xb,		/* FC_HYPER */
+/* 6370 */	0x8,		/* FC_LONG */
+			0x8,		/* FC_LONG */
+/* 6372 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 6374 */	
+			0x1b,		/* FC_CARRAY */
+			0x7,		/* 7 */
+/* 6376 */	NdrFcShort( 0x30 ),	/* 48 */
+/* 6378 */	0x9,		/* Corr desc: FC_ULONG */
+			0x0,		/*  */
+/* 6380 */	NdrFcShort( 0xfff8 ),	/* -8 */
+/* 6382 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 6384 */	0x0 , 
+			0x0,		/* 0 */
+/* 6386 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6390 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6394 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6396 */	NdrFcShort( 0xffda ),	/* Offset= -38 (6358) */
+/* 6398 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 6400 */	0xb1,		/* FC_FORCED_BOGUS_STRUCT */
+			0x7,		/* 7 */
+/* 6402 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 6404 */	NdrFcShort( 0xffe2 ),	/* Offset= -30 (6374) */
+/* 6406 */	NdrFcShort( 0x0 ),	/* Offset= 0 (6406) */
+/* 6408 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6410 */	NdrFcShort( 0xffc2 ),	/* Offset= -62 (6348) */
+/* 6412 */	0x8,		/* FC_LONG */
+			0x5b,		/* FC_END */
+/* 6414 */	
 			0x11, 0x0,	/* FC_RP */
-/* 6686 */	NdrFcShort( 0xe68e ),	/* Offset= -6514 (172) */
-/* 6688 */	
-			0x11, 0x0,	/* FC_RP */
-/* 6690 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6692) */
-/* 6692 */	
+/* 6416 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6418) */
+/* 6418 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 6694 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 6420 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x0,		/*  */
-/* 6696 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 6698 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6700 */	0x0 , 
+/* 6422 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 6424 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 6426 */	0x0 , 
 			0x0,		/* 0 */
-/* 6702 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6706 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6710 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6712) */
-/* 6712 */	NdrFcShort( 0x38 ),	/* 56 */
-/* 6714 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 6716 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 6720 */	NdrFcShort( 0xa ),	/* Offset= 10 (6730) */
-/* 6722 */	NdrFcShort( 0xffff ),	/* Offset= -1 (6721) */
-/* 6724 */	
-			0x1d,		/* FC_SMFARRAY */
+/* 6428 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6432 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6436 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6438) */
+/* 6438 */	NdrFcShort( 0x60 ),	/* 96 */
+/* 6440 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 6442 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 6446 */	NdrFcShort( 0x64 ),	/* Offset= 100 (6546) */
+/* 6448 */	NdrFcShort( 0xffff ),	/* Offset= -1 (6447) */
+/* 6450 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 6452 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6456 */	NdrFcLong( 0x100 ),	/* 256 */
+/* 6460 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 6462 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6466 */	NdrFcLong( 0x100 ),	/* 256 */
+/* 6470 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 6472 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6476 */	NdrFcLong( 0x100 ),	/* 256 */
+/* 6480 */	
+			0x1b,		/* FC_CARRAY */
+			0x1,		/* 1 */
+/* 6482 */	NdrFcShort( 0x2 ),	/* 2 */
+/* 6484 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 6486 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 6488 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 6490 */	0x0 , 
 			0x0,		/* 0 */
-/* 6726 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 6728 */	0x2,		/* FC_CHAR */
+/* 6492 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6496 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6500 */	0x5,		/* FC_WCHAR */
 			0x5b,		/* FC_END */
-/* 6730 */	
+/* 6502 */	
+			0x1b,		/* FC_CARRAY */
+			0x1,		/* 1 */
+/* 6504 */	NdrFcShort( 0x2 ),	/* 2 */
+/* 6506 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 6508 */	NdrFcShort( 0x30 ),	/* 48 */
+/* 6510 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 6512 */	0x0 , 
+			0x0,		/* 0 */
+/* 6514 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6518 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6522 */	0x5,		/* FC_WCHAR */
+			0x5b,		/* FC_END */
+/* 6524 */	
+			0x1b,		/* FC_CARRAY */
+			0x1,		/* 1 */
+/* 6526 */	NdrFcShort( 0x2 ),	/* 2 */
+/* 6528 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 6530 */	NdrFcShort( 0x40 ),	/* 64 */
+/* 6532 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 6534 */	0x0 , 
+			0x0,		/* 0 */
+/* 6536 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6540 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6544 */	0x5,		/* FC_WCHAR */
+			0x5b,		/* FC_END */
+/* 6546 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 6732 */	NdrFcShort( 0x38 ),	/* 56 */
-/* 6734 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 6736 */	NdrFcShort( 0x10 ),	/* Offset= 16 (6752) */
-/* 6738 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 6740 */	NdrFcShort( 0xe5b8 ),	/* Offset= -6728 (12) */
-/* 6742 */	0x8,		/* FC_LONG */
+/* 6548 */	NdrFcShort( 0x60 ),	/* 96 */
+/* 6550 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6552 */	NdrFcShort( 0x1c ),	/* Offset= 28 (6580) */
+/* 6554 */	0x8,		/* FC_LONG */
 			0x40,		/* FC_STRUCTPAD4 */
-/* 6744 */	0x36,		/* FC_POINTER */
+/* 6556 */	0x36,		/* FC_POINTER */
 			0x36,		/* FC_POINTER */
-/* 6746 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 6558 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 6560 */	0x0,		/* 0 */
+			NdrFcShort( 0xff91 ),	/* Offset= -111 (6450) */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 6564 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 6566 */	0x0,		/* 0 */
+			NdrFcShort( 0xff95 ),	/* Offset= -107 (6460) */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 6570 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 6572 */	0x0,		/* 0 */
+			NdrFcShort( 0xff99 ),	/* Offset= -103 (6470) */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 6576 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 6578 */	0x36,		/* FC_POINTER */
+			0x5b,		/* FC_END */
+/* 6580 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 6582 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 6584 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 6586 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 6588 */	
+			0x14, 0x8,	/* FC_FP [simple_pointer] */
+/* 6590 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 6592 */	
+			0x12, 0x0,	/* FC_UP */
+/* 6594 */	NdrFcShort( 0xff8e ),	/* Offset= -114 (6480) */
+/* 6596 */	
+			0x12, 0x0,	/* FC_UP */
+/* 6598 */	NdrFcShort( 0xffa0 ),	/* Offset= -96 (6502) */
+/* 6600 */	
+			0x12, 0x0,	/* FC_UP */
+/* 6602 */	NdrFcShort( 0xffb2 ),	/* Offset= -78 (6524) */
+/* 6604 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 6606 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 6608 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 6610 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 6612 */	
+			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
+/* 6614 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6616) */
+/* 6616 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 6618 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x54,		/* FC_DEREFERENCE */
+/* 6620 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 6622 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 6624 */	0x0 , 
 			0x0,		/* 0 */
-/* 6748 */	NdrFcShort( 0xffe8 ),	/* Offset= -24 (6724) */
+/* 6626 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6630 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6634 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6636) */
+/* 6636 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 6638 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 6640 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 6644 */	NdrFcShort( 0xf44a ),	/* Offset= -2998 (3646) */
+/* 6646 */	NdrFcShort( 0xffff ),	/* Offset= -1 (6645) */
+/* 6648 */	
+			0x11, 0x0,	/* FC_RP */
+/* 6650 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6652) */
+/* 6652 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 6654 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 6656 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 6658 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 6660 */	0x0 , 
+			0x0,		/* 0 */
+/* 6662 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6666 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6670 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6672) */
+/* 6672 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 6674 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 6676 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 6680 */	NdrFcShort( 0x38 ),	/* Offset= 56 (6736) */
+/* 6682 */	NdrFcShort( 0xffff ),	/* Offset= -1 (6681) */
+/* 6684 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 6686 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 6690 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 6694 */	
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x3,		/* 3 */
+/* 6696 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6698 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 6700 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6702 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 6704 */	0x0 , 
+			0x0,		/* 0 */
+/* 6706 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6710 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6714 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 6718 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 6720 */	0x0 , 
+			0x0,		/* 0 */
+/* 6722 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6726 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6730 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6732 */	NdrFcShort( 0xefb4 ),	/* Offset= -4172 (2560) */
+/* 6734 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 6736 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 6738 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 6740 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6742 */	NdrFcShort( 0xa ),	/* Offset= 10 (6752) */
+/* 6744 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6746 */	NdrFcShort( 0xffc2 ),	/* Offset= -62 (6684) */
+/* 6748 */	0x40,		/* FC_STRUCTPAD4 */
+			0x36,		/* FC_POINTER */
 /* 6750 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
 /* 6752 */	
 			0x12, 0x0,	/* FC_UP */
-/* 6754 */	NdrFcShort( 0xe64a ),	/* Offset= -6582 (172) */
+/* 6754 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (6694) */
 /* 6756 */	
-			0x12, 0x0,	/* FC_UP */
-/* 6758 */	NdrFcShort( 0xe770 ),	/* Offset= -6288 (470) */
+			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
+/* 6758 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6760) */
 /* 6760 */	
-			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 6762 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6764) */
-/* 6764 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 6766 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 6762 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x54,		/* FC_DEREFERENCE */
-/* 6768 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
-/* 6770 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6772 */	0x0 , 
+/* 6764 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 6766 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 6768 */	0x0 , 
 			0x0,		/* 0 */
+/* 6770 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 6774 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6778 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6782 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6784) */
-/* 6784 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 6786 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 6788 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 6792 */	NdrFcShort( 0x38 ),	/* Offset= 56 (6848) */
-/* 6794 */	NdrFcShort( 0xffff ),	/* Offset= -1 (6793) */
-/* 6796 */	0xb7,		/* FC_RANGE */
+/* 6778 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6780) */
+/* 6780 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 6782 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 6784 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 6788 */	NdrFcShort( 0x38 ),	/* Offset= 56 (6844) */
+/* 6790 */	NdrFcShort( 0xffff ),	/* Offset= -1 (6789) */
+/* 6792 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 6798 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6802 */	NdrFcLong( 0xa00000 ),	/* 10485760 */
-/* 6806 */	
+/* 6794 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6798 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 6802 */	
 			0x21,		/* FC_BOGUS_ARRAY */
 			0x3,		/* 3 */
+/* 6804 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6806 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
 /* 6808 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 6810 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 6812 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 6814 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6816 */	0x0 , 
+/* 6810 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 6812 */	0x0 , 
 			0x0,		/* 0 */
+/* 6814 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 6818 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6822 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6826 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 6830 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 6832 */	0x0 , 
+/* 6822 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 6826 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 6828 */	0x0 , 
 			0x0,		/* 0 */
+/* 6830 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 6834 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6838 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6842 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 6838 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 6844 */	NdrFcShort( 0xe550 ),	/* Offset= -6832 (12) */
-/* 6846 */	0x5c,		/* FC_PAD */
+/* 6840 */	NdrFcShort( 0xefde ),	/* Offset= -4130 (2710) */
+/* 6842 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 6848 */	
+/* 6844 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 6850 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 6852 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 6854 */	NdrFcShort( 0xa ),	/* Offset= 10 (6864) */
-/* 6856 */	0x8,		/* FC_LONG */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 6858 */	0x0,		/* 0 */
-			NdrFcShort( 0xffc1 ),	/* Offset= -63 (6796) */
+/* 6846 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 6848 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6850 */	NdrFcShort( 0xa ),	/* Offset= 10 (6860) */
+/* 6852 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6854 */	NdrFcShort( 0xffc2 ),	/* Offset= -62 (6792) */
+/* 6856 */	0x40,		/* FC_STRUCTPAD4 */
 			0x36,		/* FC_POINTER */
-/* 6862 */	0x5c,		/* FC_PAD */
+/* 6858 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
+/* 6860 */	
+			0x12, 0x0,	/* FC_UP */
+/* 6862 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (6802) */
 /* 6864 */	
-			0x12, 0x0,	/* FC_UP */
-/* 6866 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (6806) */
+			0x11, 0x0,	/* FC_RP */
+/* 6866 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6868) */
 /* 6868 */	
-			0x11, 0x0,	/* FC_RP */
-/* 6870 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6872) */
-/* 6872 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 6874 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 6870 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x0,		/*  */
-/* 6876 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 6878 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6880 */	0x0 , 
+/* 6872 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 6874 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 6876 */	0x0 , 
 			0x0,		/* 0 */
+/* 6878 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 6882 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6886 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6890 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6892) */
-/* 6892 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 6894 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 6896 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 6900 */	NdrFcShort( 0x38 ),	/* Offset= 56 (6956) */
-/* 6902 */	NdrFcShort( 0xffff ),	/* Offset= -1 (6901) */
-/* 6904 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 6906 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 6910 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 6914 */	
-			0x21,		/* FC_BOGUS_ARRAY */
-			0x3,		/* 3 */
-/* 6916 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 6918 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 6920 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 6922 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6924 */	0x0 , 
-			0x0,		/* 0 */
-/* 6926 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6930 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6934 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 6938 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 6940 */	0x0 , 
-			0x0,		/* 0 */
-/* 6942 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6946 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 6950 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 6952 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 6954 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 6956 */	
+/* 6886 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6888) */
+/* 6888 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 6890 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 6892 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 6896 */	NdrFcShort( 0x4 ),	/* Offset= 4 (6900) */
+/* 6898 */	NdrFcShort( 0xffff ),	/* Offset= -1 (6897) */
+/* 6900 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 6958 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 6960 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 6962 */	NdrFcShort( 0xc ),	/* Offset= 12 (6974) */
-/* 6964 */	0x36,		/* FC_POINTER */
+/* 6902 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 6904 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6906 */	NdrFcShort( 0xa ),	/* Offset= 10 (6916) */
+/* 6908 */	0x36,		/* FC_POINTER */
 			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 6966 */	0x0,		/* 0 */
-			NdrFcShort( 0xffc1 ),	/* Offset= -63 (6904) */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 6970 */	0x36,		/* FC_POINTER */
+/* 6910 */	0x0,		/* 0 */
+			NdrFcShort( 0xe50d ),	/* Offset= -6899 (12) */
 			0x8,		/* FC_LONG */
-/* 6972 */	0x40,		/* FC_STRUCTPAD4 */
+/* 6914 */	0x40,		/* FC_STRUCTPAD4 */
 			0x5b,		/* FC_END */
-/* 6974 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 6976 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 6978 */	
-			0x12, 0x0,	/* FC_UP */
-/* 6980 */	NdrFcShort( 0xffbe ),	/* Offset= -66 (6914) */
-/* 6982 */	
-			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 6984 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6986) */
-/* 6986 */	
+/* 6916 */	
+			0x11, 0x0,	/* FC_RP */
+/* 6918 */	NdrFcShort( 0xe5ac ),	/* Offset= -6740 (178) */
+/* 6920 */	
+			0x11, 0x0,	/* FC_RP */
+/* 6922 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6924) */
+/* 6924 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 6988 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x54,		/* FC_DEREFERENCE */
-/* 6990 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
-/* 6992 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 6994 */	0x0 , 
+/* 6926 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 6928 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 6930 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 6932 */	0x0 , 
 			0x0,		/* 0 */
-/* 6996 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7000 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7004 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7006) */
-/* 7006 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 7008 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7010 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7014 */	NdrFcShort( 0x38 ),	/* Offset= 56 (7070) */
-/* 7016 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7015) */
-/* 7018 */	0xb7,		/* FC_RANGE */
+/* 6934 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6938 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 6942 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6944) */
+/* 6944 */	NdrFcShort( 0x38 ),	/* 56 */
+/* 6946 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 6948 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 6952 */	NdrFcShort( 0xa ),	/* Offset= 10 (6962) */
+/* 6954 */	NdrFcShort( 0xffff ),	/* Offset= -1 (6953) */
+/* 6956 */	
+			0x1d,		/* FC_SMFARRAY */
+			0x0,		/* 0 */
+/* 6958 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 6960 */	0x2,		/* FC_CHAR */
+			0x5b,		/* FC_END */
+/* 6962 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 6964 */	NdrFcShort( 0x38 ),	/* 56 */
+/* 6966 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 6968 */	NdrFcShort( 0x10 ),	/* Offset= 16 (6984) */
+/* 6970 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6972 */	NdrFcShort( 0xe4d0 ),	/* Offset= -6960 (12) */
+/* 6974 */	0x8,		/* FC_LONG */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 6976 */	0x36,		/* FC_POINTER */
+			0x36,		/* FC_POINTER */
+/* 6978 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 6980 */	NdrFcShort( 0xffe8 ),	/* Offset= -24 (6956) */
+/* 6982 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 6984 */	
+			0x12, 0x0,	/* FC_UP */
+/* 6986 */	NdrFcShort( 0xe568 ),	/* Offset= -6808 (178) */
+/* 6988 */	
+			0x12, 0x0,	/* FC_UP */
+/* 6990 */	NdrFcShort( 0xe6d6 ),	/* Offset= -6442 (548) */
+/* 6992 */	
+			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
+/* 6994 */	NdrFcShort( 0x2 ),	/* Offset= 2 (6996) */
+/* 6996 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 6998 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x54,		/* FC_DEREFERENCE */
+/* 7000 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 7002 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7004 */	0x0 , 
+			0x0,		/* 0 */
+/* 7006 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7010 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7014 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7016) */
+/* 7016 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 7018 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 7020 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7024 */	NdrFcShort( 0x38 ),	/* Offset= 56 (7080) */
+/* 7026 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7025) */
+/* 7028 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 7020 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7024 */	NdrFcLong( 0x2710 ),	/* 10000 */
-/* 7028 */	
+/* 7030 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7034 */	NdrFcLong( 0xa00000 ),	/* 10485760 */
+/* 7038 */	
 			0x21,		/* FC_BOGUS_ARRAY */
 			0x3,		/* 3 */
-/* 7030 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 7032 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 7040 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 7042 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 7034 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 7036 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7038 */	0x0 , 
+/* 7044 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 7046 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7048 */	0x0 , 
 			0x0,		/* 0 */
-/* 7040 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7044 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7048 */	NdrFcLong( 0xffffffff ),	/* -1 */
-/* 7052 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
-/* 7054 */	0x0 , 
+/* 7050 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7054 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7058 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 7062 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 7064 */	0x0 , 
 			0x0,		/* 0 */
-/* 7056 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7060 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7064 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 7066 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7070 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7074 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
 			0x0,		/* 0 */
-/* 7066 */	NdrFcShort( 0xf7a6 ),	/* Offset= -2138 (4928) */
-/* 7068 */	0x5c,		/* FC_PAD */
+/* 7076 */	NdrFcShort( 0xe468 ),	/* Offset= -7064 (12) */
+/* 7078 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 7070 */	
+/* 7080 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 7072 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 7074 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 7076 */	NdrFcShort( 0xc ),	/* Offset= 12 (7088) */
-/* 7078 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 7080 */	NdrFcShort( 0xffc2 ),	/* Offset= -62 (7018) */
-/* 7082 */	0x40,		/* FC_STRUCTPAD4 */
+/* 7082 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 7084 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 7086 */	NdrFcShort( 0xa ),	/* Offset= 10 (7096) */
+/* 7088 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 7090 */	0x0,		/* 0 */
+			NdrFcShort( 0xffc1 ),	/* Offset= -63 (7028) */
 			0x36,		/* FC_POINTER */
-/* 7084 */	0x8,		/* FC_LONG */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 7086 */	0x5c,		/* FC_PAD */
+/* 7094 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 7088 */	
-			0x12, 0x0,	/* FC_UP */
-/* 7090 */	NdrFcShort( 0xffc2 ),	/* Offset= -62 (7028) */
-/* 7092 */	
-			0x11, 0x0,	/* FC_RP */
-/* 7094 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7096) */
 /* 7096 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 7098 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 7100 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 7102 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7104 */	0x0 , 
-			0x0,		/* 0 */
-/* 7106 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7110 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7114 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7116) */
-/* 7116 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 7118 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7120 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7124 */	NdrFcShort( 0xf182 ),	/* Offset= -3710 (3414) */
-/* 7126 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7125) */
-/* 7128 */	
-			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 7130 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7132) */
-/* 7132 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 7134 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x54,		/* FC_DEREFERENCE */
-/* 7136 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
-/* 7138 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7140 */	0x0 , 
-			0x0,		/* 0 */
-/* 7142 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7146 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7150 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7152) */
-/* 7152 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 7154 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7156 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7160 */	NdrFcShort( 0xf15e ),	/* Offset= -3746 (3414) */
-/* 7162 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7161) */
-/* 7164 */	
+			0x12, 0x0,	/* FC_UP */
+/* 7098 */	NdrFcShort( 0xffc4 ),	/* Offset= -60 (7038) */
+/* 7100 */	
 			0x11, 0x0,	/* FC_RP */
-/* 7166 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7168) */
-/* 7168 */	
+/* 7102 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7104) */
+/* 7104 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 7170 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 7106 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x0,		/*  */
-/* 7172 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 7174 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7176 */	0x0 , 
+/* 7108 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 7110 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7112 */	0x0 , 
 			0x0,		/* 0 */
+/* 7114 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7118 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7122 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7124) */
+/* 7124 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 7126 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 7128 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7132 */	NdrFcShort( 0x38 ),	/* Offset= 56 (7188) */
+/* 7134 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7133) */
+/* 7136 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 7138 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7142 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 7146 */	
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x3,		/* 3 */
+/* 7148 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 7150 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 7152 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 7154 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7156 */	0x0 , 
+			0x0,		/* 0 */
+/* 7158 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7162 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7166 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 7170 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 7172 */	0x0 , 
+			0x0,		/* 0 */
+/* 7174 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 7178 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7182 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7186 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7188) */
-/* 7188 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 7190 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7192 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7196 */	NdrFcShort( 0x4 ),	/* Offset= 4 (7200) */
-/* 7198 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7197) */
-/* 7200 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 7202 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 7204 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 7206 */	NdrFcShort( 0xa ),	/* Offset= 10 (7216) */
-/* 7208 */	0x8,		/* FC_LONG */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 7210 */	0x0,		/* 0 */
-			NdrFcShort( 0xe3e1 ),	/* Offset= -7199 (12) */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 7214 */	0x36,		/* FC_POINTER */
-			0x5b,		/* FC_END */
-/* 7216 */	
-			0x11, 0x0,	/* FC_RP */
-/* 7218 */	NdrFcShort( 0xe47a ),	/* Offset= -7046 (172) */
-/* 7220 */	
-			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 7222 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7224) */
-/* 7224 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 7226 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x54,		/* FC_DEREFERENCE */
-/* 7228 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
-/* 7230 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7232 */	0x0 , 
-			0x0,		/* 0 */
-/* 7234 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7238 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7242 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7244) */
-/* 7244 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 7246 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7248 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7252 */	NdrFcShort( 0xf102 ),	/* Offset= -3838 (3414) */
-/* 7254 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7253) */
-/* 7256 */	
-			0x11, 0x0,	/* FC_RP */
-/* 7258 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7260) */
-/* 7260 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 7262 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 7264 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 7266 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7268 */	0x0 , 
-			0x0,		/* 0 */
-/* 7270 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7274 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7278 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7280) */
-/* 7280 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 7282 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7284 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7288 */	NdrFcShort( 0x4 ),	/* Offset= 4 (7292) */
-/* 7290 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7289) */
-/* 7292 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 7294 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 7296 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 7298 */	NdrFcShort( 0xa ),	/* Offset= 10 (7308) */
-/* 7300 */	0x8,		/* FC_LONG */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 7302 */	0x0,		/* 0 */
-			NdrFcShort( 0xe385 ),	/* Offset= -7291 (12) */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 7306 */	0x36,		/* FC_POINTER */
-			0x5b,		/* FC_END */
-/* 7308 */	
+/* 7182 */	
 			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 7310 */	
+/* 7184 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 7312 */	
+/* 7186 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 7188 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 7190 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 7192 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 7194 */	NdrFcShort( 0xc ),	/* Offset= 12 (7206) */
+/* 7196 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 7198 */	0x0,		/* 0 */
+			NdrFcShort( 0xffc1 ),	/* Offset= -63 (7136) */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 7202 */	0x36,		/* FC_POINTER */
+			0x8,		/* FC_LONG */
+/* 7204 */	0x40,		/* FC_STRUCTPAD4 */
+			0x5b,		/* FC_END */
+/* 7206 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 7208 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 7210 */	
+			0x12, 0x0,	/* FC_UP */
+/* 7212 */	NdrFcShort( 0xffbe ),	/* Offset= -66 (7146) */
+/* 7214 */	
 			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 7314 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7316) */
-/* 7316 */	
+/* 7216 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7218) */
+/* 7218 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 7318 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 7220 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x54,		/* FC_DEREFERENCE */
-/* 7320 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
-/* 7322 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7324 */	0x0 , 
+/* 7222 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 7224 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7226 */	0x0 , 
 			0x0,		/* 0 */
-/* 7326 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7330 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7334 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7336) */
-/* 7336 */	NdrFcShort( 0xc ),	/* 12 */
-/* 7338 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7340 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7344 */	NdrFcShort( 0x4 ),	/* Offset= 4 (7348) */
-/* 7346 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7345) */
-/* 7348 */	
+/* 7228 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7232 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7236 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7238) */
+/* 7238 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 7240 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 7242 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7246 */	NdrFcShort( 0x38 ),	/* Offset= 56 (7302) */
+/* 7248 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7247) */
+/* 7250 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 7252 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7256 */	NdrFcLong( 0x2710 ),	/* 10000 */
+/* 7260 */	
+			0x21,		/* FC_BOGUS_ARRAY */
+			0x3,		/* 3 */
+/* 7262 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 7264 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 7266 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 7268 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7270 */	0x0 , 
+			0x0,		/* 0 */
+/* 7272 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7276 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7280 */	NdrFcLong( 0xffffffff ),	/* -1 */
+/* 7284 */	NdrFcShort( 0x0 ),	/* Corr flags:  */
+/* 7286 */	0x0 , 
+			0x0,		/* 0 */
+/* 7288 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7292 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7296 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 7298 */	NdrFcShort( 0xf7a6 ),	/* Offset= -2138 (5160) */
+/* 7300 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 7302 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 7304 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 7306 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 7308 */	NdrFcShort( 0xc ),	/* Offset= 12 (7320) */
+/* 7310 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 7312 */	NdrFcShort( 0xffc2 ),	/* Offset= -62 (7250) */
+/* 7314 */	0x40,		/* FC_STRUCTPAD4 */
+			0x36,		/* FC_POINTER */
+/* 7316 */	0x8,		/* FC_LONG */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 7318 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 7320 */	
+			0x12, 0x0,	/* FC_UP */
+/* 7322 */	NdrFcShort( 0xffc2 ),	/* Offset= -62 (7260) */
+/* 7324 */	
+			0x11, 0x0,	/* FC_RP */
+/* 7326 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7328) */
+/* 7328 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 7330 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 7332 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 7334 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7336 */	0x0 , 
+			0x0,		/* 0 */
+/* 7338 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7342 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7346 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7348) */
+/* 7348 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 7350 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 7352 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7356 */	NdrFcShort( 0xf182 ),	/* Offset= -3710 (3646) */
+/* 7358 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7357) */
+/* 7360 */	
+			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
+/* 7362 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7364) */
+/* 7364 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 7366 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x54,		/* FC_DEREFERENCE */
+/* 7368 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 7370 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7372 */	0x0 , 
+			0x0,		/* 0 */
+/* 7374 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7378 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7382 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7384) */
+/* 7384 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 7386 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 7388 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7392 */	NdrFcShort( 0xf15e ),	/* Offset= -3746 (3646) */
+/* 7394 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7393) */
+/* 7396 */	
+			0x11, 0x0,	/* FC_RP */
+/* 7398 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7400) */
+/* 7400 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 7402 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 7404 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 7406 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7408 */	0x0 , 
+			0x0,		/* 0 */
+/* 7410 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7414 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7418 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7420) */
+/* 7420 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 7422 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 7424 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7428 */	NdrFcShort( 0x4 ),	/* Offset= 4 (7432) */
+/* 7430 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7429) */
+/* 7432 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 7434 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 7436 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 7438 */	NdrFcShort( 0xa ),	/* Offset= 10 (7448) */
+/* 7440 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 7442 */	0x0,		/* 0 */
+			NdrFcShort( 0xe2f9 ),	/* Offset= -7431 (12) */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 7446 */	0x36,		/* FC_POINTER */
+			0x5b,		/* FC_END */
+/* 7448 */	
+			0x11, 0x0,	/* FC_RP */
+/* 7450 */	NdrFcShort( 0xe398 ),	/* Offset= -7272 (178) */
+/* 7452 */	
+			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
+/* 7454 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7456) */
+/* 7456 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 7458 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x54,		/* FC_DEREFERENCE */
+/* 7460 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 7462 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7464 */	0x0 , 
+			0x0,		/* 0 */
+/* 7466 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7470 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7474 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7476) */
+/* 7476 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 7478 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 7480 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7484 */	NdrFcShort( 0xf102 ),	/* Offset= -3838 (3646) */
+/* 7486 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7485) */
+/* 7488 */	
+			0x11, 0x0,	/* FC_RP */
+/* 7490 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7492) */
+/* 7492 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 7494 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 7496 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 7498 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7500 */	0x0 , 
+			0x0,		/* 0 */
+/* 7502 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7506 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7510 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7512) */
+/* 7512 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 7514 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 7516 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7520 */	NdrFcShort( 0x4 ),	/* Offset= 4 (7524) */
+/* 7522 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7521) */
+/* 7524 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 7526 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 7528 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 7530 */	NdrFcShort( 0xa ),	/* Offset= 10 (7540) */
+/* 7532 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 7534 */	0x0,		/* 0 */
+			NdrFcShort( 0xe29d ),	/* Offset= -7523 (12) */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 7538 */	0x36,		/* FC_POINTER */
+			0x5b,		/* FC_END */
+/* 7540 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 7542 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 7544 */	
+			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
+/* 7546 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7548) */
+/* 7548 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 7550 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x54,		/* FC_DEREFERENCE */
+/* 7552 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 7554 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7556 */	0x0 , 
+			0x0,		/* 0 */
+/* 7558 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7562 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7566 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7568) */
+/* 7568 */	NdrFcShort( 0xc ),	/* 12 */
+/* 7570 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 7572 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7576 */	NdrFcShort( 0x4 ),	/* Offset= 4 (7580) */
+/* 7578 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7577) */
+/* 7580 */	
 			0x15,		/* FC_STRUCT */
 			0x3,		/* 3 */
-/* 7350 */	NdrFcShort( 0xc ),	/* 12 */
-/* 7352 */	0x8,		/* FC_LONG */
+/* 7582 */	NdrFcShort( 0xc ),	/* 12 */
+/* 7584 */	0x8,		/* FC_LONG */
 			0x8,		/* FC_LONG */
-/* 7354 */	0x8,		/* FC_LONG */
+/* 7586 */	0x8,		/* FC_LONG */
 			0x5b,		/* FC_END */
-/* 7356 */	
+/* 7588 */	
 			0x11, 0x0,	/* FC_RP */
-/* 7358 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7360) */
-/* 7360 */	
+/* 7590 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7592) */
+/* 7592 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 7362 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 7594 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x0,		/*  */
-/* 7364 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 7366 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7368 */	0x0 , 
+/* 7596 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 7598 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7600 */	0x0 , 
 			0x0,		/* 0 */
-/* 7370 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7374 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7378 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7380) */
-/* 7380 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 7382 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7384 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7388 */	NdrFcShort( 0x4 ),	/* Offset= 4 (7392) */
-/* 7390 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7389) */
-/* 7392 */	
+/* 7602 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7606 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7610 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7612) */
+/* 7612 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 7614 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 7616 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7620 */	NdrFcShort( 0x4 ),	/* Offset= 4 (7624) */
+/* 7622 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7621) */
+/* 7624 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 7394 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 7396 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 7398 */	NdrFcShort( 0x6 ),	/* Offset= 6 (7404) */
-/* 7400 */	0x36,		/* FC_POINTER */
+/* 7626 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 7628 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 7630 */	NdrFcShort( 0x6 ),	/* Offset= 6 (7636) */
+/* 7632 */	0x36,		/* FC_POINTER */
 			0x36,		/* FC_POINTER */
-/* 7402 */	0x5c,		/* FC_PAD */
+/* 7634 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 7404 */	
+/* 7636 */	
 			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 7406 */	
+/* 7638 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 7408 */	
+/* 7640 */	
 			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 7410 */	
+/* 7642 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 7412 */	
+/* 7644 */	
 			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 7414 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7416) */
-/* 7416 */	
+/* 7646 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7648) */
+/* 7648 */	
 			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
 			0x9,		/* FC_ULONG */
-/* 7418 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+/* 7650 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
 			0x54,		/* FC_DEREFERENCE */
-/* 7420 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
-/* 7422 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7424 */	0x0 , 
+/* 7652 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 7654 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7656 */	0x0 , 
 			0x0,		/* 0 */
-/* 7426 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7430 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7434 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7436) */
-/* 7436 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 7438 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7440 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7444 */	NdrFcShort( 0x24 ),	/* Offset= 36 (7480) */
-/* 7446 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7445) */
-/* 7448 */	0xb7,		/* FC_RANGE */
+/* 7658 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7662 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7666 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7668) */
+/* 7668 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 7670 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 7672 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7676 */	NdrFcShort( 0x24 ),	/* Offset= 36 (7712) */
+/* 7678 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7677) */
+/* 7680 */	0xb7,		/* FC_RANGE */
 			0x8,		/* 8 */
-/* 7450 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7454 */	NdrFcLong( 0x400 ),	/* 1024 */
-/* 7458 */	
+/* 7682 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7686 */	NdrFcLong( 0x400 ),	/* 1024 */
+/* 7690 */	
 			0x1b,		/* FC_CARRAY */
 			0x1,		/* 1 */
-/* 7460 */	NdrFcShort( 0x2 ),	/* 2 */
-/* 7462 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+/* 7692 */	NdrFcShort( 0x2 ),	/* 2 */
+/* 7694 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
 			0x0,		/*  */
-/* 7464 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 7466 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7468 */	0x0 , 
+/* 7696 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 7698 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7700 */	0x0 , 
 			0x0,		/* 0 */
-/* 7470 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7474 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7478 */	0x5,		/* FC_WCHAR */
+/* 7702 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7706 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7710 */	0x5,		/* FC_WCHAR */
 			0x5b,		/* FC_END */
-/* 7480 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 7482 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 7484 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 7486 */	NdrFcShort( 0xc ),	/* Offset= 12 (7498) */
-/* 7488 */	0x36,		/* FC_POINTER */
-			0x36,		/* FC_POINTER */
-/* 7490 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
-			0x0,		/* 0 */
-/* 7492 */	NdrFcShort( 0xffd4 ),	/* Offset= -44 (7448) */
-/* 7494 */	0x40,		/* FC_STRUCTPAD4 */
-			0x36,		/* FC_POINTER */
-/* 7496 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 7498 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 7500 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 7502 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 7504 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 7506 */	
-			0x12, 0x0,	/* FC_UP */
-/* 7508 */	NdrFcShort( 0xffce ),	/* Offset= -50 (7458) */
-/* 7510 */	
-			0x11, 0x0,	/* FC_RP */
-/* 7512 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7514) */
-/* 7514 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 7516 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 7518 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 7520 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7522 */	0x0 , 
-			0x0,		/* 0 */
-/* 7524 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7528 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7532 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7534) */
-/* 7534 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 7536 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7538 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7542 */	NdrFcShort( 0xe ),	/* Offset= 14 (7556) */
-/* 7544 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7543) */
-/* 7546 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 7548 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7552 */	NdrFcLong( 0xffff ),	/* 65535 */
-/* 7556 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 7558 */	NdrFcShort( 0x18 ),	/* 24 */
-/* 7560 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 7562 */	NdrFcShort( 0xa ),	/* Offset= 10 (7572) */
-/* 7564 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 7566 */	0x0,		/* 0 */
-			NdrFcShort( 0xffeb ),	/* Offset= -21 (7546) */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 7570 */	0x36,		/* FC_POINTER */
-			0x5b,		/* FC_END */
-/* 7572 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 7574 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 7576 */	
-			0x12, 0x0,	/* FC_UP */
-/* 7578 */	NdrFcShort( 0xed90 ),	/* Offset= -4720 (2858) */
-/* 7580 */	
-			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 7582 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7584) */
-/* 7584 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 7586 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x54,		/* FC_DEREFERENCE */
-/* 7588 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
-/* 7590 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7592 */	0x0 , 
-			0x0,		/* 0 */
-/* 7594 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7598 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7602 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7604) */
-/* 7604 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 7606 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7608 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7612 */	NdrFcShort( 0xef9a ),	/* Offset= -4198 (3414) */
-/* 7614 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7613) */
-/* 7616 */	
-			0x11, 0x0,	/* FC_RP */
-/* 7618 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7620) */
-/* 7620 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 7622 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 7624 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 7626 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7628 */	0x0 , 
-			0x0,		/* 0 */
-/* 7630 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7634 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7638 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7640) */
-/* 7640 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 7642 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7644 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7648 */	NdrFcShort( 0x4 ),	/* Offset= 4 (7652) */
-/* 7650 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7649) */
-/* 7652 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 7654 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 7656 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 7658 */	NdrFcShort( 0x4 ),	/* Offset= 4 (7662) */
-/* 7660 */	0x36,		/* FC_POINTER */
-			0x5b,		/* FC_END */
-/* 7662 */	
-			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 7664 */	
-			0x25,		/* FC_C_WSTRING */
-			0x5c,		/* FC_PAD */
-/* 7666 */	
-			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 7668 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7670) */
-/* 7670 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 7672 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x54,		/* FC_DEREFERENCE */
-/* 7674 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
-/* 7676 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7678 */	0x0 , 
-			0x0,		/* 0 */
-/* 7680 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7684 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7688 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7690) */
-/* 7690 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 7692 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7694 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7698 */	NdrFcShort( 0xe ),	/* Offset= 14 (7712) */
-/* 7700 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7699) */
-/* 7702 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 7704 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7708 */	NdrFcLong( 0xffff ),	/* 65535 */
 /* 7712 */	
 			0x1a,		/* FC_BOGUS_STRUCT */
 			0x3,		/* 3 */
-/* 7714 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 7714 */	NdrFcShort( 0x20 ),	/* 32 */
 /* 7716 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 7718 */	NdrFcShort( 0xa ),	/* Offset= 10 (7728) */
-/* 7720 */	0x8,		/* FC_LONG */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 7722 */	0x0,		/* 0 */
-			NdrFcShort( 0xffeb ),	/* Offset= -21 (7702) */
+/* 7718 */	NdrFcShort( 0xc ),	/* Offset= 12 (7730) */
+/* 7720 */	0x36,		/* FC_POINTER */
 			0x36,		/* FC_POINTER */
-/* 7726 */	0x5c,		/* FC_PAD */
+/* 7722 */	0x4c,		/* FC_EMBEDDED_COMPLEX */
+			0x0,		/* 0 */
+/* 7724 */	NdrFcShort( 0xffd4 ),	/* Offset= -44 (7680) */
+/* 7726 */	0x40,		/* FC_STRUCTPAD4 */
+			0x36,		/* FC_POINTER */
+/* 7728 */	0x5c,		/* FC_PAD */
 			0x5b,		/* FC_END */
-/* 7728 */	
-			0x12, 0x0,	/* FC_UP */
-/* 7730 */	NdrFcShort( 0xe6b4 ),	/* Offset= -6476 (1254) */
-/* 7732 */	
-			0x11, 0x0,	/* FC_RP */
-/* 7734 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7736) */
-/* 7736 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 7738 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 7740 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 7742 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7744 */	0x0 , 
-			0x0,		/* 0 */
-/* 7746 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7750 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7754 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7756) */
-/* 7756 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 7758 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7760 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7764 */	NdrFcShort( 0xef02 ),	/* Offset= -4350 (3414) */
-/* 7766 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7765) */
-/* 7768 */	
-			0x11, 0x0,	/* FC_RP */
-/* 7770 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7772) */
-/* 7772 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 7774 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x54,		/* FC_DEREFERENCE */
-/* 7776 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
-/* 7778 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7780 */	0x0 , 
-			0x0,		/* 0 */
-/* 7782 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7786 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7790 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7792) */
-/* 7792 */	NdrFcShort( 0x40 ),	/* 64 */
-/* 7794 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7796 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7800 */	NdrFcShort( 0x4e ),	/* Offset= 78 (7878) */
-/* 7802 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7801) */
-/* 7804 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 7806 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7810 */	NdrFcLong( 0x400 ),	/* 1024 */
-/* 7814 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 7816 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7820 */	NdrFcLong( 0xa00000 ),	/* 10485760 */
-/* 7824 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 7826 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7830 */	NdrFcLong( 0xa00000 ),	/* 10485760 */
-/* 7834 */	
-			0x1b,		/* FC_CARRAY */
-			0x0,		/* 0 */
-/* 7836 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7838 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 7840 */	NdrFcShort( 0x20 ),	/* 32 */
-/* 7842 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7844 */	0x0 , 
-			0x0,		/* 0 */
-/* 7846 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7850 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7854 */	0x2,		/* FC_CHAR */
-			0x5b,		/* FC_END */
-/* 7856 */	
-			0x1b,		/* FC_CARRAY */
-			0x0,		/* 0 */
-/* 7858 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7860 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
-			0x0,		/*  */
-/* 7862 */	NdrFcShort( 0x30 ),	/* 48 */
-/* 7864 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7866 */	0x0 , 
-			0x0,		/* 0 */
-/* 7868 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7872 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7876 */	0x2,		/* FC_CHAR */
-			0x5b,		/* FC_END */
-/* 7878 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 7880 */	NdrFcShort( 0x40 ),	/* 64 */
-/* 7882 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 7884 */	NdrFcShort( 0x18 ),	/* Offset= 24 (7908) */
-/* 7886 */	0x8,		/* FC_LONG */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 7888 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 7890 */	0x0,		/* 0 */
-			NdrFcShort( 0xffa9 ),	/* Offset= -87 (7804) */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 7894 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 7896 */	0x0,		/* 0 */
-			NdrFcShort( 0xffad ),	/* Offset= -83 (7814) */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 7900 */	0x36,		/* FC_POINTER */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 7902 */	0x0,		/* 0 */
-			NdrFcShort( 0xffb1 ),	/* Offset= -79 (7824) */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 7906 */	0x36,		/* FC_POINTER */
-			0x5b,		/* FC_END */
-/* 7908 */	
+/* 7730 */	
 			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 7910 */	
+/* 7732 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
-/* 7912 */	
-			0x12, 0x0,	/* FC_UP */
-/* 7914 */	NdrFcShort( 0xf6ca ),	/* Offset= -2358 (5556) */
-/* 7916 */	
-			0x12, 0x0,	/* FC_UP */
-/* 7918 */	NdrFcShort( 0xffac ),	/* Offset= -84 (7834) */
-/* 7920 */	
-			0x12, 0x0,	/* FC_UP */
-/* 7922 */	NdrFcShort( 0xffbe ),	/* Offset= -66 (7856) */
-/* 7924 */	
-			0x11, 0x0,	/* FC_RP */
-/* 7926 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7928) */
-/* 7928 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 7930 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x0,		/*  */
-/* 7932 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
-/* 7934 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 7936 */	0x0 , 
-			0x0,		/* 0 */
-/* 7938 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7942 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 7946 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7948) */
-/* 7948 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 7950 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 7952 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7956 */	NdrFcShort( 0xe ),	/* Offset= 14 (7970) */
-/* 7958 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7957) */
-/* 7960 */	0xb7,		/* FC_RANGE */
-			0x8,		/* 8 */
-/* 7962 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 7966 */	NdrFcLong( 0x400 ),	/* 1024 */
-/* 7970 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 7972 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 7974 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 7976 */	NdrFcShort( 0xa ),	/* Offset= 10 (7986) */
-/* 7978 */	0x8,		/* FC_LONG */
-			0x4c,		/* FC_EMBEDDED_COMPLEX */
-/* 7980 */	0x0,		/* 0 */
-			NdrFcShort( 0xffeb ),	/* Offset= -21 (7960) */
-			0x36,		/* FC_POINTER */
-/* 7984 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 7986 */	
-			0x12, 0x0,	/* FC_UP */
-/* 7988 */	NdrFcShort( 0xe5b2 ),	/* Offset= -6734 (1254) */
-/* 7990 */	
-			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 7992 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7994) */
-/* 7994 */	
-			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
-			0x9,		/* FC_ULONG */
-/* 7996 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
-			0x54,		/* FC_DEREFERENCE */
-/* 7998 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
-/* 8000 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
-/* 8002 */	0x0 , 
-			0x0,		/* 0 */
-/* 8004 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 8008 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 8012 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8014) */
-/* 8014 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 8016 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 8018 */	NdrFcLong( 0x1 ),	/* 1 */
-/* 8022 */	NdrFcShort( 0x4 ),	/* Offset= 4 (8026) */
-/* 8024 */	NdrFcShort( 0xffff ),	/* Offset= -1 (8023) */
-/* 8026 */	
-			0x1a,		/* FC_BOGUS_STRUCT */
-			0x3,		/* 3 */
-/* 8028 */	NdrFcShort( 0x10 ),	/* 16 */
-/* 8030 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 8032 */	NdrFcShort( 0x6 ),	/* Offset= 6 (8038) */
-/* 8034 */	0x8,		/* FC_LONG */
-			0x40,		/* FC_STRUCTPAD4 */
-/* 8036 */	0x36,		/* FC_POINTER */
-			0x5b,		/* FC_END */
-/* 8038 */	
+/* 7734 */	
 			0x12, 0x8,	/* FC_UP [simple_pointer] */
-/* 8040 */	
+/* 7736 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 7738 */	
+			0x12, 0x0,	/* FC_UP */
+/* 7740 */	NdrFcShort( 0xffce ),	/* Offset= -50 (7690) */
+/* 7742 */	
+			0x11, 0x0,	/* FC_RP */
+/* 7744 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7746) */
+/* 7746 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 7748 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 7750 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 7752 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7754 */	0x0 , 
+			0x0,		/* 0 */
+/* 7756 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7760 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7764 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7766) */
+/* 7766 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 7768 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 7770 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7774 */	NdrFcShort( 0xe ),	/* Offset= 14 (7788) */
+/* 7776 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7775) */
+/* 7778 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 7780 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7784 */	NdrFcLong( 0xffff ),	/* 65535 */
+/* 7788 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 7790 */	NdrFcShort( 0x18 ),	/* 24 */
+/* 7792 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 7794 */	NdrFcShort( 0xa ),	/* Offset= 10 (7804) */
+/* 7796 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 7798 */	0x0,		/* 0 */
+			NdrFcShort( 0xffeb ),	/* Offset= -21 (7778) */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 7802 */	0x36,		/* FC_POINTER */
+			0x5b,		/* FC_END */
+/* 7804 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 7806 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 7808 */	
+			0x12, 0x0,	/* FC_UP */
+/* 7810 */	NdrFcShort( 0xed90 ),	/* Offset= -4720 (3090) */
+/* 7812 */	
+			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
+/* 7814 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7816) */
+/* 7816 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 7818 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x54,		/* FC_DEREFERENCE */
+/* 7820 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 7822 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7824 */	0x0 , 
+			0x0,		/* 0 */
+/* 7826 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7830 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7834 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7836) */
+/* 7836 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 7838 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 7840 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7844 */	NdrFcShort( 0xef9a ),	/* Offset= -4198 (3646) */
+/* 7846 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7845) */
+/* 7848 */	
+			0x11, 0x0,	/* FC_RP */
+/* 7850 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7852) */
+/* 7852 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 7854 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 7856 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 7858 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7860 */	0x0 , 
+			0x0,		/* 0 */
+/* 7862 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7866 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7870 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7872) */
+/* 7872 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 7874 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 7876 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7880 */	NdrFcShort( 0x4 ),	/* Offset= 4 (7884) */
+/* 7882 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7881) */
+/* 7884 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 7886 */	NdrFcShort( 0x8 ),	/* 8 */
+/* 7888 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 7890 */	NdrFcShort( 0x4 ),	/* Offset= 4 (7894) */
+/* 7892 */	0x36,		/* FC_POINTER */
+			0x5b,		/* FC_END */
+/* 7894 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 7896 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 7898 */	
+			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
+/* 7900 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7902) */
+/* 7902 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 7904 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x54,		/* FC_DEREFERENCE */
+/* 7906 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 7908 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7910 */	0x0 , 
+			0x0,		/* 0 */
+/* 7912 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7916 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7920 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7922) */
+/* 7922 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 7924 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 7926 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7930 */	NdrFcShort( 0xe ),	/* Offset= 14 (7944) */
+/* 7932 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7931) */
+/* 7934 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 7936 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7940 */	NdrFcLong( 0xffff ),	/* 65535 */
+/* 7944 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 7946 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 7948 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 7950 */	NdrFcShort( 0xa ),	/* Offset= 10 (7960) */
+/* 7952 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 7954 */	0x0,		/* 0 */
+			NdrFcShort( 0xffeb ),	/* Offset= -21 (7934) */
+			0x36,		/* FC_POINTER */
+/* 7958 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 7960 */	
+			0x12, 0x0,	/* FC_UP */
+/* 7962 */	NdrFcShort( 0xe65a ),	/* Offset= -6566 (1396) */
+/* 7964 */	
+			0x11, 0x0,	/* FC_RP */
+/* 7966 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7968) */
+/* 7968 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 7970 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 7972 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 7974 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 7976 */	0x0 , 
+			0x0,		/* 0 */
+/* 7978 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7982 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 7986 */	NdrFcShort( 0x2 ),	/* Offset= 2 (7988) */
+/* 7988 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 7990 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 7992 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 7996 */	NdrFcShort( 0xef02 ),	/* Offset= -4350 (3646) */
+/* 7998 */	NdrFcShort( 0xffff ),	/* Offset= -1 (7997) */
+/* 8000 */	
+			0x11, 0x0,	/* FC_RP */
+/* 8002 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8004) */
+/* 8004 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 8006 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x54,		/* FC_DEREFERENCE */
+/* 8008 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 8010 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 8012 */	0x0 , 
+			0x0,		/* 0 */
+/* 8014 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8018 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8022 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8024) */
+/* 8024 */	NdrFcShort( 0x40 ),	/* 64 */
+/* 8026 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 8028 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 8032 */	NdrFcShort( 0x4e ),	/* Offset= 78 (8110) */
+/* 8034 */	NdrFcShort( 0xffff ),	/* Offset= -1 (8033) */
+/* 8036 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 8038 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8042 */	NdrFcLong( 0x400 ),	/* 1024 */
+/* 8046 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 8048 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8052 */	NdrFcLong( 0xa00000 ),	/* 10485760 */
+/* 8056 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 8058 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8062 */	NdrFcLong( 0xa00000 ),	/* 10485760 */
+/* 8066 */	
+			0x1b,		/* FC_CARRAY */
+			0x0,		/* 0 */
+/* 8068 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 8070 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 8072 */	NdrFcShort( 0x20 ),	/* 32 */
+/* 8074 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 8076 */	0x0 , 
+			0x0,		/* 0 */
+/* 8078 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8082 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8086 */	0x2,		/* FC_CHAR */
+			0x5b,		/* FC_END */
+/* 8088 */	
+			0x1b,		/* FC_CARRAY */
+			0x0,		/* 0 */
+/* 8090 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 8092 */	0x19,		/* Corr desc:  field pointer, FC_ULONG */
+			0x0,		/*  */
+/* 8094 */	NdrFcShort( 0x30 ),	/* 48 */
+/* 8096 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 8098 */	0x0 , 
+			0x0,		/* 0 */
+/* 8100 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8104 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8108 */	0x2,		/* FC_CHAR */
+			0x5b,		/* FC_END */
+/* 8110 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 8112 */	NdrFcShort( 0x40 ),	/* 64 */
+/* 8114 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 8116 */	NdrFcShort( 0x18 ),	/* Offset= 24 (8140) */
+/* 8118 */	0x8,		/* FC_LONG */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 8120 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 8122 */	0x0,		/* 0 */
+			NdrFcShort( 0xffa9 ),	/* Offset= -87 (8036) */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 8126 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 8128 */	0x0,		/* 0 */
+			NdrFcShort( 0xffad ),	/* Offset= -83 (8046) */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 8132 */	0x36,		/* FC_POINTER */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 8134 */	0x0,		/* 0 */
+			NdrFcShort( 0xffb1 ),	/* Offset= -79 (8056) */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 8138 */	0x36,		/* FC_POINTER */
+			0x5b,		/* FC_END */
+/* 8140 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 8142 */	
+			0x25,		/* FC_C_WSTRING */
+			0x5c,		/* FC_PAD */
+/* 8144 */	
+			0x12, 0x0,	/* FC_UP */
+/* 8146 */	NdrFcShort( 0xf6ca ),	/* Offset= -2358 (5788) */
+/* 8148 */	
+			0x12, 0x0,	/* FC_UP */
+/* 8150 */	NdrFcShort( 0xffac ),	/* Offset= -84 (8066) */
+/* 8152 */	
+			0x12, 0x0,	/* FC_UP */
+/* 8154 */	NdrFcShort( 0xffbe ),	/* Offset= -66 (8088) */
+/* 8156 */	
+			0x11, 0x0,	/* FC_RP */
+/* 8158 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8160) */
+/* 8160 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 8162 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x0,		/*  */
+/* 8164 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
+/* 8166 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 8168 */	0x0 , 
+			0x0,		/* 0 */
+/* 8170 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8174 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8178 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8180) */
+/* 8180 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 8182 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 8184 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 8188 */	NdrFcShort( 0xe ),	/* Offset= 14 (8202) */
+/* 8190 */	NdrFcShort( 0xffff ),	/* Offset= -1 (8189) */
+/* 8192 */	0xb7,		/* FC_RANGE */
+			0x8,		/* 8 */
+/* 8194 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 8198 */	NdrFcLong( 0x400 ),	/* 1024 */
+/* 8202 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 8204 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 8206 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 8208 */	NdrFcShort( 0xa ),	/* Offset= 10 (8218) */
+/* 8210 */	0x8,		/* FC_LONG */
+			0x4c,		/* FC_EMBEDDED_COMPLEX */
+/* 8212 */	0x0,		/* 0 */
+			NdrFcShort( 0xffeb ),	/* Offset= -21 (8192) */
+			0x36,		/* FC_POINTER */
+/* 8216 */	0x5c,		/* FC_PAD */
+			0x5b,		/* FC_END */
+/* 8218 */	
+			0x12, 0x0,	/* FC_UP */
+/* 8220 */	NdrFcShort( 0xe558 ),	/* Offset= -6824 (1396) */
+/* 8222 */	
+			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
+/* 8224 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8226) */
+/* 8226 */	
+			0x2b,		/* FC_NON_ENCAPSULATED_UNION */
+			0x9,		/* FC_ULONG */
+/* 8228 */	0x29,		/* Corr desc:  parameter, FC_ULONG */
+			0x54,		/* FC_DEREFERENCE */
+/* 8230 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
+/* 8232 */	NdrFcShort( 0x1 ),	/* Corr flags:  early, */
+/* 8234 */	0x0 , 
+			0x0,		/* 0 */
+/* 8236 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8240 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 8244 */	NdrFcShort( 0x2 ),	/* Offset= 2 (8246) */
+/* 8246 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 8248 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 8250 */	NdrFcLong( 0x1 ),	/* 1 */
+/* 8254 */	NdrFcShort( 0x4 ),	/* Offset= 4 (8258) */
+/* 8256 */	NdrFcShort( 0xffff ),	/* Offset= -1 (8255) */
+/* 8258 */	
+			0x1a,		/* FC_BOGUS_STRUCT */
+			0x3,		/* 3 */
+/* 8260 */	NdrFcShort( 0x10 ),	/* 16 */
+/* 8262 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 8264 */	NdrFcShort( 0x6 ),	/* Offset= 6 (8270) */
+/* 8266 */	0x8,		/* FC_LONG */
+			0x40,		/* FC_STRUCTPAD4 */
+/* 8268 */	0x36,		/* FC_POINTER */
+			0x5b,		/* FC_END */
+/* 8270 */	
+			0x12, 0x8,	/* FC_UP [simple_pointer] */
+/* 8272 */	
 			0x25,		/* FC_C_WSTRING */
 			0x5c,		/* FC_PAD */
 
