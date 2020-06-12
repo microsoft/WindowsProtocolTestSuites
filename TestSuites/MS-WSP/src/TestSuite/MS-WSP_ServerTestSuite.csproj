@@ -58,6 +58,7 @@
     <Compile Include="..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="TraditionalCases\CPMCiState.cs" />
     <Compile Include="TraditionalCases\CPMConnect.cs" />
     <Compile Include="TestCaseAdmin_StatusInvalidParameter.cs" />
     <Compile Include="TestCaseConnectOut_StatusInvalidParameter.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="TraditionalCases\CPMCreateQuery.cs" />
     <Compile Include="TraditionalCases\CPMGetRows.cs" />
     <Compile Include="TraditionalCases\CPMSetBindings.cs" />
+    <Compile Include="TraditionalCases\WspMessageHeader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MS-WSP_ServerTestSuite.deployment.ptfconfig">

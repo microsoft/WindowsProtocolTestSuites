@@ -893,7 +893,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// Start or end of rowset or chapter was reached
         /// </summary>
-        DB_S_ENDOFROWSET = 0x00040ec6
+        DB_S_ENDOFROWSET = 0x00040ec6,
+
+        /// <summary>
+        /// Operation aborted
+        /// </summary>
+        E_ABORT = 0x80004004
     }
 
     /// <summary>

@@ -55,6 +55,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <param name="propertySet1">propertySet1 field to be used.</param>
         /// <param name="propertySet2">propertySet2 field to be used.</param>
         /// <param name="aPropertySet">aPropertySet field to be used.</param>
+        /// <param name="cPropSets">The number of CDbPropSet structures in the following fields.</param>
+        /// <param name="cExtPropSet">The number of CDbPropSet structures in aPropertySet.</param>
+        /// <param name="calculateChecksum">Calculate the messsage checksum or not.</param>
+        /// <param name="header">The header to be used.</param>
         public void SendCPMConnectIn(
             UInt32 clientVersion,
             UInt32 clientIsRemote,
@@ -62,7 +66,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             string userName,
             CDbPropSet propertySet1,
             CDbPropSet propertySet2,
-            CDbPropSet[] aPropertySet
+            CDbPropSet[] aPropertySet,
+            uint cPropSets,
+            uint cExtPropSet,
+            bool calculateChecksum = true,
+            WspMessageHeader? header = null
             )
         {
             if ((clientVersion & WspConsts.Is64bitVersion) != 0)
@@ -76,7 +84,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             var request = new CPMConnectIn()
             {
-                Header = new WspMessageHeader
+                Header = header != null ? header.Value : new WspMessageHeader
                 {
                     _msg = WspMessageHeader_msg_Values.CPMConnectIn,
                 },
@@ -84,14 +92,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 _fClientIsRemote = clientIsRemote,
                 MachineName = machineName,
                 UserName = userName,
-                cPropSets = 2,
+                cPropSets = cPropSets,
                 PropertySet1 = propertySet1,
                 PropertySet2 = propertySet2,
-                cExtPropSet = (UInt32)aPropertySet.Length,
+                cExtPropSet = cExtPropSet,
                 aPropertySets = aPropertySet,
             };
 
-            Send(request);
+            if (!calculateChecksum && header != null)
+            {
+                SendWithGivenHeader(request, header.Value);
+            }
+            else
+            {
+                Send(request);
+            }
         }
 
         /// <summary>
@@ -227,6 +242,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             lastRequest = request;
 
             sender.SendMessage(Helper.ToBytes(request), out lastResponseBytes);
+        }
+
+        /// <summary>
+        /// Send message to server with a given header.
+        /// </summary>
+        /// <param name="request">Message to be sent.</param>
+        /// <param name="header">Header to be sent.</param>
+        private void SendWithGivenHeader(IWspInMessage request, WspMessageHeader header)
+        {
+            var requestBytes = Helper.ToBytes(request);
+            var headerBytes = Helper.ToBytes(header);
+            Array.Copy(headerBytes, requestBytes, headerBytes.Length);
+            request.Header = header;
+            lastRequest = request;
+
+            sender.SendMessage(requestBytes, out lastResponseBytes);
         }
 
         /// <summary>

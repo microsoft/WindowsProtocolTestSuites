@@ -180,10 +180,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="catalogName">Name of the Catalog 
         /// under operation</param>
         /// <param name="languageLocale">Language Locale</param>
+        /// <param name="cPropSets">The number of CDbPropSet structures in the following fields</param>
+        /// <param name="cExtPropSet">The number of CDbPropSet structures in aPropertySet</param>
         /// <returns>CPMConnectIn message</returns>
         public CPMConnectIn GetConnectInMessage(uint clientVersion, int isRemote,
             string userName, string machineName, string serverMachineName,
-            string catalogName, string languageLocale)
+            string catalogName, string languageLocale,
+            uint cPropSets = 2, uint cExtPropSet = 4)
         {
             var message = new CPMConnectIn();
 
@@ -195,13 +198,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             message.UserName = userName;
 
-            message.cPropSets = 2;
+            message.cPropSets = cPropSets;
 
             message.PropertySet1 = GetPropertySet1(catalogName);
             // PropertySet1 specifying MachineName
             message.PropertySet2 = GetPropertySet2(serverMachineName);
 
-            message.cExtPropSet = 4;
+            message.cExtPropSet = cExtPropSet;
 
             message.aPropertySets = new CDbPropSet[4];
 

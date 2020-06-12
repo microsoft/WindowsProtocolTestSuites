@@ -181,6 +181,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// CPMGetScopeStatisticsOut
         /// </summary>
         CPMGetScopeStatisticsOut = 0x000000F4,
+
+        /// <summary>
+        /// Invalid
+        /// </summary>
+        Invalid = 0xFFFFFFFF
     }
 
     /// <summary>

@@ -29,7 +29,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             InvalidClientVersion,
             EmptyCatalogName,
             InvalidCatalogNameFormat,
-            NotExistedCatalogName
+            NotExistedCatalogName,
+            SmallerCExtPropSet,
+            LargerCExtPropSet
         }
 
         private enum ClientType
@@ -140,6 +142,30 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 (BaseTestSite.Properties["ClientVersion"]), (int)ClientType.RemoteClient, NotExistedCatalogName);
             //MSS_E_CATALOGNOTFOUND
         }
+
+        [TestMethod]
+        [TestCategory("CPMConnect")]
+        [Description("This test case is designed to verify the server response if smaller cExtPropSet field is sent in CPMConnectIn.")]
+        public void CPMConnect_SmallerCExtPropSet()
+        {
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn with smaller cExtPropSet field and expects NOT SUCCEED.");
+
+            argumentType = ArgumentType.SmallerCExtPropSet;
+            wspAdapter.CPMConnectInRequest((uint)Convert.ToUInt32
+                (BaseTestSite.Properties["ClientVersion"]), (int)ClientType.RemoteClient, wspAdapter.catalogName, cExtPropSet: 2);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMConnect")]
+        [Description("This test case is designed to verify the server response if larger cExtPropSet field is sent in CPMConnectIn.")]
+        public void CPMConnect_LargerCExtPropSet()
+        {
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn with larger cExtPropSet field and expects NOT SUCCEED.");
+
+            argumentType = ArgumentType.LargerCExtPropSet;
+            wspAdapter.CPMConnectInRequest((uint)Convert.ToUInt32
+                (BaseTestSite.Properties["ClientVersion"]), (int)ClientType.RemoteClient, wspAdapter.catalogName, cExtPropSet: 5);
+        }
         #endregion
 
         private void CPMConnectOut(uint errorCode)
@@ -163,6 +189,12 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     break;
                 case ArgumentType.NotExistedCatalogName:
                     Site.Assert.AreEqual((uint)WspErrorCode.MSS_E_CATALOGNOTFOUND, errorCode, "Server should return MSS_E_CATALOGNOTFOUND if catalog name of CPMConnectIn is not existed.");
+                    break;
+                case ArgumentType.SmallerCExtPropSet:
+                    Site.Assert.AreEqual((uint)WspErrorCode.ERROR_INVALID_PARAMETER, errorCode, "Server should return ERROR_INVALID_PARAMETER if cExtPropSet of CPMConnectIn is smaller than the number of CDbPropSet structures in aPropertySets.");
+                    break;
+                case ArgumentType.LargerCExtPropSet:
+                    Site.Assert.AreEqual((uint)WspErrorCode.E_ABORT, errorCode, "Server should return E_ABORT if cExtPropSet of CPMConnectIn is larger than the number of CDbPropSet structures in aPropertySets.");
                     break;
             }
         }

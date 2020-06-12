@@ -111,6 +111,26 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         public uint clientVersion = 0;
 
+        /// <summary>
+        /// Send an invalid _msg value in the message header
+        /// </summary>
+        public bool sendInvalidMsg = false;
+
+        /// <summary>
+        /// Send an invalid _status value in the message header.
+        /// </summary>
+        public bool sendInvalidStatus = false;
+
+        /// <summary>
+        /// Send an invalid _ulChecksum value in the message header. 
+        /// </summary>
+        public bool sendInvalidUlChecksum = false;
+
+        /// <summary>
+        /// Calculate the corret checksum of the message.
+        /// </summary>
+        public bool calculateChecksum = true;
+
         public CPMSetBindingsIn setBindingsIn;
         #endregion
 
@@ -219,8 +239,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         public void CPMConnectInRequest()
         {
-            int remoteCLient = 1;
-            CPMConnectInRequest(clientVersion, remoteCLient, catalogName);
+            int remoteClient = 1;
+            CPMConnectInRequest(clientVersion, remoteClient, catalogName);
         }
 
         /// <summary>
@@ -230,14 +250,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="clientVersion">Indicate whether the server is to validate the checksum</param>
         /// <param name="isClientRemote">Indicate if the client is running on a different machine than the server</param>
         /// <param name="catalogName">The name of the catalog</param>
-        public void CPMConnectInRequest(uint clientVersion, int isClientRemote, string catalogName)
+        /// <param name="cPropSets">The number of CDbPropSet structures in the following fields</param>
+        /// <param name="cExtPropSet">The number of CDbPropSet structures in aPropertySet</param>
+        public void CPMConnectInRequest(uint clientVersion, int isClientRemote, string catalogName, uint cPropSets = 2, uint cExtPropSet = 4)
         {
             WspClient client;
 
             string locale = wspTestSite.Properties.Get("LanguageLocale");
 
             string serverName = serverMachineName;
-            var connectInMessage = builder.GetConnectInMessage(clientVersion, isClientRemote, userName, clientMachineName, serverName, catalogName, locale);
+            var connectInMessage = builder.GetConnectInMessage(clientVersion, isClientRemote, userName, clientMachineName, serverName, catalogName, locale, cPropSets, cExtPropSet);
+
+            WspMessageHeader? header = GetWspMessageHeader(connectInMessage.Header._msg, connectInMessage.Header._status, connectInMessage.Header._ulChecksum);
 
             //Send the connectIn message to Server.
             if (!connectedClients.ContainsKey(clientMachineName))
@@ -256,7 +280,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             var connectInMessageBytes = Helper.ToBytes(connectInMessage);
             uint checkSum = GetCheckSumField(connectInMessageBytes);
-            client.SendCPMConnectIn(connectInMessage._iClientVersion, connectInMessage._fClientIsRemote, connectInMessage.MachineName, connectInMessage.UserName, connectInMessage.PropertySet1, connectInMessage.PropertySet2, connectInMessage.aPropertySets);
+            client.SendCPMConnectIn(connectInMessage._iClientVersion, connectInMessage._fClientIsRemote, connectInMessage.MachineName, connectInMessage.UserName, connectInMessage.PropertySet1, connectInMessage.PropertySet2, connectInMessage.aPropertySets, cPropSets: connectInMessage.cPropSets, cExtPropSet: connectInMessage.cExtPropSet, calculateChecksum: calculateChecksum, header: header);
             // RequestSender objects uses path '\\pipe\\MSFTEWDS'
             // for the protocol transport
             wspTestSite.CaptureRequirement(3, @"All messages MUST be " +
@@ -1781,6 +1805,51 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 returnValue = Constant.OFFSET_32;
             }
             return returnValue;
+        }
+
+        /// <summary>
+        /// Returns the WspMessageHeader by the adapter context.
+        /// </summary>
+        /// <param name="_msg">The original _msg value in header.</param>
+        /// <param name="_status">The original _status value in header.</param>
+        /// <param name="_ulChecksum">The orignial _ulChecksum value in header.</param>
+        /// <returns>WspMessageHeader to be used.</returns>
+        private WspMessageHeader? GetWspMessageHeader(WspMessageHeader_msg_Values _msg, uint _status, uint _ulChecksum)
+        {
+            WspMessageHeader? header = null;
+            
+            if (sendInvalidMsg)
+            {
+                header = new WspMessageHeader
+                {
+                    _msg = WspMessageHeader_msg_Values.Invalid,
+                    _status = _status,
+                    _ulChecksum = _ulChecksum
+                };
+            }
+            
+            if (sendInvalidStatus)
+            {
+                header = new WspMessageHeader
+                {
+                    _msg = _msg,
+                    _status = 0xFFFFFFFFU,
+                    _ulChecksum = _ulChecksum
+                };
+            }
+            
+            if (sendInvalidUlChecksum)
+            {
+                header = new WspMessageHeader
+                {
+                    _msg = _msg,
+                    _status = _status,
+                    _ulChecksum = 1
+                };
+                calculateChecksum = false;
+            }
+
+            return header;
         }
         #endregion
     }

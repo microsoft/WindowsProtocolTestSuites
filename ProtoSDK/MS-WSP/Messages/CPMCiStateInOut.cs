@@ -182,7 +182,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             Header = header;
 
-            buffer.ToStruct<CPMCiState>();
+            State = buffer.ToStruct<CPMCiState>();
         }
 
         public void ToBytes(WspBuffer buffer)
