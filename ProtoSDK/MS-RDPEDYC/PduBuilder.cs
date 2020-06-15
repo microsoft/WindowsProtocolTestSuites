@@ -30,6 +30,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             {
                 DynamicVCException.Throw("UnknownDynamicVCPDU was not registered.");
             }
+            
+            // Clear references in the list and register new PDUs.
+            regsiteredPDUs.Clear();
+            RegisterDefaultPdus();
+
             return res;
         }
 
