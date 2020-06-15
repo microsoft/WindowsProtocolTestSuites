@@ -479,7 +479,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
                 gfileTypeToOpen = FileType.DirectoryFile;
             }
             //Else if PathName contains a trailing backslash
-            else if (fileNameStatus == FileNameStatus.PathNameTraiblack)
+            else if (fileNameStatus == FileNameStatus.PathNameTrailBack)
             {
                 gfileTypeToOpen = FileType.DirectoryFile;
             }

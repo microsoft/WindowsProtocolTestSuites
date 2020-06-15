@@ -53,7 +53,7 @@ machine CreateFileScenario01() : CreateFileConfig
                 StreamFoundType.StreamIsFound,
                 SymbolicLinkType.IsNotSymbolicLink,
                 FileType.DataFile,
-                FileNameStatus.BlacklashName);
+                FileNameStatus.PathNameTrailBack);
     )
     ||
     FSAModelProgramCoverage
@@ -523,7 +523,7 @@ machine CreateFileScenario17() : CreateFileConfig
                 StreamFoundType.StreamIsFound,
                 SymbolicLinkType.IsNotSymbolicLink,
                 FileType.DataFile,
-                FileNameStatus.BlacklashName); // PathName contains a trailing backslash
+                FileNameStatus.PathNameTrailBack); // PathName contains a trailing backslash
     )
     ||
     FSAModelProgramCoverage 
@@ -911,7 +911,7 @@ machine CreateFileScenario31() : CreateFileConfig
                 StreamFoundType.StreamIsFound,
                 SymbolicLinkType.IsNotSymbolicLink,
                 FileType.DirectoryFile, // FileTypeToOpen = DirectoryFile
-                FileNameStatus.BlacklashName); // PathName contains a trailing backslash
+                FileNameStatus.PathNameTrailBack); // PathName contains a trailing backslash
     )
     ||
     FSAModelProgramCoverage 
