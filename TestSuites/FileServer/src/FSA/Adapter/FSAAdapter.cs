@@ -1157,7 +1157,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     randomFile = randomFile + @"<+>";
                     break;
 
-                case FileNameStatus.PathNameTraiblack:
+                case FileNameStatus.PathNameTrailBack:
                     randomFile = randomFile + @"\";
                     break;
 

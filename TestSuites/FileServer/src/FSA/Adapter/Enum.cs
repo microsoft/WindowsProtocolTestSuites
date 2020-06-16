@@ -2348,7 +2348,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// <summary>
         /// If set, PathName contains a trailing backslash.
         /// </summary>
-        PathNameTraiblack,
+        PathNameTrailBack,
 
         /// <summary>
         /// File name is null

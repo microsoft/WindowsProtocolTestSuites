@@ -568,7 +568,7 @@ machine OpenFileScenario17() : OpenFileConfig
             StreamFoundType.StreamIsNotFound,
             SymbolicLinkType.IsNotSymbolicLink,
             FileType.DataFile,
-            FileNameStatus.BlacklashName, // PathName contains a trailing backslash
+            FileNameStatus.PathNameTrailBack, // PathName contains a trailing backslash
             CreateOptions.NON_DIRECTORY_FILE,
             ShareAccess.FILE_SHARE_READ,
             FileAccess.FILE_READ_DATA,
