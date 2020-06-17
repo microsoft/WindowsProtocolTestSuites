@@ -43,6 +43,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             }
         }
 
+        // The user names with special characters in them, separated by ";"
+        public string SpecialUserNames
+        {
+            get
+            {
+                return GetProperty(AuthenticationGroupName, "SpecialUserNames");
+            }
+        }
+
         // The share used to test CBAC
         public string CBACShare
         {
