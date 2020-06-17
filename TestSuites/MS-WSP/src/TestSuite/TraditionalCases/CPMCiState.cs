@@ -10,7 +10,7 @@ using System;
 namespace Microsoft.Protocols.TestSuites.WspTS
 {
     [TestClass]
-    public partial class CPMCiStateTestCases : TestClassBase
+    public partial class CPMCiStateTestCases : WspCommonTestBase
     {
         private WspAdapter wspAdapter;
 
@@ -36,11 +36,13 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             base.TestInitialize();
             wspAdapter = new WspAdapter();
             wspAdapter.Initialize(this.Site);
-            wspAdapter.CPMConnectOutResponse += CPMConnectOut;
-            wspAdapter.CPMCreateQueryOutResponse += CPMCreateQueryOut;
-            wspAdapter.CPMSetBindingsInResponse += CPMSetBindingsOut;
-            wspAdapter.CPMGetRowsOut += CPMGetRowsOut;
-            wspAdapter.CPMFreeCursorOutResponse += CPMFreeCursorOut;
+
+            wspAdapter.CPMConnectOutResponse += EnsureSuccessfulCPMConnectOut;
+            wspAdapter.CPMCreateQueryOutResponse += EnsureSuccessfulCPMCreateQueryOut;
+            wspAdapter.CPMSetBindingsInResponse += EnsureSuccessfulCPMSetBindingsOut;
+            wspAdapter.CPMGetRowsOut += EnsureSuccessfulCPMGetRowsOut;
+            wspAdapter.CPMFreeCursorOutResponse += EnsureSuccessfulCPMFreeCursorOut;
+
             wspAdapter.CPMCiStateInOutResponse += CPMCiStateInOut;
         }
 
@@ -152,32 +154,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMCiStateInOut();
         }
         #endregion
-
-        private void CPMConnectOut(uint errorCode)
-        {
-            Site.Assert.AreEqual((uint)WspErrorCode.SUCCESS, errorCode, "CPMConnectIn should succeed.");
-        }
-
-        private void CPMCreateQueryOut(uint errorCode)
-        {
-            Site.Assert.AreEqual((uint)WspErrorCode.SUCCESS, errorCode, "CPMCreateQueryIn should succeed.");
-        }
-
-        private void CPMSetBindingsOut(uint errorCode)
-        {
-            Site.Assert.AreEqual((uint)WspErrorCode.SUCCESS, errorCode, "CPMSetBindingsIn should succeed.");
-        }
-
-        private void CPMGetRowsOut(uint errorCode)
-        {
-            bool succeed = errorCode == (uint)WspErrorCode.SUCCESS || errorCode == (uint)WspErrorCode.DB_S_ENDOFROWSET ? true : false;
-            Site.Assert.IsTrue(succeed, "Server should return SUCCESS or DB_S_ENDOFROWSET for CPMGetRowsIn.");
-        }
-
-        private void CPMFreeCursorOut(uint errorCode)
-        {
-            Site.Assert.AreEqual((uint)WspErrorCode.SUCCESS, errorCode, "CPMFreeCursorIn should succeed.");
-        }
 
         private void CPMCiStateInOut(uint errorCode)
         {

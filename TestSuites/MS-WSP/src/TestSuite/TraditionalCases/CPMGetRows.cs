@@ -14,7 +14,7 @@ using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
 namespace Microsoft.Protocols.TestSuites.WspTS
 {
     [TestClass]
-    public partial class CPMGetRowsTestCases : TestClassBase
+    public partial class CPMGetRowsTestCases : WspCommonTestBase
     {
         private WspAdapter wspAdapter;
         private const uint validRowsToTransfer = 40;
@@ -53,9 +53,11 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             base.TestInitialize();
             wspAdapter = new WspAdapter();
             wspAdapter.Initialize(this.Site);
-            wspAdapter.CPMConnectOutResponse += CPMConnectOut;
-            wspAdapter.CPMSetBindingsInResponse += CPMSetBindingsOut;
-            wspAdapter.CPMCreateQueryOutResponse += CPMCreateQueryOut;
+
+            wspAdapter.CPMConnectOutResponse += EnsureSuccessfulCPMConnectOut;
+            wspAdapter.CPMSetBindingsInResponse += EnsureSuccessfulCPMSetBindingsOut;
+            wspAdapter.CPMCreateQueryOutResponse += EnsureSuccessfulCPMCreateQueryOut;
+
             wspAdapter.CPMGetRowsOut += CPMGetRowsOut;
         }
 
@@ -201,22 +203,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         }
 
         #endregion
-
-
-        private void CPMSetBindingsOut(uint errorCode)
-        {
-            Site.Assert.AreEqual((uint)WspErrorCode.SUCCESS, errorCode, "CPMSetBindingsIn should succeed.");
-        }
-
-        private void CPMConnectOut(uint errorCode)
-        {
-            Site.Assert.AreEqual((uint)WspErrorCode.SUCCESS, errorCode, "CPMConnectIn should succeed.");
-        }
-
-        private void CPMCreateQueryOut(uint errorCode)
-        {
-            Site.Assert.AreEqual((uint)WspErrorCode.SUCCESS, errorCode, "CPMCreateQueryIn should succeed.");
-        }
 
         private void CPMGetRowsOut(uint errorCode)
         {

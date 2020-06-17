@@ -430,7 +430,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 // Generating a PseudoRandom Number
                 Random r = new Random();
                 cursorAssociated
-                    = uint.MaxValue - (uint)r.Next(MAX_RANGE, MIN_RANGE);
+                    = uint.MaxValue - (uint)r.Next(MIN_RANGE, MAX_RANGE);
             }
             byte[] statusInMessage
                 = builder.GetCPMQueryStatusIn(cursorAssociated);
@@ -500,13 +500,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         #endregion
 
         #region CPMGetQueryStatusExIn and CPMGetQueryStatusExOut
-
         /// <summary>
-        /// CPMGetQueryStatusExIn()requests for the status of the query and the
-        /// additional information from the server.
+        /// CPMGetQueryStatusExIn() requests for the status of the query and the additional information from the server.
         /// </summary>
-        /// <param name="isCursorValid">Indicates the client requesting 
-        /// status has a valid cursor.</param>
+        /// <param name="isCursorValid">Indicates the client requesting status has a valid cursor.</param>
         public void CPMGetQueryStatusExIn(bool isCursorValid)
         {
             uint cursorAssociated = 0;
@@ -518,19 +515,40 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             {
                 cursorAssociated = 2;
             }
-            byte[] statusExInMessage
-                = builder.GetCPMQueryStatusExIn(cursorAssociated, 1);
+
+            CPMGetQueryStatusExIn(cursorAssociated, 1, out var _);
+        }
+
+        /// <summary>
+        /// CPMGetQueryStatusExIn() requests for the status of the query and the additional information from the server.
+        /// </summary>
+        /// <param name="response">The CPMGetQueryStatusExOut response.</param>
+        public void CPMGetQueryStatusExIn(out CPMGetQueryStatusExOut response)
+        {
+            uint cursorAssociated = GetCursor(clientMachineName);
+            CPMGetQueryStatusExIn(cursorAssociated, 1, out response);
+        }
+
+        /// <summary>
+        /// CPMGetQueryStatusExIn() requests for the status of the query and the additional information from the server.
+        /// </summary>
+        /// <param name="cursor">The query handle.</param>
+        /// <param name="bookMarkHandle">The bookmark handle.</param>
+        /// <param name="response">The CPMGetQueryStatusExOut response.</param>
+        public void CPMGetQueryStatusExIn(uint cursor, uint bookMarkHandle, out CPMGetQueryStatusExOut response)
+        {
+            response = null;
+            byte[] statusExInMessage = builder.GetCPMQueryStatusExIn(cursor, bookMarkHandle);
             byte[] statusExOutMessage;
             uint checkSum = 0;
-            RequestSender sender
-                = GetRequestSender(isClientConnected); //Get the Sender
-            bytesRead
-                = sender.SendMessage(statusExInMessage,
-                out statusExOutMessage);
+            RequestSender sender = GetRequestSender(isClientConnected); //Get the Sender
+            bytesRead = sender.SendMessage(statusExInMessage, out statusExOutMessage);
+
             if (bytesRead == -1)
             {
                 int error = Marshal.GetLastWin32Error();
             }
+            
             if (sender == defaultSender)
             {
                 // This means that disconnect message has been sent
@@ -544,23 +562,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                    "in a CPMConnectOut message.");
 
             }
+            
             wspTestSite.CaptureRequirement(3, @"All messages MUST be " +
                             "transported using a named pipe: \\pipe\\MSFTEWDS");
+            
             if (CPMGetQueryStatusExOutResponse != null)
             {
                 int startingIndex = 0;
-                uint msgId
-                    = Helper.GetUInt(statusExOutMessage, ref startingIndex);
-                uint msgStatus
-                    = Helper.GetUInt(statusExOutMessage, ref startingIndex);
+                uint msgId = Helper.GetUInt(statusExOutMessage, ref startingIndex);
+                uint msgStatus = Helper.GetUInt(statusExOutMessage, ref startingIndex);
+                
                 if (msgStatus != 0)
                 {
                     wspTestSite.CaptureRequirementIfAreEqual<int>(bytesRead,
-        Constant.SIZE_OF_HEADER, 619,
-        "Whenever an error occurs during processing of a " +
-        "message sent by a client, the server MUST respond " +
-        "with the message header (only) of the message sent " +
-        "by the client, keeping the _msg field intact.");
+                        Constant.SIZE_OF_HEADER, 619,
+                        "Whenever an error occurs during processing of a " +
+                        "message sent by a client, the server MUST respond " +
+                        "with the message header (only) of the message sent " +
+                        "by the client, keeping the _msg field intact.");
+                                    
                     //If 4 byte Non Zero field is read as status
                     // The requirement 620 gets validated
                     wspTestSite.CaptureRequirement(620,
@@ -568,22 +588,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         "message sent by a client, the server MUST set the " +
                         "_status field to the error code value.");
                 }
+                
                 if ((msgId == (uint)MessageType.CPMGetQueryStatusExOut)
                     && (msgStatus == 0x00000000))
                 {
                     validator.ValidateGetQueryStatusExOut(statusExOutMessage,
                         checkSum);
-                }
 
-                if (wspTestSite.Properties.Get("ServerOSVersion").ToUpper() == "WIN7")
-                {
-                    if (!isCursorValid && msgStatus != 0x00000000)
-                    {
-                        //MS-WSP_R683
-                        wspTestSite.CaptureRequirementIfAreEqual<uint>((uint)WspErrorCode.E_FAIL, msgStatus, 683,
-                            "When the server receives a CPMGetQueryStatusExIn message request from a client, " +
-                            "the server MUST report an E_FAIL (0x80004005) error if the cursor handle passed is not in a list of the client's cursor handles.");
-                    }
+                    var getQueryStatusExOut = new CPMGetQueryStatusExOut();
+                    Helper.FromBytes<CPMGetQueryStatusExOut>(ref getQueryStatusExOut, statusExOutMessage);
+                    response = getQueryStatusExOut;
                 }
 
                 // Fire Response Event

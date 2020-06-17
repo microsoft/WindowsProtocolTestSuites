@@ -14,7 +14,7 @@ using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
 namespace Microsoft.Protocols.TestSuites.WspTS
 {
     [TestClass]
-    public partial class CPMCreateQueryTestCases : TestClassBase
+    public partial class CPMCreateQueryTestCases : WspCommonTestBase
     {
         private WspAdapter wspAdapter;
 
@@ -47,8 +47,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             base.TestInitialize();
             wspAdapter = new WspAdapter();
             wspAdapter.Initialize(this.Site);
-            wspAdapter.CPMConnectOutResponse += CPMConnectOut;
-            wspAdapter.CPMSetBindingsInResponse += CPMSetBindingsOut;
+
+            wspAdapter.CPMConnectOutResponse += EnsureSuccessfulCPMConnectOut;
+            wspAdapter.CPMSetBindingsInResponse += EnsureSuccessfulCPMSetBindingsOut;
+
             wspAdapter.CPMCreateQueryOutResponse += CPMCreateQueryOut;
             wspAdapter.CPMGetRowsOut += CPMGetRowsOut;
         }
@@ -330,16 +332,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 Site.Assert.AreEqual(fileNameList[i], getRowsOut.Rows[i].Columns[0].Data, "The index {0} file in Ascend order should be {1}.", i, fileNameList[i]);
                 Site.Assert.AreEqual(sizeList[i], Convert.ToInt32(getRowsOut.Rows[i].Columns[1].Data), "The size of {0} should be {1} bytes.", fileNameList[i], sizeList[i]);
             }
-        }
-
-        private void CPMSetBindingsOut(uint errorCode)
-        {
-            Site.Assert.AreEqual((uint)WspErrorCode.SUCCESS, errorCode, "CPMSetBindingsIn should succeed.");
-        }
-
-        private void CPMConnectOut(uint errorCode)
-        {
-            Site.Assert.AreEqual((uint)WspErrorCode.SUCCESS, errorCode, "CPMConnectIn should succeed.");
         }
 
         private void CPMCreateQueryOut(uint errorCode)

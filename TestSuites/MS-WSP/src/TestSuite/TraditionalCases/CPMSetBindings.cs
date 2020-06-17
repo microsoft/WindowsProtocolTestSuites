@@ -14,7 +14,7 @@ using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
 namespace Microsoft.Protocols.TestSuites.WspTS
 {
     [TestClass]
-    public partial class CPMSetBindingsTestCases : TestClassBase
+    public partial class CPMSetBindingsTestCases : WspCommonTestBase
     {
         private WspAdapter wspAdapter;
 
@@ -48,10 +48,12 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             base.TestInitialize();
             wspAdapter = new WspAdapter();
             wspAdapter.Initialize(this.Site);
-            wspAdapter.CPMConnectOutResponse += CPMConnectOut;
+
+            wspAdapter.CPMConnectOutResponse += EnsureSuccessfulCPMConnectOut;
+            wspAdapter.CPMCreateQueryOutResponse += EnsureSuccessfulCPMCreateQueryOut;
+            wspAdapter.CPMGetRowsOut += EnsureSuccessfulCPMGetRowsOut;
+
             wspAdapter.CPMSetBindingsInResponse += CPMSetBindingsOut;
-            wspAdapter.CPMCreateQueryOutResponse += CPMCreateQueryOut;
-            wspAdapter.CPMGetRowsOut += CPMGetRowsOut;
         }
 
         protected override void TestCleanup()
@@ -253,22 +255,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         }
 
         #endregion
-
-        private void CPMConnectOut(uint errorCode)
-        {
-            Site.Assert.AreEqual((uint)WspErrorCode.SUCCESS, errorCode, "CPMConnectIn should succeed.");
-        }
-
-        private void CPMCreateQueryOut(uint errorCode)
-        {
-            Site.Assert.AreEqual((uint)WspErrorCode.SUCCESS, errorCode, "CPMCreateQueryIn should succeed.");
-        }
-
-        private void CPMGetRowsOut(uint errorCode)
-        {
-            bool succeed = errorCode == (uint)WspErrorCode.SUCCESS || errorCode == (uint)WspErrorCode.DB_S_ENDOFROWSET ? true : false;
-            Site.Assert.IsTrue(succeed, "Server should return succeed or DB_S_ENDOFROWSET for CPMGetRowsIn.");
-        }
 
         private void CPMSetBindingsOut(uint errorCode)
         {

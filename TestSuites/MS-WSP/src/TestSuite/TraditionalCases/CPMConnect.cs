@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace Microsoft.Protocols.TestSuites.WspTS
 {
     [TestClass]
-    public partial class CPMConnectTestCases: TestClassBase
+    public partial class CPMConnectTestCases : WspCommonTestBase
     {
         private WspAdapter wspAdapter;
         private const uint InvalidClientVersion = 0;
@@ -62,6 +62,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             base.TestInitialize();
             wspAdapter = new WspAdapter();
             wspAdapter.Initialize(this.Site);
+
             wspAdapter.CPMConnectOutResponse += CPMConnectOut;
         }
 

@@ -10,7 +10,7 @@ using System;
 namespace Microsoft.Protocols.TestSuites.WspTS
 {
     [TestClass]
-    public partial class WspMessageHeaderTestCases : TestClassBase
+    public partial class WspMessageHeaderTestCases : WspCommonTestBase
     {
         private WspAdapter wspAdapter;
 
@@ -43,6 +43,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             base.TestInitialize();
             wspAdapter = new WspAdapter();
             wspAdapter.Initialize(this.Site);
+
             wspAdapter.CPMConnectOutResponse += CPMConnectOut;
         }
 

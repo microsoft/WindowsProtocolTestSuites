@@ -72,6 +72,10 @@
     <Compile Include="Messages\CPMConnectOut.cs" />
     <Compile Include="Messages\CPMCreateQueryIn.cs" />
     <Compile Include="Messages\CPMCreateQueryOut.cs" />
+    <Compile Include="Messages\CPMGetQueryStatusExIn.cs" />
+    <Compile Include="Messages\CPMGetQueryStatusExOut.cs" />
+    <Compile Include="Messages\CPMGetQueryStatusIn.cs" />
+    <Compile Include="Messages\CPMGetQueryStatusOut.cs" />
     <Compile Include="Messages\CPMGetRowsIn.cs" />
     <Compile Include="Messages\CPMGetRowsOut.cs" />
     <Compile Include="Messages\CPMSetBindingsIn.cs" />
