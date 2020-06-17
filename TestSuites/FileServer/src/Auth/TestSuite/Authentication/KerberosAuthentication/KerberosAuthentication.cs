@@ -103,7 +103,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                 servicePrincipalName = Smb2Utility.GetCifsServicePrincipalName(TestConfig.SutComputerName);
                 if (servicePrincipalName == null)
                 {
-                    BaseTestSite.Log.Add(LogEntryKind.Debug, "The FQDN is not fetched by reversing DNS lookup, use SutComputerName directly.");
+                    BaseTestSite.Log.Add(LogEntryKind.Debug, "The FQDN is not fetched by reverse DNS lookup, use SutComputerName directly.");
                     servicePrincipalName = "cifs/" + TestConfig.SutComputerName;
                 }
             }
