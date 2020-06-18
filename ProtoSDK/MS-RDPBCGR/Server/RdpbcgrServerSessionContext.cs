@@ -634,7 +634,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
         /// <summary>
         /// The requested protocol to be used for following PDUs.
-        /// Got from server MCS Connect Response PDU with GCC Conference.
         /// </summary>
         public requestedProtocols_Values RequestedProtocol
         {
@@ -642,11 +641,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 lock (contextLock)
                 {
-                    if (mcsConnectResponsePdu != null)
-                    {
-                        return mcsConnectResponsePdu.mcsCrsp.gccPdu.serverCoreData.clientRequestedProtocols;
-                    }
-                    else if (x224ConnectionRequestPdu != null && x224ConnectionRequestPdu.rdpNegData != null)
+                    if (x224ConnectionRequestPdu != null && x224ConnectionRequestPdu.rdpNegData != null)
                     {
                         return x224ConnectionRequestPdu.rdpNegData.requestedProtocols;
                     }
