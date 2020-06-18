@@ -949,16 +949,36 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             coreData.header.type = (TS_UD_HEADER_type_Values)ParseUInt16(data, ref currentIndex, false);
             coreData.header.length = ParseUInt16(data, ref currentIndex, false);
 
-            // TS_UD_SC_CORE: version
-            coreData.version = (TS_UD_SC_CORE_version_Values)ParseUInt32(data, ref currentIndex, false);
+            try
+            {
+                // TS_UD_SC_CORE: version
+                coreData.version = (TS_UD_SC_CORE_version_Values)ParseUInt32(data, ref currentIndex, false);
 
-            // TS_UD_SC_CORE: clientRequestedProtocols
-            coreData.clientRequestedProtocols = (requestedProtocols_Values)ParseUInt32(data, ref currentIndex, false);
+                if (currentIndex - startIndex >= coreData.header.length)
+                {
+                    // Skip all remaining optional fields since it reached the end indicating by length.
+                    return coreData;
+                }
 
-            if (currentIndex <= startIndex + coreData.header.length - 1)
+                // TS_UD_SC_CORE: clientRequestedProtocols
+                coreData.clientRequestedProtocols = (requestedProtocols_Values)ParseUInt32(data, ref currentIndex, false);
+
+                if (currentIndex - startIndex >= coreData.header.length)
+                {
+                    // Skip all remaining optional fields since it reached the end indicating by length.
+                    return coreData;
+                }
+
+                // TS_UD_SC_CORE: earlyCapabilityFlags
                 coreData.earlyCapabilityFlags = (SC_earlyCapabilityFlags_Values)ParseUInt32(data, ref currentIndex, false);
 
-            return coreData;
+                return coreData;
+            }
+            finally
+            {
+                // Verify the actual read out data length matches the header length.
+                VerifyDataLength(currentIndex - startIndex, coreData.header.length, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
+            }
         }
 
 
@@ -4797,41 +4817,48 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             currentIndex = 0;
             while (currentIndex < gccUserData.Length)
             {
-                // Peek data type
+                // Peek each header by its length.
                 int tempIndex = currentIndex;
                 TS_UD_HEADER_type_Values type =
                     (TS_UD_HEADER_type_Values)ParseUInt16(gccUserData, ref tempIndex, false);
 
-                // Parse data by type
+                ushort length = ParseUInt16(gccUserData, ref tempIndex, false);
+
+                var header = GetBytes(gccUserData, ref currentIndex, length);
+
+                int headerCurrentIndex = 0;
+
                 switch (type)
                 {
                     case TS_UD_HEADER_type_Values.SC_CORE:
-                        pdu.mcsCrsp.gccPdu.serverCoreData = ParseTsUdScCore(gccUserData, ref currentIndex);
+                        pdu.mcsCrsp.gccPdu.serverCoreData = ParseTsUdScCore(header, ref headerCurrentIndex);
                         break;
 
                     case TS_UD_HEADER_type_Values.SC_NET:
-                        pdu.mcsCrsp.gccPdu.serverNetworkData = ParseTsUdScNet(gccUserData, ref currentIndex);
+                        pdu.mcsCrsp.gccPdu.serverNetworkData = ParseTsUdScNet(header, ref headerCurrentIndex);
                         break;
 
                     case TS_UD_HEADER_type_Values.SC_SECURITY:
-                        pdu.mcsCrsp.gccPdu.serverSecurityData = ParseTsUdScSec1(gccUserData, ref currentIndex);
+                        pdu.mcsCrsp.gccPdu.serverSecurityData = ParseTsUdScSec1(header, ref headerCurrentIndex);
                         break;
 
                     case TS_UD_HEADER_type_Values.SC_MCS_MSGCHANNEL:
-                        pdu.mcsCrsp.gccPdu.serverMessageChannelData = ParseTsUdScMSGChannel(gccUserData, ref currentIndex);
+                        pdu.mcsCrsp.gccPdu.serverMessageChannelData = ParseTsUdScMSGChannel(header, ref headerCurrentIndex);
                         break;
 
                     case TS_UD_HEADER_type_Values.SC_MULTITRANSPORT:
-                        pdu.mcsCrsp.gccPdu.serverMultitransportChannelData = ParseTsUdScMultiTransport(gccUserData, ref currentIndex);
+                        pdu.mcsCrsp.gccPdu.serverMultitransportChannelData = ParseTsUdScMultiTransport(header, ref headerCurrentIndex);
                         break;
 
                     default:
                         throw new FormatException(ConstValue.ERROR_MESSAGE_ENUM_UNRECOGNIZED);
                 }
+
+                VerifyDataLength(headerCurrentIndex, length, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
             }
 
             // Check if data length exceeded expectation
-            VerifyDataLength(gccUserData.Length, currentIndex, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
+            VerifyDataLength(currentIndex, gccUserData.Length, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
             return pdu;
         }
 

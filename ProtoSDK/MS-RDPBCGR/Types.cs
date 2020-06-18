@@ -2009,10 +2009,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 List<byte> coreData = new List<byte>();
                 RdpbcgrEncoder.EncodeStructure(coreData, gccPdu.serverCoreData.header);
                 RdpbcgrEncoder.EncodeStructure(coreData, (uint)gccPdu.serverCoreData.version);
-                RdpbcgrEncoder.EncodeStructure(coreData, (uint)gccPdu.serverCoreData.clientRequestedProtocols);
-                //earlyCapabilityFlags is optional.
-                if (gccPdu.serverCoreData.earlyCapabilityFlags != 0)
+
+                // The field clientRequestedProtocols is optional
+                if (gccPdu.serverCoreData.clientRequestedProtocols != null)
+                {
+                    RdpbcgrEncoder.EncodeStructure(coreData, (uint)gccPdu.serverCoreData.clientRequestedProtocols);
+                }
+
+                //The field earlyCapabilityFlags is optional.
+                if (gccPdu.serverCoreData.earlyCapabilityFlags != null)
+                {
                     RdpbcgrEncoder.EncodeStructure(coreData, (uint)gccPdu.serverCoreData.earlyCapabilityFlags);
+                }
 
                 userData.AddRange(coreData.ToArray());
             }
@@ -7825,13 +7833,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  RDP Negotiation Request structure was not sent, this
         ///  field MUST be initialized to PROTOCOL_RDP (0).
         /// </summary>
-        public requestedProtocols_Values clientRequestedProtocols;
+        public requestedProtocols_Values? clientRequestedProtocols;
 
         /// <summary>
         /// A 32-bit, unsigned integer that specifies capabilities early in the connection sequence.
         /// If this field is present, all of the preceding fields MUST also be present.
         /// </summary>
-        public SC_earlyCapabilityFlags_Values earlyCapabilityFlags;
+        public SC_earlyCapabilityFlags_Values? earlyCapabilityFlags;
     }
 
     /// <summary>
