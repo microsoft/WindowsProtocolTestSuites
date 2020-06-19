@@ -1,14 +1,13 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Modeling;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter;
 using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
-using Microsoft.Xrt.Runtime;
+using Microsoft.Protocols.TestTools.StackSdk.Messages;
+using System.Collections.Generic;
 
-[assembly: NativeType("System.Diagnostics.Tracing.*")]
 namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.SessionMgmt
 {
     /// <summary>
@@ -29,12 +28,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.SessionMgmt
         /// <summary>
         /// Connections container which models 2 connections at most
         /// </summary>
-        public static MapContainer<ModelConnectionId, ModelConnection> ConnectionList = null;
+        public static Dictionary<ModelConnectionId, ModelConnection> ConnectionList = null;
 
         /// <summary>
         /// GlobalSession table which models 2 sessions at most
         /// </summary>
-        public static MapContainer<ModelSessionId, ModelSession> GlobalSessionTable = null;
+        public static Dictionary<ModelSessionId, ModelSession> GlobalSessionTable = null;
 
         /// <summary>
         /// Server configuration related to model
@@ -73,8 +72,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.SessionMgmt
                 Condition.IsFalse(c.IsMultiChannelCapable);
             }
 
-            ConnectionList = new MapContainer<ModelConnectionId, ModelConnection>();
-            GlobalSessionTable = new MapContainer<ModelSessionId, ModelSession>();
+            ConnectionList = new Dictionary<ModelConnectionId, ModelConnection>();
+            GlobalSessionTable = new Dictionary<ModelSessionId, ModelSession>();
 
             config = c;
         }

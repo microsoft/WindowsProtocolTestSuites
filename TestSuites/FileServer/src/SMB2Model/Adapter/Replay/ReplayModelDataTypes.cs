@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Modeling;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using System;
 using System.Text;
@@ -11,7 +10,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay
     /// <summary>
     /// The configuration of server for replay
     /// </summary>
-    public class ReplayServerConfig : CompoundValue
+    public class ReplayServerConfig
     {
         /// <summary>
         /// SMB 2.002 or SMB 2.1 or SMB 3.0 or SMB 3.02
