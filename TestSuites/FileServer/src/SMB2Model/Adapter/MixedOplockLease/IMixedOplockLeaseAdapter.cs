@@ -3,7 +3,6 @@
 
 using System;
 using System.Text;
-using Microsoft.Modeling;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 

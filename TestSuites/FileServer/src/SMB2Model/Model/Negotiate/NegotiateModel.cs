@@ -1,13 +1,12 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Modeling;
 using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter;
 using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Negotiate;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
-using Microsoft.Xrt.Runtime;
+using Microsoft.Protocols.TestTools.StackSdk.Messages;
+using System.Collections.Generic;
 
-[assembly: NativeType("System.Diagnostics.Tracing.*")]
 namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Negotiate
 {
     public static class NegotiateModel
@@ -115,7 +114,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Negotiate
         /// </summary>
         /// <param name="dialects">Dialects.</param>
         [Rule(Action = "ComNegotiateRequest(dialects)")]
-        public static void ComNegotiateRequest(Sequence<string> dialects)
+        public static void ComNegotiateRequest(List<string> dialects)
         {
             Condition.IsTrue(State == ModelState.Connected);
             Condition.IsNull(Request);
@@ -188,7 +187,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Negotiate
         /// </summary>
         /// <param name="dialects">Dialects.</param>
         [Rule(Action = "NegotiateRequest(dialects)")]
-        public static void NegotiateRequest(Sequence<DialectRevision> dialects)
+        public static void NegotiateRequest(List<DialectRevision> dialects)
         {
             Condition.IsTrue(State == ModelState.Connected);
             Condition.IsNull(Request);
@@ -348,7 +347,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Negotiate
         /// </summary>
         /// <param name="requestDialects">The Dialects array of the SMB2 NEGOTIATE request.</param>
         /// <returns>Return a common dialect if found, otherwise return DialectRevision.Smb2Unknown(0xFFFF).</returns>
-        private static DialectRevision SelectCommonDialect(Sequence<DialectRevision> requestDialects)
+        private static DialectRevision SelectCommonDialect(List<DialectRevision> requestDialects)
         {
             if (Config.MaxSmbVersionSupported >= DialectRevision.Smb302
                 && requestDialects.Contains(DialectRevision.Smb302))
@@ -373,7 +372,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Negotiate
             return DialectRevision.Smb2Unknown;
         }
 
-        private static void ComNegotiateHandleSmb2002InRequest(Sequence<string> dialects)
+        private static void ComNegotiateHandleSmb2002InRequest(List<string> dialects)
         {
             ModelHelper.Log(
                 LogType.Requirement,

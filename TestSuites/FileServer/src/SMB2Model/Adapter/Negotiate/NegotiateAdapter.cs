@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Modeling;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Negotiate
@@ -98,7 +98,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Negotiate
             }
         }
 
-        public void ComNegotiateRequest(Sequence<string> dialects)
+        public void ComNegotiateRequest(List<string> dialects)
         {
             Packet_Header responseHeader = new Packet_Header();
             DialectRevision selectedDialect = DialectRevision.Smb2Unknown;
@@ -125,7 +125,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Negotiate
 
         }
 
-        public void NegotiateRequest(Sequence<DialectRevision> dialects)
+        public void NegotiateRequest(List<DialectRevision> dialects)
         {
             Smb2NegotiateRequestPacket negotiateRequest;
             Smb2NegotiateResponsePacket negotiateResponse;
