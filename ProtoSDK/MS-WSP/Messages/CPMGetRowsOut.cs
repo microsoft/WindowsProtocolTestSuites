@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 {
@@ -156,27 +157,42 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
                             if (Rows[i].Columns[j].rowVariant.vType == vType_Values.VT_LPWSTR)
                             {
-                                int dataOffset;
-                                if (this.Is64Bit)
+                                int dataOffset = GetRealOffset(Rows[i].Columns[j].rowVariant.Offset);
+                                Rows[i].Columns[j].Data = ReadValueByType(Rows[i].Columns[j].rowVariant.vType, dataOffset, buffer);
+                            }
+                            else if (Rows[i].Columns[j].rowVariant.vType.HasFlag(vType_Values.VT_VECTOR))
+                            {
+                                var baseVType = Rows[i].Columns[j].rowVariant.vType ^ vType_Values.VT_VECTOR;
+                                var vectorCount = Rows[i].Columns[j].rowVariant.Count;
+                                if (baseVType == vType_Values.VT_LPWSTR)
                                 {
-                                    // If 64-bit offsets are being used, the reserved2 field of the message header is used as the upper 32-bits and _ulClientBase as the lower 32-bits of a 64-bit value.
-                                    Int64 clientBase = Convert.ToInt64(Request.Header._ulReserved2);
-                                    clientBase = clientBase << 32;
-                                    clientBase += ((CPMGetRowsIn)Request)._ulClientBase;
+                                    var startOffset = GetRealOffset(Rows[i].Columns[j].rowVariant.Offset);
+                                    var items = new List<string>();
+                                    for(var idx = 0; idx < vectorCount; idx++)
+                                    {
+                                        WspBuffer offsetBuffer;
+                                        int itemOffset;
+                                        if (Is64Bit)
+                                        {
+                                            offsetBuffer = new WspBuffer(buffer.ReadBytesFromOffset(startOffset + idx * 8, 8));
+                                            itemOffset = GetRealOffset(offsetBuffer.ToStruct<long>());
+                                        }
+                                        else
+                                        {
+                                            offsetBuffer = new WspBuffer(buffer.ReadBytesFromOffset(startOffset + idx * 4, 4));
+                                            itemOffset = GetRealOffset(offsetBuffer.ToStruct<int>());
+                                        }
 
-                                    // Since the ReadBuffer cannot excceed 0x4000, so the dataOffset should be a 32-bit value.
-                                    dataOffset = Convert.ToInt32((Int64)Rows[i].Columns[j].rowVariant.Offset - clientBase);
+                                        var item = ReadValueByType(vType_Values.VT_LPWSTR, itemOffset, buffer) as string;
+                                        items.Add(item);
+                                    }
+
+                                    Rows[i].Columns[j].Data = items.ToArray();
                                 }
                                 else
                                 {
-                                    dataOffset = (Int32)Rows[i].Columns[j].rowVariant.Offset - (int)((CPMGetRowsIn)Request)._ulClientBase;
+                                    throw new NotImplementedException();
                                 }
-
-                                Rows[i].Columns[j].Data = ReadValueByType(Rows[i].Columns[j].rowVariant.vType, dataOffset, buffer);
-                            }
-                            else if (Rows[i].Columns[j].rowVariant.vType == vType_Values.VT_VECTOR)
-                            {
-                                throw new NotImplementedException();
                             }
                             else
                             {
@@ -300,6 +316,24 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             }
 
             return length;
+        }
+
+        private int GetRealOffset(object offset)
+        {
+            if (this.Is64Bit)
+            {
+                // If 64-bit offsets are being used, the reserved2 field of the message header is used as the upper 32-bits and _ulClientBase as the lower 32-bits of a 64-bit value.
+                Int64 clientBase = Convert.ToInt64(Request.Header._ulReserved2);
+                clientBase = clientBase << 32;
+                clientBase += ((CPMGetRowsIn)Request)._ulClientBase;
+
+                // Since the ReadBuffer cannot excceed 0x4000, so the dataOffset should be a 32-bit value.
+                return Convert.ToInt32((Int64)offset - clientBase);
+            }
+            else
+            {
+                return (Int32)offset - (int)((CPMGetRowsIn)Request)._ulClientBase;
+            }
         }
     }
 }

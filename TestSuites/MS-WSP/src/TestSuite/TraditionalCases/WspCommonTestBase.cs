@@ -33,5 +33,20 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         {
             Site.Assert.AreEqual((uint)WspErrorCode.SUCCESS, errorCode, "CPMFreeCursorIn should succeed.");
         }
+
+        protected void EnsureSuccessfulCPMGetQueryStatusOut(uint errorCode)
+        {
+            Site.Assert.AreEqual((uint)WspErrorCode.SUCCESS, errorCode, "CPMGetQueryStatusIn should succeed.");
+        }
+
+        protected void EnsureSuccessfulCPMGetQueryStatusExOut(uint errorCode)
+        {
+            Site.Assert.AreEqual((uint)WspErrorCode.SUCCESS, errorCode, "CPMGetQueryStatusExIn should succeed.");
+        }
+
+        protected void EnsureSuccessfulCPMRestartPositionIn(uint errorCode)
+        {
+            Site.Assert.AreEqual((uint)WspErrorCode.SUCCESS, errorCode, "CPMRestartPositionIn should succeed.");
+        }
     }
 }

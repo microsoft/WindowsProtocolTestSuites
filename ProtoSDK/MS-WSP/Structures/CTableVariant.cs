@@ -27,7 +27,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// Element count. This field is 4 bytes and is present only if the vType is a VT_VECTOR.
         /// </summary>
-        public UInt32? Count;
+        public uint? Count;
 
         /// <summary>
         /// An offset to variable length data (for example, a string). 
@@ -42,22 +42,50 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             vType = buffer.ToStruct<vType_Values>();
             reserved1 = buffer.ToStruct<ushort>();
             reserved2 = buffer.ToStruct<uint>();
-            if (vType == vType_Values.VT_VECTOR)
-            {
-                throw new NotImplementedException();
-            }
-            else
-            {
-                if (Is64bit)
-                    Offset = buffer.ToStruct<Int64>();
-                else
-                    Offset = buffer.ToStruct<Int32>();
-            }
+
+            DecodeCount(buffer);
+            DecodeOffset(buffer);
         }
 
         public void ToBytes(WspBuffer buffer)
         {
             throw new NotImplementedException();
+        }
+
+        private void DecodeCount(WspBuffer buffer)
+        {
+            if (vType.HasFlag(vType_Values.VT_VECTOR))
+            {
+                if (Is64bit)
+                {
+                    Count = buffer.ToStruct<uint>();
+                    _ = buffer.ToStruct<uint>();
+                }
+                else
+                {
+                    Count = buffer.ToStruct<uint>();
+                }
+            }
+        }
+
+        private void DecodeOffset(WspBuffer buffer)
+        {
+            if (IsStringOrVectorVType())
+            {
+                if (Is64bit)
+                {
+                    Offset = buffer.ToStruct<Int64>();
+                }
+                else
+                {
+                    Offset = buffer.ToStruct<Int32>();
+                }
+            }
+        }
+
+        private bool IsStringOrVectorVType()
+        {
+            return vType.HasFlag(vType_Values.VT_VECTOR) || vType == vType_Values.VT_LPWSTR;
         }
     }
 }

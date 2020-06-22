@@ -107,6 +107,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// The full physical path to the file, including the file name.
         /// </summary>
         public static readonly CFullPropSpec Path = new CFullPropSpec(new Guid("B725F130-47EF-101A-A5F1-02608C9EEBAC"), 11);
+
+        /// <summary>
+        /// System.Author
+        /// Represents the author or authors of the document
+        /// </summary>
+        public static readonly CFullPropSpec System_Author = new CFullPropSpec(new Guid("F29F85E0-4FF9-1068-AB91-08002B27B3D9"), 4);
         #endregion
     }
 }
