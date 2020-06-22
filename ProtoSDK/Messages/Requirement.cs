@@ -10,10 +10,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Messages
     /// </summary>
     public static class Requirement
     {
-        /// <summary>
-        /// Capture the requirement.
-        /// </summary>
-        /// <param name="requirement">The requirement to be captured.</param>
         public static void Capture(string requirement)
         {
             

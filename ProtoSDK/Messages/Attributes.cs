@@ -11,32 +11,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Messages
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Constructor,AllowMultiple = false, Inherited = true)]
     public sealed class RuleAttribute : Attribute
     {
-        #region Fields and Constructors
-
-        /// <summary>
-        /// Constructs a rule attribute with default action pattern and empty mode transformation.
-        /// The default action pattern is automatically built from method signature.
-        /// </summary>
         public RuleAttribute()
         {
         }
 
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// The action pattern in cord syntax.
-        /// </summary>
         public string Action { get; set; }
 
-        /// <summary>
-        /// Indicates the mode transition.
-        /// A mode transformation in a form like "s1,...,sn -> t1,...,tm", where s and t are mode tags.
-        /// </summary>
         public string ModeTransition { get; set; }
-
-        #endregion
     }
 
     /// <summary>
