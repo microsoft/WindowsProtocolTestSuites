@@ -6,8 +6,7 @@ using System;
 namespace Microsoft.Protocols.TestTools.StackSdk.Messages
 {
     /// <summary>
-    /// This class provides primitives to declare how value (parameter) combinations shall
-    /// be produced. 
+    /// This class declare how value (parameter) combinations shall be produced. 
     /// </summary>
     /// <remarks>
     public static class Combination

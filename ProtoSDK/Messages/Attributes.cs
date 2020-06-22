@@ -6,12 +6,9 @@ using System;
 namespace Microsoft.Protocols.TestTools.StackSdk.Messages
 {
     /// <summary>
-    /// The Rule attribute makes a method as a model program rule. Rule methods are explored in each exploration state.
-    /// They produce a step if and only if all its conditions can be satisfied. A rule that has at least one condition that 
-    /// cannot be met in a state will be silently ignored for that step.
+    /// Attribute indicates that method or property has Rule configured.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Constructor,
-                    AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Constructor,AllowMultiple = false, Inherited = true)]
     public sealed class RuleAttribute : Attribute
     {
         #region Fields and Constructors
