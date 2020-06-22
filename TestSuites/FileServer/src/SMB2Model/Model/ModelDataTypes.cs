@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Modeling;
 using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter;
 using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose;
 using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreditMgmt;
@@ -14,6 +13,7 @@ using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt;
 using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Signing;
 using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.TreeMgmt;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
+using System.Collections.Generic;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model
 {
@@ -211,7 +211,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model
     /// </summary>
     public class ModelComNegotiateRequest : ModelSMB2Request
     {
-        public Sequence<string> Dialects;
+        public List<string> Dialects;
 
         /// <summary>
         /// This method is used to send a negotiate request.
@@ -219,7 +219,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model
         /// <param name="messageID"> A value that identify a message request and response uniquely across
         /// all messages sent on the same SMB Protocol transport connection. </param>
         /// <param name="dialects"> Dialects request contains. </param>
-        public ModelComNegotiateRequest(Sequence<string> dialects)
+        public ModelComNegotiateRequest(List<string> dialects)
             : base(0)
         {
             this.Dialects = dialects;
@@ -232,7 +232,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model
     /// </summary>
     public class NegotiateRequest : ModelSMB2Request
     {
-        public Sequence<DialectRevision> Dialects;
+        public List<DialectRevision> Dialects;
 
         /// <summary>
         /// This method is used to send a negotiate request.
@@ -240,7 +240,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model
         /// <param name="messageID"> A value that identify a message request and response uniquely across
         /// all messages sent on the same SMB Protocol transport connection. </param>
         /// <param name="dialects"> Dialects request contains. </param>
-        public NegotiateRequest(Sequence<DialectRevision> dialects)
+        public NegotiateRequest(List<DialectRevision> dialects)
             : base(0)
         {
             this.Dialects = dialects;

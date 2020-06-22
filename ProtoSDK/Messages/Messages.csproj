@@ -108,6 +108,9 @@
     <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Attributes.cs" />
+    <Compile Include="Combination.cs" />
+    <Compile Include="Condition.cs" />
     <Compile Include="Channel.cs" />
     <Compile Include="DefaultRuntimeHost.cs" />
     <Compile Include="EventQueue.cs" />
@@ -145,6 +148,7 @@
     <Compile Include="MessageRuntime.cs" />
     <Compile Include="MessageUtils.cs" />
     <Compile Include="ObservationQueue.cs" />
+    <Compile Include="Requirement.cs" />
     <Compile Include="RuntimeAppLog.cs" />
     <Compile Include="RuntimeMarshaler.cs">
       <SubType>Code</SubType>

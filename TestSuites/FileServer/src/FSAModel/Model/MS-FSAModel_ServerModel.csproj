@@ -113,12 +113,13 @@
     <Reference Include="Microsoft.Protocols.TestTools.VSTS">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="Microsoft.Xrt.Runtime, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>True</SpecificVersion>
-    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Messages\Messages.csproj">
+      <Project>{75544419-3F4E-4308-A676-165F45C1462E}</Project>
+      <Name>Messages</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-FSCC\Fscc.csproj">
       <Project>{124e0f6d-57d7-4582-af9a-3de11b358e76}</Project>
       <Name>Fscc</Name>

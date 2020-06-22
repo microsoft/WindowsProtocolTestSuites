@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Protocols.TestTools;
-using Microsoft.Modeling;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 {
