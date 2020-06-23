@@ -97,10 +97,336 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
         [TestMethod]
         [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test CPMCreateQuery with a regular expression by seaching file extension.")]
+        public void CPMCreateQuery_FileExtension_RegularExpression()
+        {
+            argumentType = ArgumentType.AllValid;
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
+            wspAdapter.CPMConnectInRequest();
+
+            var columnSet = wspAdapter.builder.GetColumnSet(2);
+            CBaseStorageVariant searchSope = wspAdapter.builder.GetBaseStorageVariant(vType_Values.VT_LPWSTR, new VT_LPWSTR(Site.Properties.Get("QueryPath") + "Data/Test"));
+            CBaseStorageVariant querytext = wspAdapter.builder.GetBaseStorageVariant(vType_Values.VT_LPWSTR, new VT_LPWSTR("|[.]doc*"));
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray(
+                wspAdapter.builder.GetPropertyRestriction(_relop_Values.PREQ, WspConsts.System_Search_Scope, searchSope),
+                wspAdapter.builder.GetPropertyRestriction(_relop_Values.PRRE, WspConsts.System_FileExtension, querytext));
+
+            var pidMapper = new CPidMapper();
+            pidMapper.aPropSpec = new CFullPropSpec[]
+            {
+                WspConsts.System_ItemName,
+                WspConsts.System_ItemFolderNameDisplay,
+                WspConsts.System_Search_Scope,
+                WspConsts.System_FileName,
+                WspConsts.System_FileExtension
+            };
+            pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn with query \".doc\" and expects success.");
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
+            wspAdapter.CPMSetBindingsIn(true, true);
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn and expects success.");
+            wspAdapter.CPMGetRowsIn(out CPMGetRowsOut getRowsOut);
+
+            Site.Assert.AreEqual((uint)4, getRowsOut._cRowsReturned, "The number of rows returned should be 4.");
+            Site.Assert.AreEqual("test127.doc", getRowsOut.Rows[0].Columns[0].Data.ToString().ToLower(), "The file name of Row 0 should be test127.doc.");
+            Site.Assert.AreEqual("test13.doc", getRowsOut.Rows[1].Columns[0].Data.ToString().ToLower(), "The file name of Row 1 should be test13.doc.");
+            Site.Assert.AreEqual("test15.docx", getRowsOut.Rows[2].Columns[0].Data.ToString().ToLower(), "The file name of Row 2 should be test15.docx.");
+            Site.Assert.AreEqual("test17.docx", getRowsOut.Rows[3].Columns[0].Data.ToString().ToLower(), "The file name of Row 3 should be test17.docx.");
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test CPMCreateQuery with an asterisk in the query.")]
+        public void CPMCreateQuery_FileName_Wildcard_Asterisk()
+        {
+            argumentType = ArgumentType.AllValid;
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
+            wspAdapter.CPMConnectInRequest();
+
+            var columnSet = wspAdapter.builder.GetColumnSet(2);
+            CBaseStorageVariant searchSope = wspAdapter.builder.GetBaseStorageVariant(vType_Values.VT_LPWSTR, new VT_LPWSTR(Site.Properties.Get("QueryPath") + "Data/Test"));
+            CBaseStorageVariant querytext = wspAdapter.builder.GetBaseStorageVariant(vType_Values.VT_LPWSTR, new VT_LPWSTR("test12*"));
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray(
+                wspAdapter.builder.GetPropertyRestriction(_relop_Values.PREQ, WspConsts.System_Search_Scope, searchSope),
+                wspAdapter.builder.GetPropertyRestriction(_relop_Values.PRRE, WspConsts.System_FileName, querytext));
+
+            var pidMapper = new CPidMapper();
+            pidMapper.aPropSpec = new CFullPropSpec[]
+            {
+                WspConsts.System_ItemName,
+                WspConsts.System_ItemFolderNameDisplay,
+                WspConsts.System_Search_Scope,
+                WspConsts.System_FileName,
+            };
+            pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn with query \"test12*\" and expects success.");
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
+            wspAdapter.CPMSetBindingsIn(true, true);
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn and expects success.");
+            wspAdapter.CPMGetRowsIn(out CPMGetRowsOut getRowsOut);
+
+            Site.Assert.AreEqual((uint)5, getRowsOut._cRowsReturned, "The number of rows returned should be 5.");
+            Site.Assert.AreEqual("test121.txt", getRowsOut.Rows[0].Columns[0].Data.ToString().ToLower(), "The file name of Row 0 should be test121.txt.");
+            Site.Assert.AreEqual("test122.txt", getRowsOut.Rows[1].Columns[0].Data.ToString().ToLower(), "The file name of Row 1 should be test122.txt.");
+            Site.Assert.AreEqual("test127.doc", getRowsOut.Rows[2].Columns[0].Data.ToString().ToLower(), "The file name of Row 2 should be test127.doc.");
+            Site.Assert.AreEqual("test128.txt", getRowsOut.Rows[3].Columns[0].Data.ToString().ToLower(), "The file name of Row 3 should be test128.txt.");
+            Site.Assert.AreEqual("test129.cpp", getRowsOut.Rows[4].Columns[0].Data.ToString().ToLower(), "The file name of Row 4 should be test129.cpp.");
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test CPMCreateQuery with a question mark in the query.")]
+        public void CPMCreateQuery_FileName_Wildcard_QuestionMark()
+        {
+            argumentType = ArgumentType.AllValid;
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
+            wspAdapter.CPMConnectInRequest();
+
+            var columnSet = wspAdapter.builder.GetColumnSet(2);
+            CBaseStorageVariant searchSope = wspAdapter.builder.GetBaseStorageVariant(vType_Values.VT_LPWSTR, new VT_LPWSTR(Site.Properties.Get("QueryPath") + "Data/Test"));
+            CBaseStorageVariant querytext = wspAdapter.builder.GetBaseStorageVariant(vType_Values.VT_LPWSTR, new VT_LPWSTR("test12?.txt"));
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray(
+                wspAdapter.builder.GetPropertyRestriction(_relop_Values.PREQ, WspConsts.System_Search_Scope, searchSope),
+                wspAdapter.builder.GetPropertyRestriction(_relop_Values.PRRE, WspConsts.System_FileName, querytext));
+
+            var pidMapper = new CPidMapper();
+            pidMapper.aPropSpec = new CFullPropSpec[]
+            {
+                WspConsts.System_ItemName,
+                WspConsts.System_ItemFolderNameDisplay,
+                WspConsts.System_Search_Scope,
+                WspConsts.System_FileName,
+            };
+            pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn with query \"test12?.txt\" and expects success.");
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
+            wspAdapter.CPMSetBindingsIn(true, true);
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn and expects success.");
+            wspAdapter.CPMGetRowsIn(out CPMGetRowsOut getRowsOut);
+
+            Site.Assert.AreEqual((uint)3, getRowsOut._cRowsReturned, "The number of rows returned should be 3.");
+            Site.Assert.AreEqual("test121.txt", getRowsOut.Rows[0].Columns[0].Data.ToString().ToLower(), "The file name of Row 0 should be test121.txt.");
+            Site.Assert.AreEqual("test122.txt", getRowsOut.Rows[1].Columns[0].Data.ToString().ToLower(), "The file name of Row 1 should be test122.txt.");
+            Site.Assert.AreEqual("test128.txt", getRowsOut.Rows[2].Columns[0].Data.ToString().ToLower(), "The file name of Row 2 should be test128.txt.");
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test CPMCreateQuery with a not-equal comparison.")]
+        public void CPMCreateQuery_FileName_NotEqual()
+        {
+            argumentType = ArgumentType.AllValid;
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
+            wspAdapter.CPMConnectInRequest();
+
+            var columnSet = wspAdapter.builder.GetColumnSet(2);
+            CBaseStorageVariant searchSope = wspAdapter.builder.GetBaseStorageVariant(vType_Values.VT_LPWSTR, new VT_LPWSTR(Site.Properties.Get("QueryPath") + "Data/CreateQuery_FileNameNotEqual"));
+            CBaseStorageVariant querytext = wspAdapter.builder.GetBaseStorageVariant(vType_Values.VT_LPWSTR, new VT_LPWSTR("test"));
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray(
+                wspAdapter.builder.GetPropertyRestriction(_relop_Values.PREQ, WspConsts.System_Search_Scope, searchSope),
+                wspAdapter.builder.GetPropertyRestriction(_relop_Values.PRNE, WspConsts.System_FileName, querytext));
+
+            var pidMapper = new CPidMapper();
+            pidMapper.aPropSpec = new CFullPropSpec[]
+            {
+                WspConsts.System_ItemName,
+                WspConsts.System_ItemFolderNameDisplay,
+                WspConsts.System_Search_Scope,
+                WspConsts.System_FileName,
+            };
+            pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn with a not-equal query \"test\" and expects success.");
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
+            wspAdapter.CPMSetBindingsIn(true, true);
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn and expects success.");
+            wspAdapter.CPMGetRowsIn(out CPMGetRowsOut getRowsOut);
+
+            Site.Assert.AreEqual((uint)2, getRowsOut._cRowsReturned, "The number of rows returned should be 2.");
+            Site.Assert.AreEqual("1", getRowsOut.Rows[0].Columns[0].Data.ToString().ToLower(), "The file name of Row 0 should be 1.");
+            Site.Assert.AreEqual("2", getRowsOut.Rows[1].Columns[0].Data.ToString().ToLower(), "The file name of Row 1 should be 2.");
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test CPMCreateQuery by querying file size with a greater-than comparison.")]
+        public void CPMCreateQuery_Size_GreaterThan()
+        {
+            argumentType = ArgumentType.AllValid;
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
+            wspAdapter.CPMConnectInRequest();
+
+            var columnSet = wspAdapter.builder.GetColumnSet(2);
+            CBaseStorageVariant searchSope = wspAdapter.builder.GetBaseStorageVariant(vType_Values.VT_LPWSTR, new VT_LPWSTR(Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size"));
+            CBaseStorageVariant size = wspAdapter.builder.GetBaseStorageVariant(vType_Values.VT_INT, 2000);
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray(
+                wspAdapter.builder.GetPropertyRestriction(_relop_Values.PREQ, WspConsts.System_Search_Scope, searchSope),
+                wspAdapter.builder.GetPropertyRestriction(_relop_Values.PRGT, WspConsts.System_Size, size));
+
+            var pidMapper = new CPidMapper();
+            pidMapper.aPropSpec = new CFullPropSpec[]
+            {
+                WspConsts.System_ItemName,
+                WspConsts.System_ItemFolderNameDisplay,
+                WspConsts.System_Search_Scope,
+                WspConsts.System_Size
+            };
+            pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn to query the files with size greater than 2000 bytes and expects success.");
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
+            wspAdapter.CPMSetBindingsIn(true, true);
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn and expects success.");
+            wspAdapter.CPMGetRowsIn(out CPMGetRowsOut getRowsOut);
+
+            Site.Assert.AreEqual((uint)1, getRowsOut._cRowsReturned, "The number of row returned should be 1.");
+            Site.Assert.AreEqual("test132.txt", getRowsOut.Rows[0].Columns[0].Data.ToString().ToLower(), "The file name should be test132.txt.");
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test CPMCreateQuery by querying file size with a greater-than or equal-to comparison.")]
+        public void CPMCreateQuery_Size_GreaterThanOrEqualTo()
+        {
+            argumentType = ArgumentType.AllValid;
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
+            wspAdapter.CPMConnectInRequest();
+
+            var columnSet = wspAdapter.builder.GetColumnSet(2);
+            CBaseStorageVariant searchSope = wspAdapter.builder.GetBaseStorageVariant(vType_Values.VT_LPWSTR, new VT_LPWSTR(Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size"));
+            CBaseStorageVariant size = wspAdapter.builder.GetBaseStorageVariant(vType_Values.VT_INT, 1124);
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray(
+                wspAdapter.builder.GetPropertyRestriction(_relop_Values.PREQ, WspConsts.System_Search_Scope, searchSope),
+                wspAdapter.builder.GetPropertyRestriction(_relop_Values.PRGE, WspConsts.System_Size, size));
+
+            var pidMapper = new CPidMapper();
+            pidMapper.aPropSpec = new CFullPropSpec[]
+            {
+                WspConsts.System_ItemName,
+                WspConsts.System_ItemFolderNameDisplay,
+                WspConsts.System_Search_Scope,
+                WspConsts.System_Size
+            };
+            pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn to query the files with size greater than or equal to 1124 bytes and expects success.");
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
+            wspAdapter.CPMSetBindingsIn(true, true);
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn and expects success.");
+            wspAdapter.CPMGetRowsIn(out CPMGetRowsOut getRowsOut);
+
+            Site.Assert.AreEqual((uint)2, getRowsOut._cRowsReturned, "The number of rows returned should be 2.");
+            Site.Assert.AreEqual("test1.txt", getRowsOut.Rows[0].Columns[0].Data.ToString().ToLower(), "The file name of Row 0 should be test1.txt.");
+            Site.Assert.AreEqual("test132.txt", getRowsOut.Rows[1].Columns[0].Data.ToString().ToLower(), "The file name of Row 1 should be test132.txt.");
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test CPMCreateQuery by querying file size with a less-than comparison.")]
+        public void CPMCreateQuery_Size_LessThan()
+        {
+            argumentType = ArgumentType.AllValid;
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
+            wspAdapter.CPMConnectInRequest();
+
+            var columnSet = wspAdapter.builder.GetColumnSet(2);
+            CBaseStorageVariant searchSope = wspAdapter.builder.GetBaseStorageVariant(vType_Values.VT_LPWSTR, new VT_LPWSTR(Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size"));
+            CBaseStorageVariant size = wspAdapter.builder.GetBaseStorageVariant(vType_Values.VT_INT, 2000);
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray(
+                wspAdapter.builder.GetPropertyRestriction(_relop_Values.PREQ, WspConsts.System_Search_Scope, searchSope),
+                wspAdapter.builder.GetPropertyRestriction(_relop_Values.PRLT, WspConsts.System_Size, size));
+
+            var pidMapper = new CPidMapper();
+            pidMapper.aPropSpec = new CFullPropSpec[]
+            {
+                WspConsts.System_ItemName,
+                WspConsts.System_ItemFolderNameDisplay,
+                WspConsts.System_Search_Scope,
+                WspConsts.System_Size
+            };
+            pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
+            wspAdapter.CPMSetBindingsIn(true, true);
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn and expects success.");
+            wspAdapter.CPMGetRowsIn(out CPMGetRowsOut getRowsOut);
+
+            Site.Assert.AreEqual((uint)2, getRowsOut._cRowsReturned, "The number of row returned should be 2.");
+            Site.Assert.AreEqual("test1.txt", getRowsOut.Rows[0].Columns[0].Data.ToString().ToLower(), "The file name of Row 0 should be test1.txt.");
+            Site.Assert.AreEqual("test27.txt", getRowsOut.Rows[1].Columns[0].Data.ToString().ToLower(), "The file name of Row 1 should be test27.txt.");
+
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test CPMCreateQuery by querying file size with a less-than or equal-to comparison.")]
+        public void CPMCreateQuery_Size_LessThanOrEqualTo()
+        {
+            argumentType = ArgumentType.AllValid;
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
+            wspAdapter.CPMConnectInRequest();
+
+            var columnSet = wspAdapter.builder.GetColumnSet(2);
+            CBaseStorageVariant searchSope = wspAdapter.builder.GetBaseStorageVariant(vType_Values.VT_LPWSTR, new VT_LPWSTR(Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size"));
+            CBaseStorageVariant size = wspAdapter.builder.GetBaseStorageVariant(vType_Values.VT_INT, 1124);
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray(
+                wspAdapter.builder.GetPropertyRestriction(_relop_Values.PREQ, WspConsts.System_Search_Scope, searchSope),
+                wspAdapter.builder.GetPropertyRestriction(_relop_Values.PRLE, WspConsts.System_Size, size));
+
+            var pidMapper = new CPidMapper();
+            pidMapper.aPropSpec = new CFullPropSpec[]
+            {
+                WspConsts.System_ItemName,
+                WspConsts.System_ItemFolderNameDisplay,
+                WspConsts.System_Search_Scope,
+                WspConsts.System_Size
+            };
+            pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
+            wspAdapter.CPMSetBindingsIn(true, true);
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn and expects success.");
+            wspAdapter.CPMGetRowsIn(out CPMGetRowsOut getRowsOut);
+
+            Site.Assert.AreEqual((uint)2, getRowsOut._cRowsReturned, "The number of row returned should be 2.");
+            Site.Assert.AreEqual("test1.txt", getRowsOut.Rows[0].Columns[0].Data.ToString().ToLower(), "The file name of Row 0 should be test1.txt.");
+            Site.Assert.AreEqual("test27.txt", getRowsOut.Rows[1].Columns[0].Data.ToString().ToLower(), "The file name of Row 1 should be test27.txt.");
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
         [Description("This test case is designed to verify the server response if no ColumnSet is sent in CPMCreateQueryIn.")]
         public void CPMCreateQuery_ColumnSetAbsent()
         {
-
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
             wspAdapter.CPMConnectInRequest();
 
@@ -114,6 +440,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 WspConsts.System_Search_Scope,
                 WspConsts.System_Search_Contents,
             };
+
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn without ColumnSet.");
             argumentType = ArgumentType.ColumnSetAbsent;
             wspAdapter.CPMCreateQueryIn(null, restrictionArray, null, new CCategorizationSet(), new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
@@ -359,7 +686,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             {
                 case ArgumentType.AllValid:
                     bool succeed = errorCode == (uint)WspErrorCode.SUCCESS || errorCode == (uint)WspErrorCode.DB_S_ENDOFROWSET ? true : false;
-                    Site.Assert.IsTrue(succeed, "Server should return succeed or DB_S_ENDOFROWSET for CPMGetRowsIn.");
+                    Site.Assert.IsTrue(succeed, "Server should return succeed or DB_S_ENDOFROWSET for CPMGetRowsIn, actual status is {0}", errorCode);
                     break;
             }
         }

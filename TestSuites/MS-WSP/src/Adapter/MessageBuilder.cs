@@ -1093,6 +1093,37 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         }
 
         /// <summary>
+        /// Gets CRestrictionArray structure
+        /// </summary>
+        /// <param name="queryString">Search Query String</param>
+        /// <param name="searchScope">Search Query Scope</param>
+        /// <param name="queryStringProperty">The property used by queryString</param>
+        /// <returns>CRestrictionArray structure BLOB</returns>
+        public CRestrictionArray GetRestrictionArray(params CRestriction[] restrictions)
+        {
+            var result = new CRestrictionArray();
+
+            result.count = 0x01;
+            result.isPresent = 0x01;
+
+            var restriction = new CRestriction();
+            restriction._ulType = CRestriction_ulType_Values.RTAnd;
+            restriction.Weight = NODE_WEIGHTAGE;
+            var node = new CNodeRestriction();
+            node._cNode = (uint)restrictions.Length;
+            node._paNode = new CRestriction[node._cNode];
+            for (int i = 0; i < restrictions.Length; i++)
+            {
+                node._paNode[i] = restrictions[i];
+            }
+            restriction.Restriction = node;
+
+            result.Restriction = restriction;
+
+            return result;
+        }
+
+        /// <summary>
         /// Gets Node restriction specific to the query 
         /// scope and the queryText
         /// </summary>
@@ -1111,7 +1142,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             node._paNode = new CRestriction[2];
 
-            node._paNode[0] = GetPropertyRestriction(searchScope);
+            node._paNode[0] = GetPropertyRestriction(_relop_Values.PREQ, WspConsts.System_Search_Scope, GetBaseStorageVariant(vType_Values.VT_LPWSTR, new VT_LPWSTR(searchScope)));
 
             node._paNode[1] = GetContentRestriction(queryString, queryStringProperty);
 
@@ -1124,9 +1155,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// Gets CPropertyRestriction specific to the query path
         /// </summary>
-        /// <param name="searchScope">Scope of the current search</param>
         /// <returns></returns>
-        private CRestriction GetPropertyRestriction(string searchScope)
+        public CRestriction GetPropertyRestriction(_relop_Values relopValue, CFullPropSpec propSpec, CBaseStorageVariant prVal)
         {
             var result = new CRestriction();
 
@@ -1136,11 +1166,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             var node = new CPropertyRestriction();
 
-            node._relop = _relop_Values.PREQ;
+            node._relop = relopValue;
 
-            node._Property = WspConsts.System_Search_Scope;
+            node._Property = propSpec;
 
-            node._prval = GetBaseStorageVariant(vType_Values.VT_LPWSTR, new VT_LPWSTR(searchScope));
+            node._prval = prVal; 
 
             node._lcid = parameter.LCID_VALUE;
 
@@ -1321,7 +1351,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="inputValue">input value, if isArray
         /// is true, pass values as array of objects</param>
         /// <returns>CBaseStorageVariant BLOB</returns>
-        private CBaseStorageVariant GetBaseStorageVariant(vType_Values type, object inputValue)
+        public CBaseStorageVariant GetBaseStorageVariant(vType_Values type, object inputValue)
         {
             var result = new CBaseStorageVariant();
             ushort vType = (ushort)type;
