@@ -21,5 +21,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
         /// Event be called when received data
         /// </summary>
         event ReceiveData Received;
+
+        /// <summary>
+        /// Event triggered when connection is closed.
+        /// </summary>
+        event DisconnectedHandler Disconnected;
     }
 }

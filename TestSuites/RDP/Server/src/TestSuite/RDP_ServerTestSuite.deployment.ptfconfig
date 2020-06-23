@@ -112,7 +112,11 @@
           If this property is set to true, the the SUT issues a temporary license when issuing a license to the client for the first time.
         </Description>
       </Property>
-    <Property name="Timeout" value="60"/>
+    <!--The timeout used for main transport based on RDPBCGR.-->
+	<Property name="Timeout" value="60"/>
+
+	<!--The timeout used for multiple transport based on RDPEUDP.-->
+    <Property name="MultiTransportTimeout" value="70"/>
  
   </Properties>
   <Adapters>
