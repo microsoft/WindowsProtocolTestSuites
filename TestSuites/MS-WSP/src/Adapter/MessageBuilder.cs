@@ -1095,9 +1095,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// Gets CRestrictionArray structure
         /// </summary>
-        /// <param name="queryString">Search Query String</param>
-        /// <param name="searchScope">Search Query Scope</param>
-        /// <param name="queryStringProperty">The property used by queryString</param>
+        /// <param name="restrictions">The restrictions to be inserted to the array</param>
         /// <returns>CRestrictionArray structure BLOB</returns>
         public CRestrictionArray GetRestrictionArray(params CRestriction[] restrictions)
         {
