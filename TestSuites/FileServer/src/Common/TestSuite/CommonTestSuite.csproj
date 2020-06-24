@@ -72,7 +72,7 @@
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="CommonTestBase.cs" />
-    <Compile Include="CommonUtility.cs" />
+    <Compile Include="CommonTypes.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="CommonTestSuite.deployment.ptfconfig">
