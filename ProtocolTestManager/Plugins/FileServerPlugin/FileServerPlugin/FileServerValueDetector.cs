@@ -262,6 +262,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             propertiesDic.Add("Common.SutComputerName", new List<string>() { detectionInfo.targetSUT });
             propertiesDic.Add("Common.SutIPAddress", new List<string>() { detectionInfo.networkInfo.SUTIpList[0].ToString() });
             propertiesDic.Add("Common.DomainName", new List<string>() { detectionInfo.domainName });
+            propertiesDic.Add("Common.DCServerComputerName", new List<string>() { string.Empty });
             propertiesDic.Add("Common.AdminUserName", new List<string>() { detectionInfo.userName });
             propertiesDic.Add("Common.NonAdminUserName", detectionInfo.nonadminUserAccounts);
             propertiesDic.Add("Common.GuestUserName", new List<string>() { detectionInfo.guestUserAccount });
@@ -339,7 +340,6 @@ namespace Microsoft.Protocols.TestManager.Detector
                 propertiesDic.Add("DFSC.DomainNetBIOSName", new List<string>() { string.Empty });
                 propertiesDic.Add("DFSC.DomainFQDNName", new List<string>() { string.Empty });
                 propertiesDic.Add("DFSC.DomainNamespace", new List<string>() { string.Empty });
-                propertiesDic.Add("DFSC.DCServerComputerName", new List<string>() { string.Empty });
             }
 
             #endregion

@@ -306,6 +306,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             }
         }
 
+        public string DCServerName
+        {
+            get
+            {
+                return GetProperty("DCServerComputerName");
+            }
+        }
+
         public string UserName
         {
             get
