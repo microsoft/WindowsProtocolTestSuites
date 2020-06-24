@@ -97,7 +97,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
         [TestMethod]
         [TestCategory("CPMCreateQuery")]
-        [Description("This test case is designed to test CPMCreateQuery with a regular expression by seaching file extension.")]
+        [Description("This test case is designed to test CPMCreateQuery with a regular expression by searching file extension.")]
         public void CPMCreateQuery_FileExtension_RegularExpression()
         {
             argumentType = ArgumentType.AllValid;
@@ -123,7 +123,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn with query \".doc\" and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, CreateSortSets(), null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
             wspAdapter.CPMSetBindingsIn(true, true);
@@ -131,11 +131,13 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn and expects success.");
             wspAdapter.CPMGetRowsIn(out CPMGetRowsOut getRowsOut);
 
+
             Site.Assert.AreEqual((uint)4, getRowsOut._cRowsReturned, "The number of rows returned should be 4.");
-            Site.Assert.AreEqual("test127.doc", getRowsOut.Rows[0].Columns[0].Data.ToString().ToLower(), "The file name of Row 0 should be test127.doc.");
-            Site.Assert.AreEqual("test13.doc", getRowsOut.Rows[1].Columns[0].Data.ToString().ToLower(), "The file name of Row 1 should be test13.doc.");
-            Site.Assert.AreEqual("test15.docx", getRowsOut.Rows[2].Columns[0].Data.ToString().ToLower(), "The file name of Row 2 should be test15.docx.");
-            Site.Assert.AreEqual("test17.docx", getRowsOut.Rows[3].Columns[0].Data.ToString().ToLower(), "The file name of Row 3 should be test17.docx.");
+            var fileNameList = new string[] { "test13.doc", "test15.docx", "test17.docx", "test127.doc" };
+            for (int i = 0; i < 4; i++)
+            {
+                Site.Assert.AreEqual(fileNameList[i], getRowsOut.Rows[i].Columns[0].Data, $"The file name of Row {i} should be $fileNameList[i].");
+            }
         }
 
         [TestMethod]
@@ -165,7 +167,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn with query \"test12*\" and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, CreateSortSets(), null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
             wspAdapter.CPMSetBindingsIn(true, true);
@@ -174,11 +176,11 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMGetRowsIn(out CPMGetRowsOut getRowsOut);
 
             Site.Assert.AreEqual((uint)5, getRowsOut._cRowsReturned, "The number of rows returned should be 5.");
-            Site.Assert.AreEqual("test121.txt", getRowsOut.Rows[0].Columns[0].Data.ToString().ToLower(), "The file name of Row 0 should be test121.txt.");
-            Site.Assert.AreEqual("test122.txt", getRowsOut.Rows[1].Columns[0].Data.ToString().ToLower(), "The file name of Row 1 should be test122.txt.");
-            Site.Assert.AreEqual("test127.doc", getRowsOut.Rows[2].Columns[0].Data.ToString().ToLower(), "The file name of Row 2 should be test127.doc.");
-            Site.Assert.AreEqual("test128.txt", getRowsOut.Rows[3].Columns[0].Data.ToString().ToLower(), "The file name of Row 3 should be test128.txt.");
-            Site.Assert.AreEqual("test129.cpp", getRowsOut.Rows[4].Columns[0].Data.ToString().ToLower(), "The file name of Row 4 should be test129.cpp.");
+            var fileNameList = new string[] { "test121.txt", "test122.txt", "test127.doc", "test128.txt", "test129.cpp" };
+            for (int i = 0; i < 5; i++)
+            {
+                Site.Assert.AreEqual(fileNameList[i], getRowsOut.Rows[i].Columns[0].Data, $"The file name of Row {i} should be $fileNameList[i].");
+            }
         }
 
         [TestMethod]
@@ -208,7 +210,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn with query \"test12?.txt\" and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, CreateSortSets(), null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
             wspAdapter.CPMSetBindingsIn(true, true);
@@ -217,9 +219,11 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMGetRowsIn(out CPMGetRowsOut getRowsOut);
 
             Site.Assert.AreEqual((uint)3, getRowsOut._cRowsReturned, "The number of rows returned should be 3.");
-            Site.Assert.AreEqual("test121.txt", getRowsOut.Rows[0].Columns[0].Data.ToString().ToLower(), "The file name of Row 0 should be test121.txt.");
-            Site.Assert.AreEqual("test122.txt", getRowsOut.Rows[1].Columns[0].Data.ToString().ToLower(), "The file name of Row 1 should be test122.txt.");
-            Site.Assert.AreEqual("test128.txt", getRowsOut.Rows[2].Columns[0].Data.ToString().ToLower(), "The file name of Row 2 should be test128.txt.");
+            var fileNameList = new string[] { "test121.txt", "test122.txt", "test128.txt"};
+            for (int i = 0; i < 3; i++)
+            {
+                Site.Assert.AreEqual(fileNameList[i], getRowsOut.Rows[i].Columns[0].Data, $"The file name of Row {i} should be $fileNameList[i].");
+            }
         }
 
         [TestMethod]
@@ -249,7 +253,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn with a not-equal query \"test\" and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, CreateSortSets(), null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
             wspAdapter.CPMSetBindingsIn(true, true);
@@ -258,8 +262,11 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMGetRowsIn(out CPMGetRowsOut getRowsOut);
 
             Site.Assert.AreEqual((uint)2, getRowsOut._cRowsReturned, "The number of rows returned should be 2.");
-            Site.Assert.AreEqual("1", getRowsOut.Rows[0].Columns[0].Data.ToString().ToLower(), "The file name of Row 0 should be 1.");
-            Site.Assert.AreEqual("2", getRowsOut.Rows[1].Columns[0].Data.ToString().ToLower(), "The file name of Row 1 should be 2.");
+            var fileNameList = new string[] { "1", "2"};
+            for (int i = 0; i < 2; i++)
+            {
+                Site.Assert.AreEqual(fileNameList[i], getRowsOut.Rows[i].Columns[0].Data, $"The file name of Row {i} should be $fileNameList[i].");
+            }
         }
 
         [TestMethod]
@@ -328,7 +335,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn to query the files with size greater than or equal to 1124 bytes and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, CreateSortSets(), null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
             wspAdapter.CPMSetBindingsIn(true, true);
@@ -337,8 +344,11 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMGetRowsIn(out CPMGetRowsOut getRowsOut);
 
             Site.Assert.AreEqual((uint)2, getRowsOut._cRowsReturned, "The number of rows returned should be 2.");
-            Site.Assert.AreEqual("test1.txt", getRowsOut.Rows[0].Columns[0].Data.ToString().ToLower(), "The file name of Row 0 should be test1.txt.");
-            Site.Assert.AreEqual("test132.txt", getRowsOut.Rows[1].Columns[0].Data.ToString().ToLower(), "The file name of Row 1 should be test132.txt.");
+            var fileNameList = new string[] { "test1.txt", "test132.txt" };
+            for (int i = 0; i < 2; i++)
+            {
+                Site.Assert.AreEqual(fileNameList[i], getRowsOut.Rows[i].Columns[0].Data, $"The file name of Row {i} should be $fileNameList[i].");
+            }
         }
 
         [TestMethod]
@@ -368,7 +378,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, CreateSortSets(), null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
             wspAdapter.CPMSetBindingsIn(true, true);
@@ -377,9 +387,11 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMGetRowsIn(out CPMGetRowsOut getRowsOut);
 
             Site.Assert.AreEqual((uint)2, getRowsOut._cRowsReturned, "The number of row returned should be 2.");
-            Site.Assert.AreEqual("test1.txt", getRowsOut.Rows[0].Columns[0].Data.ToString().ToLower(), "The file name of Row 0 should be test1.txt.");
-            Site.Assert.AreEqual("test27.txt", getRowsOut.Rows[1].Columns[0].Data.ToString().ToLower(), "The file name of Row 1 should be test27.txt.");
-
+            var fileNameList = new string[] { "test1.txt", "test27.txt" };
+            for (int i = 0; i < 2; i++)
+            {
+                Site.Assert.AreEqual(fileNameList[i], getRowsOut.Rows[i].Columns[0].Data, $"The file name of Row {i} should be $fileNameList[i].");
+            }
         }
 
         [TestMethod]
@@ -409,7 +421,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, CreateSortSets(), null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
             wspAdapter.CPMSetBindingsIn(true, true);
@@ -418,8 +430,11 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMGetRowsIn(out CPMGetRowsOut getRowsOut);
 
             Site.Assert.AreEqual((uint)2, getRowsOut._cRowsReturned, "The number of row returned should be 2.");
-            Site.Assert.AreEqual("test1.txt", getRowsOut.Rows[0].Columns[0].Data.ToString().ToLower(), "The file name of Row 0 should be test1.txt.");
-            Site.Assert.AreEqual("test27.txt", getRowsOut.Rows[1].Columns[0].Data.ToString().ToLower(), "The file name of Row 1 should be test27.txt.");
+            var fileNameList = new string[] { "test1.txt", "test27.txt" };
+            for (int i = 0; i < 2; i++)
+            {
+                Site.Assert.AreEqual(fileNameList[i], getRowsOut.Rows[i].Columns[0].Data, $"The file name of Row {i} should be $fileNameList[i].");
+            }
         }
 
         [TestMethod]
@@ -596,6 +611,23 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
         #endregion
 
+        /// <summary>
+        /// Construct a default SortSet
+        /// </summary>
+        /// <returns></returns>
+        private CInGroupSortAggregSets CreateSortSets()
+        {
+            CInGroupSortAggregSets inGroupSortAggregSets = new CInGroupSortAggregSets();
+            inGroupSortAggregSets.cCount = 1;
+            inGroupSortAggregSets.SortSets = new CSortSet[1];
+            inGroupSortAggregSets.SortSets[0].count = 1;
+            inGroupSortAggregSets.SortSets[0].sortArray = new CSort[1];
+            inGroupSortAggregSets.SortSets[0].sortArray[0].dwOrder = dwOrder_Values.QUERY_SORTASCEND;
+            inGroupSortAggregSets.SortSets[0].sortArray[0].pidColumn = 0; // Sort by the first column.
+            inGroupSortAggregSets.SortSets[0].sortArray[0].locale = wspAdapter.builder.parameter.LCID_VALUE;
+
+            return inGroupSortAggregSets;
+        }
 
         private void CPMCreateQuery_Sort(bool ascend)
         {
@@ -656,7 +688,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             for (int i = 0; i < 3; i++)
             {
-                Site.Assert.AreEqual(fileNameList[i], getRowsOut.Rows[i].Columns[0].Data, "The index {0} file in Ascend order should be {1}.", i, fileNameList[i]);
+                Site.Assert.AreEqual(fileNameList[i], getRowsOut.Rows[i].Columns[0].Data, "The index {0} file in {1} order should be {2}.", i, ascend? "Ascend" : "Decend", fileNameList[i]);
                 Site.Assert.AreEqual(sizeList[i], Convert.ToInt32(getRowsOut.Rows[i].Columns[1].Data), "The size of {0} should be {1} bytes.", fileNameList[i], sizeList[i]);
             }
         }
