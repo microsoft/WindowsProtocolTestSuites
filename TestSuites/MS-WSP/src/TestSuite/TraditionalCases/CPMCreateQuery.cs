@@ -614,7 +614,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// <summary>
         /// Construct a default SortSet
         /// </summary>
-        /// <returns></returns>
         private CInGroupSortAggregSets CreateSortSets()
         {
             CInGroupSortAggregSets inGroupSortAggregSets = new CInGroupSortAggregSets();
@@ -688,7 +687,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             for (int i = 0; i < 3; i++)
             {
-                Site.Assert.AreEqual(fileNameList[i], getRowsOut.Rows[i].Columns[0].Data, "The index {0} file in {1} order should be {2}.", i, ascend? "Ascend" : "Decend", fileNameList[i]);
+                Site.Assert.AreEqual(fileNameList[i], getRowsOut.Rows[i].Columns[0].Data, "The index {0} file in {1} order should be {2}.", i, ascend? "Ascend" : "Descend", fileNameList[i]);
                 Site.Assert.AreEqual(sizeList[i], Convert.ToInt32(getRowsOut.Rows[i].Columns[1].Data), "The size of {0} should be {1} bytes.", fileNameList[i], sizeList[i]);
             }
         }
