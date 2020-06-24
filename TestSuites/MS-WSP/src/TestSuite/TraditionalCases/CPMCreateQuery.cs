@@ -136,7 +136,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             var fileNameList = new string[] { "test13.doc", "test15.docx", "test17.docx", "test127.doc" };
             for (int i = 0; i < 4; i++)
             {
-                Site.Assert.AreEqual(fileNameList[i], getRowsOut.Rows[i].Columns[0].Data, $"The file name of Row {i} should be $fileNameList[i].");
+                Site.Assert.AreEqual(fileNameList[i], getRowsOut.Rows[i].Columns[0].Data, $"The file name of Row {i} should be {fileNameList[i]}.");
             }
         }
 
@@ -179,7 +179,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             var fileNameList = new string[] { "test121.txt", "test122.txt", "test127.doc", "test128.txt", "test129.cpp" };
             for (int i = 0; i < 5; i++)
             {
-                Site.Assert.AreEqual(fileNameList[i], getRowsOut.Rows[i].Columns[0].Data, $"The file name of Row {i} should be $fileNameList[i].");
+                Site.Assert.AreEqual(fileNameList[i], getRowsOut.Rows[i].Columns[0].Data, $"The file name of Row {i} should be {fileNameList[i]}.");
             }
         }
 
@@ -222,7 +222,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             var fileNameList = new string[] { "test121.txt", "test122.txt", "test128.txt"};
             for (int i = 0; i < 3; i++)
             {
-                Site.Assert.AreEqual(fileNameList[i], getRowsOut.Rows[i].Columns[0].Data, $"The file name of Row {i} should be $fileNameList[i].");
+                Site.Assert.AreEqual(fileNameList[i], getRowsOut.Rows[i].Columns[0].Data, $"The file name of Row {i} should be {fileNameList[i]}.");
             }
         }
 
@@ -265,7 +265,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             var fileNameList = new string[] { "1", "2"};
             for (int i = 0; i < 2; i++)
             {
-                Site.Assert.AreEqual(fileNameList[i], getRowsOut.Rows[i].Columns[0].Data, $"The file name of Row {i} should be $fileNameList[i].");
+                Site.Assert.AreEqual(fileNameList[i], getRowsOut.Rows[i].Columns[0].Data, $"The file name of Row {i} should be {fileNameList[i]}.");
             }
         }
 
@@ -347,7 +347,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             var fileNameList = new string[] { "test1.txt", "test132.txt" };
             for (int i = 0; i < 2; i++)
             {
-                Site.Assert.AreEqual(fileNameList[i], getRowsOut.Rows[i].Columns[0].Data, $"The file name of Row {i} should be $fileNameList[i].");
+                Site.Assert.AreEqual(fileNameList[i], getRowsOut.Rows[i].Columns[0].Data, $"The file name of Row {i} should be {fileNameList[i]}.");
             }
         }
 
@@ -390,7 +390,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             var fileNameList = new string[] { "test1.txt", "test27.txt" };
             for (int i = 0; i < 2; i++)
             {
-                Site.Assert.AreEqual(fileNameList[i], getRowsOut.Rows[i].Columns[0].Data, $"The file name of Row {i} should be $fileNameList[i].");
+                Site.Assert.AreEqual(fileNameList[i], getRowsOut.Rows[i].Columns[0].Data, $"The file name of Row {i} should be {fileNameList[i]}.");
             }
         }
 
@@ -433,7 +433,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             var fileNameList = new string[] { "test1.txt", "test27.txt" };
             for (int i = 0; i < 2; i++)
             {
-                Site.Assert.AreEqual(fileNameList[i], getRowsOut.Rows[i].Columns[0].Data, $"The file name of Row {i} should be $fileNameList[i].");
+                Site.Assert.AreEqual(fileNameList[i], getRowsOut.Rows[i].Columns[0].Data, $"The file name of Row {i} should be {fileNameList[i]}.");
             }
         }
 
