@@ -130,6 +130,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="_fRootPath"></param>
         void CPMUpdateDocumentsIn(uint _flag, uint _fRootPath);
 
+        /// <summary>
+        /// CPMRestartPositionIn() request directs the server to moves the fetch position for a cursor to the beginning of the chapter. 
+        /// </summary>
+        /// <param name="_hCursor">The query handle.</param>
+        /// <param name="_chapt">The chapter handle.</param>
+        void CPMRestartPositionIn(uint _hCursor, uint _chapt);
+
         # endregion
 
         # region Event Handlers
@@ -223,6 +230,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// This event is used to get the response from CPMUpdateDocumentsIn request.
         /// </summary>
         event CPMUpdateDocumentsOutResponseHandler CPMUpdateDocumentsOutResponse;
+
+        /// <summary>
+        /// This event is used to get the response from CPMRestartPositionIn request.
+        /// </summary>
+        event CPMRestartPositionInResponseHadler CPMRestartPositionInResponse;
 
         # endregion
     }
@@ -344,6 +356,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
     /// <param name="errorCode"></param>
     public delegate void CPMUpdateDocumentsOutResponseHandler(uint errorCode);
 
-
+    /// <summary>
+    /// CCPMRestartPositionInResponseHadler is a delegate 
+    /// for CPMRestartPositionInResponse event.
+    /// </summary>
+    /// <param name="errorCode">Error code from the server response.</param>
+    public delegate void CPMRestartPositionInResponseHadler(uint errorCode);
     # endregion
 }

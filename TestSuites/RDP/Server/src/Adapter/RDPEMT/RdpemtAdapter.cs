@@ -92,7 +92,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
 
                 rdpeudpClient.Start();
 
-                rdpeudpClient.Connect(testConfig.timeout);
+                rdpeudpClient.Connect(testConfig.multiTransportTimeout);
 
 
                 var rdpemtClient = new RdpemtClient(rdpeudpClient.Socket, testConfig.serverName, false);
@@ -193,7 +193,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         /// <returns>The Tunnel Create Response PDU sent by server.</returns>
         public RDP_TUNNEL_CREATERESPONSE ExpectTunnelCreateResponse(Multitransport_Protocol_value requestedProtocol)
         {
-            return rdpemtClients[requestedProtocol].ExpectTunnelCreateResponse(testConfig.timeout);
+            return rdpemtClients[requestedProtocol].ExpectTunnelCreateResponse(testConfig.multiTransportTimeout);
         }
     }
 }

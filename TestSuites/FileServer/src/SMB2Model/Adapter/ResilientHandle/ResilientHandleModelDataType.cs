@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Text;
-using Microsoft.Modeling;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ResilientHandle

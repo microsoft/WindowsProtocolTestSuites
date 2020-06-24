@@ -1,4 +1,4 @@
-<<Parameters>
+<Parameters>
 	<Groups>
 			<Group>
 				<GroupName>AzGroup01</GroupName>
@@ -40,4 +40,4 @@
 			<Password>Password01^</Password>        
 		</User>
 	</Users>
-</<Parameters>
+</Parameters>

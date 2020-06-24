@@ -24,7 +24,15 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             ColumnSetAbsent,
             RestrictionArrayAbsent,
             PidMapperAbsent,
+            AlternativeCMaxResultsValue
         }
+
+        public enum SortingOrder
+        {
+            PhoneticOrder,
+            StrokeCountOrder
+        }
+
         private ArgumentType argumentType;
 
         #region Test Initialize and Cleanup
@@ -609,6 +617,23 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             CPMCreateQuery_Sort(ascend: false);
         }
 
+        [TestMethod]
+        [TestCategory("BVT")]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if the author of the files can be retrieved and ordered in Chinese phonetic order by CPMCreateQuery.")]
+        public void BVT_CPMCreateQuery_SortLCID2052()
+        {
+            CPMCreateQuery_SortByAuthorsWithLCID(SortingOrder.PhoneticOrder);
+        }
+
+        [TestMethod]
+        [TestCategory("BVT")]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if the author of the files can be retrieved and ordered in Chinese stroke count order by CPMCreateQuery.")]
+        public void BVT_CPMCreateQuery_SortLCID133124()
+        {
+            CPMCreateQuery_SortByAuthorsWithLCID(SortingOrder.StrokeCountOrder);
+        }
         #endregion
 
         /// <summary>
@@ -627,7 +652,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             return inGroupSortAggregSets;
         }
-
+        
         private void CPMCreateQuery_Sort(bool ascend)
         {
             argumentType = ArgumentType.AllValid;
@@ -692,6 +717,88 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             }
         }
 
+        private void CPMCreateQuery_SortByAuthorsWithLCID(SortingOrder order)
+        {
+            argumentType = ArgumentType.AllValid;
+            var sortingLCID = GetLCIDValueBySortingOrder(order);
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
+            wspAdapter.CPMConnectInRequest();
+
+            var columnSet = wspAdapter.builder.GetColumnSet(2);
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray("*.doc", Site.Properties.Get("QueryPath") + "Data/CreateQuery_Locale", WspConsts.System_FileName);
+            var pidMapper = new CPidMapper();
+            pidMapper.aPropSpec = new CFullPropSpec[]
+            {
+                WspConsts.System_ItemName,
+                WspConsts.System_Author,
+                WspConsts.System_Search_Scope,
+                WspConsts.System_FileName
+            };
+            pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
+
+            CInGroupSortAggregSets inGroupSortAggregSets = new CInGroupSortAggregSets();
+            inGroupSortAggregSets.cCount = 1;
+            inGroupSortAggregSets.SortSets = new CSortSet[1];
+            inGroupSortAggregSets.SortSets[0].count = 1;
+            inGroupSortAggregSets.SortSets[0].sortArray = new CSort[1];
+            inGroupSortAggregSets.SortSets[0].sortArray[0].dwOrder = dwOrder_Values.QUERY_SORTASCEND;
+            inGroupSortAggregSets.SortSets[0].sortArray[0].pidColumn = 1; // Sort by author.
+            inGroupSortAggregSets.SortSets[0].sortArray[0].locale = sortingLCID; // Sort Chinese textual values by phonetic order (2052), stroke count order (133124) or other orders.
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, inGroupSortAggregSets, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+
+            var columns = new CTableColumn[]
+            {
+                wspAdapter.builder.GetTableColumn(WspConsts.System_ItemName, vType_Values.VT_VARIANT),
+                wspAdapter.builder.GetTableColumn(WspConsts.System_Author, vType_Values.VT_VARIANT)
+            };
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
+            wspAdapter.CPMSetBindingsIn(columns);
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn and expects success.");
+            argumentType = ArgumentType.AllValid;
+            wspAdapter.CPMGetRowsIn(out CPMGetRowsOut getRowsOut);
+
+            Site.Assert.AreEqual(6U, getRowsOut._cRowsReturned, "Number of rows returned should be 6.");
+
+            string[] fileNameList = null;
+            string[] authorList = null;
+            if (order is SortingOrder.PhoneticOrder)
+            {
+                fileNameList = new string[] { "locale6.doc", "locale5.doc", "locale2.doc", "locale4.doc", "locale1.doc", "locale3.doc" };
+                authorList = new string[]
+                {
+                    "ABC",
+                    "东南西",
+                    "甲乙丙",
+                    "水火木",
+                    "一二三",
+                    "子丑寅"
+                };
+            }
+            else if (order is SortingOrder.StrokeCountOrder)
+            {
+                fileNameList = new string[] { "locale6.doc", "locale1.doc", "locale3.doc", "locale4.doc", "locale5.doc", "locale2.doc" };
+                authorList = new string[]
+                {
+                    "ABC",
+                    "一二三",
+                    "子丑寅",
+                    "水火木",
+                    "东南西",
+                    "甲乙丙"
+                };
+            }
+
+            for (int i = 0; i < 6; i++)
+            {
+                Site.Assert.AreEqual(fileNameList[i], getRowsOut.Rows[i].Columns[0].Data, $"The index {i} file in Ascend order should be {fileNameList[i]}.");
+                Site.Assert.AreEqual(authorList[i], (getRowsOut.Rows[i].Columns[1].Data as string[])[0], $"The author of {fileNameList[i]} should be {authorList[i]}.");
+            }
+        }
+
         private void CPMCreateQueryOut(uint errorCode)
         {
             switch (argumentType)
@@ -719,6 +826,22 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     bool succeed = errorCode == (uint)WspErrorCode.SUCCESS || errorCode == (uint)WspErrorCode.DB_S_ENDOFROWSET ? true : false;
                     Site.Assert.IsTrue(succeed, "Server should return succeed or DB_S_ENDOFROWSET for CPMGetRowsIn, actual status is {0}", errorCode);
                     break;
+                case ArgumentType.AlternativeCMaxResultsValue:
+                    Site.Assert.AreEqual((uint)WspErrorCode.DB_S_ENDOFROWSET, errorCode, "Server should return DB_S_ENDOFROWSET for CPMGetRowsIn if _cMaxResults is set and the complete rowset can be retrieved by a single CPMGetRowsIn call.");
+                    break;
+            }
+        }
+
+        private uint GetLCIDValueBySortingOrder(SortingOrder order)
+        {
+            switch(order)
+            {
+                case SortingOrder.PhoneticOrder:
+                    return 2052U; // Phonetic order (2052) 
+                case SortingOrder.StrokeCountOrder:
+                    return 133124U; // Stroke count order (133124)
+                default:
+                    return 1033U;
             }
         }
     }

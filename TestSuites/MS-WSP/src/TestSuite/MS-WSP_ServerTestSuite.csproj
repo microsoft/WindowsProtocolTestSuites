@@ -37,9 +37,6 @@
       <SpecificVersion>True</SpecificVersion>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="Microsoft.Xrt.Runtime, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>True</SpecificVersion>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -89,6 +86,7 @@
     <Compile Include="TraditionalCases\CPMCreateQuery.cs" />
     <Compile Include="TraditionalCases\CPMGetQueryStatus.cs" />
     <Compile Include="TraditionalCases\CPMGetQueryStatusEx.cs" />
+    <Compile Include="TraditionalCases\CPMCreateQuery_RowsetProperties.cs" />
     <Compile Include="TraditionalCases\CPMGetRows.cs" />
     <Compile Include="TraditionalCases\CPMSetBindings.cs" />
     <Compile Include="TraditionalCases\WspCommonTestBase.cs" />

@@ -1491,7 +1491,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             return result;
         }
 
-        public CPMGetRowsIn GetCPMRowsInMessage(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType, out uint reserved)
+        public CPMGetRowsIn GetCPMRowsInMessage(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType, object seekDescription, out uint reserved)
         {
             reserved = 256;
 
@@ -1520,7 +1520,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
                 _chapt = chapter,
 
-                SeekDescription = GetSeekDescription((eType_Values)eType),
+                SeekDescription = seekDescription ?? GetSeekDescription((eType_Values)eType),
             };
 
             return message;

@@ -815,8 +815,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// CPMGetRowsIn() message requests rows from a query.
         /// </summary>
-        /// <param name="isCursorValid">Indicates the client 
-        /// requesting row has a valid cursor.</param>
+        /// <param name="isCursorValid">Indicates the client requesting row has a valid cursor.</param>
         public void CPMGetRowsIn(bool isCursorValid)
         {
             uint cursorAssociated;
@@ -830,16 +829,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 cursorAssociated = (uint)r.Next(50, 60);
             }
 
-            CPMGetRowsIn(cursorAssociated, builder.parameter.RowsToTransfer, builder.parameter.EachRowSize, builder.parameter.BufferSize, 0, builder.parameter.EType, out CPMGetRowsOut getRowsOut);
+            CPMGetRowsIn(cursorAssociated, builder.parameter.RowsToTransfer, builder.parameter.EachRowSize, builder.parameter.BufferSize, 0, builder.parameter.EType, out CPMGetRowsOut _);
         }
 
         /// <summary>
         /// CPMGetRowsIn() message requests rows from a query.
         /// </summary>
+        /// <param name="getRowsOut">The CPMGetRowsOut response from the server.</param>
         public void CPMGetRowsIn(out CPMGetRowsOut getRowsOut)
         {
             uint cursorAssociated = GetCursor(clientMachineName);
-            getRowsOut = null;
             CPMGetRowsIn(cursorAssociated, builder.parameter.RowsToTransfer, builder.parameter.EachRowSize, builder.parameter.BufferSize, 0, builder.parameter.EType, out getRowsOut);
         }
 
@@ -852,14 +851,44 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="cbReadBuffer">This field MUST be set to the maximum of the value of _cbRowWidth or 1000 times the value of _cRowsToTransfer, rounded up to the nearest 512 byte multiple. The value MUST NOT exceed 0x00004000</param>
         /// <param name="fBwdFetch">Indicating the order in which to fetch the rows</param>
         /// <param name="eType">Type of SeekDescription</param>
+        /// <param name="response">The CPMGetRowsOut response from the server.</param>
         public void CPMGetRowsIn(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType, out CPMGetRowsOut response)
         {
+            CPMGetRowsIn(cursor, rowsToTransfer, rowWidth, cbReadBuffer, fBwdFetch, eType, null, out response);
+        }
+
+        /// <summary>
+        /// CPMGetRowsIn() message requests rows from a query.
+        /// </summary>
+        /// <param name="cursor">Representing the handle from the CPMCreateQueryOut message identifying the query for which to retrieve rows. </param>
+        /// <param name="rowsToTransfer">Indicating the maximum number of rows that the client will receive in response to this message</param>
+        /// <param name="rowWidth">Indicating the length of a row, in bytes</param>
+        /// <param name="cbReadBuffer">This field MUST be set to the maximum of the value of _cbRowWidth or 1000 times the value of _cRowsToTransfer, rounded up to the nearest 512 byte multiple. The value MUST NOT exceed 0x00004000</param>
+        /// <param name="fBwdFetch">Indicating the order in which to fetch the rows</param>
+        /// <param name="eType">Type of SeekDescription</param>
+        /// <param name="seekDescription">The SeekDescription structure.</param>
+        /// <param name="response">The CPMGetRowsOut response from the server.</param>
+        public void CPMGetRowsIn(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType, object seekDescription, out CPMGetRowsOut response)
+        {
+            response = null;
+
             // Get hold of appropriate Sender (Pipe with/without connection)
             var client = GetClient(isClientConnected);
-            var getRowsInMessage = builder.GetCPMRowsInMessage(cursor, rowsToTransfer, rowWidth, cbReadBuffer, fBwdFetch, eType, out rowsInReserve);
+            var getRowsInMessage = builder.GetCPMRowsInMessage(cursor, rowsToTransfer, rowWidth, cbReadBuffer, fBwdFetch, eType, seekDescription, out rowsInReserve);
             var getRowsInMessageBytes = Helper.ToBytes(getRowsInMessage);
 
-            client.SendCPMGetRowsIn(getRowsInMessage._hCursor, getRowsInMessage._cRowsToTransfer, getRowsInMessage._cbRowWidth, getRowsInMessage._cbSeek, getRowsInMessage._cbReserved, getRowsInMessage._cbReadBuffer, getRowsInMessage._ulClientBase, getRowsInMessage._fBwdFetch, getRowsInMessage.eType, getRowsInMessage._chapt, getRowsInMessage.SeekDescription);
+            client.SendCPMGetRowsIn(
+                getRowsInMessage._hCursor, 
+                getRowsInMessage._cRowsToTransfer, 
+                getRowsInMessage._cbRowWidth, 
+                getRowsInMessage._cbSeek, 
+                getRowsInMessage._cbReserved, 
+                getRowsInMessage._cbReadBuffer, 
+                getRowsInMessage._ulClientBase, 
+                getRowsInMessage._fBwdFetch, 
+                getRowsInMessage.eType, 
+                getRowsInMessage._chapt, 
+                getRowsInMessage.SeekDescription);
 
             if (client == defaultClient)
             {
@@ -878,7 +907,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             wspTestSite.CaptureRequirement(3, @"All messages MUST be " +
                 "transported using a named pipe: \\pipe\\MSFTEWDS");
 
-            response = new CPMGetRowsOut();
+            
             if (CPMGetRowsOut != null)
             {
                 client.ExpectMessage<CPMGetRowsOut>(out response);
@@ -1675,9 +1704,46 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         public event CPMUpdateDocumentsOutResponseHandler
             CPMUpdateDocumentsOutResponse;
         #endregion
+
+        #region CPMRestartPositionIn request and response
+
+        /// <summary>
+        /// CPMRestartPositionIn() request directs the server to move the fetch position for a cursor to the beginning of the chapter. 
+        /// </summary>
+        /// <param name="_hCursor">The query handle.</param>
+        /// <param name="_chapt">The chapter handle.</param>
+        public void CPMRestartPositionIn(uint _hCursor, uint _chapt)
+        {
+            RequestSender sender = GetRequestSender(isClientConnected);
+
+            byte[] restartPositionInRequset = builder.GetRestartPositionIn(_hCursor, _chapt);
+
+            int bytesRead = sender.SendMessage(restartPositionInRequset, out byte[] restartPositionInResponse);
+            byte[] value = null;
+            value = new byte[bytesRead];
+            Array.Copy(restartPositionInResponse, 0, value, 0, bytesRead);
+            uint checkSum = GetCheckSumField(restartPositionInResponse);
+            
+            // Read the message Response           
+            int startingIndex = 0;
+            uint msgId = Helper.GetUInt(restartPositionInResponse, ref startingIndex);
+            uint errorCode = Helper.GetUInt(restartPositionInResponse, ref startingIndex);
+
+            if (errorCode == 0)
+            {
+                validator.ValidateRestartPositionInResponse(value, checkSum);
+            }
+
+            CPMRestartPositionInResponse(errorCode);
+        }
+
+        /// <summary>
+        /// This event is used to get the response from CPMRestartPositionIn request.
+        /// </summary>
+        public event CPMRestartPositionInResponseHadler CPMRestartPositionInResponse;
         #endregion
 
-
+        #endregion
 
         #region Helper Methods
 

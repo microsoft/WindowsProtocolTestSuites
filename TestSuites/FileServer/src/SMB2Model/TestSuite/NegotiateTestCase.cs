@@ -44,9 +44,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         
         static System.Reflection.EventInfo NegotiateResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Negotiate.INegotiateAdapter), "NegotiateResponse");
         
-        static System.Reflection.MethodBase ComNegotiateRequestInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Negotiate.INegotiateAdapter), "ComNegotiateRequest", typeof(Microsoft.Modeling.Sequence<string>));
+        static System.Reflection.MethodBase ComNegotiateRequestInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Negotiate.INegotiateAdapter), "ComNegotiateRequest", typeof(List<string>));
         
-        static System.Reflection.MethodBase NegotiateRequestInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Negotiate.INegotiateAdapter), "NegotiateRequest", typeof(Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>));
+        static System.Reflection.MethodBase NegotiateRequestInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Negotiate.INegotiateAdapter), "NegotiateRequest", typeof(List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>));
         #endregion
         
         #region Adapter Instances
@@ -107,17 +107,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S14\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\",\"SMB 2.???\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                            this.Make<List<string>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         "SMB 2.???",
-                                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})}));
+                                                        ((List<string>)(null))})})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -130,13 +130,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS0NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S17\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Comment("reaching state \'S18\'");
                     this.Manager.Comment("checking step \'return NegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S19\'");
@@ -148,26 +148,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                     if ((temp20 == 1)) {
                         this.Manager.Comment("reaching state \'S130\'");
                         this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002])\'");
-                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Rep"}, new object[] {
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                         this.Manager.Comment("reaching state \'S131\'");
                         this.Manager.Comment("checking step \'return NegotiateRequest\'");
                         this.Manager.Comment("reaching state \'S132\'");
                         if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS0NegotiateResponseChecker4))) != -1)) {
                             this.Manager.Comment("reaching state \'S133\'");
                             this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                            this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                            this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                             "Rep"}, new object[] {
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                            this.Make<List<string>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         "SMB 2.002",
-                                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                        ((List<string>)(null))})}));
                             this.Manager.Comment("reaching state \'S134\'");
                             this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                             this.Manager.Comment("reaching state \'S135\'");
@@ -221,26 +221,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S140\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S141\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S142\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS0NegotiateResponseChecker126))) != -1)) {
                     this.Manager.Comment("reaching state \'S143\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb30])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -274,13 +274,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S150\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: If the server does not implement the SMB 2.1 or 3.x dialect" +
                         " family, processing MUST continue as specified in 3.3.5.3.2.\"");
@@ -294,13 +294,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS0NegotiateResponseChecker127))) != -1)) {
                     this.Manager.Comment("reaching state \'S153\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb30])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -334,26 +334,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S4\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S5\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S6\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS0NegotiateResponseChecker128))) != -1)) {
                     this.Manager.Comment("reaching state \'S7\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb30])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -427,38 +427,38 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS121() {
             this.Manager.Comment("reaching state \'S121\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
             this.Manager.Comment("reaching state \'S122\'");
             this.Manager.Comment("checking step \'return NegotiateRequest\'");
             this.Manager.Comment("reaching state \'S123\'");
             if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS0NegotiateResponseChecker2))) != -1)) {
                 this.Manager.Comment("reaching state \'S124\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30,Smb302])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                                 "Head",
                                                                                 "Tail"}, new object[] {
                                                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
+                                                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                         "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                         "1, and not reply.\"");
@@ -565,13 +565,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS20() {
             this.Manager.Comment("reaching state \'S20\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([Smb30])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
             this.Manager.Comment("reaching state \'S21\'");
             this.Manager.Comment("checking step \'return NegotiateRequest\'");
             this.Manager.Comment("reaching state \'S22\'");
@@ -579,13 +579,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp19 == 0)) {
                 this.Manager.Comment("reaching state \'S103\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Comment("reaching state \'S104\'");
                 this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S105\'");
@@ -599,17 +599,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp19 == 1)) {
                 this.Manager.Comment("reaching state \'S108\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\",\"SMB 2.???\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                            this.Make<List<string>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         "SMB 2.???",
-                                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})}));
+                                                        ((List<string>)(null))})})}));
                 this.Manager.Comment("reaching state \'S109\'");
                 this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S110\'");
@@ -623,13 +623,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp19 == 2)) {
                 this.Manager.Comment("reaching state \'S113\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.???\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.???",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Comment("reaching state \'S114\'");
                 this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S115\'");
@@ -643,13 +643,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp19 == 3)) {
                 this.Manager.Comment("reaching state \'S118\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S119\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S120\'");
@@ -686,13 +686,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp19 == 4)) {
                 this.Manager.Comment("reaching state \'S23\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S24\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S25\'");
@@ -954,13 +954,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS26() {
             this.Manager.Comment("reaching state \'S26\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
             this.Manager.Comment("reaching state \'S27\'");
             this.Manager.Comment("checking step \'return NegotiateRequest\'");
             this.Manager.Comment("reaching state \'S28\'");
@@ -968,13 +968,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp17 == 0)) {
                 this.Manager.Comment("reaching state \'S29\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S30\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S31\'");
@@ -982,13 +982,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((temp16 == 0)) {
                     this.Manager.Comment("reaching state \'S32\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Comment("reaching state \'S33\'");
                     this.Manager.Comment("checking step \'return NegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S34\'");
@@ -996,13 +996,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                     if ((temp15 == 0)) {
                         this.Manager.Comment("reaching state \'S35\'");
                         this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Rep"}, new object[] {
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                         this.Manager.Comment("reaching state \'S36\'");
                         this.Manager.Comment("checking step \'return NegotiateRequest\'");
                         this.Manager.Comment("reaching state \'S37\'");
@@ -1010,13 +1010,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         if ((temp14 == 0)) {
                             this.Manager.Comment("reaching state \'S38\'");
                             this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-                            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Rep"}, new object[] {
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                             this.Manager.Comment("reaching state \'S39\'");
                             this.Manager.Comment("checking step \'return NegotiateRequest\'");
                             this.Manager.Comment("reaching state \'S40\'");
@@ -1144,34 +1144,34 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp17 == 5)) {
                 this.Manager.Comment("reaching state \'S95\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                 this.Manager.Comment("reaching state \'S96\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S97\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS0NegotiateResponseChecker116))) != -1)) {
                     this.Manager.Comment("reaching state \'S98\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.002",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S99\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S100\'");
@@ -1284,13 +1284,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS41() {
             this.Manager.Comment("reaching state \'S41\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
             this.Manager.Comment("reaching state \'S42\'");
             this.Manager.Comment("checking step \'return NegotiateRequest\'");
             this.Manager.Comment("reaching state \'S43\'");
@@ -1298,13 +1298,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp12 == 0)) {
                 this.Manager.Comment("reaching state \'S44\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S45\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S46\'");
@@ -1312,13 +1312,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((temp11 == 0)) {
                     this.Manager.Comment("reaching state \'S47\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Comment("reaching state \'S48\'");
                     this.Manager.Comment("checking step \'return NegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S49\'");
@@ -1326,13 +1326,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                     if ((temp10 == 0)) {
                         this.Manager.Comment("reaching state \'S50\'");
                         this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Rep"}, new object[] {
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                         this.Manager.Comment("reaching state \'S51\'");
                         this.Manager.Comment("checking step \'return NegotiateRequest\'");
                         this.Manager.Comment("reaching state \'S52\'");
@@ -1340,13 +1340,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         if ((temp9 == 0)) {
                             this.Manager.Comment("reaching state \'S53\'");
                             this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Rep"}, new object[] {
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                             this.Manager.Comment("reaching state \'S54\'");
                             this.Manager.Comment("checking step \'return NegotiateRequest\'");
                             this.Manager.Comment("reaching state \'S55\'");
@@ -1573,9 +1573,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS56() {
             this.Manager.Comment("reaching state \'S56\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
             this.Manager.Comment("reaching state \'S57\'");
             this.Manager.Comment("checking step \'return NegotiateRequest\'");
             this.Manager.Comment("reaching state \'S58\'");
@@ -1583,9 +1583,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp7 == 0)) {
                 this.Manager.Comment("reaching state \'S59\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                 this.Manager.Comment("reaching state \'S60\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S61\'");
@@ -1593,9 +1593,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((temp6 == 0)) {
                     this.Manager.Comment("reaching state \'S62\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                     this.Manager.Comment("reaching state \'S63\'");
                     this.Manager.Comment("checking step \'return NegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S64\'");
@@ -1603,9 +1603,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                     if ((temp5 == 0)) {
                         this.Manager.Comment("reaching state \'S65\'");
                         this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Rep"}, new object[] {
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                         this.Manager.Comment("reaching state \'S66\'");
                         this.Manager.Comment("checking step \'return NegotiateRequest\'");
                         this.Manager.Comment("reaching state \'S67\'");
@@ -1613,9 +1613,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         if ((temp4 == 0)) {
                             this.Manager.Comment("reaching state \'S68\'");
                             this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Rep"}, new object[] {
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                             this.Manager.Comment("reaching state \'S69\'");
                             this.Manager.Comment("checking step \'return NegotiateRequest\'");
                             this.Manager.Comment("reaching state \'S70\'");
@@ -1623,13 +1623,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             if ((temp3 == 0)) {
                                 this.Manager.Comment("reaching state \'S71\'");
                                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb30])\'");
-                                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Rep"}, new object[] {
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                                 this.Manager.Comment("reaching state \'S72\'");
                                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                                 this.Manager.Comment("reaching state \'S73\'");
@@ -1637,30 +1637,30 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                 if ((temp2 == 0)) {
                                     this.Manager.Comment("reaching state \'S74\'");
                                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21])\'");
-                                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                     "Rep"}, new object[] {
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                 "Head",
                                                                 "Tail"}, new object[] {
                                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                             "Head",
                                                                             "Tail"}, new object[] {
                                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
+                                                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
                                     this.Manager.Comment("reaching state \'S75\'");
                                     this.Manager.Comment("checking step \'return NegotiateRequest\'");
                                     this.Manager.Comment("reaching state \'S76\'");
                                     if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS0NegotiateResponseChecker34))) != -1)) {
                                         this.Manager.Comment("reaching state \'S77\'");
                                         this.Manager.Comment("executing step \'call NegotiateRequest([Smb30])\'");
-                                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Rep"}, new object[] {
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                                         this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                                                 "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                                                 "1, and not reply.\"");
@@ -1824,9 +1824,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp7 == 5)) {
                 this.Manager.Comment("reaching state \'S90\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))}));
+                                ((List<string>)(null))}));
                 this.Manager.Comment("reaching state \'S91\'");
                 this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S92\'");
@@ -1985,42 +1985,42 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS82() {
             this.Manager.Comment("reaching state \'S82\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30,Smb302])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                 "Head",
                                                                 "Tail"}, new object[] {
                                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                             "Head",
                                                                             "Tail"}, new object[] {
                                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
+                                                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
             this.Manager.Comment("reaching state \'S83\'");
             this.Manager.Comment("checking step \'return NegotiateRequest\'");
             this.Manager.Comment("reaching state \'S84\'");
             if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS0NegotiateResponseChecker36))) != -1)) {
                 this.Manager.Comment("reaching state \'S85\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
+                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                         "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                         "1, and not reply.\"");
@@ -3741,26 +3741,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1022\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1023\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1024\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1018NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1025\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.???\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.???",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S1026\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1027\'");
@@ -3789,26 +3789,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1032\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
+                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
                 this.Manager.Comment("reaching state \'S1033\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1034\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1018NegotiateResponseChecker1))) != -1)) {
                     this.Manager.Comment("reaching state \'S1035\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -3928,13 +3928,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return SetupConnection\'");
             this.Manager.Comment("reaching state \'S185\'");
             this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-            this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+            this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                            this.Make<List<string>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         "SMB 2.002",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                        ((List<string>)(null))})}));
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                     "he dialect string \"SMB 2.???\".\"");
@@ -3996,13 +3996,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return SetupConnection\'");
             this.Manager.Comment("reaching state \'S191\'");
             this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-            this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+            this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                            this.Make<List<string>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         "SMB 2.002",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                        ((List<string>)(null))})}));
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: If the server does not implement the SMB 2.1 or 3.x dialect" +
                     " family, processing MUST continue as specified in 3.3.5.3.2.\"");
@@ -4068,26 +4068,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1044\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1045\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1046\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1040NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1047\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 1.002\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 1.002",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S1048\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1049\'");
@@ -4116,42 +4116,42 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1054\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                 this.Manager.Comment("reaching state \'S1055\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1056\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1040NegotiateResponseChecker1))) != -1)) {
                     this.Manager.Comment("reaching state \'S1057\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                         "Head",
                                                                         "Tail"}, new object[] {
                                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -4295,30 +4295,30 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1066\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1067\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1068\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1062NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1069\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\",\"SMB 2.???\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.002",
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                                this.Make<List<string>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             "SMB 2.???",
-                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})}));
+                                                            ((List<string>)(null))})})}));
                     this.Manager.Comment("reaching state \'S1070\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1071\'");
@@ -4347,34 +4347,34 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1076\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                 this.Manager.Comment("reaching state \'S1077\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1078\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1062NegotiateResponseChecker1))) != -1)) {
                     this.Manager.Comment("reaching state \'S1079\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -4518,26 +4518,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1088\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1089\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1090\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1084NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1091\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -4571,17 +4571,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1098\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\",\"SMB 2.???\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                            this.Make<List<string>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         "SMB 2.???",
-                                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})}));
+                                                        ((List<string>)(null))})})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -4594,13 +4594,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1084NegotiateResponseChecker1))) != -1)) {
                     this.Manager.Comment("reaching state \'S1101\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 1.002\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 1.002",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S1102\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1103\'");
@@ -4734,26 +4734,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1110\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
+                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
                 this.Manager.Comment("reaching state \'S1111\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1112\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1106NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1113\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -4787,17 +4787,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1120\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\",\"SMB 2.???\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                            this.Make<List<string>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         "SMB 2.???",
-                                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})}));
+                                                        ((List<string>)(null))})})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -4934,34 +4934,34 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1127\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1128\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1129\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1123NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1130\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                         "Head",
                                                                         "Tail"}, new object[] {
                                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -4995,13 +4995,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1137\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 1.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 1.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -5131,26 +5131,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1146\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1147\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1148\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1142NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1149\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -5184,9 +5184,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1156\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))}));
+                                ((List<string>)(null))}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -5316,26 +5316,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1165\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1166\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1167\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1161NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1168\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -5369,13 +5369,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1175\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.???\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.???",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -5512,30 +5512,30 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1182\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1183\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1184\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1178NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1185\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
+                                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -5569,9 +5569,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1192\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                 this.Manager.AddReturn(NegotiateRequestInfo, null);
                 NegotiateTestCaseS1193();
                 goto label34;
@@ -5638,9 +5638,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp43 == 0)) {
                 this.Manager.Comment("reaching state \'S1195\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                 this.Manager.Comment("reaching state \'S1196\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1197\'");
@@ -5648,9 +5648,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((temp42 == 0)) {
                     this.Manager.Comment("reaching state \'S1198\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                     this.Manager.Comment("reaching state \'S1199\'");
                     this.Manager.Comment("checking step \'return NegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1200\'");
@@ -5658,9 +5658,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                     if ((temp41 == 0)) {
                         this.Manager.Comment("reaching state \'S1201\'");
                         this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Rep"}, new object[] {
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                         this.Manager.Comment("reaching state \'S1202\'");
                         this.Manager.Comment("checking step \'return NegotiateRequest\'");
                         this.Manager.Comment("reaching state \'S1203\'");
@@ -5668,13 +5668,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         if ((temp40 == 0)) {
                             this.Manager.Comment("reaching state \'S1204\'");
                             this.Manager.Comment("executing step \'call NegotiateRequest([Smb30])\'");
-                            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Rep"}, new object[] {
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                             this.Manager.AddReturn(NegotiateRequestInfo, null);
                             NegotiateTestCaseS1205();
                             goto label30;
@@ -5773,26 +5773,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp43 == 5)) {
                 this.Manager.Comment("reaching state \'S1240\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1241\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1242\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1178NegotiateResponseChecker33))) != -1)) {
                     this.Manager.Comment("reaching state \'S1243\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 1.002\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 1.002",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S1244\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1245\'");
@@ -5888,38 +5888,38 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp39 == 0)) {
                 this.Manager.Comment("reaching state \'S1207\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1208\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1209\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1178NegotiateResponseChecker6))) != -1)) {
                     this.Manager.Comment("reaching state \'S1210\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30,Smb302])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                         "Head",
                                                                         "Tail"}, new object[] {
                                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                                     "Head",
                                                                                     "Tail"}, new object[] {
                                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
+                                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -5942,13 +5942,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp39 == 1)) {
                 this.Manager.Comment("reaching state \'S1215\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Comment("reaching state \'S1216\'");
                 this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1217\'");
@@ -5962,13 +5962,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp39 == 2)) {
                 this.Manager.Comment("reaching state \'S1220\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.???\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.???",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Comment("reaching state \'S1221\'");
                 this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1222\'");
@@ -5982,13 +5982,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp39 == 3)) {
                 this.Manager.Comment("reaching state \'S1225\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 1.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 1.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.AddReturn(ComNegotiateRequestInfo, null);
                 NegotiateTestCaseS1138();
                 goto label29;
@@ -5996,9 +5996,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp39 == 4)) {
                 this.Manager.Comment("reaching state \'S1226\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))}));
+                                ((List<string>)(null))}));
                 this.Manager.AddReturn(ComNegotiateRequestInfo, null);
                 NegotiateTestCaseS1157();
                 goto label29;
@@ -6006,30 +6006,30 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp39 == 5)) {
                 this.Manager.Comment("reaching state \'S1227\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
+                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
                 this.Manager.Comment("reaching state \'S1228\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1229\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1178NegotiateResponseChecker12))) != -1)) {
                     this.Manager.Comment("reaching state \'S1230\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -6233,17 +6233,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS1235() {
             this.Manager.Comment("reaching state \'S1235\'");
             this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\",\"SMB 2.???\"])\'");
-            this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+            this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                            this.Make<List<string>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         "SMB 2.002",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                        this.Make<List<string>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
                                                     "SMB 2.???",
-                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})}));
+                                                    ((List<string>)(null))})})}));
             this.Manager.Comment("reaching state \'S1236\'");
             this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
             this.Manager.Comment("reaching state \'S1237\'");
@@ -6628,13 +6628,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1252\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 1.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 1.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -6663,13 +6663,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1259\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1260\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1261\'");
@@ -6677,13 +6677,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((temp58 == 0)) {
                     this.Manager.Comment("reaching state \'S1262\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Comment("reaching state \'S1263\'");
                     this.Manager.Comment("checking step \'return NegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1264\'");
@@ -6691,13 +6691,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                     if ((temp55 == 0)) {
                         this.Manager.Comment("reaching state \'S1265\'");
                         this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Rep"}, new object[] {
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                         this.Manager.Comment("reaching state \'S1266\'");
                         this.Manager.Comment("checking step \'return NegotiateRequest\'");
                         this.Manager.Comment("reaching state \'S1267\'");
@@ -6705,13 +6705,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         if ((temp54 == 0)) {
                             this.Manager.Comment("reaching state \'S1268\'");
                             this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Rep"}, new object[] {
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                             this.Manager.Comment("reaching state \'S1269\'");
                             this.Manager.Comment("checking step \'return NegotiateRequest\'");
                             this.Manager.Comment("reaching state \'S1270\'");
@@ -6814,13 +6814,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((temp58 == 5)) {
                     this.Manager.Comment("reaching state \'S1302\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.AddReturn(NegotiateRequestInfo, null);
                     NegotiateTestCaseS1303();
                     goto label47;
@@ -6950,9 +6950,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS1271() {
             this.Manager.Comment("reaching state \'S1271\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
             this.Manager.AddReturn(NegotiateRequestInfo, null);
             NegotiateTestCaseS1193();
         }
@@ -6978,13 +6978,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS1272() {
             this.Manager.Comment("reaching state \'S1272\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
             this.Manager.AddReturn(NegotiateRequestInfo, null);
             NegotiateTestCaseS1273();
         }
@@ -6997,13 +6997,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp52 == 0)) {
                 this.Manager.Comment("reaching state \'S1275\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1276\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1277\'");
@@ -7011,13 +7011,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((temp50 == 0)) {
                     this.Manager.Comment("reaching state \'S1278\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Comment("reaching state \'S1279\'");
                     this.Manager.Comment("checking step \'return NegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1280\'");
@@ -7025,13 +7025,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                     if ((temp49 == 0)) {
                         this.Manager.Comment("reaching state \'S1281\'");
                         this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Rep"}, new object[] {
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                         this.Manager.Comment("reaching state \'S1282\'");
                         this.Manager.Comment("checking step \'return NegotiateRequest\'");
                         this.Manager.Comment("reaching state \'S1283\'");
@@ -7039,13 +7039,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         if ((temp48 == 0)) {
                             this.Manager.Comment("reaching state \'S1284\'");
                             this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Rep"}, new object[] {
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                             this.Manager.Comment("reaching state \'S1285\'");
                             this.Manager.Comment("checking step \'return NegotiateRequest\'");
                             this.Manager.Comment("reaching state \'S1286\'");
@@ -7169,13 +7169,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp52 == 4)) {
                 this.Manager.Comment("reaching state \'S1291\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1292\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1293\'");
@@ -7212,26 +7212,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp52 == 5)) {
                 this.Manager.Comment("reaching state \'S1294\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1295\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1296\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1248NegotiateResponseChecker47))) != -1)) {
                     this.Manager.Comment("reaching state \'S1297\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.???\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.???",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S1298\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1299\'");
@@ -7348,13 +7348,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS1287() {
             this.Manager.Comment("reaching state \'S1287\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
             this.Manager.Comment("reaching state \'S1288\'");
             this.Manager.Comment("checking step \'return NegotiateRequest\'");
             this.Manager.Comment("reaching state \'S1289\'");
@@ -8444,26 +8444,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp57 == 3)) {
                 this.Manager.Comment("reaching state \'S1305\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1306\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1307\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1248NegotiateResponseChecker71))) != -1)) {
                     this.Manager.Comment("reaching state \'S1308\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb30])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -8486,38 +8486,38 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp57 == 4)) {
                 this.Manager.Comment("reaching state \'S1313\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30,Smb302])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                                 "Head",
                                                                                 "Tail"}, new object[] {
                                                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
+                                                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
                 this.Manager.Comment("reaching state \'S1314\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1315\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1248NegotiateResponseChecker73))) != -1)) {
                     this.Manager.Comment("reaching state \'S1316\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 1.002\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 1.002",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S1317\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1318\'");
@@ -8535,13 +8535,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp57 == 5)) {
                 this.Manager.Comment("reaching state \'S1321\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1322\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1323\'");
@@ -8894,9 +8894,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1328\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))}));
+                                ((List<string>)(null))}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -8925,13 +8925,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1335\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.AddReturn(NegotiateRequestInfo, null);
                 NegotiateTestCaseS1273();
                 goto label49;
@@ -9027,17 +9027,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1340\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\",\"SMB 2.???\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                            this.Make<List<string>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         "SMB 2.???",
-                                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})}));
+                                                        ((List<string>)(null))})})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -9050,13 +9050,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1336NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1343\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 1.002\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 1.002",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S1344\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1345\'");
@@ -9085,22 +9085,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1350\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1351\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1352\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1336NegotiateResponseChecker1))) != -1)) {
                     this.Manager.Comment("reaching state \'S1353\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))}));
+                                    ((List<string>)(null))}));
                     this.Manager.Comment("reaching state \'S1354\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1355\'");
@@ -9234,9 +9234,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1362\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                 this.Manager.AddReturn(NegotiateRequestInfo, null);
                 NegotiateTestCaseS1363();
                 goto label55;
@@ -9255,38 +9255,38 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1397\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30,Smb302])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                                 "Head",
                                                                                 "Tail"}, new object[] {
                                                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
+                                                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
                 this.Manager.Comment("reaching state \'S1398\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1399\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1358NegotiateResponseChecker26))) != -1)) {
                     this.Manager.Comment("reaching state \'S1400\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -9336,9 +9336,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp68 == 0)) {
                 this.Manager.Comment("reaching state \'S1365\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                 this.Manager.Comment("reaching state \'S1366\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1367\'");
@@ -9346,9 +9346,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((temp67 == 0)) {
                     this.Manager.Comment("reaching state \'S1368\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                     this.Manager.Comment("reaching state \'S1369\'");
                     this.Manager.Comment("checking step \'return NegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1370\'");
@@ -9356,9 +9356,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                     if ((temp66 == 0)) {
                         this.Manager.Comment("reaching state \'S1371\'");
                         this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Rep"}, new object[] {
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                         this.Manager.Comment("reaching state \'S1372\'");
                         this.Manager.Comment("checking step \'return NegotiateRequest\'");
                         this.Manager.Comment("reaching state \'S1373\'");
@@ -9366,26 +9366,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         if ((temp65 == 0)) {
                             this.Manager.Comment("reaching state \'S1374\'");
                             this.Manager.Comment("executing step \'call NegotiateRequest([Smb30])\'");
-                            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Rep"}, new object[] {
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                             this.Manager.Comment("reaching state \'S1375\'");
                             this.Manager.Comment("checking step \'return NegotiateRequest\'");
                             this.Manager.Comment("reaching state \'S1376\'");
                             if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1358NegotiateResponseChecker4))) != -1)) {
                                 this.Manager.Comment("reaching state \'S1377\'");
                                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Rep"}, new object[] {
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                                         "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                                         "1, and not reply.\"");
@@ -9499,26 +9499,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp68 == 5)) {
                 this.Manager.Comment("reaching state \'S1387\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1388\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1389\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1358NegotiateResponseChecker25))) != -1)) {
                     this.Manager.Comment("reaching state \'S1390\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -9654,13 +9654,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS1382() {
             this.Manager.Comment("reaching state \'S1382\'");
             this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-            this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+            this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                            this.Make<List<string>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         "SMB 2.002",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                        ((List<string>)(null))})}));
             this.Manager.Comment("reaching state \'S1383\'");
             this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
             this.Manager.Comment("reaching state \'S1384\'");
@@ -10077,13 +10077,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1409\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.AddReturn(NegotiateRequestInfo, null);
                 NegotiateTestCaseS1410();
                 goto label60;
@@ -10102,34 +10102,34 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1429\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                 this.Manager.Comment("reaching state \'S1430\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1431\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1405NegotiateResponseChecker24))) != -1)) {
                     this.Manager.Comment("reaching state \'S1432\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -10179,13 +10179,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp74 == 0)) {
                 this.Manager.Comment("reaching state \'S1412\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1413\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1414\'");
@@ -10193,13 +10193,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((temp73 == 0)) {
                     this.Manager.Comment("reaching state \'S1415\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Comment("reaching state \'S1416\'");
                     this.Manager.Comment("checking step \'return NegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1417\'");
@@ -10207,13 +10207,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                     if ((temp72 == 0)) {
                         this.Manager.Comment("reaching state \'S1418\'");
                         this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Rep"}, new object[] {
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                         this.Manager.Comment("reaching state \'S1419\'");
                         this.Manager.Comment("checking step \'return NegotiateRequest\'");
                         this.Manager.Comment("reaching state \'S1420\'");
@@ -10401,9 +10401,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS1421() {
             this.Manager.Comment("reaching state \'S1421\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
             this.Manager.AddReturn(NegotiateRequestInfo, null);
             NegotiateTestCaseS1363();
         }
@@ -10429,13 +10429,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS1422() {
             this.Manager.Comment("reaching state \'S1422\'");
             this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.???\"])\'");
-            this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+            this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                            this.Make<List<string>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         "SMB 2.???",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                        ((List<string>)(null))})}));
             this.Manager.Comment("reaching state \'S1423\'");
             this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
             this.Manager.Comment("reaching state \'S1424\'");
@@ -10866,13 +10866,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1441\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -10888,13 +10888,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1437NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1444\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -10928,13 +10928,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1451\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.AddReturn(NegotiateRequestInfo, null);
                 NegotiateTestCaseS1205();
                 goto label61;
@@ -11034,13 +11034,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1456\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1457\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1458\'");
@@ -11048,13 +11048,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((temp81 == 0)) {
                     this.Manager.Comment("reaching state \'S1459\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Comment("reaching state \'S1460\'");
                     this.Manager.Comment("checking step \'return NegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1461\'");
@@ -11062,38 +11062,38 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                     if ((temp79 == 0)) {
                         this.Manager.Comment("reaching state \'S1462\'");
                         this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002])\'");
-                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Rep"}, new object[] {
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                         this.Manager.Comment("reaching state \'S1463\'");
                         this.Manager.Comment("checking step \'return NegotiateRequest\'");
                         this.Manager.Comment("reaching state \'S1464\'");
                         if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1452NegotiateResponseChecker2))) != -1)) {
                             this.Manager.Comment("reaching state \'S1465\'");
                             this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30,Smb302])\'");
-                            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Rep"}, new object[] {
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                                 "Head",
                                                                                 "Tail"}, new object[] {
                                                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                                             "Head",
                                                                                             "Tail"}, new object[] {
                                                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
+                                                                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
                             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                                     "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                                     "1, and not reply.\"");
@@ -11149,9 +11149,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((temp81 == 3)) {
                     this.Manager.Comment("reaching state \'S1471\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))}));
+                                    ((List<string>)(null))}));
                     this.Manager.AddReturn(ComNegotiateRequestInfo, null);
                     NegotiateTestCaseS1329();
                     goto label64;
@@ -11159,17 +11159,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((temp81 == 4)) {
                     this.Manager.Comment("reaching state \'S1472\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\",\"SMB 2.???\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.002",
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                                this.Make<List<string>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             "SMB 2.???",
-                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})}));
+                                                            ((List<string>)(null))})})}));
                     this.Manager.Comment("reaching state \'S1473\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1474\'");
@@ -11183,13 +11183,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((temp81 == 5)) {
                     this.Manager.Comment("reaching state \'S1477\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Comment("reaching state \'S1478\'");
                     this.Manager.Comment("checking step \'return NegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1479\'");
@@ -11217,34 +11217,34 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                     if ((temp80 == 5)) {
                         this.Manager.Comment("reaching state \'S1480\'");
                         this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Rep"}, new object[] {
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                 "Head",
                                                                 "Tail"}, new object[] {
                                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                             "Head",
                                                                             "Tail"}, new object[] {
                                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                         this.Manager.Comment("reaching state \'S1481\'");
                         this.Manager.Comment("checking step \'return NegotiateRequest\'");
                         this.Manager.Comment("reaching state \'S1482\'");
                         if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1452NegotiateResponseChecker19))) != -1)) {
                             this.Manager.Comment("reaching state \'S1483\'");
                             this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 1.002\"])\'");
-                            this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                            this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                             "Rep"}, new object[] {
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                            this.Make<List<string>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         "SMB 1.002",
-                                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                        ((List<string>)(null))})}));
                             this.Manager.Comment("reaching state \'S1484\'");
                             this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                             this.Manager.Comment("reaching state \'S1485\'");
@@ -11283,13 +11283,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1490\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -11305,17 +11305,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1452NegotiateResponseChecker20))) != -1)) {
                     this.Manager.Comment("reaching state \'S1493\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
+                                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -11438,13 +11438,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS1470() {
             this.Manager.Comment("reaching state \'S1470\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
             this.Manager.AddReturn(NegotiateRequestInfo, null);
             NegotiateTestCaseS1410();
         }
@@ -11816,13 +11816,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1502\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1503\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1504\'");
@@ -11834,26 +11834,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((temp84 == 1)) {
                     this.Manager.Comment("reaching state \'S1505\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Comment("reaching state \'S1506\'");
                     this.Manager.Comment("checking step \'return NegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1507\'");
                     if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1498NegotiateResponseChecker2))) != -1)) {
                         this.Manager.Comment("reaching state \'S1508\'");
                         this.Manager.Comment("executing step \'call NegotiateRequest([Smb30])\'");
-                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Rep"}, new object[] {
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                         this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                                 "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                                 "1, and not reply.\"");
@@ -11876,13 +11876,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((temp84 == 2)) {
                     this.Manager.Comment("reaching state \'S1513\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 1.002\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 1.002",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.AddReturn(ComNegotiateRequestInfo, null);
                     NegotiateTestCaseS1253();
                     goto label66;
@@ -11890,26 +11890,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((temp84 == 3)) {
                     this.Manager.Comment("reaching state \'S1514\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Comment("reaching state \'S1515\'");
                     this.Manager.Comment("checking step \'return NegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1516\'");
                     if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1498NegotiateResponseChecker5))) != -1)) {
                         this.Manager.Comment("reaching state \'S1517\'");
                         this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Rep"}, new object[] {
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                         this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                                 "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                                 "1, and not reply.\"");
@@ -11932,38 +11932,38 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((temp84 == 4)) {
                     this.Manager.Comment("reaching state \'S1522\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30,Smb302])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                         "Head",
                                                                         "Tail"}, new object[] {
                                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                                     "Head",
                                                                                     "Tail"}, new object[] {
                                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
+                                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
                     this.Manager.Comment("reaching state \'S1523\'");
                     this.Manager.Comment("checking step \'return NegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1524\'");
                     if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1498NegotiateResponseChecker7))) != -1)) {
                         this.Manager.Comment("reaching state \'S1525\'");
                         this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Rep"}, new object[] {
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                         this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                                 "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                                 "1, and not reply.\"");
@@ -11986,30 +11986,30 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((temp84 == 5)) {
                     this.Manager.Comment("reaching state \'S1530\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
+                                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
                     this.Manager.Comment("reaching state \'S1531\'");
                     this.Manager.Comment("checking step \'return NegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1532\'");
                     if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1498NegotiateResponseChecker9))) != -1)) {
                         this.Manager.Comment("reaching state \'S1533\'");
                         this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Rep"}, new object[] {
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                         this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                                 "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                                 "1, and not reply.\"");
@@ -12048,13 +12048,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1540\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.AddReturn(NegotiateRequestInfo, null);
                 NegotiateTestCaseS1303();
                 goto label67;
@@ -12339,13 +12339,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1545\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.???\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.???",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -12358,13 +12358,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1541NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1548\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Comment("reaching state \'S1549\'");
                     this.Manager.Comment("checking step \'return NegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1550\'");
@@ -12392,50 +12392,50 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                     if ((temp100 == 5)) {
                         this.Manager.Comment("reaching state \'S1562\'");
                         this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30,Smb302])\'");
-                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Rep"}, new object[] {
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                 "Head",
                                                                 "Tail"}, new object[] {
                                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                             "Head",
                                                                             "Tail"}, new object[] {
                                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                                         "Head",
                                                                                         "Tail"}, new object[] {
                                                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
+                                                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
                         this.Manager.Comment("reaching state \'S1563\'");
                         this.Manager.Comment("checking step \'return NegotiateRequest\'");
                         this.Manager.Comment("reaching state \'S1564\'");
                         if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1541NegotiateResponseChecker90))) != -1)) {
                             this.Manager.Comment("reaching state \'S1565\'");
                             this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30,Smb302])\'");
-                            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Rep"}, new object[] {
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                                 "Head",
                                                                                 "Tail"}, new object[] {
                                                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                                             "Head",
                                                                                             "Tail"}, new object[] {
                                                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
+                                                                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
                             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                                     "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                                     "1, and not reply.\"");
@@ -12478,30 +12478,30 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1572\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1573\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1574\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1541NegotiateResponseChecker91))) != -1)) {
                     this.Manager.Comment("reaching state \'S1575\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\",\"SMB 2.???\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.002",
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                                this.Make<List<string>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             "SMB 2.???",
-                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})}));
+                                                            ((List<string>)(null))})})}));
                     this.Manager.Comment("reaching state \'S1576\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1577\'");
@@ -12578,13 +12578,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS1551() {
             this.Manager.Comment("reaching state \'S1551\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
             this.Manager.Comment("reaching state \'S1552\'");
             this.Manager.Comment("checking step \'return NegotiateRequest\'");
             this.Manager.Comment("reaching state \'S1553\'");
@@ -12639,42 +12639,42 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS1554() {
             this.Manager.Comment("reaching state \'S1554\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
+                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
             this.Manager.Comment("reaching state \'S1555\'");
             this.Manager.Comment("checking step \'return NegotiateRequest\'");
             this.Manager.Comment("reaching state \'S1556\'");
             if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1541NegotiateResponseChecker3))) != -1)) {
                 this.Manager.Comment("reaching state \'S1557\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30,Smb302])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                                 "Head",
                                                                                 "Tail"}, new object[] {
                                                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
+                                                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                         "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                         "1, and not reply.\"");
@@ -12793,13 +12793,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS425() {
             this.Manager.Comment("reaching state \'S425\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
             this.Manager.Comment("reaching state \'S426\'");
             this.Manager.Comment("checking step \'return NegotiateRequest\'");
             this.Manager.Comment("reaching state \'S427\'");
@@ -12807,34 +12807,34 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp98 == 0)) {
                 this.Manager.Comment("reaching state \'S428\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                 this.Manager.Comment("reaching state \'S429\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S430\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1541NegotiateResponseChecker9))) != -1)) {
                     this.Manager.Comment("reaching state \'S431\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -12857,22 +12857,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp98 == 1)) {
                 this.Manager.Comment("reaching state \'S436\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S437\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S438\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1541NegotiateResponseChecker11))) != -1)) {
                     this.Manager.Comment("reaching state \'S439\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))}));
+                                    ((List<string>)(null))}));
                     this.Manager.Comment("reaching state \'S440\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S441\'");
@@ -12890,13 +12890,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp98 == 2)) {
                 this.Manager.Comment("reaching state \'S444\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.???\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.???",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Comment("reaching state \'S445\'");
                 this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S446\'");
@@ -12910,17 +12910,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp98 == 3)) {
                 this.Manager.Comment("reaching state \'S449\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\",\"SMB 2.???\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                            this.Make<List<string>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         "SMB 2.???",
-                                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})}));
+                                                        ((List<string>)(null))})})}));
                 this.Manager.Comment("reaching state \'S450\'");
                 this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S451\'");
@@ -12934,9 +12934,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp98 == 4)) {
                 this.Manager.Comment("reaching state \'S454\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))}));
+                                ((List<string>)(null))}));
                 this.Manager.Comment("reaching state \'S455\'");
                 this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S456\'");
@@ -13115,13 +13115,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS459() {
             this.Manager.Comment("reaching state \'S459\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
             this.Manager.Comment("reaching state \'S460\'");
             this.Manager.Comment("checking step \'return NegotiateRequest\'");
             this.Manager.Comment("reaching state \'S461\'");
@@ -13129,13 +13129,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp97 == 0)) {
                 this.Manager.Comment("reaching state \'S462\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S463\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S464\'");
@@ -13143,13 +13143,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((temp96 == 0)) {
                     this.Manager.Comment("reaching state \'S465\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Comment("reaching state \'S466\'");
                     this.Manager.Comment("checking step \'return NegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S467\'");
@@ -13157,13 +13157,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                     if ((temp95 == 0)) {
                         this.Manager.Comment("reaching state \'S468\'");
                         this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Rep"}, new object[] {
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                         this.Manager.Comment("reaching state \'S469\'");
                         this.Manager.Comment("checking step \'return NegotiateRequest\'");
                         this.Manager.Comment("reaching state \'S470\'");
@@ -13171,13 +13171,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         if ((temp94 == 0)) {
                             this.Manager.Comment("reaching state \'S471\'");
                             this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Rep"}, new object[] {
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                             this.Manager.Comment("reaching state \'S472\'");
                             this.Manager.Comment("checking step \'return NegotiateRequest\'");
                             this.Manager.Comment("reaching state \'S473\'");
@@ -13185,9 +13185,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             if ((temp93 == 0)) {
                                 this.Manager.Comment("reaching state \'S474\'");
                                 this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Rep"}, new object[] {
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                                 this.Manager.Comment("reaching state \'S475\'");
                                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                                 this.Manager.Comment("reaching state \'S476\'");
@@ -13195,9 +13195,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                 if ((temp92 == 0)) {
                                     this.Manager.Comment("reaching state \'S477\'");
                                     this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                     "Rep"}, new object[] {
-                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                                     this.Manager.Comment("reaching state \'S478\'");
                                     this.Manager.Comment("checking step \'return NegotiateRequest\'");
                                     this.Manager.Comment("reaching state \'S479\'");
@@ -13205,9 +13205,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     if ((temp91 == 0)) {
                                         this.Manager.Comment("reaching state \'S480\'");
                                         this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Rep"}, new object[] {
-                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                                         this.Manager.Comment("reaching state \'S481\'");
                                         this.Manager.Comment("checking step \'return NegotiateRequest\'");
                                         this.Manager.Comment("reaching state \'S482\'");
@@ -13215,9 +13215,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                         if ((temp90 == 0)) {
                                             this.Manager.Comment("reaching state \'S483\'");
                                             this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                                            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                             "Rep"}, new object[] {
-                                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                                             this.Manager.Comment("reaching state \'S484\'");
                                             this.Manager.Comment("checking step \'return NegotiateRequest\'");
                                             this.Manager.Comment("reaching state \'S485\'");
@@ -13225,9 +13225,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                             if ((temp89 == 0)) {
                                                 this.Manager.Comment("reaching state \'S486\'");
                                                 this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                                                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                 "Rep"}, new object[] {
-                                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                                                 this.Manager.Comment("reaching state \'S487\'");
                                                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                                                 this.Manager.Comment("reaching state \'S488\'");
@@ -13235,30 +13235,30 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                                 if ((temp88 == 0)) {
                                                     this.Manager.Comment("reaching state \'S489\'");
                                                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb30])\'");
-                                                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Rep"}, new object[] {
-                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                                 "Head",
                                                                                 "Tail"}, new object[] {
                                                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                                                     this.Manager.Comment("reaching state \'S490\'");
                                                     this.Manager.Comment("checking step \'return NegotiateRequest\'");
                                                     this.Manager.Comment("reaching state \'S491\'");
                                                     if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1541NegotiateResponseChecker26))) != -1)) {
                                                         this.Manager.Comment("reaching state \'S492\'");
                                                         this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21])\'");
-                                                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                         "Rep"}, new object[] {
-                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                                     "Head",
                                                                                     "Tail"}, new object[] {
                                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                                                 "Head",
                                                                                                 "Tail"}, new object[] {
                                                                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
+                                                                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
                                                         this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                                                                 "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                                                                 "1, and not reply.\"");
@@ -13741,9 +13741,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS497() {
             this.Manager.Comment("reaching state \'S497\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
             this.Manager.Comment("reaching state \'S498\'");
             this.Manager.Comment("checking step \'return NegotiateRequest\'");
             this.Manager.Comment("reaching state \'S499\'");
@@ -13796,30 +13796,30 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS500() {
             this.Manager.Comment("reaching state \'S500\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
             this.Manager.Comment("reaching state \'S501\'");
             this.Manager.Comment("checking step \'return NegotiateRequest\'");
             this.Manager.Comment("reaching state \'S502\'");
             if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1541NegotiateResponseChecker29))) != -1)) {
                 this.Manager.Comment("reaching state \'S503\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
+                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                         "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                         "1, and not reply.\"");
@@ -14975,13 +14975,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return SetupConnection\'");
             this.Manager.Comment("reaching state \'S219\'");
             this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-            this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+            this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                            this.Make<List<string>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         "SMB 2.002",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                        ((List<string>)(null))})}));
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                     "he dialect string \"SMB 2.???\".\"");
@@ -15051,13 +15051,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S162\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -15073,13 +15073,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS158NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S165\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -15113,13 +15113,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S172\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S173\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S174\'");
@@ -15223,34 +15223,34 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS175() {
             this.Manager.Comment("reaching state \'S175\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                 "Head",
                                                                 "Tail"}, new object[] {
                                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
             this.Manager.Comment("reaching state \'S176\'");
             this.Manager.Comment("checking step \'return NegotiateRequest\'");
             this.Manager.Comment("reaching state \'S177\'");
             if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS158NegotiateResponseChecker2))) != -1)) {
                 this.Manager.Comment("reaching state \'S178\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                         "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                         "1, and not reply.\"");
@@ -15430,34 +15430,34 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1584\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                 this.Manager.Comment("reaching state \'S1585\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1586\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1580NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1587\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb30])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -15491,26 +15491,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1594\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1595\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1596\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1580NegotiateResponseChecker1))) != -1)) {
                     this.Manager.Comment("reaching state \'S1597\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.002",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S1598\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1599\'");
@@ -15649,26 +15649,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1606\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1607\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1608\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1602NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1609\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.???\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.???",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S1610\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1611\'");
@@ -15771,13 +15771,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return SetupConnection\'");
             this.Manager.Comment("reaching state \'S792\'");
             this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.???\"])\'");
-            this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+            this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                            this.Make<List<string>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         "SMB 2.???",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                        ((List<string>)(null))})}));
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                     "he dialect string \"SMB 2.???\".\"");
@@ -15844,26 +15844,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1618\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1619\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1620\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1614NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1621\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 1.002\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 1.002",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S1622\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1623\'");
@@ -15982,22 +15982,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1630\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1631\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1632\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1626NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1633\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))}));
+                                    ((List<string>)(null))}));
                     this.Manager.Comment("reaching state \'S1634\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1635\'");
@@ -16116,26 +16116,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1642\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1643\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1644\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1638NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1645\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -16259,22 +16259,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1654\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1655\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1656\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1650NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1657\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -16398,26 +16398,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1666\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1667\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1668\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1662NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1669\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -16541,34 +16541,34 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1678\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1679\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1680\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1674NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1681\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                         "Head",
                                                                         "Tail"}, new object[] {
                                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -16692,38 +16692,38 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1690\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30,Smb302])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                                 "Head",
                                                                                 "Tail"}, new object[] {
                                                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
+                                                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
                 this.Manager.Comment("reaching state \'S1691\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1692\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1686NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1693\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -16847,13 +16847,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1702\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.???\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.???",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -16919,9 +16919,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS1705() {
             this.Manager.Comment("reaching state \'S1705\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
             this.Manager.Comment("reaching state \'S1706\'");
             this.Manager.Comment("checking step \'return NegotiateRequest\'");
             this.Manager.Comment("reaching state \'S1707\'");
@@ -16929,9 +16929,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp127 == 0)) {
                 this.Manager.Comment("reaching state \'S1708\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                 this.Manager.Comment("reaching state \'S1709\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1710\'");
@@ -16939,9 +16939,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((temp126 == 0)) {
                     this.Manager.Comment("reaching state \'S1711\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                     this.Manager.Comment("reaching state \'S1712\'");
                     this.Manager.Comment("checking step \'return NegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1713\'");
@@ -16949,9 +16949,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                     if ((temp125 == 0)) {
                         this.Manager.Comment("reaching state \'S1714\'");
                         this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Rep"}, new object[] {
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                         this.Manager.Comment("reaching state \'S1715\'");
                         this.Manager.Comment("checking step \'return NegotiateRequest\'");
                         this.Manager.Comment("reaching state \'S1716\'");
@@ -16959,30 +16959,30 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         if ((temp124 == 0)) {
                             this.Manager.Comment("reaching state \'S1717\'");
                             this.Manager.Comment("executing step \'call NegotiateRequest([Smb30])\'");
-                            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Rep"}, new object[] {
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                             this.Manager.Comment("reaching state \'S1718\'");
                             this.Manager.Comment("checking step \'return NegotiateRequest\'");
                             this.Manager.Comment("reaching state \'S1719\'");
                             if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1698NegotiateResponseChecker5))) != -1)) {
                                 this.Manager.Comment("reaching state \'S1720\'");
                                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21])\'");
-                                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Rep"}, new object[] {
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                         "Head",
                                                                         "Tail"}, new object[] {
                                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
+                                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
                                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                                         "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                                         "1, and not reply.\"");
@@ -17096,30 +17096,30 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp127 == 5)) {
                 this.Manager.Comment("reaching state \'S1733\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1734\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1735\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1698NegotiateResponseChecker27))) != -1)) {
                     this.Manager.Comment("reaching state \'S1736\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\",\"SMB 2.???\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.002",
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                                this.Make<List<string>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             "SMB 2.???",
-                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})}));
+                                                            ((List<string>)(null))})})}));
                     this.Manager.Comment("reaching state \'S1737\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1738\'");
@@ -17246,22 +17246,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS1725() {
             this.Manager.Comment("reaching state \'S1725\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
             this.Manager.Comment("reaching state \'S1726\'");
             this.Manager.Comment("checking step \'return NegotiateRequest\'");
             this.Manager.Comment("reaching state \'S1727\'");
             if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1698NegotiateResponseChecker7))) != -1)) {
                 this.Manager.Comment("reaching state \'S1728\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))}));
+                                ((List<string>)(null))}));
                 this.Manager.Comment("reaching state \'S1729\'");
                 this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1730\'");
@@ -17682,13 +17682,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1745\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.???\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.???",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -17701,13 +17701,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1741NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1748\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.002",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S1749\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1750\'");
@@ -17821,13 +17821,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1757\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.???\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.???",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -17840,13 +17840,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1753NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1760\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Comment("reaching state \'S1761\'");
                     this.Manager.Comment("checking step \'return NegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1762\'");
@@ -17854,13 +17854,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                     if ((temp135 == 0)) {
                         this.Manager.Comment("reaching state \'S1763\'");
                         this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 1.002\"])\'");
-                        this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                        this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                         "Rep"}, new object[] {
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                        this.Make<List<string>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
                                                     "SMB 1.002",
-                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                    ((List<string>)(null))})}));
                         this.Manager.Comment("reaching state \'S1764\'");
                         this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                         this.Manager.Comment("reaching state \'S1765\'");
@@ -17874,9 +17874,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                     if ((temp135 == 1)) {
                         this.Manager.Comment("reaching state \'S1768\'");
                         this.Manager.Comment("executing step \'call ComNegotiateRequest([])\'");
-                        this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                        this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                         "Rep"}, new object[] {
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))}));
+                                        ((List<string>)(null))}));
                         this.Manager.Comment("reaching state \'S1769\'");
                         this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                         this.Manager.Comment("reaching state \'S1770\'");
@@ -17890,17 +17890,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                     if ((temp135 == 2)) {
                         this.Manager.Comment("reaching state \'S1773\'");
                         this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\",\"SMB 2.???\"])\'");
-                        this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                        this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                         "Rep"}, new object[] {
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                        this.Make<List<string>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
                                                     "SMB 2.002",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                                    this.Make<List<string>>(new string[] {
                                                                 "Head",
                                                                 "Tail"}, new object[] {
                                                                 "SMB 2.???",
-                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})}));
+                                                                ((List<string>)(null))})})}));
                         this.Manager.Comment("reaching state \'S1774\'");
                         this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                         this.Manager.Comment("reaching state \'S1775\'");
@@ -17914,13 +17914,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                     if ((temp135 == 3)) {
                         this.Manager.Comment("reaching state \'S1778\'");
                         this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Rep"}, new object[] {
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                         this.Manager.Comment("reaching state \'S1779\'");
                         this.Manager.Comment("checking step \'return NegotiateRequest\'");
                         this.Manager.Comment("reaching state \'S1780\'");
@@ -18127,42 +18127,42 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS1781() {
             this.Manager.Comment("reaching state \'S1781\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
+                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
             this.Manager.Comment("reaching state \'S1782\'");
             this.Manager.Comment("checking step \'return NegotiateRequest\'");
             this.Manager.Comment("reaching state \'S1783\'");
             if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1753NegotiateResponseChecker7))) != -1)) {
                 this.Manager.Comment("reaching state \'S1784\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30,Smb302])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                                 "Head",
                                                                                 "Tail"}, new object[] {
                                                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
+                                                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                         "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                         "1, and not reply.\"");
@@ -18317,13 +18317,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS1789() {
             this.Manager.Comment("reaching state \'S1789\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
             this.Manager.Comment("reaching state \'S1790\'");
             this.Manager.Comment("checking step \'return NegotiateRequest\'");
             this.Manager.Comment("reaching state \'S1791\'");
@@ -18339,13 +18339,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp134 == 2)) {
                 this.Manager.Comment("reaching state \'S1792\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1793\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1794\'");
@@ -18382,34 +18382,34 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp134 == 3)) {
                 this.Manager.Comment("reaching state \'S1795\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                 this.Manager.Comment("reaching state \'S1796\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1797\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1753NegotiateResponseChecker24))) != -1)) {
                     this.Manager.Comment("reaching state \'S1798\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -18432,30 +18432,30 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp134 == 4)) {
                 this.Manager.Comment("reaching state \'S1803\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1804\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1805\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1753NegotiateResponseChecker26))) != -1)) {
                     this.Manager.Comment("reaching state \'S1806\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
+                                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -18478,38 +18478,38 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp134 == 5)) {
                 this.Manager.Comment("reaching state \'S1811\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30,Smb302])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                                 "Head",
                                                                                 "Tail"}, new object[] {
                                                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
+                                                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
                 this.Manager.Comment("reaching state \'S1812\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1813\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1753NegotiateResponseChecker28))) != -1)) {
                     this.Manager.Comment("reaching state \'S1814\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb30])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -18876,30 +18876,30 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1823\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1824\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1825\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1819NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1826\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\",\"SMB 2.???\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.002",
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                                this.Make<List<string>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             "SMB 2.???",
-                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})}));
+                                                            ((List<string>)(null))})})}));
                     this.Manager.Comment("reaching state \'S1827\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1828\'");
@@ -19018,26 +19018,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1835\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1836\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1837\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1831NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1838\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 1.002\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 1.002",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S1839\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1840\'");
@@ -19156,26 +19156,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1847\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1848\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1849\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1843NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1850\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.???\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.???",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S1851\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1852\'");
@@ -19294,26 +19294,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1859\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1860\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1861\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1855NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1862\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -19437,22 +19437,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1871\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1872\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1873\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1867NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1874\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -19576,26 +19576,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1883\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1884\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1885\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1879NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1886\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -19723,38 +19723,38 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1895\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
+                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
                 this.Manager.Comment("reaching state \'S1896\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1897\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1891NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1898\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                         "Head",
                                                                         "Tail"}, new object[] {
                                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -19878,26 +19878,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1907\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1908\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1909\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1903NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1910\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -20021,26 +20021,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1919\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1920\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1921\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1915NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1922\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -20164,30 +20164,30 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1931\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1932\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1933\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1927NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1934\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
+                                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -20311,34 +20311,34 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1943\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                 this.Manager.Comment("reaching state \'S1944\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1945\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1939NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1946\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -20462,26 +20462,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S199\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S200\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S201\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS195NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S202\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.002",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S203\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S204\'");
@@ -20510,13 +20510,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S209\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: If the server does not implement the SMB 2.1 or 3.x dialect" +
                         " family, processing MUST continue as specified in 3.3.5.3.2.\"");
@@ -20530,13 +20530,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS195NegotiateResponseChecker1))) != -1)) {
                     this.Manager.Comment("reaching state \'S212\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -20673,34 +20673,34 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1955\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                 this.Manager.Comment("reaching state \'S1956\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1957\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1951NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1958\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.002",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S1959\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1960\'");
@@ -20819,38 +20819,38 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1967\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                 this.Manager.Comment("reaching state \'S1968\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1969\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1963NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1970\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\",\"SMB 2.???\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.002",
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                                this.Make<List<string>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             "SMB 2.???",
-                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})}));
+                                                            ((List<string>)(null))})})}));
                     this.Manager.Comment("reaching state \'S1971\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1972\'");
@@ -20969,34 +20969,34 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1979\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                 this.Manager.Comment("reaching state \'S1980\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1981\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1975NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1982\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 1.002\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 1.002",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S1983\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1984\'");
@@ -21115,34 +21115,34 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1991\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                 this.Manager.Comment("reaching state \'S1992\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1993\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1987NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1994\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.???\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.???",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S1995\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1996\'");
@@ -21261,30 +21261,30 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S2003\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                 this.Manager.Comment("reaching state \'S2004\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S2005\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS1999NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S2006\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))}));
+                                    ((List<string>)(null))}));
                     this.Manager.Comment("reaching state \'S2007\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S2008\'");
@@ -21403,30 +21403,30 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S2015\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                 this.Manager.Comment("reaching state \'S2016\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S2017\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS2011NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S2018\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -21550,34 +21550,34 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S2027\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                 this.Manager.Comment("reaching state \'S2028\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S2029\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS2023NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S2030\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -21701,42 +21701,42 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S2039\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                 this.Manager.Comment("reaching state \'S2040\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S2041\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS2035NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S2042\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                         "Head",
                                                                         "Tail"}, new object[] {
                                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -21860,13 +21860,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S2051\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 1.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 1.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -21976,9 +21976,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S2060\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))}));
+                                ((List<string>)(null))}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -22088,17 +22088,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S2069\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\",\"SMB 2.???\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                            this.Make<List<string>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         "SMB 2.???",
-                                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})}));
+                                                        ((List<string>)(null))})})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -22111,13 +22111,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS2065NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S2072\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.???\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.???",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S2073\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S2074\'");
@@ -22231,13 +22231,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S2081\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.AddReturn(NegotiateRequestInfo, null);
                 NegotiateTestCaseS2082();
                 goto label129;
@@ -22280,34 +22280,34 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp184 == 0)) {
                 this.Manager.Comment("reaching state \'S2084\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                 this.Manager.Comment("reaching state \'S2085\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S2086\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS2077NegotiateResponseChecker1))) != -1)) {
                     this.Manager.Comment("reaching state \'S2087\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -22330,13 +22330,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp184 == 1)) {
                 this.Manager.Comment("reaching state \'S2092\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Comment("reaching state \'S2093\'");
                 this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S2094\'");
@@ -22350,13 +22350,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp184 == 2)) {
                 this.Manager.Comment("reaching state \'S2097\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.???\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.???",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Comment("reaching state \'S2098\'");
                 this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S2099\'");
@@ -22370,13 +22370,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp184 == 3)) {
                 this.Manager.Comment("reaching state \'S2102\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 1.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 1.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.AddReturn(ComNegotiateRequestInfo, null);
                 NegotiateTestCaseS2052();
                 goto label128;
@@ -22384,17 +22384,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp184 == 4)) {
                 this.Manager.Comment("reaching state \'S2103\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\",\"SMB 2.???\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                            this.Make<List<string>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         "SMB 2.???",
-                                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})}));
+                                                        ((List<string>)(null))})})}));
                 this.Manager.Comment("reaching state \'S2104\'");
                 this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S2105\'");
@@ -22408,9 +22408,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp184 == 5)) {
                 this.Manager.Comment("reaching state \'S2108\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))}));
+                                ((List<string>)(null))}));
                 this.Manager.AddReturn(ComNegotiateRequestInfo, null);
                 NegotiateTestCaseS2061();
                 goto label128;
@@ -22606,26 +22606,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S2113\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S2114\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S2115\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS2109NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S2116\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -22749,34 +22749,34 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S2125\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                 this.Manager.Comment("reaching state \'S2126\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S2127\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS2121NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S2128\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -22900,9 +22900,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S2137\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                 this.Manager.Comment("reaching state \'S2138\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S2139\'");
@@ -22926,13 +22926,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((temp194 == 4)) {
                     this.Manager.Comment("reaching state \'S2167\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.AddReturn(NegotiateRequestInfo, null);
                     NegotiateTestCaseS2168();
                     goto label135;
@@ -22995,9 +22995,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS2140() {
             this.Manager.Comment("reaching state \'S2140\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
             this.Manager.Comment("reaching state \'S2141\'");
             this.Manager.Comment("checking step \'return NegotiateRequest\'");
             this.Manager.Comment("reaching state \'S2142\'");
@@ -23005,38 +23005,38 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp191 == 0)) {
                 this.Manager.Comment("reaching state \'S2143\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S2144\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S2145\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS2133NegotiateResponseChecker2))) != -1)) {
                     this.Manager.Comment("reaching state \'S2146\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30,Smb302])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                         "Head",
                                                                         "Tail"}, new object[] {
                                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                                     "Head",
                                                                                     "Tail"}, new object[] {
                                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
+                                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -23059,26 +23059,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp191 == 1)) {
                 this.Manager.Comment("reaching state \'S2151\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S2152\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S2153\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS2133NegotiateResponseChecker4))) != -1)) {
                     this.Manager.Comment("reaching state \'S2154\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.???\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.???",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S2155\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S2156\'");
@@ -23213,50 +23213,50 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS2159() {
             this.Manager.Comment("reaching state \'S2159\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30,Smb302])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                 "Head",
                                                                 "Tail"}, new object[] {
                                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                             "Head",
                                                                             "Tail"}, new object[] {
                                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
+                                                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
             this.Manager.Comment("reaching state \'S2160\'");
             this.Manager.Comment("checking step \'return NegotiateRequest\'");
             this.Manager.Comment("reaching state \'S2161\'");
             if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS2133NegotiateResponseChecker6))) != -1)) {
                 this.Manager.Comment("reaching state \'S2162\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30,Smb302])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                                 "Head",
                                                                                 "Tail"}, new object[] {
                                                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
+                                                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                         "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                         "1, and not reply.\"");
@@ -23424,30 +23424,30 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp193 == 1)) {
                 this.Manager.Comment("reaching state \'S2170\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S2171\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S2172\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS2133NegotiateResponseChecker16))) != -1)) {
                     this.Manager.Comment("reaching state \'S2173\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
+                                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -23470,26 +23470,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp193 == 2)) {
                 this.Manager.Comment("reaching state \'S2178\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S2179\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S2180\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS2133NegotiateResponseChecker18))) != -1)) {
                     this.Manager.Comment("reaching state \'S2181\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.002",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S2182\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S2183\'");
@@ -23507,13 +23507,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp193 == 3)) {
                 this.Manager.Comment("reaching state \'S2186\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.AddReturn(NegotiateRequestInfo, null);
                 NegotiateTestCaseS2082();
                 goto label134;
@@ -23521,30 +23521,30 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp193 == 4)) {
                 this.Manager.Comment("reaching state \'S2187\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
+                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
                 this.Manager.Comment("reaching state \'S2188\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S2189\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS2133NegotiateResponseChecker21))) != -1)) {
                     this.Manager.Comment("reaching state \'S2190\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -23567,9 +23567,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp193 == 5)) {
                 this.Manager.Comment("reaching state \'S2195\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                 this.Manager.Comment("reaching state \'S2196\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S2197\'");
@@ -23811,26 +23811,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS2198() {
             this.Manager.Comment("reaching state \'S2198\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
             this.Manager.Comment("reaching state \'S2199\'");
             this.Manager.Comment("checking step \'return NegotiateRequest\'");
             this.Manager.Comment("reaching state \'S2200\'");
             if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS2133NegotiateResponseChecker24))) != -1)) {
                 this.Manager.Comment("reaching state \'S2201\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                         "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                         "1, and not reply.\"");
@@ -24024,13 +24024,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S2211\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -24046,25 +24046,25 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS2207NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S2214\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30,Smb302])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                         "Head",
                                                                         "Tail"}, new object[] {
                                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                                     "Head",
                                                                                     "Tail"}, new object[] {
                                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
+                                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -24183,13 +24183,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S2223\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.AddReturn(NegotiateRequestInfo, null);
                 NegotiateTestCaseS2168();
                 goto label138;
@@ -24274,13 +24274,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S2228\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.???\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.???",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -24397,13 +24397,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S227\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -24419,13 +24419,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS223NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S230\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 1.002\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 1.002",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S231\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S232\'");
@@ -24454,26 +24454,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S237\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S238\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S239\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS223NegotiateResponseChecker1))) != -1)) {
                     this.Manager.Comment("reaching state \'S240\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.???\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.???",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S241\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S242\'");
@@ -24607,26 +24607,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S2235\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S2236\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S2237\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS2231NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S2238\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb30])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -24750,13 +24750,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S249\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -24772,13 +24772,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS245NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S252\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.???\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.???",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S253\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S254\'");
@@ -24807,13 +24807,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S259\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S260\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S261\'");
@@ -24925,30 +24925,30 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS262() {
             this.Manager.Comment("reaching state \'S262\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
             this.Manager.Comment("reaching state \'S263\'");
             this.Manager.Comment("checking step \'return NegotiateRequest\'");
             this.Manager.Comment("reaching state \'S264\'");
             if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS245NegotiateResponseChecker2))) != -1)) {
                 this.Manager.Comment("reaching state \'S265\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\",\"SMB 2.???\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                            this.Make<List<string>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         "SMB 2.???",
-                                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})}));
+                                                        ((List<string>)(null))})})}));
                 this.Manager.Comment("reaching state \'S266\'");
                 this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S267\'");
@@ -25115,13 +25115,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S274\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -25137,17 +25137,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS270NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S277\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\",\"SMB 2.???\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.002",
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                                this.Make<List<string>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             "SMB 2.???",
-                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})}));
+                                                            ((List<string>)(null))})})}));
                     this.Manager.Comment("reaching state \'S278\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S279\'");
@@ -25176,34 +25176,34 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S284\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                 this.Manager.Comment("reaching state \'S285\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S286\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS270NegotiateResponseChecker1))) != -1)) {
                     this.Manager.Comment("reaching state \'S287\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 1.002\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 1.002",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S288\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S289\'");
@@ -25337,13 +25337,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S296\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -25359,9 +25359,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS292NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S299\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))}));
+                                    ((List<string>)(null))}));
                     this.Manager.Comment("reaching state \'S300\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S301\'");
@@ -25390,34 +25390,34 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S306\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30,Smb302])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                                 "Head",
                                                                                 "Tail"}, new object[] {
                                                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
+                                                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
                 this.Manager.Comment("reaching state \'S307\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S308\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS292NegotiateResponseChecker1))) != -1)) {
                     this.Manager.Comment("reaching state \'S309\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))}));
+                                    ((List<string>)(null))}));
                     this.Manager.Comment("reaching state \'S310\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S311\'");
@@ -25551,13 +25551,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S318\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -25573,13 +25573,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS314NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S321\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -25613,30 +25613,30 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S328\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
+                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
                 this.Manager.Comment("reaching state \'S329\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S330\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS314NegotiateResponseChecker1))) != -1)) {
                     this.Manager.Comment("reaching state \'S331\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -25775,13 +25775,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S340\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -25797,9 +25797,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS336NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S343\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -25833,13 +25833,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S350\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: If the server does not implement the SMB 2.1 or 3.x dialect" +
                         " family, processing MUST continue as specified in 3.3.5.3.2.\"");
@@ -25853,13 +25853,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS336NegotiateResponseChecker1))) != -1)) {
                     this.Manager.Comment("reaching state \'S353\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -25991,13 +25991,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S362\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -26013,13 +26013,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS358NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S365\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -26053,13 +26053,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S372\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: If the server does not implement the SMB 2.1 or 3.x dialect" +
                         " family, processing MUST continue as specified in 3.3.5.3.2.\"");
@@ -26073,17 +26073,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS358NegotiateResponseChecker1))) != -1)) {
                     this.Manager.Comment("reaching state \'S375\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
+                                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -26215,13 +26215,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S384\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -26237,21 +26237,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS380NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S387\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                         "Head",
                                                                         "Tail"}, new object[] {
                                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -26285,13 +26285,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S394\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.???\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.???",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: If the server does not implement the SMB 2.1 or 3.x dialect" +
                         " family, processing MUST continue as specified in 3.3.5.3.2.\"");
@@ -26414,13 +26414,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S403\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.???\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.???",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -26433,13 +26433,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS399NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S406\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.002",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S407\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S408\'");
@@ -26468,13 +26468,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S413\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 1.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 1.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: If the server does not implement the SMB 2.1 or 3.x dialect" +
                         " family, processing MUST continue as specified in 3.3.5.3.2.\"");
@@ -26597,13 +26597,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S422\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.???\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.???",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -26635,9 +26635,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S511\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))}));
+                                ((List<string>)(null))}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: If the server does not implement the SMB 2.1 or 3.x dialect" +
                         " family, processing MUST continue as specified in 3.3.5.3.2.\"");
@@ -26760,30 +26760,30 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S520\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                 this.Manager.Comment("reaching state \'S521\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S522\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS516NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S523\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -26817,17 +26817,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S530\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\",\"SMB 2.???\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                            this.Make<List<string>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         "SMB 2.???",
-                                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})}));
+                                                        ((List<string>)(null))})})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: If the server does not implement the SMB 2.1 or 3.x dialect" +
                         " family, processing MUST continue as specified in 3.3.5.3.2.\"");
@@ -26841,13 +26841,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS516NegotiateResponseChecker1))) != -1)) {
                     this.Manager.Comment("reaching state \'S533\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.002",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S534\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S535\'");
@@ -26979,34 +26979,34 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S542\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                 this.Manager.Comment("reaching state \'S543\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S544\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS538NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S545\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.002",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S546\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S547\'");
@@ -27035,9 +27035,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S552\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                 this.Manager.AddReturn(NegotiateRequestInfo, null);
                 NegotiateTestCaseS553();
                 goto label158;
@@ -27112,9 +27112,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp232 == 0)) {
                 this.Manager.Comment("reaching state \'S555\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                 this.Manager.Comment("reaching state \'S556\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S557\'");
@@ -27122,9 +27122,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((temp231 == 0)) {
                     this.Manager.Comment("reaching state \'S558\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                     this.Manager.Comment("reaching state \'S559\'");
                     this.Manager.Comment("checking step \'return NegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S560\'");
@@ -27132,9 +27132,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                     if ((temp230 == 0)) {
                         this.Manager.Comment("reaching state \'S561\'");
                         this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Rep"}, new object[] {
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                         this.Manager.Comment("reaching state \'S562\'");
                         this.Manager.Comment("checking step \'return NegotiateRequest\'");
                         this.Manager.Comment("reaching state \'S563\'");
@@ -27142,13 +27142,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         if ((temp229 == 0)) {
                             this.Manager.Comment("reaching state \'S564\'");
                             this.Manager.Comment("executing step \'call NegotiateRequest([Smb30])\'");
-                            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Rep"}, new object[] {
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                             this.Manager.Comment("reaching state \'S565\'");
                             this.Manager.Comment("checking step \'return NegotiateRequest\'");
                             this.Manager.Comment("reaching state \'S566\'");
@@ -27156,30 +27156,30 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             if ((temp228 == 0)) {
                                 this.Manager.Comment("reaching state \'S567\'");
                                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21])\'");
-                                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Rep"}, new object[] {
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                         "Head",
                                                                         "Tail"}, new object[] {
                                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
+                                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})}));
                                 this.Manager.Comment("reaching state \'S568\'");
                                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                                 this.Manager.Comment("reaching state \'S569\'");
                                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS538NegotiateResponseChecker6))) != -1)) {
                                     this.Manager.Comment("reaching state \'S570\'");
                                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-                                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                     "Rep"}, new object[] {
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                 "Head",
                                                                 "Tail"}, new object[] {
                                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                                             "1, and not reply.\"");
@@ -27318,9 +27318,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp232 == 5)) {
                 this.Manager.Comment("reaching state \'S580\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))}));
+                                ((List<string>)(null))}));
                 this.Manager.AddReturn(ComNegotiateRequestInfo, null);
                 NegotiateTestCaseS512();
                 goto label157;
@@ -27461,13 +27461,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS575() {
             this.Manager.Comment("reaching state \'S575\'");
             this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-            this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+            this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                            this.Make<List<string>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         "SMB 2.002",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                        ((List<string>)(null))})}));
             this.Manager.Comment("reaching state \'S576\'");
             this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
             this.Manager.Comment("reaching state \'S577\'");
@@ -27908,38 +27908,38 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S585\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30,Smb302])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                                 "Head",
                                                                                 "Tail"}, new object[] {
                                                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
+                                                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
                 this.Manager.Comment("reaching state \'S586\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S587\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS581NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S588\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.???\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.???",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S589\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S590\'");
@@ -27968,13 +27968,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S595\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.AddReturn(NegotiateRequestInfo, null);
                 NegotiateTestCaseS596();
                 goto label163;
@@ -28049,13 +28049,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp238 == 0)) {
                 this.Manager.Comment("reaching state \'S598\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S599\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S600\'");
@@ -28063,13 +28063,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((temp237 == 0)) {
                     this.Manager.Comment("reaching state \'S601\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Comment("reaching state \'S602\'");
                     this.Manager.Comment("checking step \'return NegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S603\'");
@@ -28077,13 +28077,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                     if ((temp236 == 0)) {
                         this.Manager.Comment("reaching state \'S604\'");
                         this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Rep"}, new object[] {
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                         this.Manager.Comment("reaching state \'S605\'");
                         this.Manager.Comment("checking step \'return NegotiateRequest\'");
                         this.Manager.Comment("reaching state \'S606\'");
@@ -28271,9 +28271,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS607() {
             this.Manager.Comment("reaching state \'S607\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
             this.Manager.AddReturn(NegotiateRequestInfo, null);
             NegotiateTestCaseS553();
         }
@@ -28299,17 +28299,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS608() {
             this.Manager.Comment("reaching state \'S608\'");
             this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\",\"SMB 2.???\"])\'");
-            this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+            this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                            this.Make<List<string>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         "SMB 2.002",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                        this.Make<List<string>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
                                                     "SMB 2.???",
-                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})}));
+                                                    ((List<string>)(null))})})}));
             this.Manager.Comment("reaching state \'S609\'");
             this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
             this.Manager.Comment("reaching state \'S610\'");
@@ -28700,38 +28700,38 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S617\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                 this.Manager.Comment("reaching state \'S618\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S619\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS613NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S620\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\",\"SMB 2.???\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.002",
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                                this.Make<List<string>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             "SMB 2.???",
-                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})}));
+                                                            ((List<string>)(null))})})}));
                     this.Manager.Comment("reaching state \'S621\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S622\'");
@@ -28760,13 +28760,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S627\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.AddReturn(NegotiateRequestInfo, null);
                 NegotiateTestCaseS628();
                 goto label168;
@@ -28841,13 +28841,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp244 == 0)) {
                 this.Manager.Comment("reaching state \'S630\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S631\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S632\'");
@@ -28855,13 +28855,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((temp243 == 0)) {
                     this.Manager.Comment("reaching state \'S633\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Comment("reaching state \'S634\'");
                     this.Manager.Comment("checking step \'return NegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S635\'");
@@ -28869,13 +28869,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                     if ((temp242 == 0)) {
                         this.Manager.Comment("reaching state \'S636\'");
                         this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Rep"}, new object[] {
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                         this.Manager.Comment("reaching state \'S637\'");
                         this.Manager.Comment("checking step \'return NegotiateRequest\'");
                         this.Manager.Comment("reaching state \'S638\'");
@@ -28978,30 +28978,30 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp244 == 5)) {
                 this.Manager.Comment("reaching state \'S641\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                 this.Manager.Comment("reaching state \'S642\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S643\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS613NegotiateResponseChecker25))) != -1)) {
                     this.Manager.Comment("reaching state \'S644\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -29105,13 +29105,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS639() {
             this.Manager.Comment("reaching state \'S639\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
             this.Manager.AddReturn(NegotiateRequestInfo, null);
             NegotiateTestCaseS596();
         }
@@ -29137,13 +29137,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS640() {
             this.Manager.Comment("reaching state \'S640\'");
             this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 1.002\"])\'");
-            this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+            this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                            this.Make<List<string>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         "SMB 1.002",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                        ((List<string>)(null))})}));
             this.Manager.AddReturn(ComNegotiateRequestInfo, null);
             NegotiateTestCaseS414();
         }
@@ -29552,22 +29552,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S653\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S654\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S655\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS649NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S656\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))}));
+                                    ((List<string>)(null))}));
                     this.Manager.Comment("reaching state \'S657\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S658\'");
@@ -29596,13 +29596,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S663\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.AddReturn(NegotiateRequestInfo, null);
                 NegotiateTestCaseS664();
                 goto label173;
@@ -29677,13 +29677,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp250 == 0)) {
                 this.Manager.Comment("reaching state \'S666\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S667\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S668\'");
@@ -29691,13 +29691,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((temp249 == 0)) {
                     this.Manager.Comment("reaching state \'S669\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Comment("reaching state \'S670\'");
                     this.Manager.Comment("checking step \'return NegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S671\'");
@@ -29705,13 +29705,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                     if ((temp248 == 0)) {
                         this.Manager.Comment("reaching state \'S672\'");
                         this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Rep"}, new object[] {
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                         this.Manager.Comment("reaching state \'S673\'");
                         this.Manager.Comment("checking step \'return NegotiateRequest\'");
                         this.Manager.Comment("reaching state \'S674\'");
@@ -29899,13 +29899,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS675() {
             this.Manager.Comment("reaching state \'S675\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
             this.Manager.AddReturn(NegotiateRequestInfo, null);
             NegotiateTestCaseS628();
         }
@@ -29931,13 +29931,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS676() {
             this.Manager.Comment("reaching state \'S676\'");
             this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.???\"])\'");
-            this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+            this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                            this.Make<List<string>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         "SMB 2.???",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                        ((List<string>)(null))})}));
             this.Manager.AddReturn(ComNegotiateRequestInfo, null);
             NegotiateTestCaseS395();
         }
@@ -30322,34 +30322,34 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S681\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                 this.Manager.Comment("reaching state \'S682\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S683\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS677NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S684\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -30383,13 +30383,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S691\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.AddReturn(NegotiateRequestInfo, null);
                 NegotiateTestCaseS692();
                 goto label178;
@@ -30480,13 +30480,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp256 == 4)) {
                 this.Manager.Comment("reaching state \'S694\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S695\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S696\'");
@@ -30514,13 +30514,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((temp255 == 5)) {
                     this.Manager.Comment("reaching state \'S697\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Comment("reaching state \'S698\'");
                     this.Manager.Comment("checking step \'return NegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S699\'");
@@ -30548,13 +30548,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                     if ((temp254 == 5)) {
                         this.Manager.Comment("reaching state \'S700\'");
                         this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Rep"}, new object[] {
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                         this.Manager.Comment("reaching state \'S701\'");
                         this.Manager.Comment("checking step \'return NegotiateRequest\'");
                         this.Manager.Comment("reaching state \'S702\'");
@@ -31028,13 +31028,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS703() {
             this.Manager.Comment("reaching state \'S703\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
             this.Manager.AddReturn(NegotiateRequestInfo, null);
             NegotiateTestCaseS664();
         }
@@ -31095,34 +31095,34 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S708\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                 this.Manager.Comment("reaching state \'S709\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S710\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS704NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S711\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -31156,13 +31156,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S718\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S719\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S720\'");
@@ -31170,38 +31170,38 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((temp259 == 0)) {
                     this.Manager.Comment("reaching state \'S721\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Comment("reaching state \'S722\'");
                     this.Manager.Comment("checking step \'return NegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S723\'");
                     if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS704NegotiateResponseChecker2))) != -1)) {
                         this.Manager.Comment("reaching state \'S724\'");
                         this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30,Smb302])\'");
-                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Rep"}, new object[] {
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                 "Head",
                                                                 "Tail"}, new object[] {
                                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                             "Head",
                                                                             "Tail"}, new object[] {
                                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                                         "Head",
                                                                                         "Tail"}, new object[] {
                                                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
+                                                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
                         this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                                 "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                                 "1, and not reply.\"");
@@ -31224,46 +31224,46 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((temp259 == 1)) {
                     this.Manager.Comment("reaching state \'S729\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30,Smb302])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                         "Head",
                                                                         "Tail"}, new object[] {
                                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                                     "Head",
                                                                                     "Tail"}, new object[] {
                                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
+                                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})})}));
                     this.Manager.Comment("reaching state \'S730\'");
                     this.Manager.Comment("checking step \'return NegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S731\'");
                     if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS704NegotiateResponseChecker4))) != -1)) {
                         this.Manager.Comment("reaching state \'S732\'");
                         this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                        this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Rep"}, new object[] {
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                     "Head",
                                                     "Tail"}, new object[] {
                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                 "Head",
                                                                 "Tail"}, new object[] {
                                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                             "Head",
                                                                             "Tail"}, new object[] {
                                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                         this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                                 "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                                 "1, and not reply.\"");
@@ -31471,13 +31471,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS737() {
             this.Manager.Comment("reaching state \'S737\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
             this.Manager.AddReturn(NegotiateRequestInfo, null);
             NegotiateTestCaseS692();
         }
@@ -31521,26 +31521,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS738() {
             this.Manager.Comment("reaching state \'S738\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
             this.Manager.Comment("reaching state \'S739\'");
             this.Manager.Comment("checking step \'return NegotiateRequest\'");
             this.Manager.Comment("reaching state \'S740\'");
             if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS704NegotiateResponseChecker8))) != -1)) {
                 this.Manager.Comment("reaching state \'S741\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                         "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                         "1, and not reply.\"");
@@ -31640,42 +31640,42 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S750\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                 this.Manager.Comment("reaching state \'S751\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S752\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS746NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S753\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                         "Head",
                                                                         "Tail"}, new object[] {
                                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -31709,13 +31709,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S760\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -31731,13 +31731,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS746NegotiateResponseChecker1))) != -1)) {
                     this.Manager.Comment("reaching state \'S763\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb30])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -31872,26 +31872,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S772\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S773\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S774\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS768NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S775\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.002",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S776\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S777\'");
@@ -31920,13 +31920,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S782\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -31942,9 +31942,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS768NegotiateResponseChecker1))) != -1)) {
                     this.Manager.Comment("reaching state \'S785\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))}));
+                                    ((List<string>)(null))}));
                     this.Manager.Comment("reaching state \'S786\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S787\'");
@@ -32082,13 +32082,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S799\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S800\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S801\'");
@@ -32136,13 +32136,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S812\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -32158,13 +32158,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS795NegotiateResponseChecker7))) != -1)) {
                     this.Manager.Comment("reaching state \'S815\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.???\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.???",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S816\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S817\'");
@@ -32230,26 +32230,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void NegotiateTestCaseS802() {
             this.Manager.Comment("reaching state \'S802\'");
             this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002])\'");
-            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+            this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                             "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                         "Head",
                                         "Tail"}, new object[] {
                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
             this.Manager.Comment("reaching state \'S803\'");
             this.Manager.Comment("checking step \'return NegotiateRequest\'");
             this.Manager.Comment("reaching state \'S804\'");
             if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS795NegotiateResponseChecker1))) != -1)) {
                 this.Manager.Comment("reaching state \'S805\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 1.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 1.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Comment("reaching state \'S806\'");
                 this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S807\'");
@@ -32443,13 +32443,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S824\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -32465,9 +32465,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS820NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S827\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))}));
+                                    ((List<string>)(null))}));
                     this.Manager.Comment("reaching state \'S828\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S829\'");
@@ -32496,30 +32496,30 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S834\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S835\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S836\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS820NegotiateResponseChecker1))) != -1)) {
                     this.Manager.Comment("reaching state \'S837\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\",\"SMB 2.???\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.002",
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                                this.Make<List<string>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             "SMB 2.???",
-                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})}));
+                                                            ((List<string>)(null))})})}));
                     this.Manager.Comment("reaching state \'S838\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S839\'");
@@ -32653,13 +32653,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S846\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -32675,13 +32675,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS842NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S849\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -32715,13 +32715,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S856\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -32737,13 +32737,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS842NegotiateResponseChecker1))) != -1)) {
                     this.Manager.Comment("reaching state \'S859\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -32877,13 +32877,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S868\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -32899,9 +32899,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS864NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S871\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -32935,13 +32935,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S878\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -32957,9 +32957,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS864NegotiateResponseChecker1))) != -1)) {
                     this.Manager.Comment("reaching state \'S881\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
+                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -33093,13 +33093,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S890\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -33115,13 +33115,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS886NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S893\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -33155,13 +33155,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S900\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -33177,13 +33177,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS886NegotiateResponseChecker1))) != -1)) {
                     this.Manager.Comment("reaching state \'S903\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Wildcard])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Wildcard,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -33317,13 +33317,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S912\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -33339,21 +33339,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS908NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S915\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                         "Head",
                                                                         "Tail"}, new object[] {
                                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -33387,13 +33387,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S922\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -33409,21 +33409,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS908NegotiateResponseChecker1))) != -1)) {
                     this.Manager.Comment("reaching state \'S925\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                         "Head",
                                                                         "Tail"}, new object[] {
                                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                        ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                        ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -33557,13 +33557,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S934\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -33579,13 +33579,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS930NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S937\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -33619,13 +33619,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S944\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -33641,13 +33641,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS930NegotiateResponseChecker1))) != -1)) {
                     this.Manager.Comment("reaching state \'S947\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb2Unknown])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2Unknown,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -33781,13 +33781,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S956\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -33803,13 +33803,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS952NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S959\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -33843,13 +33843,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S966\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -33865,13 +33865,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS952NegotiateResponseChecker1))) != -1)) {
                     this.Manager.Comment("reaching state \'S969\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb302])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb302,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -34005,13 +34005,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S978\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -34027,13 +34027,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS974NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S981\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -34067,13 +34067,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S988\'");
                 this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                this.Make<List<string>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             "SMB 2.002",
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                            ((List<string>)(null))})}));
                 this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.3: This request is defined in [MS-SMB] section 2.2.4.5.1, with the SMB header defined in section 2.2.3.1. If the request matches the format described there, and Connection.NegotiateDialect is 0xFFFF, processing MUST continue as specified in 3.3.5.3.1.""");
                 this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.3.1: Otherwise, the server MUST scan the dialects provided for t" +
                         "he dialect string \"SMB 2.???\".\"");
@@ -34089,13 +34089,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS974NegotiateResponseChecker1))) != -1)) {
                     this.Manager.Comment("reaching state \'S991\'");
                     this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                    this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                    this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                                ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                     this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.4: If Connection.NegotiateDialect is 0x0202, 0x0210, 0x0300, or " +
                             "0x0302 the server MUST disconnect the connection, as specified in section 3.3.7." +
                             "1, and not reply.\"");
@@ -34221,38 +34221,38 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1010\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb2002,Smb21,Smb30])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb2002,
-                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                            this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                         "Head",
                                                         "Tail"}, new object[] {
                                                         Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                                        this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                                                     "Head",
                                                                     "Tail"}, new object[] {
                                                                     Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb30,
-                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
+                                                                    ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})})})}));
                 this.Manager.Comment("reaching state \'S1011\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1012\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS996NegotiateResponseChecker))) != -1)) {
                     this.Manager.Comment("reaching state \'S1013\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\",\"SMB 2.???\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.002",
-                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                                this.Make<List<string>>(new string[] {
                                                             "Head",
                                                             "Tail"}, new object[] {
                                                             "SMB 2.???",
-                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})}));
+                                                            ((List<string>)(null))})})}));
                     this.Manager.Comment("reaching state \'S1014\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1015\'");
@@ -34289,26 +34289,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return SetupConnection\'");
                 this.Manager.Comment("reaching state \'S1000\'");
                 this.Manager.Comment("executing step \'call NegotiateRequest([Smb21])\'");
-                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<Microsoft.Modeling.Sequence<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                this.INegotiateAdapterInstance.NegotiateRequest(this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                 "Rep"}, new object[] {
-                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
+                                this.Make<List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>>(new string[] {
                                             "Head",
                                             "Tail"}, new object[] {
                                             Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision.Smb21,
-                                            ((Microsoft.Xrt.Runtime.RuntimeList<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
+                                            ((List<Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.DialectRevision>)(null))})}));
                 this.Manager.Comment("reaching state \'S1001\'");
                 this.Manager.Comment("checking step \'return NegotiateRequest\'");
                 this.Manager.Comment("reaching state \'S1002\'");
                 if ((this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(NegotiateTestCase.NegotiateResponseInfo, null, new NegotiateResponseDelegate1(this.NegotiateTestCaseS996NegotiateResponseChecker1))) != -1)) {
                     this.Manager.Comment("reaching state \'S1003\'");
                     this.Manager.Comment("executing step \'call ComNegotiateRequest([\"SMB 2.002\"])\'");
-                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
+                    this.INegotiateAdapterInstance.ComNegotiateRequest(this.Make<List<string>>(new string[] {
                                     "Rep"}, new object[] {
-                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
+                                    this.Make<List<string>>(new string[] {
                                                 "Head",
                                                 "Tail"}, new object[] {
                                                 "SMB 2.002",
-                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}));
+                                                ((List<string>)(null))})}));
                     this.Manager.Comment("reaching state \'S1004\'");
                     this.Manager.Comment("checking step \'return ComNegotiateRequest\'");
                     this.Manager.Comment("reaching state \'S1005\'");

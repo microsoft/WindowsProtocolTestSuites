@@ -12,6 +12,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
 
     public delegate void ReceiveData(byte[] data);
 
+    public delegate void DisconnectedHandler();
+
     public abstract class RdpemtTransport : IDisposable
     {
         #region Private/Protected Methods
