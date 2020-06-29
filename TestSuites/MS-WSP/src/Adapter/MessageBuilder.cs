@@ -1103,9 +1103,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             result.count = 0x01;
             result.isPresent = 0x01;
+            result.Restriction = GetNodeRestriction(CRestriction_ulType_Values.RTAnd, restrictions);
 
+            return result;
+        }
+
+        /// <summary>
+        /// Gets node restriction
+        /// </summary>
+        /// <param name="ulType">Indicates the restriction type used for the command tree node</param>
+        /// <param name="restrictions">The child restrictions to be inserted to the restriction</param>
+        public CRestriction GetNodeRestriction(CRestriction_ulType_Values ulType, params CRestriction[] restrictions)
+        {
             var restriction = new CRestriction();
-            restriction._ulType = CRestriction_ulType_Values.RTAnd;
+            restriction._ulType = ulType;
             restriction.Weight = NODE_WEIGHTAGE;
             var node = new CNodeRestriction();
             node._cNode = (uint)restrictions.Length;
@@ -1116,9 +1127,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             }
             restriction.Restriction = node;
 
-            result.Restriction = restriction;
-
-            return result;
+            return restriction;
         }
 
         /// <summary>
@@ -1176,7 +1185,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             return result;
         }
-
+   
         /// <summary>
         /// Get rowset event structure
         /// </summary>
@@ -1216,7 +1225,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="queryString">Query String of the search</param>
         /// <param name="queryStringProperty">Property used by Query string</param>
         /// <returns>ContentRestriction structure Node</returns>
-        private CRestriction GetContentRestriction(string queryString, CFullPropSpec queryStringProperty)
+        public CRestriction GetContentRestriction(string queryString, CFullPropSpec queryStringProperty)
         {
             var result = new CRestriction();
 

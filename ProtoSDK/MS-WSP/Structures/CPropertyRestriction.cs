@@ -5,6 +5,9 @@ using System;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 {
+    /// <summary>
+    /// A 32-bit integer specifying the relation to perform on the property. 
+    /// </summary>
     public enum _relop_Values : UInt32
     {
         /// <summary>
