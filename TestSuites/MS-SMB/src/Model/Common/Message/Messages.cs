@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using Microsoft.Modeling;
 
 namespace Microsoft.Protocol.TestSuites.Smb
 {
@@ -65,7 +64,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <summary>
         /// The input array of dialects.
         /// </summary>
-        public Sequence<Dialect> dialectNames;
+        public List<Dialect> dialectNames;
 
         /// <summary>
         /// SMB_COM_NEGOTIATE request.
@@ -78,7 +77,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int messageId,
             bool isSupportExtSecurity,
             SignState signState,
-            Sequence<Dialect> dialectNames)
+            List<Dialect> dialectNames)
             : base(messageId, Command.SmbComNegotiate)
         {
             this.isSupportExtSecurity = isSupportExtSecurity;
@@ -117,7 +116,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <summary>
         /// Used by the SUT to notify the client as to which features are supported by the SUT.
         /// </summary>
-        public Set<Capabilities> capabilities;
+        public List<Capabilities> capabilities;
 
         /// <summary>
         /// SMB_COM_SESSION_SETUP request
@@ -141,7 +140,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int sessionId,
             int securitySignature,
             bool isRequireSign,
-            Set<Capabilities> capabilities)
+            List<Capabilities> capabilities)
             : base(messageId, Command.SmbComSessionSetup)
         {
             this.accountType = accountType;
@@ -182,7 +181,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <summary>
         /// It is used by the SUT to notify the client as to which features are supported by the SUT.
         /// </summary>
-        public Set<Capabilities> capabilities;
+        public List<Capabilities> capabilities;
 
         /// <summary>
         /// It indicates whether Generic Security Services (GSS) is valid or not.
@@ -218,7 +217,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int sessionId,
             int securitySignature,
             bool isRequireSign,
-            Set<Capabilities> capabilities,
+            List<Capabilities> capabilities,
             bool isGssValid,
             bool isUserIdValid)
             : base(messageId, Command.SmbComSessionSetupAdditional)
@@ -263,7 +262,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <summary>
         /// Used by the SUT to notify the client as to which features are supported by the SUT.
         /// </summary>
-        public Set<Capabilities> capabilities;
+        public List<Capabilities> capabilities;
 
 
         /// <summary>
@@ -285,7 +284,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int sessionId,
             int securitySignature,
             bool isRequireSign,
-            Set<Capabilities> capabilities)
+            List<Capabilities> capabilities)
             : base(messageId, Command.SmbComSessionSetup)
         {
             this.accountType = accountType;

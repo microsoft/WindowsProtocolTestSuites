@@ -1,10 +1,9 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestTools.StackSdk.Messages;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-
-using Microsoft.Modeling;
 
 namespace Microsoft.Protocol.TestSuites.Smb
 {
@@ -35,15 +34,15 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="fId">The SMB file identifier.</param>
         /// <param name="snapShots">The snapshots for the corresponding file.</param>
         /// <param name="isSucceed">It indicates whether the checking is successful or not.</param>
-        [Rule]
-        public static void CheckSnapshots(int fId, Set<int> snapShots, out bool isSucceed)
+        /// [Rule]
+        public static void CheckSnapshots(int fId, List<int> snapShots, out bool isSucceed)
         {
             Condition.IsTrue((smbState != SmbState.End) && (smbState != SmbState.Closed));
             isSucceed = true;
             Condition.IsTrue(smbConnection.openedFiles.ContainsKey(fId)
                                 && smbConnection.openedFiles[fId].name == Parameter.fileNames[2]);
             Condition.IsTrue(smbConnection.sentRequest.Count == 0);
-            Condition.IsTrue(snapShots == new Set<int>(1, 2));
+            Condition.IsTrue(snapShots == new List<int> { 1, 2 });
             smbConnection.openedFiles[fId].previousVersionToken = snapShots;
         }
 
@@ -73,7 +72,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// Supply the length in bytes of the StartSid, or 0 if there is no StartSid.
         /// </param>
         /// <param name="startSidOffset">startSidOffset.</param>
-        [Rule]
+        /// [Rule]
         /// Disable CA1801, because the parameter 'startSidLength' is used for interface implementation.
         [SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters")]
         public static void NtTransQueryQuotaRequest(
@@ -94,11 +93,11 @@ namespace Microsoft.Protocol.TestSuites.Smb
             Condition.IsTrue(sIdListLength == 0 || startSidLength == 0);
             if (returnSingle)
             {
-                Requirement.AssumeCaptured("Allowed to restart the scan of the quota information");
+                Requirement.Capture("Allowed to restart the scan of the quota information");
             }
             else
             {
-                Requirement.AssumeCaptured("Don't allowed to restart the scan of the quota information");
+                Requirement.Capture("Don't allowed to restart the scan of the quota information");
             }
             Checker.CheckRequest(smbConnection, messageId, sessionId, treeId, isSigned, smbState);
             smbRequest = new NtTransactQueryQuotaRequest(
@@ -126,7 +125,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status  code returned from the System Under Test (SUT) is success or failure.
         /// </param>
-        [Rule]
+        /// [Rule]
         /// Disable CA1801, because the parameter 'quotaUsed' is used for interface implementation.
         [SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters")]
         public static void NtTransQueryQuotaResponse(
@@ -173,7 +172,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
+        /// [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
         public static void ErrorNtTransQueryQuotaResponse(int messageId, MessageStatus messageStatus)
         {
             Condition.IsTrue(smbConnection.sentRequest.ContainsKey(messageId));
@@ -226,7 +225,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="isSigned">Indicate whether the SUT has message signing enabled or required.</param>
         /// <param name="fId">The SMB file identifier of the target directory.</param>
         /// <param name="quotaUsed">The amount of quota, in bytes, used by this user.</param>
-        [Rule]
+        /// [Rule]
         public static void NtTransSetQuotaRequest(
             int messageId,
             int sessionId,
@@ -254,7 +253,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        [Rule]
+        /// [Rule]
         public static void NtTransSetQuotaResponse(
             int messageId,
             int sessionId,
@@ -309,7 +308,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
+        /// [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
         public static void ErrorNtTransSetQuotaResponse(int messageId, MessageStatus messageStatus)
         {
             Condition.IsTrue(smbConnection.sentRequest.ContainsKey(messageId));
@@ -368,7 +367,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="informationLevel">
         /// It indicates that valid condition and each error condition are contained in the input conditions type.
         /// </param>
-        [Rule]
+        /// [Rule]
         public static void NtTransSetQuotaRequestAdditional(
             int messageId,
             int sessionId,
@@ -412,7 +411,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        [Rule]
+        /// [Rule]
         public static void NtTransSetQuotaResponseAdditional(
             int messageId,
             int sessionId,
@@ -461,7 +460,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        [Rule]
+        /// [Rule]
         public static void ErrorNtTransSetQuotaResponseAdditional(int messageId, MessageStatus messageStatus)
         {
             Condition.IsTrue(smbConnection.sentRequest.ContainsKey(messageId));
@@ -562,7 +561,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="isSigned">Indicate whether the SUT has message signing enabled or required.</param>
         /// <param name="fId">The SMB file identifier of the target directory.</param>
         /// <param name="maxDataCount">used to control the MaxDataCount in FSCTL_SRV_ENUMERATE_SNAPSHOTS.</param>
-        [Rule]
+        /// [Rule]
         public static void FsctlSrvEnumSnapshotsRequest(
             int messageId,
             int sessionId,
@@ -593,7 +592,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="NumberOfSnapShotsCompared">
         /// Return the comparison result of NumberOfSnapShots and NumberOfSnapShotsReturned.
         /// </param>
-        [Rule]
+        /// [Rule]
         public static void FsctlSrvEnumSnapshotsResponse(
             int messageId,
             int sessionId,
@@ -641,7 +640,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
 
                 Condition.IsTrue(NumberOfSnapShotsCompared == IntegerCompare.Equal);
 
-                Requirement.AssumeCaptured(
+                Requirement.Capture(
                     @"If MaxDataCount is large enough, the adapter will return all snapshots in a 
                     FSCTLSrvEnumSnapshotsResponse");
             }
@@ -657,7 +656,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
+        /// [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
         public static void ErrorFsctlSrvEnumSnapshotsResponse(int messageId, MessageStatus messageStatus)
         {
             Condition.IsTrue(smbConnection.sentRequest.ContainsKey(messageId));
@@ -732,7 +731,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="treeId">Tree ID used to identify the tree connection.</param>
         /// <param name="isSigned">Indicate whether the SUT has message signing enabled or required.</param>
         /// <param name="fId">The SMB file identifier of the target directory.</param>
-        [Rule]
+        /// [Rule]
         public static void FsctlSrvRequestResumeKeyRequest(
             int messageId,
             int sessionId,
@@ -759,13 +758,13 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        [Rule]
+        /// [Rule]
         public static void FsctlSrvRequestResumeKeyResponse(
             int messageId,
             int sessionId,
             int treeId,
             bool isSigned,
-            [Domain("ValidKeys")]string copychunkResumeKey,
+            string copychunkResumeKey,
             MessageStatus messageStatus)
         {
             FsctlSrvResumeKeyRequest request = null;
@@ -814,7 +813,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
+        /// [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
         public static void ErrorFsctlrvRequestResumeKeyResponse(int messageId, MessageStatus messageStatus)
         {
             Condition.IsTrue(smbConnection.sentRequest.ContainsKey(messageId));
@@ -864,7 +863,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="sourceOffset">The offset in the source file to copy from.</param>
         /// <param name="targetOffset">The offset in the target file to copy to.</param>
         /// <param name="length">The number of bytes to copy from the source file to the target file.</param>
-        [Rule]
+        /// [Rule]
         /// Disable CA1801, because the parameter 'sourceOffset' and 'targetOffset' is used for interface 
         /// implementation.
         [SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters")]
@@ -874,7 +873,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int treeId,
             bool isSigned,
             int fId,
-            [Domain("ValidKeys")]string copyChunkResumeKey,
+            string copyChunkResumeKey,
             int sourceOffset,
             int targetOffset,
             int length)
@@ -915,7 +914,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        [Rule]
+        /// [Rule]
         public static void FsctlSrvCopyChunkResponse(
             int messageId,
             int sessionId,
@@ -976,7 +975,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
+        /// [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
         public static void ErrorFsctlSrvCopyChunkResponse(int messageId, MessageStatus messageStatus)
         {
             Condition.IsTrue(smbConnection.sentRequest.ContainsKey(messageId));
@@ -1078,13 +1077,13 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="isMaximumAllowedSet">
         /// It indicates that the client set the maximum allowed in the request.
         /// </param>
-        [Rule]
+        /// [Rule]
         public static void NtTransactCreateRequest(
             int messageId,
             int sessionId,
             int treeId,
-            [Domain("ImpersonationLevel")] int impersonationLevel,
-            [Domain("FileDomain")] string fileName,
+            int impersonationLevel,
+            string fileName,
             ShareType shareType,
             bool isSigned)
         {
@@ -1105,7 +1104,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
                 isSigned,
                 fileName,
                 smbState);
-            Requirement.AssumeCaptured("Send NT_TRANSACT_CREATE request");
+            Requirement.Capture("Send NT_TRANSACT_CREATE request");
             Update.UpdateNTTransactCreateRequest(smbConnection, smbRequest);
         }
 
@@ -1120,7 +1119,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        [Rule]
+        /// [Rule]
         public static void NtTransactCreateResponse(
             int messageId,
             int sessionId,
@@ -1140,7 +1139,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
+        /// [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
         public static void ErrorNtTransactCreate(int messageId, MessageStatus messageStatus)
         {
             Condition.IsTrue(smbConnection.sentRequest.ContainsKey(messageId));
@@ -1198,7 +1197,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="sourceOffset"> The offset in the source file to copy from. </param>
         /// <param name="targetOffset"> The offset in the target file to copy to. </param>
         /// <param name="length"> The number of bytes to copy from the source file to the target file.</param>
-        [Rule]
+        /// [Rule]
         public static void FSCCFSCTLNameRequest(int messageId,
                                                 int sessionId,
                                                 int treeId,
@@ -1223,7 +1222,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="treeId"> Tree ID used to identify the tree connection.</param>
         /// <param name="isSigned">Indicate whether the SUT has message signing enabled or required.</param>
         /// /// <param name="messageStatus"> Indicates the status code returned from server, success or fail.</param>
-        [Rule]
+        /// [Rule]
         public static void FSCCFSCTLNameResponse(int messageId,
                                                  int sessionId,
                                                  int treeId,
@@ -1240,51 +1239,51 @@ namespace Microsoft.Protocol.TestSuites.Smb
 
             if (request.fsctlName == FSCCFSCTLName.FSCTL_CREATE_OR_GET_OBJECT_ID)
             {
-                Requirement.AssumeCaptured("FSCTL Name is FSCTL_CREATE_OR_GET_OBJECT_ID");
+                Requirement.Capture("FSCTL Name is FSCTL_CREATE_OR_GET_OBJECT_ID");
             }
             else if (request.fsctlName == FSCCFSCTLName.FSCTL_DELETE_OBJECT_ID)
             {
-                Requirement.AssumeCaptured("FSCTL Name is FSCTL_DELETE_OBJECT_ID");
+                Requirement.Capture("FSCTL Name is FSCTL_DELETE_OBJECT_ID");
             }
             else if (request.fsctlName == FSCCFSCTLName.FSCTL_FILESYSTEM_GET_STATISTICS)
             {
-                Requirement.AssumeCaptured("FSCTL Name is FSCTL_FILESYSTEM_GET_STATISTICS");
+                Requirement.Capture("FSCTL Name is FSCTL_FILESYSTEM_GET_STATISTICS");
             }
             else if (request.fsctlName == FSCCFSCTLName.FSCTL_GET_COMPRESSION)
             {
-                Requirement.AssumeCaptured("FSCTL Name is FSCTL_GET_COMPRESSION");
+                Requirement.Capture("FSCTL Name is FSCTL_GET_COMPRESSION");
             }
             else if (request.fsctlName == FSCCFSCTLName.FSCTL_GET_NTFS_VOLUME_DATA)
             {
-                Requirement.AssumeCaptured("FSCTL Name is FSCTL_GET_NTFS_VOLUME_DATA");
+                Requirement.Capture("FSCTL Name is FSCTL_GET_NTFS_VOLUME_DATA");
             }
             else if (request.fsctlName == FSCCFSCTLName.FSCTL_IS_PATHNAME_VALID)
             {
-                Requirement.AssumeCaptured("FSCTL Name is FSCTL_IS_PATHNAME_VALID");
+                Requirement.Capture("FSCTL Name is FSCTL_IS_PATHNAME_VALID");
             }
             else if (request.fsctlName == FSCCFSCTLName.FSCTL_READ_FILE_USN_DATA)
             {
-                Requirement.AssumeCaptured("FSCTL Name is FSCTL_READ_FILE_USN_DATA");
+                Requirement.Capture("FSCTL Name is FSCTL_READ_FILE_USN_DATA");
             }
             else if (request.fsctlName == FSCCFSCTLName.FSCTL_SET_COMPRESSION)
             {
-                Requirement.AssumeCaptured("FSCTL Name is FSCTL_SET_COMPRESSION");
+                Requirement.Capture("FSCTL Name is FSCTL_SET_COMPRESSION");
             }
             else if (request.fsctlName == FSCCFSCTLName.FSCTL_SET_SPARSE)
             {
-                Requirement.AssumeCaptured("FSCTL Name is FSCTL_SET_SPARSE");
+                Requirement.Capture("FSCTL Name is FSCTL_SET_SPARSE");
             }
             else if (request.fsctlName == FSCCFSCTLName.FSCTL_SET_ZERO_DATA)
             {
-                Requirement.AssumeCaptured("FSCTL Name is FSCTL_SET_ZERO_DATA");
+                Requirement.Capture("FSCTL Name is FSCTL_SET_ZERO_DATA");
             }
             else if (request.fsctlName == FSCCFSCTLName.FSCTL_SET_ZERO_ON_DEALLOCATION)
             {
-                Requirement.AssumeCaptured("FSCTL Name is FSCTL_SET_ZERO_ON_DEALLOCATION");
+                Requirement.Capture("FSCTL Name is FSCTL_SET_ZERO_ON_DEALLOCATION");
             }
             else if (request.fsctlName == FSCCFSCTLName.FSCTL_WRITE_USN_CLOSE_RECORD)
             {
-                Requirement.AssumeCaptured("FSCTL Name is FSCTL_WRITE_USN_CLOSE_RECORD");
+                Requirement.Capture("FSCTL Name is FSCTL_WRITE_USN_CLOSE_RECORD");
             }
 
             Update.UpdateResponse(smbConnection, messageId);

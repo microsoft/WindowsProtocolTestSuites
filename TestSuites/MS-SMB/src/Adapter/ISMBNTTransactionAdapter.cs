@@ -1,8 +1,8 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.Modeling;
 using Microsoft.Protocols.TestTools;
 
 namespace Microsoft.Protocol.TestSuites.Smb
@@ -309,7 +309,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="fid">The file identifier.</param>
         /// <param name="snapShots">snapShots.</param>
         /// <param name="isSucceed">If it succeeds, true is returned; Otherwise, false is returned.</param>
-        void CheckSnapshots(int fid, Microsoft.Modeling.Set<int> snapShots, out bool isSucceed);
+        void CheckSnapshots(int fid, List<int> snapShots, out bool isSucceed);
 
         /// <summary>
         /// NT_TRANSACT_QUERY_QUOTA Client Request.
@@ -471,8 +471,8 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int messageId,
             int sessionId,
             int treeId,
-            [Domain("ImpersonationLevel")] int impersonationLevel,
-            [Domain("FileDomain")] string name,
+            int impersonationLevel,
+            string name,
             ShareType shareType,
             bool isSigned);
 
