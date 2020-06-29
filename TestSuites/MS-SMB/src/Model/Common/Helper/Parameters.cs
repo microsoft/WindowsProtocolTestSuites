@@ -1,10 +1,8 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-
-using Microsoft.Modeling;
-
 namespace Microsoft.Protocol.TestSuites.Smb
 {
     /// <summary>
@@ -34,60 +32,60 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// </summary>
         /// Disable warning CA2211 because model need to change this variable according to Test Case design.
         [SuppressMessage("Microsoft.Usage", "CA2211:NonConstantFieldsShouldNotBeVisible")]
-        public static Sequence<string> shareFileNames = new Sequence<string>("Share1", "Share2", "DFSShare", "QuotaShare");
+        public static List<string> shareFileNames = new List<string> { "Share1", "Share2", "DFSShare", "QuotaShare" };
 
         /// <summary>
         /// Define share printer name.
         /// </summary>
         /// Disable warning CA2211 because model need to change this variable according to Test Case design.
         [SuppressMessage("Microsoft.Usage", "CA2211:NonConstantFieldsShouldNotBeVisible")]
-        public static Sequence<string> sharePrinterNames = new Sequence<string>("PrinterShare1");
+        public static List<string> sharePrinterNames = new List<string> { "PrinterShare1" };
 
         /// <summary>
         /// Define share pipe name.
         /// </summary>
         /// Disable warning CA2211 because model need to change this variable according to Test Case design.
         [SuppressMessage("Microsoft.Usage", "CA2211:NonConstantFieldsShouldNotBeVisible")]
-        public static Sequence<string> sharePipeNames = new Sequence<string>("IPC$");
+        public static List<string> sharePipeNames = new List<string> { "IPC$" };
 
         /// <summary>
         /// Define share devide name.
         /// </summary>
         /// Disable warning CA2211 because model need to change this variable according to Test Case design.
         [SuppressMessage("Microsoft.Usage", "CA2211:NonConstantFieldsShouldNotBeVisible")]
-        public static Sequence<string> shareDeviceNames = new Sequence<string>(string.Empty);
+        public static List<string> shareDeviceNames = new List<string> { string.Empty };
 
         /// <summary>
         /// File names to use.
         /// </summary>
         /// Disable warning CA2211 because model need to change this variable according to Test Case design.
         [SuppressMessage("Microsoft.Usage", "CA2211:NonConstantFieldsShouldNotBeVisible")]
-        public static SequenceContainer<string> fileNames = new SequenceContainer<string>(
-            "Test1.txt", 
-            "Test2.txt", 
-            "ExistTest.txt", 
-            @"Dir1\Test1.txt");
+        public static List<string> fileNames = new List<string>{
+            "Test1.txt",
+            "Test2.txt",
+            "ExistTest.txt",
+            @"Dir1\Test1.txt"};
 
         /// <summary>
         /// Dir names to use.
         /// </summary>
         /// Disable warning CA2211 because model need to change this variable according to Test Case design.
         [SuppressMessage("Microsoft.Usage", "CA2211:NonConstantFieldsShouldNotBeVisible")]
-        public static SequenceContainer<string> dirNames = new SequenceContainer<string>(string.Empty, "Dir1", "Dir2");
+        public static List<string> dirNames = new List<string> { string.Empty, "Dir1", "Dir2" };
 
         /// <summary>
         /// Namedpipe names to use.
         /// </summary>
         /// Disable warning CA2211 because model need to change this variable according to Test Case design.
         [SuppressMessage("Microsoft.Usage", "CA2211:NonConstantFieldsShouldNotBeVisible")]
-        public static SequenceContainer<string> pipeNames = new SequenceContainer<string>("Pipe1");
+        public static List<string> pipeNames = new List<string> { "Pipe1" };
 
         /// <summary>
         /// Mailslot names to use.
         /// </summary>
         /// Disable warning CA2211 because model need to change this variable according to Test Case design.
         [SuppressMessage("Microsoft.Usage", "CA2211:NonConstantFieldsShouldNotBeVisible")]
-        public static SequenceContainer<string> mailslotNames = new SequenceContainer<string>("Mailslot1");
+        public static List<string> mailslotNames = new List<string> { "Mailslot1" };
 
         #endregion.
 

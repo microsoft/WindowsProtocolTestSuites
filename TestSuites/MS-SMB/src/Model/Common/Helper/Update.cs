@@ -5,8 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using Microsoft.Modeling;
-
 namespace Microsoft.Protocol.TestSuites.Smb
 {
     /// <summary>
@@ -43,7 +41,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             SmbConnection connection, 
             int messageId,
             SignState signState, 
-            Set<Capabilities> serverCapabilities)
+            List<Capabilities> serverCapabilities)
         {
             connection.sutSignState = signState;
             connection.SutSendSequenceNumber.Remove(messageId);
@@ -292,7 +290,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             SmbConnection connection, 
             int messageId, 
             int fId, 
-            Set<CreateAction> createAction)
+            List<CreateAction> createAction)
         {
             CreateRequest request = (CreateRequest)connection.sentRequest[messageId];
             bool isOpened = false;

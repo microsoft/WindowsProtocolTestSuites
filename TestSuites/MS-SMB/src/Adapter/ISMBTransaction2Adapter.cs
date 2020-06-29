@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.Modeling;
 using Microsoft.Protocols.TestTools;
 
 namespace Microsoft.Protocol.TestSuites.Smb
@@ -406,7 +406,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="fid">The file identifier.</param>
         /// <param name="previousVersion">The previous version.</param>
         /// <param name="isSucceed">Indicate whether the checking is successful or not.</param>
-        void CheckPreviousVersion(int fid, Microsoft.Modeling.Set<int> previousVersion, out bool isSucceed);
+        void CheckPreviousVersion(int fid, List<int> previousVersion, out bool isSucceed);
 
         /// <summary>
         /// TRANS2_QUERY_FILE_INFORMATION Request handler.
@@ -435,7 +435,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int treeId,
             bool isSigned,
             bool isUsePassthrough,
-            [Domain("InfoLevelQueriedByFid")] InformationLevel informationLevel,
+            InformationLevel informationLevel,
             int fid,
             int reserved);
 
@@ -467,7 +467,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             bool isSigned,
             bool isUsePassthrough,
             bool isReparse,
-            [Domain("InfoLevelQueriedByPath")] InformationLevel informationLevel,
+            InformationLevel informationLevel,
             int gmtTokenIndex);
 
         /// <summary>
@@ -497,7 +497,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int treeId,
             bool isSigned,
             bool isUsePassthrough,
-            [Domain("InfoLevelQueriedByFS")] InformationLevel informationLevel,
+            InformationLevel informationLevel,
             bool otherBits,
             int reserved);
 
@@ -534,7 +534,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             bool isSigned,
             bool relaceEnable,
             bool isUsePassthrough,
-            [Domain("InfoLevelSetByFid")] InformationLevel informationLevel,
+            InformationLevel informationLevel,
             int fid,
             string fileName,
             bool isRootDirecotyNull,
@@ -568,7 +568,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             bool isSigned,
             bool isUsePassthrough,
             bool isReparse,
-            [Domain("InfoLevelSetByPath")] InformationLevel informationLevel,
+            InformationLevel informationLevel,
             int gmtTokenIndex);
 
         /// <summary>
@@ -636,7 +636,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int treeId,
             bool isSigned,
             bool isReparse,
-            [Domain("InfoLevelByFind")] InformationLevel informationLevel,
+            InformationLevel informationLevel,
             int gmtTokenIndex,
             bool isFlagsKnowsLongNameSet,
             bool isGmtPattern);
@@ -719,7 +719,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int treeId,
             int fid,
             bool isSigned,
-            [Domain("InfoLevelSetByFS")] InformationLevel informationLevel,
+            InformationLevel informationLevel,
             Trans2SetFsInfoResponseParameter requestPara);
 
         /// <summary>
@@ -750,7 +750,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int treeId,
             bool isSigned,
             bool isReparse,
-            [Domain("InfoLevelByFind")] InformationLevel informationLevel,
+            InformationLevel informationLevel,
             int sid,
             int gmtTokenIndex,
             bool isFlagsKnowsLongNameSet);

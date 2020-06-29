@@ -5,8 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using Microsoft.Modeling;
-
 namespace Microsoft.Protocol.TestSuites.Smb
 {
     /// <summary>
@@ -43,12 +41,12 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <summary>
         /// To store search handler ID.
         /// </summary>
-        public SetContainer<int> searchHandlerList = new SetContainer<int>();
+        public List<int> searchHandlerList = new List<int>();
 
         /// <summary>
         /// This container stores the previous version.
         /// </summary>
-        public Set<int> previousVersionToken = new Set<int>();
+        public List<int> previousVersionToken = new List<int>();
 
 
         /// <summary>
