@@ -938,7 +938,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             {
                 case ArgumentType.AllValid:
                     bool succeed = errorCode == (uint)WspErrorCode.SUCCESS || errorCode == (uint)WspErrorCode.DB_S_ENDOFROWSET ? true : false;
-                    Site.Assert.IsTrue(succeed, "Server should return succeed or DB_S_ENDOFROWSET for CPMGetRowsIn, actual status is {0}", errorCode);
+                    Site.Assert.IsTrue(succeed, "Server should return SUCCESS or DB_S_ENDOFROWSET for CPMGetRowsIn, actual status is {0}", errorCode);
                     break;
                 case ArgumentType.AlternativeCMaxResultsValue:
                     Site.Assert.AreEqual((uint)WspErrorCode.DB_S_ENDOFROWSET, errorCode, "Server should return DB_S_ENDOFROWSET for CPMGetRowsIn if _cMaxResults is set and the complete rowset can be retrieved by a single CPMGetRowsIn call.");
@@ -948,7 +948,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
         private void CPMGetQueryStatusExOut(uint errorCode)
         {
-            Site.Assert.AreEqual((uint)WspErrorCode.SUCCESS, errorCode, "Server should return succeed CPMGetQueryStatusExOut");
+            Site.Assert.AreEqual((uint)WspErrorCode.SUCCESS, errorCode, "Server should return SUCCESS for CPMGetQueryStatusExIn.");
         }
 
         private uint GetLCIDValueBySortingOrder(SortingOrder order)
@@ -976,7 +976,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             prepareAdapter.CPMConnectOutResponse += EnsureSuccessfulCPMConnectOut;
             prepareAdapter.CPMCreateQueryOutResponse += CPMCreateQueryOut;
             prepareAdapter.CPMGetQueryStatusExOutResponse += CPMGetQueryStatusExOut;
-            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
+            Site.Log.Add(LogEntryKind.TestStep, "A second Client sends CPMConnectIn and expects success.");
             prepareAdapter.CPMConnectInRequest();
 
             var columnSet = prepareAdapter.builder.GetColumnSet(2);
@@ -991,9 +991,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             };
             pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
 
-            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
+            Site.Log.Add(LogEntryKind.TestStep, "The second Client sends CPMCreateQueryIn and expects success.");
             prepareAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), prepareAdapter.builder.parameter.LCID_VALUE);
 
+            Site.Log.Add(LogEntryKind.TestStep, "The second Client sends CPMGetQueryStatusExIn and expects success.");
             prepareAdapter.CPMGetQueryStatusExIn(out CPMGetQueryStatusExOut response);
             return response._whereID;
         }
