@@ -351,6 +351,11 @@
       <Choice>true, false</Choice>
       <Description>Static virtual channel traffic can optionally be tunneled over a reliable multitransport tunnel, using dynamic virtual channels, if this capability is supported by the server and client.</Description>
     </Property>
+
+    <Property name="RDP.Client.SupportCompression" value="false">
+      <Choice>true, false</Choice>
+      <Description>Determines whether bulk compression is enabled when it is transmitted by RDP to the local computer.</Description>
+    </Property>
   </Properties>
   <Adapters>
   </Adapters>
