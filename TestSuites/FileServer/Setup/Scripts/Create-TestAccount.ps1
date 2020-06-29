@@ -52,6 +52,29 @@ function ExitCode()
     return $MyInvocation.ScriptLineNumber 
 }
 
+function StartService($serviceName)
+{
+    $service = Get-Service -Name $serviceName
+    $retryTimes = 0
+    while($service.Status -ne "Running" -and $retryTimes -lt 6)
+    {
+        .\Write-Info.ps1 "Start $serviceName service."
+        Start-Service -InputObj $service -ErrorAction Continue
+        Sleep 10
+        $retryTimes++ 
+        $service = Get-Service -Name $serviceName
+    }
+
+    if($retryTimes -ge 6)
+    {
+        Write-Error.ps1 "Start $serviceName service failed within 1 minute."
+    }
+    else
+    {
+        .\Write-Info.ps1 "Service $serviceName is Running."
+    }
+}
+
 #----------------------------------------------------------------------------
 # Get content from protocol config files
 #----------------------------------------------------------------------------
@@ -79,6 +102,39 @@ if([System.String]::IsNullOrEmpty($password))
 
 $azgroups = $params.Parameters.Groups
 $users =  $params.Parameters.Users
+
+#----------------------------------------------------------------------------
+# Start required services
+#----------------------------------------------------------------------------
+.\Write-Info.ps1 "Check and start Active Directory Domain Services"
+StartService "NTDS"
+
+.\Write-Info.ps1 "Check and start Active Directory Web Services"
+StartService "ADWS"
+
+
+#----------------------------------------------------------------------------
+# Create CBAC ENV
+#----------------------------------------------------------------------------
+$domainName = (Get-WmiObject win32_computersystem).Domain
+
+# Retry to wait until the ADWS can respond to PowerShell commands correctly
+$retryTimes = 0
+$domain = $null
+while ($retryTimes -lt 30) {
+    $domain = Get-ADDomain $domainName
+    if ($domain -ne $null) {
+        break;
+    }
+    else {
+        Start-Sleep 10
+        $retryTimes += 1
+    }
+}
+
+if ($domain -eq $null) {
+    .\Write-Error.ps1 "Failed to get correct responses from the ADWS service after strating it for 5 minutes."
+}
 
 #----------------------------------------------------------------------------
 # Create and active test accounts
