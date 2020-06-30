@@ -566,7 +566,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             }
         }
 
-        private void CPMCreateQuery_Size(_relop_Values relation, int comparionSize)
+        private void CPMCreateQuery_Size(_relop_Values relation, int comparedSize)
         {
             argumentType = ArgumentType.AllValid;
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
@@ -574,7 +574,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             var columnSet = wspAdapter.builder.GetColumnSet(2);
             CBaseStorageVariant searchSope = wspAdapter.builder.GetBaseStorageVariant(vType_Values.VT_LPWSTR, new VT_LPWSTR(Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size"));
-            CBaseStorageVariant size = wspAdapter.builder.GetBaseStorageVariant(vType_Values.VT_INT, comparionSize);
+            CBaseStorageVariant size = wspAdapter.builder.GetBaseStorageVariant(vType_Values.VT_INT, comparedSize);
             var restrictionArray = wspAdapter.builder.GetRestrictionArray(
                 wspAdapter.builder.GetPropertyRestriction(_relop_Values.PREQ, WspConsts.System_Search_Scope, searchSope),
                 wspAdapter.builder.GetPropertyRestriction(relation, WspConsts.System_Size, size));
@@ -594,22 +594,22 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             switch (relation)
             {
                 case _relop_Values.PRLT:
-                    log = $"less than {comparionSize}";
+                    log = $"less than {comparedSize}";
                     expectedRowsCount = 2;
                     fileNameList = new string[] { "test1.txt", "test27.txt" };
                     break;
                 case _relop_Values.PRLE:
-                    log = $"less than or equal to {comparionSize}";
+                    log = $"less than or equal to {comparedSize}";
                     expectedRowsCount = 2;
                     fileNameList = new string[] { "test1.txt", "test27.txt" };
                     break;
                 case _relop_Values.PRGT:
-                    log = $"greater than {comparionSize}";
+                    log = $"greater than {comparedSize}";
                     expectedRowsCount = 1;
                     fileNameList = new string[] { "test132.txt" };
                     break;
                 case _relop_Values.PRGE:
-                    log = $"greater than or equal to {comparionSize}";
+                    log = $"greater than or equal to {comparedSize}";
                     expectedRowsCount = 2;
                     fileNameList = new string[] { "test1.txt", "test132.txt" };
                     break;
@@ -639,7 +639,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
             wspAdapter.CPMConnectInRequest();
 
-            int comparionSize = 0;
+            int comparedSize = 0;
             string fileQueryString = null;
             string[] fileNameList = null;
             string log = null;
@@ -653,32 +653,32 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     expectedRowsCount = 0;
                     break;
                 case CRestriction_ulType_Values.RTAnd:
-                    comparionSize = 516;
+                    comparedSize = 516;
                     fileQueryString = "test12?.txt";
                     relation = _relop_Values.PRLT;
-                    log = $"whose size is less than {comparionSize} bytes and whose file name matches {fileQueryString}";
+                    log = $"whose size is less than {comparedSize} bytes and whose file name matches {fileQueryString}";
                     expectedRowsCount = 1;
                     fileNameList = new string[] { "test121.txt" };
                     break;
                 case CRestriction_ulType_Values.RTOr:
-                    comparionSize = 2883584;
+                    comparedSize = 2883584;
                     fileQueryString = "test12?.txt";
                     relation = _relop_Values.PRGT;
-                    log = $"whose size is larger than {comparionSize} bytes or whose file name matches {fileQueryString}";
+                    log = $"whose size is larger than {comparedSize} bytes or whose file name matches {fileQueryString}";
                     expectedRowsCount = 4;
                     fileNameList = new string[] { "test15.docx", "test121.txt", "test122.txt", "test128.txt" };
                     break;
                 case CRestriction_ulType_Values.RTNot:
-                    comparionSize = 2883584;
+                    comparedSize = 2883584;
                     relation = _relop_Values.PRLT;
-                    log = $"whose size is NOT less than {comparionSize}";
+                    log = $"whose size is NOT less than {comparedSize}";
                     expectedRowsCount = 2;
                     fileNameList = new string[] { "test13.doc", "test15.docx" };
                     break;
                 case CRestriction_ulType_Values.RTProperty:
-                    comparionSize = 2883584;
+                    comparedSize = 2883584;
                     relation = _relop_Values.PRGE;
-                    log = $"whose size is larger than or equal to {comparionSize} bytes";
+                    log = $"whose size is larger than or equal to {comparedSize} bytes";
                     expectedRowsCount = 2;
                     fileNameList = new string[] { "test13.doc", "test15.docx" };
                     break;
@@ -697,7 +697,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     throw new NotImplementedException($"The test case of ulType {ulType} is not implemented.");
             }
 
-            CBaseStorageVariant size = wspAdapter.builder.GetBaseStorageVariant(vType_Values.VT_INT, comparionSize);
+            CBaseStorageVariant size = wspAdapter.builder.GetBaseStorageVariant(vType_Values.VT_INT, comparedSize);
             CBaseStorageVariant querytext = wspAdapter.builder.GetBaseStorageVariant(vType_Values.VT_LPWSTR, new VT_LPWSTR(fileQueryString));
 
             // Construct restriction according to _ulType
@@ -946,11 +946,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             }
         }
 
-        private void CPMGetQueryStatusExOut(uint errorCode)
-        {
-            Site.Assert.AreEqual((uint)WspErrorCode.SUCCESS, errorCode, "Server should return SUCCESS for CPMGetQueryStatusExIn.");
-        }
-
         private uint GetLCIDValueBySortingOrder(SortingOrder order)
         {
             switch (order)
@@ -975,7 +970,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             prepareAdapter.Initialize(this.Site);
             prepareAdapter.CPMConnectOutResponse += EnsureSuccessfulCPMConnectOut;
             prepareAdapter.CPMCreateQueryOutResponse += CPMCreateQueryOut;
-            prepareAdapter.CPMGetQueryStatusExOutResponse += CPMGetQueryStatusExOut;
+            prepareAdapter.CPMGetQueryStatusExOutResponse += EnsureSuccessfulCPMGetQueryStatusExOut;
             Site.Log.Add(LogEntryKind.TestStep, "A second Client sends CPMConnectIn and expects success.");
             prepareAdapter.CPMConnectInRequest();
 
