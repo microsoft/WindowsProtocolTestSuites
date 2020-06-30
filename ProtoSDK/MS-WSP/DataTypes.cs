@@ -898,7 +898,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// Operation aborted
         /// </summary>
-        E_ABORT = 0x80004004
+        E_ABORT = 0x80004004,
+
+        /// <summary>
+        /// Column ID is invalid.
+        /// </summary>
+        DB_E_BADCOLUMNID = 0x80040E11,
+
+        /// <summary>
+        /// The scopes specified for the query were incorrectly formatted.
+        /// </summary>
+        QRY_E_INVALIDSCOPES = 0x80040718,
     }
 
     /// <summary>

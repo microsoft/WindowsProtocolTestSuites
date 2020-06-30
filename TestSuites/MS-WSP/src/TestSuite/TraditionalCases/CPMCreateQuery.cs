@@ -22,6 +22,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         {
             AllValid,
             ColumnSetAbsent,
+            EmptyColumnSet,
+            InvalidColumnSet,
+            MismatchedColumnSet,
             RestrictionArrayAbsent,
             PidMapperAbsent,
             AlternativeCMaxResultsValue
@@ -57,9 +60,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.Initialize(this.Site);
 
             wspAdapter.CPMConnectOutResponse += EnsureSuccessfulCPMConnectOut;
-            wspAdapter.CPMSetBindingsInResponse += EnsureSuccessfulCPMSetBindingsOut;
 
             wspAdapter.CPMCreateQueryOutResponse += CPMCreateQueryOut;
+            wspAdapter.CPMSetBindingsInResponse += CPMSetBindingsOut;
             wspAdapter.CPMGetRowsOut += CPMGetRowsOut;
         }
 
@@ -463,10 +466,149 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 WspConsts.System_Search_Scope,
                 WspConsts.System_Search_Contents,
             };
+            pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn without ColumnSet.");
             argumentType = ArgumentType.ColumnSetAbsent;
             wspAdapter.CPMCreateQueryIn(null, restrictionArray, null, new CCategorizationSet(), new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to verify the server response if any columns requested in CPMSetBindingsIn when an empty ColumnSet is sent in the previous CPMCreateQueryIn.")]
+        public void CPMCreateQuery_EmptyColumnSet()
+        {
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
+            wspAdapter.CPMConnectInRequest();
+
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray(Site.Properties.Get("QueryText"), Site.Properties.Get("QueryPath"), WspConsts.System_Search_Contents);
+
+            var columnSet = new CColumnSet();
+            columnSet.count = 0;
+            columnSet.indexes = new uint[] { };
+
+            var pidMapper = new CPidMapper();
+            pidMapper.aPropSpec = new CFullPropSpec[]
+            {
+                WspConsts.System_ItemName,
+                WspConsts.System_ItemFolderNameDisplay,
+                WspConsts.System_Search_Scope,
+                WspConsts.System_Search_Contents,
+            };
+            pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn with an empty ColumnSet.");
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, new CCategorizationSet(), new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+
+            var columns = new CTableColumn[]
+            {
+                wspAdapter.builder.GetTableColumn(WspConsts.System_ItemName, vType_Values.VT_VARIANT),
+                wspAdapter.builder.GetTableColumn(WspConsts.System_ItemFolderNameDisplay, vType_Values.VT_VARIANT)
+            };
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects DB_E_BADCOLUMNID if the ColumnSet of the previous CPMCreateQueryIn is empty.");
+            argumentType = ArgumentType.EmptyColumnSet;
+            wspAdapter.CPMSetBindingsIn(columns);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to verify the server response if an invalid ColumnSet whose count is smaller than the length of indexes is sent in CPMCreateQueryIn.")]
+        public void CPMCreateQuery_InvalidColumnSet_CountSmallerThanLengthOfIndexes()
+        {
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
+            wspAdapter.CPMConnectInRequest();
+
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray(Site.Properties.Get("QueryText"), Site.Properties.Get("QueryPath"), WspConsts.System_Search_Contents);
+
+            var columnSet = new CColumnSet();
+            columnSet.count = 2;
+            columnSet.indexes = new uint[] { 0, 1, 2, 3 };
+
+            var pidMapper = new CPidMapper();
+            pidMapper.aPropSpec = new CFullPropSpec[]
+            {
+                WspConsts.System_ItemName,
+                WspConsts.System_ItemFolderNameDisplay,
+                WspConsts.System_Search_Scope,
+                WspConsts.System_Search_Contents,
+            };
+            pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn with an invalid ColumnSet whose count is smaller than the length of indexes and expects ERROR_INVALID_PARAMETER.");
+            Site.Log.Add(LogEntryKind.Debug, $"columnSet.count: {columnSet.count}");
+            Site.Log.Add(LogEntryKind.Debug, $"Length of columnSet.indexes: {columnSet.indexes.Length}");
+            argumentType = ArgumentType.InvalidColumnSet;
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, new CCategorizationSet(), new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to verify the server response if an invalid ColumnSet whose count is larger than the length of indexes is sent in CPMCreateQueryIn.")]
+        public void CPMCreateQuery_InvalidColumnSet_CountLargerThanLengthOfIndexes()
+        {
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
+            wspAdapter.CPMConnectInRequest();
+
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray(Site.Properties.Get("QueryText"), Site.Properties.Get("QueryPath"), WspConsts.System_Search_Contents);
+
+            var columnSet = new CColumnSet();
+            columnSet.count = 4;
+            columnSet.indexes = new uint[] { 0, 1 };
+
+            var pidMapper = new CPidMapper();
+            pidMapper.aPropSpec = new CFullPropSpec[]
+            {
+                WspConsts.System_ItemName,
+                WspConsts.System_ItemFolderNameDisplay,
+                WspConsts.System_Search_Scope,
+                WspConsts.System_Search_Contents,
+            };
+            pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn with an invalid ColumnSet whose count is larger than the length of indexes and expects ERROR_INVALID_PARAMETER.");
+            Site.Log.Add(LogEntryKind.Debug, $"columnSet.count: {columnSet.count}");
+            Site.Log.Add(LogEntryKind.Debug, $"Length of columnSet.indexes: {columnSet.indexes.Length}");
+            argumentType = ArgumentType.InvalidColumnSet;
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, new CCategorizationSet(), new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to verify the server response if the cloumns requested in CPMSetBindingsIn do not match the ColumnSet of previous CPMCreateQueryIn.")]
+        public void CPMCreateQuery_MismatchedColumnSet()
+        {
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
+            wspAdapter.CPMConnectInRequest();
+
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray(Site.Properties.Get("QueryText"), Site.Properties.Get("QueryPath"), WspConsts.System_FileName);
+
+            var columnSet = new CColumnSet();
+            columnSet.count = 2;
+            columnSet.indexes = new uint[] { 0, 1 };
+
+            var pidMapper = new CPidMapper();
+            pidMapper.aPropSpec = new CFullPropSpec[]
+            {
+                WspConsts.System_ItemName,
+                WspConsts.System_ItemFolderNameDisplay,
+                WspConsts.System_Search_Scope,
+                WspConsts.System_FileName,
+            };
+            pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, new CCategorizationSet(), new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+
+            var columns = new CTableColumn[]
+            {
+                wspAdapter.builder.GetTableColumn(WspConsts.System_Search_Scope, vType_Values.VT_VARIANT),
+                wspAdapter.builder.GetTableColumn(WspConsts.System_FileName, vType_Values.VT_VARIANT)
+            };
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects DB_E_BADCOLUMNID if the columns requested are not present in the ColumnSet of the previous CPMCreateQueryIn.");
+            argumentType = ArgumentType.MismatchedColumnSet;
+            wspAdapter.CPMSetBindingsIn(columns);
         }
 
         [TestMethod]
@@ -486,6 +628,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 WspConsts.System_Search_Scope,
                 WspConsts.System_Search_Contents,
             };
+            pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn without RestrictionArray.");
             argumentType = ArgumentType.RestrictionArrayAbsent;
@@ -809,11 +952,30 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 case ArgumentType.ColumnSetAbsent:
                     Site.Assert.AreEqual((uint)WspErrorCode.ERROR_INVALID_PARAMETER, errorCode, "CPMCreateQueryOut should return ERROR_INVALID_PARAMETER if no ColumnSet is sent in CPMCreateQueryIn.");
                     break;
+                case ArgumentType.InvalidColumnSet:
+                    Site.Assert.AreEqual((uint)WspErrorCode.ERROR_INVALID_PARAMETER, errorCode, "CPMCreateQueryOut should return ERROR_INVALID_PARAMETER if invalid ColumnSet is sent in CPMCreateQueryIn.");
+                    break;
                 case ArgumentType.RestrictionArrayAbsent:
-                    Site.Assert.AreEqual((uint)WspErrorCode.ERROR_INVALID_PARAMETER, errorCode, "CPMCreateQueryOut should return ERROR_INVALID_PARAMETER if no RestrictionArray is sent in CPMCreateQueryIn.");
+                    Site.Assert.AreEqual((uint)WspErrorCode.QRY_E_INVALIDSCOPES, errorCode, "CPMCreateQueryOut should return QRY_E_INVALIDSCOPES if no RestrictionArray is sent in CPMCreateQueryIn.");
                     break;
                 case ArgumentType.PidMapperAbsent:
                     Site.Assert.AreEqual((uint)WspErrorCode.ERROR_INVALID_PARAMETER, errorCode, "CPMCreateQueryOut should return ERROR_INVALID_PARAMETER if no PidMapper is sent in CPMCreateQueryIn.");
+                    break;
+            }
+        }
+
+        private void CPMSetBindingsOut(uint errorCode)
+        {
+            switch (argumentType)
+            {
+                case ArgumentType.EmptyColumnSet:
+                    Site.Assert.AreEqual((uint)WspErrorCode.DB_E_BADCOLUMNID, errorCode, "CPMSetBindingsIn should return DB_E_BADCOLUMNID if ColumnSet in previous CPMCreateQueryIn is empty.");
+                    break;
+                case ArgumentType.MismatchedColumnSet:
+                    Site.Assert.AreEqual((uint)WspErrorCode.DB_E_BADCOLUMNID, errorCode, "CPMSetBindingsIn should return DB_E_BADCOLUMNID if columns requested in CPMSetBindingsIn do not match the ColumnSet in previous CPMCreateQueryIn.");
+                    break;
+                default:
+                    Site.Assert.AreEqual((uint)WspErrorCode.SUCCESS, errorCode, "CPMSetBindingsIn should succeed.");
                     break;
             }
         }
