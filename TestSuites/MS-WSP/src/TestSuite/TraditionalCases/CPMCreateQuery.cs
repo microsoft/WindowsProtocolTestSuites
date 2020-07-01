@@ -27,7 +27,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             MismatchedColumnSet,
             RestrictionArrayAbsent,
             PidMapperAbsent,
-            AlternativeCMaxResultsValue
+            AlternativeCMaxResultsValue,
+            InvalidSearchScope
         }
 
         public enum SortingOrder
@@ -633,6 +634,33 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         {
             CPMCreateQuery_SortByAuthorsWithLCID(SortingOrder.StrokeCountOrder);
         }
+
+        [TestMethod]
+        [TestCategory("BVT")]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to verify the server response if an invalid search scope is specified in CPMCreateQueryIn.")]
+        public void CPMCreateQuery_InvalidSearchScope()
+        {
+            argumentType = ArgumentType.InvalidSearchScope;
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
+            wspAdapter.CPMConnectInRequest();
+
+            var columnSet = wspAdapter.builder.GetColumnSet(2);
+            string invalidQueryPath = "file://sut/Invalid/";
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray(Site.Properties.Get("QueryText"), invalidQueryPath, WspConsts.System_Search_Contents);
+            var pidMapper = new CPidMapper();
+            pidMapper.aPropSpec = new CFullPropSpec[]
+            {
+                WspConsts.System_ItemName,
+                WspConsts.System_ItemFolderNameDisplay,
+                WspConsts.System_Search_Scope,
+                WspConsts.System_FileName,
+            };
+            pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
+
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects QRY_E_INVALIDSCOPES.");
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+        }
         #endregion
 
         /// <summary>
@@ -788,7 +816,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             string log = null;
             _relop_Values relation = _relop_Values.PRLT;
             uint expectedRowsCount = 0;
-            
+
             switch (ulType)
             {
                 case CRestriction_ulType_Values.RTNone:
@@ -1074,6 +1102,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     break;
                 case ArgumentType.PidMapperAbsent:
                     Site.Assert.AreEqual((uint)WspErrorCode.ERROR_INVALID_PARAMETER, errorCode, "CPMCreateQueryOut should return ERROR_INVALID_PARAMETER if no PidMapper is sent in CPMCreateQueryIn.");
+                    break;
+                case ArgumentType.InvalidSearchScope:
+                    Site.Assert.AreEqual((uint)WspErrorCode.QRY_E_INVALIDSCOPES, errorCode, "CPMCreateQueryOut should return QRY_E_INVALIDSCOPES if the search scope is invalid.");
                     break;
             }
         }
