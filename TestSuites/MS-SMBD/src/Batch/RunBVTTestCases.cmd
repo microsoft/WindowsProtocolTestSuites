@@ -15,5 +15,6 @@ if ErrorLevel 1 (
 	exit /b 1
 )
 
+cd /d %CurrentPath%
 %vstest% "%CurrentPath%..\Bin\MS-SMBD_ServerTestSuite.dll" /Settings:"%CurrentPath%..\Bin\ServerLocal.TestSettings" /Logger:trx /TestCaseFilter:"TestCategory=BVT"
 pause
