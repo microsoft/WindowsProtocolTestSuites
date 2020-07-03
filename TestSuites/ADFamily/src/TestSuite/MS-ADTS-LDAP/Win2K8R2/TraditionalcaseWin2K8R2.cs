@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Modeling;
 using Microsoft.Protocols.TestSuites.ActiveDirectory.Common;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.Messages;
@@ -47,12 +46,12 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
         /// <summary>
         /// Attribute and value used in add operation
         /// </summary>
-        private Sequence<string> addAttrValSeq;
+        private List<string> addAttrValSeq;
 
         /// <summary>
         /// Attribute and value used in modify operation
         /// </summary>
-        private Map<string, Sequence<string>> modAttrValMap;
+        private IDictionary<string, List<string>> modAttrValMap;
 
         /// <summary>
         /// Error status returned by add operation
@@ -172,7 +171,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Add object testUser0
 
-            addAttrValSeq = new Sequence<string>().Add("distinguishedName: " + testUser0Dn).Add("objectClass: user");
+            addAttrValSeq = new List<string>() { "distinguishedName: " + testUser0Dn, "objectClass: user" };
             adLdapModelAdapter.AddOperation(
                 addAttrValSeq,
                 RightsOnParentObjects.RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,
@@ -188,7 +187,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Add object testUser1
 
-            addAttrValSeq = new Sequence<string>().Add("distinguishedName: " + testUser1Dn).Add("objectClass: user");
+            addAttrValSeq = new List<string>() { "distinguishedName: " + testUser1Dn, "objectClass: user" };
             adLdapModelAdapter.AddOperation(
                 addAttrValSeq,
                 RightsOnParentObjects.RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,
@@ -206,7 +205,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             if (!Utilities.IsOptionalFeatureEnabled(adLdapModelAdapter.forestScopePartialDN + ',' + adLdapModelAdapter.configurationNC, adLdapModelAdapter.recycleBinPartialDN + ',' + adLdapModelAdapter.configurationNC))
             {
-                modAttrValMap = new Map<string, Sequence<string>>().Add(new KeyValuePair<string, Sequence<string>>("enableRecycleBin: true", new Sequence<string>().Add("distinguishedName: null")));
+                modAttrValMap = new Dictionary<string, List<string>>();
+                modAttrValMap.Add(new KeyValuePair<string, List<string>>("enableRecycleBin: true", new List<string>() { "distinguishedName: null" }));
                 adLdapModelAdapter.ModifyRecycleBin(
                     modAttrValMap,
                     RightsOnAttributes.RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,
@@ -322,7 +322,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Try to modify displayname of testUser0
 
-            modAttrValMap = new Map<string, Sequence<string>>().Add(new KeyValuePair<string, Sequence<string>>("displayname: name1", new Sequence<string>().Add("distinguishedName: " + testUser0Dn)));
+            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap.Add(new KeyValuePair<string, List<string>>("displayname: name1", new List<string>() { "distinguishedName: " + testUser0Dn }));
             adLdapModelAdapter.ModifyOperation(
                 modAttrValMap,
                 RightsOnAttributes.RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,
@@ -404,7 +405,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Try to modify displayname of delete object container
 
-            modAttrValMap = new Map<string, Sequence<string>>().Add(new KeyValuePair<string, Sequence<string>>("displayname: name", new Sequence<string>().Add("distinguishedName: " + deletedObjectContainer)));
+            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap.Add(new KeyValuePair<string, List<string>>("displayname: name", new List<string>() { "distinguishedName: " + deletedObjectContainer }));
             adLdapModelAdapter.ModifyOperation(
                 modAttrValMap,
                 RightsOnAttributes.RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,
@@ -576,7 +578,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 Site.Log.Add(LogEntryKind.Debug, "Whether an optional feature can be disabled is specified in the msDS-OptionalFeatureFlags attribute on the object representing the optional feature. If the feature can be disabled, the attribute contains the bit flag DISABLABLE_OPTIONAL_FEATURE. Absence of this flag means that the feature cannot be disabled once it has been enabled. Flags: {0}", (OptionalFeature)flags);
                 Site.CaptureRequirementIfAreNotEqual(OptionalFeature.DISABLABLE_OPTIONAL_FEATURE, (OptionalFeature)flags & OptionalFeature.DISABLABLE_OPTIONAL_FEATURE, 4499, "[Recycle Bin Optional Feature]The Recycle Bin optional feature cannot be disabled once it is enabled.");
 
-                modAttrValMap = new Map<string, Sequence<string>>().Add(new KeyValuePair<string, Sequence<string>>("disableRecycleBin: true", new Sequence<string>().Add("distinguishedName: null")));
+                modAttrValMap = new Dictionary<string, List<string>>();
+                modAttrValMap.Add(new KeyValuePair<string, List<string>>("disableRecycleBin: true", new List<string>() { "distinguishedName: null" }));
                 // Disable recycle bin optional feature
                 adLdapModelAdapter.ModifyRecycleBin(
                     modAttrValMap,
@@ -617,7 +620,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             if (!Utilities.IsOptionalFeatureEnabled(adLdapModelAdapter.forestScopePartialDN + ',' + adLdapModelAdapter.configurationNC, adLdapModelAdapter.recycleBinPartialDN + ',' + adLdapModelAdapter.configurationNC))
             {
-                modAttrValMap = new Map<string, Sequence<string>>().Add(new KeyValuePair<string, Sequence<string>>("enableRecycleBin: true", new Sequence<string>().Add("distinguishedName: null")));
+                modAttrValMap = new Dictionary<string, List<string>>();
+                modAttrValMap.Add(new KeyValuePair<string, List<string>>("enableRecycleBin: true", new List<string>() { "distinguishedName: null" }));
                 adLdapModelAdapter.ModifyRecycleBin(
                     modAttrValMap,
                     RightsOnAttributes.RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,
@@ -633,7 +637,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Try to disable recycle bin
 
-            modAttrValMap = new Map<string, Sequence<string>>().Add(new KeyValuePair<string, Sequence<string>>("disableRecycleBin: true", new Sequence<string>().Add("distinguishedName: null")));
+            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap.Add(new KeyValuePair<string, List<string>>("disableRecycleBin: true", new List<string>() { "distinguishedName: null" }));
             // The specified scope is forest-wide and this operation is not performed against the DC that holds the Partition Naming Master role
             adLdapModelAdapter.ModifyRecycleBin(
                 modAttrValMap,
@@ -649,7 +654,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Try to disable recycle bin with invalid GUID
 
-            modAttrValMap = new Map<string, Sequence<string>>().Add(new KeyValuePair<string, Sequence<string>>("disableOptionalFeature: invalidGUID", new Sequence<string>().Add("distinguishedName: null")));
+            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap.Add(new KeyValuePair<string, List<string>>("disableOptionalFeature: invalidGUID", new List<string>() { "distinguishedName: null" }));
             // Disable recycle bin with invalid GUID
             adLdapModelAdapter.ModifyRecycleBin(
                 modAttrValMap,
@@ -665,7 +671,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Try to disable recycle bin with invalid DN
 
-            modAttrValMap = new Map<string, Sequence<string>>().Add(new KeyValuePair<string, Sequence<string>>("disableOptionalFeature: invalidDN", new Sequence<string>().Add("distinguishedName: null")));
+            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap.Add(new KeyValuePair<string, List<string>>("disableOptionalFeature: invalidDN", new List<string>() { "distinguishedName: null" }));
             // The server does not recognize the DN as belonging to that of an object that represents a scope
             adLdapModelAdapter.ModifyRecycleBin(
                 modAttrValMap,
@@ -681,7 +688,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Try to disable recycle bin with invalid scope
 
-            modAttrValMap = new Map<string, Sequence<string>>().Add(new KeyValuePair<string, Sequence<string>>("disableOptionalFeature: invalidScope", new Sequence<string>().Add("distinguishedName: null")));
+            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap.Add(new KeyValuePair<string, List<string>>("disableOptionalFeature: invalidScope", new List<string>() { "distinguishedName: null" }));
             // The feature is not marked as being valid for the specified scope
             adLdapModelAdapter.ModifyRecycleBin(
                 modAttrValMap,
@@ -697,7 +705,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Try to disable recycle bin against invalid DC
 
-            modAttrValMap = new Map<string, Sequence<string>>().Add(new KeyValuePair<string, Sequence<string>>("disableOptionalFeature: DCNotPNM", new Sequence<string>().Add("distinguishedName: null")));
+            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap.Add(new KeyValuePair<string, List<string>>("disableOptionalFeature: DCNotPNM", new List<string>() { "distinguishedName: null" }));
             adLdapModelAdapter.ModifyRecycleBin(
                 modAttrValMap,
                 RightsOnAttributes.RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,
@@ -738,7 +747,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Add object testUser0
 
-            addAttrValSeq = new Sequence<string>().Add("distinguishedName: " + testUser0Dn).Add("objectClass: user");
+            addAttrValSeq = new List<string>() { "distinguishedName: " + testUser0Dn, "objectClass: user" };
             adLdapModelAdapter.AddOperation(
                 addAttrValSeq,
                 RightsOnParentObjects.RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,
@@ -754,7 +763,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Add container object testUser1 (not SAM-specific)
 
-            addAttrValSeq = new Sequence<string>().Add("distinguishedName: " + testUser1Dn).Add("objectClass: container");
+            addAttrValSeq = new List<string>() { "distinguishedName: " + testUser1Dn, "objectClass: container" };
             adLdapModelAdapter.AddOperation(
                 addAttrValSeq,
                 RightsOnParentObjects.RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,
@@ -770,7 +779,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Add SAM-specific object testUser2Dn
 
-            addAttrValSeq = new Sequence<string>().Add("distinguishedName: " + testUser2Dn).Add("objectClass: samDomain;user");
+            addAttrValSeq = new List<string>() { "distinguishedName: " + testUser2Dn, "objectClass: samDomain;user" };
             adLdapModelAdapter.AddOperation(
                 addAttrValSeq,
                 RightsOnParentObjects.RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,
@@ -786,7 +795,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Add object testGroup0Dn
 
-            addAttrValSeq = new Sequence<string>().Add("distinguishedName: " + testGroup0Dn).Add("objectClass: group").Add("member: " + testUser0Dn);
+            addAttrValSeq = new List<string>() { "distinguishedName: " + testGroup0Dn, "objectClass: group", "member: " + testUser0Dn };
             adLdapModelAdapter.AddOperation(
                 addAttrValSeq,
                 RightsOnParentObjects.RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,
@@ -994,7 +1003,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             if (!Utilities.IsOptionalFeatureEnabled(adLdapModelAdapter.forestScopePartialDN + ',' + adLdapModelAdapter.configurationNC, adLdapModelAdapter.recycleBinPartialDN + ',' + adLdapModelAdapter.configurationNC))
             {
-                modAttrValMap = new Map<string, Sequence<string>>().Add(new KeyValuePair<string, Sequence<string>>("enableRecycleBin: true", new Sequence<string>().Add("distinguishedName: null")));
+                modAttrValMap = new Dictionary<string, List<string>>();
+                modAttrValMap.Add(new KeyValuePair<string, List<string>>("enableRecycleBin: true", new List<string>() { "distinguishedName: null" }));
                 adLdapModelAdapter.ModifyRecycleBin(
                     modAttrValMap,
                     RightsOnAttributes.RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,
@@ -1041,9 +1051,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Add tree to be deleted
 
-            addAttrValSeq = new Sequence<string>()
-                .Add("distinguishedName: " + treeDeleteObject)
-                .Add("objectClass: container");
+            addAttrValSeq = new List<string>()
+            {
+                "distinguishedName: " + treeDeleteObject,
+                "objectClass: container"
+            };
             adLdapModelAdapter.AddOperation(
                 addAttrValSeq,
                 RightsOnParentObjects.RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,
@@ -1059,9 +1071,12 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Add leaf to be deleted
 
-            addAttrValSeq = new Sequence<string>()
-                .Add("distinguishedName: " + leafDeleteObject)
-                .Add("objectClass: user");
+            addAttrValSeq = new List<string>()
+            {
+                "distinguishedName: " + leafDeleteObject,
+                "objectClass: user"
+            };
+                
             adLdapModelAdapter.AddOperation(
                 addAttrValSeq,
                 RightsOnParentObjects.RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,
@@ -1127,7 +1142,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Try to enable recycle bin with invalid GUID
 
-            modAttrValMap = new Map<string, Sequence<string>>().Add(new KeyValuePair<string, Sequence<string>>("disableOptionalFeature: invalidGUID", new Sequence<string>().Add("distinguishedName: null")));
+            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap.Add(new KeyValuePair<string, List<string>>("disableOptionalFeature: invalidGUID", new List<string>() { "distinguishedName: null" }));
             // Enable recycle bin bin with invalid GUID
             adLdapModelAdapter.ModifyRecycleBin(
                 modAttrValMap,
@@ -1143,7 +1159,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Try to enable recycle bin with invalid DN
 
-            modAttrValMap = new Map<string, Sequence<string>>().Add(new KeyValuePair<string, Sequence<string>>("disableOptionalFeature: invalidDN", new Sequence<string>().Add("distinguishedName: null")));
+            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap.Add(new KeyValuePair<string, List<string>>("disableOptionalFeature: invalidDN", new List<string>() { "distinguishedName: null" }));
             // The server does not recognize the DN as belonging to that of an object that represents a scope
             adLdapModelAdapter.ModifyRecycleBin(
                 modAttrValMap,
@@ -1159,7 +1176,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Try to enable recycle bin with invalid scope
 
-            modAttrValMap = new Map<string, Sequence<string>>().Add(new KeyValuePair<string, Sequence<string>>("disableOptionalFeature: invalidScope", new Sequence<string>().Add("distinguishedName: null")));
+            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap.Add(new KeyValuePair<string, List<string>>("disableOptionalFeature: invalidScope", new List<string>() { "distinguishedName: null" }));
             // The feature is not marked as being valid for the specified scope
             adLdapModelAdapter.ModifyRecycleBin(
                 modAttrValMap,
@@ -1175,7 +1193,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Try to enable recycle bin with invalid DC
 
-            modAttrValMap = new Map<string, Sequence<string>>().Add(new KeyValuePair<string, Sequence<string>>("disableOptionalFeature: DCNotPNM", new Sequence<string>().Add("distinguishedName: null")));
+            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap.Add(new KeyValuePair<string, List<string>>("disableOptionalFeature: DCNotPNM", new List<string>() { "distinguishedName: null" }));
             // The specified scope is forest-wide and this operation is not performed against the DC that holds the Partition Naming Master role
             adLdapModelAdapter.ModifyRecycleBin(
                 modAttrValMap,
@@ -1193,7 +1212,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             if (!Utilities.IsOptionalFeatureEnabled(adLdapModelAdapter.forestScopePartialDN + ',' + adLdapModelAdapter.configurationNC, adLdapModelAdapter.recycleBinPartialDN))
             {
-                modAttrValMap = new Map<string, Sequence<string>>().Add(new KeyValuePair<string, Sequence<string>>("enableRecycleBin: true", new Sequence<string>().Add("distinguishedName: null")));
+                modAttrValMap = new Dictionary<string, List<string>>();
+                modAttrValMap.Add(new KeyValuePair<string, List<string>>("enableRecycleBin: true", new List<string>() { "distinguishedName: null" }));
                 // Enable recycle bin
                 adLdapModelAdapter.ModifyRecycleBin(
                     modAttrValMap,
@@ -1210,7 +1230,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Try to enable recycle bin again expect unsuccessfully when recycle already enabled
 
-            modAttrValMap = new Map<string, Sequence<string>>().Add(new KeyValuePair<string, Sequence<string>>("enableRecycleBin: true", new Sequence<string>().Add("distinguishedName: null")));
+            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap.Add(new KeyValuePair<string, List<string>>("enableRecycleBin: true", new List<string>() { "distinguishedName: null" }));
             // The specified optional feature is already enabled in the specified scope
             adLdapModelAdapter.ModifyRecycleBin(
                 modAttrValMap,
@@ -1243,7 +1264,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Add object testComputer0
 
-            addAttrValSeq = new Sequence<string>().Add("distinguishedName: " + adLdapModelAdapter.testComputer0DNForDs).Add("objectClass: computer");
+            addAttrValSeq = new List<string>()
+            {
+                "distinguishedName: " + adLdapModelAdapter.testComputer0DNForDs,
+                "objectClass: computer"
+            };
             adLdapModelAdapter.AddOperation(
                 addAttrValSeq,
                 RightsOnParentObjects.RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,
@@ -1276,7 +1301,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
                 #endregion
 
-                modAttrValMap = new Map<string, Sequence<string>>().Add(new KeyValuePair<string, Sequence<string>>("enableRecycleBin: true", new Sequence<string>().Add("distinguishedName: null")));
+                modAttrValMap = new Dictionary<string, List<string>>();
+                modAttrValMap.Add(new KeyValuePair<string, List<string>>("enableRecycleBin: true", new List<string>() { "distinguishedName: null" }));
                 // Enable recycle bin
                 adLdapModelAdapter.ModifyRecycleBin(
                     modAttrValMap,
@@ -1806,7 +1832,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Add object testUser3Dn
 
-            addAttrValSeq = new Sequence<string>().Add("distinguishedName: " + testUser3Dn).Add("objectClass: user");
+            addAttrValSeq = new List<string>() { "distinguishedName: " + testUser3Dn, "objectClass: user" };
             adLdapModelAdapter.AddOperation(
                 addAttrValSeq,
                 RightsOnParentObjects.RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,
@@ -1822,7 +1848,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Add object testUser4Dn
 
-            addAttrValSeq = new Sequence<string>().Add("distinguishedName: " + testUser4Dn).Add("objectClass: user");
+            addAttrValSeq = new List<string>() { "distinguishedName: " + testUser4Dn, "objectClass: user" };
             adLdapModelAdapter.AddOperation(
                 addAttrValSeq,
                 RightsOnParentObjects.RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,
@@ -1838,7 +1864,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Add object testUser5Dn with assistant testUser4Dn
 
-            addAttrValSeq = new Sequence<string>().Add("distinguishedName: " + testUser5Dn).Add("objectClass: user").Add("assistant:" + testUser4Dn);
+            addAttrValSeq = new List<string>() { "distinguishedName: " + testUser5Dn, "objectClass: user", "assistant:" + testUser4Dn };
             adLdapModelAdapter.AddOperation(
                 addAttrValSeq,
                 RightsOnParentObjects.RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,
@@ -1854,7 +1880,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Add object testUserGroup0Dn with member testUser3Dn and testUser4Dn
 
-            addAttrValSeq = new Sequence<string>().Add("distinguishedName: " + testUserGroup0Dn).Add("objectClass: group").Add("member: " + testUser3Dn).Add("member: " + testUser4Dn);
+            addAttrValSeq = new List<string>() { "distinguishedName: " + testUserGroup0Dn, "objectClass: group", "member: " + testUser3Dn, "member: " + testUser4Dn };
             adLdapModelAdapter.AddOperation(
                 addAttrValSeq,
                 RightsOnParentObjects.RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,
@@ -1872,7 +1898,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             if (!Utilities.IsOptionalFeatureEnabled(adLdapModelAdapter.forestScopePartialDN + ',' + adLdapModelAdapter.configurationNC, adLdapModelAdapter.recycleBinPartialDN))
             {
-                modAttrValMap = new Map<string, Sequence<string>>().Add(new KeyValuePair<string, Sequence<string>>("enableRecycleBin: true", new Sequence<string>().Add("distinguishedName: null")));
+                modAttrValMap = new Dictionary<string, List<string>>();
+                modAttrValMap.Add(new KeyValuePair<string, List<string>>("enableRecycleBin: true", new List<string>() { "distinguishedName: null" }));
                 // Enable recycle bin
                 adLdapModelAdapter.ModifyRecycleBin(
                     modAttrValMap,
@@ -2422,7 +2449,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Add object testUser3Dn
 
-            addAttrValSeq = new Sequence<string>().Add("distinguishedName: " + testUser3Dn).Add("objectClass: user");
+            addAttrValSeq = new List<string>() { "distinguishedName: " + testUser3Dn, "objectClass: user" };
             adLdapModelAdapter.AddOperation(
                 addAttrValSeq,
                 RightsOnParentObjects.RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,
@@ -2438,7 +2465,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Add object testUser4Dn
 
-            addAttrValSeq = new Sequence<string>().Add("distinguishedName: " + testUser4Dn).Add("objectClass: user");
+            addAttrValSeq = new List<string>() { "distinguishedName: " + testUser4Dn, "objectClass: user" };
             adLdapModelAdapter.AddOperation(
                 addAttrValSeq,
                 RightsOnParentObjects.RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,
@@ -2453,7 +2480,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Add object testUserGroup0Dn with member testUser3Dn
 
-            addAttrValSeq = new Sequence<string>().Add("distinguishedName: " + testUserGroup0Dn).Add("objectClass: group").Add("member: " + testUser3Dn).Add("displayName: group6750");
+            addAttrValSeq = new List<string>() { "distinguishedName: " + testUserGroup0Dn, "objectClass: group", "member: " + testUser3Dn, "displayName: group6750" };
             adLdapModelAdapter.AddOperation(
                 addAttrValSeq,
                 RightsOnParentObjects.RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,
@@ -2471,7 +2498,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             if (!Utilities.IsOptionalFeatureEnabled(adLdapModelAdapter.forestScopePartialDN + ',' + adLdapModelAdapter.configurationNC, adLdapModelAdapter.recycleBinPartialDN))
             {
-                modAttrValMap = new Map<string, Sequence<string>>().Add(new KeyValuePair<string, Sequence<string>>("enableRecycleBin: true", new Sequence<string>().Add("distinguishedName: null")));
+                modAttrValMap = new Dictionary<string, List<string>>();
+                modAttrValMap.Add(new KeyValuePair<string, List<string>>("enableRecycleBin: true", new List<string>() { "distinguishedName: null" }));
                 // Enable recycle bin
                 adLdapModelAdapter.ModifyRecycleBin(
                     modAttrValMap,
@@ -2580,7 +2608,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Remove displayname of testUserGroup0Dn
 
-            modAttrValMap = new Map<string, Sequence<string>>().Add(new KeyValuePair<string, Sequence<string>>("displayName: removal", new Sequence<string>().Add("distinguishedName: " + testUserGroup0Dn)));
+            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap.Add(new KeyValuePair<string, List<string>>("displayName: removal", new List<string>() { "distinguishedName: " + testUserGroup0Dn }));
             adLdapModelAdapter.ModifyOperation(
                 modAttrValMap,
                 RightsOnAttributes.RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,
@@ -2636,7 +2665,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Replace the linked attribute "member" of testUserGroup0Dn testUser3Dn -> testUser4Dn
 
-            modAttrValMap = new Map<string, Sequence<string>>().Add(new KeyValuePair<string, Sequence<string>>("linkattribute: replacement: " + testUser4Dn, new Sequence<string>().Add("distinguishedName: " + testUserGroup0Dn)));
+            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap.Add(new KeyValuePair<string, List<string>>("linkattribute: replacement: " + testUser4Dn, new List<string>() { "distinguishedName: " + testUserGroup0Dn }));
             adLdapModelAdapter.ModifyOperation(
                 modAttrValMap,
                 RightsOnAttributes.RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,
@@ -2711,7 +2741,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Add a value to a single-valued attribute of testUserGroup0Dn
 
-            modAttrValMap = new Map<string, Sequence<string>>().Add(new KeyValuePair<string, Sequence<string>>("single-valuedAttribute: addValue", new Sequence<string>().Add("distinguishedName: " + testUserGroup0Dn)));
+            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap.Add(new KeyValuePair<string, List<string>>("single-valuedAttribute: addValue", new List<string>() { "distinguishedName: " + testUserGroup0Dn }));
             adLdapModelAdapter.ModifyOperation(
                 modAttrValMap,
                 RightsOnAttributes.RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,
@@ -2781,7 +2812,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Add testUser3Dn back to the linked attribute "member" of testUserGroup0Dn
 
-            modAttrValMap = new Map<string, Sequence<string>>().Add(new KeyValuePair<string, Sequence<string>>("member: " + testUser3Dn, new Sequence<string>().Add("distinguishedName: " + testUserGroup0Dn)));
+            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap.Add(new KeyValuePair<string, List<string>>("member: " + testUser3Dn, new List<string>() { "distinguishedName: " + testUserGroup0Dn }));
             adLdapModelAdapter.ModifyOperation(
                 modAttrValMap,
                 RightsOnAttributes.RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,
@@ -2811,7 +2843,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Add testUser4Dn back to the linked attribute "member" of testUserGroup0Dn
 
-            modAttrValMap = new Map<string, Sequence<string>>().Add(new KeyValuePair<string, Sequence<string>>("member: " + testUser4Dn, new Sequence<string>().Add("distinguishedName: " + testUserGroup0Dn)));
+            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap.Add(new KeyValuePair<string, List<string>>("member: " + testUser4Dn, new List<string>() { "distinguishedName: " + testUserGroup0Dn }));
             adLdapModelAdapter.ModifyOperation(
                 modAttrValMap,
                 RightsOnAttributes.RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,
@@ -2841,7 +2874,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Remove linked attribute of testUserGroup0Dn
 
-            modAttrValMap = new Map<string, Sequence<string>>().Add(new KeyValuePair<string, Sequence<string>>("linkattribute: removal: " + testUser3Dn, new Sequence<string>().Add("distinguishedName: " + testUserGroup0Dn)));
+            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap.Add(new KeyValuePair<string, List<string>>("linkattribute: removal: " + testUser3Dn, new List<string>() { "distinguishedName: " + testUserGroup0Dn }));
             adLdapModelAdapter.ModifyOperation(
                 modAttrValMap,
                 RightsOnAttributes.RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,
@@ -2912,7 +2946,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Add object testUser4Dn
 
-            addAttrValSeq = new Sequence<string>().Add("distinguishedName: " + testUser4Dn).Add("objectClass: user");
+            addAttrValSeq = new List<string>() { "distinguishedName: " + testUser4Dn, "objectClass: user" };
             adLdapModelAdapter.AddOperation(
                 addAttrValSeq,
                 RightsOnParentObjects.RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,
@@ -2928,10 +2962,12 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Add object testUser5Dn
 
-            addAttrValSeq = new Sequence<string>()
-                .Add("distinguishedName: " + adLdapModelAdapter.testUser5DNForDs)
-                .Add("objectClass: user")
-                .Add("assistant:" + testUser4Dn);
+            addAttrValSeq = new List<string>()
+            {
+                "distinguishedName: " + adLdapModelAdapter.testUser5DNForDs,
+                "objectClass: user",
+                "assistant:" + testUser4Dn
+            };
             adLdapModelAdapter.AddOperation(
                 addAttrValSeq,
                 RightsOnParentObjects.RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,
@@ -3183,10 +3219,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 ADImplementations.AD_DS,
                 adLdapModelAdapter.PDCNetbiosName);
 
-            modAttrValMap = new Map<string, Sequence<string>>().Add(
-                new KeyValuePair<string, Sequence<string>>(
+            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap.Add(
+                new KeyValuePair<string, List<string>>(
                     "removeLingeringObject:CN=Configuration,DC=FAKELDAP,DC=com:CN=one,CN=adts_user1,CN=Users,DC=adts88",
-                    new Sequence<string>().Add("distinguishedName:null")));
+                    new List<string>() { "distinguishedName:null" }));
             adLdapModelAdapter.ModifyOperation(
                 modAttrValMap,
                 RightsOnAttributes.RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,
