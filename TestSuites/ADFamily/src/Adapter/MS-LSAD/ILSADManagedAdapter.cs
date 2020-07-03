@@ -4,9 +4,9 @@
 namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
 
-    using Microsoft.Modeling;
     using Microsoft.Protocols.TestTools;
 
     #region Delegates
@@ -262,7 +262,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad
         /// Returns InvalidHandle if the passed in account handle is not valid</returns>
         ErrorStatus EnumeratePrivilegesAccount(
             int handleInput, 
-            out Set<AccountPrivilege> privileges);
+            out List<AccountPrivilege> privileges);
 
         /// <summary>
         /// The AddPrivilegesToAccount method is invoked to add new privileges to an existing account object.
@@ -276,7 +276,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad
         /// Returns InvalidHandle if the passed in account handle is not valid</returns>
         ErrorStatus AddPrivilegesToAccount(
             int handleInput, 
-            Set<string> privilege);
+            List<string> privilege);
 
         /// <summary>
         /// The RemovePrivilegesFromAccount method is invoked to remove privileges from an account object.
@@ -293,7 +293,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad
         ErrorStatus RemovePrivilegesFromAccount(
             int handleInput, 
             bool allPrivileges, 
-            Set<string> privilege);
+            List<string> privilege);
 
         /// <summary>
         /// The GetSystemAccessAccount method is invoked to retrieve system access account flags 
@@ -388,7 +388,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad
             int handleInput, 
             string accountSid, 
             AccountSid sid, 
-            Set<string> accountRights);
+            List<string> accountRights);
 
         /// <summary>
         /// The RemoveAccountRights method is invoked to remove rights from an account object.
@@ -411,7 +411,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad
             string accountSid, 
             AccountSid sid,
             int allRights, 
-            Set<string> accountRights);
+            List<string> accountRights);
 
         /// <summary>
         ///  The CreateSecret method is invoked to create a new secret object in the server's database.

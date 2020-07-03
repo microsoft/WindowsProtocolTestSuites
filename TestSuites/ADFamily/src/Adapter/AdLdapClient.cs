@@ -14,7 +14,6 @@ using System.Security.Principal;
 using System.Security.AccessControl;
 using System.Text;
 
-using Microsoft.Modeling;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts;

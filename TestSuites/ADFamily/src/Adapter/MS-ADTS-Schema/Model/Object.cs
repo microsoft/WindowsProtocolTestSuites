@@ -8,8 +8,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-using Microsoft.Modeling;
-
 namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
 {
     /// <summary>
@@ -37,13 +35,13 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
         /// <summary>
         /// The child objects.
         /// </summary>
-        public MapContainer<string, ModelObject> childs = new MapContainer<string, ModelObject>();
+        public Dictionary<string, ModelObject> childs = new Dictionary<string, ModelObject>();
 
         /// <summary>
         /// The defined (non-constructed) attributes. In order to access
         /// an attribute value processing constructed attributes, use indexer.
         /// </summary>
-        public MapContainer<string, Value> attributes = new MapContainer<string, Value>();
+        public IDictionary<string, Value> attributes = new Dictionary<string, Value>();
 
         #endregion
 
@@ -170,7 +168,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
         /// Gets the object classes of this object.
         /// </summary>
         /// <returns>Returns an sequence of all class ids.</returns>
-        public Sequence<string> GetAllClassIds()
+        public IEnumerable<string> GetAllClassIds()
         {
             return from value in GetRequiredAttributeValue(StandardNames.objectClass).UnderlyingValues
                 select (string)value;
@@ -180,8 +178,8 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
 
         #region Registering constructed attribute getters
 
-        private static MapContainer<string, ConstructedAttributeGetter> constructedAttributeGetters =
-            new MapContainer<string, ConstructedAttributeGetter>();
+        private static Dictionary<string, ConstructedAttributeGetter> constructedAttributeGetters =
+            new Dictionary<string, ConstructedAttributeGetter>();
 
         /// <summary>
         /// Registers a getter for a constructed attribute.

@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Microsoft.Modeling;
-
 namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
 {
     /// <summary>
@@ -22,7 +20,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
         /// dependencies.
         /// </summary>
         /// <param name="objs">A sequence of ModelObject.</param>
-        public static void Check(Sequence<ModelObject> objs)
+        public static void Check(List<ModelObject> objs)
         {
 
             // First check for content rules as other checks my require contents in its place.
@@ -66,12 +64,12 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
         /// <param name="obj">The object of model.</param>
         public static void CheckContent(ModelObject obj)
         {
-            SetContainer<string> mustContain = new SetContainer<string>();
-            SetContainer<string> mayContain = new SetContainer<string>();
+            List<string> mustContain = new List<string>();
+            List<string> mayContain = new List<string>();
             string[] ExcludeAttributes = { "instancetype", "ntsecuritydescriptor", "objectcategory", "objectsid" };
             // Compute sets of may/must attribute
             string className = (string)obj[StandardNames.objectClass].UnderlyingValues.Last();
-            Sequence<string> superClassList = GetSuperClassList(obj.dc, className);
+            List<string> superClassList = GetSuperClassList(obj.dc, className);
 
             foreach (string classId in superClassList)
             {
@@ -126,16 +124,16 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
 
         }
 
-        static Set<string> GetAttributeSet(ModelObject obj, string attr)
+        static List<string> GetAttributeSet(ModelObject obj, string attr)
         {
             Value value = obj[attr];
             if (value != null)
             {
-                return new Set<string>(from uv in value.UnderlyingValues select ((string)uv).ToLower().Trim());
+                return new List<string>(from uv in value.UnderlyingValues select ((string)uv).ToLower().Trim());
             }
             else
             {
-                return new Set<string>();
+                return new List<string>();
             }
         }
         
@@ -151,11 +149,11 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
         public static void CheckStructure(ModelObject obj)
         {
             //Collect possSuperiors.
-            Sequence<object> possSuperiors = new Sequence<object>();
+            List<object> possSuperiors = new List<object>();
             //Get current class name.
             string className = obj[StandardNames.ldapDisplayName].UnderlyingValues.ElementAt(0).ToString();
             //Get super class list.
-            Sequence<string> superClassList = GetSuperClassList(obj.dc, className);
+            List<string> superClassList = GetSuperClassList(obj.dc, className);
 
             //For each super class
             foreach (string superClass in superClassList)
@@ -166,13 +164,13 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
                 //Get possSuperiors.
                 if (classObject[StandardNames.possSuperiors] != null)
                 {
-                    possSuperiors = possSuperiors.AddRange(classObject[StandardNames.possSuperiors].UnderlyingValues);
+                    possSuperiors.AddRange(classObject[StandardNames.possSuperiors].UnderlyingValues);
                 }
 
                 //Get systemPossSuperiors.
                 if (classObject[StandardNames.systemPossSuperiors] != null)
                 {
-                    possSuperiors = possSuperiors.AddRange(classObject[StandardNames.systemPossSuperiors].UnderlyingValues);
+                    possSuperiors.AddRange(classObject[StandardNames.systemPossSuperiors].UnderlyingValues);
                 }                    
             }
 
@@ -311,7 +309,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
 
             // Check for resolution and last/first element compliance
             int count = 0;
-            Sequence<string> classes = obj.GetAllClassIds();
+            List<string> classes = obj.GetAllClassIds().ToList();
             bool resolveOk = true;
 
             foreach (string classId in classes)
@@ -353,7 +351,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             // then sc_n is the most specific structural class, sc_1...scn_(n-1) is the super class chain of sc_n (excluding top),
             // and ac_n is the next auxilary class before that, where ac_1...acn(n-1) is that classes chain excluding classes
             // which have been seen already before (where there can be a number of ac anchors here).
-            SetContainer<string> includedClasses = new SetContainer<string>();
+            List<string> includedClasses = new List<string>();
             int i = classes.Count - 1;
 
             while (i > 0)
@@ -376,7 +374,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
                 }
 
                 //If the server is Pre Windows 2003.            
-                foreach (string clId in GetSuperClassChain(obj.dc, classId).Revert())
+                foreach (string clId in GetSuperClassChain(obj.dc, classId))
                 {
                     if (includedClasses.Contains(clId))
                     {
@@ -405,16 +403,18 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             }
         }
 
-        static Sequence<string> GetSuperClassChain(ModelDomainController dc, string classId)
+        static List<string> GetSuperClassChain(ModelDomainController dc, string classId)
         {
             if (classId == StandardNames.topGovernsId || classId == StandardNames.top)
             {
-                return new Sequence<string>();
+                return new List<string>();
             }
             else
             {
                 ModelObject classObject = dc.GetClass(classId);
-                return GetSuperClassChain(dc, (string)classObject[StandardNames.subClassOf]).Add(classId);
+                var superClassList = GetSuperClassChain(dc, (string)classObject[StandardNames.subClassOf]);
+                superClassList.Add(classId);
+                return superClassList;
             }
         }
 
@@ -424,16 +424,18 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
         /// <param name="dc">A controller of Model Domain.</param>
         /// <param name="classId">An unique ID of a class.</param>
         /// <returns>Returns a list of super classes.</returns>
-        public static Sequence<string> GetSuperClassList(ModelDomainController dc, string classId)
+        public static List<string> GetSuperClassList(ModelDomainController dc, string classId)
         {
             if (classId == StandardNames.topGovernsId || classId == StandardNames.top)
             {
-                return new Sequence<string>().Add(classId);
+                return new List<string>() { classId };
             }
             else
             {
                 ModelObject classObject = dc.GetClass(classId);
-                return GetSuperClassList(dc, (string)classObject[StandardNames.subClassOf]).Add(classId);
+                var superClassList = GetSuperClassList(dc, (string)classObject[StandardNames.subClassOf]);
+                superClassList.Add(classId);
+                return superClassList;
             }
         }
 

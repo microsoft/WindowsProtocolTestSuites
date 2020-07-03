@@ -6,8 +6,6 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Text;
 
-using Microsoft.Modeling;
-
 namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
 {
     /// <summary>

@@ -8,7 +8,6 @@ using System.DirectoryServices.Protocols;
 using System.Text;
 using System.Diagnostics.CodeAnalysis;
 
-using Microsoft.Modeling;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts;
@@ -71,7 +70,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
         /// <param name="isRODC">Specifies if the DC is RODC</param>
         /// <param name="errorStatus">Enum variable specifying the error status</param>
         void AddOperation(
-            Sequence<string> attribnVals,
+            List<string> attribnVals,
             RightsOnParentObjects AccessRights,
             NCRight NCRights,
             ServerVersion dcLevel,
@@ -115,7 +114,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
         /// argument.
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         void ModifyOperation(
-            Map<string, Sequence<string>> attribVal,
+            IDictionary<string, List<string>> attribVal,
             RightsOnAttributes rights,
             string control,
             ADImplementations service,
@@ -139,7 +138,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             string baseObjectDN,
             string filter,
             Microsoft.Protocols.TestSuites.ActiveDirectory.Common.SearchScope scope,
-            Sequence<string> attributesToBeReturned,
+            List<string> attributesToBeReturned,
             string control,
             ADImplementations service);
 
@@ -189,7 +188,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
         /// <param name="isRODC">Specifies if the DC is RODC</param>
         /// <param name="errorStatus">Enum Specifying the error status returned</param>
         void ModifyDNOperation(
-            Sequence<string> distinguishedNames,
+            List<string> distinguishedNames,
             RightsOnObjects rightsOnObject,
             RightsOnParentObjects accessRights,
             RightOnOldParentObject ParentRights,
@@ -241,7 +240,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
         /// argument.
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         void ModifyRecycleBin(
-            Map<string, Sequence<string>> attribVal,
+            IDictionary<string, List<string>> attribVal,
             RightsOnAttributes rights,
             string control,
             ADImplementations service,

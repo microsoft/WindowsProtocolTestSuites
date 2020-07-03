@@ -13,7 +13,6 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Text;
 
-using Microsoft.Modeling;
 using Microsoft.Protocols.TestTools;
 using System.Globalization;
 using Microsoft.Protocols.TestSuites.ActiveDirectory.Common;
@@ -356,7 +355,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
         /// </summary>
         /// <param name="entryTTL">Retrieved from entryTTL attribute</param>
         /// <param name="dynamicObjectMinTTL">Retrieved from dynamicObjectMinTTL attribute</param>
-        /// <param name="entryTTLToBeModified">Retried from the value that this request want to set</param>
+        /// <param name="entryTTLToBeModified">Retried from the value that this request want to List</param>
         private void VerifyEntryTTL(int entryTTL, int dynamicObjectMinTTL, int entryTTLToBeModified)
         {
             bool isR4328Verified = false;

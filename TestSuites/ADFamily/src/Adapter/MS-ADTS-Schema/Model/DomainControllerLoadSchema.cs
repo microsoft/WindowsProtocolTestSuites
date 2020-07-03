@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Microsoft.Modeling;
-
 namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
 {
     public partial class ModelDomainController
@@ -25,9 +23,9 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
         /// current DC to an actual value</param>
         /// <param name="serverVersion">Specify the OS version of the server</param>
         /// <returns>Result of the Load Schema method.</returns>
-        public ModelResult LoadSchema(IEnumerable<string> schema, Map<string, string> valueSubstitution, OSVersion serverVersion)
+        public ModelResult LoadSchema(IEnumerable<string> schema, Dictionary<string, string> valueSubstitution, OSVersion serverVersion)
         {
-            SequenceContainer<ModelObject> newObjects = new SequenceContainer<ModelObject>();
+            List<ModelObject> newObjects = new List<ModelObject>();
             UnresolvedSyntax unresolvedSyntax = new UnresolvedSyntax();
 
             #region Pass 1: read in objects resolving only builtin attributes
@@ -125,7 +123,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             // All values in the new objects.
             foreach (ModelObject newObj in newObjects)
             {
-                foreach (string attr in newObj.attributes.Keys)
+                foreach (string attr in newObj.attributes.Keys.ToList())
                 {
                     AttributeContext parsingContext = GetAttributeContext(attr);
                     Value value = newObj[attr];
@@ -155,7 +153,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
 
             #region Pass 4: check consistency
             // The tree is finally setup. Now check for consistency
-            Consistency.Check(newObjects.ToSequence());
+            Consistency.Check(newObjects);
             #endregion
 
             if (Checks.HasDiagnostics)
@@ -179,7 +177,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
         /// <param name="substitution">The substitution of key and value pair.</param>
         /// <param name="s">A string.</param>
         /// <returns>Returns substitute string.</returns>
-        string Substitute(Map<string, string> substitution, string s)
+        string Substitute(IDictionary<string, string> substitution, string s)
         {
             if (String.IsNullOrEmpty(s) || substitution == null)
             {
@@ -259,7 +257,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
         /// <summary>
         /// The syntax of a set of attributes which are required to bootstrap the schema.
         /// </summary>
-        MapContainer<string, AttributeContext> builtinAttributeSyntax;
+        Dictionary<string, AttributeContext> builtinAttributeSyntax;
 
         void InitializeBuiltinAttributes()
         {
@@ -267,7 +265,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             {
                 return;
             }
-            builtinAttributeSyntax = new MapContainer<string, AttributeContext>();
+            builtinAttributeSyntax = new Dictionary<string, AttributeContext>();
             builtinAttributeSyntax[StandardNames.attributeID.ToLower()] =
                 new AttributeContext(this, StandardNames.attributeID, Syntax.Lookup("2.5.5.2", 6, null));
             builtinAttributeSyntax[StandardNames.attributeSyntax.ToLower()] =
