@@ -55,6 +55,12 @@
     <Compile Include="WspAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="SUTControlAdapter\CreateFile.ps1" />
+    <None Include="SUTControlAdapter\DeleteFile.ps1" />
+    <None Include="SUTControlAdapter\ModifyFile.ps1" />
+    <None Include="SUTControlAdapter\ModifyFileAttributes.ps1" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\..\..\ProtoSDK\MS-WSP\WSP.csproj">
       <Project>{32326174-6220-4e78-8c0e-bf803162133e}</Project>
       <Name>WSP</Name>

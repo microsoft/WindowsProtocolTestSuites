@@ -1,4 +1,4 @@
-#############################################################################
+﻿#############################################################################
 ## Copyright (c) Microsoft. All rights reserved.
 ## Licensed under the MIT license. See LICENSE file in the project root for full license information.
 #############################################################################
@@ -8,9 +8,10 @@
 [string]$userName = $PtfProp_UserName
 [string]$password = $PtfProp_Password
 [string]$fileName
+[bool]$isReadonly
+[bool]$isHidden
 [string]$shareName = $PtfProp_ShareName
 [string]$share = "\\$serverName\$shareName"
-[string]$content = "newfile to modify"
 
 $filePath = "$share\Data\Test\$fileName"
 
@@ -29,13 +30,26 @@ Try {
     # LastExitCode 2 - Get error "multiple connections to a server or shared resource by the same user", but this error does not block New-Item
     if ($LastExitCode -eq 0 -or $LastExitCode -eq 2) {
         if (Test-Path $filePath) {
-            Set-Content -Path $filePath -Value $content -Force
+            
+            if ($isReadonly) {
+                cmd /c "attrib +r $filePath"
+            }
+            else {
+                cmd /c "attrib -r $filePath"
+            }
+
+            if ($isHidden) {
+                cmd /c "attrib +h $filePath"
+            }
+            else {
+                cmd /c "attrib -h $filePath"
+            }
+
             $result = 0
         }
     }
 }
-Catch
-{
+Catch {
     $result = 1
 }
 Finally {

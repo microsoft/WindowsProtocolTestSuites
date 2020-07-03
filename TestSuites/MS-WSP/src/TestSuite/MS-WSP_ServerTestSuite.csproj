@@ -87,6 +87,7 @@
     <Compile Include="TraditionalCases\CPMGetQueryStatus.cs" />
     <Compile Include="TraditionalCases\CPMGetQueryStatusEx.cs" />
     <Compile Include="TraditionalCases\CPMCreateQuery_RowsetProperties.cs" />
+    <Compile Include="TraditionalCases\CPMCreateQuery_CFullPropSpec.cs" />
     <Compile Include="TraditionalCases\CPMGetRows.cs" />
     <Compile Include="TraditionalCases\CPMSetBindings.cs" />
     <Compile Include="TraditionalCases\WspCommonTestBase.cs" />

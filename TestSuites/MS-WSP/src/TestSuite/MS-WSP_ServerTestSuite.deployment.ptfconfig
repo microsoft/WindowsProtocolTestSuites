@@ -8,12 +8,14 @@
     <!-- Password of user Under test-->
     <Property name="Password" value="Password01!" />
     <!-- Name of the Domain Under test-->
-    <Property name="DomainName" value="contoso.com" />    
+    <Property name="DomainName" value="contoso.com" />
     <!--Win2003,Win2008,Other-->
     <Property name="ServerOSVersion" value="Win7"/>
     <!-- Path of shared folder on server machine-->
     <Property name="SharedPath" value="C:\Test\Data\Test" />
-       <!-- Name of the Client Machine name initiating the MS-WSP request messages-->
+    <!-- Name of the share on server machine -->
+    <Property name="ShareName" value="Test" />
+    <!-- Name of the Client Machine name initiating the MS-WSP request messages-->
     <Property name="ClientName" value="DRIVER" />
     <!-- Name of the Catalog to be searched-->
     <Property name="CatalogName" value="Windows\SystemIndex" />
@@ -98,7 +100,7 @@
     HINT: SIZE around 40 is sufficient for retrieve values in fragments
     -->
     <Property name="CbChunk" value="38" />
-   
+
     <!-- Configurable properties related to CPMConnectIn message -->
     <!-- 32 for 32-bit systems and 64 for 64-bit systems-->
     <!-- ConnectIn and Connect Out-->

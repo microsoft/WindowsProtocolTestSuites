@@ -1224,8 +1224,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         /// <param name="queryString">Query String of the search</param>
         /// <param name="queryStringProperty">Property used by Query string</param>
+        /// <param name="generateMethod">The value of _ulGenerateMethod field</param>
         /// <returns>ContentRestriction structure Node</returns>
-        public CRestriction GetContentRestriction(string queryString, CFullPropSpec queryStringProperty)
+        public CRestriction GetContentRestriction(string queryString, CFullPropSpec queryStringProperty, _ulGenerateMethod_Values generateMethod = _ulGenerateMethod_Values.GENERATE_METHOD_EXACT)
         {
             var result = new CRestriction();
 
@@ -1243,7 +1244,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             node.Lcid = parameter.LCID_VALUE;
 
-            node._ulGenerateMethod = _ulGenerateMethod_Values.GENERATE_METHOD_EXACT;
+            node._ulGenerateMethod = generateMethod;
 
             result.Restriction = node;
 

@@ -1,37 +1,45 @@
-########################################################################################
-##
-## Microsoft Windows Powershell Scripting
-## Purpose: Execute a command on a server to delete a file under shared folder
-##
-#########################################################################################
-#param---list---------------------------------------------------------------------------
-#$serverName
-#$domainName
-#$userName
-#$password
-#$fileName
-#---------------------------------------------------------------------------------------
+#############################################################################
+## Copyright (c) Microsoft. All rights reserved.
+## Licensed under the MIT license. See LICENSE file in the project root for full license information.
+#############################################################################
 
+[string]$serverName = $PtfProp_ServerComputerName
+[string]$domainName = $PtfProp_DomainName
+[string]$userName = $PtfProp_UserName
+[string]$password = $PtfProp_Password
+[string]$fileName
+[string]$shareName = $PtfProp_ShareName
+[string]$share = "\\$serverName\$shareName"
 
-.\WSPRemoteExecute-Command.ps1 $serverName "cmd /c del $env:HOMEDRIVE\Test\Data\Test\$fileName" $domainName\$userName $password
+$filePath = "$share\Data\Test\$fileName"
 
-#sleep to wait for file indexed
-sleep 5
-
-$homedrive = .\Get-RemoteSystemDrive.ps1 $serverName $serverName\$userName $password
-$s = $homedrive.Substring(0,1)
-
-$exist = Test-Path \\$serverName\$s$\Test\Data\Test\$fileName
-
-if($exist -eq $true)
-{
-    return 1
+if ([System.String]::IsNullOrEmpty($domainName)) {
+	$account = $userName
 }
-else
-{
-    return 0
+else {
+	$netBiosName = $domainName.Split(".")[0]
+	$account = "$netBiosName\$userName"
 }
 
-#---------------------------------------------------------------------------------------
-## End to delete file
-#---------------------------------------------------------------------------------------
+$result = 1
+Try {
+	CMD /C "net.exe use $share $password /user:$account"
+	# LastExitCode 0 - Connect succeed 
+	# LastExitCode 2 - Get error "multiple connections to a server or shared resource by the same user", but this error does not block New-Item
+	if ($LastExitCode -eq 0 -or $LastExitCode -eq 2) {
+		if (Test-Path -Path $filePath ) {
+			Remove-Item $filePath -force -ErrorAction SilentlyContinue
+			$result = 0
+		}
+	}	
+}
+Catch {
+	$result = 1
+}
+Finally {
+	CMD /C "net.exe use $share /delete /yes" | out-null	
+}
+
+Start-Sleep -Seconds 5
+
+return $result

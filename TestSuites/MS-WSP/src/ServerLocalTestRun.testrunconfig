@@ -2,13 +2,12 @@
 <TestRunConfiguration name="local" id="6f34cecb-9a0b-4979-b94f-187ae43011d5" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
   <Description>This is a default test run configuration for a local test run.</Description>
   <Deployment>
-    <DeploymentItem filename="Adapter\SUTControlAdapter\Get-RemoteSystemDrive.ps1" />
-    <DeploymentItem filename="TestSuite\MS-WSP_ServerTestSuite.deployment.ptfconfig" />
-    <DeploymentItem filename="Adapter\SUTControlAdapter\WSPRemoteExecute-Command.ps1" />
-    <DeploymentItem filename="Adapter\SUTControlAdapter\DeleteFile.ps1" />
-    <DeploymentItem filename="TestSuite\MS-WSP_ServerTestSuite.ptfconfig" />
-    <DeploymentItem filename="Adapter\SUTControlAdapter\ModifyFile.ps1" />
     <DeploymentItem filename="Adapter\SUTControlAdapter\CreateFile.ps1" />
+    <DeploymentItem filename="Adapter\SUTControlAdapter\ModifyFile.ps1" />
+    <DeploymentItem filename="Adapter\SUTControlAdapter\DeleteFile.ps1" />
+    <DeploymentItem filename="Adapter\SUTControlAdapter\ModifyFileAttributes.ps1" />
+    <DeploymentItem filename="TestSuite\MS-WSP_ServerTestSuite.deployment.ptfconfig" />
+    <DeploymentItem filename="TestSuite\MS-WSP_ServerTestSuite.ptfconfig" />   
   </Deployment>
   <TestTypeSpecific>
     <WebTestRunConfiguration testTypeId="4e7599fa-5ecb-43e9-a887-cd63cf72d207">

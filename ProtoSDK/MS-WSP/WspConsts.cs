@@ -41,6 +41,51 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
         #region Properties
         /// <summary>
+        /// Query Property Set
+        /// </summary>
+        private static readonly Guid QueryGuid = new Guid("49691C90-7E17-101A-A91C-08002B2ECDA9");
+
+        /// <summary>
+        /// Storage Property Set
+        /// </summary>
+        private static readonly Guid StorageGuid = new Guid("B725F130-47EF-101A-A5F1-02608C9EEBAC");
+
+        /// <summary>
+        /// Property Sets for Documents
+        /// </summary>
+        private static readonly Guid DocPropSetGuid = new Guid("F29F85E0-4FF9-1068-AB91-08002B27B3D9");
+
+        /// <summary>
+        /// Property Sets for Documents
+        /// </summary>
+        private static readonly Guid DocPropSetGuid2 = new Guid("D5CDD502-2E9C-101B-9397-08002B2CF9AE");
+
+        /// <summary>
+        /// Music Property Set
+        /// </summary>
+        private static readonly Guid PSGUID_MUSIC = new Guid("56A3372E-CE9C-11d2-9F0E-006097C686F6");
+
+        /// <summary>
+        /// Image Property Set
+        /// </summary>
+        private static readonly Guid PSGUID_IMAGESUMMARYINFORMATION = new Guid("6444048F-4C8B-11D1-8B70-080036B11A03");
+
+        /// <summary>
+        /// Audio Property Set
+        /// </summary>
+        private static readonly Guid PSGUID_AUDIO = new Guid("64440490-4C8B-11D1-8B70-080036B11A03");
+
+        /// <summary>
+        /// Video Property Set
+        /// </summary>
+        private static readonly Guid PSGUID_VIDEO = new Guid("64440491-4C8B-11D1-8B70-080036B11A03");
+
+        /// <summary>
+        /// Mime Properties
+        /// </summary>
+        private static readonly Guid NNTPGuid = new Guid("AA568EEC-E0E5-11CF-8FDA-00AA00A14F93");
+
+        /// <summary>
         /// System.ItemName
         /// This is the base-name of the System.ItemNameDisplay.
         /// If the item is a file this property includes the extension in all cases, and will be localized if a localized name is available.
@@ -52,43 +97,43 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// System.ItemFolderNameDisplay
         /// This is the user-friendly display name of the parent folder of an item. 
         /// </summary>
-        public static readonly CFullPropSpec System_ItemFolderNameDisplay = new CFullPropSpec(new Guid("B725F130-47EF-101A-A5F1-02608C9EEBAC"), 2);
+        public static readonly CFullPropSpec System_ItemFolderNameDisplay = new CFullPropSpec(StorageGuid, 2);
 
         /// <summary>
         /// System.Search.Scope
         /// Used to narrow the scope of a query to the specified directory and subdirectories.
         /// </summary>
-        public static readonly CFullPropSpec System_Search_Scope = new CFullPropSpec(new Guid("B725F130-47EF-101A-A5F1-02608C9EEBAC"), 22);
+        public static readonly CFullPropSpec System_Search_Scope = new CFullPropSpec(StorageGuid, 22);
 
         /// <summary>
         /// System.Search.Contents
         /// The contents of the item. This property is for query restrictions only; it cannot be retrieved in a query result. The WSS friendly name is 'contents'.
         /// </summary>
-        public static readonly CFullPropSpec System_Search_Contents = new CFullPropSpec(new Guid("B725F130-47EF-101A-A5F1-02608C9EEBAC"), 19);
+        public static readonly CFullPropSpec System_Search_Contents = new CFullPropSpec(StorageGuid, 19);
 
         /// <summary>
         /// All
         /// Allows a content restriction over all textual properties. Cannot be retrieved.
         /// </summary>
-        public static readonly CFullPropSpec QueryAll = new CFullPropSpec(new Guid("49691C90-7E17-101A-A91C-08002B2ECDA9"), 6);
+        public static readonly CFullPropSpec QueryAll = new CFullPropSpec(QueryGuid, 6);
 
         /// <summary>
         /// System.DateCreated
         /// The date and time the item was created. 
         /// </summary>
-        public static readonly CFullPropSpec System_DateCreated = new CFullPropSpec(new Guid("B725F130-47EF-101A-A5F1-02608C9EEBAC"), 15);
+        public static readonly CFullPropSpec System_DateCreated = new CFullPropSpec(StorageGuid, 15);
 
         /// <summary>
         /// System.Size
         /// The size, in bytes, of the file.
         /// </summary>
-        public static readonly CFullPropSpec System_Size = new CFullPropSpec(new Guid("B725F130-47EF-101A-A5F1-02608C9EEBAC"), 12);
+        public static readonly CFullPropSpec System_Size = new CFullPropSpec(StorageGuid, 12);
 
         /// <summary>
         /// System.Image.HorizontalSize
         /// The horizontal size, in pixels.
         /// </summary>
-        public static readonly CFullPropSpec System_Image_HorizontalSize = new CFullPropSpec(new Guid("6444048F-4C8B-11D1-8B70-080036B11A03"), 3);
+        public static readonly CFullPropSpec System_Image_HorizontalSize = new CFullPropSpec(PSGUID_IMAGESUMMARYINFORMATION, 3);
 
         /// <summary>
         /// System.FileName
@@ -106,13 +151,221 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// System.Path
         /// The full physical path to the file, including the file name.
         /// </summary>
-        public static readonly CFullPropSpec Path = new CFullPropSpec(new Guid("B725F130-47EF-101A-A5F1-02608C9EEBAC"), 11);
+        public static readonly CFullPropSpec Path = new CFullPropSpec(StorageGuid, 11);
 
         /// <summary>
         /// System.Author
         /// Represents the author or authors of the document
         /// </summary>
-        public static readonly CFullPropSpec System_Author = new CFullPropSpec(new Guid("F29F85E0-4FF9-1068-AB91-08002B27B3D9"), 4);
+        public static readonly CFullPropSpec System_Author = new CFullPropSpec(DocPropSetGuid, 4);
+
+        /// <summary>
+        /// ClassId
+        /// The class ID of the object, for example, WordPerfect or Microsoft® Office Word.
+        /// </summary>
+        public static readonly CFullPropSpec ClassId = new CFullPropSpec(StorageGuid, 3);
+
+        /// <summary>
+        /// FileIndex
+        /// The unique ID of the file.
+        /// </summary>
+        public static readonly CFullPropSpec FileIndex = new CFullPropSpec(StorageGuid, 8);
+
+        /// <summary>
+        /// System.ItemNameDisplay
+        /// The name of the file.
+        /// </summary>
+        public static readonly CFullPropSpec System_ItemNameDisplay = new CFullPropSpec(StorageGuid, 10);
+
+        /// <summary>
+        /// System.FileAttributes
+        /// The file attributes. Documented in Win32 SDK.
+        /// </summary>
+        public static readonly CFullPropSpec System_FileAttributes = new CFullPropSpec(StorageGuid, 13);
+
+        /// <summary>
+        /// System.DateModified
+        /// The date and time of the last modification to the item. 
+        /// The Indexing Service friendly name is 'write'.
+        /// </summary>
+        public static readonly CFullPropSpec System_DateModified = new CFullPropSpec(StorageGuid, 14);
+
+        /// <summary>
+        /// System.DateAccessed
+        /// The last time the file was accessed.
+        /// </summary>
+        public static readonly CFullPropSpec System_DateAccessed = new CFullPropSpec(StorageGuid, 16);
+
+        /// <summary>
+        /// System.Document.CharacterCount
+        /// The number of characters in the document.
+        /// </summary>
+        public static readonly CFullPropSpec System_Document_CharacterCount = new CFullPropSpec(DocPropSetGuid, 16);
+
+        /// <summary>
+        /// System.Title
+        /// The title of the document.
+        /// </summary>
+        public static readonly CFullPropSpec System_Title = new CFullPropSpec(DocPropSetGuid, 2);
+
+        /// <summary>
+        /// System.ApplicationName
+        /// The name of the application that created the file.
+        /// </summary>
+        public static readonly CFullPropSpec System_ApplicationName = new CFullPropSpec(DocPropSetGuid, 18);
+
+        /// <summary>
+        /// System.Category
+        /// The type of document, such as a memo, schedule, or white paper.
+        /// </summary>
+        public static readonly CFullPropSpec System_Category = new CFullPropSpec(DocPropSetGuid2, 2);
+
+        /// <summary>
+        /// System.Documnet.ByteCount
+        /// The number of bytes in a document.
+        /// </summary>
+        public static readonly CFullPropSpec System_Document_ByteCount = new CFullPropSpec(DocPropSetGuid2, 4);
+
+        /// <summary>
+        /// DocPartTitles
+        /// The names of document parts.
+        /// </summary>
+        public static readonly CFullPropSpec DocPartTitles = new CFullPropSpec(DocPropSetGuid2, 13);
+
+        /// <summary>
+        /// System.Music.Artist
+        /// The artist who recorded the song.
+        /// </summary>
+        public static readonly CFullPropSpec System_Music_Artist = new CFullPropSpec(PSGUID_MUSIC, 2);
+
+        /// <summary>
+        /// System.Music.Album
+        /// The album on which the song was released.
+        /// </summary>
+        public static readonly CFullPropSpec System_Music_Album = new CFullPropSpec(PSGUID_MUSIC, 4);
+
+        /// <summary>
+        /// System.Music.Genre
+        /// The song's genre.
+        /// </summary>
+        public static readonly CFullPropSpec System_Music_Genre = new CFullPropSpec(PSGUID_MUSIC, 11);
+
+        /// <summary>
+        /// ImageFileType
+        /// The type of image file.
+        /// </summary>
+        public static readonly CFullPropSpec ImageFileType = new CFullPropSpec(PSGUID_IMAGESUMMARYINFORMATION, 2);
+
+        /// <summary>
+        /// ImageColorSpace
+        /// The description of the image color space.
+        /// </summary>
+        public static readonly CFullPropSpec ImageColorSpace = new CFullPropSpec(PSGUID_IMAGESUMMARYINFORMATION, 8);
+
+        /// <summary>
+        /// System.Image.HorizontalResolution
+        /// The horizontal resolution, in pixels per inch.
+        /// </summary>
+        public static readonly CFullPropSpec System_Image_HorizontalResolution = new CFullPropSpec(PSGUID_IMAGESUMMARYINFORMATION, 5);
+
+        /// <summary>
+        /// System.Image.BitDepth
+        /// The number of bits per pixel.
+        /// </summary>
+        public static readonly CFullPropSpec System_Image_BitDepth = new CFullPropSpec(PSGUID_IMAGESUMMARYINFORMATION, 7);
+
+        /// <summary>
+        /// System.Image.Dimensions
+        /// The description of the image dimensions.
+        /// </summary>
+        public static readonly CFullPropSpec System_Image_Dimensions = new CFullPropSpec(PSGUID_IMAGESUMMARYINFORMATION, 13);
+
+        /// <summary>
+        /// ImageCompression
+        /// The description of the image compression.
+        /// </summary>
+        public static readonly CFullPropSpec ImageCompression = new CFullPropSpec(PSGUID_IMAGESUMMARYINFORMATION, 9);
+
+        /// <summary>
+        /// AudioFormat
+        /// The audio format.
+        /// </summary>
+        public static readonly CFullPropSpec AudioFormat = new CFullPropSpec(PSGUID_AUDIO, 2);
+
+        /// <summary>
+        /// System.Media.Duration
+        /// The duration, in 100-ns units.
+        /// </summary>
+        public static readonly CFullPropSpec System_Media_Duration = new CFullPropSpec(PSGUID_AUDIO, 3);
+
+        /// <summary>
+        /// System.Audio.EncodingBitrate
+        /// The average encoding rate, in bits per second.
+        /// </summary>
+        public static readonly CFullPropSpec System_Audio_EncodingBitrate = new CFullPropSpec(PSGUID_AUDIO, 4);
+
+        /// <summary>
+        /// System.Video.StreamName
+        /// The name of the stream.
+        /// </summary>
+        public static readonly CFullPropSpec System_Video_StreamName = new CFullPropSpec(PSGUID_VIDEO, 2);
+
+        /// <summary>
+        /// System.Video.FrameWidth
+        /// The width, in pixels, of a frame.
+        /// </summary>
+        public static readonly CFullPropSpec System_Video_FrameWidth = new CFullPropSpec(PSGUID_VIDEO, 3);
+
+        /// <summary>
+        /// System.Video.FrameHeight
+        /// The height, in pixels, of a frame.
+        /// </summary>
+        public static readonly CFullPropSpec System_Video_FrameHeight = new CFullPropSpec(PSGUID_VIDEO, 4);
+
+        /// <summary>
+        /// System.Video.EncodingBitrate
+        /// The bits per second.
+        /// </summary>
+        public static readonly CFullPropSpec System_Video_EncodingBitrate = new CFullPropSpec(PSGUID_VIDEO, 8);
+
+        /// <summary>
+        /// MsgNewsgroup
+        /// The newsgroup for the message.
+        /// </summary>
+        public static readonly CFullPropSpec MsgNewsgroup = new CFullPropSpec(NNTPGuid, 2);
+
+        /// <summary>
+        /// MsgSubject
+        /// The subject of the message.
+        /// </summary>
+        public static readonly CFullPropSpec MsgSubject = new CFullPropSpec(NNTPGuid, 5);
+
+        /// <summary>
+        /// MsgFrom
+        /// Who sent the message.
+        /// </summary>
+        public static readonly CFullPropSpec MsgFrom = new CFullPropSpec(NNTPGuid, 6);
+
+        /// <summary>
+        /// MsgDate
+        /// When the message was sent.
+        /// </summary>
+        public static readonly CFullPropSpec MsgDate = new CFullPropSpec(NNTPGuid, 12);
+
+        /// <summary>
+        /// System.Contact.HomeTelephone
+        /// </summary>
+        public static readonly CFullPropSpec System_Contact_HomeTelephone = new CFullPropSpec(new Guid("176DC63C-2688-4E89-8143-A347800F25E9"), 20);
+
+        /// <summary>
+        /// System.Contact.EmailAddress
+        /// </summary>
+        public static readonly CFullPropSpec System_Contact_EmailAddress = new CFullPropSpec(new Guid("F8FA7FA3-D12B-4785-8A4E-691A94F7A3E7"), 100);
+
+        /// <summary>
+        /// System.Contact.FullName
+        /// </summary>
+        public static readonly CFullPropSpec System_Contact_FullName = new CFullPropSpec(new Guid("635E9051-50A5-4BA2-B9DB-4ED056C77296"), 100);
         #endregion
     }
 }

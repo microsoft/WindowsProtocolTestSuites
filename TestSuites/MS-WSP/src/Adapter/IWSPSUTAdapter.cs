@@ -10,36 +10,33 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
     {
   
         /// <summary>
-        /// this method is to create a file on remote server machine
+        /// This method is to create a file on remote server machine
         /// </summary>
-        /// <param name="serverName"></param>
-        /// <param name="domainName"></param>
-        /// <param name="userName"></param>
-        /// <param name="password"></param>
-        /// <param name="fileName"></param>
-        [MethodHelp(@"this method is to create a file on remote server machine")]
-        int CreateFile(string serverName, string domainName,string userName, string password, string fileName);
+        /// <param name="fileName">The name of the file to be created.</param>
+        [MethodHelp(@"This method is to create a file on remote server machine")]
+        int CreateFile(string fileName);
 
         /// <summary>
-        ///  this method is to delete a file on remote server machine
+        /// This method is to delete a file on remote server machine
         /// </summary>
-        /// <param name="serverName"></param>
-        /// <param name="domainName"></param>
-        /// <param name="userName"></param>
-        /// <param name="password"></param>
-        /// <param name="fileName"></param>
-        [MethodHelp(@"this method is to delete a file on remote server machine")]
-        int DeleteFile(string serverName, string domainName, string userName,string password, string fileName);
+        /// <param name="fileName">The name of the file to be deleted.</param>
+        [MethodHelp(@"This method is to delete a file on remote server machine")]
+        int DeleteFile(string fileName);
 
         /// <summary>
-        /// this method is to modify a file on remote server machine
+        /// This method is to modify a file on remote server machine
         /// </summary>
-        /// <param name="serverName"></param>
-        /// <param name="domainName"></param>
-        /// <param name="userName"></param>
-        /// <param name="password"></param>
-        /// <param name="fileName"></param>
-        [MethodHelp(@"this method is to modify a file on remote server machine")]
-        int ModifyFile(string serverName, string domainName,string userName, string password,string fileName);
+        /// <param name="fileName">The name of the file to be modified.</param>
+        [MethodHelp(@"This method is to modify a file on remote server machine")]
+        int ModifyFile(string fileName);
+
+        /// <summary>
+        /// This method is to modify the attributes of a file on remote server machine
+        /// </summary>
+        /// <param name="fileName">The name of the file to be modified.</param>
+        /// <param name="isReadonly">The file is read-only.</param>
+        /// <param name="isHidden">The file is hidden.</param>
+        [MethodHelp(@"This method is to modify the attributes of a file on remote server machine")]
+        int ModifyFileAttributes(string fileName, bool isReadonly, bool isHidden);
     }
 }

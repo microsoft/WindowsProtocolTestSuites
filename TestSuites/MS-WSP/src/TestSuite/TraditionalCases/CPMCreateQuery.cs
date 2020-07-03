@@ -18,6 +18,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
     {
         private WspAdapter wspAdapter;
 
+        private IWSPSUTAdapter wspSutAdapter;
+
         public enum ArgumentType
         {
             AllValid,
@@ -71,6 +73,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMCreateQueryOutResponse += CPMCreateQueryOut;
             wspAdapter.CPMSetBindingsInResponse += CPMSetBindingsOut;
             wspAdapter.CPMGetRowsOut += CPMGetRowsOut;
+
+            wspSutAdapter = Site.GetAdapter<IWSPSUTAdapter>();
         }
 
         protected override void TestCleanup()
