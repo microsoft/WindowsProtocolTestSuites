@@ -85,15 +85,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "e,[\"sAMAccountName\",\"cn\",\"ntSecurityDescriptor\",\"member;range=10-0\",\"msDS-QuotaU" +
                     "sed\",\"msDS-QuotaEffective\",\"member;range=1-0\",\"controlValue\"],OffsetRangeError,A" +
                     "D_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Users,DC=adts88", "(objectClass=user)", SearchScope.Subtree, new List<string>{
-                                        "sAMAccountName",
-                                                    "cn",
-                                                                "ntSecurityDescriptor",
-                                                                            "member;range=10-0",
-                                                                                        "msDS-QuotaUsed",
-                                                                                                    "msDS-QuotaEffective",
-                                                                                                                "member;range=1-0",
-                                                                                                                            "controlValue" }, ExtendedControl.OffsetRangeError, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Users,DC=adts88", "(objectClass=user)", SearchScope.Subtree, new List<string> { "sAMAccountName", "cn", "ntSecurityDescriptor", "member;range=10-0", "msDS-QuotaUsed", "msDS-QuotaEffective", "member;range=1-0", "controlValue" }, ExtendedControl.OffsetRangeError, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S18\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             TestScenarioExtendedControlsSearch1Win2K8R2S24();
@@ -104,15 +96,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
         {
             this.Manager.Comment("reaching state \'S24\'");
             this.Manager.Comment(@"executing step 'call SearchOpReq(""CN=Users,DC=adts88"",""(objectClass=user)"",Subtree,[""sAMAccountName"",""cn"",""ntSecurityDescriptor"",""member;range=10-0"",""msDS-QuotaUsed"",""msDS-QuotaEffective"",""member;range=1-0"",""controlValue""],LDAP_SERVER_GET_STATS_OIDWithSO_EXTENDED_FMT,AD_DS)'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Users,DC=adts88", "(objectClass=user)", SearchScope.Subtree, new List<string>{
-                                        "sAMAccountName",
-                                                    "cn",
-                                                                "ntSecurityDescriptor",
-                                                                            "member;range=10-0",
-                                                                                        "msDS-QuotaUsed",
-                                                                                                    "msDS-QuotaEffective",
-                                                                                                                "member;range=1-0",
-                                                                                                                            "controlValue" }, ExtendedControl.LDAP_SERVER_GET_STATS_OIDWithSO_EXTENDED_FMT, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Users,DC=adts88", "(objectClass=user)", SearchScope.Subtree, new List<string> { "sAMAccountName", "cn", "ntSecurityDescriptor", "member;range=10-0", "msDS-QuotaUsed", "msDS-QuotaEffective", "member;range=1-0", "controlValue" }, ExtendedControl.LDAP_SERVER_GET_STATS_OIDWithSO_EXTENDED_FMT, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S25\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S26\'");
@@ -175,15 +159,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "e,[\"sAMAccountName\",\"cn\",\"ntSecurityDescriptor\",\"member;range=10-0\",\"msDS-QuotaU" +
                     "sed\",\"msDS-QuotaEffective\",\"member;range=1-0\",\"controlValue\"],NotSpecifiedContro" +
                     "l,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Users,DC=adts88", "(objectClass=user)", SearchScope.Subtree, new List<string>{
-                                        "sAMAccountName",
-                                                    "cn",
-                                                                "ntSecurityDescriptor",
-                                                                            "member;range=10-0",
-                                                                                        "msDS-QuotaUsed",
-                                                                                                    "msDS-QuotaEffective",
-                                                                                                                "member;range=1-0",
-                                                                                                                            "controlValue" }, ExtendedControl.NotSpecifiedControl, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Users,DC=adts88", "(objectClass=user)", SearchScope.Subtree, new List<string> { "sAMAccountName", "cn", "ntSecurityDescriptor", "member;range=10-0", "msDS-QuotaUsed", "msDS-QuotaEffective", "member;range=1-0", "controlValue" }, ExtendedControl.NotSpecifiedControl, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S23\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             TestScenarioExtendedControlsSearch1Win2K8R2S24();
@@ -211,15 +187,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "e,[\"sAMAccountName\",\"cn\",\"ntSecurityDescriptor\",\"member;range=10-0\",\"msDS-QuotaU" +
                     "sed\",\"msDS-QuotaEffective\",\"member;range=1-0\",\"controlValue\"],LDAP_CONTROL_VLVRE" +
                     "QUEST,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Users,DC=adts88", "(objectClass=user)", SearchScope.Subtree, new List<string>{
-                                        "sAMAccountName",
-                                                    "cn",
-                                                                "ntSecurityDescriptor",
-                                                                            "member;range=10-0",
-                                                                                        "msDS-QuotaUsed",
-                                                                                                    "msDS-QuotaEffective",
-                                                                                                                "member;range=1-0",
-                                                                                                                            "controlValue" }, ExtendedControl.LDAP_CONTROL_VLVREQUEST, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Users,DC=adts88", "(objectClass=user)", SearchScope.Subtree, new List<string> { "sAMAccountName", "cn", "ntSecurityDescriptor", "member;range=10-0", "msDS-QuotaUsed", "msDS-QuotaEffective", "member;range=1-0", "controlValue" }, ExtendedControl.LDAP_CONTROL_VLVREQUEST, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S19\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             TestScenarioExtendedControlsSearch1Win2K8R2S24();
@@ -247,15 +215,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "e,[\"sAMAccountName\",\"cn\",\"ntSecurityDescriptor\",\"member;range=10-0\",\"msDS-QuotaU" +
                     "sed\",\"msDS-QuotaEffective\",\"member;range=1-0\",\"controlValue\"],LDAP_SERVER_SORT_O" +
                     "ID,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Users,DC=adts88", "(objectClass=user)", SearchScope.Subtree, new List<string>{
-                                        "sAMAccountName",
-                                                    "cn",
-                                                                "ntSecurityDescriptor",
-                                                                            "member;range=10-0",
-                                                                                        "msDS-QuotaUsed",
-                                                                                                    "msDS-QuotaEffective",
-                                                                                                                "member;range=1-0",
-                                                                                                                            "controlValue" }, ExtendedControl.LDAP_SERVER_SORT_OID, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Users,DC=adts88", "(objectClass=user)", SearchScope.Subtree, new List<string> { "sAMAccountName", "cn", "ntSecurityDescriptor", "member;range=10-0", "msDS-QuotaUsed", "msDS-QuotaEffective", "member;range=1-0", "controlValue" }, ExtendedControl.LDAP_SERVER_SORT_OID, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S20\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             TestScenarioExtendedControlsSearch1Win2K8R2S24();
@@ -280,15 +240,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("checking step \'return Initialize\'");
             this.Manager.Comment("reaching state \'S15\'");
             this.Manager.Comment(@"executing step 'call SearchOpReq(""CN=Users,DC=adts88"",""(objectClass=user)"",Subtree,[""sAMAccountName"",""cn"",""ntSecurityDescriptor"",""member;range=10-0"",""msDS-QuotaUsed"",""msDS-QuotaEffective"",""member;range=1-0"",""controlValue""],LDAP_SERVER_GET_STATS_OID,AD_DS)'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Users,DC=adts88", "(objectClass=user)", SearchScope.Subtree, new List<string>{
-                                        "sAMAccountName",
-                                                    "cn",
-                                                                "ntSecurityDescriptor",
-                                                                            "member;range=10-0",
-                                                                                        "msDS-QuotaUsed",
-                                                                                                    "msDS-QuotaEffective",
-                                                                                                                "member;range=1-0",
-                                                                                                                            "controlValue" }, ExtendedControl.LDAP_SERVER_GET_STATS_OID, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Users,DC=adts88", "(objectClass=user)", SearchScope.Subtree, new List<string> { "sAMAccountName", "cn", "ntSecurityDescriptor", "member;range=10-0", "msDS-QuotaUsed", "msDS-QuotaEffective", "member;range=1-0", "controlValue" }, ExtendedControl.LDAP_SERVER_GET_STATS_OID, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S21\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             TestScenarioExtendedControlsSearch1Win2K8R2S24();
@@ -313,15 +265,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("checking step \'return Initialize\'");
             this.Manager.Comment("reaching state \'S16\'");
             this.Manager.Comment(@"executing step 'call SearchOpReq(""CN=Users,DC=adts88"",""(objectClass=user)"",Subtree,[""sAMAccountName"",""cn"",""ntSecurityDescriptor"",""member;range=10-0"",""msDS-QuotaUsed"",""msDS-QuotaEffective"",""member;range=1-0"",""controlValue""],LDAP_PAGED_RESULT_OID_STRING,AD_DS)'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Users,DC=adts88", "(objectClass=user)", SearchScope.Subtree, new List<string>{
-                                        "sAMAccountName",
-                                                    "cn",
-                                                                "ntSecurityDescriptor",
-                                                                            "member;range=10-0",
-                                                                                        "msDS-QuotaUsed",
-                                                                                                    "msDS-QuotaEffective",
-                                                                                                                "member;range=1-0",
-                                                                                                                            "controlValue" }, ExtendedControl.LDAP_PAGED_RESULT_OID_STRING, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Users,DC=adts88", "(objectClass=user)", SearchScope.Subtree, new List<string> { "sAMAccountName", "cn", "ntSecurityDescriptor", "member;range=10-0", "msDS-QuotaUsed", "msDS-QuotaEffective", "member;range=1-0", "controlValue" }, ExtendedControl.LDAP_PAGED_RESULT_OID_STRING, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S22\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             TestScenarioExtendedControlsSearch1Win2K8R2S24();

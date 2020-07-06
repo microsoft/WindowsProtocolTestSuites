@@ -92,9 +92,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "tion,CN={368E6FB2-DBCB-41A1-B65B-18FAC4B5516E}\",\"objectClass: crossRef\",WholeTre" +
                     "e,[\"dnsRoot\",\"Enabled\"],NoExtendedControl,AD_LDS)\'");
             this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Enterprise Schema,CN=Partitions,CN=Configuration,CN={368E6FB2-DBCB-41A1-B65B-1" +
-                    "8FAC4B5516E}", "objectClass: crossRef", SearchScope.WholeTree, new List<string>{
-                                        "dnsRoot",
-                                                    "Enabled" }, null, ((ADImplementations)(1)));
+                    "8FAC4B5516E}", "objectClass: crossRef", SearchScope.WholeTree, new List<string> { "dnsRoot", "Enabled" }, null, ((ADImplementations)(1)));
             this.Manager.Comment("reaching state \'S5\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S6\'");

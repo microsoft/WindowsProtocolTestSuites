@@ -82,14 +82,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("checking step \'return Initialize\'");
             this.Manager.Comment("reaching state \'S2\'");
             this.Manager.Comment(@"executing step 'call SearchOpReq(""CN=Administrator,CN=Users,DC=adts88"",""(objectClass=user)"",Subtree,[""sAMAccountName"",""cn"",""ntSecurityDescriptor"",""member;range=10-0"",""msDS-QuotaUsed"",""msDS-QuotaEffective"",""member;range=1-0""],LDAP_SERVER_SD_FLAGS_OID,AD_DS)'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq($"CN={Utilities.DomainAdmin},CN=Users,DC=adts88", "(objectClass=user)", SearchScope.Subtree, new List<string>{
-                                        "sAMAccountName",
-                                                    "cn",
-                                                                "ntSecurityDescriptor",
-                                                                            "member;range=10-0",
-                                                                                        "msDS-QuotaUsed",
-                                                                                                    "msDS-QuotaEffective",
-                                                                                                                "member;range=1-0" }, ExtendedControl.LDAP_SERVER_SD_FLAGS_OID, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq($"CN={Utilities.DomainAdmin},CN=Users,DC=adts88", "(objectClass=user)", SearchScope.Subtree, new List<string> { "sAMAccountName", "cn", "ntSecurityDescriptor", "member;range=10-0", "msDS-QuotaUsed", "msDS-QuotaEffective", "member;range=1-0" }, ExtendedControl.LDAP_SERVER_SD_FLAGS_OID, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S3\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S4\'");

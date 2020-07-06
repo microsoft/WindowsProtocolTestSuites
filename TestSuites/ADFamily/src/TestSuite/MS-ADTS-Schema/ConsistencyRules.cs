@@ -37,8 +37,8 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             DirectoryEntry serverObject;
             string requiredObjectDN = String.Empty;
 
-            expectedSeq.Add("top".ToLower());
-            expectedSeq.Add("classSchema".ToLower());
+            expectedSeq.Add("top");
+            expectedSeq.Add("classschema");
 
             //Get attributeSchema from Server.
             requiredObjectDN = "CN=Attribute-Schema,CN=Schema,CN=Configuration," + adAdapter.rootDomainDN;

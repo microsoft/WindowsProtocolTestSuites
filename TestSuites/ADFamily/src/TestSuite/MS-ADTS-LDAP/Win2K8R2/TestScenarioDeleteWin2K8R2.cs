@@ -792,7 +792,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S73\'");
             ConstrOnAddOpErrs temp26;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: Licensing Site Settings"",""objectClass: licensingSiteSettings"",""distinguishedName: CN=Licensing Site Settings,CN=AdtsTestSite,CN=Sites,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{ "cn: Licensing Site Settings","objectClass: licensingSiteSettings","distinguishedName: CN=Licensing Site Settings,CN=AdtsTestSite,CN=Sites,CN=Configuration,DC=adts88"}, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp26);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: Licensing Site Settings", "objectClass: licensingSiteSettings", "distinguishedName: CN=Licensing Site Settings,CN=AdtsTestSite,CN=Sites,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp26);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");

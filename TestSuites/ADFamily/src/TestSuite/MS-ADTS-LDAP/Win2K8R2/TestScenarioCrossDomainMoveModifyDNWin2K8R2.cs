@@ -3032,10 +3032,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1022\'");
             ConstrOnAddOpErrs temp115;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: testContainer"",""objectClass: container"",""distinguishedName: CN=testContainer,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: testContainer",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=testContainer,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp115);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: testContainer", "objectClass: container", "distinguishedName: CN=testContainer,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp115);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -3062,10 +3059,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1114\'");
             ConstrOnAddOpErrs temp116;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: testContainerDomain"",""objectClass: container"",""distinguishedName: CN=testContainerDomain,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: testContainerDomain",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=testContainerDomain,DC=adts88"}, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp116);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: testContainerDomain", "objectClass: container", "distinguishedName: CN=testContainerDomain,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp116);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -3091,11 +3085,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1206\'");
             ConstrOnAddOpErrs temp117;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: testContainer1"",""objectClass: container"",""distinguishedName: CN=testContainer1,DC=adts88"",""allowedChildClasses: container""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: testContainer1",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=testContainer1,DC=adts88",
-                                                                            "allowedChildClasses: container" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp117);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: testContainer1", "objectClass: container", "distinguishedName: CN=testContainer1,DC=adts88", "allowedChildClasses: container" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp117);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -3124,10 +3114,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "ishedName: CN=child,CN=testContainer1,DC=adts88\"],RIGHT_DS_CREATE_CHILDwithSE_EN" +
                     "ABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,Fa" +
                     "lse,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: child",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp118);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: child", "objectClass: container", "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp118);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -3267,12 +3254,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S379\'");
             ConstrOnAddOpErrs temp123;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: CrossDomainUser4"",""objectClass: user"",""sAMAccountName: CrossDomainUser4"",""distinguishedName: CN=CrossDomainUser4,CN=Users,DC=adts88"",""memberOf: CN=CrossDomainGroup,CN=Users,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: CrossDomainUser4",
-                                                    "objectClass: user",
-                                                                "sAMAccountName: CrossDomainUser4",
-                                                                            "distinguishedName: CN=CrossDomainUser4,CN=Users,DC=adts88",
-                                                                                        "memberOf: CN=CrossDomainGroup,CN=Users,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp123);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: CrossDomainUser4", "objectClass: user", "sAMAccountName: CrossDomainUser4", "distinguishedName: CN=CrossDomainUser4,CN=Users,DC=adts88", "memberOf: CN=CrossDomainGroup,CN=Users,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp123);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -3296,11 +3278,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S471\'");
             ConstrOnAddOpErrs temp124;
             this.Manager.Comment(@"executing step 'call AddOperation([""dc: NewAppNC"",""objectClass: domainDNS"",""distinguishedName: DC=NewAppNC,DC=adts88"",""instanceType: 5""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "dc: NewAppNC",
-                                                    "objectClass: domainDNS",
-                                                                "distinguishedName: DC=NewAppNC,DC=adts88",
-                                                                            "instanceType: 5" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp124);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "dc: NewAppNC", "objectClass: domainDNS", "distinguishedName: DC=NewAppNC,DC=adts88", "instanceType: 5" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp124);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -3324,13 +3302,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S563\'");
             ConstrOnAddOpErrs temp125;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: CrossDomainGroup"",""objectClass: group"",""sAMAccountName: CrossDomainGroup"",""distinguishedName: CN=CrossDomainGroup,CN=Users,DC=adts88"",""member: CN=CrossDomainUser2,CN=Users,DC=adts88;CN=CrossDomainUser4,CN=Users,DC=adts88"",""groupType: 2""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: CrossDomainGroup",
-                                                    "objectClass: group",
-                                                                "sAMAccountName: CrossDomainGroup",
-                                                                            "distinguishedName: CN=CrossDomainGroup,CN=Users,DC=adts88",
-                                                                                        "member: CN=CrossDomainUser2,CN=Users,DC=adts88;CN=CrossDomainUser4,CN=Users,DC=adts88",
-                                                                                                    "groupType: 2" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp125);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: CrossDomainGroup", "objectClass: group", "sAMAccountName: CrossDomainGroup", "distinguishedName: CN=CrossDomainGroup,CN=Users,DC=adts88", "member: CN=CrossDomainUser2,CN=Users,DC=adts88;CN=CrossDomainUser4,CN=Users,DC=adts88", "groupType: 2" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp125);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -3378,13 +3350,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S747\'");
             ConstrOnAddOpErrs temp127;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: CrossDomainGroup1"",""objectClass: group"",""sAMAccountName: CrossDomainGroup1"",""distinguishedName: CN=CrossDomainGroup1,CN=Users,DC=adts88"",""member: CN=CrossDomainUser2,CN=Users,DC=adts88"",""groupType: 32""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: CrossDomainGroup1",
-                                                    "objectClass: group",
-                                                                "sAMAccountName: CrossDomainGroup1",
-                                                                            "distinguishedName: CN=CrossDomainGroup1,CN=Users,DC=adts88",
-                                                                                        "member: CN=CrossDomainUser2,CN=Users,DC=adts88",
-                                                                                                    "groupType: 32" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp127);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: CrossDomainGroup1", "objectClass: group", "sAMAccountName: CrossDomainGroup1", "distinguishedName: CN=CrossDomainGroup1,CN=Users,DC=adts88", "member: CN=CrossDomainUser2,CN=Users,DC=adts88", "groupType: 32" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp127);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -7781,10 +7747,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "ishedName: CN=child,CN=testContainer1,DC=adts88\"],RIGHT_DS_CREATE_CHILDwithSE_EN" +
                     "ABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,Fa" +
                     "lse,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: child",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp298);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: child", "objectClass: container", "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp298);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -7808,10 +7771,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1401\'");
             ConstrOnModDNOpErrs temp299;
             this.Manager.Comment(@"executing step 'call ModifyDNOperation([""CN=CrossDomainUser3,CN=Users,DC=LDAP,DC=com"",""CN=CrossDomainUser3,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com"",""false""],RIGHT_DELETE,RIGHT_DS_DELETE_CHILD,INVALID_RIGHT,True,LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string>{
-                                        "CN=CrossDomainUser3,CN=Users,DC=LDAP,DC=com",
-                                                    "CN=CrossDomainUser3,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com",
-                                                                "false" }, ((RightsOnObjects)(1)), RightsOnParentObjects.RIGHT_DS_DELETE_CHILD, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp299);
+            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string> { "CN=CrossDomainUser3,CN=Users,DC=LDAP,DC=com", "CN=CrossDomainUser3,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com", "false" }, ((RightsOnObjects)(1)), RightsOnParentObjects.RIGHT_DS_DELETE_CHILD, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp299);
             this.Manager.Checkpoint("MS-AD_LDAP_R829");
             this.Manager.Checkpoint("MS-AD_LDAP_R362");
             this.Manager.Checkpoint("MS-AD_LDAP_R833");
@@ -7854,17 +7814,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S114\'");
             ConstrOnAddOpErrs temp300;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: CrossDomainUser1"",""objectClass: user"",""sAMAccountName: CrossDomainUser1"",""distinguishedName: CN=CrossDomainUser1,CN=Users,DC=adts88"",""systemFlags: 0"",""isCriticalSystemObject: FALSE"",""userAccountControl: 546"",""objectSid: S-1-5-21-1414254308-4051516182-3990784729-1601"",""instanceType: 4"",""allowedChildClasses: container""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: CrossDomainUser1",
-                                                    "objectClass: user",
-                                                                "sAMAccountName: CrossDomainUser1",
-                                                                            "distinguishedName: CN=CrossDomainUser1,CN=Users,DC=adts88",
-                                                                                        "systemFlags: 0",
-                                                                                                    "isCriticalSystemObject: FALSE",
-                                                                                                                "userAccountControl: 546",
-                                                                                                                            "objectSid: S-1-5-21-1414254308-4051516182-3990784729-1601",
-                                                                                                                                        "instanceType: 4",
-                                                                                                                                                    "allowedChildClasses: container" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp300);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: CrossDomainUser1", "objectClass: user", "sAMAccountName: CrossDomainUser1", "distinguishedName: CN=CrossDomainUser1,CN=Users,DC=adts88", "systemFlags: 0", "isCriticalSystemObject: FALSE", "userAccountControl: 546", "objectSid: S-1-5-21-1414254308-4051516182-3990784729-1601", "instanceType: 4", "allowedChildClasses: container" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp300);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -8579,10 +8529,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "ishedName: CN=child,CN=testContainer1,DC=adts88\"],RIGHT_DS_CREATE_CHILDwithSE_EN" +
                     "ABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,Fa" +
                     "lse,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: child",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp328);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: child", "objectClass: container", "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp328);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -8606,10 +8553,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1403\'");
             ConstrOnModDNOpErrs temp329;
             this.Manager.Comment(@"executing step 'call ModifyDNOperation([""CN=BCKUPKEY_P Secret,CN=System,DC=LDAP,DC=com"",""CN=BCKUPKEY_P Secret,CN=System,DC=LDAPCHILD,DC=LDAP,DC=com"",""true""],RIGHT_DELETE,RIGHT_DS_DELETE_CHILD,INVALID_RIGHT,True,LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string>{
-                                        "CN=BCKUPKEY_P Secret,CN=System,DC=LDAP,DC=com",
-                                                    "CN=BCKUPKEY_P Secret,CN=System,DC=LDAPCHILD,DC=LDAP,DC=com",
-                                                                "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.RIGHT_DS_DELETE_CHILD, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp329);
+            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string> { "CN=BCKUPKEY_P Secret,CN=System,DC=LDAP,DC=com", "CN=BCKUPKEY_P Secret,CN=System,DC=LDAPCHILD,DC=LDAP,DC=com", "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.RIGHT_DS_DELETE_CHILD, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp329);
             this.Manager.Checkpoint("MS-AD_LDAP_R829");
             this.Manager.Checkpoint("MS-AD_LDAP_R362");
             this.Manager.Checkpoint("MS-AD_LDAP_R837");
@@ -8969,10 +8913,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "ishedName: CN=child,CN=testContainer1,DC=adts88\"],RIGHT_DS_CREATE_CHILDwithSE_EN" +
                     "ABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,Fa" +
                     "lse,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: child",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp343);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: child", "objectClass: container", "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp343);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -8996,10 +8937,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1404\'");
             ConstrOnModDNOpErrs temp344;
             this.Manager.Comment(@"executing step 'call ModifyDNOperation([""CN=BCKUPKEY_P Secret,CN=System,DC=LDAP,DC=com"",""CN=BCKUPKEY_P Secret,CN=System,DC=LDAPCHILD,DC=LDAP,DC=com"",""true""],RIGHT_DELETE,INVALID_RIGHT,INVALID_RIGHT,True,LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string>{
-                                        "CN=BCKUPKEY_P Secret,CN=System,DC=LDAP,DC=com",
-                                                    "CN=BCKUPKEY_P Secret,CN=System,DC=LDAPCHILD,DC=LDAP,DC=com",
-                                                                "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.INVALID_RIGHT, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp344);
+            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string> { "CN=BCKUPKEY_P Secret,CN=System,DC=LDAP,DC=com", "CN=BCKUPKEY_P Secret,CN=System,DC=LDAPCHILD,DC=LDAP,DC=com", "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.INVALID_RIGHT, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp344);
             this.Manager.Checkpoint("MS-AD_LDAP_R829");
             this.Manager.Checkpoint("MS-AD_LDAP_R362");
             this.Manager.Checkpoint("MS-AD_LDAP_R837");
@@ -9359,10 +9297,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "ishedName: CN=child,CN=testContainer1,DC=adts88\"],RIGHT_DS_CREATE_CHILDwithSE_EN" +
                     "ABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,Fa" +
                     "lse,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: child",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp358);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: child", "objectClass: container", "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp358);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -9386,10 +9321,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1405\'");
             ConstrOnModDNOpErrs temp359;
             this.Manager.Comment(@"executing step 'call ModifyDNOperation([""CN=Administrator,CN=Users,DC=LDAP,DC=com"",""CN=Administrator,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com"",""true""],RIGHT_DELETE,RIGHT_DS_DELETE_CHILD,INVALID_RIGHT,True,LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string>{
-                                        $"CN={Utilities.DomainAdmin},CN=Users,DC=LDAP,DC=com",
-                                                    $"CN={Utilities.DomainAdmin},CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com",
-                                                                "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.RIGHT_DS_DELETE_CHILD, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp359);
+            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string> { $"CN={Utilities.DomainAdmin},CN=Users,DC=LDAP,DC=com", $"CN={Utilities.DomainAdmin},CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com", "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.RIGHT_DS_DELETE_CHILD, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp359);
             this.Manager.Checkpoint("MS-AD_LDAP_R829");
             this.Manager.Checkpoint("MS-AD_LDAP_R362");
             this.Manager.Checkpoint("MS-AD_LDAP_R833");
@@ -9749,10 +9681,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "ishedName: CN=child,CN=testContainer1,DC=adts88\"],RIGHT_DS_CREATE_CHILDwithSE_EN" +
                     "ABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,Fa" +
                     "lse,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: child",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp373);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: child", "objectClass: container", "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp373);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -9776,10 +9705,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1406\'");
             ConstrOnModDNOpErrs temp374;
             this.Manager.Comment(@"executing step 'call ModifyDNOperation([""CN=CrossDomainUser1,CN=Users,DC=LDAP,DC=com"",""CN=CrossDomainUser1,CN=Users,DC=LDAP,DC=com"",""true""],RIGHT_DELETE,RIGHT_DS_DELETE_CHILD,INVALID_RIGHT,True,LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string>{
-                                        "CN=CrossDomainUser1,CN=Users,DC=LDAP,DC=com",
-                                                    "CN=CrossDomainUser1,CN=Users,DC=LDAP,DC=com",
-                                                                "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.RIGHT_DS_DELETE_CHILD, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp374);
+            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string> { "CN=CrossDomainUser1,CN=Users,DC=LDAP,DC=com", "CN=CrossDomainUser1,CN=Users,DC=LDAP,DC=com", "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.RIGHT_DS_DELETE_CHILD, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp374);
             this.Manager.Checkpoint("MS-AD_LDAP_R829");
             this.Manager.Checkpoint("MS-AD_LDAP_R362");
             this.Manager.Checkpoint("MS-AD_LDAP_R833");
@@ -10151,10 +10077,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "ishedName: CN=child,CN=testContainer1,DC=adts88\"],RIGHT_DS_CREATE_CHILDwithSE_EN" +
                     "ABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,Fa" +
                     "lse,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: child",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp388);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: child", "objectClass: container", "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp388);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -10178,10 +10101,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1407\'");
             ConstrOnModDNOpErrs temp389;
             this.Manager.Comment(@"executing step 'call ModifyDNOperation([""CN=CrossDomainUser2,CN=Users,DC=LDAP,DC=com"",""CN=CrossDomainUser2,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com"",""true""],RIGHT_DELETE,INVALID_RIGHT,INVALID_RIGHT,True,LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string>{
-                                        "CN=CrossDomainUser2,CN=Users,DC=LDAP,DC=com",
-                                                    "CN=CrossDomainUser2,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com",
-                                                                "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.INVALID_RIGHT, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp389);
+            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string> { "CN=CrossDomainUser2,CN=Users,DC=LDAP,DC=com", "CN=CrossDomainUser2,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com", "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.INVALID_RIGHT, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp389);
             this.Manager.Checkpoint("MS-AD_LDAP_R829");
             this.Manager.Checkpoint("MS-AD_LDAP_R362");
             this.Manager.Checkpoint("MS-AD_LDAP_R833");
@@ -10541,10 +10461,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "ishedName: CN=child,CN=testContainer1,DC=adts88\"],RIGHT_DS_CREATE_CHILDwithSE_EN" +
                     "ABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,Fa" +
                     "lse,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: child",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp403);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: child", "objectClass: container", "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp403);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -10571,10 +10488,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "com\",\"CN=CrossDomainUser1,CN=Users,DC=LDAP,DC=com\",\"true\"],RIGHT_DELETE,INVALID_" +
                     "RIGHT,INVALID_RIGHT,True,LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID,Windows2K8R2,False" +
                     ",out _)\'");
-            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string>{
-                                        "CN=CrossDomainUser1,CN=Users,DC=LDAP,DC=com",
-                                                    "CN=CrossDomainUser1,CN=Users,DC=LDAP,DC=com",
-                                                                "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.INVALID_RIGHT, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp404);
+            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string> { "CN=CrossDomainUser1,CN=Users,DC=LDAP,DC=com", "CN=CrossDomainUser1,CN=Users,DC=LDAP,DC=com", "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.INVALID_RIGHT, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp404);
             this.Manager.Checkpoint("MS-AD_LDAP_R829");
             this.Manager.Checkpoint("MS-AD_LDAP_R362");
             this.Manager.Checkpoint("MS-AD_LDAP_R833");
@@ -10946,10 +10860,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "ishedName: CN=child,CN=testContainer1,DC=adts88\"],RIGHT_DS_CREATE_CHILDwithSE_EN" +
                     "ABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,Fa" +
                     "lse,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: child",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp418);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: child", "objectClass: container", "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp418);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -10975,10 +10886,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("executing step \'call ModifyDNOperation([\"CN=NTDS Quotas,DC=LDAP,DC=com\",\"CN=NTDS " +
                     "Quotas,DC=LDAPCHILD,DC=LDAP,DC=com\",\"true\"],RIGHT_DELETE,INVALID_RIGHT,INVALID_R" +
                     "IGHT,True,LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID,Windows2K8R2,False,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string>{
-                                        "CN=NTDS Quotas,DC=LDAP,DC=com",
-                                                    "CN=NTDS Quotas,DC=LDAPCHILD,DC=LDAP,DC=com",
-                                                                "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.INVALID_RIGHT, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp419);
+            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string> { "CN=NTDS Quotas,DC=LDAP,DC=com", "CN=NTDS Quotas,DC=LDAPCHILD,DC=LDAP,DC=com", "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.INVALID_RIGHT, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp419);
             this.Manager.Checkpoint("MS-AD_LDAP_R829");
             this.Manager.Checkpoint("MS-AD_LDAP_R362");
             this.Manager.Checkpoint("MS-AD_LDAP_R837");
@@ -11335,10 +11243,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "ishedName: CN=child,CN=testContainer1,DC=adts88\"],RIGHT_DS_CREATE_CHILDwithSE_EN" +
                     "ABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,Fa" +
                     "lse,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: child",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp433);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: child", "objectClass: container", "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp433);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -11735,10 +11640,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "ishedName: CN=child,CN=testContainer1,DC=adts88\"],RIGHT_DS_CREATE_CHILDwithSE_EN" +
                     "ABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,Fa" +
                     "lse,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: child",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp448);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: child", "objectClass: container", "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp448);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -11765,10 +11667,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "CN=LDAPCHILD$,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com\",\"true\"],RIGHT_DELETE,INVALID" +
                     "_RIGHT,INVALID_RIGHT,True,LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID,Windows2K8R2,Fals" +
                     "e,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string>{
-                                        "CN=LDAPCHILD$,CN=Users,DC=LDAP,DC=com",
-                                                    "CN=LDAPCHILD$,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com",
-                                                                "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.INVALID_RIGHT, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp449);
+            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string> { "CN=LDAPCHILD$,CN=Users,DC=LDAP,DC=com", "CN=LDAPCHILD$,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com", "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.INVALID_RIGHT, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp449);
             this.Manager.Checkpoint("MS-AD_LDAP_R829");
             this.Manager.Checkpoint("MS-AD_LDAP_R362");
             this.Manager.Checkpoint("MS-AD_LDAP_R833");
@@ -12131,10 +12030,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "ishedName: CN=child,CN=testContainer1,DC=adts88\"],RIGHT_DS_CREATE_CHILDwithSE_EN" +
                     "ABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,Fa" +
                     "lse,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: child",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp463);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: child", "objectClass: container", "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp463);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -12158,10 +12054,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1411\'");
             ConstrOnModDNOpErrs temp464;
             this.Manager.Comment(@"executing step 'call ModifyDNOperation([""CN=RID Manager$,CN=System,DC=LDAP,DC=com"",""CN=RID Manager$,CN=System,DC=LDAPCHILD,DC=LDAP,DC=com"",""true""],RIGHT_DELETE,INVALID_RIGHT,INVALID_RIGHT,True,LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string>{
-                                        "CN=RID Manager$,CN=System,DC=LDAP,DC=com",
-                                                    "CN=RID Manager$,CN=System,DC=LDAPCHILD,DC=LDAP,DC=com",
-                                                                "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.INVALID_RIGHT, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp464);
+            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string> { "CN=RID Manager$,CN=System,DC=LDAP,DC=com", "CN=RID Manager$,CN=System,DC=LDAPCHILD,DC=LDAP,DC=com", "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.INVALID_RIGHT, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp464);
             this.Manager.Checkpoint("MS-AD_LDAP_R829");
             this.Manager.Checkpoint("MS-AD_LDAP_R362");
             this.Manager.Checkpoint("MS-AD_LDAP_R837");
@@ -12522,10 +12415,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "ishedName: CN=child,CN=testContainer1,DC=adts88\"],RIGHT_DS_CREATE_CHILDwithSE_EN" +
                     "ABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,Fa" +
                     "lse,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: child",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp478);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: child", "objectClass: container", "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp478);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -12549,10 +12439,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1412\'");
             ConstrOnModDNOpErrs temp479;
             this.Manager.Comment(@"executing step 'call ModifyDNOperation([""CN=CrossDomainGroup,CN=Users,DC=LDAP,DC=com"",""CN=CrossDomainGroup,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com"",""true""],RIGHT_DELETE,INVALID_RIGHT,INVALID_RIGHT,True,LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string>{
-                                        "CN=CrossDomainGroup,CN=Users,DC=LDAP,DC=com",
-                                                    "CN=CrossDomainGroup,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com",
-                                                                "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.INVALID_RIGHT, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp479);
+            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string> { "CN=CrossDomainGroup,CN=Users,DC=LDAP,DC=com", "CN=CrossDomainGroup,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com", "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.INVALID_RIGHT, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp479);
             this.Manager.Checkpoint("MS-AD_LDAP_R829");
             this.Manager.Checkpoint("MS-AD_LDAP_R362");
             this.Manager.Checkpoint("MS-AD_LDAP_R833");
@@ -12912,10 +12799,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "ishedName: CN=child,CN=testContainer1,DC=adts88\"],RIGHT_DS_CREATE_CHILDwithSE_EN" +
                     "ABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,Fa" +
                     "lse,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: child",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp493);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: child", "objectClass: container", "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp493);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -12939,10 +12823,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1413\'");
             ConstrOnModDNOpErrs temp494;
             this.Manager.Comment(@"executing step 'call ModifyDNOperation([""CN=CrossDomainGroup3,CN=Users,DC=LDAP,DC=com"",""CN=CrossDomainGroup3,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com"",""true""],RIGHT_DELETE,INVALID_RIGHT,INVALID_RIGHT,True,LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string>{
-                                        "CN=CrossDomainGroup3,CN=Users,DC=LDAP,DC=com",
-                                                    "CN=CrossDomainGroup3,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com",
-                                                                "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.INVALID_RIGHT, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp494);
+            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string> { "CN=CrossDomainGroup3,CN=Users,DC=LDAP,DC=com", "CN=CrossDomainGroup3,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com", "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.INVALID_RIGHT, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp494);
             this.Manager.Checkpoint("MS-AD_LDAP_R829");
             this.Manager.Checkpoint("MS-AD_LDAP_R362");
             this.Manager.Checkpoint("MS-AD_LDAP_R833");
@@ -13303,10 +13184,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "ishedName: CN=child,CN=testContainer1,DC=adts88\"],RIGHT_DS_CREATE_CHILDwithSE_EN" +
                     "ABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,Fa" +
                     "lse,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: child",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp508);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: child", "objectClass: container", "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp508);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -13330,10 +13208,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1414\'");
             ConstrOnModDNOpErrs temp509;
             this.Manager.Comment(@"executing step 'call ModifyDNOperation([""CN=testContainer,CN=Configuration,DC=LDAP,DC=com"",""CN=testContainer,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com"",""true""],RIGHT_DELETE,INVALID_RIGHT,INVALID_RIGHT,True,LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string>{
-                                        "CN=testContainer,CN=Configuration,DC=LDAP,DC=com",
-                                                    "CN=testContainer,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com",
-                                                                "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.INVALID_RIGHT, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp509);
+            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string> { "CN=testContainer,CN=Configuration,DC=LDAP,DC=com", "CN=testContainer,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com", "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.INVALID_RIGHT, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp509);
             this.Manager.Checkpoint("MS-AD_LDAP_R829");
             this.Manager.Checkpoint("MS-AD_LDAP_R362");
             this.Manager.Checkpoint("MS-AD_LDAP_R837");
@@ -13694,10 +13569,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "ishedName: CN=child,CN=testContainer1,DC=adts88\"],RIGHT_DS_CREATE_CHILDwithSE_EN" +
                     "ABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,Fa" +
                     "lse,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: child",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp523);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: child", "objectClass: container", "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp523);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -14084,10 +13956,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "ishedName: CN=child,CN=testContainer1,DC=adts88\"],RIGHT_DS_CREATE_CHILDwithSE_EN" +
                     "ABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,Fa" +
                     "lse,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: child",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp538);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: child", "objectClass: container", "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp538);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -14111,10 +13980,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1416\'");
             ConstrOnModDNOpErrs temp539;
             this.Manager.Comment(@"executing step 'call ModifyDNOperation([""CN=account,CN=Schema,CN=Configuration,DC=LDAP,DC=com"",""CN=account,CN=Schema,CN=Configuration,DC=LDAPCHILD,DC=LDAP,DC=com"",""true""],RIGHT_DELETE,INVALID_RIGHT,INVALID_RIGHT,True,LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string>{
-                                        "CN=account,CN=Schema,CN=Configuration,DC=LDAP,DC=com",
-                                                    "CN=account,CN=Schema,CN=Configuration,DC=LDAPCHILD,DC=LDAP,DC=com",
-                                                                "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.INVALID_RIGHT, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp539);
+            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string> { "CN=account,CN=Schema,CN=Configuration,DC=LDAP,DC=com", "CN=account,CN=Schema,CN=Configuration,DC=LDAPCHILD,DC=LDAP,DC=com", "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.INVALID_RIGHT, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp539);
             this.Manager.Checkpoint("MS-AD_LDAP_R829");
             this.Manager.Checkpoint("MS-AD_LDAP_R362");
             this.Manager.Checkpoint("MS-AD_LDAP_R837");
@@ -14474,10 +14340,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "ishedName: CN=child,CN=testContainer1,DC=adts88\"],RIGHT_DS_CREATE_CHILDwithSE_EN" +
                     "ABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,Fa" +
                     "lse,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: child",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp553);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: child", "objectClass: container", "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp553);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -14503,10 +14366,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("executing step \'call ModifyDNOperation([\"CN=testContainer1,DC=LDAP,DC=com\",\"CN=te" +
                     "stContainer1,DC=LDAPCHILD,DC=LDAP,DC=com\",\"true\"],RIGHT_DELETE,INVALID_RIGHT,INV" +
                     "ALID_RIGHT,True,LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID,Windows2K8R2,False,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string>{
-                                        "CN=testContainer1,DC=LDAP,DC=com",
-                                                    "CN=testContainer1,DC=LDAPCHILD,DC=LDAP,DC=com",
-                                                                "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.INVALID_RIGHT, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp554);
+            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string> { "CN=testContainer1,DC=LDAP,DC=com", "CN=testContainer1,DC=LDAPCHILD,DC=LDAP,DC=com", "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.INVALID_RIGHT, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp554);
             this.Manager.Checkpoint("MS-AD_LDAP_R829");
             this.Manager.Checkpoint("MS-AD_LDAP_R362");
             this.Manager.Checkpoint("MS-AD_LDAP_R837");
@@ -14782,10 +14642,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1050\'");
             ConstrOnAddOpErrs temp565;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: testContainer"",""objectClass: container"",""distinguishedName: CN=testContainer,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: testContainer",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=testContainer,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp565);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: testContainer", "objectClass: container", "distinguishedName: CN=testContainer,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp565);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -14838,11 +14695,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1234\'");
             ConstrOnAddOpErrs temp567;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: testContainer1"",""objectClass: container"",""distinguishedName: CN=testContainer1,DC=adts88"",""allowedChildClasses: container""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: testContainer1",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=testContainer1,DC=adts88",
-                                                                            "allowedChildClasses: container" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp567);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: testContainer1", "objectClass: container", "distinguishedName: CN=testContainer1,DC=adts88", "allowedChildClasses: container" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp567);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -14871,10 +14724,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "ishedName: CN=child,CN=testContainer1,DC=adts88\"],RIGHT_DS_CREATE_CHILDwithSE_EN" +
                     "ABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,Fa" +
                     "lse,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: child",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp568);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: child", "objectClass: container", "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp568);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -14898,10 +14748,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1418\'");
             ConstrOnModDNOpErrs temp569;
             this.Manager.Comment(@"executing step 'call ModifyDNOperation([""CN=CrossDomainGroup1,CN=Users,DC=LDAP,DC=com"",""CN=CrossDomainGroup1,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com"",""true""],RIGHT_DELETE,INVALID_RIGHT,INVALID_RIGHT,True,LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string>{
-                                        "CN=CrossDomainGroup1,CN=Users,DC=LDAP,DC=com",
-                                                    "CN=CrossDomainGroup1,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com",
-                                                                "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.INVALID_RIGHT, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp569);
+            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string> { "CN=CrossDomainGroup1,CN=Users,DC=LDAP,DC=com", "CN=CrossDomainGroup1,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com", "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.INVALID_RIGHT, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp569);
             this.Manager.Checkpoint("MS-AD_LDAP_R829");
             this.Manager.Checkpoint("MS-AD_LDAP_R362");
             this.Manager.Checkpoint("MS-AD_LDAP_R833");
@@ -15262,10 +15109,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "ishedName: CN=child,CN=testContainer1,DC=adts88\"],RIGHT_DS_CREATE_CHILDwithSE_EN" +
                     "ABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,Fa" +
                     "lse,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: child",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp583);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: child", "objectClass: container", "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp583);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -15292,10 +15136,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "\",\"null,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com\",\"true\"],RIGHT_DELETE,INVALID_RIGHT" +
                     ",INVALID_RIGHT,True,LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID,Windows2K8R2,False,out " +
                     "_)\'");
-            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string>{
-                                        $"CN={Utilities.DomainAdmin},CN=Users,DC=LDAP,DC=com",
-                                                    "null,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com",
-                                                                "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.INVALID_RIGHT, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp584);
+            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string> { $"CN={Utilities.DomainAdmin},CN=Users,DC=LDAP,DC=com", "null,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com", "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.INVALID_RIGHT, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp584);
             this.Manager.Checkpoint("MS-AD_LDAP_R829");
             this.Manager.Checkpoint("MS-AD_LDAP_R362");
             this.Manager.Checkpoint("MS-AD_LDAP_R833");
@@ -15571,10 +15412,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1016\'");
             ConstrOnAddOpErrs temp595;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: testContainer"",""objectClass: container"",""distinguishedName: CN=testContainer,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: testContainer",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=testContainer,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp595);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: testContainer", "objectClass: container", "distinguishedName: CN=testContainer,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp595);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -15601,10 +15439,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1108\'");
             ConstrOnAddOpErrs temp596;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: testContainerDomain"",""objectClass: container"",""distinguishedName: CN=testContainerDomain,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: testContainerDomain",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=testContainerDomain,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp596);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: testContainerDomain", "objectClass: container", "distinguishedName: CN=testContainerDomain,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp596);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -15659,10 +15494,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "ishedName: CN=child,CN=testContainer1,DC=adts88\"],RIGHT_DS_CREATE_CHILDwithSE_EN" +
                     "ABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,Fa" +
                     "lse,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: child",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp598);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: child", "objectClass: container", "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp598);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -15686,10 +15518,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1384\'");
             ConstrOnModDNOpErrs temp599;
             this.Manager.Comment(@"executing step 'call ModifyDNOperation([""CN=CrossDomainUser1,CN=Users,DC=LDAP,DC=com"",""CN=CrossDomainUser1,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com"",""true""],RIGHT_DELETE,INVALID_RIGHT,INVALID_RIGHT,True,LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string>{
-                                        "CN=CrossDomainUser1,CN=Users,DC=LDAP,DC=com",
-                                                    "CN=CrossDomainUser1,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com",
-                                                                "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.INVALID_RIGHT, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp599);
+            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string> { "CN=CrossDomainUser1,CN=Users,DC=LDAP,DC=com", "CN=CrossDomainUser1,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com", "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.INVALID_RIGHT, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp599);
             this.Manager.Checkpoint("MS-AD_LDAP_R829");
             this.Manager.Checkpoint("MS-AD_LDAP_R362");
             this.Manager.Checkpoint("MS-AD_LDAP_R833");
@@ -16062,10 +15891,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "ishedName: CN=child,CN=testContainer1,DC=adts88\"],RIGHT_DS_CREATE_CHILDwithSE_EN" +
                     "ABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,Fa" +
                     "lse,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: child",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp613);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: child", "objectClass: container", "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp613);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -16089,10 +15915,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1420\'");
             ConstrOnModDNOpErrs temp614;
             this.Manager.Comment(@"executing step 'call ModifyDNOperation([""CN=Administrator,CN=Users,DC=LDAP,DC=com"",""CN=Administrator,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com"",""true""],RIGHT_DELETE,INVALID_RIGHT,INVALID_RIGHT,True,LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string>{
-                                        $"CN={Utilities.DomainAdmin},CN=Users,DC=LDAP,DC=com",
-                                                    "CN="+Utilities.DomainAdmin+",CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com",
-                                                                "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.INVALID_RIGHT, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp614);
+            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string> { $"CN={Utilities.DomainAdmin},CN=Users,DC=LDAP,DC=com", "CN=" + Utilities.DomainAdmin + ",CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com", "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.INVALID_RIGHT, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp614);
             this.Manager.Checkpoint("MS-AD_LDAP_R829");
             this.Manager.Checkpoint("MS-AD_LDAP_R362");
             this.Manager.Checkpoint("MS-AD_LDAP_R833");
@@ -16370,10 +16193,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1053\'");
             ConstrOnAddOpErrs temp625;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: testContainer"",""objectClass: container"",""distinguishedName: CN=testContainer,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: testContainer",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=testContainer,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp625);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: testContainer", "objectClass: container", "distinguishedName: CN=testContainer,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp625);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -16400,10 +16220,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1145\'");
             ConstrOnAddOpErrs temp626;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: testContainerDomain"",""objectClass: container"",""distinguishedName: CN=testContainerDomain,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: testContainerDomain",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=testContainerDomain,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp626);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: testContainerDomain", "objectClass: container", "distinguishedName: CN=testContainerDomain,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp626);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -16458,10 +16275,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "ishedName: CN=child,CN=testContainer1,DC=adts88\"],RIGHT_DS_CREATE_CHILDwithSE_EN" +
                     "ABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,Fa" +
                     "lse,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: child",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp628);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: child", "objectClass: container", "distinguishedName: CN=child,CN=testContainer1,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp628);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -16485,10 +16299,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1421\'");
             ConstrOnModDNOpErrs temp629;
             this.Manager.Comment(@"executing step 'call ModifyDNOperation([""CN=CrossDomainGroup2,CN=Users,DC=LDAP,DC=com"",""CN=CrossDomainGroup2,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com"",""true""],RIGHT_DELETE,RIGHT_DS_DELETE_CHILD,INVALID_RIGHT,True,LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string>{
-                                        "CN=CrossDomainGroup2,CN=Users,DC=LDAP,DC=com",
-                                                    "CN=CrossDomainGroup2,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com",
-                                                                "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.RIGHT_DS_DELETE_CHILD, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp629);
+            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string> { "CN=CrossDomainGroup2,CN=Users,DC=LDAP,DC=com", "CN=CrossDomainGroup2,CN=Users,DC=LDAPCHILD,DC=LDAP,DC=com", "true" }, ((RightsOnObjects)(1)), RightsOnParentObjects.RIGHT_DS_DELETE_CHILD, ((RightOnOldParentObject)(1)), true, ExtendedControl.LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID, ServerVersion.Win2008R2, false, out temp629);
             this.Manager.Checkpoint("MS-AD_LDAP_R829");
             this.Manager.Checkpoint("MS-AD_LDAP_R362");
             this.Manager.Checkpoint("MS-AD_LDAP_R833");
@@ -17909,13 +17720,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S965\'");
             ConstrOnAddOpErrs temp684;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: CrossDomainGroup2"",""objectClass: group"",""sAMAccountName: CrossDomainGroup2"",""distinguishedName: CN=CrossDomainGroup2,CN=Users,DC=adts88"",""member: CN=CrossDomainUser2,CN=Users,DC=adts88"",""groupType: 8""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: CrossDomainGroup2",
-                                                    "objectClass: group",
-                                                                "sAMAccountName: CrossDomainGroup2",
-                                                                            "distinguishedName: CN=CrossDomainGroup2,CN=Users,DC=adts88",
-                                                                                        "member: CN=CrossDomainUser2,CN=Users,DC=adts88",
-                                                                                                    "groupType: 8" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp684);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: CrossDomainGroup2", "objectClass: group", "sAMAccountName: CrossDomainGroup2", "distinguishedName: CN=CrossDomainGroup2,CN=Users,DC=adts88", "member: CN=CrossDomainUser2,CN=Users,DC=adts88", "groupType: 8" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp684);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -17939,10 +17744,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1057\'");
             ConstrOnAddOpErrs temp685;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: testContainer"",""objectClass: container"",""distinguishedName: CN=testContainer,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: testContainer",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=testContainer,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp685);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: testContainer", "objectClass: container", "distinguishedName: CN=testContainer,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp685);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -17969,10 +17771,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1149\'");
             ConstrOnAddOpErrs temp686;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: testContainerDomain"",""objectClass: container"",""distinguishedName: CN=testContainerDomain,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string>{
-                                        "cn: testContainerDomain",
-                                                    "objectClass: container",
-                                                                "distinguishedName: CN=testContainerDomain,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp686);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: testContainerDomain", "objectClass: container", "distinguishedName: CN=testContainerDomain,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp686);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");

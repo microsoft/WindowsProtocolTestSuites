@@ -2920,10 +2920,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S806\'");
             ConstrOnModDNOpErrs temp107;
             this.Manager.Comment(@"executing step 'call ModifyDNOperation([""CN="+ Utilities.DomainAdmin + ",CN=Users,DC=adts88\",\"CN="+ Utilities.DomainAdmin + "1,CN=Users,DC=adts88\",\"true\"],RIGHT_DS_WRITE_PROPERTYWithRIGHT_DELETE,RIGHT_DS_CREATE_CHILD,RIGHT_DS_DELETE_CHILD,False,NoExtendedControl,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string>{
-                                        $"CN={Utilities.DomainAdmin},CN=Users,DC=adts88",
-                                                    $"CN={Utilities.DomainAdmin}1,CN=Users,DC=adts88",
-                                                                "true" }, RightsOnObjects.RIGHT_DS_WRITE_PROPERTYWithRIGHT_DELETE, RightsOnParentObjects.RIGHT_DS_CREATE_CHILD, ((RightOnOldParentObject)(0)), false, null, ServerVersion.Win2008R2, false, out temp107);
+            this.IAD_LDAPModelAdapterInstance.ModifyDNOperation(new List<string> { $"CN={Utilities.DomainAdmin},CN=Users,DC=adts88", $"CN={Utilities.DomainAdmin}1,CN=Users,DC=adts88", "true" }, RightsOnObjects.RIGHT_DS_WRITE_PROPERTYWithRIGHT_DELETE, RightsOnParentObjects.RIGHT_DS_CREATE_CHILD, ((RightOnOldParentObject)(0)), false, null, ServerVersion.Win2008R2, false, out temp107);
             this.Manager.Checkpoint("MS-AD_LDAP_R789");
             this.Manager.Checkpoint("MS-AD_LDAP_R1510");
             this.Manager.Checkpoint("MS-AD_LDAP_R796");
