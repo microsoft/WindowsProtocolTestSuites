@@ -1,21 +1,20 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.IO;
-using System.Text;
-using System.Net;
-using System.Collections.ObjectModel;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography.X509Certificates;
+using Microsoft.Protocols.TestSuites.Rdp;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.Mcs;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt;
-using Microsoft.Protocols.TestSuites.Rdp;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Net;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
 
 namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 {
@@ -1085,12 +1084,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="height">The height of the rectangle.</param>
         public void FPUpdateBitmap(ushort left, ushort top, ushort width, ushort height)
         {
-            TS_FP_UPDATE_PDU fpOutput = null;
-            TS_FP_UPDATE_BITMAP bitmap = null;
+            var bitmap = RDPBCGROutput.CreateFPUpdateBitmap(left, top, width, height);
 
-            fpOutput = RDPBCGROutput.CreateFPUpdatePDU(sessionContext, 1);
-            bitmap = RDPBCGROutput.CreateFPUpdateBitmap(left, top, width, height);
-            fpOutput.fpOutputUpdates[0] = bitmap;
+            var fpOutput = RDPBCGROutput.CreateFPUpdatePDU(sessionContext, new TS_FP_UPDATE[] { bitmap });
 
             SendPdu(fpOutput);
         }
@@ -1102,12 +1098,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="y">The y-coordinate relative to the top-left corner of the server's desktop.</param>
         public void FPPointerPosition(int x, int y)
         {
-            TS_FP_UPDATE_PDU fpOutput = null;
-            TS_FP_POINTERPOSATTRIBUTE fpPos = new TS_FP_POINTERPOSATTRIBUTE();
+            var fpPos = RDPBCGROutput.CreateFPPointerPosAttribute(x, y);
 
-            fpOutput = RDPBCGROutput.CreateFPUpdatePDU(sessionContext, 1);
-            fpPos = RDPBCGROutput.CreateFPPointerPosAttribute(x, y);
-            fpOutput.fpOutputUpdates[0] = fpPos;
+            var fpOutput = RDPBCGROutput.CreateFPUpdatePDU(sessionContext, new TS_FP_UPDATE[] { fpPos });
 
             SendPdu(fpOutput);
         }
@@ -1117,12 +1110,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// </summary>
         public void FPSystemPointerHidden()
         {
-            TS_FP_UPDATE_PDU fpOutput = null;
-            TS_FP_SYSTEMPOINTERHIDDENATTRIBUTE fpSysPointer = new TS_FP_SYSTEMPOINTERHIDDENATTRIBUTE();
+            var fpSysPointer = RDPBCGROutput.CreateFPSystemPointerHiddenAttribute();
 
-            fpOutput = RDPBCGROutput.CreateFPUpdatePDU(sessionContext, 1);
-            fpSysPointer = RDPBCGROutput.CreateFPSystemPointerHiddenAttribute();
-            fpOutput.fpOutputUpdates[0] = fpSysPointer;
+            var fpOutput = RDPBCGROutput.CreateFPUpdatePDU(sessionContext, new TS_FP_UPDATE[] { fpSysPointer });
 
             SendPdu(fpOutput);
         }
@@ -1132,12 +1122,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// </summary>
         public void FPSystemPointerDefault()
         {
-            TS_FP_UPDATE_PDU fpOutput = null;
-            TS_FP_SYSTEMPOINTERDEFAULTATTRIBUTE fpSysPointer = new TS_FP_SYSTEMPOINTERDEFAULTATTRIBUTE();
+            var fpSysPointer = RDPBCGROutput.CreateFPSystemPointerDefaultAttribute();
 
-            fpOutput = RDPBCGROutput.CreateFPUpdatePDU(sessionContext, 1);
-            fpSysPointer = RDPBCGROutput.CreateFPSystemPointerDefaultAttribute();
-            fpOutput.fpOutputUpdates[0] = fpSysPointer;
+            var fpOutput = RDPBCGROutput.CreateFPUpdatePDU(sessionContext, new TS_FP_UPDATE[] { fpSysPointer });
 
             SendPdu(fpOutput);
         }
@@ -1155,12 +1142,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         public void FPColorPointer(ushort cacheIndex, ushort hotSpotX, ushort hotSpotY, ushort width, ushort height,
             byte[] xorMaskData = null, byte[] andMaskData = null)
         {
-            TS_FP_UPDATE_PDU updatePdu = RDPBCGROutput.CreateFPUpdatePDU(sessionContext, 1);
-            TS_FP_COLORPOINTERATTRIBUTE colorAttr = RDPBCGROutput.CreateFPColorPointerAttribute(cacheIndex, hotSpotX, hotSpotY, width, height,
+            var colorAttr = RDPBCGROutput.CreateFPColorPointerAttribute(cacheIndex, hotSpotX, hotSpotY, width, height,
                 xorMaskData, andMaskData);
-            updatePdu.fpOutputUpdates[0] = colorAttr;
 
-            SendPdu(updatePdu);
+            var fpOutput = RDPBCGROutput.CreateFPUpdatePDU(sessionContext, new TS_FP_UPDATE[] { colorAttr });
+
+            SendPdu(fpOutput);
         }
 
         /// <summary>
@@ -1177,12 +1164,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         public void FPNewPointer(ushort xorBpp, ushort cacheIndex, ushort hotSpotX, ushort hotSpotY, ushort width, ushort height,
             byte[] xorMaskData = null, byte[] andMaskData = null)
         {
-            TS_FP_UPDATE_PDU updatePdu = RDPBCGROutput.CreateFPUpdatePDU(sessionContext, 1);
-            TS_FP_POINTERATTRIBUTE pointerAttr = RDPBCGROutput.CreateFPPointerAttribute(xorBpp, cacheIndex, hotSpotX, hotSpotY, width, height,
+            var pointerAttr = RDPBCGROutput.CreateFPPointerAttribute(xorBpp, cacheIndex, hotSpotX, hotSpotY, width, height,
                 xorMaskData, andMaskData);
-            updatePdu.fpOutputUpdates[0] = pointerAttr;
 
-            SendPdu(updatePdu);
+            var fpOutput = RDPBCGROutput.CreateFPUpdatePDU(sessionContext, new TS_FP_UPDATE[] { pointerAttr });
+
+            SendPdu(fpOutput);
         }
 
         /// <summary>
@@ -1191,11 +1178,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="cacheIndex">Cache entry in the pointer cache</param>
         public void FPCachedPointer(ushort cacheIndex)
         {
-            TS_FP_UPDATE_PDU updatePdu = RDPBCGROutput.CreateFPUpdatePDU(sessionContext, 1);
-            TS_FP_CACHEDPOINTERATTRIBUTE cachedPointer = RDPBCGROutput.CreateCachedPointerAttribute(cacheIndex);
-            updatePdu.fpOutputUpdates[0] = cachedPointer;
+            var cachedPointer = RDPBCGROutput.CreateCachedPointerAttribute(cacheIndex);
 
-            SendPdu(updatePdu);
+            var fpOutput = RDPBCGROutput.CreateFPUpdatePDU(sessionContext, new TS_FP_UPDATE[] { cachedPointer });
+
+            SendPdu(fpOutput);
         }
         /// <summary>
         /// Send Fast-Path Surface Commands Update to client.
@@ -1206,17 +1193,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="height">The height of the rectangle.</param>
         public void FPSurfaceCommand(ushort left, ushort top, ushort width, ushort height)
         {
-            TS_FP_UPDATE_PDU fpOutput = null;
-            TS_FP_SURFCMDS surfCmds = null;
-            TS_SURFCMD_SET_SURF_BITS setSurfBits = null;
+            var setSurfBits = RDPBCGROutput.CreateSurfCmdSetSurfBits(left, top, width, height);
 
-            fpOutput = RDPBCGROutput.CreateFPUpdatePDU(sessionContext, 1);
-            setSurfBits = RDPBCGROutput.CreateSurfCmdSetSurfBits(left, top, width, height);
-            surfCmds = RDPBCGROutput.CreateFPSurfCmds(setSurfBits);
-
+            var surfCmds = RDPBCGROutput.CreateFPSurfCmds(setSurfBits);
 
             surfCmds.surfaceCommands[0] = setSurfBits;
-            fpOutput.fpOutputUpdates[0] = surfCmds;
+
+            var fpOutput = RDPBCGROutput.CreateFPUpdatePDU(sessionContext, new TS_FP_UPDATE[] { surfCmds });
 
             SendPdu(fpOutput);
         }
@@ -1231,6 +1214,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             TS_FP_UPDATE_PDU fpOutput;
             TS_FP_UPDATE[] updates = new TS_FP_UPDATE[1];
             updates[0] = surfaceCommands;
+
             fpOutput = rdpbcgrServerStack.CreateFastPathUpdatePdu(sessionContext, updates);
             SendPdu(fpOutput);
         }
@@ -1243,19 +1227,19 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="frameId">A 32-bit, unsigned integer. The ID identifying the frame.</param>
         public void SendFrameMarkerCommand(frameAction_Values frameAction, uint frameId)
         {
-            TS_FRAME_MARKER frameMakerCmd = new TS_FRAME_MARKER();
-            frameMakerCmd.cmdType = cmdType_Values.CMDTYPE_FRAME_MARKER;
-            frameMakerCmd.frameAction = frameAction;
-            frameMakerCmd.frameId = frameId;
+            TS_FRAME_MARKER frameMarkerCmd = new TS_FRAME_MARKER();
+            frameMarkerCmd.cmdType = cmdType_Values.CMDTYPE_FRAME_MARKER;
+            frameMarkerCmd.frameAction = frameAction;
+            frameMarkerCmd.frameId = frameId;
 
             TS_FP_SURFCMDS surfCmds = new TS_FP_SURFCMDS();
 
             surfCmds.updateHeader = new nested_TS_FP_UPDATE_updateHeader(updateCode_Values.FASTPATH_UPDATETYPE_SURFCMDS);
 
-            surfCmds.compressionFlags = compressedType_Values.None;
-            surfCmds.size = 8; //size of TS_FRAME_MARKER;
             surfCmds.surfaceCommands = new TS_SURFCMD[1];
-            surfCmds.surfaceCommands[0] = frameMakerCmd;
+            surfCmds.surfaceCommands[0] = frameMarkerCmd;
+
+            surfCmds.AssignUpdateDataAndSize();
 
             SendSurfaceCommandsUpdate(surfCmds);
         }
@@ -1271,19 +1255,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             surfCmds.updateHeader = new nested_TS_FP_UPDATE_updateHeader(updateCode_Values.FASTPATH_UPDATETYPE_SURFCMDS);
 
-            surfCmds.compressionFlags = compressedType_Values.None;
-            // size of cmdType + destLeft + destTop + destRight + destBottom = 10
-            // size of bpp + flags + reserved + codecId + width + height + bitmapDataLength = 12
-            // size of exBitmapDataHeader = 24, if bitmapData.flags contains TSBitmapDataExFlags_Values.EX_COMPRESSED_BITMAP_HEADER_PRESENT
-            int subLength = 22;
-            if (streamCmd.bitmapData.exBitmapDataHeader != null)
-            {
-                subLength += 24;
-            }
-            surfCmds.size = (ushort)(subLength + streamCmd.bitmapData.bitmapDataLength); //size of TS_SURFCMD_STREAM_SURF_BITS;
-
             surfCmds.surfaceCommands = new TS_SURFCMD[1];
             surfCmds.surfaceCommands[0] = streamCmd;
+
+            surfCmds.AssignUpdateDataAndSize();
+
             SendSurfaceCommandsUpdate(surfCmds);
         }
 
