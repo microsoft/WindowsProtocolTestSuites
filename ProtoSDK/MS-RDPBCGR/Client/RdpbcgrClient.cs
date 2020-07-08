@@ -1027,7 +1027,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             string clientDigProductId = context.ClientDigProductId;
             encryptionMethod_Values encryptionMethod = (encryptionMethod_Values)context.RdpEncryptionMethod;
             CHANNEL_DEF[] virtualChannelDefines = context.VirtualChannelDefines;
-            Collection<ITsCapsSet> confirmCapabilitySets = context.ConfirmCapabilitySets;
+            Collection<ITsCapsSet> confirmCapabilitySets = context.ConfirmActiveCapabilitySets;
             context.ClearForReconnect();
             TimeSpan totalTime = timeout + DateTime.Now.TimeOfDay;
             #endregion clear the configuration
@@ -1161,7 +1161,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             #region Capabilities Exchange
             Server_Demand_Active_Pdu demandActivePdu =
                 (Server_Demand_Active_Pdu)ExpectPdu(totalTime - DateTime.Now.TimeOfDay);
-            Collection<ITsCapsSet> capabilitySets = context.ConfirmCapabilitySets;
+            Collection<ITsCapsSet> capabilitySets = context.ConfirmActiveCapabilitySets;
             Client_Confirm_Active_Pdu confirmActivePdu;
             if (capabilitySets == null)
             {

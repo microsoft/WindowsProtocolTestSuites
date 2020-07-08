@@ -3283,80 +3283,116 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 byte[] updateData = GetBytes(data, ref currentIndex, updateDataSize);
 
                 // Decompress update data (according to compressionFlags)
-                byte[] decompressedUpdateData = clientContext.Decompress(updateData, compressionFlags);
+                var decompressedUpdateData = clientContext.Decompress(updateData, compressionFlags);
 
-                // Parse fast-path updates by updateCode
-                switch (updateCode)
+                bool isPartial;
+
+                if (updateHeader.fragmentation == fragmentation_Value.FASTPATH_FRAGMENT_SINGLE)
                 {
-                    // Fast-Path Orders Update
-                    case updateCode_Values.FASTPATH_UPDATETYPE_ORDERS:
-                        update = ParseTsFpUpdateOrders(updateHeader, compressionFlags,
-                            updateDataSize, decompressedUpdateData);
-                        break;
+                    isPartial = false;
 
-                    // Fast-Path Bitmap Update
-                    case updateCode_Values.FASTPATH_UPDATETYPE_BITMAP:
-                        update = ParseTsFpUpdateBitmap(updateHeader, compressionFlags,
-                            updateDataSize, decompressedUpdateData);
-                        break;
-
-                    // Fast-Path Palette Update
-                    case updateCode_Values.FASTPATH_UPDATETYPE_PALETTE:
-                        update = ParseTsFpUpdatePalette(updateHeader, compressionFlags,
-                            updateDataSize, decompressedUpdateData);
-                        break;
-
-                    // Fast-Path Synchronize Update 
-                    case updateCode_Values.FASTPATH_UPDATETYPE_SYNCHRONIZE:
-                        update = ParseTsFpUpdateSynchronize(
-                            updateHeader, compressionFlags, updateDataSize);
-                        break;
-
-                    // Fast-Path Surface commands Update 
-                    case updateCode_Values.FASTPATH_UPDATETYPE_SURFCMDS:
-                        update = ParseTsFpSurfCmds(updateHeader, compressionFlags,
-                            updateDataSize, decompressedUpdateData);
-                        break;
-
-                    // Fast-Path System Pointer Hidden Update
-                    case updateCode_Values.FASTPATH_UPDATETYPE_PTR_NULL:
-                        update = ParseTsFpSystemPointerHiddenAttribute(
-                            updateHeader, compressionFlags, updateDataSize);
-                        break;
-
-                    // Fast-Path System Pointer Default Update
-                    case updateCode_Values.FASTPATH_UPDATETYPE_PTR_DEFAULT:
-                        update = ParseTsFpSystemPointerDefaultAttribute(
-                            updateHeader, compressionFlags, updateDataSize);
-                        break;
-
-                    // Fast-Path Pointer Position Update 
-                    case updateCode_Values.FASTPATH_UPDATETYPE_PTR_POSITION:
-                        update = ParseTsFpPointerPosAttribute(updateHeader, compressionFlags,
-                            updateDataSize, decompressedUpdateData);
-                        break;
-
-                    // Fast-Path Color Pointer Update 
-                    case updateCode_Values.FASTPATH_UPDATETYPE_COLOR:
-                        update = ParseTsFpColorPointerAttribute(updateHeader, compressionFlags,
-                            updateDataSize, decompressedUpdateData);
-                        break;
-
-                    // Fast-Path Cached Pointer Update 
-                    case updateCode_Values.FASTPATH_UPDATETYPE_CACHED:
-                        update = ParseTsFpCachedPointerAttribute(updateHeader, compressionFlags,
-                            updateDataSize, decompressedUpdateData);
-                        break;
-
-                    // Fast-Path New Pointer Update
-                    case updateCode_Values.FASTPATH_UPDATETYPE_POINTER:
-                        update = ParseTsFpPointerAttribute(updateHeader, compressionFlags,
-                            updateDataSize, decompressedUpdateData);
-                        break;
-
-                    default:
-                        throw new FormatException(ConstValue.ERROR_MESSAGE_ENUM_UNRECOGNIZED);
+                    update = new TS_FP_UPDATE_Single
+                    {
+                        updateHeader = updateHeader,
+                        compressionFlags = compressionFlags,
+                        size = updateDataSize,
+                        updateData = updateData,
+                        First = null,
+                        FragmentedUpdateData = decompressedUpdateData,
+                    };
                 }
+                else
+                {
+                    update = new TS_FP_UPDATE_Fragmented
+                    {
+                        updateHeader = updateHeader,
+                        compressionFlags = compressionFlags,
+                        size = updateDataSize,
+                        updateData = updateData,
+                        First = null,
+                        FragmentedUpdateData = decompressedUpdateData,
+                        Next = null,
+                    };
+
+                    var updateNode = clientContext.UpdateServerFastPathUpdatePduFragmentationState(update as TS_FP_UPDATE_Fragmented);
+
+                    if (updateNode == null)
+                    {
+                        isPartial = true;
+                    }
+                    else
+                    {
+                        isPartial = false;
+
+                        update = updateNode;
+                    }
+                }
+
+                if (!isPartial)
+                {
+                    // Parse fast-path updates by updateCode
+                    switch (updateCode)
+                    {
+                        // Fast-Path Orders Update
+                        case updateCode_Values.FASTPATH_UPDATETYPE_ORDERS:
+                            update = ParseTsFpUpdateOrders(update);
+                            break;
+
+                        // Fast-Path Bitmap Update
+                        case updateCode_Values.FASTPATH_UPDATETYPE_BITMAP:
+                            update = ParseTsFpUpdateBitmap(update);
+                            break;
+
+                        // Fast-Path Palette Update
+                        case updateCode_Values.FASTPATH_UPDATETYPE_PALETTE:
+                            update = ParseTsFpUpdatePalette(update);
+                            break;
+
+                        // Fast-Path Synchronize Update 
+                        case updateCode_Values.FASTPATH_UPDATETYPE_SYNCHRONIZE:
+                            update = ParseTsFpUpdateSynchronize(update);
+                            break;
+
+                        // Fast-Path Surface commands Update 
+                        case updateCode_Values.FASTPATH_UPDATETYPE_SURFCMDS:
+                            update = ParseTsFpSurfCmds(update);
+                            break;
+
+                        // Fast-Path System Pointer Hidden Update
+                        case updateCode_Values.FASTPATH_UPDATETYPE_PTR_NULL:
+                            update = ParseTsFpSystemPointerHiddenAttribute(update);
+                            break;
+
+                        // Fast-Path System Pointer Default Update
+                        case updateCode_Values.FASTPATH_UPDATETYPE_PTR_DEFAULT:
+                            update = ParseTsFpSystemPointerDefaultAttribute(update);
+                            break;
+
+                        // Fast-Path Pointer Position Update 
+                        case updateCode_Values.FASTPATH_UPDATETYPE_PTR_POSITION:
+                            update = ParseTsFpPointerPosAttribute(update);
+                            break;
+
+                        // Fast-Path Color Pointer Update 
+                        case updateCode_Values.FASTPATH_UPDATETYPE_COLOR:
+                            update = ParseTsFpColorPointerAttribute(update);
+                            break;
+
+                        // Fast-Path Cached Pointer Update 
+                        case updateCode_Values.FASTPATH_UPDATETYPE_CACHED:
+                            update = ParseTsFpCachedPointerAttribute(update);
+                            break;
+
+                        // Fast-Path New Pointer Update
+                        case updateCode_Values.FASTPATH_UPDATETYPE_POINTER:
+                            update = ParseTsFpPointerAttribute(update);
+                            break;
+
+                        default:
+                            throw new FormatException(ConstValue.ERROR_MESSAGE_ENUM_UNRECOGNIZED);
+                    }
+                }
+
                 listUpdate.Add(update);
             }
 
@@ -3369,35 +3405,29 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             return updates;
         }
 
-
         #region Fast-Path Update Attribute Parsers
         /// <summary>
         /// Parse TS_FP_UPDATE_ORDERS
         /// </summary>
-        /// <param name="updateHeader">update header</param>
-        /// <param name="compressionFlags">compression flags</param>
-        /// <param name="size">update data size(before decompression)</param>
-        /// <param name="updateData">update data(decompressed)</param>
+        /// <param name="update">The TS_FP_UPDATE instance.</param>
         /// <returns>TS_FP_UPDATE_ORDERS</returns>
         private TS_FP_UPDATE_ORDERS ParseTsFpUpdateOrders(
-            nested_TS_FP_UPDATE_updateHeader updateHeader,
-            compressedType_Values compressionFlags,
-            UInt16 size,
-            byte[] updateData)
+            TS_FP_UPDATE update
+            )
         {
-            TS_FP_UPDATE_ORDERS orders = new TS_FP_UPDATE_ORDERS();
+            var orders = new TS_FP_UPDATE_ORDERS();
 
-            // TS_FP_UPDATE_ORDERS: updateHeader
-            orders.updateHeader = updateHeader;
+            orders.Clone(update);
 
-            // TS_FP_UPDATE_ORDERS: compressionFlags
-            orders.compressionFlags = compressionFlags;
+            var updateData = orders.GetUpdateData();
 
-            // TS_FP_UPDATE_ORDERS: size
-            orders.size = size;
+            int index = 0;
 
             // TS_FP_UPDATE_ORDERS: updateOrders
-            orders.updateOrders = updateData;
+            orders.updateOrders = RdpbcgrDecoder.GetBytes(updateData, ref index, updateData.Length);
+
+            // Check if data length exceeded expectation
+            VerifyDataLength(updateData.Length, index, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
 
             return orders;
         }
@@ -3406,30 +3436,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// Parse TS_FP_UPDATE_BITMAP
         /// </summary>
-        /// <param name="updateHeader">update header</param>
-        /// <param name="compressionFlags">compression flags</param>
-        /// <param name="size">update data size(before decompression)</param>
-        /// <param name="updateData">update data(decompressed)</param>
+        /// <param name="update">The TS_FP_UPDATE instance.</param>
         /// <returns>TS_FP_UPDATE_BITMAP</returns>
         private TS_FP_UPDATE_BITMAP ParseTsFpUpdateBitmap(
-            nested_TS_FP_UPDATE_updateHeader updateHeader,
-            compressedType_Values compressionFlags,
-            UInt16 size,
-            byte[] updateData)
+            TS_FP_UPDATE update
+            )
         {
-            TS_FP_UPDATE_BITMAP bitmap = new TS_FP_UPDATE_BITMAP();
+            var bitmap = new TS_FP_UPDATE_BITMAP();
 
-            // TS_FP_UPDATE_BITMAP: updateHeader
-            bitmap.updateHeader = updateHeader;
+            bitmap.Clone(update);
 
-            // TS_FP_UPDATE_BITMAP: compressionFlags
-            bitmap.compressionFlags = compressionFlags;
+            var updateData = bitmap.GetUpdateData();
 
-            // TS_FP_UPDATE_BITMAP: size
-            bitmap.size = size;
-
-            // TS_FP_UPDATE_BITMAP: bitmapUpdateData
             int index = 0;
+
             bitmap.bitmapUpdateData = ParseTsUpdateBitmapData(updateData, ref index);
 
             // Check if data length exceeded expectation
@@ -3441,34 +3461,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// Parse TS_FP_UPDATE_PALETTE
         /// </summary>
-        /// <param name="updateHeader">update header</param>
-        /// <param name="compressionFlags">compression flags</param>
-        /// <param name="size">update data size(before decompression)</param>
-        /// <param name="updateData">update data(decompressed)</param>
+        /// <param name="update">The TS_FP_UPDATE instance.</param>
         /// <returns>TS_FP_UPDATE_PALETTE</returns>
         private TS_FP_UPDATE_PALETTE ParseTsFpUpdatePalette(
-            nested_TS_FP_UPDATE_updateHeader updateHeader,
-            compressedType_Values compressionFlags,
-            UInt16 size,
-            byte[] updateData)
+            TS_FP_UPDATE update
+            )
         {
-            TS_FP_UPDATE_PALETTE palette = new TS_FP_UPDATE_PALETTE();
+            var palette = new TS_FP_UPDATE_PALETTE();
 
-            // TS_FP_UPDATE_PALETTE: updateHeader
-            palette.updateHeader = updateHeader;
+            palette.Clone(update);
 
-            // TS_FP_UPDATE_PALETTE: compressionFlags
-            palette.compressionFlags = compressionFlags;
+            var updateData = palette.GetUpdateData();
 
-            // TS_FP_UPDATE_PALETTE: size
-            palette.size = size;
-
-            // TS_FP_UPDATE_PALETTE: paletteUpdateData
             int index = 0;
+
             palette.paletteUpdateData = ParseTsUpdatePaletteData(updateData, ref index);
 
             // Check if data length exceeded expectation
             VerifyDataLength(updateData.Length, index, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
+
             return palette;
         }
 
@@ -3476,25 +3487,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// Parse TS_FP_UPDATE_SYNCHRONIZE
         /// </summary>
-        /// <param name="updateHeader">update header</param>
-        /// <param name="compressionFlags">compression flags</param>
-        /// <param name="size">update data size(before decompression)</param>
+        /// <param name="update">The TS_FP_UPDATE instance.</param>
         /// <returns>TS_FP_UPDATE_SYNCHRONIZE</returns>
         private TS_FP_UPDATE_SYNCHRONIZE ParseTsFpUpdateSynchronize(
-            nested_TS_FP_UPDATE_updateHeader updateHeader,
-            compressedType_Values compressionFlags,
-            UInt16 size)
+            TS_FP_UPDATE update
+            )
         {
-            TS_FP_UPDATE_SYNCHRONIZE sync = new TS_FP_UPDATE_SYNCHRONIZE();
+            var sync = new TS_FP_UPDATE_SYNCHRONIZE();
 
-            // TS_FP_UPDATE_SYNCHRONIZE: updateHeader
-            sync.updateHeader = updateHeader;
+            sync.Clone(update);
 
-            // TS_FP_UPDATE_SYNCHRONIZE: compressionFlags
-            sync.compressionFlags = compressionFlags;
+            var updateData = sync.GetUpdateData();
 
-            // TS_FP_UPDATE_SYNCHRONIZE: size
-            sync.size = size;
+            int index = 0;
+
+            // Check if data length exceeded expectation
+            VerifyDataLength(updateData.Length, index, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
 
             return sync;
         }
@@ -3503,30 +3511,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// Parse TS_FP_SURFCMDS
         /// </summary>
-        /// <param name="updateHeader">update header</param>
-        /// <param name="compressionFlags">compression flags</param>
-        /// <param name="size">update data size(before decompression)</param>
-        /// <param name="updateData">update data(decompressed)</param>
+        /// <param name="update">The TS_FP_UPDATE instance.</param>
         /// <returns>TS_FP_SURFCMDS</returns>
         private TS_FP_SURFCMDS ParseTsFpSurfCmds(
-            nested_TS_FP_UPDATE_updateHeader updateHeader,
-            compressedType_Values compressionFlags,
-            UInt16 size,
-            byte[] updateData)
+            TS_FP_UPDATE update
+            )
         {
-            TS_FP_SURFCMDS cmds = new TS_FP_SURFCMDS();
+            var cmds = new TS_FP_SURFCMDS();
 
-            // TS_FP_SURFCMDS: updateHeader
-            cmds.updateHeader = updateHeader;
+            cmds.Clone(update);
 
-            // TS_FP_SURFCMDS: compressionFlags
-            cmds.compressionFlags = compressionFlags;
+            var updateData = cmds.GetUpdateData();
 
-            // TS_FP_SURFCMDS: size
-            cmds.size = size;
-
-            // TS_FP_SURFCMDS: surfaceCommands
             int index = 0;
+
             cmds.surfaceCommands = ParseTsSurfCmd(updateData, ref index);
 
             // Check if data length exceeded expectation
@@ -3662,25 +3660,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// Parse TS_FP_SYSTEMPOINTERHIDDENATTRIBUTE
         /// </summary>
-        /// <param name="updateHeader">update header</param>
-        /// <param name="compressionFlags">compression flags</param>
-        /// <param name="size">update data size(before decompression)</param>
+        /// <param name="update">The TS_FP_UPDATE instance.</param>
         /// <returns>TS_FP_SYSTEMPOINTERHIDDENATTRIBUTE</returns>
         private TS_FP_SYSTEMPOINTERHIDDENATTRIBUTE ParseTsFpSystemPointerHiddenAttribute(
-            nested_TS_FP_UPDATE_updateHeader updateHeader,
-            compressedType_Values compressionFlags,
-            UInt16 size)
+            TS_FP_UPDATE update
+            )
         {
-            TS_FP_SYSTEMPOINTERHIDDENATTRIBUTE hiddenAttribute = new TS_FP_SYSTEMPOINTERHIDDENATTRIBUTE();
+            var hiddenAttribute = new TS_FP_SYSTEMPOINTERHIDDENATTRIBUTE();
 
-            // TS_FP_SYSTEMPOINTERHIDDENATTRIBUTE: updateHeader
-            hiddenAttribute.updateHeader = updateHeader;
+            hiddenAttribute.Clone(update);
 
-            // TS_FP_SYSTEMPOINTERHIDDENATTRIBUTE: compressionFlags
-            hiddenAttribute.compressionFlags = compressionFlags;
+            var updateData = hiddenAttribute.GetUpdateData();
 
-            // TS_FP_SYSTEMPOINTERHIDDENATTRIBUTE: size
-            hiddenAttribute.size = size;
+            int index = 0;
+
+            // Check if data length exceeded expectation
+            VerifyDataLength(updateData.Length, index, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
 
             return hiddenAttribute;
         }
@@ -3689,25 +3684,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// Parse TS_FP_SYSTEMPOINTERDEFAULTATTRIBUTE
         /// </summary>
-        /// <param name="updateHeader">update header</param>
-        /// <param name="compressionFlags">compression flags</param>
-        /// <param name="size">update data size(before decompression)</param>
+        /// <param name="update">The TS_FP_UPDATE instance.</param>
         /// <returns>TS_FP_SYSTEMPOINTERDEFAULTATTRIBUTE</returns>
         private TS_FP_SYSTEMPOINTERDEFAULTATTRIBUTE ParseTsFpSystemPointerDefaultAttribute(
-            nested_TS_FP_UPDATE_updateHeader updateHeader,
-            compressedType_Values compressionFlags,
-            UInt16 size)
+            TS_FP_UPDATE update
+            )
         {
-            TS_FP_SYSTEMPOINTERDEFAULTATTRIBUTE defaultAttribute = new TS_FP_SYSTEMPOINTERDEFAULTATTRIBUTE();
+            var defaultAttribute = new TS_FP_SYSTEMPOINTERDEFAULTATTRIBUTE();
 
-            // TS_FP_SYSTEMPOINTERDEFAULTATTRIBUTE: updateHeader
-            defaultAttribute.updateHeader = updateHeader;
+            defaultAttribute.Clone(update);
 
-            // TS_FP_SYSTEMPOINTERDEFAULTATTRIBUTE: compressionFlags
-            defaultAttribute.compressionFlags = compressionFlags;
+            var updateData = defaultAttribute.GetUpdateData();
 
-            // TS_FP_SYSTEMPOINTERDEFAULTATTRIBUTE: size
-            defaultAttribute.size = size;
+            int index = 0;
+
+            // Check if data length exceeded expectation
+            VerifyDataLength(updateData.Length, index, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
 
             return defaultAttribute;
         }
@@ -3716,30 +3708,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// Parse TS_FP_POINTERPOSATTRIBUTE
         /// </summary>
-        /// <param name="updateHeader">update header</param>
-        /// <param name="compressionFlags">compression flags</param>
-        /// <param name="size">update data size(before decompression)</param>
-        /// <param name="updateData">update data(decompressed)</param>
+        /// <param name="update">The TS_FP_UPDATE instance.</param>
         /// <returns>TS_FP_POINTERPOSATTRIBUTE</returns>
         private TS_FP_POINTERPOSATTRIBUTE ParseTsFpPointerPosAttribute(
-            nested_TS_FP_UPDATE_updateHeader updateHeader,
-            compressedType_Values compressionFlags,
-            UInt16 size,
-            byte[] updateData)
+           TS_FP_UPDATE update
+            )
         {
-            TS_FP_POINTERPOSATTRIBUTE positionAttribute = new TS_FP_POINTERPOSATTRIBUTE();
+            var positionAttribute = new TS_FP_POINTERPOSATTRIBUTE();
 
-            // TS_FP_POINTERPOSATTRIBUTE: updateHeader
-            positionAttribute.updateHeader = updateHeader;
+            positionAttribute.Clone(update);
 
-            // TS_FP_POINTERPOSATTRIBUTE: compressionFlags
-            positionAttribute.compressionFlags = compressionFlags;
+            var updateData = positionAttribute.GetUpdateData();
 
-            // TS_FP_POINTERPOSATTRIBUTE: size
-            positionAttribute.size = size;
-
-            // TS_FP_POINTERPOSATTRIBUTE: pointerPositionUpdateData
             int index = 0;
+
             positionAttribute.pointerPositionUpdateData = ParseTsPointerPosAttribute(updateData, ref index);
 
             // Check if data length exceeded expectation
@@ -3790,30 +3772,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// Parse TS_FP_COLORPOINTERATTRIBUTE
         /// </summary>
-        /// <param name="updateHeader">update header</param>
-        /// <param name="compressionFlags">compression flags</param>
-        /// <param name="size">update data size(before decompression)</param>
-        /// <param name="updateData">update data(decompressed)</param>
+        /// <param name="update">The TS_FP_UPDATE instance.</param>
         /// <returns>TS_FP_COLORPOINTERATTRIBUTE</returns>
         private TS_FP_COLORPOINTERATTRIBUTE ParseTsFpColorPointerAttribute(
-            nested_TS_FP_UPDATE_updateHeader updateHeader,
-            compressedType_Values compressionFlags,
-            UInt16 size,
-            byte[] updateData)
+            TS_FP_UPDATE update
+            )
         {
-            TS_FP_COLORPOINTERATTRIBUTE attribute = new TS_FP_COLORPOINTERATTRIBUTE();
+            var attribute = new TS_FP_COLORPOINTERATTRIBUTE();
 
-            // TS_FP_COLORPOINTERATTRIBUTE: updateHeader
-            attribute.updateHeader = updateHeader;
+            attribute.Clone(update);
 
-            // TS_FP_COLORPOINTERATTRIBUTE: compressionFlags
-            attribute.compressionFlags = compressionFlags;
+            var updateData = attribute.GetUpdateData();
 
-            // TS_FP_COLORPOINTERATTRIBUTE: size
-            attribute.size = size;
-
-            // TS_FP_COLORPOINTERATTRIBUTE: colorPointerUpdateData
             int index = 0;
+
             attribute.colorPointerUpdateData = ParseTsColorPointerAttribute(updateData, ref index);
 
             // Check if data length exceeded expectation
@@ -3870,30 +3842,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// Parse TS_FP_CACHEDPOINTERATTRIBUTE
         /// </summary>
-        /// <param name="updateHeader">update header</param>
-        /// <param name="compressionFlags">compression flags</param>
-        /// <param name="size">update data size(before decompression)</param>
-        /// <param name="updateData">update data(decompressed)</param>
+        /// <param name="update">The TS_FP_UPDATE instance.</param>
         /// <returns>TS_FP_CACHEDPOINTERATTRIBUTE</returns>
         private TS_FP_CACHEDPOINTERATTRIBUTE ParseTsFpCachedPointerAttribute(
-            nested_TS_FP_UPDATE_updateHeader updateHeader,
-            compressedType_Values compressionFlags,
-            UInt16 size,
-            byte[] updateData)
+            TS_FP_UPDATE update
+            )
         {
-            TS_FP_CACHEDPOINTERATTRIBUTE attribute = new TS_FP_CACHEDPOINTERATTRIBUTE();
+            var attribute = new TS_FP_CACHEDPOINTERATTRIBUTE();
 
-            // TS_FP_CACHEDPOINTERATTRIBUTE: updateHeader
-            attribute.updateHeader = updateHeader;
+            attribute.Clone(update);
 
-            // TS_FP_CACHEDPOINTERATTRIBUTE: compressionFlags
-            attribute.compressionFlags = compressionFlags;
+            var updateData = attribute.GetUpdateData();
 
-            // TS_FP_CACHEDPOINTERATTRIBUTE: size
-            attribute.size = size;
-
-            // TS_FP_CACHEDPOINTERATTRIBUTE: cachedPointerUpdateData
             int index = 0;
+
             attribute.cachedPointerUpdateData = ParseTsCachePointerAttribute(updateData, ref index);
 
             // Check if data length exceeded expectation
@@ -3923,35 +3885,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// Parse TS_FP_POINTERATTRIBUTE
         /// </summary>
-        /// <param name="updateHeader">update header</param>
-        /// <param name="compressionFlags">compression flags</param>
-        /// <param name="size">update data size(before decompression)</param>
-        /// <param name="updateData">update data(decompressed)</param>
+        /// <param name="update">The TS_FP_UPDATE instance.</param>
         /// <returns>TS_FP_POINTERATTRIBUTE</returns>
         private TS_FP_POINTERATTRIBUTE ParseTsFpPointerAttribute(
-            nested_TS_FP_UPDATE_updateHeader updateHeader,
-            compressedType_Values compressionFlags,
-            UInt16 size,
-            byte[] updateData)
+           TS_FP_UPDATE update
+            )
         {
-            TS_FP_POINTERATTRIBUTE attribute = new TS_FP_POINTERATTRIBUTE();
+            var attribute = new TS_FP_POINTERATTRIBUTE();
 
-            // TS_FP_POINTERATTRIBUTE: updateHeader
-            attribute.updateHeader = updateHeader;
+            attribute.Clone(update);
 
-            // TS_FP_POINTERATTRIBUTE: compressionFlags
-            attribute.compressionFlags = compressionFlags;
+            var updateData = attribute.GetUpdateData();
 
-            // TS_FP_POINTERATTRIBUTE: size
-            attribute.size = size;
-
-            // TS_FP_POINTERATTRIBUTE: newPointerUpdateData
             int index = 0;
+
             attribute.newPointerUpdateData = ParseTsPointerAttribute(updateData, ref index);
 
-            // [Commented out for TDI #41402]
             // Check if data length exceeded expectation
-            // VerifyDataLength(updateData.Length, index, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
+            VerifyDataLength(updateData.Length, index, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
+
             return attribute;
         }
 
