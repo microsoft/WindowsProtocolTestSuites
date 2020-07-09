@@ -73,13 +73,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.TestSuite
         protected string GetTestFileName(string share)
         {
             string fileName = CurrentTestCaseName + "_" + Guid.NewGuid().ToString();
-            testFiles.Add(Path.Combine(share, fileName));
+            testFiles.Add(string.Format(@"{0}\{1}", share, fileName));
             return fileName;
         }
 
         protected void AddTestFileName(string share, string fileName)
         {
-            testFiles.Add(Path.Combine(share, fileName));
+            testFiles.Add(string.Format(@"{0}\{1}", share, fileName));
         }
 
         protected string CreateTestDirectory(string server, string share)
@@ -90,7 +90,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.TestSuite
         protected string CreateTestDirectory(string share)
         {
             string testDirectory = CurrentTestCaseName + "_" + Guid.NewGuid().ToString();
-            string testDirectoryFullPath = Path.Combine(share, testDirectory);
+            string testDirectoryFullPath = string.Format(@"{0}\{1}", share, testDirectory);
             testDirectories.Add(testDirectoryFullPath);
             sutProtocolController.CreateDirectory(share, testDirectory);
             BaseTestSite.Log.Add(LogEntryKind.Debug, "Create a directory {0} in the share {1}.",
@@ -101,13 +101,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.TestSuite
         protected string GetTestDirectoryName(string share)
         {
             string directoryName = CurrentTestCaseName + "_" + Guid.NewGuid().ToString();
-            testDirectories.Add(Path.Combine(share, directoryName));
+            testDirectories.Add(string.Format(@"{0}\{1}", share, directoryName));
             return directoryName;
         }
 
         protected void AddTestDirectoryName(string share, string directoryName)
         {
-            testDirectories.Add(Path.Combine(share, directoryName));
+            testDirectories.Add(string.Format(@"{0}\{1}", share, directoryName));
         }
 
         protected uint DoUntilSucceed(Func<uint> func, TimeSpan timeout, string format, params object[] args)
