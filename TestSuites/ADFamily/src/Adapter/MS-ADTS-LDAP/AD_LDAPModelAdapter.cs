@@ -113,8 +113,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
         public bool isWindows;
 
         // attributes read from rootDSE on currently connected and binded server
-        Dictionary<string, string> rootDSEAttributesForDs;
-        Dictionary<string, string> rootDSEAttributesForLds;
+        IDictionary<string, string> rootDSEAttributesForDs;
+        IDictionary<string, string> rootDSEAttributesForLds;
         public string rootDomainNC;
         public string defaultNC;
         public string configurationNC;

@@ -1949,7 +1949,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Common
         /// <param name="rootDSEValues">The rootDSE attributes retreived</param>
         /// <param name="isWindows">whether the server is windows or not</param>
         public string SearchRootDSEValues(
-            out Dictionary<string, string> rootDSEValues,
+            out IDictionary<string, string> rootDSEValues,
             bool isWindows = true)
         {
             string result = string.Empty;

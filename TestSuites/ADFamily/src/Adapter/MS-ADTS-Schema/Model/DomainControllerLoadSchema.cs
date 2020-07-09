@@ -23,7 +23,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
         /// current DC to an actual value</param>
         /// <param name="serverVersion">Specify the OS version of the server</param>
         /// <returns>Result of the Load Schema method.</returns>
-        public ModelResult LoadSchema(IEnumerable<string> schema, Dictionary<string, string> valueSubstitution, OSVersion serverVersion)
+        public ModelResult LoadSchema(IEnumerable<string> schema, IDictionary<string, string> valueSubstitution, OSVersion serverVersion)
         {
             List<ModelObject> newObjects = new List<ModelObject>();
             UnresolvedSyntax unresolvedSyntax = new UnresolvedSyntax();
@@ -257,7 +257,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
         /// <summary>
         /// The syntax of a set of attributes which are required to bootstrap the schema.
         /// </summary>
-        Dictionary<string, AttributeContext> builtinAttributeSyntax;
+        IDictionary<string, AttributeContext> builtinAttributeSyntax;
 
         void InitializeBuiltinAttributes()
         {

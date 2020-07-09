@@ -35,7 +35,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
         /// <summary>
         /// The child objects.
         /// </summary>
-        public Dictionary<string, ModelObject> childs = new Dictionary<string, ModelObject>();
+        public IDictionary<string, ModelObject> childs = new Dictionary<string, ModelObject>();
 
         /// <summary>
         /// The defined (non-constructed) attributes. In order to access

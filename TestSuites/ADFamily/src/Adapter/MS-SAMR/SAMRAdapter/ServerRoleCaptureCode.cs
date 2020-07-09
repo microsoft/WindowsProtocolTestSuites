@@ -208,7 +208,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         public void VerifyQueryDisplayInformationForDomainDisplayGroup(_SAMPR_DOMAIN_DISPLAY_GROUP_BUFFER buffer) 
         {
             Site.Assert.IsTrue(buffer.EntriesRead > 0, "The number of entries returned should be larger than 0.");
-            Dictionary<string, string> dic = new Dictionary<string, string>();
+            IDictionary<string, string> dic = new Dictionary<string, string>();
             LdapConnection con = new LdapConnection(new LdapDirectoryIdentifier(_samrProtocolAdapter.pdcFqdn),
     new NetworkCredential(_samrProtocolAdapter.DomainAdministratorName, _samrProtocolAdapter.DomainUserPassword, _samrProtocolAdapter.PrimaryDomainDnsName));
             con.SessionOptions.Sealing = false;
@@ -1509,7 +1509,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         public void VerifyQueryDisplayInformationForDomainDisplayOemUser(_SAMPR_DOMAIN_DISPLAY_OEM_USER_BUFFER buffer)
         {
             Site.Assert.IsTrue(buffer.EntriesRead > 0, "The number of entries returned should be larger than 0.");
-            Dictionary<string, string> dic = new Dictionary<string, string>();
+            IDictionary<string, string> dic = new Dictionary<string, string>();
             LdapConnection con = new LdapConnection(new LdapDirectoryIdentifier(_samrProtocolAdapter.pdcFqdn),
     new NetworkCredential(_samrProtocolAdapter.DomainAdministratorName, _samrProtocolAdapter.DomainUserPassword, _samrProtocolAdapter.PrimaryDomainDnsName));
             con.SessionOptions.Sealing = false;

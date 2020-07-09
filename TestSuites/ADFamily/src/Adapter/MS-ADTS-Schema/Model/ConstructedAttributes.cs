@@ -160,7 +160,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             }
 
             //First condition, take all entries in SchemaNC.
-            Dictionary<string, ModelObject> allSchemaEntries = dcModel.schemaReplica.root.childs;
+            IDictionary<string, ModelObject> allSchemaEntries = dcModel.schemaReplica.root.childs;
             foreach (KeyValuePair<string, ModelObject> schemaEntry in allSchemaEntries)
             {
                 ModelObject entry = schemaEntry.Value;
@@ -247,7 +247,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
 
 
             //First condition, take all entries in SchemaNC.
-            Dictionary<string, ModelObject> allSchemaEntries = dcModel.schemaReplica.root.childs;
+            IDictionary<string, ModelObject> allSchemaEntries = dcModel.schemaReplica.root.childs;
             foreach (KeyValuePair<string, ModelObject> schemaEntry in allSchemaEntries)
             {
                 ModelObject entry = schemaEntry.Value;
@@ -361,7 +361,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             }
 
             //First condition, take all entries in SchemaNC.
-            Dictionary<string, ModelObject> allSchemaEntries = dcModel.schemaReplica.root.childs;
+            IDictionary<string, ModelObject> allSchemaEntries = dcModel.schemaReplica.root.childs;
 
             //All Conditions
             foreach (KeyValuePair<string, ModelObject> schemaEntry in allSchemaEntries)

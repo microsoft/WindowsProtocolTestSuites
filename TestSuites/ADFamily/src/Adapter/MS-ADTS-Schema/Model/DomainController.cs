@@ -46,23 +46,23 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
         /// <summary>
         /// A map of attribute display names to objects
         /// </summary>
-        public Dictionary<string, ModelObject> attributeMap = new Dictionary<string, ModelObject>();
+        public IDictionary<string, ModelObject> attributeMap = new Dictionary<string, ModelObject>();
 
         /// <summary>
         /// A map from attribute ids to their according display name. Used to resolve DNs which
         /// use ID notation '1.2.4=value' instead of name notation.
         /// </summary>
-        public Dictionary<string, string> attributeIdToDisplayNameMap = new Dictionary<string, string>();
+        public IDictionary<string, string> attributeIdToDisplayNameMap = new Dictionary<string, string>();
 
         /// <summary>
         /// A map of class display names to class objects 
         /// </summary>
-        public Dictionary<string, ModelObject> classMap = new Dictionary<string, ModelObject>();
+        public IDictionary<string, ModelObject> classMap = new Dictionary<string, ModelObject>();
 
         /// <summary>
         /// A map of class governs ids to display names of classes.
         /// </summary>
-        public Dictionary<string, string> classGovernsIdToDisplayNameMap = new Dictionary<string, string>();
+        public IDictionary<string, string> classGovernsIdToDisplayNameMap = new Dictionary<string, string>();
 
         //partialDomainNCs, AppNCs, PdcChangeLog, NT4ReplicationState, LDAPConnections, ReplicationQueue,
         //KCCFailedConnections, KCCFailedLinks, RPCClientContexts, RPCOutgoingContexts

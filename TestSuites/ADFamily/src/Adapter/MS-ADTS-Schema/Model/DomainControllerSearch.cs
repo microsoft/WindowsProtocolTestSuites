@@ -438,7 +438,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
                     }
                 }
             }
-            Dictionary<string, string> map = new Dictionary<string,string>();
+            IDictionary<string, string> map = new Dictionary<string,string>();
 
             foreach (string attr in obj.attributes.Keys)
             {
