@@ -566,7 +566,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
         [SuppressMessage("Microsoft.Maintainability", "CA1505:AvoidUnmaintainableCode")]
         [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public void AddOperation(
-            List<string> attribnVals,
+            IList<string> attribnVals,
             RightsOnParentObjects accessRights,
             NCRight NCRights,
             ServerVersion dcLevel,
@@ -2745,7 +2745,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
         [SuppressMessage("Microsoft.Maintainability", "CA1505:AvoidUnmaintainableCode")]
         [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public void ModifyOperation(
-            IDictionary<string, List<string>> attribVal,
+            IDictionary<string, IList<string>> attribVal,
             RightsOnAttributes rights,
             string control,
             ADImplementations service,
@@ -4119,7 +4119,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
         [SuppressMessage("Microsoft.Maintainability", "CA1505:AvoidUnmaintainableCode")]
         [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public void ModifyRecycleBin(
-            IDictionary<string, List<string>> attribVal,
+            IDictionary<string, IList<string>> attribVal,
             RightsOnAttributes rights,
             string control,
             ADImplementations service,
@@ -5110,7 +5110,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
         [SuppressMessage("Microsoft.Maintainability", "CA1505:AvoidUnmaintainableCode")]
         [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public void ModifyDNOperation(
-            List<string> oldDN_newDN_deleteOldRDN,
+            IList<string> oldDN_newDN_deleteOldRDN,
             RightsOnObjects rightsOnOldObject, //rightsOnObject
             RightsOnParentObjects rightsOnNewObjectParent, //accessRights
             RightOnOldParentObject rightsOnOldObjectParent, //ParentRights
@@ -5948,7 +5948,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             string baseObjectDN,
             string filter,
             Microsoft.Protocols.TestSuites.ActiveDirectory.Common.SearchScope scope,
-            List<string> attributesToBeReturned,
+            IList<string> attributesToBeReturned,
             string control,
             ADImplementations service)
         {
@@ -9245,7 +9245,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 #region Set isDefunct to false for new added test schema
 
                 ModifyOperation(
-                    new Dictionary<System.String, List<System.String>>()
+                    new Dictionary<System.String, IList<System.String>>()
                     {{ "isDefunct: FALSE", new List<System.String>(){
                     "distinguishedName: CN=TestClass1,CN=Schema,CN=Configuration,DC=adts88",
                     "isDefunct: TRUE" } } },
@@ -9256,7 +9256,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     false,
                     out errorStatus);
                 ModifyOperation(
-                    new Dictionary<System.String, List<System.String>>()
+                    new Dictionary<System.String, IList<System.String>>()
                     {{ "isDefunct: FALSE", new List<System.String>() {
                     "distinguishedName: CN=TempClass,CN=Schema,CN=Configuration,DC=adts88",
                     "isDefunct: TRUE" } } },

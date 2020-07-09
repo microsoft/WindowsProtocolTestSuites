@@ -70,7 +70,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
         /// <param name="isRODC">Specifies if the DC is RODC</param>
         /// <param name="errorStatus">Enum variable specifying the error status</param>
         void AddOperation(
-            List<string> attribnVals,
+            IList<string> attribnVals,
             RightsOnParentObjects AccessRights,
             NCRight NCRights,
             ServerVersion dcLevel,
@@ -114,7 +114,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
         /// argument.
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         void ModifyOperation(
-            IDictionary<string, List<string>> attribVal,
+            IDictionary<string, IList<string>> attribVal,
             RightsOnAttributes rights,
             string control,
             ADImplementations service,
@@ -138,7 +138,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             string baseObjectDN,
             string filter,
             Microsoft.Protocols.TestSuites.ActiveDirectory.Common.SearchScope scope,
-            List<string> attributesToBeReturned,
+            IList<string> attributesToBeReturned,
             string control,
             ADImplementations service);
 
@@ -188,7 +188,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
         /// <param name="isRODC">Specifies if the DC is RODC</param>
         /// <param name="errorStatus">Enum Specifying the error status returned</param>
         void ModifyDNOperation(
-            List<string> distinguishedNames,
+            IList<string> distinguishedNames,
             RightsOnObjects rightsOnObject,
             RightsOnParentObjects accessRights,
             RightOnOldParentObject ParentRights,
@@ -240,7 +240,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
         /// argument.
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         void ModifyRecycleBin(
-            IDictionary<string, List<string>> attribVal,
+            IDictionary<string, IList<string>> attribVal,
             RightsOnAttributes rights,
             string control,
             ADImplementations service,

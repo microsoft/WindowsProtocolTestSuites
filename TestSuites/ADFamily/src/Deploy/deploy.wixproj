@@ -375,7 +375,7 @@
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Get-DomainNetbiosName.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Get-DomainSid.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Get-ForestFuncLvl.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
-    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Get-OSVersion.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
+    <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\Get-OSVersionForADTests.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\GetVMNameByComputerName.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\GetVmParameters.ps1" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
     <Copy SourceFiles="$(TestSuiteRoot)\CommonScripts\GptTmpl.txt" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Scripts" />
