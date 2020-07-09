@@ -205,7 +205,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             if (!Utilities.IsOptionalFeatureEnabled(adLdapModelAdapter.forestScopePartialDN + ',' + adLdapModelAdapter.configurationNC, adLdapModelAdapter.recycleBinPartialDN + ',' + adLdapModelAdapter.configurationNC))
             {
-                modAttrValMap = new Dictionary<string, List<string>>();
+                modAttrValMap = new Dictionary<string, IList<string>>();
                 modAttrValMap.Add(new KeyValuePair<string, List<string>>("enableRecycleBin: true", new List<string>() { "distinguishedName: null" }));
                 adLdapModelAdapter.ModifyRecycleBin(
                     modAttrValMap,
@@ -322,7 +322,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Try to modify displayname of testUser0
 
-            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap = new Dictionary<string, IList<string>>();
             modAttrValMap.Add(new KeyValuePair<string, List<string>>("displayname: name1", new List<string>() { "distinguishedName: " + testUser0Dn }));
             adLdapModelAdapter.ModifyOperation(
                 modAttrValMap,
@@ -405,7 +405,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Try to modify displayname of delete object container
 
-            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap = new Dictionary<string, IList<string>>();
             modAttrValMap.Add(new KeyValuePair<string, List<string>>("displayname: name", new List<string>() { "distinguishedName: " + deletedObjectContainer }));
             adLdapModelAdapter.ModifyOperation(
                 modAttrValMap,
@@ -578,7 +578,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 Site.Log.Add(LogEntryKind.Debug, "Whether an optional feature can be disabled is specified in the msDS-OptionalFeatureFlags attribute on the object representing the optional feature. If the feature can be disabled, the attribute contains the bit flag DISABLABLE_OPTIONAL_FEATURE. Absence of this flag means that the feature cannot be disabled once it has been enabled. Flags: {0}", (OptionalFeature)flags);
                 Site.CaptureRequirementIfAreNotEqual(OptionalFeature.DISABLABLE_OPTIONAL_FEATURE, (OptionalFeature)flags & OptionalFeature.DISABLABLE_OPTIONAL_FEATURE, 4499, "[Recycle Bin Optional Feature]The Recycle Bin optional feature cannot be disabled once it is enabled.");
 
-                modAttrValMap = new Dictionary<string, List<string>>();
+                modAttrValMap = new Dictionary<string, IList<string>>();
                 modAttrValMap.Add(new KeyValuePair<string, List<string>>("disableRecycleBin: true", new List<string>() { "distinguishedName: null" }));
                 // Disable recycle bin optional feature
                 adLdapModelAdapter.ModifyRecycleBin(
@@ -620,7 +620,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             if (!Utilities.IsOptionalFeatureEnabled(adLdapModelAdapter.forestScopePartialDN + ',' + adLdapModelAdapter.configurationNC, adLdapModelAdapter.recycleBinPartialDN + ',' + adLdapModelAdapter.configurationNC))
             {
-                modAttrValMap = new Dictionary<string, List<string>>();
+                modAttrValMap = new Dictionary<string, IList<string>>();
                 modAttrValMap.Add(new KeyValuePair<string, List<string>>("enableRecycleBin: true", new List<string>() { "distinguishedName: null" }));
                 adLdapModelAdapter.ModifyRecycleBin(
                     modAttrValMap,
@@ -637,7 +637,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Try to disable recycle bin
 
-            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap = new Dictionary<string, IList<string>>();
             modAttrValMap.Add(new KeyValuePair<string, List<string>>("disableRecycleBin: true", new List<string>() { "distinguishedName: null" }));
             // The specified scope is forest-wide and this operation is not performed against the DC that holds the Partition Naming Master role
             adLdapModelAdapter.ModifyRecycleBin(
@@ -654,7 +654,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Try to disable recycle bin with invalid GUID
 
-            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap = new Dictionary<string, IList<string>>();
             modAttrValMap.Add(new KeyValuePair<string, List<string>>("disableOptionalFeature: invalidGUID", new List<string>() { "distinguishedName: null" }));
             // Disable recycle bin with invalid GUID
             adLdapModelAdapter.ModifyRecycleBin(
@@ -671,7 +671,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Try to disable recycle bin with invalid DN
 
-            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap = new Dictionary<string, IList<string>>();
             modAttrValMap.Add(new KeyValuePair<string, List<string>>("disableOptionalFeature: invalidDN", new List<string>() { "distinguishedName: null" }));
             // The server does not recognize the DN as belonging to that of an object that represents a scope
             adLdapModelAdapter.ModifyRecycleBin(
@@ -688,7 +688,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Try to disable recycle bin with invalid scope
 
-            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap = new Dictionary<string, IList<string>>();
             modAttrValMap.Add(new KeyValuePair<string, List<string>>("disableOptionalFeature: invalidScope", new List<string>() { "distinguishedName: null" }));
             // The feature is not marked as being valid for the specified scope
             adLdapModelAdapter.ModifyRecycleBin(
@@ -705,7 +705,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Try to disable recycle bin against invalid DC
 
-            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap = new Dictionary<string, IList<string>>();
             modAttrValMap.Add(new KeyValuePair<string, List<string>>("disableOptionalFeature: DCNotPNM", new List<string>() { "distinguishedName: null" }));
             adLdapModelAdapter.ModifyRecycleBin(
                 modAttrValMap,
@@ -1003,7 +1003,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             if (!Utilities.IsOptionalFeatureEnabled(adLdapModelAdapter.forestScopePartialDN + ',' + adLdapModelAdapter.configurationNC, adLdapModelAdapter.recycleBinPartialDN + ',' + adLdapModelAdapter.configurationNC))
             {
-                modAttrValMap = new Dictionary<string, List<string>>();
+                modAttrValMap = new Dictionary<string, IList<string>>();
                 modAttrValMap.Add(new KeyValuePair<string, List<string>>("enableRecycleBin: true", new List<string>() { "distinguishedName: null" }));
                 adLdapModelAdapter.ModifyRecycleBin(
                     modAttrValMap,
@@ -1142,7 +1142,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Try to enable recycle bin with invalid GUID
 
-            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap = new Dictionary<string, IList<string>>();
             modAttrValMap.Add(new KeyValuePair<string, List<string>>("disableOptionalFeature: invalidGUID", new List<string>() { "distinguishedName: null" }));
             // Enable recycle bin bin with invalid GUID
             adLdapModelAdapter.ModifyRecycleBin(
@@ -1159,7 +1159,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Try to enable recycle bin with invalid DN
 
-            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap = new Dictionary<string, IList<string>>();
             modAttrValMap.Add(new KeyValuePair<string, List<string>>("disableOptionalFeature: invalidDN", new List<string>() { "distinguishedName: null" }));
             // The server does not recognize the DN as belonging to that of an object that represents a scope
             adLdapModelAdapter.ModifyRecycleBin(
@@ -1176,7 +1176,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Try to enable recycle bin with invalid scope
 
-            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap = new Dictionary<string, IList<string>>();
             modAttrValMap.Add(new KeyValuePair<string, List<string>>("disableOptionalFeature: invalidScope", new List<string>() { "distinguishedName: null" }));
             // The feature is not marked as being valid for the specified scope
             adLdapModelAdapter.ModifyRecycleBin(
@@ -1193,7 +1193,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Try to enable recycle bin with invalid DC
 
-            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap = new Dictionary<string, IList<string>>();
             modAttrValMap.Add(new KeyValuePair<string, List<string>>("disableOptionalFeature: DCNotPNM", new List<string>() { "distinguishedName: null" }));
             // The specified scope is forest-wide and this operation is not performed against the DC that holds the Partition Naming Master role
             adLdapModelAdapter.ModifyRecycleBin(
@@ -1212,7 +1212,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             if (!Utilities.IsOptionalFeatureEnabled(adLdapModelAdapter.forestScopePartialDN + ',' + adLdapModelAdapter.configurationNC, adLdapModelAdapter.recycleBinPartialDN))
             {
-                modAttrValMap = new Dictionary<string, List<string>>();
+                modAttrValMap = new Dictionary<string, IList<string>>();
                 modAttrValMap.Add(new KeyValuePair<string, List<string>>("enableRecycleBin: true", new List<string>() { "distinguishedName: null" }));
                 // Enable recycle bin
                 adLdapModelAdapter.ModifyRecycleBin(
@@ -1230,7 +1230,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Try to enable recycle bin again expect unsuccessfully when recycle already enabled
 
-            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap = new Dictionary<string, IList<string>>();
             modAttrValMap.Add(new KeyValuePair<string, List<string>>("enableRecycleBin: true", new List<string>() { "distinguishedName: null" }));
             // The specified optional feature is already enabled in the specified scope
             adLdapModelAdapter.ModifyRecycleBin(
@@ -1301,7 +1301,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
                 #endregion
 
-                modAttrValMap = new Dictionary<string, List<string>>();
+                modAttrValMap = new Dictionary<string, IList<string>>();
                 modAttrValMap.Add(new KeyValuePair<string, List<string>>("enableRecycleBin: true", new List<string>() { "distinguishedName: null" }));
                 // Enable recycle bin
                 adLdapModelAdapter.ModifyRecycleBin(
@@ -1898,7 +1898,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             if (!Utilities.IsOptionalFeatureEnabled(adLdapModelAdapter.forestScopePartialDN + ',' + adLdapModelAdapter.configurationNC, adLdapModelAdapter.recycleBinPartialDN))
             {
-                modAttrValMap = new Dictionary<string, List<string>>();
+                modAttrValMap = new Dictionary<string, IList<string>>();
                 modAttrValMap.Add(new KeyValuePair<string, List<string>>("enableRecycleBin: true", new List<string>() { "distinguishedName: null" }));
                 // Enable recycle bin
                 adLdapModelAdapter.ModifyRecycleBin(
@@ -2498,7 +2498,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             if (!Utilities.IsOptionalFeatureEnabled(adLdapModelAdapter.forestScopePartialDN + ',' + adLdapModelAdapter.configurationNC, adLdapModelAdapter.recycleBinPartialDN))
             {
-                modAttrValMap = new Dictionary<string, List<string>>();
+                modAttrValMap = new Dictionary<string, IList<string>>();
                 modAttrValMap.Add(new KeyValuePair<string, List<string>>("enableRecycleBin: true", new List<string>() { "distinguishedName: null" }));
                 // Enable recycle bin
                 adLdapModelAdapter.ModifyRecycleBin(
@@ -2608,7 +2608,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Remove displayname of testUserGroup0Dn
 
-            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap = new Dictionary<string, IList<string>>();
             modAttrValMap.Add(new KeyValuePair<string, List<string>>("displayName: removal", new List<string>() { "distinguishedName: " + testUserGroup0Dn }));
             adLdapModelAdapter.ModifyOperation(
                 modAttrValMap,
@@ -2665,7 +2665,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Replace the linked attribute "member" of testUserGroup0Dn testUser3Dn -> testUser4Dn
 
-            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap = new Dictionary<string, IList<string>>();
             modAttrValMap.Add(new KeyValuePair<string, List<string>>("linkattribute: replacement: " + testUser4Dn, new List<string>() { "distinguishedName: " + testUserGroup0Dn }));
             adLdapModelAdapter.ModifyOperation(
                 modAttrValMap,
@@ -2741,7 +2741,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Add a value to a single-valued attribute of testUserGroup0Dn
 
-            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap = new Dictionary<string, IList<string>>();
             modAttrValMap.Add(new KeyValuePair<string, List<string>>("single-valuedAttribute: addValue", new List<string>() { "distinguishedName: " + testUserGroup0Dn }));
             adLdapModelAdapter.ModifyOperation(
                 modAttrValMap,
@@ -2812,7 +2812,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Add testUser3Dn back to the linked attribute "member" of testUserGroup0Dn
 
-            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap = new Dictionary<string, IList<string>>();
             modAttrValMap.Add(new KeyValuePair<string, List<string>>("member: " + testUser3Dn, new List<string>() { "distinguishedName: " + testUserGroup0Dn }));
             adLdapModelAdapter.ModifyOperation(
                 modAttrValMap,
@@ -2843,7 +2843,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Add testUser4Dn back to the linked attribute "member" of testUserGroup0Dn
 
-            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap = new Dictionary<string, IList<string>>();
             modAttrValMap.Add(new KeyValuePair<string, List<string>>("member: " + testUser4Dn, new List<string>() { "distinguishedName: " + testUserGroup0Dn }));
             adLdapModelAdapter.ModifyOperation(
                 modAttrValMap,
@@ -2874,7 +2874,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
 
             #region Remove linked attribute of testUserGroup0Dn
 
-            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap = new Dictionary<string, IList<string>>();
             modAttrValMap.Add(new KeyValuePair<string, List<string>>("linkattribute: removal: " + testUser3Dn, new List<string>() { "distinguishedName: " + testUserGroup0Dn }));
             adLdapModelAdapter.ModifyOperation(
                 modAttrValMap,
@@ -3219,7 +3219,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                 ADImplementations.AD_DS,
                 adLdapModelAdapter.PDCNetbiosName);
 
-            modAttrValMap = new Dictionary<string, List<string>>();
+            modAttrValMap = new Dictionary<string, IList<string>>();
             modAttrValMap.Add(
                 new KeyValuePair<string, List<string>>(
                     "removeLingeringObject:CN=Configuration,DC=FAKELDAP,DC=com:CN=one,CN=adts_user1,CN=Users,DC=adts88",

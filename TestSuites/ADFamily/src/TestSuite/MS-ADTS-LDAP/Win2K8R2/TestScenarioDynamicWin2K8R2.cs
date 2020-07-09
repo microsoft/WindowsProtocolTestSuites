@@ -192,7 +192,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S24\'");
             ConstrOnModOpErrs temp5;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""entryTTL: 500""->[""objectClass: dynamicObject;user"",""distinguishedName: CN=DynamicUser2,CN=Users,DC=adts88""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "entryTTL: 500", new List<string> { "objectClass: dynamicObject;user", "distinguishedName: CN=DynamicUser2,CN=Users,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp5);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "entryTTL: 500", new List<string> { "objectClass: dynamicObject;user", "distinguishedName: CN=DynamicUser2,CN=Users,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp5);
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S26\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out success]\'");
@@ -206,7 +206,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S28\'");
             ConstrOnModOpErrs temp6;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""objectClass: user""->[""cn: DynamicUser"",""objectClass: dynamicObject;user"",""sAMAccountName: DynamicUser"",""distinguishedName: CN=DynamicUser,CN=Users,DC=adts88"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88"",""msDS-Entry-Time-To-Die: 20201228143047.0Z"",""entryTTL: 500""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "objectClass: user", new List<string> { "cn: DynamicUser", "objectClass: dynamicObject;user", "sAMAccountName: DynamicUser", "distinguishedName: CN=DynamicUser,CN=Users,DC=adts88", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88", "msDS-Entry-Time-To-Die: 20201228143047.0Z", "entryTTL: 500" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp6);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "objectClass: user", new List<string> { "cn: DynamicUser", "objectClass: dynamicObject;user", "sAMAccountName: DynamicUser", "distinguishedName: CN=DynamicUser,CN=Users,DC=adts88", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88", "msDS-Entry-Time-To-Die: 20201228143047.0Z", "entryTTL: 500" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp6);
             this.Manager.Comment("reaching state \'S29\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out ConstraintViolation_ERROR_DS_OBJ_CLASS" +
                     "_VIOLATION]\'");
@@ -214,7 +214,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S30\'");
             ConstrOnModOpErrs temp7;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""objectClass:dynamicObject;user""->[""cn: Administrator"",""objectClass: user"",""sAMAccountName: Administrator"",""distinguishedName: CN=Administrator,CN=Users,DC=adts88"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "objectClass:dynamicObject;user", new List<string> { $"cn: {Utilities.DomainAdmin}", "objectClass: user", $"sAMAccountName: {Utilities.DomainAdmin}", $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp7);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "objectClass:dynamicObject;user", new List<string> { $"cn: {Utilities.DomainAdmin}", "objectClass: user", $"sAMAccountName: {Utilities.DomainAdmin}", $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp7);
             this.Manager.Comment("reaching state \'S31\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out ConstraintViolation_ERROR_DS_OBJ_CLASS" +
                     "_VIOLATION]\'");
@@ -367,7 +367,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "t;user\",\"distinguishedName: CN=DynamicUser2,CN=Users,DC=adts88\"]},RIGHT_DS_WRITE" +
                     "_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2" +
                     ",False,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "entryTTL: 50", new List<string> { "objectClass: dynamicObject;user", "distinguishedName: CN=DynamicUser2,CN=Users,DC=adts88", } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp13);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "entryTTL: 50", new List<string> { "objectClass: dynamicObject;user", "distinguishedName: CN=DynamicUser2,CN=Users,DC=adts88", } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp13);
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S27\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out success]\'");

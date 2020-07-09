@@ -372,7 +372,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S26\'");
             ConstrOnModOpErrs temp12;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""isDefunct: FALSE""->[""distinguishedName:CN=DefunctAttribute10,CN=Schema,CN=Configuration,DC=adts88"",""objectClass: top;attributeSchema"",""isDefunct: TRUE""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "isDefunct: FALSE", new List<string> { "distinguishedName:CN=DefunctAttribute10,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;attributeSchema", "isDefunct: TRUE" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp12);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "isDefunct: FALSE", new List<string> { "distinguishedName:CN=DefunctAttribute10,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;attributeSchema", "isDefunct: TRUE" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp12);
             this.Manager.Checkpoint("MS-AD_LDAP_R148");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S27\'");
@@ -381,7 +381,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S28\'");
             ConstrOnModOpErrs temp13;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""isDefunct: TRUE""->[""distinguishedName:CN=TestDefunctAttribute1,CN=Schema,CN=Configuration,DC=adts88"",""objectClass: top;attributeSchema"",""isDefunct: <Not Set>""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "isDefunct: TRUE", new List<string> { "distinguishedName:CN=TestDefunctAttribute1,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;attributeSchema", "isDefunct: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp13);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "isDefunct: TRUE", new List<string> { "distinguishedName:CN=TestDefunctAttribute1,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;attributeSchema", "isDefunct: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp13);
             this.Manager.Checkpoint("MS-AD_LDAP_R993");
             this.Manager.Checkpoint("MS-AD_LDAP_R993");
             this.Manager.Checkpoint("MS-AD_LDAP_R993");
@@ -434,7 +434,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S30\'");
             ConstrOnModOpErrs temp14;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""isDefunct: TRUE""->[""distinguishedName:CN=TestDefunctClass1,CN=Schema,CN=Configuration,DC=adts88"",""objectClass: top;classSchema"",""isDefunct: <Not Set>""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "isDefunct: TRUE", new List<string> { "distinguishedName:CN=TestDefunctClass1,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;classSchema", "isDefunct: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp14);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "isDefunct: TRUE", new List<string> { "distinguishedName:CN=TestDefunctClass1,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;classSchema", "isDefunct: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp14);
             this.Manager.Checkpoint("MS-AD_LDAP_R995");
             this.Manager.Checkpoint("MS-AD_LDAP_R995");
             this.Manager.Checkpoint("MS-AD_LDAP_R995");
@@ -478,7 +478,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S32\'");
             ConstrOnModOpErrs temp15;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""isDefunct: FALSE""->[""distinguishedName:CN=TestDefunctClass1,CN=Schema,CN=Configuration,DC=adts88"",""objectClass: top;classSchema"",""isDefunct: TRUE""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "isDefunct: FALSE", new List<string> { "distinguishedName:CN=TestDefunctClass1,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;classSchema", "isDefunct: TRUE" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp15);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "isDefunct: FALSE", new List<string> { "distinguishedName:CN=TestDefunctClass1,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;classSchema", "isDefunct: TRUE" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp15);
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S33\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out success]\'");
@@ -486,7 +486,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S34\'");
             ConstrOnModOpErrs temp16;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""description: newdescription""->[""distinguishedName:CN=TestDefunctAttribute1,CN=Schema,CN=Configuration,DC=adts88"",""objectClass: top;attributeSchema"",""description: <not set>"",""isDefunct: TRUE""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "description: newdescription", new List<string> { "distinguishedName:CN=TestDefunctAttribute1,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;attributeSchema", "description: <not set>", "isDefunct: TRUE" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp16);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "description: newdescription", new List<string> { "distinguishedName:CN=TestDefunctAttribute1,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;attributeSchema", "description: <not set>", "isDefunct: TRUE" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp16);
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S35\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out success]\'");
@@ -494,7 +494,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S36\'");
             ConstrOnModOpErrs temp17;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""isDefunct: TRUE""->[""distinguishedName:CN=Given-Name,CN=Schema,CN=Configuration,DC=adts88"",""objectClass: top;attributeSchema"",""isDefunct: <Not Set>""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "isDefunct: TRUE", new List<string> { "distinguishedName:CN=Given-Name,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;attributeSchema", "isDefunct: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp17);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "isDefunct: TRUE", new List<string> { "distinguishedName:CN=Given-Name,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;attributeSchema", "isDefunct: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp17);
             this.Manager.Checkpoint("MS-AD_LDAP_R993");
             this.Manager.Checkpoint("MS-AD_LDAP_R993");
             this.Manager.Checkpoint("MS-AD_LDAP_R993");
@@ -520,7 +520,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S38\'");
             ConstrOnModOpErrs temp18;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""isDefunct: TRUE""->[""distinguishedName:CN=top,CN=Schema,CN=Configuration,DC=adts88"",""objectClass: top;classSchema"",""isDefunct: <Not Set>""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "isDefunct: TRUE", new List<string> { "distinguishedName:CN=top,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;classSchema", "isDefunct: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp18);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "isDefunct: TRUE", new List<string> { "distinguishedName:CN=top,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;classSchema", "isDefunct: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp18);
             this.Manager.Checkpoint("MS-AD_LDAP_R144");
             this.Manager.Checkpoint("MS-AD_LDAP_R996");
             this.Manager.Comment("reaching state \'S39\'");
@@ -529,7 +529,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S40\'");
             ConstrOnModOpErrs temp19;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""isDefunct: TRUE""->[""distinguishedName:CN=ADTSFirstClass,CN=Schema,CN=Configuration,DC=adts88"",""isDefunct: <Not Set>""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "isDefunct: TRUE", new List<string> { "distinguishedName:CN=ADTSFirstClass,CN=Schema,CN=Configuration,DC=adts88", "isDefunct: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp19);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "isDefunct: TRUE", new List<string> { "distinguishedName:CN=ADTSFirstClass,CN=Schema,CN=Configuration,DC=adts88", "isDefunct: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp19);
             this.Manager.Checkpoint("MS-AD_LDAP_R66");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S41\'");
@@ -538,7 +538,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S42\'");
             ConstrOnModOpErrs temp20;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""isDefunct: TRUE""->[""distinguishedName:CN=DefunctAttribute9,CN=Schema,CN=Configuration,DC=adts88"",""isDefunct: <Not Set>""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "isDefunct: TRUE", new List<string> { "distinguishedName:CN=DefunctAttribute9,CN=Schema,CN=Configuration,DC=adts88", "isDefunct: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp20);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "isDefunct: TRUE", new List<string> { "distinguishedName:CN=DefunctAttribute9,CN=Schema,CN=Configuration,DC=adts88", "isDefunct: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp20);
             this.Manager.Checkpoint("MS-AD_LDAP_R66");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S43\'");
@@ -547,7 +547,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S44\'");
             ConstrOnModOpErrs temp21;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""isDefunct: FALSE""->[""distinguishedName:CN=ADTSFirstClass,CN=Schema,CN=Configuration,DC=adts88"",""objectClass: top;classSchema"",""isDefunct: TRUE""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "isDefunct: FALSE", new List<string> { "distinguishedName:CN=ADTSFirstClass,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;classSchema", "isDefunct: TRUE" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp21);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "isDefunct: FALSE", new List<string> { "distinguishedName:CN=ADTSFirstClass,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;classSchema", "isDefunct: TRUE" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp21);
             this.Manager.Checkpoint("MS-AD_LDAP_R999");
             this.Manager.Checkpoint("MS-AD_LDAP_R999");
             this.Manager.Checkpoint("MS-AD_LDAP_R999");
@@ -574,7 +574,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S46\'");
             ConstrOnModOpErrs temp22;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""isDefunct: TRUE""->[""distinguishedName:CN=AdtsThirdClass,CN=Schema,CN=Configuration,DC=adts88"",""isDefunct: <Not Set>""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "isDefunct: TRUE", new List<string> { "distinguishedName:CN=AdtsThirdClass,CN=Schema,CN=Configuration,DC=adts88", "isDefunct: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp22);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "isDefunct: TRUE", new List<string> { "distinguishedName:CN=AdtsThirdClass,CN=Schema,CN=Configuration,DC=adts88", "isDefunct: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp22);
             this.Manager.Checkpoint("MS-AD_LDAP_R66");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S47\'");
@@ -583,7 +583,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S48\'");
             ConstrOnModOpErrs temp23;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""isDefunct: TRUE""->[""distinguishedName:CN=AdtsSecondClass,CN=Schema,CN=Configuration,DC=adts88"",""isDefunct: <Not Set>""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "isDefunct: TRUE", new List<string> { "distinguishedName:CN=AdtsSecondClass,CN=Schema,CN=Configuration,DC=adts88", "isDefunct: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp23);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "isDefunct: TRUE", new List<string> { "distinguishedName:CN=AdtsSecondClass,CN=Schema,CN=Configuration,DC=adts88", "isDefunct: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp23);
             this.Manager.Checkpoint("MS-AD_LDAP_R66");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S49\'");
@@ -592,7 +592,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S50\'");
             ConstrOnModOpErrs temp24;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""isDefunct: FALSE""->[""distinguishedName:CN=AdtsThirdClass,CN=Schema,CN=Configuration,DC=adts88"",""objectClass: top;classSchema"",""isDefunct: TRUE""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "isDefunct: FALSE", new List<string> { "distinguishedName:CN=AdtsThirdClass,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;classSchema", "isDefunct: TRUE" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp24);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "isDefunct: FALSE", new List<string> { "distinguishedName:CN=AdtsThirdClass,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;classSchema", "isDefunct: TRUE" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp24);
             this.Manager.Checkpoint("MS-AD_LDAP_R999");
             this.Manager.Checkpoint("MS-AD_LDAP_R999");
             this.Manager.Checkpoint("MS-AD_LDAP_R999");
@@ -619,7 +619,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S52\'");
             ConstrOnModOpErrs temp25;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""lDAPDisplayName: DefunctAttribute3""->[""distinguishedName: CN=DefunctAttribute8,CN=Schema,CN=Configuration,DC=adts88"",""objectClass: top;attributeSchema"",""lDAPDisplayName: DefunctAttribute8""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "lDAPDisplayName: DefunctAttribute3", new List<string> { "distinguishedName: CN=DefunctAttribute8,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;attributeSchema", "lDAPDisplayName: DefunctAttribute8" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp25);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "lDAPDisplayName: DefunctAttribute3", new List<string> { "distinguishedName: CN=DefunctAttribute8,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;attributeSchema", "lDAPDisplayName: DefunctAttribute8" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp25);
             this.Manager.Checkpoint("MS-AD_LDAP_R149");
             this.Manager.Checkpoint("MS-AD_LDAP_R150");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
@@ -629,7 +629,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S54\'");
             ConstrOnModOpErrs temp26;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""lDAPDisplayName: DefunctClass2""->[""distinguishedName: CN=DefunctClass1,CN=Schema,CN=Configuration,DC=adts88"",""objectClass: top;classSchema"",""lDAPDisplayName: DefunctClass1""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "lDAPDisplayName: DefunctClass2", new List<string> { "distinguishedName: CN=DefunctClass1,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;classSchema", "lDAPDisplayName: DefunctClass1" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp26);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "lDAPDisplayName: DefunctClass2", new List<string> { "distinguishedName: CN=DefunctClass1,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;classSchema", "lDAPDisplayName: DefunctClass1" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp26);
             this.Manager.Checkpoint("MS-AD_LDAP_R149");
             this.Manager.Checkpoint("MS-AD_LDAP_R151");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
@@ -678,7 +678,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S62\'");
             ConstrOnModOpErrs temp29;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""isDefunct: TRUE""->[""distinguishedName: CN=TestClass1,CN=Schema,CN=Configuration,DC=adts88"",""isDefunct: <Not Set>""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "isDefunct: TRUE", new List<string> { "distinguishedName: CN=TestClass1,CN=Schema,CN=Configuration,DC=adts88", "isDefunct: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp29);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "isDefunct: TRUE", new List<string> { "distinguishedName: CN=TestClass1,CN=Schema,CN=Configuration,DC=adts88", "isDefunct: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp29);
             this.Manager.Checkpoint("MS-AD_LDAP_R66");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S63\'");

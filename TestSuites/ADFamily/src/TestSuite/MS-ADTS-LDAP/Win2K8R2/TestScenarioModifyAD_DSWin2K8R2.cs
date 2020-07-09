@@ -271,7 +271,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1062\'");
             ConstrOnModOpErrs temp8;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""description: <xy>""->[""objectClass: computer"",""distinguishedName: CN=Computers,DC=adts88"",""cn: Computers"",""description: <Not Set>""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "description: <xy>", new List<string> { "objectClass: computer", "distinguishedName: CN=Computers,DC=adts88", "cn: Computers", "description: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp8);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "description: <xy>", new List<string> { "objectClass: computer", "distinguishedName: CN=Computers,DC=adts88", "cn: Computers", "description: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp8);
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S1121\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out success]\'");
@@ -279,7 +279,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1180\'");
             ConstrOnModOpErrs temp9;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""description: <xyz>""->[""objectClass: computer"",""distinguishedName: CN=Computers,DC=adts88"",""cn: Computers"",""description: <Not Set>""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "description: <xyz>", new List<string> { "objectClass: computer", "distinguishedName: CN=Computers,DC=adts88", "cn: Computers", "description: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp9);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "description: <xyz>", new List<string> { "objectClass: computer", "distinguishedName: CN=Computers,DC=adts88", "cn: Computers", "description: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp9);
             this.Manager.Checkpoint("MS-AD_LDAP_R1502");
             this.Manager.Comment("reaching state \'S1193\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out AttributeOrValueExists_ERROR_DS_ATT_VA" +
@@ -512,7 +512,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1067\'");
             ConstrOnModOpErrs temp18;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""objectCategory: CN=ClassSchema,CN=schema,CN=Configuration,DC=adts88""->[""instanceType: 4"",""objectCategory: CN=Class-Schema,CN=Schema,CN=Configuration,DC=adts88"",""objectClass: top;classSchema"",""distinguishedName: CN=ACS-Resource-Limits,CN=Schema,CN=Configuration,DC=adts88"",""systemFlags: 16""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "objectCategory: CN=ClassSchema,CN=schema,CN=Configuration,DC=adts88", new List<string> { "instanceType: 4", "objectCategory: CN=Class-Schema,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;classSchema", "distinguishedName: CN=ACS-Resource-Limits,CN=Schema,CN=Configuration,DC=adts88", "systemFlags: 16" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp18);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "objectCategory: CN=ClassSchema,CN=schema,CN=Configuration,DC=adts88", new List<string> { "instanceType: 4", "objectCategory: CN=Class-Schema,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;classSchema", "distinguishedName: CN=ACS-Resource-Limits,CN=Schema,CN=Configuration,DC=adts88", "systemFlags: 16" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp18);
             this.Manager.Checkpoint("MS-AD_LDAP_R695");
             this.Manager.Comment("reaching state \'S1126\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out UnwillingToPerform_ERROR_DS_ILLEGAL_MO" +
@@ -735,7 +735,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1112\'");
             ConstrOnModOpErrs temp27;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88""->[""distinguishedName:CN=RID Manager$,CN=System,DC=adts88"",""fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88", new List<string> { "distinguishedName:CN=RID Manager$,CN=System,DC=adts88", "fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp27);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88", new List<string> { "distinguishedName:CN=RID Manager$,CN=System,DC=adts88", "fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp27);
             this.Manager.Checkpoint("MS-AD_LDAP_R671");
             this.Manager.Checkpoint("MS-AD_LDAP_R668");
             this.Manager.Checkpoint("MS-AD_LDAP_R700");
@@ -965,7 +965,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1113\'");
             ConstrOnModOpErrs temp36;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88""->[""distinguishedName:CN=Partitions,CN=Configuration,DC=adts88"",""fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88", new List<string> { "distinguishedName:CN=Partitions,CN=Configuration,DC=adts88", "fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp36);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88", new List<string> { "distinguishedName:CN=Partitions,CN=Configuration,DC=adts88", "fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp36);
             this.Manager.Checkpoint("MS-AD_LDAP_R673");
             this.Manager.Checkpoint("MS-AD_LDAP_R687");
             this.Manager.Checkpoint("MS-AD_LDAP_R668");
@@ -1201,7 +1201,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1114\'");
             ConstrOnModOpErrs temp45;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""memberOf: CN=Administrator,CN=Builtin,DC=adts88""->[""distinguishedName: CN=Administrator,CN=Users,DC=adts88"",""memberOf: CN=Group Policy Creator Owners,CN=Users,DC=adts88""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { $"memberOf: CN={Utilities.DomainAdmin},CN=Builtin,DC=adts88", new List<string> { $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88", "memberOf: CN=Group Policy Creator Owners,CN=Users,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp45);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { $"memberOf: CN={Utilities.DomainAdmin},CN=Builtin,DC=adts88", new List<string> { $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88", "memberOf: CN=Group Policy Creator Owners,CN=Users,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp45);
             this.Manager.Checkpoint("MS-AD_LDAP_R56");
             this.Manager.Checkpoint("MS-AD_LDAP_R982");
             this.Manager.Comment("reaching state \'S1173\'");
@@ -1424,7 +1424,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1115\'");
             ConstrOnModOpErrs temp54;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""member: CN=Domain Controllers,CN=Users,DC=adts88""->[""distinguishedName: CN=Domain Controllers,CN=Users,DC=adts88"",""member: <Not Set>""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "member: CN=Domain Controllers,CN=Users,DC=adts88", new List<string> { "distinguishedName: CN=Domain Controllers,CN=Users,DC=adts88", "member: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp54);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "member: CN=Domain Controllers,CN=Users,DC=adts88", new List<string> { "distinguishedName: CN=Domain Controllers,CN=Users,DC=adts88", "member: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp54);
             this.Manager.Checkpoint("MS-AD_LDAP_R661");
             this.Manager.Checkpoint("MS-AD_LDAP_R662");
             this.Manager.Checkpoint("MS-AD_LDAP_R663");
@@ -1649,7 +1649,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1116\'");
             ConstrOnModOpErrs temp63;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""linkattribute: removal: CN=user6745,CN=Users,DC=adts88""->[""distinguishedName: CN=SampleGroup,CN=Users,DC=adts88""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "linkattribute: removal: CN=user6745,CN=Users,DC=adts88", new List<string> { "distinguishedName: CN=SampleGroup,CN=Users,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp63);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "linkattribute: removal: CN=user6745,CN=Users,DC=adts88", new List<string> { "distinguishedName: CN=SampleGroup,CN=Users,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp63);
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S1175\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out success]\'");
@@ -1871,7 +1871,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1117\'");
             ConstrOnModOpErrs temp72;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""linkattribute: replacement: CN=user6745,CN=Users,DC=adts88""->[""distinguishedName: CN=SampleGroup,CN=Users,DC=adts88""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "linkattribute: replacement: CN=user6745,CN=Users,DC=adts88", new List<string> { "distinguishedName: CN=SampleGroup,CN=Users,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp72);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "linkattribute: replacement: CN=user6745,CN=Users,DC=adts88", new List<string> { "distinguishedName: CN=SampleGroup,CN=Users,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp72);
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S1176\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out success]\'");
@@ -2095,7 +2095,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("executing step \'call ModifyOperation({\"single-valuedAttribute: addValue\"->[\"disti" +
                     "nguishedName: CN=user6745,CN=Users,DC=adts88\"]},RIGHT_DS_WRITE_PROPERTYwithSE_EN" +
                     "ABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "single-valuedAttribute: addValue", new List<string> { "distinguishedName: CN=user6745,CN=Users,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp81);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "single-valuedAttribute: addValue", new List<string> { "distinguishedName: CN=user6745,CN=Users,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp81);
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S1177\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out success]\'");
@@ -2317,7 +2317,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1119\'");
             ConstrOnModOpErrs temp90;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""msDS-AdditionalDnsHostName: valid""->[""objectClass: top;person;organizationalPerson;user;computer"",""distinguishedName: CN=WIN-6IEHBFZ8AMV,OU=Domain Controllers,DC=adts88"",""msDS-AdditionalDnsHostName: adts88""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "msDS-AdditionalDnsHostName: valid", new List<string> { "objectClass: top;person;organizationalPerson;user;computer", "distinguishedName: CN=WIN-6IEHBFZ8AMV,OU=Domain Controllers,DC=adts88", "msDS-AdditionalDnsHostName: adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp90);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "msDS-AdditionalDnsHostName: valid", new List<string> { "objectClass: top;person;organizationalPerson;user;computer", "distinguishedName: CN=WIN-6IEHBFZ8AMV,OU=Domain Controllers,DC=adts88", "msDS-AdditionalDnsHostName: adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp90);
             this.Manager.Checkpoint("MS-AD_LDAP_R1496");
             this.Manager.Checkpoint("MS-AD_LDAP_R710");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
@@ -2541,7 +2541,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1120\'");
             ConstrOnModOpErrs temp99;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""systemFlags: 32""->[""distinguishedName: CN=SystemFlagsAttrib,CN=Schema,CN=Configuration,DC=adts88"",""systemFlags: <Not Set>"",""objectClass: attributeSchema""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "systemFlags: 32", new List<string> { "distinguishedName: CN=SystemFlagsAttrib,CN=Schema,CN=Configuration,DC=adts88", "systemFlags: <Not Set>", "objectClass: attributeSchema" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp99);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "systemFlags: 32", new List<string> { "distinguishedName: CN=SystemFlagsAttrib,CN=Schema,CN=Configuration,DC=adts88", "systemFlags: <Not Set>", "objectClass: attributeSchema" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp99);
             this.Manager.Checkpoint("MS-AD_LDAP_R710");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S1179\'");
@@ -2764,7 +2764,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1068\'");
             ConstrOnModOpErrs temp108;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""nTMixedDomain: 1""->[""instanceType: 4"",""objectCategory: CN=Cross-Ref,CN=Schema,CN=Configuration,DC=adts88"",""objectClass: top;crossRef"",""distinguishedName: CN=ADTS88,CN=Partitions,CN=Configuration,DC=adts88"",""nTMixedDomain: 0""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "nTMixedDomain: 1", new List<string> { "instanceType: 4", "objectCategory: CN=Cross-Ref,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;crossRef", "distinguishedName: CN=ADTS88,CN=Partitions,CN=Configuration,DC=adts88", "nTMixedDomain: 0" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp108);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "nTMixedDomain: 1", new List<string> { "instanceType: 4", "objectCategory: CN=Cross-Ref,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;crossRef", "distinguishedName: CN=ADTS88,CN=Partitions,CN=Configuration,DC=adts88", "nTMixedDomain: 0" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp108);
             this.Manager.Checkpoint("MS-AD_LDAP_R699");
             this.Manager.Checkpoint("MS-AD_LDAP_R1004327");
             this.Manager.Comment("reaching state \'S1127\'");
@@ -2988,7 +2988,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1069\'");
             ConstrOnModOpErrs temp117;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88""->[""instanceType: 4"",""fSMORoleOwner: <not set>"",""objectCategory: CN=Container,CN=Schema,CN=Configuration,DC=adts88"",""objectClass: top;container"",""distinguishedName: CN=Users,DC=adts88"",""cn: Users""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88", new List<string> { "instanceType: 4", "fSMORoleOwner: <not set>", "objectCategory: CN=Container,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;container", "distinguishedName: CN=Users,DC=adts88", "cn: Users" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp117);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88", new List<string> { "instanceType: 4", "fSMORoleOwner: <not set>", "objectCategory: CN=Container,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;container", "distinguishedName: CN=Users,DC=adts88", "cn: Users" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp117);
             this.Manager.Checkpoint("MS-AD_LDAP_R700");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S1128\'");
@@ -3211,7 +3211,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1070\'");
             ConstrOnModOpErrs temp126;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""fSMORoleOwner: CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88""->[""instanceType: 4"",""fSMORoleOwner: <not set>"",""objectCategory: CN=Container,CN=Schema,CN=Configuration,DC=adts88"",""objectClass: top;container"",""distinguishedName: CN=Users,DC=adts88"",""cn: Users""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "fSMORoleOwner: CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88", new List<string> { "instanceType: 4", "fSMORoleOwner: <not set>", "objectCategory: CN=Container,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;container", "distinguishedName: CN=Users,DC=adts88", "cn: Users" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp126);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "fSMORoleOwner: CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88", new List<string> { "instanceType: 4", "fSMORoleOwner: <not set>", "objectCategory: CN=Container,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;container", "distinguishedName: CN=Users,DC=adts88", "cn: Users" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp126);
             this.Manager.Checkpoint("MS-AD_LDAP_R1495");
             this.Manager.Comment("reaching state \'S1129\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out UnwillingToPerform_ERROR_DS_INVALID_RO" +
@@ -3434,7 +3434,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1071\'");
             ConstrOnModOpErrs temp135;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""mAPIID: 20""->[""instanceType: 4"",""objectCategory: CN=Attribute-Schema,CN=Schema,CN=Configuration,DC=adts88"",""objectClass: top;attributeSchema"",""mAPIID: 0"",""distinguishedName: CN=SystemFlagsAttribNotIncludeBase1,CN=Schema,CN=Configuration,DC=adts88""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "mAPIID: 20", new List<string> { "instanceType: 4", "objectCategory: CN=Attribute-Schema,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;attributeSchema", "mAPIID: 0", "distinguishedName: CN=SystemFlagsAttribNotIncludeBase1,CN=Schema,CN=Configuration,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp135);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "mAPIID: 20", new List<string> { "instanceType: 4", "objectCategory: CN=Attribute-Schema,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;attributeSchema", "mAPIID: 0", "distinguishedName: CN=SystemFlagsAttribNotIncludeBase1,CN=Schema,CN=Configuration,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp135);
             this.Manager.Checkpoint("MS-AD_LDAP_R87");
             this.Manager.Checkpoint("MS-AD_LDAP_R710");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
@@ -3658,7 +3658,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1063\'");
             ConstrOnModOpErrs temp144;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""description: lostandFound""->[""instanceType: 4"",""objectCategory: CN=Lost-And-Found,CN=Schema,CN=Configuration,DC=adts88"",""objectClass: top;lostAndFound"",""distinguishedName: CN=LostAndFound,DC=adts88"",""cn: LostAndFound"",""description: Default container for orphaned objects""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "description: lostandFound", new List<string> { "instanceType: 4", "objectCategory: CN=Lost-And-Found,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;lostAndFound", "distinguishedName: CN=LostAndFound,DC=adts88", "cn: LostAndFound", "description: Default container for orphaned objects" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp144);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "description: lostandFound", new List<string> { "instanceType: 4", "objectCategory: CN=Lost-And-Found,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;lostAndFound", "distinguishedName: CN=LostAndFound,DC=adts88", "cn: LostAndFound", "description: Default container for orphaned objects" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp144);
             this.Manager.Checkpoint("MS-AD_LDAP_R683");
             this.Manager.Comment("reaching state \'S1122\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out UnwillingToPerform_ERROR_DS_ILLEGAL_MO" +
@@ -3881,7 +3881,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1072\'");
             ConstrOnModOpErrs temp153;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""mAPIID: 20""->[""instanceType: 4"",""objectCategory: CN=Attribute-Schema,CN=Schema,CN=Configuration,DC=adts88"",""objectClass: top;attributeSchema"",""mAPIID: 0"",""distinguishedName: CN=Governs-ID,CN=Schema,CN=Configuration,DC=adts88""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "mAPIID: 20", new List<string> { "instanceType: 4", "objectCategory: CN=Attribute-Schema,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;attributeSchema", "mAPIID: 0", "distinguishedName: CN=Governs-ID,CN=Schema,CN=Configuration,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp153);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "mAPIID: 20", new List<string> { "instanceType: 4", "objectCategory: CN=Attribute-Schema,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;attributeSchema", "mAPIID: 0", "distinguishedName: CN=Governs-ID,CN=Schema,CN=Configuration,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp153);
             this.Manager.Checkpoint("MS-AD_LDAP_R88");
             this.Manager.Comment("reaching state \'S1131\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out UnwillingToPerform_ERROR_DS_ILLEGAL_BA" +
@@ -4104,7 +4104,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1073\'");
             ConstrOnModOpErrs temp162;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""msDS-AllowedToDelegateTo: newvalue""->[""cn: Administrator"",""objectClass: top;person;organizationalPerson;user"",""distinguishedName: CN=Administrator,CN=Users,DC=adts88"",""sAMAccountName: Administrator"",""msDS-AllowedToDelegateTo: value""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "msDS-AllowedToDelegateTo: newvalue", new List<string> { $"cn: {Utilities.DomainAdmin}", "objectClass: top;person;organizationalPerson;user", $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88", $"sAMAccountName: {Utilities.DomainAdmin}", "msDS-AllowedToDelegateTo: value" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp162);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "msDS-AllowedToDelegateTo: newvalue", new List<string> { $"cn: {Utilities.DomainAdmin}", "objectClass: top;person;organizationalPerson;user", $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88", $"sAMAccountName: {Utilities.DomainAdmin}", "msDS-AllowedToDelegateTo: value" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp162);
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S1132\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out success]\'");
@@ -4326,7 +4326,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1074\'");
             ConstrOnModOpErrs temp171;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""name: newvalue""->[""cn: Administrator"",""objectClass: top;person;organizationalPerson;user"",""distinguishedName: CN=Administrator,CN=Users,DC=adts88"",""name: Administrator""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "name: newvalue", new List<string> { $"cn: {Utilities.DomainAdmin}", "objectClass: top;person;organizationalPerson;user", $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88", $"name: {Utilities.DomainAdmin}" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp171);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "name: newvalue", new List<string> { $"cn: {Utilities.DomainAdmin}", "objectClass: top;person;organizationalPerson;user", $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88", $"name: {Utilities.DomainAdmin}" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp171);
             this.Manager.Checkpoint("MS-AD_LDAP_R690");
             this.Manager.Checkpoint("MS-AD_LDAP_R1488");
             this.Manager.Comment("reaching state \'S1133\'");
@@ -4550,7 +4550,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1075\'");
             ConstrOnModOpErrs temp180;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""description: canname""->[""cn: Canonical-Name"",""objectClass: top;attributeSchema"",""ldapDisplayName: canonicalName"",""distinguishedName: CN=Canonical-Name,CN=Schema,CN=Configuration,DC=adts88"",""description: <not set>"",""systemFlags: 0x8000014""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "description: canname", new List<string> { "cn: Canonical-Name", "objectClass: top;attributeSchema", "ldapDisplayName: canonicalName", "distinguishedName: CN=Canonical-Name,CN=Schema,CN=Configuration,DC=adts88", "description: <not set>", "systemFlags: 0x8000014" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp180);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "description: canname", new List<string> { "cn: Canonical-Name", "objectClass: top;attributeSchema", "ldapDisplayName: canonicalName", "distinguishedName: CN=Canonical-Name,CN=Schema,CN=Configuration,DC=adts88", "description: <not set>", "systemFlags: 0x8000014" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp180);
             this.Manager.Checkpoint("MS-AD_LDAP_R689");
             this.Manager.Comment("reaching state \'S1134\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out UnwillingToPerform_ERROR_DS_CONSTRUCTE" +
@@ -4773,7 +4773,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1076\'");
             ConstrOnModOpErrs temp189;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""objectCategory: CN=ClassSchema,CN=Schema,CN=Configuration,DC=adts88""->[""objectCategory: CN=Class-Schema,CN=Schema,CN=Configuration,DC=adts88"",""objectClass: top;classSchema"",""instanceType: 4"",""distinguishedName: CN=user,CN=Schema,CN=Configuration,DC=adts88"",""systemFlags: 16""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "objectCategory: CN=ClassSchema,CN=Schema,CN=Configuration,DC=adts88", new List<string> { "objectCategory: CN=Class-Schema,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;classSchema", "instanceType: 4", "distinguishedName: CN=user,CN=Schema,CN=Configuration,DC=adts88", "systemFlags: 16" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp189);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "objectCategory: CN=ClassSchema,CN=Schema,CN=Configuration,DC=adts88", new List<string> { "objectCategory: CN=Class-Schema,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;classSchema", "instanceType: 4", "distinguishedName: CN=user,CN=Schema,CN=Configuration,DC=adts88", "systemFlags: 16" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp189);
             this.Manager.Checkpoint("MS-AD_LDAP_R695");
             this.Manager.Comment("reaching state \'S1135\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out UnwillingToPerform_ERROR_DS_ILLEGAL_MO" +
@@ -4996,7 +4996,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1077\'");
             ConstrOnModOpErrs temp198;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""dSHeuristics: 00000000011""->[""objectClass: top;nTDSService"",""distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88"",""dSHeuristics: 0000002""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "dSHeuristics: 00000000011", new List<string> { "objectClass: top;nTDSService", "distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88", "dSHeuristics: 0000002" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp198);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "dSHeuristics: 00000000011", new List<string> { "objectClass: top;nTDSService", "distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88", "dSHeuristics: 0000002" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp198);
             this.Manager.Checkpoint("MS-AD_LDAP_R1490");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S1136\'");
@@ -5219,7 +5219,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1078\'");
             ConstrOnModOpErrs temp207;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""dSHeuristics: 000000000100000000026""->[""objectClass: top;nTDSService"",""distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88"",""dSHeuristics: 0000002""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "dSHeuristics: 000000000100000000026", new List<string> { "objectClass: top;nTDSService", "distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88", "dSHeuristics: 0000002" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp207);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "dSHeuristics: 000000000100000000026", new List<string> { "objectClass: top;nTDSService", "distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88", "dSHeuristics: 0000002" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp207);
             this.Manager.Checkpoint("MS-AD_LDAP_R1490");
             this.Manager.Checkpoint("MS-AD_LDAP_R1491");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
@@ -5443,7 +5443,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1079\'");
             ConstrOnModOpErrs temp216;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""dSHeuristics: 0000000001000000000200000000031""->[""objectClass: top;nTDSService"",""distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88"",""dSHeuristics: 0000002""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "dSHeuristics: 0000000001000000000200000000031", new List<string> { "objectClass: top;nTDSService", "distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88", "dSHeuristics: 0000002" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp216);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "dSHeuristics: 0000000001000000000200000000031", new List<string> { "objectClass: top;nTDSService", "distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88", "dSHeuristics: 0000002" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp216);
             this.Manager.Checkpoint("MS-AD_LDAP_R1490");
             this.Manager.Checkpoint("MS-AD_LDAP_R1491");
             this.Manager.Checkpoint("MS-AD_LDAP_R1492");
@@ -5668,7 +5668,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1080\'");
             ConstrOnModOpErrs temp225;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""dSHeuristics: 00000000010000000002000000000300000000049""->[""objectClass: top;nTDSService"",""distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88"",""dSHeuristics: 0000002""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "dSHeuristics: 00000000010000000002000000000300000000049", new List<string> { "objectClass: top;nTDSService", "distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88", "dSHeuristics: 0000002" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp225);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "dSHeuristics: 00000000010000000002000000000300000000049", new List<string> { "objectClass: top;nTDSService", "distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88", "dSHeuristics: 0000002" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp225);
             this.Manager.Checkpoint("MS-AD_LDAP_R1490");
             this.Manager.Checkpoint("MS-AD_LDAP_R1491");
             this.Manager.Checkpoint("MS-AD_LDAP_R1492");
@@ -5894,7 +5894,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1081\'");
             ConstrOnModOpErrs temp234;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""dSHeuristics: 000000000100000000020000000003000000000400000000054""->[""objectClass: top;nTDSService"",""distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88"",""dSHeuristics: 0000002""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "dSHeuristics: 000000000100000000020000000003000000000400000000054", new List<string> { "objectClass: top;nTDSService", "distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88", "dSHeuristics: 0000002" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp234);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "dSHeuristics: 000000000100000000020000000003000000000400000000054", new List<string> { "objectClass: top;nTDSService", "distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88", "dSHeuristics: 0000002" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp234);
             this.Manager.Checkpoint("MS-AD_LDAP_R1490");
             this.Manager.Checkpoint("MS-AD_LDAP_R1491");
             this.Manager.Checkpoint("MS-AD_LDAP_R1492");
@@ -6121,7 +6121,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1064\'");
             ConstrOnModOpErrs temp243;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""description: <Not Set>""->[""objectClass: user"",""distinguishedName: CN=Administrator,CN=Users,DC=adts88"",""cn: Administrator"",""description: <Not Set>""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "description: <Not Set>", new List<string> { "objectClass: user", $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88", $"cn: {Utilities.DomainAdmin}", "description: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp243);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "description: <Not Set>", new List<string> { "objectClass: user", $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88", $"cn: {Utilities.DomainAdmin}", "description: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp243);
             this.Manager.Checkpoint("MS-AD_LDAP_R1503");
             this.Manager.Comment("reaching state \'S1123\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out NoSuchAttribute_ERROR_DS_CANT_REM_MISS" +
@@ -6344,7 +6344,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1082\'");
             ConstrOnModOpErrs temp252;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""dSHeuristics: 0000000001000000000200000000030000000004000000000500000000066""->[""objectClass: top;nTDSService"",""distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88"",""dSHeuristics: 0000002""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "dSHeuristics: 0000000001000000000200000000030000000004000000000500000000066", new List<string> { "objectClass: top;nTDSService", "distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88", "dSHeuristics: 0000002" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp252);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "dSHeuristics: 0000000001000000000200000000030000000004000000000500000000066", new List<string> { "objectClass: top;nTDSService", "distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88", "dSHeuristics: 0000002" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp252);
             this.Manager.Checkpoint("MS-AD_LDAP_R1490");
             this.Manager.Checkpoint("MS-AD_LDAP_R1491");
             this.Manager.Checkpoint("MS-AD_LDAP_R1492");
@@ -6572,7 +6572,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1083\'");
             ConstrOnModOpErrs temp261;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""dSHeuristics: 00000000010000000002000000000300000000040000000005000000000600000000073""->[""objectClass: top;nTDSService"",""distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88"",""dSHeuristics: 0000002""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "dSHeuristics: 00000000010000000002000000000300000000040000000005000000000600000000073", new List<string> { "objectClass: top;nTDSService", "distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88", "dSHeuristics: 0000002" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp261);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "dSHeuristics: 00000000010000000002000000000300000000040000000005000000000600000000073", new List<string> { "objectClass: top;nTDSService", "distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88", "dSHeuristics: 0000002" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp261);
             this.Manager.Checkpoint("MS-AD_LDAP_R1490");
             this.Manager.Checkpoint("MS-AD_LDAP_R1491");
             this.Manager.Checkpoint("MS-AD_LDAP_R1492");
@@ -6801,7 +6801,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1084\'");
             ConstrOnModOpErrs temp270;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""dSHeuristics: 000000000100000000020000000003000000000400000000050000000006000000000700000000087""->[""objectClass: top;nTDSService"",""distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88"",""dSHeuristics: 0000002""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "dSHeuristics: 000000000100000000020000000003000000000400000000050000000006000000000700000000087", new List<string> { "objectClass: top;nTDSService", "distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88", "dSHeuristics: 0000002" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp270);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "dSHeuristics: 000000000100000000020000000003000000000400000000050000000006000000000700000000087", new List<string> { "objectClass: top;nTDSService", "distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88", "dSHeuristics: 0000002" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp270);
             this.Manager.Checkpoint("MS-AD_LDAP_R1490");
             this.Manager.Checkpoint("MS-AD_LDAP_R1491");
             this.Manager.Checkpoint("MS-AD_LDAP_R1492");
@@ -7031,7 +7031,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1085\'");
             ConstrOnModOpErrs temp279;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""dSHeuristics: 0000000001000000000200000000030000000004000000000500000000060000000007000000000800000000092""->[""objectClass: top;nTDSService"",""distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88"",""dSHeuristics: 0000002""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "dSHeuristics: 0000000001000000000200000000030000000004000000000500000000060000000007000000000800000000092", new List<string> { "objectClass: top;nTDSService", "distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88", "dSHeuristics: 0000002" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp279);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "dSHeuristics: 0000000001000000000200000000030000000004000000000500000000060000000007000000000800000000092", new List<string> { "objectClass: top;nTDSService", "distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88", "dSHeuristics: 0000002" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp279);
             this.Manager.Checkpoint("MS-AD_LDAP_R1490");
             this.Manager.Checkpoint("MS-AD_LDAP_R1491");
             this.Manager.Checkpoint("MS-AD_LDAP_R1492");
@@ -7262,7 +7262,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1086\'");
             ConstrOnModOpErrs temp288;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""dSHeuristics: 00000000056""->[""objectClass: top;nTDSService"",""distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88"",""dSHeuristics: 0000002""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "dSHeuristics: 00000000056", new List<string> { "objectClass: top;nTDSService", "distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88", "dSHeuristics: 0000002" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp288);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "dSHeuristics: 00000000056", new List<string> { "objectClass: top;nTDSService", "distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88", "dSHeuristics: 0000002" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp288);
             this.Manager.Checkpoint("MS-AD_LDAP_R1494");
             this.Manager.Comment("reaching state \'S1145\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out ConstraintViolation_ERROR_DS_CONSTRAIN" +
@@ -7485,7 +7485,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1087\'");
             ConstrOnModOpErrs temp297;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""distinguishedName: CN=admin,CN=Users,DC=adts88""->[""objectClass: top;person;organizationalPerson;user"",""distinguishedName: CN=Administrator,CN=Users,DC=adts88""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "distinguishedName: CN=admin,CN=Users,DC=adts88", new List<string> { "objectClass: top;person;organizationalPerson;user", $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp297);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "distinguishedName: CN=admin,CN=Users,DC=adts88", new List<string> { "objectClass: top;person;organizationalPerson;user", $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp297);
             this.Manager.Comment("reaching state \'S1146\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out ConstraintViolation_ERROR_DS_CANT_MOD_" +
                     "SYSTEM_ONLY]\'");
@@ -7707,7 +7707,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1088\'");
             ConstrOnModOpErrs temp306;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""uSNCreated: 8195""->[""objectClass: top;person;organizationalPerson;user"",""distinguishedName: CN=Administrator,CN=Users,DC=adts88"",""uSNCreated: 8194""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "uSNCreated: 8195", new List<string> { "objectClass: top;person;organizationalPerson;user", $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88", "uSNCreated: 8194" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp306);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "uSNCreated: 8195", new List<string> { "objectClass: top;person;organizationalPerson;user", $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88", "uSNCreated: 8194" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp306);
             this.Manager.Comment("reaching state \'S1147\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out ConstraintViolation_ERROR_DS_CANT_MOD_" +
                     "SYSTEM_ONLY]\'");
@@ -7929,7 +7929,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1089\'");
             ConstrOnModOpErrs temp315;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""subRefs: CN=schema,CN=Configuration,DC=adts88""->[""objectClass: top;configuration"",""distinguishedName: CN=Configuration,DC=adts88"",""subRefs: CN=Schema,CN=Configuration,DC=adts88""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "subRefs: CN=schema,CN=Configuration,DC=adts88", new List<string> { "objectClass: top;configuration", "distinguishedName: CN=Configuration,DC=adts88", "subRefs: CN=Schema,CN=Configuration,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp315);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "subRefs: CN=schema,CN=Configuration,DC=adts88", new List<string> { "objectClass: top;configuration", "distinguishedName: CN=Configuration,DC=adts88", "subRefs: CN=Schema,CN=Configuration,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp315);
             this.Manager.Comment("reaching state \'S1148\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out ConstraintViolation_ERROR_DS_CANT_MOD_" +
                     "SYSTEM_ONLY]\'");
@@ -8151,7 +8151,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1090\'");
             ConstrOnModOpErrs temp324;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""systemOnly: TRUE""->[""objectClass: attributeSchema"",""systemOnly: FALSE"",""distinguishedName: CN=Account-Expires,CN=Schema,CN=Configuration,DC=adts88""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "systemOnly: TRUE", new List<string> { "objectClass: attributeSchema", "systemOnly: FALSE", "distinguishedName: CN=Account-Expires,CN=Schema,CN=Configuration,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp324);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "systemOnly: TRUE", new List<string> { "objectClass: attributeSchema", "systemOnly: FALSE", "distinguishedName: CN=Account-Expires,CN=Schema,CN=Configuration,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp324);
             this.Manager.Checkpoint("MS-AD_LDAP_R707");
             this.Manager.Checkpoint("MS-AD_LDAP_R4629");
             this.Manager.Comment("reaching state \'S1149\'");
@@ -8376,7 +8376,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1091\'");
             ConstrOnModOpErrs temp333;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""msDS-PasswordHistoryLength: 108""->[""objectClass: msDS-PasswordSettings"",""distinguishedName: CN=TestPassword,CN=Password Settings Container,CN=System,DC=adts88"",""msDS-PasswordSettingsPrecedence: 1"",""msDS-PasswordReversibleEncryptionEnabled: FALSE"",""msDS-PasswordHistoryLength: 102"",""msDS-PasswordComplexityEnabled: FALSE"",""msDS-MinimumPasswordLength: 220"",""msDS-MinimumPasswordAge: -56"",""msDS-MaximumPasswordAge: -58"",""msDS-LockoutDuration: -20"",""msDS-LockoutObservationWindow: -10"",""msDS-LockoutThreshold: 1""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "msDS-PasswordHistoryLength: 108", new List<string> { "objectClass: msDS-PasswordSettings", "distinguishedName: CN=TestPassword,CN=Password Settings Container,CN=System,DC=adts88", "msDS-PasswordSettingsPrecedence: 1", "msDS-PasswordReversibleEncryptionEnabled: FALSE", "msDS-PasswordHistoryLength: 102", "msDS-PasswordComplexityEnabled: FALSE", "msDS-MinimumPasswordLength: 220", "msDS-MinimumPasswordAge: -56", "msDS-MaximumPasswordAge: -58", "msDS-LockoutDuration: -20", "msDS-LockoutObservationWindow: -10", "msDS-LockoutThreshold: 1" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp333);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "msDS-PasswordHistoryLength: 108", new List<string> { "objectClass: msDS-PasswordSettings", "distinguishedName: CN=TestPassword,CN=Password Settings Container,CN=System,DC=adts88", "msDS-PasswordSettingsPrecedence: 1", "msDS-PasswordReversibleEncryptionEnabled: FALSE", "msDS-PasswordHistoryLength: 102", "msDS-PasswordComplexityEnabled: FALSE", "msDS-MinimumPasswordLength: 220", "msDS-MinimumPasswordAge: -56", "msDS-MaximumPasswordAge: -58", "msDS-LockoutDuration: -20", "msDS-LockoutObservationWindow: -10", "msDS-LockoutThreshold: 1" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp333);
             this.Manager.Checkpoint("MS-AD_LDAP_R713");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S1150\'");
@@ -8604,7 +8604,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1065\'");
             ConstrOnModOpErrs temp342;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""description: <Not Set1>""->[""objectClass: user"",""distinguishedName: CN=Administrator,CN=Users,DC=adts88"",""cn: Administrator"",""description: <Not Set>""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "description: <Not Set1>", new List<string> { "objectClass: user", $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88", $"cn: {Utilities.DomainAdmin}", "description: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp342);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "description: <Not Set1>", new List<string> { "objectClass: user", $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88", $"cn: {Utilities.DomainAdmin}", "description: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp342);
             this.Manager.Checkpoint("MS-AD_LDAP_R1504");
             this.Manager.Comment("reaching state \'S1124\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out NoSuchAttribute_ERROR_DS_ATT_IS_NOT_ON" +
@@ -8828,7 +8828,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1092\'");
             ConstrOnModOpErrs temp351;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""msDS-PasswordHistoryLength: 1027""->[""objectClass: msDS-PasswordSettings"",""distinguishedName: CN=TestPassword,CN=Password Settings Container,CN=System,DC=adts88"",""msDS-PasswordSettingsPrecedence: 1"",""msDS-PasswordReversibleEncryptionEnabled: FALSE"",""msDS-PasswordHistoryLength: 102"",""msDS-PasswordComplexityEnabled: FALSE"",""msDS-MinimumPasswordLength: 220"",""msDS-MinimumPasswordAge: -56"",""msDS-MaximumPasswordAge: -58"",""msDS-LockoutDuration: -20"",""msDS-LockoutObservationWindow: -10"",""msDS-LockoutThreshold: 1""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "msDS-PasswordHistoryLength: 1027", new List<string> { "objectClass: msDS-PasswordSettings", "distinguishedName: CN=TestPassword,CN=Password Settings Container,CN=System,DC=adts88", "msDS-PasswordSettingsPrecedence: 1", "msDS-PasswordReversibleEncryptionEnabled: FALSE", "msDS-PasswordHistoryLength: 102", "msDS-PasswordComplexityEnabled: FALSE", "msDS-MinimumPasswordLength: 220", "msDS-MinimumPasswordAge: -56", "msDS-MaximumPasswordAge: -58", "msDS-LockoutDuration: -20", "msDS-LockoutObservationWindow: -10", "msDS-LockoutThreshold: 1" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp351);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "msDS-PasswordHistoryLength: 1027", new List<string> { "objectClass: msDS-PasswordSettings", "distinguishedName: CN=TestPassword,CN=Password Settings Container,CN=System,DC=adts88", "msDS-PasswordSettingsPrecedence: 1", "msDS-PasswordReversibleEncryptionEnabled: FALSE", "msDS-PasswordHistoryLength: 102", "msDS-PasswordComplexityEnabled: FALSE", "msDS-MinimumPasswordLength: 220", "msDS-MinimumPasswordAge: -56", "msDS-MaximumPasswordAge: -58", "msDS-LockoutDuration: -20", "msDS-LockoutObservationWindow: -10", "msDS-LockoutThreshold: 1" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp351);
             this.Manager.Checkpoint("MS-AD_LDAP_R714");
             this.Manager.Comment("reaching state \'S1151\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out UnwillingToPerform_ERROR_DS_SECURITY_I" +
@@ -9052,7 +9052,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1093\'");
             ConstrOnModOpErrs temp360;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""msDS-MinimumPasswordAge: -4""->[""objectClass: msDS-PasswordSettings"",""distinguishedName: CN=TestPassword,CN=Password Settings Container,CN=System,DC=adts88"",""msDS-PasswordSettingsPrecedence: 1"",""msDS-PasswordReversibleEncryptionEnabled: FALSE"",""msDS-PasswordHistoryLength: 102"",""msDS-PasswordComplexityEnabled: FALSE"",""msDS-MinimumPasswordLength: 220"",""msDS-MinimumPasswordAge: -56"",""msDS-MaximumPasswordAge: -58"",""msDS-LockoutDuration: -20"",""msDS-LockoutObservationWindow: -10"",""msDS-LockoutThreshold: 1""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "msDS-MinimumPasswordAge: -4", new List<string> { "objectClass: msDS-PasswordSettings", "distinguishedName: CN=TestPassword,CN=Password Settings Container,CN=System,DC=adts88", "msDS-PasswordSettingsPrecedence: 1", "msDS-PasswordReversibleEncryptionEnabled: FALSE", "msDS-PasswordHistoryLength: 102", "msDS-PasswordComplexityEnabled: FALSE", "msDS-MinimumPasswordLength: 220", "msDS-MinimumPasswordAge: -56", "msDS-MaximumPasswordAge: -58", "msDS-LockoutDuration: -20", "msDS-LockoutObservationWindow: -10", "msDS-LockoutThreshold: 1" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp360);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "msDS-MinimumPasswordAge: -4", new List<string> { "objectClass: msDS-PasswordSettings", "distinguishedName: CN=TestPassword,CN=Password Settings Container,CN=System,DC=adts88", "msDS-PasswordSettingsPrecedence: 1", "msDS-PasswordReversibleEncryptionEnabled: FALSE", "msDS-PasswordHistoryLength: 102", "msDS-PasswordComplexityEnabled: FALSE", "msDS-MinimumPasswordLength: 220", "msDS-MinimumPasswordAge: -56", "msDS-MaximumPasswordAge: -58", "msDS-LockoutDuration: -20", "msDS-LockoutObservationWindow: -10", "msDS-LockoutThreshold: 1" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp360);
             this.Manager.Checkpoint("MS-AD_LDAP_R715");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S1152\'");
@@ -9281,7 +9281,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1094\'");
             ConstrOnModOpErrs temp369;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""msDS-MaximumPasswordAge: -60""->[""objectClass: msDS-PasswordSettings"",""distinguishedName: CN=TestPassword,CN=Password Settings Container,CN=System,DC=adts88"",""msDS-PasswordSettingsPrecedence: 1"",""msDS-PasswordReversibleEncryptionEnabled: FALSE"",""msDS-PasswordHistoryLength: 102"",""msDS-PasswordComplexityEnabled: FALSE"",""msDS-MinimumPasswordLength: 220"",""msDS-MinimumPasswordAge: -56"",""msDS-MaximumPasswordAge: -58"",""msDS-LockoutDuration: -20"",""msDS-LockoutObservationWindow: -10"",""msDS-LockoutThreshold: 1""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "msDS-MaximumPasswordAge: -60", new List<string> { "objectClass: msDS-PasswordSettings", "distinguishedName: CN=TestPassword,CN=Password Settings Container,CN=System,DC=adts88", "msDS-PasswordSettingsPrecedence: 1", "msDS-PasswordReversibleEncryptionEnabled: FALSE", "msDS-PasswordHistoryLength: 102", "msDS-PasswordComplexityEnabled: FALSE", "msDS-MinimumPasswordLength: 220", "msDS-MinimumPasswordAge: -56", "msDS-MaximumPasswordAge: -58", "msDS-LockoutDuration: -20", "msDS-LockoutObservationWindow: -10", "msDS-LockoutThreshold: 1" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp369);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "msDS-MaximumPasswordAge: -60", new List<string> { "objectClass: msDS-PasswordSettings", "distinguishedName: CN=TestPassword,CN=Password Settings Container,CN=System,DC=adts88", "msDS-PasswordSettingsPrecedence: 1", "msDS-PasswordReversibleEncryptionEnabled: FALSE", "msDS-PasswordHistoryLength: 102", "msDS-PasswordComplexityEnabled: FALSE", "msDS-MinimumPasswordLength: 220", "msDS-MinimumPasswordAge: -56", "msDS-MaximumPasswordAge: -58", "msDS-LockoutDuration: -20", "msDS-LockoutObservationWindow: -10", "msDS-LockoutThreshold: 1" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp369);
             this.Manager.Checkpoint("MS-AD_LDAP_R719");
             this.Manager.Checkpoint("MS-AD_LDAP_R717");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
@@ -9511,7 +9511,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1095\'");
             ConstrOnModOpErrs temp378;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""msDS-MinimumPasswordLength: 30""->[""objectClass: msDS-PasswordSettings"",""distinguishedName: CN=TestPassword,CN=Password Settings Container,CN=System,DC=adts88"",""msDS-PasswordSettingsPrecedence: 1"",""msDS-PasswordReversibleEncryptionEnabled: FALSE"",""msDS-PasswordHistoryLength: 102"",""msDS-PasswordComplexityEnabled: FALSE"",""msDS-MinimumPasswordLength: 220"",""msDS-MinimumPasswordAge: -56"",""msDS-MaximumPasswordAge: -58"",""msDS-LockoutDuration: -20"",""msDS-LockoutObservationWindow: -10"",""msDS-LockoutThreshold: 1""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "msDS-MinimumPasswordLength: 30", new List<string> { "objectClass: msDS-PasswordSettings", "distinguishedName: CN=TestPassword,CN=Password Settings Container,CN=System,DC=adts88", "msDS-PasswordSettingsPrecedence: 1", "msDS-PasswordReversibleEncryptionEnabled: FALSE", "msDS-PasswordHistoryLength: 102", "msDS-PasswordComplexityEnabled: FALSE", "msDS-MinimumPasswordLength: 220", "msDS-MinimumPasswordAge: -56", "msDS-MaximumPasswordAge: -58", "msDS-LockoutDuration: -20", "msDS-LockoutObservationWindow: -10", "msDS-LockoutThreshold: 1" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp378);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "msDS-MinimumPasswordLength: 30", new List<string> { "objectClass: msDS-PasswordSettings", "distinguishedName: CN=TestPassword,CN=Password Settings Container,CN=System,DC=adts88", "msDS-PasswordSettingsPrecedence: 1", "msDS-PasswordReversibleEncryptionEnabled: FALSE", "msDS-PasswordHistoryLength: 102", "msDS-PasswordComplexityEnabled: FALSE", "msDS-MinimumPasswordLength: 220", "msDS-MinimumPasswordAge: -56", "msDS-MaximumPasswordAge: -58", "msDS-LockoutDuration: -20", "msDS-LockoutObservationWindow: -10", "msDS-LockoutThreshold: 1" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp378);
             this.Manager.Checkpoint("MS-AD_LDAP_R721");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S1154\'");
@@ -9740,7 +9740,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1096\'");
             ConstrOnModOpErrs temp387;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""msDS-LockoutDuration: -30""->[""objectClass: msDS-PasswordSettings"",""distinguishedName: CN=TestPassword,CN=Password Settings Container,CN=System,DC=adts88"",""msDS-PasswordSettingsPrecedence: 1"",""msDS-PasswordReversibleEncryptionEnabled: FALSE"",""msDS-PasswordHistoryLength: 102"",""msDS-PasswordComplexityEnabled: FALSE"",""msDS-MinimumPasswordLength: 220"",""msDS-MinimumPasswordAge: -56"",""msDS-MaximumPasswordAge: -58"",""msDS-LockoutDuration: -20"",""msDS-LockoutObservationWindow: -10"",""msDS-LockoutThreshold: 1""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "msDS-LockoutDuration: -30", new List<string> { "objectClass: msDS-PasswordSettings", "distinguishedName: CN=TestPassword,CN=Password Settings Container,CN=System,DC=adts88", "msDS-PasswordSettingsPrecedence: 1", "msDS-PasswordReversibleEncryptionEnabled: FALSE", "msDS-PasswordHistoryLength: 102", "msDS-PasswordComplexityEnabled: FALSE", "msDS-MinimumPasswordLength: 220", "msDS-MinimumPasswordAge: -56", "msDS-MaximumPasswordAge: -58", "msDS-LockoutDuration: -20", "msDS-LockoutObservationWindow: -10", "msDS-LockoutThreshold: 1" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp387);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "msDS-LockoutDuration: -30", new List<string> { "objectClass: msDS-PasswordSettings", "distinguishedName: CN=TestPassword,CN=Password Settings Container,CN=System,DC=adts88", "msDS-PasswordSettingsPrecedence: 1", "msDS-PasswordReversibleEncryptionEnabled: FALSE", "msDS-PasswordHistoryLength: 102", "msDS-PasswordComplexityEnabled: FALSE", "msDS-MinimumPasswordLength: 220", "msDS-MinimumPasswordAge: -56", "msDS-MaximumPasswordAge: -58", "msDS-LockoutDuration: -20", "msDS-LockoutObservationWindow: -10", "msDS-LockoutThreshold: 1" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp387);
             this.Manager.Checkpoint("MS-AD_LDAP_R723");
             this.Manager.Checkpoint("MS-AD_LDAP_R727");
             this.Manager.Checkpoint("MS-AD_LDAP_R725");
@@ -9971,7 +9971,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1097\'");
             ConstrOnModOpErrs temp396;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""msDS-LockoutObservationWindow: -15""->[""objectClass: msDS-PasswordSettings"",""distinguishedName: CN=TestPassword,CN=Password Settings Container,CN=System,DC=adts88"",""msDS-PasswordSettingsPrecedence: 1"",""msDS-PasswordReversibleEncryptionEnabled: FALSE"",""msDS-PasswordHistoryLength: 102"",""msDS-PasswordComplexityEnabled: FALSE"",""msDS-MinimumPasswordLength: 220"",""msDS-MinimumPasswordAge: -56"",""msDS-MaximumPasswordAge: -58"",""msDS-LockoutDuration: -20"",""msDS-LockoutObservationWindow: -10"",""msDS-LockoutThreshold: 1""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "msDS-LockoutObservationWindow: -15", new List<string> { "objectClass: msDS-PasswordSettings", "distinguishedName: CN=TestPassword,CN=Password Settings Container,CN=System,DC=adts88", "msDS-PasswordSettingsPrecedence: 1", "msDS-PasswordReversibleEncryptionEnabled: FALSE", "msDS-PasswordHistoryLength: 102", "msDS-PasswordComplexityEnabled: FALSE", "msDS-MinimumPasswordLength: 220", "msDS-MinimumPasswordAge: -56", "msDS-MaximumPasswordAge: -58", "msDS-LockoutDuration: -20", "msDS-LockoutObservationWindow: -10", "msDS-LockoutThreshold: 1" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp396);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "msDS-LockoutObservationWindow: -15", new List<string> { "objectClass: msDS-PasswordSettings", "distinguishedName: CN=TestPassword,CN=Password Settings Container,CN=System,DC=adts88", "msDS-PasswordSettingsPrecedence: 1", "msDS-PasswordReversibleEncryptionEnabled: FALSE", "msDS-PasswordHistoryLength: 102", "msDS-PasswordComplexityEnabled: FALSE", "msDS-MinimumPasswordLength: 220", "msDS-MinimumPasswordAge: -56", "msDS-MaximumPasswordAge: -58", "msDS-LockoutDuration: -20", "msDS-LockoutObservationWindow: -10", "msDS-LockoutThreshold: 1" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp396);
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S1156\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out success]\'");
@@ -10198,7 +10198,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1098\'");
             ConstrOnModOpErrs temp405;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""servicePrincipalName: HOST/ADTS_XP;HOST/ADTS_XP.adts88""->[""servicePrincipalName: HOST/ADTS_XP;HOST/ADTS_XP.adts88"",""objectClass: top;person;organizationalPerson;user;computer"",""dNSHostName: ADTS_XP.adts88"",""sAMAccountName: ADTS_XP$"",""distinguishedName: CN=ADTS_XP,CN=Computers,DC=adts88""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "servicePrincipalName: HOST/ADTS_XP;HOST/ADTS_XP.adts88", new List<string> { "servicePrincipalName: HOST/ADTS_XP;HOST/ADTS_XP.adts88", "objectClass: top;person;organizationalPerson;user;computer", "dNSHostName: ADTS_XP.adts88", "sAMAccountName: ADTS_XP$", "distinguishedName: CN=ADTS_XP,CN=Computers,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp405);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "servicePrincipalName: HOST/ADTS_XP;HOST/ADTS_XP.adts88", new List<string> { "servicePrincipalName: HOST/ADTS_XP;HOST/ADTS_XP.adts88", "objectClass: top;person;organizationalPerson;user;computer", "dNSHostName: ADTS_XP.adts88", "sAMAccountName: ADTS_XP$", "distinguishedName: CN=ADTS_XP,CN=Computers,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp405);
             this.Manager.Checkpoint("MS-AD_LDAP_R667");
             this.Manager.Checkpoint("MS-AD_LDAP_R667");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
@@ -10422,7 +10422,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1099\'");
             ConstrOnModOpErrs temp414;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""objectClass: 88object""->[""cn: Administrator"",""objectClass: user"",""distinguishedName: CN=Administrator,CN=Users,DC=adts88"",""sAMAccountName: Administrator""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "objectClass: 88object", new List<string> { $"cn: {Utilities.DomainAdmin}", "objectClass: user", $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88", $"sAMAccountName: {Utilities.DomainAdmin}" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp414);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "objectClass: 88object", new List<string> { $"cn: {Utilities.DomainAdmin}", "objectClass: user", $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88", $"sAMAccountName: {Utilities.DomainAdmin}" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp414);
             this.Manager.Checkpoint("MS-AD_LDAP_R4362");
             this.Manager.Comment("reaching state \'S1158\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out ObjectClassViolation_ERROR_DS_OBJ_CLAS" +
@@ -10645,7 +10645,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1100\'");
             ConstrOnModOpErrs temp423;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""objectClass: inetOrgPerson""->[""cn: Administrator"",""objectClass: user"",""distinguishedName: CN=Administrator,CN=Users,DC=adts88"",""sAMAccountName: Administrator""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "objectClass: inetOrgPerson", new List<string> { $"cn: {Utilities.DomainAdmin}", "objectClass: user", $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88", $"sAMAccountName: {Utilities.DomainAdmin}" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp423);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "objectClass: inetOrgPerson", new List<string> { $"cn: {Utilities.DomainAdmin}", "objectClass: user", $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88", $"sAMAccountName: {Utilities.DomainAdmin}" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp423);
             this.Manager.Checkpoint("MS-AD_LDAP_R748");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S1159\'");
@@ -10873,7 +10873,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1101\'");
             ConstrOnModOpErrs temp432;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""description: hai""->[""cn: Administrator"",""objectClass: user"",""distinguishedName: <GUID=>"",""sAMAccountName: Administrator""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "description: hai", new List<string> { $"cn: {Utilities.DomainAdmin}", "objectClass: user", "distinguishedName: <GUID=>", $"sAMAccountName: {Utilities.DomainAdmin}" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp432);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "description: hai", new List<string> { $"cn: {Utilities.DomainAdmin}", "objectClass: user", "distinguishedName: <GUID=>", $"sAMAccountName: {Utilities.DomainAdmin}" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp432);
             this.Manager.Checkpoint("MS-AD_LDAP_R1003");
             this.Manager.Comment("reaching state \'S1160\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out success]\'");
@@ -11095,7 +11095,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1066\'");
             ConstrOnModOpErrs temp441;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""description: secret""->[""instanceType: 4"",""objectCategory: CN=Secret,CN=Schema,CN=Configuration,DC=adts88"",""objectClass: top;leaf;secret"",""distinguishedName: CN=BCKUPKEY_PREFERRED Secret,CN=System,DC=adts88"",""cn: BCKUPKEY_PREFERRED Secret"",""description: <Not Set>""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "description: secret", new List<string> { "instanceType: 4", "objectCategory: CN=Secret,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;leaf;secret", "distinguishedName: CN=BCKUPKEY_PREFERRED Secret,CN=System,DC=adts88", "cn: BCKUPKEY_PREFERRED Secret", "description: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp441);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "description: secret", new List<string> { "instanceType: 4", "objectCategory: CN=Secret,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;leaf;secret", "distinguishedName: CN=BCKUPKEY_PREFERRED Secret,CN=System,DC=adts88", "cn: BCKUPKEY_PREFERRED Secret", "description: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp441);
             this.Manager.Checkpoint("MS-AD_LDAP_R686");
             this.Manager.Comment("reaching state \'S1125\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out UnwillingToPerform_ERROR_DS_ILLEGAL_MO" +
@@ -11318,7 +11318,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1102\'");
             ConstrOnModOpErrs temp450;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""description: hai""->[""cn: Administrator"",""objectClass: user"",""distinguishedName: <SID=>"",""sAMAccountName: Administrator""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "description: hai", new List<string> { $"cn: {Utilities.DomainAdmin}", "objectClass: user", "distinguishedName: <SID=>", $"sAMAccountName: {Utilities.DomainAdmin}" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp450);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "description: hai", new List<string> { $"cn: {Utilities.DomainAdmin}", "objectClass: user", "distinguishedName: <SID=>", $"sAMAccountName: {Utilities.DomainAdmin}" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp450);
             this.Manager.Checkpoint("MS-AD_LDAP_R1008");
             this.Manager.Comment("reaching state \'S1161\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out success]\'");
@@ -11540,7 +11540,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1103\'");
             ConstrOnModOpErrs temp459;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""description: hai""->[""objectClass: user"",""distinguishedName: <WKGUID=a9d1ca15768811d1aded00c04fd8d5cd,DC=adts88>""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "description: hai", new List<string> { "objectClass: user", "distinguishedName: <WKGUID=a9d1ca15768811d1aded00c04fd8d5cd,DC=adts88>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp459);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "description: hai", new List<string> { "objectClass: user", "distinguishedName: <WKGUID=a9d1ca15768811d1aded00c04fd8d5cd,DC=adts88>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp459);
             this.Manager.Checkpoint("MS-AD_LDAP_R1012");
             this.Manager.Comment("reaching state \'S1162\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out success]\'");
@@ -11762,7 +11762,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1104\'");
             ConstrOnModOpErrs temp468;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""objectClass: computer""->[""cn: inetUser"",""objectClass: inetOrgPerson"",""distinguishedName: CN=inetUser,CN=Users,DC=adts88"",""sAMAccountName: inetUser""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "objectClass: computer", new List<string> { "cn: inetUser", "objectClass: inetOrgPerson", "distinguishedName: CN=inetUser,CN=Users,DC=adts88", "sAMAccountName: inetUser" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp468);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "objectClass: computer", new List<string> { "cn: inetUser", "objectClass: inetOrgPerson", "distinguishedName: CN=inetUser,CN=Users,DC=adts88", "sAMAccountName: inetUser" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp468);
             this.Manager.Checkpoint("MS-AD_LDAP_R3004363");
             this.Manager.Comment("reaching state \'S1163\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out ObjectClassViolation_ERROR_DS_ILLEGAL_" +
@@ -11985,7 +11985,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1105\'");
             ConstrOnModOpErrs temp477;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""objectClass: user""->[""cn: inetUser"",""objectClass: inetOrgPerson"",""distinguishedName: CN=inetUser,CN=Users,DC=adts88"",""sAMAccountName: inetUser""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "objectClass: user", new List<string> { "cn: inetUser", "objectClass: inetOrgPerson", "distinguishedName: CN=inetUser,CN=Users,DC=adts88", "sAMAccountName: inetUser" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp477);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "objectClass: user", new List<string> { "cn: inetUser", "objectClass: inetOrgPerson", "distinguishedName: CN=inetUser,CN=Users,DC=adts88", "sAMAccountName: inetUser" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp477);
             this.Manager.Checkpoint("MS-AD_LDAP_R749");
             this.Manager.Checkpoint("MS-AD_LDAP_R710");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
@@ -12214,7 +12214,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1106\'");
             ConstrOnModOpErrs temp486;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""description: NonExistingObject""->[""cn: NonExistingObject"",""objectClass: top;person;organizationalPerson;user"",""distinguishedName: CN=NonExistingObject,CN=Users,DC=adts88"",""description: <Not Set>""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "description: NonExistingObject", new List<string> { "cn: NonExistingObject", "objectClass: top;person;organizationalPerson;user", "distinguishedName: CN=NonExistingObject,CN=Users,DC=adts88", "description: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp486);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "description: NonExistingObject", new List<string> { "cn: NonExistingObject", "objectClass: top;person;organizationalPerson;user", "distinguishedName: CN=NonExistingObject,CN=Users,DC=adts88", "description: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp486);
             this.Manager.Checkpoint("MS-AD_LDAP_R49");
             this.Manager.Checkpoint("MS-AD_LDAP_R51");
             this.Manager.Comment("reaching state \'S1165\'");
@@ -12437,7 +12437,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1107\'");
             ConstrOnModOpErrs temp495;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""adminDisplayName: Aggregate""->[""objectClass: top;subSchema"",""distinguishedName: CN=Aggregate,CN=Schema,CN=Configuration,DC=adts88"",""adminDisplayName: <Not set>""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "adminDisplayName: Aggregate", new List<string> { "objectClass: top;subSchema", "distinguishedName: CN=Aggregate,CN=Schema,CN=Configuration,DC=adts88", "adminDisplayName: <Not set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp495);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "adminDisplayName: Aggregate", new List<string> { "objectClass: top;subSchema", "distinguishedName: CN=Aggregate,CN=Schema,CN=Configuration,DC=adts88", "adminDisplayName: <Not set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp495);
             this.Manager.Checkpoint("MS-AD_LDAP_R69");
             this.Manager.Comment("reaching state \'S1166\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out UnspecifiedError]\'");
@@ -12661,7 +12661,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("executing step \'call ModifyOperation({\"cn: users+user67\"->[\"cn: inetUser\",\"distin" +
                     "guishedName: CN=inetUser,CN=Users,DC=adts88\"]},RIGHT_DS_WRITE_PROPERTYwithSE_ENA" +
                     "BLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "cn: users+user67", new List<string> { "cn: inetUser", "distinguishedName: CN=inetUser,CN=Users,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp504);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "cn: users+user67", new List<string> { "cn: inetUser", "distinguishedName: CN=inetUser,CN=Users,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp504);
             this.Manager.Checkpoint("MS-AD_LDAP_R153");
             this.Manager.Comment("reaching state \'S1167\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out NotAllowedOnRdn_UnKnownError]\'");
@@ -12883,7 +12883,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1109\'");
             ConstrOnModOpErrs temp513;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88""->[""distinguishedName:CN=Infrastructure,DC=adts88"",""fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88", new List<string> { "distinguishedName:CN=Infrastructure,DC=adts88", "fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp513);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88", new List<string> { "distinguishedName:CN=Infrastructure,DC=adts88", "fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp513);
             this.Manager.Checkpoint("MS-AD_LDAP_R669");
             this.Manager.Checkpoint("MS-AD_LDAP_R668");
             this.Manager.Checkpoint("MS-AD_LDAP_R700");
@@ -13113,7 +13113,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1110\'");
             ConstrOnModOpErrs temp522;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88""->[""distinguishedName:CN=Schema,CN=Configuration,DC=adts88"",""fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88", new List<string> { "distinguishedName:CN=Schema,CN=Configuration,DC=adts88", "fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp522);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88", new List<string> { "distinguishedName:CN=Schema,CN=Configuration,DC=adts88", "fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp522);
             this.Manager.Checkpoint("MS-AD_LDAP_R670");
             this.Manager.Checkpoint("MS-AD_LDAP_R668");
             this.Manager.Checkpoint("MS-AD_LDAP_R700");
@@ -13338,7 +13338,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S1111\'");
             ConstrOnModOpErrs temp531;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88""->[""distinguishedName:DC=adts88"",""fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, List<string>> { { "fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88", new List<string> { "distinguishedName:DC=adts88", "fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp531);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88", new List<string> { "distinguishedName:DC=adts88", "fSMORoleOwner: CN=NTDS Settings,CN=WIN-6IEHBFZ8AMV,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp531);
             this.Manager.Checkpoint("MS-AD_LDAP_R672");
             this.Manager.Checkpoint("MS-AD_LDAP_R668");
             this.Manager.Checkpoint("MS-AD_LDAP_R700");
