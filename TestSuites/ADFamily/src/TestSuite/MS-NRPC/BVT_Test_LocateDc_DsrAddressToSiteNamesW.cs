@@ -79,11 +79,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             this.Manager.Comment("reaching state \'S16\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.HRESULT temp1;
             this.Manager.Comment("executing step \'call DsrAddressToSiteNamesExW(PrimaryDc,{InvalidSocketAddress})\'");
-            temp1 = this.INrpcServerAdapterInstance.DsrAddressToSiteNamesExW(Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.ComputerType.PrimaryDc, this.Make<Microsoft.Modeling.Set<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType, Microsoft.Xrt.Runtime.Singleton>(), Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType.InvalidSocketAddress, this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp1 = this.INrpcServerAdapterInstance.DsrAddressToSiteNamesExW(Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.ComputerType.PrimaryDc, new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType> { Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType.InvalidSocketAddress });
             this.Manager.Checkpoint("MS-NRPC_R103451");
             this.Manager.Comment("reaching state \'S24\'");
             this.Manager.Comment("checking step \'return DsrAddressToSiteNamesExW/ERROR_SUCCESS\'");
@@ -117,11 +113,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             this.Manager.Comment("reaching state \'S21\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.HRESULT temp3;
             this.Manager.Comment("executing step \'call DsrAddressToSiteNamesExW(PrimaryDc,{Ipv4SocketAddress})\'");
-            temp3 = this.INrpcServerAdapterInstance.DsrAddressToSiteNamesExW(Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.ComputerType.PrimaryDc, this.Make<Microsoft.Modeling.Set<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType, Microsoft.Xrt.Runtime.Singleton>(), Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType.Ipv4SocketAddress, this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp3 = this.INrpcServerAdapterInstance.DsrAddressToSiteNamesExW(Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.ComputerType.PrimaryDc, new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType> { Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType.Ipv4SocketAddress });
             this.Manager.Checkpoint("MS-NRPC_R103451");
             this.Manager.Comment("reaching state \'S29\'");
             this.Manager.Comment("checking step \'return DsrAddressToSiteNamesExW/ERROR_SUCCESS\'");
@@ -150,11 +142,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             this.Manager.Comment("reaching state \'S22\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.HRESULT temp5;
             this.Manager.Comment("executing step \'call DsrAddressToSiteNamesExW(PrimaryDc,{Ipv6SocketAddress})\'");
-            temp5 = this.INrpcServerAdapterInstance.DsrAddressToSiteNamesExW(Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.ComputerType.PrimaryDc, this.Make<Microsoft.Modeling.Set<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType, Microsoft.Xrt.Runtime.Singleton>(), Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType.Ipv6SocketAddress, this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp5 = this.INrpcServerAdapterInstance.DsrAddressToSiteNamesExW(Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.ComputerType.PrimaryDc, new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType> { Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType.Ipv6SocketAddress });
             this.Manager.Checkpoint("MS-NRPC_R103451");
             this.Manager.Comment("reaching state \'S30\'");
             this.Manager.Comment("checking step \'return DsrAddressToSiteNamesExW/ERROR_SUCCESS\'");
@@ -184,11 +172,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.HRESULT temp7;
             this.Manager.Comment("executing step \'call DsrAddressToSiteNamesExW(PrimaryDc,{InvalidFormatSocketAddre" +
                     "ss})\'");
-            temp7 = this.INrpcServerAdapterInstance.DsrAddressToSiteNamesExW(Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.ComputerType.PrimaryDc, this.Make<Microsoft.Modeling.Set<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType, Microsoft.Xrt.Runtime.Singleton>(), Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType.InvalidFormatSocketAddress, this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp7 = this.INrpcServerAdapterInstance.DsrAddressToSiteNamesExW(Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.ComputerType.PrimaryDc, new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType> { Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType.InvalidFormatSocketAddress });
             this.Manager.Checkpoint("MS-NRPC_R103451");
             this.Manager.Comment("reaching state \'S31\'");
             this.Manager.Comment("checking step \'return DsrAddressToSiteNamesExW/ERROR_SUCCESS\'");
@@ -217,11 +201,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             this.Manager.Comment("reaching state \'S17\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.HRESULT temp9;
             this.Manager.Comment("executing step \'call DsrAddressToSiteNamesW(PrimaryDc,{Ipv4SocketAddress})\'");
-            temp9 = this.INrpcServerAdapterInstance.DsrAddressToSiteNamesW(Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.ComputerType.PrimaryDc, this.Make<Microsoft.Modeling.Set<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType, Microsoft.Xrt.Runtime.Singleton>(), Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType.Ipv4SocketAddress, this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp9 = this.INrpcServerAdapterInstance.DsrAddressToSiteNamesW(Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.ComputerType.PrimaryDc, new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType> { Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType.Ipv4SocketAddress });
             this.Manager.Checkpoint("MS-NRPC_R103449");
             this.Manager.Comment("reaching state \'S25\'");
             this.Manager.Comment("checking step \'return DsrAddressToSiteNamesW/ERROR_SUCCESS\'");
@@ -250,11 +230,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             this.Manager.Comment("reaching state \'S18\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.HRESULT temp11;
             this.Manager.Comment("executing step \'call DsrAddressToSiteNamesW(PrimaryDc,{Ipv6SocketAddress})\'");
-            temp11 = this.INrpcServerAdapterInstance.DsrAddressToSiteNamesW(Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.ComputerType.PrimaryDc, this.Make<Microsoft.Modeling.Set<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType, Microsoft.Xrt.Runtime.Singleton>(), Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType.Ipv6SocketAddress, this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp11 = this.INrpcServerAdapterInstance.DsrAddressToSiteNamesW(Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.ComputerType.PrimaryDc, new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType> { Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType.Ipv6SocketAddress });
             this.Manager.Checkpoint("MS-NRPC_R103449");
             this.Manager.Comment("reaching state \'S26\'");
             this.Manager.Comment("checking step \'return DsrAddressToSiteNamesW/ERROR_SUCCESS\'");
@@ -284,11 +260,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.HRESULT temp13;
             this.Manager.Comment("executing step \'call DsrAddressToSiteNamesW(PrimaryDc,{InvalidFormatSocketAddress" +
                     "})\'");
-            temp13 = this.INrpcServerAdapterInstance.DsrAddressToSiteNamesW(Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.ComputerType.PrimaryDc, this.Make<Microsoft.Modeling.Set<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType, Microsoft.Xrt.Runtime.Singleton>(), Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType.InvalidFormatSocketAddress, this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp13 = this.INrpcServerAdapterInstance.DsrAddressToSiteNamesW(Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.ComputerType.PrimaryDc, new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType> { Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType.InvalidFormatSocketAddress });
             this.Manager.Checkpoint("MS-NRPC_R103449");
             this.Manager.Comment("reaching state \'S27\'");
             this.Manager.Comment("checking step \'return DsrAddressToSiteNamesW/ERROR_SUCCESS\'");
@@ -317,11 +289,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             this.Manager.Comment("reaching state \'S20\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.HRESULT temp15;
             this.Manager.Comment("executing step \'call DsrAddressToSiteNamesW(PrimaryDc,{InvalidSocketAddress})\'");
-            temp15 = this.INrpcServerAdapterInstance.DsrAddressToSiteNamesW(Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.ComputerType.PrimaryDc, this.Make<Microsoft.Modeling.Set<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType, Microsoft.Xrt.Runtime.Singleton>(), Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType.InvalidSocketAddress, this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp15 = this.INrpcServerAdapterInstance.DsrAddressToSiteNamesW(Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.ComputerType.PrimaryDc, new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType> { Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.SocketAddressType.InvalidSocketAddress });
             this.Manager.Checkpoint("MS-NRPC_R103449");
             this.Manager.Comment("reaching state \'S28\'");
             this.Manager.Comment("checking step \'return DsrAddressToSiteNamesW/ERROR_SUCCESS\'");

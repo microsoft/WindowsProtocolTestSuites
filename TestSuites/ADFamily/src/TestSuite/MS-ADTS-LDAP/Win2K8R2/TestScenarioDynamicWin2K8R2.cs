@@ -74,33 +74,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S4\'");
             ConstrOnAddOpErrs temp0;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: DynamicUser1"",""objectClass: dynamicObject;user"",""sAMAccountName: DynamicUser1"",""distinguishedName: CN=DynamicUser1,CN=Users,DC=adts88"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88"",""entryTTL: 500""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: DynamicUser1",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: dynamicObject;user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "sAMAccountName: DynamicUser1",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=DynamicUser1,CN=Users,DC=adts88",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "entryTTL: 500",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp0);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: DynamicUser1", "objectClass: dynamicObject;user", "sAMAccountName: DynamicUser1", "distinguishedName: CN=DynamicUser1,CN=Users,DC=adts88", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88", "entryTTL: 500" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp0);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -126,33 +100,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S8\'");
             ConstrOnAddOpErrs temp1;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: DynamicUser"",""objectClass: dynamicObject;user"",""sAMAccountName: DynamicUser"",""distinguishedName: CN=DynamicUser,CN=Users,DC=adts88"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88"",""msDS-Entry-Time-To-Die: 20201228143047.0Z""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: DynamicUser",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: dynamicObject;user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "sAMAccountName: DynamicUser",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=DynamicUser,CN=Users,DC=adts88",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "msDS-Entry-Time-To-Die: 20201228143047.0Z",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp1);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: DynamicUser", "objectClass: dynamicObject;user", "sAMAccountName: DynamicUser", "distinguishedName: CN=DynamicUser,CN=Users,DC=adts88", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88", "msDS-Entry-Time-To-Die: 20201228143047.0Z" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp1);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -179,25 +127,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S12\'");
             ConstrOnAddOpErrs temp2;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: DynamicUserChild"",""objectClass: classStore"",""distinguishedName: CN=DynamicUserChild,CN=DynamicUser,CN=Users,DC=adts88"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: DynamicUserChild",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: classStore",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=DynamicUserChild,CN=DynamicUser,CN=Users,DC=adts88",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88",
-                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp2);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: DynamicUserChild", "objectClass: classStore", "distinguishedName: CN=DynamicUserChild,CN=DynamicUser,CN=Users,DC=adts88", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp2);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -219,25 +149,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S16\'");
             ConstrOnAddOpErrs temp3;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: DyUser"",""objectClass: dynamicObject;user"",""sAMAccountName: DyUser"",""distinguishedName: CN=DyUser,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: DyUser",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: dynamicObject;user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "sAMAccountName: DyUser",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=DyUser,CN=Configuration,DC=adts88",
-                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp3);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: DyUser", "objectClass: dynamicObject;user", "sAMAccountName: DyUser", "distinguishedName: CN=DyUser,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp3);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -254,25 +166,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S20\'");
             ConstrOnAddOpErrs temp4;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: DynamicUser2"",""objectClass: dynamicObject;user"",""sAMAccountName: DynamicUser2"",""distinguishedName: CN=DynamicUser2,CN=Users,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: DynamicUser2",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: dynamicObject;user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "sAMAccountName: DynamicUser2",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=DynamicUser2,CN=Users,DC=adts88",
-                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp4);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: DynamicUser2", "objectClass: dynamicObject;user", "sAMAccountName: DynamicUser2", "distinguishedName: CN=DynamicUser2,CN=Users,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp4);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -298,21 +192,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S24\'");
             ConstrOnModOpErrs temp5;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""entryTTL: 500""->[""objectClass: dynamicObject;user"",""distinguishedName: CN=DynamicUser2,CN=Users,DC=adts88""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(this.Make<Microsoft.Modeling.Map<string, Microsoft.Modeling.Sequence<string>>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Modeling.Sequence<string>>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Modeling.Sequence<string>>(), "entryTTL: 500", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Modeling.Sequence<string>>>(new string[] {
-                                            "Element"}, new object[] {
-                                            this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                                                        "Rep"}, new object[] {
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                    "Head",
-                                                                    "Tail"}, new object[] {
-                                                                    "objectClass: dynamicObject;user",
-                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                "Head",
-                                                                                "Tail"}, new object[] {
-                                                                                "distinguishedName: CN=DynamicUser2,CN=Users,DC=adts88",
-                                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}))}), ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp5);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "entryTTL: 500", new List<string> { "objectClass: dynamicObject;user", "distinguishedName: CN=DynamicUser2,CN=Users,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp5);
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S26\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out success]\'");
@@ -326,41 +206,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S28\'");
             ConstrOnModOpErrs temp6;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""objectClass: user""->[""cn: DynamicUser"",""objectClass: dynamicObject;user"",""sAMAccountName: DynamicUser"",""distinguishedName: CN=DynamicUser,CN=Users,DC=adts88"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88"",""msDS-Entry-Time-To-Die: 20201228143047.0Z"",""entryTTL: 500""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(this.Make<Microsoft.Modeling.Map<string, Microsoft.Modeling.Sequence<string>>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Modeling.Sequence<string>>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Modeling.Sequence<string>>(), "objectClass: user", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Modeling.Sequence<string>>>(new string[] {
-                                            "Element"}, new object[] {
-                                            this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                                                        "Rep"}, new object[] {
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                    "Head",
-                                                                    "Tail"}, new object[] {
-                                                                    "cn: DynamicUser",
-                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                "Head",
-                                                                                "Tail"}, new object[] {
-                                                                                "objectClass: dynamicObject;user",
-                                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                            "Head",
-                                                                                            "Tail"}, new object[] {
-                                                                                            "sAMAccountName: DynamicUser",
-                                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                        "Head",
-                                                                                                        "Tail"}, new object[] {
-                                                                                                        "distinguishedName: CN=DynamicUser,CN=Users,DC=adts88",
-                                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                                    "Head",
-                                                                                                                    "Tail"}, new object[] {
-                                                                                                                    "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88",
-                                                                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                                                "Head",
-                                                                                                                                "Tail"}, new object[] {
-                                                                                                                                "msDS-Entry-Time-To-Die: 20201228143047.0Z",
-                                                                                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                                                            "Head",
-                                                                                                                                            "Tail"}, new object[] {
-                                                                                                                                            "entryTTL: 500",
-                                                                                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})})})}))}), ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp6);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "objectClass: user", new List<string> { "cn: DynamicUser", "objectClass: dynamicObject;user", "sAMAccountName: DynamicUser", "distinguishedName: CN=DynamicUser,CN=Users,DC=adts88", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88", "msDS-Entry-Time-To-Die: 20201228143047.0Z", "entryTTL: 500" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp6);
             this.Manager.Comment("reaching state \'S29\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out ConstraintViolation_ERROR_DS_OBJ_CLASS" +
                     "_VIOLATION]\'");
@@ -368,33 +214,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S30\'");
             ConstrOnModOpErrs temp7;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""objectClass:dynamicObject;user""->[""cn: Administrator"",""objectClass: user"",""sAMAccountName: Administrator"",""distinguishedName: CN=Administrator,CN=Users,DC=adts88"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(this.Make<Microsoft.Modeling.Map<string, Microsoft.Modeling.Sequence<string>>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Modeling.Sequence<string>>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Modeling.Sequence<string>>(), "objectClass:dynamicObject;user", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Modeling.Sequence<string>>>(new string[] {
-                                            "Element"}, new object[] {
-                                            this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                                                        "Rep"}, new object[] {
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                    "Head",
-                                                                    "Tail"}, new object[] {
-                                                                    $"cn: {Utilities.DomainAdmin}",
-                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                "Head",
-                                                                                "Tail"}, new object[] {
-                                                                                "objectClass: user",
-                                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                            "Head",
-                                                                                            "Tail"}, new object[] {
-                                                                                            $"sAMAccountName: {Utilities.DomainAdmin}",
-                                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                        "Head",
-                                                                                                        "Tail"}, new object[] {
-                                                                                                        $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88",
-                                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                                    "Head",
-                                                                                                                    "Tail"}, new object[] {
-                                                                                                                    "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88",
-                                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}))}), ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp7);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "objectClass:dynamicObject;user", new List<string> { $"cn: {Utilities.DomainAdmin}", "objectClass: user", $"sAMAccountName: {Utilities.DomainAdmin}", $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp7);
             this.Manager.Comment("reaching state \'S31\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out ConstraintViolation_ERROR_DS_OBJ_CLASS" +
                     "_VIOLATION]\'");
@@ -426,33 +246,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S5\'");
             ConstrOnAddOpErrs temp8;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: DynamicUser1"",""objectClass: dynamicObject;user"",""sAMAccountName: DynamicUser1"",""distinguishedName: CN=DynamicUser1,CN=Users,DC=adts88"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88"",""entryTTL: 500""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: DynamicUser1",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: dynamicObject;user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "sAMAccountName: DynamicUser1",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=DynamicUser1,CN=Users,DC=adts88",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "entryTTL: 500",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp8);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: DynamicUser1", "objectClass: dynamicObject;user", "sAMAccountName: DynamicUser1", "distinguishedName: CN=DynamicUser1,CN=Users,DC=adts88", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88", "entryTTL: 500" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp8);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -478,33 +272,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S9\'");
             ConstrOnAddOpErrs temp9;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: DynamicUser"",""objectClass: dynamicObject;user"",""sAMAccountName: DynamicUser"",""distinguishedName: CN=DynamicUser,CN=Users,DC=adts88"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88"",""msDS-Entry-Time-To-Die: 20201228143047.0Z""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: DynamicUser",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: dynamicObject;user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "sAMAccountName: DynamicUser",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=DynamicUser,CN=Users,DC=adts88",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "msDS-Entry-Time-To-Die: 20201228143047.0Z",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp9);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: DynamicUser", "objectClass: dynamicObject;user", "sAMAccountName: DynamicUser", "distinguishedName: CN=DynamicUser,CN=Users,DC=adts88", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88", "msDS-Entry-Time-To-Die: 20201228143047.0Z" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp9);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -531,25 +299,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S13\'");
             ConstrOnAddOpErrs temp10;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: DynamicUserChild"",""objectClass: classStore"",""distinguishedName: CN=DynamicUserChild,CN=DynamicUser,CN=Users,DC=adts88"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: DynamicUserChild",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: classStore",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=DynamicUserChild,CN=DynamicUser,CN=Users,DC=adts88",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88",
-                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp10);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: DynamicUserChild", "objectClass: classStore", "distinguishedName: CN=DynamicUserChild,CN=DynamicUser,CN=Users,DC=adts88", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp10);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -571,25 +321,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S17\'");
             ConstrOnAddOpErrs temp11;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: DyUser"",""objectClass: dynamicObject;user"",""sAMAccountName: DyUser"",""distinguishedName: CN=DyUser,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: DyUser",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: dynamicObject;user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "sAMAccountName: DyUser",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=DyUser,CN=Configuration,DC=adts88",
-                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp11);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: DyUser", "objectClass: dynamicObject;user", "sAMAccountName: DyUser", "distinguishedName: CN=DyUser,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp11);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -606,25 +338,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S21\'");
             ConstrOnAddOpErrs temp12;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: DynamicUser2"",""objectClass: dynamicObject;user"",""sAMAccountName: DynamicUser2"",""distinguishedName: CN=DynamicUser2,CN=Users,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: DynamicUser2",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: dynamicObject;user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "sAMAccountName: DynamicUser2",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=DynamicUser2,CN=Users,DC=adts88",
-                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp12);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: DynamicUser2", "objectClass: dynamicObject;user", "sAMAccountName: DynamicUser2", "distinguishedName: CN=DynamicUser2,CN=Users,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp12);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -653,21 +367,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "t;user\",\"distinguishedName: CN=DynamicUser2,CN=Users,DC=adts88\"]},RIGHT_DS_WRITE" +
                     "_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2" +
                     ",False,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(this.Make<Microsoft.Modeling.Map<string, Microsoft.Modeling.Sequence<string>>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Modeling.Sequence<string>>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Modeling.Sequence<string>>(), "entryTTL: 50", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Modeling.Sequence<string>>>(new string[] {
-                                            "Element"}, new object[] {
-                                            this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                                                        "Rep"}, new object[] {
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                    "Head",
-                                                                    "Tail"}, new object[] {
-                                                                    "objectClass: dynamicObject;user",
-                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                "Head",
-                                                                                "Tail"}, new object[] {
-                                                                                "distinguishedName: CN=DynamicUser2,CN=Users,DC=adts88",
-                                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}))}), ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp13);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "entryTTL: 50", new List<string> { "objectClass: dynamicObject;user", "distinguishedName: CN=DynamicUser2,CN=Users,DC=adts88", } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp13);
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S27\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out success]\'");

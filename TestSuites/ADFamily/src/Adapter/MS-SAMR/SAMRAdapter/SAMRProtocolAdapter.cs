@@ -11,7 +11,6 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading;
 
-using Microsoft.Modeling;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.Dtyp;
 using Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce;

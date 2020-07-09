@@ -1,12 +1,11 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestTools.StackSdk.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
-using Microsoft.Modeling;
 
 namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
 { 
@@ -101,7 +100,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
         /// <param name="parameters">Objects parameters.</param>
         public static void IsTrue(bool cond, string message, params object[] parameters)
         {
-            Modeling.Condition.IsTrue(cond, "\r\nERROR: " + String.Format(message, parameters));
+            Condition.IsTrue(cond, "\r\nERROR: " + String.Format(message, parameters));
         }
 
         /// <summary>

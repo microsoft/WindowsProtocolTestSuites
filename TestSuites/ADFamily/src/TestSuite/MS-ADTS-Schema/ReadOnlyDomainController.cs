@@ -12,7 +12,6 @@ using System.IO;
 using System.Security.Principal;
 using System.Text;
 
-using Microsoft.Modeling;
 using Microsoft.Protocols.TestTools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
