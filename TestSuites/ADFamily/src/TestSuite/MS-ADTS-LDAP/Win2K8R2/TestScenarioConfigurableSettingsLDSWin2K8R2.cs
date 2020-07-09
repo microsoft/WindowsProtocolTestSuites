@@ -85,13 +85,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "CN=Configuration,CN={368E6FB2-DBCB-41A1-B65B-18FAC4B5516E}\",\"(objectClass=nTDSSe" +
                     "rvice)\",Subtree,[\"msDS-Other-Settings\"],NoExtendedControl,AD_LDS)\'");
             this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,CN={368E6FB2-DBCB" +
-                    "-41A1-B65B-18FAC4B5516E}", "(objectClass=nTDSService)", SearchScope.Subtree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "msDS-Other-Settings",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(1)));
+                    "-41A1-B65B-18FAC4B5516E}", "(objectClass=nTDSService)", SearchScope.Subtree, new List<string> { "msDS-Other-Settings" }, null, ((ADImplementations)(1)));
             this.Manager.Comment("reaching state \'S3\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S4\'");

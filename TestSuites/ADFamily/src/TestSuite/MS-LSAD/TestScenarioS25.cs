@@ -90,11 +90,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp4;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp4 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp4 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S224\'");
             this.Manager.Comment("checking step \'return AddAccountRights/Success\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus)(0)), temp4, "return of AddAccountRights, state S224");
@@ -189,11 +185,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp17;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp17 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp17 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S229\'");
             this.Manager.Comment("checking step \'return AddAccountRights/AccessDenied\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.AccessDenied, temp17, "return of AddAccountRights, state S229");
@@ -276,11 +268,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp30;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp30 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp30 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S230\'");
             this.Manager.Comment("checking step \'return AddAccountRights/AccessDenied\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.AccessDenied, temp30, "return of AddAccountRights, state S230");
@@ -344,11 +332,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp39;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp39 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp39 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S231\'");
             this.Manager.Comment("checking step \'return AddAccountRights/AccessDenied\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.AccessDenied, temp39, "return of AddAccountRights, state S231");
@@ -412,11 +396,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp48;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp48 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp48 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S232\'");
             this.Manager.Comment("checking step \'return AddAccountRights/AccessDenied\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.AccessDenied, temp48, "return of AddAccountRights, state S232");
@@ -499,11 +479,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp61;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp61 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp61 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S233\'");
             this.Manager.Comment("checking step \'return AddAccountRights/AccessDenied\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.AccessDenied, temp61, "return of AddAccountRights, state S233");
@@ -567,11 +543,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp70;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp70 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp70 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S225\'");
             this.Manager.Comment("checking step \'return AddAccountRights/AccessDenied\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.AccessDenied, temp70, "return of AddAccountRights, state S225");
@@ -635,11 +607,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp79;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp79 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp79 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S234\'");
             this.Manager.Comment("checking step \'return AddAccountRights/AccessDenied\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.AccessDenied, temp79, "return of AddAccountRights, state S234");
@@ -703,11 +671,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp88;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp88 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp88 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S235\'");
             this.Manager.Comment("checking step \'return AddAccountRights/AccessDenied\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.AccessDenied, temp88, "return of AddAccountRights, state S235");
@@ -771,11 +735,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp97;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp97 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp97 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S236\'");
             this.Manager.Comment("checking step \'return AddAccountRights/AccessDenied\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.AccessDenied, temp97, "return of AddAccountRights, state S236");
@@ -839,11 +799,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp106;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp106 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp106 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S237\'");
             this.Manager.Comment("checking step \'return AddAccountRights/AccessDenied\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.AccessDenied, temp106, "return of AddAccountRights, state S237");
@@ -907,11 +863,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp115;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp115 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp115 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S238\'");
             this.Manager.Comment("checking step \'return AddAccountRights/AccessDenied\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.AccessDenied, temp115, "return of AddAccountRights, state S238");
@@ -975,11 +927,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp124;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp124 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp124 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S239\'");
             this.Manager.Comment("checking step \'return AddAccountRights/Success\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus)(0)), temp124, "return of AddAccountRights, state S239");
@@ -1061,11 +1009,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp137;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp137 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp137 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S240\'");
             this.Manager.Comment("checking step \'return AddAccountRights/Success\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus)(0)), temp137, "return of AddAccountRights, state S240");
@@ -1129,11 +1073,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp146;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp146 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp146 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S241\'");
             this.Manager.Comment("checking step \'return AddAccountRights/Success\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus)(0)), temp146, "return of AddAccountRights, state S241");
@@ -1197,11 +1137,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp155;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp155 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp155 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S242\'");
             this.Manager.Comment("checking step \'return AddAccountRights/Success\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus)(0)), temp155, "return of AddAccountRights, state S242");
@@ -1265,11 +1201,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp164;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp164 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp164 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S243\'");
             this.Manager.Comment("checking step \'return AddAccountRights/Success\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus)(0)), temp164, "return of AddAccountRights, state S243");
@@ -1333,11 +1265,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp173;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp173 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp173 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S226\'");
             this.Manager.Comment("checking step \'return AddAccountRights/AccessDenied\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.AccessDenied, temp173, "return of AddAccountRights, state S226");
@@ -1401,11 +1329,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp182;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp182 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp182 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S244\'");
             this.Manager.Comment("checking step \'return AddAccountRights/Success\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus)(0)), temp182, "return of AddAccountRights, state S244");
@@ -1469,11 +1393,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp191;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp191 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp191 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S245\'");
             this.Manager.Comment("checking step \'return AddAccountRights/Success\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus)(0)), temp191, "return of AddAccountRights, state S245");
@@ -1537,11 +1457,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp200;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp200 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp200 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S246\'");
             this.Manager.Comment("checking step \'return AddAccountRights/Success\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus)(0)), temp200, "return of AddAccountRights, state S246");
@@ -1604,11 +1520,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp209;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp209 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp209 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S247\'");
             this.Manager.Comment("checking step \'return AddAccountRights/Success\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus)(0)), temp209, "return of AddAccountRights, state S247");
@@ -1672,11 +1584,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp218;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp218 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp218 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S248\'");
             this.Manager.Comment("checking step \'return AddAccountRights/Success\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus)(0)), temp218, "return of AddAccountRights, state S248");
@@ -1740,11 +1648,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp227;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp227 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp227 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S249\'");
             this.Manager.Comment("checking step \'return AddAccountRights/Success\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus)(0)), temp227, "return of AddAccountRights, state S249");
@@ -1808,11 +1712,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp236;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp236 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp236 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S250\'");
             this.Manager.Comment("checking step \'return AddAccountRights/Success\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus)(0)), temp236, "return of AddAccountRights, state S250");
@@ -1876,11 +1776,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp245;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp245 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp245 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S251\'");
             this.Manager.Comment("checking step \'return AddAccountRights/Success\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus)(0)), temp245, "return of AddAccountRights, state S251");
@@ -1944,11 +1840,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp254;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp254 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp254 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S252\'");
             this.Manager.Comment("checking step \'return AddAccountRights/Success\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus)(0)), temp254, "return of AddAccountRights, state S252");
@@ -2012,11 +1904,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp263;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp263 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp263 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S253\'");
             this.Manager.Comment("checking step \'return AddAccountRights/AccessDenied\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.AccessDenied, temp263, "return of AddAccountRights, state S253");
@@ -2080,11 +1968,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp272;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp272 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp272 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S227\'");
             this.Manager.Comment("checking step \'return AddAccountRights/AccessDenied\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.AccessDenied, temp272, "return of AddAccountRights, state S227");
@@ -2148,11 +2032,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp281;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp281 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp281 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S254\'");
             this.Manager.Comment("checking step \'return AddAccountRights/AccessDenied\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.AccessDenied, temp281, "return of AddAccountRights, state S254");
@@ -2216,11 +2096,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp290;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp290 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp290 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S255\'");
             this.Manager.Comment("checking step \'return AddAccountRights/Success\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus)(0)), temp290, "return of AddAccountRights, state S255");
@@ -2284,11 +2160,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp299;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp299 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp299 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S228\'");
             this.Manager.Comment("checking step \'return AddAccountRights/AccessDenied\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.AccessDenied, temp299, "return of AddAccountRights, state S228");

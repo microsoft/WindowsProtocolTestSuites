@@ -7,12 +7,12 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad
     using System.Collections;
     using System.Diagnostics.CodeAnalysis;
 
-    using Microsoft.Modeling;
     using Microsoft.Protocols.TestTools;
     using Microsoft.Protocols.TestTools.StackSdk;
     using Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa;
     using Microsoft.Protocols.TestTools.StackSdk.Dtyp;
     using Microsoft.Protocols.TestSuites.ActiveDirectory.Common;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Implement methods of interface ILsadManagedAdapter.
@@ -492,7 +492,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad
         /// if do any changes about maintainability.
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity",
             Justification = "Disable warning CA1502 because it will affect the implementation of Adapter and Model")]
-        public ErrorStatus EnumeratePrivilegesAccount(int handleInput, out Set<AccountPrivilege> privileges)
+        public ErrorStatus EnumeratePrivilegesAccount(int handleInput, out List<AccountPrivilege> privileges)
         {
             this.objAccountHandle = this.validAccountHandle;
             _LSAPR_PRIVILEGE_SET? privilegeSet = new _LSAPR_PRIVILEGE_SET?();
@@ -545,15 +545,15 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad
                     out privilegeSet);
             }
 
-            privileges = new Set<AccountPrivilege>();
+            privileges = new List<AccountPrivilege>();
 
             if (privilegeSet == null)
             {
-                privileges = privileges.Add(AccountPrivilege.Invalid);
+                privileges.Add(AccountPrivilege.Invalid);
             }
             else
             {
-                privileges = privileges.Add(AccountPrivilege.Valid);
+                privileges.Add(AccountPrivilege.Valid);
             }
 
             if (stPolicyInformation.PHandle + 1 != handleInput || this.htAccHandle.Count == uintHandle)
@@ -797,7 +797,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad
         /// Returns InvalidParameter if the parameters passed to the method are not valid;
         /// Returns AccessDenied if the caller does not have the permissions to perform this operation;
         /// Returns InvalidHandle if the passed in account handle is not valid.</returns>
-        public ErrorStatus AddPrivilegesToAccount(int handleInput, Set<string> privilege)
+        public ErrorStatus AddPrivilegesToAccount(int handleInput, List<string> privilege)
         {
             bool luidAttributeValidation = false;
             this.objAccountHandle = this.validAccountHandle;
@@ -967,7 +967,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad
         /// Returns InvalidParameter if the parameters passed to the method are not valid;
         /// Returns AccessDenied if the caller does not have the permissions to perform this operation;
         /// Returns InvalidHandle if the passed in account handle is not valid.</returns>
-        public ErrorStatus RemovePrivilegesFromAccount(int handleInput, bool allPrivileges, Set<string> privilege)
+        public ErrorStatus RemovePrivilegesFromAccount(int handleInput, bool allPrivileges, List<string> privilege)
         {
             _LSAPR_PRIVILEGE_SET? privilegeSet = new _LSAPR_PRIVILEGE_SET?();
             privilegeSet = utilities.AddPrivilege(PrivilegeType.Valid);
@@ -1715,7 +1715,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad
             int handleInput,
             string accountSid,
             AccountSid sid,
-            Set<string> accountRights)
+            List<string> accountRights)
         {
             ACCESS_MASK accountAccess = ACCESS_MASK.POLICY_VIEW_LOCAL_INFORMATION 
                                             | ACCESS_MASK.POLICY_VIEW_AUDIT_INFORMATION 
@@ -1945,7 +1945,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad
             string accountSid,
             AccountSid sid,
             int allRights,
-            Set<string> accountRights)
+            List<string> accountRights)
         {
             utilities.DeleteUnknownSID();
             bool ObjNotfound = false;

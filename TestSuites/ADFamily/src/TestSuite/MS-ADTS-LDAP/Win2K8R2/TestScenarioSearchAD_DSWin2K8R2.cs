@@ -83,75 +83,33 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S10\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=adts_user1,CN=Users,DC=adts88\",\"objectClass:" +
                     " user\",WholeTree,[\"objectSid\"],NoExtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=adts_user1,CN=Users,DC=adts88", "objectClass: user", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "objectSid",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=adts_user1,CN=Users,DC=adts88", "objectClass: user", SearchScope.WholeTree, new List<string> { "objectSid" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S15\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S20\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=Account,CN=Schema,CN=Configuration,DC=adts88" +
                     "\",\"objectClass: classSchema\",WholeTree,[\"objectSid\"],NoExtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Account,CN=Schema,CN=Configuration,DC=adts88", "objectClass: classSchema", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "objectSid",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Account,CN=Schema,CN=Configuration,DC=adts88", "objectClass: classSchema", SearchScope.WholeTree, new List<string> { "objectSid" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S25\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S30\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=S-1-5-4,CN=ForeignSecurityPrincipals,DC=adts" +
                     "88\",\"objectClass: foreignSecurityPrincipal\",WholeTree,[\"objectSid\"],NoExtendedCo" +
                     "ntrol,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=S-1-5-4,CN=ForeignSecurityPrincipals,DC=adts88", "objectClass: foreignSecurityPrincipal", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "objectSid",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=S-1-5-4,CN=ForeignSecurityPrincipals,DC=adts88", "objectClass: foreignSecurityPrincipal", SearchScope.WholeTree, new List<string> { "objectSid" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S35\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S40\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"DC=adts88\",\"objectCategory: contact\",WholeTree," +
                     "[\"sAMAccountName\"],NoExtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("DC=adts88", "objectCategory: contact", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "sAMAccountName",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("DC=adts88", "objectCategory: contact", SearchScope.WholeTree, new List<string> { "sAMAccountName" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S45\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S50\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=Computers,DC=adts88\",\"objectClass: computer\"" +
                     ",WholeTree,[\"dNSHostName\",\"sAMAccountName\",\"msDS-AdditionalDnsHostName\",\"objectS" +
                     "id\"],NoExtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Computers,DC=adts88", "objectClass: computer", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "dNSHostName",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "sAMAccountName",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "msDS-AdditionalDnsHostName",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "objectSid",
-                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Computers,DC=adts88", "objectClass: computer", SearchScope.WholeTree, new List<string> { "dNSHostName", "sAMAccountName", "msDS-AdditionalDnsHostName", "objectSid" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S55\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S60\'");
@@ -159,13 +117,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "objectClass=user)(!userAccountControl:1.2.840.113556.1.4.803:=2))\",WholeTree,[\"s" +
                     "AMAccountName\"],NoExtendedControl,AD_DS)\'");
             this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Users,DC=adts88", "(&(objectCategory=person)(objectClass=user)(!userAccountControl:1.2.840.113556.1." +
-                    "4.803:=2))", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "sAMAccountName",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+                    "4.803:=2))", SearchScope.WholeTree, new List<string> { "sAMAccountName" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S65\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S70\'");
@@ -173,92 +125,34 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "objectClass=user)(!userAccountControl:1.2.840.113556.1.4.804:=2))\",WholeTree,[\"s" +
                     "AMAccountName\"],NoExtendedControl,AD_DS)\'");
             this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Users,DC=adts88", "(&(objectCategory=person)(objectClass=user)(!userAccountControl:1.2.840.113556.1." +
-                    "4.804:=2))", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "sAMAccountName",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+                    "4.804:=2))", SearchScope.WholeTree, new List<string> { "sAMAccountName" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S75\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S80\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=Schema,CN=Configuration,DC=adts88\",\"(&(objec" +
                     "tClass=attributeSchema)(systemFlags:1.2.840.113556.1.4.804:=4))\",WholeTree,[\"lDA" +
                     "PDisplayName\"],NoExtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Schema,CN=Configuration,DC=adts88", "(&(objectClass=attributeSchema)(systemFlags:1.2.840.113556.1.4.804:=4))", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "lDAPDisplayName",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Schema,CN=Configuration,DC=adts88", "(&(objectClass=attributeSchema)(systemFlags:1.2.840.113556.1.4.804:=4))", SearchScope.WholeTree, new List<string> { "lDAPDisplayName" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S85\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S90\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"DC=adts88\",\"(memberOf:1.2.840.113556.1.4.1941:=" +
                     "CN=Enterprise Admins,CN=Users,DC=adts88)\",WholeTree,[\"sAMAccountName\"],NoExtende" +
                     "dControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("DC=adts88", "(memberOf:1.2.840.113556.1.4.1941:=CN=Enterprise Admins,CN=Users,DC=adts88)", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "sAMAccountName",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("DC=adts88", "(memberOf:1.2.840.113556.1.4.1941:=CN=Enterprise Admins,CN=Users,DC=adts88)", SearchScope.WholeTree, new List<string> { "sAMAccountName" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S95\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S100\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=ADTS88,CN=Partitions,CN=Configuration,DC=adt" +
                     "s88\",\"objectClass: crossRef\",WholeTree,[\"nCName\",\"dnsRoot\",\"Enabled\"],NoExtended" +
                     "Control,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=ADTS88,CN=Partitions,CN=Configuration,DC=adts88", "objectClass: crossRef", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "nCName",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "dnsRoot",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "Enabled",
-                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=ADTS88,CN=Partitions,CN=Configuration,DC=adts88", "objectClass: crossRef", SearchScope.WholeTree, new List<string> { "nCName", "dnsRoot", "Enabled" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S105\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S110\'");
             ConstrOnAddOpErrs temp0;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: CustomCrossRef"",""Enabled: FALSE"",""dnsRoot: CustomCrossRef.adts88"",""nCName: DC=CustomCrossRef,DC=custom,DC=com"",""objectClass: crossRef"",""distinguishedName: CN=CustomCrossRef,CN=Partitions,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,NonWindows,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: CustomCrossRef",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "Enabled: FALSE",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "dnsRoot: CustomCrossRef.adts88",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "nCName: DC=CustomCrossRef,DC=custom,DC=com",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "objectClass: crossRef",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "distinguishedName: CN=CustomCrossRef,CN=Partitions,CN=Configuration,DC=adts88",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.NonWin, null, ((ADImplementations)(0)), false, out temp0);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: CustomCrossRef", "Enabled: FALSE", "dnsRoot: CustomCrossRef.adts88", "nCName: DC=CustomCrossRef,DC=custom,DC=com", "objectClass: crossRef", "distinguishedName: CN=CustomCrossRef,CN=Partitions,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.NonWin, null, ((ADImplementations)(0)), false, out temp0);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -289,46 +183,20 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=CustomCrossRef,CN=Partitions,CN=Configuratio" +
                     "n,DC=adts88\",\"objectClass=crossRef\",WholeTree,[\"nCName\",\"Enabled\",\"dnsRoot\"],NoE" +
                     "xtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=CustomCrossRef,CN=Partitions,CN=Configuration,DC=adts88", "objectClass=crossRef", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "nCName",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "Enabled",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "dnsRoot",
-                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=CustomCrossRef,CN=Partitions,CN=Configuration,DC=adts88", "objectClass=crossRef", SearchScope.WholeTree, new List<string> { "nCName", "Enabled", "dnsRoot" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S123\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S126\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=Administrators,CN=Builtin,DC=adts88\",\"(membe" +
                     "r: *)\",WholeTree,[\"(member;range=0-2)\"],NoExtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Administrators,CN=Builtin,DC=adts88", "(member: *)", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "(member;range=0-2)",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Administrators,CN=Builtin,DC=adts88", "(member: *)", SearchScope.WholeTree, new List<string> { "(member;range=0-2)" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S129\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S132\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"<WKGUID=a9d1ca15768811d1aded00c04fd8d5cd,DC=adt" +
                     "s88>\",\"(objectClass=user)\",WholeTree,[\"distinguishedName\"],NoExtendedControl,AD_" +
                     "DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("<WKGUID=a9d1ca15768811d1aded00c04fd8d5cd,DC=adts88>", "(objectClass=user)", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "distinguishedName",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("<WKGUID=a9d1ca15768811d1aded00c04fd8d5cd,DC=adts88>", "(objectClass=user)", SearchScope.WholeTree, new List<string> { "distinguishedName" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S135\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             TestScenarioSearchAD_DSWin2K8R2S138();
@@ -394,75 +262,33 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S11\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=adts_user1,CN=Users,DC=adts88\",\"objectClass:" +
                     " user\",WholeTree,[\"objectSid\"],NoExtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=adts_user1,CN=Users,DC=adts88", "objectClass: user", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "objectSid",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=adts_user1,CN=Users,DC=adts88", "objectClass: user", SearchScope.WholeTree, new List<string> { "objectSid" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S16\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S21\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=Account,CN=Schema,CN=Configuration,DC=adts88" +
                     "\",\"objectClass: classSchema\",WholeTree,[\"objectSid\"],NoExtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Account,CN=Schema,CN=Configuration,DC=adts88", "objectClass: classSchema", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "objectSid",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Account,CN=Schema,CN=Configuration,DC=adts88", "objectClass: classSchema", SearchScope.WholeTree, new List<string> { "objectSid" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S26\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S31\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=S-1-5-4,CN=ForeignSecurityPrincipals,DC=adts" +
                     "88\",\"objectClass: foreignSecurityPrincipal\",WholeTree,[\"objectSid\"],NoExtendedCo" +
                     "ntrol,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=S-1-5-4,CN=ForeignSecurityPrincipals,DC=adts88", "objectClass: foreignSecurityPrincipal", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "objectSid",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=S-1-5-4,CN=ForeignSecurityPrincipals,DC=adts88", "objectClass: foreignSecurityPrincipal", SearchScope.WholeTree, new List<string> { "objectSid" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S36\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S41\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"DC=adts88\",\"objectCategory: contact\",WholeTree," +
                     "[\"sAMAccountName\"],NoExtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("DC=adts88", "objectCategory: contact", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "sAMAccountName",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("DC=adts88", "objectCategory: contact", SearchScope.WholeTree, new List<string> { "sAMAccountName" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S46\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S51\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=Computers,DC=adts88\",\"objectClass: computer\"" +
                     ",WholeTree,[\"dNSHostName\",\"sAMAccountName\",\"msDS-AdditionalDnsHostName\",\"objectS" +
                     "id\"],NoExtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Computers,DC=adts88", "objectClass: computer", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "dNSHostName",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "sAMAccountName",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "msDS-AdditionalDnsHostName",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "objectSid",
-                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Computers,DC=adts88", "objectClass: computer", SearchScope.WholeTree, new List<string> { "dNSHostName", "sAMAccountName", "msDS-AdditionalDnsHostName", "objectSid" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S56\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S61\'");
@@ -470,13 +296,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "objectClass=user)(!userAccountControl:1.2.840.113556.1.4.803:=2))\",WholeTree,[\"s" +
                     "AMAccountName\"],NoExtendedControl,AD_DS)\'");
             this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Users,DC=adts88", "(&(objectCategory=person)(objectClass=user)(!userAccountControl:1.2.840.113556.1." +
-                    "4.803:=2))", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "sAMAccountName",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+                    "4.803:=2))", SearchScope.WholeTree, new List<string> { "sAMAccountName" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S66\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S71\'");
@@ -484,92 +304,34 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "objectClass=user)(!userAccountControl:1.2.840.113556.1.4.804:=2))\",WholeTree,[\"s" +
                     "AMAccountName\"],NoExtendedControl,AD_DS)\'");
             this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Users,DC=adts88", "(&(objectCategory=person)(objectClass=user)(!userAccountControl:1.2.840.113556.1." +
-                    "4.804:=2))", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "sAMAccountName",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+                    "4.804:=2))", SearchScope.WholeTree, new List<string> { "sAMAccountName" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S76\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S81\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=Schema,CN=Configuration,DC=adts88\",\"(&(objec" +
                     "tClass=attributeSchema)(systemFlags:1.2.840.113556.1.4.804:=4))\",WholeTree,[\"lDA" +
                     "PDisplayName\"],NoExtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Schema,CN=Configuration,DC=adts88", "(&(objectClass=attributeSchema)(systemFlags:1.2.840.113556.1.4.804:=4))", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "lDAPDisplayName",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Schema,CN=Configuration,DC=adts88", "(&(objectClass=attributeSchema)(systemFlags:1.2.840.113556.1.4.804:=4))", SearchScope.WholeTree, new List<string> { "lDAPDisplayName" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S86\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S91\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"DC=adts88\",\"(memberOf:1.2.840.113556.1.4.1941:=" +
                     "CN=Enterprise Admins,CN=Users,DC=adts88)\",WholeTree,[\"sAMAccountName\"],NoExtende" +
                     "dControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("DC=adts88", "(memberOf:1.2.840.113556.1.4.1941:=CN=Enterprise Admins,CN=Users,DC=adts88)", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "sAMAccountName",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("DC=adts88", "(memberOf:1.2.840.113556.1.4.1941:=CN=Enterprise Admins,CN=Users,DC=adts88)", SearchScope.WholeTree, new List<string> { "sAMAccountName" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S96\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S101\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=ADTS88,CN=Partitions,CN=Configuration,DC=adt" +
                     "s88\",\"objectClass: crossRef\",WholeTree,[\"nCName\",\"dnsRoot\",\"Enabled\"],NoExtended" +
                     "Control,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=ADTS88,CN=Partitions,CN=Configuration,DC=adts88", "objectClass: crossRef", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "nCName",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "dnsRoot",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "Enabled",
-                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=ADTS88,CN=Partitions,CN=Configuration,DC=adts88", "objectClass: crossRef", SearchScope.WholeTree, new List<string> { "nCName", "dnsRoot", "Enabled" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S106\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S111\'");
             ConstrOnAddOpErrs temp2;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: CustomCrossRef"",""Enabled: FALSE"",""dnsRoot: CustomCrossRef.adts88"",""nCName: DC=CustomCrossRef,DC=custom,DC=com"",""objectClass: crossRef"",""distinguishedName: CN=CustomCrossRef,CN=Partitions,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: CustomCrossRef",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "Enabled: FALSE",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "dnsRoot: CustomCrossRef.adts88",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "nCName: DC=CustomCrossRef,DC=custom,DC=com",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "objectClass: crossRef",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "distinguishedName: CN=CustomCrossRef,CN=Partitions,CN=Configuration,DC=adts88",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ((ServerVersion)(0)), null, ((ADImplementations)(0)), false, out temp2);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: CustomCrossRef", "Enabled: FALSE", "dnsRoot: CustomCrossRef.adts88", "nCName: DC=CustomCrossRef,DC=custom,DC=com", "objectClass: crossRef", "distinguishedName: CN=CustomCrossRef,CN=Partitions,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ((ServerVersion)(0)), null, ((ADImplementations)(0)), false, out temp2);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -594,45 +356,19 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=CustomCrossRef,CN=Partitions,CN=Configuratio" +
                     "n,DC=adts88\",\"objectClass=crossRef\",WholeTree,[\"nCName\",\"Enabled\",\"dnsRoot\"],NoE" +
                     "xtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=CustomCrossRef,CN=Partitions,CN=Configuration,DC=adts88", "objectClass=crossRef", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "nCName",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "Enabled",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "dnsRoot",
-                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=CustomCrossRef,CN=Partitions,CN=Configuration,DC=adts88", "objectClass=crossRef", SearchScope.WholeTree, new List<string> { "nCName", "Enabled", "dnsRoot" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S124\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S127\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=Administrators,CN=Builtin,DC=adts88\",\"(membe" +
                     "r: *)\",WholeTree,[\"(member;range=0-2)\"],NoExtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Administrators,CN=Builtin,DC=adts88", "(member: *)", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "(member;range=0-2)",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Administrators,CN=Builtin,DC=adts88", "(member: *)", SearchScope.WholeTree, new List<string> { "(member;range=0-2)" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S130\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S133\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"<GUID=a5127683905336458dc57f180a0adf16>\",\"(obje" +
                     "ctClass=user)\",WholeTree,[\"distinguishedName\"],NoExtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("<GUID=a5127683905336458dc57f180a0adf16>", "(objectClass=user)", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "distinguishedName",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("<GUID=a5127683905336458dc57f180a0adf16>", "(objectClass=user)", SearchScope.WholeTree, new List<string> { "distinguishedName" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S136\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             TestScenarioSearchAD_DSWin2K8R2S138();
@@ -658,75 +394,33 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S12\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=adts_user1,CN=Users,DC=adts88\",\"objectClass:" +
                     " user\",WholeTree,[\"objectSid\"],NoExtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=adts_user1,CN=Users,DC=adts88", "objectClass: user", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "objectSid",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=adts_user1,CN=Users,DC=adts88", "objectClass: user", SearchScope.WholeTree, new List<string> { "objectSid" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S17\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S22\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=Account,CN=Schema,CN=Configuration,DC=adts88" +
                     "\",\"objectClass: classSchema\",WholeTree,[\"objectSid\"],NoExtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Account,CN=Schema,CN=Configuration,DC=adts88", "objectClass: classSchema", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "objectSid",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Account,CN=Schema,CN=Configuration,DC=adts88", "objectClass: classSchema", SearchScope.WholeTree, new List<string> { "objectSid" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S27\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S32\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=S-1-5-4,CN=ForeignSecurityPrincipals,DC=adts" +
                     "88\",\"objectClass: foreignSecurityPrincipal\",WholeTree,[\"objectSid\"],NoExtendedCo" +
                     "ntrol,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=S-1-5-4,CN=ForeignSecurityPrincipals,DC=adts88", "objectClass: foreignSecurityPrincipal", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "objectSid",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=S-1-5-4,CN=ForeignSecurityPrincipals,DC=adts88", "objectClass: foreignSecurityPrincipal", SearchScope.WholeTree, new List<string> { "objectSid" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S37\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S42\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"DC=adts88\",\"objectCategory: contact\",WholeTree," +
                     "[\"sAMAccountName\"],NoExtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("DC=adts88", "objectCategory: contact", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "sAMAccountName",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("DC=adts88", "objectCategory: contact", SearchScope.WholeTree, new List<string> { "sAMAccountName" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S47\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S52\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=Computers,DC=adts88\",\"objectClass: computer\"" +
                     ",WholeTree,[\"dNSHostName\",\"sAMAccountName\",\"msDS-AdditionalDnsHostName\",\"objectS" +
                     "id\"],NoExtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Computers,DC=adts88", "objectClass: computer", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "dNSHostName",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "sAMAccountName",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "msDS-AdditionalDnsHostName",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "objectSid",
-                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Computers,DC=adts88", "objectClass: computer", SearchScope.WholeTree, new List<string> { "dNSHostName", "sAMAccountName", "msDS-AdditionalDnsHostName", "objectSid" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S57\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S62\'");
@@ -734,13 +428,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "objectClass=user)(!userAccountControl:1.2.840.113556.1.4.803:=2))\",WholeTree,[\"s" +
                     "AMAccountName\"],NoExtendedControl,AD_DS)\'");
             this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Users,DC=adts88", "(&(objectCategory=person)(objectClass=user)(!userAccountControl:1.2.840.113556.1." +
-                    "4.803:=2))", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "sAMAccountName",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+                    "4.803:=2))", SearchScope.WholeTree, new List<string> { "sAMAccountName" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S67\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S72\'");
@@ -748,92 +436,34 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "objectClass=user)(!userAccountControl:1.2.840.113556.1.4.804:=2))\",WholeTree,[\"s" +
                     "AMAccountName\"],NoExtendedControl,AD_DS)\'");
             this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Users,DC=adts88", "(&(objectCategory=person)(objectClass=user)(!userAccountControl:1.2.840.113556.1." +
-                    "4.804:=2))", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "sAMAccountName",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+                    "4.804:=2))", SearchScope.WholeTree, new List<string> { "sAMAccountName" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S77\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S82\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=Schema,CN=Configuration,DC=adts88\",\"(&(objec" +
                     "tClass=attributeSchema)(systemFlags:1.2.840.113556.1.4.804:=4))\",WholeTree,[\"lDA" +
                     "PDisplayName\"],NoExtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Schema,CN=Configuration,DC=adts88", "(&(objectClass=attributeSchema)(systemFlags:1.2.840.113556.1.4.804:=4))", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "lDAPDisplayName",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Schema,CN=Configuration,DC=adts88", "(&(objectClass=attributeSchema)(systemFlags:1.2.840.113556.1.4.804:=4))", SearchScope.WholeTree, new List<string> { "lDAPDisplayName" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S87\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S92\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"DC=adts88\",\"(memberOf:1.2.840.113556.1.4.1941:=" +
                     "CN=Enterprise Admins,CN=Users,DC=adts88)\",WholeTree,[\"sAMAccountName\"],NoExtende" +
                     "dControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("DC=adts88", "(memberOf:1.2.840.113556.1.4.1941:=CN=Enterprise Admins,CN=Users,DC=adts88)", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "sAMAccountName",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("DC=adts88", "(memberOf:1.2.840.113556.1.4.1941:=CN=Enterprise Admins,CN=Users,DC=adts88)", SearchScope.WholeTree, new List<string> { "sAMAccountName" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S97\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S102\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=ADTS88,CN=Partitions,CN=Configuration,DC=adt" +
                     "s88\",\"objectClass: crossRef\",WholeTree,[\"nCName\",\"dnsRoot\",\"Enabled\"],NoExtended" +
                     "Control,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=ADTS88,CN=Partitions,CN=Configuration,DC=adts88", "objectClass: crossRef", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "nCName",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "dnsRoot",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "Enabled",
-                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=ADTS88,CN=Partitions,CN=Configuration,DC=adts88", "objectClass: crossRef", SearchScope.WholeTree, new List<string> { "nCName", "dnsRoot", "Enabled" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S107\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S112\'");
             ConstrOnAddOpErrs temp3;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: CustomCrossRef"",""Enabled: FALSE"",""dnsRoot: CustomCrossRef.adts88"",""nCName: DC=CustomCrossRef,DC=custom,DC=com"",""objectClass: crossRef"",""distinguishedName: CN=CustomCrossRef,CN=Partitions,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K3,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: CustomCrossRef",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "Enabled: FALSE",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "dnsRoot: CustomCrossRef.adts88",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "nCName: DC=CustomCrossRef,DC=custom,DC=com",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "objectClass: crossRef",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "distinguishedName: CN=CustomCrossRef,CN=Partitions,CN=Configuration,DC=adts88",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ((ServerVersion)(1)), null, ((ADImplementations)(0)), false, out temp3);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: CustomCrossRef", "Enabled: FALSE", "dnsRoot: CustomCrossRef.adts88", "nCName: DC=CustomCrossRef,DC=custom,DC=com", "objectClass: crossRef", "distinguishedName: CN=CustomCrossRef,CN=Partitions,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ((ServerVersion)(1)), null, ((ADImplementations)(0)), false, out temp3);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -858,46 +488,20 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=CustomCrossRef,CN=Partitions,CN=Configuratio" +
                     "n,DC=adts88\",\"objectClass=crossRef\",WholeTree,[\"nCName\",\"Enabled\",\"dnsRoot\"],NoE" +
                     "xtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=CustomCrossRef,CN=Partitions,CN=Configuration,DC=adts88", "objectClass=crossRef", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "nCName",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "Enabled",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "dnsRoot",
-                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=CustomCrossRef,CN=Partitions,CN=Configuration,DC=adts88", "objectClass=crossRef", SearchScope.WholeTree, new List<string> { "nCName", "Enabled", "dnsRoot" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S125\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S128\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=Administrators,CN=Builtin,DC=adts88\",\"(membe" +
                     "r: *)\",WholeTree,[\"(member;range=0-2)\"],NoExtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Administrators,CN=Builtin,DC=adts88", "(member: *)", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "(member;range=0-2)",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Administrators,CN=Builtin,DC=adts88", "(member: *)", SearchScope.WholeTree, new List<string> { "(member;range=0-2)" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S131\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S134\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"<SID=S-1-5-21-126476475-3050469762-4276591986-1" +
                     "104>\",\"(objectClass=user)\",WholeTree,[\"distinguishedName\"],NoExtendedControl,AD_" +
                     "DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("<SID=S-1-5-21-126476475-3050469762-4276591986-1104>", "(objectClass=user)", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "distinguishedName",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("<SID=S-1-5-21-126476475-3050469762-4276591986-1104>", "(objectClass=user)", SearchScope.WholeTree, new List<string> { "distinguishedName" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S137\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             TestScenarioSearchAD_DSWin2K8R2S138();
@@ -923,75 +527,33 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S13\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=adts_user1,CN=Users,DC=adts88\",\"objectClass:" +
                     " user\",WholeTree,[\"objectSid\"],NoExtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=adts_user1,CN=Users,DC=adts88", "objectClass: user", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "objectSid",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=adts_user1,CN=Users,DC=adts88", "objectClass: user", SearchScope.WholeTree, new List<string> { "objectSid" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S18\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S23\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=Account,CN=Schema,CN=Configuration,DC=adts88" +
                     "\",\"objectClass: classSchema\",WholeTree,[\"objectSid\"],NoExtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Account,CN=Schema,CN=Configuration,DC=adts88", "objectClass: classSchema", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "objectSid",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Account,CN=Schema,CN=Configuration,DC=adts88", "objectClass: classSchema", SearchScope.WholeTree, new List<string> { "objectSid" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S28\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S33\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=S-1-5-4,CN=ForeignSecurityPrincipals,DC=adts" +
                     "88\",\"objectClass: foreignSecurityPrincipal\",WholeTree,[\"objectSid\"],NoExtendedCo" +
                     "ntrol,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=S-1-5-4,CN=ForeignSecurityPrincipals,DC=adts88", "objectClass: foreignSecurityPrincipal", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "objectSid",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=S-1-5-4,CN=ForeignSecurityPrincipals,DC=adts88", "objectClass: foreignSecurityPrincipal", SearchScope.WholeTree, new List<string> { "objectSid" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S38\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S43\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"DC=adts88\",\"objectCategory: contact\",WholeTree," +
                     "[\"sAMAccountName\"],NoExtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("DC=adts88", "objectCategory: contact", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "sAMAccountName",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("DC=adts88", "objectCategory: contact", SearchScope.WholeTree, new List<string> { "sAMAccountName" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S48\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S53\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=Computers,DC=adts88\",\"objectClass: computer\"" +
                     ",WholeTree,[\"dNSHostName\",\"sAMAccountName\",\"msDS-AdditionalDnsHostName\",\"objectS" +
                     "id\"],NoExtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Computers,DC=adts88", "objectClass: computer", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "dNSHostName",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "sAMAccountName",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "msDS-AdditionalDnsHostName",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "objectSid",
-                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Computers,DC=adts88", "objectClass: computer", SearchScope.WholeTree, new List<string> { "dNSHostName", "sAMAccountName", "msDS-AdditionalDnsHostName", "objectSid" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S58\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S63\'");
@@ -999,13 +561,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "objectClass=user)(!userAccountControl:1.2.840.113556.1.4.803:=2))\",WholeTree,[\"s" +
                     "AMAccountName\"],NoExtendedControl,AD_DS)\'");
             this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Users,DC=adts88", "(&(objectCategory=person)(objectClass=user)(!userAccountControl:1.2.840.113556.1." +
-                    "4.803:=2))", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "sAMAccountName",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+                    "4.803:=2))", SearchScope.WholeTree, new List<string> { "sAMAccountName" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S68\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S73\'");
@@ -1013,92 +569,34 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "objectClass=user)(!userAccountControl:1.2.840.113556.1.4.804:=2))\",WholeTree,[\"s" +
                     "AMAccountName\"],NoExtendedControl,AD_DS)\'");
             this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Users,DC=adts88", "(&(objectCategory=person)(objectClass=user)(!userAccountControl:1.2.840.113556.1." +
-                    "4.804:=2))", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "sAMAccountName",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+                    "4.804:=2))", SearchScope.WholeTree, new List<string> { "sAMAccountName" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S78\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S83\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=Schema,CN=Configuration,DC=adts88\",\"(&(objec" +
                     "tClass=attributeSchema)(systemFlags:1.2.840.113556.1.4.804:=4))\",WholeTree,[\"lDA" +
                     "PDisplayName\"],NoExtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Schema,CN=Configuration,DC=adts88", "(&(objectClass=attributeSchema)(systemFlags:1.2.840.113556.1.4.804:=4))", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "lDAPDisplayName",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Schema,CN=Configuration,DC=adts88", "(&(objectClass=attributeSchema)(systemFlags:1.2.840.113556.1.4.804:=4))", SearchScope.WholeTree, new List<string> { "lDAPDisplayName" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S88\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S93\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"DC=adts88\",\"(memberOf:1.2.840.113556.1.4.1941:=" +
                     "CN=Enterprise Admins,CN=Users,DC=adts88)\",WholeTree,[\"sAMAccountName\"],NoExtende" +
                     "dControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("DC=adts88", "(memberOf:1.2.840.113556.1.4.1941:=CN=Enterprise Admins,CN=Users,DC=adts88)", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "sAMAccountName",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("DC=adts88", "(memberOf:1.2.840.113556.1.4.1941:=CN=Enterprise Admins,CN=Users,DC=adts88)", SearchScope.WholeTree, new List<string> { "sAMAccountName" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S98\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S103\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=ADTS88,CN=Partitions,CN=Configuration,DC=adt" +
                     "s88\",\"objectClass: crossRef\",WholeTree,[\"nCName\",\"dnsRoot\",\"Enabled\"],NoExtended" +
                     "Control,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=ADTS88,CN=Partitions,CN=Configuration,DC=adts88", "objectClass: crossRef", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "nCName",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "dnsRoot",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "Enabled",
-                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=ADTS88,CN=Partitions,CN=Configuration,DC=adts88", "objectClass: crossRef", SearchScope.WholeTree, new List<string> { "nCName", "dnsRoot", "Enabled" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S108\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S113\'");
             ConstrOnAddOpErrs temp4;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: CustomCrossRef"",""Enabled: FALSE"",""dnsRoot: CustomCrossRef.adts88"",""nCName: DC=CustomCrossRef,DC=custom,DC=com"",""objectClass: crossRef"",""distinguishedName: CN=CustomCrossRef,CN=Partitions,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: CustomCrossRef",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "Enabled: FALSE",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "dnsRoot: CustomCrossRef.adts88",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "nCName: DC=CustomCrossRef,DC=custom,DC=com",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "objectClass: crossRef",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "distinguishedName: CN=CustomCrossRef,CN=Partitions,CN=Configuration,DC=adts88",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008, null, ((ADImplementations)(0)), false, out temp4);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: CustomCrossRef", "Enabled: FALSE", "dnsRoot: CustomCrossRef.adts88", "nCName: DC=CustomCrossRef,DC=custom,DC=com", "objectClass: crossRef", "distinguishedName: CN=CustomCrossRef,CN=Partitions,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008, null, ((ADImplementations)(0)), false, out temp4);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -1142,75 +640,33 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S14\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=adts_user1,CN=Users,DC=adts88\",\"objectClass:" +
                     " user\",WholeTree,[\"objectSid\"],NoExtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=adts_user1,CN=Users,DC=adts88", "objectClass: user", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "objectSid",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=adts_user1,CN=Users,DC=adts88", "objectClass: user", SearchScope.WholeTree, new List<string> { "objectSid" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S19\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S24\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=Account,CN=Schema,CN=Configuration,DC=adts88" +
                     "\",\"objectClass: classSchema\",WholeTree,[\"objectSid\"],NoExtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Account,CN=Schema,CN=Configuration,DC=adts88", "objectClass: classSchema", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "objectSid",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Account,CN=Schema,CN=Configuration,DC=adts88", "objectClass: classSchema", SearchScope.WholeTree, new List<string> { "objectSid" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S29\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S34\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=S-1-5-4,CN=ForeignSecurityPrincipals,DC=adts" +
                     "88\",\"objectClass: foreignSecurityPrincipal\",WholeTree,[\"objectSid\"],NoExtendedCo" +
                     "ntrol,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=S-1-5-4,CN=ForeignSecurityPrincipals,DC=adts88", "objectClass: foreignSecurityPrincipal", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "objectSid",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=S-1-5-4,CN=ForeignSecurityPrincipals,DC=adts88", "objectClass: foreignSecurityPrincipal", SearchScope.WholeTree, new List<string> { "objectSid" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S39\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S44\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"DC=adts88\",\"objectCategory: contact\",WholeTree," +
                     "[\"sAMAccountName\"],NoExtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("DC=adts88", "objectCategory: contact", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "sAMAccountName",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("DC=adts88", "objectCategory: contact", SearchScope.WholeTree, new List<string> { "sAMAccountName" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S49\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S54\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=Computers,DC=adts88\",\"objectClass: computer\"" +
                     ",WholeTree,[\"dNSHostName\",\"sAMAccountName\",\"msDS-AdditionalDnsHostName\",\"objectS" +
                     "id\"],NoExtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Computers,DC=adts88", "objectClass: computer", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "dNSHostName",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "sAMAccountName",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "msDS-AdditionalDnsHostName",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "objectSid",
-                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Computers,DC=adts88", "objectClass: computer", SearchScope.WholeTree, new List<string> { "dNSHostName", "sAMAccountName", "msDS-AdditionalDnsHostName", "objectSid" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S59\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S64\'");
@@ -1218,13 +674,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "objectClass=user)(!userAccountControl:1.2.840.113556.1.4.803:=2))\",WholeTree,[\"s" +
                     "AMAccountName\"],NoExtendedControl,AD_DS)\'");
             this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Users,DC=adts88", "(&(objectCategory=person)(objectClass=user)(!userAccountControl:1.2.840.113556.1." +
-                    "4.803:=2))", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "sAMAccountName",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+                    "4.803:=2))", SearchScope.WholeTree, new List<string> { "sAMAccountName" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S69\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S74\'");
@@ -1232,92 +682,34 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "objectClass=user)(!userAccountControl:1.2.840.113556.1.4.804:=2))\",WholeTree,[\"s" +
                     "AMAccountName\"],NoExtendedControl,AD_DS)\'");
             this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Users,DC=adts88", "(&(objectCategory=person)(objectClass=user)(!userAccountControl:1.2.840.113556.1." +
-                    "4.804:=2))", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "sAMAccountName",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+                    "4.804:=2))", SearchScope.WholeTree, new List<string> { "sAMAccountName" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S79\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S84\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=Schema,CN=Configuration,DC=adts88\",\"(&(objec" +
                     "tClass=attributeSchema)(systemFlags:1.2.840.113556.1.4.804:=4))\",WholeTree,[\"lDA" +
                     "PDisplayName\"],NoExtendedControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Schema,CN=Configuration,DC=adts88", "(&(objectClass=attributeSchema)(systemFlags:1.2.840.113556.1.4.804:=4))", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "lDAPDisplayName",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Schema,CN=Configuration,DC=adts88", "(&(objectClass=attributeSchema)(systemFlags:1.2.840.113556.1.4.804:=4))", SearchScope.WholeTree, new List<string> { "lDAPDisplayName" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S89\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S94\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"DC=adts88\",\"(memberOf:1.2.840.113556.1.4.1941:=" +
                     "CN=Enterprise Admins,CN=Users,DC=adts88)\",WholeTree,[\"sAMAccountName\"],NoExtende" +
                     "dControl,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("DC=adts88", "(memberOf:1.2.840.113556.1.4.1941:=CN=Enterprise Admins,CN=Users,DC=adts88)", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "sAMAccountName",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("DC=adts88", "(memberOf:1.2.840.113556.1.4.1941:=CN=Enterprise Admins,CN=Users,DC=adts88)", SearchScope.WholeTree, new List<string> { "sAMAccountName" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S99\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S104\'");
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=ADTS88,CN=Partitions,CN=Configuration,DC=adt" +
                     "s88\",\"objectClass: crossRef\",WholeTree,[\"nCName\",\"dnsRoot\",\"Enabled\"],NoExtended" +
                     "Control,AD_DS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=ADTS88,CN=Partitions,CN=Configuration,DC=adts88", "objectClass: crossRef", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "nCName",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "dnsRoot",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "Enabled",
-                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}), null, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=ADTS88,CN=Partitions,CN=Configuration,DC=adts88", "objectClass: crossRef", SearchScope.WholeTree, new List<string> { "nCName", "dnsRoot", "Enabled" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S109\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S114\'");
             ConstrOnAddOpErrs temp5;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: CustomCrossRef"",""Enabled: FALSE"",""dnsRoot: CustomCrossRef.adts88"",""nCName: DC=CustomCrossRef,DC=custom,DC=com"",""objectClass: crossRef"",""distinguishedName: CN=CustomCrossRef,CN=Partitions,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: CustomCrossRef",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "Enabled: FALSE",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "dnsRoot: CustomCrossRef.adts88",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "nCName: DC=CustomCrossRef,DC=custom,DC=com",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "objectClass: crossRef",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "distinguishedName: CN=CustomCrossRef,CN=Partitions,CN=Configuration,DC=adts88",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp5);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: CustomCrossRef", "Enabled: FALSE", "dnsRoot: CustomCrossRef.adts88", "nCName: DC=CustomCrossRef,DC=custom,DC=com", "objectClass: crossRef", "distinguishedName: CN=CustomCrossRef,CN=Partitions,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp5);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
