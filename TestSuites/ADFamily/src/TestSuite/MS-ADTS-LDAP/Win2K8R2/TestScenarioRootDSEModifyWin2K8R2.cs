@@ -726,11 +726,17 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S47\'");
             this.Manager.Comment("checking step \'return Initialize\'");
             this.Manager.Comment("reaching state \'S71\'");
-            ConstrOnModOpErrs temp21;
-            this.Manager.Comment("executing step \'call ModifyOperation({\"rODCPurgeAccount:CN=adts_user10,CN=Users,DC" +
-                    "=adts88\"->[\"distinguishedName: null\"]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELE" +
-                    "GATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,True,out _)\'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "rODCPurgeAccount:CN=adts_user10,CN=Users,DC=adts88", new List<string> { "distinguishedName: null" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, true, out temp21);
+            //Assign a default value to ensure compilation passes
+            ConstrOnModOpErrs temp21 = new ConstrOnModOpErrs();
+            this.Manager.Comment("executing step \'call ModifyOperation({\"rODCPurgeAccount:CN=adts_user10,CN=Users,DC" +
+                    "=adts88\"->[\"distinguishedName: null\"]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELE" +
+                    "GATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,True,out _)\'");
+            Utilities.RetryAction(10, () =>
+            {
+                this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "rODCPurgeAccount:CN=adts_user10,CN=Users,DC=adts88", new List<string> { "distinguishedName: null" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, true, out temp21);
+                this.Manager.Comment($"Modify state: {temp21.ToString()}");
+                return (temp21 != ConstrOnModOpErrs.success);
+            });
             this.Manager.Comment("reaching state \'S95\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out success]\'");
             TestManagerHelpers.AssertAreEqual<ConstrOnModOpErrs>(this.Manager, ConstrOnModOpErrs.success, temp21, "errorStatus of ModifyOperation, state S95");
