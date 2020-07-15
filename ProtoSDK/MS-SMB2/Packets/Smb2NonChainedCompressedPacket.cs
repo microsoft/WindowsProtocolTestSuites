@@ -8,22 +8,22 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Packets
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 {
     /// <summary>
-    /// SMB2 encrypted packet.
+    /// SMB2 non-chained compressed packet.
     /// </summary>
-    public class Smb2EncryptedPacket : Smb2Packet
+    public class Smb2NonChainedCompressedPacket : Smb2CompressedPacket
     {
         /// <summary>
-        /// Header.
+        /// Uncompressed data part.
         /// </summary>
-        public Transform_Header Header;
+        public byte[] UncompressedData;
 
         /// <summary>
         /// Compressed data part.
         /// </summary>
-        public byte[] EncryptdData;
+        public byte[] CompressedData;
 
         /// <summary>
         /// Marshaling this packet to bytes.
@@ -33,9 +33,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Packets
         {
             var result = new List<byte>();
 
-            result.AddRange(Smb2Utility.MarshalStructure(Header));
+            result.AddRange(TypeMarshal.ToBytes(Header));
 
-            result.AddRange(EncryptdData);
+            result.AddRange(UncompressedData);
+
+            result.AddRange(CompressedData);
 
             return result.ToArray();
         }
@@ -48,15 +50,24 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Packets
         /// <param name="expectedLen">The expected data length.</param>
         internal override void FromBytes(byte[] data, out int consumedLen, out int expectedLen)
         {
-            int minimumLength = Marshal.SizeOf(Header);
+            int minimumLength = TypeMarshal.GetBlockMemorySize(Header);
             if (data.Length < minimumLength)
             {
-                throw new InvalidOperationException("Not enough data for Transform_Header!");
+                throw new InvalidOperationException("Not enough data for Compression_Transform_Header!");
             }
+            int offset = 0;
+            Header = TypeMarshal.ToStruct<Compression_Transform_Header>(data, ref offset);
 
-            Header = Smb2Utility.UnmarshalStructure<Transform_Header>(data.Take(minimumLength).ToArray());
+            if (offset + Header.Offset > data.Length)
+            {
+                throw new InvalidOperationException("Not enough data for Smb2CompressedPacket!");
+            }
+            UncompressedData = new byte[Header.Offset];
+            Array.Copy(data, offset, UncompressedData, 0, Header.Offset);
 
-            EncryptdData = data.Skip(minimumLength).ToArray();
+            long compressedDataLength = data.Length - offset - Header.Offset;
+            CompressedData = new byte[compressedDataLength];
+            Array.Copy(data, offset + Header.Offset, CompressedData, 0, compressedDataLength);
 
             consumedLen = data.Length;
             expectedLen = 0;
