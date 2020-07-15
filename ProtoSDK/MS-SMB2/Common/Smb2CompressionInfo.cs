@@ -19,6 +19,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
             CompressAllPackets = false;
             CompressionIds = new CompressionAlgorithm[0];
             PreferredCompressionAlgorithm = CompressionAlgorithm.NONE;
+
+            CompressBufferOnly = false;
+
+            SupportChainedCompression = false;
         }
 
         /// <summary>
@@ -35,6 +39,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
         /// Indicating the preferred compression algorithm to be used.
         /// </summary>
         public CompressionAlgorithm PreferredCompressionAlgorithm { get; set; }
+
+        /// <summary>
+        /// Indicating whether to compress the buffer only.
+        /// </summary>
+        public bool CompressBufferOnly { get; set; }
 
         /// <summary>
         /// Indicating whether chained compression is supported or not.

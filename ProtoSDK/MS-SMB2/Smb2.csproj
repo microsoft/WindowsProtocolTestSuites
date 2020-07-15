@@ -147,6 +147,7 @@
     <Compile Include="Client\Smb2ClientPendingRequest.cs" />
     <Compile Include="Common\PreauthIntegrityContext.cs" />
     <Compile Include="Common\Smb2Compression.cs" />
+    <Compile Include="Common\Smb2CompressionForChained.cs" />
     <Compile Include="Common\Smb2CompressionInfo.cs" />
     <Compile Include="Common\Smb2Crypto.cs" />
     <Compile Include="Common\Smb2CryptoInfo.cs" />
@@ -182,6 +183,7 @@
     <Compile Include="IPacketBuffer.cs" />
     <Compile Include="Packets\Smb2CancelRequestPacket.cs" />
     <Compile Include="Packets\Smb2CancelResponsePacket.cs" />
+    <Compile Include="Packets\Smb2ChainedCompressedPacket.cs" />
     <Compile Include="Packets\Smb2ChangeNotifyRequestPacket.cs" />
     <Compile Include="Packets\Smb2ChangeNotifyResponsePacket.cs" />
     <Compile Include="Packets\Smb2CloseRequestPacket.cs" />
@@ -210,6 +212,7 @@
     <Compile Include="Packets\Smb2NegotiateResponsePacket.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Packets\Smb2NonChainedCompressedPacket.cs" />
     <Compile Include="Packets\Smb2OpLockBreakAckPacket.cs" />
     <Compile Include="Packets\Smb2OpLockBreakNotificationPacket.cs" />
     <Compile Include="Packets\Smb2OpLockBreakResponsePacket.cs" />
