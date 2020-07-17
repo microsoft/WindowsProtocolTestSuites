@@ -13,7 +13,6 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Text;
 
-using Microsoft.Modeling;
 using Microsoft.Protocols.TestTools;
 using System.Globalization;
 using Microsoft.Protocols.TestSuites.ActiveDirectory.Common;

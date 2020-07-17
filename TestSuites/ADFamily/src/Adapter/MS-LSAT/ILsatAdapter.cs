@@ -3,8 +3,8 @@
 
 namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat
 {
-    using Microsoft.Modeling;
     using Microsoft.Protocols.TestTools;
+    using System.Collections.Generic;
 
     /// <summary>
     /// The protocol adapter interface defines all protocol methods.
@@ -94,7 +94,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat
         /// Returns AccessDenied if the handle is Invalid.</returns>
         ErrorStatus WinLookUpNames2(
             LSAHandle handle,
-            Set<string> secPrincipalNames,
+            List<string> secPrincipalNames,
             out TranslatedSid translateSids,
             out MappedCount mapCount);
 
@@ -117,7 +117,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat
         /// Returns NoneMapped if none of the secPrincipalNames are translated into their SID form.</returns>
         ErrorStatus LookUpNames3(
             int handle,
-            Set<string> secPrincipalNames,
+            List<string> secPrincipalNames,
             LookUpOption optionOfLookup,
             LookUpLevel levelOfLookup,
             out TranslatedSid translateSids,
@@ -141,7 +141,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat
         /// Returns NoneMapped if none of the secPrincipalNames are translated into their SID form.</returns>
         ErrorStatus LookUpNames2(
             int handle,
-            Set<string> secPrincipalNames,
+            List<string> secPrincipalNames,
             LookUpLevel levelOfLookup,
             out TranslatedSid translateSids,
             out MappedCount mapCount);
@@ -164,7 +164,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat
         /// Returns NoneMapped if none of the secPrincipalNames are translated into their SID form.</returns>
         ErrorStatus LookUpNames(
             int handle,
-            Set<string> secPrincipalNames,
+            List<string> secPrincipalNames,
             LookUpLevel levelOfLookup,
             out TranslatedSid translateSids,
             out MappedCount mapCount);
@@ -188,7 +188,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat
         /// Returns NoneMapped if none of the secPrincipalSids are translated into their Name form.</returns>
         ErrorStatus LookUpSids2(
             int handle,
-            Set<string> secPrincipalSids,
+            List<string> secPrincipalSids,
             LookUpLevel levelOfLookup,
             out TranstlatedNames translateNames,
             out MappedCount mapCount);
@@ -212,7 +212,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat
         /// Returns NoneMapped if none of the secPrincipalSids are translated into their Name form.</returns>
         ErrorStatus LookUpSids(
             int handle,
-            Set<string> secPrincipalSids,
+            List<string> secPrincipalSids,
             LookUpLevel levelOfLookup,
             out TranstlatedNames translateNames,
             out MappedCount mapCount);

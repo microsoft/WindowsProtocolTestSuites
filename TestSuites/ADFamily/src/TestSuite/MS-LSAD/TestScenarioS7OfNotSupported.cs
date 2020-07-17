@@ -91,11 +91,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp6;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp6 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp6 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S72\'");
             this.Manager.Comment("checking step \'return AddAccountRights/AccessDenied\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.AccessDenied, temp6, "return of AddAccountRights, state S72");
@@ -103,11 +99,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp7;
             this.Manager.Comment("executing step \'call RemoveAccountRights(1,\"S-1-5-19\",Valid,0,{\"SeAuditPrivilege\"" +
                     "})\'");
-            temp7 = this.ILsadManagedAdapterInstance.RemoveAccountRights(1, "S-1-5-19", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), 0, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAuditPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp7 = this.ILsadManagedAdapterInstance.RemoveAccountRights(1, "S-1-5-19", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), 0, new List<string> { "SeAuditPrivilege" });
             this.Manager.Comment("reaching state \'S88\'");
             this.Manager.Comment("checking step \'return RemoveAccountRights/NotSupported\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.NotSupported, temp7, "return of RemoveAccountRights, state S88");
@@ -173,11 +165,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp16;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp16 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp16 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S77\'");
             this.Manager.Comment("checking step \'return AddAccountRights/AccessDenied\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.AccessDenied, temp16, "return of AddAccountRights, state S77");
@@ -185,11 +173,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp17;
             this.Manager.Comment("executing step \'call RemoveAccountRights(1,\"S-1-5-20\",Valid,0,{\"SeCreateGlobalPri" +
                     "vilege\"})\'");
-            temp17 = this.ILsadManagedAdapterInstance.RemoveAccountRights(1, "S-1-5-20", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), 0, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeCreateGlobalPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp17 = this.ILsadManagedAdapterInstance.RemoveAccountRights(1, "S-1-5-20", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), 0, new List<string> { "SeCreateGlobalPrivilege" });
             this.Manager.Comment("reaching state \'S93\'");
             this.Manager.Comment("checking step \'return RemoveAccountRights/NotSupported\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.NotSupported, temp17, "return of RemoveAccountRights, state S93");
@@ -242,11 +226,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp24;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp24 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp24 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S78\'");
             this.Manager.Comment("checking step \'return AddAccountRights/AccessDenied\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.AccessDenied, temp24, "return of AddAccountRights, state S78");
@@ -254,11 +234,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp25;
             this.Manager.Comment("executing step \'call RemoveAccountRights(1,\"S-1-5-20\",Valid,0,{\"SeAuditPrivilege\"" +
                     "})\'");
-            temp25 = this.ILsadManagedAdapterInstance.RemoveAccountRights(1, "S-1-5-20", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), 0, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAuditPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp25 = this.ILsadManagedAdapterInstance.RemoveAccountRights(1, "S-1-5-20", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), 0, new List<string> { "SeAuditPrivilege" });
             this.Manager.Comment("reaching state \'S94\'");
             this.Manager.Comment("checking step \'return RemoveAccountRights/NotSupported\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.NotSupported, temp25, "return of RemoveAccountRights, state S94");
@@ -311,11 +287,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp32;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp32 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp32 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S79\'");
             this.Manager.Comment("checking step \'return AddAccountRights/AccessDenied\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.AccessDenied, temp32, "return of AddAccountRights, state S79");
@@ -323,11 +295,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp33;
             this.Manager.Comment("executing step \'call RemoveAccountRights(1,\"S-1-5-19\",Valid,0,{\"SeCreateGlobalPri" +
                     "vilege\"})\'");
-            temp33 = this.ILsadManagedAdapterInstance.RemoveAccountRights(1, "S-1-5-19", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), 0, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeCreateGlobalPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp33 = this.ILsadManagedAdapterInstance.RemoveAccountRights(1, "S-1-5-19", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), 0, new List<string> { "SeCreateGlobalPrivilege" });
             this.Manager.Comment("reaching state \'S95\'");
             this.Manager.Comment("checking step \'return RemoveAccountRights/NotSupported\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.NotSupported, temp33, "return of RemoveAccountRights, state S95");
@@ -380,11 +348,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp40;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp40 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp40 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S73\'");
             this.Manager.Comment("checking step \'return AddAccountRights/AccessDenied\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.AccessDenied, temp40, "return of AddAccountRights, state S73");
@@ -392,11 +356,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp41;
             this.Manager.Comment("executing step \'call RemoveAccountRights(1,\"S-1-5-19\",Valid,0,{\"SeChangeNotifyPri" +
                     "vilege\"})\'");
-            temp41 = this.ILsadManagedAdapterInstance.RemoveAccountRights(1, "S-1-5-19", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), 0, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeChangeNotifyPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp41 = this.ILsadManagedAdapterInstance.RemoveAccountRights(1, "S-1-5-19", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), 0, new List<string> { "SeChangeNotifyPrivilege" });
             this.Manager.Comment("reaching state \'S89\'");
             this.Manager.Comment("checking step \'return RemoveAccountRights/NotSupported\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.NotSupported, temp41, "return of RemoveAccountRights, state S89");
@@ -449,11 +409,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp48;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp48 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp48 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S74\'");
             this.Manager.Comment("checking step \'return AddAccountRights/AccessDenied\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.AccessDenied, temp48, "return of AddAccountRights, state S74");
@@ -461,11 +417,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp49;
             this.Manager.Comment("executing step \'call RemoveAccountRights(1,\"S-1-5-19\",Valid,0,{\"SeImpersonatePriv" +
                     "ilege\"})\'");
-            temp49 = this.ILsadManagedAdapterInstance.RemoveAccountRights(1, "S-1-5-19", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), 0, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeImpersonatePrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp49 = this.ILsadManagedAdapterInstance.RemoveAccountRights(1, "S-1-5-19", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), 0, new List<string> { "SeImpersonatePrivilege" });
             this.Manager.Comment("reaching state \'S90\'");
             this.Manager.Comment("checking step \'return RemoveAccountRights/NotSupported\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.NotSupported, temp49, "return of RemoveAccountRights, state S90");
@@ -518,11 +470,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp56;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp56 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp56 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S75\'");
             this.Manager.Comment("checking step \'return AddAccountRights/AccessDenied\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.AccessDenied, temp56, "return of AddAccountRights, state S75");
@@ -530,11 +478,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp57;
             this.Manager.Comment("executing step \'call RemoveAccountRights(1,\"S-1-5-20\",Valid,0,{\"SeImpersonatePriv" +
                     "ilege\"})\'");
-            temp57 = this.ILsadManagedAdapterInstance.RemoveAccountRights(1, "S-1-5-20", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), 0, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeImpersonatePrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp57 = this.ILsadManagedAdapterInstance.RemoveAccountRights(1, "S-1-5-20", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), 0, new List<string> { "SeImpersonatePrivilege" });
             this.Manager.Comment("reaching state \'S91\'");
             this.Manager.Comment("checking step \'return RemoveAccountRights/NotSupported\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.NotSupported, temp57, "return of RemoveAccountRights, state S91");
@@ -587,11 +531,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp64;
             this.Manager.Comment("executing step \'call AddAccountRights(1,\"SID\",Valid,{\"SeAssignPrimaryTokenPrivile" +
                     "ge\"})\'");
-            temp64 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeAssignPrimaryTokenPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp64 = this.ILsadManagedAdapterInstance.AddAccountRights(1, "SID", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), new List<string> { "SeAssignPrimaryTokenPrivilege" });
             this.Manager.Comment("reaching state \'S76\'");
             this.Manager.Comment("checking step \'return AddAccountRights/AccessDenied\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.AccessDenied, temp64, "return of AddAccountRights, state S76");
@@ -599,11 +539,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp65;
             this.Manager.Comment("executing step \'call RemoveAccountRights(1,\"S-1-5-20\",Valid,0,{\"SeChangeNotifyPri" +
                     "vilege\"})\'");
-            temp65 = this.ILsadManagedAdapterInstance.RemoveAccountRights(1, "S-1-5-20", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), 0, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SeChangeNotifyPrivilege", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp65 = this.ILsadManagedAdapterInstance.RemoveAccountRights(1, "S-1-5-20", ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountSid)(0)), 0, new List<string> { "SeChangeNotifyPrivilege" });
             this.Manager.Comment("reaching state \'S92\'");
             this.Manager.Comment("checking step \'return RemoveAccountRights/NotSupported\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.NotSupported, temp65, "return of RemoveAccountRights, state S92");

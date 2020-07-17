@@ -30,7 +30,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
         #region Event Metadata
         static System.Reflection.MethodBase CloseInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ILsadManagedAdapter), "Close", typeof(int), typeof(Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.Handle).MakeByRefType());
         
-        static System.Reflection.MethodBase RemovePrivilegesFromAccountInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ILsadManagedAdapter), "RemovePrivilegesFromAccount", typeof(int), typeof(bool), typeof(Microsoft.Modeling.Set<string>));
+        static System.Reflection.MethodBase RemovePrivilegesFromAccountInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ILsadManagedAdapter), "RemovePrivilegesFromAccount", typeof(int), typeof(bool), typeof(List<string>));
         
         static System.Reflection.MethodBase DeleteObjectInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ILsadManagedAdapter), "DeleteObject", typeof(int), typeof(Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ObjectEnum), typeof(Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.Handle).MakeByRefType());
         #endregion
@@ -102,34 +102,24 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             this.Manager.Comment("reaching state \'S120\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp4;
             this.Manager.Comment("executing step \'call AddPrivilegesToAccount(2,{\"{0,21}\"})\'");
-            temp4 = this.ILsadManagedAdapterInstance.AddPrivilegesToAccount(2, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "{0,21}", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp4 = this.ILsadManagedAdapterInstance.AddPrivilegesToAccount(2, new List<string> { "{0,21}" });
             this.Manager.Comment("reaching state \'S130\'");
             this.Manager.Comment("checking step \'return AddPrivilegesToAccount/InvalidHandle\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.InvalidHandle, temp4, "return of AddPrivilegesToAccount, state S130");
             this.Manager.Comment("reaching state \'S140\'");
-            Microsoft.Modeling.Set<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> temp5;
+            List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> temp5;
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp6;
             this.Manager.Comment("executing step \'call EnumeratePrivilegesAccount(2,out _)\'");
             temp6 = this.ILsadManagedAdapterInstance.EnumeratePrivilegesAccount(2, out temp5);
             this.Manager.Comment("reaching state \'S150\'");
             this.Manager.Comment("checking step \'return EnumeratePrivilegesAccount/[out {Invalid}]:InvalidHandle\'");
             TestManagerHelpers.AssertNotNull(this.Manager, temp5, "privileges of EnumeratePrivilegesAccount, state S150");
-            TestManagerHelpers.AssertAreEqual<Microsoft.Xrt.Runtime.RuntimeMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege, Microsoft.Xrt.Runtime.Singleton>>(this.Manager, Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege, Microsoft.Xrt.Runtime.Singleton>(), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Invalid, this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                "Element"}, new object[] {
-                                Microsoft.Xrt.Runtime.Singleton.Single})), temp5.Rep, "privileges of EnumeratePrivilegesAccount, state S150, field selection Rep");
+            CollectionAssert.AreEquivalent(new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> { Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Invalid }, temp5, "privileges of EnumeratePrivilegesAccount, state S150, field selection Rep");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.InvalidHandle, temp6, "return of EnumeratePrivilegesAccount, state S150");
             this.Manager.Comment("reaching state \'S160\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp7;
             this.Manager.Comment("executing step \'call RemovePrivilegesFromAccount(2,False,{\"{0,21}\"})\'");
-            temp7 = this.ILsadManagedAdapterInstance.RemovePrivilegesFromAccount(2, false, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "{0,21}", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp7 = this.ILsadManagedAdapterInstance.RemovePrivilegesFromAccount(2, false, new List<string> { "{0,21}" });
             this.Manager.Comment("reaching state \'S170\'");
             this.Manager.Comment("checking step \'return RemovePrivilegesFromAccount/InvalidHandle\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.InvalidHandle, temp7, "return of RemovePrivilegesFromAccount, state S170");
@@ -207,34 +197,24 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             this.Manager.Comment("reaching state \'S125\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp16;
             this.Manager.Comment("executing step \'call AddPrivilegesToAccount(2,{\"{0,21}\"})\'");
-            temp16 = this.ILsadManagedAdapterInstance.AddPrivilegesToAccount(2, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "{0,21}", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp16 = this.ILsadManagedAdapterInstance.AddPrivilegesToAccount(2, new List<string> { "{0,21}" });
             this.Manager.Comment("reaching state \'S135\'");
             this.Manager.Comment("checking step \'return AddPrivilegesToAccount/InvalidHandle\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.InvalidHandle, temp16, "return of AddPrivilegesToAccount, state S135");
             this.Manager.Comment("reaching state \'S145\'");
-            Microsoft.Modeling.Set<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> temp17;
+            List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> temp17;
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp18;
             this.Manager.Comment("executing step \'call EnumeratePrivilegesAccount(2,out _)\'");
             temp18 = this.ILsadManagedAdapterInstance.EnumeratePrivilegesAccount(2, out temp17);
             this.Manager.Comment("reaching state \'S155\'");
             this.Manager.Comment("checking step \'return EnumeratePrivilegesAccount/[out {Invalid}]:InvalidHandle\'");
             TestManagerHelpers.AssertNotNull(this.Manager, temp17, "privileges of EnumeratePrivilegesAccount, state S155");
-            TestManagerHelpers.AssertAreEqual<Microsoft.Xrt.Runtime.RuntimeMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege, Microsoft.Xrt.Runtime.Singleton>>(this.Manager, Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege, Microsoft.Xrt.Runtime.Singleton>(), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Invalid, this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                "Element"}, new object[] {
-                                Microsoft.Xrt.Runtime.Singleton.Single})), temp17.Rep, "privileges of EnumeratePrivilegesAccount, state S155, field selection Rep");
+            CollectionAssert.AreEquivalent(new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> { Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Invalid }, temp17, "privileges of EnumeratePrivilegesAccount, state S155, field selection Rep");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.InvalidHandle, temp18, "return of EnumeratePrivilegesAccount, state S155");
             this.Manager.Comment("reaching state \'S165\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp19;
             this.Manager.Comment("executing step \'call RemovePrivilegesFromAccount(2,False,{\"{0,21}\"})\'");
-            temp19 = this.ILsadManagedAdapterInstance.RemovePrivilegesFromAccount(2, false, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "{0,21}", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp19 = this.ILsadManagedAdapterInstance.RemovePrivilegesFromAccount(2, false, new List<string> { "{0,21}" });
             this.Manager.Comment("reaching state \'S175\'");
             this.Manager.Comment("checking step \'return RemovePrivilegesFromAccount/InvalidHandle\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.InvalidHandle, temp19, "return of RemovePrivilegesFromAccount, state S175");
@@ -299,34 +279,24 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             this.Manager.Comment("reaching state \'S126\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp28;
             this.Manager.Comment("executing step \'call AddPrivilegesToAccount(2,{\"{0,77}\"})\'");
-            temp28 = this.ILsadManagedAdapterInstance.AddPrivilegesToAccount(2, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "{0,77}", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp28 = this.ILsadManagedAdapterInstance.AddPrivilegesToAccount(2, new List<string> { "{0,77}" });
             this.Manager.Comment("reaching state \'S136\'");
             this.Manager.Comment("checking step \'return AddPrivilegesToAccount/InvalidParameter\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.InvalidParameter, temp28, "return of AddPrivilegesToAccount, state S136");
             this.Manager.Comment("reaching state \'S146\'");
-            Microsoft.Modeling.Set<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> temp29;
+            List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> temp29;
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp30;
             this.Manager.Comment("executing step \'call EnumeratePrivilegesAccount(2,out _)\'");
             temp30 = this.ILsadManagedAdapterInstance.EnumeratePrivilegesAccount(2, out temp29);
             this.Manager.Comment("reaching state \'S156\'");
             this.Manager.Comment("checking step \'return EnumeratePrivilegesAccount/[out {Invalid}]:InvalidHandle\'");
             TestManagerHelpers.AssertNotNull(this.Manager, temp29, "privileges of EnumeratePrivilegesAccount, state S156");
-            TestManagerHelpers.AssertAreEqual<Microsoft.Xrt.Runtime.RuntimeMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege, Microsoft.Xrt.Runtime.Singleton>>(this.Manager, Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege, Microsoft.Xrt.Runtime.Singleton>(), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Invalid, this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                "Element"}, new object[] {
-                                Microsoft.Xrt.Runtime.Singleton.Single})), temp29.Rep, "privileges of EnumeratePrivilegesAccount, state S156, field selection Rep");
+            CollectionAssert.AreEquivalent(new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> { Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Invalid }, temp29, "privileges of EnumeratePrivilegesAccount, state S156, field selection Rep");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.InvalidHandle, temp30, "return of EnumeratePrivilegesAccount, state S156");
             this.Manager.Comment("reaching state \'S166\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp31;
             this.Manager.Comment("executing step \'call RemovePrivilegesFromAccount(2,False,{\"{0,77}\"})\'");
-            temp31 = this.ILsadManagedAdapterInstance.RemovePrivilegesFromAccount(2, false, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "{0,77}", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp31 = this.ILsadManagedAdapterInstance.RemovePrivilegesFromAccount(2, false, new List<string> { "{0,77}" });
             this.Manager.Comment("reaching state \'S176\'");
             this.Manager.Comment("checking step \'return RemovePrivilegesFromAccount/InvalidParameter\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.InvalidParameter, temp31, "return of RemovePrivilegesFromAccount, state S176");
@@ -441,34 +411,24 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             this.Manager.Comment("reaching state \'S127\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp44;
             this.Manager.Comment("executing step \'call AddPrivilegesToAccount(2,{\"{0,77}\"})\'");
-            temp44 = this.ILsadManagedAdapterInstance.AddPrivilegesToAccount(2, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "{0,77}", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp44 = this.ILsadManagedAdapterInstance.AddPrivilegesToAccount(2, new List<string> { "{0,77}" });
             this.Manager.Comment("reaching state \'S137\'");
             this.Manager.Comment("checking step \'return AddPrivilegesToAccount/InvalidParameter\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.InvalidParameter, temp44, "return of AddPrivilegesToAccount, state S137");
             this.Manager.Comment("reaching state \'S147\'");
-            Microsoft.Modeling.Set<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> temp45;
+            List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> temp45;
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp46;
             this.Manager.Comment("executing step \'call EnumeratePrivilegesAccount(2,out _)\'");
             temp46 = this.ILsadManagedAdapterInstance.EnumeratePrivilegesAccount(2, out temp45);
             this.Manager.Comment("reaching state \'S157\'");
             this.Manager.Comment("checking step \'return EnumeratePrivilegesAccount/[out {Invalid}]:AccessDenied\'");
             TestManagerHelpers.AssertNotNull(this.Manager, temp45, "privileges of EnumeratePrivilegesAccount, state S157");
-            TestManagerHelpers.AssertAreEqual<Microsoft.Xrt.Runtime.RuntimeMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege, Microsoft.Xrt.Runtime.Singleton>>(this.Manager, Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege, Microsoft.Xrt.Runtime.Singleton>(), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Invalid, this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                "Element"}, new object[] {
-                                Microsoft.Xrt.Runtime.Singleton.Single})), temp45.Rep, "privileges of EnumeratePrivilegesAccount, state S157, field selection Rep");
+            CollectionAssert.AreEquivalent(new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> { Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Invalid }, temp45, "privileges of EnumeratePrivilegesAccount, state S157, field selection Rep");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.AccessDenied, temp46, "return of EnumeratePrivilegesAccount, state S157");
             this.Manager.Comment("reaching state \'S167\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp47;
             this.Manager.Comment("executing step \'call RemovePrivilegesFromAccount(2,False,{\"{0,77}\"})\'");
-            temp47 = this.ILsadManagedAdapterInstance.RemovePrivilegesFromAccount(2, false, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "{0,77}", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp47 = this.ILsadManagedAdapterInstance.RemovePrivilegesFromAccount(2, false, new List<string> { "{0,77}" });
             this.Manager.Comment("reaching state \'S177\'");
             this.Manager.Comment("checking step \'return RemovePrivilegesFromAccount/InvalidParameter\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.InvalidParameter, temp47, "return of RemovePrivilegesFromAccount, state S177");
@@ -533,34 +493,24 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             this.Manager.Comment("reaching state \'S121\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp56;
             this.Manager.Comment("executing step \'call AddPrivilegesToAccount(2,{\"{0,21}\"})\'");
-            temp56 = this.ILsadManagedAdapterInstance.AddPrivilegesToAccount(2, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "{0,21}", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp56 = this.ILsadManagedAdapterInstance.AddPrivilegesToAccount(2, new List<string> { "{0,21}" });
             this.Manager.Comment("reaching state \'S131\'");
             this.Manager.Comment("checking step \'return AddPrivilegesToAccount/Success\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus)(0)), temp56, "return of AddPrivilegesToAccount, state S131");
             this.Manager.Comment("reaching state \'S141\'");
-            Microsoft.Modeling.Set<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> temp57;
+            List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> temp57;
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp58;
             this.Manager.Comment("executing step \'call EnumeratePrivilegesAccount(2,out _)\'");
             temp58 = this.ILsadManagedAdapterInstance.EnumeratePrivilegesAccount(2, out temp57);
             this.Manager.Comment("reaching state \'S151\'");
             this.Manager.Comment("checking step \'return EnumeratePrivilegesAccount/[out {Valid}]:Success\'");
             TestManagerHelpers.AssertNotNull(this.Manager, temp57, "privileges of EnumeratePrivilegesAccount, state S151");
-            TestManagerHelpers.AssertAreEqual<Microsoft.Xrt.Runtime.RuntimeMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege, Microsoft.Xrt.Runtime.Singleton>>(this.Manager, Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege, Microsoft.Xrt.Runtime.Singleton>(), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Valid, this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                "Element"}, new object[] {
-                                Microsoft.Xrt.Runtime.Singleton.Single})), temp57.Rep, "privileges of EnumeratePrivilegesAccount, state S151, field selection Rep");
+            CollectionAssert.AreEquivalent(new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> { Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Valid }, temp57, "privileges of EnumeratePrivilegesAccount, state S151, field selection Rep");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus)(0)), temp58, "return of EnumeratePrivilegesAccount, state S151");
             this.Manager.Comment("reaching state \'S161\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp59;
             this.Manager.Comment("executing step \'call RemovePrivilegesFromAccount(2,False,{\"{0,21}\"})\'");
-            temp59 = this.ILsadManagedAdapterInstance.RemovePrivilegesFromAccount(2, false, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "{0,21}", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp59 = this.ILsadManagedAdapterInstance.RemovePrivilegesFromAccount(2, false, new List<string> { "{0,21}" });
             this.Manager.AddReturn(RemovePrivilegesFromAccountInfo, null, temp59);
             TestScenarioS6S171();
             this.Manager.EndTest();
@@ -742,34 +692,24 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             this.Manager.Comment("reaching state \'S128\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp78;
             this.Manager.Comment("executing step \'call AddPrivilegesToAccount(2,{\"{0,77}\"})\'");
-            temp78 = this.ILsadManagedAdapterInstance.AddPrivilegesToAccount(2, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "{0,77}", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp78 = this.ILsadManagedAdapterInstance.AddPrivilegesToAccount(2, new List<string> { "{0,77}" });
             this.Manager.Comment("reaching state \'S138\'");
             this.Manager.Comment("checking step \'return AddPrivilegesToAccount/InvalidParameter\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.InvalidParameter, temp78, "return of AddPrivilegesToAccount, state S138");
             this.Manager.Comment("reaching state \'S148\'");
-            Microsoft.Modeling.Set<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> temp79;
+            List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> temp79;
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp80;
             this.Manager.Comment("executing step \'call EnumeratePrivilegesAccount(2,out _)\'");
             temp80 = this.ILsadManagedAdapterInstance.EnumeratePrivilegesAccount(2, out temp79);
             this.Manager.Comment("reaching state \'S158\'");
             this.Manager.Comment("checking step \'return EnumeratePrivilegesAccount/[out {Invalid}]:InvalidHandle\'");
             TestManagerHelpers.AssertNotNull(this.Manager, temp79, "privileges of EnumeratePrivilegesAccount, state S158");
-            TestManagerHelpers.AssertAreEqual<Microsoft.Xrt.Runtime.RuntimeMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege, Microsoft.Xrt.Runtime.Singleton>>(this.Manager, Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege, Microsoft.Xrt.Runtime.Singleton>(), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Invalid, this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                "Element"}, new object[] {
-                                Microsoft.Xrt.Runtime.Singleton.Single})), temp79.Rep, "privileges of EnumeratePrivilegesAccount, state S158, field selection Rep");
+            CollectionAssert.AreEquivalent(new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> { Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Invalid }, temp79, "privileges of EnumeratePrivilegesAccount, state S158, field selection Rep");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.InvalidHandle, temp80, "return of EnumeratePrivilegesAccount, state S158");
             this.Manager.Comment("reaching state \'S168\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp81;
             this.Manager.Comment("executing step \'call RemovePrivilegesFromAccount(2,False,{\"{0,77}\"})\'");
-            temp81 = this.ILsadManagedAdapterInstance.RemovePrivilegesFromAccount(2, false, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "{0,77}", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp81 = this.ILsadManagedAdapterInstance.RemovePrivilegesFromAccount(2, false, new List<string> { "{0,77}" });
             this.Manager.Comment("reaching state \'S178\'");
             this.Manager.Comment("checking step \'return RemovePrivilegesFromAccount/InvalidParameter\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.InvalidParameter, temp81, "return of RemovePrivilegesFromAccount, state S178");
@@ -992,34 +932,24 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             this.Manager.Comment("reaching state \'S129\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp106;
             this.Manager.Comment("executing step \'call AddPrivilegesToAccount(2,{\"{0,77}\"})\'");
-            temp106 = this.ILsadManagedAdapterInstance.AddPrivilegesToAccount(2, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "{0,77}", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp106 = this.ILsadManagedAdapterInstance.AddPrivilegesToAccount(2, new List<string> { "{0,77}" });
             this.Manager.Comment("reaching state \'S139\'");
             this.Manager.Comment("checking step \'return AddPrivilegesToAccount/InvalidParameter\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.InvalidParameter, temp106, "return of AddPrivilegesToAccount, state S139");
             this.Manager.Comment("reaching state \'S149\'");
-            Microsoft.Modeling.Set<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> temp107;
+            List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> temp107;
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp108;
             this.Manager.Comment("executing step \'call EnumeratePrivilegesAccount(2,out _)\'");
             temp108 = this.ILsadManagedAdapterInstance.EnumeratePrivilegesAccount(2, out temp107);
             this.Manager.Comment("reaching state \'S159\'");
             this.Manager.Comment("checking step \'return EnumeratePrivilegesAccount/[out {Valid}]:Success\'");
             TestManagerHelpers.AssertNotNull(this.Manager, temp107, "privileges of EnumeratePrivilegesAccount, state S159");
-            TestManagerHelpers.AssertAreEqual<Microsoft.Xrt.Runtime.RuntimeMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege, Microsoft.Xrt.Runtime.Singleton>>(this.Manager, Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege, Microsoft.Xrt.Runtime.Singleton>(), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Valid, this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                "Element"}, new object[] {
-                                Microsoft.Xrt.Runtime.Singleton.Single})), temp107.Rep, "privileges of EnumeratePrivilegesAccount, state S159, field selection Rep");
+            CollectionAssert.AreEquivalent(new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> { Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Valid }, temp107, "privileges of EnumeratePrivilegesAccount, state S159, field selection Rep");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus)(0)), temp108, "return of EnumeratePrivilegesAccount, state S159");
             this.Manager.Comment("reaching state \'S169\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp109;
             this.Manager.Comment("executing step \'call RemovePrivilegesFromAccount(2,False,{\"{0,21}\"})\'");
-            temp109 = this.ILsadManagedAdapterInstance.RemovePrivilegesFromAccount(2, false, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "{0,21}", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp109 = this.ILsadManagedAdapterInstance.RemovePrivilegesFromAccount(2, false, new List<string> { "{0,21}" });
             this.Manager.AddReturn(RemovePrivilegesFromAccountInfo, null, temp109);
             TestScenarioS6S171();
             this.Manager.EndTest();
@@ -1060,34 +990,24 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             this.Manager.Comment("reaching state \'S122\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp114;
             this.Manager.Comment("executing step \'call AddPrivilegesToAccount(2,{\"{0,21}\"})\'");
-            temp114 = this.ILsadManagedAdapterInstance.AddPrivilegesToAccount(2, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "{0,21}", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp114 = this.ILsadManagedAdapterInstance.AddPrivilegesToAccount(2, new List<string> { "{0,21}" });
             this.Manager.Comment("reaching state \'S132\'");
             this.Manager.Comment("checking step \'return AddPrivilegesToAccount/AccessDenied\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.AccessDenied, temp114, "return of AddPrivilegesToAccount, state S132");
             this.Manager.Comment("reaching state \'S142\'");
-            Microsoft.Modeling.Set<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> temp115;
+            List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> temp115;
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp116;
             this.Manager.Comment("executing step \'call EnumeratePrivilegesAccount(2,out _)\'");
             temp116 = this.ILsadManagedAdapterInstance.EnumeratePrivilegesAccount(2, out temp115);
             this.Manager.Comment("reaching state \'S152\'");
             this.Manager.Comment("checking step \'return EnumeratePrivilegesAccount/[out {Invalid}]:AccessDenied\'");
             TestManagerHelpers.AssertNotNull(this.Manager, temp115, "privileges of EnumeratePrivilegesAccount, state S152");
-            TestManagerHelpers.AssertAreEqual<Microsoft.Xrt.Runtime.RuntimeMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege, Microsoft.Xrt.Runtime.Singleton>>(this.Manager, Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege, Microsoft.Xrt.Runtime.Singleton>(), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Invalid, this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                "Element"}, new object[] {
-                                Microsoft.Xrt.Runtime.Singleton.Single})), temp115.Rep, "privileges of EnumeratePrivilegesAccount, state S152, field selection Rep");
+            CollectionAssert.AreEquivalent(new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> { Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Invalid }, temp115, "privileges of EnumeratePrivilegesAccount, state S152, field selection Rep");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.AccessDenied, temp116, "return of EnumeratePrivilegesAccount, state S152");
             this.Manager.Comment("reaching state \'S162\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp117;
             this.Manager.Comment("executing step \'call RemovePrivilegesFromAccount(2,False,{\"{0,21}\"})\'");
-            temp117 = this.ILsadManagedAdapterInstance.RemovePrivilegesFromAccount(2, false, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "{0,21}", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp117 = this.ILsadManagedAdapterInstance.RemovePrivilegesFromAccount(2, false, new List<string> { "{0,21}" });
             this.Manager.Comment("reaching state \'S172\'");
             this.Manager.Comment("checking step \'return RemovePrivilegesFromAccount/AccessDenied\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.AccessDenied, temp117, "return of RemovePrivilegesFromAccount, state S172");
@@ -1130,34 +1050,24 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             this.Manager.Comment("reaching state \'S123\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp122;
             this.Manager.Comment("executing step \'call AddPrivilegesToAccount(2,{\"{0,77}\"})\'");
-            temp122 = this.ILsadManagedAdapterInstance.AddPrivilegesToAccount(2, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "{0,77}", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp122 = this.ILsadManagedAdapterInstance.AddPrivilegesToAccount(2, new List<string> { "{0,77}" });
             this.Manager.Comment("reaching state \'S133\'");
             this.Manager.Comment("checking step \'return AddPrivilegesToAccount/InvalidParameter\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.InvalidParameter, temp122, "return of AddPrivilegesToAccount, state S133");
             this.Manager.Comment("reaching state \'S143\'");
-            Microsoft.Modeling.Set<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> temp123;
+            List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> temp123;
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp124;
             this.Manager.Comment("executing step \'call EnumeratePrivilegesAccount(2,out _)\'");
             temp124 = this.ILsadManagedAdapterInstance.EnumeratePrivilegesAccount(2, out temp123);
             this.Manager.Comment("reaching state \'S153\'");
             this.Manager.Comment("checking step \'return EnumeratePrivilegesAccount/[out {Valid}]:Success\'");
             TestManagerHelpers.AssertNotNull(this.Manager, temp123, "privileges of EnumeratePrivilegesAccount, state S153");
-            TestManagerHelpers.AssertAreEqual<Microsoft.Xrt.Runtime.RuntimeMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege, Microsoft.Xrt.Runtime.Singleton>>(this.Manager, Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege, Microsoft.Xrt.Runtime.Singleton>(), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Valid, this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                "Element"}, new object[] {
-                                Microsoft.Xrt.Runtime.Singleton.Single})), temp123.Rep, "privileges of EnumeratePrivilegesAccount, state S153, field selection Rep");
+            CollectionAssert.AreEquivalent(new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> { Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Valid }, temp123, "privileges of EnumeratePrivilegesAccount, state S153, field selection Rep");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus)(0)), temp124, "return of EnumeratePrivilegesAccount, state S153");
             this.Manager.Comment("reaching state \'S163\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp125;
             this.Manager.Comment("executing step \'call RemovePrivilegesFromAccount(2,False,{\"{0,77}\"})\'");
-            temp125 = this.ILsadManagedAdapterInstance.RemovePrivilegesFromAccount(2, false, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "{0,77}", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp125 = this.ILsadManagedAdapterInstance.RemovePrivilegesFromAccount(2, false, new List<string> { "{0,77}" });
             this.Manager.Comment("reaching state \'S173\'");
             this.Manager.Comment("checking step \'return RemovePrivilegesFromAccount/InvalidParameter\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.InvalidParameter, temp125, "return of RemovePrivilegesFromAccount, state S173");
@@ -1200,34 +1110,24 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             this.Manager.Comment("reaching state \'S124\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp130;
             this.Manager.Comment("executing step \'call AddPrivilegesToAccount(2,{\"{0,21}\"})\'");
-            temp130 = this.ILsadManagedAdapterInstance.AddPrivilegesToAccount(2, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "{0,21}", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp130 = this.ILsadManagedAdapterInstance.AddPrivilegesToAccount(2, new List<string> { "{0,21}" });
             this.Manager.Comment("reaching state \'S134\'");
             this.Manager.Comment("checking step \'return AddPrivilegesToAccount/Success\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus)(0)), temp130, "return of AddPrivilegesToAccount, state S134");
             this.Manager.Comment("reaching state \'S144\'");
-            Microsoft.Modeling.Set<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> temp131;
+            List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> temp131;
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp132;
             this.Manager.Comment("executing step \'call EnumeratePrivilegesAccount(2,out _)\'");
             temp132 = this.ILsadManagedAdapterInstance.EnumeratePrivilegesAccount(2, out temp131);
             this.Manager.Comment("reaching state \'S154\'");
             this.Manager.Comment("checking step \'return EnumeratePrivilegesAccount/[out {Valid}]:Success\'");
             TestManagerHelpers.AssertNotNull(this.Manager, temp131, "privileges of EnumeratePrivilegesAccount, state S154");
-            TestManagerHelpers.AssertAreEqual<Microsoft.Xrt.Runtime.RuntimeMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege, Microsoft.Xrt.Runtime.Singleton>>(this.Manager, Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege, Microsoft.Xrt.Runtime.Singleton>(), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Valid, this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                "Element"}, new object[] {
-                                Microsoft.Xrt.Runtime.Singleton.Single})), temp131.Rep, "privileges of EnumeratePrivilegesAccount, state S154, field selection Rep");
+            CollectionAssert.AreEquivalent(new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> { Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Valid }, temp131, "privileges of EnumeratePrivilegesAccount, state S154, field selection Rep");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus)(0)), temp132, "return of EnumeratePrivilegesAccount, state S154");
             this.Manager.Comment("reaching state \'S164\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp133;
             this.Manager.Comment("executing step \'call RemovePrivilegesFromAccount(2,False,{\"{0,77}\"})\'");
-            temp133 = this.ILsadManagedAdapterInstance.RemovePrivilegesFromAccount(2, false, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "{0,77}", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}));
+            temp133 = this.ILsadManagedAdapterInstance.RemovePrivilegesFromAccount(2, false, new List<string> { "{0,77}" });
             this.Manager.Comment("reaching state \'S174\'");
             this.Manager.Comment("checking step \'return RemovePrivilegesFromAccount/InvalidParameter\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.InvalidParameter, temp133, "return of RemovePrivilegesFromAccount, state S174");

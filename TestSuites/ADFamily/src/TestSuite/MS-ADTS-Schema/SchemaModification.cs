@@ -11,7 +11,6 @@ using System.DirectoryServices.Protocols;
 using System.IO;
 using System.Text;
 
-using Microsoft.Modeling;
 using Microsoft.Protocols.TestTools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

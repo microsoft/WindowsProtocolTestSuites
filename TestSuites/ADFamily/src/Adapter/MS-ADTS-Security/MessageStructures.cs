@@ -5,8 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using Microsoft.Modeling;
-
 namespace ProtocolMessageStructures
 {
 
@@ -27,7 +25,7 @@ namespace ProtocolMessageStructures
     /// recType: recType is of type RecordType. Section 7.1.6.9.3.1 specifies the possible entries
     /// for record type field of Records
     /// </summary>
-    public class TRUSTED_DOMAIN_OBJECT : CompoundValue
+    public class TRUSTED_DOMAIN_OBJECT 
     {
         /// <summary>
         /// FlatName: The flatName attribute contains the NetBIOS name of the 
@@ -119,7 +117,7 @@ namespace ProtocolMessageStructures
     /// interDomainAccType = sAMAccountType.NotSet
     /// userAccountControl = userAccountControl.NotSet
     /// </summary>
-    public class InterDomain_Trust_Info : CompoundValue
+    public class InterDomain_Trust_Info 
     {
         /// <summary>
         /// The RDN of an inter domain trust account attribute, contains the NetBIOS name 
@@ -997,7 +995,7 @@ namespace ProtocolMessageStructures
     /// Trusted_Forest_Information stores the Trusted Forest Record Information
     /// for TDOs whose Trust Attribute is TRUST_ATTRIBUTE_FOREST_TRANSITIVE
     /// </summary>
-    public class Trusted_Forest_Information : CompoundValue
+    public class Trusted_Forest_Information 
     {
 
         /// <summary>

@@ -10,7 +10,6 @@ using System.DirectoryServices.ActiveDirectory;
 using System.IO;
 using System.Text;
 
-using Microsoft.Modeling;
 using Microsoft.Protocols.TestTools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Protocols.TestSuites.ActiveDirectory.Common;
@@ -85,7 +84,8 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
                 tdSources = adAdapter.OpenXmlPath.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             }
 
-            Map<string, string> rootDomainDNSubs = new Map<string, string>().Add("<RootDomainDN>", adAdapter.rootDomainDN);
+            IDictionary<string, string> rootDomainDNSubs = new Dictionary<string, string>();
+            rootDomainDNSubs.Add("<RootDomainDN>", adAdapter.rootDomainDN);
             DSSchemaLoadResult = dcModel.LoadSchema(
                 SchemaReader.ReadSchema(
                 tdSources,
@@ -108,7 +108,8 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
                 }
                 //Model for AD/LDS
                 adamModel = new ModelDomainController(adAdapter.LDSRootObjectName, null);
-                Map<string, string> adamRootDomainDNSubs = new Map<string, string>().Add("<RootDomainDN>", adAdapter.LDSRootObjectName);
+                IDictionary<string, string> adamRootDomainDNSubs = new Dictionary<string, string>();
+                adamRootDomainDNSubs.Add("<RootDomainDN>", adAdapter.LDSRootObjectName);
 
                 LDSSchemaLoadResult = adamModel.LoadSchema(
                     SchemaReader.ReadSchema(

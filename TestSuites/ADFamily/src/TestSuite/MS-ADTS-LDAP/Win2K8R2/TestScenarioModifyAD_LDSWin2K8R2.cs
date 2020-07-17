@@ -74,25 +74,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S12\'");
             ConstrOnAddOpErrs temp0;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: ModifyTestUser"",""objectClass: user"",""distinguishedName: CN=ModifyTestUser,CN=ApplicationNamingContext,DC=adts88"",""userPrincipalName: ModifyTestUser@adts""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_LDS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: ModifyTestUser",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=ModifyTestUser,CN=ApplicationNamingContext,DC=adts88",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "userPrincipalName: ModifyTestUser@adts",
-                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(1)), false, out temp0);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: ModifyTestUser", "objectClass: user", "distinguishedName: CN=ModifyTestUser,CN=ApplicationNamingContext,DC=adts88", "userPrincipalName: ModifyTestUser@adts" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(1)), false, out temp0);
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
@@ -219,25 +201,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S24\'");
             ConstrOnAddOpErrs temp1;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: ModifyTestUser1"",""objectClass: user"",""distinguishedName: CN=ModifyTestUser1,CN=ApplicationNamingContext,DC=adts88"",""userPrincipalName: ModifyTestUser1@adts""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_LDS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: ModifyTestUser1",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=ModifyTestUser1,CN=ApplicationNamingContext,DC=adts88",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "userPrincipalName: ModifyTestUser1@adts",
-                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(1)), false, out temp1);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: ModifyTestUser1", "objectClass: user", "distinguishedName: CN=ModifyTestUser1,CN=ApplicationNamingContext,DC=adts88", "userPrincipalName: ModifyTestUser1@adts" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(1)), false, out temp1);
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
@@ -364,21 +328,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S36\'");
             ConstrOnModOpErrs temp2;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""userPrincipalName: ModifyTestUser2@adts""->[""objectClass: user"",""distinguishedName: CN=ModifyTestUser1,CN=ApplicationNamingContext,DC=adts88""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_LDS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(this.Make<Microsoft.Modeling.Map<string, Microsoft.Modeling.Sequence<string>>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Modeling.Sequence<string>>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Modeling.Sequence<string>>(), "userPrincipalName: ModifyTestUser2@adts", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Modeling.Sequence<string>>>(new string[] {
-                                            "Element"}, new object[] {
-                                            this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                                                        "Rep"}, new object[] {
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                    "Head",
-                                                                    "Tail"}, new object[] {
-                                                                    "objectClass: user",
-                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                "Head",
-                                                                                "Tail"}, new object[] {
-                                                                                "distinguishedName: CN=ModifyTestUser1,CN=ApplicationNamingContext,DC=adts88",
-                                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}))}), ((RightsOnAttributes)(0)), null, ((ADImplementations)(1)), ServerVersion.Win2008R2, false, out temp2);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "userPrincipalName: ModifyTestUser2@adts", new List<string> { "objectClass: user", "distinguishedName: CN=ModifyTestUser1,CN=ApplicationNamingContext,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(1)), ServerVersion.Win2008R2, false, out temp2);
             this.Manager.Checkpoint("MS-AD_LDAP_R729");
             this.Manager.Checkpoint("MS-AD_LDAP_R729");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
@@ -413,25 +363,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S17\'");
             ConstrOnAddOpErrs temp3;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: ModifyTestUser"",""objectClass: user"",""distinguishedName: CN=ModifyTestUser,CN=ApplicationNamingContext,DC=adts88"",""userPrincipalName: ModifyTestUser@adts""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_LDS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: ModifyTestUser",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=ModifyTestUser,CN=ApplicationNamingContext,DC=adts88",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "userPrincipalName: ModifyTestUser@adts",
-                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(1)), false, out temp3);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: ModifyTestUser", "objectClass: user", "distinguishedName: CN=ModifyTestUser,CN=ApplicationNamingContext,DC=adts88", "userPrincipalName: ModifyTestUser@adts" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(1)), false, out temp3);
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
@@ -558,25 +490,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S29\'");
             ConstrOnAddOpErrs temp4;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: ModifyTestUser1"",""objectClass: user"",""distinguishedName: CN=ModifyTestUser1,CN=ApplicationNamingContext,DC=adts88"",""userPrincipalName: ModifyTestUser1@adts""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_LDS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: ModifyTestUser1",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=ModifyTestUser1,CN=ApplicationNamingContext,DC=adts88",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "userPrincipalName: ModifyTestUser1@adts",
-                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(1)), false, out temp4);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: ModifyTestUser1", "objectClass: user", "distinguishedName: CN=ModifyTestUser1,CN=ApplicationNamingContext,DC=adts88", "userPrincipalName: ModifyTestUser1@adts" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(1)), false, out temp4);
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
@@ -703,21 +617,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S41\'");
             ConstrOnModOpErrs temp5;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""lockoutTime: 0""->[""objectClass: user"",""distinguishedName: CN=ModifyTestUser,CN=ApplicationNamingContext,DC=adts88""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_LDS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(this.Make<Microsoft.Modeling.Map<string, Microsoft.Modeling.Sequence<string>>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Modeling.Sequence<string>>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Modeling.Sequence<string>>(), "lockoutTime: 0", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Modeling.Sequence<string>>>(new string[] {
-                                            "Element"}, new object[] {
-                                            this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                                                        "Rep"}, new object[] {
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                    "Head",
-                                                                    "Tail"}, new object[] {
-                                                                    "objectClass: user",
-                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                "Head",
-                                                                                "Tail"}, new object[] {
-                                                                                "distinguishedName: CN=ModifyTestUser,CN=ApplicationNamingContext,DC=adts88",
-                                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}))}), ((RightsOnAttributes)(0)), null, ((ADImplementations)(1)), ServerVersion.Win2008R2, false, out temp5);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "lockoutTime: 0", new List<string> { "objectClass: user", "distinguishedName: CN=ModifyTestUser,CN=ApplicationNamingContext,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(1)), ServerVersion.Win2008R2, false, out temp5);
             this.Manager.Checkpoint("MS-AD_LDAP_R729");
             this.Manager.Checkpoint("MS-AD_LDAP_R729");
             this.Manager.Checkpoint("MS-AD_LDAP_R733");
@@ -758,25 +658,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S13\'");
             ConstrOnAddOpErrs temp6;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: ModifyTestUser"",""objectClass: user"",""distinguishedName: CN=ModifyTestUser,CN=ApplicationNamingContext,DC=adts88"",""userPrincipalName: ModifyTestUser@adts""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_LDS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: ModifyTestUser",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=ModifyTestUser,CN=ApplicationNamingContext,DC=adts88",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "userPrincipalName: ModifyTestUser@adts",
-                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(1)), false, out temp6);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: ModifyTestUser", "objectClass: user", "distinguishedName: CN=ModifyTestUser,CN=ApplicationNamingContext,DC=adts88", "userPrincipalName: ModifyTestUser@adts" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(1)), false, out temp6);
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
@@ -903,25 +785,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S25\'");
             ConstrOnAddOpErrs temp7;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: ModifyTestUser1"",""objectClass: user"",""distinguishedName: CN=ModifyTestUser1,CN=ApplicationNamingContext,DC=adts88"",""userPrincipalName: ModifyTestUser1@adts""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_LDS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: ModifyTestUser1",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=ModifyTestUser1,CN=ApplicationNamingContext,DC=adts88",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "userPrincipalName: ModifyTestUser1@adts",
-                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(1)), false, out temp7);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: ModifyTestUser1", "objectClass: user", "distinguishedName: CN=ModifyTestUser1,CN=ApplicationNamingContext,DC=adts88", "userPrincipalName: ModifyTestUser1@adts" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(1)), false, out temp7);
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
@@ -1048,21 +912,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S37\'");
             ConstrOnModOpErrs temp8;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""userPrincipalName: ModifyTestUser@adts""->[""objectClass: user"",""distinguishedName: CN=ModifyTestUser1,CN=ApplicationNamingContext,DC=adts88""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_LDS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(this.Make<Microsoft.Modeling.Map<string, Microsoft.Modeling.Sequence<string>>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Modeling.Sequence<string>>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Modeling.Sequence<string>>(), "userPrincipalName: ModifyTestUser@adts", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Modeling.Sequence<string>>>(new string[] {
-                                            "Element"}, new object[] {
-                                            this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                                                        "Rep"}, new object[] {
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                    "Head",
-                                                                    "Tail"}, new object[] {
-                                                                    "objectClass: user",
-                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                "Head",
-                                                                                "Tail"}, new object[] {
-                                                                                "distinguishedName: CN=ModifyTestUser1,CN=ApplicationNamingContext,DC=adts88",
-                                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}))}), ((RightsOnAttributes)(0)), null, ((ADImplementations)(1)), ServerVersion.Win2008R2, false, out temp8);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "userPrincipalName: ModifyTestUser@adts", new List<string> { "objectClass: user", "distinguishedName: CN=ModifyTestUser1,CN=ApplicationNamingContext,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(1)), ServerVersion.Win2008R2, false, out temp8);
             this.Manager.Checkpoint("MS-AD_LDAP_R729");
             this.Manager.Checkpoint("MS-AD_LDAP_R730");
             this.Manager.Comment("reaching state \'S43\'");
@@ -1111,25 +961,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S14\'");
             ConstrOnAddOpErrs temp9;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: ModifyTestUser"",""objectClass: user"",""distinguishedName: CN=ModifyTestUser,CN=ApplicationNamingContext,DC=adts88"",""userPrincipalName: ModifyTestUser@adts""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_LDS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: ModifyTestUser",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=ModifyTestUser,CN=ApplicationNamingContext,DC=adts88",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "userPrincipalName: ModifyTestUser@adts",
-                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(1)), false, out temp9);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: ModifyTestUser", "objectClass: user", "distinguishedName: CN=ModifyTestUser,CN=ApplicationNamingContext,DC=adts88", "userPrincipalName: ModifyTestUser@adts" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(1)), false, out temp9);
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
@@ -1256,25 +1088,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S26\'");
             ConstrOnAddOpErrs temp10;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: ModifyTestUser1"",""objectClass: user"",""distinguishedName: CN=ModifyTestUser1,CN=ApplicationNamingContext,DC=adts88"",""userPrincipalName: ModifyTestUser1@adts""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_LDS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: ModifyTestUser1",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=ModifyTestUser1,CN=ApplicationNamingContext,DC=adts88",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "userPrincipalName: ModifyTestUser1@adts",
-                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(1)), false, out temp10);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: ModifyTestUser1", "objectClass: user", "distinguishedName: CN=ModifyTestUser1,CN=ApplicationNamingContext,DC=adts88", "userPrincipalName: ModifyTestUser1@adts" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(1)), false, out temp10);
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
@@ -1401,21 +1215,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S38\'");
             ConstrOnModOpErrs temp11;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""lockoutTime: 4568""->[""objectClass: user"",""distinguishedName: CN=ModifyTestUser1,CN=ApplicationNamingContext,DC=adts88""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_LDS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(this.Make<Microsoft.Modeling.Map<string, Microsoft.Modeling.Sequence<string>>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Modeling.Sequence<string>>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Modeling.Sequence<string>>(), "lockoutTime: 4568", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Modeling.Sequence<string>>>(new string[] {
-                                            "Element"}, new object[] {
-                                            this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                                                        "Rep"}, new object[] {
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                    "Head",
-                                                                    "Tail"}, new object[] {
-                                                                    "objectClass: user",
-                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                "Head",
-                                                                                "Tail"}, new object[] {
-                                                                                "distinguishedName: CN=ModifyTestUser1,CN=ApplicationNamingContext,DC=adts88",
-                                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}))}), ((RightsOnAttributes)(0)), null, ((ADImplementations)(1)), ServerVersion.Win2008R2, false, out temp11);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "lockoutTime: 4568", new List<string> { "objectClass: user", "distinguishedName: CN=ModifyTestUser1,CN=ApplicationNamingContext,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(1)), ServerVersion.Win2008R2, false, out temp11);
             this.Manager.Checkpoint("MS-AD_LDAP_R729");
             this.Manager.Checkpoint("MS-AD_LDAP_R729");
             this.Manager.Checkpoint("MS-AD_LDAP_R734");
@@ -1446,25 +1246,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S15\'");
             ConstrOnAddOpErrs temp12;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: ModifyTestUser"",""objectClass: user"",""distinguishedName: CN=ModifyTestUser,CN=ApplicationNamingContext,DC=adts88"",""userPrincipalName: ModifyTestUser@adts""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_LDS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: ModifyTestUser",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=ModifyTestUser,CN=ApplicationNamingContext,DC=adts88",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "userPrincipalName: ModifyTestUser@adts",
-                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(1)), false, out temp12);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: ModifyTestUser", "objectClass: user", "distinguishedName: CN=ModifyTestUser,CN=ApplicationNamingContext,DC=adts88", "userPrincipalName: ModifyTestUser@adts" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(1)), false, out temp12);
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
@@ -1591,25 +1373,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S27\'");
             ConstrOnAddOpErrs temp13;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: ModifyTestUser1"",""objectClass: user"",""distinguishedName: CN=ModifyTestUser1,CN=ApplicationNamingContext,DC=adts88"",""userPrincipalName: ModifyTestUser1@adts""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_LDS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: ModifyTestUser1",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=ModifyTestUser1,CN=ApplicationNamingContext,DC=adts88",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "userPrincipalName: ModifyTestUser1@adts",
-                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(1)), false, out temp13);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: ModifyTestUser1", "objectClass: user", "distinguishedName: CN=ModifyTestUser1,CN=ApplicationNamingContext,DC=adts88", "userPrincipalName: ModifyTestUser1@adts" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(1)), false, out temp13);
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
@@ -1736,21 +1500,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S39\'");
             ConstrOnModOpErrs temp14;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""pwdLastSet: 0""->[""objectClass: user"",""distinguishedName: CN=ModifyTestUser,CN=ApplicationNamingContext,DC=adts88""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_LDS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(this.Make<Microsoft.Modeling.Map<string, Microsoft.Modeling.Sequence<string>>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Modeling.Sequence<string>>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Modeling.Sequence<string>>(), "pwdLastSet: 0", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Modeling.Sequence<string>>>(new string[] {
-                                            "Element"}, new object[] {
-                                            this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                                                        "Rep"}, new object[] {
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                    "Head",
-                                                                    "Tail"}, new object[] {
-                                                                    "objectClass: user",
-                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                "Head",
-                                                                                "Tail"}, new object[] {
-                                                                                "distinguishedName: CN=ModifyTestUser,CN=ApplicationNamingContext,DC=adts88",
-                                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}))}), ((RightsOnAttributes)(0)), null, ((ADImplementations)(1)), ServerVersion.Win2008R2, false, out temp14);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "pwdLastSet: 0", new List<string> { "objectClass: user", "distinguishedName: CN=ModifyTestUser,CN=ApplicationNamingContext,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(1)), ServerVersion.Win2008R2, false, out temp14);
             this.Manager.Checkpoint("MS-AD_LDAP_R729");
             this.Manager.Checkpoint("MS-AD_LDAP_R729");
             this.Manager.Checkpoint("MS-AD_LDAP_R731");
@@ -1781,25 +1531,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S16\'");
             ConstrOnAddOpErrs temp15;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: ModifyTestUser"",""objectClass: user"",""distinguishedName: CN=ModifyTestUser,CN=ApplicationNamingContext,DC=adts88"",""userPrincipalName: ModifyTestUser@adts""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_LDS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: ModifyTestUser",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=ModifyTestUser,CN=ApplicationNamingContext,DC=adts88",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "userPrincipalName: ModifyTestUser@adts",
-                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(1)), false, out temp15);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: ModifyTestUser", "objectClass: user", "distinguishedName: CN=ModifyTestUser,CN=ApplicationNamingContext,DC=adts88", "userPrincipalName: ModifyTestUser@adts" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(1)), false, out temp15);
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
@@ -1926,25 +1658,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S28\'");
             ConstrOnAddOpErrs temp16;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: ModifyTestUser1"",""objectClass: user"",""distinguishedName: CN=ModifyTestUser1,CN=ApplicationNamingContext,DC=adts88"",""userPrincipalName: ModifyTestUser1@adts""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_LDS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: ModifyTestUser1",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=ModifyTestUser1,CN=ApplicationNamingContext,DC=adts88",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "userPrincipalName: ModifyTestUser1@adts",
-                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(1)), false, out temp16);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: ModifyTestUser1", "objectClass: user", "distinguishedName: CN=ModifyTestUser1,CN=ApplicationNamingContext,DC=adts88", "userPrincipalName: ModifyTestUser1@adts" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(1)), false, out temp16);
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
             this.Manager.Checkpoint("MS-AD_LDAP_R620");
@@ -2071,21 +1785,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S40\'");
             ConstrOnModOpErrs temp17;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""pwdLastSet: 4568152""->[""objectClass: user"",""distinguishedName: CN=ModifyTestUser1,CN=ApplicationNamingContext,DC=adts88""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_LDS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(this.Make<Microsoft.Modeling.Map<string, Microsoft.Modeling.Sequence<string>>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Modeling.Sequence<string>>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Modeling.Sequence<string>>(), "pwdLastSet: 4568152", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Modeling.Sequence<string>>>(new string[] {
-                                            "Element"}, new object[] {
-                                            this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                                                        "Rep"}, new object[] {
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                    "Head",
-                                                                    "Tail"}, new object[] {
-                                                                    "objectClass: user",
-                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                "Head",
-                                                                                "Tail"}, new object[] {
-                                                                                "distinguishedName: CN=ModifyTestUser1,CN=ApplicationNamingContext,DC=adts88",
-                                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}))}), ((RightsOnAttributes)(0)), null, ((ADImplementations)(1)), ServerVersion.Win2008R2, false, out temp17);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "pwdLastSet: 4568152", new List<string> { "objectClass: user", "distinguishedName: CN=ModifyTestUser1,CN=ApplicationNamingContext,DC=adts88" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(1)), ServerVersion.Win2008R2, false, out temp17);
             this.Manager.Checkpoint("MS-AD_LDAP_R729");
             this.Manager.Checkpoint("MS-AD_LDAP_R729");
             this.Manager.Checkpoint("MS-AD_LDAP_R732");

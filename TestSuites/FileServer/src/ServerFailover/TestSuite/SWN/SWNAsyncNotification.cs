@@ -220,7 +220,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             string uncSharePath = Smb2Utility.GetUncPath(server, TestConfig.ClusteredFileShare);
             string content = Smb2Utility.CreateRandomString(TestConfig.WriteBufferLengthInKb);
             string testDirectory = CreateTestDirectory(uncSharePath);
-            string file = Path.Combine(testDirectory, Guid.NewGuid().ToString());
+            string file = string.Format(@"{0}\{1}", testDirectory, Guid.NewGuid().ToString());
             Guid clientGuid = Guid.NewGuid();
             Guid createGuid = Guid.NewGuid();
             FileServerType fsType = FileServerType.ScaleOutFileServer;

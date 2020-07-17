@@ -10,7 +10,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
     using System.Security.Cryptography;
     using System.Text;
 
-    using Microsoft.Modeling;
     using Microsoft.Protocols.TestTools;
     using Microsoft.Protocols.TestTools.StackSdk;
     using Microsoft.Protocols.TestTools.StackSdk.Dtyp;
@@ -1221,7 +1220,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
         /// <param name="sutType">The type of the SUT computer receiving in the request.</param>
         /// <param name="socketAddresses">A list of socket addresses.</param>
         /// <returns>The method returns 0x00000000 if success; otherwise, it returns a nonzero error code.</returns>
-        public HRESULT DsrAddressToSiteNamesW(ComputerType sutType, Set<SocketAddressType> socketAddresses)
+        public HRESULT DsrAddressToSiteNamesW(ComputerType sutType, List<SocketAddressType> socketAddresses)
         {
             checkIfMachineExists(sutType);
             InitNrpcClient(this.IsSecurityContext);
@@ -1311,7 +1310,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
         /// <param name="sutType">The type of the SUT computer receiving in the request.</param>
         /// <param name="socketAddresses">A list of socket addresses.</param>
         /// <returns>The method returns 0x00000000 if success; otherwise, it returns a nonzero error code.</returns>
-        public HRESULT DsrAddressToSiteNamesExW(ComputerType sutType, Set<SocketAddressType> socketAddresses)
+        public HRESULT DsrAddressToSiteNamesExW(ComputerType sutType, List<SocketAddressType> socketAddresses)
         {
             checkIfMachineExists(sutType);
             InitNrpcClient(this.IsSecurityContext);
@@ -4701,7 +4700,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
         /// </summary>
         /// <param name="socketAddresses">A list of socket addresses.</param>
         /// <returns>return an instance of a _NL_SOCKET_ADDRESS structure.</returns>
-        private _NL_SOCKET_ADDRESS[] GetSocketAddressArray(Set<SocketAddressType> socketAddresses)
+        private _NL_SOCKET_ADDRESS[] GetSocketAddressArray(List<SocketAddressType> socketAddresses)
         {
             string ipaddresses = InValidIpAddrs;
             _NL_SOCKET_ADDRESS[] socketAddressList = null;

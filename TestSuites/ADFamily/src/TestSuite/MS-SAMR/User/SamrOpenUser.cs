@@ -8,7 +8,6 @@ using Microsoft.Protocols.TestTools.StackSdk.Dtyp;
 using Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Samr;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Modeling;
 using System.Collections.Generic;
 
 namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr

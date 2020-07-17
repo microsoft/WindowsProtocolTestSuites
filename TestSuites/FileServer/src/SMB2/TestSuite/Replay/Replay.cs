@@ -42,7 +42,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Replay
             base.TestInitialize();
 
             sharePath = Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare);
-            fileName = Path.Combine(CreateTestDirectory(sharePath), "Replay_" + Guid.NewGuid() + ".txt");
+            fileName = string.Format(@"{0}\Replay_{1}.txt", CreateTestDirectory(sharePath), Guid.NewGuid());
             mainChannelClient = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             alternativeChannelClient = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
         }

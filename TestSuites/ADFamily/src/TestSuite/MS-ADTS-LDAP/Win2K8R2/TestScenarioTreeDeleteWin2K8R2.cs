@@ -74,21 +74,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S34\'");
             ConstrOnAddOpErrs temp0;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: userTreeDel"",""objectClass: container"",""distinguishedName: CN=userTreeDel,CN=Users,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: userTreeDel",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: container",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88",
-                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp0);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: userTreeDel", "objectClass: container", "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp0);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -112,33 +98,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S68\'");
             ConstrOnAddOpErrs temp1;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: user6745"",""objectClass: top;person;organizationalPerson;user"",""sAMAccountName: user6745"",""distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88"",""instanceType: 4"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: user6745",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: top;person;organizationalPerson;user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "sAMAccountName: user6745",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "instanceType: 4",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp1);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: user6745", "objectClass: top;person;organizationalPerson;user", "sAMAccountName: user6745", "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp1);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -206,21 +166,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S39\'");
             ConstrOnAddOpErrs temp3;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: userTreeDel"",""objectClass: container"",""distinguishedName: CN=userTreeDel,CN=Users,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: userTreeDel",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: container",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88",
-                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp3);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: userTreeDel", "objectClass: container", "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp3);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -244,33 +190,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S73\'");
             ConstrOnAddOpErrs temp4;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: user6745"",""objectClass: top;person;organizationalPerson;user"",""sAMAccountName: user6745"",""distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88"",""instanceType: 4"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: user6745",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: top;person;organizationalPerson;user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "sAMAccountName: user6745",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "instanceType: 4",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp4);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: user6745", "objectClass: top;person;organizationalPerson;user", "sAMAccountName: user6745", "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp4);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -341,21 +261,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S40\'");
             ConstrOnAddOpErrs temp6;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: userTreeDel"",""objectClass: container"",""distinguishedName: CN=userTreeDel,CN=Users,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: userTreeDel",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: container",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88",
-                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp6);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: userTreeDel", "objectClass: container", "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp6);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -379,33 +285,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S74\'");
             ConstrOnAddOpErrs temp7;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: user6745"",""objectClass: top;person;organizationalPerson;user"",""sAMAccountName: user6745"",""distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88"",""instanceType: 4"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: user6745",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: top;person;organizationalPerson;user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "sAMAccountName: user6745",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "instanceType: 4",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp7);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: user6745", "objectClass: top;person;organizationalPerson;user", "sAMAccountName: user6745", "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp7);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -465,21 +345,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S41\'");
             ConstrOnAddOpErrs temp9;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: userTreeDel"",""objectClass: container"",""distinguishedName: CN=userTreeDel,CN=Users,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: userTreeDel",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: container",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88",
-                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp9);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: userTreeDel", "objectClass: container", "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp9);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -503,33 +369,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S75\'");
             ConstrOnAddOpErrs temp10;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: user6745"",""objectClass: top;person;organizationalPerson;user"",""sAMAccountName: user6745"",""distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88"",""instanceType: 4"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: user6745",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: top;person;organizationalPerson;user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "sAMAccountName: user6745",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "instanceType: 4",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp10);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: user6745", "objectClass: top;person;organizationalPerson;user", "sAMAccountName: user6745", "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp10);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -588,21 +428,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S42\'");
             ConstrOnAddOpErrs temp12;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: userTreeDel"",""objectClass: container"",""distinguishedName: CN=userTreeDel,CN=Users,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: userTreeDel",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: container",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88",
-                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp12);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: userTreeDel", "objectClass: container", "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp12);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -626,33 +452,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S76\'");
             ConstrOnAddOpErrs temp13;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: user6745"",""objectClass: top;person;organizationalPerson;user"",""sAMAccountName: user6745"",""distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88"",""instanceType: 4"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: user6745",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: top;person;organizationalPerson;user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "sAMAccountName: user6745",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "instanceType: 4",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp13);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: user6745", "objectClass: top;person;organizationalPerson;user", "sAMAccountName: user6745", "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp13);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -711,21 +511,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S43\'");
             ConstrOnAddOpErrs temp15;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: userTreeDel"",""objectClass: container"",""distinguishedName: CN=userTreeDel,CN=Users,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: userTreeDel",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: container",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88",
-                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp15);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: userTreeDel", "objectClass: container", "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp15);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -749,33 +535,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S77\'");
             ConstrOnAddOpErrs temp16;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: user6745"",""objectClass: top;person;organizationalPerson;user"",""sAMAccountName: user6745"",""distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88"",""instanceType: 4"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: user6745",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: top;person;organizationalPerson;user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "sAMAccountName: user6745",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "instanceType: 4",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp16);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: user6745", "objectClass: top;person;organizationalPerson;user", "sAMAccountName: user6745", "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp16);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -834,21 +594,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S35\'");
             ConstrOnAddOpErrs temp18;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: userTreeDel"",""objectClass: container"",""distinguishedName: CN=userTreeDel,CN=Users,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: userTreeDel",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: container",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88",
-                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp18);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: userTreeDel", "objectClass: container", "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp18);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -872,33 +618,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S69\'");
             ConstrOnAddOpErrs temp19;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: user6745"",""objectClass: top;person;organizationalPerson;user"",""sAMAccountName: user6745"",""distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88"",""instanceType: 4"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: user6745",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: top;person;organizationalPerson;user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "sAMAccountName: user6745",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "instanceType: 4",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp19);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: user6745", "objectClass: top;person;organizationalPerson;user", "sAMAccountName: user6745", "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp19);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -959,21 +679,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S44\'");
             ConstrOnAddOpErrs temp21;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: userTreeDel"",""objectClass: container"",""distinguishedName: CN=userTreeDel,CN=Users,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: userTreeDel",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: container",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88",
-                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp21);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: userTreeDel", "objectClass: container", "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp21);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -997,33 +703,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S78\'");
             ConstrOnAddOpErrs temp22;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: user6745"",""objectClass: top;person;organizationalPerson;user"",""sAMAccountName: user6745"",""distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88"",""instanceType: 4"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: user6745",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: top;person;organizationalPerson;user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "sAMAccountName: user6745",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "instanceType: 4",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp22);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: user6745", "objectClass: top;person;organizationalPerson;user", "sAMAccountName: user6745", "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp22);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -1082,21 +762,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S45\'");
             ConstrOnAddOpErrs temp24;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: userTreeDel"",""objectClass: container"",""distinguishedName: CN=userTreeDel,CN=Users,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: userTreeDel",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: container",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88",
-                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp24);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: userTreeDel", "objectClass: container", "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp24);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -1120,33 +786,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S79\'");
             ConstrOnAddOpErrs temp25;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: user6745"",""objectClass: top;person;organizationalPerson;user"",""sAMAccountName: user6745"",""distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88"",""instanceType: 4"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: user6745",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: top;person;organizationalPerson;user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "sAMAccountName: user6745",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "instanceType: 4",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp25);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: user6745", "objectClass: top;person;organizationalPerson;user", "sAMAccountName: user6745", "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp25);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -1206,21 +846,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S46\'");
             ConstrOnAddOpErrs temp27;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: userTreeDel"",""objectClass: container"",""distinguishedName: CN=userTreeDel,CN=Users,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: userTreeDel",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: container",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88",
-                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp27);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: userTreeDel", "objectClass: container", "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp27);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -1244,33 +870,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S80\'");
             ConstrOnAddOpErrs temp28;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: user6745"",""objectClass: top;person;organizationalPerson;user"",""sAMAccountName: user6745"",""distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88"",""instanceType: 4"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: user6745",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: top;person;organizationalPerson;user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "sAMAccountName: user6745",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "instanceType: 4",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp28);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: user6745", "objectClass: top;person;organizationalPerson;user", "sAMAccountName: user6745", "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp28);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -1329,21 +929,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S47\'");
             ConstrOnAddOpErrs temp30;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: userTreeDel"",""objectClass: container"",""distinguishedName: CN=userTreeDel,CN=Users,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: userTreeDel",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: container",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88",
-                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp30);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: userTreeDel", "objectClass: container", "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp30);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -1367,33 +953,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S81\'");
             ConstrOnAddOpErrs temp31;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: user6745"",""objectClass: top;person;organizationalPerson;user"",""sAMAccountName: user6745"",""distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88"",""instanceType: 4"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: user6745",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: top;person;organizationalPerson;user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "sAMAccountName: user6745",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "instanceType: 4",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp31);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: user6745", "objectClass: top;person;organizationalPerson;user", "sAMAccountName: user6745", "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp31);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -1455,21 +1015,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S48\'");
             ConstrOnAddOpErrs temp33;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: userTreeDel"",""objectClass: container"",""distinguishedName: CN=userTreeDel,CN=Users,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: userTreeDel",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: container",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88",
-                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp33);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: userTreeDel", "objectClass: container", "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp33);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -1493,33 +1039,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S82\'");
             ConstrOnAddOpErrs temp34;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: user6745"",""objectClass: top;person;organizationalPerson;user"",""sAMAccountName: user6745"",""distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88"",""instanceType: 4"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: user6745",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: top;person;organizationalPerson;user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "sAMAccountName: user6745",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "instanceType: 4",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp34);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: user6745", "objectClass: top;person;organizationalPerson;user", "sAMAccountName: user6745", "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp34);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -1578,21 +1098,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S49\'");
             ConstrOnAddOpErrs temp36;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: userTreeDel"",""objectClass: container"",""distinguishedName: CN=userTreeDel,CN=Users,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: userTreeDel",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: container",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88",
-                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp36);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: userTreeDel", "objectClass: container", "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp36);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -1616,33 +1122,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S83\'");
             ConstrOnAddOpErrs temp37;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: user6745"",""objectClass: top;person;organizationalPerson;user"",""sAMAccountName: user6745"",""distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88"",""instanceType: 4"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: user6745",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: top;person;organizationalPerson;user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "sAMAccountName: user6745",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "instanceType: 4",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp37);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: user6745", "objectClass: top;person;organizationalPerson;user", "sAMAccountName: user6745", "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp37);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -1701,21 +1181,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S50\'");
             ConstrOnAddOpErrs temp39;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: userTreeDel"",""objectClass: container"",""distinguishedName: CN=userTreeDel,CN=Users,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: userTreeDel",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: container",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88",
-                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp39);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: userTreeDel", "objectClass: container", "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp39);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -1739,33 +1205,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S84\'");
             ConstrOnAddOpErrs temp40;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: user6745"",""objectClass: top;person;organizationalPerson;user"",""sAMAccountName: user6745"",""distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88"",""instanceType: 4"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: user6745",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: top;person;organizationalPerson;user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "sAMAccountName: user6745",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "instanceType: 4",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp40);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: user6745", "objectClass: top;person;organizationalPerson;user", "sAMAccountName: user6745", "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp40);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -1823,21 +1263,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S36\'");
             ConstrOnAddOpErrs temp42;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: userTreeDel"",""objectClass: container"",""distinguishedName: CN=userTreeDel,CN=Users,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: userTreeDel",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: container",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88",
-                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp42);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: userTreeDel", "objectClass: container", "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp42);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -1861,33 +1287,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S70\'");
             ConstrOnAddOpErrs temp43;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: user6745"",""objectClass: top;person;organizationalPerson;user"",""sAMAccountName: user6745"",""distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88"",""instanceType: 4"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: user6745",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: top;person;organizationalPerson;user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "sAMAccountName: user6745",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "instanceType: 4",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp43);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: user6745", "objectClass: top;person;organizationalPerson;user", "sAMAccountName: user6745", "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp43);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -1948,21 +1348,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S37\'");
             ConstrOnAddOpErrs temp45;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: userTreeDel"",""objectClass: container"",""distinguishedName: CN=userTreeDel,CN=Users,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: userTreeDel",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: container",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88",
-                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp45);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: userTreeDel", "objectClass: container", "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp45);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -1986,33 +1372,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S71\'");
             ConstrOnAddOpErrs temp46;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: user6745"",""objectClass: top;person;organizationalPerson;user"",""sAMAccountName: user6745"",""distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88"",""instanceType: 4"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: user6745",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: top;person;organizationalPerson;user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "sAMAccountName: user6745",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "instanceType: 4",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp46);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: user6745", "objectClass: top;person;organizationalPerson;user", "sAMAccountName: user6745", "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp46);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -2072,21 +1432,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S38\'");
             ConstrOnAddOpErrs temp48;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: userTreeDel"",""objectClass: container"",""distinguishedName: CN=userTreeDel,CN=Users,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: userTreeDel",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: container",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88",
-                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp48);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: userTreeDel", "objectClass: container", "distinguishedName: CN=userTreeDel,CN=Users,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp48);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -2110,33 +1456,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S72\'");
             ConstrOnAddOpErrs temp49;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: user6745"",""objectClass: top;person;organizationalPerson;user"",""sAMAccountName: user6745"",""distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88"",""instanceType: 4"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: user6745",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: top;person;organizationalPerson;user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "sAMAccountName: user6745",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "instanceType: 4",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp49);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: user6745", "objectClass: top;person;organizationalPerson;user", "sAMAccountName: user6745", "distinguishedName: CN=user6745,CN=userTreeDel,CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp49);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
