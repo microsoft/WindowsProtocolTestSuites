@@ -31,9 +31,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         {
             buffer.Add(cCount);
 
-            foreach (var spec in AggregSpecs)
+            if (cCount != 0)
             {
-                spec.ToBytes(buffer);
+                foreach (var spec in AggregSpecs)
+                {
+                    buffer.AlignWrite(4);
+                    spec.ToBytes(buffer);
+                }
             }
         }
     }

@@ -41,7 +41,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A CRangeCategSpec structure specifying the range values. This field MUST be omitted if _ulCategType is set to CATEGORIZE_UNIQUE; otherwise it MUST be present.
         /// </summary>
-        public CRangeCategSpec CRangeCategSpec;
+        public CRangeCategSpec? CRangeCategSpec;
 
         public void FromBytes(WspBuffer buffer)
         {
@@ -54,7 +54,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             _sortKey.ToBytes(buffer);
 
-            CRangeCategSpec.ToBytes(buffer);
+            if (CRangeCategSpec.HasValue)
+            {
+                CRangeCategSpec.Value.ToBytes(buffer);
+            }
         }
     }
 }

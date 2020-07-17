@@ -42,6 +42,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             foreach (var range in aRangeBegin)
             {
+                buffer.AlignWrite(4);
+
                 range.ToBytes(buffer);
             }
         }

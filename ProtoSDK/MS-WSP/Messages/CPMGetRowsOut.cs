@@ -168,7 +168,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                                 {
                                     var startOffset = GetRealOffset(Rows[i].Columns[j].rowVariant.Offset);
                                     var items = new List<string>();
-                                    for(var idx = 0; idx < vectorCount; idx++)
+                                    for (var idx = 0; idx < vectorCount; idx++)
                                     {
                                         WspBuffer offsetBuffer;
                                         int itemOffset;
@@ -184,6 +184,19 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                                         }
 
                                         var item = ReadValueByType(vType_Values.VT_LPWSTR, itemOffset, buffer) as string;
+                                        items.Add(item);
+                                    }
+
+                                    Rows[i].Columns[j].Data = items.ToArray();
+                                }
+                                else if (baseVType == vType_Values.VT_FILETIME)
+                                {
+                                    var startOffset = GetRealOffset(Rows[i].Columns[j].rowVariant.Offset);
+                                    var items = new List<object>();
+                                    for (var idx = 0; idx < vectorCount; idx++)
+                                    {
+                                        var item = ReadValueByType(vType_Values.VT_FILETIME, startOffset, buffer);
+                                        startOffset += 8; // VT_FILETIME is a 64-bit value
                                         items.Add(item);
                                     }
 

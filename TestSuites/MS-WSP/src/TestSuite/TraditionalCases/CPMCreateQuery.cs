@@ -670,16 +670,27 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// <summary>
         /// Construct a default SortSet
         /// </summary>
-        private CInGroupSortAggregSets CreateSortSets()
+        private CInGroupSortAggregSets CreateSortSets(params uint[] pidColumns)
         {
+            if (pidColumns == null || pidColumns.Length == 0)
+            {
+                // Set default value for pidColumns.
+                pidColumns = new uint[1] { 0 };
+            }
+
             CInGroupSortAggregSets inGroupSortAggregSets = new CInGroupSortAggregSets();
             inGroupSortAggregSets.cCount = 1;
             inGroupSortAggregSets.SortSets = new CSortSet[1];
-            inGroupSortAggregSets.SortSets[0].count = 1;
-            inGroupSortAggregSets.SortSets[0].sortArray = new CSort[1];
-            inGroupSortAggregSets.SortSets[0].sortArray[0].dwOrder = dwOrder_Values.QUERY_SORTASCEND;
-            inGroupSortAggregSets.SortSets[0].sortArray[0].pidColumn = 0; // Sort by the first column.
-            inGroupSortAggregSets.SortSets[0].sortArray[0].locale = wspAdapter.builder.parameter.LCID_VALUE;
+            inGroupSortAggregSets.SortSets[0].count = (uint)pidColumns.Length;
+            inGroupSortAggregSets.SortSets[0].sortArray = new CSort[pidColumns.Length];
+
+            for (int i = 0; i < pidColumns.Length; i++)
+            {
+                inGroupSortAggregSets.SortSets[0].sortArray[i].dwOrder = dwOrder_Values.QUERY_SORTASCEND;
+                inGroupSortAggregSets.SortSets[0].sortArray[i].pidColumn = pidColumns[i]; 
+                inGroupSortAggregSets.SortSets[0].sortArray[i].locale = wspAdapter.builder.parameter.LCID_VALUE;
+                inGroupSortAggregSets.SortSets[0].sortArray[i].dwIndividual = dwIndividual_Values.QUERY_SORTINDIVIDUAL;
+            }
 
             return inGroupSortAggregSets;
         }

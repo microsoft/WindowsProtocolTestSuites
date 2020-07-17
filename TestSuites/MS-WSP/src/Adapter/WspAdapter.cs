@@ -852,9 +852,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="fBwdFetch">Indicating the order in which to fetch the rows</param>
         /// <param name="eType">Type of SeekDescription</param>
         /// <param name="response">The CPMGetRowsOut response from the server.</param>
-        public void CPMGetRowsIn(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType, out CPMGetRowsOut response)
+        public void CPMGetRowsIn(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType, out CPMGetRowsOut response, uint chapter = 0)
         {
-            CPMGetRowsIn(cursor, rowsToTransfer, rowWidth, cbReadBuffer, fBwdFetch, eType, null, out response);
+            CPMGetRowsIn(cursor, rowsToTransfer, rowWidth, cbReadBuffer, fBwdFetch, eType, null, out response, chapter);
         }
 
         /// <summary>
@@ -868,13 +868,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="eType">Type of SeekDescription</param>
         /// <param name="seekDescription">The SeekDescription structure.</param>
         /// <param name="response">The CPMGetRowsOut response from the server.</param>
-        public void CPMGetRowsIn(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType, object seekDescription, out CPMGetRowsOut response)
+        public void CPMGetRowsIn(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType, object seekDescription, out CPMGetRowsOut response, uint chapter = 0)
         {
             response = null;
 
             // Get hold of appropriate Sender (Pipe with/without connection)
             var client = GetClient(isClientConnected);
-            var getRowsInMessage = builder.GetCPMRowsInMessage(cursor, rowsToTransfer, rowWidth, cbReadBuffer, fBwdFetch, eType, seekDescription, out rowsInReserve);
+            var getRowsInMessage = builder.GetCPMRowsInMessage(cursor, rowsToTransfer, rowWidth, cbReadBuffer, fBwdFetch, eType, seekDescription, out rowsInReserve, chapter);
             var getRowsInMessageBytes = Helper.ToBytes(getRowsInMessage);
 
             client.SendCPMGetRowsIn(

@@ -29,9 +29,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         {
             buffer.Add(cCount);
 
-            foreach (var sortKey in SortKeys)
+            if (cCount != 0)
             {
-                sortKey.ToBytes(buffer);
+                foreach (var sortKey in SortKeys)
+                {
+                    sortKey.ToBytes(buffer);
+                }
             }
         }
     }
