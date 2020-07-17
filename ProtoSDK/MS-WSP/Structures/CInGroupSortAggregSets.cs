@@ -34,11 +34,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         {
             buffer.Add(cCount, 4);
 
-            buffer.Add(Reserved);
-
-            foreach (var sortSet in SortSets)
+            if (cCount > 0)
             {
-                sortSet.ToBytes(buffer);
+                buffer.Add(Reserved);
+
+                foreach (var sortSet in SortSets)
+                {
+                    sortSet.ToBytes(buffer);
+                }
             }
         }
     }

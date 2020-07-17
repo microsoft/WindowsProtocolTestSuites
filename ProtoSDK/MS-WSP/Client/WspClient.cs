@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 {
@@ -24,7 +25,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
         private byte[] lastResponseBytes;
 
-        private CPMSetBindingsIn lastSetBindingsInMessage;
+        private Dictionary<uint, CPMSetBindingsIn> bindingRequestMap = new Dictionary<uint, CPMSetBindingsIn>();
+
+        private CPMGetRowsIn latestCPMGetRowsIn;
 
         private bool is64bitClientVersion;
 
@@ -178,7 +181,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 aColumns = aColumns,
             };
 
-            lastSetBindingsInMessage = request;
+            bindingRequestMap[_hCursor] = request;
 
             Send(request);
         }
@@ -229,6 +232,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 _chapt = _chapt,
                 SeekDescription = seekDescription,
             };
+
+            latestCPMGetRowsIn = request;
 
             Send(request);
         }
@@ -291,7 +296,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             {
                 CPMGetRowsOut getRowsOut = response as CPMGetRowsOut;
                 getRowsOut.Is64Bit = Is64bit;
-                getRowsOut.BindingRequest = lastSetBindingsInMessage;
+                getRowsOut.BindingRequest = bindingRequestMap[latestCPMGetRowsIn._hCursor];
             }
 
             var buffer = new WspBuffer(lastResponseBytes);

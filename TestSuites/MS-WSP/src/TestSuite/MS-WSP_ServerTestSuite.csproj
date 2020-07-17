@@ -84,6 +84,7 @@
     <Compile Include="TestCaseSetScopePrioritization_StatusInvalidParameter.cs" />
     <Compile Include="TestCaseUpdateDocumentsIn_StatusInvalid.cs" />
     <Compile Include="TraditionalCases\CPMCreateQuery.cs" />
+    <Compile Include="TraditionalCases\CPMCreateQuery_Categorization.cs" />
     <Compile Include="TraditionalCases\CPMGetQueryStatus.cs" />
     <Compile Include="TraditionalCases\CPMGetQueryStatusEx.cs" />
     <Compile Include="TraditionalCases\CPMCreateQuery_RowsetProperties.cs" />
