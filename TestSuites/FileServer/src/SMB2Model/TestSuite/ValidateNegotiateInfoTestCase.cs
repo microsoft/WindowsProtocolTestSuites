@@ -16,11 +16,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
     using System.Collections.Generic;
     using System.Text;
     using System.Reflection;
-    using Microsoft.SpecExplorer.Runtime.Testing;
     using Microsoft.Protocols.TestTools;
-    
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Spec Explorer", "3.5.3146.0")]
+    using Microsoft.Protocols.TestTools.Messages.Runtime;
+
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
     public partial class ValidateNegotiateInfoTestCase : PtfTestClassBase {
         
@@ -82,9 +80,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         #region Test Initialization and Cleanup
         protected override void TestInitialize() {
             this.InitializeTestManager();
-            this.IValidateNegotiateInfoAdapterInstance = ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.IValidateNegotiateInfoAdapter)(this.Manager.GetAdapter(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.IValidateNegotiateInfoAdapter))));
-            this.Manager.Subscribe(TerminateConnectionInfo, this.IValidateNegotiateInfoAdapterInstance);
-            this.Manager.Subscribe(ValidateNegotiateInfoResponseInfo, this.IValidateNegotiateInfoAdapterInstance);
+            this.IValidateNegotiateInfoAdapterInstance = ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.IValidateNegotiateInfoAdapter)(this.GetAdapter(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.IValidateNegotiateInfoAdapter))));
+            this.IValidateNegotiateInfoAdapterInstance.TerminateConnection += IValidateNegotiateInfoAdapterInstance_TerminateConnection;
+            this.IValidateNegotiateInfoAdapterInstance.ValidateNegotiateInfoResponse += IValidateNegotiateInfoAdapterInstance_ValidateNegotiateInfoResponse;
             this.c = this.Manager.CreateVariable<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>("c");
             this.c1 = this.Manager.CreateVariable<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>("c1");
             this.status = this.Manager.CreateVariable<int>("status");
@@ -92,8 +90,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.v1 = this.Manager.CreateVariable<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>("v1");
             this.v2 = this.Manager.CreateVariable<int>("v2");
         }
-        
+
+        private void IValidateNegotiateInfoAdapterInstance_ValidateNegotiateInfoResponse(Adapter.ModelSmb2Status status, Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config)
+        {
+            this.Manager.AddEvent(ValidateNegotiateInfoResponseInfo, this.IValidateNegotiateInfoAdapterInstance, new object[] { status, config });
+        }
+
+        private void IValidateNegotiateInfoAdapterInstance_TerminateConnection()
+        {
+            this.Manager.AddEvent(TerminateConnectionInfo, this.IValidateNegotiateInfoAdapterInstance, new object[] { });
+        }
+
         protected override void TestCleanup() {
+            this.IValidateNegotiateInfoAdapterInstance.TerminateConnection -= IValidateNegotiateInfoAdapterInstance_TerminateConnection;
+            this.IValidateNegotiateInfoAdapterInstance.ValidateNegotiateInfoResponse -= IValidateNegotiateInfoAdapterInstance_ValidateNegotiateInfoResponse;
             base.TestCleanup();
             this.CleanupTestManager();
         }
@@ -188,7 +198,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS0ValidateNegotiateInfoResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -202,9 +212,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         " on the server\"");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is allowed on the server\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
@@ -218,7 +228,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS0ValidateNegotiateInfoResponseChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -231,11 +241,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -259,13 +269,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "us is not equal to STATUS_SUCCESS\"");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[TestInfo] SUT platform is NonWindows, so only assert status is not equal to STA" +
@@ -288,11 +298,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -313,11 +323,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -339,11 +349,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -445,7 +455,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1007");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS1006ValidateNegotiateInfoResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -459,9 +469,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         " on the server\"");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is allowed on the server\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
@@ -475,7 +485,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1007");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS1006ValidateNegotiateInfoResponseChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -488,11 +498,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -517,11 +527,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -546,11 +556,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -574,11 +584,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -604,13 +614,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "us is not equal to STATUS_SUCCESS\"");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[TestInfo] SUT platform is NonWindows, so only assert status is not equal to STA" +
@@ -695,7 +705,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S106");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS83() {
@@ -724,7 +734,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S106");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS75() {
@@ -815,7 +825,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S114");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS118() {
@@ -844,7 +854,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S114");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS124() {
@@ -937,14 +947,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S128");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS127ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S128");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -1017,14 +1027,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S136");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS135ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S136");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -1097,14 +1107,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S144");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS143ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S144");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -1177,14 +1187,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S152");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS151ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S152");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -1253,7 +1263,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S160");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS164() {
@@ -1282,7 +1292,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S160");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS170() {
@@ -1375,14 +1385,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S174");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS173ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S174");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -1451,7 +1461,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S19");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS23() {
@@ -1480,7 +1490,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S19");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS29() {
@@ -1575,14 +1585,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S182");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS181ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S182");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -1655,14 +1665,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S190");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS189ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S190");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -1735,14 +1745,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S198");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS197ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S198");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -1811,7 +1821,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S206");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS210() {
@@ -1840,7 +1850,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S206");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS216() {
@@ -1933,14 +1943,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S220");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS219ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S220");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -2013,14 +2023,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S228");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS227ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S228");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -2093,14 +2103,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S236");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS235ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S236");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -2173,14 +2183,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S244");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS243ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S244");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -2251,7 +2261,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S252");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS251ValidateNegotiateInfoResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -2265,9 +2275,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         " on the server\"");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is allowed on the server\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
@@ -2281,7 +2291,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S252");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS262() {
@@ -2372,7 +2382,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S266");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS270() {
@@ -2401,7 +2411,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S266");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -2472,14 +2482,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S277");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS276ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S277");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -2551,14 +2561,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S285");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS284ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S285");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -2630,14 +2640,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S293");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS292ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S293");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -2708,7 +2718,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S301");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS300ValidateNegotiateInfoResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -2722,9 +2732,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         " on the server\"");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is allowed on the server\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
@@ -2738,7 +2748,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S301");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS311() {
@@ -2829,7 +2839,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S315");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS319() {
@@ -2858,7 +2868,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S315");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -2929,14 +2939,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S33");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS32ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S33");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -3007,14 +3017,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S326");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS325ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S326");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -3086,14 +3096,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S334");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS333ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S334");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -3184,14 +3194,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S342");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS341ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S342");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS341ValidateNegotiateInfoResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -3204,11 +3214,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -3233,11 +3243,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -3262,11 +3272,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -3290,11 +3300,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -3320,13 +3330,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "us is not equal to STATUS_SUCCESS\"");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[TestInfo] SUT platform is NonWindows, so only assert status is not equal to STA" +
@@ -3406,7 +3416,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S357");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS361() {
@@ -3435,7 +3445,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S357");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS367() {
@@ -3527,14 +3537,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S371");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS370ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S371");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -3606,14 +3616,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S379");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS378ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S379");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -3685,14 +3695,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S387");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS386ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S387");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -3764,14 +3774,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S395");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS394ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S395");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -3844,14 +3854,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S41");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS40ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S41");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -3919,7 +3929,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S403");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS407() {
@@ -3948,7 +3958,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S403");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS413() {
@@ -4040,14 +4050,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S417");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS416ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S417");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -4119,14 +4129,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S425");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS424ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S425");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -4198,14 +4208,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S433");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS432ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S433");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -4277,14 +4287,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S441");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS440ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S441");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -4353,7 +4363,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S449");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS453() {
@@ -4382,7 +4392,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S449");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS459() {
@@ -4475,14 +4485,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S463");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS462ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S463");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -4555,14 +4565,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S471");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS470ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S471");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -4635,14 +4645,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S479");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS478ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S479");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -4715,14 +4725,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S49");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS48ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S49");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -4795,14 +4805,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S487");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS486ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S487");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -4870,7 +4880,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S495");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS499() {
@@ -4899,7 +4909,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S495");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS505() {
@@ -4991,14 +5001,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S509");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS508ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S509");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -5070,14 +5080,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S517");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS516ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S517");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -5149,14 +5159,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S525");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS524ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S525");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -5228,14 +5238,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S533");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS532ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S533");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -5302,7 +5312,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S541");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS545() {
@@ -5331,7 +5341,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S541");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS551() {
@@ -5422,14 +5432,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S555");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS554ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S555");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -5502,14 +5512,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S57");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS56ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S57");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -5580,14 +5590,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S563");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS562ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S563");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -5658,14 +5668,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S571");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS570ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S571");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -5736,14 +5746,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S579");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS578ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S579");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -5811,7 +5821,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S587");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS591() {
@@ -5840,7 +5850,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S587");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS597() {
@@ -5932,14 +5942,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S601");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS600ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S601");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -6011,14 +6021,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S609");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS608ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S609");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -6090,14 +6100,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S617");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS616ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S617");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -6169,14 +6179,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S625");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS624ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S625");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -6244,7 +6254,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S633");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS637() {
@@ -6273,7 +6283,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S633");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS643() {
@@ -6367,7 +6377,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S65");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS64ValidateNegotiateInfoResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -6381,9 +6391,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         " on the server\"");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is allowed on the server\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
@@ -6397,7 +6407,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S65");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -6467,14 +6477,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S647");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS646ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S647");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -6546,14 +6556,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S655");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS654ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S655");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -6625,14 +6635,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S663");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS662ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S663");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -6704,14 +6714,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S671");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS670ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S671");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -6779,7 +6789,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S679");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS683() {
@@ -6808,7 +6818,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S679");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS689() {
@@ -6900,14 +6910,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S693");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS692ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S693");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -6979,14 +6989,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S701");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS700ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S701");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -7058,14 +7068,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S709");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS708ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S709");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -7137,14 +7147,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S717");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS716ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S717");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -7213,7 +7223,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S725");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS729() {
@@ -7242,7 +7252,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S725");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS735() {
@@ -7335,14 +7345,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S739");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS738ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S739");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -7415,14 +7425,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S747");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS746ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S747");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -7495,14 +7505,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S755");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS754ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S755");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -7575,14 +7585,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S763");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS762ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S763");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -7675,7 +7685,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S771");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS770ValidateNegotiateInfoResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -7689,9 +7699,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         " on the server\"");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is allowed on the server\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
@@ -7705,7 +7715,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S771");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS770ValidateNegotiateInfoResponseChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -7718,11 +7728,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -7747,11 +7757,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -7776,11 +7786,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -7806,13 +7816,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "us is not equal to STATUS_SUCCESS\"");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[TestInfo] SUT platform is NonWindows, so only assert status is not equal to STA" +
@@ -7837,11 +7847,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -7922,14 +7932,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S79");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS78ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S79");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -8021,14 +8031,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S789");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS788ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S789");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS788ValidateNegotiateInfoResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -8041,11 +8051,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -8070,11 +8080,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -8099,11 +8109,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -8129,13 +8139,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "us is not equal to STATUS_SUCCESS\"");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[TestInfo] SUT platform is NonWindows, so only assert status is not equal to STA" +
@@ -8160,11 +8170,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -8268,7 +8278,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S804");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS803ValidateNegotiateInfoResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -8282,9 +8292,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         " on the server\"");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is allowed on the server\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
@@ -8298,7 +8308,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S804");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS803ValidateNegotiateInfoResponseChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -8311,11 +8321,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -8340,11 +8350,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -8369,11 +8379,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -8399,13 +8409,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "us is not equal to STATUS_SUCCESS\"");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[TestInfo] SUT platform is NonWindows, so only assert status is not equal to STA" +
@@ -8430,11 +8440,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -8538,7 +8548,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S822");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS821ValidateNegotiateInfoResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -8552,9 +8562,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         " on the server\"");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is allowed on the server\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
@@ -8568,7 +8578,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S822");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS821ValidateNegotiateInfoResponseChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -8581,11 +8591,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -8610,11 +8620,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -8639,11 +8649,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -8667,11 +8677,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -8697,13 +8707,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "us is not equal to STATUS_SUCCESS\"");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[TestInfo] SUT platform is NonWindows, so only assert status is not equal to STA" +
@@ -8808,7 +8818,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S840");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS839ValidateNegotiateInfoResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -8822,9 +8832,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         " on the server\"");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is allowed on the server\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
@@ -8838,7 +8848,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S840");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS839ValidateNegotiateInfoResponseChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -8851,11 +8861,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -8880,11 +8890,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -8909,11 +8919,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -8939,13 +8949,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "us is not equal to STATUS_SUCCESS\"");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[TestInfo] SUT platform is NonWindows, so only assert status is not equal to STA" +
@@ -8970,11 +8980,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -9076,14 +9086,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S858");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS857ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S858");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS857ValidateNegotiateInfoResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -9096,11 +9106,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -9125,11 +9135,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -9154,11 +9164,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -9182,11 +9192,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -9212,13 +9222,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "us is not equal to STATUS_SUCCESS\"");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[TestInfo] SUT platform is NonWindows, so only assert status is not equal to STA" +
@@ -9302,14 +9312,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S873");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS872ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S873");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -9401,7 +9411,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S881");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS880ValidateNegotiateInfoResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -9415,9 +9425,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         " on the server\"");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is allowed on the server\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
@@ -9431,7 +9441,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S881");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS880ValidateNegotiateInfoResponseChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -9444,11 +9454,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -9473,11 +9483,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -9501,11 +9511,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -9530,11 +9540,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -9560,13 +9570,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "us is not equal to STATUS_SUCCESS\"");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[TestInfo] SUT platform is NonWindows, so only assert status is not equal to STA" +
@@ -9650,14 +9660,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S90");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS89ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S90");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         #endregion
         
@@ -9749,7 +9759,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S899");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS898ValidateNegotiateInfoResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -9763,9 +9773,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         " on the server\"");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is allowed on the server\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
@@ -9779,7 +9789,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S899");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS898ValidateNegotiateInfoResponseChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -9792,11 +9802,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -9821,11 +9831,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -9849,11 +9859,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -9879,13 +9889,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "us is not equal to STATUS_SUCCESS\"");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[TestInfo] SUT platform is NonWindows, so only assert status is not equal to STA" +
@@ -9910,11 +9920,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -10019,7 +10029,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S917");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS916ValidateNegotiateInfoResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -10033,9 +10043,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         " on the server\"");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is allowed on the server\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
@@ -10049,7 +10059,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S917");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS916ValidateNegotiateInfoResponseChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -10062,11 +10072,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -10091,11 +10101,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -10119,11 +10129,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -10148,11 +10158,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -10178,13 +10188,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "us is not equal to STATUS_SUCCESS\"");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[TestInfo] SUT platform is NonWindows, so only assert status is not equal to STA" +
@@ -10288,7 +10298,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S935");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS934ValidateNegotiateInfoResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -10302,9 +10312,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         " on the server\"");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is allowed on the server\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
@@ -10318,7 +10328,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S935");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS934ValidateNegotiateInfoResponseChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -10331,11 +10341,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -10360,11 +10370,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -10389,11 +10399,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -10417,11 +10427,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -10447,13 +10457,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "us is not equal to STATUS_SUCCESS\"");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[TestInfo] SUT platform is NonWindows, so only assert status is not equal to STA" +
@@ -10556,7 +10566,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S953");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS952ValidateNegotiateInfoResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -10570,9 +10580,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         " on the server\"");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is allowed on the server\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
@@ -10586,7 +10596,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S953");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS952ValidateNegotiateInfoResponseChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -10599,11 +10609,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -10628,11 +10638,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -10657,11 +10667,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -10685,11 +10695,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -10715,13 +10725,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "us is not equal to STATUS_SUCCESS\"");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[TestInfo] SUT platform is NonWindows, so only assert status is not equal to STA" +
@@ -10806,14 +10816,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S98");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS97ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S98");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         #endregion
         
@@ -10905,7 +10915,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S971");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS970ValidateNegotiateInfoResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -10919,9 +10929,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         " on the server\"");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is allowed on the server\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
@@ -10935,7 +10945,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S971");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS970ValidateNegotiateInfoResponseChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -10948,11 +10958,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -10976,11 +10986,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -11005,11 +11015,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -11035,13 +11045,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "us is not equal to STATUS_SUCCESS\"");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[TestInfo] SUT platform is NonWindows, so only assert status is not equal to STA" +
@@ -11066,11 +11076,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -11174,7 +11184,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S989");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 1");
         }
         
         private void ValidateNegotiateInfoTestCaseS988ValidateNegotiateInfoResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -11188,9 +11198,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         " on the server\"");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1))), "Fail to check the assumption : c.ValidateNegotiateInfoSupported == 1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is allowed on the server\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
@@ -11204,7 +11214,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.c, c, "c of ReadConfig, state S989");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.ValidateNegotiateInfoSupported)))), ((object)(0))), "Fail to check the assumption : v.ValidateNegotiateInfoSupported == 0");
         }
         
         private void ValidateNegotiateInfoTestCaseS988ValidateNegotiateInfoResponseChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig config) {
@@ -11217,11 +11227,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v1.Platform == 268435463");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -11246,11 +11256,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2012, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v1.Platform == 268435462");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -11274,11 +11284,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");
@@ -11304,13 +11314,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "us is not equal to STATUS_SUCCESS\"");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[TestInfo] SUT platform is NonWindows, so only assert status is not equal to STA" +
@@ -11335,11 +11345,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server"", ""[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPPORTED when an FSCTL is not allowed on the server"", ""[TestInfo] SUT platform is WindowsServer2008R2, so follow the SHOULD requirement"", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.ValidateNegotiateInfoSupported)))), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(c.ValidateNegotiateInfoSupported == 1)");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ValidateNegotiateInfo.ValidateNegotiateInfoConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v1.Platform == 268435460");
             this.Manager.Checkpoint("\"[TestInfo] FSCTL_VALIDATE_NEGOTIATE_INFO is not allowed on the server\"");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.15: The server SHOULD<299> fail the request with STATUS_NOT_SUPP" +
                     "ORTED when an FSCTL is not allowed on the server\"");

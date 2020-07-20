@@ -226,7 +226,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Negotiate
             Condition.IsTrue(State == ModelState.Connected);
             Condition.IsTrue(Request is ModelComNegotiateRequest || Request is NegotiateRequest);
 
-            // Avoid "Microsoft.SpecExplorer.Runtime.Testing.UnboundVariableException: Variable's value cannot be read before it is bound"
             Condition.IsTrue(dialectRevision == DialectRevision.Smb2002 || dialectRevision == DialectRevision.Smb21 ||
                              dialectRevision == DialectRevision.Smb30 || dialectRevision == DialectRevision.Smb302 ||
                              dialectRevision == DialectRevision.Smb2Wildcard ||

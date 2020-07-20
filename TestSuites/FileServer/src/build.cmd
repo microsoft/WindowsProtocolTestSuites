@@ -25,11 +25,6 @@ if ErrorLevel 1 (
 	exit /b 1
 )
 
-call "%CurrentPath%..\..\..\common\checkSpecExplorer.cmd"
-if ErrorLevel 1 (
-	exit /b 1
-)
-
 call "%CurrentPath%..\..\..\common\setPtfVer.cmd"
 if ErrorLevel 1 (
 	exit /b 1

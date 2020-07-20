@@ -157,8 +157,7 @@
       <postscript>Disable_Firewall.ps1;TrustHostedCacheServer.ps1</postscript>
       <skipwaitingforpostscript>false</skipwaitingforpostscript>
       <tools>
-        <tool name="SE" MSIName="SpecExplorer.msi" version="3.5.3146.0" CPUArchitecture="x86" />
-        <tool name="PTF" MSIName="ProtocolTestFrameworkInstaller.msi" version="1.0.6000.0" CPUArchitecture="x86" />
+        <tool name="PTF" MSIName="ProtocolTestFrameworkInstaller.msi" version="1.0.8000.0" />
         <TestsuiteMSI MSIName="BranchCache.msi" targetEndpoint="" />
       </tools>
     </vm>
