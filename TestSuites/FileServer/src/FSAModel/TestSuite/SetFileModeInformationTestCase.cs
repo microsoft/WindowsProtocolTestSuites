@@ -16,11 +16,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
     using System.Collections.Generic;
     using System.Text;
     using System.Reflection;
-    using Microsoft.SpecExplorer.Runtime.Testing;
     using Microsoft.Protocols.TestTools;
     
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Spec Explorer", "3.5.3146.0")]
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
     public partial class SetFileModeInformationTestCase : PtfTestClassBase {
         
@@ -48,7 +46,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         #region Test Initialization and Cleanup
         protected override void TestInitialize() {
             this.InitializeTestManager();
-            this.IFSAAdapterInstance = ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.IFSAAdapter)(this.Manager.GetAdapter(typeof(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.IFSAAdapter))));
+            this.IFSAAdapterInstance = ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.IFSAAdapter)(this.GetAdapter(typeof(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.IFSAAdapter))));
         }
         
         protected override void TestCleanup() {

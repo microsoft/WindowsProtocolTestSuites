@@ -16,11 +16,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
     using System.Collections.Generic;
     using System.Text;
     using System.Reflection;
-    using Microsoft.SpecExplorer.Runtime.Testing;
     using Microsoft.Protocols.TestTools;
-    
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Spec Explorer", "3.5.3146.0")]
+    using Microsoft.Protocols.TestTools.Messages.Runtime;
+
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
     public partial class ReplayFileOperationTestCase : PtfTestClassBase {
         
@@ -72,8 +70,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         #region Test Initialization and Cleanup
         protected override void TestInitialize() {
             this.InitializeTestManager();
-            this.IReplayAdapterInstance = ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.IReplayAdapter)(this.Manager.GetAdapter(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.IReplayAdapter))));
-            this.Manager.Subscribe(FileOperationResponseInfo, this.IReplayAdapterInstance);
+            this.IReplayAdapterInstance = ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.IReplayAdapter)(this.GetAdapter(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.IReplayAdapter))));
+            this.IReplayAdapterInstance.FileOperationResponse += IReplayAdapterInstance_FileOperationResponse;
             this.c = this.Manager.CreateVariable<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>("c");
             this.c1 = this.Manager.CreateVariable<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>("c1");
             this.status = this.Manager.CreateVariable<int>("status");
@@ -81,8 +79,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.v1 = this.Manager.CreateVariable<int>("v1");
             this.v2 = this.Manager.CreateVariable<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>("v2");
         }
-        
+
+        private void IReplayAdapterInstance_FileOperationResponse(Adapter.ModelSmb2Status status, Adapter.Replay.ReplayServerConfig c)
+        {
+            this.Manager.AddEvent(FileOperationResponseInfo, this.IReplayAdapterInstance, new object[] { status, c });
+        }
+
         protected override void TestCleanup() {
+            this.IReplayAdapterInstance.FileOperationResponse -= IReplayAdapterInstance_FileOperationResponse;
             base.TestCleanup();
             this.CleanupTestManager();
         }
@@ -103,7 +107,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp0, "c of ReadConfig, state S1");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S2\'");
@@ -362,7 +366,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1002\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp2, "c of ReadConfig, state S1002");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1003\'");
@@ -602,7 +606,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1010\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp4, "c of ReadConfig, state S1010");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1011\'");
@@ -739,7 +743,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1018\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp6, "c of ReadConfig, state S1018");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1019\'");
@@ -871,7 +875,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1026\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp8, "c of ReadConfig, state S1026");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1027\'");
@@ -1004,7 +1008,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1034\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp10, "c of ReadConfig, state S1034");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1035\'");
@@ -1135,7 +1139,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1042\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp12, "c of ReadConfig, state S1042");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1043\'");
@@ -1266,7 +1270,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1050\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp14, "c of ReadConfig, state S1050");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1051\'");
@@ -1397,7 +1401,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1058\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp16, "c of ReadConfig, state S1058");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1059\'");
@@ -1531,7 +1535,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S107\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp18, "c of ReadConfig, state S107");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S108\'");
@@ -1715,7 +1719,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1066\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp20, "c of ReadConfig, state S1066");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1067\'");
@@ -1846,7 +1850,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1074\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp22, "c of ReadConfig, state S1074");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1075\'");
@@ -1973,7 +1977,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1081\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp24, "c of ReadConfig, state S1081");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1082\'");
@@ -2103,7 +2107,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1088\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp26, "c of ReadConfig, state S1088");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1089\'");
@@ -2236,7 +2240,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1095\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp28, "c of ReadConfig, state S1095");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1096\'");
@@ -2358,7 +2362,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1102\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp30, "c of ReadConfig, state S1102");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1103\'");
@@ -2481,7 +2485,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1108\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp32, "c of ReadConfig, state S1108");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1109\'");
@@ -2608,7 +2612,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1114\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp34, "c of ReadConfig, state S1114");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1115\'");
@@ -2734,7 +2738,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1120\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp36, "c of ReadConfig, state S1120");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1121\'");
@@ -2860,7 +2864,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1126\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp38, "c of ReadConfig, state S1126");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1127\'");
@@ -2983,7 +2987,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1132\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp40, "c of ReadConfig, state S1132");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1133\'");
@@ -3109,7 +3113,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1138\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp42, "c of ReadConfig, state S1138");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1139\'");
@@ -3243,7 +3247,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1146\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp44, "c of ReadConfig, state S1146");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1147\'");
@@ -3370,7 +3374,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1155\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp46, "c of ReadConfig, state S1155");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1156\'");
@@ -3508,7 +3512,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1163\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp48, "c of ReadConfig, state S1163");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1164\'");
@@ -3645,7 +3649,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1171\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp50, "c of ReadConfig, state S1171");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1172\'");
@@ -3782,7 +3786,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1179\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp52, "c of ReadConfig, state S1179");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1180\'");
@@ -3917,7 +3921,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1187\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp54, "c of ReadConfig, state S1187");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1188\'");
@@ -4049,7 +4053,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1195\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp56, "c of ReadConfig, state S1195");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1196\'");
@@ -4171,7 +4175,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S121\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp58, "c of ReadConfig, state S121");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S122\'");
@@ -4349,7 +4353,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1202\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp60, "c of ReadConfig, state S1202");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1203\'");
@@ -4474,7 +4478,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1209\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp62, "c of ReadConfig, state S1209");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1210\'");
@@ -4600,7 +4604,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1218\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp64, "c of ReadConfig, state S1218");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1219\'");
@@ -4723,7 +4727,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1224\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp66, "c of ReadConfig, state S1224");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1225\'");
@@ -4731,7 +4735,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp67 == 0)) {
                 this.Manager.Comment("reaching state \'S1226\'");
                 this.Manager.Comment("executing step \'call FileOperationRequest(MainChannel,Smb2002,Read,InvalidChannel" +
-                        "Sequence,WithReplayFlag,DefaultParameters)\'");
+                        "List,WithReplayFlag,DefaultParameters)\'");
                 this.IReplayAdapterInstance.FileOperationRequest(((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelSwitchChannelType)(0)), Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb2002, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelRequestCommand.Read, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelChannelSequenceType.InvalidChannelSequence, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelSetReplayFlag)(0)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelRequestCommandParameters)(0)));
                 this.Manager.Comment("reaching state \'S1227\'");
                 this.Manager.Comment("checking step \'return FileOperationRequest\'");
@@ -4846,7 +4850,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1230\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp68, "c of ReadConfig, state S1230");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S1231\'");
@@ -4971,7 +4975,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S135\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp70, "c of ReadConfig, state S135");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S136\'");
@@ -5148,7 +5152,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S149\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp72, "c of ReadConfig, state S149");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S150\'");
@@ -5327,7 +5331,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S163\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp74, "c of ReadConfig, state S163");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S164\'");
@@ -5503,7 +5507,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S175\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp76, "c of ReadConfig, state S175");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S176\'");
@@ -5680,7 +5684,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S186\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp78, "c of ReadConfig, state S186");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S187\'");
@@ -5693,7 +5697,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return PrepareFileOperation\'");
                 this.Manager.Comment("reaching state \'S190\'");
                 this.Manager.Comment("executing step \'call FileOperationRequest(MainChannel,Smb302,Write,InvalidChannel" +
-                        "Sequence,WithReplayFlag,AlternativeParameters)\'");
+                        "List,WithReplayFlag,AlternativeParameters)\'");
                 this.IReplayAdapterInstance.FileOperationRequest(((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelSwitchChannelType)(0)), Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelRequestCommand.Write, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelChannelSequenceType.InvalidChannelSequence, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelSetReplayFlag)(0)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelRequestCommandParameters)(1)));
                 this.Manager.Comment("reaching state \'S191\'");
                 this.Manager.Comment("checking step \'return FileOperationRequest\'");
@@ -5709,7 +5713,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp79 == 1)) {
                 this.Manager.Comment("reaching state \'S194\'");
                 this.Manager.Comment("executing step \'call FileOperationRequest(MainChannel,Smb2002,Read,InvalidChannel" +
-                        "Sequence,WithReplayFlag,DefaultParameters)\'");
+                        "List,WithReplayFlag,DefaultParameters)\'");
                 this.IReplayAdapterInstance.FileOperationRequest(((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelSwitchChannelType)(0)), Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb2002, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelRequestCommand.Read, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelChannelSequenceType.InvalidChannelSequence, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelSetReplayFlag)(0)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelRequestCommandParameters)(0)));
                 this.Manager.Comment("reaching state \'S195\'");
                 this.Manager.Comment("checking step \'return FileOperationRequest\'");
@@ -5849,7 +5853,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S20\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp80, "c of ReadConfig, state S20");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S21\'");
@@ -5882,7 +5886,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return PrepareFileOperation\'");
                 this.Manager.Comment("reaching state \'S28\'");
                 this.Manager.Comment("executing step \'call FileOperationRequest(MainChannel,Smb302,Write,DefaultChannel" +
-                        "Sequence,WithReplayFlag,DefaultParameters)\'");
+                        "List,WithReplayFlag,DefaultParameters)\'");
                 this.IReplayAdapterInstance.FileOperationRequest(((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelSwitchChannelType)(0)), Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelRequestCommand.Write, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelChannelSequenceType)(0)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelSetReplayFlag)(0)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelRequestCommandParameters)(0)));
                 this.Manager.Comment("reaching state \'S29\'");
                 this.Manager.Comment("checking step \'return FileOperationRequest\'");
@@ -6029,7 +6033,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S198\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp82, "c of ReadConfig, state S198");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S199\'");
@@ -6206,7 +6210,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S210\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp84, "c of ReadConfig, state S210");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S211\'");
@@ -6344,7 +6348,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S219\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp86, "c of ReadConfig, state S219");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S220\'");
@@ -6527,7 +6531,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S231\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp88, "c of ReadConfig, state S231");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S232\'");
@@ -6704,7 +6708,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S242\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp90, "c of ReadConfig, state S242");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S243\'");
@@ -6879,7 +6883,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S254\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp92, "c of ReadConfig, state S254");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S255\'");
@@ -7059,7 +7063,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S266\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp94, "c of ReadConfig, state S266");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S267\'");
@@ -7232,7 +7236,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S277\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp96, "c of ReadConfig, state S277");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S278\'");
@@ -7265,7 +7269,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp97 == 2)) {
                 this.Manager.Comment("reaching state \'S285\'");
                 this.Manager.Comment("executing step \'call FileOperationRequest(MainChannel,Smb2002,Read,InvalidChannel" +
-                        "Sequence,WithReplayFlag,DefaultParameters)\'");
+                        "List,WithReplayFlag,DefaultParameters)\'");
                 this.IReplayAdapterInstance.FileOperationRequest(((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelSwitchChannelType)(0)), Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb2002, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelRequestCommand.Read, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelChannelSequenceType.InvalidChannelSequence, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelSetReplayFlag)(0)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelRequestCommandParameters)(0)));
                 this.Manager.Comment("reaching state \'S286\'");
                 this.Manager.Comment("checking step \'return FileOperationRequest\'");
@@ -7401,7 +7405,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S289\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp98, "c of ReadConfig, state S289");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S290\'");
@@ -7577,7 +7581,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S301\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp100, "c of ReadConfig, state S301");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S302\'");
@@ -7750,7 +7754,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S312\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp102, "c of ReadConfig, state S312");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S313\'");
@@ -7925,7 +7929,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S323\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp104, "c of ReadConfig, state S323");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S324\'");
@@ -8051,7 +8055,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S332\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp106, "c of ReadConfig, state S332");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S333\'");
@@ -8184,7 +8188,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S340\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp108, "c of ReadConfig, state S340");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S341\'");
@@ -8317,7 +8321,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S348\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp110, "c of ReadConfig, state S348");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S349\'");
@@ -8450,7 +8454,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S356\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp112, "c of ReadConfig, state S356");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S357\'");
@@ -8588,7 +8592,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S37\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp114, "c of ReadConfig, state S37");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S38\'");
@@ -8721,7 +8725,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S365\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp116, "c of ReadConfig, state S365");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S366\'");
@@ -8858,7 +8862,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S374\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp118, "c of ReadConfig, state S374");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S375\'");
@@ -8992,7 +8996,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S382\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp120, "c of ReadConfig, state S382");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S383\'");
@@ -9126,7 +9130,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S390\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp122, "c of ReadConfig, state S390");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S391\'");
@@ -9257,7 +9261,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S399\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp124, "c of ReadConfig, state S399");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S400\'");
@@ -9390,7 +9394,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S407\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp126, "c of ReadConfig, state S407");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S408\'");
@@ -9523,7 +9527,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S415\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp128, "c of ReadConfig, state S415");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S416\'");
@@ -9654,7 +9658,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S423\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp130, "c of ReadConfig, state S423");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S424\'");
@@ -9781,7 +9785,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S431\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp132, "c of ReadConfig, state S431");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S432\'");
@@ -9913,7 +9917,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S439\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp134, "c of ReadConfig, state S439");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S440\'");
@@ -10044,7 +10048,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S447\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp136, "c of ReadConfig, state S447");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S448\'");
@@ -10178,7 +10182,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S455\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp138, "c of ReadConfig, state S455");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S456\'");
@@ -10309,7 +10313,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S463\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp140, "c of ReadConfig, state S463");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S464\'");
@@ -10440,7 +10444,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S471\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp142, "c of ReadConfig, state S471");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S472\'");
@@ -10578,7 +10582,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S480\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp144, "c of ReadConfig, state S480");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S481\'");
@@ -10712,7 +10716,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S489\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp146, "c of ReadConfig, state S489");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S490\'");
@@ -10845,7 +10849,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S50\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp148, "c of ReadConfig, state S50");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S51\'");
@@ -11014,7 +11018,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S497\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp150, "c of ReadConfig, state S497");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S498\'");
@@ -11148,7 +11152,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S505\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp152, "c of ReadConfig, state S505");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S506\'");
@@ -11279,7 +11283,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S514\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp154, "c of ReadConfig, state S514");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S515\'");
@@ -11412,7 +11416,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S522\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp156, "c of ReadConfig, state S522");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S523\'");
@@ -11545,7 +11549,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S530\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp158, "c of ReadConfig, state S530");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S531\'");
@@ -11672,7 +11676,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S538\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp160, "c of ReadConfig, state S538");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S539\'");
@@ -11803,7 +11807,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S546\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp162, "c of ReadConfig, state S546");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S547\'");
@@ -11934,7 +11938,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S554\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp164, "c of ReadConfig, state S554");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S555\'");
@@ -12066,7 +12070,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S562\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp166, "c of ReadConfig, state S562");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S563\'");
@@ -12199,7 +12203,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S570\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp168, "c of ReadConfig, state S570");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S571\'");
@@ -12326,7 +12330,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S579\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp170, "c of ReadConfig, state S579");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S580\'");
@@ -12459,7 +12463,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S587\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp172, "c of ReadConfig, state S587");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S588\'");
@@ -12484,7 +12488,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return PrepareFileOperation\'");
                 this.Manager.Comment("reaching state \'S591\'");
                 this.Manager.Comment("executing step \'call FileOperationRequest(MainChannel,Smb302,IoCtl,DefaultChannel" +
-                        "Sequence,WithReplayFlag,DefaultParameters)\'");
+                        "List,WithReplayFlag,DefaultParameters)\'");
                 this.IReplayAdapterInstance.FileOperationRequest(((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelSwitchChannelType)(0)), Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelRequestCommand.IoCtl, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelChannelSequenceType)(0)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelSetReplayFlag)(0)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelRequestCommandParameters)(0)));
                 this.Manager.Comment("reaching state \'S592\'");
                 this.Manager.Comment("checking step \'return FileOperationRequest\'");
@@ -12593,7 +12597,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S596\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp174, "c of ReadConfig, state S596");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S597\'");
@@ -12730,7 +12734,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S605\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp176, "c of ReadConfig, state S605");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S606\'");
@@ -12864,7 +12868,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S62\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp178, "c of ReadConfig, state S62");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S63\'");
@@ -12880,7 +12884,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             if ((temp179 == 2)) {
                 this.Manager.Comment("reaching state \'S64\'");
                 this.Manager.Comment("executing step \'call FileOperationRequest(MainChannel,Smb2002,Read,InvalidChannel" +
-                        "Sequence,WithReplayFlag,DefaultParameters)\'");
+                        "List,WithReplayFlag,DefaultParameters)\'");
                 this.IReplayAdapterInstance.FileOperationRequest(((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelSwitchChannelType)(0)), Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb2002, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelRequestCommand.Read, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelChannelSequenceType.InvalidChannelSequence, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelSetReplayFlag)(0)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelRequestCommandParameters)(0)));
                 this.Manager.Comment("reaching state \'S65\'");
                 this.Manager.Comment("checking step \'return FileOperationRequest\'");
@@ -13040,7 +13044,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S613\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp180, "c of ReadConfig, state S613");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S614\'");
@@ -13171,7 +13175,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S622\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp182, "c of ReadConfig, state S622");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S623\'");
@@ -13298,7 +13302,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S630\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp184, "c of ReadConfig, state S630");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S631\'");
@@ -13431,7 +13435,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S638\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp186, "c of ReadConfig, state S638");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S639\'");
@@ -13565,7 +13569,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S646\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp188, "c of ReadConfig, state S646");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S647\'");
@@ -13698,7 +13702,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S654\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp190, "c of ReadConfig, state S654");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S655\'");
@@ -13829,7 +13833,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S662\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp192, "c of ReadConfig, state S662");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S663\'");
@@ -13961,7 +13965,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S670\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp194, "c of ReadConfig, state S670");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S671\'");
@@ -14093,7 +14097,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S678\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp196, "c of ReadConfig, state S678");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S679\'");
@@ -14220,7 +14224,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S686\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp198, "c of ReadConfig, state S686");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S687\'");
@@ -14245,7 +14249,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment("checking step \'return PrepareFileOperation\'");
                 this.Manager.Comment("reaching state \'S690\'");
                 this.Manager.Comment("executing step \'call FileOperationRequest(MainChannel,Smb302,IoCtl,InvalidChannel" +
-                        "Sequence,WithoutReplayFlag,DefaultParameters)\'");
+                        "List,WithoutReplayFlag,DefaultParameters)\'");
                 this.IReplayAdapterInstance.FileOperationRequest(((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelSwitchChannelType)(0)), Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelRequestCommand.IoCtl, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelChannelSequenceType.InvalidChannelSequence, ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelSetReplayFlag)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayModelRequestCommandParameters)(0)));
                 this.Manager.Comment("reaching state \'S691\'");
                 this.Manager.Comment("checking step \'return FileOperationRequest\'");
@@ -14347,7 +14351,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S695\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp200, "c of ReadConfig, state S695");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S696\'");
@@ -14479,7 +14483,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S703\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp202, "c of ReadConfig, state S703");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S704\'");
@@ -14612,7 +14616,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S711\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp204, "c of ReadConfig, state S711");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S712\'");
@@ -14746,7 +14750,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S720\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp206, "c of ReadConfig, state S720");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S721\'");
@@ -14883,7 +14887,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S73\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp208, "c of ReadConfig, state S73");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S74\'");
@@ -15054,7 +15058,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S729\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp210, "c of ReadConfig, state S729");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S730\'");
@@ -15187,7 +15191,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S737\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp212, "c of ReadConfig, state S737");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S738\'");
@@ -15318,7 +15322,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S746\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp214, "c of ReadConfig, state S746");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S747\'");
@@ -15452,7 +15456,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S754\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp216, "c of ReadConfig, state S754");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S755\'");
@@ -15586,7 +15590,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S762\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp218, "c of ReadConfig, state S762");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S763\'");
@@ -15719,7 +15723,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S770\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp220, "c of ReadConfig, state S770");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S771\'");
@@ -15851,7 +15855,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S778\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp222, "c of ReadConfig, state S778");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S779\'");
@@ -15983,7 +15987,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S786\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp224, "c of ReadConfig, state S786");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S787\'");
@@ -16110,7 +16114,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S794\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp226, "c of ReadConfig, state S794");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S795\'");
@@ -16241,7 +16245,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S802\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp228, "c of ReadConfig, state S802");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S803\'");
@@ -16373,7 +16377,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S810\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp230, "c of ReadConfig, state S810");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S811\'");
@@ -16506,7 +16510,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S818\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp232, "c of ReadConfig, state S818");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S819\'");
@@ -16633,7 +16637,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S827\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp234, "c of ReadConfig, state S827");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S828\'");
@@ -16767,7 +16771,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S836\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp236, "c of ReadConfig, state S836");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S837\'");
@@ -16905,7 +16909,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S85\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp238, "c of ReadConfig, state S85");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S86\'");
@@ -17080,7 +17084,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S845\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp240, "c of ReadConfig, state S845");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S846\'");
@@ -17211,7 +17215,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S854\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp242, "c of ReadConfig, state S854");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S855\'");
@@ -17344,7 +17348,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S862\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp244, "c of ReadConfig, state S862");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S863\'");
@@ -17477,7 +17481,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S870\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp246, "c of ReadConfig, state S870");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S871\'");
@@ -17611,7 +17615,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S878\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp248, "c of ReadConfig, state S878");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S879\'");
@@ -17738,7 +17742,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S886\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp250, "c of ReadConfig, state S886");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S887\'");
@@ -17871,7 +17875,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S894\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp252, "c of ReadConfig, state S894");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S895\'");
@@ -18004,7 +18008,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S902\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp254, "c of ReadConfig, state S902");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S903\'");
@@ -18135,7 +18139,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S910\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp256, "c of ReadConfig, state S910");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S911\'");
@@ -18266,7 +18270,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S918\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp258, "c of ReadConfig, state S918");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S919\'");
@@ -18393,7 +18397,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S926\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp260, "c of ReadConfig, state S926");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S927\'");
@@ -18520,7 +18524,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S935\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp262, "c of ReadConfig, state S935");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S936\'");
@@ -18654,7 +18658,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S943\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp264, "c of ReadConfig, state S943");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S944\'");
@@ -18786,7 +18790,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S96\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp266, "c of ReadConfig, state S96");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S97\'");
@@ -18961,7 +18965,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S951\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp268, "c of ReadConfig, state S951");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S952\'");
@@ -19095,7 +19099,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S960\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp270, "c of ReadConfig, state S960");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S961\'");
@@ -19229,7 +19233,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S969\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp272, "c of ReadConfig, state S969");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S970\'");
@@ -19355,7 +19359,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S978\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp274, "c of ReadConfig, state S978");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S979\'");
@@ -19488,7 +19492,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S986\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp276, "c of ReadConfig, state S986");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S987\'");
@@ -19622,7 +19626,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S994\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp278, "c of ReadConfig, state S994");
-            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S995\'");

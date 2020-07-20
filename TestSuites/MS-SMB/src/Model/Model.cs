@@ -61,7 +61,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// 2. Session be closed; 
         /// 3. Tree connection is established and all the requests have received their assotiated responses.
         /// </returns>
-        /// [AcceptingStateCondition]
+        [AcceptingStateCondition]
         public static bool AcceptingCondition()
         {
             return ((smbState == SmbState.SessionSetupSuccess)
@@ -76,7 +76,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <summary>
         /// Initialize the SMB underlying transport connection.
         /// </summary>
-        /// [Rule(Action = "SmbConnectionRequest()")]
+        [Rule(Action = "SmbConnectionRequest()")]
         public static void SmbConnectionRequest()
         {
             Condition.IsTrue(smbState == SmbState.Init);
@@ -89,7 +89,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// </summary>
         /// <param name="clientPlatform">Platform of client.</param>
         /// <param name="sutPlatform">Platform of the SUT.</param>
-        /// [Rule]
+        [Rule]
         public static void SmbConnectionResponse(Platform clientPlatform, Platform sutPlatform)
         {
             Condition.IsTrue(smbState == SmbState.ConnectionRequest);
@@ -124,7 +124,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="isMessageModePipe">
         /// It indicates the adapter to setup a message mode pipe or byte mode pipe.
         /// </param>
-        /// [Rule]
+        [Rule]
         public static void ServerSetup(
             FileSystemType fsType,
             SignState sutSignState,
@@ -188,7 +188,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="isRapServerActive">It indicates whether the RAP server is available on the SUT machine.</param>
         /// <param name="isSupportResumeKey">It indicates whether the SUT will support resume key.</param>
         /// <param name="isSupportCopyChunk">It indicates whether the SUT will support CopyChunk.</param>
-        /// [Rule]
+        [Rule]
         public static void ServerSetupResponse(
             int totalBytesWritten,
             bool isSupportInfoLevelPassthrough,
@@ -245,7 +245,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="isCreatePipeStatus">
         /// It indicates the status of create named pipe and mailslot operation.
         /// </param>
-        /// [Rule]
+        [Rule]
         public static void CreatePipeAndMailslot(List<string> pipes, List<string> mailslot, out bool isCreatePipeStatus)
         {
             Condition.IsTrue(smbState == SmbState.ServerSetupSuccess);
@@ -269,7 +269,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="clientSignState">
         /// It indicates the sign state of the client: Required, Enabled, Disabled or Disabled Unless Required.
         /// </param>
-        /// [Rule]
+        [Rule]
         public static void NegotiateRequest(
             int messageId,
             bool isSupportExtSecurity,
@@ -303,7 +303,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        /// [Rule]
+        [Rule]
         public static void NegotiateResponse(
             int messageId,
             bool isSignatureRequired,
@@ -431,7 +431,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        /// [Rule]
+        [Rule]
         public static void NonExtendedNegotiateResponse(
             int messageId,
             bool isSignatureRequired,
@@ -524,7 +524,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        /// [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
+        [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
         public static void ErrorNegotiateResponse(int messageId, MessageStatus messageStatus)
         {
             Condition.IsTrue(smbConnection.sentRequest.ContainsKey(messageId));
@@ -575,7 +575,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// It indicates whether the maximum the SUT buffer size of bytes for writing exceeds the MaxBufferSize field.
         /// </param>
         /// <param name="flag2">This value is ignored by the SUT, and it is used for traditional test.</param>
-        /// [Rule]
+        [Rule]
         public static void SessionSetupRequest(
             AccountType account,
             int messageId,
@@ -634,7 +634,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="isWriteBufferSizeExceedMaxBufferSize"> Indicate whether the maximum buffer size 
         /// for writing can exceed the MaxBufferSize field.</param>
         /// <param name="flag2"> This value is ignored by the server and it is used for traditional test.</param>
-        /// [Rule]
+        [Rule]
         public static void SessionSetupNonUnicodeRequest(
             AccountType account,
             int messageId,
@@ -696,7 +696,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// It indicates whether the maximum the SUT buffer size of bytes for writing exceeds the MaxBufferSize field.
         /// </param>
         /// <param name="flag2">This value is ignored by the SUT, and it is used for traditional test.</param>
-        /// [Rule]
+        [Rule]
         public static void NonExtendedSessionSetupRequest(
             AccountType account,
             int messageId,
@@ -757,7 +757,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        /// [Rule]
+        [Rule]
         public static void SessionSetupResponse(
             int messageId,
             int sessionId,
@@ -843,7 +843,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// </param>
         /// <param name="isRs2322Implemented">It indicates whether RS2322 is implemented.</param>
         /// Disable warning CA1801 isRs2322Implemented is used in Adapter.
-        /// [Rule]
+        [Rule]
         [SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters")]
         public static void NonExtendedSessionSetupResponse(
             int messageId,
@@ -893,7 +893,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        /// [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
+        [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
         public static void ErrorSessionSetupResponse(int messageId, MessageStatus messageStatus)
         {
             Condition.IsTrue(smbConnection.sentRequest.ContainsKey(messageId));
@@ -941,7 +941,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="flag2">This value is ignored by the SUT, and it is used for traditional test.</param>
         /// <param name="isGSSTokenValid">It indicates whether the GSSToken is valid.</param>
         /// <param name="isUserIdValid">It indicates whether the user id is valid.</param>
-        /// [Rule]
+        [Rule]
         public static void SessionSetupRequestAdditional(
             AccountType accountType,
             int messageId,
@@ -995,7 +995,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        /// [Rule]
+        [Rule]
         public static void SessionSetupResponseAdditional(
             int messageId,
             int sessionId,
@@ -1082,7 +1082,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        /// [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
+        [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
         public static void ErrorSessionSetupResponseAdditional(int messageId, MessageStatus messageStatus)
         {
             Condition.IsTrue(smbConnection.sentRequest.ContainsKey(messageId));
@@ -1158,7 +1158,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="shareName">This is used to indicate which share the client wants to access.</param>
         /// <param name="shareType">The share type client intends to access.</param>
         /// <param name="isSigned">It indicates whether the message is signed or not for this request.</param>
-        /// [Rule]
+        [Rule]
         public static void TreeConnectRequest(
             int messageId,
             int sessionId,
@@ -1202,7 +1202,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="share"> Share name.</param>
         /// <param name="shareType"> The share type client intends to access.</param>
         /// <param name="isSigned"> Indicate whether the message is signed or not for this request.</param>
-        /// [Rule]
+        [Rule]
         public static void TreeMultipleConnectRequest(
             int messageId,
             int sessionId,
@@ -1253,7 +1253,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// One flag of OptionalSupport field. If set, the SUT is using signing key protection as the client
         /// requested.
         /// </param>
-        /// [Rule]
+        [Rule]
         public static void TreeConnectResponse(
             int messageId,
             int sessionId,
@@ -1310,7 +1310,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
         /// <param name="isRs357Implemented">It indicates whether RS357 is implemented.</param>
-        /// [Rule]
+        [Rule]
         public static void ErrorTreeConnectResponse(int messageId, MessageStatus messageStatus, bool isRs357Implemented)
         {
             Condition.IsTrue(smbConnection.sentRequest.ContainsKey(messageId));
@@ -1401,7 +1401,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="isMaximumAllowedSet">
         /// It indicates that the client set the maximum allowed in the request.
         /// </param>
-        /// [Rule]
+        [Rule]
         public static void CreateRequest(
             int messageId,
             int sessionId,
@@ -1472,7 +1472,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="isNoStream">
         /// It indicates whether NO_SUBSTREAMS bit in the FileStatusFlags field is set in the SMB_COM_NT_CREATE_ANDX 
         /// response.</param>
-        /// [Rule]
+        [Rule]
         public static void CreateResponse(
             int messageId,
             int sessionId,
@@ -1566,7 +1566,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        /// [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
+        [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
         /// Disable warning CA1502, because there are 28 error situations in this command according to the technical 
         /// document, the cyclomatic complexity cannot be reduced.
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
@@ -1809,7 +1809,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="fid">File ID.</param>
         /// <param name="shareType">The type of resource the client intends to access.</param>
         /// <param name="isSigned">It indicates whether the message is signed or not for this request.</param>
-        /// [Rule]
+        [Rule]
         public static void ReadRequest(
             int messageId,
             int sessionId,
@@ -1838,7 +1838,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        /// [Rule]
+        [Rule]
         /// Disable CA1801, because the parameter 'isSigned' is used for interface implementation.
         [SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters")]
         public static void ReadResponse(
@@ -1873,7 +1873,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        /// [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
+        [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
         public static void ErrorReadResponse(int messageId, MessageStatus messageStatus)
         {
             Condition.IsTrue(smbConnection.sentRequest.ContainsKey(messageId));
@@ -1904,7 +1904,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="shareType">The type of resource the client intends to access.</param>
         /// <param name="isSigned">It indicates whether the message is signed or not for this request.</param>
         /// <param name="synchronize">This flag SHOULD be ignored by both clients and servers.</param>
-        /// [Rule]
+        [Rule]
         public static void WriteRequest(
             int messageId,
             int sessionId,
@@ -1940,7 +1940,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="isWrittenByteCountLargerThanMaxBufferSize">
         /// It indicates whether the written bytes count is lager than MaxBufferSize.
         /// </param>
-        /// [Rule]
+        [Rule]
         /// Disable CA1801, because the parameter 'isSigned' is used for interface implementation.
         [SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters")]
         public static void WriteResponse(
@@ -2023,7 +2023,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
         /// <param name="isRs5229Implemented">It indicates whether RS5229 is implemented.</param>
-        /// [Rule]
+        [Rule]
         public static void ErrorWriteResponse(int messageId, MessageStatus messageStatus, bool isRs5229Implemented)
         {
             Condition.IsTrue(smbConnection.sentRequest.ContainsKey(messageId));
@@ -2114,7 +2114,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        /// [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
+        [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
         public static void ErrorInvalidCommandResponse(int messageId, MessageStatus messageStatus)
         {
             Condition.IsTrue(smbConnection.sentRequest.ContainsKey(messageId));
@@ -2150,7 +2150,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// Close session request.
         /// </summary>
         /// <param name="sessionId">The session Id which the session is being closed.</param>
-        /// [Rule]
+        [Rule]
         public static void SessionClose(int sessionId)
         {
             Condition.IsTrue(smbState == SmbState.End);
@@ -2184,7 +2184,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="isSigned">It indicates whether the message is signed or not for this response.</param>
         /// <param name="fid">The SMB file identifier of the target directory.</param>
         /// <param name="command">This is used to tell adapter to send an invalid kind of command.</param>
-        /// [Rule]
+        [Rule]
         public static void FsctlBadCommandRequest(
             int messageId,
             int sessionId,
@@ -2233,7 +2233,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        /// [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
+        [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
         /// Disable warning CA1502, because there are 35 error situations in this command according to the technical 
         /// document, the cyclomatic complexity cannot be reduced.
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]

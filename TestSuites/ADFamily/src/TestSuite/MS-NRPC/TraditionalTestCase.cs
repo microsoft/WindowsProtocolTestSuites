@@ -12,7 +12,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
     using Microsoft.Protocols.TestTools;
     using Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc;
     using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
-    using Microsoft.SpecExplorer.Runtime.Testing;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>

@@ -26,11 +26,6 @@ if ErrorLevel 1 (
 	exit /b 1
 )
 
-call "%CurrentPath%..\..\..\common\checkSpecExplorer.cmd"
-if ErrorLevel 1 (
-	exit /b 1
-)
-
 call "%CurrentPath%..\..\..\common\checkMMA.cmd"
 if ErrorLevel 1 (
 	exit /b 1

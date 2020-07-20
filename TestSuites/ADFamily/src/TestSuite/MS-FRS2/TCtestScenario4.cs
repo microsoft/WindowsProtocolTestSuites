@@ -6,11 +6,12 @@ namespace GeneratedTests {
     using System.Collections.Generic;
     using System.Text;
     using System.Reflection;
-    using Microsoft.SpecExplorer.Runtime.Testing;
     using Microsoft.Protocols.TestTools;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Microsoft.Protocols.TestSuites.MS_FRS2;
-    
+    using Microsoft.Protocols.TestTools.Messages.Runtime;
+    using FRS2Model;
+
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
     public partial class TCtestScenario4 : PtfTestClassBase {
         
@@ -179,17 +180,51 @@ namespace GeneratedTests {
         #region Test Initialization and Cleanup
         protected override void TestInitialize() {
             this.InitializeTestManager();
-            this.IFRS2ManagedAdapterInstance = ((IFRS2ManagedAdapter)(this.Manager.GetAdapter(typeof(IFRS2ManagedAdapter))));
+            this.IFRS2ManagedAdapterInstance = ((IFRS2ManagedAdapter)(this.GetAdapter(typeof(IFRS2ManagedAdapter))));
             FRS2ManagedAdapter.PreCheck();
-            this.Manager.Subscribe(AsyncPollResponseEventInfo, this.IFRS2ManagedAdapterInstance);
-            this.Manager.Subscribe(RequestUpdatesEventInfo, this.IFRS2ManagedAdapterInstance);
-            this.Manager.Subscribe(InitializeFileTransferAsyncEventInfo, this.IFRS2ManagedAdapterInstance);
-            this.Manager.Subscribe(RawGetFileDataResponseEventInfo, this.IFRS2ManagedAdapterInstance);
-            this.Manager.Subscribe(RdcGetFileDataEventInfo, this.IFRS2ManagedAdapterInstance);
-            this.Manager.Subscribe(RequestRecordsEventInfo, this.IFRS2ManagedAdapterInstance);
+            this.IFRS2ManagedAdapterInstance.AsyncPollResponseEvent += IFRS2ManagedAdapterInstance_AsyncPollResponseEvent;
+            this.IFRS2ManagedAdapterInstance.RequestUpdatesEvent += IFRS2ManagedAdapterInstance_RequestUpdatesEvent;
+            this.IFRS2ManagedAdapterInstance.InitializeFileTransferAsyncEvent += IFRS2ManagedAdapterInstance_InitializeFileTransferAsyncEvent;
+            this.IFRS2ManagedAdapterInstance.RawGetFileDataResponseEvent += IFRS2ManagedAdapterInstance_RawGetFileDataResponseEvent;
+            this.IFRS2ManagedAdapterInstance.RdcGetFileDataEvent += IFRS2ManagedAdapterInstance_RdcGetFileDataEvent;
+            this.IFRS2ManagedAdapterInstance.RequestRecordsEvent += IFRS2ManagedAdapterInstance_RequestRecordsEvent;
         }
-        
+
+        private void IFRS2ManagedAdapterInstance_RequestRecordsEvent(RecordsStatus status)
+        {
+            this.Manager.AddEvent(RequestRecordsEventInfo, this.IFRS2ManagedAdapterInstance, new object[] { status });
+        }
+
+        private void IFRS2ManagedAdapterInstance_RdcGetFileDataEvent(SizeReturned sizeReturned)
+        {
+            this.Manager.AddEvent(RdcGetFileDataEventInfo, this.IFRS2ManagedAdapterInstance, new object[] { sizeReturned });
+        }
+
+        private void IFRS2ManagedAdapterInstance_AsyncPollResponseEvent(VVGeneration vvGen)
+        {
+            this.Manager.AddEvent(AsyncPollResponseEventInfo, this.IFRS2ManagedAdapterInstance, new object[] { vvGen });
+        }
+
+        private void IFRS2ManagedAdapterInstance_RequestUpdatesEvent(FilePresense present, UPDATE_STATUS updateStatus)
+        {
+            this.Manager.AddEvent(RequestUpdatesEventInfo, this.IFRS2ManagedAdapterInstance, new object[] { present, updateStatus });
+        }
+        private void IFRS2ManagedAdapterInstance_RawGetFileDataResponseEvent(bool isEOF)
+        {
+            this.Manager.AddEvent(RawGetFileDataResponseEventInfo, this.IFRS2ManagedAdapterInstance, new object[] { isEOF });
+        }
+
+        private void IFRS2ManagedAdapterInstance_InitializeFileTransferAsyncEvent(ServerContext context, RDC_Sig_Level rdcsigLevel, bool isEOF)
+        {
+            this.Manager.AddEvent(InitializeFileTransferAsyncEventInfo, this.IFRS2ManagedAdapterInstance, new object[] { context, rdcsigLevel, isEOF });
+        }
         protected override void TestCleanup() {
+            this.IFRS2ManagedAdapterInstance.AsyncPollResponseEvent -= IFRS2ManagedAdapterInstance_AsyncPollResponseEvent;
+            this.IFRS2ManagedAdapterInstance.RequestUpdatesEvent -= IFRS2ManagedAdapterInstance_RequestUpdatesEvent;
+            this.IFRS2ManagedAdapterInstance.InitializeFileTransferAsyncEvent -= IFRS2ManagedAdapterInstance_InitializeFileTransferAsyncEvent;
+            this.IFRS2ManagedAdapterInstance.RawGetFileDataResponseEvent -= IFRS2ManagedAdapterInstance_RawGetFileDataResponseEvent;
+            this.IFRS2ManagedAdapterInstance.RdcGetFileDataEvent -= IFRS2ManagedAdapterInstance_RdcGetFileDataEvent;
+            this.IFRS2ManagedAdapterInstance.RequestRecordsEvent -= IFRS2ManagedAdapterInstance_RequestRecordsEvent;
             base.TestCleanup();
             this.CleanupTestManager();
         }

@@ -16,9 +16,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
     using System.Collections.Generic;
     using System.Text;
     using System.Reflection;
-    using Microsoft.SpecExplorer.Runtime.Testing;
     using Microsoft.Protocols.TestTools;
-    
+    using Microsoft.Protocols.TestTools.Messages.Runtime;
+
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
     public partial class NegotiateTestCase : PtfTestClassBase
     {
@@ -71,12 +71,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         protected override void TestInitialize()
         {
             this.InitializeTestManager();
-            this.INegotiateAdapterInstance = ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Negotiate.INegotiateAdapter)(this.Manager.GetAdapter(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Negotiate.INegotiateAdapter))));
-            this.Manager.Subscribe(NegotiateResponseInfo, this.INegotiateAdapterInstance);
+            this.INegotiateAdapterInstance = ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Negotiate.INegotiateAdapter)(this.GetAdapter(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Negotiate.INegotiateAdapter))));
+            this.INegotiateAdapterInstance.NegotiateResponse += INegotiateAdapterInstance_NegotiateResponse;
+        }
+
+        private void INegotiateAdapterInstance_NegotiateResponse(Adapter.ModelSmb2Status status, TestTools.StackSdk.FileAccessService.Smb2.DialectRevision dialectRevision)
+        {
+            this.Manager.AddEvent(NegotiateResponseInfo, this.INegotiateAdapterInstance, new object[] { status, dialectRevision });
         }
 
         protected override void TestCleanup()
         {
+            this.INegotiateAdapterInstance.NegotiateResponse -= INegotiateAdapterInstance_NegotiateResponse;
             base.TestCleanup();
             this.CleanupTestManager();
         }
