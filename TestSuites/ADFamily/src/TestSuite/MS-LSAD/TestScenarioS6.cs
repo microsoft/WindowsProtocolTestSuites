@@ -6,11 +6,10 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
     using System.Collections.Generic;
     using System.Text;
     using System.Reflection;
-    using Microsoft.SpecExplorer.Runtime.Testing;
     using Microsoft.Protocols.TestTools;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Spec Explorer", "3.4.2965.0")]
+    using Microsoft.Protocols.TestTools.Messages.Runtime;
+
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
     public partial class TestScenarioS6 : PtfTestClassBase {
         
@@ -54,7 +53,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
         #region Test Initialization and Cleanup
         protected override void TestInitialize() {
             this.InitializeTestManager();
-            this.ILsadManagedAdapterInstance = ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ILsadManagedAdapter)(this.Manager.GetAdapter(typeof(Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ILsadManagedAdapter))));
+            this.ILsadManagedAdapterInstance = ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ILsadManagedAdapter)(this.GetAdapter(typeof(Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ILsadManagedAdapter))));
         }
         
         protected override void TestCleanup() {
@@ -114,7 +113,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             this.Manager.Comment("reaching state \'S150\'");
             this.Manager.Comment("checking step \'return EnumeratePrivilegesAccount/[out {Invalid}]:InvalidHandle\'");
             TestManagerHelpers.AssertNotNull(this.Manager, temp5, "privileges of EnumeratePrivilegesAccount, state S150");
-            CollectionAssert.AreEquivalent(new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> { Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Invalid }, temp5, "privileges of EnumeratePrivilegesAccount, state S150, field selection Rep");
+            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege>(this.Manager, new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> { Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Invalid }, temp5, "privileges of EnumeratePrivilegesAccount, state S150, field selection Rep");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.InvalidHandle, temp6, "return of EnumeratePrivilegesAccount, state S150");
             this.Manager.Comment("reaching state \'S160\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp7;
@@ -209,7 +208,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             this.Manager.Comment("reaching state \'S155\'");
             this.Manager.Comment("checking step \'return EnumeratePrivilegesAccount/[out {Invalid}]:InvalidHandle\'");
             TestManagerHelpers.AssertNotNull(this.Manager, temp17, "privileges of EnumeratePrivilegesAccount, state S155");
-            CollectionAssert.AreEquivalent(new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> { Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Invalid }, temp17, "privileges of EnumeratePrivilegesAccount, state S155, field selection Rep");
+            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege>(this.Manager, new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> { Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Invalid }, temp17, "privileges of EnumeratePrivilegesAccount, state S155, field selection Rep");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.InvalidHandle, temp18, "return of EnumeratePrivilegesAccount, state S155");
             this.Manager.Comment("reaching state \'S165\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp19;
@@ -291,7 +290,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             this.Manager.Comment("reaching state \'S156\'");
             this.Manager.Comment("checking step \'return EnumeratePrivilegesAccount/[out {Invalid}]:InvalidHandle\'");
             TestManagerHelpers.AssertNotNull(this.Manager, temp29, "privileges of EnumeratePrivilegesAccount, state S156");
-            CollectionAssert.AreEquivalent(new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> { Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Invalid }, temp29, "privileges of EnumeratePrivilegesAccount, state S156, field selection Rep");
+            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege>(this.Manager, new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> { Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Invalid }, temp29, "privileges of EnumeratePrivilegesAccount, state S156, field selection Rep");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.InvalidHandle, temp30, "return of EnumeratePrivilegesAccount, state S156");
             this.Manager.Comment("reaching state \'S166\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp31;
@@ -423,7 +422,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             this.Manager.Comment("reaching state \'S157\'");
             this.Manager.Comment("checking step \'return EnumeratePrivilegesAccount/[out {Invalid}]:AccessDenied\'");
             TestManagerHelpers.AssertNotNull(this.Manager, temp45, "privileges of EnumeratePrivilegesAccount, state S157");
-            CollectionAssert.AreEquivalent(new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> { Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Invalid }, temp45, "privileges of EnumeratePrivilegesAccount, state S157, field selection Rep");
+            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> (this.Manager, new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> { Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Invalid }, temp45, "privileges of EnumeratePrivilegesAccount, state S157, field selection Rep");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.AccessDenied, temp46, "return of EnumeratePrivilegesAccount, state S157");
             this.Manager.Comment("reaching state \'S167\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp47;
@@ -505,7 +504,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             this.Manager.Comment("reaching state \'S151\'");
             this.Manager.Comment("checking step \'return EnumeratePrivilegesAccount/[out {Valid}]:Success\'");
             TestManagerHelpers.AssertNotNull(this.Manager, temp57, "privileges of EnumeratePrivilegesAccount, state S151");
-            CollectionAssert.AreEquivalent(new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> { Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Valid }, temp57, "privileges of EnumeratePrivilegesAccount, state S151, field selection Rep");
+            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege>(this.Manager, new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> { Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Valid }, temp57, "privileges of EnumeratePrivilegesAccount, state S151, field selection Rep");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus)(0)), temp58, "return of EnumeratePrivilegesAccount, state S151");
             this.Manager.Comment("reaching state \'S161\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp59;
@@ -704,7 +703,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             this.Manager.Comment("reaching state \'S158\'");
             this.Manager.Comment("checking step \'return EnumeratePrivilegesAccount/[out {Invalid}]:InvalidHandle\'");
             TestManagerHelpers.AssertNotNull(this.Manager, temp79, "privileges of EnumeratePrivilegesAccount, state S158");
-            CollectionAssert.AreEquivalent(new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> { Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Invalid }, temp79, "privileges of EnumeratePrivilegesAccount, state S158, field selection Rep");
+            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege>(this.Manager, new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> { Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Invalid }, temp79, "privileges of EnumeratePrivilegesAccount, state S158, field selection Rep");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.InvalidHandle, temp80, "return of EnumeratePrivilegesAccount, state S158");
             this.Manager.Comment("reaching state \'S168\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp81;
@@ -944,7 +943,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             this.Manager.Comment("reaching state \'S159\'");
             this.Manager.Comment("checking step \'return EnumeratePrivilegesAccount/[out {Valid}]:Success\'");
             TestManagerHelpers.AssertNotNull(this.Manager, temp107, "privileges of EnumeratePrivilegesAccount, state S159");
-            CollectionAssert.AreEquivalent(new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> { Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Valid }, temp107, "privileges of EnumeratePrivilegesAccount, state S159, field selection Rep");
+            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege>(this.Manager, new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> { Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Valid }, temp107, "privileges of EnumeratePrivilegesAccount, state S159, field selection Rep");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus)(0)), temp108, "return of EnumeratePrivilegesAccount, state S159");
             this.Manager.Comment("reaching state \'S169\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp109;
@@ -1002,7 +1001,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             this.Manager.Comment("reaching state \'S152\'");
             this.Manager.Comment("checking step \'return EnumeratePrivilegesAccount/[out {Invalid}]:AccessDenied\'");
             TestManagerHelpers.AssertNotNull(this.Manager, temp115, "privileges of EnumeratePrivilegesAccount, state S152");
-            CollectionAssert.AreEquivalent(new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> { Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Invalid }, temp115, "privileges of EnumeratePrivilegesAccount, state S152, field selection Rep");
+            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege>(this.Manager, new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> { Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Invalid }, temp115, "privileges of EnumeratePrivilegesAccount, state S152, field selection Rep");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus.AccessDenied, temp116, "return of EnumeratePrivilegesAccount, state S152");
             this.Manager.Comment("reaching state \'S162\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp117;
@@ -1062,7 +1061,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             this.Manager.Comment("reaching state \'S153\'");
             this.Manager.Comment("checking step \'return EnumeratePrivilegesAccount/[out {Valid}]:Success\'");
             TestManagerHelpers.AssertNotNull(this.Manager, temp123, "privileges of EnumeratePrivilegesAccount, state S153");
-            CollectionAssert.AreEquivalent(new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> { Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Valid }, temp123, "privileges of EnumeratePrivilegesAccount, state S153, field selection Rep");
+            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege>(this.Manager, new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> { Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Valid }, temp123, "privileges of EnumeratePrivilegesAccount, state S153, field selection Rep");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus)(0)), temp124, "return of EnumeratePrivilegesAccount, state S153");
             this.Manager.Comment("reaching state \'S163\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp125;
@@ -1122,7 +1121,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
             this.Manager.Comment("reaching state \'S154\'");
             this.Manager.Comment("checking step \'return EnumeratePrivilegesAccount/[out {Valid}]:Success\'");
             TestManagerHelpers.AssertNotNull(this.Manager, temp131, "privileges of EnumeratePrivilegesAccount, state S154");
-            CollectionAssert.AreEquivalent(new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> { Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Valid }, temp131, "privileges of EnumeratePrivilegesAccount, state S154, field selection Rep");
+            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege>(this.Manager, new List<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege> { Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.AccountPrivilege.Valid }, temp131, "privileges of EnumeratePrivilegesAccount, state S154, field selection Rep");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus>(this.Manager, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus)(0)), temp132, "return of EnumeratePrivilegesAccount, state S154");
             this.Manager.Comment("reaching state \'S164\'");
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ErrorStatus temp133;

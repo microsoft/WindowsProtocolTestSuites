@@ -383,21 +383,46 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             CColumnGroupArray groupArray,
             uint lcid)
         {
+            CPMCreateQueryIn(
+                columnSet,
+                restrictionArray,
+                sortSet,
+                categorizationSet,
+                rowsetProperties,
+                pidMapper,
+                groupArray,
+                lcid,
+                out _);
+        }
+
+        /// <summary>
+        /// Create and send CPMCreateQueryIn and expect response.
+        /// </summary>
+        public void CPMCreateQueryIn(
+            CColumnSet? columnSet,
+            CRestrictionArray? restrictionArray,
+            CInGroupSortAggregSets? sortSet,
+            CCategorizationSet? categorizationSet,
+            CRowsetProperties rowsetProperties,
+            CPidMapper pidMapper,
+            CColumnGroupArray groupArray,
+            uint lcid,
+            out CPMCreateQueryOut createQueryOut)
+        {
             var client = GetClient(isClientConnected);
 
             client.SendCPMCreateQueryIn(columnSet, restrictionArray, sortSet, categorizationSet, rowsetProperties, pidMapper, groupArray, lcid);
 
-            CPMCreateQueryOut response;
-            client.ExpectMessage<CPMCreateQueryOut>(out response);
+            client.ExpectMessage<CPMCreateQueryOut>(out createQueryOut);
 
-            if (response.Header._status == 0)
+            if (createQueryOut.Header._status == 0)
             {
                 uint[] cursor = null;// to be obtained from the server
-                validator.ValidateCreateQueryOutResponse(response, out cursor);
+                validator.ValidateCreateQueryOutResponse(createQueryOut, out cursor);
                 cursorMap.Add(clientMachineName, cursor[0]);
             }
 
-            CPMCreateQueryOutResponse(response.Header._status);
+            CPMCreateQueryOutResponse(createQueryOut.Header._status);
         }
 
         /// <summary>
@@ -852,9 +877,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="fBwdFetch">Indicating the order in which to fetch the rows</param>
         /// <param name="eType">Type of SeekDescription</param>
         /// <param name="response">The CPMGetRowsOut response from the server.</param>
-        public void CPMGetRowsIn(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType, out CPMGetRowsOut response, uint chapter = 0)
+        public void CPMGetRowsIn(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType, out CPMGetRowsOut response)
         {
-            CPMGetRowsIn(cursor, rowsToTransfer, rowWidth, cbReadBuffer, fBwdFetch, eType, null, out response, chapter);
+            CPMGetRowsIn(cursor, rowsToTransfer, rowWidth, cbReadBuffer, fBwdFetch, eType, null, null, out response);
         }
 
         /// <summary>
@@ -868,13 +893,30 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="eType">Type of SeekDescription</param>
         /// <param name="seekDescription">The SeekDescription structure.</param>
         /// <param name="response">The CPMGetRowsOut response from the server.</param>
-        public void CPMGetRowsIn(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType, object seekDescription, out CPMGetRowsOut response, uint chapter = 0)
+        public void CPMGetRowsIn(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType, object seekDescription, out CPMGetRowsOut response)
+        {
+            CPMGetRowsIn(cursor, rowsToTransfer, rowWidth, cbReadBuffer, fBwdFetch, eType, null, seekDescription, out response);
+        }
+
+        /// <summary>
+        /// CPMGetRowsIn() message requests rows from a query.
+        /// </summary>
+        /// <param name="cursor">Representing the handle from the CPMCreateQueryOut message identifying the query for which to retrieve rows. </param>
+        /// <param name="rowsToTransfer">Indicating the maximum number of rows that the client will receive in response to this message</param>
+        /// <param name="rowWidth">Indicating the length of a row, in bytes</param>
+        /// <param name="cbReadBuffer">This field MUST be set to the maximum of the value of _cbRowWidth or 1000 times the value of _cRowsToTransfer, rounded up to the nearest 512 byte multiple. The value MUST NOT exceed 0x00004000</param>
+        /// <param name="fBwdFetch">Indicating the order in which to fetch the rows</param>
+        /// <param name="eType">Type of SeekDescription</param>
+        /// <param name="chapt">The handle to a chapter of hierarchical results.</param>
+        /// <param name="seekDescription">The SeekDescription structure.</param>
+        /// <param name="response">The CPMGetRowsOut response from the server.</param>
+        public void CPMGetRowsIn(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType, uint? chapt, object seekDescription, out CPMGetRowsOut response)
         {
             response = null;
 
             // Get hold of appropriate Sender (Pipe with/without connection)
             var client = GetClient(isClientConnected);
-            var getRowsInMessage = builder.GetCPMRowsInMessage(cursor, rowsToTransfer, rowWidth, cbReadBuffer, fBwdFetch, eType, seekDescription, out rowsInReserve, chapter);
+            var getRowsInMessage = builder.GetCPMRowsInMessage(cursor, rowsToTransfer, rowWidth, cbReadBuffer, fBwdFetch, eType, chapt, seekDescription, out rowsInReserve);
             var getRowsInMessageBytes = Helper.ToBytes(getRowsInMessage);
 
             client.SendCPMGetRowsIn(
