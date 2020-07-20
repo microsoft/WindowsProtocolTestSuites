@@ -97,13 +97,14 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 GetRowsetProperties(),
                 GetPidMapper(propSpec),
                 new CColumnGroupArray(),
-                wspAdapter.builder.parameter.LCID_VALUE);
+                wspAdapter.builder.parameter.LCID_VALUE,
+                out CPMCreateQueryOut createQueryResponse);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
-            wspAdapter.CPMSetBindingsIn(1, MessageBuilder.rowWidth, 1, new CTableColumn[] {  GetTableColumn(propSpec, aggregateType)  });
+            wspAdapter.CPMSetBindingsIn(createQueryResponse.aCursors[0], MessageBuilder.rowWidth, 1, new CTableColumn[] {  GetTableColumn(propSpec, aggregateType)  });
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn and expects success.");
-            wspAdapter.CPMGetRowsIn(1, 20, MessageBuilder.rowWidth, wspAdapter.builder.parameter.BufferSize, 0, wspAdapter.builder.parameter.EType, out CPMGetRowsOut response, 0);
+            wspAdapter.CPMGetRowsIn(createQueryResponse.aCursors[0], 20, MessageBuilder.rowWidth, wspAdapter.builder.parameter.BufferSize, 0, wspAdapter.builder.parameter.EType, 0, null, out CPMGetRowsOut response);
 
             Site.Assert.AreEqual(1U, response._cRowsReturned, "The count of rows returned from server should be 1.");
 
@@ -146,15 +147,16 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 GetRowsetProperties(),
                 GetPidMapper(propSpec), 
                 new CColumnGroupArray(), 
-                wspAdapter.builder.parameter.LCID_VALUE);
+                wspAdapter.builder.parameter.LCID_VALUE,
+                out CPMCreateQueryOut createQueryResponse);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn to the first two cursors and expects success.");
-            wspAdapter.CPMSetBindingsIn(1, MessageBuilder.rowWidth, 1, new CTableColumn[] { GetTableColumn(WspConsts.System_Author, CAggregSpec_type_Values.DBAGGTTYPE_BYNONE) });
-            wspAdapter.CPMSetBindingsIn(2, MessageBuilder.rowWidth, 1, new CTableColumn[] { GetTableColumn(propSpec, CAggregSpec_type_Values.DBAGGTTYPE_CHILDCOUNT) });
+            wspAdapter.CPMSetBindingsIn(createQueryResponse.aCursors[0], MessageBuilder.rowWidth, 1, new CTableColumn[] { GetTableColumn(WspConsts.System_Author, CAggregSpec_type_Values.DBAGGTTYPE_BYNONE) });
+            wspAdapter.CPMSetBindingsIn(createQueryResponse.aCursors[1], MessageBuilder.rowWidth, 1, new CTableColumn[] { GetTableColumn(propSpec, CAggregSpec_type_Values.DBAGGTTYPE_CHILDCOUNT) });
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn to the first two cursors and expects success.");
-            wspAdapter.CPMGetRowsIn(1, 20, MessageBuilder.rowWidth, wspAdapter.builder.parameter.BufferSize, 0, wspAdapter.builder.parameter.EType, out CPMGetRowsOut response, 0);
-            wspAdapter.CPMGetRowsIn(2, 1, MessageBuilder.rowWidth, wspAdapter.builder.parameter.BufferSize, 0, wspAdapter.builder.parameter.EType, out response, 1);
+            wspAdapter.CPMGetRowsIn(createQueryResponse.aCursors[0], 20, MessageBuilder.rowWidth, wspAdapter.builder.parameter.BufferSize, 0, wspAdapter.builder.parameter.EType, 0, null, out CPMGetRowsOut response);
+            wspAdapter.CPMGetRowsIn(createQueryResponse.aCursors[1], 1, MessageBuilder.rowWidth, wspAdapter.builder.parameter.BufferSize, 0, wspAdapter.builder.parameter.EType, 1, null, out response);
 
             Site.Assert.AreEqual(1U, response._cRowsReturned, "The count of rows returned for cursor 2 should be 1.");
 
