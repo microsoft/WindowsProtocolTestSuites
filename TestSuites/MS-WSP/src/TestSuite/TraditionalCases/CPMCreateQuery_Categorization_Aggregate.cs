@@ -110,6 +110,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             if (aggregateType == CAggregSpec_type_Values.DBAGGTTYPE_DATERANGE)
             {
+                Site.Assert.AreEqual(vType_Values.VT_VECTOR | vType_Values.VT_FILETIME,
+                    response.Rows[0].Columns[0].rowVariant.vType,
+                    "The type of the column should be VT_VECTOR | VT_FILETIME.");
                 object[] dateRange = (object[])response.Rows[0].Columns[0].Data;
                 Site.Assert.AreEqual(2, dateRange.Length, "The count of date range returned from server should be 2.");
                 Site.Log.Add(LogEntryKind.Debug, $"The first date is {dateRange[0]}");
@@ -117,7 +120,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             }
             else
             {
-                int data = Convert.ToInt32(response.Rows[0].Columns[0].Data); // Only one row one column is returned.
+                int data = Convert.ToInt32(response.Rows[0].Columns[0].Data); // Only one row with a single column is returned.
                 Site.Assert.AreEqual(comparedValue, data, $"The aggregated value retrieved from the row should be {comparedValue}");
             }
         }
@@ -160,7 +163,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Assert.AreEqual(1U, response._cRowsReturned, "The count of rows returned for cursor 2 should be 1.");
 
-            int data = Convert.ToInt32(response.Rows[0].Columns[0].Data); // One row one column is returned.
+            int data = Convert.ToInt32(response.Rows[0].Columns[0].Data); // One row with a single column is returned.
             Site.Assert.AreEqual(comparedValue, data, $"The aggregated value retrieved from the row should be {comparedValue}");
         }
 
@@ -213,7 +216,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             sortKey.locale = wspAdapter.builder.parameter.LCID_VALUE;
             sortKey.dwOrder = dwOrder_Values.QUERY_SORTASCEND;
             sortKey.pidColumn = aggregateType == CAggregSpec_type_Values.DBAGGTTYPE_CHILDCOUNT ? idColumn : 0;
-            sortKey.dwIndividual = dwIndividual_Values.QUERY_SORTINDIVIDUAL;
+            sortKey.dwIndividual = dwIndividual_Values.QUERY_SORTALL;
 
             // Construct aggregation set.
             var aggregateSet = new CAggregSet();

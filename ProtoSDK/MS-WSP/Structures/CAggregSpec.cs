@@ -79,11 +79,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         public CAggregSpec_type_Values type;
 
         /// <summary>
-        /// This field MUST be 3 bytes in length, and the value it contains is arbitrary. The content of this field MUST be ignored by the receiver.
-        /// </summary>
-        public byte[] padding;
-
-        /// <summary>
         /// A 32-bit unsigned integer specifying the number of characters in the Alias field.
         /// </summary>
         public UInt32 ccAlias;

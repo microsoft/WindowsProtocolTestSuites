@@ -689,7 +689,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 inGroupSortAggregSets.SortSets[0].sortArray[i].dwOrder = dwOrder_Values.QUERY_SORTASCEND;
                 inGroupSortAggregSets.SortSets[0].sortArray[i].pidColumn = pidColumns[i]; 
                 inGroupSortAggregSets.SortSets[0].sortArray[i].locale = wspAdapter.builder.parameter.LCID_VALUE;
-                inGroupSortAggregSets.SortSets[0].sortArray[i].dwIndividual = dwIndividual_Values.QUERY_SORTINDIVIDUAL;
+                inGroupSortAggregSets.SortSets[0].sortArray[i].dwIndividual = dwIndividual_Values.QUERY_SORTALL;
             }
 
             return inGroupSortAggregSets;
