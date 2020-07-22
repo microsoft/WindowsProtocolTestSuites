@@ -286,7 +286,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 throw new InvalidOperationException("Unexpected response from server!");
             }
 
-            if (header._status != 0 && header._status != (uint)WspErrorCode.DB_S_ENDOFROWSET)
+            if (header._status != 0 && header._status != (uint)WspErrorCode.DB_S_ENDOFROWSET && header._status != (uint)WspErrorCode.DB_S_DIALECTIGNORED)
             {
                 response.Header = header;
                 return header._status;
