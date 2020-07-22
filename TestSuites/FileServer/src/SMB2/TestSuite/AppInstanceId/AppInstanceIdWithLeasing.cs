@@ -186,7 +186,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             else
             {
                 BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client3: Attempt to create an empty file to trigger lease break.");
-                sutProtocolController.CreateFile(string.Format(@"{0}\{1}", Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare), testDirectory), CurrentTestCaseName, string.Empty);
+                sutProtocolController.CreateFile(Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare), $"{testDirectory}\\{CurrentTestCaseName}", string.Empty);
             }
 
             Thread.Sleep(500);

@@ -231,7 +231,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             uncSharePath = Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare);
             fileName = "DirectoryLeasing_BreakReadCachingByChildDeleted_" + Guid.NewGuid().ToString() + ".txt";
             testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare);
-            sutProtocolController.CreateFile(uncSharePath + "\\" + testDirectory, fileName, string.Empty);
+            sutProtocolController.CreateFile(uncSharePath, $"{testDirectory}\\{fileName}", string.Empty);
             #endregion
 
             #region Initialize test clients
@@ -303,7 +303,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             uncSharePath = Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare);
             fileName = "DirectoryLeasing_BreakReadCachingByChildAdded_" + Guid.NewGuid().ToString() + ".txt";
             testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare);
-            sutProtocolController.CreateFile(uncSharePath + "\\" + testDirectory, fileName, string.Empty);
+            sutProtocolController.CreateFile(uncSharePath, $"{testDirectory}\\{fileName}", string.Empty);
             #endregion
 
             #region Initialize test clients
@@ -374,7 +374,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             uncSharePath = Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare);
             fileName = "DirectoryLeasing_BreakReadCachingByChildModified_" + Guid.NewGuid().ToString() + ".txt";
             testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare);
-            sutProtocolController.CreateFile(uncSharePath + "\\" + testDirectory, fileName, string.Empty);
+            sutProtocolController.CreateFile(uncSharePath, $"{testDirectory}\\{fileName}", string.Empty);
             #endregion
 
             #region Initialize test clients
@@ -447,7 +447,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             uncSharePath = Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare);
             testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare);
             fileName = "DirectoryLeasing_BreakReadCachingByChildRenamed_" + Guid.NewGuid().ToString() + ".txt";
-            sutProtocolController.CreateFile(uncSharePath + "\\" + testDirectory, fileName, string.Empty);
+            sutProtocolController.CreateFile(uncSharePath, $"{testDirectory}\\{fileName}", string.Empty);
             #endregion
 
             #region Initialize test clients
@@ -536,7 +536,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Create test directory.");
             uncSharePath = Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare);
             string parentDirectory = CreateTestDirectory(uncSharePath);
-            testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare + "\\" + parentDirectory);
+            testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare, parentDirectory);
             #endregion
 
             #region Initialize test clients
@@ -640,7 +640,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Create test directory.");
             uncSharePath = Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare);
             string parentDirectory = CreateTestDirectory(uncSharePath);
-            testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare + "\\" + parentDirectory);
+            testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare, parentDirectory);
             #endregion
 
             #region Initialize test clients
