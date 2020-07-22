@@ -74,14 +74,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             }
 
             string[] filePath = fileName.Split(new char[] { '\\' });
-            // file Path contains wildcard, so get the files by search pattern.
+            // fileName contains wildcard, so get the files by search pattern.
             string[] files = System.IO.Directory.GetFiles(filePath[0], filePath[1]);
 
             foreach (var file in files)
             {
                 using (FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read))
                 {
-                    // file contains path of the orginal file, the pure file name needs to be extract it and then copy it to the destination share.
+                    // "file" contains path of the orginal file, the pure file name needs to be extracted and then the file can be copied to the destination share.
                     var paths = file.Split(new char[] { '\\' });
                     var pureFileName = paths[paths.Length - 1];
                     byte[] buf = new byte[fs.Length];

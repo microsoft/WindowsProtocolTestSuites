@@ -97,15 +97,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.TestSuite
             return CreateTestDirectoryInternal(uncSharePath, null);
         }
 
-        private string CreateTestDirectoryInternal(string share, string parentDirectoryName)
+        private string CreateTestDirectoryInternal(string uncSharePath, string parentDirectoryName)
         {
             string testDirectory = string.IsNullOrEmpty(parentDirectoryName) ? null : $"{parentDirectoryName}\\";
             testDirectory += CurrentTestCaseName + "_" + Guid.NewGuid().ToString();
-            string testDirectoryFullPath = string.Format(@"{0}\{1}", share, testDirectory);
+            string testDirectoryFullPath = string.Format(@"{0}\{1}", uncSharePath, testDirectory);
             testDirectories.Add(testDirectoryFullPath);
-            sutProtocolController.CreateDirectory(share, testDirectory);
+            sutProtocolController.CreateDirectory(uncSharePath, testDirectory);
             BaseTestSite.Log.Add(LogEntryKind.Debug, "Create a directory {0} in the share {1}.",
-                testDirectory, share);
+                testDirectory, uncSharePath);
             return testDirectory;
         }
 
