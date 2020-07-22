@@ -441,6 +441,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             this.decoder = decodePacketCallback;
             this.packetQueue = new QueueManager();
             this.listenSock = new Socket(transportConfig.LocalIpAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            this.listenSock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
             this.streamType = transportConfig.StreamType;
             IPEndPoint endPoint = new IPEndPoint(config.LocalIpAddress, config.LocalIpPort);
             this.listenSock.Bind(endPoint);
@@ -503,8 +504,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 {
                     if (this.listenSock != null)
                     {
-                        this.listenSock.Close();
-                        this.listenSock = null;
+                        try
+                        {
+                            this.listenSock.Shutdown(SocketShutdown.Both);
+                        }
+                        finally
+                        {
+                            this.listenSock.Close();
+                            this.listenSock = null;
+                        }
                     }
 
                     lock (this.receivingStreams)
