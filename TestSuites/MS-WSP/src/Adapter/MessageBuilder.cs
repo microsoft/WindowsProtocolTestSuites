@@ -138,14 +138,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         uint LOGICAL_AND = 0x1;
 
-        //newC
         /// <summary>
         /// static value for chapter of CPMGetRowsIn message
         /// </summary>
         public static uint chapter;
 
+        /// <summary>
+        /// static value for RowWidth of CPMGetRowsIn message
+        /// </summary>
         public static uint rowWidth = 92;
-
 
         public MessageBuilderParameter parameter;
 
@@ -981,7 +982,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         }
         #endregion
 
-        #region Structures of CPMgetRowsIn message
+        #region Structures of CPMGetRowsIn message
         /// <summary>
         /// Gets FullPropertySpec for a given GUID, eKIND and propSec Id
         /// </summary>
@@ -1034,6 +1035,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             switch (eType)
             {
+                case eType_Values.None:
+                    break;
+
                 case eType_Values.eRowSeekNext:
                     {
                         result = new CRowSeekNext()

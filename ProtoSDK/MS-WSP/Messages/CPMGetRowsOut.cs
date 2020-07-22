@@ -91,7 +91,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             Header = header;
 
             // Do not parse message body if the status in header is not success.
-            if (header._status != (uint)WspErrorCode.SUCCESS && header._status != (uint)WspErrorCode.DB_S_ENDOFROWSET)
+            if (header._status != (uint)WspErrorCode.SUCCESS && header._status != (uint)WspErrorCode.DB_S_ENDOFROWSET && header._status != (uint)WspErrorCode.DB_S_DIALECTIGNORED)
             {
                 return;
             }
@@ -117,7 +117,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                     SeekDescription = buffer.ToStruct<CRowSeekAtRatio>();
                     break;
                 case RowSeekType.eRowSeekByBookmark:
-                    SeekDescription = buffer.ToStruct<CRowSeekByBookmark>();
+                    var tempSeekDescription = new CRowSeekByBookmark();
+                    tempSeekDescription.FromBytes(buffer);
+                    SeekDescription = tempSeekDescription;
                     break;
             }
 

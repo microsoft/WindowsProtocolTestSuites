@@ -909,6 +909,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// The scopes specified for the query were incorrectly formatted.
         /// </summary>
         QRY_E_INVALIDSCOPES = 0x80040718,
+
+        /// <summary>
+        /// Input dialect was ignored and command was processed using default dialect.
+        /// </summary>
+        DB_S_DIALECTIGNORED = 0x00040ECD,
+
+        /// <summary>
+        /// The data area passed to a system call is too small.
+        /// </summary>
+        STATUS_BUFFER_TOO_SMALL = 0xC0000023,
+
+        /// <summary>
+        /// Numerator was greater than denominator. Values must express ratio between zero and 1.
+        /// </summary>
+        DB_E_BADRATIO = 0x80040E12,
     }
 
     /// <summary>

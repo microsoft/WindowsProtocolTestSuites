@@ -138,36 +138,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             tempBuffer.Add(_chapt);
 
-            switch (eType)
+            switch (SeekDescription)
             {
-                case eType_Values.None:
-                    {
-
-                    }
+                case CRowSeekNext seek:
+                    seek.ToBytes(tempBuffer);
                     break;
 
-                case eType_Values.eRowSeekNext:
-                    {
-                        ((CRowSeekNext)SeekDescription).ToBytes(tempBuffer);
-                    }
+                case CRowSeekAt seek:
+                    seek.ToBytes(tempBuffer);
                     break;
 
-                case eType_Values.eRowSeekAt:
-                    {
-                        ((CRowSeekAt)SeekDescription).ToBytes(tempBuffer);
-                    }
+                case CRowSeekAtRatio seek:
+                    seek.ToBytes(tempBuffer);
                     break;
 
-                case eType_Values.eRowSeekAtRatio:
-                    {
-                        ((CRowSeekAtRatio)SeekDescription).ToBytes(tempBuffer);
-                    }
+                case CRowSeekByBookmark seek:
+                    seek.ToBytes(tempBuffer);
                     break;
 
-                case eType_Values.eRowSeekByBookmark:
-                    {
-                        ((CRowSeekByBookmark)SeekDescription).ToBytes(tempBuffer);
-                    }
+                default:
                     break;
             }
 
