@@ -111,10 +111,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         public void ToBytes(WspBuffer buffer)
         {
             buffer.Add(type);
+            buffer.AlignWrite(4);
 
             buffer.Add(ccAlias);
 
-            buffer.AddUnicodeString(Alias, false);
+            if (ccAlias != 0)
+            {
+                buffer.AddUnicodeString(Alias, false);
+            }
 
             buffer.Add(idColumn);
 

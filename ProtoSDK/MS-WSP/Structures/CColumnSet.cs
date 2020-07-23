@@ -30,9 +30,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         {
             buffer.Add(count);
 
-            foreach (var index in indexes)
+            if (count != 0)
             {
-                buffer.Add(index);
+                foreach (var index in indexes)
+                {
+                    buffer.Add(index);
+                }
             }
         }
     }
