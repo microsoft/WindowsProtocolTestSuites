@@ -29,7 +29,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             {
                 return false;
             }
-            uint createStatus = client.Create(treeId, directoryName, CreateOptions_Values.FILE_DIRECTORY_FILE, out FILEID fileId, out Smb2CreateContextResponse[] serverCreateContexts);
+            uint createStatus = client.Create(treeId, directoryName, 
+                CreateOptions_Values.FILE_DIRECTORY_FILE, 
+                out FILEID fileId, 
+                out Smb2CreateContextResponse[] serverCreateContexts,
+                checker: (header, response) => { });
             DisconnectToShare(treeId, fileId);
             return createStatus == Smb2Status.STATUS_SUCCESS;
         }
@@ -40,7 +44,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             {
                 return;
             }
-            client.Create(treeId, directoryName, CreateOptions_Values.FILE_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE, out FILEID fileId, out Smb2CreateContextResponse[] serverCreateContexts);
+            client.Create(treeId, directoryName, 
+                CreateOptions_Values.FILE_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE, 
+                out FILEID fileId, 
+                out Smb2CreateContextResponse[] serverCreateContexts,
+                checker: (header, response) => { });
             DisconnectToShare(treeId, fileId);
         }
 
@@ -50,8 +58,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             {
                 return false;
             }
-            uint createStatus = client.Create(treeId, fileName, CreateOptions_Values.FILE_NON_DIRECTORY_FILE, out FILEID fileId, out Smb2CreateContextResponse[] serverCreateContexts);
-            client.Write(treeId, fileId, content);
+            uint createStatus = client.Create(treeId, fileName, 
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE, 
+                out FILEID fileId, 
+                out Smb2CreateContextResponse[] serverCreateContexts,
+                checker: (header, response) => { });
+            if (createStatus == Smb2Status.STATUS_SUCCESS)
+            {
+                client.Write(treeId, fileId, content);
+            }
             DisconnectToShare(treeId, fileId);
             return createStatus == Smb2Status.STATUS_SUCCESS;
         }
@@ -62,7 +77,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             {
                 return;
             }
-            client.Create(treeId, fileName, CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE, out FILEID fileId, out Smb2CreateContextResponse[] serverCreateContexts);
+            client.Create(treeId, fileName, 
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE, 
+                out FILEID fileId, 
+                out Smb2CreateContextResponse[] serverCreateContexts,
+                checker: (header, response)=> { });
             DisconnectToShare(treeId, fileId);
         }
 
@@ -86,7 +105,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                     var pureFileName = paths[paths.Length - 1];
                     byte[] buf = new byte[fs.Length];
                     fs.Read(buf, 0, (int)fs.Length);
-                    client.Create(treeId, pureFileName, CreateOptions_Values.FILE_NON_DIRECTORY_FILE, out FILEID fileId, out Smb2CreateContextResponse[] serverCreateContexts);
+                    client.Create(treeId, pureFileName, 
+                        CreateOptions_Values.FILE_NON_DIRECTORY_FILE, 
+                        out FILEID fileId, 
+                        out Smb2CreateContextResponse[] serverCreateContexts,
+                        checker: (header, response) => { });
                     client.Write(treeId, fileId, buf);
                     client.Close(treeId, fileId);
                 }
@@ -112,22 +135,31 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 return false;
             }
 
-            client.ConnectToServer(Smb2TransportType.Tcp, serverName, serverIPs[0]);
-            uint status = client.Negotiate(
-                Smb2Utility.GetDialects(testConfig.MaxSmbVersionSupported),
-                true);
-            if (status != Smb2Status.STATUS_SUCCESS)
+            uint status = 0;
+            foreach (var ip in serverIPs) // Try to connect to each IP since not all of them can be connected successfully.
             {
-                return false;
-            }
-            status = client.SessionSetup(testConfig.DefaultSecurityPackage, serverName, testConfig.AccountCredential, false);
-            if (status != Smb2Status.STATUS_SUCCESS)
-            {
-                return false;
+                client.ConnectToServer(Smb2TransportType.Tcp, serverName, ip);
+                status = client.Negotiate(
+                    Smb2Utility.GetDialects(testConfig.MaxSmbVersionSupported),
+                    true);
+                if (status != Smb2Status.STATUS_SUCCESS)
+                {
+                    continue;
+                }
+                status = client.SessionSetup(testConfig.DefaultSecurityPackage, serverName, testConfig.AccountCredential, false);
+                if (status != Smb2Status.STATUS_SUCCESS)
+                {
+                    continue;
+                }
+
+                status = client.TreeConnect(uncSharePath, out treeId);
+                if (status == Smb2Status.STATUS_SUCCESS)
+                {
+                    return true;
+                }
             }
 
-            client.TreeConnect(uncSharePath, out treeId);
-            return status == Smb2Status.STATUS_SUCCESS;
+            return false;
         }
 
         private void DisconnectToShare(uint treeId, FILEID fileId)

@@ -558,7 +558,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             #region CREATE an open to request lease
             uint treeIdClientRequestingLease;
             FILEID fileIdClientRequestingLease;
-            string targetName = parentDirectory + "\\" + testDirectory;
             LeaseStateValues requestedLeaseState = LeaseStateValues.SMB2_LEASE_READ_CACHING | LeaseStateValues.SMB2_LEASE_HANDLE_CACHING;
 
             // Add expected NewLeaseState
@@ -567,7 +566,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
                 "Client attempts to request lease {0} on directory {1}", requestedLeaseState, testDirectory);
-            status = CreateOpenFromClient(clientRequestingLease, clientGuidRequestingLease, targetName, true, requestedLeaseState, AccessMask.GENERIC_READ, out treeIdClientRequestingLease, out fileIdClientRequestingLease);
+            status = CreateOpenFromClient(clientRequestingLease, clientGuidRequestingLease, testDirectory, true, requestedLeaseState, AccessMask.GENERIC_READ, out treeIdClientRequestingLease, out fileIdClientRequestingLease);
             BaseTestSite.Assert.AreEqual(
                 Smb2Status.STATUS_SUCCESS,
                 status,
@@ -662,7 +661,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             #region CREATE an open to request lease
             uint treeIdClientRequestingLease;
             FILEID fileIdClientRequestingLease;
-            string targetName = parentDirectory + "\\" + testDirectory;
             LeaseStateValues requestedLeaseState = LeaseStateValues.SMB2_LEASE_READ_CACHING | LeaseStateValues.SMB2_LEASE_HANDLE_CACHING;
 
             // Add expected NewLeaseState
@@ -671,7 +669,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
                 "Client attempts to request lease {0} on directory {1}", requestedLeaseState, testDirectory);
-            status = CreateOpenFromClient(clientRequestingLease, clientGuidRequestingLease, targetName, true, requestedLeaseState, AccessMask.GENERIC_READ, out treeIdClientRequestingLease, out fileIdClientRequestingLease);
+            status = CreateOpenFromClient(clientRequestingLease, clientGuidRequestingLease, testDirectory, true, requestedLeaseState, AccessMask.GENERIC_READ, out treeIdClientRequestingLease, out fileIdClientRequestingLease);
             BaseTestSite.Assert.AreEqual(
                 Smb2Status.STATUS_SUCCESS,
                 status,
@@ -730,7 +728,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             Smb2CreateContextResponse[] serverCreateContexts;
             status = clientTriggeringBreak.Create(
                 treeIdClientTriggeringBreak,
-                targetName,
+                testDirectory,
                 CreateOptions_Values.FILE_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
                 out fileIdClientTriggeringBreak,
                 out serverCreateContexts,
