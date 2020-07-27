@@ -152,7 +152,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                     continue;
                 }
 
-                status = client.TreeConnect(uncSharePath, out treeId);
+                status = client.TreeConnect(uncSharePath, out treeId, checker: (header, response) => { });
                 if (status == Smb2Status.STATUS_SUCCESS)
                 {
                     return true;
