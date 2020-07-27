@@ -419,7 +419,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             {
                 uint[] cursor = null;// to be obtained from the server
                 validator.ValidateCreateQueryOutResponse(createQueryOut, out cursor);
-                cursorMap.Add(clientMachineName, cursor[0]);
+                cursorMap[clientMachineName] = cursor[0];
             }
 
             CPMCreateQueryOutResponse(createQueryOut.Header._status);
@@ -1181,9 +1181,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// CPMFreeCursorIn() requests to release a cursor.
         /// </summary>
-        /// <param name="isCursorValid">Indicates the client requesting 
-        /// to release a cursor.</param>
+        /// <param name="isCursorValid">Indicates the client requesting to release a cursor.</param>
         public void CPMFreeCursorIn(bool isCursorValid)
+        {
+            CPMFreeCursorIn(isCursorValid, out _);
+        }
+
+        /// <summary>
+        /// CPMFreeCursorIn() requests to release a cursor.
+        /// </summary>
+        /// <param name="isCursorValid">Indicates the client requesting to release a cursor.</param>
+        /// <param name="freeCursorOut">The CPMFreeCursorOut response from the server.</param> 
+        public void CPMFreeCursorIn(bool isCursorValid, out CPMFreeCursorOut freeCursorOut)
         {
             uint cursorAssociated = 0;
             if (isCursorValid)
@@ -1194,13 +1203,32 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             {
                 cursorAssociated = uint.MaxValue - 10;
             }
-            uint errorCode = 0xFFFFFFFF; // Get it from Server
-                                         //string machineName = GetMachineName(machineNameValue);
-                                         //uint cursor = GetCursor(clientMachineName);
-            byte[] freeCursorOut;
-            byte[] freeCursor = builder.GetFreeCursorIn(cursorAssociated);
+
+            CPMFreeCursorIn(cursorAssociated, out freeCursorOut);
+        }
+
+        /// <summary>
+        /// CPMFreeCursorIn() requests to release a cursor.
+        /// </summary>
+        /// <param name="cursor">The handle to the query cursor.</param>
+        public void CPMFreeCursorIn(uint cursor)
+        {
+            CPMFreeCursorIn(cursor, out _);
+        }
+
+        /// <summary>
+        /// CPMFreeCursorIn() requests to release a cursor.
+        /// </summary>
+        /// <param name="cursor">The handle to the query cursor.</param>
+        /// <param name="freeCursorOut">The CPMFreeCursorOut response from the server.</param>
+        public void CPMFreeCursorIn(uint cursor, out CPMFreeCursorOut freeCursorOut)
+        {
+            freeCursorOut = null;
+            CPMFreeCursorIn freeCursorIn = builder.GetFreeCursorIn(cursor);
             RequestSender sender = GetRequestSender(isClientConnected);
-            sender.SendMessage(freeCursor, out freeCursorOut);
+            var tempBuffer = new WspBuffer();
+            freeCursorIn.ToBytes(tempBuffer);
+            sender.SendMessage(tempBuffer.GetBytes(), out byte[] freeCursorOutBytes);
             if (sender == defaultSender)
             {
                 // This means that disconnect message has been sent
@@ -1219,19 +1247,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             wspTestSite.CaptureRequirement(3, @"All messages MUST be " +
                 "transported using a named pipe: \\pipe\\MSFTEWDS");
             int startingIndex = 0;
-            uint msgId
-                    = Helper.GetUInt(freeCursorOut, ref startingIndex);
-            errorCode = Helper.GetUInt(freeCursorOut, ref startingIndex);
+            uint msgId = Helper.GetUInt(freeCursorOutBytes, ref startingIndex);
+            uint errorCode = Helper.GetUInt(freeCursorOutBytes, ref startingIndex);
             if (CPMFreeCursorOutResponse != null)
             {
                 uint checkSumZero = 0x00000000;
-                if ((msgId == (uint)MessageType.CPMFreeCursorOut))
+                if ((msgId == (uint)MessageType.CPMFreeCursorOut) && (errorCode == 0x00000000))
                 {
-                    validator.ValidateFreeCursorOut(freeCursorOut, checkSumZero);
+                    freeCursorOut = new CPMFreeCursorOut();
+                    freeCursorOut.FromBytes(new WspBuffer(freeCursorOutBytes));
+                    validator.ValidateFreeCursorOut(freeCursorOutBytes, checkSumZero);
                 }
+
                 CPMFreeCursorOutResponse(errorCode);
             }
         }
+
         /// <summary>
         /// This event is used to get the response from 
         /// CPMFreeCursorIn request.
@@ -1244,10 +1275,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         #region CPMDisconnect
 
         /// <summary>
-        /// CPMDisconnect() request is sent to end the connection 
-        /// with the server.
+        /// CPMDisconnect() request is sent to end the connection with the server.
         /// </summary>
         public void CPMDisconnect()
+        {
+            CPMDisconnect(true);
+        }
+
+        /// <summary>
+        /// CPMDisconnect() request is sent to end the connection with the server.
+        /// </summary>
+        /// <param name="removeClient">Remove the client associated to the current connection.</param>
+        public void CPMDisconnect(bool removeClient)
         {
             byte[] disconnectResponse = null;
             RequestSender sender = null;
@@ -1280,7 +1319,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             wspTestSite.CaptureRequirement(3, @"All messages MUST be " +
                 "transported using a named pipe: \\pipe\\MSFTEWDS");
 
-            if (connectedClients.ContainsKey(clientMachineName))
+            if (connectedClients.ContainsKey(clientMachineName) && removeClient)
             {
                 // Remove the Request Sender associated with the client
                 connectedClients.Remove(clientMachineName);

@@ -86,6 +86,8 @@
     <Compile Include="TraditionalCases\CPMCreateQuery.cs" />
     <Compile Include="TraditionalCases\CPMCreateQuery_Categorization_Aggregate.cs" />
     <Compile Include="TraditionalCases\CPMCreateQuery_Categorization.cs" />
+    <Compile Include="TraditionalCases\CPMDisconnect.cs" />
+    <Compile Include="TraditionalCases\CPMFreeCursor.cs" />
     <Compile Include="TraditionalCases\CPMGetQueryStatus.cs" />
     <Compile Include="TraditionalCases\CPMGetQueryStatusEx.cs" />
     <Compile Include="TraditionalCases\CPMCreateQuery_RowsetProperties.cs" />

@@ -72,6 +72,8 @@
     <Compile Include="Messages\CPMConnectOut.cs" />
     <Compile Include="Messages\CPMCreateQueryIn.cs" />
     <Compile Include="Messages\CPMCreateQueryOut.cs" />
+    <Compile Include="Messages\CPMFreeCursorIn.cs" />
+    <Compile Include="Messages\CPMFreeCursorOut.cs" />
     <Compile Include="Messages\CPMGetQueryStatusExIn.cs" />
     <Compile Include="Messages\CPMGetQueryStatusExOut.cs" />
     <Compile Include="Messages\CPMGetQueryStatusIn.cs" />

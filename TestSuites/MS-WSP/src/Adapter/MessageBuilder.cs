@@ -422,39 +422,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             return AddMessageHeader(MessageType.CPMRestartPositionIn, mainBlob);
         }
 
-        //Update by v-aliche for delta testing
-        ///// <summary>
-        ///// Gets CPMStopAsyncIn Message Blob
-        ///// </summary>
-        ///// <param name="cursor">Handle from the
-        ///// CPMCreateQueryOut message</param>
-        ///// <returns>CPMStopAsyncIn BLOB</returns>
-        //public byte[] GetStopAsyncIn(uint cursor)
-        //{
-        //    byte[] mainBlob = new byte[Constant.SIZE_OF_UINT];
-        //    //================ Converting values into Bytes ===================
-        //    int index = 0;
-        //    Helper.CopyBytes(mainBlob, ref index,
-        //        BitConverter.GetBytes(cursor));
-        //    return AddMessageHeader
-        //        (MessageType.CPMStopAsynchIn, mainBlob);
-        //}
-
         /// <summary>
-        /// Gets CPMFreeCursorIn Message Blob
+        /// Gets CPMFreeCursorIn Message
         /// </summary>
-        /// <param name="cursor">Handle from the 
-        /// CPMCreateQueryOut message</param>
-        /// <returns>CPMFreeCursorIn BLOB</returns>
-        public byte[] GetFreeCursorIn(uint cursor)
+        /// <param name="cursor">Handle from the CPMCreateQueryOut message</param>
+        /// <returns>CPMFreeCursorIn Message</returns>
+        public CPMFreeCursorIn GetFreeCursorIn(uint cursor)
         {
-            byte[] mainBlob = new byte[Constant.SIZE_OF_UINT];
-            //================ Converting values into Bytes ==============
-            int index = 0;
-            Helper.CopyBytes(mainBlob, ref index,
-                BitConverter.GetBytes(cursor));
-            return AddMessageHeader
-                (MessageType.CPMFreeCursorIn, mainBlob);
+            var message = new CPMFreeCursorIn 
+            {
+                Header = new WspMessageHeader
+                {
+                    _msg = WspMessageHeader_msg_Values.CPMFreeCursorIn,
+                },
+                _hCursor = cursor
+            };
+
+            return message;
         }
 
         /// <summary>
