@@ -322,8 +322,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -349,8 +347,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -373,8 +369,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -720,8 +714,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -747,8 +739,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -771,8 +761,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -1107,8 +1095,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -1134,8 +1120,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -1158,8 +1142,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -1491,8 +1473,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -1518,8 +1498,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -1542,8 +1520,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -1872,8 +1848,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -1899,8 +1873,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -1923,8 +1895,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -2255,8 +2225,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -2282,8 +2250,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -2306,8 +2272,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -2657,8 +2621,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -2684,8 +2646,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -2708,8 +2668,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -3038,8 +2996,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -3065,8 +3021,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -3089,8 +3043,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -3428,8 +3380,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -3455,8 +3405,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -3479,8 +3427,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -3812,8 +3758,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -3839,8 +3783,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -3863,8 +3805,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -4196,8 +4136,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -4223,8 +4161,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -4247,8 +4183,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -4581,8 +4515,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -4608,8 +4540,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -4632,8 +4562,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -4966,8 +4894,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -4993,8 +4919,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -5017,8 +4941,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -5350,8 +5272,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -5377,8 +5297,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -5401,8 +5319,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -5735,8 +5651,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -5762,8 +5676,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -5786,8 +5698,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -6120,8 +6030,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -6147,8 +6055,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -6171,8 +6077,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -6505,8 +6409,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -6532,8 +6434,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -6556,8 +6456,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -6889,8 +6787,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -6916,8 +6812,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -6940,8 +6834,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -6999,9 +6891,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R857");
             this.Manager.Checkpoint("MS-AD_LDAP_R859");
             this.Manager.Checkpoint("MS-AD_LDAP_R861");
-            this.Manager.Checkpoint("MS-AD_LDAP_R883");
-            this.Manager.Checkpoint("MS-AD_LDAP_R883");
-            this.Manager.Checkpoint("MS-AD_LDAP_R883");
             this.Manager.Checkpoint("MS-AD_LDAP_R883");
             this.Manager.Checkpoint("MS-AD_LDAP_R851");
             this.Manager.Checkpoint("MS-AD_LDAP_R853");
@@ -7286,8 +7175,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -7313,8 +7200,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -7337,8 +7222,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -7671,8 +7554,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -7698,8 +7579,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -7722,8 +7601,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -8062,8 +7939,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -8089,8 +7964,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -8113,8 +7986,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -8453,8 +8324,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -8480,8 +8349,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -8504,8 +8371,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -8837,8 +8702,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -8864,8 +8727,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -8888,8 +8749,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -9221,8 +9080,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -9248,8 +9105,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -9272,8 +9127,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -9605,8 +9458,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -9632,8 +9483,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -9656,8 +9505,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -9715,9 +9562,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R857");
             this.Manager.Checkpoint("MS-AD_LDAP_R859");
             this.Manager.Checkpoint("MS-AD_LDAP_R861");
-            this.Manager.Checkpoint("MS-AD_LDAP_R883");
-            this.Manager.Checkpoint("MS-AD_LDAP_R883");
-            this.Manager.Checkpoint("MS-AD_LDAP_R883");
             this.Manager.Checkpoint("MS-AD_LDAP_R883");
             this.Manager.Checkpoint("MS-AD_LDAP_R851");
             this.Manager.Checkpoint("MS-AD_LDAP_R853");
@@ -10001,8 +9845,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -10028,8 +9870,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -10052,8 +9892,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -10385,8 +10223,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -10412,8 +10248,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -10436,8 +10270,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -10498,9 +10330,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R857");
             this.Manager.Checkpoint("MS-AD_LDAP_R859");
             this.Manager.Checkpoint("MS-AD_LDAP_R861");
-            this.Manager.Checkpoint("MS-AD_LDAP_R883");
-            this.Manager.Checkpoint("MS-AD_LDAP_R883");
-            this.Manager.Checkpoint("MS-AD_LDAP_R883");
             this.Manager.Checkpoint("MS-AD_LDAP_R883");
             this.Manager.Checkpoint("MS-AD_LDAP_R851");
             this.Manager.Checkpoint("MS-AD_LDAP_R853");
@@ -10784,8 +10613,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -10811,8 +10638,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -10835,8 +10660,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -11167,8 +10990,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -11194,8 +11015,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -11218,8 +11037,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -11277,9 +11094,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R857");
             this.Manager.Checkpoint("MS-AD_LDAP_R859");
             this.Manager.Checkpoint("MS-AD_LDAP_R861");
-            this.Manager.Checkpoint("MS-AD_LDAP_R883");
-            this.Manager.Checkpoint("MS-AD_LDAP_R883");
-            this.Manager.Checkpoint("MS-AD_LDAP_R883");
             this.Manager.Checkpoint("MS-AD_LDAP_R883");
             this.Manager.Checkpoint("MS-AD_LDAP_R851");
             this.Manager.Checkpoint("MS-AD_LDAP_R853");
@@ -11564,8 +11378,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -11591,8 +11403,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -11615,8 +11425,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -11954,8 +11762,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -11981,8 +11787,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -12005,8 +11809,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -12339,8 +12141,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -12366,8 +12166,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -12390,8 +12188,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -12723,8 +12519,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -12750,8 +12544,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -12774,8 +12566,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -13108,8 +12898,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -13135,8 +12923,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -13159,8 +12945,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -13493,8 +13277,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -13520,8 +13302,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -13544,8 +13324,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -13880,8 +13658,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -13907,8 +13683,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -13931,8 +13705,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -14264,8 +14036,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -14291,8 +14061,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -14315,8 +14083,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -14648,8 +14414,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -14675,8 +14439,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -14699,8 +14461,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -15033,8 +14793,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -15060,8 +14818,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -15084,8 +14840,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -15418,8 +15172,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -15445,8 +15197,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -15469,8 +15219,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -15528,9 +15276,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R857");
             this.Manager.Checkpoint("MS-AD_LDAP_R859");
             this.Manager.Checkpoint("MS-AD_LDAP_R861");
-            this.Manager.Checkpoint("MS-AD_LDAP_R883");
-            this.Manager.Checkpoint("MS-AD_LDAP_R883");
-            this.Manager.Checkpoint("MS-AD_LDAP_R883");
             this.Manager.Checkpoint("MS-AD_LDAP_R883");
             this.Manager.Checkpoint("MS-AD_LDAP_R851");
             this.Manager.Checkpoint("MS-AD_LDAP_R853");
@@ -15815,8 +15560,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -15842,8 +15585,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -15866,8 +15607,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -16199,8 +15938,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -16226,8 +15963,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -16250,8 +15985,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -16589,8 +16322,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -16616,8 +16347,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -16640,8 +16369,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -16979,8 +16706,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -17006,8 +16731,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -17030,8 +16753,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -17365,8 +17086,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -17392,8 +17111,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -17416,8 +17133,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
@@ -17750,8 +17465,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -17777,8 +17490,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");
             this.Manager.Checkpoint("MS-AD_LDAP_R559");
             this.Manager.Checkpoint("MS-AD_LDAP_R561");
@@ -17801,8 +17512,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R557");

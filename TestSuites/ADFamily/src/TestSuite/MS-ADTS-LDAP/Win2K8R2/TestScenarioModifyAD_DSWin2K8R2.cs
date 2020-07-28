@@ -5670,7 +5670,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R1490");
             this.Manager.Checkpoint("MS-AD_LDAP_R1491");
             this.Manager.Checkpoint("MS-AD_LDAP_R1492");
-            this.Manager.Checkpoint("MS-AD_LDAP_R1492");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S1139\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out success]\'");
@@ -5895,8 +5894,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "dSHeuristics: 000000000100000000020000000003000000000400000000054", new List<string> { "objectClass: top;nTDSService", "distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88", "dSHeuristics: 0000002" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp234);
             this.Manager.Checkpoint("MS-AD_LDAP_R1490");
             this.Manager.Checkpoint("MS-AD_LDAP_R1491");
-            this.Manager.Checkpoint("MS-AD_LDAP_R1492");
-            this.Manager.Checkpoint("MS-AD_LDAP_R1492");
             this.Manager.Checkpoint("MS-AD_LDAP_R1492");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S1140\'");
@@ -6346,9 +6343,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R1490");
             this.Manager.Checkpoint("MS-AD_LDAP_R1491");
             this.Manager.Checkpoint("MS-AD_LDAP_R1492");
-            this.Manager.Checkpoint("MS-AD_LDAP_R1492");
-            this.Manager.Checkpoint("MS-AD_LDAP_R1492");
-            this.Manager.Checkpoint("MS-AD_LDAP_R1492");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S1141\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out success]\'");
@@ -6573,10 +6567,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "dSHeuristics: 00000000010000000002000000000300000000040000000005000000000600000000073", new List<string> { "objectClass: top;nTDSService", "distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88", "dSHeuristics: 0000002" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp261);
             this.Manager.Checkpoint("MS-AD_LDAP_R1490");
             this.Manager.Checkpoint("MS-AD_LDAP_R1491");
-            this.Manager.Checkpoint("MS-AD_LDAP_R1492");
-            this.Manager.Checkpoint("MS-AD_LDAP_R1492");
-            this.Manager.Checkpoint("MS-AD_LDAP_R1492");
-            this.Manager.Checkpoint("MS-AD_LDAP_R1492");
             this.Manager.Checkpoint("MS-AD_LDAP_R1492");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S1142\'");
@@ -6803,11 +6793,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R1490");
             this.Manager.Checkpoint("MS-AD_LDAP_R1491");
             this.Manager.Checkpoint("MS-AD_LDAP_R1492");
-            this.Manager.Checkpoint("MS-AD_LDAP_R1492");
-            this.Manager.Checkpoint("MS-AD_LDAP_R1492");
-            this.Manager.Checkpoint("MS-AD_LDAP_R1492");
-            this.Manager.Checkpoint("MS-AD_LDAP_R1492");
-            this.Manager.Checkpoint("MS-AD_LDAP_R1492");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S1143\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out success]\'");
@@ -7032,12 +7017,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "dSHeuristics: 0000000001000000000200000000030000000004000000000500000000060000000007000000000800000000092", new List<string> { "objectClass: top;nTDSService", "distinguishedName: CN=Directory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88", "dSHeuristics: 0000002" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp279);
             this.Manager.Checkpoint("MS-AD_LDAP_R1490");
             this.Manager.Checkpoint("MS-AD_LDAP_R1491");
-            this.Manager.Checkpoint("MS-AD_LDAP_R1492");
-            this.Manager.Checkpoint("MS-AD_LDAP_R1492");
-            this.Manager.Checkpoint("MS-AD_LDAP_R1492");
-            this.Manager.Checkpoint("MS-AD_LDAP_R1492");
-            this.Manager.Checkpoint("MS-AD_LDAP_R1492");
-            this.Manager.Checkpoint("MS-AD_LDAP_R1492");
             this.Manager.Checkpoint("MS-AD_LDAP_R1492");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S1144\'");
