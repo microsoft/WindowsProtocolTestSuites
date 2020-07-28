@@ -126,7 +126,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         private bool ConnectToShare(string uncSharePath, out uint treeId)
         {
             treeId = 0;
-            client = new Smb2FunctionalClient(testConfig.Timeout, testConfig, Site);
 
             string serverName = Smb2Utility.GetServerName(uncSharePath);
             var serverIPs = Dns.GetHostEntry(serverName).AddressList;
@@ -138,17 +137,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             uint status = 0;
             foreach (var ip in serverIPs) // Try to connect to each IP since not all of them can be connected successfully.
             {
+                client = new Smb2FunctionalClient(testConfig.Timeout, testConfig, Site);
                 client.ConnectToServer(Smb2TransportType.Tcp, serverName, ip);
                 status = client.Negotiate(
                     Smb2Utility.GetDialects(testConfig.MaxSmbVersionSupported),
-                    true);
+                    true,
+                    checker: (header, response) => { });
                 if (status != Smb2Status.STATUS_SUCCESS)
                 {
                     continue;
                 }
-                status = client.SessionSetup(testConfig.DefaultSecurityPackage, serverName, testConfig.AccountCredential, false);
+                status = client.SessionSetup(testConfig.DefaultSecurityPackage, serverName, testConfig.AccountCredential, false, checker: (header, response) => { });
                 if (status != Smb2Status.STATUS_SUCCESS)
                 {
+                    client.Disconnect();
                     continue;
                 }
 
@@ -156,6 +158,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 if (status == Smb2Status.STATUS_SUCCESS)
                 {
                     return true;
+                }
+                else
+                {
+                    client.LogOff();
+                    client.Disconnect();
                 }
             }
 

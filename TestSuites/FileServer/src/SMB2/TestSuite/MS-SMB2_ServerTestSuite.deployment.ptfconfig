@@ -10,7 +10,7 @@
     <Group name="SMB2">
       <!--Tag named Description is used for the comment-->
 
-      <Property name="WaitTimeoutInMilliseconds" value="5000">
+      <Property name="WaitTimeoutInMilliseconds" value="8000">
         <Description>
           Timeout in milliseconds before current thread continues when use WaitHandle.WaitOne
         </Description>
