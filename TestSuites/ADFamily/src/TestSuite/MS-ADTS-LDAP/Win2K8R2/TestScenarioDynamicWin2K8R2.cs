@@ -155,8 +155,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R198");
             this.Manager.Comment("reaching state \'S18\'");
             this.Manager.Comment("checking step \'return AddOperation/[out unSpecifiedError]\'");
@@ -325,8 +323,6 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
             this.Manager.Checkpoint("MS-AD_LDAP_R574");
             this.Manager.Checkpoint("MS-AD_LDAP_R520");
-            this.Manager.Checkpoint("MS-AD_LDAP_R553");
-            this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R553");
             this.Manager.Checkpoint("MS-AD_LDAP_R555");
             this.Manager.Checkpoint("MS-AD_LDAP_R198");
