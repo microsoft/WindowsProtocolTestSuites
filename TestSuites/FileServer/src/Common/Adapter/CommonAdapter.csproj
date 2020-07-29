@@ -11,7 +11,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="ProtocolTestFramework" Version="2.0.0-preview" />
+    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.0.0-beta" />
   </ItemGroup>
 
   <ItemGroup>
