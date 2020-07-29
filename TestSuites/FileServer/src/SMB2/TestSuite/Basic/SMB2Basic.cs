@@ -2423,7 +2423,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             // and StartSidOffset SHOULD be set to 0.
 
             FileGetQuotaInformation fileGetQuotaInfo = new FileGetQuotaInformation();
-            _SID curSid = DtypUtility.GetSidFromAccount(TestConfig.DomainName, testConfig.UserName);
+            _SID curSid = DtypUtility.GetSidFromAccount(TestConfig.DomainName, testConfig.UserName, testConfig.UserName, testConfig.UserPassword);
             fileGetQuotaInfo.Sid = curSid;
             fileGetQuotaInfo.SidLength = (uint)TypeMarshal.ToBytes<_SID>(curSid).Length;
             quotaInfo.Buffer = TypeMarshal.ToBytes<FileGetQuotaInformation>(fileGetQuotaInfo);

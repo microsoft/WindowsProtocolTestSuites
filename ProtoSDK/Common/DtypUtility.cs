@@ -11,6 +11,7 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Text;
 using System.Text.RegularExpressions;
+using Novell.Directory.Ldap;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
 {
@@ -3565,13 +3566,32 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// </summary>
         /// <param name="domainName">The name of the domain. </param>
         /// <param name="accountName">The name of the account.</param>
+        /// <param name="adminName">The name of admin.</param>
+        /// <param name="adminPassword">The password of admin.</param>
         /// <returns>The SID of the user</returns>
-        public static _SID GetSidFromAccount(string domainName, string accountName)
+        public static _SID GetSidFromAccount(string domainName, string accountName, string adminName, string adminPassword)
         {
-            NTAccount account = new NTAccount(domainName, accountName);
-            SecurityIdentifier securityId = (SecurityIdentifier)account.Translate(typeof(SecurityIdentifier));
-            byte[] sidBinary = new byte[securityId.BinaryLength];
-            securityId.GetBinaryForm(sidBinary, 0);
+            int ldapPort = 389;
+            string domainNetbios = domainName.Split('.')[0];
+            string admin = string.Format("{0}\\{1}", domainNetbios.ToUpper(), adminName);
+            string searchBase = $"CN={accountName},CN=Users,DC=" + domainName.Replace(".", ",DC=");
+            string searchFilter = "(objectclass=*)";
+
+            LdapConnection conn = new LdapConnection();
+
+            conn.Connect(domainName, ldapPort);
+            conn.Bind(admin, adminPassword);
+
+            var results = conn.Search(searchBase, LdapConnection.ScopeSub, searchFilter, null, false);
+
+            if (!results.HasMore())
+            {
+                throw new InvalidOperationException($"User {accountName} is not found on DC.");
+            }
+
+            LdapEntry resultEntry = results.Next();
+            byte[] sidBinary = resultEntry.GetAttribute("objectSid").ByteValue;
+
             _SID sid = TypeMarshal.ToStruct<_SID>(sidBinary);
             return sid;
         }
