@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Auth\TestSuite\Auth_ServerTestSuite.csproj" />
+    <ProjectReference Include="..\Common\TestSuite\CommonTestSuite.csproj" />
+    <ProjectReference Include="..\DFSC\TestSuite\MS-DFSC_ServerTestSuite.csproj" />
+    <ProjectReference Include="..\FSRVP\TestSuite\MS-FSRVP_ServerTestSuite.csproj" />
+    <ProjectReference Include="..\RSVD\TestSuite\MS-RSVD_ServerTestSuite.csproj" />
+    <ProjectReference Include="..\ServerFailover\TestSuite\ServerFailoverTestSuite.csproj" />
+    <ProjectReference Include="..\SMB2\TestSuite\MS-SMB2_ServerTestSuite.csproj" />
+    <ProjectReference Include="..\SQOS\TestSuite\MS-SQOS_ServerTestSuite.csproj" />
+  </ItemGroup>
+</Project>

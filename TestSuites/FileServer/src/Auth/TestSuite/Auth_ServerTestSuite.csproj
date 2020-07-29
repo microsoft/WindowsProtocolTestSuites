@@ -1,118 +1,35 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{1F5C2146-BB0F-4C1C-8D1F-13C90B04BDAE}</ProjectGuid>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite</RootNamespace>
-    <AssemblyName>Auth_ServerTestSuite</AssemblyName>
-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="Microsoft.Protocols.TestTools">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Microsoft.Protocols.TestTools.VSTS">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="Microsoft.Xrt.Runtime, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>True</SpecificVersion>
-    </Reference>
-    <Reference Include="System.DirectoryServices" />
-  </ItemGroup>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>  
   <ItemGroup>
     <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Authentication\AuthenticationTestBase.cs" />
-    <Compile Include="Authentication\KerberosAuthentication\KerberosAuthentication.cs" />
-    <Compile Include="Authentication\KerberosAuthentication\KerberosFunctionalClient.cs" />
-    <Compile Include="Authentication\KerberosAuthentication\KeyManager.cs" />
-    <Compile Include="Authentication\KerberosAuthentication\SMB2FunctionalClientForKerbAuth.cs" />
-    <Compile Include="Authorization\CBACTest.cs" />
-    <Compile Include="Authorization\FolderPermissionTest.cs" />
-    <Compile Include="Authorization\FilePermissionTest.cs" />
-    <Compile Include="Authorization\SharePermissionTest.cs" />
-    <Compile Include="Authorization\AuthorizationTestBase.cs" />
-    <Compile Include="AuthTestConfig.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Asn1Base\Asn1Base.csproj">
-      <Project>{deda188c-c97e-4968-bc31-594925631e9f}</Project>
-      <Name>Asn1Base</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Common\Common.csproj">
-      <Project>{fe653643-6342-4300-871e-683c7ba31494}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\CryptoLib\CryptoLib.csproj">
-      <Project>{bf6afaf0-7592-467f-ad5c-18429d854057}</Project>
-      <Name>CryptoLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\KerberosLib\KerberosLib.csproj">
-      <Project>{F1EDA208-50B6-4501-A9D8-D18D3434D587}</Project>
-      <Name>Kerberos</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SMB2\Smb2.csproj">
-      <Project>{c7f08825-d3c9-4ddd-9ba3-06733b1abe36}</Project>
-      <Name>Smb2</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SRVS\Srvs.csproj">
-      <Project>{e471f558-bb6d-4317-81f8-8fd755afefdc}</Project>
-      <Name>Srvs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\SspiLib\SspiLib.csproj">
-      <Project>{E64BF20F-11D2-49F6-A25B-F4378AB38180}</Project>
-      <Name>SspiLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Sspi\Sspi.csproj">
-      <Project>{d0cb354b-2cd3-49c1-8eca-2f6ebadbccee}</Project>
-      <Name>Sspi</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Common\Adapter\CommonAdapter.csproj">
-      <Project>{3fd566ba-e398-461e-b1b6-464b117ed422}</Project>
-      <Name>CommonAdapter</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Common\TestSuite\CommonTestSuite.csproj">
-      <Project>{cf70c975-efea-4b87-b278-1f0b15995f8e}</Project>
-      <Name>CommonTestSuite</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Asn1Base\Asn1Base.csproj" />
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Common\Common.csproj" />
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\CryptoLib\CryptoLib.csproj" />
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\KerberosLib\KerberosLib.csproj" />
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SMB2\Smb2.csproj" />
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SRVS\Srvs.csproj" />
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\SspiLib\SspiLib.csproj" />
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Sspi\Sspi.csproj" />
+    <ProjectReference Include="..\..\Common\Adapter\CommonAdapter.csproj" />
+    <ProjectReference Include="..\..\Common\TestSuite\CommonTestSuite.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Auth_ServerTestSuite.deployment.ptfconfig" />
     <Content Include="Auth_ServerTestSuite.ptfconfig" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Target Name="AfterBuild">
-    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\" />
-    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\" />
-  </Target>
+  <ItemGroup>
+    <PackageReference Include="System.DirectoryServices" Version="4.7.0" />
+    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.0.0-beta" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
+  </ItemGroup>
 </Project>

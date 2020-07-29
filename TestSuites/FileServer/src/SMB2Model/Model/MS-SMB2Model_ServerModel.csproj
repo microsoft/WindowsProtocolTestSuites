@@ -1,91 +1,23 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{1486BFE5-D3AD-4486-A9E9-CE2CB0D048A2}</ProjectGuid>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model</RootNamespace>
-    <AssemblyName>MS-SMB2Model_ServerModel</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <!--For CoReXT bcz fxcop settings-->
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'fxcop|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\fxcop\</OutputPath>
     <DefineConstants>FXCOP;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
+  </PropertyGroup>  
   <ItemGroup>
-    <Reference Include="Microsoft.Protocols.TestTools">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.SpecExplorer.Runtime, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>True</SpecificVersion>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-    </Reference>
-    <Reference Include="Microsoft.Xrt.Runtime, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>True</SpecificVersion>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Common\Common.csproj">
-      <Project>{FE653643-6342-4300-871E-683C7BA31494}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SMB2\Smb2.csproj">
-      <Project>{C7F08825-D3C9-4DDD-9BA3-06733B1ABE36}</Project>
-      <Name>Smb2</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\SspiLib\SspiLib.csproj">
-      <Project>{e64bf20f-11d2-49f6-a25b-f4378ab38180}</Project>
-      <Name>SspiLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Common\Adapter\CommonAdapter.csproj">
-      <Project>{3FD566BA-E398-461E-B1B6-464B117ED422}</Project>
-      <Name>CommonAdapter</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Adapter\MS-SMB2Model_ServerAdapter.csproj">
-      <Project>{6E8058F1-AF11-42F3-9459-C716F07EA673}</Project>
-      <Name>MS-SMB2Model_ServerAdapter</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Common\Common.csproj" />
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SMB2\Smb2.csproj" />
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\SspiLib\SspiLib.csproj" />
+    <ProjectReference Include="..\..\Common\Adapter\CommonAdapter.csproj" />
+    <ProjectReference Include="..\Adapter\MS-SMB2Model_ServerAdapter.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Common.cord" />
@@ -96,24 +28,6 @@
     <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AppInstanceId\AppInstanceIdModel.cs" />
-    <Compile Include="Conflict\ConflictModel.cs" />
-    <Compile Include="CreateClose\CreateCloseModel.cs" />
-    <Compile Include="CreditMgmt\CreditMgmtModel.cs" />
-    <Compile Include="Encryption\EncryptionModel.cs" />
-    <Compile Include="Handle\HandleModel.cs" />
-    <Compile Include="Leasing\LeasingModel.cs" />
-    <Compile Include="MixedOplockLease\MixedOplockLeaseModel.cs" />
-    <Compile Include="ModelDataTypes.cs" />
-    <Compile Include="ModelHelper.cs" />
-    <Compile Include="Negotiate\NegotiateModel.cs" />
-    <Compile Include="Replay\ReplayModel.cs" />
-    <Compile Include="ResilientHandle\ResilientHandleModel.cs" />
-    <Compile Include="Oplock\OplockModel.cs" />
-    <Compile Include="SessionMgmt\SessionMgmtModel.cs" />
-    <Compile Include="Signing\SigningModel.cs" />
-    <Compile Include="TreeMgmt\TreeMgmtModel.cs" />
-    <Compile Include="ValidateNegotiateInfo\ValidateNegotiateInfoModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="SessionMgmt\SessionMgmt.cord" />
@@ -157,9 +71,9 @@
   <ItemGroup>
     <Content Include="MixedOplockLease\MixedOplockLease.cord" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Target Name="AfterBuild">
-    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\" />
-    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\" />
-  </Target>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.0.0-beta" />
+  </ItemGroup>
 </Project>
