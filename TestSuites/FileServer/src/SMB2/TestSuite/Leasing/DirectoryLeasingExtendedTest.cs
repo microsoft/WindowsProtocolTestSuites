@@ -81,6 +81,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
         protected override void TestCleanup()
         {
+            // Wait until CheckBreakNotification exits;
+            Thread.Sleep(TestConfig.WaitTimeoutInMilliseconds);
+
             foreach (var client in testClients.Values)
             {
                 try

@@ -3,6 +3,7 @@
 
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
+using System;
 using System.IO;
 using System.Net;
 
@@ -25,97 +26,139 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
         public bool CreateDirectory(string uncSharePath, string directoryName)
         {
-            if (!ConnectToShare(uncSharePath, out uint treeId))
+            uint createStatus = 0;
+            try
             {
-                return false;
+                if (!ConnectToShare(uncSharePath, out uint treeId))
+                {
+                    return false;
+                }
+
+                createStatus = client.Create(treeId, directoryName,
+                    CreateOptions_Values.FILE_DIRECTORY_FILE,
+                    out FILEID fileId,
+                    out Smb2CreateContextResponse[] serverCreateContexts,
+                    checker: (header, response) => { });
+                DisconnectToShare(treeId, fileId);
             }
-            uint createStatus = client.Create(treeId, directoryName, 
-                CreateOptions_Values.FILE_DIRECTORY_FILE, 
-                out FILEID fileId, 
-                out Smb2CreateContextResponse[] serverCreateContexts,
-                checker: (header, response) => { });
-            DisconnectToShare(treeId, fileId);
+            catch (Exception ex)
+            {
+                Site.Log.Add(LogEntryKind.Debug, $"Exception thrown when CreateDirectory: {ex}");
+            }
             return createStatus == Smb2Status.STATUS_SUCCESS;
         }
 
         public void DeleteDirectory(string uncSharePath, string directoryName)
         {
-            if (!ConnectToShare(uncSharePath, out uint treeId))
+            try
             {
-                return;
+                if (!ConnectToShare(uncSharePath, out uint treeId))
+                {
+                    return;
+                }
+
+                client.Create(treeId, directoryName,
+                    CreateOptions_Values.FILE_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
+                    out FILEID fileId,
+                    out Smb2CreateContextResponse[] serverCreateContexts,
+                    checker: (header, response) => { });
+                DisconnectToShare(treeId, fileId);
             }
-            client.Create(treeId, directoryName, 
-                CreateOptions_Values.FILE_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE, 
-                out FILEID fileId, 
-                out Smb2CreateContextResponse[] serverCreateContexts,
-                checker: (header, response) => { });
-            DisconnectToShare(treeId, fileId);
+            catch (Exception ex)
+            {
+                Site.Log.Add(LogEntryKind.Debug, $"Exception thrown when DeleteDirectory: {ex}");
+            }
         }
 
         public bool CreateFile(string uncSharePath, string fileName, string content)
         {
-            if (!ConnectToShare(uncSharePath, out uint treeId))
+
+            uint createStatus = 0;
+            try
             {
-                return false;
+                if (!ConnectToShare(uncSharePath, out uint treeId))
+                {
+                    return false;
+                }
+
+                createStatus = client.Create(treeId, fileName,
+                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                    out FILEID fileId,
+                    out Smb2CreateContextResponse[] serverCreateContexts,
+                    checker: (header, response) => { });
+                if (createStatus == Smb2Status.STATUS_SUCCESS)
+                {
+                    client.Write(treeId, fileId, content);
+                }
+                DisconnectToShare(treeId, fileId);
             }
-            uint createStatus = client.Create(treeId, fileName, 
-                CreateOptions_Values.FILE_NON_DIRECTORY_FILE, 
-                out FILEID fileId, 
-                out Smb2CreateContextResponse[] serverCreateContexts,
-                checker: (header, response) => { });
-            if (createStatus == Smb2Status.STATUS_SUCCESS)
+            catch (Exception ex)
             {
-                client.Write(treeId, fileId, content);
+                Site.Log.Add(LogEntryKind.Debug, $"Exception thrown when CreateFile: {ex}");
             }
-            DisconnectToShare(treeId, fileId);
             return createStatus == Smb2Status.STATUS_SUCCESS;
         }
 
         public void DeleteFile(string uncSharePath, string fileName)
         {
-            if (!ConnectToShare(uncSharePath, out uint treeId))
+            try
             {
-                return;
+                if (!ConnectToShare(uncSharePath, out uint treeId))
+                {
+                    return;
+                }
+
+                client.Create(treeId, fileName,
+                    CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
+                    out FILEID fileId,
+                    out Smb2CreateContextResponse[] serverCreateContexts,
+                    checker: (header, response) => { });
+                DisconnectToShare(treeId, fileId);
             }
-            client.Create(treeId, fileName, 
-                CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE, 
-                out FILEID fileId, 
-                out Smb2CreateContextResponse[] serverCreateContexts,
-                checker: (header, response)=> { });
-            DisconnectToShare(treeId, fileId);
+            catch (Exception ex)
+            {
+                Site.Log.Add(LogEntryKind.Debug, $"Exception thrown when DeleteFile: {ex}");
+            }
         }
 
         public void CopyFile(string uncSharePath, string fileName)
         {
-            if (!ConnectToShare(uncSharePath, out uint treeId))
+            try
             {
-                return;
-            }
-
-            string[] filePath = fileName.Split(new char[] { '\\' });
-            // fileName contains wildcard, so get the files by search pattern.
-            string[] files = System.IO.Directory.GetFiles(filePath[0], filePath[1]);
-
-            foreach (var file in files)
-            {
-                using (FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read))
+                if (!ConnectToShare(uncSharePath, out uint treeId))
                 {
-                    // "file" contains path of the orginal file, the pure file name needs to be extracted and then the file can be copied to the destination share.
-                    var paths = file.Split(new char[] { '\\' });
-                    var pureFileName = paths[paths.Length - 1];
-                    byte[] buf = new byte[fs.Length];
-                    fs.Read(buf, 0, (int)fs.Length);
-                    client.Create(treeId, pureFileName, 
-                        CreateOptions_Values.FILE_NON_DIRECTORY_FILE, 
-                        out FILEID fileId, 
-                        out Smb2CreateContextResponse[] serverCreateContexts,
-                        checker: (header, response) => { });
-                    client.Write(treeId, fileId, buf);
-                    client.Close(treeId, fileId);
+                    return;
                 }
-            }
 
-            DisconnectToShare(treeId, FILEID.Zero);
+                string[] filePath = fileName.Split(new char[] { '\\' });
+                // fileName contains wildcard, so get the files by search pattern.
+                string[] files = System.IO.Directory.GetFiles(filePath[0], filePath[1]);
+
+                foreach (var file in files)
+                {
+                    using (FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read))
+                    {
+                        // "file" contains path of the orginal file, the pure file name needs to be extracted and then the file can be copied to the destination share.
+                        var paths = file.Split(new char[] { '\\' });
+                        var pureFileName = paths[paths.Length - 1];
+                        byte[] buf = new byte[fs.Length];
+                        fs.Read(buf, 0, (int)fs.Length);
+                        client.Create(treeId, pureFileName,
+                            CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                            out FILEID fileId,
+                            out Smb2CreateContextResponse[] serverCreateContexts,
+                            checker: (header, response) => { });
+                        client.Write(treeId, fileId, buf);
+                        client.Close(treeId, fileId);
+                    }
+                }
+
+                DisconnectToShare(treeId, FILEID.Zero);
+            }
+            catch (Exception ex)
+            {
+                Site.Log.Add(LogEntryKind.Debug, $"Exception thrown when CopyFile: {ex}");
+            }
         }
 
         public bool CheckIfShareIsAvailable(string share)
@@ -137,32 +180,41 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             uint status = 0;
             foreach (var ip in serverIPs) // Try to connect to each IP since not all of them can be connected successfully.
             {
-                client = new Smb2FunctionalClient(testConfig.Timeout, testConfig, Site);
-                client.ConnectToServer(Smb2TransportType.Tcp, serverName, ip);
-                status = client.Negotiate(
-                    Smb2Utility.GetDialects(testConfig.MaxSmbVersionSupported),
-                    true,
-                    checker: (header, response) => { });
-                if (status != Smb2Status.STATUS_SUCCESS)
+                try
                 {
-                    continue;
-                }
-                status = client.SessionSetup(testConfig.DefaultSecurityPackage, serverName, testConfig.AccountCredential, false, checker: (header, response) => { });
-                if (status != Smb2Status.STATUS_SUCCESS)
-                {
-                    client.Disconnect();
-                    continue;
-                }
+                    client = new Smb2FunctionalClient(testConfig.Timeout, testConfig, Site);
+                    client.ConnectToServer(Smb2TransportType.Tcp, serverName, ip);
+                    status = client.Negotiate(
+                        Smb2Utility.GetDialects(testConfig.MaxSmbVersionSupported),
+                        true,
+                        checker: (header, response) => { });
+                    if (status != Smb2Status.STATUS_SUCCESS)
+                    {
+                        continue;
+                    }
 
-                status = client.TreeConnect(uncSharePath, out treeId, checker: (header, response) => { });
-                if (status == Smb2Status.STATUS_SUCCESS)
-                {
-                    return true;
+                    status = client.SessionSetup(testConfig.DefaultSecurityPackage, serverName, testConfig.AccountCredential, false, checker: (header, response) => { });
+                    if (status != Smb2Status.STATUS_SUCCESS)
+                    {
+                        client.Disconnect();
+                        continue;
+                    }
+
+                    status = client.TreeConnect(uncSharePath, out treeId, checker: (header, response) => { });
+                    if (status == Smb2Status.STATUS_SUCCESS)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        client.LogOff();
+                        client.Disconnect();
+                    }
                 }
-                else
+                catch
                 {
-                    client.LogOff();
-                    client.Disconnect();
+                    // Catch the exceptions thrown in Negotiage/SessionSetup/TreeConnect
+                    // Try next IP
                 }
             }
 
