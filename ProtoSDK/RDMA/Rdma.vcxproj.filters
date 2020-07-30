@@ -46,7 +46,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rdma.rc">
+    <ResourceCompile Include="Rdma.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
