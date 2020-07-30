@@ -8,51 +8,51 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		LocalTestRun.testsettings = LocalTestRun.testsettings
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSuite", "TestSuite\TestSuite.csproj", "{61EADAB7-919C-42E0-BF66-5A1F5407ABB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestSuite", "TestSuite\TestSuite.csproj", "{61EADAB7-919C-42E0-BF66-5A1F5407ABB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PccrcStack", "MS-PCCRC\Shared\PccrcStack\PccrcStack.csproj", "{CD34EB17-A5B5-49A1-A539-E45EF848FAB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PccrcStack", "MS-PCCRC\Shared\PccrcStack\PccrcStack.csproj", "{CD34EB17-A5B5-49A1-A539-E45EF848FAB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PccrtpStack", "MS-PCCRTP\Shared\PccrtpStack\PccrtpStack.csproj", "{C87577F2-FFB9-4584-B109-E8D4F62999E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PccrtpStack", "MS-PCCRTP\Shared\PccrtpStack\PccrtpStack.csproj", "{C87577F2-FFB9-4584-B109-E8D4F62999E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PchcStack", "MS-PCHC\Shared\PchcStack\PchcStack.csproj", "{77239ADF-01DC-4C41-948F-283511840692}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PchcStack", "MS-PCHC\Shared\PchcStack\PchcStack.csproj", "{77239ADF-01DC-4C41-948F-283511840692}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PccrrStack", "MS-PCCRR\Shared\PccrrStack\PccrrStack.csproj", "{E740266B-2CDF-43A8-9F24-EE6FF55149EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PccrrStack", "MS-PCCRR\Shared\PccrrStack\PccrrStack.csproj", "{E740266B-2CDF-43A8-9F24-EE6FF55149EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PccrdStack", "ms-pccrd\Shared\PccrdStack\PccrdStack.csproj", "{6CDA2C3E-F9CE-4A18-A06C-818C3C779C35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PccrdStack", "ms-pccrd\Shared\PccrdStack\PccrdStack.csproj", "{6CDA2C3E-F9CE-4A18-A06C-818C3C779C35}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WsDiscovery", "ms-pccrd\Shared\WsDiscovery\WsDiscovery.csproj", "{334C9601-ABF7-4830-9793-8F9259D0D7EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WsDiscovery", "ms-pccrd\Shared\WsDiscovery\WsDiscovery.csproj", "{334C9601-ABF7-4830-9793-8F9259D0D7EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonStack", "COMMON\CommonStack\CommonStack.csproj", "{F3CA3AD9-94A6-4FE1-BA05-0C798E477673}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonStack", "COMMON\CommonStack\CommonStack.csproj", "{F3CA3AD9-94A6-4FE1-BA05-0C798E477673}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapter", "Adapter\Adapter.csproj", "{418CF4CF-F013-4378-B5AA-8A189BECFC17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Adapter", "Adapter\Adapter.csproj", "{418CF4CF-F013-4378-B5AA-8A189BECFC17}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProtoSDK", "ProtoSDK", "{3C26417A-C50B-40FA-97F7-F8C636E22245}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProtoStack", "ProtoStack", "{579A5494-A44C-4D8F-A4CB-33D9AEECEB16}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "..\..\..\ProtoSDK\Common\Common.csproj", "{FE653643-6342-4300-871E-683C7BA31494}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "..\..\..\ProtoSDK\Common\Common.csproj", "{FE653643-6342-4300-871E-683C7BA31494}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoLib", "..\..\..\ProtoSDK\CryptoLib\CryptoLib.csproj", "{BF6AFAF0-7592-467F-AD5C-18429D854057}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryptoLib", "..\..\..\ProtoSDK\CryptoLib\CryptoLib.csproj", "{BF6AFAF0-7592-467F-AD5C-18429D854057}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileAccessService", "..\..\..\ProtoSDK\FileAccessService\FileAccessService.csproj", "{AB191B32-B12D-42CB-976D-CEA2C5BAD8BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileAccessService", "..\..\..\ProtoSDK\FileAccessService\FileAccessService.csproj", "{AB191B32-B12D-42CB-976D-CEA2C5BAD8BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messages", "..\..\..\ProtoSDK\Messages\Messages.csproj", "{75544419-3F4E-4308-A676-165F45C1462E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Messages", "..\..\..\ProtoSDK\Messages\Messages.csproj", "{75544419-3F4E-4308-A676-165F45C1462E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nlmp", "..\..\..\ProtoSDK\MS-NLMP\Nlmp.csproj", "{5E53E71E-52D1-4BF0-99C0-608437EC446C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nlmp", "..\..\..\ProtoSDK\MS-NLMP\Nlmp.csproj", "{5E53E71E-52D1-4BF0-99C0-608437EC446C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smb2", "..\..\..\ProtoSDK\MS-SMB2\Smb2.csproj", "{C7F08825-D3C9-4DDD-9BA3-06733B1ABE36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Smb2", "..\..\..\ProtoSDK\MS-SMB2\Smb2.csproj", "{C7F08825-D3C9-4DDD-9BA3-06733B1ABE36}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransportStack", "..\..\..\ProtoSDK\TransportStack\TransportStack.csproj", "{967D976A-C792-4893-9235-14615AE1FF58}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransportStack", "..\..\..\ProtoSDK\TransportStack\TransportStack.csproj", "{967D976A-C792-4893-9235-14615AE1FF58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asn1Base", "..\..\..\ProtoSDK\Asn1Base\Asn1Base.csproj", "{DEDA188C-C97E-4968-BC31-594925631E9F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Asn1Base", "..\..\..\ProtoSDK\Asn1Base\Asn1Base.csproj", "{DEDA188C-C97E-4968-BC31-594925631E9F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProtoUtility", "ProtoUtility", "{08B989B4-8305-4466-8A44-78F1EC16C13F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MS-PCCRC_TestTool", "MS-PCCRC_Tool\Source\MS-PCCRC_TestTool\MS-PCCRC_TestTool.csproj", "{C91DBDA8-6D90-4320-99C4-747DDBC839E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MS-PCCRC_TestTool", "MS-PCCRC_Tool\Source\MS-PCCRC_TestTool\MS-PCCRC_TestTool.csproj", "{C91DBDA8-6D90-4320-99C4-747DDBC839E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xca", "..\..\..\ProtoSDK\MS-XCA\Xca.csproj", "{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xca", "..\..\..\ProtoSDK\MS-XCA\Xca.csproj", "{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SspiLib", "..\..\..\ProtoSDK\SspiLib\SspiLib.csproj", "{E64BF20F-11D2-49F6-A25B-F4378AB38180}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SspiLib", "..\..\..\ProtoSDK\SspiLib\SspiLib.csproj", "{E64BF20F-11D2-49F6-A25B-F4378AB38180}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -575,8 +575,8 @@ Global
 		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Debug|Win32.ActiveCfg = Debug|Any CPU
 		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Debug|Win32.Build.0 = Debug|Any CPU
-		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Debug|x64.ActiveCfg = Debug|x64
-		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Debug|x64.Build.0 = Debug|x64
+		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Debug|x64.Build.0 = Debug|Any CPU
 		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Debug|x86.Build.0 = Debug|Any CPU
 		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Fxcop|amd64.ActiveCfg = Release|Any CPU
@@ -589,8 +589,8 @@ Global
 		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Fxcop|Mixed Platforms.Build.0 = Release|Any CPU
 		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Fxcop|Win32.ActiveCfg = Release|Any CPU
 		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Fxcop|Win32.Build.0 = Release|Any CPU
-		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Fxcop|x64.ActiveCfg = Release|x64
-		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Fxcop|x64.Build.0 = Release|x64
+		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Fxcop|x64.ActiveCfg = Release|Any CPU
+		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Fxcop|x64.Build.0 = Release|Any CPU
 		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Fxcop|x86.ActiveCfg = Release|Any CPU
 		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Fxcop|x86.Build.0 = Release|Any CPU
 		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Release|amd64.ActiveCfg = Release|Any CPU
@@ -603,8 +603,8 @@ Global
 		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Release|Win32.ActiveCfg = Release|Any CPU
 		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Release|Win32.Build.0 = Release|Any CPU
-		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Release|x64.ActiveCfg = Release|x64
-		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Release|x64.Build.0 = Release|x64
+		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Release|x64.ActiveCfg = Release|Any CPU
+		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Release|x64.Build.0 = Release|Any CPU
 		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Release|x86.ActiveCfg = Release|Any CPU
 		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Release|x86.Build.0 = Release|Any CPU
 		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Debug|amd64.ActiveCfg = Debug|Any CPU
@@ -617,8 +617,8 @@ Global
 		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Debug|Win32.ActiveCfg = Debug|Any CPU
 		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Debug|Win32.Build.0 = Debug|Any CPU
-		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Debug|x64.ActiveCfg = Debug|x64
-		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Debug|x64.Build.0 = Debug|x64
+		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Debug|x64.Build.0 = Debug|Any CPU
 		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Debug|x86.Build.0 = Debug|Any CPU
 		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Fxcop|amd64.ActiveCfg = Release|Any CPU
@@ -631,8 +631,8 @@ Global
 		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Fxcop|Mixed Platforms.Build.0 = Release|Any CPU
 		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Fxcop|Win32.ActiveCfg = Release|Any CPU
 		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Fxcop|Win32.Build.0 = Release|Any CPU
-		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Fxcop|x64.ActiveCfg = Release|x64
-		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Fxcop|x64.Build.0 = Release|x64
+		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Fxcop|x64.ActiveCfg = Release|Any CPU
+		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Fxcop|x64.Build.0 = Release|Any CPU
 		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Fxcop|x86.ActiveCfg = Release|Any CPU
 		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Fxcop|x86.Build.0 = Release|Any CPU
 		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Release|amd64.ActiveCfg = Release|Any CPU
@@ -645,8 +645,8 @@ Global
 		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Release|Win32.ActiveCfg = Release|Any CPU
 		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Release|Win32.Build.0 = Release|Any CPU
-		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Release|x64.ActiveCfg = Release|x64
-		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Release|x64.Build.0 = Release|x64
+		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Release|x64.ActiveCfg = Release|Any CPU
+		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Release|x64.Build.0 = Release|Any CPU
 		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Release|x86.ActiveCfg = Release|Any CPU
 		{E64BF20F-11D2-49F6-A25B-F4378AB38180}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection

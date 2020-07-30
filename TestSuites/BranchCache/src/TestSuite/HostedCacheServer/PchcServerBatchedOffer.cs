@@ -16,6 +16,7 @@ using Microsoft.Protocols.TestTools.StackSdk.CommonStack.Enum;
 using Microsoft.Protocols.TestTools.StackSdk.BranchCache.Pchc;
 using Microsoft.Protocols.TestTools.StackSdk.BranchCache.Pccrc;
 using Microsoft.Protocols.TestTools.StackSdk.BranchCache.Pccrr;
+using Microsoft.Protocols.TestTools.StackSdk;
 
 namespace Microsoft.Protocols.TestSuites.BranchCache.TestSuite.HostedCacheServer
 {
